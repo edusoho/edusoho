@@ -378,7 +378,7 @@ admin_setting_ip_blacklist:
     parent: admin_system
     group: 2
 admin_setting_post_num_rules:
-    name: 访问次数限制设置
+    name: 发帖限制设置
     parent: admin_system
     group: 2
 admin_logs:

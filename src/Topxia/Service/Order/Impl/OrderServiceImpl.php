@@ -19,6 +19,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->getOrderBySn($sn, $lock);
     }
 
+    public function getOrderByToken($token)
+    {
+        return $this->getOrderDao()->getOrderByToken($token);
+    }
+
     public function findOrdersByIds(array $ids)
     {
         $orders = $this->getOrderDao()->findOrdersByIds($ids);
@@ -253,10 +258,21 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $order;
     }
 
-    public function createPayRecord($id, $payData)
+    public function createPayRecord($id, array $payData)
     {
-        $payData = array('data'=>json_encode($payData));
-        $order =$this->updateOrder($id,$payData);
+        $order = $this->getOrder($id);
+        $data = $order['data'];
+
+        if(!is_array($data)){
+            $data = json_decode($order['data'], true);
+        }
+
+        foreach($payData as $key => $value){
+            $data[$key] = $value;
+        }
+
+        $fields = array('data' => $data);
+        $order =$this->updateOrder($id,$fields);
         $this->_createLog($order['id'], 'pay_create', '创建交易', $payData);
     }
 

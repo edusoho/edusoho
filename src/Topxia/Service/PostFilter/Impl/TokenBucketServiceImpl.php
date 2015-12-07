@@ -3,108 +3,119 @@ namespace Topxia\Service\PostFilter\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\PostFilter\TokenBucketService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\KeywordFilter;
 
 class TokenBucketServiceImpl extends BaseService implements TokenBucketService
 {
-	protected function createRecentPostNum($ip, $type)
-	{
-		$fields = array(
-			'ip' => $ip,
-			'type' => $type,
-			'num' => 0,
-			'createdTime' => time(), 
-		);
-		return $this->getRecentPostNumDao()->addRecentPostNum($fields);
-	}
+    protected function createRecentPostNum($ip, $type)
+    {
+        $fields = array(
+            'ip'          => $ip,
+            'type'        => $type,
+            'num'         => 0,
+            'createdTime' => time()
+        );
+        return $this->getRecentPostNumDao()->addRecentPostNum($fields);
+    }
 
-	public function incrToken($ip, $type)
-	{
-		$postNumRules = $this->getSettingService()->get("post_num_rules");
+    public function incrToken($ip, $type)
+    {
+        $postNumRules = $this->getSettingService()->get("post_num_rules");
 
-		if(!isset($postNumRules['rules'])) {
-			return;
-		}
+        if (!isset($postNumRules['rules'])) {
+            return;
+        }
 
-		foreach ($postNumRules['rules'] as $key => $value) {
-			if($key == $type) {
-				$rules = $postNumRules['rules'][$key];
-				foreach ($rules as $ruleName => $rule) {
-					$ruleName = "{$key}.{$ruleName}";
-					$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $ruleName);
-					if(empty($recentPostNum)) {
-						$recentPostNum = $this->createRecentPostNum($ip, $ruleName);
-					}
-					$this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
-				}
-			}
-		}
+        foreach ($postNumRules['rules'] as $key => $value) {
+            if ($key == $type) {
+                $rules = $postNumRules['rules'][$key];
 
-	}
+                foreach ($rules as $ruleName => $rule) {
+                    if (empty($rule['postNum'])) {
+                        continue;
+                    }
 
-	public function hasToken($ip, $type)
-	{
-		if(in_array($ip, $this->getIpBlacklist())) {
-			return false;
-		}
+                    $ruleName      = "{$key}.{$ruleName}";
+                    $recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $ruleName);
 
-		$postNumRules = $this->getSettingService()->get("post_num_rules");
-		if(!isset($postNumRules['rules'])) {
-			return true;
-		}
+                    if (empty($recentPostNum)) {
+                        $recentPostNum = $this->createRecentPostNum($ip, $ruleName);
+                    }
 
-		foreach ($postNumRules['rules'] as $key => $value) {
-			if($key == $type) {
-				$rules = $postNumRules['rules'][$key];
-				foreach ($rules as $ruleName => $rule) {
-					if(!$this->confirmRule($ip, "{$key}.{$ruleName}", $rule)){
-						return false;
-					}
-				}
-			}
-		}
+                    $this->getRecentPostNumDao()->waveRecentPostNum($recentPostNum["id"], 'num', 1);
+                }
+            }
+        }
+    }
 
-		return true;
-	}
+    public function hasToken($ip, $type)
+    {
+        if (in_array($ip, $this->getIpBlacklist())) {
+            return false;
+        }
 
-	protected function confirmRule($ip, $type, $postNumRule)
-	{
+        $postNumRules = $this->getSettingService()->get("post_num_rules");
 
-		$recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
-		if(empty($recentPostNum)) {
-			return true;
-		}
+        if (!isset($postNumRules['rules'])) {
+            return true;
+        }
 
-		if((time() - $recentPostNum['createdTime']) > $postNumRule["interval"]) {
-			$this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
-			return true;
-		}
+        foreach ($postNumRules['rules'] as $key => $value) {
+            if ($key == $type) {
+                $rules = $postNumRules['rules'][$key];
 
-		if($recentPostNum['num'] < $postNumRule['postNum']) {
-			return true;
-		}
+                foreach ($rules as $ruleName => $rule) {
+                    if (empty($rule['postNum'])) {
+                        continue;
+                    }
 
-		return false;
-	}
+                    if (!$this->confirmRule($ip, "{$key}.{$ruleName}", $rule)) {
+                        return false;
+                    }
+                }
+            }
+        }
 
-	protected function getIpBlacklist()
-	{
-		$postNumRules = $this->getSettingService()->get("post_num_rules");
-		if(isset($postNumRules["ipBlackList"])) {
-			return $postNumRules["ipBlackList"];
-		}
-		return array();
-	}
+        return true;
+    }
 
-	protected function getRecentPostNumDao()
+    protected function confirmRule($ip, $type, $postNumRule)
+    {
+        $recentPostNum = $this->getRecentPostNumDao()->getRecentPostNumByIpAndType($ip, $type);
+
+        if (empty($recentPostNum)) {
+            return true;
+        }
+
+        if ((time() - $recentPostNum['createdTime']) > $postNumRule["interval"]) {
+            $this->getRecentPostNumDao()->deleteRecentPostNum($recentPostNum["id"]);
+            return true;
+        }
+
+        if ($recentPostNum['num'] < $postNumRule['postNum']) {
+            return true;
+        }
+
+        return false;
+    }
+
+    protected function getIpBlacklist()
+    {
+        $postNumRules = $this->getSettingService()->get("post_num_rules");
+
+        if (isset($postNumRules["ipBlackList"])) {
+            return $postNumRules["ipBlackList"];
+        }
+
+        return array();
+    }
+
+    protected function getRecentPostNumDao()
     {
         return $this->createDao('PostFilter.RecentPostNumDao');
     }
 
     protected function getSettingService()
     {
-        return $this->createDao('System.SettingService');
+        return $this->createService('System.SettingService');
     }
-
 }

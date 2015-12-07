@@ -38,7 +38,11 @@ class NeteaseOpenCourseItemParser extends AbstractItemParser
 
     public function detect($url)
     {
-        return !! preg_match('/^http\:\/\/v\.163\.com\/movie\/.+?\.html/s', $url);
+          $matched =  preg_match('/^http\:\/\/v\.163\.com\/movie\/.+?\.html/s', $url) ;
+          if(!$matched ){
+             $matched = preg_match('/^http\:\/\/open\.163\.com\/movie\/.+?\.html/s', $url) ;
+          }
+          return $matched;
     }
 
 }

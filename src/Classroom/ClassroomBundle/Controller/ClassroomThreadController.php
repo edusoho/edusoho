@@ -9,13 +9,15 @@ class ClassroomThreadController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -83,9 +85,11 @@ class ClassroomThreadController extends BaseController
 
     public function updateAction(Request $request, $classroomId, $threadId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if(!$this->getClassroomService()->canLookClassroom($classroomId)){ 
-                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
             }
         $thread = $this->getThreadService()->getThread($threadId);
 
@@ -111,6 +115,8 @@ class ClassroomThreadController extends BaseController
 
     public function showAction(Request $request, $classroomId, $threadId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
         $author = $this->getUserService()->getUser($thread['userId']);
@@ -123,7 +129,7 @@ class ClassroomThreadController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
          if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服','',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
         if (empty($thread)) {
             return $this->createMessageResponse('error', '帖子已不存在');
@@ -174,5 +180,10 @@ class ClassroomThreadController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

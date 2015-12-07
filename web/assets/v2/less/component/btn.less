@@ -24,11 +24,22 @@
   // }
 }
 
+.btn-ghost-white {
+  color: #fff;
+  border: 2px solid #fff;
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
 .btn-link {
   color: @gray-darker;
   &:hover, 
   &:focus,
-  &.focus, {
+  &.focus {
     color: @brand-primary;
     text-decoration: none;
   }
@@ -195,6 +206,18 @@
   &:hover {
     color: #666;
     .box-shadow(0 10px 15px 0px rgba(51, 51, 51, 0.5));
+    .es-transition;
+  }
+}
+
+.btn-ghost {
+  border-color: #fff;
+  color: #fff;
+  border-radius: 20px;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    background-color: #fff;
     .es-transition;
   }
 }

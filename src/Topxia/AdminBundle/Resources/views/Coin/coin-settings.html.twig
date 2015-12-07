@@ -61,6 +61,7 @@
           <input type="hidden" name="cash_rate" {% if setting('coin.cash_rate') %} value="{{setting('coin.cash_rate') }}" {% else %} value="1" {% endif %}>
           <input type="hidden" name="coin_enabled" {% if setting('coin.coin_enabled') %} value="{{setting('coin.coin_enabled') }}" {% else %} value="0" {% endif %}>
           <input type="hidden" name="cash_model" {% if setting('coin.cash_model') %} value="{{setting('coin.cash_model') }}" {% else %} value="none" {% endif %}>
+          <input type="hidden" name="charge_coin_enabled" {% if setting('coin.charge_coin_enabled') %} value="{{setting('coin.charge_coin_enabled')}}" {% else %} value="0" {% endif %}>
         </div>
     </div>
 

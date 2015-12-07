@@ -22,6 +22,12 @@
           </li>
           <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
             <a href="{{path('my_orders')}}">我的订单</a> 
+          </li>  
+          {% if is_plugin_installed('Coupon') or is_plugin_installed("MoneyCard") %}
+            <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
+              <a href="{{path('my_cards')}}">我的卡包</a> 
+            </li> 
+          {% endif %}
           </li>
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
