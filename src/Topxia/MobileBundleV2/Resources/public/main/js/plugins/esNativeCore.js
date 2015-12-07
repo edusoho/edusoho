@@ -100,8 +100,13 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         redirect : function(body) {
             exec(null, null, "ESNativeCore", "redirect", [ body ]);
         },
-        getThirdConfig : function (args) {
-            exec(null, null, "ESNativeCore", "getThirdConfig", [ args ]);
+        getThirdConfig : function ($q) {
+            var deferred = $q.defer(); 
+            exec(function(data) {
+                deferred.resolve(data);
+            }, null, "ESNativeCore", "getThirdConfig", []);
+
+            return deferred.promise;
         }
     };
 });

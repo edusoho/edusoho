@@ -1,6 +1,6 @@
 app.controller('LoginController', ['$scope', 'UserService', '$stateParams', 'platformUtil', 'cordovaUtil', '$state', LoginController]);
 
-function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil, $state)
+function LoginController($scope, UserService, $stateParams, platformUtil, cordovaUtil, $state, $q)
 {	
 	console.log("LoginController");
 
@@ -9,24 +9,27 @@ function LoginController($scope, UserService, $stateParams, platformUtil, cordov
 		password : null
 	};
 
-	var thirdConfig = cordovaUtil.getThirdConfig();
+	cordovaUtil.getThirdConfig($q).then(function(data) {
+		$scope.thirdConfig = data;
+	});
+
 	$scope.jumpToMain = function() {
 		$state.go("slideView.mainTab");
 	}
 
 	$scope.getThirdStyle = function() {
-		if (!thirdConfig || thirdConfig.length <= 1) {
+		if (!$scope.thirdConfig || $scope.thirdConfig.length <= 1) {
 			return "";
 		}
-		return thirdConfig.length == 2 ? "ui-grid-halve" : "ui-grid-trisect";
+		return $scope.thirdConfig.length == 2 ? "ui-grid-halve" : "ui-grid-trisect";
 	}
 
 	$scope.hasThirdType = function(name) {
-		if (! thirdConfig) {
+		if (! $scope.thirdConfig) {
 			return false;
 		}
 
-		return thirdConfig.indexOf(name) != -1;
+		return $scope.thirdConfig.indexOf(name) != -1;
 	}
 
 	$scope.login = function(user) {

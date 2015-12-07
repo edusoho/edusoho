@@ -28,7 +28,7 @@
         <div class="shard-label">
           <span>| 其他方式登录 |</span>
         </div>
-        <ul class="{{getThirdStyle()}}">
+        <ul class="{{getThirdStyle()}}" ng-if="thirdConfig.length > 0">
           <li ng-if="hasThirdType('QQ')">
               <i class="iconfont icon-qq shard-login qq-login" ng-click="loginWithOpen('QQ')"></i>
           </li>

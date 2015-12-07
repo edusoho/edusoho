@@ -352,8 +352,11 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		redirect : function(body) {
 			alert("请在app内转发分享");
 		},
-		getThirdConfig : function(args) {
-			return [];
+		getThirdConfig : function($q) {
+			var deferred = $q.defer();
+			deferred.resolve([]);
+
+			return deferred.promise;
 		}
 	};
 
