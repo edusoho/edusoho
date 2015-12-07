@@ -7,6 +7,8 @@
 {% block keywords %}{% if category.id %}{{ category.name }}{% endif %} {{ setting('site.name') }}{% endblock %}
 {% block description %}{% if category.id %}{{category.name}}的{% endif %}课程列表，第{{ app.request.get('page', 1)}}页。{% endblock %}
 
+{% set script_controller = 'course/explore' %}
+
 {% block content %}
 
     <!--二级页面路径导航开始-->
