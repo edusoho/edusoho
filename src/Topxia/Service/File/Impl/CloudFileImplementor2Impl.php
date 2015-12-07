@@ -36,24 +36,35 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $files;
     }
 
-    public function resumeUpload($globalId, $file)
+    public function resumeUpload($file, $initParams)
     {
         $params = array(
-            'bucket' => $file['bucket'],
-            'extno'  => $file['extno'],
-            'size'   => $file['size'],
-            'name'   => $file['name'],
-            'hash'   => $file['hash']
+            'bucket' => $initParams['bucket'],
+            'extno'  => $file['id'],
+            'size'   => $initParams['fileSize'],
+            'name'   => $initParams['fileName'],
+            'hash'   => $initParams['hash']
         );
 
-        $api     = CloudAPIFactory::create();
-        $resumed = $api->post("/resources/{$globalId}/upload_resume", $params);
+        $api       = CloudAPIFactory::create();
+        $apiResult = $api->post("/resources/{$file['globalId']}/upload_resume", $params);
 
-        if (empty($resumed['resumed']) || ($resumed['resumed'] !== 'ok')) {
+        if (empty($apiResult['resumed']) || ($apiResult['resumed'] !== 'ok')) {
             return null;
         }
 
-        return $resumed;
+        $result = array();
+
+        $result['globalId'] = $file['globalId'];
+        $result['outerId']  = $file['id'];
+        $result['resumed']  = $apiResult['resumed'];
+
+        $result['uploadMode']     = $apiResult['uploadMode'];
+        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadProxyUrl'] = '';
+        $result['uploadToken']    = $apiResult['uploadToken'];
+
+        return $result;
     }
 
     public function prepareUpload($params)
@@ -98,8 +109,20 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'size'   => $file['size']
         );
 
-        $api = CloudAPIFactory::create();
-        return $api->post('/resources/upload_init', $params);
+        $api       = CloudAPIFactory::create();
+        $apiResult = $api->post('/resources/upload_init', $params);
+
+        $result = array();
+
+        $result['globalId'] = $apiResult['no'];
+        $result['outerId']  = $file['extno'];
+
+        $result['uploadMode']     = $apiResult['uploadMode'];
+        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadProxyUrl'] = '';
+        $result['uploadToken']    = $apiResult['uploadToken'];
+
+        return $result;
     }
 
     public function getDownloadFile($file)

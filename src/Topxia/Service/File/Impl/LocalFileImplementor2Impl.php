@@ -17,6 +17,7 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function prepareUpload($params)
     {
+        return null;
     }
 
     public function finishedUpload($file, $params)

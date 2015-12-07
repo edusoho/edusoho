@@ -143,7 +143,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadComplete', function(file) {
-                console.log('uploadSuccess');
             });
 
             uploader.on('uploadAccept', function(object, ret) {
