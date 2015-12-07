@@ -121,8 +121,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'name'   => $params['filename'],
             'size'   => $params['size']
         );
-        $api = CloudAPIFactory::create();
-        return $api->post("/resources/{$file['globalId']}/upload_finish", $params);
+
+        $api                     = CloudAPIFactory::create();
+        $result                  = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
+        $result['convertStatus'] = 'none';
+
+        return $result;
     }
 
     private function mergeCloudFile($file, $cloudFile)

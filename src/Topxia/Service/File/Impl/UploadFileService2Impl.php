@@ -187,12 +187,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             throw $this->createServiceException("uploadFile失败，完成上传失败！");
         }
 
-        $file = $this->getUploadFileDao()->updateFile($file['id'], array(
-            'status'   => 'ok',
-            'length'   => $params['length'],
-            'fileName' => $params['filename'],
-            'fileSize' => $params['size']
-        ));
+        $fields = array(
+            'status'        => 'ok',
+            'convertStatus' => $result['convertStatus'],
+            'length'        => $params['length'],
+            'fileName'      => $params['filename'],
+            'fileSize'      => $params['size']
+        );
+        $file = $this->getUploadFileDao()->updateFile($file['id'], $fields);
     }
 
     public function setFileProcessed($params)

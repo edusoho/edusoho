@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\WebBundle\Util\UploaderToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,11 @@ class UploaderController extends BaseController
         }
 
         $params = array_merge($request->request->all(), $params);
+
+        $params = ArrayToolkit::parts($params, array(
+            'id', 'length', 'filename', 'size'
+        ));
+
         $this->getUploadFileService()->finishedUpload($params);
         return $this->createJsonResponse(true);
     }

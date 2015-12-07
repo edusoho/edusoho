@@ -286,7 +286,7 @@ define(function(require, exports, module) {
                     data.size = file.size;
                     data.id = file.fileId;
 
-                    $.post(file.uploaderWidget.get('finishUrl'), data, function() {
+                    $.post(file.uploaderWidget.get('finishUrl'), data, function(response) {
                         deferred.resolve();
                         file.uploaderWidget.trigger('file.uploaded', file, data);
 

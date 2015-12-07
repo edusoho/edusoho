@@ -22,7 +22,10 @@ define(function(require, exports, module) {
         },
 
         finishUpload: function(deferred) {
-            return {id: this.file.fileId};
+            return {
+                id: this.file.fileId,
+                status: 'success'
+            };
         }
     });
 
