@@ -111,7 +111,7 @@
                       {{ review.content|plain_text(50) }}
                     </div>
                   </div>
-                  <span class="date"></span>
+                  <span class="date">{{review.createdTime|smart_time}}</span>
                 </div>
                 {% endif %}
                 {% endfor %}
