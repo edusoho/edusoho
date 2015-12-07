@@ -15,7 +15,7 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         return $file;
     }
 
-    public function findFiles($files)
+    public function findFilesStatus($files)
     {
         return $files;
     }

@@ -17,7 +17,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $this->mergeCloudFile($file, $cloudFile);
     }
 
-    public function findFiles($files)
+    public function findFilesStatus($files)
     {
         $globalIds = ArrayToolkit::column($files, 'globalId');
         $api       = CloudAPIFactory::create();
