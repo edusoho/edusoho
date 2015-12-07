@@ -13,17 +13,15 @@
   white-space: nowrap;
   word-wrap: normal;
 }
-a {
-  color: #c30d22;
-}
 a:hover,
 a:focus {
   color: #c30d22;
 }
 .link-dark:hover,
 .link-light:hover,
-.link-white {
-  color: #c30d22;
+.link-white:hover,
+.link-lighter:hover {
+  color: #c30d22 !important;
 }
 .text-primary,
 .color-primary {
@@ -68,9 +66,6 @@ a:focus {
 .course-detail-header .course-data > li > a:hover {
   color: #c30d22;
 }
-.score i {
-  color: #c30d22;
-}
 .es-tabs .tab-header > ul > li > a:hover {
   color: #c30d22;
 }
@@ -82,9 +77,6 @@ a:focus {
 }
 .media.media-number .media-body > a:hover {
   color: #c30d22;
-}
-.btn-tag:hover {
-  background-color: #c30d22;
 }
 .media-hot-comment .comments-info p a,
 .media-hot-comment .comments-info h5 a:hover {
@@ -121,7 +113,6 @@ a:focus {
 .es-filter .nav-sort > li > a:hover,
 .es-filter .nav-sort > li > a.active {
   background-color: #c30d22;
-  color: #fff;
 }
 .es-filter .filter label:hover {
   color: #c30d22;
@@ -159,11 +150,11 @@ a:focus {
 .nav-pills > .active > a > .badge {
   color: #c30d22;
 }
-.link-lighter:hover {
-  color: #c30d22;
-}
 body {
   background: #F5F6F7;
+}
+.nav-pills > li {
+  margin: 0 10px;
 }
 .nav-pills > li > a {
   padding: 8px 20px;
@@ -498,9 +489,6 @@ body {
   top: 30px;
   right: -10px;
   background: #f55e5e;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
   padding: 8px 20px;
   color: #fff;
 }
@@ -533,9 +521,8 @@ body {
   position: absolute;
   pointer-events: none;
   border-right-color: #f55e5e;
-  border-width: 28px;
-  margin-top: -28px;
-  margin-right: -1px;
+  border-width: 25px;
+  margin-top: -25px;
 }
 @media (max-width: 1199px) {
   .qs-course-block .course-action .course-price:after {
@@ -674,7 +661,7 @@ body {
   position: absolute;
   top: 0;
   right: 0;
-  color: #e1e1e1;
+  color: #c1c1c1;
 }
 .qs-article-panel .qs-new-article li {
   position: relative;
@@ -684,7 +671,7 @@ body {
   white-space: nowrap;
   word-wrap: normal;
   margin-bottom: 25px;
-  padding-right: 50px;
+  padding-right: 70px;
 }
 .qs-article-block {
   position: relative;
@@ -724,6 +711,7 @@ body {
 }
 .media-dynamic .date {
   font-size: 14px;
+  color: #c1c1c1;
 }
 .media-dynamic .media-body {
   border: none;

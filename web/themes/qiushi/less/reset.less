@@ -1,17 +1,15 @@
 @brand-primary:         #c30d22;
 
-a {
+a:hover, 
+a:focus {
   color: @brand-primary;
-  &:hover,
-  &:focus {
-    color: @brand-primary;
-  }
 }
 
 .link-dark:hover,
 .link-light:hover,
-.link-white {
-  color: @brand-primary;
+.link-white:hover,
+.link-lighter:hover {
+  color: @brand-primary !important;
 }
 
 .text-primary,
@@ -71,10 +69,6 @@ a {
   color: @brand-primary;
 }
 
-.score i {
-  color: @brand-primary;
-}
-
 .es-tabs .tab-header>ul>li>a:hover {
   color: @brand-primary;
 }
@@ -89,10 +83,6 @@ a {
 
 .media.media-number .media-body>a:hover {
   color: @brand-primary;
-}
-
-.btn-tag:hover {
-  background-color: @brand-primary;
 }
 
 .media-hot-comment .comments-info p a,
@@ -142,7 +132,6 @@ a {
     &:hover,
     &.active {
       background-color: @brand-primary;
-      color: #fff;
     }
   }
   .filter label:hover {
@@ -155,7 +144,7 @@ a {
 }
 
 .class-header .class-data>li .dropdown-toggle:hover {
-  color: @brand-primary;
+    color: @brand-primary;
 }
 
 .progress-bar,.rank_num{
@@ -188,9 +177,5 @@ a {
 }
 
 .list-group-item.active > .badge, .nav-pills > .active > a > .badge {
-  color: @brand-primary;
-}
-
-.link-lighter:hover {
   color: @brand-primary;
 }

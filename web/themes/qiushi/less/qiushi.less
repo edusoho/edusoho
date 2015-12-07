@@ -6,6 +6,9 @@ body {
 }
 
 // reset
+.nav-pills > li {
+  margin: 0 10px;
+}
 .nav-pills > li > a {
   padding: 8px 20px;
   .border-radius(20px);
@@ -377,7 +380,7 @@ body {
       top: 30px;
       right: -10px;
       background: @brand-danger;
-      .border-radius(4px);
+      // .border-radius(4px);
       padding: 8px 20px;
       color: #fff;
       @media(max-width:@screen-md-max) {
@@ -403,9 +406,9 @@ body {
         position: absolute;
         pointer-events: none;
         border-right-color: @brand-danger;
-        border-width: 28px;
-        margin-top: -28px;
-        margin-right: -1px;
+        border-width: 25px;
+        margin-top: -25px;
+        // margin-right: -1px;
         @media(max-width:@screen-md-max) {
           border-width: 18px;
           margin-top: -18px;
@@ -530,14 +533,13 @@ body {
       position: absolute;
       top: 0;
       right: 0;
-      color: @gray-light;
+      color: @gray-medium;
     }
     li {
       position: relative;
       .text-overflow;
       margin-bottom: 25px;
-      padding-right: 50px;
-      
+      padding-right: 70px;
     }
   }
 }
@@ -572,6 +574,7 @@ body {
   }
   .date {
     font-size: 14px;
+    color: @gray-medium;
   }
   .media-body {
     border: none;
