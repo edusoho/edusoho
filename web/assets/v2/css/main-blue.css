@@ -2139,6 +2139,7 @@ select:-webkit-autofill {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  border-color: #fff;
 }
 .navbar-form .form-control.active {
   width: 150px;
@@ -2993,6 +2994,18 @@ select:-webkit-autofill {
 .editor-text img {
   max-width: 100%;
   height: auto;
+}
+.section-gray {
+  background-color: #fafafa !important;
+}
+.section-gray .text-line h5 > span {
+  background-color: #fafafa !important;
+}
+.section-wihte {
+  background-color: #fff !important;
+}
+.section-wihte .text-line h5 > span {
+  background-color: #fff !important;
 }
 .divider-line {
   border-bottom: 1px solid #f5f5f5;
