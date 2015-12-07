@@ -314,7 +314,7 @@
 </div>
 
 <div class="mod-preview-mask">
-  <iframe src="{{ path('admin_themes_show',{uri:themeUri}) }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage" onload="SetCwinHeight(this)" >
+  <iframe src="{{ path('admin_themes_show',{uri:themeUri}) }}" marginheight="0" marginwidth="0" frameborder="0" scrolling="no" width="100%" height="100%" id="iframepage" name="iframepage">
   </iframe>
   <div class="pm-iframe"></div>
 </div>
@@ -385,25 +385,3 @@
     color: #444;
   }
 </style>
-
-<script>
-function SetCwinHeight(obj)
-{
-  var cwin=obj;
-  if (document.getElementById)
-  {
-    if (cwin && !window.opera)
-    {
-      if (cwin.contentDocument && cwin.contentDocument.body.offsetHeight)
-        cwin.height = cwin.contentDocument.body.offsetHeight + 20; //FF NS
-      else if(cwin.Document && cwin.Document.body.scrollHeight)
-        cwin.height = cwin.Document.body.scrollHeight + 10;//IE
-    }
-    else
-    {
-        if(cwin.contentWindow.document && cwin.contentWindow.document.body.scrollHeight)
-            cwin.height = cwin.contentWindow.document.body.scrollHeight;//Opera
-    }
-  }
-}
-</script>
