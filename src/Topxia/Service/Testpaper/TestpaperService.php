@@ -39,31 +39,31 @@ interface TestpaperService
 
     public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
 
-    public function findTestpaperResultsByUserId ($id, $start, $limit);
+    public function findTestpaperResultsByUserId($id, $start, $limit);
 
-    public function findTestpaperResultsCountByUserId ($id);
+    public function findTestpaperResultsCountByUserId($id);
 
     public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId);
 
     public function findTestpaperResultsByTestIdAndStatusAndUserId($testpaperId, $userId, array $status);
 
-    public function findTestpaperResultsByStatusAndTestIds ($ids, $status, $start, $limit);
+    public function findTestpaperResultsByStatusAndTestIds($ids, $status, $start, $limit);
 
-    public function findTestpaperResultCountByStatusAndTestIds ($ids, $status);
+    public function findTestpaperResultCountByStatusAndTestIds($ids, $status);
 
-    public function findTestpaperResultsByStatusAndTeacherIds ($ids, $status, $start, $limit);
+    public function findTestpaperResultsByStatusAndTeacherIds($ids, $status, $start, $limit);
 
-    public function findTestpaperResultCountByStatusAndTeacherIds ($ids, $status);
+    public function findTestpaperResultCountByStatusAndTeacherIds($ids, $status);
 
-    public function findAllTestpapersByTarget ($id);
+    public function findAllTestpapersByTarget($id);
 
     public function findAllTestpapersByTargets(array $ids);
 
     /**
      * 开始做试卷
-     * 
-     * @param  [type] $id [description]
-     * @return [type]     [description]
+     *
+     * @param  [type] $id             [description]
+     * @return [type] [description]
      */
     public function startTestpaper($id, $target);
 
@@ -73,31 +73,31 @@ interface TestpaperService
 
     /**
      * [submitTestpaperAnswer description]
-     * @param  [type] $testpaperId [description]
-     * @param  [type] $answers     [description]
-     * @return [type]              [description]
+     * @param  [type] $testpaperId    [description]
+     * @param  [type] $answers        [description]
+     * @return [type] [description]
      */
     public function submitTestpaperAnswer($resultId, $answers);
 
-    public function makeTestpaperResultFinish ($id);
+    public function makeTestpaperResultFinish($id);
 
     public function finishTest($id, $userId, $usedTime);
 
-    public function makeTeacherFinishTest ($id, $paperId, $teacherId, $field);
+    public function makeTeacherFinishTest($id, $paperId, $teacherId, $field);
 
     public function updateTestpaperResult($id, $usedTime);
 
     public function updateTestResultsByLessonId($lessonId, $fields);
 
-    public function findTeacherTestpapersByTeacherId ($teacherId);
+    public function findTeacherTestpapersByTeacherId($teacherId);
 
     /**
      * 获取试卷的所有题目
-     * 
-     * @param  integer $id 试卷ID
-     * @return array     试卷所有题目，包含item对应的question的信息
+     *
+     * @param  integer $id                                                         试卷ID
+     * @return array   试卷所有题目，包含item对应的question的信息
      */
-    
+
     public function getTestpaperItems($testpaperId);
 
     public function updateTestpaperItems($testpaperId, $items);
