@@ -9,38 +9,54 @@ function LoginController($scope, UserService, $stateParams, platformUtil, cordov
 		password : null
 	};
 
+	var thirdConfig = cordovaUtil.getThirdConfig();
 	$scope.jumpToMain = function() {
 		$state.go("slideView.mainTab");
 	}
 
-    	$scope.login = function(user) {
-    		$scope.showLoad();
-    		UserService.login({
-    			"_username": user.username,
-			"_password" : user.password
-    		}, function(data) {
-    			
-			$scope.hideLoad();
-    			if (data.error) {
-				$scope.toast(data.error.message);
-				return;
-			}
+	$scope.getThirdStyle = function() {
+		if (!thirdConfig || thirdConfig.length <= 1) {
+			return "";
+		}
+		return thirdConfig.length == 2 ? "ui-grid-halve" : "ui-grid-trisect";
+	}
 
-			if (platformUtil.native) {
-				esNativeCore.closeWebView();
-				return;
-			}
+	$scope.hasThirdType = function(name) {
+		if (! thirdConfig) {
+			return false;
+		}
 
-			if ($stateParams.goto) {
-				window.history.back();
-			} else {
-				$scope.jumpToMain();
-			}
+		return thirdConfig.indexOf(name) != -1;
+	}
+
+	$scope.login = function(user) {
+		$scope.showLoad();
+		UserService.login({
+			"_username": user.username,
+		"_password" : user.password
+		}, function(data) {
 			
-    		});
-    	}
+		$scope.hideLoad();
+			if (data.error) {
+			$scope.toast(data.error.message);
+			return;
+		}
 
-    	$scope.loginWithOpen = function(type) {
-    		cordovaUtil.openPlatformLogin(type);
-    	}
+		if (platformUtil.native) {
+			esNativeCore.closeWebView();
+			return;
+		}
+
+		if ($stateParams.goto) {
+			window.history.back();
+		} else {
+			$scope.jumpToMain();
+		}
+		
+		});
+	}
+
+	$scope.loginWithOpen = function(type) {
+		cordovaUtil.openPlatformLogin(type);
+	}
 }
