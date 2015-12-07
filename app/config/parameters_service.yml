@@ -1,6 +1,7 @@
 parameters:
     topxia_services:
         'Course.CourseService' : 'Mooc\Service\Course\Impl\CourseServiceImpl'
+        'Course.CourseCopyService' : 'Mooc\Service\Course\Impl\CourseCopyServiceImpl'
         'Course.CourseDeleteService' : 'Mooc\Service\Course\Impl\CourseDeleteServiceImpl'
         'User.UserService' : 'Mooc\Service\User\Impl\UserServiceImpl'
         'User.AuthService' : 'Mooc\Service\User\Impl\AuthServiceImpl'
