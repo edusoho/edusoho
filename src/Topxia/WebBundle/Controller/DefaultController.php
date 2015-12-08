@@ -208,10 +208,11 @@ class DefaultController extends BaseController
 
     public function coursesCategoryAction(Request $request)
     {
-        $conditions             = $request->query->all();
-        $conditions['status']   = 'published';
-        $conditions['parentId'] = 0;
-        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
+        $conditions               = $request->query->all();
+        $conditions['status']     = 'published';
+        $conditions['parentId']   = 0;
+        $categoryId               = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
+        $conditions['categoryId'] = $categoryId;
 
         if (isset($conditions['config'])) {
             $config = $conditions['config'];
