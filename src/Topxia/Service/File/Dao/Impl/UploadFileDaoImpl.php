@@ -4,19 +4,19 @@ namespace Topxia\Service\File\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\File\Dao\UploadFileDao;
-    
+
 class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 {
     protected $table = 'upload_files';
 
     private $serializeFields = array(
-            'metas2' => 'json',
-            'convertParams' => 'json',
+        'metas2'        => 'json',
+        'convertParams' => 'json'
     );
 
     public function getFile($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql  = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $file = $this->getConnection()->fetchAssoc($sql, array($id));
         return $file ? $this->createSerializer()->unserialize($file, $this->serializeFields) : null;
     }
@@ -24,28 +24,40 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     public function getFileByHashId($hash)
     {
         $sql = "SELECT * FROM {$this->table} WHERE hashId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($hash)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
     }
 
     public function getFileByGlobalId($globalId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE globalId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($globalId)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($globalId)) ?: null;
     }
 
     public function getFileByConvertHash($hash)
     {
         $sql = "SELECT * FROM {$this->table} WHERE convertHash = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($hash)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($hash)) ?: null;
     }
 
     public function findFilesByIds($ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function findCloudFilesByIds($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks}) and storage='cloud' and globalId!='0';";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
@@ -63,18 +75,18 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-            
-        return $builder->execute()->fetchAll() ? : array(); 
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchFileCount($conditions)
     {
         $builder = $this->createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -86,10 +98,12 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     public function addFile(array $file)
     {
         $file['createdTime'] = time();
-        $affected = $this->getConnection()->insert($this->table, $file);
+        $affected            = $this->getConnection()->insert($this->table, $file);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Course File disk file error.');
         }
+
         return $this->getFile($this->getConnection()->lastInsertId());
     }
 
@@ -99,7 +113,6 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getFile($id);
     }
-
 
     public function waveUploadFile($id, $field, $diff)
     {
@@ -124,7 +137,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     protected function createSearchQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions);
+        $conditions           = array_filter($conditions);
         $conditions['status'] = 'ok';
 
         if (isset($conditions['filename'])) {
@@ -132,18 +145,17 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             unset($conditions['filename']);
         }
 
-         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('targetType = :targetType')
-            ->andWhere('targetId = :targetId')
-            ->andWhere('status = :status')
-            ->andWhere('targetId IN ( :targets )')
-            ->andWhere('type = :type')
-            ->andWhere('storage = :storage')
-            ->andWhere('filename LIKE :filenameLike')
-            ->andWhere('createdUserId IN ( :createdUserIds )');
+        $builder = $this->createDynamicQueryBuilder($conditions)
+                        ->from($this->table, $this->table)
+                        ->andWhere('targetType = :targetType')
+                        ->andWhere('targetId = :targetId')
+                        ->andWhere('status = :status')
+                        ->andWhere('targetId IN ( :targets )')
+                        ->andWhere('type = :type')
+                        ->andWhere('storage = :storage')
+                        ->andWhere('filename LIKE :filenameLike')
+                        ->andWhere('createdUserId IN ( :createdUserIds )');
 
-         return $builder;
+        return $builder;
     }
-
 }

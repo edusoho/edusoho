@@ -15,5 +15,5 @@ interface FileImplementor2
 
     public function deleteFile($file);
 
-    public function findFilesStatus($files);
+    public function findFiles($files);
 }

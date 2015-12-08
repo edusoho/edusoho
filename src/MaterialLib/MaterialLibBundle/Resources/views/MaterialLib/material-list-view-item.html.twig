@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-<tr id="upload-file-tr-{{file.id}}" data-role="item" data-convertHash="{{file.convertHash}}" class="item-material">
+<tr id="upload-file-tr-{{file.id}}" data-role="item" data-file="{{file.id}}" data-convertHash="{{file.convertHash}}" class="item-material">
 
   <td><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
     data-link-count="{{ file.usedCount }}"

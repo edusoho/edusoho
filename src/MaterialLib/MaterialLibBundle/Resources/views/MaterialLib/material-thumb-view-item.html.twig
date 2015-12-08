@@ -1,6 +1,6 @@
 <li class="course-grid item-material">
-	<div style="width: 180px; height: 180px; padding: 2px;" class="course-item-list-multi">
-    <div><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
+	<div style="width: 180px; height: 180px; padding: 2px;" class="course-item-list-multi" data-file="{{file.id}}">
+    <div class="select"><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
     	data-link-count="{{ file.usedCount }}"
     	data-file-name="{{ file.filename }}"></div>
 

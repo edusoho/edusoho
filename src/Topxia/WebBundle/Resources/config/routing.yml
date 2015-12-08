@@ -6,6 +6,10 @@ homepage_category:
     pattern: /course/search
     defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
 
+test_test:
+    pattern: /test
+    defaults: { _controller: TopxiaWebBundle:Default:test }
+
 live_jump:
     pattern: /live/jump
     defaults: { _controller: TopxiaWebBundle:Default:jump }

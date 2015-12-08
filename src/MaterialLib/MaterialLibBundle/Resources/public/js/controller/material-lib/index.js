@@ -109,9 +109,22 @@ define(function(require, exports, module) {
             return $(this).data('fileName');
         }});
 
-        $('.select [type=checkbox]').each(function(){
-            console.log($(this).val());
+
+        var fileIds = new Array();
+        $('#material-item-list [type=checkbox]').each(function(){
+            if(!isNaN($(this).val())){
+                fileIds.push($(this).val());
+            }
         });
+
+        if(fileIds.length>0){
+            $.get("/materiallib/file/status?ids="+fileIds.join(","),'',function(data){
+                
+                if(data.length>0){
+                    console.log(data);
+                }
+            });
+        }
 
 
     }
