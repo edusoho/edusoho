@@ -106,7 +106,7 @@ class CourseController extends CourseBaseController
             $categoryArrayDescription = $categoryArray['description'];
             $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
             $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
+            $categoryArrayDescription = mb_substr($categoryArrayDescription, 0, 100, 'utf-8');
         }
 
         if (!$categoryArray) {
@@ -183,7 +183,7 @@ class CourseController extends CourseBaseController
             $courseDescription = $course['about'];
             $courseDescription = strip_tags($courseDescription, '');
             $courseDescription = preg_replace("/ /", "", $courseDescription);
-            $courseDescription = substr($courseDescription, 0, 100);
+            $courseDescription = mb_substr($courseDescription, 0, 100, 'utf-8');
         }
 
         return $this->render('TopxiaWebBundle:Course:archiveCourse.html.twig', array(
@@ -306,7 +306,7 @@ class CourseController extends CourseBaseController
 
         $courseAbout = preg_replace("/ /", "", $courseAbout);
 
-        $courseAbout = substr($courseAbout, 0, 100);
+        $courseAbout = mb_substr($courseAbout, 0, 100, 'utf-8');
 
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course'      => $course,
