@@ -321,6 +321,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $orderInfo;
     }
 
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderService()->updateOrder($id, $fileds);
+    }
+
     public function getNote($targetId)
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
@@ -331,6 +336,22 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $classroom = $this->getClassroomService()->getClassroom($targetId);
         return str_replace(' ', '', strip_tags($classroom['title']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getPayCenterService()->pay($payData);
+    }
+
+    public function callbackUrl($router, $order, $container)
+    {
+        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        return $goto;
+    }
+
+    public function cancelOrder($id, $message, $data)
+    {
+        return $this->getOrderService()->createPayRecord($order["id"], $payData);
     }
 
     protected function getClassroomService()

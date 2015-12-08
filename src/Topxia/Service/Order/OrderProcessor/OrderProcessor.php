@@ -27,6 +27,9 @@ interface OrderProcessor
 
     public function pay($payData);
 
-    //public function cancelOrder($id, $message, $data);
+    public function callbackUrl($router, $order, $container);
 
+    public function cancelOrder($id, $message, $data);
+
+    public function createPayRecord($id, $payData);
 }

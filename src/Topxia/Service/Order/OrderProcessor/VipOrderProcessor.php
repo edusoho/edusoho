@@ -297,6 +297,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $orderInfo;
     }
 
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderService()->updateOrder($id, $fileds);
+    }
+
     public function getNote($targetId)
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
@@ -307,6 +312,27 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $vipLevel = $this->getLevelService()->getLevel($targetId);
         return str_replace(' ', '', strip_tags($vipLevel['name']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getPayCenterService()->pay($payData);
+    }
+
+    public function callbackUrl($router, $order, $container)
+    {
+        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        return $goto;
+    }
+
+    public function cancelOrder($id, $message, $data)
+    {
+        return $this->getOrderService()->createPayRecord($order["id"], $payData);
+    }
+
+    public function createPayRecord($id, $payData)
+    {
+        return $this->getOrderService()->createPayRecord($id, $payData);
     }
 
     protected function setting($name, $default = null)

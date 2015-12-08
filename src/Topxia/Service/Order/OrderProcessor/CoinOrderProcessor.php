@@ -80,9 +80,20 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCashOrdersService()->payOrder($payData);
     }
 
+    public function callbackUrl($router, $order, $container)
+    {
+        $goto = !empty($router) ? $container->get('router')->generate($router) : $this->generateUrl('homepage', array(), true);
+        return $goto;
+    }
+
     public function cancelOrder($id, $message, $data)
     {
         return $this->getCashOrdersService()->cancelOrder($id, $message, $data);
+    }
+
+    public function createPayRecord($id, $payData)
+    {
+        return $this->getCashOrdersService()->createPayRecord($id, $payData);
     }
 
     protected function getCashOrdersService()

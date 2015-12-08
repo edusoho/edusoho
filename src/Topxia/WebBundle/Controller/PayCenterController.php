@@ -133,8 +133,13 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
-        $requestParams = OrderProcessorFactory::create($order['targetType'])->requestParams($order, $this->container);
-        $payment       = $request->request->get('payment');
+        //$requestParams = OrderProcessorFactory::create($order['targetType'])->requestParams($order, $this->container);
+        $requestParams = array(
+            'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
+            'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
+        );
+        $payment = $request->request->get('payment');
 
         if ($payment == 'quickpay') {
             $authBank = array();
@@ -250,8 +255,8 @@ class PayCenterController extends BaseController
         $processor = OrderProcessorFactory::create($order["targetType"]);
         $router    = $processor->getRouter();
 
-        $goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
-
+        //$goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        $goto = $processor->callbackUrl($router, $order, $this->container);
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $goto
         ));
@@ -326,7 +331,7 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "created") {
             $order = $processor->getOrderBySn($payData['sn']);
-            $this->getOrderService()->createPayRecord($order["id"], $payData);
+            $processor->createPayRecord($order["id"], $payData);
             return new Response('success');
         }
 
@@ -448,7 +453,7 @@ class PayCenterController extends BaseController
         $options       = $this->getPaymentOptions($order['payment']);
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order["targetType"]);
-        $targetId      = isset($order["targetType"]) ? $order['targetId'] : $order['id'];
+        $targetId      = isset($order["targetId"]) ? $order['targetId'] : $order['id'];
         $requestParams = array_merge($requestParams, array(
             'orderSn'     => $order['sn'],
             'userId'      => $order['userId'],
