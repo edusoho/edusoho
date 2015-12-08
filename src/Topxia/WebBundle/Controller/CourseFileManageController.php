@@ -93,9 +93,7 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
-        $files = $this->getUploadFileService2()->findFiles($fileIds);
-
-        return $this->createJsonResponse(FileFilter::filters($files));
+        return $this->createJsonResponse($this->getUploadFileService2()->findFiles($fileIds));
     }
 
     public function showAction(Request $request, $id, $fileId)
@@ -233,23 +231,5 @@ class CourseFileManageController extends BaseController
         }
 
         return $response;
-    }
-}
-
-class FileFilter
-{
-    public static function filters($files)
-    {
-        $filterResult = array();
-
-        if (empty($files)) {
-            return $filterResult;
-        }
-
-        foreach ($files as $index => $file) {
-            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
-        }
-
-        return $filterResult;
     }
 }

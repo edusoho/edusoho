@@ -502,9 +502,7 @@ class CourseLessonManageController extends BaseController
             }
         }
 
-        $files = $this->getUploadFileService()->findFiles($fileIds);
-
-        return $this->createJsonResponse(FileFilter::filters($files));
+        return $this->createJsonResponse($this->getUploadFileService()->findFiles($fileIds));
     }
 
     protected function secondsToText($value)
