@@ -17,8 +17,6 @@ interface CourseService
 
     public function getCourse($id);
 
-    public function getCoursesCount();
-
     public function findCoursesByIds(array $ids);
 
     public function findCoursesByParentIdAndLocked($parentId, $locked);
@@ -28,8 +26,6 @@ interface CourseService
     public function findCoursesByLikeTitle($title);
 
     public function findMinStartTimeByCourseId($courseId);
-
-    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
 
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
@@ -373,4 +369,9 @@ interface CourseService
     public function deleteLessonReplayByLessonId($lessonId);
 
     public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+
+    public function updateCourseLessonReplay($id, $fields);
+
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields);
+
 }
