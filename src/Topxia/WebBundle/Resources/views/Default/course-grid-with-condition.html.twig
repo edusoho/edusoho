@@ -18,7 +18,7 @@
     <div class="btn-group visible-xs">
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">全部课程 <span class="caret"></span></button>
       <ul class="dropdown-menu" role="menu">
-        <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}" data-url="{{path('homepage_category',{config:config,categoryId : 0,orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+        <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}" data-url="{{path('homepage_category',{config:config,orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
         {% if categoriesFirst%}
           {% for category in categoriesFirst  if (category.parentId == 0) %}
             {% if ( loop.index0 < config.categoryCount|default(4) ) %}
