@@ -9,6 +9,7 @@ class CashAccountServiceTest extends BaseTestCase
     {
         $user   = $this->createUser();
         $result = $this->getCashAccountService()->createAccount($user['id']);
+        $this->assertEquals($result["cash"], 0);
         return $result;
     }
 
@@ -17,6 +18,7 @@ class CashAccountServiceTest extends BaseTestCase
         $user    = $this->createUser();
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $result  = $this->getCashAccountService()->getAccount($account['id']);
+        $this->assertEquals($result["cash"], 0);
         return $result;
     }
 
@@ -25,6 +27,7 @@ class CashAccountServiceTest extends BaseTestCase
         $user = $this->createUser();
         $this->getCashAccountService()->createAccount($user['id']);
         $result = $this->getCashAccountService()->getAccountByUserId($user['id']);
+        $this->assertEquals($result["cash"], 0);
         return $result;
     }
 
@@ -45,6 +48,8 @@ class CashAccountServiceTest extends BaseTestCase
         $result     = $this->getCashAccountService()->SearchAccount($conditions, $orderBy, 0, 10);
         $conditions = array();
         $result     = $this->getCashAccountService()->SearchAccount($conditions, $orderBy, 0, 10);
+        $this->assertEquals($result[0]["cash"], 0);
+        $this->assertEquals($result[1]["cash"], 0);
         return $result;
     }
 
@@ -57,14 +62,17 @@ class CashAccountServiceTest extends BaseTestCase
         $conditions = array(
             'userId' => $user['id']
         );
-        $orderBy    = array('createdTime', 'Desc');
-        $result     = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $orderBy = array('createdTime', 'Desc');
+        $result  = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $this->assertEquals($result, 1);
         $conditions = array(
             'userId' => $user2['id']
         );
-        $result     = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $result = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $this->assertEquals($result, 1);
         $conditions = array();
         $result     = $this->getCashAccountService()->SearchAccountCount($conditions, $orderBy, 0, 10);
+        $this->assertEquals($result, null);
         return $result;
     }
 
@@ -72,6 +80,7 @@ class CashAccountServiceTest extends BaseTestCase
     {
         $user   = $this->createUser();
         $change = $this->getCashAccountService()->addChange($user['id']);
+        $this->assertEquals($change["amount"], 0);
         return $change;
     }
 
@@ -80,6 +89,7 @@ class CashAccountServiceTest extends BaseTestCase
         $user   = $this->createUser();
         $change = $this->getCashAccountService()->addChange($user['id']);
         $change = $this->getCashAccountService()->getChangeByUserId($user['id']);
+        $this->assertEquals($change["amount"], 0);
         return $change;
     }
 
@@ -89,6 +99,7 @@ class CashAccountServiceTest extends BaseTestCase
         $user        = $this->createUser();
         $this->getCashAccountService()->createAccount($user['id']);
         $result = $this->getCashAccountService()->changeCoin(1, 1, $user['id']);
+        $this->assertEquals($result["amount"], 1);
         return $result;
     }
 
@@ -96,7 +107,9 @@ class CashAccountServiceTest extends BaseTestCase
     {
         $user    = $this->createUser();
         $account = $this->getCashAccountService()->createAccount($user['id']);
-        $result  = $this->getCashAccountService()->waveCashField($account['id'], 1);
+        $result  = $this->getCashAccountService()->waveCashField($account['id'], 0);
+        var_dump($result);
+        $this->assertEquals($result, "");
         return $result;
     }
 
