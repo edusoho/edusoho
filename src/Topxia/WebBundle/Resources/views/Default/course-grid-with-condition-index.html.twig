@@ -19,7 +19,7 @@
     </div>
     <div class="course-filter" id="course-filter">
       <ul class="nav nav-pills hidden-xs" role="tablist">
-        <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{config:config,categoryId : 0,orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+        <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{config:config,orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
         {% if categoriesFirst%}
           {% for category in categoriesFirst  if (category.parentId == 0) %}
             {% if ( loop.index0 < config.categoryCount|default(4) ) %}
