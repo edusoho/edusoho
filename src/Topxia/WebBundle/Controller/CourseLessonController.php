@@ -5,8 +5,8 @@ use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseLessonController extends BaseController
@@ -282,7 +282,7 @@ class CourseLessonController extends BaseController
                     }
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                        if (isset($file['convertParams']['convertor']) && ( in_array($file['convertParams']['convertor'], array('HLSEncryptedVideo', 'audio')) )) {
+                        if (isset($file['convertParams']['convertor']) && (in_array($file['convertParams']['convertor'], array('HLSEncryptedVideo', 'audio')))) {
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                 'data'     => $file['id'],
                                 'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
@@ -328,10 +328,9 @@ class CourseLessonController extends BaseController
                         }
 
                         if ($key) {
-                            $api = CloudAPIFactory::create();
-                            $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
+                            $api              = CloudAPIFactory::create();
+                            $result           = $api->get(sprintf("/files/%s/player", $file['globalId']));
                             $json['mediaUri'] = $result['url'];
-
                         } else {
                             $json['mediaUri'] = '';
                         }
@@ -486,7 +485,6 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
@@ -502,12 +500,12 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $api = CloudAPIFactory::create();
+        $api    = CloudAPIFactory::create();
         $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
 
         if (empty($result['images'])) {
             return $this->createJsonResponse(array(
-                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。'),
+                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。')
             ));
         }
 
@@ -551,18 +549,18 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $api = CloudAPIFactory::create();
+        $api    = CloudAPIFactory::create();
         $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
 
-        if (empty($result['pdf']) or empty($result['swf'])) {
+        if (empty($result['pdf']) || empty($result['swf'])) {
             return $this->createJsonResponse(array(
-                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。'),
+                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。')
             ));
         }
 
         return $this->createJsonResponse(array(
             'pdfUri' => $result['pdf'],
-            'swfUri' => $result['swf'],
+            'swfUri' => $result['swf']
         ));
     }
 
@@ -933,7 +931,7 @@ class CourseLessonController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getTestpaperService()
