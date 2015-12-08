@@ -113,11 +113,15 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $params = array(
             "extno"  => $file['id'],
             "bucket" => $file['bucket'],
-            "key"    => $file['hashId'],
+            "reskey" => $file['hashId'],
             "hash"   => $file['hash'],
             'name'   => $file['fileName'],
             'size'   => $file['fileSize']
         );
+
+        if (isset($file['directives'])) {
+            $params['directives'] = $file['directives'];
+        }
 
         $api       = CloudAPIFactory::create();
         $apiResult = $api->post('/resources/upload_init', $params);
@@ -246,10 +250,17 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         } else {
             if ($file['type'] == 'video') {
                 $file['convertParams'] = array(
-                    'convertor'    => $cloudFile['directives']['output'],
+                    'convertor'    => 'HLSEncryptedVideo',
                     'videoQuality' => $cloudFile['directives']['videoQuality'],
                     'audioQuality' => $cloudFile['directives']['audioQuality']
                 );
+
+                foreach ($cloudFile['metas']['levels'] as $key => $value) {
+                    $value['type']                      = $key;
+                    $value['cmd']['hlsKey']             = $cloudFile['metas']['levels'][$key]['hlsKey'];
+                    $cloudFile['metas']['levels'][$key] = $value;
+                }
+
                 $file['metas2'] = $cloudFile['metas']['levels'];
             } elseif ($file['type'] == 'ppt') {
                 $file['convertParams'] = array(
@@ -269,6 +280,32 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
                 );
                 $file['metas2'] = $cloudFile['metas']['levels'];
             }
+
+            // if ($file['type'] == 'video') {
+            //     $file['convertParams'] = array(
+            //         'convertor'    => $cloudFile['directives']['output'],
+            //         'videoQuality' => $cloudFile['directives']['videoQuality'],
+            //         'audioQuality' => $cloudFile['directives']['audioQuality']
+            //     );
+            //     $file['metas2'] = $cloudFile['metas']['levels'];
+            // } elseif ($file['type'] == 'ppt') {
+            //     $file['convertParams'] = array(
+            //         'convertor' => $cloudFile['directives']['output']
+            //     );
+            //     $file['metas2'] = $cloudFile['metas'];
+            // } elseif ($file['type'] == 'document') {
+            //     $file['convertParams'] = array(
+            //         'convertor' => $cloudFile['directives']['output']
+            //     );
+            //     $file['metas2'] = $cloudFile['metas'];
+            // } elseif ($file['type'] == 'audio') {
+            //     $file['convertParams'] = array(
+            //         'convertor'    => $cloudFile['directives']['output'],
+            //         'videoQuality' => 'normal',
+            //         'audioQuality' => 'normal'
+            //     );
+            //     $file['metas2'] = $cloudFile['metas']['levels'];
+            // }
         }
 
         return $file;

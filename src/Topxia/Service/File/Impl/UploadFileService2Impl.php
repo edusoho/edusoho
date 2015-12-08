@@ -43,7 +43,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return null;
         }
 
-        return ArrayToolkit::parts($file, array('id', 'globalId', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
+        return ArrayToolkit::parts($file, array('id', 'hashId', 'globalId', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
     }
 
     public function getFileByGlobalId($globalId)
@@ -121,7 +121,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         $params['userId'] = $user['id'];
-        $params           = ArrayToolkit::parts($params, array('id', 'userId', 'targetId', 'targetType', 'bucket', 'hash', 'fileSize', 'fileName'));
+        $params           = ArrayToolkit::parts($params, array('id', 'directives', 'userId', 'targetId', 'targetType', 'bucket', 'hash', 'fileSize', 'fileName'));
 
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];

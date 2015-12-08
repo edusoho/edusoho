@@ -117,13 +117,27 @@ class UploaderController extends BaseController
 
     public function mkfileAction(Request $request, $fileSize)
     {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isLogin()) {
+            throw $this->createAccessDeniedException();
+        }
+
         $headers = array(
             'Authorization:'.$request->headers->get('Authorization')
         );
 
         $params = $request->request->all();
 
-        $url    = $params['uploadUrl'].'/mkfile/'.$fileSize;
+        $id   = $params['id'];
+        $file = $this->getUploadFileService()->getThinFile($id);
+
+        if (empty($file)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $key    = base64_encode($file['hashId']);
+        $url    = $params['uploadUrl']."/mkfile/{$fileSize}/key/{$key}";
         $data   = $params['content'];
         $result = $this->_post($url, $data, $headers, true);
         return new Response($result);

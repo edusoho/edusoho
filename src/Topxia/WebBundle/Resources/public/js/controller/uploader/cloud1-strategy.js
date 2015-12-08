@@ -67,7 +67,8 @@ define(function(require, exports, module) {
                 async: false,
                 data:{
                     'uploadUrl': encodeURI(self.get('uploadUrl')),
-                    'content': cloud2UploadStatus.ctxs.join(',')
+                    'content': cloud2UploadStatus.ctxs.join(','),
+                    'id': this.file.fileId
                 },
                 beforeSend: function(xhr){
                     xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
