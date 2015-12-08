@@ -3,7 +3,7 @@
   
   {% set count = config.count|default(12) %}
   {% set categoryId = 0 %}
-  {% set orderBy = config.orderBy|default('latest')%}
+  {% set orderBy = 'latest'%}
   {% if orderBy == 'latest'%}
     {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
   {% elseif orderBy == 'recommendedSeq'%}
