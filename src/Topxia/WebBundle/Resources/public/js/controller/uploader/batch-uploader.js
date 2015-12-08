@@ -198,9 +198,10 @@ define(function(require, exports, module) {
             }
 
             var params = {};
-            if ((this.get('process') == 'auto') && extOutputs[file.ext]) {
-                params = paramsDefault[extOutputs[file.ext]];
-                params[outputKey[extOutputs[file.ext]]] = extOutputs[file.ext];
+            var extOutput = extOutputs[file.ext];
+            if ((this.get('process') == 'auto') && extOutput) {
+                params = paramsDefault[extOutput];
+                params[outputKey[extOutput]] = extOutput;
             } 
 
             return params;
