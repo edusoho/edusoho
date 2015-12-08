@@ -85,6 +85,7 @@ class CourseController extends CourseBaseController
             $this->getCourseService()->searchCourseCount($conditions),
             20
         );
+
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
             $orderBy,
@@ -105,7 +106,7 @@ class CourseController extends CourseBaseController
             $categoryArrayDescription = $categoryArray['description'];
             $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
             $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-            $categoryArrayDescription = mb_substr($categoryArrayDescription, 0, 100, 'utf-8');
+            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
         }
 
         if (!$categoryArray) {
@@ -144,8 +145,7 @@ class CourseController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
-            , 30
+            $this->getCourseService()->searchCourseCount($conditions), 30
         );
 
         $courses = $this->getCourseService()->searchCourses(
@@ -183,7 +183,7 @@ class CourseController extends CourseBaseController
             $courseDescription = $course['about'];
             $courseDescription = strip_tags($courseDescription, '');
             $courseDescription = preg_replace("/ /", "", $courseDescription);
-            $courseDescription = mb_substr($courseDescription, 0, 100, 'utf-8');
+            $courseDescription = substr($courseDescription, 0, 100);
         }
 
         return $this->render('TopxiaWebBundle:Course:archiveCourse.html.twig', array(
@@ -305,7 +305,9 @@ class CourseController extends CourseBaseController
         $courseAbout = strip_tags($courseAbout, '');
 
         $courseAbout = preg_replace("/ /", "", $courseAbout);
-        $courseAbout = mb_substr($courseAbout, 0, 100, 'utf-8');
+
+        $courseAbout = substr($courseAbout, 0, 100);
+
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course'      => $course,
             'member'      => $member,
@@ -318,6 +320,7 @@ class CourseController extends CourseBaseController
     {
         $category = $this->getCategoryService()->getCategory($course['categoryId']);
         $tags     = $this->getTagService()->findTagsByIds($course['tags']);
+
         return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
             'category' => $category,
             'tags'     => $tags,
@@ -343,12 +346,14 @@ class CourseController extends CourseBaseController
     public function favoriteAction(Request $request, $id)
     {
         $this->getCourseService()->favoriteCourse($id);
+
         return $this->createJsonResponse(true);
     }
 
     public function unfavoriteAction(Request $request, $id)
     {
         $this->getCourseService()->unfavoriteCourse($id);
+
         return $this->createJsonResponse(true);
     }
 
@@ -363,15 +368,15 @@ class CourseController extends CourseBaseController
         if ($type == 'live') {
             $courseSetting = $this->setting('course', array());
 
+            if (empty($courseSetting['live_course_enabled'])) {
+                return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
+            }
+
             if (!empty($courseSetting['live_course_enabled'])) {
                 $client   = new EdusohoLiveClient();
                 $capacity = $client->getCapacity();
             } else {
                 $capacity = array();
-            }
-
-            if (empty($courseSetting['live_course_enabled'])) {
-                return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
             }
 
             if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
@@ -386,6 +391,7 @@ class CourseController extends CourseBaseController
         if ($request->getMethod() == 'POST') {
             $course = $request->request->all();
             $course = $this->getCourseService()->createCourse($course);
+
             return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
         }
 
@@ -409,6 +415,7 @@ class CourseController extends CourseBaseController
         }
 
         $this->getCourseService()->removeStudent($course['id'], $user['id']);
+
         return $this->createJsonResponse(true);
     }
 
@@ -425,15 +432,18 @@ class CourseController extends CourseBaseController
         }
 
         $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
+
         return $this->createJsonResponse(true);
     }
 
     public function learnAction(Request $request, $id)
     {
-        $user = $this->getCurrentUser();
+        $user      = $this->getCurrentUser();
+        $starttime = $request->query->get('starttime', '');
 
         if (!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('course_show', array('id' => $id)));
+
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
@@ -468,7 +478,8 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:learn.html.twig', array(
-            'course' => $course
+            'course'    => $course,
+            'starttime' => $starttime
         ));
     }
 
@@ -555,10 +566,12 @@ class CourseController extends CourseBaseController
             $fields = $request->request->all();
 
             $this->getCourseService()->addMemberExpiryDays($courseId, $userId, $fields['expiryDay']);
+
             return $this->createJsonResponse(true);
         }
 
         $default = $this->getSettingService()->get('default', array());
+
         return $this->render('TopxiaWebBundle:CourseStudentManage:set-expiryday-modal.html.twig', array(
             'course'  => $course,
             'user'    => $user,
@@ -567,9 +580,8 @@ class CourseController extends CourseBaseController
     }
 
     /**
-     * Block Actions
+     * Block Actions.
      */
-
     public function headerAction($course, $manage = false)
     {
         $user = $this->getCurrentUser();
@@ -620,6 +632,7 @@ class CourseController extends CourseBaseController
     {
         $classroomMembers     = $this->getClassroomService()->getClassroomMembersByCourseId($course["id"], $user->id);
         $classroomMemberRoles = ArrayToolkit::column($classroomMembers, "role");
+
         return isset($member["joinedType"]) && $member["joinedType"] == 'classroom' && (empty($classroomMemberRoles) || count($classroomMemberRoles) == 0);
     }
 
@@ -643,6 +656,7 @@ class CourseController extends CourseBaseController
         $nextLearnLesson = $this->getCourseService()->getUserNextLearnLesson($user['id'], $course['id']);
 
         $progress = $this->calculateUserLearnProgress($course, $member);
+
         return $this->render('TopxiaWebBundle:Course:progress-block.html.twig', array(
             'course'          => $course,
             'member'          => $member,
@@ -655,6 +669,7 @@ class CourseController extends CourseBaseController
     {
         $students = $this->getCourseService()->findCourseStudents($course['id'], 0, 12);
         $users    = $this->getUserService()->findUsersByIds(ArrayToolkit::column($students, 'userId'));
+
         return $this->render('TopxiaWebBundle:Course:latest-members-block.html.twig', array(
             'students' => $students,
             'users'    => $users
@@ -713,8 +728,7 @@ class CourseController extends CourseBaseController
 
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions)
-            , 5
+            $this->getCourseService()->searchCourseCount($conditions), 5
         );
 
         $courses = $this->getCourseService()->searchCourses(
@@ -836,6 +850,7 @@ class CourseController extends CourseBaseController
     public function memberIdsAction(Request $request, $id)
     {
         $ids = $this->getCourseService()->findMemberUserIdsByCourseId($id);
+
         return $this->createJsonResponse($ids);
     }
 

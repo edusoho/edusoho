@@ -193,6 +193,16 @@ class CrontabServiceImpl extends BaseService implements CrontabService
         return $this->getJobDao()->findJobByTargetTypeAndTargetId($targetType, $targetId);
     }
 
+    public function findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId)
+    {
+        return $this->getJobDao()->findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId);
+    }
+
+    public function updateJob($id, $fields)
+    {
+        return $this->getJobDao()->updateJob($id, $fields);
+    }
+
     protected function prepareSearchConditions($conditions)
     {
         if (!empty($conditions['nextExcutedStartTime']) && !empty($conditions['nextExcutedEndTime'])) {

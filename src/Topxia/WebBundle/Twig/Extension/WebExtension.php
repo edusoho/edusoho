@@ -79,7 +79,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('dict_text', array($this, 'getDictText'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
-            new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstaled')),
+            new \Twig_SimpleFunction('is_plugin_installed', array($this, 'isPluginInstalled')),
             new \Twig_SimpleFunction('plugin_version', array($this, 'getPluginVersion')),
             new \Twig_SimpleFunction('version_compare', array($this, 'versionCompare')),
             new \Twig_SimpleFunction('is_exist_in_subarray_by_id', array($this, 'isExistInSubArrayById')),
@@ -105,6 +105,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_parameters_from_url', array($this, 'getParametersFromUrl')),
             new \Twig_SimpleFunction('upgrade_locked', array($this, 'upgradeLocked')),
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
+            new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork'))
         );
@@ -189,6 +190,7 @@ class WebExtension extends \Twig_Extension
         $values = array_filter($values, function ($value) {
             return !is_array($value);
         }
+
         );
         return $this->simpleTemplateFilter($pattern, $values);
     }
@@ -290,7 +292,7 @@ class WebExtension extends \Twig_Extension
         return '';
     }
 
-    public function isPluginInstaled($name)
+    public function isPluginInstalled($name)
     {
         $plugins = $this->container->get('kernel')->getPlugins();
 
@@ -1120,6 +1122,10 @@ class WebExtension extends \Twig_Extension
                 if ($order['amount'] > 0) {
                     if ($order['payment'] == 'wxpay') {
                         $default = "微信支付";
+                    } elseif ($order['payment'] == 'heepay') {
+                        $default = "网银支付";
+                    } elseif ($order['payment'] == 'quickpay') {
+                        $default = "快捷支付";
                     } else {
                         $default = "支付宝";
                     }
@@ -1137,6 +1143,10 @@ class WebExtension extends \Twig_Extension
                     $default = "无";
                 } elseif ($order['payment'] == 'wxpay') {
                     $default = "微信支付";
+                } elseif ($order['payment'] == 'heepay') {
+                    $default = "网银支付";
+                } elseif ($order['payment'] == 'quickpay') {
+                    $default = "快捷支付";
                 } else {
                     $default = "支付宝";
                 }
@@ -1231,6 +1241,11 @@ class WebExtension extends \Twig_Extension
         }
 
         return false;
+    }
+
+    public function timestamp()
+    {
+        return time();
     }
 
     public function blur_phone_number($phoneNum)

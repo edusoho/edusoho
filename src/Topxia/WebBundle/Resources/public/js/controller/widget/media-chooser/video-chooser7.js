@@ -75,10 +75,10 @@ define(function(require, exports, module) {
     	onImport: function(e) {
             var self = this,
                 $btn = $(e.currentTarget),
-                $urlInput = this.$('[data-role=import-url]'),
+                $urlInput = $btn.parent().siblings('input'),
                 url = $urlInput.val();
 
-            if (url.length ==0) {
+            if (url.length == 0 ) {
                 Notify.danger('请输入视频页面地址');
                 return;
             }

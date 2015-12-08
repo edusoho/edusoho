@@ -1,16 +1,15 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Topxia\System;
+use Topxia\Common\BlockToolkit;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
-use Topxia\Common\BlockToolkit;
-use Topxia\System;
 
 class BuildCommand extends BaseCommand
 {
-
     protected function configure()
     {
         $this->setName('topxia:build');
@@ -44,18 +43,19 @@ class BuildCommand extends BaseCommand
 
     private function initBuild(InputInterface $input, OutputInterface $output)
     {
-        $this->input = $input;
+        $this->input  = $input;
         $this->output = $output;
 
-        $this->rootDirectory = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
-        $this->buildDirectory = $this->rootDirectory . '/build';
+        $this->rootDirectory  = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
+        $this->buildDirectory = $this->rootDirectory.'/build';
 
         $this->filesystem = new Filesystem();
 
         if ($this->filesystem->exists($this->buildDirectory)) {
             $this->filesystem->remove($this->buildDirectory);
         }
-        $this->distDirectory = $this->buildDirectory . '/edusoho';
+
+        $this->distDirectory = $this->buildDirectory.'/edusoho';
         $this->filesystem->mkdir($this->distDirectory);
     }
 
@@ -65,14 +65,13 @@ class BuildCommand extends BaseCommand
 
         chdir($this->buildDirectory);
 
-        $command = "tar czvf edusoho-" . System::VERSION . ".tar.gz edusoho/";
+        $command = "tar czvf edusoho-".System::VERSION.".tar.gz edusoho/";
         exec($command);
     }
 
     private function clean()
     {
         $this->output->writeln('cleaning...');
-
     }
 
     private function buildRootDirectory()
@@ -138,7 +137,6 @@ class BuildCommand extends BaseCommand
         $this->filesystem->copy("{$this->rootDirectory}/app/AppKernel.php", "{$this->distDirectory}/app/AppKernel.php");
         $this->filesystem->copy("{$this->rootDirectory}/app/autoload.php", "{$this->distDirectory}/app/autoload.php");
         $this->filesystem->copy("{$this->rootDirectory}/app/bootstrap.php.cache", "{$this->distDirectory}/app/bootstrap.php.cache");
-
     }
 
     public function buildDocDirectory()
@@ -187,6 +185,7 @@ class BuildCommand extends BaseCommand
         $finder->directories()->in("{$this->distDirectory}/src/");
 
         $toDeletes = array();
+
         foreach ($finder as $dir) {
             if ($dir->getFilename() == 'Tests') {
                 $toDeletes[] = $dir->getRealpath();
@@ -196,7 +195,6 @@ class BuildCommand extends BaseCommand
         foreach ($toDeletes as $file) {
             $this->filesystem->remove($file);
         }
-
     }
 
     public function buildVendorDirectory()
@@ -207,6 +205,8 @@ class BuildCommand extends BaseCommand
 
         $directories = array(
             'composer',
+            'silex/silex/src',
+            'pimple/pimple/lib',
             'doctrine/annotations/lib',
             'doctrine/cache/lib',
             'doctrine/collections/lib',
@@ -240,7 +240,7 @@ class BuildCommand extends BaseCommand
             'twig/twig/lib',
             'twig/extensions/lib',
             'endroid/qrcode/src',
-            'endroid/qrcode/assets',
+            'endroid/qrcode/assets'
         );
 
         foreach ($directories as $dir) {
@@ -253,6 +253,7 @@ class BuildCommand extends BaseCommand
         $finder->directories()->in("{$this->distDirectory}/vendor2");
 
         $toDeletes = array();
+
         foreach ($finder as $dir) {
             if ($dir->getFilename() == 'Tests') {
                 $toDeletes[] = $dir->getRealpath();
@@ -262,12 +263,11 @@ class BuildCommand extends BaseCommand
         $this->filesystem->remove($toDeletes);
 
         //$this->cleanIcuVendor();
-
     }
 
     private function cleanIcuVendor()
     {
-        $icuBase = "{$this->distDirectory}/vendor2/symfony/icu/Symfony/Component/Icu/Resources/data";
+        $icuBase    = "{$this->distDirectory}/vendor2/symfony/icu/Symfony/Component/Icu/Resources/data";
         $whileFiles = array(
             'svn-info.txt',
             'version.txt',
@@ -282,11 +282,12 @@ class BuildCommand extends BaseCommand
             'locales/zh_CN.res',
             'region/en.res',
             'region/zh.res',
-            'region/zh_CN.res',
+            'region/zh_CN.res'
         );
 
         $finder = new Finder();
         $finder->files()->in($icuBase);
+
         foreach ($finder as $file) {
             if (!in_array($file->getRelativePathname(), $whileFiles)) {
                 $this->filesystem->remove($file->getRealpath());
@@ -328,8 +329,10 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->files()->in("{$this->distDirectory}/web/assets/libs");
+
         foreach ($finder as $file) {
             $filename = $file->getFilename();
+
             if ($filename == 'package.json' || preg_match('/-debug.js$/', $filename) || preg_match('/-debug.css$/', $filename)) {
                 $this->filesystem->remove($file->getRealpath());
             }
@@ -338,13 +341,14 @@ class BuildCommand extends BaseCommand
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
         $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom');
+
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {
                 continue;
             }
+
             $this->filesystem->mirror($dir->getRealpath(), "{$this->distDirectory}/web/bundles/{$dir->getFilename()}");
         }
-
     }
 
     public function buildFixPdoSession()
@@ -352,7 +356,8 @@ class BuildCommand extends BaseCommand
         $this->output->writeln('build fix PdoSessionHandler .');
 
         $targetPath = "{$this->distDirectory}/vendor2/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php";
-        $sourcePath = __DIR__ . "/Fixtures/PdoSessionHandler.php";
+
+        $sourcePath = __DIR__."/Fixtures/PdoSessionHandler.php";
         $this->filesystem->copy($sourcePath, $targetPath, true);
     }
 
@@ -360,37 +365,41 @@ class BuildCommand extends BaseCommand
     {
         $this->output->writeln('build default blocks .');
 
-        $themeDir = realpath(__DIR__ . '/../../../../web/themes/');
+        $themeDir = realpath(__DIR__.'/../../../../web/themes/');
 
         $html = $this->generateBlcokContent("{$themeDir}/block.json");
         $this->generateBlcokContent("{$themeDir}/default/block.json");
         $this->generateBlcokContent("{$themeDir}/autumn/block.json");
         $this->generateBlcokContent("{$themeDir}/jianmo/block.json");
-
     }
 
     private function generateBlcokContent($metaFilePath)
     {
         $metas = file_get_contents($metaFilePath);
         $metas = json_decode($metas, true);
+
         if (empty($metas)) {
             throw new \RuntimeException("插件元信息文件{$metaFilePath}格式不符合JSON规范，解析失败，请检查元信息文件格式");
         }
 
         foreach ($metas as $code => $meta) {
             $data = array();
+
             foreach ($meta['items'] as $key => $item) {
                 $data[$key] = $item['default'];
             }
-            $block = array('templateName' => $meta['templateName'], 'data' => $data);
-            $html = BlockToolkit::render($block, $this->getContainer());
 
-            $filename = "block-" . md5($code) . '.html';
-            $folder = "{$this->distDirectory}/web/install/blocks/";
+            $block = array('templateName' => $meta['templateName'], 'data' => $data);
+            $html  = BlockToolkit::render($block, $this->getContainer());
+
+            $filename = "block-".md5($code).'.html';
+            $folder   = "{$this->distDirectory}/web/install/blocks/";
+
             if (!file_exists($folder)) {
                 mkdir($folder);
             }
-            $filename = $folder . $filename;
+
+            $filename = $folder.$filename;
 
             file_put_contents($filename, $html);
         }
@@ -400,12 +409,11 @@ class BuildCommand extends BaseCommand
     {
         $finder = new Finder();
         $finder->files()->in($this->distDirectory)->ignoreDotFiles(false);
-        foreach ($finder as $dir) {
 
+        foreach ($finder as $dir) {
             if ($dir->getBasename() == '.DS_Store') {
                 $this->filesystem->remove($dir->getRealpath());
             }
         }
     }
-
 }

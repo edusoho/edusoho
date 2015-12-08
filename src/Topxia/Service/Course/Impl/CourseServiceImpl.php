@@ -42,14 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
-    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
-    {
-        $courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByTagIdsAndStatus($tagIds, $status, $start, $limit)
-        );
-        return ArrayToolkit::index($courses, 'id');
-    }
-
+    // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         $courses = CourseSerialize::unserializes(
@@ -85,11 +78,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
     }
 
-    public function getCoursesCount()
-    {
-        return $this->getCourseDao()->getCoursesCount();
-    }
-
+    // TODO searchCoursesCount
     public function findCoursesCountByLessThanCreatedTime($endTime)
     {
         return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
@@ -207,6 +196,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $conditions;
     }
 
+    // TODO searchCoursesCount
     public function findUserLearnCourses($userId, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
@@ -225,6 +215,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // TODO searchCourse
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
@@ -234,6 +225,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // TODO 和findUserLearnCourseCountNotInClassroom合并
     public function findUserLearnCourseCount($userId, $onlyPublished = true)
     {
         return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
@@ -404,8 +396,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
 
-        $course = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
-
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
@@ -443,8 +434,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields = CourseSerialize::serialize($fields);
-
+        $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
@@ -452,6 +442,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
+    // TODO refactor
     public function updateCourseCounter($id, $counter)
     {
         $fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum', 'giveCredit'));
@@ -484,7 +475,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'watchLimit'    => 0,
             'approval'      => 0,
             'maxRate'       => 0,
-            'locked'        => 0
+            'locked'        => 0,
+            'buyable'       => 0
         ));
 
         if (!empty($fields['about'])) {
@@ -574,6 +566,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    // TODO hitCourse 和 waveCourse合并
     public function hitCourse($id)
     {
         $checkCourse = $this->getCourse($id);
@@ -1027,14 +1020,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function createLesson($lesson)
     {
-        if (isset($lesson['reservationIds']) && !empty($lesson['reservationIds'])) {
-            $reservationIds = $lesson['reservationIds'];
-            unset($lesson['reservationIds']);
-        }
-
         $argument = $lesson;
-
-        $lesson = ArrayToolkit::filter($lesson, array(
+        $lesson   = ArrayToolkit::filter($lesson, array(
             'courseId'      => 0,
             'chapterId'     => 0,
             'free'          => 0,
@@ -1050,7 +1037,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit'    => 0,
             'requireCredit' => 0,
             'liveProvider'  => 'none',
-            'copyId'        => 0
+            'copyId'        => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0,
+            'suggestHours'  => '0.0'
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1094,7 +1084,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
 
         if ($lesson['type'] == 'live') {
-            $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
+            $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
+            $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
         if (array_key_exists('copyId', $lesson)) {
@@ -1118,14 +1109,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent("course.lesson.create", array('argument' => $argument, 'lesson' => $lesson));
-
-        $LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
-
-        if ($LiveReservation && !empty($reservationIds) && $lesson['type'] == 'live') {
-            $this->dispatchEvent("reseravtion.lesson.create",
-                new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
-            );
-        }
 
         return $lesson;
     }
@@ -1250,7 +1233,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit'    => 0,
             'requireCredit' => 0,
             'homeworkId'    => 0,
-            'exerciseId'    => 0
+            'exerciseId'    => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0,
+            'suggestHours'  => '1.0'
         ));
 
         if (isset($fields['title'])) {
@@ -1260,7 +1246,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields['type'] = $lesson['type'];
 
         if ($fields['type'] == 'live' && isset($fields['startTime'])) {
-            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+            $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
+            $fields['suggestHours'] = $fields['length'] / 60;
         }
 
         if (array_key_exists('media', $fields)) {
@@ -1293,14 +1280,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
-
-        $LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
-
-        if ($LiveReservation && !empty($reservationIds) && $updatedLesson['type'] == 'live') {
-            $this->dispatchEvent("reseravtion.lesson.create",
-                new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
-            );
-        }
 
         $updatedLesson['fields'] = $lesson;
         $this->dispatchEvent("course.lesson.update", array('argument' => $argument, 'lesson' => $updatedLesson));
@@ -2216,7 +2195,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException();
         }
 
-        if (!in_array($course['status'], array('published', 'closed'))) {
+        if (!in_array($course['status'], array('published'))) {
             throw $this->createServiceException('不能加入未发布课程');
         }
 
@@ -2729,6 +2708,424 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
         return $courseMembers;
+    }
+
+=======
+    {
+        $setting            = $this->getSettingService()->get('course', array());
+        $valuesToBeReplace  = array('{{nickname}}', '{{course}}');
+        $valuesToReplace    = array($user['nickname'], $course['title']);
+        $welcomeMessageBody = str_replace($valuesToBeReplace, $valuesToReplace, $setting['welcome_message_body']);
+        return $welcomeMessageBody;
+    }
+
+    public function removeStudent($courseId, $userId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程(#${$courseId})不存在，退出课程失败。");
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if (empty($member) || ($member['role'] != 'student')) {
+            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，退出课程失败。");
+        }
+
+        $this->getMemberDao()->deleteMember($member['id']);
+
+        $this->getCourseDao()->updateCourse($courseId, array(
+            'studentNum' => $this->getCourseStudentCount($courseId)
+        ));
+
+        $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
+        $this->dispatchEvent(
+            'course.quit',
+            new ServiceEvent($course, array('userId' => $member['userId']))
+        );
+    }
+
+    public function lockStudent($courseId, $userId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学员失败。");
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if (empty($member) || ($member['role'] != 'student')) {
+            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，封锁学员失败。");
+        }
+
+        if ($member['locked']) {
+            return;
+        }
+
+        $this->getMemberDao()->updateMember($member['id'], array('locked' => 1));
+    }
+
+    public function unlockStudent($courseId, $userId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程(#${$courseId})不存在，封锁学员失败。");
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if (empty($member) || ($member['role'] != 'student')) {
+            throw $this->createServiceException("用户(#{$userId})不是课程(#{$courseId})的学员，解封学员失败。");
+        }
+
+        if (empty($member['locked'])) {
+            return;
+        }
+
+        $this->getMemberDao()->updateMember($member['id'], array('locked' => 0));
+    }
+
+    public function increaseLessonQuizCount($lessonId)
+    {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['quizNum'] += 1;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function resetLessonQuizCount($lessonId, $count)
+    {
+        $lesson            = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['quizNum'] = $count;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function increaseLessonMaterialCount($lessonId)
+    {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['materialNum'] += 1;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function resetLessonMaterialCount($lessonId, $count)
+    {
+        $lesson                = $this->getLessonDao()->getLesson($lessonId);
+        $lesson['materialNum'] = $count;
+        $this->getLessonDao()->updateLesson($lesson['id'], $lesson);
+    }
+
+    public function setMemberNoteNumber($courseId, $userId, $number)
+    {
+        $member = $this->getCourseMember($courseId, $userId);
+
+        if (empty($member)) {
+            return false;
+        }
+
+        $this->getMemberDao()->updateMember($member['id'], array(
+            'noteNum'            => (int) $number,
+            'noteLastUpdateTime' => time()
+        ));
+
+        return true;
+    }
+
+    /**
+     * @todo refactor it.
+     */
+    public function tryManageCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->hasCourseManagerRole($courseId, $user['id'])) {
+            throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+        }
+
+        return CourseSerialize::unserialize($course);
+    }
+
+    public function tryAdminCourse($courseId)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (empty($user->id)) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) == 0) {
+            throw $this->createAccessDeniedException('您不是管理员，无权操作！');
+        }
+
+        return CourseSerialize::unserialize($course);
+    }
+
+    public function canManageCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            return $user->isAdmin();
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user->id);
+
+        if ($member && ($member['role'] == 'teacher')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function tryTakeCourse($courseId)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('您尚未登录用户，请登录后再查看！');
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+            return array($course, $member);
+        }
+
+        if (empty($member) && $this->isClassroomMember($course, $user['id'])) {
+            if (!$this->isCourseTeacher($course['id'], $user['id']) && !$this->isCourseStudent($course['id'], $user['id'])) {
+                $member = $this->becomeStudentByClassroomJoined($course['id'], $user['id']);
+                return array($course, $member);
+            }
+        }
+
+        if (empty($member) || !in_array($member['role'], array('teacher', 'student'))) {
+            throw $this->createAccessDeniedException('您不是课程学员，不能查看课程内容，请先购买课程！');
+        }
+
+        return array($course, $member);
+    }
+
+    public function isMemberNonExpired($course, $member)
+    {
+        if (empty($course) || empty($member)) {
+            throw $this->createServiceException("course, member参数不能为空");
+        }
+
+        /*
+        如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
+        if ($course['expiryDay'] == 0) {
+        return true;
+        }
+         */
+
+        if ($member['deadline'] == 0) {
+            return true;
+        }
+
+        if ($member['deadline'] > time()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function canTakeCourse($course)
+    {
+        $course = !is_array($course) ? $this->getCourse(intval($course)) : $course;
+
+        if (empty($course)) {
+            return false;
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return false;
+        }
+
+        if (count(array_intersect($user['roles'], array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+            return true;
+        }
+
+        if ($course['parentId'] && $this->isClassroomMember($course, $user['id'])) {
+            return true;
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($course['id'], $user['id']);
+
+        if ($member && in_array($member['role'], array('teacher', 'student'))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function tryLearnCourse($courseId)
+    {
+        $course = $this->getCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $member = $this->getMemberDao()->getMemberByCourseIdAndUserId($courseId, $user['id']);
+
+        if (empty($member) || !in_array($member['role'], array('admin', 'teacher', 'student'))) {
+            throw $this->createAccessDeniedException('您不是课程学员，不能学习！');
+        }
+
+        return array($course, $member);
+    }
+
+    public function generateLessonReplay($courseId, $lessonId)
+    {
+        $courseReplay = array('courseId' => $courseId, 'lessonId' => $lessonId);
+        $course       = $this->tryManageCourse($courseId);
+        $lesson       = $this->getLessonDao()->getLesson($lessonId);
+        $mediaId      = $lesson["mediaId"];
+        $client       = new EdusohoLiveClient();
+        $replayList   = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+
+        if (array_key_exists("error", $replayList)) {
+            return $replayList;
+        }
+
+        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+
+        if (array_key_exists("data", $replayList)) {
+            $replayList = json_decode($replayList["data"], true);
+        }
+
+        foreach ($replayList as $key => $replay) {
+            $fields                = array();
+            $fields["courseId"]    = $courseId;
+            $fields["lessonId"]    = $lessonId;
+            $fields["title"]       = $replay["subject"];
+            $fields["replayId"]    = $replay["id"];
+            $fields["userId"]      = $this->getCurrentUser()->id;
+            $fields["createdTime"] = time();
+            $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+        }
+
+        $fields = array(
+            "replayStatus" => "generated"
+        );
+        $lesson = $this->getLessonDao()->updateLesson($lessonId, $fields);
+        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+        return $replayList;
+    }
+
+    public function entryReplay($lessonId, $courseLessonReplayId)
+    {
+        $lesson                = $this->getLessonDao()->getLesson($lessonId);
+        list($course, $member) = $this->tryTakeCourse($lesson['courseId']);
+
+        $courseLessonReplay = $this->getCourseLessonReplayDao()->getCourseLessonReplay($courseLessonReplayId);
+        $user               = $this->getCurrentUser();
+
+        $args = array(
+            'liveId'   => $lesson["mediaId"],
+            'replayId' => $courseLessonReplay["replayId"],
+            'provider' => $lesson["liveProvider"],
+            'user'     => $user['email'],
+            'nickname' => $user['nickname']
+        );
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryReplay($args);
+        return $result;
+    }
+
+    public function getCourseLessonReplayByLessonId($lessonId)
+    {
+        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId);
+    }
+
+    public function deleteCourseLessonReplayByLessonId($lessonId)
+    {
+        $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
+    }
+
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId)
+    {
+        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+    }
+
+    public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
+    {
+        if (empty($courseIds) || count($courseIds) == 0) {
+            return array();
+        }
+
+        $courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+        return $courseMembers;
+    }
+
+    public function updateCourseLessonReplay($id, $fields)
+    {
+        $replayCourse = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+
+        if (empty($replayCourse)) {
+            throw $this->createServiceException('录播回放不存在，更新失败！');
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
+
+        $updatedCourseLessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
+
+        return $updatedCourseLessonReplay;
+    }
+
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields)
+    {
+        $lesson = $this->getLesson($lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException('直播课时不存在，更新失败！');
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('hidden'));
+
+        return $this->getCourseLessonReplayDao()->updateCourseLessonReplayByLessonId($lessonId, $fields);
     }
 
     protected function isClassroomMember($course, $userId)
