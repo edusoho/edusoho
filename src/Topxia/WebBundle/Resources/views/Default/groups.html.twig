@@ -2,6 +2,7 @@
 <!-- 小组动态 -->
   {% set groups = data('HotGroup',{'count':config.count|default(6)}) %}
   {% set reviews = data('LatestCourseReviews',{'count':config.count|default(4)}) %}
+  {% set ArticlesIsNull = false %}
   {% if groups %}
     <section class="dynamic-section">
       <div class="container">
@@ -61,6 +62,7 @@
                 <ul class="index-recommend-aricle">
                   {% for article in featuredArticles %}
                     {% if article.thumb %}
+                    {% set ArticlesIsNull = true %}
                     <li class="{% if loop.index == 2 %}last{% endif %}">
                       <a href="{{ path('article_detail', {id:article.id}) }}">
                         {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
@@ -68,12 +70,12 @@
                         <div class="title">{{ article.title }}</div>
                       </a>
                     </li>
-                    {% endif %}
+                   {% endif %}
                   {% endfor %}
                 </ul>
                 {% endif %}
 
-                <ul class="index-new-article {% if featuredArticles %}{% else %}full{% endif %}">
+                <ul class="index-new-article {% if ArticlesIsNull %}{% else %}full{% endif %}">
                   {% set articles = data('LatestArticles',{'count':6}) %}
                   {% if articles %}
                     {% for article in articles %}
