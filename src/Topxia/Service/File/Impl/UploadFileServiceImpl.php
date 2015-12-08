@@ -98,7 +98,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
             //Find all the users who is sharing with current user.
-            $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
+            $myFriends = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId']);
 
             if (isset($myFriends)) {
                 $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");

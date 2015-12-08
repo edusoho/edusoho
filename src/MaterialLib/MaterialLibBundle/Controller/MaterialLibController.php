@@ -43,9 +43,9 @@ class MaterialLibController extends BaseController
         $conditions['source']        = $source;
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
+        $paginator = new Paginator($request, $this->getUploadFileService()->searchFileCount($conditions), 20);
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestCreated', $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
@@ -286,7 +286,7 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getUserService()
