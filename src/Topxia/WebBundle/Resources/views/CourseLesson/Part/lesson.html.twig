@@ -6,7 +6,7 @@
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
   {% if item.status == 'published' %}
     {% if item.free or member or course.buyable %}
-      <a {% if member %}href="{{ lessonUrl }}" data-toggle="tooltip" data-placement="bottom" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
+      <a {% if member %}href="{{ lessonUrl }}" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
       title="{{ item.title }}">
       {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
       <span class="title">  {% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>

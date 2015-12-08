@@ -1,10 +1,3 @@
-{% set banner = block_show('bill_banner') %}
-{% if banner %}
-  <div class="mbl">
-    {{ banner|raw }}
-  </div>
-{% endif %}
-
 {% if setting('coin.coin_enabled') %}
   <ul class="nav nav-tabs">
     <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
