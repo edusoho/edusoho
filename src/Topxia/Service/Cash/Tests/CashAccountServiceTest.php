@@ -107,18 +107,22 @@ class CashAccountServiceTest extends BaseTestCase
     {
         $user    = $this->createUser();
         $account = $this->getCashAccountService()->createAccount($user['id']);
-        $result  = $this->getCashAccountService()->waveCashField($account['id'], 0);
-        var_dump($result);
-        $this->assertEquals($result, "");
-        return $result;
+        $this->assertEquals($account['cash'], 0);
+        $this->getCashAccountService()->waveCashField($account['id'], 1);
+        $account = $this->getCashAccountService()->getAccount($account['id']);
+        $this->assertEquals($account['cash'], 1);
+        return $account;
     }
 
     public function testWaveDownCashField()
     {
         $user    = $this->createUser();
         $account = $this->getCashAccountService()->createAccount($user['id']);
-        $result  = $this->getCashAccountService()->waveDownCashField($account['id'], 1);
-        return $result;
+        $this->assertEquals($account['cash'], 0);
+        $this->getCashAccountService()->waveDownCashField($account['id'], 1);
+        $account = $this->getCashAccountService()->getAccount($account['id']);
+        $this->assertEquals($account['cash'], -1);
+        return $account;
     }
 
     public function testReward()
@@ -126,6 +130,7 @@ class CashAccountServiceTest extends BaseTestCase
         $user    = $this->createUser();
         $account = $this->getCashAccountService()->createAccount($user['id']);
         $result  = $this->getCashAccountService()->reward(1, '送', $user['id'], null);
+        $this->assertEquals($result['amount'], 1);
         return $result;
     }
 
