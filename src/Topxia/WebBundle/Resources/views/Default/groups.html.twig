@@ -60,13 +60,15 @@
                 {% if featuredArticles %}
                 <ul class="index-recommend-aricle">
                   {% for article in featuredArticles %}
-                  <li class="{% if loop.index == 2 %}last{% endif %}">
-                    <a href="{{ path('article_detail', {id:article.id}) }}">
-                      {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
-                      <div class="image-overlay"></div>
-                      <div class="title">{{ article.title }}</div>
-                    </a>
-                  </li>
+                    {% if article.thumb %}
+                    <li class="{% if loop.index == 2 %}last{% endif %}">
+                      <a href="{{ path('article_detail', {id:article.id}) }}">
+                        {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
+                        <div class="image-overlay"></div>
+                        <div class="title">{{ article.title }}</div>
+                      </a>
+                    </li>
+                    {% endif %}
                   {% endfor %}
                 </ul>
                 {% endif %}
