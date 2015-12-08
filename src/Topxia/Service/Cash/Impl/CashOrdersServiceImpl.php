@@ -53,6 +53,11 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return $order;
     }
 
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderDao()->updateOrder($id, $fileds);
+    }
+
     public function payOrder($payData)
     {
         $success = true;

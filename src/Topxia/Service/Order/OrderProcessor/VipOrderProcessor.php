@@ -235,17 +235,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->createOrder($orderInfo);
     }
 
-    public function getNote($targetId)
-    {
-        $vipLevel = $this->getLevelService()->getLevel($targetId);
-        return str_replace(' ', '', strip_tags($vipLevel['description']));
-    }
-
-    public function getTitle($targetId)
-    {
-        $vipLevel = $this->getLevelService()->getLevel($targetId);
-        return str_replace(' ', '', strip_tags($vipLevel['name']));
-    }
+    
 
     public function doPaySuccess($success, $order)
     {
@@ -288,6 +278,45 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
     }
 
+
+    public function getOrderBySn($sn)
+    {
+        return $this->getOrderService()->getOrderBySn($sn);
+    }
+
+    public function getOrderInfo($order)
+    {
+        $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+
+        $defaultBuyMonth           = $this->setting('vip.default_buy_months');
+        $fields['unit']            = $order['data']['unitType'];
+        $fields['duration']        = $order['data']['duration'];
+        $fields['defaultBuyMonth'] = $defaultBuyMonth;
+        $fields['buyType']         = $order['data']['buyType'];
+
+        $processor = OrderProcessorFactory::create($order['targetType']);
+        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
+
+        return $orderInfo;
+    }
+
+    public function getNote($targetId)
+    {
+        $vipLevel = $this->getLevelService()->getLevel($targetId);
+        return str_replace(' ', '', strip_tags($vipLevel['description']));
+    }
+
+    public function getTitle($targetId)
+    {
+        $vipLevel = $this->getLevelService()->getLevel($targetId);
+        return str_replace(' ', '', strip_tags($vipLevel['name']));
+    }
+
+    protected function setting($name, $default = null)
+    {
+        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+    }
+
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
@@ -312,4 +341,5 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return ServiceKernel::instance()->createService('Order.OrderService');
     }
+
 }

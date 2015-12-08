@@ -37,6 +37,41 @@ class CashOrdersServiceTest extends BaseTestCase
 
     }
 
+    public function testCancelOrder()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $createOrder['amount']);
+        $order = $this->getCashOrdersService()->cancelOrder($createOrder['id'], '取消订单');
+        $this->assertEquals('cancelled', $order['status']);
+    }
+
+    public function testUpdateOrder()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $createOrder['amount']);
+        $fields = array('amount' => '120.00');
+        $order  = $this->getCashOrdersService()->updateOrder($createOrder['id'], $fields);
+        $this->assertEquals('120.00', $order['amount']);
+    }
+
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */

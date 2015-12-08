@@ -12,8 +12,18 @@ interface OrderProcessor
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
     public function createOrder($orderInfo, $fields);
+    
+
+    public function getOrderBySn($sn);
+
+    public function getOrderInfo($order);
+
+    public function updateOrder($id, $fileds);
+
+    public function requestParams($order, $container);
 
     public function getNote($targetId);
 
     public function getTitle($targetId);
+
 }

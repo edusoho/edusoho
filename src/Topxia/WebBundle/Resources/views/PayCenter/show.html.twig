@@ -55,6 +55,7 @@
       </div>
       <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
+        <input type="hidden" name="targetType" value="{{order.targetType}}"> 
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% for payment,options in payments %}
           {% if loop.index == 1 %}

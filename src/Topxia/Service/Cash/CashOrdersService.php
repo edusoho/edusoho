@@ -11,6 +11,8 @@ interface CashOrdersService
 
     public function cancelOrder($id, $message, $data);
 
+    public function updateOrder($id, $fileds);
+
     public function searchOrders($conditions, $orderBy, $start, $limit);
 
     public function searchOrdersCount($conditions);

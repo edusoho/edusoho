@@ -5,7 +5,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Component\Payment\Payment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Order\OrderType\OrderTypeFactory;
 use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class PayCenterController extends BaseController
@@ -31,14 +30,9 @@ class PayCenterController extends BaseController
         $fields = $request->query->all();
 
         //$order     = $this->getOrderService()->getOrderBySn($fields["sn"]);
-        $order     = OrderTypeFactory::create($fields['targetType'])->getOrderBySn($fields["sn"]);
-        $orderInfo = array();
-
-        if ($order['targetType'] != 'coin') {
-            $orderInfo = $this->getOrderInfo($order);
-        } else {
-            $orderInfo['targetType'] = 'coin';
-        }
+        $processor = OrderProcessorFactory::create($fields['targetType']);
+        $order     = $processor->getOrderBySn($fields["sn"]);
+        $orderInfo = $processor->getOrderInfo($order);
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -120,7 +114,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order = $this->getOrderService()->updateOrder($fields["orderId"], array('payment' => $fields['payment']));
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields["orderId"], array('payment' => $fields['payment']));
 
         if ($user["id"] != $order["userId"]) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -137,12 +131,8 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
-        $requestParams = array(
-            'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $this->generateUrl('pay_success_show', array('id' => $order['id']), true)
-        );
-        $payment = $request->request->get('payment');
+        $requestParams = OrderProcessorFactory::create($order['targetType'])->requestParams($order,$this->container);
+        $payment       = $request->request->get('payment');
 
         if ($payment == 'quickpay') {
             $authBank = array();
@@ -254,6 +244,27 @@ class PayCenterController extends BaseController
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $goto
         ));
+    }
+
+    public function payReturnAction(Request $request, $name)
+    {
+        $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
+        $response = $this->createPaymentResponse($name, $request->query->all());
+
+        $payData = $response->getPayData();
+
+        if ($payData['status'] == "waitBuyerConfirmGoods") {
+            return $this->forward("TopxiaWebBundle:Coin:resultNotice");
+        }
+
+        list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
+
+        if ($order['status'] == 'paid' && $success) {
+            $successUrl = $this->generateUrl('my_coin', array(), true);
+        }
+
+        $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
+        return $this->redirect($goto);
     }
 
     public function payErrorAction(Request $request)
@@ -425,13 +436,14 @@ class PayCenterController extends BaseController
         $options       = $this->getPaymentOptions($order['payment']);
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order["targetType"]);
+        $targetId = isset($order["targetType"]) ? $order['targetId'] : $order['id'];
         $requestParams = array_merge($requestParams, array(
             'orderSn'     => $order['sn'],
             'userId'      => $order['userId'],
             'title'       => $order['title'],
-            'targetTitle' => $processor->getTitle($order['targetId']),
+            'targetTitle' => $processor->getTitle($targetId),
             'summary'     => '',
-            'note'        => $processor->getNote($order['targetId']),
+            'note'        => $processor->getNote($targetId),
             'amount'      => $order['amount']
         ));
         return $request->setParams($requestParams);

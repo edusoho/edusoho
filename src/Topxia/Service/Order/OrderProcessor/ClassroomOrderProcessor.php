@@ -269,18 +269,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getClassroomOrderService()->createOrder($orderInfo);
     }
 
-    public function getNote($targetId)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($targetId);
-        return str_replace(' ', '', strip_tags($classroom['about']));
-    }
-
-    public function getTitle($targetId)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($targetId);
-        return str_replace(' ', '', strip_tags($classroom['title']));
-    }
-
     public function doPaySuccess($success, $order)
     {
         if (!$success) {
@@ -320,6 +308,33 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $coursesTotalPrice;
     }
 
+
+    public function getOrderBySn($sn)
+    {
+        return $this->getOrderService()->getOrderBySn($sn);
+    }
+
+    public function getOrderInfo($order)
+    {
+        $fields    = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+        $processor = OrderProcessorFactory::create($order['targetType']);
+        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
+
+        return $orderInfo;
+    }
+
+    public function getNote($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        return str_replace(' ', '', strip_tags($classroom['about']));
+    }
+
+    public function getTitle($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        return str_replace(' ', '', strip_tags($classroom['title']));
+    }
+
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
@@ -348,5 +363,10 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getClassroomOrderService()
     {
         return ServiceKernel::instance()->createService("Classroom:Classroom.ClassroomOrderService");
+    }
+    
+    protected function getOrderService()
+    {
+        return ServiceKernel::instance()->createService('Order.OrderService');
     }
 }
