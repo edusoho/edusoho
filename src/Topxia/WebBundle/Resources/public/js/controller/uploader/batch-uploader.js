@@ -143,7 +143,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadComplete', function(file) {
-                console.log('uploadSuccess');
             });
 
             uploader.on('uploadAccept', function(object, ret) {
@@ -233,7 +232,7 @@ define(function(require, exports, module) {
 
                         var key = 'file_' + file.hash;
                         var value = store.get(key);
-                        if(value) {
+                        if(value && value.id) {
                             params.id = value.id;
                         }
 
@@ -241,7 +240,7 @@ define(function(require, exports, module) {
                             var key = 'file_' + file.hash;
                             if(response.resumed != 'ok') {
                                 var value = {};
-                                value.id = file.id;
+                                value.id = response.outerId;
                                 store.set(key, value);
                             }
 
@@ -284,13 +283,14 @@ define(function(require, exports, module) {
 
                     data.filename = file.name;
                     data.size = file.size;
+                    data.id = file.fileId;
 
-                    $.post(file.uploaderWidget.get('finishUrl'), data, function() {
+                    $.post(file.uploaderWidget.get('finishUrl'), data, function(response) {
                         deferred.resolve();
                         file.uploaderWidget.trigger('file.uploaded', file, data);
 
                         file.setStatus('complete');
-                        // file.uploaderWidget._getUploader().trigger('uploadSuccess', file, ret, hds);
+                        //file.uploaderWidget._getUploader().trigger('uploadSuccess', file, ret, hds);
 
                         var $li = $('#' + file.id);
                         $li.find('.file-status').html('已上传');

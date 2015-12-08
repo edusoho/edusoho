@@ -7,7 +7,7 @@ define(function(require, exports, module) {
 
             file.gid = response.globalId;
             file.globalId = response.globalId;
-            file.outerId = response.outerId;
+            file.fileId = response.outerId;
 
             file.uploaderWidget.set('uploadToken', response.uploadToken);
             file.uploaderWidget.set('uploadUrl', response.uploadUrl);
@@ -35,17 +35,6 @@ define(function(require, exports, module) {
 
         },
 
-        preupload: function(file, response){
-            file.gid = response.globalId;
-            file.globalId = response.globalId;
-            file.outerId = response.outerId;
-
-            file.uploaderWidget.set('uploadToken', response.uploadToken);
-            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
-            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
-            file.uploaderWidget.set('uploadMode', response.uploadMode);
-        },
-        
         uploadBeforeSend: function(object, data, headers){
         	var self = this.file.uploaderWidget;
         	$.each(data, function(i, n){
@@ -87,7 +76,7 @@ define(function(require, exports, module) {
                     result = eval('('+data+')');
                 }
             });
-            return $.extend({globalId: this.file.gid}, result);
+            return $.extend({id: this.file.fileId}, result);
         },
 
         uploadAccept: function(object, ret){

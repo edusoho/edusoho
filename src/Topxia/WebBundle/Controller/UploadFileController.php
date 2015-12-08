@@ -31,7 +31,7 @@ class UploadFileController extends BaseController
 
         $originalFile = $this->get('request')->files->get('file');
 
-        $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
+        $file = $this->getUploadFileService()->addFile($targetType, $targetId, array(), 'local', $originalFile);
 
         return $this->createJsonResponse($file);
     }

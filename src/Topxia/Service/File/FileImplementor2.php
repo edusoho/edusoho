@@ -16,4 +16,7 @@ interface FileImplementor2
     public function deleteFile($file);
 
     public function findFiles($files);
+
+    public function finishedUpload($file, $params);
+
 }

@@ -172,8 +172,8 @@ define(function(require, exports, module) {
 
             uploader.on('file.uploaded', function(file, data){
                 var item = {
-                    id: file.outerId,
-                    status: 'waiting',
+                    id: file.fileId,
+                    status: data.status,
                     source: 'self',
                     name: file.name,
                     length: parseInt(data.length)

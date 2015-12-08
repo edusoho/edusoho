@@ -46,24 +46,35 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $files;
     }
 
-    public function resumeUpload($globalId, $file)
+    public function resumeUpload($file, $initParams)
     {
         $params = array(
-            'bucket' => $file['bucket'],
-            'extno'  => $file['extno'],
-            'size'   => $file['size'],
-            'name'   => $file['name'],
-            'hash'   => $file['hash']
+            'bucket' => $initParams['bucket'],
+            'extno'  => $file['id'],
+            'size'   => $initParams['fileSize'],
+            'name'   => $initParams['fileName'],
+            'hash'   => $initParams['hash']
         );
 
-        $api     = CloudAPIFactory::create();
-        $resumed = $api->post("/resources/{$globalId}/upload_resume", $params);
+        $api       = CloudAPIFactory::create();
+        $apiResult = $api->post("/resources/{$file['globalId']}/upload_resume", $params);
 
-        if (empty($resumed['resumed']) || ($resumed['resumed'] !== 'ok')) {
+        if (empty($apiResult['resumed']) || ($apiResult['resumed'] !== 'ok')) {
             return null;
         }
 
-        return $resumed;
+        $result = array();
+
+        $result['globalId'] = $file['globalId'];
+        $result['outerId']  = $file['id'];
+        $result['resumed']  = $apiResult['resumed'];
+
+        $result['uploadMode']     = $apiResult['uploadMode'];
+        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadProxyUrl'] = '';
+        $result['uploadToken']    = $apiResult['uploadToken'];
+
+        return $result;
     }
 
     public function prepareUpload($params)
@@ -100,16 +111,28 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function initUpload($file)
     {
         $params = array(
-            "extno"  => $file['extno'],
+            "extno"  => $file['id'],
             "bucket" => $file['bucket'],
-            "key"    => $file['key'],
+            "key"    => $file['hashId'],
             "hash"   => $file['hash'],
-            'name'   => $file['name'],
-            'size'   => $file['size']
+            'name'   => $file['fileName'],
+            'size'   => $file['fileSize']
         );
 
-        $api = CloudAPIFactory::create();
-        return $api->post('/resources/upload_init', $params);
+        $api       = CloudAPIFactory::create();
+        $apiResult = $api->post('/resources/upload_init', $params);
+
+        $result = array();
+
+        $result['globalId'] = $apiResult['no'];
+        $result['outerId']  = $file['id'];
+
+        $result['uploadMode']     = $apiResult['uploadMode'];
+        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadProxyUrl'] = '';
+        $result['uploadToken']    = $apiResult['uploadToken'];
+
+        return $result;
     }
 
     public function deleteFile($file)
@@ -183,15 +206,23 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $download;
     }
 
-    public function finishedUpload($globalId, $params)
+    public function finishedUpload($file, $params)
     {
+        if (empty($file['globalId'])) {
+            throw $this->createServiceException("文件不存在(global id: #{$params['globalId']})，完成上传失败！");
+        }
+
         $params = array(
             "length" => $params['length'],
-            'name'   => $params['name'],
+            'name'   => $params['filename'],
             'size'   => $params['size']
         );
-        $api = CloudAPIFactory::create();
-        return $api->post("/resources/{$globalId}/upload_finish", $params);
+
+        $api                     = CloudAPIFactory::create();
+        $result                  = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
+        $result['convertStatus'] = 'none';
+
+        return $result;
     }
 
     private function mergeCloudFile($file, $cloudFile)
