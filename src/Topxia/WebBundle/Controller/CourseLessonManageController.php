@@ -574,21 +574,3 @@ class CourseLessonManageController extends BaseController
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }
 }
-
-class FileFilter
-{
-    public static function filters($files)
-    {
-        $filterResult = array();
-
-        if (empty($files)) {
-            return $filterResult;
-        }
-
-        foreach ($files as $index => $file) {
-            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
-        }
-
-        return $filterResult;
-    }
-}

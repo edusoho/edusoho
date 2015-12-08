@@ -125,7 +125,7 @@ define(function(require, exports, module) {
           return ;
         }
 
-        $.get("/materiallib/file/status?ids="+fileIds.join(","),'',function(data){
+        $.get("/course/manage/file/status?ids="+fileIds.join(","),'',function(data){
             if(!data||data.length==0){
                 return ;
             }
@@ -139,7 +139,6 @@ define(function(require, exports, module) {
               }
             }
         });
-        
     }
 
 });

@@ -41,7 +41,3 @@ materiallib_file_delete:
 materiallib_file_download:
     pattern: /materiallib/file/{id}/download
     defaults: { _controller: MaterialLibBundle:MaterialLib:download }
-
-materiallib_file_status:
-    pattern: /materiallib/file/status
-    defaults: { _controller: MaterialLibBundle:MaterialLib:fileStatus }

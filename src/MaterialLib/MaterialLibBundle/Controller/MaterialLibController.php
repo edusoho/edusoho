@@ -246,27 +246,6 @@ class MaterialLibController extends BaseController
         return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
     }
 
-    public function fileStatusAction(Request $request)
-    {
-        $currentUser = $this->getCurrentUser();
-
-        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            return $this->createJsonResponse(array());
-        }
-
-        $fileIds = $request->query->get('ids');
-
-        if (empty($fileIds)) {
-            return $this->createJsonResponse(array());
-        }
-
-        $fileIds = explode(',', $fileIds);
-
-        $files = $this->getUploadFileService()->findFiles($fileIds);
-
-        return $this->createJsonResponse(FileFilter::filters($files));
-    }
-
     protected function tryAccessFile($fileId)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
@@ -318,23 +297,5 @@ class MaterialLibController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-}
-
-class FileFilter
-{
-    public static function filters($files)
-    {
-        $filterResult = array();
-
-        if (empty($files)) {
-            return $filterResult;
-        }
-
-        foreach ($files as $index => $file) {
-            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
-        }
-
-        return $filterResult;
     }
 }
