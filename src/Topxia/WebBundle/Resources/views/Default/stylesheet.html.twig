@@ -1,9 +1,9 @@
 {% if isEditColor %}
-	{% set maincolor = config.config.maincolor|default('') %}
-	{% set navigationcolor = config.config.navigationcolor|default('') %}
+	{% set maincolor = config.config.maincolor|default('default') %}
+	{% set navigationcolor = config.config.navigationcolor|default('default') %}
 {% else %}
-	{% set maincolor = config.confirmConfig.maincolor|default('') %}
-	{% set navigationcolor = config.confirmConfig.navigationcolor|default('') %}
+	{% set maincolor = config.confirmConfig.maincolor|default('default') %}
+	{% set navigationcolor = config.confirmConfig.navigationcolor|default('default') %}
 {% endif %}
 
 
