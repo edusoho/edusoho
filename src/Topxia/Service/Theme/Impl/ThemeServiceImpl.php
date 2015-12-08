@@ -120,7 +120,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
         if (empty($currentTheme)) {
             $currentTheme = $this->getSettingService()->get('theme');
-            return $this->createThemeConfig($currentTheme['name'], $defaultConfig);
+            return $this->createThemeConfig($currentTheme['name'], $this->defaultConfig);
         }
 
         $config['config'] = empty($currentTheme['confirmConfig']) ? $this->defaultConfig : $currentTheme['confirmConfig'];
