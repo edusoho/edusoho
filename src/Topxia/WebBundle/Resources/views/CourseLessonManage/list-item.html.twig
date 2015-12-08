@@ -62,17 +62,6 @@
       <small class="text-muted">(需{{ lesson.requireCredit }}学分)</small>
     {% endif %}
 
-    {% if lesson.type != 'testpaper' %}
-      {% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
-      {% if mediaStatus == 'waiting' %}
-        <span class="text-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
-      {% elseif mediaStatus == 'doing' %}
-        <span class="text-info">(正在转换{{ mediaTypeName }}格式)</span>
-      {% elseif mediaStatus == 'error' %}
-        <span class="text-danger">({{ mediaTypeName }}格式转换失败)</span>
-      {% endif %}
-    {% endif  %}
-
     {% if lesson.status == 'unpublished' %}
       <span class="unpublish-warning text-warning">(未发布)</span>
     {% endif %}

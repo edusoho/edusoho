@@ -484,6 +484,29 @@ class CourseLessonManageController extends BaseController
         ));
     }
 
+    public function fileStatusAction(Request $request, $id)
+    {
+        $courseItems = $this->getCourseService()->getCourseItems($id);
+
+        if (empty($courseItems)) {
+            return $this->createJsonResponse(array());
+        }
+
+        $mediaIds = array_unique(ArrayToolkit::column($courseItems, 'mediaId'));
+
+        $fileIds = array();
+
+        foreach ($mediaIds as $medisId) {
+            if (intval($medisId) > 0) {
+                $fileIds[] = intval($medisId);
+            }
+        }
+
+        $files = $this->getUploadFileService()->findFiles($fileIds);
+
+        return $this->createJsonResponse(FileFilter::filters($files));
+    }
+
     protected function secondsToText($value)
     {
         $minutes = intval($value / 60);
@@ -523,7 +546,7 @@ class CourseLessonManageController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getQuestionService()
@@ -549,5 +572,23 @@ class CourseLessonManageController extends BaseController
     protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+}
+
+class FileFilter
+{
+    public static function filters($files)
+    {
+        $filterResult = array();
+
+        if (empty($files)) {
+            return $filterResult;
+        }
+
+        foreach ($files as $index => $file) {
+            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
+        }
+
+        return $filterResult;
     }
 }

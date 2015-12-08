@@ -736,6 +736,10 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
+course_manage_lesson_file_status:
+    pattern:  /course/{id}/manage/lesson/fileStatus
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
+
 course_draft_create:
     pattern:  /course/draft/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }
