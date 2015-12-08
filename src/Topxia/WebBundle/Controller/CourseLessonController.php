@@ -328,9 +328,14 @@ class CourseLessonController extends BaseController
                         }
 
                         if ($key) {
-                            $api              = CloudAPIFactory::create();
-                            $result           = $api->get(sprintf("/files/%s/player", $file['globalId']));
-                            $json['mediaUri'] = $result['url'];
+                            if (empty($file['globalId'])) {
+                                $url              = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                                $json['mediaUri'] = $url['url'];
+                            } else {
+                                $api              = CloudAPIFactory::create();
+                                $result           = $api->get(sprintf("/files/%s/player", $file['globalId']));
+                                $json['mediaUri'] = $result['url'];
+                            }
                         } else {
                             $json['mediaUri'] = '';
                         }
@@ -500,6 +505,14 @@ class CourseLessonController extends BaseController
             }
         }
 
+        if (empty($file['globalId'])) {
+            $factory = new CloudClientFactory();
+            $client  = $factory->createClient();
+
+            $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
+            return $this->createJsonResponse($result);
+        }
+
         $api    = CloudAPIFactory::create();
         $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
 
@@ -547,6 +560,19 @@ class CourseLessonController extends BaseController
                     'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
                 ));
             }
+        }
+
+        if (empty($file['globalId'])) {
+            $factory = new CloudClientFactory();
+            $client  = $factory->createClient();
+
+            $metas2           = $file['metas2'];
+            $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+            $result['pdfUri'] = $url['url'];
+            $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+            $result['swfUri'] = $url['url'];
+
+            return $this->createJsonResponse($result);
         }
 
         $api    = CloudAPIFactory::create();
