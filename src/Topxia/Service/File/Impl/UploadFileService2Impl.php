@@ -21,6 +21,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return null;
         }
 
+        if (empty($file['globalId'])) {
+            return $file;
+        }
+
         return $this->getFileImplementor($file)->getFile($file);
     }
 

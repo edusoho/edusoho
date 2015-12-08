@@ -221,7 +221,7 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (!empty($file['convertParams']['hlsKey'])) {
+        if (empty($file['globalId']) && isset($file['convertParams']['hlsKey'])) {
             return new Response($file['convertParams']['hlsKey']);
         }
 
@@ -250,7 +250,7 @@ class HLSController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getTokenService()
