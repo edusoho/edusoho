@@ -117,33 +117,19 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                     'targetType' => $params['targetType']
                 ));
 
-                unset($initParams['resumed']);
                 return $initParams;
             }
         }
 
-        $file = $implementor->prepareUpload($params);
+        $preparedFile = $implementor->prepareUpload($params);
 
-        if (!empty($file)) {
-            $file = $this->getUploadFileDao()->addFile($file);
-
-            $initUploadParams = array(
-                'extno'  => $file['id'],
-                'bucket' => $params['bucket'],
-                'key'    => $file['hashId'],
-                'hash'   => $params['hash'],
-                'name'   => $params['fileName'],
-                'size'   => $params['fileSize'],
-                'userId' => $user['id']
-            );
-
-            $params = array_merge($params, $initUploadParams);
-        }
-
-        $initParams = $implementor->initUpload($params);
-
-        if (!empty($file)) {
-            $file = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
+        if (!empty($preparedFile)) {
+            $file       = $this->getUploadFileDao()->addFile($preparedFile);
+            $params     = array_merge($params, $file);
+            $initParams = $implementor->initUpload($params);
+            $file       = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
+        } else {
+            $initParams = $implementor->initUpload($params);
         }
 
         return $initParams;

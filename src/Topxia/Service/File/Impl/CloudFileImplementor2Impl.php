@@ -101,12 +101,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function initUpload($file)
     {
         $params = array(
-            "extno"  => $file['extno'],
+            "extno"  => $file['id'],
             "bucket" => $file['bucket'],
-            "key"    => $file['key'],
+            "key"    => $file['hashId'],
             "hash"   => $file['hash'],
-            'name'   => $file['name'],
-            'size'   => $file['size']
+            'name'   => $file['fileName'],
+            'size'   => $file['fileSize']
         );
 
         $api       = CloudAPIFactory::create();
@@ -115,7 +115,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $result = array();
 
         $result['globalId'] = $apiResult['no'];
-        $result['outerId']  = $file['extno'];
+        $result['outerId']  = $file['id'];
 
         $result['uploadMode']     = $apiResult['uploadMode'];
         $result['uploadUrl']      = 'http://upload.edusoho.net';
