@@ -72,6 +72,10 @@ class PlayerController extends BaseController
             $factory = new CloudClientFactory();
             $client  = $factory->createClient();
 
+            if (!empty($file['globalId'])) {
+                $file['metas2'] = '';
+            }
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $token = $this->makeToken('hls.playlist', $file['id'], $context);

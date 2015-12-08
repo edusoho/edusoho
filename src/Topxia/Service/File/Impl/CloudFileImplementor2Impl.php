@@ -103,7 +103,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $params = array(
             "extno"  => $file['id'],
             "bucket" => $file['bucket'],
-            "key"    => $file['hashId'],
+            "reskey" => $file['hashId'],
             "hash"   => $file['hash'],
             'name'   => $file['fileName'],
             'size'   => $file['fileSize']
