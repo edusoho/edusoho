@@ -109,24 +109,37 @@ define(function(require, exports, module) {
             return $(this).data('fileName');
         }});
 
+        asyncLoadFiles();
+    }
 
-        var fileIds = new Array();
+    function asyncLoadFiles()
+    {
+      var fileIds = new Array();
         $('#material-item-list [type=checkbox]').each(function(){
             if(!isNaN($(this).val())){
                 fileIds.push($(this).val());
             }
         });
 
-        if(fileIds.length>0){
-            $.get("/materiallib/file/status?ids="+fileIds.join(","),'',function(data){
-                
-                if(data.length>0){
-                    console.log(data);
-                }
-            });
+        if(fileIds.length==0){
+          return ;
         }
 
-
+        $.get("/materiallib/file/status?ids="+fileIds.join(","),'',function(data){
+            if(!data||data.length==0){
+                return ;
+            }
+            
+            for(var i=0;i<data.length;i++){
+              var file=data[i];
+              if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
+                $(".convertInfo"+file.id).append("<br><span class='text-warning text-sm'>正在文件格式转换</span>");
+              }else if(file.convertStatus=='error'){
+                $(".convertInfo"+file.id).append("<br><span class='text-danger text-sm'>文件格式转换失败</span>");
+              }
+            }
+        });
+        
     }
 
 });

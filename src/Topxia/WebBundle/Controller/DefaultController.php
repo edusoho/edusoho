@@ -56,11 +56,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    public function testAction()
-    {
-        $this->getFileUploadService()->getFileStatus(3);
-    }
-
     public function userlearningAction()
     {
         $user = $this->getCurrentUser();
@@ -304,10 +299,5 @@ class DefaultController extends BaseController
     private function getBlacklistService()
     {
         return $this->getServiceKernel()->createService('User.BlacklistService');
-    }
-
-    private function getFileUploadService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 }

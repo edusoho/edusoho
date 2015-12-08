@@ -5,7 +5,7 @@
     data-link-count="{{ file.usedCount }}"
     data-file-name="{{ file.filename }}"></td>
 
-  <td class="first-col">
+  <td class="first-col convertInfo{{file.id}}">
     {{file.filename}}
 
     {% if source == "shared"%}
