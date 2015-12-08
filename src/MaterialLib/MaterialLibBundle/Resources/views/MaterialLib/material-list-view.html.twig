@@ -30,7 +30,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for file in files %}
+            {% for uploadFile in files %}
                 {% include 'MaterialLibBundle:MaterialLib:material-list-view-item.html.twig' %}
             {% else %}
                 <tr class="empty"><td colspan="20">无文件记录</td></tr>

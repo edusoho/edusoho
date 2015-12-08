@@ -1,4 +1,132 @@
 <li class="course-grid item-material">
+	<div style="width: 180px; height: 180px; padding: 2px;" class="course-item-list-multi">
+    <div><input value="{{uploadFile.id}}" type="checkbox" data-role="batch-item" 
+    	data-link-count="{{ uploadFile.usedCount }}"
+    	data-file-name="{{ uploadFile.filename }}"></div>
+
+   	{% if uploadFile.type == 'video' %}
+		{% set parentClass = "item-object-video" %}
+	{% elseif uploadFile.type == 'audio' %}
+		{% set parentClass = "item-object-audio" %}
+	{% elseif uploadFile.type == 'ppt' %}
+		{% set parentClass = "item-object-ppt" %}
+	{% elseif uploadFile.ext == 'pdf' %}
+		{% set parentClass = "item-object-pdf" %}
+	{% elseif uploadFile.ext == 'doc' or uploadFile.ext == 'docx' %}
+		{% set parentClass = "item-object-doc" %}
+	{% elseif uploadFile.ext == 'xls' or uploadFile.ext == 'xlsx' %}
+		{% set parentClass = "item-object-xls" %}
+	{% else %}
+		{% set parentClass = "item-object-text" %}
+	{% endif %}
+	
+	{% if uploadFile.type in ['video', 'audio'] %}
+		{% set subTitle = uploadFile.length|date('i:s') %}
+	{% else %}
+		{% set subTitle = uploadFile.ext|upper %}
+	{% endif %}
+	
+	<div style="height: 90px;" class="center-block">
+		
+		{% if uploadFile.type in ['video', 'audio', 'ppt', 'image'] or uploadFile.ext in ['pdf'] %}
+			{% set tagName = "a" %}
+			{% set title = "预览" %}
+		{% else %}
+			{% set tagName = "span" %}
+			{% set title = "暂不支持预览" %}
+		{% endif %}
+
+		{% if uploadFile.type in ['image'] %}
+			<a href="{{ path('material_lib_file_preview_content', {fileId: uploadFile.id}) }}" style="float: none;" class="item-object {{ parentClass|default('') }} center-block mtm tip image-preview" 
+				title="{{ title }}" data-file-name="{{ uploadFile.filename }}" >
+
+		{% else %}
+			<{{ tagName }} style="float: none;" class="item-object {{ parentClass|default('') }} center-block mtm tip" 
+				title="{{ title }}" data-placement="top" 
+				{% if tagName == 'a' %} 
+					href="#modal" data-toggle="modal" 
+					data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" 
+				{% endif %} >
+		{% endif %}
+			{% if uploadFile.type == 'video' %}
+				<i class="fa fa-file-video-o"></i>
+			{% elseif uploadFile.type == 'audio' %}
+				<i class="fa fa-file-audio-o"></i>
+			{% elseif uploadFile.type == 'ppt' %}
+				<i class="fa fa-file-powerpoint-o"></i>
+			{% elseif uploadFile.ext == 'pdf'%}
+				<i class="fa fa-file-pdf-o"></i>
+			{% elseif uploadFile.ext == 'doc' or uploadFile.ext == 'docx' %}
+				<i class="fa fa-file-word-o"></i>
+			{% elseif uploadFile.ext == 'xls' or uploadFile.ext == 'xlsx' %}
+				<i class="fa fa-file-excel-o"></i>
+			{% elseif uploadFile.ext == 'txt' %}
+				<i class="fa fa-file-o"></i>
+			{% else %}
+				<i class="fa fa-file-photo-o"></i>
+			{% endif %}
+			<span class="item-length">
+				{{ subTitle|default('') }}
+			</span>
+		</{{ tagName }}>
+
+	</div>
+											
+    <span class="file-name-container text-sm">
+	    {% if source == "shared"%}
+    		{{ uploadFile.filename|sub_text(12) }}
+			<br>
+			<span class="text-sm text-muted">
+				来自 
+				<span class="text-info">{{ createdUsers[uploadFile.createdUserId]["nickname"]}}</span>
+			</span>
+	    {% else %}
+	    	{{ uploadFile.filename|sub_text(30) }}
+	    {% endif %}
+    </span>
+    
+
+    <span class="action-buttons-container center-block text-center" style="display: none; background-color: #f6f6f6;">
+  		<a class="btn btn-link tip" href="{{ path('material_lib_file_preview_content', {fileId: uploadFile.id}) }}">
+  			<span class="glyphicon glyphicon-cloud-download"></span> 下载
+  		</a>
+  		{% if uploadFile.createdUserId == currentUserId %}
+	    	<a
+	    		class="btn btn-link delete-material-btn" 
+	    		data-url="{{ path('material_lib_delete_file', {id: uploadFile.id}) }}"
+	    		data-link-count="{{ uploadFile.usedCount }}">
+	    		<span class="glyphicon glyphicon-trash"></span> 删除
+	    	</a>
+	    {% endif %}
+	    {% if uploadFile.convertStatus == 'waiting' %}
+	      <br><span class="text-warning text-sm">正在文件格式转换</span>
+	      {% if ( now - uploadFile.updatedTime ) > 28800 %}
+	        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+	      {% endif %}
+
+	    {% elseif uploadFile.convertStatus == 'doing' %}
+	      <br><span class="text-info text-sm">正在文件格式转换</span>
+	      {% if uploadFile.type == 'ppt' and ( now - uploadFile.updatedTime ) > 1800 %}
+	        <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+	      {% endif %}
+	    {% elseif uploadFile.convertStatus == 'error' %}
+	      <br><span class="text-danger text-sm">文件格式转换失败，<a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn">重新转换</a></span>
+	    {% else %}
+	        {% if uploadFile.type == 'ppt' and ( not uploadFile.metas2.length|default(null) ) and uploadFile.targetType == 'courselesson'  %}
+	          <br><a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换</a>
+	        {% endif %}
+	    {% endif %}
+
+	    {% if setting('developer.debug') and uploadFile.convertParams.convertor|default(null) %}
+	      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">重新转换(调试模式)</a>
+	    {% endif %}
+    </span>
+  </div>
+</li>
+
+
+
+{# <li class="course-grid item-material">
 	<div style="width: 180px; height: 180px; padding: 2px;" class="course-item-list-multi" data-file="{{file.id}}">
     <div class="select"><input value="{{file.id}}" type="checkbox" data-role="batch-item" 
     	data-link-count="{{ file.usedCount }}"
@@ -103,10 +231,7 @@
 	    	</a>
 	    {% endif %}
 	    
-
-	    {# {% if setting('developer.debug') and file.convertParams.convertor|default(null) %}
-	      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:'0', fileId:file.id}) }}" class="convert-file-btn text-danger text-sm">重新转码(调试模式)</a>
-	    {% endif %} #}
     </div>
   </div>
 </li>
+#}

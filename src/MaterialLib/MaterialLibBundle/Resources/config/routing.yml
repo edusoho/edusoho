@@ -6,6 +6,10 @@ material_lib_my_sharing:
     pattern: /material/lib/my/sharing/show
     defaults: { _controller: MaterialLibBundle:MaterialLib:showShareForm }
 
+material_lib_delete_file:
+    pattern: /material/lib/{id}/delete
+    defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
+
 material_lib_save_sharing:
     pattern: /material/lib/my/sharing/save
     defaults: { _controller: MaterialLibBundle:MaterialLib:saveShare }
@@ -30,8 +34,8 @@ materiallib_file_deletes:
     pattern: /materiallib/file/deletes
     defaults: { _controller: MaterialLibBundle:MaterialLib:deletes }
 
-materiallib_file_preview:
-    pattern:  /materiallib/file/{id}/preview
+material_lib_file_preview:
+    pattern:  /material/lib/file/{fileId}/preview
     defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
 
 materiallib_file_delete:
@@ -41,3 +45,28 @@ materiallib_file_delete:
 materiallib_file_download:
     pattern: /materiallib/file/{id}/download
     defaults: { _controller: MaterialLibBundle:MaterialLib:download }
+
+material_lib_file_player:
+    pattern:  /material/lib/{fileId}/player
+    defaults: { _controller: MaterialLibBundle:MaterialLib:player }
+
+material_lib_file_play_url:
+    pattern:  /material/lib/{fileId}/play_url{suffix}
+    defaults: { _controller: MaterialLibBundle:MaterialLib:playUrl, suffix:'' }
+    requirements:
+        suffix:  |.m3u8
+
+material_lib_file_preview_hlskeyurl:
+    pattern: /material/lib/{fileId}/preview/hlskeyurl/{token}
+    defaults: { _controller: MaterialLibBundle:MaterialLib:hlskeyurl }
+
+material_lib_file_preview_ppt:
+    pattern: /material/lib/{fileId}/preview/ppt
+    defaults: { _controller: MaterialLibBundle:MaterialLib:ppt }
+
+material_lib_file_preview_content:
+    pattern:  /material/lib/{fileId}/preview/content
+    defaults: { _controller: MaterialLibBundle:MaterialLib:content }
+
+
+

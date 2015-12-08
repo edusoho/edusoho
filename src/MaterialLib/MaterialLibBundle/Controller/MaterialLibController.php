@@ -4,6 +4,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
@@ -231,9 +232,9 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function previewAction(Request $request, $id)
+    public function previewAction(Request $request, $fileId)
     {
-        $file = $this->tryAccessFile($id);
+        $file = $this->tryAccessFile($fileId);
 
         return $this->render('MaterialLibBundle:MaterialLib:preview-modal.html.twig', array(
             'file' => $file
@@ -277,6 +278,102 @@ class MaterialLibController extends BaseController
         }
 
         throw $this->createAccessDeniedException('您无权访问此文件！');
+    }
+
+    //加载播放器的地址
+    public function playerAction(Request $request, $fileId)
+    {
+        $file = $this->tryAccessFile($fileId);
+        $url  = $this->generateUrl("material_lib_file_play_url", array(
+            'fileId' => $fileId
+        ), true);
+
+        return $this->forward('TopxiaWebBundle:Player:show', array(
+            'id'  => $fileId,
+            'url' => $url
+        ));
+    }
+
+    /**
+     * Generate HLS key which will be used when preview a file from the cloud.
+     * @param  Request                                    $request HTTP request
+     * @param  unknown                                    $fileId  file id
+     * @param  unknown                                    $token   token
+     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     */
+    public function hlskeyurlAction(Request $request, $fileId, $token)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $token = $this->getTokenService()->verifyToken('hlsvideo.view', $token);
+
+        if (empty($token)) {
+            $fakeKey = $this->getTokenService()->makeFakeTokenString(16);
+            return new Response($fakeKey);
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['convertParams']['hlsKey'])) {
+            throw $this->createNotFoundException();
+        }
+
+        return new Response($file['convertParams']['hlsKey']);
+    }
+
+    /**
+     * Preview a PPT file.
+     * @param  Request                                        $request HTTP request
+     * @param  unknown                                        $fileId  file id
+     * @return \Symfony\Component\HttpFoundation\JsonResponse JSON response
+     */
+    public function pptAction(Request $request, $fileId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file) || $file['type'] != 'ppt') {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
+                $message = sprintf('PPT文档转换失败，请重新转换。');
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message)
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。')
+                ));
+            }
+        }
+
+        $factory = new CloudClientFactory();
+        $client  = $factory->createClient();
+
+        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
+
+        return $this->createJsonResponse($result);
+    }
+
+    public function contentAction(Request $request, $fileId)
+    {
+        $file = $this->tryAccessFile($fileId);
+        return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
     }
 
     protected function getSettingService()
