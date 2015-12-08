@@ -190,10 +190,17 @@ define(function(require, exports, module) {
                 'audio' : {}
             }
 
+            var outputKey = {
+                'HLSEncryptedVideo' : 'video',
+                'document' : 'document',
+                'ppt' : 'ppt',
+                'audio' : 'audio'
+            }
+
             var params = {};
             if ((this.get('process') == 'auto') && extOutputs[file.ext]) {
                 params = paramsDefault[extOutputs[file.ext]];
-                params.output = extOutputs[file.ext];
+                params[outputKey[extOutputs[file.ext]]] = extOutputs[file.ext];
             } 
 
             return params;
