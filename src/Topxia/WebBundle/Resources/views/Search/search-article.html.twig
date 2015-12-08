@@ -3,5 +3,7 @@
 </div>
 {% for article in resultSet %}
 {% set category = article.category %}
+<div class="article-list">
   {% include 'TopxiaWebBundle:Search:search-article-item.html.twig' %}
+</div>
 {% endfor %}
