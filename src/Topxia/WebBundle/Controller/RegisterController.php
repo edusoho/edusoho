@@ -24,7 +24,12 @@ class RegisterController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $registration           = $request->request->all();
+            $registration = $request->request->all();
+
+            if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
+                $registration['verifiedMobile'] = $registration['emailOrMobile'];
+            }
+
             $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             $registration['createdIp'] = $request->getClientIp();
