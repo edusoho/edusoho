@@ -152,18 +152,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCourseOrderService()->createOrder($orderInfo);
     }
 
-    public function getNote($targetId)
-    {
-        $course = $this->getCourseService()->getCourse($targetId);
-        return str_replace(' ', '', strip_tags($course['about']));
-    }
-
-    public function getTitle($targetId)
-    {
-        $course = $this->getCourseService()->getCourse($targetId);
-        return str_replace(' ', '', strip_tags($course['title']));
-    }
-
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
@@ -188,6 +176,52 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $this->getCourseOrderService()->doSuccessPayOrder($order['id']);
 
         return;
+    }
+
+    public function getOrderBySn($sn)
+    {
+        return $this->getOrderService()->getOrderBySn($sn);
+    }
+
+    public function getOrderMessage($order)
+    {
+        $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+        $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
+        $orderInfo['template'] = 'course';
+        return $orderInfo;
+    }
+
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderService()->updateOrder($id, $fileds);
+    }
+
+    public function requestParams($order, $container)
+    {
+        $requestParams = array(
+            'returnUrl' => $container->get('router')->generate('pay_return', array('name' => $order['payment']), true),
+            'notifyUrl' => $container->get('router')->generate('pay_notify', array('name' => $order['payment']), true),
+            'showUrl'   => $container->get('router')->generate('pay_success_show', array('id' => $order['id']), true)
+        );
+
+        return $requestParams;
+    }
+
+    public function getNote($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        return str_replace(' ', '', strip_tags($course['about']));
+    }
+
+    public function getTitle($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        return str_replace(' ', '', strip_tags($course['title']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getPayCenterService()->pay($payData);
     }
 
     protected function getCouponService()
@@ -218,5 +252,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getCourseOrderService()
     {
         return ServiceKernel::instance()->createService("Course.CourseOrderService");
+    }
+
+    protected function getOrderService()
+    {
+        return ServiceKernel::instance()->createService('Order.OrderService');
     }
 }

@@ -37,6 +37,26 @@ class CashOrdersServiceTest extends BaseTestCase
 
     }
 
+    public function testCreatePayRecord()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $order['amount']);
+        $payData = array('status' => 'closed');
+        $this->getCashOrdersService()->createPayRecord($createOrder['id'], $payData);
+        $result = $this->getCashOrdersService()->getOrder($createOrder['id']);
+        $this->assertEquals($result['data'], json_encode($payData));
+
+    }
+
     public function testCancelOrder()
     {
         $this->setSettingcoin();

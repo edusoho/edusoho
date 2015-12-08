@@ -158,6 +158,24 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return $this->getOrderDao()->analysisAmount($conditions);
     }
 
+    public function createPayRecord($id, array $payData)
+    {
+        $order = $this->getOrder($id);
+        $data  = $order['data'];
+
+        if (!is_array($data)) {
+            $data = json_decode($order['data'], true);
+        }
+
+        foreach ($payData as $key => $value) {
+            $data[$key] = $value;
+        }
+
+        $fields = array('data' => json_encode($data));
+        $order  = $this->updateOrder($id, $fields);
+        $this->_createLog($order['id'], 'cash_pay_create', '创建交易', $payData);
+    }
+
     protected function _createLog($orderId, $type, $message = '', array $data = array())
     {
         $user = $this->getCurrentUser();

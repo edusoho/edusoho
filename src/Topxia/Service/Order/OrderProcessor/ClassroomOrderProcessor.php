@@ -308,18 +308,16 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $coursesTotalPrice;
     }
 
-
     public function getOrderBySn($sn)
     {
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    public function getOrderInfo($order)
+    public function getOrderMessage($order)
     {
-        $fields    = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
-
+        $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+        $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
+        $orderInfo['template'] = 'classroom';
         return $orderInfo;
     }
 
@@ -364,7 +362,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return ServiceKernel::instance()->createService("Classroom:Classroom.ClassroomOrderService");
     }
-    
+
     protected function getOrderService()
     {
         return ServiceKernel::instance()->createService('Order.OrderService');

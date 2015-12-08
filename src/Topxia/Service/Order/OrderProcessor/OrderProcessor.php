@@ -12,11 +12,10 @@ interface OrderProcessor
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
 
     public function createOrder($orderInfo, $fields);
-    
 
     public function getOrderBySn($sn);
 
-    public function getOrderInfo($order);
+    public function getOrderMessage($order);
 
     public function updateOrder($id, $fileds);
 
@@ -25,5 +24,9 @@ interface OrderProcessor
     public function getNote($targetId);
 
     public function getTitle($targetId);
+
+    public function pay($payData);
+
+    //public function cancelOrder($id, $message, $data);
 
 }

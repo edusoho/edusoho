@@ -20,4 +20,6 @@ interface CashOrdersService
     public function getLogsByOrderId($orderId);
 
     public function analysisAmount($conditions);
+
+    public function createPayRecord($id, array $payDate);
 }

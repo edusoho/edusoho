@@ -235,8 +235,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->createOrder($orderInfo);
     }
 
-    
-
     public function doPaySuccess($success, $order)
     {
         if (!$success) {
@@ -278,13 +276,12 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
     }
 
-
     public function getOrderBySn($sn)
     {
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    public function getOrderInfo($order)
+    public function getOrderMessage($order)
     {
         $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
 
@@ -294,8 +291,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $fields['defaultBuyMonth'] = $defaultBuyMonth;
         $fields['buyType']         = $order['data']['buyType'];
 
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
+        $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
+        $orderInfo['template'] = 'vip';
 
         return $orderInfo;
     }
@@ -341,5 +338,4 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return ServiceKernel::instance()->createService('Order.OrderService');
     }
-
 }

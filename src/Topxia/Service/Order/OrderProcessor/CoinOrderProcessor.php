@@ -3,9 +3,9 @@ namespace Topxia\Service\Order\OrderProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
 
-class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
+class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "";
+    protected $router = "my_coin";
 
     public function getRouter()
     {
@@ -41,9 +41,10 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCashOrdersService()->getOrderBySn($sn);
     }
 
-    public function getOrderInfo($order)
+    public function getOrderMessage($order)
     {
-        $orderInfo = $this->getCashOrdersService()->getOrder($order['id']);
+        $orderInfo             = $this->getCashOrdersService()->getOrder($order['id']);
+        $orderInfo['template'] = 'coin';
         return $orderInfo;
     }
 
@@ -72,6 +73,16 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $order = $this->getCashOrdersService()->getOrder($targetId);
         return str_replace(' ', '', strip_tags($order['title']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getCashOrdersService()->payOrder($payData);
+    }
+
+    public function cancelOrder($id, $message, $data)
+    {
+        return $this->getCashOrdersService()->cancelOrder($id, $message, $data);
     }
 
     protected function getCashOrdersService()
