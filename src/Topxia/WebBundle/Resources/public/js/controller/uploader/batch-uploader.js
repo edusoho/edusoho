@@ -167,14 +167,14 @@ define(function(require, exports, module) {
 
         _getDirectives: function(file) {
             var extOutputs = {
-                mp4: 'HLSEncryptedVideo',
-                avi: 'HLSEncryptedVideo',
-                flv: 'HLSEncryptedVideo',
-                f4v: 'HLSEncryptedVideo',
-                wmv: 'HLSEncryptedVideo',
-                mov: 'HLSEncryptedVideo',
-                rmvb: 'HLSEncryptedVideo',
-                mkv: 'HLSEncryptedVideo',
+                mp4: 'video',
+                avi: 'video',
+                flv: 'video',
+                f4v: 'video',
+                wmv: 'video',
+                mov: 'video',
+                rmvb: 'video',
+                mkv: 'video',
                 doc: 'document',
                 docx: 'document',
                 pdf: 'document',
@@ -184,24 +184,17 @@ define(function(require, exports, module) {
             };
 
             var paramsDefault = {
-                'HLSEncryptedVideo' : {videoQuality: 'normal', audioQuality: 'normal'},
+                'video' : {videoQuality: 'normal', audioQuality: 'normal'},
                 'document' : {},
                 'ppt' : {},
                 'audio' : {}
-            }
-
-            var outputKey = {
-                'HLSEncryptedVideo' : 'video',
-                'document' : 'document',
-                'ppt' : 'ppt',
-                'audio' : 'audio'
             }
 
             var params = {};
             var extOutput = extOutputs[file.ext];
             if ((this.get('process') == 'auto') && extOutput) {
                 params = paramsDefault[extOutput];
-                params[outputKey[extOutput]] = extOutput;
+                params.output = extOutput;
             } 
 
             return params;
