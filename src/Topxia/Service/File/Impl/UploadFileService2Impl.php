@@ -32,7 +32,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return null;
         }
 
-        return $this->getFileImplementor(array('storage' => 'cloud'))->findFiles($files);
+        return FileFilter::filters($this->getFileImplementor(array('storage' => 'cloud'))->findFiles($files));
     }
 
     public function getThinFile($id)
@@ -325,5 +325,23 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function getUploadFileShareDao()
     {
         return $this->createDao('File.UploadFileShareDao');
+    }
+}
+
+class FileFilter
+{
+    public static function filters($files)
+    {
+        $filterResult = array();
+
+        if (empty($files)) {
+            return $filterResult;
+        }
+
+        foreach ($files as $index => $file) {
+            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
+        }
+
+        return $filterResult;
     }
 }
