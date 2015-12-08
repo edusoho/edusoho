@@ -505,24 +505,26 @@ class CourseLessonController extends BaseController
             }
         }
 
-        if (empty($file['globalId'])) {
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
-            $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-            return $this->createJsonResponse($result);
+        if (!empty($file['globalId'])) {
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
         }
 
-        $api    = CloudAPIFactory::create();
-        $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
+        $factory = new CloudClientFactory();
+        $client  = $factory->createClient();
 
-        if (empty($result['images'])) {
-            return $this->createJsonResponse(array(
-                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。')
-            ));
-        }
+        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
+        return $this->createJsonResponse($result);
 
-        return $this->createJsonResponse($result['images']);
+        // $api    = CloudAPIFactory::create();
+        // $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
+
+        // if (empty($result['images'])) {
+        //     return $this->createJsonResponse(array(
+        //         'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。')
+        //     ));
+        // }
+
+        // return $this->createJsonResponse($result['images']);
     }
 
     public function documentAction(Request $request, $courseId, $lessonId)
@@ -562,32 +564,32 @@ class CourseLessonController extends BaseController
             }
         }
 
-        if (empty($file['globalId'])) {
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
-            $metas2           = $file['metas2'];
-            $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-            $result['pdfUri'] = $url['url'];
-            $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-            $result['swfUri'] = $url['url'];
-
-            return $this->createJsonResponse($result);
+        if (!empty($file['globalId'])) {
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
         }
 
-        $api    = CloudAPIFactory::create();
-        $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
+        $factory          = new CloudClientFactory();
+        $client           = $factory->createClient();
+        $metas2           = $file['metas2'];
+        $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $result['pdfUri'] = $url['url'];
+        $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        $result['swfUri'] = $url['url'];
+        return $this->createJsonResponse($result);
 
-        if (empty($result['pdf']) || empty($result['swf'])) {
-            return $this->createJsonResponse(array(
-                'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。')
-            ));
-        }
+        // $api    = CloudAPIFactory::create();
+        // $result = $api->get(sprintf("/resource/%s/player", $file['globalId']));
 
-        return $this->createJsonResponse(array(
-            'pdfUri' => $result['pdf'],
-            'swfUri' => $result['swf']
-        ));
+        // if (empty($result['pdf']) || empty($result['swf'])) {
+        //     return $this->createJsonResponse(array(
+        //         'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。')
+        //     ));
+        // }
+
+        // return $this->createJsonResponse(array(
+        //     'pdfUri' => $result['pdf'],
+        //     'swfUri' => $result['swf']
+        // ));
     }
 
     public function flashAction(Request $request, $courseId, $lessonId)
