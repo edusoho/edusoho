@@ -17,7 +17,11 @@ define(function(require, exports, module) {
 			setup: function() {
 				Lazyload.init();
 
-				$("#search-input-group").on('input propertychange','input',function(){
+                if($("#search-input-group .form-control").val()) {
+                    $(".js-btn-clear").show();
+                }
+
+				$("#search-input-group").on('input propertychange','.form-control',function(){
 					var $this =$(this);
 					var btnClear = $this.siblings('.js-btn-clear');
 
