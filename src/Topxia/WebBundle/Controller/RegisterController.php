@@ -30,14 +30,14 @@ class RegisterController extends BaseController
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
             }
 
-            $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
-
+            $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
             $registration['createdIp'] = $request->getClientIp();
 
             $authSettings = $this->getSettingService()->get('auth', array());
 
             //验证码校验
             $this->captchaEnabledValidator($authSettings, $registration, $request);
+
             //手机校验码
 
             if ($this->smsCodeValidator($authSettings, $registration, $request)) {
@@ -49,7 +49,7 @@ class RegisterController extends BaseController
                 if ($result) {
                     $registration['verifiedMobile'] = $sessionField['to'];
                 } else {
-                    return $this->createMessageResponse('info', '手机短信验证错误，请重新注册');
+                    return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
                 }
             }
 
