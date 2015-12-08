@@ -77,7 +77,7 @@
                   {% set articles = data('LatestArticles',{'count':6}) %}
                   {% if articles %}
                     {% for article in articles %}
-                    <li class="{% if loop.index == 6 %}last{% endif %} clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.updatedTime|smart_time }}</span></li>
+                    <li class="{% if loop.index == 6 %}last{% endif %} clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.createdTime|smart_time }}</span></li>
                     {% endfor %}
                   {% endif %}
                 </ul>
