@@ -73,7 +73,7 @@ class PlayerController extends BaseController
             $client  = $factory->createClient();
 
             if (!empty($file['globalId'])) {
-                $file['metas2'] = '';
+                $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($file['id']);
             }
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {

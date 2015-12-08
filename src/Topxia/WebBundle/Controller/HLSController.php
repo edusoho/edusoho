@@ -82,8 +82,7 @@ class HLSController extends BaseController
             'video' => $file['convertParams']['videoQuality'],
             'audio' => $file['convertParams']['audioQuality']
         );
-
-        $api = CloudAPIFactory::create('leaf');
+        $api = CloudAPIFactory::create('root');
 
         if (!$fromApi && $this->setting("developer.balloon_player")) {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
@@ -150,7 +149,8 @@ class HLSController extends BaseController
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
+                'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1,
+                'level'         => $level
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
@@ -180,7 +180,7 @@ class HLSController extends BaseController
             $params['line'] = $line;
         }
 
-        $api = CloudAPIFactory::create('leaf');
+        $api = CloudAPIFactory::create('root');
 
         $stream = $api->get('/hls/stream', $params);
 
@@ -196,7 +196,6 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        return new Response('1234567890123456');
         $token = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
@@ -222,19 +221,25 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        if (empty($file['convertParams']['hlsKey'])) {
+        // if (empty($file['convertParams']['hlsKey'])) {
+        //     return $this->makeFakeTokenString();
+        // }
+
+        if (empty($file['metas2'][$token['data']['level']]['hlsKey'])) {
             return $this->makeFakeTokenString();
         }
 
-        $api = CloudAPIFactory::create('leaf');
+        return new Response($file['metas2'][$token['data']['level']]['hlsKey']);
+
+        $api = CloudAPIFactory::create('root');
 
         if (!empty($token['data']['keyencryption'])) {
-            $stream = $api->get("/hls/clef/{$file['convertParams']['hlsKey']}/algo/1", array());
+            $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
             return new Response($stream['key']);
         }
 
-        $stream = $api->get("/hls/clef/{$file['convertParams']['hlsKey']}/algo/0", array());
-        return new Response($stream['key']);
+        $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/0", array());
+        return new Response($file['metas2'][$token['data']['level']]['hlsKey']);
     }
 
     protected function makeFakeTokenString()
