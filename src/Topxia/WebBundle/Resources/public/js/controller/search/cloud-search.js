@@ -28,10 +28,7 @@ define(function(require, exports, module) {
 					}
 				})
 
-				$("#search-nav-tabs").lavaLamp({
-		        	fx: "backout",
-		        	speed: 700
-		        });
+				$("#search-nav-tabs").lavaLamp();
 			},
 			OnBtnClear: function(e) {
 				var $this = $(e.currentTarget);

@@ -20,7 +20,7 @@
         <ul class="ul-lesson">
         {% for lesson in course.lessons|slice(0, 3)%}
           <li>
-            <i class="es-icon es-icon-dot"></i>
+            <i class="es-icon es-icon-arrowdropleft"></i>
             <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
               课时 {{lesson.number}}: {{lesson.title|raw}}
             </a>

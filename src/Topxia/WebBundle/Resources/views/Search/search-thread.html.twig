@@ -10,7 +10,6 @@
 </ul>
 
 <div class="media-list">
-
 	{% for thread in resultSet%}
 		<div class="media media-search">
 			<div class="media-left">
@@ -30,19 +29,19 @@
 				{% endif %}
 
 				" target="_blank">{{thread.title|raw}}</a></div>
-				<p class="text-sm color-gray">来自
-				
-				{% if thread.targetType == 'group'%}
-					{% set group = data('Group',{'groupId':thread.targetId}) %}
-					<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">{{group.title|default('')}}</a>
-				{% elseif thread.targetType == 'classroom'%}
-					{% set classroom = data('Classroom',{'classroomId':thread.targetId}) %}
-					<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">{{classroom.title|default('')}}</a>
-				{% elseif thread.targetType == 'course'%}
-					{% set course = data('Course',{'courseId':thread.targetId}) %}
-					<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
-				{% endif %}
-				<span class="mlm">{{thread.createdTime|smart_time}}</span></p>
+				<div class="text-sm color-gray">来自
+					{% if thread.targetType == 'group'%}
+						{% set group = data('Group',{'groupId':thread.targetId}) %}
+						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">{{group.title|default('')}}</a>
+					{% elseif thread.targetType == 'classroom'%}
+						{% set classroom = data('Classroom',{'classroomId':thread.targetId}) %}
+						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">{{classroom.title|default('')}}</a>
+					{% elseif thread.targetType == 'course'%}
+						{% set course = data('Course',{'courseId':thread.targetId}) %}
+						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
+					{% endif %}
+					<span class="mlm">{{thread.createdTime|smart_time}}</span>
+				</div>
 			</div>
 		</div>
 	{% endfor %}

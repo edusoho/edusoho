@@ -5496,6 +5496,9 @@ a.homework-essay-textarea-pack-up {
   height: 50px;
   text-align: center;
   padding: 5px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .media-search .title {
   font-size: 16px;
@@ -10316,7 +10319,7 @@ textarea {
   transition: all 0.3s ease;
 }
 .search-course-list .course-item .title > a:hover {
-  color: #e83d2c;
+  color: #46c37b;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
