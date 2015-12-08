@@ -70,7 +70,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $result['resumed']  = $apiResult['resumed'];
 
         $result['uploadMode']     = $apiResult['uploadMode'];
-        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadUrl']      = $apiResult['uploadUrl'];
         $result['uploadProxyUrl'] = '';
         $result['uploadToken']    = $apiResult['uploadToken'];
 
@@ -255,13 +255,15 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
                     'audioQuality' => $cloudFile['directives']['audioQuality']
                 );
 
-                foreach ($cloudFile['metas']['levels'] as $key => $value) {
-                    $value['type']                      = $key;
-                    $value['cmd']['hlsKey']             = $cloudFile['metas']['levels'][$key]['hlsKey'];
-                    $cloudFile['metas']['levels'][$key] = $value;
-                }
+                if (isset($cloudFile['metas']['levels'])) {
+                    foreach ($cloudFile['metas']['levels'] as $key => $value) {
+                        $value['type']                      = $key;
+                        $value['cmd']['hlsKey']             = $cloudFile['metas']['levels'][$key]['hlsKey'];
+                        $cloudFile['metas']['levels'][$key] = $value;
+                    }
 
-                $file['metas2'] = $cloudFile['metas']['levels'];
+                    $file['metas2'] = $cloudFile['metas']['levels'];
+                }
             } elseif ($file['type'] == 'ppt') {
                 $file['convertParams'] = array(
                     'convertor' => $cloudFile['directives']['output']
