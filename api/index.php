@@ -94,6 +94,13 @@ $app->before(function (Request $request) use ($app) {
             throw createAccessDeniedException("Auth Params is invalid...");
         }
 
+        setCurrentUser(array(
+            'id' => 0,
+            'nickname' => '游客',
+            'currentIp' =>  $request->getClientIp(),
+            'roles' => array(),
+        ));
+
     } else {
         $token = $request->headers->get('X-Auth-Token');
         if (empty($token)) {

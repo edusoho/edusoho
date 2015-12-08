@@ -48,6 +48,9 @@ class Courses extends BaseResource
                 continue;
             }
             foreach ($course['tags'] as $tagId) {
+                if (empty($tags[$tagId])) {
+                    continue;
+                } 
                 $courseTags[] = array(
                     'id' => $tagId,
                     'name' => $tags[$tagId]['name'],
