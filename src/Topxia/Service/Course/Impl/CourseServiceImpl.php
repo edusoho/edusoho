@@ -1110,6 +1110,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLogService()->info('course', 'add_lesson', "添加课时《{$lesson['title']}》({$lesson['id']})", $lesson);
         $this->dispatchEvent("course.lesson.create", array('argument' => $argument, 'lesson' => $lesson));
 
+        $LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
+
+        if ($LiveReservation && !empty($reservationIds) && $lesson['type'] == 'live') {
+            $this->dispatchEvent("reseravtion.lesson.create",
+                new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
+            );
+        }
+
         return $lesson;
     }
 
@@ -1281,6 +1289,14 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update_lesson', "更新课时《{$updatedLesson['title']}》({$updatedLesson['id']})", $updatedLesson);
 
+        $LiveReservation = $this->getAppService()->findInstallApp('LiveReservation');
+
+        if ($LiveReservation && !empty($reservationIds) && $updatedLesson['type'] == 'live') {
+            $this->dispatchEvent("reseravtion.lesson.create",
+                new ServiceEvent($lesson, array('reservationIds' => $reservationIds))
+            );
+        }
+        
         $updatedLesson['fields'] = $lesson;
         $this->dispatchEvent("course.lesson.update", array('argument' => $argument, 'lesson' => $updatedLesson));
 
