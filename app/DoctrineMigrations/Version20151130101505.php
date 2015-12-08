@@ -34,6 +34,12 @@ class Version20151130101505 extends AbstractMigration
         $this->addSql("ALTER TABLE `groups_thread` ADD INDEX `updatedTime` (`updatedTime`);");
         
         $this->addSql("ALTER TABLE `article` ADD INDEX(`updatedTime`);");
+
+        $this->addSql("UPDATE `user` SET  `updatedTime` = `createdTime`;");
+        $this->addSql("UPDATE `course` SET  `updatedTime` = `createdTime`;");
+        $this->addSql("UPDATE `course_lesson` SET  `updatedTime` = `createdTime`;");
+        $this->addSql("UPDATE `course_thread` SET  `updatedTime` = `createdTime`;");
+        $this->addSql("UPDATE `groups_thread` SET  `updatedTime` = `createdTime`;");
     }
 
     /**
