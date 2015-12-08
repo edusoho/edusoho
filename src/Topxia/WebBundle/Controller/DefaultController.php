@@ -208,11 +208,10 @@ class DefaultController extends BaseController
 
     public function coursesCategoryAction(Request $request)
     {
-        $conditions               = $request->query->all();
-        $conditions['status']     = 'published';
-        $conditions['parentId']   = 0;
-        $categoryId               = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
-        $conditions['categoryId'] = $categoryId;
+        $conditions             = $request->query->all();
+        $conditions['status']   = 'published';
+        $conditions['parentId'] = 0;
+        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
 
         if (isset($conditions['config'])) {
             $config = $conditions['config'];
@@ -224,7 +223,7 @@ class DefaultController extends BaseController
 
         //var_dump($conditions);
 
-        if (empty($conditions['categoryId'])) {
+        if (!empty($conditions['categoryId'])) {
             $conditions['categoryId'] = intval($conditions['categoryId']);
         } else {
             unset($conditions['categoryId']);
