@@ -57,7 +57,7 @@
             				<span class="subtitle">汇率{{ coin.cashRate }}</span>
             			</h4>
         			</div>
-        			<label class="ui-switch">
+        			<label class="ui-switch" ng-if="!checkIsCoinMode()">
 	            		<input type="checkbox" ng-model="payMode" ng-change="changePayMode()" ng-checked="payMode == 'coin' " ng-if="priceType != 'Coin'" >
 	        		</label>
 		</li>

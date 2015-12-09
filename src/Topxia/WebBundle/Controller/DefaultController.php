@@ -206,12 +206,12 @@ class DefaultController extends BaseController
         return new Response($jumpScript);
     }
 
-    public function CoursesCategoryAction(Request $request)
+    public function coursesCategoryAction(Request $request)
     {
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $categoryId             = $conditions['categoryId'];
+        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
 
         if (isset($conditions['config'])) {
             $config = $conditions['config'];
@@ -223,7 +223,7 @@ class DefaultController extends BaseController
 
         //var_dump($conditions);
 
-        if ($conditions['categoryId'] != 'all') {
+        if (!empty($conditions['categoryId'])) {
             $conditions['categoryId'] = intval($conditions['categoryId']);
         } else {
             unset($conditions['categoryId']);

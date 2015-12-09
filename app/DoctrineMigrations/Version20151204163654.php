@@ -16,6 +16,7 @@ class Version20151204163654 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql("DELETE FROM `theme_config` where `name`='简墨';");
         $this->addSql("INSERT INTO `theme_config`  (`id`, `name`, `config`, `confirmConfig`, `allConfig`, `updatedTime`, `createdTime`, `updatedUserId`)
             VALUES (
                 NULL,
