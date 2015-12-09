@@ -236,9 +236,8 @@ class DefaultController extends BaseController
         }
 
         unset($conditions['orderBy']);
-        $config = $this->getThemeService()->getCurrentThemeConfig();
-        $config = $config['confirmConfig']['blocks']['left'][0];
-        //$courses              = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $config['count']);
+        $config               = $this->getThemeService()->getCurrentThemeConfig();
+        $config               = $config['confirmConfig']['blocks']['left'][0];
         $config['orderBy']    = $orderBy;
         $config['categoryId'] = $categoryId;
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
