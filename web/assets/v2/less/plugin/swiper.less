@@ -70,9 +70,9 @@ Basic Swiper Styles
 }
 .swiper-slide {
     float: left;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: content-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .swiper-hidden {
@@ -82,6 +82,31 @@ Basic Swiper Styles
         visibility: visible !important;
         height: 100% !important;
     }
+}
+
+.arrow-left,
+.arrow-right {
+    position: absolute;
+    top: 50%;
+    margin-top: 15px;
+    >i {
+        font-size: 50px;
+    }
+    color: #dbdbdb;
+    .es-transition;
+    &:hover,
+    &:focus {
+        color: @gray-dark;
+        .es-transition;
+    }
+}
+
+.arrow-left {
+    left: -50px;
+}
+
+.arrow-right {
+    right: -50px;
 }
 
 /* IE10 Windows Phone 8 Fixes */
