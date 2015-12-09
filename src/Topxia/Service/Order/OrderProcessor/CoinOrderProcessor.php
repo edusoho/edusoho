@@ -55,14 +55,14 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getNote($targetId)
     {
-        $order = $this->getCashOrdersService()->getOrder($targetId);
-        return str_replace(' ', '', strip_tags($order['note']));
+        $coin = $this->getSettingService()->get('coin');
+        return '充值'.$coin['coin_name'];
     }
 
     public function getTitle($targetId)
     {
-        $order = $this->getCashOrdersService()->getOrder($targetId);
-        return str_replace(' ', '', strip_tags($order['title']));
+        $coin = $this->getSettingService()->get('coin');
+        return $coin['coin_name'];
     }
 
     public function pay($payData)
@@ -89,6 +89,11 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getCashOrdersService()
     {
         return ServiceKernel::instance()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
 }

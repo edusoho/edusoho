@@ -85,7 +85,6 @@ class CoinController extends BaseController
         // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('TopxiaWebBundle:Coin:index.html.twig', array(
-            'payments'      => $this->getEnabledPayments(),
             'account'       => $account,
             'cashes'        => $cashes,
             'paginator'     => $paginator,
@@ -279,29 +278,6 @@ class CoinController extends BaseController
     public function resultNoticeAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Coin:retrun-notice.html.twig');
-    }
-
-    protected function getEnabledPayments()
-    {
-        $enableds = array();
-
-        $setting = $this->setting('payment', array());
-
-        if (empty($setting['enabled'])) {
-            return $enableds;
-        }
-
-        $payNames = array('alipay');
-
-        foreach ($payNames as $payName) {
-            if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
-                );
-            }
-        }
-
-        return $enableds;
     }
 
     protected function getCashService()

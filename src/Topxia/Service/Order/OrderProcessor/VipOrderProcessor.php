@@ -283,9 +283,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function getOrderMessage($order)
     {
-        $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-
-        $defaultBuyMonth           = $this->setting('vip.default_buy_months');
+        $fields                    = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+        $vip                       = $this->getSettingService()->get('vip');
+        $defaultBuyMonth           = $vip['default_buy_months'];
         $fields['unit']            = $order['data']['unitType'];
         $fields['duration']        = $order['data']['duration'];
         $fields['defaultBuyMonth'] = $defaultBuyMonth;
@@ -335,9 +335,9 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->createPayRecord($id, $payData);
     }
 
-    protected function setting($name, $default = null)
+    protected function getSettingService()
     {
-        return $this->get('topxia.twig.web_extension')->getSetting($name, $default);
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 
     protected function getUserService()
