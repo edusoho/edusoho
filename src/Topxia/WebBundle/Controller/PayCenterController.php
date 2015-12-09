@@ -185,11 +185,11 @@ class PayCenterController extends BaseController
     public function closeAuthAction(Request $request)
     {
         $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
-        $fields               = $request->request->all();
-        list($order, $user)   = $this->verification($fields);
+        $fields = $request->request->all();
+        $this->verification($fields);
         $authBank             = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
-        $requestParams        = array('authBank' => $authBank, 'payment' => $fields['payment'], 'mobile' => $fields['mobile']);
-        $closeAuthBankRequest = $this->createCloseAuthBankRequest($order, $requestParams);
+        $requestParams        = array('authBank' => $authBank, 'payment' => 'quickpay', 'mobile' => $fields['mobile']);
+        $closeAuthBankRequest = $this->createCloseAuthBankRequest($requestParams);
         $formRequest          = $closeAuthBankRequest->form();
         return $this->createJsonResponse($formRequest);
     }
@@ -200,9 +200,7 @@ class PayCenterController extends BaseController
         $this->verification($fields);
 
         return $this->render('TopxiaWebBundle:PayCenter:checkMobile.html.twig', array(
-            'payAgreementId' => $fields['payAgreementId'],
-            'orderId'        => $fields["orderId"],
-            'payment'        => $fields['payment']
+            'payAgreementId' => $fields['payAgreementId']
         ));
     }
 
@@ -413,11 +411,11 @@ class PayCenterController extends BaseController
         return $request->setParams($requestParams);
     }
 
-    protected function createCloseAuthBankRequest($order, $params)
+    protected function createCloseAuthBankRequest($params)
     {
         $options = $this->getPaymentOptions($params['payment']);
         $request = Payment::createCloseAuthRequest($params['payment'], $options);
-        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'mobile' => $params['mobile']));
+        return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
     protected function getOrderInfo($order)
@@ -448,31 +446,15 @@ class PayCenterController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录');
-        }
-
-        if (!array_key_exists('orderId', $fields)) {
-            return $this->createMessageResponse('error', '缺少订单');
-        }
-
-        if (!isset($fields['payment'])) {
-            return $this->createMessageResponse('error', '支付方式未开启');
-        }
-
-        $order = $this->getOrderService()->getOrder($fields["orderId"]);
-
-        if ($user["id"] != $order["userId"]) {
-            return $this->createMessageResponse('error', '不是您创建的订单');
+            return array('success' => false, 'message' => '用户未登录');
         }
 
         $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
         $authBanks = ArrayToolkit::column($authBanks, 'id');
 
         if (!in_array($fields['payAgreementId'], $authBanks)) {
-            return $this->createMessageResponse('error', '不是您绑定的银行卡');
+            return array('success' => false, 'message' => '不是您绑定的银行卡');
         }
-
-        return array($order, $user);
     }
 
     protected function getPaymentOptions($payment)

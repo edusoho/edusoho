@@ -41,13 +41,15 @@ define(function(require, exports, module){
             }
 
             var $this = $(this);
-            var orderId = $("input[name='orderId']").val();
             var payAgreementId = $this.closest(".js-pay-bank").find("input").val();
-            var payment = $("input[name='payment']").val();
                         
-            $.post($this.data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(html){
-               　$modal.modal('show');　
-               　$modal.html(html);
+            $.post($this.data('url'),{'payAgreementId':payAgreementId},function(response){
+                if(response.success == false){
+                    Notify.danger(response.message);
+                }else{
+                    $modal.modal('show');　
+               　    $modal.html(response);
+                }　
             })
         })
 
