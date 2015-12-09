@@ -2,8 +2,8 @@
   {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   
   {% set count = config.count|default(12) %}
-  {% set categoryId = 0 %}
-  {% set orderBy = 'latest'%}
+  {% set categoryId = config.categoryId|default(0) %}
+  {% set orderBy = config.orderBy|default('latest')%}
   {% if orderBy == 'latest'%}
     {% set courses = data('LatestCourses',{'count':count, 'categoryId':categoryId}) %}
   {% elseif orderBy == 'recommendedSeq'%}
@@ -19,11 +19,11 @@
     </div>
     <div class="course-filter" id="course-filter">
       <ul class="nav nav-pills hidden-xs" role="tablist">
-        <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{config:config,orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+        <li role="presentation" class="{% if (categoryId|default(0) == 0) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
         {% if categoriesFirst%}
           {% for category in categoriesFirst  if (category.parentId == 0) %}
             {% if ( loop.index0 < config.categoryCount|default(4) ) %}
-              <li role="presentation" class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{config:config,categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
+              <li role="presentation" class="{% if (categoryId|default(0) == category.id) %}active {% endif %} js-course-filter"data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
             {% endif %}
           {% endfor %}
         {% endif %}
@@ -31,24 +31,24 @@
       <div class="btn-group visible-xs">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="tooltip" aria-expanded="false">全部课程 <span class="caret"></span></button>
         <ul class="dropdown-menu" role="menu">
-          <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}" data-url="{{path('homepage_category',{config:config,orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
+          <li role="presentation" class="js-course-filter {% if (categoryId|default(0) == 0) %}active {% endif %}" data-url="{{path('homepage_category',{orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">全部课程</a></li>
           {% if categoriesFirst%}
             {% for category in categoriesFirst  if (category.parentId == 0) %}
               {% if ( loop.index0 < config.categoryCount|default(4) ) %}
-                <li role="presentation" class = "js-course-filter {% if (categoryId|default(0) == category.id) %}active {% endif %}" data-url="{{path('homepage_category',{config:config,categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
+                <li role="presentation" class = "js-course-filter {% if (categoryId|default(0) == category.id) %}active {% endif %}" data-url="{{path('homepage_category',{categoryId : category.id, orderBy : orderBy|default('latest')}) }}"><a href="javascript:;">{{ category.name }}</a></li>
               {% endif %}
             {% endfor %}
           {% endif %}
         </ul>
       </div>
       <div class="course-sort btn-group">
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{config:config,categoryId : categoryId|default(0), orderBy : 'latest'}) }}">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}">
           最新
         </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{config:config,categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}">
           最热
         </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{config:config,categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}">
           推荐
         </a>
       </div>
