@@ -1,3 +1,8 @@
 <div class="article-text">
   {{ article.body |raw }}
 </div>
+{% if article.annexIds %}
+	{% for annex in annexs %}
+	<a href="{{ filepath(annex.uri)}}"><i class="es-icon es-icon-icattachfileblack24px"></i>附件{{loop.index}}</a>
+	{% endfor %}
+{% endif %}
