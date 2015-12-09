@@ -236,7 +236,8 @@ class DefaultController extends BaseController
         }
 
         unset($conditions['orderBy']);
-
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+        $config = $config['confirmConfig']['blocks']['left'][0];
         //$courses              = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $config['count']);
         $config['orderBy']    = $orderBy;
         $config['categoryId'] = $categoryId;
@@ -303,6 +304,11 @@ class DefaultController extends BaseController
     protected function getBatchNotificationService()
     {
         return $this->getServiceKernel()->createService('User.BatchNotificationService');
+    }
+
+    protected function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 
     private function getBlacklistService()
