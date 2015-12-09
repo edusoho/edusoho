@@ -490,6 +490,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if (!empty($file['globalId'])) {
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
+        }
+
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
@@ -503,10 +507,6 @@ class CourseLessonController extends BaseController
                     'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。')
                 ));
             }
-        }
-
-        if (!empty($file['globalId'])) {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
         }
 
         $factory = new CloudClientFactory();
@@ -549,6 +549,10 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if (!empty($file['globalId'])) {
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
+        }
+
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
@@ -562,10 +566,6 @@ class CourseLessonController extends BaseController
                     'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
                 ));
             }
-        }
-
-        if (!empty($file['globalId'])) {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
         }
 
         $factory          = new CloudClientFactory();

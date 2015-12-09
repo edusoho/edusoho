@@ -349,6 +349,10 @@ class MaterialLibController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if (!empty($file['globalId'])) {
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($fileId);
+        }
+
         if ($file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $message = sprintf('PPT文档转换失败，请重新转换。');
@@ -360,10 +364,6 @@ class MaterialLibController extends BaseController
                     'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。')
                 ));
             }
-        }
-
-        if (!empty($file['globalId'])) {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($fileId);
         }
 
         $factory = new CloudClientFactory();

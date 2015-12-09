@@ -241,7 +241,6 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'ok'         => 'success',
             'error'      => 'error'
         );
-
         $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
 
         if (empty($cloudFile['directives']['output'])) {
