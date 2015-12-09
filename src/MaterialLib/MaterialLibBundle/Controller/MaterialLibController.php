@@ -362,6 +362,10 @@ class MaterialLibController extends BaseController
             }
         }
 
+        if (!empty($file['globalId'])) {
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($fileId);
+        }
+
         $factory = new CloudClientFactory();
         $client  = $factory->createClient();
 
