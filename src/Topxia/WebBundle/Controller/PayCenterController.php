@@ -262,27 +262,6 @@ class PayCenterController extends BaseController
         ));
     }
 
-    // public function payReturnAction(Request $request, $name)
-    // {
-    //     $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
-    //     $response = $this->createPaymentResponse($name, $request->query->all());
-
-    //     $payData = $response->getPayData();
-
-    //     if ($payData['status'] == "waitBuyerConfirmGoods") {
-    //         return $this->forward("TopxiaWebBundle:Coin:resultNotice");
-    //     }
-
-    //     list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-
-    //     if ($order['status'] == 'paid' && $success) {
-    //         $successUrl = $this->generateUrl('my_coin', array(), true);
-    //     }
-
-    //     $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
-    //     return $this->redirect($goto);
-    // }
-
     public function payErrorAction(Request $request)
     {
         return $this->createMessageResponse('error', '由于余额不足，支付失败，订单已被取消。');
@@ -311,6 +290,14 @@ class PayCenterController extends BaseController
 
         if ($payData['status'] == "waitBuyerConfirmGoods") {
             return new Response('success');
+        }
+
+        if (stripos($payData['sn'], 'c') !== false) {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
+        }
+
+        if (stripos($payData['sn'], 'o') !== false) {
+            $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         }
 
         $processor = OrderProcessorFactory::create($order['targetType']);

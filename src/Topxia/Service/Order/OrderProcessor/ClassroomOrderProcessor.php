@@ -351,7 +351,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function cancelOrder($id, $message, $data)
     {
-        return $this->getOrderService()->createPayRecord($order["id"], $payData);
+        return $this->getOrderService()->cancelOrder($id, $message, $data);
+    }
+
+    public function createPayRecord($id, $payData)
+    {
+        return $this->getOrderService()->createPayRecord($id, $payData);
     }
 
     protected function getClassroomService()

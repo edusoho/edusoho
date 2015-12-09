@@ -196,17 +196,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->updateOrder($id, $fileds);
     }
 
-    public function requestParams($order, $container)
-    {
-        $requestParams = array(
-            'returnUrl' => $container->get('router')->generate('pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $container->get('router')->generate('pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $container->get('router')->generate('pay_success_show', array('id' => $order['id']), true)
-        );
-
-        return $requestParams;
-    }
-
     public function getNote($targetId)
     {
         $course = $this->getCourseService()->getCourse($targetId);
@@ -232,7 +221,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function cancelOrder($id, $message, $data)
     {
-        return $this->getOrderService()->createPayRecord($order["id"], $payData);
+        return $this->getOrderService()->cancelOrder($id, $message, $data);
     }
 
     public function createPayRecord($id, $payData)

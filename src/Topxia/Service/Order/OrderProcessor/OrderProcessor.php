@@ -19,8 +19,6 @@ interface OrderProcessor
 
     public function updateOrder($id, $fileds);
 
-    public function requestParams($order, $container);
-
     public function getNote($targetId);
 
     public function getTitle($targetId);

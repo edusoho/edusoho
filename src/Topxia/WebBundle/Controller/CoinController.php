@@ -265,119 +265,21 @@ class CoinController extends BaseController
 
     public function payAction(Request $request)
     {
-        $formData               = $request->request->all();
-        $user                   = $this->getCurrentUser();
-        $formData['userId']     = $user['id'];
-        $formData['targetType'] = 'coin';
+        $formData           = $request->request->all();
+        $user               = $this->getCurrentUser();
+        $formData['userId'] = $user['id'];
 
         $order = $this->getCashOrdersService()->addOrder($formData);
         return $this->redirect($this->generateUrl('pay_center_show', array(
             'sn'         => $order['sn'],
             'targetType' => $order['targetType']
         )));
-        // $payRequestParams = array(
-        //     'returnUrl' => $this->generateUrl('coin_order_pay_return', array('name' => $order['payment']), true),
-        //     'notifyUrl' => $this->generateUrl('coin_order_pay_notify', array('name' => $order['payment']), true),
-        //     'showUrl'   => $this->generateUrl('my_coin', array(), true)
-        // );
-
-        // return $this->forward('TopxiaWebBundle:Coin:submitPayRequest', array(
-        //     'order'         => $order,
-        //     'requestParams' => $payRequestParams
-        // ));
     }
-
-    // public function payReturnAction(Request $request, $name)
-    // {
-    //     $this->getLogService()->info('order', 'pay_result', "{$name}页面跳转支付通知", $request->query->all());
-    //     $response = $this->createPaymentResponse($name, $request->query->all());
-
-    //     $payData = $response->getPayData();
-
-    //     if ($payData['status'] == "waitBuyerConfirmGoods") {
-    //         return $this->forward("TopxiaWebBundle:Coin:resultNotice");
-    //     }
-
-    //     list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-
-    //     if ($order['status'] == 'paid' && $success) {
-    //         $successUrl = $this->generateUrl('my_coin', array(), true);
-    //     }
-
-    //     $goto = empty($successUrl) ? $this->generateUrl('homepage', array(), true) : $successUrl;
-    //     return $this->redirect($goto);
-    // }
 
     public function resultNoticeAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Coin:retrun-notice.html.twig');
     }
-
-    // public function payNotifyAction(Request $request, $name)
-    // {
-    //     $this->getLogService()->info('order', 'pay_result', "{$name}服务器端支付通知", $request->request->all());
-
-    //     if ($name == 'alipay') {
-    //         $response = $this->createPaymentResponse($name, $request->request->all());
-    //     } elseif ($name == 'wxpay') {
-    //         $returnXml   = $request->getContent();
-    //         $returnArray = $this->fromXml($returnXml);
-    //         $response    = $this->createPaymentResponse($name, $returnArray);
-    //     }
-
-    //     $payData = $response->getPayData();
-    //     try {
-    //         list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-
-    //         return new Response('success');
-    //     } catch (\Exception $e) {
-    //         throw $e;
-    //     }
-    // }
-
-    // protected function createPaymentResponse($name, $params)
-    // {
-    //     $options  = $this->getPaymentOptions($name);
-    //     $response = Payment::createResponse($name, $options);
-
-    //     return $response->setParams($params);
-    // }
-
-    // protected function getPaymentOptions($payment)
-    // {
-    //     $settings = $this->setting('payment');
-
-    //     if (empty($settings)) {
-    //         throw new \RuntimeException('支付参数尚未配置，请先配置。');
-    //     }
-
-    //     if (empty($settings['enabled'])) {
-    //         throw new \RuntimeException("支付模块未开启，请先开启。");
-    //     }
-
-    //     if (empty($settings[$payment.'_enabled'])) {
-    //         throw new \RuntimeException("支付模块({$payment})未开启，请先开启。");
-    //     }
-
-    //     if (empty($settings["{$payment}_key"]) || empty($settings["{$payment}_secret"])) {
-    //         throw new \RuntimeException("支付模块({$payment})参数未设置，请先设置。");
-    //     }
-
-    //     if ($payment == 'alipay') {
-    //         $options = array(
-    //             'key'    => $settings["{$payment}_key"],
-    //             'secret' => $settings["{$payment}_secret"],
-    //             'type'   => $settings["{$payment}_type"]
-    //         );
-    //     } elseif ($payment == 'wxpay') {
-    //         $options = array(
-    //             'key'    => $settings["{$payment}_key"],
-    //             'secret' => $settings["{$payment}_secret"]
-    //         );
-    //     }
-
-    //     return $options;
-    // }
 
     protected function getEnabledPayments()
     {

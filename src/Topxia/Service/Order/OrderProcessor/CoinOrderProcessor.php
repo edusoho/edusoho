@@ -53,16 +53,6 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCashOrdersService()->updateOrder($id, $fileds);
     }
 
-    public function requestParams($order, $container)
-    {
-        $requestParams = array(
-            'returnUrl' => $container->get('router')->generate('coin_order_pay_return', array('name' => $order['payment']), true),
-            'notifyUrl' => $container->get('router')->generate('coin_order_pay_notify', array('name' => $order['payment']), true),
-            'showUrl'   => $container->get('router')->generate('my_coin', array(), true)
-        );
-        return $requestParams;
-    }
-
     public function getNote($targetId)
     {
         $order = $this->getCashOrdersService()->getOrder($targetId);
