@@ -184,6 +184,7 @@ class PayCenterController extends BaseController
 
     public function closeAuthAction(Request $request)
     {
+        $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
         $fields               = $request->request->all();
         list($order, $user)   = $this->verification($fields);
         $authBank             = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
