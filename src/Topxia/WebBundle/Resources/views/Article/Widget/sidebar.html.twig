@@ -22,13 +22,9 @@
             {{ web_macro.user_avatar(post.user, '','avatar-sm') }}
           </div>
           <div class="comments-info">
-            <p>
-              {{ web_macro.user_link(post.user, '') }}
-              <span>评论于</span>
-            </p>
-            <h5>
-              <a href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
-            </h5>
+            {{ web_macro.user_link(post.user, '') }}
+            <span class="mhs">评论于</span>
+            <a class="link-dark" href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
           </div>
           <div class="comments-content">
            {{ post.content|at(post.ats)|raw }}
