@@ -39,12 +39,12 @@ class UserController extends BaseController
                 array('mobile' => $conditions['keyword']),
                 array('id', 'DESC'),
                 0,
-                $profilesCount
+                $profilesCount + 1
             );
             $userIds = ArrayToolkit::column($userProfiles, 'id');
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
-            $conditions['userIds'] = $userIds;
+            $conditions['userIds'] = !empty($userIds) ? $userIds : array(0);
         }
 
         $users = $this->getUserService()->searchUsers(
