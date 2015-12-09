@@ -185,8 +185,13 @@ class PayCenterController extends BaseController
     public function closeAuthAction(Request $request)
     {
         $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
-        $fields = $request->request->all();
-        $this->verification($fields);
+        $fields   = $request->request->all();
+        $response = $this->verification($fields);
+
+        if ($response) {
+            return $this->createJsonResponse($response);
+        }
+
         $authBank             = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
         $requestParams        = array('authBank' => $authBank, 'payment' => 'quickpay', 'mobile' => $fields['mobile']);
         $closeAuthBankRequest = $this->createCloseAuthBankRequest($requestParams);
@@ -196,8 +201,12 @@ class PayCenterController extends BaseController
 
     public function checkMobileAction(Request $request)
     {
-        $fields = $request->request->all();
-        $this->verification($fields);
+        $fields   = $request->request->all();
+        $response = $this->verification($fields);
+
+        if ($response) {
+            return $this->createJsonResponse($response);
+        }
 
         return $this->render('TopxiaWebBundle:PayCenter:checkMobile.html.twig', array(
             'payAgreementId' => $fields['payAgreementId']
