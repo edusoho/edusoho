@@ -3445,53 +3445,49 @@ Pagination Styles
   min-height: 450px;
 }
 .vip-banner {
-  height: 350px;
-  background: url('/assets/v2/img/vip/vip_banner.jpg') center center no-repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  padding: 20px 0;
+}
+.vip-banner .vip-banner-thumb {
+  float: left;
+  width: 870px;
 }
 @media (max-width: 1199px) {
-  .vip-banner {
-    height: 300px;
+  .vip-banner .vip-banner-thumb {
+    width: 720px;
   }
 }
 @media (max-width: 991px) {
-  .vip-banner {
-    height: 250px;
-    background-position-x: -200px;
+  .vip-banner .vip-banner-thumb {
+    width: 100%;
   }
 }
-@media (max-width: 767px) {
-  .vip-banner {
-    height: 150px;
-    background-position-x: -150px;
-  }
+.vip-banner .vip-banner-thumb img {
+  width: 100%;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
 }
-.vip-banner .container {
-  position: relative;
-  height: 350px;
-}
-@media (max-width: 1199px) {
-  .vip-banner .container {
-    height: 300px;
+@media (max-width: 991px) {
+  .vip-banner .vip-banner-thumb img {
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
   }
 }
 .vip-user {
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  right: 10px;
+  float: left;
   width: 270px;
+  height: 350px;
   padding: 30px 20px;
   background-color: #fff;
   text-align: center;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 @media (max-width: 1199px) {
   .vip-user {
-    padding: 20px;
-    width: 250px;
+    padding: 10px;
+    width: 220px;
+    height: 290px;
   }
 }
 .vip-user .user-avatar {
@@ -3691,9 +3687,12 @@ Pagination Styles
   }
 }
 .vip-new-member {
-  background: url('/assets/v2/img/vip/vip_bg.jpg') center center no-repeat;
-  padding: 60px 0;
+  background-color: #fafafa;
+  padding: 10px 0 30px 0;
   text-align: center;
+}
+.vip-new-member .text-line {
+  padding-bottom: 30px;
 }
 .vip-new-member .title {
   font-size: 32px;
@@ -3706,9 +3705,20 @@ Pagination Styles
 .vip-new-member .member-list img {
   display: inline-block;
   margin: 15px;
-  border: 2px solid #fff;
+  border: 4px solid #fff;
   height: 80px !important;
   width: 80px !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.vip-new-member .member-list img:hover {
+  border-color: #fd5f56;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .bootstrap-notify-bar {
   position: fixed;
@@ -4881,7 +4891,7 @@ a.homework-essay-textarea-pack-up {
   left: 0;
   width: 100%;
   height: 1px;
-  background: #f5f5f5;
+  background: #e1e1e1;
   margin-top: -1px;
   z-index: -1;
 }
@@ -6247,6 +6257,7 @@ textarea {
   font-weight: 500;
   line-height: 1;
   padding-left: 15px;
+  border-left: 4px solid #fd5f56;
 }
 .es-piece.piece-lg .piece-header .more {
   font-size: 14px;
@@ -11404,6 +11415,9 @@ textarea {
   margin: 50px auto;
   width: 460px;
   min-height: 400px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
 }
 @media (max-width: 767px) {
   .login-section {
@@ -11441,9 +11455,6 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
-.login-section .logon-tab > a + a {
-  border-left: 1px solid #f5f5f5;
 }
 .login-section .login-main {
   padding: 40px 45px 20px 45px;
