@@ -208,7 +208,7 @@ class PayCenterController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        return $this->render('TopxiaWebBundle:PayCenter:showMobile.html.twig', array(
+        return $this->render('TopxiaWebBundle:PayCenter:show-mobile.html.twig', array(
             'payAgreementId' => $fields['payAgreementId']
         ));
     }
