@@ -182,7 +182,7 @@ class PayCenterController extends BaseController
         ));
     }
 
-    public function closeAuthAction(Request $request)
+    public function unbindAuthAction(Request $request)
     {
         $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
         $fields   = $request->request->all();
@@ -192,14 +192,14 @@ class PayCenterController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        $authBank             = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
-        $requestParams        = array('authBank' => $authBank, 'payment' => 'quickpay', 'mobile' => $fields['mobile']);
-        $closeAuthBankRequest = $this->createCloseAuthBankRequest($requestParams);
-        $formRequest          = $closeAuthBankRequest->form();
+        $authBank              = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
+        $requestParams         = array('authBank' => $authBank, 'payment' => 'quickpay', 'mobile' => $fields['mobile']);
+        $unbindAuthBankRequest = $this->createUnbindAuthBankRequest($requestParams);
+        $formRequest           = $unbindAuthBankRequest->form();
         return $this->createJsonResponse($formRequest);
     }
 
-    public function checkMobileAction(Request $request)
+    public function showMobileAction(Request $request)
     {
         $fields   = $request->request->all();
         $response = $this->verification($fields);
@@ -208,7 +208,7 @@ class PayCenterController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        return $this->render('TopxiaWebBundle:PayCenter:checkMobile.html.twig', array(
+        return $this->render('TopxiaWebBundle:PayCenter:showMobile.html.twig', array(
             'payAgreementId' => $fields['payAgreementId']
         ));
     }
@@ -420,10 +420,10 @@ class PayCenterController extends BaseController
         return $request->setParams($requestParams);
     }
 
-    protected function createCloseAuthBankRequest($params)
+    protected function createUnbindAuthBankRequest($params)
     {
         $options = $this->getPaymentOptions($params['payment']);
-        $request = Payment::createCloseAuthRequest($params['payment'], $options);
+        $request = Payment::createUnbindAuthRequest($params['payment'], $options);
         return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
