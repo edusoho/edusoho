@@ -46,6 +46,12 @@ class UserController extends BaseController
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
             $conditions['userIds'] = !empty($userIds) ? $userIds : array(0);
+            $userCount             = $this->getUserService()->searchUserCount($conditions);
+            $paginator             = new Paginator(
+                $this->get('request'),
+                $userCount,
+                20
+            );
         }
 
         $users = $this->getUserService()->searchUsers(
@@ -54,6 +60,7 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $userCount = count($users);
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
 
