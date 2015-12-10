@@ -71,13 +71,13 @@
           <div class="js-pay-agreement" style="display:none">
             <ul class="pay-agreement-list row">
               {% for payAgreement in payAgreements %}
-                <li class="col-md-6 js-pay-bank {% if loop.index0 == 0 %}checked{% endif %}">
+                <li id="unbind-bank-{{payAgreement.id}}" class="col-md-6 js-pay-bank {% if loop.index0 == 0 %}checked{% endif %}">
                   <div class="pay-bank clearfix">
                     <input class="hidden" type="radio" name='payAgreementId' value="{{payAgreement.id}}" {% if loop.index0 == 0 %}checked{% endif %} />
                     <span class="name">{{payAgreement.bankName}}</span>
                     <span class="number">***{{payAgreement.bankNumber}}</span>
                     <span class="hidden-xs">{% if payAgreement.type == 0 %}储蓄卡{% else %}信用卡{% endif %}</span>
-                    <a href="javascript:;" class="closed visible-lg" data-url="{{ path('pay_center_auth_close')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
+                    <a href="javascript:;" class="closed visible-lg" data-url="{{ path('auth_close_mobile_check')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
                   </div>
                 </li>
               {% endfor %}
