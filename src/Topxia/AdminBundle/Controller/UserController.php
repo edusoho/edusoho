@@ -60,7 +60,6 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $userCount = count($users);
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
 
