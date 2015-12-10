@@ -116,13 +116,13 @@
               </ul>
             </div>
             <ul class="visible-lg">
-              {% if app.user.id ==  branchSchool.adminId|default() %}
+              {# {% if app.user.id ==  branchSchool.adminId|default() %} #}
               <li>
-                <a class="tooltop" href="{{ path('branch_school_settings',{domain:branchSchool.domain}) }}" data-toggle="tooltip" data-placement="bottom" title="分校">
+                <a class="tooltop branchSchool" href="{# {{ path('branch_school_settings',{domain:branchSchool.domain}) }} #}" data-toggle="tooltip" data-placement="bottom" title="分校">
                   <span class="iconfont icon-xuetang"></span>
                 </a>
               </li>
-              {% endif %}
+              {# {% endif %} #}
               <li>
                 <a class="tooltop" href="{{ path('my') }}" data-toggle="tooltip" data-placement="bottom" title="课程">
                   <span class="icons-user-5"></span>
