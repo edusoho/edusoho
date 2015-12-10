@@ -153,7 +153,14 @@ class QuickpayResponse extends Response
 
     public function getOrderSn($token)
     {
-        $order = $this->getOrderService()->getOrderByToken($token);
+        if (stripos($token, 'c') !== false) {
+            $order = $this->getOrderService()->getOrderByToken($token);
+        }
+
+        if (stripos($token, 'o') !== false) {
+            $order = $this->getCashOrdersService()->getOrderByToken($token);
+        }
+
         return $order['sn'];
     }
 
@@ -209,5 +216,10 @@ class QuickpayResponse extends Response
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 }

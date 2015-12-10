@@ -34,6 +34,11 @@ class CashOrdersServiceImpl extends BaseService implements CashOrdersService
         return $this->getOrderDao()->getOrderBySn($sn, $lock);
     }
 
+    public function getOrderByToken($token)
+    {
+        return $this->getOrderDao()->getOrderByToken($token);
+    }
+
     public function cancelOrder($id, $message = '', $data = array())
     {
         $order = $this->getOrder($id);

@@ -448,7 +448,8 @@ class PayCenterController extends BaseController
             'targetTitle' => $processor->getTitle($targetId),
             'summary'     => '',
             'note'        => $processor->getNote($targetId),
-            'amount'      => $order['amount']
+            'amount'      => $order['amount'],
+            'targetType'  => $order['targetType']
         ));
         return $request->setParams($requestParams);
     }
@@ -480,7 +481,8 @@ class PayCenterController extends BaseController
 
     public function generateOrderToken($order, $params)
     {
-        return $this->getOrderService()->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+        return $processor->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
     }
 
     protected function getPaymentOptions($payment)

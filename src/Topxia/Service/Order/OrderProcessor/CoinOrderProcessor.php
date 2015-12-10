@@ -86,6 +86,11 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCashOrdersService()->createPayRecord($id, $payData);
     }
 
+    public function generateOrderToken()
+    {
+        return 'o'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
     protected function getCashOrdersService()
     {
         return ServiceKernel::instance()->createService('Cash.CashOrdersService');

@@ -30,4 +30,6 @@ interface OrderProcessor
     public function cancelOrder($id, $message, $data);
 
     public function createPayRecord($id, $payData);
+
+    public function generateOrderToken();
 }

@@ -32,6 +32,12 @@ class CashOrdersDaoImpl extends BaseDao implements CashOrdersDao
         return $this->getConnection()->fetchAssoc($sql, array($sn)) ?: null;
     }
 
+    public function getOrderByToken($token)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($token));
+    }
+
     public function updateOrder($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));

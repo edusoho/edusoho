@@ -335,6 +335,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->createPayRecord($id, $payData);
     }
 
+    public function generateOrderToken()
+    {
+        return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');

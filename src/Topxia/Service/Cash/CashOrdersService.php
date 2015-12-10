@@ -9,6 +9,8 @@ interface CashOrdersService
 
     public function getOrderBySn($sn, $lock = false);
 
+    public function getOrderByToken($token);
+
     public function cancelOrder($id, $message, $data);
 
     public function updateOrder($id, $fileds);
