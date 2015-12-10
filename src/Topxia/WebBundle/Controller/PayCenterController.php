@@ -27,14 +27,10 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields = $request->query->all();
-        // var_dump($fields);
-        // exit();
-        //$order     = $this->getOrderService()->getOrderBySn($fields["sn"]);
+        $fields    = $request->query->all();
         $processor = OrderProcessorFactory::create($fields['targetType']);
         $order     = $processor->getOrderBySn($fields["sn"]);
         $orderInfo = $processor->getOrderMessage($order);
-        //$orderInfo = $processor->getOrderInfo($fields["sn"]);
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -133,7 +129,6 @@ class PayCenterController extends BaseController
 
     public function submitPayRequestAction(Request $request, $order)
     {
-        //$requestParams = OrderProcessorFactory::create($order['targetType'])->requestParams($order, $this->container);
         $requestParams = array(
             'returnUrl' => $this->generateUrl('pay_return', array('name' => $order['payment']), true),
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
@@ -245,7 +240,6 @@ class PayCenterController extends BaseController
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         }
 
-        //list($success, $order) = $this->getPayCenterService()->pay($payData);
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
@@ -255,7 +249,6 @@ class PayCenterController extends BaseController
         $processor = OrderProcessorFactory::create($order["targetType"]);
         $router    = $processor->getRouter();
 
-        //$goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
         $goto = $processor->callbackUrl($router, $order, $this->container);
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $goto

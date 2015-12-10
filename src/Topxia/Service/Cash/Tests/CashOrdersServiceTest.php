@@ -37,6 +37,23 @@ class CashOrdersServiceTest extends BaseTestCase
 
     }
 
+    public function testGetOrderByToken()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $order       = $this->getCashOrdersService()->getOrderByToken($createOrder['sn']);
+        $this->assertEquals('100.00', $order['amount']);
+
+    }
+
     public function testCreatePayRecord()
     {
         $this->setSettingcoin();
