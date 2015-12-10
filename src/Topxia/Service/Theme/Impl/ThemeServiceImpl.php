@@ -28,6 +28,10 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     {
         $currentTheme = $this->getSettingService()->get('theme');
 
+        if (!isset($currentTheme['name'])) {
+            $currentTheme['name'] = "简墨";
+        }
+
         if (empty($this->themeName) && empty($this->defaultConfig)) {
             return false;
         }
@@ -53,7 +57,12 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         }
 
         if (empty($config['name'])) {
-            $currentTheme   = $this->getSettingService()->get('theme');
+            $currentTheme = $this->getSettingService()->get('theme');
+
+            if (!isset($currentTheme['name'])) {
+                $currentTheme['name'] = "简墨";
+            }
+
             $config['name'] = $currentTheme['name'];
         }
 
@@ -74,10 +83,20 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     public function saveCurrentThemeConfig($config)
     {
         $currentTheme = $this->getSettingService()->get('theme');
+
+        if (!isset($currentTheme['name'])) {
+            $currentTheme['name'] = "简墨";
+        }
+
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
 
         if (empty($currentTheme)) {
             $currentTheme = $this->getSettingService()->get('theme');
+
+            if (!isset($currentTheme['name'])) {
+                $currentTheme['name'] = "简墨";
+            }
+
             return $this->createThemeConfig($currentTheme['name'], $config);
         }
 
@@ -98,16 +117,31 @@ class ThemeServiceImpl extends BaseService implements ThemeService
     public function resetConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
+
+        if (!isset($currentTheme['name'])) {
+            $currentTheme['name'] = "简墨";
+        }
+
         return $this->saveCurrentThemeConfig($this->defaultConfig);
     }
 
     public function resetCurrentConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
+
+        if (!isset($currentTheme['name'])) {
+            $currentTheme['name'] = "简墨";
+        }
+
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
 
         if (empty($currentTheme)) {
             $currentTheme = $this->getSettingService()->get('theme');
+
+            if (!isset($currentTheme['name'])) {
+                $currentTheme['name'] = "简墨";
+            }
+
             return $this->createThemeConfig($currentTheme['name'], $this->defaultConfig);
         }
 
