@@ -37,7 +37,7 @@
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
     {% if setting('course.custom_chapter_enabled')|default(true) %} 
-      课时 <span class="number">{{ lesson.number }}</span>：
+      课时 <span class="number">{{ number }}</span>：
     {% endif %}
     {% if lesson.free == 1 %}<span class="label label-danger">试听</span>{% endif %}
     

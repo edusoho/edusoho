@@ -1901,4 +1901,7 @@ generate_short_link:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
 
-
+TAFE:
+    pattern: /TAFE
+    defaults: { _controller: TopxiaWebBundle:TAFE:index }
+ 

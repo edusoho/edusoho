@@ -18,6 +18,6 @@ swiftmailer:
 doctrine:
     dbal:
         host:     127.0.0.1
-        dbname:   edusoho-test
+        dbname:   mooc-test
         user:     tester
         password: tester
