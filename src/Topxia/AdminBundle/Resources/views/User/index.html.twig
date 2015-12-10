@@ -66,11 +66,15 @@
     </tr>
   </thead>
   <tbody>
+    {% if userCount %}
+    <p class="text-muted">
+      <span class="mrl">用户总数：<strong class="inflow-num">{{userCount}}</strong></span>
+    </p>
+    {% endif %}
     {% for user in users %}
       {% include 'TopxiaAdminBundle:User:user-table-tr.html.twig' with {user:user,profile:profiles[user.id]} %}
     {% endfor %}
   </tbody>
 </table>
-{% if userCount %}<div class= 'member_count'>用户总数: <font>{{userCount}}</font></div>{% endif %}
  {{ web_macro.paginator(paginator) }} 
 {% endblock %}
