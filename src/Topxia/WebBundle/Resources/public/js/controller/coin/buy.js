@@ -16,11 +16,11 @@ define(function(require, exports, module) {
             }
         });
 
-        validator.addItem({
-            element: '[name="amount"]',
-            required: true,
-            rule: 'positive_integer' 
-        });
+        // validator.addItem({
+        //     element: '[name="amount"]',
+        //     required: true,
+        //     rule: 'positive_integer' 
+        // });
 
         $(".check ").on('click',  function() {
             $(this).addClass('active').siblings().removeClass('active').find('.icon').addClass('hide');
