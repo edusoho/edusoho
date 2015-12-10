@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     require('ckeditor');
-
+    require('webuploader');
     var Validator = require('bootstrap.validator');
     var Uploader = require('upload');
     require('common/validator-rules').inject(Validator);
@@ -18,6 +18,10 @@ define(function(require, exports, module) {
         var $editor = _initEditorFields($form, validator);
 
         _initTagSelect($form);
+
+        _uploadAnnex();
+
+       
 
     };
 
@@ -145,5 +149,42 @@ define(function(require, exports, module) {
         });
 
         return validator;
+    }
+
+    function _uploadAnnex(){
+        var $annexbtn = $('#article-annex-upload');
+        var formData = $.extend({}, {token:$annexbtn.data('uploadToken')});
+        var uploader = WebUploader.create({
+           swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+           server: app.uploadUrl,
+           pick: $annexbtn,
+           formData: $.extend(formData , {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
+           accept: {
+                   title: 'Annex',
+                   extensions: 'txt,docx,doc,xls,xlsx,pptx,ppsx,rar,zip',
+            }
+        });
+
+        uploader.on( 'fileQueued', function( file ) {
+            Notify.info('正在上传，请稍等！', 0);
+            uploader.upload();
+        });
+
+        uploader.on( 'uploadSuccess', function( file, response ) {
+                var url = $annexbtn.data("gotoUrl");
+                var html = $("#article-annex-container").html();
+                var ids = $("#article-annex-ids").val();
+                $.post(url, response ,function(data){
+                    html += '<p>'+data.fileName+'</p>';
+                    ids += data.fileId+',';
+                $("#article-annex-container").html(html);
+                $("#article-annex-ids").val(ids);
+                Notify.success('附件上传成功！');
+            });
+        });
+
+        uploader.on( 'uploadError', function( file, response ) {
+            Notify.danger('上传失败，请重试！');
+        });
     }
 });

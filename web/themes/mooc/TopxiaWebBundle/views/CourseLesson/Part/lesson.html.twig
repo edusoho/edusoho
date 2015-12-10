@@ -15,12 +15,12 @@
       <a href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}">
     {% endif %}
       {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-      {% if setting('course.custom_chapter_enabled') %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
+      {% if setting('course.custom_chapter_enabled') %} 课时{{lesson_index }}：{% endif %}{{ item.title }}</span>
       {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
     </a>
   {% else %}
     {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-    {% if setting('course.custom_chapter_enabled') %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
+    {% if setting('course.custom_chapter_enabled') %} 课时{{ lesson_index }}：{% endif %}{{ item.title }}</span>
     {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
   {% endif %}
 </li>

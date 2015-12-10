@@ -2,7 +2,7 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-Created by FontForge 20120731 at Tue Nov 17 16:51:23 2015
+Created by FontForge 20120731 at Thu Dec 10 13:51:14 2015
  By Ads
 </metadata>
 <defs>
@@ -13,13 +13,13 @@ Created by FontForge 20120731 at Tue Nov 17 16:51:23 2015
     font-stretch="normal"
     units-per-em="1024"
     panose-1="2 0 6 3 0 0 0 0 0 0"
-    ascent="812"
-    descent="-212"
+    ascent="896"
+    descent="-128"
     x-height="792"
     bbox="34 -131 956 792"
     underline-thickness="50"
     underline-position="-100"
-    unicode-range="U+0078-E607"
+    unicode-range="U+0078-E608"
   />
 <missing-glyph horiz-adv-x="374" 
 d="M34 0v682h272v-682h-272zM68 34h204v614h-204v-614z" />
@@ -64,5 +64,10 @@ h648q9 0 15.5 6.5t6.5 15.5v426zM330 309h364v-45h-364v45zM330 493h215v-45h-215v45
     <glyph glyph-name="uniE607" unicode="&#xe607;" 
 d="M750 168v1v0v-1zM725 181v0v0zM827 349q-6 0 -11 -3t-8 -8t-3 -11v-394h-648v580h265q4 0 8.5 1.5t7.5 5t4.5 7.5t1.5 8.5t-1.5 9t-4.5 7.5t-7.5 4.5t-8.5 1.5h-310v-671h738v439v1q0 9 -6.5 15.5t-16.5 6.5zM906 682q-4 3 -8 5t-8.5 2t-8.5 -2t-7 -5l-508 -508
 q-3 -3 -4.5 -6t-2 -6.5t0 -7t2 -6.5t4.5 -6q6 -7 15.5 -7t16.5 7l508 508q2 2 3 4t2 4.5t1 5.5v4q0 3 -1 5.5t-2 4.5t-3 4z" />
+    <glyph glyph-name="uniE608" unicode="&#xe608;" 
+d="M130 412l1 -2v-1v-1l1 -2l1 -1q1 -2 1 -3l1 -1l2 -2l1 -1q2 -1 2.5 -1.5t1 -0.5t0.5 -1q2 -1 2.5 -1t2 -0.5l1.5 -0.5h3h1h1h718h1h1h3l1 1h3l1.5 1t2 1.5t1.5 0.5v1q1 1 2 1l1 2h1v1h1q0 1 1 3l1 1q0 1 1 2v2l1 2v3v1v1q0 1 -0.5 2t-0.5 2v1l-1 1q0 1 -1 2q0 2 -1 3
+l-1 1l-1 1l-2 2v1h-1l-360 263l-1 1l-2 1q-1 0 -1.5 0.5t-2.5 0.5l-2 1h-2h-2h-2h-2l-2 -1q-2 0 -2.5 -0.5t-1.5 -0.5l-2 -1l-1 -1l-360 -263l-1 -1l-2 -2l-1 -1l-1 -2q-1 0 -1 -2l-1 -2q-1 0 -1 -1.5t-0.5 -2.5t-0.5 -2v-1v-1v-3zM512 650l290 -212h-580zM874 -55v0h-724
+q-6 0 -11 -3t-8 -8.5t-3 -11.5t3 -11t8 -8t11 -3h724q9 0 15.5 6.5t6.5 16t-6.5 16t-15.5 6.5zM238 328v-320q0 -9 6.5 -15.5t15.5 -6.5q6 0 11.5 3t8.5 8t3 11v320q0 4 -2 8.5t-5 7.5t-7 4.5t-8.5 1.5t-9 -1.5t-7.5 -4.5t-4.5 -7.5t-1.5 -8.5zM741 328v-320q0 -6 3 -11
+t8.5 -8t11.5 -3q9 0 15.5 6.5t6.5 15.5v320q0 4 -1.5 8.5t-4.5 7.5t-7.5 4.5t-8.5 1.5q-10 0 -16.5 -6.5t-6.5 -15.5zM489 328v-320q0 -4 2 -8.5t5 -7.5t7 -4.5t9 -1.5t9 1.5t7 4.5t5 7.5t2 8.5v320q-5 18 -23 22q-4 0 -7.5 -1t-6 -3t-4.5 -5t-3.5 -6.5t-1.5 -6.5z" />
   </font>
 </defs></svg>

@@ -51,6 +51,7 @@
                 <img src="{{filepath(app.user.smallAvatar, 'avatar.png')}}" />            
                 <span class="name hidden-sm hidden-xs">{{ app.user.nickname }}</span>
               </a>
+
               <ul class="dropdown-menu">
                 <li role="presentation" class="dropdown-header visible-sm visible-xs">{{ app.user.nickname }}</li>
                 <li>
@@ -81,6 +82,7 @@
                     <span>课程</span>
                   </a>
                 </li>
+
               <li class="divider hidden-lg"></li>
               <li>
                 <a href="{{ path('message') }}" class="hidden-lg">
@@ -114,6 +116,13 @@
               </ul>
             </div>
             <ul class="visible-lg">
+              {% if app.user.id ==  branchSchool.adminId|default() %}
+              <li>
+                <a class="tooltop branchSchool" href="{{ path('branch_school_settings',{domain:branchSchool.domain}) }}" data-toggle="tooltip" data-placement="bottom" title="分校">
+                  <span class="iconfont icon-xuetang"></span>
+                </a>
+              </li>
+              {% endif %}
               <li>
                 <a class="tooltop" href="{{ path('my') }}" data-toggle="tooltip" data-placement="bottom" title="课程">
                   <span class="icons-user-5"></span>
