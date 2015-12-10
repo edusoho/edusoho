@@ -62,17 +62,17 @@
     <div class="form-group"> 
       <label class="col-sm-3 control-label">背景颜色设置</label> 
       <div class="col-sm-9 check-box">
-      <input type="hidden"  name="background" value={{config.background|default("")}}>  
+      <input type="hidden"  name="background" value={{config.background|default("")}}>
         <label class="radio-inline"> 
-          <input type="radio"  value="section-gray" checked="checked"> 
+          <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}> 
           灰色 
         </label> 
         <label class="radio-inline" > 
-          <input type="radio"  value="section-wihte" > 
+          <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} > 
           白色 
         </label>
         <label class="radio-inline" > 
-          <input type="radio"  value="" > 
+          <input type="radio"  value=""{% if config.background|default("") == ""%} checked="checked"{% endif %} > 
           默认 
         </label>  
       </div> 
