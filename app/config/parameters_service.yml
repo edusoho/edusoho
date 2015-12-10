@@ -8,7 +8,9 @@ parameters:
         'Classroom:Classroom.ClassroomService' : 'Mooc\Service\Classroom\Impl\ClassroomServiceImpl'
         'Crontab.CrontabService' : 'Mooc\Service\CrontabJob\Impl\CrontabJobServiceImpl'
         'Testpaper.TestpaperService' : 'Mooc\Service\Testpaper\Impl\TestpaperServiceImpl'
+        'Course.ThreadService' : 'Mooc\Service\Course\Impl\ThreadServiceImpl'
         'Article.CategoryService' : 'Mooc\Service\Article\Impl\CategoryServiceImpl'
+
     topxia_daos:
         'Course.CourseDao' : 'Mooc\Service\Course\Dao\Impl\CourseDaoImpl'
         'User.UserDao' : 'Mooc\Service\User\Dao\Impl\UserDaoImpl'
@@ -16,5 +18,9 @@ parameters:
         'Classroom:Classroom.ClassroomMemberDao' : 'Mooc\Service\Classroom\Dao\Impl\ClassroomMemberDaoImpl'
         'Crontab.JobDao' : 'Mooc\Service\CrontabJob\Dao\Impl\CrontabJobDaoImpl'
         'Testpaper.TestpaperResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperResultDaoImpl'
+        'Course.ThreadPostDao' : 'Mooc\Service\Course\Dao\Impl\ThreadPostDaoImpl'
+        'Course.ThreadDao' : 'Mooc\Service\Course\Dao\Impl\ThreadDaoImpl'
+        'Testpaper.TestpaperItemResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperItemResultDaoImpl'
         'Article.CategoryDao' : 'Mooc\Service\Article\Dao\Impl\CategoryDaoImpl'
+
 

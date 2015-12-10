@@ -18,4 +18,21 @@ class TestpaperResultDaoImpl extends BaseTestpaperResultDaoImpl
         $parameters[] = $userId;
         return $this->getConnection()->fetchAll($sql, $parameters);
     }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions);
+
+        if (isset($conditions['target'])) {
+            $conditions['targetLike'] = $conditions['target'].'%';
+        }
+
+        $builder = parent::_createSearchQueryBuilder($conditions);
+        $builder
+            ->andWhere('checkTeacherId  = :checkTeacherId')
+            ->andWhere('checkedTime >= :startTime')
+            ->andWhere('checkedTime <= :endTime')
+            ->andWhere('target LIKE :targetLike');
+        return $builder;
+    }
 }

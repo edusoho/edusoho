@@ -6,26 +6,27 @@ use Topxia\Service\Testpaper\Dao\TestpaperDao;
 
 class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 {
-	protected $table = 'testpaper';
+    protected $table = 'testpaper';
 
     private $serializeFields = array(
-            'metas' => 'json'
+        'metas' => 'json'
     );
 
     public function getTestpaper($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql       = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $testpaper = $this->getConnection()->fetchAssoc($sql, array($id));
         return $testpaper ? $this->createSerializer()->unserialize($testpaper, $this->serializeFields) : null;
     }
 
     public function findTestpapersByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
@@ -35,12 +36,12 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         $this->checkOrderBy($orderBy, array('createdTime'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
+                        ->select('*')
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit)
+                        ->orderBy($orderBy[0], $orderBy[1]);
 
-        $questions = $builder->execute()->fetchAll() ? : array();
+        $questions = $builder->execute()->fetchAll() ?: array();
 
         return $this->createSerializer()->unserializes($questions, $this->serializeFields);
     }
@@ -48,18 +49,20 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     public function searchTestpapersCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-             ->select('COUNT(id)');
+                        ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
     public function addTestpaper($fields)
     {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $fields   = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $fields);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert testpaper error.');
         }
+
         return $this->getTestpaper($this->getConnection()->lastInsertId());
     }
 
@@ -71,26 +74,26 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     }
 
     public function deleteTestpaper($id)
-    {  
+    {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
     public function findTestpaperByTargets(array $targets)
     {
-        if(empty($targets)){ 
-            return array(); 
+        if (empty($targets)) {
+            return array();
         }
-        $marks = str_repeat('?,', count($targets) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks})";
-        $results = $this->getConnection()->fetchAll($sql, $targets) ? : array();
+
+        $marks   = str_repeat('?,', count($targets) - 1).'?';
+        $sql     = "SELECT * FROM {$this->table} WHERE target IN ({$marks})";
+        $results = $this->getConnection()->fetchAll($sql, $targets) ?: array();
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
     }
-
 
     public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
     {
         $sql = "SELECT * FROM {$this->table} WHERE copyId = ?  AND target IN {$lockedTarget}";
-        return $this->getConnection()->fetchAll($sql,array($copyId));
+        return $this->getConnection()->fetchAll($sql, array($copyId));
     }
 
     protected function _createSearchQueryBuilder($conditions)
@@ -103,13 +106,11 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'testpaper')
-            ->andWhere('target = :target')
-            ->andWhere('target LIKE :targetLike')
-            ->andWhere('status LIKE :status');
-            
+                        ->from($this->table, 'testpaper')
+                        ->andWhere('target = :target')
+                        ->andWhere('target LIKE :targetLike')
+                        ->andWhere('status LIKE :status');
 
         return $builder;
     }
-
 }
