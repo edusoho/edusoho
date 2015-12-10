@@ -25,9 +25,10 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
+        $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $userCount,
             20
         );
 
@@ -67,6 +68,7 @@ class UserController extends BaseController
 
         return $this->render('TopxiaAdminBundle:User:index.html.twig', array(
             'users'          => $users,
+            'userCount'      => $userCount,
             'paginator'      => $paginator,
             'profiles'       => $profiles,
             'showUserExport' => $showUserExport
