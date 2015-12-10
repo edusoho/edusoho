@@ -31,7 +31,8 @@ define(function(require, exports, module) {
         events: {
             'click [data-role=next-lesson]': 'onNextLesson',
             'click [data-role=prev-lesson]': 'onPrevLesson',
-            'click [data-role=finish-lesson]': 'onFinishLesson'
+            'click [data-role=finish-lesson]': 'onFinishLesson',
+            'click [data-role=ask-question]': 'onAskQuestion'
         },
 
         attrs: {
@@ -39,7 +40,9 @@ define(function(require, exports, module) {
             courseUri: null,
             dashboardUri: null,
             lessonId: null,
-            watchLimit: false
+            type: null,
+            watchLimit: false,
+            starttime: null
         },
 
         setup: function() {
@@ -68,9 +71,7 @@ define(function(require, exports, module) {
 
         onFinishLesson: function(e) {
             var $btn = this.element.find('[data-role=finish-lesson]');
-            if ($btn.hasClass('btn-success')) {
-                this._onCancelLearnLesson();
-            } else {
+            if (!$btn.hasClass('btn-success')) {
                 this._onFinishLearnLesson();
             }
         },
@@ -93,11 +94,22 @@ define(function(require, exports, module) {
 
             var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
             $.post(url, function(response) {
+
                 if (response.isLearned) {
                     $('#course-learned-modal').modal('show');
                 }
 
+                if (!response.canFinish && response.html) {
+                    $("#modal").html(response.html);
+                    $("#modal").modal('show');
+                    return false;
+                } else if (response.canFinish && response.html != '') {
+                    $("#modal").html(response.html);
+                    $("#modal").modal('show');
+                }
+
                 $btn.addClass('btn-success');
+                $btn.attr('disabled', true);
                 $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
 
@@ -122,7 +134,7 @@ define(function(require, exports, module) {
             this.set('courseUri', this.element.data('courseUri'));
             this.set('dashboardUri', this.element.data('dashboardUri'));
             this.set('watchLimit', this.element.data('watchLimit'));
-
+            this.set('starttime', this.element.data('starttime'));
         },
 
         _initToolbar: function() {
@@ -199,6 +211,8 @@ define(function(require, exports, module) {
                 return data;
             }
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
+                
+                that.set('type',lesson.type);
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
                 $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
                 var $titleStr = "";
@@ -261,6 +275,9 @@ define(function(require, exports, module) {
                         }
 
                         var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
+                        if(self.get('starttime')){
+                            playerUrl += "?starttime=" + self.get('starttime');
+                        }
                         var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
                         $("#lesson-video-content").show();
@@ -271,6 +288,9 @@ define(function(require, exports, module) {
                             project: 'PlayerProject',
                             children: [ document.getElementById('viewerIframe') ],
                             type: 'parent'
+                        });
+
+                        messenger.on("ready", function(){
                         });
 
                         messenger.on("ended", function(){
@@ -291,7 +311,6 @@ define(function(require, exports, module) {
                             player.playing = false;
                             that.set("player", player);
                         });
-
                         that.set("player", {});
 
                     } else {
@@ -604,9 +623,11 @@ define(function(require, exports, module) {
                 var $finishButton = that.element.find('[data-role=finish-lesson]');
                 if (json.status != 'finished') {
                     $finishButton.removeClass('btn-success');
+                    $finishButton.attr('disabled',false);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 } else {
                     $finishButton.addClass('btn-success');
+                    $finishButton.attr('disabled',true);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 }
             }, 'json');

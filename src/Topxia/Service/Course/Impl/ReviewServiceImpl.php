@@ -94,7 +94,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         $user = $this->getUserService()->getUser($fields['userId']);
 
         if (empty($user)) {
-            return $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
+            throw $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
         }
 
         $review = $this->getReviewDao()->getReviewByUserIdAndCourseId($user['id'], $course['id']);
@@ -116,7 +116,7 @@ class ReviewServiceImpl extends BaseService implements ReviewService
         }
 
         $this->calculateCourseRating($course['id']);
-        $this->dispatchEvent("course.review.create", $review);
+
         return $review;
     }
 

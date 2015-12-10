@@ -29,6 +29,7 @@
     data-course-uri="{{ path('course_show', {id:course.id}) }}"
     data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}"
     data-watch-limit="{{ setting('magic.lesson_watch_limit') }}"
+    data-starttime = "{{starttime|default('')}}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
     <div class="dashboard-content">
       {% set classroom = data('GetClassroomByCourseId',{courseId:course.id}) %}
@@ -185,6 +186,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+
 
 {% endblock %}
 

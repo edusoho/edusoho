@@ -2,8 +2,19 @@
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="{% if nav == 'introduction' %}active{% endif %}"><a  href="{{ path('classroom_introductions', {id:classroom.id}) }}">介绍</a></li>
 
-    <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">课程 <small class="text-muted">{% if classroom.courseNum != 0 %}( {{classroom.courseNum}} ){% endif %}</small></a></li>
+    {% if is_plugin_installed('ClassroomPlan') %}
+      {% set classroomPlan = data('GetClassroomPlanByClassroomId',{classroomId:classroom.id})|default(null) %}
+      {% if classroomPlan|default(null) and classroomPlan.status == 'published' and app.user %}
+        {% set planMember = data('UserClassroomPlanTaskNumInfo',{classroomId:classroom.id, userId:app.user.id})|default(null) %}
+      {% endif %}
+    {% endif %}
+    {% if not planMember|default(null) %}
+      <li role="presentation" class="{% if nav == 'course' %}active{% endif %}"><a href="{{ path('classroom_courses', {classroomId:classroom.id}) }}">课程 <small class="text-muted">{% if classroom.courseNum != 0 %}( {{classroom.courseNum}} ){% endif %}</small></a></li>
+    {% endif %}
 
+    {% if is_plugin_installed('ClassroomPlan') %}
+      {{ render(controller('ClassroomPlanBundle:ClassroomPlan:planNav',{classroomId:classroom.id, nav:nav})) }}
+    {% endif %}
   {% if  classroom.showable or ( not classroom.showable and member) %}
     <li role="presentation" class="{% if nav == 'review' %}active{% endif %}"><a href="{{ path('classroom_reviews', {id:classroom.id}) }}">评价 <small class="text-muted">{% if classroom.ratingNum != 0 %}( {{classroom.ratingNum}} ){% endif %}</small></a></li>
 
