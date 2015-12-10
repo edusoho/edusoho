@@ -6,5 +6,5 @@ interface TestpaperService
 {
     public function findUserTestpaperResultsByTestpaperIds(array $testpaperIds, $userId);
 
-    public function findTestpaperItemResultsByTestIdAndQuestionIdAndStatus($testpaperId, $questionId, $status = true);
+    public function searchTestpaperItemResultsCount($conditions);
 }

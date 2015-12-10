@@ -6,16 +6,24 @@ use Topxia\Service\Testpaper\Dao\Impl\TestpaperItemResultDaoImpl as BaseTestpape
 
 class TestpaperItemResultDaoImpl extends BaseTestpaperItemResultDaoImpl
 {
-    public function findTestpaperItemResultsByTestIdAndQuestionIdAndStatus($questionId, $testpaperId, $status)
+    public function searchTestpaperItemResultsCount($conditions)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE questionId = ?  AND testId = ?";
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('COUNT(id)');
 
-        if ($status) {
-            $sql .= "AND status = 'right' ";
-        } else {
-            $sql .= "AND status <> 'right' ";
-        }
+        return $builder->execute()->fetchColumn(0);
+    }
 
-        return $this->getConnection()->fetchAll($sql, array($questionId, $testpaperId));
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+                        ->from($this->table, 'testpaper_item_result')
+                        ->andWhere('testId = :testId')
+                        ->andWhere('status <> :excludeStatus')
+                        ->andWhere('homeworkId = :homeworkId')
+                        ->andWhere('status = :status')
+                        ->andWhere('questionId = :questionId');
+
+        return $builder;
     }
 }
