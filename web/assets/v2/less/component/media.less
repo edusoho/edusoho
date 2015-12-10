@@ -44,18 +44,6 @@
 
 // 用于热门资讯等
 .media {
-  &.media-number {
-    .media-body {
-      >a {
-        color: @gray;
-        .es-transition;
-        &:hover {
-          color: @brand-primary;
-          .es-transition;
-        }
-      }
-    }
-  }
   &.media-number-o {
     .media-body {
       color: @gray;
@@ -81,51 +69,20 @@
     &:last-child {
       border-bottom: none;
     }
-    // &:nth-child(1) .num,
-    // &:nth-child(2) .num,
-    // &:nth-child(3) .num {
-    //   border-color: @brand-primary;
-    //   color: @brand-primary;
-    // }
   }
 }
 
 // 用于热门评论等
 .media-hot-comment {
-  .img-circle {
-    width: 40px;
-    height: 40px;
-  }
   .comments-info {
+    margin-top: 5px;
     padding-left: 50px;
-    p {
-      margin: 0;
-      font-size: 12px;
-      color: @gray-light;
-      margin-top: 2px;
-      a {
-        color: @brand-primary;
-        margin-right: 10px;
-      }
-    }
-    h5 {
-      margin: 0;
-      a {
-        color: @gray;
-        height: 20px;
-        display: inline-block;
-        line-height: 20px;
-        overflow: hidden;
-        .es-transition;
-        &:hover {
-          color: @brand-primary;
-          .es-transition;
-        }
-      }
-    }
+    font-size: 12px;
+    color: @gray-medium;
+    min-height: 34px;
   }
   .comments-content {
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     background: @gray-lighter;
     color: @gray;
     line-height: 25px;
@@ -271,7 +228,7 @@
     padding-right: 80px;
     padding-bottom: 8px;
     border-bottom: 1px solid @gray-lighter;
-    .title a {
+    .title {
       font-size: 12px;
     }
     .content { 
@@ -279,14 +236,6 @@
       overflow: hidden;
       display: block;
       color: @gray;
-      a {
-        color: @gray-dark;
-        .es-transition;
-        &:hover {
-          color: @brand-primary;
-          .es-transition;
-        }
-      }
     }
   }
   .date {
@@ -294,6 +243,6 @@
     right: 0px;
     top: 9px;
     font-size: 16px;
-    color: @gray-light;
+    color: @gray-medium;
   }
 }

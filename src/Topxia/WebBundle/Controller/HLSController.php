@@ -42,7 +42,8 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data'     => array(
-                        'id' => $file['id'].$level
+                        'id'      => $file['id'].$level,
+                        'fromApi' => $fromApi
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600
@@ -150,7 +151,7 @@ class HLSController extends BaseController
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
+                'keyencryption' => $token['data']['fromApi'] || $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600

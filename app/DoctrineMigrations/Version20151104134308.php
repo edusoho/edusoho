@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -16,9 +16,9 @@ class Version20151104134308 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql(" ALTER TABLE `orders` CHANGE `payment` `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
-        $this->addSql(" ALTER TABLE `cash_orders` CHANGE `payment` `payment` ENUM('none','alipay','wxpay','heepay','quickpay') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
-        $this->addSql(" ALTER TABLE `cash_flow` CHANGE `payment` `payment` ENUM('alipay','wxpay','heepay','quickpay') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL"); 
+        $this->addSql(" ALTER TABLE `orders` CHANGE `payment` `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay') CHARACTER SET utf8  NOT NULL");
+        $this->addSql(" ALTER TABLE `cash_orders` CHANGE `payment` `payment` ENUM('none','alipay','wxpay','heepay','quickpay') CHARACTER SET utf8 NOT NULL");
+        $this->addSql(" ALTER TABLE `cash_flow` CHANGE `payment` `payment` ENUM('alipay','wxpay','heepay','quickpay') CHARACTER SET utf8  NULL DEFAULT NULL");
         $this->addSql("
             CREATE TABLE IF NOT EXISTS `user_pay_agreement` (
             `id` int(11) NOT NULL AUTO_INCREMENT,

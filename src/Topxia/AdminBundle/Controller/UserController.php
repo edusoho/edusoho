@@ -28,9 +28,25 @@ class UserController extends BaseController
         $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getUserService()->searchUserCount($conditions),
+            $userCount,
             20
         );
+
+        //根据mobile查询user_profile获得userIds
+
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile') {
+            $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
+            $userProfiles  = $this->getUserService()->searchUserProfiles(
+                array('mobile' => $conditions['keyword']),
+                array('id', 'DESC'),
+                0,
+                $profilesCount
+            );
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
+            $conditions['userIds'] = !empty($userIds) ? $userIds : array(0);
+        }
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
