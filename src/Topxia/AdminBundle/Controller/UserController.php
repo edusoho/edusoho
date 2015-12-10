@@ -25,9 +25,10 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
+        $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
-            $userCount = $this->getUserService()->searchUserCount($conditions),
+            $this->getUserService()->searchUserCount($conditions),
             20
         );
 
