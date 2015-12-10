@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-    require('ckeditor');
+    require('es-ckeditor');
     Notify = require('common/bootstrap-notify');
 
     exports.run = function() {

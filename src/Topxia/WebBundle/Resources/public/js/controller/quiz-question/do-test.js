@@ -6,7 +6,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
 
-    require('ckeditor');
+    require('es-ckeditor');
     require('../widget/document-player');
 
     var AudioPlayer = require('./audioplayer');
