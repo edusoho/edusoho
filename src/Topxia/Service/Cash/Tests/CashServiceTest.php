@@ -21,7 +21,7 @@ class CashServiceTest extends BaseTestCase
         $flow3 = $this->createInflowOrOutflow('outflow', $user['id'], 'Coin');
         $flow4 = $this->createInflowOrOutflow('inflow', $user['id'], 'RMB');
 
-        $flows = $this->getCashService()->searchFlows(array('amount' => 10), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $flows = $this->getCashService()->searchFlows(array('amount' => 10), array('id', 'ASC'), 0, PHP_INT_MAX);
         $this->assertEquals($flows[0]['type'], 'inflow');
         $this->assertEquals($flows[1]['type'], 'outflow');
         $this->assertEquals($flows[2]['cashType'], 'Coin');
