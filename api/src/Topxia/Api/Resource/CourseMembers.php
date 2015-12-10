@@ -6,7 +6,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 
-class ClassroomMembers extends BaseResource
+class CourseMembers extends BaseResource
 {
     public function get(Application $app, Request $request, $courseId)
     {
@@ -14,8 +14,8 @@ class ClassroomMembers extends BaseResource
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $total = $this->getClassroomService()->searchMemberCount($conditions);
-        $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $total = $this->getCourseService()->searchMemberCount($conditions);
+        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
 
@@ -28,7 +28,7 @@ class ClassroomMembers extends BaseResource
 
     public function filter(&$res)
     {
-        return $this->multicallFilter('ClassroomMember', $res);
+        return $this->multicallFilter('CourseMember', $res);
     }
 
     protected function getUserService()
@@ -36,9 +36,9 @@ class ClassroomMembers extends BaseResource
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getClassroomService()
+    protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
 }
