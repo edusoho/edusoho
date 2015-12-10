@@ -14,7 +14,5 @@ interface ThemeService
 
     public function isAllowedConfig();
 
-    public function isAllowedGracefulConfig();
-
     public function resetCurrentConfig();
 }
