@@ -39,7 +39,7 @@ class UserController extends BaseController
                 array('mobile' => $conditions['keyword']),
                 array('id', 'DESC'),
                 0,
-                $profilesCount + 1
+                $profilesCount
             );
             $userIds = ArrayToolkit::column($userProfiles, 'id');
             unset($conditions['keywordType']);
