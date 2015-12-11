@@ -51,6 +51,69 @@ class SensitiveWordServiceTest extends BaseTestCase
 
     }
 
+    public function testDeleteByQuestionMarkerId()
+    {
+        $questionMarkerId = 4;
+        $jim              = 3;
+        $tony             = 4;
+        $andy             = 10;
+        $markerId         = 3;
+
+        $result1 = array(
+            'markerId'         => $markerId,
+            'questionMarkerId' => $questionMarkerId,
+            'userId'           => $jim,
+            'status'           => 'noAnswer'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
+
+        $result2 = array(
+            'markerId'         => $markerId,
+            'questionMarkerId' => $questionMarkerId,
+            'userId'           => $tony,
+            'status'           => 'wrong'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result2);
+
+        $result3 = array(
+            'markerId'         => $markerId,
+            'questionMarkerId' => $questionMarkerId,
+            'userId'           => $andy,
+            'status'           => 'right'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result3);
+
+        $this->getQuestionMarkerResultService()->deleteByQuestionMarkerId($questionMarkerId);
+        $jimResult  = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($jim, $markerId);
+        $tonyResult = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($tony, $markerId);
+        $andyResult = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($andy, $markerId);
+
+        $this->assertTrue(empty($jimResult));
+        $this->assertTrue(empty($tonyResult));
+        $this->assertTrue(empty($andyResult));
+    }
+
+    public function testFindByUserIdAndMarkerId()
+    {
+        $questionMarkerId = 4;
+        $jim              = 3;
+        $markerId         = 3;
+
+        $result1 = array(
+            'markerId'         => $markerId,
+            'questionMarkerId' => $questionMarkerId,
+            'userId'           => $jim,
+            'status'           => 'noAnswer'
+        );
+        $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result1);
+
+        $jimResult = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($jim, $markerId);
+
+        $this->assertTrue(!empty($jimResult));
+        $this->assertEquals(1, count($jimResult));
+
+    }
+
     protected function getQuestionMarkerResultService()
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');

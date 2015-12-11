@@ -9,4 +9,8 @@ interface QuestionMarkerResultDao
 
     public function updateQuestionMarkerResult($id, $fields);
 
+    public function deleteByQuestionMarkerId($questionMarkerId);
+
+    public function findByUserIdAndMarkerId($userId, $markerId);
+
 }

@@ -32,4 +32,15 @@ class QuestionMarkerResultDaoImpl extends BaseDao implements QuestionMarkerResul
 
         return $this->getQuestionMarkerResult($id);
     }
+
+    public function deleteByQuestionMarkerId($questionMarkerId)
+    {
+        return $this->getConnection()->delete($this->table, array('questionMarkerId' => $questionMarkerId));
+    }
+
+    public function findByUserIdAndMarkerId($userId, $markerId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and markerId = ?";
+        return $this->getConnection()->fetchAll($sql, array($userId, $markerId)) ?: array();
+    }
 }

@@ -9,4 +9,8 @@ interface QuestionMarkerResultService
 
     public function updateQuestionMarkerResult($id, $result);
 
+    public function deleteByQuestionMarkerId($questionMarkerId);
+
+    public function findByUserIdAndMarkerId($userId, $markerId);
+
 }
