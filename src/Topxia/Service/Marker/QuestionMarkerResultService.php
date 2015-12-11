@@ -1,0 +1,12 @@
+<?php
+namespace Topxia\Service\Marker;
+
+interface QuestionMarkerResultService
+{
+    public function getQuestionMarkerResult($id);
+
+    public function addQuestionMarkerResult($result);
+
+    public function updateQuestionMarkerResult($id, $result);
+
+}
