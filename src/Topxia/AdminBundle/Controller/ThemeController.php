@@ -54,7 +54,7 @@ class ThemeController extends BaseController
     public function confirmConfigAction(Request $request, $uri)
     {
         $this->getThemeService()->saveConfirmConfig();
-        return $this->redirect($this->generateUrl('admin_theme_manage', array('uri' => $uri), true));
+        return $this->redirect($this->generateUrl('admin_setting_theme', array(), true));
     }
 
     public function manageIndexAction(Request $request, $uri)

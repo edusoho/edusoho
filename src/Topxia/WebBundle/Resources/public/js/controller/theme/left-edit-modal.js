@@ -12,7 +12,6 @@ define(function(require, exports, module) {
             var config = formSerialize($($(this).data('form')));
 
             var code = $currentItem.data('code').split('_').pop();
-
             config.code = code;
             config.defaultTitle = currentConfig.defaultTitle;
             config.defaultSubTitle = currentConfig.defaultSubTitle;
@@ -29,6 +28,16 @@ define(function(require, exports, module) {
                 $(this).val('checked');
             } else {
                 $(this).val('');
+            }
+        });
+
+        $("#edit-left-course-form").on("click", 'input[type=radio]', function(){ 
+            var $this = $(this); 
+            if ($this.attr("checked")=="checked") {
+            $(".check-box").find('input[name=background]').val($this.val());
+            } else {
+                $(".check-box").find('input[name=background]').val($this.val());
+                $this.attr("checked","checked").parent().siblings().find("input").removeAttr("checked"); 
             }
         });
 

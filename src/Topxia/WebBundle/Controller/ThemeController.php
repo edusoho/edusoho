@@ -9,7 +9,7 @@ class ThemeController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $themeConfig = $this->getThemeService()->getCurrentThemeConfirmConfig();
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('TopxiaWebBundle:Default:show.html.twig', array(
             'themeConfig'    => $themeConfig['confirmConfig'],
@@ -45,28 +45,9 @@ class ThemeController extends BaseController
     {
         $config = $this->getThemeService()->getCurrentThemeConfig();
 
-        if (!$isEditColor) {
-            if (!empty($config) && $config['name'] == '雅致简洁（商业主题）') {
-                $color = $config['confirmConfig']['color'];
-            } else {
-                $color = array(
-                    'maincolor'       => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['maincolor'],
-                    'navigationcolor' => empty($config['confirmConfig']) ? '' : $config['confirmConfig']['navigationcolor']
-                );
-            }
-        } else {
-            if (!empty($config) && $config['name'] == '雅致简洁（商业主题）') {
-                $color = $config['config']['color'];
-            } else {
-                $color = array(
-                    'maincolor'       => empty($config['config']) ? '' : $config['config']['maincolor'],
-                    'navigationcolor' => empty($config['config']) ? '' : $config['config']['navigationcolor']
-                );
-            }
-        }
-
         return $this->render("TopxiaWebBundle:Default:stylesheet.html.twig", array(
-            'color' => $color
+            'config'      => $config,
+            'isEditColor' => $isEditColor
         ));
     }
 

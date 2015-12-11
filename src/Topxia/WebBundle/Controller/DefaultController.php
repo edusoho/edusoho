@@ -206,12 +206,12 @@ class DefaultController extends BaseController
         return new Response($jumpScript);
     }
 
-    public function CoursesCategoryAction(Request $request)
+    public function coursesCategoryAction(Request $request)
     {
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $categoryId             = $conditions['categoryId'];
+        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
 
         if (isset($conditions['config'])) {
             $config = $conditions['config'];
@@ -223,7 +223,7 @@ class DefaultController extends BaseController
 
         //var_dump($conditions);
 
-        if ($conditions['categoryId'] != 'all') {
+        if (!empty($conditions['categoryId'])) {
             $conditions['categoryId'] = intval($conditions['categoryId']);
         } else {
             unset($conditions['categoryId']);
@@ -236,14 +236,12 @@ class DefaultController extends BaseController
         }
 
         unset($conditions['orderBy']);
-
-        $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $config['count']);
-        //var_dump($config);
-        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig', array(
-            'orderBy'    => $orderBy,
-            'categoryId' => $categoryId,
-            'courses'    => $courses,
-            'config'     => $config
+        $config               = $this->getThemeService()->getCurrentThemeConfig();
+        $config               = $config['confirmConfig']['blocks']['left'][0];
+        $config['orderBy']    = $orderBy;
+        $config['categoryId'] = $categoryId;
+        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+            'config' => $config
         ));
     }
 
@@ -305,6 +303,11 @@ class DefaultController extends BaseController
     protected function getBatchNotificationService()
     {
         return $this->getServiceKernel()->createService('User.BatchNotificationService');
+    }
+
+    protected function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 
     private function getBlacklistService()
