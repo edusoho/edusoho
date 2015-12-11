@@ -15,8 +15,6 @@ interface OrderProcessor
 
     public function getOrderBySn($sn);
 
-    //public function getOrderMessage($order);
-
     public function updateOrder($id, $fileds);
 
     public function getNote($targetId);

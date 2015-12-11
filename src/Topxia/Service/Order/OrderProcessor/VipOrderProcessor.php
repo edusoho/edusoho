@@ -281,22 +281,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    // public function getOrderMessage($order)
-    // {
-    //     $fields                    = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-    //     $vip                       = $this->getSettingService()->get('vip');
-    //     $defaultBuyMonth           = $vip['default_buy_months'];
-    //     $fields['unit']            = $order['data']['unitType'];
-    //     $fields['duration']        = $order['data']['duration'];
-    //     $fields['defaultBuyMonth'] = $defaultBuyMonth;
-    //     $fields['buyType']         = $order['data']['buyType'];
-
-    //     $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
-    //     $orderInfo['template'] = 'vip';
-
-    //     return $orderInfo;
-    // }
-
     public function updateOrder($id, $fileds)
     {
         return $this->getOrderService()->updateOrder($id, $fileds);

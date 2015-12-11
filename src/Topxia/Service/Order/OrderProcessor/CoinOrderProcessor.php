@@ -41,13 +41,6 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCashOrdersService()->getOrderBySn($sn);
     }
 
-    // public function getOrderMessage($order)
-    // {
-    //     $orderInfo             = $this->getCashOrdersService()->getOrder($order['id']);
-    //     $orderInfo['template'] = 'coin';
-    //     return $orderInfo;
-    // }
-
     public function updateOrder($id, $fileds)
     {
         return $this->getCashOrdersService()->updateOrder($id, $fileds);

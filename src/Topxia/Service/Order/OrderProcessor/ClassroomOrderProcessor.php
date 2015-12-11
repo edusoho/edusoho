@@ -313,14 +313,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    // public function getOrderMessage($order)
-    // {
-    //     $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-    //     $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
-    //     $orderInfo['template'] = 'classroom';
-    //     return $orderInfo;
-    // }
-
     public function updateOrder($id, $fileds)
     {
         return $this->getOrderService()->updateOrder($id, $fileds);
