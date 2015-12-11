@@ -378,11 +378,7 @@ class PayCenterController extends BaseController
                 $payData['paidTime'] = time();
                 $payData['sn']       = $returnArray['out_trade_no'];
 
-                if (isset($order['targetType'])) {
-                    list($success, $order) = $this->getPayCenterService()->pay($payData);
-                } else {
-                    list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-                }
+                list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
                 if ($success) {
                     return $this->createJsonResponse(true);
