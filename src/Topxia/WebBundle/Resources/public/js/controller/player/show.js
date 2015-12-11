@@ -67,8 +67,6 @@ define(function(require, exports, module) {
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
-                watermark: watermark,
-                starttime: starttime,
                 agentInWhiteList: agentInWhiteList
             }
         );

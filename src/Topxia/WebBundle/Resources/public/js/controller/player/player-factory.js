@@ -20,8 +20,8 @@ define(function(require, exports, module) {
                     return new LocalVideoPlayer(options);
                     break;
                 case "cloud-video-player":
-                    var CloudVideoPlayer = require('./cloud-video-player');
-                    return new CloudVideoPlayer(options);
+                    var BalloonVideoPlayer = require('./balloon-cloud-video-player');
+                    return new BalloonVideoPlayer(options);
                     break;
                 case "balloon-cloud-video-player":
                     var BalloonVideoPlayer = require('./balloon-cloud-video-player');
