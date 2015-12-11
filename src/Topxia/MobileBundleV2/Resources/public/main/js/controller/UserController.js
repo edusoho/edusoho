@@ -1,7 +1,7 @@
 app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', 'platformUtil', '$stateParams', '$q', MyInfoController]);
 app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
 app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
-app.controller('StudentListController', ['$scope', 'ClassRoomService', '$stateParams', StudentListController]);
+app.controller('StudentListController', ['$scope', 'ClassRoomService', 'CourseService', '$stateParams', StudentListController]);
 
 function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
 {
@@ -41,16 +41,61 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 	this.initService();
 }
 
-function StudentListController($scope, ClassRoomService, $stateParams)
+function StudentListController($scope, ClassRoomService, CourseService, $stateParams)
 {
-	$scope.title = "班级学员";
-	$scope.emptyStr = "该班级暂无学员";
-	ClassRoomService.getStudents({
-		classRoomId : $stateParams.targetId,
-		limit : -1
-	}, function(data) {
-		$scope.users = data.data;
-	});
+	$scope.title = getTitle($stateParams.targetType);
+
+	function getTitle(targetType) {
+		if ("classroom" == $stateParams.targetType) {
+			return "班级学员";
+		}
+
+		return "课程学员";
+	}
+
+	function getEmptyStr(targetType) {
+		if ("classroom" == $stateParams.targetType) {
+			return "该班级暂无学员";
+		}
+
+		return "该课程暂无学员";
+	}
+
+	$scope.title = getTitle($stateParams.targetType);
+	$scope.emptyStr = getEmptyStr($stateParams.targetType);
+
+	function getClassRoomStudents(targetId, callback) {
+		ClassRoomService.getStudents({
+			classRoomId : $stateParams.targetId
+		}, callback);
+	}
+
+	function getCourseStudents(targetId, callback) {
+		CourseService.getStudents({
+			courseId : $stateParams.targetId,
+		}, callback);
+	}
+
+	function getStudentArray(resources) {
+		var users = [];
+		for (var i = 0; i < resources.length; i++) {
+			users[i] = resources[i].user;
+		};
+
+		return users;
+	}
+
+	$scope.loadUsers = function() {
+		var service;
+		if ("classroom" == $stateParams.targetType) {
+			service = getClassRoomStudents;
+		} else {
+			service = getCourseStudents;
+		}
+		service($stateParams.targetId, function(data) {
+			$scope.users = getStudentArray(data.resources);
+		});
+	}
 }
 
 function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $stateParams, $q) 
