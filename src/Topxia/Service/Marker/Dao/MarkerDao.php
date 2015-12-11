@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Service\Marker;
+namespace Topxia\Service\Marker\Dao;
 
-interface MarkerService
+interface MarkerDao
 {
     public function getMarker($id);
 
