@@ -226,7 +226,7 @@ class ArticleController extends BaseController
 
         $articleBody = preg_replace("/ /", "", $articleBody);
 
-        $annexs = $this->getFileService()->getFilesByIds($article['annexIds']);
+        $attachments = $this->getFileService()->getFilesByIds($article['attachmentIds']);
 
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
             'categoryTree'    => $categoryTree,
@@ -249,7 +249,7 @@ class ArticleController extends BaseController
             'sameTagArticles' => $sameTagArticles,
             'userLike'        => $userLike,
             'category'        => $category,
-            'annexs'          => $annexs
+            'attachments'     => $attachments
         ));
     }
 

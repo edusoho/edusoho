@@ -17,7 +17,8 @@ class Version20151210103233 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
 
-        $this->addSql(" ALTER TABLE `article` ADD `annexIds` TINYTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `tagIds`;");
+        $this->addSql(" ALTER TABLE `article` ADD `attachmentIds` TINYTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL AFTER `tagIds`;");
+        $this->addSql(" ALTER TABLE `file` ADD `fileName` VARCHAR(1024) NOT NULL AFTER `uri`;");
     }
 
     /**

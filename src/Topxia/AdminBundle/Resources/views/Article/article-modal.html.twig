@@ -130,16 +130,17 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">添加附件</div>
 				<div class="panel-body">
-					<div id="article-annex-container">
-						{% for annexName in annexNames|default(null) %}
-                            {{ annexName }}
+					<div id="article-attachment-container">
+						{% for attachment in attachments|default(null) %}
+                            <p>{{ attachment.fileName }} <a data-url="{{ path('admin_article_attachment_remove',{id:attachment.id}) }}">移除</a></p>
+                            <input type="hidden" value="{{attachment.id}}" id="article-attachment-{{attachment.id}}" name="attachmentIds[]">
 						{% endfor %}
 					</div>
-					<input type="hidden" value="" id="article-annex-ids" name="annexIds">
+					
 					<br>
-					<a class="btn btn-default" id="article-annex-upload" 
-			        data-upload-token="{{ upload_token('article','annex') }}"
-			        data-goto-url="{{ path('admin_article_annex_upload') }}">上传</a>
+					<a class="btn btn-default" id="article-attachment-upload" 
+			        data-upload-token="{{ upload_token('article','attachment') }}"
+			        data-goto-url="{{ path('admin_article_attachment_upload') }}">上传</a>
 			        <p class="help-block">请上传txt docx doc xls xlsx pptx ppsx rar zip格式的附件文件。</p>
 				</div>
 		    </div>
