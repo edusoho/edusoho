@@ -9,9 +9,7 @@ class CashOrdersServiceTest extends BaseTestCase
     {
         $this->setSettingcoin();
         $order = array(
-            'sn'          => '12238551',
             'status'      => 'created',
-            'title'       => 'hh',
             'amount'      => '100.00',
             'payment'     => 'none',
             'note'        => 'hello',
@@ -19,6 +17,96 @@ class CashOrdersServiceTest extends BaseTestCase
             'createdTime' => time()
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $createOrder['amount']);
+    }
+
+    public function testGetOrderBySn()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $order       = $this->getCashOrdersService()->getOrderBySn($createOrder['sn']);
+        $this->assertEquals('100.00', $order['amount']);
+
+    }
+
+    public function testGetOrderByToken()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $order       = $this->getCashOrdersService()->getOrderByToken($createOrder['sn']);
+        $this->assertEquals('100.00', $order['amount']);
+
+    }
+
+    public function testCreatePayRecord()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $order['amount']);
+        $payData = array('status' => 'closed');
+        $this->getCashOrdersService()->createPayRecord($createOrder['id'], $payData);
+        $result = $this->getCashOrdersService()->getOrder($createOrder['id']);
+        $this->assertEquals($result['data'], json_encode($payData));
+
+    }
+
+    public function testCancelOrder()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $createOrder['amount']);
+        $order = $this->getCashOrdersService()->cancelOrder($createOrder['id'], '取消订单');
+        $this->assertEquals('cancelled', $order['status']);
+    }
+
+    public function testUpdateOrder()
+    {
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $createOrder = $this->getCashOrdersService()->addOrder($order);
+        $this->assertEquals('100.00', $createOrder['amount']);
+        $fields = array('amount' => '120.00');
+        $order  = $this->getCashOrdersService()->updateOrder($createOrder['id'], $fields);
+        $this->assertEquals('120.00', $order['amount']);
     }
 
     /**

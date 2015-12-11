@@ -30,6 +30,16 @@ class OrderProcessorTest extends BaseTestCase
         $note      = $processor->getNote($classroom['id']);
         $this->assertEquals('测试', $note);
 
+        $vip       = array("name" => "测试", "monthPrice" => 0.01, "yearPrice" => 0.01, "description" => "测试");
+        $vip       = $this->getLevelService()->createLevel($vip);
+        $processor = OrderProcessorFactory::create('vip');
+        $note      = $processor->getNote($vip['id']);
+        $this->assertEquals('测试', $note);
+
+        $this->setSettingcoin();
+        $processor = OrderProcessorFactory::create('coin');
+        $note      = $processor->getNote(1);
+        $this->assertEquals('充值coin', $note);
     }
 
     public function testGetTitle()
@@ -54,6 +64,219 @@ class OrderProcessorTest extends BaseTestCase
         $title     = $processor->getTitle($classroom['id']);
         $this->assertEquals('test', $title);
 
+        $vip       = array("name" => "测试", "monthPrice" => 0.01, "yearPrice" => 0.01, "description" => "测试");
+        $vip       = $this->getLevelService()->createLevel($vip);
+        $processor = OrderProcessorFactory::create('vip');
+        $note      = $processor->getTitle($vip['id']);
+        $this->assertEquals('测试', $note);
+
+        $this->setSettingcoin();
+        $processor = OrderProcessorFactory::create('coin');
+        $note      = $processor->getTitle(1);
+        $this->assertEquals('coin', $note);
+
+    }
+
+    public function testGetOrderBySn()
+    {
+        $payment = array(
+            'enabled'          => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway'     => 'none',
+            'alipay_enabled'   => 0,
+            'alipay_key'       => '',
+            'alipay_secret'    => '',
+            'alipay_account'   => '',
+            'alipay_type'      => 'direct',
+            'tenpay_enabled'   => 1,
+            'tenpay_key'       => '',
+            'tenpay_secret'    => ''
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $vip = array(
+            'enabled'                    => 1,
+            'buyType'                    => 10,
+            'default_buy_months10'       => 3,
+            'default_buy_years10'        => 1,
+            'default_buy_years'          => 1,
+            'default_buy_months'         => 1,
+            'upgrade_min_day'            => 30,
+            'deadlineNotify'             => 0,
+            'daysOfNotifyBeforeDeadline' => 10,
+            'poster'                     => 0,
+            'poster_bgcolor'             => '#f13b54'
+        );
+
+        $this->getSettingService()->set('vip', $vip);
+        $course = array(
+            'title' => 'course 1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $order        = array(
+            'userId'     => 1,
+            'title'      => 'buy course 1',
+            'amount'     => '100',
+            'targetType' => 'course',
+            'targetId'   => $createCourse['id'],
+            'payment'    => 'none'
+        );
+        $order     = $this->getOrderService()->createOrder($order);
+        $processor = OrderProcessorFactory::create('course');
+        $result    = $processor->getOrderBySn($order['sn']);
+        $this->assertEquals('course', $order['targetType']);
+
+        $classroom = array(
+            'title'      => 'test',
+            'id'         => 1,
+            'categoryId' => 1,
+            'status'     => 'published',
+            'about'      => '测试班级'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $order     = $this->getOrderService()->createOrder(array(
+            'userId'     => 1,
+            'title'      => "testOrder",
+            'targetType' => 'classroom',
+            'targetId'   => $createCourse['id'],
+            'amount'     => 10,
+            'payment'    => 'none',
+            'snPrefix'   => 'CR'
+        ));
+        $processor = OrderProcessorFactory::create('classroom');
+        $result    = $processor->getOrderBySn($order['sn']);
+        $this->assertEquals('classroom', $order['targetType']);
+
+        $vip       = array("name" => "测试", "monthPrice" => 0.01, "yearPrice" => 0.01, "description" => "测试");
+        $vip       = $this->getLevelService()->createLevel($vip);
+        $processor = OrderProcessorFactory::create('vip');
+        $order     = $this->getOrderService()->createOrder(array(
+            'userId'     => 1,
+            'title'      => "testOrder",
+            'targetType' => 'vip',
+            'targetId'   => $vip['id'],
+            'amount'     => 10,
+            'payment'    => 'none',
+            'snPrefix'   => 'CR'
+        ));
+
+        $result = $processor->getOrderBySn($order['sn']);
+        $this->assertEquals('vip', $order['targetType']);
+
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $order     = $this->getCashOrdersService()->addOrder($order);
+        $processor = OrderProcessorFactory::create('coin');
+        $result    = $processor->getOrderBySn($order['sn']);
+        $this->assertEquals('100.00', $order['amount']);
+    }
+
+    public function testGetOrderMessage()
+    {
+        $payment = array(
+            'enabled'          => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway'     => 'none',
+            'alipay_enabled'   => 0,
+            'alipay_key'       => '',
+            'alipay_secret'    => '',
+            'alipay_account'   => '',
+            'alipay_type'      => 'direct',
+            'tenpay_enabled'   => 1,
+            'tenpay_key'       => '',
+            'tenpay_secret'    => ''
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $vip = array(
+            'enabled'                    => 1,
+            'buyType'                    => 10,
+            'default_buy_months10'       => 3,
+            'default_buy_years10'        => 1,
+            'default_buy_years'          => 1,
+            'default_buy_months'         => 1,
+            'upgrade_min_day'            => 30,
+            'deadlineNotify'             => 0,
+            'daysOfNotifyBeforeDeadline' => 10,
+            'poster'                     => 0,
+            'poster_bgcolor'             => '#f13b54'
+        );
+
+        $this->getSettingService()->set('vip', $vip);
+        $course = array(
+            'title' => 'course 1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $order        = array(
+            'userId'     => 1,
+            'title'      => 'buy course 1',
+            'amount'     => '100',
+            'targetType' => 'course',
+            'targetId'   => $createCourse['id'],
+            'payment'    => 'none'
+        );
+        $order     = $this->getOrderService()->createOrder($order);
+        $processor = OrderProcessorFactory::create('course');
+        $result    = $processor->getOrderMessage($order);
+        $this->assertEquals('course', $result['template']);
+
+        $classroom = array(
+            'title'      => 'test',
+            'id'         => 1,
+            'categoryId' => 1,
+            'status'     => 'published',
+            'about'      => '测试班级'
+        );
+        $classroom = $this->getClassroomService()->addClassroom($classroom);
+        $order     = $this->getOrderService()->createOrder(array(
+            'userId'     => 1,
+            'title'      => "testOrder",
+            'targetType' => 'classroom',
+            'targetId'   => $createCourse['id'],
+            'amount'     => 10,
+            'payment'    => 'none',
+            'snPrefix'   => 'CR'
+        ));
+        $processor = OrderProcessorFactory::create('classroom');
+        $result    = $processor->getOrderMessage($order);
+        $this->assertEquals('classroom', $result['template']);
+
+        $vip       = array("name" => "测试", "monthPrice" => 0.01, "yearPrice" => 0.01, "description" => "测试");
+        $vip       = $this->getLevelService()->createLevel($vip);
+        $processor = OrderProcessorFactory::create('vip');
+        $order     = $processor->createOrder(array('priceType' => 'RMB', 'otalPrice' => '0.01', 'amount' => '0.01', 'coinRate' => 1, 'coinAmount' => 0, 'userId' => 1, 'payment' => 'alipay', 'targetId' => $vip['id'], 'coupon' => 0, 'couponDiscount' => 0), array('targetType' => 'vip', 'maxRate' => 100, 'targetId' => $vip['id'], 'totalPrice' => '0.01', 'shouldPayMoney' => '0.01', 'sms_code' => '', 'mobile' => '', 'buyType' => 'new', 'duration' => 1, 'unitType' => 'month', 'type' => '', 'couponCode' => ''));
+        $result    = $processor->getOrderMessage($order);
+        $this->assertEquals('vip', $result['template']);
+
+        $this->setSettingcoin();
+        $order = array(
+            'status'      => 'created',
+            'amount'      => '100.00',
+            'payment'     => 'none',
+            'note'        => 'hello',
+            'userId'      => '1',
+            'createdTime' => time()
+        );
+        $order     = $this->getCashOrdersService()->addOrder($order);
+        $processor = OrderProcessorFactory::create('coin');
+        $result    = $processor->getOrderMessage($order);
+        $this->assertEquals('coin', $result['template']);
+
+    }
+
+    private function setSettingcoin()
+    {
+        $coinSettingsPosted = array(
+            'cash_rate' => '1.0',
+            'coin_name' => 'coin'
+        );
+        $this->getSettingService()->set('coin', $coinSettingsPosted);
+
     }
 
     protected function getCourseService()
@@ -66,4 +289,23 @@ class OrderProcessorTest extends BaseTestCase
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
+    protected function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
+    }
 }

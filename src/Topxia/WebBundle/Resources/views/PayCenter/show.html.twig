@@ -20,7 +20,7 @@
         </button>
         订单已提交，请在４８小时内完成支付！逾期订单将被取消。
       </div>
-      <div class="order-detail-bg  checkout" style="border:none">
+     {#  <div class="order-detail-bg  checkout" style="border:none">
         <div class="order-detail  clearfix">
           <div class="order-img hidden-xs">
             {% if order.targetType == "course" and course|default(null) %}
@@ -38,6 +38,11 @@
                 <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="收费">
               </a>
             {% endif %}
+            {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') and order.targetType == "coin" %}
+              <a href="javascript:;">
+                <img class="img-responsive" src="{{asset('assets/img/default/classroom-default-213-142.png') }}"alt="收费">
+              </a>
+            {% endif %}
           </div>
           <div class="order-info">
             <p>订单名称：{{ order.title }}</p>
@@ -47,9 +52,11 @@
             </p>
           </div>
         </div>
-      </div>
+      </div> #}
+     {{ render(controller(template , {'sn':sn})) }}
       <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
+        <input type="hidden" name="targetType" value="{{order.targetType}}"> 
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% for payment,options in payments %}
           {% if loop.index == 1 %}
@@ -98,17 +105,7 @@
           </div>
         </div>
         <div class="form-group text-right">
-          <a 
-            href="javascript:;"
-            {% if targetType == "course" and course|default(null) %}
-              data-goto="{{ path('course_show', {id:course.id}) }}" 
-            {% elseif targetType == "vip" %}
-              data-goto="{{ path('vip_renew') }}"
-            {% elseif targetType == "classroom" %}
-              data-goto="{{ path('classroom_show', {id:classroom.id}) }}"
-            {% endif %}
-             class="js-order-cancel btn btn-link" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消
-          </a>
+          {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
           <button class="pay-button btn btn-primary"  type="submit">确认支付</button>
         </div>
       </form>

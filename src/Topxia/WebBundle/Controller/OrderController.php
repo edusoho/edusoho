@@ -188,7 +188,8 @@ class OrderController extends BaseController
             }
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn' => $order['sn']
+                'sn'         => $order['sn'],
+                'targetType' => $order['targetType']
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
