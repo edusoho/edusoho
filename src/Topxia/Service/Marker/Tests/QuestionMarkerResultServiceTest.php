@@ -13,7 +13,6 @@ class SensitiveWordServiceTest extends BaseTestCase
             'questionMarkerId' => 2,
             'userId'           => 1,
             'status'           => 'none'
-
         );
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
         $this->assertNotNull($savedResult);
@@ -30,7 +29,6 @@ class SensitiveWordServiceTest extends BaseTestCase
             'questionMarkerId' => 4,
             'userId'           => 6,
             'status'           => 'noAnswer'
-
         );
         $savedResult = $this->getQuestionMarkerResultService()->addQuestionMarkerResult($result);
 
