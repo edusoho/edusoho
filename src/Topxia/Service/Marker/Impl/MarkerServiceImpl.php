@@ -36,11 +36,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function addMarker($mediaId, $fields)
     {
-        // $media = $this->getUploadFileService()->getFile($midiaId);
+        $media = $this->getUploadFileService()->getFile($mediaId);
 
-        // if (empty($midiaId) || empty($media)) {
-        //     throw $this->createServiceException("视频文件不存在！");
-        // }
+        if (empty($mediaId) || empty($media)) {
+            throw $this->createServiceException("视频文件不存在！");
+        }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
             throw $this->createServiceException("请输入弹题时间！");
