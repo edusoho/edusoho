@@ -1,8 +1,8 @@
 <?php
 
-namespace Topxia\Service\QuestionMarker;
+namespace Topxia\Service\Marker\Dao;
 
-interface QuestionMarkerService
+interface QuestionMarkerDao
 {
     public function getQuestionMarker($id);
 
