@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomMembers extends BaseResource
 {
-    public function get(Application $app, Request $request, $courseId)
+    public function get(Application $app, Request $request, $classroomId)
     {
         $conditions = array('classroomId' => $classroomId);
         $start      = $request->query->get('start', 0);
