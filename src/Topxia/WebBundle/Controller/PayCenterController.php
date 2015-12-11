@@ -27,10 +27,13 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields    = $request->query->all();
-        $processor = OrderProcessorFactory::create($fields['targetType']);
-        $order     = $processor->getOrderBySn($fields["sn"]);
-        $orderInfo = $processor->getOrderMessage($order);
+        $fields                  = $request->query->all();
+        $orderInfo['sn']         = $fields['sn'];
+        $orderInfo['targetType'] = $fields['targetType'];
+        $processor               = OrderProcessorFactory::create($fields['targetType']);
+        $orderInfo['template']   = $processor->getOrderInfoTemplate();
+        $order                   = $processor->getOrderBySn($orderInfo['sn']);
+        // $orderInfo = $processor->getOrderMessage($order);
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -454,23 +457,23 @@ class PayCenterController extends BaseController
         return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'userProfile' => $params['userProfile']));
     }
 
-    protected function getOrderInfo($order)
-    {
-        $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+    // protected function getOrderInfo($order)
+    // {
+    //     $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
 
-        if ($order['targetType'] == 'vip') {
-            $defaultBuyMonth           = $this->setting('vip.default_buy_months');
-            $fields['unit']            = $order['data']['unitType'];
-            $fields['duration']        = $order['data']['duration'];
-            $fields['defaultBuyMonth'] = $defaultBuyMonth;
-            $fields['buyType']         = $order['data']['buyType'];
-        }
+    //     if ($order['targetType'] == 'vip') {
+    //         $defaultBuyMonth           = $this->setting('vip.default_buy_months');
+    //         $fields['unit']            = $order['data']['unitType'];
+    //         $fields['duration']        = $order['data']['duration'];
+    //         $fields['defaultBuyMonth'] = $defaultBuyMonth;
+    //         $fields['buyType']         = $order['data']['buyType'];
+    //     }
 
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
+    //     $processor = OrderProcessorFactory::create($order['targetType']);
+    //     $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
 
-        return $orderInfo;
-    }
+    //     return $orderInfo;
+    // }
 
     public function generateOrderToken($order, $params)
     {

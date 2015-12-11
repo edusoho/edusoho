@@ -183,13 +183,13 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    public function getOrderMessage($order)
-    {
-        $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-        $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
-        $orderInfo['template'] = 'course';
-        return $orderInfo;
-    }
+    // public function getOrderMessage($order)
+    // {
+    //     $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+    //     $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
+    //     $orderInfo['template'] = 'course';
+    //     return $orderInfo;
+    // }
 
     public function updateOrder($id, $fileds)
     {
@@ -232,6 +232,11 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function generateOrderToken()
     {
         return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "TopxiaWebBundle:Course:orderInfo";
     }
 
     protected function getCouponService()

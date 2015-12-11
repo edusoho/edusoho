@@ -41,12 +41,12 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCashOrdersService()->getOrderBySn($sn);
     }
 
-    public function getOrderMessage($order)
-    {
-        $orderInfo             = $this->getCashOrdersService()->getOrder($order['id']);
-        $orderInfo['template'] = 'coin';
-        return $orderInfo;
-    }
+    // public function getOrderMessage($order)
+    // {
+    //     $orderInfo             = $this->getCashOrdersService()->getOrder($order['id']);
+    //     $orderInfo['template'] = 'coin';
+    //     return $orderInfo;
+    // }
 
     public function updateOrder($id, $fileds)
     {
@@ -89,6 +89,11 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
     public function generateOrderToken()
     {
         return 'o'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "ChargeCoinBundle:Coin:orderInfo";
     }
 
     protected function getCashOrdersService()

@@ -313,13 +313,13 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    public function getOrderMessage($order)
-    {
-        $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-        $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
-        $orderInfo['template'] = 'classroom';
-        return $orderInfo;
-    }
+    // public function getOrderMessage($order)
+    // {
+    //     $fields                = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+    //     $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
+    //     $orderInfo['template'] = 'classroom';
+    //     return $orderInfo;
+    // }
 
     public function updateOrder($id, $fileds)
     {
@@ -362,6 +362,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function generateOrderToken()
     {
         return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "ClassroomBundle:Classroom:orderInfo";
     }
 
     protected function getClassroomService()

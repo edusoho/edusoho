@@ -15,7 +15,7 @@ interface OrderProcessor
 
     public function getOrderBySn($sn);
 
-    public function getOrderMessage($order);
+    //public function getOrderMessage($order);
 
     public function updateOrder($id, $fileds);
 
@@ -32,4 +32,6 @@ interface OrderProcessor
     public function createPayRecord($id, $payData);
 
     public function generateOrderToken();
+
+    public function getOrderInfoTemplate();
 }

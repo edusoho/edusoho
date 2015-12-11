@@ -281,21 +281,21 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->getOrderBySn($sn);
     }
 
-    public function getOrderMessage($order)
-    {
-        $fields                    = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-        $vip                       = $this->getSettingService()->get('vip');
-        $defaultBuyMonth           = $vip['default_buy_months'];
-        $fields['unit']            = $order['data']['unitType'];
-        $fields['duration']        = $order['data']['duration'];
-        $fields['defaultBuyMonth'] = $defaultBuyMonth;
-        $fields['buyType']         = $order['data']['buyType'];
+    // public function getOrderMessage($order)
+    // {
+    //     $fields                    = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
+    //     $vip                       = $this->getSettingService()->get('vip');
+    //     $defaultBuyMonth           = $vip['default_buy_months'];
+    //     $fields['unit']            = $order['data']['unitType'];
+    //     $fields['duration']        = $order['data']['duration'];
+    //     $fields['defaultBuyMonth'] = $defaultBuyMonth;
+    //     $fields['buyType']         = $order['data']['buyType'];
 
-        $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
-        $orderInfo['template'] = 'vip';
+    //     $orderInfo             = $this->getOrderInfo($order['targetId'], $fields);
+    //     $orderInfo['template'] = 'vip';
 
-        return $orderInfo;
-    }
+    //     return $orderInfo;
+    // }
 
     public function updateOrder($id, $fileds)
     {
@@ -343,6 +343,11 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "VipBundle:Vip:orderInfo";
     }
 
     protected function getUserService()

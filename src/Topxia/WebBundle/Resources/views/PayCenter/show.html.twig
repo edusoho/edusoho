@@ -53,7 +53,7 @@
           </div>
         </div>
       </div> #}
-      {% include 'TopxiaWebBundle:PayCenter:' ~ template ~ '.html.twig' %}
+     {{ render(controller(template , {'sn':sn})) }}
       <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="targetType" value="{{order.targetType}}"> 
@@ -105,7 +105,7 @@
           </div>
         </div>
         <div class="form-group text-right">
-          {% include 'TopxiaWebBundle:PayCenter:' ~ template ~ '-cancelled.html.twig' %}
+          {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
           <button class="pay-button btn btn-primary"  type="submit">确认支付</button>
         </div>
       </form>
