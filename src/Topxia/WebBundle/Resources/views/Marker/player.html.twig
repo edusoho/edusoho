@@ -1,18 +1,31 @@
-  <div class="lesson-dashboard" id="lesson-dashboard"
+{% block stylesheets %}
+  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  <style>
+    .lesson-dashboard .dashboard-body
+    {
+      top: 20px;
+      bottom:150px;
+    }
+
+  </style>
+{% endblock %}
+
+  <div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ lesson.courseId }}"
     data-lesson-id="{{ lesson.id }}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
-
-    <div class="dashboard-body">
-      <div class="lesson-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
-          data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
-        {% endif %}
-        {% if setting('storage.video_fingerprint') and app.user %}
-          data-fingerprint="{{ finger_print() }}"
-        {% endif %}
-          data-user-id="{{ app.user.id }}"
-      ></div>
-      <div class="watermarkEmbedded" ></div>
-      <div class="lesson-content-text-body"></div>
+    <div class="dashboard-content">
+      <div class="dashboard-body">
+        <div class="lesson-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+            data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+          {% endif %}
+          {% if setting('storage.video_fingerprint') and app.user %}
+            data-fingerprint="{{ finger_print() }}"
+          {% endif %}
+            data-user-id="{{ app.user.id }}"
+        ></div>
+        <div class="watermarkEmbedded" ></div>
+        <div class="lesson-content-text-body"></div>
+      </div>
     </div>
 </div>
