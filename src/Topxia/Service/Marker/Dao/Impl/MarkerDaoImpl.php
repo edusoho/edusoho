@@ -2,6 +2,7 @@
 namespace Topxia\Service\Marker\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
+use Topxia\Service\Marker\Dao\MarkerDao;
 
 class MarkerDaoImpl extends BaseDao implements MarkerDao
 {

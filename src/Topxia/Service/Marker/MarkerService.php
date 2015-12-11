@@ -1,5 +1,4 @@
 <?php
-
 namespace Topxia\Service\Marker;
 
 interface MarkerService
@@ -12,7 +11,7 @@ interface MarkerService
 
     public function updateMarker($id, $fields);
 
-    public function addMarker($fields);
+    public function addMarker($mediaId, $fields);
 
     public function deleteMarker($id);
 }

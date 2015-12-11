@@ -4,6 +4,7 @@ namespace Topxia\Service\Marker\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Marker\MarkerService;
 
 class MarkerServiceImpl extends BaseService implements MarkerService
 {
@@ -26,8 +27,8 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function updateMarker($id, $fields)
     {
-        if (isset($fields['updateTime']) || $fields['updateTime'] == "") {
-            $fields['updateTime'] = time();
+        if (isset($fields['updatedTime']) || $fields['updatedTime'] == "") {
+            $fields['updatedTime'] = time();
         }
 
         return $this->getMarkerDao()->updateMarker($id, $fields);
@@ -35,11 +36,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function addMarker($mediaId, $fields)
     {
-        $media = $this->getUploadFileService()->getFile($midiaId);
+        // $media = $this->getUploadFileService()->getFile($midiaId);
 
-        if (empty($midiaId) || empty($media)) {
-            throw $this->createServiceException("视频文件不存在！");
-        }
+        // if (empty($midiaId) || empty($media)) {
+        //     throw $this->createServiceException("视频文件不存在！");
+        // }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
             throw $this->createServiceException("请输入弹题时间！");
@@ -48,7 +49,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $marker = array(
             'mediaId'     => $mediaId,
             'createdTime' => time(),
-            'updateTime'  => time(),
+            'updatedTime' => time(),
             'second'      => $fields['second']
         );
 
@@ -86,5 +87,10 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 }
