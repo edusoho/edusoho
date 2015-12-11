@@ -47,10 +47,10 @@ class ArticleController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $article             = $request->request->all();
-            $article['tags']     = array_filter(explode(',', $article['tags']));
-            $article['annexIds'] = array_filter(explode(',', $article['annexIds']));
-            $article             = $this->getArticleService()->createArticle($article);
+            $article                  = $request->request->all();
+            $article['tags']          = array_filter(explode(',', $article['tags']));
+            $article['attachmentIds'] = $article['attachmentIds'];
+            $article                  = $this->getArticleService()->createArticle($article);
 
             return $this->redirect($this->generateUrl('admin_article'));
         }
@@ -83,9 +83,7 @@ class ArticleController extends BaseController
 
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
-        $annexs = $this->getFileService()->getFilesByIds($article['annexIds']);
-
-        $annexNames = $this->parseAnnex($annexs);
+        $attachments = $this->getFileService()->getFilesByIds($article['attachmentIds']);
 
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
@@ -98,7 +96,7 @@ class ArticleController extends BaseController
             'categoryTree' => $categoryTree,
             'category'     => $category,
             'tagNames'     => $tagNames,
-            'annexNames'   => $annexNames
+            'attachments'  => $attachments
         ));
     }
 
@@ -163,20 +161,21 @@ class ArticleController extends BaseController
         ));
     }
 
-    public function annexUploadAction(Request $request)
+    public function attachmentUploadAction(Request $request)
     {
         $fileId = $request->request->get('id');
 
         $file = $this->getFileService()->getFile($fileId);
 
-        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
+        return $this->createJsonResponse($file);
+    }
 
-        $response = array(
-            'fileName' => $parsed['name'],
-            'fileId'   => $file['id']
-        );
+    public function attachmentRemoveAction(Request $request, $id)
+    {
+        $file = $this->getFileService()->getFile($id);
+        $this->getFileService()->deleteFile($id);
 
-        return $this->createJsonResponse($response);
+        return $this->createJsonResponse(true);
     }
 
     public function pictureCropAction(Request $request)
@@ -200,19 +199,6 @@ class ArticleController extends BaseController
             'naturalSize' => $naturalSize,
             'scaledSize'  => $scaledSize
         ));
-    }
-
-    private function parseAnnex($annexs)
-    {
-        $annexNames = array();
-
-        foreach ($annexs as $key => $annex) {
-            $pos = strrpos($annex['uri'], '/');
-
-            $annexNames[$key] = substr($annex['uri'], $pos + 1);
-        }
-
-        return $annexNames;
     }
 
     protected function getArticleService()

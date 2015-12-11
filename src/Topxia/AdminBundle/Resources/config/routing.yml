@@ -1014,9 +1014,13 @@ admin_article_show_upload:
     pattern:  /article/show/upload
     defaults: { _controller: TopxiaAdminBundle:Article:showUpload }
 
-admin_article_annex_upload:
-    pattern:  /article/annex/upload
-    defaults: { _controller: TopxiaAdminBundle:Article:annexUpload }
+admin_article_attachment_upload:
+    pattern:  /article/attachment/upload
+    defaults: { _controller: TopxiaAdminBundle:Article:attachmentUpload }
+
+admin_article_attachment_remove:
+    pattern:  /article/attachment/{id}/remove
+    defaults: { _controller: TopxiaAdminBundle:Article:attachmentRemove }
 
 admin_article_set_property:
     pattern:  /article/set/property/{id}/{property}
