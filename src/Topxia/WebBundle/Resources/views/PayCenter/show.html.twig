@@ -20,40 +20,9 @@
         </button>
         订单已提交，请在４８小时内完成支付！逾期订单将被取消。
       </div>
-     {#  <div class="order-detail-bg  checkout" style="border:none">
-        <div class="order-detail  clearfix">
-          <div class="order-img hidden-xs">
-            {% if order.targetType == "course" and course|default(null) %}
-                <a href="{{ path('course_show', {id:course.id}) }}">
-                  <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}"alt="收费">
-                </a>
-            {% endif %}
-            {% if order.targetType == "vip" %}
-              <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}"alt="收费">
-              </a>
-            {% endif %}
-            {% if order.targetType == "classroom" %}
-              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
-                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="收费">
-              </a>
-            {% endif %}
-            {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') and order.targetType == "coin" %}
-              <a href="javascript:;">
-                <img class="img-responsive" src="{{asset('assets/img/default/classroom-default-213-142.png') }}"alt="收费">
-              </a>
-            {% endif %}
-          </div>
-          <div class="order-info">
-            <p>订单名称：{{ order.title }}</p>
-            <p>订单号：{{order.sn}}</p>
-            <p>
-              订单价格：<span class="pay-rmb">￥{{order.amount}}</span>
-            </p>
-          </div>
-        </div>
-      </div> #}
-     {{ render(controller(template , {'sn':sn})) }}
+      
+      {{ render(controller(template , {'sn':sn})) }}
+
       <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
       <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
         <input type="hidden" name="targetType" value="{{order.targetType}}"> 

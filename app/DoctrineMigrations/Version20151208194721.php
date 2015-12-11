@@ -25,7 +25,7 @@ class Version20151208194721 extends AbstractMigration
             $this->addSql("ALTER TABLE `cash_orders` ADD `token` VARCHAR(50) NULL DEFAULT NULL COMMENT '令牌';");
         }
 
-        if (!$this->isFieldExist('cash_orders', 'targetType')) {
+        if (!$this->isFieldExist('cash_orders', 'data')) {
             $this->addSql("ALTER TABLE `cash_orders` ADD `data` TEXT NULL DEFAULT NULL COMMENT '订单业务数据'");
         }
     }

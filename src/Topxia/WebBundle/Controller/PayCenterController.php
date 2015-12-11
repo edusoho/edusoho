@@ -33,7 +33,6 @@ class PayCenterController extends BaseController
         $processor               = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template']   = $processor->getOrderInfoTemplate();
         $order                   = $processor->getOrderBySn($orderInfo['sn']);
-        // $orderInfo = $processor->getOrderMessage($order);
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -370,11 +369,7 @@ class PayCenterController extends BaseController
                 $payData['paidTime'] = time();
                 $payData['sn']       = $returnArray['out_trade_no'];
 
-                if (isset($order['targetType'])) {
-                    list($success, $order) = $this->getPayCenterService()->pay($payData);
-                } else {
-                    list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-                }
+                list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
                 if ($success) {
                     return $this->createJsonResponse(true);
@@ -447,24 +442,6 @@ class PayCenterController extends BaseController
         $request = Payment::createCloseAuthRequest($params['payment'], $options);
         return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
-
-    // protected function getOrderInfo($order)
-    // {
-    //     $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-
-    //     if ($order['targetType'] == 'vip') {
-    //         $defaultBuyMonth           = $this->setting('vip.default_buy_months');
-    //         $fields['unit']            = $order['data']['unitType'];
-    //         $fields['duration']        = $order['data']['duration'];
-    //         $fields['defaultBuyMonth'] = $defaultBuyMonth;
-    //         $fields['buyType']         = $order['data']['buyType'];
-    //     }
-
-    //     $processor = OrderProcessorFactory::create($order['targetType']);
-    //     $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
-
-    //     return $orderInfo;
-    // }
 
     public function generateOrderToken($order, $params)
     {
