@@ -19,7 +19,9 @@ define(function(require, exports, module) {
 
         _initTagSelect($form);
 
-        _uploadAnnex();
+        _uploadAttachment();
+
+        _removeAttachment();
 
        
 
@@ -151,8 +153,8 @@ define(function(require, exports, module) {
         return validator;
     }
 
-    function _uploadAnnex(){
-        var $annexbtn = $('#article-annex-upload');
+    function _uploadAttachment(){
+        var $annexbtn = $('#article-attachment-upload');
         var formData = $.extend({}, {token:$annexbtn.data('uploadToken')});
         var uploader = WebUploader.create({
            swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
@@ -160,7 +162,7 @@ define(function(require, exports, module) {
            pick: $annexbtn,
            formData: $.extend(formData , {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
            accept: {
-                   title: 'Annex',
+                   title: 'Attachment',
                    extensions: 'txt,docx,doc,xls,xlsx,pptx,ppsx,rar,zip',
             }
         });
@@ -172,19 +174,37 @@ define(function(require, exports, module) {
 
         uploader.on( 'uploadSuccess', function( file, response ) {
                 var url = $annexbtn.data("gotoUrl");
-                var html = $("#article-annex-container").html();
-                var ids = $("#article-annex-ids").val();
+                var html = $("#article-attachment-container").html();
+                var ids = $("#article-attachment-ids").val();
                 $.post(url, response ,function(data){
-                    html += '<p>'+data.fileName+'</p>';
-                    ids += data.fileId+',';
-                $("#article-annex-container").html(html);
-                $("#article-annex-ids").val(ids);
+                    html += "<p>"+data.fileName+ " " + "<a data-url='/admin/article/attachment/"+data.id+"/remove'>移除</a></p>";
+                    html += '<input type="hidden" value="'+data.id+'" id="article-attachment-'+data.id+'" name="attachmentIds[]">';
+                    ids += data.id +',';
+                $("#article-attachment-container").html(html);
+                $("#article-attachment-ids").val(ids);
                 Notify.success('附件上传成功！');
             });
         });
 
         uploader.on( 'uploadError', function( file, response ) {
             Notify.danger('上传失败，请重试！');
+        });
+    }
+
+    function _removeAttachment(){
+        var $container = $('#article-attachment-container');
+        $container.on('click','a',function(){
+            if (!confirm('确认要移除该附件吗？')) return false;
+            $this = $(this);
+            $.post($this.data('url'),function(response){
+                if(response){
+                    $this.parent('p').remove();
+                    Notify.success('删除成功！'); 
+                }
+
+            }).error(function(){
+                Notify.danger('删除失败！');
+            });
         });
     }
 });

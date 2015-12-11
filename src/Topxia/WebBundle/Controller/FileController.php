@@ -23,7 +23,7 @@ class FileController extends BaseController
             if (!FileToolkit::isImageFile($file)) {
                 throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
             }
-        } elseif ($type == 'annex') {
+        } elseif ($type == 'attachment') {
             if (FileToolkit::validateFileExtension($file, 'txt docx doc xls xlsx pptx ppsx rar zip')) {
                 throw new \RuntimeException("您上传的附件支持文件，请重新上传。");
             }

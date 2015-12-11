@@ -9,8 +9,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
     protected $table = 'article';
 
     private $serializeFields = array(
-        'tagIds'   => 'saw',
-        'annexIds' => 'saw'
+        'tagIds'        => 'saw',
+        'attachmentIds' => 'saw'
     );
 
     public function getArticle($id)

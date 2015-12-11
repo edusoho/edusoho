@@ -1,0 +1,5 @@
+{% if article.attachmentIds %}
+	{% for attachment in attachments %}
+	<p><a href="{{ filepath(attachment.uri)}}"><i class="es-icon es-icon-icattachfileblack24px"></i>{{ attachment.fileName }} </a></p>
+	{% endfor %}
+{% endif %}
