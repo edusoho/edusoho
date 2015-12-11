@@ -255,8 +255,9 @@ class RegisterController extends BaseController
             'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
             '_target_path' => $this->getTargetPath($request),
             ));*/
+
             $this->authenticateUser($user);
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->getTargetPath($request));
         }
     }
 
