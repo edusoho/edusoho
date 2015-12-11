@@ -62,7 +62,7 @@ class HeepayRequest extends Request
 
     protected function filterText($text)
     {
-        preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9]*/iu', $text, $results);
+        preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9.]*/iu', $text, $results);
         $title = '';
 
         if ($results) {
