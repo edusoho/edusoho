@@ -5,7 +5,11 @@
 
 
 {% block body %}
-<div class="contain">
+
+  <div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
+    data-course-id="{{ lesson.courseId }}"
+    data-lesson-id="{{ lesson.id }}"
+    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
 
 		{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
 

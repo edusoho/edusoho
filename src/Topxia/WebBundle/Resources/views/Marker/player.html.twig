@@ -10,10 +10,6 @@
   </style>
 {% endblock %}
 
-  <div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
-    data-course-id="{{ lesson.courseId }}"
-    data-lesson-id="{{ lesson.id }}"
-    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
     <div class="dashboard-content">
       <div class="dashboard-body">
         <div class="lesson-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
@@ -25,7 +21,5 @@
             data-user-id="{{ app.user.id }}"
         ></div>
         <div class="watermarkEmbedded" ></div>
-        <div class="lesson-content-text-body"></div>
       </div>
     </div>
-</div>
