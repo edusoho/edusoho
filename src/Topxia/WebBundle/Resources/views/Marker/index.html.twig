@@ -1,0 +1,34 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}驻点管理{% endblock %}
+
+{% set script_controller = 'marker/index' %}
+
+{% block stylesheets %}
+  {{ parent() }}
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block body %}
+<div class="contain">
+
+	<div class="row">
+		<div class="col-md-9">
+			{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
+		</div>
+		<div class="col-md-3">
+			<div class="panel">
+			{% block questions %}qqq{% endblock %}
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-9">
+			<div class="panel">
+			{% block coord %}ccc{% endblock %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

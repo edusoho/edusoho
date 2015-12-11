@@ -960,6 +960,11 @@ course_manage_publish:
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
     methods: [POST]
 
+course_manage_lesson_marker:
+    pattern:  /lesson/{id}/marker/manage
+    defaults: { _controller: TopxiaWebBundle:Marker:manage }
+
+
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list
     defaults: {_controller:TopxiaWebBundle:Announcement:list }
