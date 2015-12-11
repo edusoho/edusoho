@@ -25,13 +25,6 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        $userCount = $this->getUserService()->searchUserCount($conditions);
-        $paginator = new Paginator(
-            $this->get('request'),
-            $userCount,
-            20
-        );
-
         //根据mobile查询user_profile获得userIds
 
         if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile') {
@@ -43,10 +36,20 @@ class UserController extends BaseController
                 $profilesCount
             );
             $userIds = ArrayToolkit::column($userProfiles, 'id');
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-            $conditions['userIds'] = !empty($userIds) ? $userIds : array(0);
+
+            if (!empty($userIds)) {
+                unset($conditions['keywordType']);
+                unset($conditions['keyword']);
+                $conditions['userIds'] = $userIds;
+            }
         }
+
+        $userCount = $this->getUserService()->searchUserCount($conditions);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $userCount,
+            20
+        );
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
