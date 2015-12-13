@@ -1,6 +1,6 @@
 {% set teachers = data('RecommendTeachers',{'count':config.count|default(4)}) %}
   {% if teachers %}
-  <section class="recommend-teacher">
+  <section class="recommend-teacher {{config.background|default("")}}">
     <div class="container">
       <div class="text-line">
         <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>

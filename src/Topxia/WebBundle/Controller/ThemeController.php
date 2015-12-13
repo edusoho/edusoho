@@ -9,7 +9,7 @@ class ThemeController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $themeConfig = $this->getThemeService()->getCurrentThemeConfirmConfig();
+        $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('TopxiaWebBundle:Default:show.html.twig', array(
             'themeConfig'    => $themeConfig['confirmConfig'],

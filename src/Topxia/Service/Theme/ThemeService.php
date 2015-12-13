@@ -6,8 +6,6 @@ interface ThemeService
 {
     public function getCurrentThemeConfig();
 
-    public function getCurrentThemeConfirmConfig();
-
     public function saveCurrentThemeConfig($config);
 
     public function saveConfirmConfig();
@@ -15,8 +13,6 @@ interface ThemeService
     public function resetConfig();
 
     public function isAllowedConfig();
-
-    public function isAllowedGracefulConfig();
 
     public function resetCurrentConfig();
 }
