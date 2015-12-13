@@ -18,6 +18,7 @@ class CashOrdersServiceTest extends BaseTestCase
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
         $this->assertEquals('100.00', $createOrder['amount']);
+
     }
 
     public function testGetOrderBySn()
@@ -46,10 +47,11 @@ class CashOrdersServiceTest extends BaseTestCase
             'payment'     => 'none',
             'note'        => 'hello',
             'userId'      => '1',
-            'createdTime' => time()
+            'createdTime' => time(),
+            'token'       => '12345678'
         );
         $createOrder = $this->getCashOrdersService()->addOrder($order);
-        $order       = $this->getCashOrdersService()->getOrderByToken($createOrder['sn']);
+        $order       = $this->getCashOrdersService()->getOrderByToken($createOrder['token']);
         $this->assertEquals('100.00', $order['amount']);
 
     }
