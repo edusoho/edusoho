@@ -3,18 +3,16 @@
 
 {% set script_controller = 'marker/index' %}
 
-
 {% block body %}
 
   <div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ lesson.courseId }}"
     data-lesson-id="{{ lesson.id }}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
-
 		{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
 
-		{% include 'TopxiaWebBundle:Marker:question.html.twig' %}
-
+		{{ render(controller('TopxiaWebBundle:Marker:question', {courseId:course.id,lessonId:lesson.id})) }}
+		
 		{% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
 </div>
 {% endblock %}
