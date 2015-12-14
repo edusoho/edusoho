@@ -12,11 +12,13 @@ interface QuestionMarkerService
 
     public function findQuestionMarkersByQuestionId($questionId);
 
-    public function addQuestionMarker($questionMarker);
+    public function addQuestionMarker($questionId, $markerId, $seq);
 
     public function updateQuestionMarker($id, $fields);
 
     public function deleteQuestionMarker($id);
+
+    public function sortQuestionMarkers(array $ids);
 
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit);
 }

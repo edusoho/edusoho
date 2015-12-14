@@ -18,5 +18,7 @@ interface QuestionMarkerDao
 
     public function deleteQuestionMarker($id);
 
+    public function updateQuestionMarkersSeq($markerId, $seq);
+
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit);
 }

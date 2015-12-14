@@ -9,11 +9,16 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
 {
     protected $table = 'question_marker';
 
+    private $serializeFields = array(
+        'answer' => 'json',
+        'metas'  => 'json'
+    );
+
     public function getQuestionMarker($id)
     {
         $sql            = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $questionMarker = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $questionMarker ?: null;
+        return $questionMarker ? $this->createSerializer()->unserialize($questionMarker, $this->serializeFields) : null;
     }
 
     public function findQuestionMarkersByIds($ids)
@@ -25,26 +30,27 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         $marks           = str_repeat('?,', count($ids) - 1).'?';
         $sql             = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         $questionMarkers = $this->getConnection()->fetchAll($sql, $ids);
-        return $questionMarkers;
+        return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
 
     public function findQuestionMarkersByMarkerId($markerId)
     {
         $sql             = "SELECT * FROM {$this->table} where markerId = ?";
         $questionMarkers = $this->getConnection()->fetchAll($sql, array($markerId));
-        return $questionMarkers;
+        return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
 
     public function findQuestionMarkersByQuestionId($questionId)
     {
         $sql             = "SELECT * FROM {$this->table} where questionId = ?";
         $questionMarkers = $this->getConnection()->fetchAll($sql, array($questionId));
-        return $questionMarkers;
+        return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
 
     public function addQuestionMarker($questionMarker)
     {
-        $affected = $this->getConnection()->insert($this->table, $questionMarker);
+        $questionMarker = $this->createSerializer()->serialize($questionMarker, $this->serializeFields);
+        $affected       = $this->getConnection()->insert($this->table, $questionMarker);
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert questionMarker error.');
@@ -53,8 +59,15 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         return $this->getQuestionMarker($this->getConnection()->lastInsertId());
     }
 
+    public function updateQuestionMarkersSeq($markerId, $seq)
+    {
+        $sql = "UPDATE {$this->table} SET seq = seq + 1 WHERE markerId = ? AND seq >= ? ";
+        return $this->getConnection()->executeQuery($sql, array($markerId, $seq));
+    }
+
     public function updateQuestionMarker($id, $fields)
     {
+        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getQuestionMarker($id);
     }
@@ -74,9 +87,9 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
                         ->setFirstResult($start)
                         ->setMaxResults($limit)
                         ->orderBy($orderBy[0], $orderBy[1]);
-        $questions = $builder->execute()->fetchAll() ?: array();
+        $questionMarkers = $builder->execute()->fetchAll() ?: array();
 
-        return $questions;
+        return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
 
     public function _createSearchQueryBuilder($conditions)

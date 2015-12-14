@@ -27,9 +27,28 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->getQuestionMarkerDao()->findQuestionMarkersByQuestionId($questionId);
     }
 
-    public function addQuestionMarker($questionMarker)
+    public function addQuestionMarker($questionId, $markerId, $seq)
     {
-        return $this->getQuestionMarkerDao()->addQuestionMarker($questionMarker);
+        $question = $this->getQuestionService()->getQuestion($questionId);
+
+        if (!empty($question)) {
+            $questionMarker = array(
+                'markerId'    => $markerId,
+                'questionId'  => $questionId,
+                'seq'         => $seq,
+                'type'        => $question['type'],
+                'stem'        => $question['stem'],
+                'answer'      => $question['answer'],
+                'analysis'    => $question['analysis'],
+                'metas'       => $question['metas'],
+                'difficulty'  => $question['difficulty'],
+                'createdTime' => time()
+
+            );
+            $questionMarkers = $this->findQuestionMarkersByMarkerId($markerId);
+            $this->getQuestionMarkerDao()->updateQuestionMarkersSeq($markerId, $seq);
+            return $this->getQuestionMarkerDao()->addQuestionMarker($questionMarker);
+        }
     }
 
     public function updateQuestionMarker($id, $fields)
@@ -74,5 +93,10 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->createService('Question.QuestionService');
     }
 }

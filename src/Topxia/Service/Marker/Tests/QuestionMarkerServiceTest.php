@@ -8,111 +8,215 @@ class QuestionMarkerServiceTest extends BaseTestCase
 {
     public function testGetQuestionMarker()
     {
-        $questionMarker = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker);
+        $question       = $this->getQuestionService()->createQuestion($question);
+        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
 
         $result = $this->getQuestionMarkerService()->getQuestionMarker($questionMarker['id']);
-        $this->assertEquals('Math', $result['type']);
+        $this->assertEquals('single_choice', $result['type']);
         $this->assertEquals(1, $result['markerId']);
-        $this->assertEquals(1, $result['questionId']);
+        $this->assertEquals($question['id'], $result['questionId']);
 
     }
 
     public function testFindQuestionMarkersByIds()
     {
-        $questionMarker1 = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker2 = array(
-            'markerId'   => 1,
-            'questionId' => 2,
-            'type'       => 'Math'
+        $question1 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
+        $question  = $this->getQuestionService()->createQuestion($question);
+        $question1 = $this->getQuestionService()->createQuestion($question1);
 
-        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker1);
-        $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker2);
-        $results         = $this->getQuestionMarkerService()->findQuestionMarkersByIds(array(1, 2));
+        $questionMarker  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
 
+        $results = $this->getQuestionMarkerService()->findQuestionMarkersByIds(array(1, 2));
         $this->assertNotNull($results);
 
     }
 
     public function testFindQuestionMarkersByMarkerId()
     {
-        $questionMarker1 = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker2 = array(
-            'markerId'   => 1,
-            'questionId' => 2,
-            'type'       => 'Math'
+        $question1 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
+        $question  = $this->getQuestionService()->createQuestion($question);
+        $question1 = $this->getQuestionService()->createQuestion($question1);
 
-        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker1);
-        $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker2);
+        $questionMarker  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
         $results         = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId(1);
         $this->assertCount(2, $results);
     }
 
     public function testFindQuestionMarkersByQuestionId()
     {
-        $questionMarker1 = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker2 = array(
-            'markerId'   => 1,
-            'questionId' => 2,
-            'type'       => 'Math'
+        $question1 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
+        $question  = $this->getQuestionService()->createQuestion($question);
+        $question1 = $this->getQuestionService()->createQuestion($question1);
 
-        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker1);
-        $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker2);
-        $results         = $this->getQuestionMarkerService()->findQuestionMarkersByQuestionId(1);
+        $questionMarker  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
+        $results         = $this->getQuestionMarkerService()->findQuestionMarkersByQuestionId($question['id']);
         $this->assertCount(1, $results);
     }
 
     public function testAddQuestionMarker()
     {
-        $questionMarker = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
+        $question1 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 1,
+            'copyId'     => 1
 
-        $result = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker);
+        );
+        $question  = $this->getQuestionService()->createQuestion($question);
+        $question1 = $this->getQuestionService()->createQuestion($question1);
 
-        $this->assertEquals('Math', $result['type']);
-        $this->assertEquals(1, $result['markerId']);
-        $this->assertEquals(1, $result['questionId']);
+        $question        = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $question1       = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
+        $questionMarker  = $this->getQuestionMarkerService()->getQuestionMarker($question['id']);
+        $questionMarker1 = $this->getQuestionMarkerService()->getQuestionMarker($question1['id']);
+
+        $this->assertEquals($questionMarker['seq'], 2);
+        $this->assertEquals($questionMarker1['seq'], 1);
 
     }
 
     public function testUpdateQuestionMarker()
     {
-        $questionMarker = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker);
+        $question       = $this->getQuestionService()->createQuestion($question);
+        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
 
         $updateQuestionMarker = array(
-            'stem' => 'test1'
+            'stem'  => 'test1',
+            "metas" => array("爱", "测", "额", "U")
         );
 
         $result = $this->getQuestionMarkerService()->updateQuestionMarker($questionMarker['id'], $updateQuestionMarker);
@@ -121,14 +225,23 @@ class QuestionMarkerServiceTest extends BaseTestCase
 
     public function testDeleteQuestionMarker()
     {
-        $questionMarker = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'normal',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker);
-        $resultStart    = $resultEnd    = $this->getQuestionMarkerService()->getQuestionMarker($questionMarker['id']);
+        $question       = $this->getQuestionService()->createQuestion($question);
+        $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $resultStart    = $this->getQuestionMarkerService()->getQuestionMarker($questionMarker['id']);
         $this->getQuestionMarkerService()->deleteQuestionMarker($questionMarker['id']);
         $resultEnd = $this->getQuestionMarkerService()->getQuestionMarker($questionMarker['id']);
         $this->assertNotNull($resultStart);
@@ -137,25 +250,42 @@ class QuestionMarkerServiceTest extends BaseTestCase
 
     public function testSearchQuestionMarkers()
     {
-        $questionMarker1 = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math',
-            'stem'       => 'test1',
-            'difficulty' => 'hard'
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'hard',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
+        $question1 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
+            'difficulty' => 'hard',
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 1,
+            'copyId'     => 1
 
-        $questionMarker2 = array(
-            'markerId'   => 1,
-            'questionId' => 2,
-            'type'       => 'Math',
-            'stem'       => 'test2',
-            'difficulty' => 'hard'
         );
+        $question  = $this->getQuestionService()->createQuestion($question);
+        $question1 = $this->getQuestionService()->createQuestion($question1);
 
-        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker1);
-        $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker2);
-        $conditions      = array(
+        $question  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
+        $question1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
+
+        $conditions = array(
             'difficulty' => 'hard'
         );
         $results = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('createdTime', 'DESC'), 0, 10);
@@ -164,36 +294,57 @@ class QuestionMarkerServiceTest extends BaseTestCase
 
     public function testSortQuestionMarker()
     {
-        $questionMarker1 = array(
-            'markerId'   => 1,
-            'questionId' => 1,
-            'type'       => 'Math',
-            'stem'       => 'test1',
+        $question = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
             'difficulty' => 'hard',
-            'seq'        => 1
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 0,
+            'copyId'     => 1
         );
-
-        $questionMarker2 = array(
-            'markerId'   => 1,
-            'questionId' => 2,
-            'type'       => 'Math',
-            'stem'       => 'test1',
+        $question1 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
             'difficulty' => 'hard',
-            'seq'        => 2
-        );
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 1,
+            'copyId'     => 1
 
-        $questionMarker3 = array(
-            'markerId'   => 1,
-            'questionId' => 3,
-            'type'       => 'Math',
-            'stem'       => 'test2',
+        );
+        $question2 = array(
+            'type'       => 'single_choice',
+            'stem'       => 'question.',
             'difficulty' => 'hard',
-            'seq'        => 3
-        );
+            'answer'     => array('answer'),
+            'target'     => 'course-1',
+            "choices"    => array("爱", "测", "额", "恶"),
+            'uncertain'  => 0,
+            "analysis"   => '',
+            "score"      => '2',
+            "submission" => 'submit',
+            "parentId"   => 1,
+            'copyId'     => 1
 
-        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker1);
-        $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker2);
-        $questionMarker3 = $this->getQuestionMarkerService()->addQuestionMarker($questionMarker3);
+        );
+        $question  = $this->getQuestionService()->createQuestion($question);
+        $question1 = $this->getQuestionService()->createQuestion($question1);
+        $question2 = $this->getQuestionService()->createQuestion($question2);
+
+        $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 3);
+        $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
+        $questionMarker3 = $this->getQuestionMarkerService()->addQuestionMarker($question2['id'], 1, 2);
         $ids             = array($questionMarker3['id'], $questionMarker1['id'], $questionMarker2['id']);
         $this->getQuestionMarkerService()->sortQuestionMarkers($ids);
         $results         = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId(1);
@@ -207,5 +358,10 @@ class QuestionMarkerServiceTest extends BaseTestCase
     protected function getQuestionMarkerService()
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 }
