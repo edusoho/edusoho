@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\QuestionMarker;
+namespace Topxia\Service\Marker;
 
 interface QuestionMarkerService
 {

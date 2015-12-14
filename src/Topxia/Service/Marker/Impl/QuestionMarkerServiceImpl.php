@@ -3,7 +3,7 @@
 namespace Topxia\Service\Marker\Impl;
 
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\Question\QuestionMarkerService;
+use Topxia\Service\Marker\QuestionMarkerService;
 
 class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerService
 {
@@ -14,7 +14,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     public function findQuestionMarkersByIds($ids)
     {
-        return $this->findQuestionMarkersByIds($ids);
+        return $this->getQuestionMarkerDao()->findQuestionMarkersByIds($ids);
     }
 
     public function findQuestionMarkersByMarkerId($markerId)
@@ -40,9 +40,9 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
     public function deleteQuestionMarker($id)
     {
         $questionMarker = $this->getQuestionMarker($id);
-        $this->getCourseDao()->deleteCourse($id);
+        $this->getQuestionMarkerDao()->deleteQuestionMarker($id);
         $questionMarkerLog = "删除驻点问题\"{$questionMarker['stem']}\"";
-        $this->getLogService()->info('questionMarker', 'delete', $courseLog);
+        $this->getLogService()->info('questionMarker', 'delete', $questionMarkerLog);
         return true;
     }
 
@@ -53,7 +53,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     protected function getQuestionMarkerDao()
     {
-        return $this->createDao('Marker.QuestionMarker');
+        return $this->createDao('Marker.QuestionMarkerDao');
     }
 
     protected function getLogService()
