@@ -64,9 +64,33 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
                 'price' => $classroom['price'],
                 'picture' =>$this->coverPic($classroom['middlePicture'], 'course-large.png')
             );
+        } else if ("vip" == $targetType) {
+            $result = $this->getVipOrderInfo($targetId);
+            if (isset($result['error'])) {
+                return $this->createErrorResponse($result['error']['name'], $result['error']['message']);
+            }
+            $payOrderInfo = $result;
         }
 
         return $payOrderInfo;
+    }
+
+    private function getVipOrderInfo($levelId) {
+        if (! $this->controller->isinstalledPlugin("Vip")) {
+            return $this->createErrorResponse('no_vip', '网校未安装vip插件');
+        }
+        
+        $level = $this->getLevelService()->getLevel($levelId);
+        
+        $buyType = $this->controller->setting('vip.buyType');
+        if (empty($buyType)) {
+            $buyType = 10;
+        }
+
+        return array(
+                'level' => $level,
+                'buyType' => $buyType
+        );
     }
 
     public function getPayOrder()
@@ -251,12 +275,35 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         $this->controller->getAuthService()->changePayPassword($user['id'], $userPass, $newPayPassword);
     }
 
+    private function initPayFieldsByTargetType($user, $targetType, $targetId) {
+        $fields = $this->request->request->all();
+        if ("vip" == $targetType) {
+            $payVip = $this->controller->getLevelService()->getLevel($targetId);
+            if (!$payVip) {
+                return $this->createErrorResponse('error', '购买的vip类型不存在!');
+            }
+            $vip = $this->controller->getVipService()->getMemberByUserId($user['id']);
+            if ($vip) {
+                $currentVipLevel = $this->controller->getLevelService()->getLevel($vip["levelId"]);
+                if ($payVip["seq"] >= $currentVipLevel["seq"]) {
+                    $fields["buyType"] = "upgrade";
+                } else {
+                    return $this->createErrorResponse('error', '会员类型不能降级付费!');
+                }
+                $fields["buyType"] = "renew";
+            } else {
+                $fields["buyType"] = "new";
+            }
+        }
+
+        return $fields;
+    }
+
     public function createOrder()
     {
         $targetType = $this->getParam('targetType');
         $targetId = $this->getParam('targetId');
         $payment = $this->getParam('payment', 'alipay');
-        $fields = $this->request->request->all();
 
         if(empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip","classroom")) ) {
             return $this->createErrorResponse('error', '参数不正确');
@@ -278,6 +325,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
             $cashRate = $coinSetting["cash_rate"];
         }
 
+        $fields = $this->initPayFieldsByTargetType($user, $targetType, $targetId);
+        if (isset($fields['error'])) {
+            return $this->createErrorResponse($fields['error']['name'], $fields['error']['message']);
+        }
         if ($payment == "coin") {
             try {
                 $this->checkUserSetPayPassword($user, $fields["payPassword"]);
@@ -677,5 +728,10 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
     private function getClassroomService() 
     {
         return $this->controller->getService('Classroom:Classroom.ClassroomService');
+    }
+
+    private function getLevelService()
+    {
+        return $this->controller->getService('Vip:Vip.LevelService');
     }
 }

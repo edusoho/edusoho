@@ -9,6 +9,8 @@ interface OrderDao
 
     public function getOrderBySn($sn);
 
+    public function getOrderByToken($token);
+
     public function findOrdersByIds(array $ids);
 
     public function addOrder($order);

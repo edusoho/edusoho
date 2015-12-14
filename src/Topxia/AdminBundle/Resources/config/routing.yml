@@ -162,7 +162,7 @@ admin_user_create_mobile_check:
 admin_user_create_email_or_mobile_check:
     pattern:  /user/create/email_or_mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:emailOrMobileCheck }
-    
+
 admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
@@ -573,6 +573,31 @@ admin_setting_theme_change:
     pattern:  /setting/theme/change
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
+
+admin_theme_manage:
+    pattern:  /theme/{uri}/manage
+    defaults: { _controller: TopxiaAdminBundle:Theme:manageIndex }
+
+admin_reset_currentTheme_config:
+    pattern:  /theme/{uri}/config/reset
+    defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
+
+admin_save_themes_config:
+    pattern:  /theme/{uri}/config/save
+    defaults: { _controller: TopxiaAdminBundle:Theme:saveConfig }
+    methods:  [POST]
+
+admin_confirm_themes_config:
+    pattern:  /theme/{uri}/config/confirm
+    defaults: { _controller: TopxiaAdminBundle:Theme:confirmConfig }
+
+admin_themes_show:
+    pattern:  /theme/{uri}/show
+    defaults: { _controller: TopxiaAdminBundle:Theme:show }
+
+admin_themes_config_edit:
+    pattern:  /theme/{uri}/config/edit
+    defaults: { _controller: TopxiaAdminBundle:Theme:themeConfigEdit }
 
 admin_setting_user_center:
     pattern:  /setting/user-center
@@ -1337,3 +1362,7 @@ admin_batch_notification_send:
     pattern: /batch_notification/send/{id}
     defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
     methods:  [POST]
+
+admin_feedback:
+    pattern: /feedback
+    defaults: { _controller: TopxiaAdminBundle:Default:feedback }

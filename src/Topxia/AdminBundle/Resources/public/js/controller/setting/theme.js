@@ -11,7 +11,6 @@ define(function(require, exports, module) {
                 window.location.reload();
             });
         });
-
     };
 
 });

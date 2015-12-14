@@ -136,7 +136,7 @@
           </div>
 
           {% if courses %}
-          <div class="alert alert-warning pull-right">若班级课程被移除，则该课程内所有学习数据将被清空。</div>
+          <div class="alert alert-warning pull-right">若{{setting("classroom.name")|default("班级")}}课程被移除，则该课程内所有学习数据将被清空。</div>
           <div class="form-group">
             <div class="col-md-offset-9 col-md-3 controls">
               <div class="mbl pull-right">共计: &nbsp; &nbsp;

@@ -42,14 +42,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return ArrayToolkit::index($courses, 'id');
     }
 
-    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit)
-    {
-        $courses = CourseSerialize::unserializes(
-            $this->getCourseDao()->findCoursesByTagIdsAndStatus($tagIds, $status, $start, $limit)
-        );
-        return ArrayToolkit::index($courses, 'id');
-    }
-
+    // todo 和searchCourses合并
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit)
     {
         $courses = CourseSerialize::unserializes(
@@ -85,11 +78,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($this->getCourseDao()->getCourse($id));
     }
 
-    public function getCoursesCount()
-    {
-        return $this->getCourseDao()->getCoursesCount();
-    }
-
+    // TODO searchCoursesCount
     public function findCoursesCountByLessThanCreatedTime($endTime)
     {
         return $this->getCourseDao()->findCoursesCountByLessThanCreatedTime($endTime);
@@ -140,6 +129,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
             return !empty($value);
         }
+
         );
 
         if (isset($conditions['date'])) {
@@ -206,6 +196,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $conditions;
     }
 
+    // TODO searchCoursesCount
     public function findUserLearnCourses($userId, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
@@ -224,6 +215,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // TODO searchCourse
     public function findUserLearnCoursesNotInClassroom($userId, $start, $limit, $onlyPublished = true)
     {
         $members = $this->getMemberDao()->findMembersNotInClassroomByUserIdAndRole($userId, 'student', $start, $limit, $onlyPublished);
@@ -233,6 +225,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $courses;
     }
 
+    // TODO 和findUserLearnCourseCountNotInClassroom合并
     public function findUserLearnCourseCount($userId, $onlyPublished = true)
     {
         return $this->getMemberDao()->findMemberCountByUserIdAndRole($userId, 'student', $onlyPublished);
@@ -403,8 +396,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException('缺少必要字段，创建课程失败！');
         }
 
-        $course = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
-
+        $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
         $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
@@ -451,6 +443,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return CourseSerialize::unserialize($updatedCourse);
     }
 
+    // TODO refactor
     public function updateCourseCounter($id, $counter)
     {
         $fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum', 'giveCredit'));
@@ -485,7 +478,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'maxRate'       => 0,
             'locked'        => 0,
             'tryLookable'   => 0,
-            'tryLookTime'   => 0
+            'tryLookTime'   => 0,
+            'buyable'       => 0
         ));
 
         if (!empty($fields['about'])) {
@@ -498,6 +492,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             array_walk($fields['tags'], function (&$item, $key) {
                 $item = (int) $item['id'];
             }
+
             );
         }
 
@@ -574,6 +569,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $course;
     }
 
+    // TODO hitCourse 和 waveCourse合并
     public function hitCourse($id)
     {
         $checkCourse = $this->getCourse($id);
@@ -1044,7 +1040,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit'    => 0,
             'requireCredit' => 0,
             'liveProvider'  => 'none',
-            'copyId'        => 0
+            'copyId'        => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0,
+            'suggestHours'  => '0.0'
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -1088,7 +1087,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $lesson['chapterId'] = empty($lastChapter) ? 0 : $lastChapter['id'];
 
         if ($lesson['type'] == 'live') {
-            $lesson['endTime'] = $lesson['startTime'] + $lesson['length'] * 60;
+            $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
+            $lesson['suggestHours'] = $lesson['length'] / 60;
         }
 
         if (array_key_exists('copyId', $lesson)) {
@@ -1232,7 +1232,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             'giveCredit'    => 0,
             'requireCredit' => 0,
             'homeworkId'    => 0,
-            'exerciseId'    => 0
+            'exerciseId'    => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0,
+            'suggestHours'  => '1.0'
         ));
 
         if (isset($fields['title'])) {
@@ -1242,7 +1245,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields['type'] = $lesson['type'];
 
         if ($fields['type'] == 'live' && isset($fields['startTime'])) {
-            $fields['endTime'] = $fields['startTime'] + $fields['length'] * 60;
+            $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
+            $fields['suggestHours'] = $fields['length'] / 60;
         }
 
         if (array_key_exists('media', $fields)) {
@@ -1854,6 +1858,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         uasort($items, function ($item1, $item2) {
             return $item1['seq'] > $item2['seq'];
         }
+
         );
         return $items;
     }
@@ -2189,7 +2194,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createNotFoundException();
         }
 
-        if (!in_array($course['status'], array('published', 'closed'))) {
+        if (!in_array($course['status'], array('published'))) {
             throw $this->createServiceException('不能加入未发布课程');
         }
 
@@ -2702,6 +2707,34 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $courseMembers = $this->getMemberDao()->findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
         return $courseMembers;
+    }
+
+    public function updateCourseLessonReplay($id, $fields)
+    {
+        $replayCourse = $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
+
+        if (empty($replayCourse)) {
+            throw $this->createServiceException('录播回放不存在，更新失败！');
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('hidden', 'title'));
+
+        $updatedCourseLessonReplay = $this->getCourseLessonReplayDao()->updateCourseLessonReplay($id, $fields);
+
+        return $updatedCourseLessonReplay;
+    }
+
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields)
+    {
+        $lesson = $this->getLesson($lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException('直播课时不存在，更新失败！');
+        }
+
+        $fields = ArrayToolkit::parts($fields, array('hidden'));
+
+        return $this->getCourseLessonReplayDao()->updateCourseLessonReplayByLessonId($lessonId, $fields);
     }
 
     protected function isClassroomMember($course, $userId)
