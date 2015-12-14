@@ -152,7 +152,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function updateLesson($id, $fields)
     {
-        $fields['updateTime'] = time();
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getLesson($id);
     }
