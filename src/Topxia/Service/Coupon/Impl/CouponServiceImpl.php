@@ -100,8 +100,8 @@ class CouponServiceImpl extends BaseService implements CouponService
                     'userId'      => $coupon['userId'],
                     'createdTime' => time()
                 ));
-
-                $message = '恭喜您获得'.$rewardName.'奖励：'.$inviteSetting[$settingName].'元面值抵价优惠券一张，已发至您“我的卡包”中。';
+                $mycardUrl = $this->generateUrl('my_card', array('cardType' => 'coupon'));
+                $message   = "恭喜您获得".$rewardName."奖励：".$inviteSetting[$settingName]."元面值抵价优惠券一张，已发至您<a href='{$mycardUrl}'>“我的卡包”</a>中。";
                 $this->getNotificationService()->notify($userId, 'default', $message);
                 return $coupon;
             } else {
