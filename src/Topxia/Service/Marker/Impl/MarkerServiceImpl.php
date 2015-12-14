@@ -61,11 +61,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $marker = $this->getMarker($id);
 
         if (empty($marker)) {
-            throw $this->createServiceException("弹题不存在，操作失败。");
+            throw $this->createServiceException("驻点不存在，操作失败。");
         }
 
         $this->getMarkerDao()->deleteMarker($id);
-        $this->getLogService()->info('Marker', 'delete', "弹题#{$id}永久删除");
+        $this->getLogService()->info('Marker', 'delete', "驻点#{$id}永久删除");
 
         return true;
     }
