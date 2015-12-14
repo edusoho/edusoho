@@ -106,3 +106,11 @@ course_manage_student_score_edit:
 course_manage_student_grades_cards:
     pattern:  /course/{courseId}/student/{userId}/grades/cards
     defaults: { _controller: MoocWebBundle:CourseScore:studentGradesCards }
+
+course_manage_lesson_create_testpaper:
+    pattern:  /course/{id}/manage/lesson/create/testpaper
+    defaults: { _controller: MoocWebBundle:CourseLessonManage:createTestpaper }
+    
+course_manage_lesson_edit_testpaper:
+    pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
+    defaults: { _controller: MoocWebBundle:CourseLessonManage:editTestpaper }
