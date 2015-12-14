@@ -51,7 +51,7 @@ class OperationSettingController extends BaseController
             'promoted_user_value'       => '',
             'promote_user_value'        => '',
             'deadline'                  => 90,
-            'inviteInfomation_template' => '这是网站名称{{siteName}}这是邀请链接{{registerUrl}}'
+            'inviteInfomation_template' => '{{registerUrl}}'
         );
 
         if ($request->getMethod() == 'POST') {
