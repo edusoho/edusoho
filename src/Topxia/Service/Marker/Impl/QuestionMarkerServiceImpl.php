@@ -46,9 +46,24 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return true;
     }
 
+    public function sortQuestionMarkers(array $ids)
+    {
+        $seq = 0;
+
+        foreach ($ids as $itemId) {
+            $seq++;
+            $item   = $this->getQuestionMarker($itemId);
+            $fields = array('seq' => $seq);
+
+            if ($fields['seq'] != $item['seq']) {
+                $this->updateQuestionMarker($item['id'], $fields);
+            }
+        }
+    }
+
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit)
     {
-        return $this->searchQuestionMarkers($conditions, $orderBy, $start, $limit);
+        return $this->getQuestionMarkerDao()->searchQuestionMarkers($conditions, $orderBy, $start, $limit);
     }
 
     protected function getQuestionMarkerDao()

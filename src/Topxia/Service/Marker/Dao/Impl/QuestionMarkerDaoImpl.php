@@ -94,6 +94,7 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, 'question_marker')
                         ->andWhere("id IN ( :ids )")
+                        ->andWhere('seq = :seq')
                         ->andWhere('markerId = :markerId')
                         ->andWhere('questionId = :questionId')
                         ->andWhere('difficulty = :difficulty')
