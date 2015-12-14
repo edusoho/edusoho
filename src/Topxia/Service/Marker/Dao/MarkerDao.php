@@ -1,7 +1,8 @@
 <?php
-namespace Topxia\Service\Marker;
 
-interface MarkerService
+namespace Topxia\Service\Marker\Dao;
+
+interface MarkerDao
 {
     public function getMarker($id);
 
@@ -11,7 +12,7 @@ interface MarkerService
 
     public function updateMarker($id, $fields);
 
-    public function addMarker($mediaId, $fields);
+    public function addMarker($fields);
 
     public function deleteMarker($id);
 }
