@@ -18,19 +18,26 @@ class MarkerController extends BaseController
     {
         $data = $request->request->all();
 
-        if (!isset($fileds['markerId'])) {
+        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
+        $question           = $this->getQuestionService()->getQuestion($data['questionId']);
+
+        if (empty($question)) {
+            return $this->createMessageResponse('error', '该题目不存在!');
+        }
+
+        if (!isset($data['markerId'])) {
             $fields = array(
                 'second' => $data['second']
             );
-            $marker = $this->getMarkerService()->addMarker($data['mediaId'], $fields);
-            //$question = $this->getQuestionMarkerService()->addQuestionMarker();
+            $marker   = $this->getMarkerService()->addMarker($data['mediaId'], $fields);
+            $question = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], 1);
             return $this->createJsonResponse($question);
         } else {
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                //$question = $this->getQuestionMarkerService()->addQuestionMarker();
-                //$questions = $this->getQuestionMarkerService()->updateQuestionMarkerSeq($question['seq']);
+                $question  = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                $questions = $this->getQuestionMarkerService()->updateQuestionMarkerSeq($question['seq']);
                 return $this->createJsonResponse($question);
             } else {
                 return $this->createJsonResponse(false);
@@ -40,7 +47,10 @@ class MarkerController extends BaseController
 
     public function deleteQuestionMarker(Request $request)
     {
-        $data = $request->request->all();
+        $data               = $request->request->all();
+        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
+        $result             = $this->getMarkerService()->deleteQuestionMarker($data['questionId']);
+        return $this->createJsonResponse($result);
     }
 
     protected function getCourseService()
@@ -56,5 +66,10 @@ class MarkerController extends BaseController
     protected function getQuestionMarkerService()
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerService');
+    }
+
+    protected function getQuestionService()
+    {
+        return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 }
