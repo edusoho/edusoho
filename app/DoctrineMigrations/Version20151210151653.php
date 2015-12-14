@@ -25,7 +25,7 @@ class Version20151210151653 extends AbstractMigration
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='驻点';
 
-            CREATE TABLE IF NOT EXISTS `pluck` (
+            CREATE TABLE IF NOT EXISTS `question_marker` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
                 `questionId` int(10) unsigned NOT NULL COMMENT '问题Id',
@@ -41,10 +41,10 @@ class Version20151210151653 extends AbstractMigration
             PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='弹题';
 
-            CREATE TABLE IF NOT EXISTS `pluck_result` (
+            CREATE TABLE IF NOT EXISTS `question_marker_result` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
-                `pluckId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '弹题ID',
+                `questionMarkerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '弹题ID',
                 `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '做题人ID',
                 `status` enum('none','right','partRight','wrong','noAnswer') NOT NULL DEFAULT 'none' COMMENT '结果状态',
                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
