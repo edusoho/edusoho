@@ -136,7 +136,7 @@ class CourseLessonManageController extends BaseController
             }
 
             $lesson = $this->getCourseService()->createLesson($lesson);
-            return $this->render('TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig', array(
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson
             ));
