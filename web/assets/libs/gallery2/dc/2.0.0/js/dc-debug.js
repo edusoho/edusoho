@@ -8852,7 +8852,7 @@ define("gallery2/dc/2.0.0/js/dc-debug", [], function (require, exports, module) 
                     _chartBody = _chart.svg()
                         .append('g')
                         .attr('class', 'heatmap')
-                        .attr('transform', 'translate(' + _chart.margins().left + ',' + _chart.margins().top + ')');
+                        .attr('transform', 'translate(' + 70 + ',' + _chart.margins().top + ')');
 
                     return _chart._doRedraw();
                 };
