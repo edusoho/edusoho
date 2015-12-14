@@ -1,0 +1,26 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+
+{% block title %}详情{% endblock %}
+
+{% block body %}
+
+  <table class="table table-hover table-striped" >
+  <thead>
+  	<tr>
+  	<th>用户</th>
+  	<th>消费总额</th>
+  	</tr>
+  </thead>
+  <tbody>
+  	{% for detail in details %}
+		  <tr>
+  		<td>{{detail.nickname}}</td>
+  		<td>{{detail.totalPrice}}</td>
+  		</tr>
+  	{% endfor %}	
+  </tbody>
+  </table>
+    
+
+{% endblock %}
