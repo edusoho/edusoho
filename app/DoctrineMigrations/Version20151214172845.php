@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -42,20 +42,22 @@ class Version20151214172845 extends AbstractMigration
             $this->addSql("
               ALTER TABLE `coupon` CHANGE `targetType` `targetType` varchar(64) NUll DEFAULT NULL COMMENT '使用对象类型';
             ");
-           $this->addSql("
+            $this->addSql("
               ALTER TABLE `coupon` CHANGE `targetId` `targetId` INT(10) UNSIGNED NULL DEFAULT 0 COMMENT '使用对象';
             ");
-           $this->addSql("
+            $this->addSql("
               ALTER TABLE `coupon` CHANGE `status` `status` enum('used','unused','receive') NOT NULL COMMENT '使用状态';
             ");
+
             if (!$this->isFieldExist('coupon', 'receiveTime')) {
-               $this->addSql("
+                $this->addSql("
               ALTER TABLE `coupon` ADD `receiveTime` INT(10) NULL DEFAULT 0 COMMENT '接收时间';
             ");
+            }
         }
-    }
-    if (!$this->isTableExist('invite_record')) {
-           $this->addSql("
+
+        if (!$this->isTableExist('invite_record')) {
+            $this->addSql("
             CREATE TABLE `invite_record` (
                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                 `inviteUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请者',
@@ -66,11 +68,14 @@ class Version20151214172845 extends AbstractMigration
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='邀请记录表';
             ");
-    }
+        }
 
-    $this->addSql("
-            ALTER TABLE `user` ADD `inviteCode` varchar(255) NUll DEFAULT NUll COMMENT '邀请码';
-    ");
+        if (!$this->isFieldExist('user', 'inviteCode')) {
+            $this->addSql("
+                ALTER TABLE `user` ADD `inviteCode` varchar(255) NUll DEFAULT NUll COMMENT '邀请码';
+            ");
+        }
+    }
 
     protected function isTableExist($table)
     {
@@ -92,6 +97,5 @@ class Version20151214172845 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
-
     }
 }
