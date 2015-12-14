@@ -19,16 +19,8 @@ class CardController extends BaseController
             return $this->createMessageResponse('error', '用户未登录，请先登录！');
         }
 
-        if ($cardType == 'coupon' || empty($cardType)) {
-            if (!$this->isPluginInstalled('Coupon') || ($this->isPluginInstalled('Coupon') && version_compare($this->getWebExtension()->getPluginVersion('Coupon'), '1.3.3', '<='))) {
-                return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
-                    'cards' => null
-                ));
-            }
-        }
-
         if ($cardType == 'moneyCard') {
-            if (!$this->isPluginInstalled('Coupon') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
+            if (!$this->isPluginInstalled('moneyCard') || ($this->isPluginInstalled('moneyCard') && version_compare($this->getWebExtension()->getPluginVersion('moneyCard'), '1.1.1', '<='))) {
                 return $this->render('TopxiaWebBundle:Card:index.html.twig', array(
                     'cards' => null
                 ));
@@ -85,7 +77,7 @@ class CardController extends BaseController
             $useableCards = array();
 
             foreach ($cardDetails as $key => $value) {
-                if ($value['targetType'] == $targetType && ($value['targetId'] == 0 || $value['targetId'] == $targetId)) {
+                if (($value['targetType'] == 'all' || $value['targetType'] == $targetType) && ($value['targetId'] == 0 || $value['targetId'] == $targetId)) {
                     if ($value['type'] == 'minus') {
                         $cardDetails[$key]['truePrice'] = $totalPrice - $value['rate'];
                         $useableCards[]                 = $cardDetails[$key];
@@ -130,8 +122,7 @@ class CardController extends BaseController
         $card     = $this->getCardService()->getCardByCardIdAndCardType($cardId, $cardType);
 
         $cardDetail = $this->getCardService()->findCardDetailByCardTypeAndCardId($cardType, $cardId);
-
-        $response = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
+        $response   = $this->render('TopxiaWebBundle:Card:receive-show.html.twig', array(
             'cardType'   => $cardType,
             'cardId'     => $cardId,
             'cardDetail' => $cardDetail

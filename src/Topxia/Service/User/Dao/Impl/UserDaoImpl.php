@@ -61,6 +61,21 @@ class UserDaoImpl extends BaseDao implements UserDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function getUserByInviteCode($inviteCode)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE inviteCode = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($inviteCode)) ?: null;
+    }
+
+    public function createInviteCode($code)
+    {
+        $affected = $this->getConnection()->insert($this->table, $code);
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert InviteCode error.');
+        }
+        return $this->getUser($this->getConnection()->lastInsertId());
+    }
+    
     public function searchUsers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
@@ -91,6 +106,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             }
             return true;
         });
+
         if (isset($conditions['roles'])) {
             $conditions['roles'] = "%{$conditions['roles']}%";
         }
@@ -139,6 +155,7 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('roles LIKE :roles')
             ->andWhere('roles = :role')
             ->andWhere('UPPER(nickname) LIKE :nickname')
+            ->andWhere('id =: id')
             ->andWhere('loginIp = :loginIp')
             ->andWhere('createdIp = :createdIp')
             ->andWhere('approvalStatus = :approvalStatus')
@@ -155,6 +172,8 @@ class UserDaoImpl extends BaseDao implements UserDao
             ->andWhere('verifiedMobile = :verifiedMobile')
             ->andWhere('type LIKE :type')
             ->andWhere('id IN ( :userIds)')
+            ->andWhere('inviteCode = :inviteCode')
+            ->andWhere('inviteCode != :NoInviteCode')
             ->andWhere('id NOT IN ( :excludeIds )');
             
         if (array_key_exists('hasVerifiedMobile', $conditions)) {

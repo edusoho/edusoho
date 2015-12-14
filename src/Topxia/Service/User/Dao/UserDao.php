@@ -16,6 +16,10 @@ interface UserDao
 
 	public function findUsersByIds(array $ids);
 
+	public function getUserByInviteCode($code);//
+
+	public function createInviteCode($code);//
+
 	public function searchUsers($conditions, $orderBy, $start, $limit);
 
 	public function searchUserCount($conditions);
