@@ -138,6 +138,19 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->getDispatcher()->dispatch('order.service.paid', new ServiceEvent($order));
         }
 
+        if ($this->isFirstOrderByUserId($order['userId'])) {
+            $inviteRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
+
+            if (!empty($inviteRecord)) {
+                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteRecord['inviteUserId'], 'pay');
+            }
+
+            if (!empty($inviteCoupon)) {
+                $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['userId'], array('inviteUserCardId' => $card['cardId']));
+            }
+        }
+
         return array($success, $order);
     }
 
@@ -185,6 +198,12 @@ class OrderServiceImpl extends BaseService implements OrderService
     {
         $conditions = $this->_prepareSearchConditions($conditions);
         return $this->getOrderDao()->analysisAmount($conditions);
+    }
+
+    public function analysisTotalPrice($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisTotalPrice($conditions);
     }
 
     public function analysisAmountDataByTime($startTime, $endTime)
@@ -556,7 +575,18 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function _prepareSearchConditions($conditions)
     {
+        $tmpConditions = array();
+
+        if (isset($conditions['coinAmount'])) {
+            $tmpConditions['coinAmount'] = $conditions['coinAmount'];
+        }
+
+        if (isset($conditions['amount'])) {
+            $tmpConditions['amount'] = $conditions['amount'];
+        }
+
         $conditions = array_filter($conditions);
+        $conditions = array_merge($conditions, $tmpConditions);
 
         if (isset($conditions['date'])) {
             $dates = array(
@@ -636,6 +666,27 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
     }
 
+    private function isFirstOrderByUserId($userId)
+    {
+        $conditionsAmount = array(
+            'userId' => $userId,
+            'amount' => 0.00
+        );
+        $conditionsCoinAmount = array(
+            'userId'     => $userId,
+            'coinAmount' => 0.00
+        );
+
+        $orderAmount     = $this->searchOrders($conditionsAmount, array('createdTime', 'DESC'), 0, 2);
+        $orderCoinAmount = $this->searchOrders($conditionsCoinAmount, array('createdTime', 'DESC'), 0, 2);
+
+        if (count($orderAmount) + count($orderCoinAmount) == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected function getLogService()
     {
         return $this->createService('System.LogService');
@@ -644,6 +695,11 @@ class OrderServiceImpl extends BaseService implements OrderService
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getCardService()
+    {
+        return $this->createService('Card.CardService');
     }
 
     protected function getUserService()
@@ -668,7 +724,12 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon:Coupon.CouponService');
+        return $this->createService('Coupon.CouponService');
+    }
+
+    protected function getInviteRecordService()
+    {
+        return $this->createService('User.InviteRecordService');
     }
 
     protected function getPayCenterService()

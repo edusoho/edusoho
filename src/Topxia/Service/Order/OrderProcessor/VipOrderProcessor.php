@@ -162,10 +162,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $amount = $totalPrice;
         //优惠码优惠价格
-        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
+        if ($orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $orderData["couponCode"],
                 'vip',

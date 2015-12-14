@@ -96,10 +96,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $amount = $totalPrice;
 
         //优惠码优惠价格
-        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if ($fields["couponCode"] && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'course',
@@ -233,7 +231,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService');
+        return ServiceKernel::instance()->createService('Coupon.CouponService');
     }
 
     protected function getAppService()
