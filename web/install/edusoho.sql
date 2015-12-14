@@ -1576,3 +1576,32 @@ CREATE TABLE `card` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+DROP TABLE IF EXISTS `card`;
+CREATE TABLE `coupon` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) NOT NULL COMMENT '优惠码',
+  `type` enum('minus','discount') NOT NULL COMMENT '优惠方式',
+  `status` enum('used','unused','receive') NOT NULL COMMENT '使用状态',
+  `rate` float(10,2) unsigned NOT NULL COMMENT '若优惠方式为打折，则为打折率，若为抵价，则为抵价金额',
+  `batchId` int(10) unsigned  NULL DEFAULT NULL COMMENT '批次号',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用者',
+  `deadline` int(10) unsigned NOT NULL COMMENT '失效时间',
+  `targetType` varchar(64) NUll DEFAULT NULL COMMENT '使用对象类型',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用对象',
+  `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单号',
+  `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
+  `createdTime` int(10) unsigned NOT NULL,
+  `receiveTime` INT(10) unsigned NULL DEFAULT '0'  COMMENT '接收时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='优惠码表';
+
+DROP TABLE IF EXISTS `invite_record`;
+CREATE TABLE `invite_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `inviteUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请者',
+  `invitedUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '被邀请者',
+  `inviteTime` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请时间',
+  `inviteUserCardId` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请者获得奖励的卡的ID',
+  `invitedUserCardId` int(11) unsigned NULL DEFAULT NULL COMMENT '被邀请者获得奖励的卡的ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='邀请记录表';
