@@ -103,5 +103,4 @@ interface TestpaperService
     public function updateTestpaperItems($testpaperId, $items);
 
     public function getItemsCountByParams($conditions, $groupBy = '');
-
 }
