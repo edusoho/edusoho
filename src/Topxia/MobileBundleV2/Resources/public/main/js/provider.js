@@ -60,6 +60,16 @@ appProvider.provider('appRouter', function($stateProvider) {
 	};
 
 	this.init = function() {
+    var routingConfig = app.routingConfig || {};
+
+    var state = $stateProvider.state;
+    $stateProvider.state = function(name, args) {
+      if (routingConfig.hasOwnProperty(name)) {
+        args = routingConfig[name];
+      }
+      return state.call($stateProvider, name, args);
+    };
+    
 		$stateProvider.state("slideView",{
             abstract: true,
             views : {
