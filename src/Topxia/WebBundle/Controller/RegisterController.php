@@ -277,35 +277,6 @@ class RegisterController extends BaseController
         }
     }
 
-    protected function getTargetPath($request)
-    {
-        if ($request->query->get('goto')) {
-            $targetPath = $request->query->get('goto');
-        } else
-
-        if ($request->getSession()->has('_target_path')) {
-            $targetPath = $request->getSession()->get('_target_path');
-        } else {
-            $targetPath = $request->headers->get('Referer');
-        }
-
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
-            return $this->generateUrl('homepage');
-        }
-
-        $url = explode('?', $targetPath);
-
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
-            return $this->generateUrl('homepage');
-        }
-
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
-        }
-
-        return $targetPath;
-    }
-
     public function emailVerifyAction(Request $request, $token)
     {
         $token = $this->getUserService()->getToken('email-verify', $token);
