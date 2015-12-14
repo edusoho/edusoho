@@ -240,6 +240,7 @@ CREATE TABLE `course` (
   `watchLimit` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '视频观看次数限制',
   `singleBuy` INT(10) UNSIGNED NOT NULL DEFAULT '1' COMMENT '加入班级后课程能否单独购买' ,
   `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `freeStartTime` int(10) NOT NULL DEFAULT '0',
   `freeEndTime` int(10) NOT NULL DEFAULT '0',
   `approval` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否需要实名认证',
@@ -250,6 +251,7 @@ CREATE TABLE `course` (
   `buyable` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否开放购买',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
 
 DROP TABLE IF EXISTS `announcement`;
 CREATE TABLE `announcement` (
@@ -337,12 +339,14 @@ CREATE TABLE `course_lesson` (
   `liveProvider` int(10) unsigned NOT NULL DEFAULT '0',
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
   `suggestHours` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '建议学习时长',
   `testMode` ENUM('normal', 'realTime') NULL DEFAULT 'normal' COMMENT '考试模式',
   `testStartTime` INT(10) NULL DEFAULT '0' COMMENT '实时考试开始时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+ALTER TABLE `course_lesson` ADD INDEX `updatedTime` (`updatedTime`);
 
 DROP TABLE IF EXISTS `course_lesson_learn`;
 CREATE TABLE `course_lesson_learn` (
@@ -1044,10 +1048,13 @@ CREATE TABLE `user` (
   `newNotificationNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '未读消息数',
   `createdIp` varchar(64) NOT NULL DEFAULT '' COMMENT '注册IP',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  `inviteCode` varchar(255) NUll DEFAULT NUll COMMENT '邀请码',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `nickname` (`nickname`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+ALTER TABLE `user` ADD INDEX `updatedTime` (`updatedTime`);
 
 DROP TABLE IF EXISTS `user_approval`;
 CREATE TABLE `user_approval` (
@@ -1198,6 +1205,9 @@ CREATE TABLE `cash_orders` (
   `payment` enum('none','alipay','wxpay') NOT NULL DEFAULT 'none',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
   `note` varchar(255) NOT NULL DEFAULT '',
+  `targetType` VARCHAR(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
+  `token` VARCHAR(50) NULL DEFAULT NULL COMMENT '令牌',
+  `data` TEXT NULL DEFAULT NULL COMMENT '订单业务数据',
   `userId` int(10) unsigned NOT NULL DEFAULT '0',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -1605,3 +1615,43 @@ CREATE TABLE `invite_record` (
   `invitedUserCardId` int(11) unsigned NULL DEFAULT NULL COMMENT '被邀请者获得奖励的卡的ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='邀请记录表';
+
+DROP TABLE IF EXISTS `cash_change`;
+CREATE TABLE `cash_change` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `userId` int(10) unsigned NOT NULL,
+  `amount` double(10,2) NOT NULL DEFAULT '0.00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+DROP TABLE IF EXISTS `coupon`;
+CREATE TABLE `coupon` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) NOT NULL COMMENT '优惠码',
+  `type` enum('minus','discount') NOT NULL COMMENT '优惠方式',
+  `status` enum('used','unused','receive') NOT NULL COMMENT '使用状态',
+  `rate` float(10,2) unsigned NOT NULL COMMENT '若优惠方式为打折，则为打折率，若为抵价，则为抵价金额',
+  `batchId` int(10) unsigned  NULL DEFAULT NULL COMMENT '批次号',
+  `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用者',
+  `deadline` int(10) unsigned NOT NULL COMMENT '失效时间',
+  `targetType` varchar(64) NUll DEFAULT NULL COMMENT '使用对象类型',
+  `targetId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用对象',
+  `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单号',
+  `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
+  `createdTime` int(10) unsigned NOT NULL,
+  `receiveTime` INT(10) unsigned NULL DEFAULT '0'  COMMENT '接收时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='优惠码表';
+
+DROP TABLE IF EXISTS `invite_record`;
+CREATE TABLE `invite_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `inviteUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请者',
+  `invitedUserId` int(11) unsigned NULL DEFAULT NULL COMMENT '被邀请者',
+  `inviteTime` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请时间',
+  `inviteUserCardId` int(11) unsigned NULL DEFAULT NULL COMMENT '邀请者获得奖励的卡的ID',
+  `invitedUserCardId` int(11) unsigned NULL DEFAULT NULL COMMENT '被邀请者获得奖励的卡的ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='邀请记录表';
+
+
