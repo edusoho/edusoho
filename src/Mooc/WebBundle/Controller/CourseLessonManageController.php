@@ -6,6 +6,208 @@ use Topxia\WebBundle\Controller\CourseLessonManageController as TopxiaCourseLess
 
 class CourseLessonManageController extends TopxiaCourseLessonManageController
 {
+    public function editAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException("课时(#{$lessonId})不存在！");
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            if ($fields['media']) {
+                $fields['media'] = json_decode($fields['media'], true);
+            }
+
+            if ($fields['second']) {
+                $fields['length'] = $this->textToSeconds($fields['minute'], $fields['second']);
+                unset($fields['minute']);
+                unset($fields['second']);
+            }
+
+            $fields['free'] = empty($fields['free']) ? 0 : 1;
+            $lesson         = $this->getCourseService()->updateLesson($course['id'], $lesson['id'], $fields);
+            $this->getCourseService()->deleteCourseDrafts($course['id'], $lesson['id'], $this->getCurrentUser()->id);
+
+            $file = false;
+
+            if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $lesson['mediaStatus'] = $file['convertStatus'];
+
+                if ($file['type'] == "document" && $file['convertStatus'] == "none") {
+                    $convertHash = $this->getUploadFileService()->reconvertFile(
+                        $file['id'],
+                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                    );
+                }
+            }
+
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course'     => $course,
+                'lesson'     => $lesson,
+                'file'       => $file,
+                'seq_number' => $fields['seq_number']
+            ));
+        }
+
+        $file = null;
+
+        if ($lesson['mediaId']) {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+            if (!empty($file)) {
+                $lesson['media'] = array(
+                    'id'     => $file['id'],
+                    'status' => $file['convertStatus'],
+                    'source' => 'self',
+                    'name'   => $file['filename'],
+                    'uri'    => ''
+                );
+            } else {
+                $lesson['media'] = array('id' => 0, 'status' => 'none', 'source' => '', 'name' => '文件已删除', 'uri' => '');
+            }
+        } else {
+            $lesson['media'] = array(
+                'id'     => 0,
+                'status' => 'none',
+                'source' => $lesson['mediaSource'],
+                'name'   => $lesson['mediaName'],
+                'uri'    => $lesson['mediaUri']
+            );
+        }
+
+        list($lesson['minute'], $lesson['second']) = $this->secondsToText($lesson['length']);
+
+        $user       = $this->getCurrentUser();
+        $userId     = $user['id'];
+        $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+        $filePath   = "courselesson/{$course['id']}";
+        $fileKey    = "{$filePath}/".$randString;
+        $convertKey = $randString;
+
+        $targetType = 'courselesson';
+        $targetId   = $course['id'];
+        $draft      = $this->getCourseService()->findCourseDraft($courseId, $lessonId, $userId);
+        $setting    = $this->setting('storage');
+        // if ($setting['upload_mode'] == 'local') {
+        //     // $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+        //     //     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+        //     //     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+        //     // );
+        // } else {
+
+        // }
+        $lesson['title'] = str_replace(array('"', "'"), array('&#34;', '&#39;'), $lesson['title']);
+
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
+            'course'         => $course,
+            'lesson'         => $lesson,
+            'file'           => $file,
+            'targetType'     => $targetType,
+            'targetId'       => $targetId,
+            'filePath'       => $filePath,
+            'fileKey'        => $fileKey,
+            'convertKey'     => $convertKey,
+            'storageSetting' => $setting,
+            'features'       => $features,
+            'draft'          => $draft
+        ));
+    }
+
+    // @todo refactor it.
+    public function createAction(Request $request, $id)
+    {
+        $course   = $this->getCourseService()->tryManageCourse($id);
+        $parentId = $request->query->get('parentId');
+
+        if ($request->getMethod() == 'POST') {
+            $lesson             = $request->request->all();
+            $lesson['courseId'] = $course['id'];
+
+            if ($lesson['media']) {
+                $lesson['media'] = json_decode($lesson['media'], true);
+            }
+
+            if (is_numeric($lesson['second'])) {
+                $lesson['length'] = $this->textToSeconds($lesson['minute'], $lesson['second']);
+                unset($lesson['minute']);
+                unset($lesson['second']);
+            }
+
+            $seq_number = $lesson['seq_number'];
+            $lesson     = $this->getCourseService()->createLesson($lesson);
+            $file       = false;
+
+            if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
+                $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+                if ($file['type'] == "document" && $file['convertStatus'] == "none") {
+                    $convertHash = $this->getUploadFileService()->reconvertFile(
+                        $file['id'],
+                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                    );
+                }
+
+                $lesson['mediaStatus'] = $file['convertStatus'];
+            }
+
+            //  if ($shortcut == 'true')
+            //  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();
+            //else
+            $lessonId = 0;
+            $this->getCourseService()->deleteCourseDrafts($id, $lessonId, $this->getCurrentUser()->id);
+
+            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+                'course'     => $course,
+                'lesson'     => $lesson,
+                'file'       => $file,
+                'seq_number' => $seq_number
+            ));
+        }
+
+        $user       = $this->getCurrentUser();
+        $userId     = $user['id'];
+        $randString = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 12);
+        $filePath   = "courselesson/{$course['id']}";
+        $fileKey    = "{$filePath}/".$randString;
+        $convertKey = $randString;
+
+        $targetType = 'courselesson';
+        $targetId   = $course['id'];
+        $draft      = $this->getCourseService()->findCourseDraft($targetId, 0, $userId);
+        $setting    = $this->setting('storage');
+        //      if ($setting['upload_mode'] == 'local') {
+        //          $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
+        //           'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
+        //           'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
+        // );
+
+        //      } else {
+
+        //      }
+
+        $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
+
+        return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
+            'course'         => $course,
+            'targetType'     => $targetType,
+            'targetId'       => $targetId,
+            'filePath'       => $filePath,
+            'fileKey'        => $fileKey,
+            'convertKey'     => $convertKey,
+            'storageSetting' => $setting,
+            'features'       => $features,
+            'parentId'       => $parentId,
+            'draft'          => $draft
+        ));
+    }
+
     public function createTestPaperAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
