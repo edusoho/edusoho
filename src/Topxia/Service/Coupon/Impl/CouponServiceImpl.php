@@ -83,7 +83,7 @@ class CouponServiceImpl extends BaseService implements CouponService
                     'rate'        => $inviteSetting[$settingName],
                     'userId'      => $userId,
                     'batchId'     => null,
-                    'deadline'    => time() + ($inviteSetting['deadline'] - 1) * 24 * 3600,
+                    'deadline'    => strtotime(date('Y-m-d')) + $inviteSetting['deadline'] * 24 * 3600,
                     'targetType'  => 'all',
                     'targetId'    => 0,
                     'createdTime' => time()
