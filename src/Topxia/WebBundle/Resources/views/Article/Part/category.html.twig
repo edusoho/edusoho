@@ -19,10 +19,12 @@
       {% for l,cs in categories if cs %}
         <ul class="clearfix">
           {% for c in cs %}
+          {% if c.published == 1|default(0) %}
             {% if loop.index == 1 %}
               <li class="all"><a href="{{ path('article_category', {categoryCode:nextCode}) }}">全部</a></li>
             {% endif %}
             <li class="{% if c.id in activeIds %}{% set nextCode = c.code %}active{% endif %}"><a href="{{ path('article_category', {categoryCode:c.code}) }}">{{ c.name }}</a></li>
+          {% endif %}
           {% endfor %}
         </ul>
       {% endfor %}
