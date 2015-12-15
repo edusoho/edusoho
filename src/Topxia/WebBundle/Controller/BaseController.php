@@ -155,9 +155,7 @@ abstract class BaseController extends Controller
     {
         if ($request->query->get('goto')) {
             $targetPath = $request->query->get('goto');
-        } else
-
-        if ($request->getSession()->has('_target_path')) {
+        } elseif ($request->getSession()->has('_target_path')) {
             $targetPath = $request->getSession()->get('_target_path');
         } else {
             $targetPath = $request->headers->get('Referer');
