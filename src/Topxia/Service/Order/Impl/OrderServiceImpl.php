@@ -200,6 +200,12 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisAmount($conditions);
     }
 
+    public function analysisCoinAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisCoinAmount($conditions);
+    }
+
     public function analysisTotalPrice($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
