@@ -1,5 +1,6 @@
 <div class="toolbar toolbar-open">
-	<form class="form-inline well well-sm" style="margin-top:20px;"action="" method="get" novalidate>
+	<form class="form-inline well well-sm mark-from" style="margin-top:20px;" action="{{path('course_lesson_question_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
+	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 		<div class="form-group">
 			<select class="form-control" name="target" style="width:150px;">
 				{{ select_options(targetChoices, app.request.query.get('target'))}}
@@ -22,17 +23,12 @@
       			<th>操作</th>
       		</tr>
       	</thead>
-      	<tbody>
-      		{# {% for question in questions %}
-           {% include 'TopxiaWebBundle:Marker:question-tr.html.twig' %}
-        {% else %}
-      		<tr>
-      			<td colspan="20">
-      				<div class="empty">一道题都没有，请点击右上角按钮，按不同的题型录入题目</div>
-      			</td>
-      		</tr>
-      		{% endfor %} #}
+      	<tbody class="question-tr">
+      		{% include 'TopxiaWebBundle:Marker:question-tr.html.twig' %}
       	</tbody>
       </table>
 </div>
+
+
+<script>app.load('marker/question')</script>
 
