@@ -175,6 +175,10 @@ abstract class BaseController extends Controller
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
+        if (strpos($url[0], $request->getPathInfo()) > -1) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
         if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
             || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
             || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
