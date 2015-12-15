@@ -11,10 +11,10 @@
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
   		{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
 
-  		<div class="question" data-url="{{ path('course_lesson_question_list')}}"></div>
+  		<div class="question" data-url="{{ path('course_lesson_question_list',{courseId:course.id,lessonId:lesson.id})}}"></div>
 
   		{% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
   	</div>
-
 	<div class="modal"></div>
+
 {% endblock %}

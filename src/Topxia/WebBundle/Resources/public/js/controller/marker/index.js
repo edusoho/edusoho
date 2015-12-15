@@ -13,7 +13,7 @@ define(function(require, exports, module) {
         var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
         $("#lesson-video-content").html(html);
 
-        $.post($('.question').data('url'),{'courseId':courseId,'lessonId':lessonId},function(response){
+        $.get($('.question').data('url'),function(response){
         	$('.question').html(response);
         })
     }

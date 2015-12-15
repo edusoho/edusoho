@@ -21,7 +21,7 @@ class MarkerController extends BaseController
         $course                      = $this->getCourseService()->tryManageCourse($courseId);
         $lesson                      = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $conditions                  = $request->query->all();
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions);
+        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
             'course'        => $course,
             'lesson'        => $lesson,
@@ -36,7 +36,7 @@ class MarkerController extends BaseController
         $course                      = $this->getCourseService()->tryManageCourse($courseId);
         $lesson                      = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $conditions                  = $request->request->all();
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions);
+        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
             'course'    => $course,
             'paginator' => $paginator,
@@ -53,7 +53,7 @@ class MarkerController extends BaseController
         return $choices;
     }
 
-    protected function getPaginatorAndQuestion($request, $conditions)
+    protected function getPaginatorAndQuestion($request, $conditions, $course)
     {
         if (empty($conditions['target'])) {
             $conditions['targetPrefix'] = "course-{$course['id']}";

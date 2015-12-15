@@ -1,6 +1,6 @@
 <div class="toolbar toolbar-open">
 	<form class="form-inline well well-sm mark-from" style="margin-top:20px;" action="{{path('course_lesson_question_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
-	<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">	
 		<div class="form-group">
 			<select class="form-control" name="target" style="width:150px;">
 				{{ select_options(targetChoices, app.request.query.get('target'))}}
@@ -13,22 +13,18 @@
 		<button class="btn btn-primary btn-sm">搜索</button>
 	</form>
 
-      <table class="table table-striped table-hover" id="quiz-table">
-      	<thead>
-      		<tr>
-      			<th width="10%"></th>
-      			<th width="40%">题干</th>
-      			<th>类型</th>
-      			<th>难度</th>
-      			<th>操作</th>
-      		</tr>
-      	</thead>
-      	<tbody class="question-tr">
-      		{% include 'TopxiaWebBundle:Marker:question-tr.html.twig' %}
-      	</tbody>
-      </table>
+	<table class="table table-striped table-hover" id="quiz-table">
+		<thead>
+			<tr>
+				<th width="10%"></th>
+				<th width="40%">题干</th>
+				<th>类型</th>
+				<th>难度</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody class="question-tr">{% include 'TopxiaWebBundle:Marker:question-tr.html.twig' %}</tbody>
+	</table>
 </div>
-
-
 <script>app.load('marker/question')</script>
 

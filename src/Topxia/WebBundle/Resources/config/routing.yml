@@ -972,7 +972,6 @@ course_lesson_question_search:
     pattern:  /course/{courseId}/lesson/{lessonId}/question/search
     defaults: { _controller: TopxiaWebBundle:Marker:search }
 
-
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list
     defaults: {_controller:TopxiaWebBundle:Announcement:list }
