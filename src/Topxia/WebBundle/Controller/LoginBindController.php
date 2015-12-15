@@ -11,7 +11,7 @@ class LoginBindController extends BaseController
     public function indexAction(Request $request, $type)
     {
         if ($request->query->has('_target_path')) {
-            if (!in_array($request->query->get('_target_path'), $this->getBlacklist())) {
+            if (!in_array($request->query->get('_target_path', $this->generateUrl('homepage')), $this->getBlacklist())) {
                 $request->getSession()->set('_target_path', $request->query->get('_target_path'));
             }
         }
@@ -195,7 +195,7 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
-        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+        $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
 
         response:
         return $this->createJsonResponse($response);
