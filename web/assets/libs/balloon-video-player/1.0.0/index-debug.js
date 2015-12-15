@@ -12919,36 +12919,32 @@ define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(
         }
         return target;
       };
-
-    videojs.plugin('pluck', function(options) {
-
-      var settings, video, div, img;
-      settings = extend(defaults, options);
-
-      /* Grab the necessary DOM elements */
-      video = this.el();
-      
-      div = document.getElementsByClassName('vjs-pluck')[0];
-      if(div == undefined){
-        // create the pluck element
+      createDom = function(video,text){
         div = document.createElement('div');
         div.className = 'vjs-pluck';
         span = document.createElement('span');
-        span.innerHTML = settings.text;
+        span.innerHTML = text;
         span.className = 'vjs-pluck-text';
         div.appendChild(span);
-        
-        div.style.opacity = options.opacity;
         video.appendChild(div);
-      }
+        return div;
+      };
+
+    videojs.plugin('pluck', function(options) {
+      var settings, video, div, img;
+      settings = extend(defaults, options);
+
+      video = this.el();
+      div = document.getElementsByClassName('vjs-pluck')[0];
 
       if(settings.display == false){
-        div.style.visibility='hidden';
+        if(div != undefined){
+          div.style.visibility='hidden';
+        }
       }else{
+        div = div == undefined?createDom(video,settings.text):div;
         div.style.visibility='visible';
       }
-
-      //video.oncontextmenu = function(){alert("Hello!");}
     });
   })(videojs);
 });

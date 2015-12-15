@@ -94,7 +94,7 @@ define(function(require, exports, module) {
                     var currentTime = player.currentTime();
                     var timelimit = self.get('timelimit');
                     if(timelimit>0 && timelimit<currentTime){
-                        self.isPlaying()?player.pause():'';
+                        self.isPlaying() && player.pause();
                         player.currentTime(timelimit);
                         player.pluck({
                             text: "免费试看结束，购买后可完整观看",
@@ -114,7 +114,7 @@ define(function(require, exports, module) {
                 player.on("play", function(e){
                     self.trigger("playing", e);
                     player.pluck({
-                        text: "免费试看结束，购买后可完整观看",
+                        text: "",
                         display:false
                     });
                 });
