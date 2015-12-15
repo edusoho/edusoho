@@ -6,6 +6,7 @@ require("balloon-video-player/1.0.0/src/plugins/fingerprint/fingerprint-debug");
 require("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-selector-debug");
 require("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug");
 require("balloon-video-player/1.0.0/src/plugins/markers/markers-debug");
+require("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug");
 
 
 });
@@ -12890,6 +12891,65 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
 
      videojs.plugin('markers', registerVideoJsMarkersPlugin);
 
+  })(videojs);
+});
+
+define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(require, exports, module){
+  (function() {
+    var defaults = {
+          text: 'Owned_Stamp.png',
+          opacity: 100,
+          display:true,
+      },
+      extend = function() {
+        var args, target, i, object, property;
+        args = Array.prototype.slice.call(arguments);
+        target = args.shift() || {};
+        for (i in args) {
+          object = args[i];
+          for (property in object) {
+            if (object.hasOwnProperty(property)) {
+              if (typeof object[property] === 'object') {
+                target[property] = extend(target[property], object[property]);
+              } else {
+                target[property] = object[property];
+              }
+            }
+          }
+        }
+        return target;
+      };
+
+    videojs.plugin('pluck', function(options) {
+
+      var settings, video, div, img;
+      settings = extend(defaults, options);
+
+      /* Grab the necessary DOM elements */
+      video = this.el();
+      
+      div = document.getElementsByClassName('vjs-pluck')[0];
+      if(div == undefined){
+        // create the pluck element
+        div = document.createElement('div');
+        div.className = 'vjs-pluck';
+        span = document.createElement('span');
+        span.innerHTML = settings.text;
+        span.className = 'vjs-pluck-text';
+        div.appendChild(span);
+        
+        div.style.opacity = options.opacity;
+        video.appendChild(div);
+      }
+
+      if(settings.display == false){
+        div.style.visibility='hidden';
+      }else{
+        div.style.visibility='visible';
+      }
+
+      //video.oncontextmenu = function(){alert("Hello!");}
+    });
   })(videojs);
 });
 
