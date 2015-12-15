@@ -273,7 +273,7 @@ class RegisterController extends BaseController
             ));*/
 
             $this->authenticateUser($user);
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->getTargetPath($request));
         }
     }
 
