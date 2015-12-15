@@ -60,40 +60,28 @@ class RegisterController extends BaseController
                 return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
             }
 
-            if (!empty($registration['invite_code'])) {
-                $registration['invite_code'] = $registration['invite_code'];
-            }
-
             $user = $this->getAuthService()->register($registration);
 
-            if (!isset($registration['nickname'])) {
-                return $this->render("TopxiaWebBundle:Register:nickname-update.html.twig", array('user' => $user));
-            } else {
-                $authSettings = $this->getSettingService()->get('auth', array());
+            $authSettings = $this->getSettingService()->get('auth', array());
 
-                if (($authSettings && array_key_exists('email_enabled', $authSettings) && ($authSettings['email_enabled'] == 'closed')) || !$this->isEmptyVeryfyMobile($user)) {
-                    $this->authenticateUser($user);
-                }
-
-                $goto = $this->generateUrl('register_submited', array(
-                    'id'   => $user['id'],
-                    'hash' => $this->makeHash($user),
-                    'goto' => $this->getTargetPath($request)
-                ));
-
-                if ($this->getAuthService()->hasPartnerAuth()) {
-                    $this->authenticateUser($user);
-                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-                }
-
-                $mailerSetting = $this->getSettingService()->get('mailer');
-
-                if (!$mailerSetting['enabled'] && $this->isEmptyVeryfyMobile($user)) {
-                    return $this->redirect($this->getTargetPath($request));
-                }
-
-                return $this->redirect($goto);
+            if (($authSettings
+                && array_key_exists('email_enabled', $authSettings)
+                && ($authSettings['email_enabled'] == 'closed'))
+                || !$this->isEmptyVeryfyMobile($user)) {
+                $this->authenticateUser($user);
             }
+
+            $goto = $this->generateUrl('register_submited', array(
+                'id'   => $user['id'],
+                'hash' => $this->makeHash($user),
+                'goto' => $this->getTargetPath($request)
+            ));
+
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+            }
+
+            return $this->redirect($goto);
         }
 
         $inviteCode = '';
@@ -111,47 +99,6 @@ class RegisterController extends BaseController
             'isRegisterEnabled' => $registerEnable,
             'registerSort'      => array(),
             '_target_path'      => $this->getTargetPath($request)
-        ));
-    }
-
-    public function nicknameUpdateAction(Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $registration = $request->request->all();
-            $this->getAuthService()->changeNickname($registration['id'], $registration['nickname']);
-            $user = $this->getUserService()->getUser($registration['id']);
-
-            $authSettings = $this->getSettingService()->get('auth', array());
-
-            if (($authSettings && array_key_exists('email_enabled', $authSettings) && ($authSettings['email_enabled'] == 'closed')) || !$this->isEmptyVeryfyMobile($user)) {
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
-            }
-
-            $goto = $this->generateUrl('register_submited', array(
-                'id'   => $user['id'],
-                'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request)
-            ));
-
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
-                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-            }
-
-            $mailerSetting = $this->getSettingService()->get('mailer');
-
-            if (!$mailerSetting['enabled'] && $this->isEmptyVeryfyMobile($user)) {
-                return $this->redirect($this->getTargetPath($request));
-            }
-
-            return $this->redirect($goto);
-        }
-
-        return $this->render("TopxiaWebBundle:Register:nickname-update.html.twig", array(
-            'user'         => $user,
-            'registration' => $registration
         ));
     }
 
@@ -254,7 +201,7 @@ class RegisterController extends BaseController
         $auth = $this->getSettingService()->get('auth');
 
         if (!empty($user['verifiedMobile'])) {
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->getTargetPath($request));
         }
 
         if ($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled', $auth) && ($auth['email_enabled'] == 'opened')) {
@@ -265,14 +212,6 @@ class RegisterController extends BaseController
                 '_target_path'  => $this->getTargetPath($request)
             ));
         } else {
-            /*return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
-            'user' => $user,
-            'hash' => $hash,
-            'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-            '_target_path' => $this->getTargetPath($request),
-            ));*/
-
-            $this->authenticateUser($user);
             return $this->redirect($this->getTargetPath($request));
         }
     }

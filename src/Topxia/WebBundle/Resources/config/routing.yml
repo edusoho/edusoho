@@ -84,10 +84,6 @@ register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
 
-register_nickname_update:
-    pattern:  /register/nickname/update
-    defaults: { _controller: TopxiaWebBundle:Register:nicknameUpdate }
-
 register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
