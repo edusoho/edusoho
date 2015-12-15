@@ -138,14 +138,12 @@ class MobileApiController extends MobileBaseController
         $self        = $this;
         $container   = $this->container;
         return array_map(function ($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture']  = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
+            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
-            $course['largePicture']  = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
-            $course['about']         = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
-            $course['createdTime']   = date("c", $course['createdTime']);
-            $course['startTime']     = date("c", $course['startTime']);
-            $course['endTime']       = date("c", $course['endTime']);
-            $course['now']           = date("c", time());
+            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
+            $course['createdTime'] = date("c", $course['createdTime']);
+            $course['now'] = date("c", time());
 
             $course['teachers'] = array();
 
@@ -157,7 +155,7 @@ class MobileApiController extends MobileBaseController
 
             unset($course['teacherIds']);
             $course["priceType"] = $coinSetting["priceType"];
-            $course['coinName']  = $coinSetting["name"];
+            $course['coinName'] = $coinSetting["name"];
             return $course;
         }, $courses);
     }

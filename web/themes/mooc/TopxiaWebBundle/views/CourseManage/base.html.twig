@@ -40,7 +40,7 @@ locationUrl: path('location_all')
           <label class="col-md-2 control-label">限制加入</label>
             <div class="col-md-8 controls radios">
               {{ radios('buyable', {'0':'开启', '1':'关闭'}, course.buyable|default(1) ) }}
-             <div class="help-block">开启后课程将无法主动加入，由教师和管理员在后台导入</div>
+             <div class="help-block">开启限制加入后，学员不能主动加入，需教师从后台导入</div>
           </div>
         </div>
       

@@ -4,23 +4,23 @@
   {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
 {% endif %}
 <li class="period lesson-item lesson-item-{{ item.id }}" data-id="{{ item.id }}" data-num="{{ loop.index }}">
-    {% if item.status == 'published'  and( item.free or  course.buyable|default(true) == true ) %}
-    {% if member %}
-      <a href="{{ lessonUrl }}">
-    {% elseif ('periodic'== course.type and "now"|date('U') < course.startTime) %}
-      <a class='course-before-open'>
-    {% elseif ('periodic'== course.type and "now"|date('U') > course.endTime) %}
-      <a class='course-ended'>
-    {% else %}
-      <a href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}">
-    {% endif %}
-      {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-      {% if setting('course.custom_chapter_enabled') %} 课时{{lesson_index }}：{% endif %}{{ item.title }}</span>
-      {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
-    </a>
+{% if item.status == 'published' %}
+  {% if member %}
+    <a href="{{ lessonUrl }}">
+  {% elseif ('periodic'== course.type and "now"|date('U') < course.startTime) %}
+    <a class='course-before-open'>
+  {% elseif ('periodic'== course.type and "now"|date('U') > course.endTime) %}
+    <a class='course-ended'>
   {% else %}
-    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
-    {% if setting('course.custom_chapter_enabled') %} 课时{{ lesson_index }}：{% endif %}{{ item.title }}</span>
-    {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+    <a {% if ( item.free or  course.buyable|default(true) == true ) %} href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}" {% endif %} >
   {% endif %}
+  {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+  {% if setting('course.custom_chapter_enabled') %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
+  {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+    </a>
+{% else %}
+  {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
+  {% if setting('course.custom_chapter_enabled') %} 课时{{ lesson_index }}：{% endif %}{{ item.title }}</span>
+  {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+{% endif %}
 </li>
