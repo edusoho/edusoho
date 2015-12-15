@@ -11,8 +11,14 @@ class LoginBindController extends BaseController
     public function indexAction(Request $request, $type)
     {
         if ($request->query->has('_target_path')) {
-            if (!in_array($request->query->get('_target_path'), $this->getBlacklist())) {
-                $request->getSession()->set('_target_path', $request->query->get('_target_path', $this->generateUrl('homepage')));
+            $targetPath = $request->query->get('_target_path');
+
+            if ($targetPath == '') {
+                $targetPath = $this->generateUrl('homepage');
+            }
+
+            if (!in_array($targetPath, $this->getBlacklist())) {
+                $request->getSession()->set('_target_path', $targetPath);
             }
         }
 
