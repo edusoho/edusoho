@@ -25,7 +25,7 @@
   {% endif %}
 
   {% block stylesheets %}
-    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+    {{ render(controller('TopxiaWebBundle:Theme:getCurrentConfigColor', {isEditColor:isEditColor|default(false)})) }}
   {% endblock %}
   
   <!--[if lt IE 9]>
@@ -42,7 +42,6 @@
   <div class="es-wrap">
 
     {% block header %}
-      {% include 'TopxiaWebBundle::weixin-alert.html.twig'%}
       {% include 'TopxiaWebBundle::site-hint.html.twig' %}
       {% include 'TopxiaWebBundle:Default:header.html.twig' %}
     {% endblock %}

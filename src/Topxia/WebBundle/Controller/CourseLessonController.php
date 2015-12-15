@@ -20,11 +20,19 @@ class CourseLessonController extends BaseController
         }
 
         $isPreview = $request->query->get('isPreview', '');
-        $timeLimit = $this->setting('magic.lesson_watch_time_limit');
 
-        if (($isPreview && $lesson["free"]) || !empty($timeLimit)) {
+        if (($isPreview && $lesson["free"])) {
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id' => $lesson["mediaId"]
+            ));
+        }
+
+        $timeLimit = $this->setting('magic.lesson_watch_time_limit');
+
+        if ($isPreview && !empty($timeLimit)) {
+            return $this->forward('TopxiaWebBundle:Player:show', array(
+                'id'      => $lesson["mediaId"],
+                'context' => array('watchTimeLimit' => $timeLimit)
             ));
         }
 
@@ -235,7 +243,16 @@ class CourseLessonController extends BaseController
         $json['isTeacher'] = $this->getCourseService()->isCourseTeacher($courseId, $this->getCurrentUser()->id);
 
         if ($lesson['type'] == 'live' && $lesson['replayStatus'] == 'generated') {
-            $json['replays'] = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+            $replaysLesson  = $this->getCourseService()->getCourseLessonReplayByLessonId($lesson['id']);
+            $visableReplays = array();
+
+            foreach ($replaysLesson as $key => $value) {
+                if ($value['hidden'] == 0) {
+                    $visableReplays[] = $value;
+                }
+            }
+
+            $json['replays'] = $visableReplays;
 
             if (!empty($json['replays'])) {
                 foreach ($json['replays'] as $key => $value) {
