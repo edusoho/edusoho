@@ -11,7 +11,8 @@ class RegisterController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $fields = $request->query->all();
+        $user   = $this->getCurrentUser();
 
         if ($user->isLogin()) {
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
@@ -25,6 +26,7 @@ class RegisterController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $registration = $request->request->all();
+            // $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
@@ -32,8 +34,7 @@ class RegisterController extends BaseController
 
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
             $registration['createdIp'] = $request->getClientIp();
-
-            $authSettings = $this->getSettingService()->get('auth', array());
+            $authSettings              = $this->getSettingService()->get('auth', array());
 
             //验证码校验
             $this->captchaEnabledValidator($authSettings, $registration, $request);
@@ -57,6 +58,10 @@ class RegisterController extends BaseController
 
             if ($this->registerLimitValidator($registration, $authSettings, $request)) {
                 return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+            }
+
+            if (!empty($registration['invite_code'])) {
+                $registration['invite_code'] = $registration['invite_code'];
             }
 
             $user = $this->getAuthService()->register($registration);
@@ -91,7 +96,18 @@ class RegisterController extends BaseController
             }
         }
 
+        $inviteCode = '';
+
+        if (!empty($fields['inviteCode'])) {
+            $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
+        }
+
+        if (!empty($inviteUser)) {
+            $inviteCode = $fields['inviteCode'];
+        }
+
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
+            'inviteCode'        => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort'      => array(),
             '_target_path'      => $this->getTargetPath($request)
@@ -255,38 +271,10 @@ class RegisterController extends BaseController
             'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
             '_target_path' => $this->getTargetPath($request),
             ));*/
+
             $this->authenticateUser($user);
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->getTargetPath($request));
         }
-    }
-
-    protected function getTargetPath($request)
-    {
-        if ($request->query->get('goto')) {
-            $targetPath = $request->query->get('goto');
-        } else
-
-        if ($request->getSession()->has('_target_path')) {
-            $targetPath = $request->getSession()->get('_target_path');
-        } else {
-            $targetPath = $request->headers->get('Referer');
-        }
-
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
-            return $this->generateUrl('homepage');
-        }
-
-        $url = explode('?', $targetPath);
-
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
-            return $this->generateUrl('homepage');
-        }
-
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
-        }
-
-        return $targetPath;
     }
 
     public function emailVerifyAction(Request $request, $token)
@@ -386,6 +374,18 @@ class RegisterController extends BaseController
         return $this->validateResult($result, $message);
     }
 
+    public function invitecodeCheckAction(Request $request)
+    {
+        $inviteCode = $request->query->get('value');
+        $user       = $this->getUserService()->getUserByInviteCode($inviteCode);
+
+        if (empty($user)) {
+            return $this->validateResult('false', '邀请码不正确');
+        } else {
+            return $this->validateResult('success', '');
+        }
+    }
+
     public function captchaModalAction()
     {
         return $this->render('TopxiaWebBundle:Register:captcha-modal.html.twig', array());
@@ -461,6 +461,11 @@ class RegisterController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getCardService()
+    {
+        return $this->getServiceKernel()->createService('Card.CardService');
     }
 
     protected function getAuthService()

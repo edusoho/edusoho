@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}分享邀请链接{% endblock %}
+{% block body %}
+<div class="form-horizontal">
+
+  <div class="form-group">
+    <div class="col-md-offset-1 col-md-10 controls">
+    <textarea rows="3" class="form-control" id="content" readonly="true">{{inviteInfomation_template}}</textarea>
+    </div>
+  </div>
+</div>
+<p>*该链接只支持网页注册，如果好友通过第三方登录创建新账号，请登录后在"TA的邀请码"中输入邀请码:{{code}}</p>
+<script>app.load('coin/invite-content-copy')</script>
+{% endblock %} 
+{% block footer %}
+    <button class="btn-sm btn btn-primary" id='copy'>复制到剪贴板</button>
+{% endblock %}

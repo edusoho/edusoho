@@ -117,6 +117,10 @@ register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
 
+invitecode_check:
+    pattern:  /register/invitecode/check
+    defaults: { _controller: TopxiaWebBundle:Register:invitecodeCheck }
+
 register_captcha_check:
     pattern:  /register/captcha/check
     defaults: { _controller: TopxiaWebBundle:Register:captchaCheck }
@@ -1647,6 +1651,20 @@ my_bill:
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
+my_invite_code:
+    path:     /my/invitecode
+    defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
+invite_promote_link:
+    path:     /my/invitecode/promotelink
+    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
+
+write_invitecode:
+    path:     /my/invitecode/writeinvitecode
+    defaults: { _controller: TopxiaWebBundle:Coin:writeInvitecode }
+receive_coupon:
+    path:     /my/invitecode/receivecoupon
+    defaults: { _controller: TopxiaWebBundle:Coin:receiveCoupon }
+
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }

@@ -2,6 +2,7 @@
 namespace Topxia\Service\User\Impl;
 
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
 use Topxia\Common\SimpleValidator;
 use Topxia\Service\User\UserService;
 use Topxia\Service\Common\BaseService;
@@ -475,6 +476,20 @@ class UserServiceImpl extends BaseService implements UserService
         $user = UserSerialize::unserialize(
             $this->getUserDao()->addUser(UserSerialize::serialize($user))
         );
+
+        if (!empty($registration['invite_code'])) {
+            $inviteUser = $this->getUserDao()->getUserByInviteCode($registration['invite_code']);
+        }
+
+        if (!empty($inviteUser)) {
+            $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
+            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
+
+            if (!empty($inviteCoupon)) {
+                $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+            }
+        }
 
         if (isset($registration['mobile']) && $registration['mobile'] != "" && !SimpleValidator::mobile($registration['mobile'])) {
             throw $this->createServiceException('mobile error!');
@@ -1380,6 +1395,29 @@ class UserServiceImpl extends BaseService implements UserService
         return $ats;
     }
 
+    public function getUserByInviteCode($inviteCode)
+    {
+        return $this->getUserDao()->getUserByInviteCode($inviteCode);
+    }
+
+    public function findUserIdsByInviteCode($inviteCode)
+    {
+        $inviteUser = $this->getUserDao()->getUserByInviteCode($inviteCode);
+        $record     = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUser['id']);
+        $userIds    = ArrayToolkit::column($record, 'invitedUserId');
+        return $userIds;
+    }
+
+    public function createInviteCode($userId)
+    {
+        $inviteCode = StringToolkit::createRandomString(5);
+        $inviteCode = strtoupper($inviteCode);
+        $code       = array(
+            'inviteCode' => $inviteCode
+        );
+        return $this->getUserDao()->updateUser($userId, $code);
+    }
+
     public function getUserPayAgreement($id)
     {
         return $this->getUserPayAgreementDao()->getUserPayAgreement($id);
@@ -1421,6 +1459,11 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->createDao("User.FriendDao");
     }
 
+    protected function getCouponDao()
+    {
+        return $this->createDao('Coupon.CouponDao');
+    }
+
     protected function getUserDao()
     {
         return $this->createDao('User.UserDao');
@@ -1449,6 +1492,16 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getUserFortuneLogDao()
     {
         return $this->createDao('User.UserFortuneLogDao');
+    }
+
+    protected function getCardService()
+    {
+        return $this->createService('Card.CardService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->createService('Coupon.CouponService');
     }
 
     protected function getUserPayAgreementDao()
@@ -1489,6 +1542,11 @@ class UserServiceImpl extends BaseService implements UserService
     protected function getBlacklistService()
     {
         return $this->createService('User.BlacklistService');
+    }
+
+    protected function getInviteRecordService()
+    {
+        return $this->createService('User.InviteRecordService');
     }
 }
 

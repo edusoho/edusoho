@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    require('es-ckeditor');
     var WebUploader = require('edusoho.webuploader');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');

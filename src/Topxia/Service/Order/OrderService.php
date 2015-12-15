@@ -74,6 +74,8 @@ interface OrderService
 
     public function analysisAmount($conditions);
 
+    public function analysisTotalPrice($conditions);
+
     public function analysisAmountDataByTime($startTime, $endTime);
 
     public function analysisCourseAmountDataByTime($startTime, $endTime);
