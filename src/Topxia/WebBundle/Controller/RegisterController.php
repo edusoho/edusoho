@@ -77,6 +77,7 @@ class RegisterController extends BaseController
             ));
 
             if ($this->getAuthService()->hasPartnerAuth()) {
+                $this->authenticateUser($user);
                 return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
             }
 
@@ -211,6 +212,7 @@ class RegisterController extends BaseController
                 '_target_path'  => $this->getTargetPath($request)
             ));
         } else {
+            $this->authenticateUser($user);
             return $this->redirect($this->getTargetPath($request));
         }
     }
