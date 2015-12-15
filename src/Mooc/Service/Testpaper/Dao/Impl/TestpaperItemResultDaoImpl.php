@@ -32,6 +32,7 @@ class TestpaperItemResultDaoImpl extends BaseTestpaperItemResultDaoImpl
                         ->andWhere('status <> :excludeStatus')
                         ->andWhere('homeworkId = :homeworkId')
                         ->andWhere('status = :status')
+                        ->andWhere('userId NOT IN ( :excludeUserIds )')
                         ->andWhere('questionId = :questionId');
 
         return $builder;
