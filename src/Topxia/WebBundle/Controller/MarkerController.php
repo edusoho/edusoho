@@ -14,6 +14,7 @@ class MarkerController extends BaseController
         ));
     }
 
+    //将弹题拖入时间轴
     public function addQuestionMarker(Request $request)
     {
         $data = $request->request->all();
@@ -36,8 +37,8 @@ class MarkerController extends BaseController
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                $question  = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
-                $questions = $this->getQuestionMarkerService()->updateQuestionMarkerSeq($question['seq']);
+                $question = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                $this->getQuestionMarkerService()->updateQuestionMarkerSeq($question['seq']);
                 return $this->createJsonResponse($question);
             } else {
                 return $this->createJsonResponse(false);
@@ -45,12 +46,34 @@ class MarkerController extends BaseController
         }
     }
 
+    //删除弹题
     public function deleteQuestionMarker(Request $request)
     {
         $data               = $request->request->all();
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
         $result             = $this->getMarkerService()->deleteQuestionMarker($data['questionId']);
         return $this->createJsonResponse($result);
+    }
+
+    //弹题排序
+    public function sortQuestionMarker(Request $request)
+    {
+        $data   = $request->request->all();
+        $data   = isset($data['questionIds']) ? $data['questionIds'] : array();
+        $result = $this->getQuestionMarkerService()->sortQuestionMarkers($data);
+        return $this->createJsonResponse($result);
+    }
+
+    //更新驻点时间
+    public function updateMarker(Request $request)
+    {
+        $data       = $request->request->all();
+        $data['id'] = isset($data['id']) ? $data['id'] : 0;
+        $fields     = array(
+            'updatedTime' => time(),
+            'second'      => isset($data['second']) ? $data['second'] : ""
+        );
+        return $this->getMarkerService()->updateMarker($data['id'], $fields);
     }
 
     protected function getCourseService()

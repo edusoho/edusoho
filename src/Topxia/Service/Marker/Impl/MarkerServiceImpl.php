@@ -27,8 +27,18 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function updateMarker($id, $fields)
     {
+        $marker = $this->getMarker($id);
+
+        if (empty($marker)) {
+            throw $this->createServiceException("驻点不存在");
+        }
+
         if (isset($fields['updatedTime']) || $fields['updatedTime'] == "") {
             $fields['updatedTime'] = time();
+        }
+
+        if (isset($fields['second']) || $fields['second'] == "") {
+            throw $this->createServiceException("更新驻点时间不存在");
         }
 
         return $this->getMarkerDao()->updateMarker($id, $fields);

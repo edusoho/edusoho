@@ -78,6 +78,8 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
                 $this->updateQuestionMarker($item['id'], $fields);
             }
         }
+
+        return true;
     }
 
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit)
