@@ -28,7 +28,7 @@
 
           {% if setting('classroom.enabled')|default(0) %}
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-              <a href="{{path('my_teaching_classrooms')}}">所在{{ setting('classroom.name')|default("班级") }}
+              <a href="{{path('my_teaching_classrooms')}}">所教{{ setting('classroom.name')|default("班级") }}
               </a>
            </li>
           {% endif %}

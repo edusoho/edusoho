@@ -14,6 +14,7 @@ class HLSController extends BaseController
         $returnJson    = $request->query->get('returnJson', false);
         $levelParam    = $request->query->get('level', "");
         $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $fromApi       = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -41,7 +42,8 @@ class HLSController extends BaseController
             if (empty($levelParam) || (!empty($levelParam) && strtolower($levelParam) == $level)) {
                 $tokenFields = array(
                     'data'     => array(
-                        'id' => $file['id'].$level
+                        'id'      => $file['id'].$level,
+                        'fromApi' => $fromApi
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600
@@ -49,6 +51,10 @@ class HLSController extends BaseController
 
                 if (!empty($token['userId'])) {
                     $tokenFields['userId'] = $token['userId'];
+                }
+
+                if (isset($token['data']['watchTimeLimit'])) {
+                    $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -80,7 +86,7 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        if ($returnJson) {
+        if (!$fromApi && $this->setting("developer.balloon_player")) {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
             return $this->createJsonResponse($playlist);
         } else {
@@ -135,10 +141,8 @@ class HLSController extends BaseController
         $params        = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        $timelimit = $this->setting('magic.lesson_watch_time_limit');
-
-        if (!empty($timelimit)) {
-            $params['limitSecond'] = $timelimit;
+        if (isset($token['data']['watchTimeLimit'])) {
+            $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
         $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));
@@ -147,7 +151,7 @@ class HLSController extends BaseController
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
+                'keyencryption' => $token['data']['fromApi'] || $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600

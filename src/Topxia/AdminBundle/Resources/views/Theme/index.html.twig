@@ -39,6 +39,12 @@
             {% else %}
               <button class="btn btn-default btn-sm use-theme-btn" data-url="{{ path('admin_setting_theme_change', {uri:theme.uri}) }}">使用</button>
             {% endif %}
+            {% if theme.uri == 'jianmo' and currentTheme.uri == 'jianmo' %}
+            <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >管理</a>
+            {% endif %}
+            {% if theme.uri == 'graceful' and currentTheme.uri == 'graceful' and version_compare(theme.version,'1.4.14','>=') %}
+            <a href="{{ path('admin_theme_manage', {uri:theme.uri}) }}"class="btn btn-primary" >管理</a>
+            {% endif %}
           </td>
         </tr>
       {% endfor %}
