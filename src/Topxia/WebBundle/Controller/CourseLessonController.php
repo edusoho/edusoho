@@ -27,12 +27,12 @@ class CourseLessonController extends BaseController
             ));
         }
 
-        $timeLimit = $this->setting('magic.lesson_watch_time_limit');
+        $course = $this->getCourseService()->getCourse($courseId);
 
-        if ($isPreview && !empty($timeLimit)) {
+        if ($isPreview && !empty($course['tryLookable'])) {
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
-                'context' => array('watchTimeLimit' => $timeLimit)
+                'context' => array('watchTimeLimit' => $course['tryLookTime'] * 60)
             ));
         }
 
@@ -70,13 +70,11 @@ class CourseLessonController extends BaseController
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
-        $timelimit = $this->setting('magic.lesson_watch_time_limit');
-
         $user = $this->getCurrentUser();
 
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
-        if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
+        if (empty($lesson['free']) && empty($course['tryLookable']) && !($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -100,12 +98,16 @@ class CourseLessonController extends BaseController
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (empty($lesson['free']) && empty($timelimit) && $file['storage'] != 'cloud') {
+            if (empty($lesson['free']) && empty($course['tryLookable']) && empty($timelimit) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }
 
                 return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
+            }
+
+            if (empty($lesson['free']) && !empty($course['tryLookable'])) {
+                $tryLookTime = empty($course['tryLookTime']) ? 0 : $course['tryLookTime'];
             }
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -116,7 +118,8 @@ class CourseLessonController extends BaseController
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $token = $this->getTokenService()->makeToken('hls.playlist', array(
                         'data'     => array(
-                            'id' => $file['id']
+                            'id'          => $file['id'],
+                            'tryLookTime' => $tryLookTime
                         ),
                         'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
                         'duration' => 3600
