@@ -76,9 +76,20 @@ class ArticleController extends BaseController
     public function categoryNavAction(Request $request, $categoryCode)
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($categoryCode);
+
+        $publishedCategories = array();
+
+        foreach ($categories as $key1 => $nextCategory) {
+            foreach ($nextCategory as $key2 => $category) {
+                if ($category['published'] == 1) {
+                    $publishedCategories[] = $category;
+                }
+            }
+        }
+
         return $this->render('TopxiaWebBundle:Article/Part:category.html.twig', array(
             'rootCategories' => $rootCategories,
-            'categories'     => $categories,
+            'categories'     => $publishedCategories,
             'categoryCode'   => $categoryCode,
             'activeIds'      => $activeIds
         ));

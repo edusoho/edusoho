@@ -6,10 +6,6 @@ define(function(require, exports, module) {
                 $(this).find('li.all').addClass('active');
             }
         });
-        
-        if ($('.tab-body ul').find("li").length == 0) {
-        	$('.tab-body').remove();
-        };
 
     };
 
