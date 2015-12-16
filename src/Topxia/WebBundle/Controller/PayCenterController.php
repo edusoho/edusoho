@@ -227,16 +227,10 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
         }
 
-        if (stripos($payData['sn'], 'c') !== false) {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-        }
-
-        if (stripos($payData['sn'], 'v') !== false) {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-        }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
@@ -284,16 +278,10 @@ class PayCenterController extends BaseController
             return new Response('success');
         }
 
-        if (stripos($payData['sn'], 'c') !== false) {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-        }
-
-        if (stripos($payData['sn'], 'v') !== false) {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-        }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
         $processor = OrderProcessorFactory::create($order['targetType']);
