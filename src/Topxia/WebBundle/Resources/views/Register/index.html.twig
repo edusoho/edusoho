@@ -89,7 +89,7 @@
         {% endif %}
         {% if (setting('invite.invite_code_setting')|default(0) == 1) and  inviteCode == null  %}
         <div class="form-group mbl">
-          <label class="control-label required" for="invite_code">邀请码<p class="text-success fsn">(*选填)</p></label>
+          <label class="control-label required" for="invite_code">邀请码<span class="text-success fsn">(*选填)</span></label>
           <div class="controls">
             <input type="text" name="invite_code" required="required" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="如果您有邀请码，请填写您的邀请码">
           </div>
