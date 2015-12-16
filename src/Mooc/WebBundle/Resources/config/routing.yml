@@ -115,6 +115,14 @@ course_manage_lesson_edit_testpaper:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
     defaults: { _controller: MoocWebBundle:CourseLessonManage:editTestpaper }
 
+course_lesson_do_test:
+    pattern: /lesson/{lessonId}/test/{testId}/do
+    defaults: { _controller: MoocWebBundle:CourseLesson:doTestpaper }
+
+course_lesson_redo_test:
+    pattern: /lesson/{lessonId}/test/{testId}/redo
+    defaults: { _controller: MoocWebBundle:CourseLesson:reDoTestpaper }
+
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: MoocWebBundle:CourseLessonManage:create }
