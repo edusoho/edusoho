@@ -960,10 +960,17 @@ course_manage_publish:
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
     methods: [POST]
 
-course_manage_lesson_marker:
-    pattern:  /lesson/{id}/marker/manage
+course_lesson_marker_manage:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/manage
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
+course_lesson_question_list:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question/list
+    defaults: { _controller: TopxiaWebBundle:Marker:question }
+
+course_lesson_question_search:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question/search
+    defaults: { _controller: TopxiaWebBundle:Marker:search }
 
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list
@@ -1923,5 +1930,6 @@ live_course_manage_lesson_replay_title_update:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+
 
 
