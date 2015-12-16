@@ -84,6 +84,8 @@ class CouponDaoImpl extends BaseDao implements CouponDao
 
     private function _createSearchQueryBuilder($conditions)
     {
+        $tmpConditions = array();
+
         if (isset($conditions['batchIdNotEqual'])) {
             $tmpConditions['batchIdNotEqual'] = $conditions['batchIdNotEqual'];
         }
