@@ -19,6 +19,7 @@ define(function(require, exports, module) {
                 }
             });
         }
+        
         Lazyload.init();
 
         $("#course-list").on('click','.js-course-filter',function(){
@@ -26,12 +27,9 @@ define(function(require, exports, module) {
              $.get($btn.data('url'),function(html){
                $('#course-list').html(html);
                Lazyload.init();
-               $(".tooltip").remove();
-               $('[data-toggle="tooltip"]').tooltip({container: 'body'});
             })
         })
 
-    
 
         $('.recommend-teacher').on('click', '.teacher-item .follow-btn', function(){
             var $btn = $(this);

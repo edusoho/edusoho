@@ -4,7 +4,7 @@ homepage:
 
 homepage_category:
     pattern: /course/search
-    defaults: { _controller: TopxiaWebBundle:Default:CoursesCategory }
+    defaults: { _controller: TopxiaWebBundle:Default:coursesCategory }
 
 live_jump:
     pattern: /live/jump
@@ -1676,6 +1676,15 @@ pay_center_pay:
     defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
     methods: [POST]
 
+pay_center_auth_unbind:
+    path:   /pay/center/auth_unbind
+    defaults: { _controller: TopxiaWebBundle:PayCenter:unbindAuth}
+    methods: [POST]
+
+auth_unbind_mobile_show:
+    path:   /pay/center/mobile_show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:showMobile }
+
 pay_return:
     pattern:  /pay/center/pay/{name}/return
     defaults: { _controller: TopxiaWebBundle:PayCenter:payReturn }
@@ -1896,6 +1905,15 @@ publish_sms_send:
 generate_short_link:
     pattern:  /generate/short/link
     defaults: { _controller: TopxiaWebBundle:Sms:changeLink }
+
+live_course_manage_lesson_replay_edit:
+    pattern:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/edit
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:editLessonReplay }
+
+live_course_manage_lesson_replay_title_update:
+    pattern:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
+    defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
+    methods: [POST]
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

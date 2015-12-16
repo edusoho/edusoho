@@ -5,6 +5,7 @@ admin_periodic_course_add:
     router_params: {'flag': 'periodic'}
     group: 2
     blank: 1
+    before: admin_course_add
 
 admin_app_center_show:
     name: ES(慕课版)应用
