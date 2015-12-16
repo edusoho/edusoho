@@ -34,11 +34,13 @@ class InviteController extends BaseController
             foreach ($invitedRecords as $keynum => $invitedRecord) {
                 $coinAmountTotalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
                 $amountTotalPrice     = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
-                $totalPrice           = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
+                $tempPrice            = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
 
                 if ($coinAmountTotalPrice || $amountTotalPrice) {
                     $payingUserCount = $payingUserCount + 1;
                 }
+
+                $totalPrice = $totalPrice + $tempPrice;
             }
 
             $inviteInformations[] = array(
@@ -67,8 +69,8 @@ class InviteController extends BaseController
         $invitedRecords = $this->getInviteRecordService()->findRecordsByInviteUserId($inviteUserId);
 
         foreach ($invitedRecords as $key => $invitedRecord) {
-            $coinAmountTotalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'totalPrice' => 0, 'coinAmount' => 0, 'paidStartTime' => $invitedRecord['inviteTime'], 'status' => 'paid'));
-            $amountTotalPrice     = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'totalPrice' => 0, 'amount' => 0, 'paidStartTime' => $invitedRecord['inviteTime'], 'status' => 'paid'));
+            $coinAmountTotalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'coinAmount' => 0, 'paidStartTime' => $invitedRecord['inviteTime'], 'status' => 'paid'));
+            $amountTotalPrice     = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'amount' => 0, 'paidStartTime' => $invitedRecord['inviteTime'], 'status' => 'paid'));
 
             $user = $this->getUserService()->getUser($invitedRecord['invitedUserId']);
 
