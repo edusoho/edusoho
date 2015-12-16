@@ -1,7 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% for question in questions %}
   <tr>
-    <td></td>
+    <td><span class="glyphicon glyphicon-move" style="padding-left:5px;"></span></td>
     <td>{{question.stem|fill_question_stem_text|plain_text(12) }}</td>
     <td>{{ dict('questionType')[question.type] }}</td>
     <td>{{ dict('difficulty')[question.difficulty] }}</td>
