@@ -157,6 +157,38 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isIndexExist('course_lesson', 'updatedTime')) {
             $connection->exec("ALTER TABLE `course_lesson` ADD INDEX `updatedTime` (`updatedTime`);");
         }
+
+        if (!$this->isTableExist('recent_post_num')) {
+            $connection->exec(
+                "CREATE TABLE `recent_post_num` (
+                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+                 `ip` varchar(20) NOT NULL COMMENT 'IP',
+                 `type` varchar(255) NOT NULL COMMENT '类型',
+                 `num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'post次数',
+                 `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次更新时间',
+                 `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
+                 PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';"
+            );
+        }
+
+        if (!$this->isTableExist("user_pay_agreement")) {
+            $connection->exec("
+                CREATE TABLE IF NOT EXISTS `user_pay_agreement` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `userId` int(11) NOT NULL COMMENT '用户Id',
+                `type` int(8) NOT NULL DEFAULT '0' COMMENT '0:储蓄卡1:信用卡',
+                `bankName` varchar(255) NOT NULL COMMENT '银行名称',
+                `bankNumber` int(8) NOT NULL COMMENT '银行卡号',
+                `userAuth` varchar(225) DEFAULT NULL COMMENT '用户授权',
+                `bankAuth` varchar(225) NOT NULL COMMENT '银行授权码',
+                `otherId` int(8) NOT NULL COMMENT '对应的银行Id',
+                `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+                `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
+                 PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户授权银行'"
+            );
+        }
     }
 
     private function updateCrontabSetting()
