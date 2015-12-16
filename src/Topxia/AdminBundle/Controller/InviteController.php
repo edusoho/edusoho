@@ -80,7 +80,7 @@ class InviteController extends BaseController
                 $details[] = array(
                     'userId'               => $user['id'],
                     'nickname'             => $user['nickname'],
-                    'totalPrice'           => $coinAmountTotalPrice + $amountTotalPrice,
+                    'totalPrice'           => $totalPrice,
                     'amountTotalPrice'     => $amountTotalPrice,
                     'coinAmountTotalPrice' => $coinAmountTotalPrice
                 );
