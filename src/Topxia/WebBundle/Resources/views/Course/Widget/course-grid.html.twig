@@ -20,7 +20,8 @@
           <span class="tag-live"></span>
         </span>
       {% endif %}
-      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+      <img class="transform img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}">
+      {#{{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}#}
     </a>
   </div>
   <div class="course-info">
