@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=deadline]',
-            required: false,
+            required: true,
             rule:'positive_integer'
         });
 
