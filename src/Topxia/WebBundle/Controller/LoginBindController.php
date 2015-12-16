@@ -49,9 +49,9 @@ class LoginBindController extends BaseController
             $this->authenticateUser($user);
 
             if ($this->getAuthService()->hasPartnerAuth()) {
-                return $this->redirect($this->generateUrl('partner_login', array('goto' => $request->getSession()->get('_target_path', ''))));
+                return $this->redirect($this->generateUrl('partner_login', array('goto' => $this->getTargetPath($request))));
             } else {
-                $goto = $request->getSession()->get('_target_path', '') ?: $this->generateUrl('homepage');
+                $goto = $this->getTargetPath($request);
 
                 return $this->redirect($goto);
             }
@@ -134,11 +134,7 @@ class LoginBindController extends BaseController
         }
 
         $this->authenticateUser($user);
-        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
-
-        if (!$response['_target_path']) {
-            $response['_target_path'] = $this->generateUrl('homepage');
-        }
+        $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
 
         response:
         return $response;
@@ -199,7 +195,7 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
-        $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+        $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
 
         response:
         return $this->createJsonResponse($response);
@@ -295,8 +291,7 @@ class LoginBindController extends BaseController
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => "该{{ $this->setting('site.name') }}帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！");
         } else {
-            file_put_contents('/var/www/try6.edusoho.cn/a.txt', $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
-            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+            $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }
@@ -331,7 +326,7 @@ class LoginBindController extends BaseController
         } elseif ($this->getUserService()->getUserBindByTypeAndUserId($type, $user['id'])) {
             $response = array('success' => false, 'message' => '该帐号已经绑定了该第三方网站的其他帐号，如需重新绑定，请先到账户设置中取消绑定！');
         } else {
-            $response = array('success' => true, '_target_path' => $request->getSession()->get('_target_path', $this->generateUrl('homepage')));
+            $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
             $this->getUserService()->bindUser($type, $oauthUser['id'], $user['id'], $token);
             $this->authenticateUser($user);
         }

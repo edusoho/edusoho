@@ -195,7 +195,9 @@
     </div>
   </div>
 
-  {% block footer %}{% endblock %}
+  {% block footer %}
+    {{ setting('site.analytics')|raw }} 
+  {% endblock %}
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
