@@ -53,7 +53,7 @@ class HeepayRequest extends Request
         }
 
         $converted['user_ip']    = str_replace(".", "_", $this->getClientIp());
-        $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 50, 'utf-8'));
+        $converted['goods_name'] = urlencode(mb_substr($this->filterText($params['title']), 0, 15, 'utf-8'));
         $converted['remark']     = '';
         $converted['sign']       = $this->signParams($converted);
         return $converted;

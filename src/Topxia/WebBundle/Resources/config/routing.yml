@@ -1676,10 +1676,14 @@ pay_center_pay:
     defaults: { _controller: TopxiaWebBundle:PayCenter:pay }
     methods: [POST]
 
-pay_center_auth_close:
-    path:   /pay/center/auth_close
-    defaults: { _controller: TopxiaWebBundle:PayCenter:closeAuth}
+pay_center_auth_unbind:
+    path:   /pay/center/auth_unbind
+    defaults: { _controller: TopxiaWebBundle:PayCenter:unbindAuth}
     methods: [POST]
+
+auth_unbind_mobile_show:
+    path:   /pay/center/mobile_show
+    defaults: { _controller: TopxiaWebBundle:PayCenter:showMobile }
 
 pay_return:
     pattern:  /pay/center/pay/{name}/return

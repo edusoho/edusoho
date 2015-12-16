@@ -78,9 +78,9 @@ class QuickpayRequest extends Request
         $converted['agent_bill_id']   = $this->generateOrderToken();
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
-        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 50, 'utf-8');
+        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 15, 'utf-8');
 
-        if (strlen($converted['goods_name']) >= 50) {
+        if (strlen($converted['goods_name']) >= 45) {
             $converted['goods_name'] .= '...';
         }
 
@@ -184,7 +184,7 @@ class QuickpayRequest extends Request
 
     protected function filterText($text)
     {
-        return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
+        return str_replace(array('#', '%', '&', '+', '《', '》'), array('＃', '％', '＆', '＋', '', ''), $text);
     }
 
     private function encrypt($data, $key)
