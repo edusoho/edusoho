@@ -328,8 +328,3 @@ passedStatus:
     good: 良好
     passed: 合格
     unpassed: 不合格
-
-pointRecordType:
-    all:　全部
-    student: 学生
-    teacher: 老师

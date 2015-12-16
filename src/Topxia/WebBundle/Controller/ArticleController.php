@@ -167,8 +167,6 @@ class ArticleController extends BaseController
             $seoKeyword = implode(",", $seoKeyword);
         }
 
-        $this->getArticleService()->hitArticle($id);
-
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 
         $conditions = array(
