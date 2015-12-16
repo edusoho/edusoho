@@ -978,11 +978,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (in_array('teacher', $member['role'])) {
-            return true;
-        }
-
-        if (in_array('headTeacher', $member['role'])) {
+        if (array_intersect($member['role'], array('auditor', 'teacher', 'headTeacher'))) {
             return true;
         }
 
