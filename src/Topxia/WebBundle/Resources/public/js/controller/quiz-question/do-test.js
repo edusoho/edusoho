@@ -528,9 +528,8 @@ define(function(require, exports, module) {
 
                 var scoreTotal = 0;
                 $('[name^="score_"]').each(function(){
-                    var score = $(this).data('score');
+                    var score = $(this).val();
                     scoreTotal = scoreTotal + score;
-                    console.log('score='+scoreTotal);
                 });
                 var subjectiveScore = Number($('[name="objectiveScore"]').val());
                 var totalScore = Number(scoreTotal) + subjectiveScore;
