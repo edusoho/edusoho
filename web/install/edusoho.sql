@@ -721,11 +721,12 @@ CREATE TABLE `orders` (
   `giftTo` varchar(64) NOT NULL DEFAULT '' COMMENT '赠送给用户ID',
   `discountId` INT UNSIGNED NOT NULL DEFAULT  '0' COMMENT  '折扣活动ID',
   `discount` FLOAT( 10, 2 ) NOT NULL DEFAULT  '10' COMMENT  '折扣',
+  `token` VARCHAR(50) NULL DEFAULT NULL COMMENT '令牌',
   `refundId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次退款操作记录的ID',
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
-  `payment` enum('none','alipay','tenpay','coin','wxpay') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `payment` enum('none','alipay','tenpay','coin','wxpay','heepay','quickpay') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
   `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
   `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
   `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',
@@ -1202,7 +1203,7 @@ CREATE TABLE `cash_orders` (
   `status` enum('created','paid','cancelled') NOT NULL,
   `title` varchar(255) NOT NULL,
   `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `payment` enum('none','alipay','wxpay') NOT NULL DEFAULT 'none',
+  `payment` enum('none','alipay','wxpay','heepay','quickpay') NOT NULL DEFAULT 'none',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
   `note` varchar(255) NOT NULL DEFAULT '',
   `targetType` VARCHAR(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
@@ -1235,7 +1236,7 @@ CREATE TABLE `cash_flow` (
   `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
   `orderSn` varchar(40) NOT NULL COMMENT '订单号',
   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '帐目类目',
-  `payment` ENUM( 'alipay', 'wxpay' ),
+  `payment` ENUM( 'alipay','wxpay','heepay','quickpay' ),
   `note` text COMMENT '备注',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -1634,5 +1635,20 @@ CREATE TABLE `recent_post_num` (
  `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='黑名单表';
+
+DROP TABLE IF EXISTS `user_pay_agreement`;
+CREATE TABLE IF NOT EXISTS `user_pay_agreement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL COMMENT '用户Id',
+  `type` int(8) NOT NULL DEFAULT '0' COMMENT '0:储蓄卡1:信用卡',
+  `bankName` varchar(255) NOT NULL COMMENT '银行名称',
+  `bankNumber` int(8) NOT NULL COMMENT '银行卡号',
+  `userAuth` varchar(225) DEFAULT NULL COMMENT '用户授权',
+  `bankAuth` varchar(225) NOT NULL COMMENT '银行授权码',
+  `otherId` int(8) NOT NULL COMMENT '对应的银行Id',
+  `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
+  `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
+   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户授权银行';
 
 
