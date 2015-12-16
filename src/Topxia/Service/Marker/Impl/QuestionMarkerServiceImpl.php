@@ -19,6 +19,12 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
     public function findQuestionMarkersByMarkerId($markerId)
     {
+        $marker = $this->getMarkerService()->getMarker($markerId);
+
+        if (empty($marker)) {
+            throw $this->createServiceException("驻点不存在");
+        }
+
         return $this->getQuestionMarkerDao()->findQuestionMarkersByMarkerId($markerId);
     }
 
@@ -64,9 +70,15 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
             throw $this->createServiceException("弹题不存在");
         }
 
-        $this->getQuestionMarkerDao()->deleteQuestionMarker($id);
+        $this->getQuestionMarkerDao()->deleteQuestionMarker($questionMarker['id']);
+        $questionmarkers = $this->findQuestionMarkersByMarkerId($questionMarker['markerId']);
+
+        if (empty($questionmarkers)) {
+            $this->getMarkerService()->deleteMarker($questionMarker['markerId']);
+        }
+
         $this->getQuestionMarkerResultService()->deleteByQuestionMarkerId($id);
-        $this->getLogService()->info('questionMarker', 'delete', "删除驻点问题{$questionMarker['stem']}");
+        $this->getLogService()->info('questionMarker', 'delete', "删除驻点问题#{$questionMarker['stem']}");
         return true;
     }
 
@@ -110,5 +122,10 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
     protected function getQuestionMarkerResultService()
     {
         return $this->createService('Marker.QuestionMarkerResultService');
+    }
+
+    protected function getMarkerService()
+    {
+        return $this->createService('Marker.MarkerService');
     }
 }

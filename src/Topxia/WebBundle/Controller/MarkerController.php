@@ -51,7 +51,7 @@ class MarkerController extends BaseController
     {
         $data               = $request->request->all();
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
-        $result             = $this->getMarkerService()->deleteQuestionMarker($data['questionId']);
+        $result             = $this->getQuestionMarkerService()->deleteQuestionMarker($data['questionId']);
         return $this->createJsonResponse($result);
     }
 
@@ -77,6 +77,15 @@ class MarkerController extends BaseController
         return $this->createJsonResponse($marker);
     }
 
+    //获取当前驻点弹题
+    public function showQuestionMarker(Request $request)
+    {
+        $data             = $request->request->all();
+        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $questionmarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+        return $this->createJsonResponse($questionmarkers);
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -95,5 +104,10 @@ class MarkerController extends BaseController
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    protected function getQuestionMarkerResultService()
+    {
+        return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');
     }
 }
