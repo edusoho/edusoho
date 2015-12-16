@@ -53,8 +53,8 @@ class HLSController extends BaseController
                     $tokenFields['userId'] = $token['userId'];
                 }
 
-                if (isset($token['data']['tryLookTime'])) {
-                    $tokenFields['data']['tryLookTime'] = $token['data']['tryLookTime'];
+                if (isset($token['data']['watchTimeLimit'])) {
+                    $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -141,8 +141,8 @@ class HLSController extends BaseController
         $params        = array();
         $params['key'] = $file['metas2'][$level]['key'];
 
-        if (!empty($token['data']['tryLookTime'])) {
-            $params['trialSeconds'] = $token['data']['tryLookTime'] * 60;
+        if (!empty($token['data']['watchTimeLimit'])) {
+            $params['trialSeconds'] = $token['data']['watchTimeLimit'];
         }
 
         $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));
