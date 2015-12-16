@@ -14,7 +14,7 @@ class MarkerController extends BaseController
         ));
     }
 
-    //将弹题拖入时间轴
+    //新增弹题
     public function addQuestionMarker(Request $request)
     {
         $data = $request->request->all();
