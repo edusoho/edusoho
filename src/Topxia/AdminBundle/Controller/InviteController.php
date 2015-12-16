@@ -34,10 +34,10 @@ class InviteController extends BaseController
             foreach ($invitedRecords as $keynum => $invitedRecord) {
                 $coinAmountTotalPrice = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
                 $amountTotalPrice     = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'amount' => 0, 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
+                $totalPrice           = $this->getOrderService()->analysisTotalPrice(array('userId' => $invitedRecord['invitedUserId'], 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
 
                 if ($coinAmountTotalPrice || $amountTotalPrice) {
                     $payingUserCount = $payingUserCount + 1;
-                    $totalPrice      = $coinAmountTotalPrice + $amountTotalPrice + $totalPrice;
                 }
             }
 
@@ -46,6 +46,8 @@ class InviteController extends BaseController
                 'nickname'             => $user['nickname'],
                 'payingUserCount'      => $payingUserCount,
                 'payingUserTotalPrice' => $totalPrice,
+                'coinAmountPrice'      => $coinAmountTotalPrice,
+                'amountPrice'          => $amountTotalPrice,
                 'count'                => count($invitedRecords)
             );
         }
@@ -72,9 +74,11 @@ class InviteController extends BaseController
 
             if (!empty($user)) {
                 $details[] = array(
-                    'userId'     => $user['id'],
-                    'nickname'   => $user['nickname'],
-                    'totalPrice' => $coinAmountTotalPrice + $amountTotalPrice
+                    'userId'               => $user['id'],
+                    'nickname'             => $user['nickname'],
+                    'totalPrice'           => $coinAmountTotalPrice + $amountTotalPrice,
+                    'amountTotalPrice'     => $amountTotalPrice,
+                    'coinAmountTotalPrice' => $coinAmountTotalPrice
                 );
             }
         }
