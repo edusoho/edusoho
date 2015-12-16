@@ -89,9 +89,8 @@ class CouponDaoImpl extends BaseDao implements CouponDao
 
             if (isset($conditions['batchIdNotEqual'])) {
                 $tmpConditions['batchIdNotEqual'] = $conditions['batchIdNotEqual'];
+                $conditions                       = array_merge($conditions, $tmpConditions);
             }
-
-            $conditions = array_merge($conditions, $tmpConditions);
         }
 
         if (isset($conditions['code'])) {
