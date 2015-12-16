@@ -968,7 +968,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($user->isAdmin()) {
+        if ($user->isAdmin() || $user->isTeacher()) {
             return true;
         }
 
