@@ -20,14 +20,9 @@ define(function(require, exports, module) {
         	}
 		});
 
-		$(".pagination a").each(function(){
-			var url = $(this).attr('href');
-			$(this).attr('href','javascript:;');
-			$(this).attr('data-url',url);
-		})
-
-		$(".pagination a").on('click',function(){
-			$.get($(this).data('url'),function(response){
+		$(".pagination a").on('click',function(e){
+			e.preventDefault();
+			$.get($(this).attr('href'),function(response){
         		$('.question').html(response);
         	})
 		})
