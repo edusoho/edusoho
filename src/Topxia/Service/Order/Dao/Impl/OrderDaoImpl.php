@@ -212,7 +212,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function analysisAmount($conditions)
+    public function analysisCoinAmount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('sum(coinAmount)');
