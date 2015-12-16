@@ -73,7 +73,8 @@ class MarkerController extends BaseController
             'updatedTime' => time(),
             'second'      => isset($data['second']) ? $data['second'] : ""
         );
-        return $this->getMarkerService()->updateMarker($data['id'], $fields);
+        $marker = $this->getMarkerService()->updateMarker($data['id'], $fields);
+        return $this->createJsonResponse($marker);
     }
 
     protected function getCourseService()
