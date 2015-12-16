@@ -115,7 +115,7 @@ class CouponDaoImpl extends BaseDao implements CouponDao
                         ->andWhere('targetId = :targetId')
                         ->andWhere('targetType = :targetType')
                         ->andWhere('batchId = :batchId')
-                        ->andWhere('batchId != :batchIdNotEqual')
+                        ->andWhere('batchId <> :batchIdNotEqual')
                         ->andWhere('type = :type')
                         ->andWhere('status = :status')
                         ->andWhere('createdTime >= :startDateTime')
