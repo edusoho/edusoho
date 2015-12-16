@@ -231,6 +231,10 @@ class PayCenterController extends BaseController
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
+        if (stripos($payData['sn'], 'v') !== false) {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
+        }
+
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
         }
@@ -281,6 +285,10 @@ class PayCenterController extends BaseController
         }
 
         if (stripos($payData['sn'], 'c') !== false) {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
+        }
+
+        if (stripos($payData['sn'], 'v') !== false) {
             $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
