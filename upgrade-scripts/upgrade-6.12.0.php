@@ -178,7 +178,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
     protected function isIndexExist($table, $indexName)
     {
-        $sql    = "show index from `{$table}`  where Key_name='{$indexName}`';";
+        $sql    = "show index from `{$table}`  where Key_name='{$indexName}';";
         $result = $this->getConnection()->fetchAssoc($sql);
         return empty($result) ? false : true;
     }
