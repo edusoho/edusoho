@@ -530,11 +530,12 @@ define(function(require, exports, module) {
                 $('[name^="score_"]').each(function(){
                     var score = $(this).data('score');
                     scoreTotal = scoreTotal + score;
+                    console.log('score='+scoreTotal);
                 });
+                var subjectiveScore = Number($('[name="objectiveScore"]').val());
+                var totalScore = Number(scoreTotal) + subjectiveScore;
 
-                var objectiveScore = Number($("#objectiveScore").html());
-                var temp = Number(scoreTotal) + Number(objectiveScore);
-                $("#objectiveScore").html(temp);
+                $("#totalScore").html(totalScore);
                 $('#testpaper-checked-dialog').modal('show');
             });
         });
