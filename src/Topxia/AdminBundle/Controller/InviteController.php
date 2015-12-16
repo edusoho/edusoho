@@ -32,6 +32,8 @@ class InviteController extends BaseController
             $coinAmountTotalPrice = 0;
             $amountTotalPrice     = 0;
             $totalPrice           = 0;
+            $totalCoinAmount      = 0;
+            $totalAmount          = 0;
 
             foreach ($invitedRecords as $keynum => $invitedRecord) {
                 $coinAmountTotalPrice = $this->getOrderService()->analysisCoinAmount(array('userId' => $invitedRecord['invitedUserId'], 'coinAmount' => 0, 'status' => 'paid', 'paidStartTime' => $invitedRecord['inviteTime']));
@@ -42,7 +44,9 @@ class InviteController extends BaseController
                     $payingUserCount = $payingUserCount + 1;
                 }
 
-                $totalPrice = $totalPrice + $tempPrice;
+                $totalCoinAmount = $totalCoinAmount + $coinAmountTotalPrice;
+                $totalAmount     = $totalAmount + $amountTotalPrice;
+                $totalPrice      = $totalPrice + $tempPrice;
             }
 
             $inviteInformations[] = array(
@@ -50,8 +54,8 @@ class InviteController extends BaseController
                 'nickname'             => $user['nickname'],
                 'payingUserCount'      => $payingUserCount,
                 'payingUserTotalPrice' => $totalPrice,
-                'coinAmountPrice'      => $coinAmountTotalPrice,
-                'amountPrice'          => $amountTotalPrice,
+                'coinAmountPrice'      => $totalCoinAmount,
+                'amountPrice'          => $totalAmount,
                 'count'                => count($invitedRecords)
             );
         }
