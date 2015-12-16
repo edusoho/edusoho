@@ -71,10 +71,16 @@ class FileServiceImpl extends BaseService implements FileService
             throw $this->createServiceException("用户尚未登录。");
         }
 
-        $record             = array();
-        $record['userId']   = $user['id'];
-        $record['groupId']  = $group['id'];
-        $record['fileName'] = $file->getClientOriginalName();
+        $record            = array();
+        $record['userId']  = $user['id'];
+        $record['groupId'] = $group['id'];
+
+        if ($file instanceof UploadedFile) {
+            $record['fileName'] = $file->getClientOriginalName();
+        } else {
+            $record['fileName'] = $file->getFilename();
+        }
+
         // @todo fix it.
         $record['mime'] = '';
         // $record['mime'] = $file->getMimeType();

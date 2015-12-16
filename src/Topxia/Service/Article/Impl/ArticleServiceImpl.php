@@ -329,7 +329,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article['thumb']         = $fields['thumb'];
         $article['originalThumb'] = $fields['originalThumb'];
-        $article['attachmentIds'] = $fields['attachmentIds'];
+
         $article['title']         = $fields['title'];
         $article['body']          = $fields['body'];
         $article['featured']      = empty($fields['featured']) ? 0 : 1;
@@ -346,6 +346,12 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
         } else {
             $article['tagIds'] = array();
+        }
+
+        if (isset($fields['attachmentIds']) && !empty($fields['attachmentIds'])) {
+            $article['attachmentIds'] = $fields['attachmentIds'];
+        } else {
+            $article['attachmentIds'] = array();
         }
 
         if ($mode == 'add') {

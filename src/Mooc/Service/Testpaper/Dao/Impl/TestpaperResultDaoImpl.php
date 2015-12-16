@@ -32,6 +32,7 @@ class TestpaperResultDaoImpl extends BaseTestpaperResultDaoImpl
             ->andWhere('checkTeacherId  = :checkTeacherId')
             ->andWhere('checkedTime >= :startTime')
             ->andWhere('checkedTime <= :endTime')
+            ->andWhere('userId NOT IN ( :excludeUserIds )')
             ->andWhere('target LIKE :targetLike');
         return $builder;
     }
