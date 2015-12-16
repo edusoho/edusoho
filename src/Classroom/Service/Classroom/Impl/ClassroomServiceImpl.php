@@ -968,7 +968,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if ($user->isAdmin() || $user->isTeacher()) {
+        if ($user->isAdmin()) {
             return true;
         }
 
@@ -976,6 +976,10 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         if (empty($member)) {
             return false;
+        }
+
+        if (in_array('teacher', $member['role'])) {
+            return true;
         }
 
         if (in_array('headTeacher', $member['role'])) {
