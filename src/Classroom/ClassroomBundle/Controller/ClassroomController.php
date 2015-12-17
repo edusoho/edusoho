@@ -352,7 +352,7 @@ class ClassroomController extends BaseController
         $member       = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['title']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         if (!$classroom) {
@@ -640,7 +640,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$classroom['buyable']) {
-            return $this->createMessageResponse('info', "非常抱歉，该{$classroom['name']}不允许加入，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，该{$classroom['title']}不允许加入，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -759,7 +759,7 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
 
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', "{$classroom['name']}不存在，不能购买。");
+            return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
