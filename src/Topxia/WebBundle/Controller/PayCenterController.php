@@ -50,7 +50,9 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
 
-        if ($this->isPluginInstalled('Coupon') && !empty($order['coupon'])) {
+        // $this->isPluginInstalled('Coupon') &&
+
+        if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
 
             if ($result['useable'] == 'no') {
@@ -225,12 +227,10 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
         }
 
-        if (stripos($payData['sn'], 'c') !== false) {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-        }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
         list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
@@ -262,7 +262,7 @@ class PayCenterController extends BaseController
         }
 
         if ($name == 'wxpay') {
-            $returnXml   = $GLOBALS['HTTP_RAW_POST_DATA'];
+            $returnXml   = $request->getContent();
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
@@ -278,12 +278,10 @@ class PayCenterController extends BaseController
             return new Response('success');
         }
 
-        if (stripos($payData['sn'], 'c') !== false) {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-        }
-
         if (stripos($payData['sn'], 'o') !== false) {
             $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
         }
 
         $processor = OrderProcessorFactory::create($order['targetType']);
@@ -545,7 +543,7 @@ class PayCenterController extends BaseController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 
     protected function getAuthService()

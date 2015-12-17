@@ -1,9 +1,9 @@
 <?php
 namespace Topxia\Service\Article\Impl;
 
-use Topxia\Service\Article\CategoryService;
-use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Article\CategoryService;
 
 class CategoryServiceImpl extends BaseService implements CategoryService
 {
@@ -25,10 +25,12 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     {
         $prepare = function ($categories) {
             $prepared = array();
+
             foreach ($categories as $category) {
                 if (!isset($prepared[$category['parentId']])) {
                     $prepared[$category['parentId']] = array();
                 }
+
                 $prepared[$category['parentId']][] = $category;
             }
 
@@ -36,7 +38,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         };
 
         $categories = $prepare($this->findAllCategories());
-        $tree = array();
+        $tree       = array();
         $this->makeCategoryTree($tree, $categories, 0);
 
         return $tree;
@@ -45,12 +47,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function makeCategoryTree(&$tree, &$categories, $parentId)
     {
         static $depth = 0;
-        static $leaf = false;
+        static $leaf  = false;
+
         if (isset($categories[$parentId]) && is_array($categories[$parentId])) {
             foreach ($categories[$parentId] as $category) {
                 $depth++;
                 $category['depth'] = $depth;
-                $tree[] = $category;
+                $tree[]            = $category;
                 $this->makeCategoryTree($tree, $categories, $category['id']);
                 $depth--;
             }
@@ -62,18 +65,22 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function findCategoryChildrenIds($id)
     {
         $category = $this->getCategory($id);
+
         if (empty($category)) {
             return array();
         }
+
         $tree = $this->getCategoryTree();
 
         $childrenIds = array();
-        $depth = 0;
+        $depth       = 0;
+
         foreach ($tree as $node) {
             if ($node['id'] == $category['id']) {
                 $depth = $node['depth'];
                 continue;
             }
+
             if ($depth > 0 && $depth < $node['depth']) {
                 $childrenIds[] = $node['id'];
             }
@@ -121,6 +128,11 @@ class CategoryServiceImpl extends BaseService implements CategoryService
         return ArrayToolkit::index($this->getCategoryDao()->findAllCategoriesByParentId($parentId), 'id');
     }
 
+    public function findAllPublishedCategoriesByParentId($parentId)
+    {
+        return ArrayToolkit::index($this->getCategoryDao()->findAllPublishedCategoriesByParentId($parentId), 'id');
+    }
+
     public function findCategoryBreadcrumbs($categoryId)
     {
         $breadcrumbs = array();
@@ -134,7 +146,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
                 break;
             }
 
-            $category = $indexedCategories[$categoryId];
+            $category      = $indexedCategories[$categoryId];
             $breadcrumbs[] = $category;
 
             if (empty($category['parentId'])) {
@@ -169,11 +181,13 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function updateCategory($id, array $fields)
     {
         $category = $this->getCategory($id);
+
         if (empty($category)) {
             throw $this->createNoteFoundException("栏目(#{$id})不存在，更新栏目失败！");
         }
 
         $fields = ArrayToolkit::parts($fields, array('name', 'code', 'weight', 'parentId', 'publishArticle', 'seoTitle', 'seoKeyword', 'seoDesc', 'published'));
+
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新栏目失败！');
         }
@@ -188,12 +202,14 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     public function deleteCategory($id)
     {
         $category = $this->getCategory($id);
+
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
 
-        $ids = $this->findCategoryChildrenIds($id);
+        $ids   = $this->findCategoryChildrenIds($id);
         $ids[] = $id;
+
         foreach ($ids as $id) {
             $this->getCategoryDao()->deleteCategory($id);
         }
@@ -204,14 +220,14 @@ class CategoryServiceImpl extends BaseService implements CategoryService
     protected function _filterCategoryFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'name' => '',
-            'code' => '',
-            'weight' => 0,
+            'name'           => '',
+            'code'           => '',
+            'weight'         => 0,
             'publishArticle' => '',
-            'seoTitle' => '',
-            'seoDesc' => '',
-            'published' => 1,
-            'parentId' => 0,
+            'seoTitle'       => '',
+            'seoDesc'        => '',
+            'published'      => 1,
+            'parentId'       => 0
         ));
 
         if (empty($fields['name'])) {
@@ -224,6 +240,7 @@ class CategoryServiceImpl extends BaseService implements CategoryService
             if (!preg_match("/^[a-zA-Z0-9_]+$/i", $fields['code'])) {
                 throw $this->createServiceException("编码({$fields['code']})含有非法字符，保存栏目失败");
             }
+
             if (ctype_digit($fields['code'])) {
                 throw $this->createServiceException("编码({$fields['code']})不能全为数字，保存栏目失败");
             }
@@ -234,24 +251,28 @@ class CategoryServiceImpl extends BaseService implements CategoryService
 
     public function makeNavCategories($code)
     {
-        $rootCagoies = $this->findAllCategoriesByParentId(0);
+        $rootCagoies = $this->findAllPublishedCategoriesByParentId(0);
+
         if (empty($code)) {
             return array($rootCagoies, array(), array());
         } else {
-            $category = $this->getCategoryByCode($code);
-            $parentId = $category['id'];
-            $categories = array();
-            $activeIds = array();
+            $category    = $this->getCategoryByCode($code);
+            $parentId    = $category['id'];
+            $categories  = array();
+            $activeIds   = array();
             $activeIds[] = $category['id'];
-            $level = 1;
+            $level       = 1;
+
             while ($parentId) {
                 $activeIds[] = $parentId;
-                $sibling = $this->findAllCategoriesByParentId($parentId);
+                $sibling     = $this->findAllPublishedCategoriesByParentId($parentId);
+
                 if ($sibling) {
                     $categories[$level] = $sibling;
                     $level++;
                 }
-                $parent = $this->getCategory($parentId);
+
+                $parent   = $this->getCategory($parentId);
                 $parentId = $parent['parentId'];
             }
 

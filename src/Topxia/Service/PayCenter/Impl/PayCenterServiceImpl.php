@@ -138,11 +138,10 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     protected function useCoupon($order)
     {
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
-
-        if (!empty($couponApp)) {
-            $this->getCouponService()->useCoupon($order["coupon"], $order);
-        }
+        // $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        // if (!empty($couponApp)) {
+        $this->getCouponService()->useCoupon($order["coupon"], $order);
+        // }
     }
 
     protected function proccessCashFlow($order)
@@ -275,6 +274,6 @@ class PayCenterServiceImpl extends BaseService implements PayCenterService
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon:Coupon.CouponService');
+        return $this->createService('Coupon.CouponService');
     }
 }
