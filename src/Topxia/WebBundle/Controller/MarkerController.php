@@ -29,19 +29,14 @@ class MarkerController extends BaseController
         }
 
         if (!isset($data['markerId'])) {
-            $fields = array(
-                'second' => $data['second']
-            );
-            $marker   = $this->getMarkerService()->addMarker($data['mediaId'], $fields);
-            $question = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], 1);
-            return $this->createJsonResponse($question);
+            $result = $this->getMarkerService()->addMarker($data['mediaId'], $data);
+            return $this->createJsonResponse($result);
         } else {
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                $question = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
-                $this->getQuestionMarkerService()->updateQuestionMarkerSeq($question['seq']);
-                return $this->createJsonResponse($question);
+                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                return $this->createJsonResponse($questionmarker);
             } else {
                 return $this->createJsonResponse(false);
             }

@@ -63,7 +63,8 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             'second'      => $fields['second']
         );
 
-        return $this->getMarkerDao()->addMarker($marker);
+        $marker   = $this->getMarkerDao()->addMarker($marker);
+        $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['qusetionId'], $marker['id'], 1);
     }
 
     public function deleteMarker($id)
@@ -92,6 +93,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getMarkerDao()
     {
         return $this->createDao('Marker.MarkerDao');
+    }
+
+    protected function getQuestionMarkerService()
+    {
+        return $this->createService('Marker.QuestionMarkerService');
     }
 
     protected function getUploadFileService()
