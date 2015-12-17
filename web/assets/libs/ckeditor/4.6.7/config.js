@@ -13,7 +13,7 @@ CKEDITOR.editorConfig = function( config ) {
     ];
 
     config.toolbar_editVip = [
-        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList']}
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList'] }
     ];
 
     config.toolbar_Simple = [
