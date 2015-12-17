@@ -12523,7 +12523,6 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
         markerStyle: {
            'width':'8px',
            'border-radius': '10%',
-           'background-color': 'red'
         },
         markerTip: {
            display: true,
@@ -12607,10 +12606,16 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
         }
         
         function createMarkerDiv(marker, duration) {
-           var markerDiv = $("<div class='vjs-marker'></div>")
+           var markerDiv = $("<div class='vjs-marker'></div>");
+           if(marker.finished !=undefined && marker.finished==true){
+           //  markerDiv.addClass('vjs-marker');
+               markerDiv.css('background-color','red');
+             }
+           // }else{
+           //  markerDiv.addClass('vjs-marker-done');
+           // }
            markerDiv.css(setting.markerStyle)
-              .css({"margin-left" : -parseFloat(markerDiv.css("width"))/2 + 'px', 
-                 "left" : getPosition(marker) + '%'})
+              .css({"left" : getPosition(marker) + '%'})
               .attr("data-marker-key", marker.key)
               .attr("data-marker-time", setting.markerTip.time(marker));
               
@@ -12793,7 +12798,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            if (newMarkerIndex != currentMarkerIndex) {
               // trigger event
               if (newMarkerIndex != -1 && options.onMarkerReached) {
-                options.onMarkerReached(markersList[newMarkerIndex]);
+                options.onMarkerReached(markersList[newMarkerIndex],player);
               }
               currentMarkerIndex = newMarkerIndex;
            }
