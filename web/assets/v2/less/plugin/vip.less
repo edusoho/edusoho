@@ -109,73 +109,9 @@
   }
 }
 
-// .vip-cat {
-//   background-color: #eee;
-//   text-align: center;
-//   .cat-name {
-//     display: block;
-//     float: left;
-//     padding: 15px 20px;
-//     font-size: 16px;
-//     color: @gray;
-//     @media (max-width: @screen-sm-max) {
-//       padding: 10px 15px;
-//     }
-//     @media (max-width: @screen-xs-max) {
-//       font-size: 14px;
-//       padding: 10px;
-//     }
-//     + .cat-name {
-//       border-left: 1px solid @gray-light;
-//     }
-//     &.equal-1 {
-//       width: 100%;
-//     }
-//     &.equal-2 {
-//       width: 50%;
-//     }
-//     &.equal-3 {
-//       width: 33.333333%;
-//     }
-//     &.equal-4 {
-//       width: 25%;
-//     }
-//     &.equal-5 {
-//       width: 20%;
-//     }
-//     &.equal-6 {
-//       width: 16.666666%;
-//     }
-//     &.equal-7 {
-//       width: 14.285714%;
-//     }
-//     &.equal-8 {
-//       width: 12.25%;
-//     }
-//     &.equal-9 {
-//       width: 11.1111%;
-//     }
-//     &.equal-10 {
-//       width: 10%;
-//     }
-//     &.active {
-//       background-color: #fff;
-//       .es-transition;
-//     }
-//     &:hover {
-//       background-color: #d1d1d1;
-//       .es-transition;
-//     }
-//     &.active:hover {
-//       cursor: default;
-//     }
-//   }
-// }
-
 .vip-wide-item {
   height: 200px;
   padding: 20px;
-  // margin: 0 10px;
   .border-radius;
   background-color: #fff;
   margin-bottom: 30px;
@@ -203,13 +139,15 @@
   .vip-info {
     float: left;
     width: 27%;
-    padding: 15px;
+    height: 160px;
+    padding: 15px 10px;
     .border-radius;
     text-align: center;
     background-color: @gray-lighter;
     @media (max-width: @screen-sm-max) {
+      height: 140px;
       width: 45%;
-      padding: 10px 15px;
+      padding: 10px;
       p {
         margin-bottom: 7px !important;
       }
@@ -226,6 +164,9 @@
       span {
         font-size: 24px;
         margin-right: 5px;
+        @media (max-width: @screen-md-max) {
+          font-size: 20px;
+        }
       }
     }
     .number {

@@ -3213,7 +3213,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: 15px;
+  margin-top: -25px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -3254,12 +3254,12 @@ sizes, pagination, etc.
 .swiper-container {
   /* Specify Swiper's Size: */
   /*width:200px;
-    height: 100px;*/
+  height: 100px;*/
 }
 .swiper-slide {
   /* Specify Slides's Size: */
   /*width: 100%;
-    height: 100%;*/
+  height: 100%;*/
 }
 .swiper-slide-active {
   /* Specific active slide styling: */
@@ -3595,7 +3595,8 @@ Pagination Styles
 .vip-wide-item .vip-info {
   float: left;
   width: 27%;
-  padding: 15px;
+  height: 160px;
+  padding: 15px 10px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -3604,8 +3605,9 @@ Pagination Styles
 }
 @media (max-width: 991px) {
   .vip-wide-item .vip-info {
+    height: 140px;
     width: 45%;
-    padding: 10px 15px;
+    padding: 10px;
   }
   .vip-wide-item .vip-info p {
     margin-bottom: 7px !important;
@@ -3626,6 +3628,11 @@ Pagination Styles
 .vip-wide-item .vip-info .price span {
   font-size: 24px;
   margin-right: 5px;
+}
+@media (max-width: 1199px) {
+  .vip-wide-item .vip-info .price span {
+    font-size: 20px;
+  }
 }
 .vip-wide-item .vip-info .number {
   margin: 0 auto 10px;
