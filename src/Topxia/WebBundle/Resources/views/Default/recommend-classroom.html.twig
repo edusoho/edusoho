@@ -1,7 +1,7 @@
 <!-- 推荐班级 --> 
   {% set RecommendClassrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%} 
   {% if RecommendClassrooms %} 
-    <section class="class-section"> 
+    <section class="class-section {{config.background|default("")}}"> 
       <div class="container"> 
         <div class="text-line"> 
           <h5> 

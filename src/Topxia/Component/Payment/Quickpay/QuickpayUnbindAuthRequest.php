@@ -5,7 +5,7 @@ use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
 
-class QuickpayCloseAuthRequest extends Request
+class QuickpayUnbindAuthRequest extends Request
 {
     protected $url = 'Https://Pay.Heepay.com/ShortPay/CloseAuth.aspx';
 

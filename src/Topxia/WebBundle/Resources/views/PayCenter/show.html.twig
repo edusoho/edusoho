@@ -77,7 +77,7 @@
                     <span class="name">{{payAgreement.bankName}}</span>
                     <span class="number">***{{payAgreement.bankNumber}}</span>
                     <span class="hidden-xs">{% if payAgreement.type == 0 %}储蓄卡{% else %}信用卡{% endif %}</span>
-                    <a href="javascript:;" class="closed visible-lg" data-url="{{ path('auth_close_mobile_check')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
+                    <a href="javascript:;" class="closed visible-lg" data-url="{{ path('auth_unbind_mobile_show')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
                   </div>
                 </li>
               {% endfor %}
