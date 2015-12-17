@@ -13,6 +13,10 @@ a {
   background-image : none ! important;
 }
 
+.ui-avatar-s.rr {
+  -webkit-border-radius: 8px;
+}
+
 .rootView , .side-content{
   height: 100%;
   background: #f0f0f0;
@@ -2214,4 +2218,132 @@ a {
     -webkit-background-size: 100% 1px
   }
 }
+
 /* ui-actionsheet */
+
+/* todo list */
+
+.ui-todolist {
+  background: #f0f0f0;
+}
+
+.ui-todolist .list-chart {
+  width: 100%;
+  padding: 8px;
+  height: 200px;
+}
+
+.ui-todolist .chart-container h4 {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 16px;
+  background: #f0f0f0;
+}
+
+.ui-todolist .todo-header {
+  padding: 0;
+  text-align: center;
+}
+
+.ui-todolist .todo-header li {
+  padding: 0;
+  color: #bbb;
+  margin: 10px 0 10px 0;
+}
+
+.ui-todolist .todo-header .label {
+  display: block;
+  font-size: 2rem;
+}
+
+.label.red {
+  color : #f95949;
+}
+
+.label.blue {
+  color : #666;
+}
+
+.ui-todolist .ui-slider-content {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.ui-todolist .ui-panel {
+  background: #ffffff;
+  margin-bottom: 16px;
+}
+
+.ui-todolist .ui-panel .title-body {
+  height: 44px;
+  color: #999;
+  line-height: 44px;
+}
+
+.ui-todolist .title-body .title-tips {
+  color: #999;
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  width: auto;
+}
+
+.ui-todolist .title-body .title-tips label {
+  color: #f95949;
+}
+
+.ui-todolist .title-body .title {
+  margin-left: 16px;
+}
+.ui-todolist .ui-list .ui-avatar-s {
+  margin: 0 10px 0 0;
+  display: inline-block;
+}
+
+.ui-todolist .ui-list .bottom-label {
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+}
+
+.ui-todolist .ui-list .bottom-label .bottom-label-bg {
+  font-size: 8px;
+  border-radius: 5px;
+  background-color: #ddd;
+  padding: 3px 5px 3px 5px;
+}
+
+.ui-todolist .bottom-label.right {
+  right: 16px;
+}
+
+.ui-todolist .ui-list .ui-list-info {
+  padding: 8px;
+}
+
+.ui-todolist .ui-list .ui-list-info p {
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.todo-card .ui-list li .bottom {
+  position: relative;
+}
+
+.ui-todolist .ui-slider-indicators {
+  -webkit-box-pack: center;
+}
+
+.ui-todolist .ui-slider-indicators li {
+  background-color: #ddd;
+}
+
+.ui-todolist .ui-slider-indicators li.current, .ui-todolist .ui-slider-indicators li.current:before {
+  background-color: #37b97d;
+}
+
+.todo-card .ui-list-info h2 {
+  height: 44px;
+  line-height: 44px;
+}
+/* todo list */

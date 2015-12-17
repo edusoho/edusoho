@@ -347,6 +347,16 @@ appProvider.provider('appRouter', function($stateProvider) {
           }
         });
 
+        $stateProvider.state('todolist', {
+          url: "/todolist/:courseId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/todolist.html",
+              controller : TeacherTodoListController
+            }
+          }
+        });
+
 	    this.initPlugin($stateProvider);
 	}
 

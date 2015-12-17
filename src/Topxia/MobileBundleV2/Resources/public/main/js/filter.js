@@ -255,4 +255,21 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 		}
 		return app.viewFloder  + "img/avatar.png";
 	}
-}]);
+}]).
+filter('coverUserRole', function(AppUtil){
+
+	return function(roles) {
+		if (AppUtil.inArray("ROLE_SUPER_ADMIN", roles) != -1) {
+			return "超管";
+		};
+
+		if (AppUtil.inArray("ROLE_ADMIN", roles) != -1) {
+			return "管理员";
+		};
+
+		if (AppUtil.inArray("ROLE_TEACHER", roles) != -1) {
+			return "教师";
+		};
+		return "学生";
+	}
+});
