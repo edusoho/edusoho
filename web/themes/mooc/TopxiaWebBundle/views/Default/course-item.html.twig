@@ -27,7 +27,10 @@
             {% if course.startTime > now %}<span class="label label-ing label-sm">报名中</span>{% endif %}
             {% if course.startTime < now and course.endTime < now %}<span class="label label-gray-light label-sm">已结束</span>{% endif %}
           {% endif %}
-          <span class="pull-right"><span class="text-primary">3</span>学分</span>
+          {% set credit = data('Credit',{'courseId': course.id})%}
+            {% if credit %}
+          <span class="pull-right"><span class="text-primary">{{credit}}</span>学分</span>
+            {% endif %}
         </div>
       </div>
     </div>

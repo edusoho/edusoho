@@ -20,7 +20,10 @@
         <a class="pull-right time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
       {% endif %}
     {% endif %}
-    <span class="mrl"><span class="text-primary">3</span>学分</span>
+     {% set credit = data('Credit',{'courseId': course.id})%}
+     {% if credit %}
+    <span class="mrl"><span class="text-primary">{{credit}}</span>学分</span>
+     {% endif %}
     <span class="student-mun">已有<span>{{course.studentNum}}</span>人学习</span>
     <span class="star-{{(course.rating)|number_format }}"></span>
 
