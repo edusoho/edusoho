@@ -54,7 +54,10 @@ define(function(require, exports, module) {
 
                 plugins = $.extend(plugins, {
                         markers: {
-                            markers: self.get('markers')
+                            markers: self.get('markers'),
+                            markerTip: {
+                               display: false
+                            }
                         }
                     })
 
