@@ -16,8 +16,11 @@ $resources = array(
     'User',
     'Apps',
     'App',
+    'Analysis',
     'Homework',
     'HomeworkResult',
+    'HomeworkManager',
+    'ThreadManager',
     'Upload'
 );
 

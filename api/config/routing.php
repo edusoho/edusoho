@@ -52,3 +52,8 @@ $app->post(_u('/homework_results/{homeworkId}'), 'res.HomeworkResult:post');
 $app->get(_u('/homework_results/{lessonId}'), 'res.HomeworkResult:get');
 
 $app->post(_u('/upload/{group}'), 'res.Upload:post');
+
+$app->get(_u('/analysis/{type}/{tab}'), 'res.Analysis:get');
+
+$app->get(_u('/homework/manager/teaching'), 'res.HomeworkManager:teaching');
+$app->get(_u('/thread/manager/question'), 'res.ThreadManager:question');
