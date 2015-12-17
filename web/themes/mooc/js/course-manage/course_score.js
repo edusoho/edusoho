@@ -5,6 +5,21 @@ define(function(require, exports, module) {
     exports.run = function() {
           var textarea = "本年课程的最终成绩由三部分组成，考试成绩占比权重为" + $("#score_examWeight").val() + "%，作业成绩权重为" + $("#score_homeworkWeight").val() + "%，其他权重为" + $("#score_otherWeight").val() + "%。\n本课程成绩" + $("#score_standardScore").val() + "分为合格，成绩预计公布时间为" + $("#score_expectPublishTime").val() + "日。\n请大家及时完成作业及考试，以免影响最终成绩。";
         $("#score_template").val(textarea);
+
+
+        if(app.arguments.readonly){
+            $(':radio:not(:checked)').attr('disabled', true);
+        }else{
+            $("[name=expectPublishTime]").datetimepicker({
+                language: 'zh-CN',
+                autoclose: true,
+                format: 'yyyy-mm-dd',
+                minView: 'month',
+            }).on('hide', function(ev) {
+                validator.query('[name=expectPublishTime]').execute();
+            });
+             $('[name=expectPublishTime]').datetimepicker('setStartDate', now);
+        }
         var validator = new Validator({
             element: '#score-setting-form',
         });
@@ -41,15 +56,8 @@ define(function(require, exports, module) {
             errormessageDataAfter: '预发布时间不能小于或等于课程结束时间' + $('[name=course_endTime]').val()
         });
         var now = new Date();
-        $("[name=expectPublishTime]").datetimepicker({
-            language: 'zh-CN',
-            autoclose: true,
-            format: 'yyyy-mm-dd',
-            minView: 'month',
-        }).on('hide', function(ev) {
-            validator.query('[name=expectPublishTime]').execute();
-        });
-        $('[name=expectPublishTime]').datetimepicker('setStartDate', now);
+       
+       
     };
     Validator.addRule('dataAfter', function(options, commit) {
         var startTime = $('[name=course_endTime]').val();
