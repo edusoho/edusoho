@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: [],
+            markers: [{id:0,time:-1,text:''}],
             starttime: '0',
             timelimit:'0'
         },
@@ -51,6 +51,12 @@ define(function(require, exports, module) {
                         }
                     })
                 }
+
+                plugins = $.extend(plugins, {
+                        markers: {
+                            markers: self.get('markers')
+                        }
+                    })
 
                 var player = videojs(elementId, {
                     techOrder: ["flash", "html5"],
