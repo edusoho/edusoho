@@ -2,7 +2,7 @@
 	<form class="form-inline well well-sm mark-from" style="margin-top:20px;" action="{{path('course_lesson_question_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">	
 		<div class="form-group">
-			<select class="form-control" name="target" style="width:150px;">
+			<select class="form-control" name="target" style="width:120px;">
 				{{ select_options(targetChoices, app.request.query.get('target'))}}
 			</select>
 		</div>
