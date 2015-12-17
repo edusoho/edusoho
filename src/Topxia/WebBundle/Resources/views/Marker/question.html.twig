@@ -1,5 +1,6 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <div class="toolbar toolbar-open">
-	<form class="form-inline well well-sm mark-from" style="margin-top:20px;" action="{{path('course_lesson_question_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
+	<form class="form-inline well well-sm mark-from" style="margin-top:20px;" action="{{path('course_lesson_question_search',{courseId:course.id,lessonId:lesson.id})}}" method="post">
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">	
 		<div class="form-group">
 			<select class="form-control" name="target" style="width:120px;">
@@ -24,6 +25,9 @@
 			</tr>
 		</thead>
 		<tbody class="question-tr">{% include 'TopxiaWebBundle:Marker:question-tr.html.twig' %}</tbody>
+		<tfoot>
+			<tr><td colspan="5">{{ web_macro.paginator(paginator) }}</td></tr>
+		</tfoot>
 	</table>
 </div>
 <script>app.load('marker/question')</script>

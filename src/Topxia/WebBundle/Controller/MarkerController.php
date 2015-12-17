@@ -85,8 +85,9 @@ class MarkerController extends BaseController
 
     public function questionAction(Request $request, $courseId, $lessonId)
     {
-        $course                      = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson                      = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         $conditions                  = $request->query->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
@@ -100,14 +101,17 @@ class MarkerController extends BaseController
 
     public function searchAction(Request $request, $courseId, $lessonId)
     {
-        $course                      = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson                      = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         $conditions                  = $request->request->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
-        return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
-            'course'    => $course,
-            'paginator' => $paginator,
-            'questions' => $questions
+        return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
+            'course'        => $course,
+            'lesson'        => $lesson,
+            'paginator'     => $paginator,
+            'questions'     => $questions,
+            'targetChoices' => $this->getQuestionTargetChoices($course, $lesson)
         ));
     }
 
@@ -137,7 +141,7 @@ class MarkerController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            9
+            12
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
