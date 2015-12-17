@@ -119,7 +119,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $this->clearCached();
         $this->createSerializer()->serialize($fields, $this->serializeFields);
-        $fields['updatedTime'] = time();
+        $fields['updateTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getThread($id);
@@ -142,7 +142,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         }
 
         $currentTime = time();
-        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = {$currentTime} WHERE id = ? LIMIT 1";
+        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updateTime = {$currentTime} WHERE id = ? LIMIT 1";
 
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
