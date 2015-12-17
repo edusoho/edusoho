@@ -22,9 +22,12 @@
         <td>{% if usersScore %}{{ usersScore[user.id].homeworkScore }}{% endif %}</td>
         <td name="otherScore">{% if usersScore %}{{ usersScore[user.id].otherScore }}{% endif %}</td>
         <td name="credit">{% if usersScore and usersScore[user.id].totalScore >= courseScoreSetting.standardScore %}{{ courseScoreSetting.credit|default(0) }}{% else %} -- {% endif %}</td>
-        <td><a id="score-edit" data-url="{{ path('course_manage_student_score_edit',{courseId:course.id}) }}"
+        <td>
+          {% if courseScoreSetting.status != 'published'%}
+          <a id="score-edit" data-url="{{ path('course_manage_student_score_edit',{courseId:course.id}) }}"
                data-id="{{ usersScore[user.id].id }}"><i class="iconfont icon-edit" data-toggle="tooltip"
                                                          data-placement="top" title="编辑"></i></a>
+          {% endif %}
           <a href="{{ path('course_manage_student_grades_cards',{courseId:course.id,userId:user.id}) }}"><i
                 class="iconfont icon-wendangkeshi" data-toggle="tooltip" data-placement="top"
                 title="查看"></i></a>
