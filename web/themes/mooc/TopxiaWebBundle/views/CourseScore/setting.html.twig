@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 {% block title %}课程评分标准 - {{ parent() }}{% endblock %}
-{% set readonly =   (score.publishTime != null) %} 
+{% set readonly =   (score.publishTime|default(null) != null) %} 
 {% set script_controller = 'theme/course-manage/course_score' %}
 {% set script_arguments = {readonly: readonly}  %}
 {% set side_nav ='course_manage_score' %}

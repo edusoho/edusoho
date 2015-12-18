@@ -30,13 +30,11 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name=examWeight]',
             rule: 'percent_number maxlength{max:3} noMoreThan',
-            required: true,
             errormessageNoMoreThan: '成绩权重只能等于100%'
         });
         validator.addItem({
             element: '[name=homeworkWeight]',
             rule: 'percent_number maxlength{max:3} noMoreThan',
-            required: true,
             errormessageNoMoreThan: '成绩权重只能等于100%'
         });
         validator.addItem({
@@ -71,14 +69,27 @@ define(function(require, exports, module) {
         }
         return true;
     });
+
     Validator.addRule('noMoreThan', function(options, commit) {
         var fullValue = 0;
-        fullValue += ($("#score_examWeight").val() == "") ? 0 : parseInt($("#score_examWeight").val());
-        fullValue += ($("#score_homeworkWeight").val() == "") ? 0 : parseInt($("#score_homeworkWeight").val());
-        fullValue += ($("#score_otherWeight").val() == "") ? 0 : parseInt($("#score_otherWeight").val());
-        if ($("#score_examWeight").val() != "" && $("#score_homeworkWeight").val() != "") {
-            return fullValue == 100;
+        var flag = false;
+        var  weights = new Array('input[name=examWeight]', 'input[name=homeworkWeight]', 'input[name=otherWeight]');
+        $.each(weights, function(index, weight){
+            fullValue +=  ($(weight).val() == "") ? 0 : parseInt($(weight).val()); 
+        });
+        
+      //  if ($("#score_examWeight").val() != "" && $("#score_homeworkWeight").val() != "") {
+            flag =  fullValue == 100;
+        //}
+
+        if(flag){
+            var currentWeight = 'input'+options.element.selector;
+            $.each(weights, function(index, weight){
+                if(currentWeight != weight){
+                   $(weight).next().empty().parent().parent().removeClass('has-error');
+                }
+            });
         }
-        return true;
+        return flag;
     });
 });
