@@ -1,18 +1,20 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 {% block title %}课程评分标准 - {{ parent() }}{% endblock %}
+{% set readonly =   (score.publishTime|default(null) != null) %} 
 {% set script_controller = 'theme/course-manage/course_score' %}
+{% set script_arguments = {readonly: readonly}  %}
 {% set side_nav ='course_manage_score' %}
  {% block main %}
-
      <div class="panel panel-default panel-col">
          <div class="panel-heading">基本信息</div>
+
          <div class="panel-body">
              <form class="form-horizontal" id="score-setting-form" method="post">
                  {{ web_macro.flash_messages() }}
                  <div class="form-group"> 
                      <label class="col-md-2 control-label">课程学分</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_credit" name="credit"   class="form-control width-input width-input-large" value="{{ score.credit|default('') }}">
+                         <input type="text" id="score_credit" name="credit"   class="form-control width-input width-input-large" value="{{ score.credit|default('') }}" {% if readonly %} readonly {% endif %} style="background-color: white;">
                          <div class="help-block" style="display:none;"></div>
                      </div>
                  </div>
@@ -20,7 +22,7 @@
                  <div class="form-group">
                      <label class="col-md-2 control-label" for="score_examWeight">考试成绩权重</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_examWeight" name="examWeight" required="required" class="form-control width-input width-input-large"  value="{{ score.examWeight|default('') }}"> %   
+                         <input type="text" id="score_examWeight" name="examWeight" required="required" class="form-control width-input width-input-large"  value="{{ score.examWeight|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;"> %   
                          <div class="help-block" style="display:none;"></div>
                      </div>
                  </div>
@@ -28,7 +30,7 @@
                  <div class="form-group">
                      <label class="col-md-2 control-label" for="score_homeworkWeight">作业成绩权重</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_homeworkWeight" name="homeworkWeight" required="required"   class="form-control width-input width-input-large"  value="{{ score.homeworkWeight|default('') }}"> %
+                         <input type="text" id="score_homeworkWeight" name="homeworkWeight" required="required"   class="form-control width-input width-input-large"  value="{{ score.homeworkWeight|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;"> %
                          <div class="help-block" style="display:none;"></div>
                      </div>
                  </div>
@@ -36,7 +38,7 @@
                 <div class="form-group">
                      <label class="col-md-2 control-label" for="score_otherWeight">其他</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_otherWeight" name="otherWeight" required="required"   class="form-control width-input width-input-large"  value="{{ score.otherWeight|default('') }}"> %
+                         <input type="text" id="score_otherWeight" name="otherWeight" required="required"   class="form-control width-input width-input-large"  value="{{ score.otherWeight|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;"> %
                          <div class="help-block" style="display:none;"></div>
                      </div>
                  </div>
@@ -44,7 +46,7 @@
                   <div class="form-group">
                      <label class="col-md-2 control-label" for="score_standardScore">成绩合格标准</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_standardScore" name="standardScore" required="required"   class="form-control width-input width-input-large"  value="{{ score.standardScore|default('') }}">  分
+                         <input type="text" id="score_standardScore" name="standardScore" required="required"   class="form-control width-input width-input-large"  value="{{ score.standardScore|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;">  分
                          <div class="help-block" style="display:none;"></div>
                      </div>
                  </div>
@@ -52,9 +54,14 @@
                  <div class="form-group">
                      <label class="col-md-2 control-label" for="score_expectPublishTime">成绩发布预告时间</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_expectPublishTime" name="expectPublishTime" required="required"   class="form-control width-input width-input-large mrl"  value="{{ score.expectPublishTime|default(null)|date_format('Y-m-d')}}">
+                         <input type="text" id="score_expectPublishTime" name="expectPublishTime" required="required"   class="form-control width-input width-input-large mrl"  value="{{ score.expectPublishTime|default(null)|date_format('Y-m-d')}}" {% if readonly %} readonly {% endif %} style="background-color: white;">
                    
-                         <label  class="prl" > <input type="radio"  id ="score_publishType" name ="publishType" value="auto"  {% if score.publishType|default('manual')  == 'auto'%}checked="checked" {% endif %}> 自动发布</label>      <label><input type="radio" name="publishType" value="manual"  {% if score.publishType|default('manual')  == 'manual'%}checked="checked" {% endif %}> 手动发布</label>
+                         <label  class="prl" > 
+                            <input type="radio"  id ="score_publishType" name ="publishType" value="auto"  {% if score.publishType|default('manual')  == 'auto'%}checked="checked" {% endif %}> 自动发布
+                         </label>     
+                        <label>
+                            <input type="radio" name="publishType" value="manual"  {% if score.publishType|default('manual')  == 'manual'%}checked="checked" {% endif %}> 手动发布
+                        </label>
                          <div class="help-block" style="display:none;"></div> 
                      </div>
                  </div>
@@ -69,7 +76,7 @@
                  
                   <div class="form-group">
                     <div class="col-md-offset-2 col-md-8 controls">
-                      <button class="btn btn-fat btn-primary" id="score-create-btn" type="submit">保存</button>
+                      <button class="btn btn-fat btn-primary {% if readonly %} disabled {% endif %}" id="score-create-btn" type="submit">  {% if readonly %} 成绩已发布，设置无法修改{% else %}保存{% endif %}</button>
                     </div>
                   </div>
                  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
