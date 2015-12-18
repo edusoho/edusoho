@@ -47,10 +47,9 @@ class ArticleController extends BaseController
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $article                  = $request->request->all();
-            $article['tags']          = array_filter(explode(',', $article['tags']));
-            $article['attachmentIds'] = $article['attachmentIds'];
-            $article                  = $this->getArticleService()->createArticle($article);
+            $article         = $request->request->all();
+            $article['tags'] = array_filter(explode(',', $article['tags']));
+            $article         = $this->getArticleService()->createArticle($article);
 
             return $this->redirect($this->generateUrl('admin_article'));
         }
