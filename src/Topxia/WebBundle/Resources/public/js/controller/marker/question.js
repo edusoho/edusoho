@@ -2,7 +2,11 @@ define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
+    var DraggableWidget = require('../marker/mange');
 
+    var myDraggableWidget = new DraggableWidget ({
+        element:"#lesson-dashboard"
+    })
     exports.run = function() {
 		$form = $('.mark-from');
 		var validator = new Validator({
@@ -34,6 +38,8 @@ define(function(require, exports, module) {
 				
 			})
 		})
+
+        
 
     }
 });

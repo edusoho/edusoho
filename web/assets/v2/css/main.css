@@ -12007,3 +12007,161 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+.question-manage {
+  background-color: #eeeeee;
+}
+.question-manage .breadcrumb {
+  margin-bottom: 0;
+  line-height: 60px;
+  background-color: #eeeeee;
+  padding: 0 20px;
+}
+.question-manage .lesson-dashboard {
+  background-color: #eeeeee;
+  top: 60px;
+}
+.question-manage .lesson-dashboard .toolbar {
+  background-color: #eeeeee;
+  border: 0;
+  width: 490px;
+  padding-right: 20px;
+}
+.question-manage .lesson-dashboard .dashboard-body {
+  top: 0;
+  bottom: 30%;
+}
+.question-manage .lesson-dashboard .dashboard-content {
+  right: 510px;
+}
+.question-manage .list-title {
+  padding: 10px 0;
+  border-bottom: 1px solid #e1e1e1;
+  margin: 10px 0;
+}
+.question-manage .lesson-list {
+  border: 0;
+  margin: 0;
+  min-height: 100px;
+}
+.question-manage .lesson-list .item-lesson {
+  margin: 0 0 10px;
+  line-height: 46px;
+  cursor: pointer;
+}
+.question-manage .lesson-list .title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.question-manage .lesson-list .content {
+  text-align: center;
+}
+.question-manage .lesson-list .item-lesson.dragged {
+  background-color: #feffeb;
+  background-color: rgba(254, 255, 235, 0.9);
+  width: 150px!important;
+  overflow: hidden;
+}
+.question-manage .lesson-list .item-lesson.dragged .title {
+  width: 100%;
+}
+.question-manage .lesson-list .item-lesson.dragged .content {
+  display: none;
+}
+.question-manage .lesson-list .placeholder {
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+  line-height: 46px;
+  height: 46px;
+  padding: 0 10px;
+  color: #919191;
+}
+.question-manage .coord {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 70%;
+  height: 150px;
+  background-color: #313131;
+}
+.question-manage .coord .time-scale {
+  position: relative;
+  height: 20px;
+}
+.question-manage .coord .time-scale a {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+  border-left: 1px solid #fff;
+  padding-right: 1px;
+  float: left;
+  cursor: pointer;
+}
+.question-manage .coord .time-scale .question-scale {
+  left: 0;
+  bottom: 100%;
+  height: 50px;
+  bottom: 40px;
+  border-color: #c33b2d;
+}
+.question-manage .coord .time-scale .question-scale .question-details {
+  position: absolute;
+  left: 0;
+  bottom: 50px;
+  min-width: 50px;
+  background-color: rgba(0, 0, 0, 0.8);
+  margin-left: -25px;
+  text-align: center;
+  color: #fff;
+  visibility: hidden;
+}
+.question-manage .coord .time-scale .question-scale.blue {
+  border-color: #2998c9;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+.question-manage .coord .time-scale .question-scale.blue:hover .question-details {
+  visibility: visible;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details {
+  visibility: visible;
+  background-color: transparent;
+  width: 220px;
+  margin-left: -110px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .lesson-list {
+  height: auto;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .item-lesson {
+  background-color: transparent;
+  border: none;
+  margin-bottom: 0;
+  text-align: left;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .item-lesson:hover {
+  background-color: #46c37b;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .title {
+  width: 100%;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .glyphicon {
+  display: none;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .content {
+  display: none;
+}
+.question-manage .coord .time-scale .question-scale.show {
+  visibility: visible;
+}
+.question-manage .coord .time-scale .tooltip-inner {
+  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.question-manage .coord .lesson-list {
+  min-height: 40px;
+  height: 100px;
+}

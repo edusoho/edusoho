@@ -1,5 +1,35 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-{% for question in questions %}
+
+<div class="row list-title">
+  <div class="col-md-6">题干</div>
+  <div class="col-md-2">题型</div>
+  <div class="col-md-2">难度</div>
+  <div class="col-md-2">操作</div>
+</div>
+
+
+<ul class="lesson-list sortable-list simple_with_animation" id="right-item-list">
+  {% for question in questions %} 
+  <li class="row item-lesson">
+    <div class="col-md-6 title">
+      <span class="glyphicon glyphicon-move mrm"></span>
+      第
+      <span class="num">
+      {{loop.index}}
+      </span>
+      题：
+      {{question.stem|fill_question_stem_text|plain_text(12) }}
+    </div>
+    <div class="col-md-2 content">{{ dict('questionType')[question.type] }}</div>
+    <div class="col-md-2 content">{{ dict('difficulty')[question.difficulty] }}</div>
+    <div class="col-md-2 content"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></div>
+  </li>
+  {% else %}
+    <div class="empty">一道题都没有</div>
+  {% endfor %}
+</ul>
+
+{#{% for question in questions %}
   <tr>
     <td><span class="glyphicon glyphicon-move" style="padding-left:5px;"></span></td>
     <td>{{question.stem|fill_question_stem_text|plain_text(12) }}</td>
@@ -15,3 +45,4 @@
     </tr>
 {% endfor %}
 <tr><td colspan="5">{{ web_macro.paginator(paginator) }}</td></tr>
+#}

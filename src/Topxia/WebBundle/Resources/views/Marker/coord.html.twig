@@ -1,16 +1,11 @@
-{% block stylesheets %}
-  <style>
-    .lesson-dashboard .coord
-    {
-      left: 20px;
-      height: 130px;
-      bottom:10px;
-      position:absolute;
-    }
-
-  </style>
-{% endblock %}
-
 <div class="coord">
-	ddddddddd
+  <div class="time-scale">
+    <a class="question-scale" id="default-scale">
+      <div class="question-details">
+        <ul class="simple_with_animation"></ul>
+      </div>
+    </a>
+  </div>
+  <ul class="lesson-list sortable-list simple_with_animation" id="left-item-list">
+  </ul>
 </div>
