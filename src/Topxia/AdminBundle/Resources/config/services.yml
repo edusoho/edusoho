@@ -10,6 +10,7 @@ parameters:
         - title: ""
           count: "12"
           orderBy: "latest"
+          background: ""
           categoryId: 0
           code: course-grid-with-condition-index
           categoryCount: "4"
@@ -23,6 +24,7 @@ parameters:
           code: "live-course"
           defaultTitle: "近期直播"
           subTitle: ""
+          background: ""
           defaultSubTitle: "实时跟踪直播课程，避免课程遗漏。"
           id: "RecentLiveCourses"
         - title: ""
@@ -35,6 +37,7 @@ parameters:
           code: "recommend-classroom"
           defaultTitle: "推荐班级"
           subTitle: ""
+          background: ""
           defaultSubTitle: "班级化学习体系，给你更多的课程相关服务。"
           id: "RecommendClassrooms"
         - title: ""
@@ -42,6 +45,7 @@ parameters:
           code: "groups"
           defaultTitle: "动态"
           subTitle: ""
+          background: ""
           defaultSubTitle: "参与小组，结交更多同学，关注课程动态。"
           select1: "checked"
           select2: "checked"
@@ -54,6 +58,7 @@ parameters:
           code: "recommend-teacher"
           defaultTitle: "推荐教师"
           subTitle: ""
+          background: ""
           defaultSubTitle: "名师汇集，保证教学质量与学习效果。"
           id: "RecommendTeachers"
     bottom: simple
@@ -66,6 +71,7 @@ parameters:
         - title: ""
           count: "12"
           orderBy: "latest"
+          background: ""
           categoryId: 0
           code: course-grid-with-condition-index
           categoryCount: "4"
@@ -79,6 +85,7 @@ parameters:
           code: "live-course"
           defaultTitle: "近期直播"
           subTitle: ""
+          background: ""
           defaultSubTitle: "实时跟踪直播课程，避免课程遗漏。"
           id: "RecentLiveCourses"
         - title: ""
@@ -91,6 +98,7 @@ parameters:
           code: "recommend-classroom"
           defaultTitle: "推荐班级"
           subTitle: ""
+          background: ""
           defaultSubTitle: "班级化学习体系，给你更多的课程相关服务。"
           id: "RecommendClassrooms"
         - title: ""
@@ -98,6 +106,7 @@ parameters:
           code: "groups"
           defaultTitle: "动态"
           subTitle: ""
+          background: ""
           defaultSubTitle: "参与小组，结交更多同学，关注课程动态。"
           select1: "checked"
           select2: "checked"
@@ -110,6 +119,7 @@ parameters:
           code: "recommend-teacher"
           defaultTitle: "推荐教师"
           subTitle: ""
+          background: ""
           defaultSubTitle: "名师汇集，保证教学质量与学习效果。"
           id: "RecommendTeachers"
     bottom: simple

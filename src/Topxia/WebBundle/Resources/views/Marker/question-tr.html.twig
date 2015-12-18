@@ -30,20 +30,3 @@
   {% endfor %}
 </ul>
 
-{#{% for question in questions %}
-  <tr>
-    <td><span class="glyphicon glyphicon-move" style="padding-left:5px;"></span></td>
-    <td>{{question.stem|fill_question_stem_text|plain_text(12) }}</td>
-    <td>{{ dict('questionType')[question.type] }}</td>
-    <td>{{ dict('difficulty')[question.difficulty] }}</td>
-    <td><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></td>
-  </tr>
-{% else %}
-    <tr>
-      <td colspan="20">
-        <div class="empty">一道题都没有</div>
-      </td>
-    </tr>
-{% endfor %}
-<tr><td colspan="5">{{ web_macro.paginator(paginator) }}</td></tr>
-#}

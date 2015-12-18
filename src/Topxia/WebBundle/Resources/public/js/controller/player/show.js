@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
-        var watchLimit = videoHtml.data('watchLimit');
+        var timelimit = videoHtml.data('timelimit');
 
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
@@ -67,7 +67,10 @@ define(function(require, exports, module) {
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
-                agentInWhiteList: agentInWhiteList
+                watermark: watermark,
+                starttime: starttime,
+                agentInWhiteList: agentInWhiteList,
+                timelimit:timelimit
             }
         );
 
@@ -95,9 +98,12 @@ define(function(require, exports, module) {
  
         });
         
-
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
+        });
+
+        player.on("timechange", function(){
+            messenger.sendToParent("timechange", {pause: true});
         });
 
         player.on("paused", function(){

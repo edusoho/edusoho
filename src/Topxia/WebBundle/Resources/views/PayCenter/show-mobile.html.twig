@@ -23,7 +23,7 @@
     
     <div class="pannel pannel-default unbind">
       <div class="unbind-frame">
-        <form id="unbind-form" class="form-horizontal" method="post" action="{{ path('pay_center_auth_close') }}">
+        <form id="unbind-form" class="form-horizontal" method="post" action="{{ path('pay_center_auth_unbind') }}">
           <input type="hidden" name="payAgreementId" value="{{payAgreementId}}"/>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <div class="form-group unbind-down">
@@ -43,5 +43,5 @@
 {% block footer %}
   <button id="unbind-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#unbind-form">确定</button>
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <script>app.load('pay/checkMobile-modal')</script>
+  <script>app.load('pay/show-mobile-modal')</script>
 {% endblock %}

@@ -16,10 +16,78 @@ class MarkerController extends BaseController
         ));
     }
 
+    //新增弹题
+    public function addQuestionMarkerAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
+        $question           = $this->getQuestionService()->getQuestion($data['questionId']);
+
+        if (empty($question)) {
+            return $this->createMessageResponse('error', '该题目不存在!');
+        }
+
+        if (!isset($data['markerId'])) {
+            $result = $this->getMarkerService()->addMarker($data['mediaId'], $data);
+            return $this->createJsonResponse($result);
+        } else {
+            $marker = $this->getMarkerService()->getMarker($data['markerId']);
+
+            if (!empty($marker)) {
+                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                return $this->createJsonResponse($questionmarker);
+            } else {
+                return $this->createJsonResponse(false);
+            }
+        }
+    }
+
+    //删除弹题
+    public function deleteQuestionMarkerAction(Request $request)
+    {
+        $data               = $request->request->all();
+        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
+        $result             = $this->getQuestionMarkerService()->deleteQuestionMarker($data['questionId']);
+        return $this->createJsonResponse($result);
+    }
+
+    //弹题排序
+    public function sortQuestionMarkerAction(Request $request)
+    {
+        $data   = $request->request->all();
+        $data   = isset($data['questionIds']) ? $data['questionIds'] : array();
+        $result = $this->getQuestionMarkerService()->sortQuestionMarkers($data);
+        return $this->createJsonResponse($result);
+    }
+
+    //更新驻点时间
+    public function updateMarkerAction(Request $request)
+    {
+        $data       = $request->request->all();
+        $data['id'] = isset($data['id']) ? $data['id'] : 0;
+        $fields     = array(
+            'updatedTime' => time(),
+            'second'      => isset($data['second']) ? $data['second'] : ""
+        );
+        $marker = $this->getMarkerService()->updateMarker($data['id'], $fields);
+        return $this->createJsonResponse($marker);
+    }
+
+    //获取当前驻点弹题
+    public function showQuestionMarkerAction(Request $request)
+    {
+        $data             = $request->request->all();
+        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $questionmarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+        return $this->createJsonResponse($questionmarkers);
+    }
+
     public function questionAction(Request $request, $courseId, $lessonId)
     {
-        $course                      = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson                      = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         $conditions                  = $request->query->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
@@ -33,14 +101,17 @@ class MarkerController extends BaseController
 
     public function searchAction(Request $request, $courseId, $lessonId)
     {
-        $course                      = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson                      = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         $conditions                  = $request->request->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
-        return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
-            'course'    => $course,
-            'paginator' => $paginator,
-            'questions' => $questions
+        return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
+            'course'        => $course,
+            'lesson'        => $lesson,
+            'paginator'     => $paginator,
+            'questions'     => $questions,
+            'targetChoices' => $this->getQuestionTargetChoices($course, $lesson)
         ));
     }
 
@@ -70,7 +141,7 @@ class MarkerController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            9
+            12
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
@@ -91,5 +162,20 @@ class MarkerController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getMarkerService()
+    {
+        return $this->getServiceKernel()->createService('Marker.MarkerService');
+    }
+
+    protected function getQuestionMarkerService()
+    {
+        return $this->getServiceKernel()->createService('Marker.QuestionMarkerService');
+    }
+
+    protected function getQuestionMarkerResultService()
+    {
+        return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');
     }
 }

@@ -27,8 +27,18 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function updateMarker($id, $fields)
     {
+        $marker = $this->getMarker($id);
+
+        if (empty($marker)) {
+            throw $this->createServiceException("驻点不存在");
+        }
+
         if (isset($fields['updatedTime']) || $fields['updatedTime'] == "") {
             $fields['updatedTime'] = time();
+        }
+
+        if (isset($fields['second']) || $fields['second'] == "") {
+            throw $this->createServiceException("更新驻点时间不存在");
         }
 
         return $this->getMarkerDao()->updateMarker($id, $fields);
@@ -53,7 +63,8 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             'second'      => $fields['second']
         );
 
-        return $this->getMarkerDao()->addMarker($marker);
+        $marker   = $this->getMarkerDao()->addMarker($marker);
+        $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['qusetionId'], $marker['id'], 1);
     }
 
     public function deleteMarker($id)
@@ -82,6 +93,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getMarkerDao()
     {
         return $this->createDao('Marker.MarkerDao');
+    }
+
+    protected function getQuestionMarkerService()
+    {
+        return $this->createService('Marker.QuestionMarkerService');
     }
 
     protected function getUploadFileService()

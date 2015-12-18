@@ -18,7 +18,7 @@ define(function(require, exports, module) {
 	                return ;
 	           	}
 	          	$.post($form.attr('action'), $form.serialize(), function(response){
-	             	$('.question-tr').html(response);
+	             	$('.question').html(response);
 	          	});	
     
         	}

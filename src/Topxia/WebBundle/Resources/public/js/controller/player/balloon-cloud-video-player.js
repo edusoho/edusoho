@@ -10,8 +10,10 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: [],
-            starttime: '0'
+            markers: [{id:1,time:10,text:'dfasdfdf',finished:true},
+                      {id:2,time:14,text:'deefefe',finished:false}],
+            starttime: '0',
+            timelimit:'0'
         },
 
         events: {},
@@ -50,6 +52,39 @@ define(function(require, exports, module) {
                         }
                     })
                 }
+
+                plugins = $.extend(plugins, {
+                        markers: {
+                            markers: self.get('markers'),
+                            markerTip: {
+                               display: false
+                            },
+                            breakOverlay:{
+                               display: true,
+                               displayTime: 1,
+                               text: function(marker) {
+                                  return "Break overlay: " + marker.text;
+                               },
+                               style: {
+                                  'width':'100%',
+                                  'bottom': '60px',
+                                  'background-color': 'rgba(0,0,0,0.7)',
+                                  'color': 'white',
+                                  'font-size': '17px'
+                               }
+                            },
+                            onMarkerReached:function(marker,player){
+                              if(!player.paused() && marker.finished == false){
+                                player.pause();
+                                // $.get('/course/1/manage/question/25/preview','',function(data){
+                                //     console.log($('.vjs-break-overlay-text'));
+                                //     $('.vjs-break-overlay-text').html(data);
+
+                                // });
+                              }
+                            }
+                        }
+                    });
 
                 var player = videojs(elementId, {
                     techOrder: ["flash", "html5"],
@@ -90,6 +125,16 @@ define(function(require, exports, module) {
 
                 player.on("timeupdate", function(e){
                     self.trigger("timechange", e);
+                    var currentTime = player.currentTime();
+                    var timelimit = self.get('timelimit');
+                    if(timelimit>0 && timelimit<currentTime){
+                        self.isPlaying() && player.pause();
+                        player.currentTime(timelimit);
+                        player.pluck({
+                            text: "免费试看结束，购买后可完整观看",
+                            display:true
+                        });
+                    }
                 });
 
                 player.on("ended", function(e){
@@ -102,6 +147,10 @@ define(function(require, exports, module) {
 
                 player.on("play", function(e){
                     self.trigger("playing", e);
+                    player.pluck({
+                        text: "",
+                        display:false
+                    });
                 });
 
                 player.on("pause", function(e){

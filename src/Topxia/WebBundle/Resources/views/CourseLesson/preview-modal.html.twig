@@ -17,7 +17,7 @@
           style="height:300px;overflow:hidden"
           data-balloon-player="1"
           {% if not lesson.free %}
-            data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
+            data-timelimit="{{ course.tryLookTime }}"
           {% endif %}
           data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1})}}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
@@ -37,7 +37,7 @@
           </div>
           <div class="js-buy-text">
             <span class="text-success">
-              您可以免费试看前{{ (setting('magic.lesson_watch_time_limit')|default(0)/60)|number_format(2,'.') }}分钟，购买后可完整观看。
+              您可以免费试看前{{ course.tryLookTime }}分钟，购买后可完整观看。
             </span>
           </div>
         </div>

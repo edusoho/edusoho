@@ -4,7 +4,7 @@
   {% set reviews = data('LatestCourseReviews',{'count':config.count|default(4)}) %}
   {% set ArticlesIsNull = false %}
   {% if groups %}
-    <section class="dynamic-section">
+    <section class="dynamic-section {{config.background|default("")}}">
       <div class="container">
         <div class="text-line gray">
           <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
