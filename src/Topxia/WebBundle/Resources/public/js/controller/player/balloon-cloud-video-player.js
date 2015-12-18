@@ -10,7 +10,8 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: [{id:0,time:-1,text:''}],
+            markers: [{id:1,time:10,text:'dfasdfdf',finished:true},
+                      {id:2,time:14,text:'deefefe',finished:false}],
             starttime: '0',
             timelimit:'0'
         },
@@ -54,9 +55,36 @@ define(function(require, exports, module) {
 
                 plugins = $.extend(plugins, {
                         markers: {
-                            markers: self.get('markers')
+                            markers: self.get('markers'),
+                            markerTip: {
+                               display: false
+                            },
+                            breakOverlay:{
+                               display: true,
+                               displayTime: 1,
+                               text: function(marker) {
+                                  return "Break overlay: " + marker.text;
+                               },
+                               style: {
+                                  'width':'100%',
+                                  'bottom': '60px',
+                                  'background-color': 'rgba(0,0,0,0.7)',
+                                  'color': 'white',
+                                  'font-size': '17px'
+                               }
+                            },
+                            onMarkerReached:function(marker,player){
+                              if(!player.paused() && marker.finished == false){
+                                player.pause();
+                                $.get('/course/1/manage/question/25/preview','',function(data){
+                                    console.log($('.vjs-break-overlay-text'));
+                                    $('.vjs-break-overlay-text').html(data);
+
+                                });
+                              }
+                            }
                         }
-                    })
+                    });
 
                 var player = videojs(elementId, {
                     techOrder: ["flash", "html5"],
