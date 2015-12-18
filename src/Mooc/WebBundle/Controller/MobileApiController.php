@@ -156,6 +156,15 @@ class MobileApiController extends MobileBaseController
             unset($course['teacherIds']);
             $course["priceType"] = $coinSetting["priceType"];
             $course['coinName'] = $coinSetting["name"];
+
+            if (!isset($course['periodicStartTime'])) {
+                $course['periodicStartTime'] = date("c", $course['startTime']);
+            }
+
+            if (!isset($course['periodicEndTime'])) {
+                $course['periodicEndTime'] = date("c", $course['endTime']);
+            }
+
             return $course;
         }, $courses);
     }
