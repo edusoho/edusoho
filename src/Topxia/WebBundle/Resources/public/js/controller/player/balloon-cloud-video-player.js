@@ -67,7 +67,7 @@ define(function(require, exports, module) {
                                },
                                style: {
                                   'width':'100%',
-                                  'height': '20%',
+                                  'bottom': '60px',
                                   'background-color': 'rgba(0,0,0,0.7)',
                                   'color': 'white',
                                   'font-size': '17px'
@@ -76,7 +76,11 @@ define(function(require, exports, module) {
                             onMarkerReached:function(marker,player){
                               if(!player.paused() && marker.finished == false){
                                 player.pause();
-                                console.log(marker);
+                                $.get('/course/1/manage/question/25/preview','',function(data){
+                                    console.log($('.vjs-break-overlay-text'));
+                                    $('.vjs-break-overlay-text').html(data);
+
+                                });
                               }
                             }
                         }

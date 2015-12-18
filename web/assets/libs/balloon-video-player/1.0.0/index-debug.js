@@ -12541,7 +12541,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            },
            style: {
               'width':'100%',
-              'height': '20%',
+              'bottom': '80px',
               'background-color': 'rgba(0,0,0,0.7)',
               'color': 'white',
               'font-size': '17px'
@@ -12607,18 +12607,14 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
         
         function createMarkerDiv(marker, duration) {
            var markerDiv = $("<div class='vjs-marker'></div>");
-           if(marker.finished !=undefined && marker.finished==true){
-           //  markerDiv.addClass('vjs-marker');
-               markerDiv.css('background-color','red');
-             }
-           // }else{
-           //  markerDiv.addClass('vjs-marker-done');
-           // }
            markerDiv.css(setting.markerStyle)
               .css({"left" : getPosition(marker) + '%'})
               .attr("data-marker-key", marker.key)
               .attr("data-marker-time", setting.markerTip.time(marker));
               
+           if(marker.finished !=undefined && marker.finished==true){
+               markerDiv.css('background-color','red');
+           }
            // add user-defined class to marker
            if (marker.class) {
               markerDiv.addClass(marker.class);
@@ -12656,6 +12652,9 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               if (markerDiv.data('marker-time') != markerTime) {
                  markerDiv.css({"left": getPosition(marker) + '%'})
                     .attr("data-marker-time", markerTime);
+                 if(marker.finished !=undefined && marker.finished==true){
+                     markerDiv.css('background-color','red');
+                 }
               }
            }
            sortMarkersList();
@@ -12726,6 +12725,9 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            var marker = markersList[currentMarkerIndex];
            var markerTime = setting.markerTip.time(marker);
         
+           if(marker.finished != undefined &&marker.finished ==true){
+             return ;
+           }
            if (currentTime >= markerTime && 
               currentTime <= (markerTime + setting.breakOverlay.displayTime)) {
 
