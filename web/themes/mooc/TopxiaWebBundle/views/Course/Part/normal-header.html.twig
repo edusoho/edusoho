@@ -33,9 +33,9 @@
    
     <div class="metas hidden-xs hidden-sm">
       <p class="student-num ">
-        {% set credit = data('Credit',{'courseId': course.id})%}
-        {% if credit %}
-        <label for="">课程学分：</label><span class="text-primary mrl"> {{credit}}学分</span>
+        {% set CourseScoreSetting = data('CourseScoreSetting',{'courseId': course.id})%}
+        {% if CourseScoreSetting %}
+        <label for="">课程学分：</label><span class="text-primary mrl"> {{CourseScoreSetting.credit}}学分</span>
         {% endif %}
         {% if course.showStudentNumType == 'opened' %}
         <label for="">学员人数：</label><span class="text-primary"> {{ course.studentNum }}人</span>
