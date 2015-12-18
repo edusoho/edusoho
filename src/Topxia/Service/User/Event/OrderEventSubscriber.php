@@ -18,43 +18,16 @@ class OrderEventSubscriber implements EventSubscriberInterface
     {
         $order = $event->getSubject();
 
-        if ($this->isFirstOrderByUserId($order['userId'])) {
-            $inviteRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
+        if ($order['coinAmount'] > 0 || $order['amount'] > 0) {
+            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
 
-            if (!empty($inviteRecord)) {
-                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteRecord['inviteUserId'], 'pay');
+            if (!empty($record) && $record['inviteUserCardId'] == null) {
+                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($record['inviteUserId'], 'pay');
 
                 if (!empty($inviteCoupon)) {
                     $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['userId'], array('inviteUserCardId' => $inviteCoupon['id']));
                 }
             }
-        }
-    }
-
-    private function isFirstOrderByUserId($userId)
-    {
-        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($userId);
-
-        $conditionsAmount = array(
-            'userId'                 => $userId,
-            'amount'                 => 0.00,
-            'status'                 => 'paid',
-            'createdTimeGreaterThan' => $record['inviteTime'] ? $record['inviteTime'] : null
-        );
-        $conditionsCoinAmount = array(
-            'userId'                 => $userId,
-            'coinAmount'             => 0.00,
-            'status'                 => 'paid',
-            'createdTimeGreaterThan' => $record['inviteTime'] ? $record['inviteTime'] : null
-        );
-
-        $orderAmount     = $this->getOrderService()->searchOrders($conditionsAmount, array('createdTime', 'DESC'), 0, 2);
-        $orderCoinAmount = $this->getOrderService()->searchOrders($conditionsCoinAmount, array('createdTime', 'DESC'), 0, 2);
-
-        if (count($orderAmount) + count($orderCoinAmount) == 1) {
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -66,10 +39,5 @@ class OrderEventSubscriber implements EventSubscriberInterface
     protected function getCouponService()
     {
         return ServiceKernel::instance()->createService('Coupon.CouponService');
-    }
-
-    protected function getOrderService()
-    {
-        return ServiceKernel::instance()->createService('Order.OrderService');
     }
 }
