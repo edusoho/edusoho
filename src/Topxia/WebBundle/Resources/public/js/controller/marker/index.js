@@ -33,7 +33,8 @@ define(function(require, exports, module) {
                         var marker={
                             "id":data[index].id,
                             "time":data[index].second,
-                            "text":"ads"
+                            "text":"ads",
+                            "finished":false
                         };
                         player.addMarker([marker]);
                     }

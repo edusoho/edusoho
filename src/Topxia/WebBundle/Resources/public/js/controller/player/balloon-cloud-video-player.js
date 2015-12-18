@@ -10,8 +10,7 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: [{id:1,time:10,text:'dfasdfdf',finished:true},
-                      {id:2,time:14,text:'deefefe',finished:false}],
+            markers: [{id:0,time:-1,text:'',finished:true}],
             starttime: '0',
             timelimit:'0'
         },
@@ -79,7 +78,6 @@ define(function(require, exports, module) {
                                 $.get('/course/1/manage/question/25/preview','',function(data){
                                     console.log($('.vjs-break-overlay-text'));
                                     $('.vjs-break-overlay-text').html(data);
-
                                 });
                               }
                             }
