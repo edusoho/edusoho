@@ -12,10 +12,11 @@ define(function(require, exports, module) {
             right_list: '#right-item-list',
             left_list: "#left-item-list",
             group_list: ".simple_with_animation",
-            arryid :[]
+            arryid: []
         },
         events: {
-            'mousedown {{attrs.item}}': 'itemDraggable'
+            'mousedown {{attrs.item}}': 'itemDraggable',
+            'click .lesson-list .icon-close': 'itemRmove'
         },
         setup: function() {
             this._initSortable();
@@ -63,7 +64,7 @@ define(function(require, exports, module) {
                 }
             }).mouseup(function() {
                 // 隐藏默认时间轴
-                // $question_scale.css("visibility", "hidden");
+                $question_scale.css("visibility", "hidden");
                 $question_scale_details.css("visibility", "hidden");
 
                 // 停止拖动
@@ -77,48 +78,74 @@ define(function(require, exports, module) {
                 var left = $question_scale.css("left");
                 var arryid = _obj.get("arryid");
 
-                if ($left_list.children().length > 0){
+                if ($left_list.children().length > 0) {
                     var bool = false;
                     // 5秒以内一个弹题
-                    
-                    if(arryid.length>0 ) {
-                        console.log(arryid);
-                        for (var i = arryid.length - 1; i >= 0; i--) {
-                            if(arryid[i]!=timeiD  ) {
+
+                    if (arryid.length > 0) {
+                        var arr =  false;
+                        // 遍历所有元素都与当前时间差大于5秒再增加，一旦遍历有时间挫小于5秒就跳出xun h
+                       for (var i = arryid.length - 1; i >= 0; i--) {
+                            if (arryid[i] != timeiD && ( Math.abs( parseInt(timeiD) - parseInt(arryid[i]) ) )> 5) {
                                 arryid.push(timeiD);
                                 bool = true;
-                            }
-                            if(Math.abs(parseInt(timeiD)-parseInt(arryid[i])) <= 5) {
+                            } else if (Math.abs(parseInt(timeiD) - parseInt(arryid[i])) <= 5) {
                                 bool = false;
                                 timeiD = arryid[i];
+                                break;
                             }
                         };
-                    }else {
+                    } else {
                         bool = true;
                         arryid.push(timeiD);
                     }
-                    if(bool) {
+                    if (bool) {
                         var $newscale = $('<a class="question-scale blue" id="' + timeiD + '"><div class="question-details"><ul class="lesson-list simple_with_animation"></ul></div></a>');
                         //获取到默认的时间轴内容，生成一个id的
-                        $newscale.appendTo($timecontent.find('.time-scale')); 
+                        $newscale.appendTo($timecontent.find('.time-scale'));
                         // 将拖放过来的li给这个新的newscale中的ul 
                         $left_list.children().appendTo($newscale.find(".simple_with_animation"));
-                        $newscale.find(".simple_with_animation").after('<div class="time">'+$question_scale_details.html()+'</div>');
-                        $newscale.css("left",left);
-                    }else {
+                        $newscale.find(".simple_with_animation").after('<div class="time">' + $question_scale_details.html() + '</div>');
+                        $newscale.css("left", left);
+                    } else {
                         //相同直接获取存在的ID
-                        var $_scale = $timecontent.find('.time-scale').find('a[id='+timeiD+']');
+                        var $_scale = $timecontent.find('.time-scale').find('a[id=' + timeiD + ']');
                         console.log($_scale);
-                         $left_list.children().appendTo($_scale.find(".simple_with_animation"));
+                        $left_list.children().appendTo($_scale.find(".simple_with_animation"));
                     }
-                    
+
                 }
                 $list_item.each(function(index, dom) {
                     $(dom).find(".num").text(index);
                 });
 
-                
+
             });
+        },
+        itemRmove: function(e) {
+            $this = $(e.currentTarget);
+            var num = $this.closest('ul').children().length;
+            var $question_scale = $this.closest('.question-scale');
+            var arrid = $this.closest('.question-scale').attr('id');
+
+            $this.closest('li').appendTo($(this.get("right_list")));
+
+            //判断当前子元数小于0移除蓝色的时间挫；
+            if (num <= 1) {
+                $question_scale.remove();
+                // 清楚数组中保留的时间ID
+                
+                var arr = this.get("arryid");
+                console.log(arr);
+                if (arr.length > 0) {
+                    for (var i = arr.length - 1; i >= 0; i--) {
+                        if (arr[i] == arrid) {
+                            arr.splice(i,1);
+                        }
+                    };
+                }
+                console.log(arr);
+            }
         },
         _initSortable: function() {
             var _obj = this;
@@ -245,9 +272,9 @@ define(function(require, exports, module) {
         _convertNUm: function(num) {
             var string = "";
             var arr = num.toString().split(":");
-            if(arr.length>0) {
+            if (arr.length > 0) {
                 for (var i = 0; i < arr.length; i++) {
-                   string += arr[i];
+                    string += arr[i];
                 };
             }
             return string;

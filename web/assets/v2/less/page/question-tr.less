@@ -38,7 +38,12 @@
       cursor: pointer;
     }
     .title {
-      .text-overflow;
+      .before {
+        .text-overflow;
+      }
+      .icon-close {
+        display: none;
+      }
     }
     .content {
       text-align: center;
@@ -87,13 +92,14 @@
       .question-scale {
         left: 0;
         bottom: 100%;
-        height: 50px;
-        bottom: 40px;
+        height: 208px;
+        bottom: 58px;
         border-color: #c33b2d;
         .question-details {
           position: absolute;
           left: 0;
-          bottom: 50px;
+          top: -20px;
+          
           min-width: 50px;
           background-color: rgba(0, 0, 0, 0.8);
           margin-left: -25px;
@@ -104,28 +110,46 @@
       }
       .question-scale.blue {
         border-color: #2998c9;
-        .opacity(.2);
+        height: 78px;
+        bottom: 58px;
+        // .opacity(.2);
         &:hover {
           .question-details  {
             visibility: visible;
+            // .opacity(.9);
           }
         }
-
         .question-details {
-          visibility: visible;
-          // .opacity();
+          visibility: hidden;
+          top: inherit;
+          bottom: 78px;
           background-color: transparent;
           width: 220px;
           margin-left: -110px;
           background-color: rgba(0, 0, 0, 0.8);
           .lesson-list  {
             height: auto;
+            .title {
+              position: relative;
+              .before {
+                width: 180px;
+              }
+              .icon-close {
+                display: inline;
+                position: absolute;
+                top: 15px;
+                right: 10px;
+                color: #fff;
+              }
+            }
           }
           .item-lesson {
             background-color: transparent;
             border: none;
             margin-bottom: 0;
             text-align: left;
+            height: 46px;
+            overflow: hidden;
             &:hover {
               background-color: @brand-primary;
             }

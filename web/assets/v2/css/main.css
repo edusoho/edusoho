@@ -12048,12 +12048,15 @@ textarea {
   line-height: 46px;
   cursor: pointer;
 }
-.question-manage .lesson-list .title {
+.question-manage .lesson-list .title .before {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+}
+.question-manage .lesson-list .title .icon-close {
+  display: none;
 }
 .question-manage .lesson-list .content {
   text-align: center;
@@ -12103,14 +12106,14 @@ textarea {
 .question-manage .coord .time-scale .question-scale {
   left: 0;
   bottom: 100%;
-  height: 50px;
-  bottom: 40px;
+  height: 208px;
+  bottom: 58px;
   border-color: #c33b2d;
 }
 .question-manage .coord .time-scale .question-scale .question-details {
   position: absolute;
   left: 0;
-  bottom: 50px;
+  top: -20px;
   min-width: 50px;
   background-color: rgba(0, 0, 0, 0.8);
   margin-left: -25px;
@@ -12120,14 +12123,16 @@ textarea {
 }
 .question-manage .coord .time-scale .question-scale.blue {
   border-color: #2998c9;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
+  height: 78px;
+  bottom: 58px;
 }
 .question-manage .coord .time-scale .question-scale.blue:hover .question-details {
   visibility: visible;
 }
 .question-manage .coord .time-scale .question-scale.blue .question-details {
-  visibility: visible;
+  visibility: hidden;
+  top: inherit;
+  bottom: 78px;
   background-color: transparent;
   width: 220px;
   margin-left: -110px;
@@ -12136,11 +12141,26 @@ textarea {
 .question-manage .coord .time-scale .question-scale.blue .question-details .lesson-list {
   height: auto;
 }
+.question-manage .coord .time-scale .question-scale.blue .question-details .lesson-list .title {
+  position: relative;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .lesson-list .title .before {
+  width: 180px;
+}
+.question-manage .coord .time-scale .question-scale.blue .question-details .lesson-list .title .icon-close {
+  display: inline;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  color: #fff;
+}
 .question-manage .coord .time-scale .question-scale.blue .question-details .item-lesson {
   background-color: transparent;
   border: none;
   margin-bottom: 0;
   text-align: left;
+  height: 46px;
+  overflow: hidden;
 }
 .question-manage .coord .time-scale .question-scale.blue .question-details .item-lesson:hover {
   background-color: #46c37b;
