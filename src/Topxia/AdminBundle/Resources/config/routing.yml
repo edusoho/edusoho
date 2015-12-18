@@ -704,9 +704,14 @@ admin_optimize_remove_show_progressbar:
 admin_jobs:
     pattern: /setting/jobs
     defaults: { _controller: TopxiaAdminBundle:Job:index }
+
 admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
+
+admin_role:
+    pattern:  /setting/roles
+    defaults: { _controller: TopxiaAdminBundle:Role:index }
 
 admin_logs_prod:
     pattern:  /setting/logs/prod

@@ -64,7 +64,10 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
-        'video-player': 'balloon-video-player/1.0.0/index'
+        'video-player': 'balloon-video-player/1.0.0/index',
+        'z_tree': 'jquery-plugin/z_tree/js/jquery.ztree.core-3.5',
+        'z_tree_check': 'jquery-plugin/z_tree/js/jquery.ztree.excheck-3.5',
+        'z_tree_css': 'jquery-plugin/z_tree/css/zTreeStyle/zTreeStyle.css',
     },
 
 	// 预加载项

@@ -35,6 +35,10 @@ admin_operation_group:
     name: 小组管理
     parent: admin_operation
     router_name: admin_group
+admin_operation_mobile:
+    name: 移动端内容管理
+    parent: admin_operation
+    group: 2
 admin_operation_mobile_banner_manage:
     name: 轮播图设置
     parent: admin_operation_mobile
@@ -54,9 +58,6 @@ admin_block_visual_edit:
     parent: admin_operation_block
     router_params: {'blockId': 'block.id'}
     router_params_context: 1
-
-
-
 admin_block_visual_edit_history:
     name: 历史记录
     parent: admin_operation_block
@@ -68,45 +69,41 @@ admin_operation_content:
     router_name: admin_content
     router_params: { type: page }
     group: 2
-admin_operation_mobile:
-    name: 移动端内容管理
-    parent: admin_operation
-    group: 2
 admin_operation_analysis_register:
     name: 数据统计
     parent: admin_operation
     router_params: { tab: trend , analysisDateType:register }
     after: admin_operation_content
     group: 3
+admin_operation_article_manage:
+    name: 资讯管理
+    parent: admin_operation_article
+    router_name: admin_article
 admin_operation_article_create:
     name: 添加资讯
     parent: admin_operation_article_manage
     router_name: admin_article_create
     group: 2
+admin_operation_article_category:
+    name: 栏目管理
+    parent: admin_operation_article
+    router_name: admin_article_category
 admin_operation_category_create:
     name: 新建栏目
     parent: admin_operation_article_category
     router_name: admin_article_category_create
     mode: modal
     group: 2
-admin_operation_article_manage:
-    name: 资讯管理
-    parent: admin_operation_article
-    router_name: admin_article
-admin_operation_article_category:
-    name: 栏目管理
-    parent: admin_operation_article
-    router_name: admin_article_category
+admin_operation_group_manage:
+    name: 小组管理
+    parent: admin_operation_group
+    router_name: admin_group
 admin_operation_group_create:
     name: 创建小组
     parent: admin_operation_group_manage
     router_name: group_add
     group: 2
     blank: 1
-admin_operation_group_manage:
-    name: 小组管理
-    parent: admin_operation_group
-    router_name: admin_group
 admin_operation_group_thread:
     name: 话题管理
     parent: admin_operation_group
@@ -114,6 +111,10 @@ admin_operation_group_thread:
 admin_course_show:
     name: 课程管理
     parent: admin_course
+    router_name: admin_course
+admin_course_manage:
+    name: 课程管理
+    parent: admin_course_show
     router_name: admin_course
 admin_course_add:
     name: 创建课程
@@ -181,15 +182,15 @@ admin_user_show:
     name: 用户管理
     parent: admin_user
     router_name: admin_user
+admin_user_manage:
+    name: 用户管理
+    parent: admin_user_show
+    router_name: admin_user
 admin_user_create:
     name: 添加新用户
     parent: admin_user_manage
     mode: modal
     group: 2
-admin_user_manage:
-    name: 用户管理
-    parent: admin_user_show
-    router_name: admin_user
 admin_login_record:
     name: 登录日志
     parent: admin_user_show
@@ -203,10 +204,6 @@ admin_approval_approvals:
 admin_message:
     name: 私信管理
     parent: admin_user
-admin_course_manage:
-    name: 课程管理
-    parent: admin_course_show
-    router_name: admin_course
 admin_course_recommend:
     name: 课程推荐
     parent: admin_course_show
@@ -223,7 +220,7 @@ admin_coin_orders:
     parent: admin_order
 admin_coin_order_query:
     name: 查阅
-    parent: admin_coin_order
+    parent: admin_coin_orders
     router_name: admin_coin_orders
 admin_course_order_query:
     name: 查阅
@@ -383,6 +380,10 @@ admin_setting_post_num_rules:
     group: 2
 admin_logs:
     name: 系统日志
+    parent: admin_system
+    group: 2
+admin_role:
+    name: 权限设置
     parent: admin_system
     group: 2
 admin_logs_query:
