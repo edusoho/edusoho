@@ -247,8 +247,6 @@ class DefaultController extends BaseController
 
         $config['orderBy']    = $orderBy;
         $config['categoryId'] = $categoryId;
-        $config['orderBy']    = $orderBy;
-        $config['categoryId'] = $categoryId;
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
             'config' => $config
         ));
