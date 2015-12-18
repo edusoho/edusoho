@@ -19,13 +19,14 @@ class CreateTestDataCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $num = $input->getArgument('num');
+        $num   = $input->getArgument('num');
+        $start = $input->getArgument('start');
 
         $this->initServiceKernel();
         $user = $this->getUserService()->getUserByEmail('test@edusoho.com');
         $this->authenticateUser($user);
 
-        for ($i = 0; $i < $num; $i++) {
+        for ($i = $start; $i < $num; $i++) {
             $user = array(
                 "email"     => "canuo{$i}@qq.com",
                 "nickname"  => "canuo{$i}",
