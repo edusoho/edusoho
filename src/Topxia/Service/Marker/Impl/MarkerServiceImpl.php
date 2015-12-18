@@ -19,6 +19,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return ArrayToolkit::index($markers, 'id');
     }
 
+    public function findMarkersByMediaId($mediaId)
+    {
+        return $this->getMarkerDao()->findMarkersByMediaId($mediaId);
+    }
+
     public function searchMarkers($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareMarkerConditions($conditions);

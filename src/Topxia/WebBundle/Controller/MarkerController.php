@@ -83,6 +83,15 @@ class MarkerController extends BaseController
         return $this->createJsonResponse($questionmarkers);
     }
 
+    //获取当前播放器的驻点
+    public function showMarkersAction(Request $request)
+    {
+        $data             = $request->request->all();
+        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $markers          = $this->getMarkerService()->findMarkersByMediaId($data['mediaId']);
+        return $this->createJsonResponse($markers);
+    }
+
     public function questionAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);

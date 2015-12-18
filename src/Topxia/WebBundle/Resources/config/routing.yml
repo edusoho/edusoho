@@ -964,6 +964,10 @@ course_lesson_marker_manage:
     pattern:  /course/{courseId}/lesson/{lessonId}/marker/manage
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
+course_lesson_marker_show:
+    pattern:  /course/lesson/{mediaId}/marker/show
+    defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
+
 course_lesson_question_list:
     pattern:  /course/{courseId}/lesson/{lessonId}/question/list
     defaults: { _controller: TopxiaWebBundle:Marker:question }

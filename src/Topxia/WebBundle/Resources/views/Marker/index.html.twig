@@ -4,10 +4,11 @@
 {% set script_controller = 'marker/index' %}
 
 {% block body %}
-
+{{ lesson.mediaId }}
   	<div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
+    data-lesson-mediaid="{{ lesson.mediaId }}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
   		{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
 

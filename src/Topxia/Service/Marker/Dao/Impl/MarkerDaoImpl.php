@@ -26,6 +26,13 @@ class MarkerDaoImpl extends BaseDao implements MarkerDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
+    public function findMarkersByMediaId($mediaId)
+    {
+        $sql     = "SELECT * FROM {$this->table} where mediaId = ?";
+        $markers = $this->getConnection()->fetchAll($sql, array($mediaId));
+        return $markers;
+    }
+
     public function searchMarkers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
