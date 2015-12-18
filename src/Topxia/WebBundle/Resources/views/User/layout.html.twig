@@ -9,10 +9,11 @@
 
 {% set script_controller = 'user/user' %}
 
+{% block top_content %}
+  {{ render(controller('TopxiaWebBundle:User:headerBlock', {user:user})) }}
+{% endblock %}
+
 {% block content %}
-
-{{ render(controller('TopxiaWebBundle:User:headerBlock', {user:user})) }}
-
 <div class="es-section">
   <ul class="nav nav-tabs clearfix">
   	{% if 'ROLE_TEACHER' in user.roles %}

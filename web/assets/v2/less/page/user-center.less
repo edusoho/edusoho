@@ -1,0 +1,41 @@
+.user-center-header {
+  height: 300px;
+  padding: 60px 0;
+  background-color: #100b1b;
+  .user-avatar {
+    float: left;
+    width: 30%;
+    text-align: center;
+  }
+  .avatar-wrap {
+    border: 6px solid #767371;
+  }
+  .user-info {
+    float: left;
+    width: 30%;
+    .name {
+      color: #fff;
+      font-size: 22px;
+      small {
+        color: @gray;
+        margin: 0 10px;
+        font-size: 16px;
+      }
+      >a {
+        color: #9f9d9b;
+        .es-transition;
+        &:hover {
+          color: #fff;
+          .es-transition;
+        }
+      }
+    }
+  }
+  .user-about {
+    float: left;
+    width: 40%;
+    background-color: #716d6b;
+    color: #fff;
+    overflow: auto;
+  }
+}
