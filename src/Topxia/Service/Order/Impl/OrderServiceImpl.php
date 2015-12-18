@@ -674,19 +674,13 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     private function isFirstOrderByUserId($userId)
     {
-        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($userId);
-
         $conditionsAmount = array(
-            'userId'                 => $userId,
-            'amount'                 => 0.00,
-            'status'                 => 'paid',
-            'createdTimeGreaterThan' => $record['inviteTime'] ? $record['inviteTime'] : null
+            'userId' => $userId,
+            'amount' => 0.00
         );
         $conditionsCoinAmount = array(
-            'userId'                 => $userId,
-            'coinAmount'             => 0.00,
-            'status'                 => 'paid',
-            'createdTimeGreaterThan' => $record['inviteTime'] ? $record['inviteTime'] : null
+            'userId'     => $userId,
+            'coinAmount' => 0.00
         );
 
         $orderAmount     = $this->searchOrders($conditionsAmount, array('createdTime', 'DESC'), 0, 2);

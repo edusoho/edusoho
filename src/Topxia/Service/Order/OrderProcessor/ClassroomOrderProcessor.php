@@ -210,7 +210,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         //优惠码优惠价格
 
-        if ($fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if (!empty($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'classroom',
