@@ -79,7 +79,22 @@ class TaskServiceImpl extends BaseService implements TaskService
             $canFinished = $this->_canFinished($getTask, $targetObject);
 
             if ($canFinished) {
+                $completeConditions = array(
+                    'userId'   => $userId,
+                    'taskType' => $taskType,
+                    'batchId'  => $getTask['batchId'],
+                    'status'   => 'completed'
+                );
                 $updateInfo = array('status' => 'completed', 'completedTime' => time());
+
+                $recentCompletedTask = $this->searchTasks($completeConditions, array('completedTime', 'DESC'), 0, 1);
+
+                if ($recentCompletedTask) {
+                    $updateInfo['intervalDate'] = ceil((time() - $recentCompletedTask[0]['completedTime']) / (24 * 3600));
+                } else {
+                    $updateInfo['intervalDate'] = ceil((time() - $getTask['taskStartTime']) / (24 * 3600));
+                }
+
                 return $this->updateTask($getTask['id'], $updateInfo);
             }
         }
