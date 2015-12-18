@@ -111,14 +111,7 @@
 
 .vip-wide-item {
   height: 200px;
-  padding: 20px;
-  .border-radius;
-  background-color: #fff;
   margin-bottom: 30px;
-  @media (max-width: @screen-sm-max) {
-    height: 160px;
-    padding: 10px;
-  }
   @media (max-width: @screen-xs-max) {
     height: auto;
   }
@@ -126,31 +119,28 @@
     float: left;
     width: 23%;
     text-align: center;
-    margin-top: 16px;
+    margin-top: 21px;
     @media (max-width: @screen-sm-max) {
-      margin-top: 7px;
       width: 30%;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
+      margin-top: 0;
       margin-bottom: 20px;
     }
   }
   .vip-info {
     float: left;
-    width: 27%;
-    height: 160px;
+    width: 22%;
+    height: 170px;
     padding: 15px 10px;
     .border-radius;
     text-align: center;
     background-color: @gray-lighter;
     @media (max-width: @screen-sm-max) {
-      height: 140px;
+      height: 170px;
       width: 45%;
       padding: 10px;
-      p {
-        margin-bottom: 7px !important;
-      }
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
@@ -160,35 +150,38 @@
       color: @gray-darker;
     }
     .price {
-      color: @brand-danger;
+      color: @gray;
+      font-size: 12px;
+      margin-bottom: 0;
       span {
-        font-size: 24px;
+        font-size: 18px;
         margin-right: 5px;
-        @media (max-width: @screen-md-max) {
-          font-size: 20px;
-        }
+        color: @brand-danger;
       }
     }
     .number {
-      margin: 0 auto 10px;
+      font-size: 12px;
+      margin: 10px auto 0;
       span {
         display: inline-block;
-        width: 110px;
+        width: 90px;
         text-align: left;
       }
     }
-      
   }
   .vip-content {
     float: left;
-    width: 30%;
-    height: 160px;
-    line-height: 21px;
-    padding: 10px 30px;
+    width: 40%;
+    margin: 10px 0;
+    height: 150px;
+    font-size: 12px;
+    line-height: 30px;
+    padding: 0 50px;
     overflow: auto;
-    color: @gray;
+    color: @gray-darker;
     @media(max-width:@screen-md-max) {
       width: 32%;
+      padding: 0 20px;
     }
     @media(max-width:@screen-sm-max) {
       display: none;
@@ -196,35 +189,21 @@
   }
   .vip-item-footer {
     float: right;
-    width: 20%;
-    display: block;
-    margin: -20px -20px -20px 0;
-    line-height: 200px;
-    font-size: 22px;
+    width: 15%;
+    margin-top: 68px;
     text-align: center;
-    background-color: @brand-warning;
-    color: #fff;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    .es-transition;
     @media(max-width:@screen-md-max) {
       width: 18%;
-      font-size: 18px;
     }
     @media(max-width:@screen-sm-max) {
       width: 25%;
-      margin: -10px -10px -10px 0;
-      line-height: 160px;
     }
     @media (max-width: @screen-xs-max) {
+      margin-top: 0;
       width: 100%;
-      margin: 0;
-      line-height: 50px;
-      .border-radius;
-    }
-    &:hover {
-      .es-transition;
-      background-color: darken(@brand-warning,8%);
+      .btn {
+        display: block;
+      }
     }
   }
 }
@@ -240,64 +219,57 @@
 
 .vip-swiper-item {
   position: relative;
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 20px 50px 40px 50px !important;
+  margin-bottom: 30px;
   background-color: #fff;
   .border-radius;
   @media (min-width: @screen-md-min) {
     .es-transup;
   }
+  @media (max-width: @screen-md-max) {
+    padding: 20px !important;
+  }
   .vip-thumb {
     text-align: center;
-    margin: 0 auto 20px;
+    margin: 0 auto 15px;
   }
   .vip-info {
     text-align: center;
-    height: 160px;
-    padding: 18px;
-    margin-bottom: 10px;
+    height: 170px;
+    padding: 15px;
+    margin-bottom: 20px;
     .border-radius;
     background-color: @gray-lighter;
     .name {
       color: @gray-darker;
     }
     .price {
-      color: @brand-danger;
+      color: @gray;
+      font-size: 12px;
+      margin-bottom: 0;
       span {
-        font-size: 24px;
+        font-size: 18px;
         margin-right: 5px;
+        color: @brand-danger;
       }
     }
     .number {
-      margin: 0 auto 10px;
+      font-size: 12px;
+      margin: 10px auto 0;
       span {
         display: inline-block;
-        width: 110px;
+        width: 90px;
         text-align: left;
       }
     }
   }
   .vip-content {
-    height: 100px;
-    padding: 10px 15px;
+    font-size: 12px;
+    line-height: 18px;
+    height: 54px;
+    margin-bottom: 20px;
     overflow: auto;
-    color: @gray;
-  }
-  .vip-item-footer {
-    display: block;
-    margin: 20px -20px -20px -20px;
-    line-height: 80px;
-    font-size: 22px;
-    text-align: center;
-    background-color: @brand-warning;
-    color: #fff;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    .es-transition;
-    &:hover {
-      .es-transition;
-      background-color: darken(@brand-warning,8%);
-    }
+    color: @gray-darker;
   }
 }
 
