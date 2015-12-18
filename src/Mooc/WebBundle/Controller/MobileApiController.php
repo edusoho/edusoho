@@ -158,11 +158,11 @@ class MobileApiController extends MobileBaseController
             $course['coinName'] = $coinSetting["name"];
 
             if (!isset($course['periodicStartTime'])) {
-                $course['periodicStartTime'] = $course['startTime'];
+                $course['periodicStartTime'] = date("c", $course['startTime']);
             }
 
             if (!isset($course['periodicEndTime'])) {
-                $course['periodicEndTime'] = $course['endTime'];
+                $course['periodicEndTime'] = date("c", $course['endTime']);
             }
 
             return $course;
