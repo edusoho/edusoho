@@ -12766,9 +12766,29 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               // next marker time of last marker would be end of video time
               return player.duration();
            }
+
+           // get early unfinished marker time
+           var getFastMarkerTime = function(){
+             for (var i = 0; i < markersList.length; i++) {
+               var marker = markersList[i];
+               if(marker.finished ==undefined || marker.finished ==false){
+                return marker.time;
+               }
+             }
+             return -1;
+           }
+
+           var fastMarkerTime = getFastMarkerTime();
            var currentTime = player.currentTime();
            var newMarkerIndex;
            
+           if(fastMarkerTime>0 && currentTime>fastMarkerTime){
+             if(!player.paused()){
+               player.pause();
+             }
+             player.currentTime(fastMarkerTime);
+           }
+
            if (currentMarkerIndex != -1) {
               // check if staying at same marker
               var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
