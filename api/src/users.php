@@ -348,26 +348,26 @@ $api->post('/logout', function (Request $request) {
 }
 ```
  */
-$api->post('/{id}/vips', function (Request $request, $id) {
-    $user = convert($id, 'user');
-    $levelId = $request->request->get('levelId');
-    $boughtDuration = $request->request->get('boughtDuration');
-    $boughtUnit = $request->request->get('boughtUnit');
+// $api->post('/{id}/vips', function (Request $request, $id) {
+//     $user = convert($id, 'user');
+//     $levelId = $request->request->get('levelId');
+//     $boughtDuration = $request->request->get('boughtDuration');
+//     $boughtUnit = $request->request->get('boughtUnit');
 
-    $member = ServiceKernel::instance()->createService('Vip:Vip.VipService')->becomeMember(
-        $user['id'],
-        $levelId,
-        $boughtDuration,
-        $boughtUnit,
-        $orderId = 0
-    );
+//     $member = ServiceKernel::instance()->createService('Vip:Vip.VipService')->becomeMember(
+//         $user['id'],
+//         $levelId,
+//         $boughtDuration,
+//         $boughtUnit,
+//         $orderId = 0
+//     );
 
-    return array(
-        'success' => empty($member) ? false : true
-    );
-}
+//     return array(
+//         'success' => empty($member) ? false : true
+//     );
+// }
 
-);
+// );
 
 /*
 ## （取消）关注用户
