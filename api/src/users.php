@@ -358,35 +358,4 @@ $api->post('/{id}/followers', function (Request $request, $id) {
 }
 
 );
-
-/*
-## 好友互粉
-POST /users/friendship
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| toId | int | 是 | 互粉用户的Id |
-
- ** 响应 **
-
-```
-{
-'success' => bool
-}
-```
- */
-$api->post('/friendship', function (Request $request) {
-    $fromUser = getCurrentUser();
-    $fromId = $fromUser['id'];
-    $toId = $request->request->get('toId', 0);
-    $result1 = ServiceKernel::instance()->createService('User.UserService')->follow($fromId, $toId);
-    $result2 = ServiceKernel::instance()->createService('User.UserService')->follow($toId, $fromId);
-    return array(
-        'success' => ($result1 && $result2) ? true : false
-    );
-}
-
-);
 return $api;
