@@ -391,14 +391,13 @@ follower : toId用户关注了id用户
 friend : 互相关注
  */
 $api->get('/{id}/friendship', function (Request $request, $id) {
-    $user = convert($id, 'user');
-    $currentUser = getCurrentUser();
+    $user = getCurrentUser();
     $toIds = $request->query->get('toIds');
 
     if (!empty($toIds)) {
         $toIds = explode(',', $toIds);
     } else {
-        $toIds = array($currentUser['id']);
+        return array();
     }
 
     foreach ($toIds as $toId) {
