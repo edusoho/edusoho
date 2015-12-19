@@ -345,7 +345,7 @@ POST /users/{id}/followers
  */
 $api->post('/{id}/followers', function (Request $request, $id) {
     $method = $request->request->get('method');
-    $fromUser = getCurrentUser()
+    $fromUser = getCurrentUser();
     if (!empty($method) && $method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.UserService')->unFollow($fromUser['id'], $id);
     } else {
@@ -528,8 +528,7 @@ POST /users/friendship
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| fromId | int | 是 | 互粉用户A的Id |
-| toId | int | 是 | 互粉用户B的Id |
+| toId | int | 是 | 互粉用户的Id |
 
  ** 响应 **
 
@@ -540,7 +539,8 @@ POST /users/friendship
 ```
  */
 $api->post('/friendship', function (Request $request) {
-    $fromId = $request->request->get('fromId', 0);
+    $fromUser = getCurrentUser();
+    $fromId = $fromUser['id'];
     $toId = $request->request->get('toId', 0);
     $result1 = ServiceKernel::instance()->createService('User.UserService')->follow($fromId, $toId);
     $result2 = ServiceKernel::instance()->createService('User.UserService')->follow($toId, $fromId);
