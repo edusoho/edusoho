@@ -42,7 +42,6 @@ include __DIR__ . '/src/functions.php';
 $app = new Silex\Application();
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
-$app['debug'] = true;
 
 $app->view(function (array $result, Request $request) use ($app) {
     return new JsonResponse($result);

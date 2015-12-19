@@ -394,7 +394,7 @@ $api->get('/{id}/followers', function ($id) {
 $api->get('/{id}/followings', function ($id) {
     $user = convert($id, 'user');
     $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
-    return filters($follwers, 'user');
+    return filters($follwings, 'user');
 }
 
 );
