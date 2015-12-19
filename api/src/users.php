@@ -325,50 +325,6 @@ $api->post('/logout', function (Request $request) {
 
 );
 
-//开通会员
-/*
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| levelId | int | 是 | 会员等级id |
-| boughtUnit | string | 是 | 开通时长 |
-| boughtDuration | string | 是 | 付费方式 |
-
-`boughtDuration`的值有:
-
- * month : 按月
- * year : 按年
-
- ** 响应 **
-
-```
-{
-"success": bool
-}
-```
- */
-// $api->post('/{id}/vips', function (Request $request, $id) {
-//     $user = convert($id, 'user');
-//     $levelId = $request->request->get('levelId');
-//     $boughtDuration = $request->request->get('boughtDuration');
-//     $boughtUnit = $request->request->get('boughtUnit');
-
-//     $member = ServiceKernel::instance()->createService('Vip:Vip.VipService')->becomeMember(
-//         $user['id'],
-//         $levelId,
-//         $boughtDuration,
-//         $boughtUnit,
-//         $orderId = 0
-//     );
-
-//     return array(
-//         'success' => empty($member) ? false : true
-//     );
-// }
-
-// );
-
 /*
 ## （取消）关注用户
 POST /users/{id}/followers
@@ -377,7 +333,6 @@ POST /users/{id}/followers
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| userId | int | 否 | 发起关注操作的用户id,未传则默认为当前用户 |
 | method | string | 否 | 值为delete时为取消关注用户 |
 
  ** 响应 **
@@ -389,10 +344,8 @@ POST /users/{id}/followers
 ```
  */
 $api->post('/{id}/followers', function (Request $request, $id) {
-    $userId = $request->request->get('userId', '');
     $method = $request->request->get('method');
-    $fromUser = empty($userId) ? getCurrentUser() : convert($userId, 'user');
-
+    $fromUser = getCurrentUser()
     if (!empty($method) && $method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.UserService')->unFollow($fromUser['id'], $id);
     } else {
