@@ -117,6 +117,8 @@ class UserServiceImpl extends BaseService implements UserService
     public function setEmailVerified($userId)
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
+        $user = $this->getUser($userId);
+        $this->dispatchEvent('email.verify', new ServiceEvent($user));
     }
 
     public function changeNickname($userId, $nickname)
@@ -298,6 +300,7 @@ class UserServiceImpl extends BaseService implements UserService
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
+        $this->dispatchEvent('mobile.change', new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
@@ -666,6 +669,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (isset($fields['title'])) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
+            $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
         }
 
         unset($fields['title']);
@@ -690,7 +694,11 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['about'] = $this->purifyHtml($fields['about']);
         }
 
-        return $this->getProfileDao()->updateProfile($id, $fields);
+        $userProfile = $this->getProfileDao()->updateProfile($id, $fields);
+
+        $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
+
+        return $userProfile;
     }
 
     public function changeUserRoles($id, array $roles)
@@ -1253,7 +1261,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     public function passApproval($userId, $note = null)
     {
-        $user = $this->getUserDao()->getUser($userId);
+        $user = $this->getUser($userId);
 
         if (empty($user)) {
             throw $this->createServiceException("用户#{$userId}不存在！");
@@ -1281,6 +1289,9 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !");
+
+        $this->dispatchEvent('realname.approval', new ServiceEvent($user));
+
         $message = array(
             'note' => $note ? $note : '',
             'type' => 'through');
