@@ -6,6 +6,13 @@
 {% set script_controller = 'article/list.js' %}
 
 {% block content %}
+
+  <div class="es-tabs article-list-header">
+    <div class="tab-header">
+      {% include 'TopxiaWebBundle:Article/Part:list-header-nav.html.twig' %}
+    </div>
+  </div>
+  
   <!-- 资讯头部 -->
   {% include 'TopxiaWebBundle:Article/Part:list-header.html.twig' %}
   

@@ -22,10 +22,7 @@
         {{ select_options({ paid: '已支付',created:'未付款',cancelled:'已取消'}, request.get('status'), '订单状态') }}
       </select>
       <select class="form-control" name="payment">
-        <!--{{ select_options(dict('payment'), app.request.get('payment'), '支付方式') }}-->
-        <option value>支付方式</option>
-        <option value="alipay">支付宝</option>
-        <option value="wxpay">微信支付</option>
+        {{ select_options(dict('payment'), app.request.get('payment'), '支付方式') }}
       </select>
     </div>
    

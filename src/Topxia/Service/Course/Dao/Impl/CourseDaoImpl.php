@@ -137,14 +137,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
 
-        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $currentTime = time();
+
+        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
     public function clearCourseDiscountPrice($discountId)
     {
-        $sql = "UPDATE course SET price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
+        $currentTime = time();
+        $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
         return $this->getConnection()->executeQuery($sql, array($discountId));
     }
 

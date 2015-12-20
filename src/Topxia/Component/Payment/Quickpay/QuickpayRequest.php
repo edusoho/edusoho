@@ -4,6 +4,7 @@ namespace Topxia\Component\Payment\Quickpay;
 use Topxia\Component\Payment\Request;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Util\Phpsec\Crypt\Rijndael;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class QuickpayRequest extends Request
 {
@@ -75,12 +76,12 @@ class QuickpayRequest extends Request
             $converted['notify_url'] = $params['notifyUrl'];
         }
 
-        $converted['agent_bill_id']   = $this->generateOrderToken();
+        $converted['agent_bill_id']   = $this->generateOrderToken($params);
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_amt']         = $params['amount'];
-        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 50, 'utf-8');
+        $converted['goods_name']      = mb_substr($this->filterText($params['targetTitle']), 0, 15, 'utf-8');
 
-        if (strlen($converted['goods_name']) >= 50) {
+        if (strlen($converted['goods_name']) >= 45) {
             $converted['goods_name'] .= '...';
         }
 
@@ -121,9 +122,10 @@ class QuickpayRequest extends Request
         return $converted;
     }
 
-    private function generateOrderToken()
+    private function generateOrderToken($params)
     {
-        return 'h'.date('YmdHis', time()).mt_rand(10000, 99999);
+        $processor = OrderProcessorFactory::create($params['targetType']);
+        return $processor->generateOrderToken();
     }
 
     public function updateBankAuth($sn, $params)
@@ -184,7 +186,7 @@ class QuickpayRequest extends Request
 
     protected function filterText($text)
     {
-        return str_replace(array('#', '%', '&', '+'), array('＃', '％', '＆', '＋'), $text);
+        return str_replace(array('#', '%', '&', '+', '《', '》'), array('＃', '％', '＆', '＋', '', ''), $text);
     }
 
     private function encrypt($data, $key)

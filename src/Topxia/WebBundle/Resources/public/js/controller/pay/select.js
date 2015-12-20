@@ -4,6 +4,8 @@ define(function(require, exports, module){
 
     exports.run = function() {
             
+        var $modal = $('#modal');
+
         $(".form-paytype").on('click','.check', function() {
             var $this = $(this);
             if (!$this.hasClass('active')) {
@@ -39,17 +41,15 @@ define(function(require, exports, module){
             }
 
             var $this = $(this);
-            var orderId = $("input[name='orderId']").val();
             var payAgreementId = $this.closest(".js-pay-bank").find("input").val();
-            var payment = $("input[name='payment']").val();
-
-            $.post($this.data('url'),{'orderId':orderId,'payAgreementId':payAgreementId,'payment':payment},function(response){
-                if(response.success){
-                    $this.closest('.js-pay-bank').remove();
-                    Notify.success(response.message);
-                }else{
+                        
+            $.post($this.data('url'),{'payAgreementId':payAgreementId},function(response){
+                if(response.success == false){
                     Notify.danger(response.message);
-                }
+                }else{
+                    $modal.modal('show');　
+               　    $modal.html(response);
+                }　
             })
         })
 
