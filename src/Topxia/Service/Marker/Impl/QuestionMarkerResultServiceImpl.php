@@ -35,6 +35,11 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->findByUserIdAndMarkerId($userId, $markerId);
     }
 
+    public function findByUserIdAndPluckId($userId, $pluckId)
+    {
+        return $this->getQuestionMarkerResultDao()->findByUserIdAndPluckId($userId, $pluckId);
+    }
+
     protected function getQuestionMarkerResultDao()
     {
         return $this->createDao('Marker.QuestionMarkerResultDao');

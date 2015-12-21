@@ -86,10 +86,47 @@ class MarkerController extends BaseController
     //获取当前播放器的驻点
     public function showMarkersAction(Request $request)
     {
-        $data             = $request->request->all();
-        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
-        $markers          = $this->getMarkerService()->findMarkersByMediaId($data['mediaId']);
+        $data = $request->request->all();
+        //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $markers = $this->getMarkerService()->findMarkersByMediaId($data['mediaId']);
         return $this->createJsonResponse($markers);
+    }
+
+    //获取驻点弹题
+    public function showMarkerQuestionAction(Request $request)
+    {
+        $data             = $request->request->all();
+        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 1;
+        $questions        = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+        $question         = !empty($questions) ? $questions[0] : array();
+        return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
+            'questions' => $questions,
+            'markerId'  => $data['markerId'],
+            'question'  => $question
+        ));
+    }
+
+    public function doNextTestAction(Request $request)
+    {
+        $data             = $request->request->all();
+        $data['markerId'] = isset($data['id']) ? $data['id'] : 1;
+        $conditions       = array(
+            'markerId' => $data['markerId']
+        );
+        $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'DESC'), 0, 999);
+        $user      = $this->getCurrentUser();
+        $question  = array();
+
+        foreach ($questions as $key => $value) {
+            $questionmarkerresult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);
+
+            if ($questionmarkerresult['status'] == 'none') {
+                $question = $value;
+                break;
+            }
+        }
+
+        return $this->createJsonResponse($question);
     }
 
     public function questionAction(Request $request, $courseId, $lessonId)

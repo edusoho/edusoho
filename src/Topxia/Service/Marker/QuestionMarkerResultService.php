@@ -13,4 +13,6 @@ interface QuestionMarkerResultService
 
     public function findByUserIdAndMarkerId($userId, $markerId);
 
+    public function findByUserIdAndPluckId($userId, $pluckId);
+
 }

@@ -75,8 +75,7 @@ define(function(require, exports, module) {
                             onMarkerReached:function(marker,player){
                               if(!player.paused() && marker.finished == false){
                                 player.pause();
-                                $.get('/course/1/manage/question/25/preview','',function(data){
-                                    console.log($('.vjs-break-overlay-text'));
+                                $.get('/course/lesson/'+marker.id+'/questionmarker/show',{"markerid":marker.id},function(data){
                                     $('.vjs-break-overlay-text').html(data);
                                 });
                               }
