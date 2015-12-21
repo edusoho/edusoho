@@ -5550,7 +5550,8 @@ textarea.form-control-o {
 }
 .btn-ghost-white {
   color: #fff;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
+  background: none;
 }
 .btn-ghost-white:hover,
 .btn-ghost-white:focus,
@@ -12022,47 +12023,76 @@ textarea {
 .user-center-header {
   height: 300px;
   padding: 60px 0;
-  background-color: #100b1b;
+  background-color: #1b122d;
 }
 .user-center-header .user-avatar {
+  position: relative;
   float: left;
-  width: 30%;
-  text-align: center;
+  width: 66.67%;
+  padding-left: 200px;
+}
+@media (max-width: 991px) {
+  .user-center-header .user-avatar {
+    width: 100%;
+  }
+}
+@media (max-width: 767px) {
+  .user-center-header .user-avatar {
+    padding-left: 0;
+  }
 }
 .user-center-header .avatar-wrap {
-  border: 6px solid #767371;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 6px solid #585560;
+  border: 6px solid rgba(255, 255, 255, 0.3);
 }
-.user-center-header .user-info {
-  float: left;
-  width: 30%;
-}
-.user-center-header .user-info .name {
+.user-center-header .name {
   color: #fff;
   font-size: 22px;
+  margin-bottom: 20px;
 }
-.user-center-header .user-info .name small {
+.user-center-header .name small {
   color: #919191;
   margin: 0 10px;
   font-size: 16px;
 }
-.user-center-header .user-info .name > a {
+.user-center-header .name > a {
   color: #9f9d9b;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.user-center-header .user-info .name > a:hover {
+.user-center-header .name > a:hover {
   color: #fff;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.user-center-header .mates {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.user-center-header .actions .btn + .btn {
+  margin-left: 20px;
+}
 .user-center-header .user-about {
   float: left;
-  width: 40%;
-  background-color: #716d6b;
+  width: 33.33%;
+  margin-top: 30px;
+  padding: 15px 10px;
+  background-color: #585560;
+  background-color: rgba(255, 255, 255, 0.3);
   color: #fff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.user-center-header .user-about-content {
+  height: 60px;
   overflow: auto;
 }

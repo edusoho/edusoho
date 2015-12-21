@@ -1,41 +1,70 @@
 .user-center-header {
   height: 300px;
   padding: 60px 0;
-  background-color: #100b1b;
+  background-color: #1b122d;
+  .container {
+    // padding: 60px 0;
+  }
   .user-avatar {
+    position: relative;
     float: left;
-    width: 30%;
-    text-align: center;
+    width: 66.67%;
+    padding-left: 200px;
+    // text-align: center;
+    @media(max-width:@screen-sm-max) {
+      width: 100%;
+    }
+    @media(max-width:@screen-xs-max) {
+      padding-left: 0;
+    }
   }
   .avatar-wrap {
-    border: 6px solid #767371;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 6px solid #585560;
+    border: 6px solid rgba(255, 255, 255, 0.3);
   }
-  .user-info {
-    float: left;
-    width: 30%;
-    .name {
-      color: #fff;
-      font-size: 22px;
-      small {
-        color: @gray;
-        margin: 0 10px;
-        font-size: 16px;
-      }
-      >a {
-        color: #9f9d9b;
+  .name {
+    color: #fff;
+    font-size: 22px;
+    margin-bottom: 20px;
+    small {
+      color: @gray;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+    >a {
+      color: #9f9d9b;
+      .es-transition;
+      &:hover {
+        color: #fff;
         .es-transition;
-        &:hover {
-          color: #fff;
-          .es-transition;
-        }
       }
+    }
+  }
+  .mates {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  .actions {
+    .btn + .btn {
+      margin-left: 20px;
     }
   }
   .user-about {
     float: left;
-    width: 40%;
-    background-color: #716d6b;
+    width: 33.33%;
+    margin-top: 30px;
+    padding: 15px 10px;
+    background-color: #585560;
+    background-color: rgba(255, 255, 255, 0.3);
     color: #fff;
+    .border-radius;
+  }
+  .user-about-content {
+    height: 60px;
     overflow: auto;
   }
 }

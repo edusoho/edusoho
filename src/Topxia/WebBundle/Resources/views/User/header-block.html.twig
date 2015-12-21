@@ -1,20 +1,13 @@
-<div class="es-banner">
-  <div class="container">
-    <div class="title">个人主页</div>
-  </div>
-</div>
-<div class="user-center-header">
+<div class="user-center-header" data-href="{{asset('assets/v2/img/user_bg.jpg')}}" data-sharpness="40">
   <div class="container clearfix">
     <div class="user-avatar">
-      <div class="avatar-wrap">
+      <div class="avatar-wrap hidden-xs">
         <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
         {% if 'ROLE_TEACHER' in user.roles %}
           <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span
         >
         {% endif %}
       </div>
-    </div>
-    <div class="user-info">
       <div class="name">
         {{user.nickname}}<small>{{ user.title }}</small>
         {% if user.weibo %}
@@ -31,23 +24,26 @@
         {% endif %}
       </div>
       <div class="mates">
-        2012粉丝 ｜ 522关注
+        <span>2012粉丝</span> ｜ <span>522关注</span>
       </div>
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
-          <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
-          <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
-          <button class="btn btn-default btn-sm" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
+          <a class="btn btn-primary btn-xlg follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
+          <a class="btn btn-default btn-xlg unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+          <button class="btn btn-ghost-white btn-xlg " data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
         </div>
       {% endif %}
     </div>
-    <div class="user-about">
-      {{ user.about|raw }}
+    <div class="user-about hidden-sm hidden-xs">
+      <div class="user-about-content">
+        {% if user.signature %}{{ user.signature }}{% else %}暂无签名{% endif %}
+      </div>
     </div>
   </div>
 </div>
 
-<div class="es-section userpage-header">
+{#
+<div class="es-section userpage-header hidden">
   <div class="media">
     <div class="media-left">
       <div class="avatar-bg">
@@ -80,4 +76,4 @@
       {% endif %}
     </div>
   </div>
-</div>
+</div>#}

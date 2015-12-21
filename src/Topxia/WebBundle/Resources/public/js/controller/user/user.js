@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    require("jquery.blurr");
 
     exports.run = function() {
         $('.follow-btn').on('click', function() {
@@ -18,6 +19,7 @@ define(function(require, exports, module) {
             });
         });
 
+        $(".user-center-header").blurr();
 
     }
 
