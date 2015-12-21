@@ -360,7 +360,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
-        var_dump($result);
+        // var_dump($result);
     }
 
     protected function addGroupMember($grouType, $groupId, $memberId)
