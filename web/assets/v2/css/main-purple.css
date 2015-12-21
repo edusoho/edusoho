@@ -8843,7 +8843,7 @@ textarea {
   font-size: 12px;
 }
 .course-detail-header .metas p label {
-  width: 60px;
+  width: 40px;
   margin-bottom: 0;
   font-weight: normal;
 }
@@ -8883,7 +8883,7 @@ textarea {
   margin-bottom: 0;
 }
 .course-detail-header .activity .name {
-  color: #773cec;
+  color: #313131;
   margin-right: 10px;
 }
 .course-detail-header .activity i {
