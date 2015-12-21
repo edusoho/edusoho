@@ -388,6 +388,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $post['content'] = $this->filterSensitiveWord($this->purifyHtml($post['content']));
         $post            = $this->getThreadPostDao()->addPost($post);
 
+        foreach ($course['teacherIds'] as $teacherId) {
+            if ($teacherId == $post['userId'] && $thread['type'] == 'question') {
+                $this->dispatchEvent('course.thread.teacher_answer', $post);
+            }
+        }
+
         // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
         $threadFields = array(
             'postNum'          => $thread['postNum'] + 1,
