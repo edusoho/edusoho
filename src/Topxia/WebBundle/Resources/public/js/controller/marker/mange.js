@@ -4,180 +4,141 @@ define(function(require, exports, module) {
 
     var DraggableWidget = Widget.extend({
         attrs: {
-            item: '.simple_with_animation .item-lesson',
+            item: '.item-lesson',
             placeholder: '.placeholder',
             time: '68',
-            timecontent: '.coord',
-            timescale: '.time-scale',
+            editbox: '.editbox',
+            scalebox: '.scalebox',
             timepartnum: '6',
-            right_list: '#right-item-list',
-            left_list: "#left-item-list",
-            group_list: ".simple_with_animation",
+            subject_lesson_list: '#subject-lesson-list',
+            editbox_lesson_list: "#editbox-lesson-list",
+            group_list: ".gruop-lesson-list",
             arryid: [],
             newId: '',
-            isDraggable: 'false'
+            isDraggable: 'false',
+            addScale: function(scalejson) {
+                return scalejson;
+            },
+            mergeScale: function(scalejson) {
+                return scalejson;
+            },
+            updateScale: function(scalejson) {
+                return scalejson;
+            },
+            deleteScale: function(scalejson) {
+                return scalejson;
+            }
         },
         events: {
             'mousedown {{attrs.item}}': 'itemDraggable',
             'click .lesson-list .icon-close': 'itemRmove',
-            'mousedown .question-scale.blue': 'slideScale'
+            'mousedown .scale.blue': 'slideScale'
         },
         setup: function() {
             this._initSortable();
-            this._initTimeContent();
+            this._initeditbox();
         },
         itemDraggable: function(e) {
             var $this = $(e.currentTarget);
             var _obj = this;
             var isMove = true;
+            //开始拖动事件
             _obj.set('isDraggable', 'true');
-            var num = 0;
-            var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
-            var $timecontent = $(_obj.get("timecontent"));
-            var $times_cale = $(_obj.get("timescale"));
-            var $right_list = $(this.element).find(_obj.get('right_list'));
-            var $left_list = $(this.element).find(_obj.get('left_list'));
-            var $list_item = $right_list.find(_obj.get('item'));
+            var $editbox = $(_obj.get("editbox"));
+            var $scalebox = $(_obj.get("scalebox"));
+            var $subject_lesson_list = $(this.element).find(_obj.get('subject_lesson_list'));
+            var $editbox_lesson_list = $(this.element).find(_obj.get('editbox_lesson_list'));
             var value = '<i class="es-icon es-icon-infooutline mrl"></i>' + "将题目拖至左侧时间条";
 
-            var $scale_red = $timecontent.find("#default-scale");
-            var $scale_red_details = $scale_red.find(".question-details");
+            var $scale = $editbox.find("#default-scale");
+            var $scale_details = $scale.find(".scale-details");
 
             // 显示时间轴
-            $scale_red.css("visibility", "visible");
-            $scale_red_details.css("visibility", "visible");
+            $scale.css("visibility", "visible");
+            $scale_details.css("visibility", "visible");
 
             $(document).mousemove(function(event) {
                 if (isMove) {
-                    // :右边拖动交互
-                    $right_list.find(_obj.get('placeholder')).html(value);
-
-                    //鼠标进入右侧交互
-                    //显示移动时间轴的位置
-                    if (event.pageX > offsetenter) {
-                        $scale_red.css("left", offsetenter - 20 - 1);
-                    } else if (event.pageX < offsetenter && event.pageX > 20) {
-                        $scale_red.css("left", event.pageX - 20 - 1);
-                    } else if (event.pageX < 20) {
-                        $scale_red.css("left", 0);
-                    }
-                    //显示移动时间轴的时间
-                    var scale_left = parseInt($scale_red.css("left"));
-                    var time = parseInt(_obj.get("time"));
-                    var width = $(".dashboard-content").width();
-                    var scale_value = Math.round(scale_left * time / width);
-                    $scale_red_details.html(_obj._convertTime(scale_value));
-
-                    // 查找5秒范围类的ID，提示合并效果
-                    var timeiD = _obj._convertNUm(_obj._convertTime(scale_value));
-                    var arryid = _obj.get("arryid");
-                    if (arryid.length > 0) {;
-                        for (var i = arryid.length - 1; i >= 0; i--) {
-                            if (Math.abs(parseInt(timeiD) - parseInt(arryid[i])) <= 5) {
-                                $times_cale.find('.question-scale.blue' + '[id=' + arryid[i] + ']').find('.border').addClass('show');
-                            } else {
-                                $times_cale.find('.question-scale.blue' + '[id=' + arryid[i] + ']').find('.border').removeClass('show');
-                            }
-                        }
-                    }
+                    $subject_lesson_list.find(_obj.get('placeholder')).html(value);
+                    _obj._moveShow($scale, $scale_details, $scalebox, _obj);
                 }
             }).mouseup(function() {
                 // 停止拖动
                 isMove = false;
                 // 隐藏默认时间轴
-                $scale_red.css("visibility", "hidden");
-                $scale_red_details.css("visibility", "hidden");
-                
-                var timeiD = _obj._convertNUm($scale_red_details.html());
-                var left = $scale_red.css("left");
-                var arryid = _obj.get("arryid");
-
-                if ($left_list.children().length > 0) {
+                $scale.css("visibility", "hidden");
+                $scale_details.css("visibility", "hidden");
+                var timeiD = _obj._convertNUm($scale_details.html());
+                var left = $scale.css("left");
+                var arry = _obj.get("arryid");
+                if ($editbox_lesson_list.children().length > 0) {
                     var bool = true;
-                    if (arryid.length > 0) {
+                    if (arry.length > 0) {
                         // 遍历所有元素都与当前时间差，一旦遍历有时间挫小于5秒就跳出循环，认定为最接近元素。
-                        for (var i = arryid.length - 1; i >= 0; i--) {
-                            if(Math.abs(parseInt(timeiD) - parseInt(arryid[i])) <= 5) {
-                                bool =false
-                                timeiD = arryid[i];
+                        for (var i = arry.length - 1; i >= 0; i--) {
+                            if (Math.abs(parseInt(timeiD) - parseInt(arry[i])) <= 5) {
+                                bool = false
+                                timeiD = arry[i];
                                 break;
                             }
                         }
-                        if(bool) {
+                        if (bool) {
                             // 遍历完成后为出现靠近元素，数组记录ID
-                            arryid.push(timeiD); 
+                            arry.push(timeiD);
                         }
-                    }else {
-                        arryid.push(timeiD); 
+                    } else {
+                        // 第一个元素
+                        arry.push(timeiD);
                     }
                     if (bool) {
-
-                        var $newscale = $('<a class="question-scale blue" id="' + timeiD + '"><div class="border"></div><div class="question-details"><ul class="lesson-list simple_with_animation"></ul></div></a>');
-                        //获取到默认的时间轴内容，生成一个id的
-                        $newscale.appendTo($timecontent.find('.time-scale'));
-                        // 将拖放过来的li给这个新的newscale中的ul 
-                        $left_list.children().appendTo($newscale.find(".simple_with_animation"));
-                        $newscale.find(".simple_with_animation").after('<div class="time">' + $scale_red_details.html() + '</div>');
-                        $newscale.css("left", left);
-                        // 拖拽后排序
+                        // 生成一个时间轴：但前时间作为时间轴的ID
+                        var $newscale = $('<a class="scale blue" id="' + timeiD + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul></div></a>').css("left", left).appendTo($editbox.find('.scalebox'));
+                        $editbox_lesson_list.children().appendTo($newscale.find(".lesson-list"));
+                        $newscale.find(".lesson-list").after('<div class="time">' + $scale_details.html() + '</div>');
+                        // 拖拽后排序：在当前获取不到最新的li,在拖动事件的完成后查找当前的时间轴id中的ul进行排序
+                        // 新生成的scale注册拖动事件:
+                        _obj._newSortList($newscale.find(".lesson-list"), _obj);
+                        // 第一个元素：在这返回数据到后台，其他在Drop中返回：第一次添加时newId为空
+                        if(_obj.get('newId').toString().length <= 0) {
+                            _obj._addScale($newscale ,$scale_details.html(), true);
+                        }
                         _obj.set("newId", timeiD);
-                        // 注册内部item拖动事件:
-                        var $list = $newscale.find(".simple_with_animation").sortable({
-                            distance: 20,
-                            itemSelector: '.item-lesson',
-                            onDrop: function(item, container, _super) {
-                                _super(item, container);
-                                _obj._sortList($list);
-                            },
-                            serialize: function(parent, children, isContainer) {
-                                return isContainer ? children : parent.attr('id');
-                            },
-                            isValidTarget: function(item, container) {
-                                if (item.siblings('li').length) {
-                                    return true;
-                                } else {
-                                    return false;
-                                }
-                            }
-                        });
-                        //注册滑块事件
-                        // $newscale.
                     } else {
+                        console.log("text");
+                        _obj.set("newId",timeiD);
                         //相同直接获取存在的ID
-                        var $_scale = $timecontent.find('.time-scale').find('a[id=' + timeiD + ']');
-                        var $list = $_scale.find(".simple_with_animation");
-                        var $item = $left_list.children();
-                        $item.appendTo($list);
-                        // 拖拽后排序
-                        _obj.set("newId", timeiD);
+                        var $_scale = $editbox.find('.scalebox').find('a[id=' + timeiD + ']');
+                        $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
-                        $_scale.find('.border').removeClass('show')
+                        $_scale.find('.border').removeClass('show');
                     }
                 }
-                console.log(arryid);
+                console.log(arry);
                 // 拖动时间停止
                 _obj.set('isDraggable', 'false');
             });
         },
         itemRmove: function(e) {
             $this = $(e.currentTarget);
-            var num = $this.closest('ul').children().length;
-            var $scale_red = $this.closest('.question-scale');
-            var arrid = $this.closest('.question-scale').attr('id');
-            var $list = $this.closest('ul');
+            var $list = $this.closest('.lesson-list');
+            var $list_item = $this.closest('.item-lesson');
+            var num = $list.children().length;
+            var $scale = $this.closest('.scale.blue');
+            var scaleid = $scale.attr('id');
 
-            $this.closest('li').appendTo($(this.get("right_list")));
+            $list_item.appendTo($(this.get("subject_lesson_list")));
             this._sortList($list);
-            // this._sortList($(this.get("right_list")));
+            // this._sortList($(this.get("subject-lesson-list")));
             //判断当前子元数小于0移除蓝色的时间挫；
-            if (num <= 1) {
-                $scale_red.remove();
-                // 清楚数组中保留的时间ID
 
+            this._deleteScale(scaleid,$list_item.find('.idname').html());
+            if (num <= 1) {
+                $scale.remove();
+                // 清楚数组中保留的时间ID
                 var arr = this.get("arryid");
                 if (arr.length > 0) {
                     for (var i = arr.length - 1; i >= 0; i--) {
-                        if (arr[i] == arrid) {
+                        if (arr[i] == scaleid) {
                             arr.splice(i, 1);
                             console.log(arr);
                         }
@@ -190,50 +151,22 @@ define(function(require, exports, module) {
             if (this.get('isDraggable') == 'false') {
                 var _obj = this;
                 var $this = $(e.currentTarget);
-                var $times_cale = $(_obj.get("timescale"));
-                var $time = $this.find(".question-details .time");
-                var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
+                var $scalebox = $(_obj.get("scalebox"));
+                var $time = $this.find(".scale-details .time");
                 var old_id = $this.attr('id');
                 var isMove = true;
                 $(document).mousemove(function(event) {
                     var left = 0;
                     if (isMove) {
-                        if (event.pageX > offsetenter) {
-                            left = offsetenter - 20 - 1;
-                        } else if (event.pageX < offsetenter && event.pageX > 20) {
-                            left = event.pageX - 20 - 1;
-                        } else if (event.pageX < 20) {
-                            left = 0;
-                        }
-                        $this.css('left', left);
-                        //显示移动时间轴的时间
-                        var totaltime = parseInt(_obj.get("time"));
-                        var width = $(".dashboard-content").width();
-                        var scale_value = Math.round(left * totaltime / width);
-                        $time.css("visibility", "visible");
-                        $time.html(_obj._convertTime(scale_value));
-
-                        // 查找5秒范围类的ID，提示合并效果
-                        var timeiD = _obj._convertNUm(_obj._convertTime(scale_value));
-                        var arryid = _obj.get("arryid");
-                        if (arryid.length > 0) {
-                            for (var i = arryid.length - 1; i >= 0; i--) {
-                                if (Math.abs(parseInt(timeiD) - parseInt(arryid[i])) <= 5) {
-                                    $times_cale.find('.question-scale.blue' + '[id=' + arryid[i] + ']').find('.border').addClass('show');
-                                } else {
-                                    $times_cale.find('.question-scale.blue' + '[id=' + arryid[i] + ']').find('.border').removeClass('show');
-                                }
-                            }
-                        }
+                        _obj._moveShow($this, $time, $scalebox, _obj);
                     }
                 }).mouseup(function() {
                     isMove = false;
                     old_id = $this.attr('id');
-                    $this.attr('id', _obj._convertNUm($this.find(".question-details .time").html()));
+                    $this.attr('id', _obj._convertNUm($this.find(".scale-details .time").html()));
                     var newid = $this.attr('id');
                     // 判断是非移动，阻止点击时间造成的影响
                     if (newid != old_id) {
-                        console.log("已移动");
                         var additem = true;
                         var mergeid = -1;
                         var arry = _obj.get("arryid");
@@ -243,29 +176,65 @@ define(function(require, exports, module) {
                                     // 要循环所有将旧id删除，不能中途跳出循环
                                     arry.splice(i, 1);
                                 }
-                                if($this.attr('id') == arry[i]||Math.abs(parseInt($this.attr('id')) - parseInt(arry[i])) <= 5) {
+                                if ($this.attr('id') == arry[i] || Math.abs(parseInt($this.attr('id')) - parseInt(arry[i])) <= 5) {
                                     // 将合并到该目标div，数组无需纪录ID，自身隐藏
                                     additem = false;
                                     mergeid = arry[i];
-                                    console.log("需要合并");
                                 }
                             }
                         }
                         if (additem) {
                             arry.push($this.attr('id'));
-                            console.log("需要添加:slideScale"+$this.attr('id'));
-                        } else{
-                            var $_scale = $times_cale.find('a[id=' + mergeid + ']');
+                            _obj._updateScale(old_id,$this.attr('id'),_obj._convertTime($this.attr('id')));
+                        } else {
+                            var $_scale = $scalebox.find('a[id=' + mergeid + ']');
                             if ($_scale.length > 0) {
-                                $this.find('.simple_with_animation').children().appendTo($_scale.find('.simple_with_animation'));
-                                _obj._sortList($_scale.find('.simple_with_animation'));
+                                $this.find('.lesson-list').children().appendTo($_scale.find('.lesson-list'));
                                 $this.remove();
+                                _obj._sortList($_scale.find('.lesson-list'));
+                                _obj._mergeScale(mergeid,old_id);
                             }
+
                         }
-                        $times_cale.find('.border').removeClass('show');
+                        $scalebox.find('.border').removeClass('show');
                         console.log(arry);
                     }
                 });
+            }
+        },
+        _moveShow: function($scale, $scale_details, $scalebox, _obj) {
+            var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
+
+            var left = 0;
+            //鼠标进入右侧交互
+            //显示移动时间轴的位置
+            if (event.pageX > offsetenter) {
+                left = offsetenter - 20 - 1;
+            } else if (event.pageX < offsetenter && event.pageX > 20) {
+                left = event.pageX - 20 - 1;
+            } else if (event.pageX < 20) {
+                left = 0;
+            }
+
+            $scale.css("left", left);
+
+            //显示移动时间轴的时间
+            var time = parseInt(_obj.get("time"));
+            var width = $(".dashboard-content").width();
+            var scale_value = Math.round(left * time / width);
+            $scale_details.html(_obj._convertTime(scale_value));
+
+            // 查找5秒范围类的ID，提示合并效果
+            var timeiD = _obj._convertNUm(_obj._convertTime(scale_value));
+            var arryid = _obj.get("arryid");
+            if (arryid.length > 0) {;
+                for (var i = arryid.length - 1; i >= 0; i--) {
+                    if (Math.abs(parseInt(timeiD) - parseInt(arryid[i])) <= 5) {
+                        $scalebox.find('.scale.blue' + '[id=' + arryid[i] + ']').find('.border').addClass('show');
+                    } else {
+                        $scalebox.find('.scale.blue' + '[id=' + arryid[i] + ']').find('.border').removeClass('show');
+                    }
+                }
             }
         },
         _initSortable: function() {
@@ -283,16 +252,17 @@ define(function(require, exports, module) {
                     _super($item, container);
                     var id = _obj.get("newId");
                     if (id.toString().length > 0) {
-                        var $list = $(_obj.get("timecontent")).find('a[id=' + id + ']').find('.simple_with_animation');
-                        _obj._sortList($list);
+                        var $scale =  $(_obj.get("scalebox")).find('a[id=' + id + ']')
+                        _obj._sortList($scale.find('.lesson-list'));
+                        _obj._addScale($scale ,$scale.find('.time').html(), true);
                     }
                 }
             });
         },
-        _initTimeContent: function() {
+        _initeditbox: function() {
             var _obj = this;
-            var $_timecontent = $(_obj.get("timecontent"));
-            var _width = $_timecontent.width();
+            var $_editbox = $(_obj.get("editbox"));
+            var _width = $_editbox.width();
             // 以秒为单位
             var _totaltime = _obj.get("time");
             var _partnum = _obj.get("timepartnum");
@@ -304,7 +274,7 @@ define(function(require, exports, module) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(num);
 
-                    $_timecontent.find(_obj.get("timescale")).append('<a style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
+                    $_editbox.find(_obj.get("scalebox")).append('<a style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
                 }
                 $('[data-toggle="tooltip"]').tooltip();
             }
@@ -316,7 +286,26 @@ define(function(require, exports, module) {
                 num++;
             });
         },
-
+        _newSortList: function($list, _obj) {
+            $list.sortable({
+                distance: 20,
+                itemSelector: '.item-lesson',
+                onDrop: function(item, container, _super) {
+                    _super(item, container);
+                    _obj._sortList($list);
+                },
+                serialize: function(parent, children, isContainer) {
+                    return isContainer ? children : parent.attr('id');
+                },
+                isValidTarget: function(item, container) {
+                    if (item.siblings('li').length) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+        },
         _convertTime: function(num) {
             var time = "";
             var h = parseInt((num % 86400) / 3600);
@@ -348,7 +337,43 @@ define(function(require, exports, module) {
             }
             return string;
         },
+        _addScale: function($_scale,time, bool) {
+            if (bool) { 
+                var $item_lesson = $_scale.find(this.get('item')+':last');
+                var id = $_scale.attr('id');
+                // 最后一个孩子为新增的元素
+                var scalejson = {
+                    "scaleid": id,
+                    "scaletime":time,
+                    "subject": [{'id':$item_lesson.find(".idname").html(),'ordinal':$item_lesson.find('.num').html()}]
+                };
+                $.extend(scalejson, this.get("addScale")(scalejson));
+            }
+
+        },
+        _mergeScale: function(id,removeid) {
+            // 合并时后台去处理顺序，被合并数按序号依次增加
+            var scalejson = {
+                "scaleid": id,
+                "remove_scaleid":removeid
+            };
+            $.extend(scalejson, this.get("mergeScale")(scalejson));
+        },
+        _updateScale: function(id,newid,time) {
+            var scalejson = {
+                "scaleid": id,
+                "new_scaleid":newid,
+                "scaletime":time
+            };
+            $.extend(scalejson, this.get("updateScale")(scalejson));
+        },
+        _deleteScale:function(id,subjectid) {
+            var scalejson = {
+                "scaleid": id,
+                "subjectid":subjectid
+            };
+            $.extend(scalejson, this.get("deleteScale")(scalejson));
+        }
     });
     module.exports = DraggableWidget;
-
 });

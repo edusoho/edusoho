@@ -8,11 +8,12 @@
 </div>
 
 
-<ul class="lesson-list sortable-list simple_with_animation" id="right-item-list">
+<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list">
   {% for question in questions %} 
   <li class="row item-lesson">
     <div class="col-md-6 title">
       <div class="before">
+        <span class="idname">{{question.id}}</span>
         <span class="glyphicon glyphicon-move mrm"></span>
         <span class="number"><span class="num">1</span>.</span>
         {{question.stem|fill_question_stem_text|plain_text(12) }}

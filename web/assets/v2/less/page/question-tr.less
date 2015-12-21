@@ -36,20 +36,15 @@
       margin: 0 0 10px;
       line-height: 46px;
       cursor: pointer;
-    }
-    .title {
       .before {
         .text-overflow;
-        .number {
-          display: none;
-        }
       }
-      .icon-close {
+      .idname,.number,.icon-close,.icon-close{
         display: none;
       }
-    }
-    .content {
-      text-align: center;
+      .content {
+        text-align: center;
+      }
     }
     .item-lesson.dragged {
       background-color: #feffeb;
@@ -72,7 +67,7 @@
       color: @gray;
     }
   }
-  .coord {
+  .editbox {
     position: absolute;
     left: 0;
     right: 0;
@@ -80,7 +75,7 @@
     top:70%;
     height: 150px;
     background-color: #313131;
-    .time-scale {
+    .scalebox {
       position: relative;
       height: 20px;
       a {
@@ -89,13 +84,13 @@
         height: 100%;
         border-left: 1px solid #fff;
       }
-      .question-scale {
+      .scale{
         left: 0;
         bottom: 100%;
         height: 208px;
         top: -58px;
         border-color: #c33b2d;
-        .question-details {
+        .scale-details {
           position: absolute;
           left: 0;
           bottom:100%;
@@ -107,11 +102,11 @@
           color: #fff;
         }
       }
-      .question-scale.blue {
+      .scale.blue{
         border-color: #2998c9;
         height: 78px;
         &:hover {
-          .question-details  {
+          .scale-details  {
             .es-transition;
             visibility: visible;
              .opacity(1);
@@ -130,7 +125,7 @@
           background-color:rgba(41,152,201,0.3);
           .opacity(1);
         }
-        .question-details {
+        .scale-details {
           .es-transition;
           visibility: hidden;
           .opacity(0);
@@ -169,6 +164,10 @@
               background-color: @brand-primary;
             }
           }
+          .placeholder {
+            background-color: #f1f1f1;
+            background-color: rgba(255, 255, 255, 0.5)
+          }
           .title{
             width: 100%;
           }
@@ -180,9 +179,9 @@
           }
         }
       }
-      .question-scale.show {
-        visibility: visible;
-      }
+      // .question-scale.show {
+      //   visibility: visible;
+      // }
       .tooltip-inner {
         background-color: #000;
         background-color: rgba(0, 0, 0, 0.8)
