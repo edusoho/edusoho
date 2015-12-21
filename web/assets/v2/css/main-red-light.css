@@ -4963,6 +4963,7 @@ a.homework-essay-textarea-pack-up {
   padding: 0 20px;
 }
 .text-line .line {
+  display: none;
   position: absolute;
   top: 50%;
   left: 0;
