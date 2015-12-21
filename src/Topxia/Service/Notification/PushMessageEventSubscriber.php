@@ -351,7 +351,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->push($course['title'], '您的作业已经批改完成', $from, $to, $body);
     }
 
-    public function onCourseLessonFinishTui()
+    public function onCourseLessonFinishTui(ServiceEvent $event)
     {
         $learn  = $event->getSubject();
         $course = $this->getCourseService()->getCourse($learn['courseId']);
