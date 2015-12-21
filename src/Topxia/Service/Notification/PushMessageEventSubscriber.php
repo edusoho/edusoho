@@ -315,7 +315,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'course',
             'id'   => $post['courseId']
         );
-        $to   = array('type' => 'course');
+        $to   = array('type' => 'user', 'id' => $question['userId']);
         $body = array(
             'type'                => 'question.answered',
             'questionId'          => $question['id'],
@@ -360,6 +360,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
+        var_dump($result);
     }
 
     protected function addGroupMember($grouType, $groupId, $memberId)

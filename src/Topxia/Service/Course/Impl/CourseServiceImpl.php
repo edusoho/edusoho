@@ -1593,6 +1593,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             ));
         }
 
+        // $this->dispatchEvent('')
+
         $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
 
         $totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
