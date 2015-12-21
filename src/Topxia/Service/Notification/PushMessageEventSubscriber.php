@@ -365,7 +365,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'lessonId'        => $learn['lessonId'],
             'courseId'        => $learn['courseId'],
             'learnStartTime'  => $learn['startTime'],
-            'learnFinishTime' => $learn['finishTime']
+            'learnFinishTime' => $learn['finishedTime']
         );
         $this->push($course['title'], '恭喜你完成了一个课时的学习', $from, $to, $body);
     }
