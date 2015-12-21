@@ -1593,7 +1593,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             ));
         }
 
-        // $this->dispatchEvent('')
+        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
+        $this->dispatchEvent('course.lesson_finish_tui', $learn);
 
         $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
 

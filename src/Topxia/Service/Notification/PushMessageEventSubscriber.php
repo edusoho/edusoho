@@ -28,7 +28,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.join'                  => 'onCourseJoin',
             'course.quit'                  => 'onCourseQuit',
             'course.thread.teacher_answer' => 'onCourseThreadTeacherAnswer',
-            'homework.reviewed'            => 'onHomeworkReviewed'
+            'homework.reviewed'            => 'onHomeworkReviewed',
+            'course.lesson_finish_tui'     => 'onCourseLessonFinishTui'
         );
     }
 
@@ -348,6 +349,25 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $this->push($course['title'], '您的作业已经批改完成', $from, $to, $body);
+    }
+
+    public function onCourseLessonFinishTui()
+    {
+        $learn  = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($learn['courseId']);
+        $from   = array(
+            'type' => 'course',
+            'id'   => $courseId
+        );
+        $to   = array('type' => 'user', 'id' => $learn['userId']);
+        $body = array(
+            'type'            => 'lesson.finish',
+            'lessonId'        => $learn['lessonId'],
+            'courseId'        => $learn['courseId'],
+            'learnStartTime'  => $learn['startTime'],
+            'learnFinishTime' => $learn['finishTime']
+        );
+        $this->push($course['title'], '恭喜你完成了一个课时的学习', $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)
