@@ -44,7 +44,10 @@ class EduSohoUpgrade extends AbstractUpdater
                 $connection->exec("ALTER TABLE `course_thread` ADD `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间' AFTER `createdTime`;");
             }
 
-            $connection->exec("ALTER TABLE `course_thread` ADD INDEX `updatedTime` (`updatedTime`);");
+            if (!$this->isIndexExist('course_thread', 'updatedTime')) {
+                $connection->exec("ALTER TABLE `course_thread` ADD INDEX `updatedTime` (`updatedTime`);");
+            }
+
             $connection->exec("UPDATE `course_thread` SET  `updatedTime` = `createdTime`;");
         }
 
@@ -58,10 +61,13 @@ class EduSohoUpgrade extends AbstractUpdater
             }
 
             $connection->exec("UPDATE `groups_thread` SET  `updatedTime` = `createdTime`;");
-            $connection->exec("ALTER TABLE `groups_thread` ADD INDEX `updatedTime` (`updatedTime`);");
+
+            if (!$this->isIndexExist('groups_thread', 'updatedTime')) {
+                $connection->exec("ALTER TABLE `groups_thread` ADD INDEX `updatedTime` (`updatedTime`);");
+            }
         }
 
-        if (!$this->isFieldExist('article', 'updateTime')) {
+        if (!$this->isFieldExist('article', 'updateTime') && !$this->isIndexExist('article', 'updatedTime')) {
             $connection->exec("ALTER TABLE `article` ADD INDEX(`updatedTime`);");
         }
     }
