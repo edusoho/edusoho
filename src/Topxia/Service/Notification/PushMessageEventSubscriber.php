@@ -357,7 +357,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $course = $this->getCourseService()->getCourse($learn['courseId']);
         $from   = array(
             'type' => 'course',
-            'id'   => $courseId
+            'id'   => $course['id']
         );
         $to   = array('type' => 'user', 'id' => $learn['userId']);
         $body = array(
