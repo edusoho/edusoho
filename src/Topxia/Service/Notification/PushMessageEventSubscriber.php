@@ -52,6 +52,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $body = array(
             'type' => 'testpaper.reviewed',
             'id'   => $result['id']
+
         );
 
         $this->push($target['title'], $result['paperName'], $from, $to, $body);
@@ -320,6 +321,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type'                => 'question.answered',
             'questionId'          => $question['id'],
             'courseId'            => $question['courseId'],
+            'lessonId'            => $question['lessonId'],
             'questionCreatedTime' => $question['createdTime'],
             'questionTitle'       => $question['title']
         );
@@ -329,12 +331,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onHomeworkReviewed(ServiceEvent $event)
     {
         $homeworkResult = $event->getSubject();
-        $course         = $this->getCourseService()->getCourse($homeworkResult['courseId']);
-        $from           = array(
+
+        $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
+        $from   = array(
             'type' => 'course',
             'id'   => $course['id']
         );
-        $to   = array('type' => 'course');
+        $to   = array('type' => 'user', 'id' => $homeworkResult['userId']);
         $body = array(
             'type'             => 'homework.reviewed',
             'homeworkId'       => $homeworkResult['homeworkId'],
@@ -360,7 +363,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
-        // var_dump($result);
     }
 
     protected function addGroupMember($grouType, $groupId, $memberId)
