@@ -25,6 +25,15 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->updateQuestionMarkerResult($id, $result);
     }
 
+    public function finishCurrentQuestion($userId, $pluckId)
+    {
+        $questionMarkerResult = $this->findByUserIdAndPluckId($userId, $pluckId);
+        $this->updateQuestionMarkerResult($questionMarkerResult['id'], array(
+            'status'      => 'right',
+            'updatedTime' => time()
+        ));
+    }
+
     public function deleteByQuestionMarkerId($questionMarkerId)
     {
         return $this->getQuestionMarkerResultDao()->deleteByQuestionMarkerId($questionMarkerId);

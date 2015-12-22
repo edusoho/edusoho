@@ -91,7 +91,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         $questionResults = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($userId, $markerId);
 
         foreach ($questionResults as $key => $questionResult) {
-            if ($questionResult['status'] != 'none') {
+            if ($questionResult['status'] == 'none') {
                 return false;
             }
         }

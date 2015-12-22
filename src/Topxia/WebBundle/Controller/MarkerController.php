@@ -119,22 +119,24 @@ class MarkerController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
-            'questions' => $questions,
-            'markerId'  => $data['markerId'],
-            'question'  => $question
+            'markerId' => $data['markerId'],
+            'question' => $question
         ));
     }
 
     public function doNextTestAction(Request $request)
     {
-        $data             = $request->request->all();
-        $data['markerId'] = isset($data['id']) ? $data['id'] : 1;
-        $conditions       = array(
+        $data               = $request->request->all();
+        $data['markerId']   = isset($data['markerId']) ? $data['markerId'] : 1;
+        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
+        $user               = $this->getUserService()->getCurrentUser();
+        $this->getQuestionMarkerResultService()->finishCurrentQuestion($user['id'], $data['questionId']);
+        $conditions = array(
             'markerId' => $data['markerId']
         );
-        $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'DESC'), 0, 999);
-        $user      = $this->getUserService()->getCurrentUser();
-        $question  = array();
+        $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 999);
+
+        $question = array();
 
         foreach ($questions as $key => $value) {
             $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);

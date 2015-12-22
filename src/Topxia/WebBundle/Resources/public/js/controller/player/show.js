@@ -103,7 +103,7 @@ define(function(require, exports, module) {
         });
         player.on("doNextQuestionMarker",function(markerId){
             $('.vjs-break-overlay-text').html("");
-            $.get('/course/lesson/'+2+'/questionmarker/show',{"markerid":2},function(data){
+            $.get('/course/lesson/'+markerId+'/questionmarker/show',{"markerId":markerId},function(data){
                 $('.vjs-break-overlay-text').html(data);
             });
         });
