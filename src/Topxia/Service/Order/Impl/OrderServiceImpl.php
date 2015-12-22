@@ -138,19 +138,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             $this->getDispatcher()->dispatch('order.service.paid', new ServiceEvent($order));
         }
 
-        if ($this->isFirstOrderByUserId($order['userId'])) {
-            $inviteRecord = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
-
-            if (!empty($inviteRecord)) {
-                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteRecord['inviteUserId'], 'pay');
-            }
-
-            if (!empty($inviteCoupon)) {
-                $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
-                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['userId'], array('inviteUserCardId' => $card['cardId']));
-            }
-        }
-
         return array($success, $order);
     }
 
@@ -670,27 +657,6 @@ class OrderServiceImpl extends BaseService implements OrderService
     public function updateOrder($id, $orderFileds)
     {
         return $this->getOrderDao()->updateOrder($id, $orderFileds);
-    }
-
-    private function isFirstOrderByUserId($userId)
-    {
-        $conditionsAmount = array(
-            'userId' => $userId,
-            'amount' => 0.00
-        );
-        $conditionsCoinAmount = array(
-            'userId'     => $userId,
-            'coinAmount' => 0.00
-        );
-
-        $orderAmount     = $this->searchOrders($conditionsAmount, array('createdTime', 'DESC'), 0, 2);
-        $orderCoinAmount = $this->searchOrders($conditionsCoinAmount, array('createdTime', 'DESC'), 0, 2);
-
-        if (count($orderAmount) + count($orderCoinAmount) == 1) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     protected function getLogService()

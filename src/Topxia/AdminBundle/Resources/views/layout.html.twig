@@ -34,7 +34,8 @@
   </title>
 
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+    <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
   
   {% block stylesheets %}

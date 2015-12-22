@@ -24,6 +24,7 @@ CREATE TABLE `article` (
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+ALTER TABLE `article` ADD INDEX(`updatedTime`);
 
 DROP TABLE IF EXISTS `article_category`;
 CREATE TABLE `article_category` (
@@ -494,8 +495,10 @@ CREATE TABLE `course_thread` (
   `latestPostUserId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复人ID',
   `latestPostTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后回复时间',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题创建时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+ALTER TABLE `course_thread` ADD INDEX `updatedTime` (`updatedTime`);
 
 DROP TABLE IF EXISTS `course_thread_post`;
 CREATE TABLE `course_thread_post` (
@@ -582,6 +585,7 @@ CREATE TABLE `groups_thread` (
   `groupId` int(10) unsigned NOT NULL,
   `userId` int(10) unsigned NOT NULL,
   `createdTime` int(10) unsigned NOT NULL COMMENT '添加时间',
+  `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `postNum` int(10) unsigned NOT NULL DEFAULT '0',
   `status` enum('open','close') NOT NULL DEFAULT 'open',
   `hitNum` int(10) unsigned NOT NULL DEFAULT '0',
@@ -589,6 +593,7 @@ CREATE TABLE `groups_thread` (
   `type` VARCHAR(255) NOT NULL DEFAULT 'default',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `groups_thread` ADD INDEX `updatedTime` (`updatedTime`);
 
 DROP TABLE IF EXISTS `groups_thread_post`;
 CREATE TABLE `groups_thread_post` (
@@ -1330,6 +1335,7 @@ CREATE TABLE `thread` (
   `updateTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '话题最后一次被编辑或回复时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+ALTER TABLE `thread` ADD INDEX(`updateTime`);
 
 DROP TABLE IF EXISTS `thread_post`;
 CREATE TABLE `thread_post` (
