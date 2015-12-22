@@ -17,9 +17,15 @@ class MarkerController extends BaseController
     }
 
     //新增弹题
-    public function addQuestionMarkerAction(Request $request)
+    public function addQuestionMarkerAction(Request $request, $courseId, $lessonId)
     {
         $data = $request->request->all();
+
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+
+        if (empty($lesson)) {
+            return $this->createMessageResponse('error', '该课时不存在!');
+        }
 
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
         $question           = $this->getQuestionService()->getQuestion($data['questionId']);
@@ -29,7 +35,7 @@ class MarkerController extends BaseController
         }
 
         if (!isset($data['markerId'])) {
-            $result = $this->getMarkerService()->addMarker($data['mediaId'], $data);
+            $result = $this->getMarkerService()->addMarker($lesson['mediaId'], $data);
             return $this->createJsonResponse($result);
         } else {
             $marker = $this->getMarkerService()->getMarker($data['markerId']);

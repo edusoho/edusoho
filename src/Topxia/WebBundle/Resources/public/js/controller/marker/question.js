@@ -4,9 +4,17 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
 
+    var videoHtml = $('#lesson-dashboard');
+    var courseId = videoHtml.data("course-id");
+    var lessonId = videoHtml.data("lesson-id");
+
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
         addScale: function(scalejson) {
+            var url = $('.toolbar-question-marker').data('queston-marker-add-url');
+            $.post(url,{questionId:scalejson.subject[0].id,second:10},function(data){
+                
+            });
             console.log(scalejson);
             return scalejson;
         },
