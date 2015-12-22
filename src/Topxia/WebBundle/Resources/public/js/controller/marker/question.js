@@ -33,6 +33,14 @@ define(function(require, exports, module) {
             return scalejson;
         },
         deleteScale: function(scalejson) {
+
+            var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
+
+            $.post(url,{questionId:20},function(data){
+                
+                console.log(scalejson);
+            });
+
             console.log(scalejson);
             return scalejson;
         }
