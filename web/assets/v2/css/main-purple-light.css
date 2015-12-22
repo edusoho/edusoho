@@ -3567,7 +3567,7 @@ Pagination Styles
   float: left;
   width: 23%;
   text-align: center;
-  margin-top: 21px;
+  margin-top: 25px;
 }
 @media (max-width: 991px) {
   .vip-wide-item .vip-thumb {
@@ -3580,6 +3580,13 @@ Pagination Styles
     margin-top: 0;
     margin-bottom: 20px;
   }
+}
+.vip-wide-item .vip-thumb img {
+  width: 120px;
+  height: 120px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
 }
 .vip-wide-item .vip-info {
   float: left;
@@ -3648,6 +3655,9 @@ Pagination Styles
   .vip-wide-item .vip-content {
     display: none;
   }
+}
+.vip-wide-item .vip-content p {
+  margin: 0;
 }
 .vip-wide-item .vip-item-footer {
   float: right;
@@ -3719,9 +3729,16 @@ Pagination Styles
   text-align: center;
   margin: 0 auto 15px;
 }
+.vip-swiper-item .vip-thumb img {
+  width: 120px;
+  height: 120px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
 .vip-swiper-item .vip-info {
   text-align: center;
-  height: 170px;
+  height: 140px;
   padding: 15px;
   margin-bottom: 20px;
   -webkit-border-radius: 2px;
@@ -3744,20 +3761,21 @@ Pagination Styles
 }
 .vip-swiper-item .vip-info .number {
   font-size: 12px;
-  margin: 10px auto 0;
+  margin: 10px auto;
 }
 .vip-swiper-item .vip-info .number span {
-  display: inline-block;
-  width: 90px;
-  text-align: left;
+  margin: 0 3px;
 }
 .vip-swiper-item .vip-content {
   font-size: 12px;
   line-height: 18px;
-  height: 54px;
+  height: 90px;
   margin-bottom: 20px;
   overflow: auto;
   color: #313131;
+}
+.vip-swiper-item .vip-content p {
+  margin: 0;
 }
 .vip-filer {
   background-color: #fff;
