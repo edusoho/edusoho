@@ -4,10 +4,24 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
 
+    var videoHtml = $('#lesson-dashboard');
+    var courseId = videoHtml.data("course-id");
+    var lessonId = videoHtml.data("lesson-id");
+
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
         addScale: function(scalejson) {
-            console.log(scalejson);
+            var url = $('.toolbar-question-marker').data('queston-marker-add-url');
+
+            $.post(url,{
+                questionId:scalejson.subject[0].id,
+                second:scalejson.scaletime,
+                markerId:scalejson.markerId
+            },function(data){
+                scalejson.markerId=data.markerId;
+                console.log(scalejson);
+            });
+            
             return scalejson;
         },
         mergeScale: function(scalejson) {
