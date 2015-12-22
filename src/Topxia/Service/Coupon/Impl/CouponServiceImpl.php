@@ -284,7 +284,11 @@ class CouponServiceImpl extends BaseService implements CouponService
             $allDiscount += ($order["couponDiscount"] / $rate);
         }
 
-        $this->dispatchEvent('coupon.use', new ServiceEvent($coupon['batchId'], array('usedNum' => $usedCount, 'money' => $allDiscount)));
+        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+
+        if (!empty($couponApp) && $coupon['batchId'] !== null) {
+            $this->dispatchEvent('coupon.use', new ServiceEvent($coupon['batchId'], array('usedNum' => $usedCount, 'money' => $allDiscount)));
+        }
 
         return $coupon;
     }
@@ -305,6 +309,11 @@ class CouponServiceImpl extends BaseService implements CouponService
     private function getCouponBatchService()
     {
         return $this->createService('Coupon:Coupon.CouponBatchService');
+    }
+
+    private function getAppService()
+    {
+        return $this->createService('CloudPlatform.AppService');
     }
 
     private function getTokenService()
