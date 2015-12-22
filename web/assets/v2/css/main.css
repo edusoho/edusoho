@@ -12078,11 +12078,15 @@ textarea {
 }
 .question-manage .lesson-list .placeholder {
   background-color: #f1f1f1;
+  border: 1px dashed  #e1e1e1;
   margin-bottom: 10px;
   line-height: 46px;
   height: 46px;
   padding: 0 10px;
   color: #919191;
+}
+.question-manage .lesson-list .placeholder .show-edit {
+  display: none;
 }
 .question-manage .editbox {
   position: absolute;
@@ -12092,6 +12096,18 @@ textarea {
   top: 70%;
   height: 150px;
   background-color: #313131;
+}
+.question-manage .editbox .editbox-body {
+  position: relative;
+}
+.question-manage .editbox .editbox-body .remask {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 300px;
+  margin-top: -10px;
+  margin-left: -150px;
+  text-align: center;
 }
 .question-manage .editbox .scalebox {
   position: relative;
@@ -12211,5 +12227,16 @@ textarea {
 }
 .question-manage .editbox .lesson-list {
   min-height: 40px;
-  height: 100px;
+  height: 130px;
+}
+.question-manage .editbox .lesson-list .placeholder {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+}
+.question-manage .editbox .lesson-list .placeholder .show-sub {
+  display: none;
+}
+.question-manage .editbox .lesson-list .placeholder .show-edit {
+  display: inline;
 }
