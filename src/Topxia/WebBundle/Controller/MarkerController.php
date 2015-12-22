@@ -109,8 +109,8 @@ class MarkerController extends BaseController
     //获取驻点弹题
     public function showMarkerQuestionAction(Request $request)
     {
-        $data             = $request->request->all();
-        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 1;
+        $data             = $request->query->all();
+        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
         $questions        = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
         $user             = $this->getUserService()->getCurrentUser();
         $question         = array();
@@ -132,8 +132,8 @@ class MarkerController extends BaseController
 
     public function doNextTestAction(Request $request)
     {
-        $data               = $request->request->all();
-        $data['markerId']   = isset($data['markerId']) ? $data['markerId'] : 1;
+        $data               = $request->query->all();
+        $data['markerId']   = isset($data['markerId']) ? $data['markerId'] : 0;
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
         $user               = $this->getUserService()->getCurrentUser();
         $this->getQuestionMarkerResultService()->finishCurrentQuestion($user['id'], $data['questionId']);
@@ -153,7 +153,7 @@ class MarkerController extends BaseController
             }
         }
 
-        return $this->createJsonResponse($question);
+        return $this->createJsonResponse($data['markerId']);
     }
 
     public function questionAction(Request $request, $courseId, $lessonId)

@@ -17,7 +17,7 @@
       </label>
     {% endfor %}
 </div>
-<input id="data" data-markerid="{{markerId}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+<input id="data" data-markerid="{{markerId}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
 <button id="submit" class="btn btn-success btn-sm">提交</button>
 
 {% endblock %}
