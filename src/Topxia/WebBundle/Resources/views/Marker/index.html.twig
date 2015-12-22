@@ -2,8 +2,16 @@
 {% block title %}驻点管理{% endblock %}
 
 {% set script_controller = 'marker/index' %}
+{% set bodyClass="question-manage" %}
 
 {% block body %}
+    <ul class="breadcrumb">
+      <li>
+        <a href="/course/17/thread">首页</a>
+      </li>
+      <li class="active">课时管理</li>
+      <li class="active">题目管理</li>
+    </ul>
   	<div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
@@ -13,7 +21,7 @@
 
   		<div class="question" data-url="{{ path('course_lesson_question_list',{courseId:course.id,lessonId:lesson.id})}}"></div>
 
-  		{% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
+  		
   	</div>
 	<div class="modal"></div>
 {% endblock %}

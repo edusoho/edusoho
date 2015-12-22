@@ -1,13 +1,5 @@
 {% block stylesheets %}
   <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
-  <style>
-    .lesson-dashboard .dashboard-body
-    {
-      top: 20px;
-      bottom:150px;
-    }
-
-  </style>
 {% endblock %}
 
 <div class="dashboard-content">
@@ -22,4 +14,5 @@
     ></div>
     <div class="watermarkEmbedded" ></div>
   </div>
+  {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
 </div>
