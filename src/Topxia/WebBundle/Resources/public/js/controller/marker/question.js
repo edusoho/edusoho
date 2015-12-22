@@ -12,10 +12,16 @@ define(function(require, exports, module) {
         element: "#lesson-dashboard",
         addScale: function(scalejson) {
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
-            $.post(url,{questionId:scalejson.subject[0].id,second:10},function(data){
-                
+
+            $.post(url,{
+                questionId:scalejson.subject[0].id,
+                second:scalejson.scaletime,
+                markerId:scalejson.markerId
+            },function(data){
+                scalejson.markerId=data.markerId;
+                console.log(scalejson);
             });
-            console.log(scalejson);
+            
             return scalejson;
         },
         mergeScale: function(scalejson) {

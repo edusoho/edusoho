@@ -34,7 +34,7 @@ class MarkerController extends BaseController
             return $this->createMessageResponse('error', '该题目不存在!');
         }
 
-        if (!isset($data['markerId'])) {
+        if (empty($data['markerId'])) {
             $result = $this->getMarkerService()->addMarker($lesson['mediaId'], $data);
             return $this->createJsonResponse($result);
         } else {
