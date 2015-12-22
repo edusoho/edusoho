@@ -3,7 +3,6 @@ namespace Topxia\Service\Article;
 
 interface CategoryService
 {
-
     public function getCategory($id);
 
     public function getCategoryByCode($code);
@@ -33,4 +32,6 @@ interface CategoryService
     public function findCategoriesCountByParentId($parentId);
 
     public function makeNavCategories($code);
+
+    public function findAllPublishedCategoriesByParentId($parentId);
 }

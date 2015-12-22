@@ -102,7 +102,8 @@
               </div>
               <div class="form-group">
                 <div class="col-md-4 controls">
-                  试卷得分:<span id="objectiveScore">{% if not isPreview|default(false) %}{{ paperResult.objectiveScore }}{% endif %}</span>
+                  <input type="hidden" value="{{ paperResult.objectiveScore }}" name="objectiveScore" />
+                  试卷得分:<span id="totalScore">{% if not isPreview|default(false) %}{{ paperResult.objectiveScore }}{% endif %}</span>
                 </div>
                 <div class="col-md-8 controls radios">
                   {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}

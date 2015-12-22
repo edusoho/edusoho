@@ -10,7 +10,7 @@
       <div class="sidenav">
         <ul class="list-group">
           <li class="list-group-heading">账户中心</li>
-          <li class="list-group-item {% if side_nav == 'my-bill' or side_nav == 'my-coin' %} active {% endif %}">
+          <li class="list-group-item {% if side_nav in ['my-bill', 'my-coin', 'my-invite-code'] %} active {% endif %}">
             <a href="
               {% if setting('coin.coin_enabled') %}
                 {{path('my_coin')}}
@@ -23,11 +23,9 @@
           <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
             <a href="{{path('my_orders')}}">我的订单</a> 
           </li>  
-          {% if is_plugin_installed('Coupon') or is_plugin_installed("MoneyCard") %}
-            <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
-              <a href="{{path('my_cards')}}">我的卡包</a> 
-            </li> 
-          {% endif %}
+          <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
+            <a href="{{path('my_cards')}}">我的卡包</a> 
+          </li> 
           </li>
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
