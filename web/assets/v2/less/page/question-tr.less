@@ -60,11 +60,15 @@
     }
     .placeholder {
       background-color: #f1f1f1;
+      border: 1px dashed  #e1e1e1;
       margin-bottom: 10px;
       line-height: 46px;
       height: 46px;
       padding: 0 10px;
       color: @gray;
+      .show-edit {
+        display: none;
+      }
     }
   }
   .editbox {
@@ -75,6 +79,18 @@
     top:70%;
     height: 150px;
     background-color: #313131;
+    .editbox-body {
+      position: relative;
+      .remask {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 300px;
+        margin-top: -10px;
+        margin-left: -150px;
+        text-align: center;
+      }
+    }
     .scalebox {
       position: relative;
       height: 20px;
@@ -187,10 +203,20 @@
         background-color: rgba(0, 0, 0, 0.8)
       }
     }
-    
     .lesson-list {
       min-height: 40px;
-      height: 100px;
+      height: 130px;
+      .placeholder {
+        background-color: #000;
+        color: #fff;
+        text-align: center;
+        .show-sub {
+          display: none;
+        }
+        .show-edit {
+          display: inline;
+        }
+      }
     }
   }
 }
