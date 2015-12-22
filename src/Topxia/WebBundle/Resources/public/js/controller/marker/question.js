@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
     var scalejson = {
-        "scaleid": '0023',
+        "id": '0023',
         "scaletime": '23',
         "scaleleft":'310px',
         "subject": [{
@@ -15,6 +15,16 @@ define(function(require, exports, module) {
             'ordinal': '2'
         }]
     };
+
+    var markerJson = {
+        "id": 22,
+        "second":23,
+        "position":'310px',
+        "questionMarkers":[{
+            "id":1,
+            "seq":1,
+        }]
+    } 
 
     var videoHtml = $('#lesson-dashboard');
     var courseId = videoHtml.data("course-id");
@@ -30,11 +40,12 @@ define(function(require, exports, module) {
                 questionId:scalejson.subject[0].id,
                 second:scalejson.scaletime,
                 markerId:scalejson.markerId
+                //{question_marker_id}
             },function(data){
                 scalejson.markerId=data.markerId;
+                scalejson.questionMarkerId='';
                 console.log(scalejson);
             });
-            
             return scalejson;
         },
         mergeScale: function(scalejson) {

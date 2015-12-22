@@ -406,7 +406,8 @@ define(function(require, exports, module) {
                         'ordinal': $item_lesson.find('.num').html()
                     }]
                 };
-                $.extend(scalejson, this.get("addScale")(scalejson));
+                var tes = $.extend(scalejson, this.get("addScale")(scalejson));
+                console.log(tes);
             }
         },
         _mergeScale: function(id, removeid) {
