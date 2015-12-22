@@ -1025,6 +1025,23 @@ class ClassroomController extends BaseController
         ));
     }
 
+    public function orderInfoAction(Request $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (empty($order)) {
+            throw $this->createNotFoundException('订单不存在!');
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
+
+        if (empty($classroom)) {
+            throw $this->createNotFoundException("找不到要购买的班级!");
+        }
+
+        return $this->render('ClassroomBundle:Classroom:classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
+    }
+
     protected function getEnabledPayments()
     {
         $enableds = array();
