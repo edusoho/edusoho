@@ -398,6 +398,7 @@ define(function(require, exports, module) {
                 // 最后一个孩子为新增的元素
                 var scalejson = {
                     "scaleid": id,
+                    "markerId":'',
                     "scaletime": this._convertSec(time),
                     "scaleleft":$_scale.css('left'),
                     "subject": [{

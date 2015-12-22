@@ -54,7 +54,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
             $questionMarkers = $this->findQuestionMarkersByMarkerId($markerId);
             $this->getQuestionMarkerDao()->updateQuestionMarkersSeq($markerId, $seq);
             $questionmarker = $this->getQuestionMarkerDao()->addQuestionMarker($questionMarker);
-            $this->getQuestionMarkerService()->updateQuestionMarkerSeq($questionmarker['seq']);
+            //$this->getQuestionMarkerService()->updateQuestionMarkerSeq($questionmarker['seq']);
             return $questionmarker;
         }
     }

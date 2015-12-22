@@ -64,7 +64,8 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         );
 
         $marker   = $this->getMarkerDao()->addMarker($marker);
-        $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['qusetionId'], $marker['id'], 1);
+        $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
+        return $question;
     }
 
     public function deleteMarker($id)

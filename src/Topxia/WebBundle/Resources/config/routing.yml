@@ -964,12 +964,17 @@ course_lesson_marker_manage:
     pattern:  /course/{courseId}/lesson/{lessonId}/marker/manage
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
-course_lesson_question_list:
-    pattern:  /course/{courseId}/lesson/{lessonId}/question/list
+course_lesson_question_marker_add:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/add
+    defaults: { _controller: TopxiaWebBundle:Marker:addQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_list:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/list
     defaults: { _controller: TopxiaWebBundle:Marker:question }
 
-course_lesson_question_search:
-    pattern:  /course/{courseId}/lesson/{lessonId}/question/search
+course_lesson_question_marker_search:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/search
     defaults: { _controller: TopxiaWebBundle:Marker:search }
 
 announcement_list:
