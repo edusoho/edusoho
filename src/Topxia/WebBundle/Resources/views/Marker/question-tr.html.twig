@@ -10,7 +10,7 @@
 
 <ul class="lesson-list gruop-lesson-list" id="subject-lesson-list">
   {% for question in questions %} 
-  <li class="row item-lesson">
+  <li class="row item-lesson" data-id="{{question.id}}">
     <div class="col-md-6 title">
       <div class="before">
         <span class="idname">{{question.id}}</span>

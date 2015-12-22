@@ -3,9 +3,21 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
-
+    var scalejson = {
+        "scaleid": '0023',
+        "scaletime": '23',
+        "scaleleft":'310px',
+        "subject": [{
+            'id': '1',
+            'ordinal': '1'
+        },{
+            'id': '2',
+            'ordinal': '2'
+        }]
+    }
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
+        initscale:scalejson,
         addScale: function(scalejson) {
             console.log(scalejson);
             return scalejson;
