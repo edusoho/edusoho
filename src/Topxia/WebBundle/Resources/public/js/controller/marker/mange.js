@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         attrs: {
             item: '.item-lesson',
             placeholder: '.placeholder',
-            time: '68',
+            videotime: '68',
             editbox: '.editbox',
             scalebox: '.scalebox',
             timepartnum: '6',
@@ -229,7 +229,7 @@ define(function(require, exports, module) {
             $scale.css("left", left);
 
             //显示移动时间轴的时间
-            var time = parseInt(_obj.get("time"));
+            var time = parseInt(_obj.get("videotime"));
             var width = $(".dashboard-content").width();
             var scale_value = Math.round(left * time / width);
             $scale_details.html(_obj._convertTime(scale_value));
@@ -274,7 +274,7 @@ define(function(require, exports, module) {
             var $_editbox = $(_obj.get("editbox"));
             var _width = $_editbox.width();
             // 以秒为单位
-            var _totaltime = _obj.get("time");
+            var _totaltime = _obj.get("videotime");
             var _partnum = _obj.get("timepartnum");
 
             if (_partnum > 0) {
