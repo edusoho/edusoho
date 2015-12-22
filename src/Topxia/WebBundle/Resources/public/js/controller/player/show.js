@@ -101,6 +101,12 @@ define(function(require, exports, module) {
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
         });
+        player.on("doNextQuestionMarker",function(markerId){
+            $('.vjs-break-overlay-text').html("");
+            $.get('/course/lesson/'+2+'/questionmarker/show',{"markerid":2},function(data){
+                $('.vjs-break-overlay-text').html(data);
+            });
+        });
 
         player.on("timechange", function(){
             messenger.sendToParent("timechange", {pause: true});

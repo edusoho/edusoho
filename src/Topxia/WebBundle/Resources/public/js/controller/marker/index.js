@@ -34,7 +34,7 @@ define(function(require, exports, module) {
                             "id":data[index].id,
                             "time":data[index].second,
                             "text":"ads",
-                            "finished":false
+                            "finished":data[index].finish
                         };
                         player.addMarker([marker]);
                     }

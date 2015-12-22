@@ -69,7 +69,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         );
 
         $marker   = $this->getMarkerDao()->addMarker($marker);
-        $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['qusetionId'], $marker['id'], 1);
+        $question = $this->getQuestionMarkerService()->addQuestionMarker($fields['questionId'], $marker['id'], 1);
     }
 
     public function deleteMarker($id)
@@ -82,6 +82,19 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         $this->getMarkerDao()->deleteMarker($id);
         $this->getLogService()->info('Marker', 'delete', "驻点#{$id}永久删除");
+
+        return true;
+    }
+
+    public function isFinishMarker($userId, $markerId)
+    {
+        $questionResults = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($userId, $markerId);
+
+        foreach ($questionResults as $key => $questionResult) {
+            if ($questionResult['status'] != 'none') {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -103,6 +116,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getQuestionMarkerService()
     {
         return $this->createService('Marker.QuestionMarkerService');
+    }
+
+    protected function getQuestionMarkerResultService()
+    {
+        return $this->createService('Marker.QuestionMarkerResultService');
     }
 
     protected function getUploadFileService()

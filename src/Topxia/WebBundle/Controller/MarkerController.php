@@ -35,7 +35,7 @@ class MarkerController extends BaseController
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['questionId'], $marker['id'], $data['seq']);
                 return $this->createJsonResponse($questionmarker);
             } else {
                 return $this->createJsonResponse(false);
@@ -79,8 +79,8 @@ class MarkerController extends BaseController
     {
         $data             = $request->request->all();
         $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
-        $questionmarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
-        return $this->createJsonResponse($questionmarkers);
+        $questionMarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+        return $this->createJsonResponse($questionMarkers);
     }
 
     //获取当前播放器的驻点
@@ -89,7 +89,15 @@ class MarkerController extends BaseController
         $data = $request->request->all();
         //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
         $markers = $this->getMarkerService()->findMarkersByMediaId($data['mediaId']);
-        return $this->createJsonResponse($markers);
+        $results = array();
+        $user    = $this->getUserService()->getCurrentUser();
+
+        foreach ($markers as $key => $marker) {
+            $results[$key]           = $marker;
+            $results[$key]['finish'] = $this->getMarkerService()->isFinishMarker($user['id'], $marker['id']);
+        }
+
+        return $this->createJsonResponse($results);
     }
 
     //获取驻点弹题
@@ -98,7 +106,18 @@ class MarkerController extends BaseController
         $data             = $request->request->all();
         $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 1;
         $questions        = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
-        $question         = !empty($questions) ? $questions[0] : array();
+        $user             = $this->getUserService()->getCurrentUser();
+        $question         = array();
+
+        foreach ($questions as $key => $value) {
+            $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);
+
+            if ($questionResult['status'] == 'none') {
+                $question = $value;
+                break;
+            }
+        }
+
         return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
             'questions' => $questions,
             'markerId'  => $data['markerId'],
@@ -114,13 +133,13 @@ class MarkerController extends BaseController
             'markerId' => $data['markerId']
         );
         $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'DESC'), 0, 999);
-        $user      = $this->getCurrentUser();
+        $user      = $this->getUserService()->getCurrentUser();
         $question  = array();
 
         foreach ($questions as $key => $value) {
-            $questionmarkerresult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);
+            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);
 
-            if ($questionmarkerresult['status'] == 'none') {
+            if ($questionMarkerResult['status'] == 'none') {
                 $question = $value;
                 break;
             }
@@ -223,5 +242,10 @@ class MarkerController extends BaseController
     protected function getQuestionMarkerResultService()
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
