@@ -21,6 +21,7 @@ $resources = array(
     'HomeworkResult',
     'HomeworkManager',
     'ThreadManager',
+    'Thread',
     'Upload'
 );
 
