@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             arryid: [],
             newId: '',
             isDraggable: 'false',
-            initscale: {},
+            initMarkerArry: [],
             Dragitem: [],
             addScale: function(markerJson, $marker, $item_lesson) {
                 return markerJson;
@@ -40,7 +40,7 @@ define(function(require, exports, module) {
         setup: function() {
             this._initSortable();
             this._initeditbox();
-            this._initScale(this.get('initscale'));
+            this._initScale(this.get('initMarkerArry'));
         },
         itemDraggable: function(e) {
             var $this = $(e.currentTarget);
@@ -364,16 +364,28 @@ define(function(require, exports, module) {
                 $('[data-toggle="tooltip"]').tooltip();
             }
         },
-        _initScale: function(scalejson) {
-            // var $editbox = $(this.get('editbox'));
-            // var $subject_lesson_list = $(this.get('subject_lesson_list'));
-            // var $newscale = $('<a class="scale blue" id="' + scalejson.scaleid + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(scalejson.scaletime) + '</div></div></a>').css("left", scalejson.scaleleft).appendTo($editbox.find('.scalebox'));
-            // var $lesson_list = $newscale.find('.lesson-list');
-            // var subject = scalejson.subject;
-            // for (var i = 0; i < subject.length; i++) {
-            //     $subject_lesson_list.find(this.get('item') + '[data-id=' + subject[i].id + ']').find('.number .num').html(subject[i].ordinal);
-            //     $subject_lesson_list.find(this.get('item') + '[data-id=' + subject[i].id + ']').appendTo($lesson_list);
-            // }
+        _initScale: function(initMarkerArry) {
+            console.log(initMarkerArry);
+            if(initMarkerArry.length>0) {
+                console.log(initMarkerArry.length);
+                var $editbox = $(this.get('editbox'));
+                var $subject_lesson_list = $(this.get('subject_lesson_list'));
+                for (var i = 0; i < initMarkerArry.length; i++) {
+                    var $newscale = $('<a class="scale blue" id="' + initMarkerArry[i].id + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(initMarkerArry[i].second) + '</div></div></a>').css("left", initMarkerArry[i].position).appendTo($editbox.find('.scalebox'));
+                   console.log($newscale);
+                    var $lesson_list = $newscale.find('.lesson-list');
+                    
+                    var questionMarkers = initMarkerArry[i].questionMarkers;
+                    console.log(questionMarkers.length);
+
+                    for (var j = 0; j < questionMarkers.length; j++) {
+                        console.log($lesson_list );
+                        $subject_lesson_list.find(this.get('item') + '[question-id=' + questionMarkers[j].questionId + ']').attr('id',questionMarkers[j].id).appendTo($lesson_list).find('.number .num').html(questionMarkers[j].seq);
+                        // $subject_lesson_list.find(this.get('item') + '[data-id=' + questionMarkers[i].questionId + ']');
+                    }
+                }
+            }
+            // var subject = initMarkerJson.subject;
             // var arry = this.get('arryid').push(scalejson.scaleid);
         },
         _sortList: function($list) {
