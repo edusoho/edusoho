@@ -69,7 +69,7 @@ class CourseSettingController extends BaseController
 
             $courseUpdateSetting = $request->request->all();
 
-            $courseSetting = array_merge($courseUpdateSetting, $liveCourseSetting, $courseSetting);
+            $courseSetting = array_merge($courseSetting, $courseUpdateSetting, $liveCourseSetting);
 
             $this->getSettingService()->set('live-course', $liveCourseSetting);
             $this->getSettingService()->set('course', $courseSetting);
