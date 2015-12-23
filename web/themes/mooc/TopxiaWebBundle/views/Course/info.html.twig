@@ -42,7 +42,7 @@
         {% if scoreSetting %}
           本年课程的最终成绩由三部分组成，考试成绩占比权重为{{ scoreSetting.examWeight }}%，作业成绩权重为{{scoreSetting.homeworkWeight }}%，其他权重为
           {{scoreSetting.otherWeight|default(0) }}%。<br \>
-          本课程成绩{{ scoreSetting.standardScore }}分为合格，成绩预计公布时间为{{ scoreSetting.publishTime|date('Y-m-d') }}日。<br \>
+          本课程成绩{{ scoreSetting.standardScore }}分为合格，成绩预计公布时间为{{ scoreSetting.expectPublishTime|date('Y-m-d') }}日。<br \>
           请大家及时完成作业及考试，以免影响最终成绩。
         {% else %}
           <div class="text-muted">暂无课程考核标准</div>
