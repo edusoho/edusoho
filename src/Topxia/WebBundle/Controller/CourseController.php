@@ -783,43 +783,6 @@ class CourseController extends CourseBaseController
         return $unEnabledCourseIds;
     }
 
-    public function searchAction(Request $request)
-    {
-        $key         = $request->request->get("key");
-        $classroomId = 0;
-
-        $conditions           = array("title" => $key);
-        $conditions['status'] = 'published';
-
-        if ($request->query->get('classroomId')) {
-            $classroomId = $request->query->get('classroomId');
-        }
-
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions, 'latest',
-            0,
-            5
-        );
-
-        $courseIds          = ArrayToolkit::column($courses, 'id');
-        $unEnabledCourseIds = $this->getClassroomCourseIds($request, $courseIds);
-
-        $userIds = array();
-
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
-            'users'              => $users,
-            'courses'            => $courses,
-            'unEnabledCourseIds' => $unEnabledCourseIds
-        ));
-    }
-
     public function relatedCoursesBlockAction($course)
     {
         $courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc', ''), 0, 4);
