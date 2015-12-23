@@ -55,7 +55,7 @@ class MarkerController extends BaseController
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['questionId'], $marker['id'], $data['seq']);
                 return $this->createJsonResponse($questionmarker);
             } else {
                 return $this->createJsonResponse(false);

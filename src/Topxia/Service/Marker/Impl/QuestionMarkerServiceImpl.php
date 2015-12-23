@@ -101,6 +101,11 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return true;
     }
 
+    public function merge($sourceMarkerId, $targetMarkerId)
+    {
+        return;
+    }
+
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit)
     {
         return $this->getQuestionMarkerDao()->searchQuestionMarkers($conditions, $orderBy, $start, $limit);
