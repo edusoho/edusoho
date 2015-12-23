@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{# {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
@@ -7,11 +7,11 @@
 {% set bodyClass = 'indexpage' %}
 
 {% block full_content %}
-  {{ block_show('mooc:home_top_banner') }}
+  {{ block_show('mooc:home_top_banner') }} #}
 {# {% endblock %} #}
 
   {# {% block container %} #}
-  {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
+{#  {% set recommendCourses = data('RecommendCourses',{ count:6 }) %}
   <section class="es-section section-gray" id="course-list">
     <div class="container">
       <div class="course-filter section-header" id="course-filter">
@@ -148,4 +148,6 @@
   </section>
 
 {% endblock %}
-{% do load_script('theme/default/index') %}
+{% do load_script('theme/default/index') %} #}
+
+{{ render(controller('TopxiaWebBundle:Theme:index')) }}
