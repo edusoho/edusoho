@@ -12221,6 +12221,21 @@ textarea {
 .question-manage .editbox .scalebox .scale.blue .scale-details .content {
   display: none;
 }
+.question-manage .editbox .scalebox .transparent {
+  visibility: hidden;
+}
+.question-manage .editbox .scalebox .transparent:hover .scale-details {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  visibility: hidden;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.question-manage .editbox .scalebox .transparent:hover .border {
+  background-color: transparent;
+}
 .question-manage .editbox .scalebox .tooltip-inner {
   background-color: #000;
   background-color: rgba(0, 0, 0, 0.8);
@@ -12228,6 +12243,9 @@ textarea {
 .question-manage .editbox .lesson-list {
   min-height: 40px;
   height: 130px;
+}
+.question-manage .editbox .lesson-list .item-lesson.transparent {
+  visibility: hidden;
 }
 .question-manage .editbox .lesson-list .placeholder {
   background-color: #000;
