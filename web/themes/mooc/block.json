@@ -101,108 +101,32 @@
         "category": "mooc",
         "templateName": "@theme/mooc/block/middle_banner.template.html.twig",
         "items": {
-            "icon1":
-            {   
-                "title": "中部图标１",
-                "desc": "建议图片大小为130*130",
-                "count": 1,
-                "type": "img",
-                "default": [
-                    {
-                        "src": "\/assets\/v2\/img\/icon_introduction_1.png",
-                        "alt": "中部横幅"
-                    }
-                ]
-            },
-            "icon1title": {
-                "title": "图标１标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
+            "banner":{
+                "title":"横幅",
+                "desc":"首页中部.横幅",
+                "count":3,
+                "type":"banner",
                 "default":[
                     {
-                        "value": "网校功能强大"
-                    }
-                ]
-            },
-            "icon1introduction": {
-                "title": "图标１介绍",
-                "desc": "",
-                "count": 1,
-                "type": "textarea",
-                "default":[
+                        "title" : "横幅1标题",
+                        "value" : "横幅1介绍",
+                        "src" : "\/themes\/mooc\/img\/feature_1.png",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "横幅1"
+                    },
                     {
-                        "value": "一万多家网校共同选择，值得信赖"
-                    }
-                ]
-            },
-            "icon2":
-            {   
-                "title": "中部图标２",
-                "desc": "建议图片大小为130*130",
-                "count": 1,
-                "type": "img",
-                "default": [
+                        "title" : "横幅2标题",
+                        "value" : "横幅2介绍",
+                        "src" : "\/themes\/mooc\/img\/feature_2.png",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "横幅2"
+                    },
                     {
-                        "src": "\/assets\/v2\/img\/icon_introduction_2.png",
-                        "alt": "中部横幅"
-                    }
-                ]
-            },
-            "icon2title": {
-                "title": "图标２标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "响应式页面技术"
-                    }
-                ]
-            },
-            "icon2introduction": {
-                "title": "图标２介绍",
-                "desc": "",
-                "count": 1,
-                "type": "textarea",
-                "default":[
-                    {
-                        "value": "采用响应式技术，完美适配任意终端"
-                    }
-                ]
-            },
-            "icon3":
-            {   
-                "title": "中部图标３",
-                "desc": "建议图片大小为130*130",
-                "count": 1,
-                "type": "img",
-                "default": [
-                    {
-                        "src": "\/assets\/v2\/img\/icon_introduction_3.png",
-                        "alt": "中部横幅"
-                    }
-                ]
-            },
-            "icon3title": {
-                "title": "图标３标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "教育云服务支持"
-                    }
-                ]
-            },
-            "icon3introduction": {
-                "title": "图标３介绍",
-                "desc": "",
-                "count": 1,
-                "type": "textarea",
-                "default":[
-                    {
-                        "value": "强力教育云支持，免除你的后顾之忧"
+                        "title" : "横幅3标题",
+                        "value" : "横幅3介绍",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "横幅3"
                     }
                 ]
             }
@@ -440,52 +364,6 @@
                     {
                         "src": "\/assets\/img\/default\/android.png",
                         "alt": "网校的Android版APP"
-                    }
-                ]
-            }
-        }
-    },
-    "mooc:branch_school_top_banner":
-    {
-        "title": "慕课主题：分校.首页顶部.轮播图 ",
-        "category": "mooc",
-        "templateName": "@theme/mooc/block/branch_school_carousel.template.html.twig",
-        "items": {
-            "posters":{
-                "title":"海报",
-                "desc":"首页海报",
-                "count":1,
-                "type":"poster",
-                "default":[
-                    {
-                        "src" : "\/themes\/mooc\/img\/TAFE-banner-1.jpg",
-                        "alt" : "海报1",
-                        "layout" : "tile",
-                        "background" : "#fff",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
-                    },
-                    {
-                        "src" : "\/themes\/mooc\/img\/TAFE-banner-2.jpg",
-                        "alt" : "海报2",
-                        "layout" : "tile",
-                        "background" : "#0984f7",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
-                    },
-                    {
-                        "src" : "\/themes\/mooc\/img\/TAFE-banner-3.jpg",
-                        "alt" : "海报3",
-                        "layout" : "tile",
-                        "background" : "#3b4250",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
                     }
                 ]
             }

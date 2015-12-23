@@ -24,3 +24,10 @@ admin_operation_organization_create:
     router_name: admin_organization_create
     mode: modal
     group: 2
+
+admin_operation_block:
+    name: 编辑区管理
+    parent: admin_operation
+    router_name: admin_block
+    router_params: { 'category': 'theme'}
+    group: 2
