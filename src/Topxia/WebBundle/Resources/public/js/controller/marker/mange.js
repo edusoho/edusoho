@@ -6,18 +6,15 @@ define(function(require, exports, module) {
         attrs: {
             item: '.item-lesson',
             placeholder: '.placeholder',
-            videotime: '68',
+            videotime: '68',//视频总时长
             editbox: '.editbox',
             scalebox: '.scalebox',
             timepartnum: '6',
             subject_lesson_list: '#subject-lesson-list',
             editbox_lesson_list: "#editbox-lesson-list",
             group_list: ".gruop-lesson-list",
-            arryid: [],
-            newId: '',
-            isDraggable: 'false',
-            initMarkerArry: [],
-            Dragitem: [],
+            isDraggable: 'false',//拖动时阻止滑动事件响应
+            initMarkerArry: [],//初始化数据
             updateSqeArry: [],
             addScale: function(markerJson, $marker, $item_lesson) {
                 return markerJson;
@@ -32,15 +29,15 @@ define(function(require, exports, module) {
                 return markerJson;
             },
             updateSqe: function($marker, questionMarkers_id, seq, new_seq) {
-                return markerJson;
+                return true;
             }
         },
         events: {
-            'mousedown {{attrs.item}}': 'itemDraggable',
+            'mousedown .gruop-lesson-list .item-lesson': 'itemDraggable',
             'click .lesson-list .icon-close': 'itemRmove',
             'mousedown .scale.blue': 'slideScale',
             'mouseenter .scale.blue': 'hoverScale',
-            'mouseenter .scale.blue .item-lesson': 'itemSqe'
+            'mousedown .scale.blue .item-lesson': 'itemSqe'
         },
         setup: function() {
             this._initSortable();
@@ -128,23 +125,8 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
                         _obj._newSortList($new_scale.find('.lesson-list'));
-
                         _obj._addScale($new_scale, timestr, $new_scale.css("left"),$new_scale.find('.lesson-list').children().num );
-                        // 第一个元素：在这返回数据到后台，其他在Drop中返回：
-                        // if (_obj.get('Dragitem').length <= 0) {
-                        //     _obj._addScale($new_scale, timestr, postionleft, 1);
-                        //     console.log("我是第一条");
-                        // } else {
-                        //     // 第一条数据无序排序
-                        //     // 其他在Drop中返回：
-                        //     console.log($editbox_lesson_list.children().length);
-                        //     var Dragitem = [];
-                        //     Dragitem.push($new_scale);
-                        //     Dragitem.push(timestr);
-                        //     Dragitem.push(postionleft);
-                        //     _obj.set("Dragitem", Dragitem);
-                            console.log("增加完成");
-                        // }
+                        console.log("增加完成");
                     } else {
                         //相同直接获取存在的ID
                         console.log("需要合并");
@@ -155,13 +137,7 @@ define(function(require, exports, module) {
                         $_scale.find('.border').removeClass('show');
                         _obj._sortList($_scale.find('.lesson-list'));
                         _obj._addScale($_scale, timestr, $_scale.css("left"),$_scale.find('.lesson-list').children().length );
-                        // // 其他在Drop中传递当前信息给后台，并进行排序
-                        // var Dragitem = [];
-                        // Dragitem.push($_scale);
-                        // Dragitem.push(_obj._convertTime(timesec));
-                        // Dragitem.push($_scale.css('left'));
-                        // _obj.set("Dragitem", Dragitem);
-                        console.log("需要合并处理完成开始排序和增加ID吧");
+                        console.log("合并和排序完成");
 
                     }
                 }
@@ -297,6 +273,7 @@ define(function(require, exports, module) {
             }
         },
         itemSqe: function(e) {
+            //阻止默认事件，父层的滑动
             e.stopPropagation();
         },
         _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
@@ -347,12 +324,6 @@ define(function(require, exports, module) {
                 onDrop: function($item, container, _super) {
                     _super($item, container);
                     console.log("onDroponDroponDroponDrop");
-                    // var Dragitem = _obj.get('Dragitem');
-                    // if (Dragitem.length > 0) {
-                    //     console.log("至少两条以后吧");
-                    //     _obj._sortList(Dragitem[0].find('.lesson-list'));
-                    //     _obj._addScale(Dragitem[0], Dragitem[1], Dragitem[2], Dragitem[0].find('.lesson-list').children().length);
-                    // }
                 }
             });
         },
@@ -393,12 +364,9 @@ define(function(require, exports, module) {
                     for (var j = 0; j < questionMarkers.length; j++) {
                         console.log($lesson_list);
                         $subject_lesson_list.find(this.get('item') + '[question-id=' + questionMarkers[j].questionId + ']').attr('id', questionMarkers[j].id).appendTo($lesson_list).find('.number .num').html(questionMarkers[j].seq);
-                        // $subject_lesson_list.find(this.get('item') + '[data-id=' + questionMarkers[i].questionId + ']');
                     }
                 }
             }
-            // var subject = initMarkerJson.subject;
-            // var arry = this.get('arryid').push(scalejson.scaleid);
         },
         _sortList: function($list) {
             var num = 1;
