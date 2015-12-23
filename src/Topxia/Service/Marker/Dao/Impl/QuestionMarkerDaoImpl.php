@@ -21,6 +21,18 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         return $questionMarker ? $this->createSerializer()->unserialize($questionMarker, $this->serializeFields) : null;
     }
 
+    public function getMaxSeqByMarkerId($id)
+    {
+        $sql = "SELECT max(seq) seq FROM {$this->table} WHERE markerId = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id));
+    }
+
+    public function merge($sourceMarkerId, $targetMarkerId, $maxSeq)
+    {
+        $sql = "UPDATE {$this->table} SET seq = seq + {$maxSeq}, markerId = {$targetMarkerId} WHERE markerId = ? ";
+        return $this->getConnection()->executeQuery($sql, array($sourceMarkerId));
+    }
+
     public function findQuestionMarkersByIds($ids)
     {
         if (empty($ids)) {

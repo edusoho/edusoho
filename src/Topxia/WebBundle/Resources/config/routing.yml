@@ -974,6 +974,11 @@ course_lesson_question_marker_delete:
     defaults: { _controller: TopxiaWebBundle:Marker:deleteQuestionMarker }
     methods: [POST]
 
+course_lesson_question_marker_merge:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/merge
+    defaults: { _controller: TopxiaWebBundle:Marker:merge }
+    methods: [POST]
+
 course_lesson_question_marker_list:
     pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/list
     defaults: { _controller: TopxiaWebBundle:Marker:question }

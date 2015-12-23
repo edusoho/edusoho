@@ -93,7 +93,9 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function merge($sourceMarkerId, $targetMarkerId)
     {
-        $this->deleteMarker($targetMarkerId);
+        $this->getQuestionMarkerService()->merge($sourceMarkerId, $targetMarkerId);
+        $this->deleteMarker($sourceMarkerId);
+        return true;
     }
 
     protected function getMarkerDao()

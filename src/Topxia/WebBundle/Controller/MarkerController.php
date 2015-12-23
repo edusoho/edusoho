@@ -27,6 +27,8 @@ class MarkerController extends BaseController
             return $this->createMessageResponse('error', '参数错误!');
         }
 
+        $this->getMarkerService()->merge($data['sourceMarkerId'], $data['targetMarkerId']);
+
         return $this->createJsonResponse(true);
     }
 

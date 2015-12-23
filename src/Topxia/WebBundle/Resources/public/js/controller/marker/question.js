@@ -107,7 +107,16 @@ define(function(require, exports, module) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.merg_id:   "+markerJson.merg_id);
+            var url = $('.toolbar-question-marker').data('queston-marker-merge-url');
+
+
+            $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
+                
+                //console.log(scalejson);
+            });
+
             if(true) {
+                console.log(markerJson);
                 //后台需要将，markerJson.id中的所有题目移动到markerJson.merg_id中，如两id都分别有2题，那被移动题目的序号由1，2变为3，4
                 //成功回调，将$marker真移除
                 $marker.remove();
@@ -145,7 +154,7 @@ define(function(require, exports, module) {
 
             $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
                 
-                console.log(scalejson);
+                //console.log(scalejson);
             });
 
 
