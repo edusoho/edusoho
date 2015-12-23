@@ -123,7 +123,12 @@ define(function(require, exports, module) {
                 // 将？$marker_list_item放回到$marker中，并将$marker显示；
                 // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
             }
+        },
+        updateSqe:function() {
+            
         }
+
+
     })
     exports.run = function() {
         $form = $('.mark-from');
