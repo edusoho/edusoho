@@ -116,6 +116,17 @@ services:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
         arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
 
+    session.handler.redis.factory:
+        class: Topxia\Service\Common\RedisFactory
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
+
+    session.handler.redis:
+        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        arguments: [@session.handler.redis.factory, @security.context]
+
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
         arguments:    [@service_container]
