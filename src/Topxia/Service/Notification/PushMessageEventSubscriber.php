@@ -341,7 +341,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = $this->getTarget('course', $homeworkResult['courseId']);
         $from   = array(
             'type'  => 'course',
-            'id'    => $post['courseId'],
+            'id'    => $homeworkResult['courseId'],
             'image' => $target['image']
         );
         $to   = array('type' => 'user', 'id' => $homeworkResult['userId']);
@@ -365,7 +365,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = $this->getTarget('course', $learn['courseId']);
         $from   = array(
             'type'  => 'course',
-            'id'    => $post['courseId'],
+            'id'    => $learn['courseId'],
             'image' => $target['image']
         );
         $to   = array('type' => 'user', 'id' => $learn['userId']);
@@ -387,7 +387,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = $this->getTarget('course', $learn['courseId']);
         $from   = array(
             'type'  => 'course',
-            'id'    => $post['courseId'],
+            'id'    => $learn['courseId'],
             'image' => $target['image']
         );
         $to   = array('type' => 'user', 'id' => $learn['userId']);
