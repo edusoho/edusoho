@@ -142,12 +142,21 @@ define(function(require, exports, module) {
                 // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
             }
         },
-        updateSqe:function() {
-
+        updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
+            // var markerJson = {
+            //     "id": $marker.attr('id'),
+            //     "questionMarkers": [{
+            //         "id": questionMarkers_id,
+            //         "seq": seq,
+            //         "new_seq": new_seq
+            //     }]
+            // }  
+            if(true) {
+                // 后台： 更据当前的序号编号，重新排序
+            }else {
+                //撤销排序
+            }  
         },
-
-
-
     })
     exports.run = function() {
         $form = $('.mark-from');
