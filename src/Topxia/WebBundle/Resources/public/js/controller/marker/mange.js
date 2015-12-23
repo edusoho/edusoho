@@ -42,7 +42,7 @@ define(function(require, exports, module) {
         setup: function() {
             this._initSortable();
             this._initeditbox();
-            // this._initScale(this.get('initMarkerArry'));
+            this._initMarkerArry(this.get('initMarkerArry'));
         },
         itemDraggable: function(e) {
             var _obj = this;
@@ -334,22 +334,17 @@ define(function(require, exports, module) {
                 $('[data-toggle="tooltip"]').tooltip();
             }
         },
-        _initScale: function(initMarkerArry) {
-            console.log(initMarkerArry);
+        _initMarkerArry: function(initMarkerArry) {
             if (initMarkerArry.length > 0) {
-                console.log(initMarkerArry.length);
                 var $editbox = $(this.get('editbox'));
                 var $subject_lesson_list = $(this.get('subject_lesson_list'));
                 for (var i = 0; i < initMarkerArry.length; i++) {
                     var $newscale = $('<a class="scale blue" id="' + initMarkerArry[i].id + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(initMarkerArry[i].second) + '</div></div></a>').css("left", initMarkerArry[i].position).appendTo($editbox.find('.scalebox'));
-                    console.log($newscale);
                     var $lesson_list = $newscale.find('.lesson-list');
-
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     console.log(questionMarkers.length);
 
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        console.log($lesson_list);
                         $subject_lesson_list.find(this.get('item') + '[question-id=' + questionMarkers[j].questionId + ']').attr('id', questionMarkers[j].id).appendTo($lesson_list).find('.number .num').html(questionMarkers[j].seq);
                     }
                 }
@@ -415,16 +410,6 @@ define(function(require, exports, module) {
                 time += m;
             }
             return time;
-        },
-        _convertNUm: function(num) {
-            var string = "";
-            var arr = num.toString().split(":");
-            if (arr.length > 0) {
-                for (var i = 0; i < arr.length; i++) {
-                    string += arr[i];
-                };
-            }
-            return string;
         },
         _convertSec: function(num) {
             var arry = num.split(':');
