@@ -37,6 +37,7 @@ define(function(require, exports, module) {
                             "finished":data[index].finish
                         };
                         player.addMarker([marker]);
+                        console.log(player.markers);
                     }
                 }
             });

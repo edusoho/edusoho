@@ -105,6 +105,10 @@ define(function(require, exports, module) {
             $('.vjs-break-overlay-text').html("");
             $.get('/course/lesson/'+markerId+'/questionmarker/show',{"markerId":markerId},function(data){
                 $('.vjs-break-overlay-text').html(data);
+                if (data == "") {
+                    //console.log(data);
+                    player.finishMarker(markerId);
+                }
             });
         });
 

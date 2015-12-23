@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     	var markerId = $('#data').data('markerid');
     	var questionId = $('#data').data('questionid');
 	    $.get($('#data').data('url'),{"markerId":markerId,"questionId":questionId},function(data){
-	    	console.log(data);
+	    	//console.log(data);
 	    	var player = window.BalloonPlayer;
 	    	player.trigger('doNextQuestionMarker',data);
 		  });

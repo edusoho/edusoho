@@ -191,6 +191,25 @@ define(function(require, exports, module) {
             return this.get('markers');
         },
 
+        finishMarker: function(id) {
+            var player = this.get("player");
+            var markers = player.markers.getMarkers();
+            // var markers = this.get('markers');
+            console.log(markers);
+            for(var key in markers) 
+            {
+                if(markers[key].id == id) {
+                    markers[key].finished = true;
+                    break;
+                }
+            }
+            console.log([markers]);
+            player.markers.removeAll();
+            player.markers.add([markers]);
+            markers = player.markers.getMarkers();
+            console.log(markers);
+        },
+
         setMarkers: function(markers) {
             var player = this.get("player");
             player.markers.reset(markers);
