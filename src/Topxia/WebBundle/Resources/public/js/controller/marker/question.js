@@ -47,9 +47,10 @@ define(function(require, exports, module) {
             console.log(markerJson);
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             var param = {
-                questionId:markerJson.questionMarkers[0].questionId,
+                markerId:markerJson.id,
                 second:markerJson.second,
-                markerId:markerJson.id
+                questionId:markerJson.questionMarkers[0].questionId,
+                seq:markerJson.questionMarkers[0].seq
             };
             $.post(url,param,function(data){
                 if(data.id == undefined) {
