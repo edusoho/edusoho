@@ -195,6 +195,19 @@
           }
         }
       }
+      .transparent {
+        visibility: hidden;
+        &:hover {
+          .scale-details  {
+            .es-transition;
+            visibility: hidden;
+             .opacity(1);
+          }
+          .border {
+            background-color:transparent;
+          }
+        }
+      }
       // .question-scale.show {
       //   visibility: visible;
       // }
@@ -206,6 +219,9 @@
     .lesson-list {
       min-height: 40px;
       height: 130px;
+      .item-lesson.transparent{
+        visibility: hidden;
+      }
       .placeholder {
         background-color: #000;
         color: #fff;

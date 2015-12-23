@@ -16,17 +16,18 @@ define(function(require, exports, module) {
             arryid: [],
             newId: '',
             isDraggable: 'false',
-            initscale:{},
-            addScale: function(scalejson) {
+            initscale: {},
+            Dragitem: [],
+            addScale: function(markerJson, $marker, $item_lesson) {
+                return markerJson;
+            },
+            mergeScale: function(markerJson, $marker, $merg_emarker, childrenum) {
                 return scalejson;
             },
-            mergeScale: function(scalejson) {
+            updateScale: function($marker, markerJson, old_position, old_time) {
                 return scalejson;
             },
-            updateScale: function(scalejson) {
-                return scalejson;
-            },
-            deleteScale: function(scalejson) {
+            deleteScale: function(markerJson, $marker, $marker_list_item) {
                 return scalejson;
             }
         },
@@ -61,10 +62,23 @@ define(function(require, exports, module) {
             $scale.css("visibility", "visible");
             $scale_details.css("visibility", "visible");
 
+            var arry = [];
+            // 遍历时间刻度
+            $scalebox.children('.scale.blue').each(function() {
+                console.log($this);
+                var $item_blue = $(this);
+                var scale = {
+                    'id': $item_blue.attr('id'),
+                    'sec': _obj._convertSec($item_blue.find('.time').html())
+                };
+                arry.push(scale);
+            });
+
+            // console.log(arry);
             $(document).mousemove(function(event) {
                 if (isMove) {
                     $subject_lesson_list.find(_obj.get('placeholder')).html(value);
-                    _obj._moveShow($scale, $scale_details, $scalebox, _obj);
+                    _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
                 }
             }).mouseup(function() {
                 // 停止拖动
@@ -72,83 +86,99 @@ define(function(require, exports, module) {
                 // 隐藏默认时间轴
                 $scale.css("visibility", "hidden");
                 $scale_details.css("visibility", "hidden");
-                var timeiD = _obj._convertNUm($scale_details.html());
-                var left = $scale.css("left");
-                var arry = _obj.get("arryid");
+                var timestr = $scale_details.html();
+                var postionleft = $scale.css("left");
+                var timesec = _obj._convertSec(timestr);
+                var id = '';
+                var arry = [];
+                // 遍历时间刻度:整理删除
+                $scalebox.children('.scale.blue').each(function() {
+                    var $item_blue = $(this);
+                    var scale = {
+                        'id': $item_blue.attr('id'),
+                        'sec': _obj._convertSec($item_blue.find('.time').html())
+                    };
+                    arry.push(scale);
+                });
+
                 if ($editbox_lesson_list.children().length > 0) {
                     var bool = true;
                     if (arry.length > 0) {
                         // 遍历所有元素都与当前时间差，一旦遍历有时间挫小于5秒就跳出循环，认定为最接近元素。
                         for (var i = arry.length - 1; i >= 0; i--) {
-                            if (Math.abs(parseInt(timeiD) - parseInt(arry[i])) <= 5) {
+                            console.log("timesec" + timesec);
+                            if (Math.abs(parseInt(timesec) - parseInt(arry[i].sec)) <= 5) {
+                                console.log('合并');
+                                console.log(Math.abs(parseInt(timesec) - parseInt(arry[i].sec)));
                                 bool = false
-                                timeiD = arry[i];
+                                id = arry[i].id;
+                                timesec = arry[i].sec;
                                 break;
                             }
                         }
-                        if (bool) {
-                            // 遍历完成后为出现靠近元素，数组记录ID
-                            arry.push(timeiD);
-                        }
-                    } else {
-                        // 第一个元素
-                        arry.push(timeiD);
                     }
                     if (bool) {
-                        // 生成一个时间轴：但前时间作为时间轴的ID
-                        var $newscale = $('<a class="scale blue" id="' + timeiD + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul></div></a>').css("left", left).appendTo($editbox.find('.scalebox'));
-                        $editbox_lesson_list.children().appendTo($newscale.find(".lesson-list"));
-                        $newscale.find(".lesson-list").after('<div class="time">' + $scale_details.html() + '</div>');
-                        // 拖拽后排序：在当前获取不到最新的li,在拖动事件的完成后查找当前的时间轴id中的ul进行排序
+                        console.log("增加");
+                        var $new_scale = $('<a class="scale blue" id=""><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + timestr + '</div></div></a>').css("left", postionleft).appendTo($scalebox);
+                        $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
-                        _obj._newSortList($newscale.find(".lesson-list"), _obj);
-                        // 第一个元素：在这返回数据到后台，其他在Drop中返回：第一次添加时newId为空
-                        if (_obj.get('newId').toString().length <= 0) {
-                            _obj._addScale($newscale, $scale_details.html(), true);
+                        _obj._newSortList($new_scale.find(_obj.get('item')));
+                        // 第一个元素：在这返回数据到后台，其他在Drop中返回：
+                        if (_obj.get('Dragitem').length <= 0) {
+                            _obj._addScale($new_scale, timestr, postionleft, 1);
                         }
-                        _obj.set("newId", timeiD);
+                        // 第一条数据无序排序
+                        // 其他在Drop中返回：
+                        console.log($editbox_lesson_list.children().length);
+                        var Dragitem = [];
+                        Dragitem.push($new_scale);
+                        Dragitem.push(timestr);
+                        Dragitem.push(postionleft);
+                        _obj.set("Dragitem", Dragitem);
+                        console.log("增加完成");
+
                     } else {
-                        console.log("text");
-                        _obj.set("newId", timeiD);
                         //相同直接获取存在的ID
-                        var $_scale = $editbox.find('.scalebox').find('a[id=' + timeiD + ']');
+                        console.log("合并");
+                        console.log("id " + id);
+                        var $_scale = $scalebox.find('a[id=' + id + ']');
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
                         $_scale.find('.border').removeClass('show');
+                        // 其他在Drop中传递当前信息给后台，并进行排序
+                        var Dragitem = [];
+                        Dragitem.push($_scale);
+                        Dragitem.push(_obj._convertTime(timesec));
+                        Dragitem.push($_scale.css('left'));
+                        _obj.set("Dragitem", Dragitem);
+
                     }
                 }
-                console.log(arry);
+                console.log("拖动停止");
                 // 拖动时间停止
                 _obj.set('isDraggable', 'false');
+
             });
         },
         itemRmove: function(e) {
             $this = $(e.currentTarget);
             var $list = $this.closest('.lesson-list');
-            var $list_item = $this.closest('.item-lesson');
             var num = $list.children().length;
+            //要移除的li
+            var $list_item = $this.closest(this.get('item'));
+            // 所属时间轴
             var $scale = $this.closest('.scale.blue');
-            var scaleid = $scale.attr('id');
 
+            //将li移除，放回原位，然后list重新排序
             $list_item.appendTo($(this.get("subject_lesson_list")));
             this._sortList($list);
-            // this._sortList($(this.get("subject-lesson-list")));
-            //判断当前子元数小于0移除蓝色的时间挫；
 
-            this._deleteScale(scaleid, $list_item.find('.idname').html());
+            //判断当前子元数小于0移除蓝色的时间挫；
             if (num <= 1) {
-                $scale.remove();
-                // 清楚数组中保留的时间ID
-                var arr = this.get("arryid");
-                if (arr.length > 0) {
-                    for (var i = arr.length - 1; i >= 0; i--) {
-                        if (arr[i] == scaleid) {
-                            arr.splice(i, 1);
-                            console.log(arr);
-                        }
-                    };
-                }
+                // 假删除，待成功回调后真删除
+                $scale.hide();
             }
+            this._deleteScale($scale, $list_item);
         },
         slideScale: function(e) {
             //避免拖动过程中触发事件
@@ -156,53 +186,92 @@ define(function(require, exports, module) {
                 var _obj = this;
                 var $this = $(e.currentTarget);
                 var $scalebox = $(_obj.get("scalebox"));
+                var $scale_details = $this.find(".scale-details ");
                 var $time = $this.find(".scale-details .time");
-                var old_id = $this.attr('id');
+                var old_time = _obj._convertSec($time.html());
+                var old_position = $this.css('left');
+
                 var isMove = true;
+
+                var arry = [];
+                // 遍历时间刻度
+                $scalebox.children('.scale.blue').each(function() {
+                    var $item_blue = $(this);
+                    var scale = {
+                        'id': $item_blue.attr('id'),
+                        'sec': _obj._convertSec($item_blue.find('.time').html())
+                    };
+                    arry.push(scale);
+                });
+                console.log(arry);
+
                 $(document).mousemove(function(event) {
-                    var left = 0;
                     if (isMove) {
-                        _obj._moveShow($this, $time, $scalebox, _obj);
+                        _obj._moveShow($this, $time, $scalebox, _obj, arry);
                     }
                 }).mouseup(function() {
-                    isMove = false;
-                    $(document).unbind(); //移除所有 
-                    old_id = $this.attr('id');
-                    $this.attr('id', _obj._convertNUm($this.find(".scale-details .time").html()));
-                    var newid = $this.attr('id');
-                    // 判断是非移动，阻止点击时间造成的影响
-                    if (newid != old_id) {
-                        var additem = true;
-                        var mergeid = -1;
-                        var arry = _obj.get("arryid");
-                        if (arry.length > 0) {
-                            for (var i = arry.length - 1; i >= 0; i--) {
-                                if (arry[i] == old_id) {
-                                    // 要循环所有将旧id删除，不能中途跳出循环
-                                    arry.splice(i, 1);
-                                }
-                                if ($this.attr('id') == arry[i] || Math.abs(parseInt($this.attr('id')) - parseInt(arry[i])) <= 5) {
-                                    // 将合并到该目标div，数组无需纪录ID，自身隐藏
-                                    additem = false;
-                                    mergeid = arry[i];
-                                }
-                            }
-                        }
-                        if (additem) {
-                            arry.push($this.attr('id'));
-                            _obj._updateScale(old_id, $this.attr('id'), _obj._convertTime($this.attr('id')));
-                        } else {
-                            var $_scale = $scalebox.find('a[id=' + mergeid + ']');
-                            if ($_scale.length > 0) {
-                                $this.find('.lesson-list').children().appendTo($_scale.find('.lesson-list'));
-                                $this.remove();
-                                _obj._sortList($_scale.find('.lesson-list'));
-                                _obj._mergeScale(mergeid, old_id);
-                            }
-
-                        }
-                        $scalebox.find('.border').removeClass('show');
+                    // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
+                    if ($this.length > 0 && $this.is(":visible")) {
+                        console.log($this);
+                        console.log("拖动过程中触发up");
+                        isMove = false;
+                        var arry = [];
+                        $scalebox.children('.scale.blue').each(function() {
+                            var $item_blue = $(this);
+                            var scale = {
+                                'id': $item_blue.attr('id'),
+                                'sec': _obj._convertSec($item_blue.find('.time').html())
+                            };
+                            arry.push(scale);
+                        });
                         console.log(arry);
+                        var new_time = _obj._convertSec($time.html());
+                        console.log('new_time' + new_time);
+                        // 判断是否移动，阻止点击事件触发方法，或者移动回原位置；
+                        if (old_time != new_time) {
+                            var additem = true;
+                            var mergeid = -1;
+                            // 至少同时存在有俩个时间轴才需进行是否合并的判断，否则直接修改；
+                            if (arry.length > 1) {
+                                for (var i = arry.length - 1; i >= 0; i--) {
+                                    console.log("循环时间" + arry[i].sec);
+                                    if (Math.abs(parseInt(new_time) - parseInt(arry[i].sec)) <= 5) {
+                                        //当前时间(排除自身)，已存在时间轴，将合并到该时间轴，然后自身的题目合并到该时间轴，并移除自身。
+                                        // 合并后被合并元素可能会触发该事件加判断arry[i].id.toString().length
+                                        if ($this.attr('id') != arry[i].id) {
+                                            additem = false;
+                                            mergeid = arry[i].id;
+                                            console.log("当前时间" + new_time);
+                                            console.log("被拖动的 " + $this.attr('id'));
+                                            console.log("将要被合并到目标的地id " + arry[i].id);
+                                            console.log("目标的地时间" + arry[i].sec);
+                                            console.log(i);
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (additem) {
+                                    console.log("滑动修改");
+                                    // 做修改操作：直接改变时间轴的时间即可
+                                    _obj._updateScale($this, new_time, old_position, old_time);
+                                } else {
+                                    console.log('滑动合并');
+                                    // 合并后被合并元素可能会触发该事件加判断$this.length后期优化
+                                    if ($this.length > 0) {
+                                        console.log('开始滑动合并');
+                                        var $_scale = $scalebox.find('.scale.blue[id=' + mergeid + ']');
+                                        var childrenum = $this.find('.lesson-list').children().length;
+                                        $this.find('.lesson-list').children().appendTo($_scale.find('.lesson-list'));
+                                        // 假删除：防止请求成功后再真删
+                                        $this.hide();
+                                        _obj._sortList($_scale.find('.lesson-list'));
+                                        _obj._mergeScale($this, $_scale, childrenum);
+                                    }
+
+                                }
+                            }
+                            $scalebox.find('.border').removeClass('show');
+                        }
                     }
                 });
             }
@@ -215,7 +284,7 @@ define(function(require, exports, module) {
                 $this.find('.scale-details').css('margin-left', '-110px');
             }
         },
-        _moveShow: function($scale, $scale_details, $scalebox, _obj) {
+        _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
             var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
 
             var left = 0;
@@ -236,16 +305,14 @@ define(function(require, exports, module) {
             var width = $(".dashboard-content").width();
             var scale_value = Math.round(left * time / width);
             $scale_details.html(_obj._convertTime(scale_value));
-
             // 查找5秒范围类的ID，提示合并效果
-            var timeiD = _obj._convertNUm(_obj._convertTime(scale_value));
-            var arryid = _obj.get("arryid");
-            if (arryid.length > 0) {;
-                for (var i = arryid.length - 1; i >= 0; i--) {
-                    if (Math.abs(parseInt(timeiD) - parseInt(arryid[i])) <= 5) {
-                        $scalebox.find('.scale.blue' + '[id=' + arryid[i] + ']').find('.border').addClass('show');
+            var timesec = scale_value;
+            if (arry.length > 0) {
+                for (var i = arry.length - 1; i >= 0; i--) {
+                    if (Math.abs(parseInt(timesec) - parseInt(arry[i].sec)) <= 5) {
+                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').find('.border').addClass('show');
                     } else {
-                        $scalebox.find('.scale.blue' + '[id=' + arryid[i] + ']').find('.border').removeClass('show');
+                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').find('.border').removeClass('show');
                     }
                 }
             }
@@ -257,18 +324,23 @@ define(function(require, exports, module) {
             var $list = $(_classname).sortable({
                 group: _classname,
                 afterMove: function(placeholder, container) {
+                    console.log("afterMove");
                     if (oldContainer != container) {
                         oldContainer = container;
                     }
                 },
                 onDrop: function($item, container, _super) {
                     _super($item, container);
-                    var id = _obj.get("newId");
-                    if (id.toString().length > 0) {
-                        var $scale = $(_obj.get("scalebox")).find('a[id=' + id + ']')
-                        _obj._sortList($scale.find('.lesson-list'));
-                        _obj._addScale($scale, $scale.find('.time').html(), true);
+                    var Dragitem = _obj.get('Dragitem');
+                    if (Dragitem.length > 0) {
+                        _obj._sortList(Dragitem[0].find('.lesson-list'));
+                        _obj._addScale(Dragitem[0], Dragitem[1], Dragitem[2], Dragitem[0].find('.lesson-list').children().length);
                     }
+                    // var id = _obj.get("newId");
+                    // if (id.toString().length > 0) {
+                    //     var $scale = $(_obj.get("scalebox")).find('a[id=' + id + ']')
+                    //     _obj._addScale($scale, $scale.find('.time').html(), true);
+                    // }
                 }
             });
         },
@@ -293,19 +365,16 @@ define(function(require, exports, module) {
             }
         },
         _initScale: function(scalejson) {
-            console.log(scalejson);
-            var $editbox = $(this.get('editbox'));
-            var $subject_lesson_list = $(this.get('subject_lesson_list'));
-            var $newscale = $('<a class="scale blue" id="' +scalejson.scaleid + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">'+this._convertTime(scalejson.scaletime)+'</div></div></a>').css("left", scalejson.scaleleft).appendTo($editbox.find('.scalebox'));
-            var $lesson_list = $newscale.find('.lesson-list');
-            var subject =scalejson.subject;
-            for (var i = 0; i < subject.length; i++) {
-                console.log(subject[i].id);
-                $subject_lesson_list.find(this.get('item')+'[data-id='+subject[i].id+']').find('.number .num').html(subject[i].ordinal);
-                $subject_lesson_list.find(this.get('item')+'[data-id='+subject[i].id+']').appendTo($lesson_list);
-            }
-            var arry =  this.get('arryid').push(scalejson.scaleid);
-            console.log(arry);
+            // var $editbox = $(this.get('editbox'));
+            // var $subject_lesson_list = $(this.get('subject_lesson_list'));
+            // var $newscale = $('<a class="scale blue" id="' + scalejson.scaleid + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(scalejson.scaletime) + '</div></div></a>').css("left", scalejson.scaleleft).appendTo($editbox.find('.scalebox'));
+            // var $lesson_list = $newscale.find('.lesson-list');
+            // var subject = scalejson.subject;
+            // for (var i = 0; i < subject.length; i++) {
+            //     $subject_lesson_list.find(this.get('item') + '[data-id=' + subject[i].id + ']').find('.number .num').html(subject[i].ordinal);
+            //     $subject_lesson_list.find(this.get('item') + '[data-id=' + subject[i].id + ']').appendTo($lesson_list);
+            // }
+            // var arry = this.get('arryid').push(scalejson.scaleid);
         },
         _sortList: function($list) {
             var num = 1;
@@ -314,13 +383,13 @@ define(function(require, exports, module) {
                 num++;
             });
         },
-        _newSortList: function($list, _obj) {
+        _newSortList: function($list) {
             $list.sortable({
                 distance: 20,
                 itemSelector: '.item-lesson',
                 onDrop: function(item, container, _super) {
                     _super(item, container);
-                    _obj._sortList($list);
+                    this._sortList($list);
                 },
                 serialize: function(parent, children, isContainer) {
                     return isContainer ? children : parent.attr('id');
@@ -391,47 +460,46 @@ define(function(require, exports, module) {
             }
             return sec;
         },
-        _addScale: function($_scale, time, bool) {
-            if (bool) {
-                var $item_lesson = $_scale.find(this.get('item') + ':last');
-                var id = $_scale.attr('id');
-                // 最后一个孩子为新增的元素
-                var scalejson = {
-                    "scaleid": id,
-                    "markerId":'',
-                    "scaletime": this._convertSec(time),
-                    "scaleleft":$_scale.css('left'),
-                    "subject": [{
-                        'id': $item_lesson.find(".idname").html(),
-                        'ordinal': $item_lesson.find('.num').html()
-                    }]
-                };
-                var tes = $.extend(scalejson, this.get("addScale")(scalejson));
-                console.log(tes);
+        _addScale: function($marker, timestr, postionleft, seq) {
+            var $marker_item = $marker.find('li' + ':last');
+            var markerJson = {
+                "id": $marker.attr('id'),
+                "second": this._convertSec(timestr),
+                "position": postionleft,
+                "questionMarkers": [{
+                    "id": $marker_item.attr('id'),
+                    "seq": seq,
+                    "questionId": $marker_item.attr('question-id')
+                }]
             }
+            $.extend(this.get("addScale")(markerJson, $marker));
         },
-        _mergeScale: function(id, removeid) {
+        _mergeScale: function($marker, $merg_marker, childrenum) {
             // 合并时后台去处理顺序，被合并数按序号依次增加
-            var scalejson = {
-                "scaleid": id,
-                "remove_scaleid": removeid
-            };
-            $.extend(scalejson, this.get("mergeScale")(scalejson));
+            var markerJson = {
+                "id": $marker.attr('id'),
+                "merg_id": $merg_marker.attr('id')
+            }
+            $.extend(this.get("mergeScale")(markerJson, $marker, $merg_marker, childrenum));
         },
-        _updateScale: function(id, newid, time) {
-            var scalejson = {
-                "scaleid": id,
-                "new_scaleid": newid,
-                "scaletime":this._convertSec(time)
-            };
-            $.extend(scalejson, this.get("updateScale")(scalejson));
+        _updateScale: function($marker, newtime, old_position, old_time) {
+            var markerJson = {
+                "id": $marker.attr('id'),
+                "second": newtime,
+                "position": $marker.css('left')
+            }
+            $.extend(this.get("updateScale")($marker, markerJson, old_position, old_time));
         },
-        _deleteScale: function(id, subjectid) {
-            var scalejson = {
-                "scaleid": id,
-                "subjectid": subjectid
-            };
-            $.extend(scalejson, this.get("deleteScale")(scalejson));
+        _deleteScale: function($marker, $marker_list_item) {
+            var markerJson = {
+                "id": $marker.attr('id'),
+                "questionMarkers": [{
+                    "id": $marker_list_item.attr('id'),
+                    "seq": $marker_list_item.find('.number .num').html(),
+                    "questionId": $marker_list_item.attr('question-id')
+                }]
+            }
+            $.extend(this.get("deleteScale")(markerJson, $marker, $marker_list_item));
         }
     });
     module.exports = DraggableWidget;
