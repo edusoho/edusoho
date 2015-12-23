@@ -141,20 +141,29 @@ define(function(require, exports, module) {
             //     console.log(scalejson);
             // });
 
-            if(true) {
-                //后台需注意：移除题目后前台已经重新排序，后台数据的序号也需要改变：将当前移除的题目序号后的题目序号依次加一
-                // 成功回调
-                console.log($marker);
-                console.log($marker_list_item);
-                //判断$marker是否hide，如果hide需要直接移除{时间轴上的所有题目已经移除}
-                if($marker.is(":hidden")) {
-                    $marker.remove();
-                }
-            }
-            else {
-                // 将？$marker_list_item放回到$marker中，并将$marker显示；
-                // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
-            }
+            var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
+
+            $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
+                
+                console.log(scalejson);
+            });
+
+
+            // if(true) {
+            //     //后台需注意：移除题目后前台已经重新排序，后台数据的序号也需要改变：将当前移除的题目序号后的题目序号依次加一
+            //     // 成功回调
+
+            //     console.log($marker);
+            //     console.log($marker_list_item);
+            //     //判断$marker是否hide，如果hide需要直接移除{时间轴上的所有题目已经移除}
+            //     if($marker.is(":hidden")) {
+            //         $marker.remove();
+            //     }
+            // }
+            // else {
+            //     // 将？$marker_list_item放回到$marker中，并将$marker显示；
+            //     // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
+            // }
         },
         updateSqe:function() {
             
