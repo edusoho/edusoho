@@ -21,4 +21,6 @@ interface QuestionMarkerService
     public function sortQuestionMarkers(array $ids);
 
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit);
+
+    public function merge($sourceMarkerId, $targetMarkerId);
 }
