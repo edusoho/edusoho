@@ -20,6 +20,10 @@
         <a class="pull-right time-reminder ing-bg"><i class="iconfont icon-time"></i>{{course.startTime | date('Y-m-d')}}开课</a>
       {% endif %}
     {% endif %}
+     {% set CourseScoreSetting = data('CourseScoreSetting',{'courseId': course.id})%}
+     {% if CourseScoreSetting %}
+    <span class="mrl"><span class="text-primary">{{CourseScoreSetting.credit}}</span>学分</span>
+     {% endif %}
     <span class="student-mun">已有<span>{{course.studentNum}}</span>人学习</span>
     <span class="star-{{(course.rating)|number_format }}"></span>
 
