@@ -379,7 +379,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
-    public function onCourseLessonStartTui()
+    public function onCourseLessonStartTui(ServiceEvent $event)
     {
         $learn  = $event->getSubject();
         $course = $this->getCourseService()->getCourse($learn['courseId']);
