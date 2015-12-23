@@ -2991,6 +2991,10 @@ select:-webkit-autofill {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+a.btn.disabled,
+fieldset[disabled] a.btn {
+  pointer-events: none;
+}
 .editor-text img {
   max-width: 100%;
   height: auto;
@@ -5649,6 +5653,12 @@ textarea.form-control-o {
   background-color: #f5f5f5;
   border-color: #dcdcdc;
 }
+.btn-default.disabled:hover,
+.btn-default[disabled]:hover {
+  color: #616161;
+  background-color: #f5f5f5;
+  border-color: #dcdcdc;
+}
 .btn-default:hover,
 .btn-default:focus,
 .btn-default.focus,
@@ -6329,7 +6339,7 @@ textarea {
   position: relative;
   margin: 5px auto 20px auto;
   padding-right: 30px;
-  color: #616161;
+  color: #313131;
   font-size: 16px;
 }
 .es-piece .piece-header .more {
