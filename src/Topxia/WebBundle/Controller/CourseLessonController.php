@@ -684,7 +684,7 @@ class CourseLessonController extends BaseController
         if ($user->isLogin()) {
             $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$lessonId}";
         } else {
-            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$id}";
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$courseId}";
         }
 
         $token = $this->getTokenService()->makeToken('qrcode', array(

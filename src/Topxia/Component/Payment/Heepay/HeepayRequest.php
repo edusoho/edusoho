@@ -2,6 +2,7 @@
 namespace Topxia\Component\Payment\Heepay;
 
 use Topxia\Component\Payment\Request;
+use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class HeepayRequest extends Request
 {
@@ -38,7 +39,7 @@ class HeepayRequest extends Request
         $converted                    = array();
         $converted['version']         = 1;
         $converted['agent_id']        = $this->options['key'];
-        $converted['agent_bill_id']   = strtolower($this->generateOrderToken());
+        $converted['agent_bill_id']   = strtolower($this->generateOrderToken($params));
         $converted['agent_bill_time'] = date("YmdHis", time());
         $converted['pay_type']        = '20';
         $converted['pay_code']        = '0';
@@ -61,7 +62,7 @@ class HeepayRequest extends Request
 
     protected function filterText($text)
     {
-        preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9]*/iu', $text, $results);
+        preg_match_all('/[\x{4e00}-\x{9fa5}A-Za-z0-9.]*/iu', $text, $results);
         $title = '';
 
         if ($results) {
@@ -75,8 +76,9 @@ class HeepayRequest extends Request
         return $title;
     }
 
-    private function generateOrderToken()
+    private function generateOrderToken($params)
     {
-        return 'h'.date('YmdHis', time()).mt_rand(10000, 99999);
+        $processor = OrderProcessorFactory::create($params['targetType']);
+        return $processor->generateOrderToken();
     }
 }
