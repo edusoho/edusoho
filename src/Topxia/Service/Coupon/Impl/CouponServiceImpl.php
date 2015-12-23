@@ -284,7 +284,7 @@ class CouponServiceImpl extends BaseService implements CouponService
             $allDiscount += ($order["couponDiscount"] / $rate);
         }
 
-        $this->dispatchEvent('coupon.use', new ServiceEvent($coupon['batchId'], array('usedNum' => $usedCount, 'money' => $allDiscount)));
+        $this->dispatchEvent('coupon.use', new ServiceEvent($coupon, array('usedNum' => $usedCount, 'money' => $allDiscount)));
 
         return $coupon;
     }
