@@ -39,9 +39,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $testpaper = $event->getSubject();
         $result    = $event->getArgument('testpaperResult');
 
-        $testpaper['target'] = explode('-', $testpaper['target']);
-        $lesson              = $this->getCourseService()->getLesson($testpaper['target'][3]);
-        $target              = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
+        $testpaper['target']       = explode('-', $testpaper['target']);
+        $testpaperResult['target'] = explode('-', $result['target']);
+        $lesson                    = $this->getCourseService()->getLesson($testpaperResult['target'][3]);
+        $target                    = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
 
         $from = array(
             'type'  => $target['type'],
