@@ -11,27 +11,44 @@ class SettingDaoImpl extends BaseDao implements SettingDao
 
     public function getSetting($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id));
+        }
+
+        );
     }
 
     public function addSetting($setting)
     {
-       $affected = $this->getConnection()->insert($this->table, $setting);
+        $affected = $this->getConnection()->insert($this->table, $setting);
+        $this->clearCached();
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert setting error.');
         }
+
         return $this->getSetting($this->getConnection()->lastInsertId());
     }
 
     public function findAllSettings()
     {
-        $sql = "SELECT * FROM {$this->table}";
-        return $this->getConnection()->fetchAll($sql, array());
+        $that = $this;
+
+        return $this->fetchCached("all", function () use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()}";
+            return $that->getConnection()->fetchAll($sql, array());
+        }
+
+        );
     }
 
     public function deleteSettingByName($name)
     {
-        return $this->getConnection()->delete($this->table, array('name' => $name));
+        $result = $this->getConnection()->delete($this->table, array('name' => $name));
+        $this->clearCached();
+        return $result;
     }
 }

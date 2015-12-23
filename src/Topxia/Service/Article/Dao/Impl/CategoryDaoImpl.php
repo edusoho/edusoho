@@ -18,6 +18,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
             throw $this->createDaoException('Insert category error.');
         }
 
+        $this->clearCached();
         return $this->getCategory($this->getConnection()->lastInsertId());
     }
 
@@ -133,6 +134,7 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
             $sql = "SELECT * FROM {$that->getTable()} ORDER BY weight ASC";
             return $that->getConnection()->fetchAll($sql) ?: array();
         }
+
         );
     }
 }
