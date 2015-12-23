@@ -25,6 +25,15 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->updateQuestionMarkerResult($id, $result);
     }
 
+    public function finishCurrentQuestion($userId, $questionMarkerId)
+    {
+        $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
+        $this->updateQuestionMarkerResult($questionMarkerResult['id'], array(
+            'status'      => 'right',
+            'updatedTime' => time()
+        ));
+    }
+
     public function deleteByQuestionMarkerId($questionMarkerId)
     {
         return $this->getQuestionMarkerResultDao()->deleteByQuestionMarkerId($questionMarkerId);
@@ -33,6 +42,11 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
     public function findByUserIdAndMarkerId($userId, $markerId)
     {
         return $this->getQuestionMarkerResultDao()->findByUserIdAndMarkerId($userId, $markerId);
+    }
+
+    public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId)
+    {
+        return $this->getQuestionMarkerResultDao()->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
     }
 
     protected function getQuestionMarkerResultDao()

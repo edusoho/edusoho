@@ -19,6 +19,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return ArrayToolkit::index($markers, 'id');
     }
 
+    public function findMarkersByMediaId($mediaId)
+    {
+        return $this->getMarkerDao()->findMarkersByMediaId($mediaId);
+    }
+
     public function searchMarkers($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareMarkerConditions($conditions);
@@ -82,6 +87,25 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return true;
     }
 
+    public function isFinishMarker($userId, $markerId)
+    {
+        $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
+
+        if (empty($questionMarkers)) {
+            return true;
+        }
+
+        foreach ($questionMarkers as $key => $questionMarker) {
+            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($userId, $questionMarker['id']);
+
+            if (empty($questionMarkerResult) || $questionMarkerResult['status'] == 'none') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     protected function prepareMarkerConditions($conditions)
     {
         if (isset($conditions['second']) && $conditions['second'] == "") {
@@ -99,6 +123,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getQuestionMarkerService()
     {
         return $this->createService('Marker.QuestionMarkerService');
+    }
+
+    protected function getQuestionMarkerResultService()
+    {
+        return $this->createService('Marker.QuestionMarkerResultService');
     }
 
     protected function getUploadFileService()
