@@ -11,10 +11,10 @@ interface QuestionMarkerResultService
 
     public function deleteByQuestionMarkerId($questionMarkerId);
 
-    public function finishCurrentQuestion($userId, $pluckId);
+    public function finishCurrentQuestion($userId, $questionMarkerId);
 
     public function findByUserIdAndMarkerId($userId, $markerId);
 
-    public function findByUserIdAndPluckId($userId, $pluckId);
+    public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
 
 }

@@ -194,20 +194,17 @@ define(function(require, exports, module) {
         finishMarker: function(id) {
             var player = this.get("player");
             var markers = player.markers.getMarkers();
-            // var markers = this.get('markers');
-            console.log(markers);
             for(var key in markers) 
             {
                 if(markers[key].id == id) {
                     markers[key].finished = true;
+                    var marker = markers[key];
+                    player.markers.remove(key);
+                    player.markers.add([marker]);
                     break;
                 }
             }
-            console.log([markers]);
-            player.markers.removeAll();
-            player.markers.add([markers]);
-            markers = player.markers.getMarkers();
-            console.log(markers);
+            this.get("player").play();
         },
 
         setMarkers: function(markers) {

@@ -116,7 +116,19 @@ class MarkerController extends BaseController
         $question         = array();
 
         foreach ($questions as $key => $value) {
-            $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);
+            $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
+
+            if (empty($questionResult)) {
+                $this->getQuestionMarkerResultService()->addQuestionMarkerResult(array(
+                    'markerId'         => $data['markerId'],
+                    'questionMarkerId' => $value['id'],
+                    'userId'           => $user['id'],
+                    'status'           => 'none',
+                    'createdTime'      => time(),
+                    'updatedTime'      => time()
+                ));
+                $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
+            }
 
             if ($questionResult['status'] == 'none') {
                 $question = $value;
@@ -145,7 +157,7 @@ class MarkerController extends BaseController
         $question = array();
 
         foreach ($questions as $key => $value) {
-            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndPluckId($user['id'], $value['id']);
+            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
 
             if ($questionMarkerResult['status'] == 'none') {
                 $question = $value;

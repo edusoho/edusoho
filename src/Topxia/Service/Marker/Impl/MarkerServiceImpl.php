@@ -89,10 +89,16 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
     public function isFinishMarker($userId, $markerId)
     {
-        $questionResults = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($userId, $markerId);
+        $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
 
-        foreach ($questionResults as $key => $questionResult) {
-            if ($questionResult['status'] == 'none') {
+        if (empty($questionMarkers)) {
+            return true;
+        }
+
+        foreach ($questionMarkers as $key => $questionMarker) {
+            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($userId, $questionMarker['id']);
+
+            if (empty($questionMarkerResult) || $questionMarkerResult['status'] == 'none') {
                 return false;
             }
         }

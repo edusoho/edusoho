@@ -44,9 +44,9 @@ class QuestionMarkerResultDaoImpl extends BaseDao implements QuestionMarkerResul
         return $this->getConnection()->fetchAll($sql, array($userId, $markerId)) ?: array();
     }
 
-    public function findByUserIdAndPluckId($userId, $pluckId)
+    public function findByUserIdAndQuestionMarkerId($userId, $questionMarkerId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and pluckId = ?";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $pluckId)) ?: null;
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? and questionMarkerId = ?";
+        return $this->getConnection()->fetchAssoc($sql, array($userId, $questionMarkerId)) ?: null;
     }
 }
