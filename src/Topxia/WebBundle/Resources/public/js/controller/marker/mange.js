@@ -45,22 +45,23 @@ define(function(require, exports, module) {
             // this._initScale(this.get('initMarkerArry'));
         },
         itemDraggable: function(e) {
-            var $this = $(e.currentTarget);
             var _obj = this;
+            console.log("开始拖拽");
+             //开始拖动事件
+            _obj.set('isDraggable', 'true');
+
+            var $this = $(e.currentTarget);
             var $obj = $(this.element)
             var isMove = true;
-            //开始拖动事件
-            _obj.set('isDraggable', 'true');
             var $editbox = $(_obj.get("editbox"));
             var $scalebox = $(_obj.get("scalebox"));
             var $subject_lesson_list = $(this.element).find(_obj.get('subject_lesson_list'));
             var $editbox_lesson_list = $(this.element).find(_obj.get('editbox_lesson_list'));
             var value = '<span class="show-sub"><i class="es-icon es-icon-infooutline mrm"></i>' + '将题目拖至左侧时间条' + '</span>' + '<span class="show-edit">左右拖动选择时间确定位置后松开鼠标</span>';
 
+            // 显示红色时间轴
             var $scale = $editbox.find("#default-scale");
             var $scale_details = $scale.find(".scale-details");
-
-            // 显示时间轴
             $scale.css("visibility", "visible");
             $scale_details.css("visibility", "visible");
 
@@ -74,14 +75,13 @@ define(function(require, exports, module) {
                 };
                 arry.push(scale);
             });
-
-            // console.log(arry);
             $(document).mousemove(function(event) {
                 if (isMove) {
                     $subject_lesson_list.find(_obj.get('placeholder')).html(value);
                     _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
                 }
             }).mouseup(function() {
+                console.log("停止拖拽");
                 // 停止拖动
                 $(document).off();
                 isMove = false;
@@ -108,10 +108,7 @@ define(function(require, exports, module) {
                     if (arry.length > 0) {
                         // 遍历所有元素都与当前时间差，一旦遍历有时间挫小于5秒就跳出循环，认定为最接近元素。
                         for (var i = arry.length - 1; i >= 0; i--) {
-                            console.log("timesec" + timesec);
                             if (Math.abs(parseInt(timesec) - parseInt(arry[i].sec)) <= 5) {
-                                console.log('合并');
-                                console.log(Math.abs(parseInt(timesec) - parseInt(arry[i].sec)));
                                 bool = false
                                 id = arry[i].id;
                                 timesec = arry[i].sec;
@@ -120,13 +117,14 @@ define(function(require, exports, module) {
                         }
                     }
                     if (bool) {
-                        console.log("增加");
+                        console.log("增加时间轴");
                         var $new_scale = $('<a class="scale blue" id=""><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + timestr + '</div></div></a>').css("left", postionleft).appendTo($scalebox);
                         $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
                         _obj._newSortList($new_scale.find('.lesson-list'));
+                        console.log("处理增加时间轴回调");
                         _obj._addScale($new_scale, timestr, $new_scale.css("left"),$new_scale.find('.lesson-list').children().num );
-                        console.log("增加完成");
+                        console.log("增加时间轴完成");
                     } else {
                         //相同直接获取存在的ID
                         console.log("需要合并");
@@ -135,13 +133,14 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
                         $_scale.find('.border').removeClass('show');
+                        console.log("排序和处理合并回调");
                         _obj._sortList($_scale.find('.lesson-list'));
                         _obj._addScale($_scale, timestr, $_scale.css("left"),$_scale.find('.lesson-list').children().length );
                         console.log("合并和排序完成");
 
                     }
                 }
-                console.log("拖动停止");
+                console.log("拖拽处理完成");
                 // 拖动时间停止
                 _obj.set('isDraggable', 'false');
 
@@ -170,6 +169,7 @@ define(function(require, exports, module) {
         slideScale: function(e) {
             //避免拖动过程中触发事件
             if (this.get('isDraggable') == 'false') {
+                console.log("开始滑动");
                 var _obj = this;
                 var $this = $(e.currentTarget);
                 var $scalebox = $(_obj.get("scalebox"));
@@ -177,9 +177,7 @@ define(function(require, exports, module) {
                 var $time = $this.find(".scale-details .time");
                 var old_time = _obj._convertSec($time.html());
                 var old_position = $this.css('left');
-
                 var isMove = true;
-
                 var arry = [];
                 // 遍历时间刻度
                 $scalebox.children('.scale.blue').each(function() {
@@ -190,18 +188,15 @@ define(function(require, exports, module) {
                     };
                     arry.push(scale);
                 });
-                console.log(arry);
-
                 $(document).mousemove(function(event) {
                     if (isMove) {
                         _obj._moveShow($this, $time, $scalebox, _obj, arry);
                     }
                 }).mouseup(function() {
+                    console.log("停止滑动");
                     $(document).off();
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
-                        console.log($this);
-                        console.log("拖动过程中触发up");
                         isMove = false;
                         var arry = [];
                         $scalebox.children('.scale.blue').each(function() {
@@ -212,9 +207,7 @@ define(function(require, exports, module) {
                             };
                             arry.push(scale);
                         });
-                        console.log(arry);
                         var new_time = _obj._convertSec($time.html());
-                        console.log('new_time' + new_time);
                         // 判断是否移动，阻止点击事件触发方法，或者移动回原位置；
                         if (old_time != new_time) {
                             var additem = true;
@@ -222,18 +215,11 @@ define(function(require, exports, module) {
                             // 至少同时存在有俩个时间轴才需进行是否合并的判断，否则直接修改；
                             if (arry.length > 1) {
                                 for (var i = arry.length - 1; i >= 0; i--) {
-                                    console.log("循环时间" + arry[i].sec);
                                     if (Math.abs(parseInt(new_time) - parseInt(arry[i].sec)) <= 5) {
-                                        //当前时间(排除自身)，已存在时间轴，将合并到该时间轴，然后自身的题目合并到该时间轴，并移除自身。
-                                        // 合并后被合并元素可能会触发该事件加判断arry[i].id.toString().length
+                                        //当前时间(滑动操作需排除自身)，已存在时间轴，将合并到该时间轴，然后自身的题目合并到该时间轴，并移除自身。
                                         if ($this.attr('id') != arry[i].id) {
                                             additem = false;
                                             mergeid = arry[i].id;
-                                            console.log("当前时间" + new_time);
-                                            console.log("被拖动的 " + $this.attr('id'));
-                                            console.log("将要被合并到目标的地id " + arry[i].id);
-                                            console.log("目标的地时间" + arry[i].sec);
-                                            console.log(i);
                                             break;
                                         }
                                     }
@@ -254,6 +240,7 @@ define(function(require, exports, module) {
                                         $this.hide();
                                         _obj._sortList($_scale.find('.lesson-list'));
                                         _obj._mergeScale($this, $_scale, childrenum);
+                                        console.log('滑动处理结束');
                                     }
 
                                 }
@@ -316,14 +303,14 @@ define(function(require, exports, module) {
             var $list = $(_classname).sortable({
                 group: _classname,
                 afterMove: function(placeholder, container) {
-                    console.log("afterMove");
+                    console.log("_initSortable ::afterMove");
                     if (oldContainer != container) {
                         oldContainer = container;
                     }
                 },
                 onDrop: function($item, container, _super) {
                     _super($item, container);
-                    console.log("onDroponDroponDroponDrop");
+                    console.log("_initSortable:::onDrop");
                 }
             });
         },
