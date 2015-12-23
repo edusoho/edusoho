@@ -29,7 +29,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.quit'                  => 'onCourseQuit',
             'course.thread.teacher_answer' => 'onCourseThreadTeacherAnswer',
             'homework.reviewed'            => 'onHomeworkReviewed',
-            'course.lesson_finish_tui'     => 'onCourseLessonFinishTui'
+            'course.lesson_finish_tui'     => 'onCourseLessonFinishTui',
+            'course.lesson_start_tui'      => 'onCourseLessonStartTui'
         );
     }
 
@@ -39,8 +40,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $result    = $event->getArgument('testpaperResult');
 
         $testpaper['target'] = explode('-', $testpaper['target']);
-
-        $target = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
+        $lesson              = $this->getCourseService()->getLesson($testpaper['target'][3]);
+        $target              = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
 
         $from = array(
             'type'  => $target['type'],
@@ -56,7 +57,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         );
 
-        $this->push($target['title'], $result['paperName'], $from, $to, $body);
+        $this->push($lesson['title'], $result['paperName'], $from, $to, $body);
     }
 
     public function onLessonPubilsh(ServiceEvent $event)
@@ -313,10 +314,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $post     = $event->getSubject();
         $course   = $this->getCourseService()->getCourse($post['courseId']);
         $question = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
+        $target   = $this->getTarget('course', $post['courseId']);
         $from     = array(
-            'type' => 'course',
-            'id'   => $post['courseId'],
-            'image' => $this->getFileUrl($course['smallPicture'])
+            'type'  => 'course',
+            'id'    => $post['courseId'],
+            'image' => $target['image']
         );
         $to   = array('type' => 'user', 'id' => $question['userId']);
         $body = array(
@@ -327,7 +329,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'questionCreatedTime' => $question['createdTime'],
             'questionTitle'       => $question['title']
         );
-        $this->push($course['title'], '您的提问有新的老师回答', $from, $to, $body);
+        $this->push($course['title'], $question['title'], $from, $to, $body);
     }
 
     public function onHomeworkReviewed(ServiceEvent $event)
@@ -335,10 +337,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $homeworkResult = $event->getSubject();
 
         $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
+        $lesson = $this->getCourseService()->getLesson($homeworkResult['courseId']);
+        $target = $this->getTarget('course', $post['courseId']);
         $from   = array(
-            'type' => 'course',
-            'id'   => $course['id'],
-            'image'   => $this->getFileUrl($course['smallPicture'])
+            'type'  => 'course',
+            'id'    => $post['courseId'],
+            'image' => $target['image']
         );
         $to   = array('type' => 'user', 'id' => $homeworkResult['userId']);
         $body = array(
@@ -350,17 +354,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'teacherSay'       => $homeworkResult['teacherSay']
         );
 
-        $this->push($course['title'], '您的作业已经批改完成', $from, $to, $body);
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
     public function onCourseLessonFinishTui(ServiceEvent $event)
     {
         $learn  = $event->getSubject();
         $course = $this->getCourseService()->getCourse($learn['courseId']);
+        $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
+        $target = $this->getTarget('course', $post['courseId']);
         $from   = array(
-            'type' => 'course',
-            'id'   => $course['id'],
-            'image'   => $this->getFileUrl($course['smallPicture'])
+            'type'  => 'course',
+            'id'    => $post['courseId'],
+            'image' => $target['image']
         );
         $to   = array('type' => 'user', 'id' => $learn['userId']);
         $body = array(
@@ -370,7 +376,28 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'learnStartTime'  => $learn['startTime'],
             'learnFinishTime' => $learn['finishedTime']
         );
-        $this->push($course['title'], '恭喜你完成了一个课时的学习', $from, $to, $body);
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+    }
+
+    public function onCourseLessonStartTui()
+    {
+        $learn  = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($learn['courseId']);
+        $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
+        $target = $this->getTarget('course', $post['courseId']);
+        $from   = array(
+            'type'  => 'course',
+            'id'    => $post['courseId'],
+            'image' => $target['image']
+        );
+        $to   = array('type' => 'user', 'id' => $learn['userId']);
+        $body = array(
+            'type'           => 'lesson.start',
+            'lessonId'       => $learn['lessonId'],
+            'courseId'       => $learn['courseId'],
+            'learnStartTime' => $learn['startTime']
+        );
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
     protected function push($title, $content, $from, $to, $body)
