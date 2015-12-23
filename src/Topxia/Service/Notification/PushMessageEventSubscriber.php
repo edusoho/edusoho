@@ -52,8 +52,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $to = array('type' => 'user', 'id' => $result['userId']);
 
         $body = array(
-            'type' => 'testpaper.reviewed',
-            'id'   => $result['id']
+            'type'     => 'testpaper.reviewed',
+            'id'       => $result['id'],
+            'lessonId' => $lesson['id']
 
         );
 
