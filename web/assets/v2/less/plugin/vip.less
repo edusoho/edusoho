@@ -110,18 +110,24 @@
 }
 
 .vip-wide-item {
-  height: 160px;
-  margin-bottom: 30px;
+  width: 940px;
+  height: 200px;
+  padding: 30px 20px !important;
+  margin: 0 auto 30px !important;
+  @media (max-width: @screen-sm-max) {
+    width: 100%;
+  }
   @media (max-width: @screen-xs-max) {
     height: auto;
   }
   .vip-thumb {
     float: left;
-    width: 23%;
+    width: 14%;
     text-align: center;
     margin-top: 15px;
+    padding-right: 20px;
     @media (max-width: @screen-sm-max) {
-      width: 30%;
+      width: 18%;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
@@ -136,14 +142,14 @@
   }
   .vip-info {
     float: left;
-    width: 22%;
-    height: 130px;
-    padding: 15px 10px;
+    width: 29%;
+    height: 140px;
+    padding: 10px;
     .border-radius;
     text-align: center;
     background-color: @gray-lighter;
     @media (max-width: @screen-sm-max) {
-      width: 45%;
+      width: 54%;
       padding: 10px;
     }
     @media (max-width: @screen-xs-max) {
@@ -166,25 +172,18 @@
     .number {
       font-size: 12px;
       margin: 10px auto;
-      span {
-        margin: 0 3px;
-      }
     }
   }
   .vip-content {
     float: left;
-    width: 40%;
-    margin: 5px 0;
+    width: 45%;
+    margin: 10px 0;
     height: 120px;
     font-size: 12px;
-    line-height: 30px;
-    padding: 0 50px;
-    overflow: auto;
+    line-height: 20px;
+    padding: 0 20px;
+    overflow: hidden;
     color: @gray-darker;
-    @media(max-width:@screen-md-max) {
-      width: 32%;
-      padding: 0 20px;
-    }
     @media(max-width:@screen-sm-max) {
       display: none;
     }
@@ -194,12 +193,10 @@
   }
   .vip-item-footer {
     float: right;
-    width: 15%;
-    margin-top: 48px;
+    width: 12%;
+    margin-top: 53px;
     text-align: center;
-    @media(max-width:@screen-md-max) {
-      width: 18%;
-    }
+    
     @media(max-width:@screen-sm-max) {
       width: 25%;
     }
@@ -244,10 +241,11 @@
     text-align: center;
     height: 140px;
     padding: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     .border-radius;
     background-color: @gray-lighter;
     .name {
+      font-size: 16px;
       color: @gray-darker;
     }
     .price {
@@ -263,17 +261,14 @@
     .number {
       font-size: 12px;
       margin: 10px auto;
-      span {
-        margin: 0 3px;
-      }
     }
   }
   .vip-content {
     font-size: 12px;
     line-height: 18px;
     height: 90px;
-    margin-bottom: 20px;
-    overflow: auto;
+    overflow: hidden;
+    margin-bottom: 15px;
     color: @gray-darker;
     p {
       margin: 0;
