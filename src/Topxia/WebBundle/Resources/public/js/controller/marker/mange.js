@@ -16,6 +16,7 @@ define(function(require, exports, module) {
             arryid: [],
             newId: '',
             isDraggable: 'false',
+            initscale:{},
             addScale: function(scalejson) {
                 return scalejson;
             },
@@ -38,10 +39,12 @@ define(function(require, exports, module) {
         setup: function() {
             this._initSortable();
             this._initeditbox();
+            this._initScale(this.get('initscale'));
         },
         itemDraggable: function(e) {
             var $this = $(e.currentTarget);
             var _obj = this;
+            var $obj = $(this.element)
             var isMove = true;
             //开始拖动事件
             _obj.set('isDraggable', 'true');
@@ -289,6 +292,21 @@ define(function(require, exports, module) {
                 $('[data-toggle="tooltip"]').tooltip();
             }
         },
+        _initScale: function(scalejson) {
+            console.log(scalejson);
+            var $editbox = $(this.get('editbox'));
+            var $subject_lesson_list = $(this.get('subject_lesson_list'));
+            var $newscale = $('<a class="scale blue" id="' +scalejson.scaleid + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">'+this._convertTime(scalejson.scaletime)+'</div></div></a>').css("left", scalejson.scaleleft).appendTo($editbox.find('.scalebox'));
+            var $lesson_list = $newscale.find('.lesson-list');
+            var subject =scalejson.subject;
+            for (var i = 0; i < subject.length; i++) {
+                console.log(subject[i].id);
+                $subject_lesson_list.find(this.get('item')+'[data-id='+subject[i].id+']').find('.number .num').html(subject[i].ordinal);
+                $subject_lesson_list.find(this.get('item')+'[data-id='+subject[i].id+']').appendTo($lesson_list);
+            }
+            var arry =  this.get('arryid').push(scalejson.scaleid);
+            console.log(arry);
+        },
         _sortList: function($list) {
             var num = 1;
             $list.find('.item-lesson').each(function() {
@@ -381,14 +399,15 @@ define(function(require, exports, module) {
                 var scalejson = {
                     "scaleid": id,
                     "scaletime": this._convertSec(time),
+                    "scaleleft":$_scale.css('left'),
                     "subject": [{
                         'id': $item_lesson.find(".idname").html(),
                         'ordinal': $item_lesson.find('.num').html()
                     }]
                 };
-                $.extend(scalejson, this.get("addScale")(scalejson));
+                var tes = $.extend(scalejson, this.get("addScale")(scalejson));
+                console.log(tes);
             }
-
         },
         _mergeScale: function(id, removeid) {
             // 合并时后台去处理顺序，被合并数按序号依次增加
