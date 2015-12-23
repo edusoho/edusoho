@@ -338,7 +338,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
         $lesson = $this->getCourseService()->getLesson($homeworkResult['courseId']);
-        $target = $this->getTarget('course', $post['courseId']);
+        $target = $this->getTarget('course', $homeworkResult['courseId']);
         $from   = array(
             'type'  => 'course',
             'id'    => $post['courseId'],
@@ -362,7 +362,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $learn  = $event->getSubject();
         $course = $this->getCourseService()->getCourse($learn['courseId']);
         $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
-        $target = $this->getTarget('course', $post['courseId']);
+        $target = $this->getTarget('course', $learn['courseId']);
         $from   = array(
             'type'  => 'course',
             'id'    => $post['courseId'],
@@ -384,7 +384,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $learn  = $event->getSubject();
         $course = $this->getCourseService()->getCourse($learn['courseId']);
         $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
-        $target = $this->getTarget('course', $post['courseId']);
+        $target = $this->getTarget('course', $learn['courseId']);
         $from   = array(
             'type'  => 'course',
             'id'    => $post['courseId'],
