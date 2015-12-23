@@ -316,6 +316,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $from     = array(
             'type' => 'course',
             'id'   => $post['courseId']
+            'image'   => $this->getFileUrl($course['smallPicture']),
         );
         $to   = array('type' => 'user', 'id' => $question['userId']);
         $body = array(
@@ -337,12 +338,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $from   = array(
             'type' => 'course',
             'id'   => $course['id']
+            'image'   => $this->getFileUrl($course['smallPicture']),
         );
         $to   = array('type' => 'user', 'id' => $homeworkResult['userId']);
         $body = array(
             'type'             => 'homework.reviewed',
             'homeworkId'       => $homeworkResult['homeworkId'],
-            'HomeworkResultId' => $homeworkResult['id'],
+            'homeworkResultId' => $homeworkResult['id'],
             'lessonId'         => $homeworkResult['lessonId'],
             'courseId'         => $homeworkResult['courseId'],
             'teacherSay'       => $homeworkResult['teacherSay']
@@ -358,6 +360,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $from   = array(
             'type' => 'course',
             'id'   => $course['id']
+            'image'   => $this->getFileUrl($course['smallPicture']),
         );
         $to   = array('type' => 'user', 'id' => $learn['userId']);
         $body = array(
