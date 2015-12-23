@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             isDraggable: 'false',
             initMarkerArry: [],
             Dragitem: [],
-            updateSqe:[],
+            updateSqeArry: [],
             addScale: function(markerJson, $marker, $item_lesson) {
                 return markerJson;
             },
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             deleteScale: function(markerJson, $marker, $marker_list_item) {
                 return markerJson;
             },
-            updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
+            updateSqe: function($marker, questionMarkers_id, seq, new_seq) {
                 return markerJson;
             }
         },
@@ -39,7 +39,8 @@ define(function(require, exports, module) {
             'mousedown {{attrs.item}}': 'itemDraggable',
             'click .lesson-list .icon-close': 'itemRmove',
             'mousedown .scale.blue': 'slideScale',
-            'mouseenter .scale.blue': 'hoverScale'
+            'mouseenter .scale.blue': 'hoverScale',
+            'mouseenter .scale.blue .item-lesson': 'itemSqe'
         },
         setup: function() {
             this._initSortable();
@@ -69,7 +70,6 @@ define(function(require, exports, module) {
             var arry = [];
             // 遍历时间刻度
             $scalebox.children('.scale.blue').each(function() {
-                console.log($this);
                 var $item_blue = $(this);
                 var scale = {
                     'id': $item_blue.attr('id'),
@@ -86,6 +86,7 @@ define(function(require, exports, module) {
                 }
             }).mouseup(function() {
                 // 停止拖动
+                $(document).off();
                 isMove = false;
                 // 隐藏默认时间轴
                 $scale.css("visibility", "hidden");
@@ -127,34 +128,40 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
                         _obj._newSortList($new_scale.find('.lesson-list'));
-                        // 第一个元素：在这返回数据到后台，其他在Drop中返回：
-                        if (_obj.get('Dragitem').length <= 0) {
-                            _obj._addScale($new_scale, timestr, postionleft, 1);
-                        }
-                        // 第一条数据无序排序
-                        // 其他在Drop中返回：
-                        console.log($editbox_lesson_list.children().length);
-                        var Dragitem = [];
-                        Dragitem.push($new_scale);
-                        Dragitem.push(timestr);
-                        Dragitem.push(postionleft);
-                        _obj.set("Dragitem", Dragitem);
-                        console.log("增加完成");
 
+                        _obj._addScale($new_scale, timestr, $new_scale.css("left"),$new_scale.find('.lesson-list').children().num );
+                        // 第一个元素：在这返回数据到后台，其他在Drop中返回：
+                        // if (_obj.get('Dragitem').length <= 0) {
+                        //     _obj._addScale($new_scale, timestr, postionleft, 1);
+                        //     console.log("我是第一条");
+                        // } else {
+                        //     // 第一条数据无序排序
+                        //     // 其他在Drop中返回：
+                        //     console.log($editbox_lesson_list.children().length);
+                        //     var Dragitem = [];
+                        //     Dragitem.push($new_scale);
+                        //     Dragitem.push(timestr);
+                        //     Dragitem.push(postionleft);
+                        //     _obj.set("Dragitem", Dragitem);
+                            console.log("增加完成");
+                        // }
                     } else {
                         //相同直接获取存在的ID
-                        console.log("合并");
+                        console.log("需要合并");
                         console.log("id " + id);
                         var $_scale = $scalebox.find('a[id=' + id + ']');
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
                         $_scale.find('.border').removeClass('show');
-                        // 其他在Drop中传递当前信息给后台，并进行排序
-                        var Dragitem = [];
-                        Dragitem.push($_scale);
-                        Dragitem.push(_obj._convertTime(timesec));
-                        Dragitem.push($_scale.css('left'));
-                        _obj.set("Dragitem", Dragitem);
+                        _obj._sortList($_scale.find('.lesson-list'));
+                        _obj._addScale($_scale, timestr, $_scale.css("left"),$_scale.find('.lesson-list').children().length );
+                        // // 其他在Drop中传递当前信息给后台，并进行排序
+                        // var Dragitem = [];
+                        // Dragitem.push($_scale);
+                        // Dragitem.push(_obj._convertTime(timesec));
+                        // Dragitem.push($_scale.css('left'));
+                        // _obj.set("Dragitem", Dragitem);
+                        console.log("需要合并处理完成开始排序和增加ID吧");
 
                     }
                 }
@@ -214,6 +221,7 @@ define(function(require, exports, module) {
                         _obj._moveShow($this, $time, $scalebox, _obj, arry);
                     }
                 }).mouseup(function() {
+                    $(document).off();
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
                         console.log($this);
@@ -288,6 +296,9 @@ define(function(require, exports, module) {
                 $this.find('.scale-details').css('margin-left', '-110px');
             }
         },
+        itemSqe: function(e) {
+            e.stopPropagation();
+        },
         _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
             var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
 
@@ -335,11 +346,13 @@ define(function(require, exports, module) {
                 },
                 onDrop: function($item, container, _super) {
                     _super($item, container);
-                    var Dragitem = _obj.get('Dragitem');
-                    if (Dragitem.length > 0) {
-                        _obj._sortList(Dragitem[0].find('.lesson-list'));
-                        _obj._addScale(Dragitem[0], Dragitem[1], Dragitem[2], Dragitem[0].find('.lesson-list').children().length);
-                    }
+                    console.log("onDroponDroponDroponDrop");
+                    // var Dragitem = _obj.get('Dragitem');
+                    // if (Dragitem.length > 0) {
+                    //     console.log("至少两条以后吧");
+                    //     _obj._sortList(Dragitem[0].find('.lesson-list'));
+                    //     _obj._addScale(Dragitem[0], Dragitem[1], Dragitem[2], Dragitem[0].find('.lesson-list').children().length);
+                    // }
                 }
             });
         },
@@ -365,21 +378,21 @@ define(function(require, exports, module) {
         },
         _initScale: function(initMarkerArry) {
             console.log(initMarkerArry);
-            if(initMarkerArry.length>0) {
+            if (initMarkerArry.length > 0) {
                 console.log(initMarkerArry.length);
                 var $editbox = $(this.get('editbox'));
                 var $subject_lesson_list = $(this.get('subject_lesson_list'));
                 for (var i = 0; i < initMarkerArry.length; i++) {
                     var $newscale = $('<a class="scale blue" id="' + initMarkerArry[i].id + '"><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + this._convertTime(initMarkerArry[i].second) + '</div></div></a>').css("left", initMarkerArry[i].position).appendTo($editbox.find('.scalebox'));
-                   console.log($newscale);
+                    console.log($newscale);
                     var $lesson_list = $newscale.find('.lesson-list');
-                    
+
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     console.log(questionMarkers.length);
 
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        console.log($lesson_list );
-                        $subject_lesson_list.find(this.get('item') + '[question-id=' + questionMarkers[j].questionId + ']').attr('id',questionMarkers[j].id).appendTo($lesson_list).find('.number .num').html(questionMarkers[j].seq);
+                        console.log($lesson_list);
+                        $subject_lesson_list.find(this.get('item') + '[question-id=' + questionMarkers[j].questionId + ']').attr('id', questionMarkers[j].id).appendTo($lesson_list).find('.number .num').html(questionMarkers[j].seq);
                         // $subject_lesson_list.find(this.get('item') + '[data-id=' + questionMarkers[i].questionId + ']');
                     }
                 }
@@ -404,8 +417,8 @@ define(function(require, exports, module) {
                     _super(item, container);
                     _obj._sortList($list);
                     //判断是否需要传给后台进行排序
-                    if(_obj.get('updateSqeArry').length>0) {
-                        if($(item).find('.number .num').html()!=_obj.get('updateSqeArry')[0]) {
+                    if (_obj.get('updateSqeArry').length > 0) {
+                        if ($(item).find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
                             后台进
                         }
                     }
@@ -416,7 +429,7 @@ define(function(require, exports, module) {
                     return isContainer ? children : parent.attr('id');
                 },
                 isValidTarget: function(item, container) {
-                    if(_obj.get('updateSqeArry').length<0) {
+                    if (_obj.get('updateSqeArry').length < 0) {
                         _obj.get('updateSqeArry').push($(item).find('.number .num').html());
                     }
                     if (item.siblings('li').length) {
@@ -525,7 +538,7 @@ define(function(require, exports, module) {
             };
             $.extend(this.get("deleteScale")(markerJson, $marker, $marker_list_item));
         },
-        _updateSqe: function($marker,questionMarkers_id,seq,new_seq) {
+        _updateSqe: function($marker, questionMarkers_id, seq, new_seq) {
             var markerJson = {
                 "id": $marker.attr('id'),
                 "questionMarkers": [{

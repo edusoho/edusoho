@@ -64,9 +64,14 @@ define(function(require, exports, module) {
             // console.log("markerJson.questionMarkers.questionId:   "+markerJson.questionMarkers[0].questionId);
             if(true) {//成功回调
                 //如果时间轴ID为空，为新增加的时间轴需要返回的ID
+                console.log("传过来"+markerJson.id);
                 if(markerJson.id == undefined) {
+                    console.log("新增ID");
                     markerJson.id = tempid;
-                    $marker.attr('id',markerJson.id)
+                    $marker.attr('id',markerJson.id);
+                    console.log("设置后"+markerJson.id);
+                }else {
+                    console.log("合并了");
                 }
                 // 返回题目的ID
                 if(markerJson.questionMarkers[0].id == undefined) {
@@ -74,8 +79,7 @@ define(function(require, exports, module) {
                     $marker.find('.item-lesson[question-id='+markerJson.questionMarkers[0].questionId+']').attr('id',markerJson.questionMarkers[0].id);
                 }
                 tempid++;
-                console.log("markerJson.id"+markerJson.id);
-                console.log("markerJson.questionMarkers.id:   "+markerJson.questionMarkers[0].id);
+                
             }
             else {
                 // 失败将li恢复到原位
@@ -130,8 +134,8 @@ define(function(require, exports, module) {
             if(true) {
                 //后台需注意：移除题目后前台已经重新排序，后台数据的序号也需要改变：将当前移除的题目序号后的题目序号依次加一
                 // 成功回调
-                console.log($marker);
-                console.log($marker_list_item);
+                // console.log($marker);
+                // console.log($marker_list_item);
                 //判断$marker是否hide，如果hide需要直接移除{时间轴上的所有题目已经移除}
                 if($marker.is(":hidden")) {
                     $marker.remove();
