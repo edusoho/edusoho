@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 // use Symfony\Component\Debug\Debug;
 
 // Debug::enable();
-ErrorHandler::register(false);
+ErrorHandler::register(0);
 ExceptionHandler::register(false);
 $config         = include __DIR__.'/config.php';
 $config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
