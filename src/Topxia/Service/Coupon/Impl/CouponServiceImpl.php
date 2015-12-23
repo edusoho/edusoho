@@ -267,7 +267,7 @@ class CouponServiceImpl extends BaseService implements CouponService
         ));
 
         $usedCount = $this->getCouponDao()->searchCouponsCount(array('status' => 'used', 'batchId' => $coupon['batchId']));
-        $coupons   = $this->getCouponDao()->searchCoupons(array('status' => 'used'), array('createdTime', 'DESC'), 0, $usedCount);
+        $coupons   = $this->getCouponDao()->searchCoupons(array('status' => 'used', 'batchId' => $coupon['batchId']), array('createdTime', 'DESC'), 0, $usedCount);
 
         $orders      = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
         $allDiscount = 0;
