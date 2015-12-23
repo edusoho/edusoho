@@ -4,6 +4,8 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\StringToolkit;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -152,6 +154,158 @@ class CoinController extends BaseController
         ));
     }
 
+    public function inviteCodeAction(Request $request)
+    {
+        $user         = $this->getCurrentUser();
+        $inviteReward = array();
+        $promote      = array();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        }
+
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+
+        if (empty($user['inviteCode'])) {
+            $user = $this->getUserservice()->createInviteCode($user['id']);
+        }
+
+        $invitedUserIds = $this->getUserservice()->findUserIdsByInviteCode($user['inviteCode']);
+        $invitedUsers   = null;
+
+        if (!empty($invitedUserIds)) {
+            $conditions = array('userIds' => $invitedUserIds);
+            $paginator  = new Paginator(
+                $request,
+                $this->getUserservice()->searchUserCount($conditions),
+                20
+            );
+
+            $invitedUsers = $this->getUserservice()->searchUsers(
+                $conditions,
+                array('id', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $recordTime = $this->getInviteTime(ArrayToolkit::column($invitedUsers, 'id'));
+
+            for ($i = 0; $i < count($invitedUsers); $i++) {
+                $invitedUsers[$i]['inviteTime'] = $recordTime[$i];
+                $record                         = $this->getInviteRecordService()->getRecordByInvitedUserId($invitedUsers[$i]['id']);
+                $card                           = $this->getCardService()->getCardByCardId($record['inviteUserCardId']);
+                $coupon                         = $this->getCouponService()->getCoupon($card['cardId']);
+                $invitedUsers[$i]['rewardRate'] = $coupon['rate'];
+
+                if ($record['inviteUserCardId']) {
+                    $invitedUsers[$i]['inviteRewardTime'] = date('Y-m-d H:i:s', $coupon['createdTime']);
+                }
+            }
+        } else {
+            $paginator = new Paginator(
+                $request,
+                0,
+                20
+            );
+        }
+
+        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+        return $this->render('TopxiaWebBundle:Coin:invite-code.html.twig', array(
+            'code'          => $user['inviteCode'],
+            'record'        => $record,
+            'inviteSetting' => $inviteSetting,
+            'invitedUsers'  => $invitedUsers,
+            'inviteReward'  => $inviteReward,
+            'paginator'     => $paginator
+        ));
+    }
+
+    private function getInviteTime($userIds)
+    {
+        $recordTime = array();
+
+        foreach ($userIds as $key => $id) {
+            $record       = $this->getInviteRecordService()->getRecordByInvitedUserId($id);
+            $recordTime[] = $record['inviteTime'];
+        }
+
+        return $recordTime;
+    }
+
+    public function promoteLinkAction(Request $request)
+    {
+        $user          = $this->getCurrentUser();
+        $message       = null;
+        $site          = $this->getSettingService()->get('site', array());
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+
+        $urlContent  = $this->generateUrl('register', array(), true);
+        $registerUrl = $urlContent.'?inviteCode='.$user['inviteCode'];
+
+        if ($inviteSetting['inviteInfomation_template']) {
+            $variables = array(
+                'siteName'    => $site['name'],
+                'registerUrl' => $registerUrl
+            );
+            $message = StringToolkit::template($inviteSetting['inviteInfomation_template'], $variables);
+        }
+
+        return $this->render('TopxiaWebBundle:Coin:promote-link-modal.html.twig',
+            array(
+                'code'                      => $user['inviteCode'],
+                'inviteInfomation_template' => $message
+            ));
+    }
+
+    public function writeInvitecodeAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $fields     = $request->request->all();
+            $inviteCode = $fields['inviteCode'];
+
+            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+
+            if ($record) {
+                $response = array('success' => false, 'message' => '您已经填过邀请码');
+            } else {
+                $promoteUser = $this->getUserservice()->getUserByInviteCode($inviteCode);
+
+                if ($promoteUser) {
+                    if ($promoteUser['id'] == $user['id']) {
+                        $response = array('success' => false, 'message' => '不能填写自己的邀请码');
+                    } else {
+                        $this->getInviteRecordService()->createInviteRecord($promoteUser['id'], $user['id']);
+                        $response     = array('success' => true);
+                        $inviteCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
+
+                        if (!empty($inviteCoupon)) {
+                            $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
+                            $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+                        }
+                    }
+                } else {
+                    $response = array('success' => false, 'message' => '邀请码不正确');
+                }
+            }
+
+            return $this->createJsonResponse($response);
+        }
+
+        return $this->render('TopxiaWebBundle:Coin:write-invitecode-modal.html.twig');
+    }
+
+    public function receiveCouponAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+
+        $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $record['invitedUserCardId'])));
+        $response->headers->setCookie(new Cookie("modalOpened", '1'));
+        return $response;
+    }
+
     public function changeAction(Request $request)
     {
         $user   = $this->getCurrentUser();
@@ -278,6 +432,26 @@ class CoinController extends BaseController
     public function resultNoticeAction(Request $request)
     {
         return $this->render('TopxiaWebBundle:Coin:retrun-notice.html.twig');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
+    }
+
+    protected function getCardService()
+    {
+        return $this->getServiceKernel()->createService('Card.CardService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getInviteRecordService()
+    {
+        return $this->getServiceKernel()->createService('User.InviteRecordService');
     }
 
     protected function getCashService()
