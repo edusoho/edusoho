@@ -41,7 +41,7 @@ class MarkerController extends BaseController
             $marker = $this->getMarkerService()->getMarker($data['markerId']);
 
             if (!empty($marker)) {
-                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['qusetionId'], $marker['id'], $data['seq']);
+                $questionmarker = $this->getQuestionMarkerService()->addQuestionMarker($data['questionId'], $marker['id'], $data['seq']);
                 return $this->createJsonResponse($questionmarker);
             } else {
                 return $this->createJsonResponse(false);
@@ -85,8 +85,87 @@ class MarkerController extends BaseController
     {
         $data             = $request->request->all();
         $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
-        $questionmarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
-        return $this->createJsonResponse($questionmarkers);
+        $questionMarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+        return $this->createJsonResponse($questionMarkers);
+    }
+
+    //获取当前播放器的驻点
+    public function showMarkersAction(Request $request)
+    {
+        $data = $request->request->all();
+        //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $markers = $this->getMarkerService()->findMarkersByMediaId($data['mediaId']);
+        $results = array();
+        $user    = $this->getUserService()->getCurrentUser();
+
+        foreach ($markers as $key => $marker) {
+            $results[$key]           = $marker;
+            $results[$key]['finish'] = $this->getMarkerService()->isFinishMarker($user['id'], $marker['id']);
+        }
+
+        return $this->createJsonResponse($results);
+    }
+
+    //获取驻点弹题
+    public function showMarkerQuestionAction(Request $request)
+    {
+        $data             = $request->query->all();
+        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $questions        = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+        $user             = $this->getUserService()->getCurrentUser();
+        $question         = array();
+
+        foreach ($questions as $key => $value) {
+            $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
+
+            if (empty($questionResult)) {
+                $this->getQuestionMarkerResultService()->addQuestionMarkerResult(array(
+                    'markerId'         => $data['markerId'],
+                    'questionMarkerId' => $value['id'],
+                    'userId'           => $user['id'],
+                    'status'           => 'none',
+                    'createdTime'      => time(),
+                    'updatedTime'      => time()
+                ));
+                $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
+            }
+
+            if ($questionResult['status'] == 'none') {
+                $question = $value;
+                break;
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
+            'markerId' => $data['markerId'],
+            'question' => $question
+        ));
+    }
+
+    public function doNextTestAction(Request $request)
+    {
+        $data               = $request->query->all();
+        $data['markerId']   = isset($data['markerId']) ? $data['markerId'] : 0;
+        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
+        $user               = $this->getUserService()->getCurrentUser();
+        $this->getQuestionMarkerResultService()->finishCurrentQuestion($user['id'], $data['questionId']);
+        $conditions = array(
+            'markerId' => $data['markerId']
+        );
+        $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 999);
+
+        $question = array();
+
+        foreach ($questions as $key => $value) {
+            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
+
+            if ($questionMarkerResult['status'] == 'none') {
+                $question = $value;
+                break;
+            }
+        }
+
+        return $this->createJsonResponse($data['markerId']);
     }
 
     public function questionAction(Request $request, $courseId, $lessonId)
@@ -183,5 +262,10 @@ class MarkerController extends BaseController
     protected function getQuestionMarkerResultService()
     {
         return $this->getServiceKernel()->createService('Marker.QuestionMarkerResultService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }

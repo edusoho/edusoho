@@ -73,13 +73,11 @@ define(function(require, exports, module) {
                                }
                             },
                             onMarkerReached:function(marker,player){
-                              if(!player.paused() && marker.finished == false){
+                              if(self.isPlaying() && marker.finished == false){
                                 player.pause();
-                                // $.get('/course/1/manage/question/25/preview','',function(data){
-                                //     console.log($('.vjs-break-overlay-text'));
-                                //     $('.vjs-break-overlay-text').html(data);
-
-                                // });
+                                $.get('/course/lesson/'+marker.id+'/questionmarker/show',{"markerId":marker.id},function(data){
+                                    $('.vjs-break-overlay-text').html(data);
+                                });
                               }
                             }
                         }
@@ -191,6 +189,22 @@ define(function(require, exports, module) {
 
         getMarkers: function() {
             return this.get('markers');
+        },
+
+        finishMarker: function(id) {
+            var player = this.get("player");
+            var markers = player.markers.getMarkers();
+            for(var key in markers) 
+            {
+                if(markers[key].id == id) {
+                    markers[key].finished = true;
+                    var marker = markers[key];
+                    player.markers.remove(key);
+                    player.markers.add([marker]);
+                    break;
+                }
+            }
+            this.get("player").play();
         },
 
         setMarkers: function(markers) {

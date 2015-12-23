@@ -80,7 +80,7 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $this->checkOrderBy($orderBy, array('createdTime'));
+        $this->checkOrderBy($orderBy, array('createdTime', 'seq'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')
