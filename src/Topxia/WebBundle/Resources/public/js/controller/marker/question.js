@@ -172,11 +172,13 @@ define(function(require, exports, module) {
         },
         updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
 
-            var url = $('.toolbar-question-marker').data('queston-marker-update-url');
+            console.log(questionMarkers_id);
             
-            $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
+            var url = $('.toolbar-question-marker').data('queston-marker-sort-url');
+            
+            // $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
                 
-            });
+            // });
 
             // var markerJson = {
             //     "id": $marker.attr('id'),
