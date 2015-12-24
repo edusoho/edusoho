@@ -1,5 +1,5 @@
 {% set RecentLiveCourses = data('RecentLiveCourses',{ 'count':4}) %}
-  {% if RecentLiveCourses %} 
+{% if RecentLiveCourses %} 
   <section class="live-course-section {{config.background|default("")}}"> 
     <div class="container"> 
       <div class="text-line gray"> 
@@ -62,4 +62,4 @@
       </div> 
     </div> 
   </section> 
-  {% endif %} 
+{% endif %} 

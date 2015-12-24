@@ -5,10 +5,12 @@
   {% if cardDetail.targetType == "classroom" %}
     <p class="title">此班级优惠券已使用</p>
   {% endif %}
-
   {% if cardDetail.targetType == "vip" %}
     <p class="title">此会员优惠券已使用</p>
   {% endif %}
+	{% if cardDetail.targetType == "all" %}
+			<p class="title">此抵价优惠券已使用</p>
+	{% endif %}
   <p class="price">
     {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}折{% endif %}
   </p>
@@ -16,3 +18,4 @@
   <!--优惠劵已使用-->
   <div class="stamp stamp-used"></div>
 </div>
+

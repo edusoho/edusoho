@@ -768,6 +768,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             } else {
                 $this->getClassroomMemberDao()->addMember($fields);
             }
+
+            $this->dispatchEvent('classMaster.become', new ServiceEvent($member));
         }
     }
 
@@ -978,7 +980,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (in_array('headTeacher', $member['role'])) {
+        if (array_intersect($member['role'], array('teacher', 'headTeacher'))) {
             return true;
         }
 
