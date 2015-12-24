@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         	seq = $("#lesson-"+lessonId+" .number").text();
         }else{
         	var maxNumber = $('.number:last').text();
-        	seq = (maxNumber === "") ? 0 :  parseInt(maxNumber) +1;
+        	seq = (maxNumber === "") ? 1 :  parseInt(maxNumber) +1;
         }
         $("#course-lesson-form").append('<input type="hidden" name="seq_number"  value="'+seq+'">');
          require('topxiawebbundle/controller/course-manage/lesson-modal').run();
