@@ -1,0 +1,5 @@
+{% set type = question.type|default(false) %}
+{% if type %}
+	{% include 'TopxiaWebBundle:Marker:do-test-' ~ type ~ '.html.twig' %}
+	<script>app.load('marker/do-test')</script>
+{% endif %}

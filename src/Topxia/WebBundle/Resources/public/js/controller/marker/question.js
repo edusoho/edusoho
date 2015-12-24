@@ -3,18 +3,36 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
-    var scalejson = {
-        "id": '0023',
-        "scaletime": '23',
-        "scaleleft":'310px',
-        "subject": [{
-            'id': '1',
-            'ordinal': '1'
-        },{
-            'id': '2',
-            'ordinal': '2'
+    // 未避免初始化前端排序操作，将questionMarkers按生序方式返回，可省略questionMarkers.seq
+    var initMarkerArry =[{
+        "id": 1,
+        "second":39,
+        "position":'528px',
+        "questionMarkers":[{
+            "id":22,
+            "seq":1,
+            "questionId":1
+        },
+        {
+            "id":23,
+            "seq":2,
+            "questionId":2
         }]
-    };
+    },{
+        "id": 2,
+        "second":19,
+        "position":'256px',
+        "questionMarkers":[{
+            "id":32,
+            "seq":1,
+            "questionId":3
+        },
+        {
+            "id":33,
+            "seq":2,
+            "questionId":4
+        }]
+    }];
 
     var markerJson = {
         "id": 22,
@@ -35,7 +53,7 @@ define(function(require, exports, module) {
 
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
-        initscale:scalejson,
+        initMarkerArry:initMarkerArry,
         addScale: function(markerJson,$marker) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
@@ -57,6 +75,7 @@ define(function(require, exports, module) {
                     return ;
                 }
                 if(markerJson.id == undefined) {
+                    console.log("新增ID");
                     markerJson.id = tempid;
                     $marker.attr('id',data.markerId);
                 }
@@ -101,7 +120,7 @@ define(function(require, exports, module) {
             //     scalejson.questionMarkerId='';
             //     console.log(scalejson);
             // });
-            return scalejson;
+            return markerJson;
         },
         mergeScale: function(markerJson,$marker,$merg_emarker,childrenum) {
             // console.log(markerJson);
@@ -123,7 +142,7 @@ define(function(require, exports, module) {
             }else {
                 // 将merg_emarker中list的最后面取childrenum个子元素放回$marker中的list，并将$marker重新排序
             }
-            return scalejson;
+            return markerJson;
         },
         updateScale: function($marker,markerJson,old_position,old_time) {
             // console.log(markerJson);
@@ -135,7 +154,7 @@ define(function(require, exports, module) {
             }else {
                 // 前台：将时间轴移动回原来的位置并改变时间轴的时间
             }
-            return scalejson;
+            return markerJson;
         },
         deleteScale: function(markerJson,$marker,$marker_list_item) {
             // console.log(markerJson);
@@ -174,11 +193,21 @@ define(function(require, exports, module) {
             //     // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
             // }
         },
-        updateSqe:function() {
-            
-        }
-
-
+        updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
+            // var markerJson = {
+            //     "id": $marker.attr('id'),
+            //     "questionMarkers": [{
+            //         "id": questionMarkers_id,
+            //         "seq": seq,
+            //         "new_seq": new_seq
+            //     }]
+            // }  
+            if(true) {
+                // 后台： 更据当前的序号编号，重新排序
+            }else {
+                //撤销排序
+            }  
+        },
     })
     exports.run = function() {
         $form = $('.mark-from');
