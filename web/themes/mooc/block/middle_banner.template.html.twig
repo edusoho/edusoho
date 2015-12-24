@@ -3,7 +3,7 @@
     <div class="cow">
       {% for i in 0..2 %}
         <div class="feature-item col-sm-4">
-          <img class="img-responsive" src="{{ banner[i].src|default('') }}" alt="">
+          <img class="img-responsive" src="{{ banner[i].src|default('') }}" alt="{{ banner[i].alt|default('') }}">
           <h4>{{ banner[i].value|default('') }}</h4>
         </div>
       {% endfor %}
