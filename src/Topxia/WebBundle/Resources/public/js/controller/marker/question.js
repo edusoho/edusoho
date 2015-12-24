@@ -115,6 +115,7 @@ define(function(require, exports, module) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.merg_id:   "+markerJson.merg_id);
+            
             var url = $('.toolbar-question-marker').data('queston-marker-merge-url');
 
 
@@ -182,7 +183,7 @@ define(function(require, exports, module) {
             //     // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
             // }
         },
-        updateSeq:function(markerJson,$marker,questionMarkers_id,seq,new_seq) {
+        updateSeq:function($scale,markerJson) {
             // var markerJson = {
             //     "id": $marker.attr('id'),
             //     "questionMarkers": [{

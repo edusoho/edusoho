@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             deleteScale: function(markerJson, $marker, $marker_list_item) {
                 return markerJson;
             },
-            updateSeq: function(markerJson,$marker,questionMarkers_id, seq,new_seq) {
+            updateSeq: function($scale,markerJson) {
                 return markerJson;
             }
         },
@@ -387,13 +387,21 @@ define(function(require, exports, module) {
                     //判断是否需要传给后台进行排序
                     if (_obj.get('updateSqeArry').length > 0) {
                         if ($item.find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
-                            // 后台进
-                            // $marker, questionMarkers_id, seq, new_seq
-                            console.log("处理排序");
-                            _obj._updateSeq($item.closest(".scale.blue"),$item.attr('id'),$item.find('.number .num').html(),_obj.get('updateSqeArry')[0]);
+                            var $scale = $item.closest(".scale.blue");
+                            var markerJson = {
+                                "id": '',
+                                "questionMarkers": []
+                            };
+                            markerJson.id = $scale.attr('id');
+                            var arry = [];
+                            $scale.find(".lesson-list .item-lesson").each(function() {
+                                var questionMarkers = {'id':$(this).attr('id'),'seq':$(this).find('.number .num').html()};
+                                markerJson.questionMarkers.push(questionMarkers);
+                            });
+                            _obj._updateSeq($scale,markerJson);
                         }
                     }
-                    _obj.set('updateSqeArry',[]);
+                    _obj.set('updateSqeArry', []);
 
                 },
                 serialize: function(parent, children, isContainer) {
@@ -503,16 +511,8 @@ define(function(require, exports, module) {
             };
             $.extend(this.get("deleteScale")(markerJson, $marker, $marker_list_item));
         },
-        _updateSeq: function($marker, questionMarkers_id, seq, new_seq) {
-            var markerJson = {
-                "id": $marker.attr('id'),
-                "questionMarkers": [{
-                    "id": questionMarkers_id,
-                    "seq": seq,
-                    "new_seq": new_seq
-                }]
-            };
-            $.extend(this.get("updateSeq")(markerJson,$marker,questionMarkers_id, seq,new_seq));
+        _updateSeq: function($scale,markerJson) {
+            $.extend(this.get("updateSeq")($scale,markerJson));
         }
     });
     module.exports = DraggableWidget;
