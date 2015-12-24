@@ -14,4 +14,7 @@ interface MarkerService
     public function addMarker($mediaId, $fields);
 
     public function deleteMarker($id);
+
+    public function merge($sourceMarkerId, $targetMarkerId);
+
 }

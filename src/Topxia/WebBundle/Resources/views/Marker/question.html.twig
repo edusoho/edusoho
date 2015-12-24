@@ -1,6 +1,8 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <div class="toolbar toolbar-open toolbar-question-marker" 
-	data-queston-marker-add-url="{{path('course_lesson_question_marker_add',{'courseId':course.id,'lessonId':lesson.id})}}">
+	data-queston-marker-add-url="{{path('course_lesson_question_marker_add',{'courseId':course.id,'lessonId':lesson.id})}}" 
+	data-queston-marker-delete-url="{{path('course_lesson_question_marker_delete',{'courseId':course.id,'lessonId':lesson.id})}}" 
+	data-queston-marker-merge-url="{{path('course_lesson_question_marker_merge',{'courseId':course.id,'lessonId':lesson.id})}}" >
 	<form class="form-inline mark-from" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">	
 		<div class="form-group">

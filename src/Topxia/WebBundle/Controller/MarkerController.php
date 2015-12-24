@@ -16,6 +16,22 @@ class MarkerController extends BaseController
         ));
     }
 
+    //驻点合并
+    public function mergeAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+
+        $data = $request->request->all();
+
+        if (empty($data['sourceMarkerId']) || empty($data['targetMarkerId'])) {
+            return $this->createMessageResponse('error', '参数错误!');
+        }
+
+        $this->getMarkerService()->merge($data['sourceMarkerId'], $data['targetMarkerId']);
+
+        return $this->createJsonResponse(true);
+    }
+
     //新增弹题
     public function addQuestionMarkerAction(Request $request, $courseId, $lessonId)
     {

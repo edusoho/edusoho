@@ -6,6 +6,10 @@ interface QuestionMarkerDao
 {
     public function getQuestionMarker($id);
 
+    public function getMaxSeqByMarkerId($id);
+
+    public function merge($sourceMarkerId, $targetMarkerId, $maxSeq);
+
     public function findQuestionMarkersByIds($ids);
 
     public function findQuestionMarkersByMarkerId($markerId);

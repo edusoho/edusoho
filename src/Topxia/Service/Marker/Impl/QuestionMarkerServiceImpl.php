@@ -101,6 +101,14 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return true;
     }
 
+    public function merge($sourceMarkerId, $targetMarkerId)
+    {
+        $targetMaxSeq = $this->getQuestionMarkerDao()->getMaxSeqByMarkerId($targetMarkerId);
+        $maxSeq       = !empty($targetMaxSeq) ? $targetMaxSeq['seq'] : 0;
+
+        return $this->getQuestionMarkerDao()->merge($sourceMarkerId, $targetMarkerId, $maxSeq);
+    }
+
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit)
     {
         return $this->getQuestionMarkerDao()->searchQuestionMarkers($conditions, $orderBy, $start, $limit);

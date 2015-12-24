@@ -62,30 +62,52 @@ define(function(require, exports, module) {
             // console.log("markerJson.questionMarkers.id:   "+markerJson.questionMarkers[0].id);
             // console.log("markerJson.questionMarkers.seq:   "+markerJson.questionMarkers[0].seq);
             // console.log("markerJson.questionMarkers.questionId:   "+markerJson.questionMarkers[0].questionId);
-            if(true) {//成功回调
-                //如果时间轴ID为空，为新增加的时间轴需要返回的ID
-                console.log("传过来"+markerJson.id);
+            console.log(markerJson);
+            var url = $('.toolbar-question-marker').data('queston-marker-add-url');
+            var param = {
+                markerId:markerJson.id,
+                second:markerJson.second,
+                questionId:markerJson.questionMarkers[0].questionId,
+                seq:markerJson.questionMarkers[0].seq
+            };
+            $.post(url,param,function(data){
+                if(data.id == undefined) {
+                    return ;
+                }
                 if(markerJson.id == undefined) {
                     console.log("新增ID");
                     markerJson.id = tempid;
-                    $marker.attr('id',markerJson.id);
-                    console.log("设置后"+markerJson.id);
-                }else {
-                    console.log("合并了");
+                    $marker.attr('id',data.markerId);
                 }
                 // 返回题目的ID
                 if(markerJson.questionMarkers[0].id == undefined) {
                     markerJson.questionMarkers[0].id = tempid;
-                    $marker.find('.item-lesson[question-id='+markerJson.questionMarkers[0].questionId+']').attr('id',markerJson.questionMarkers[0].id);
+                    $marker.find('.item-lesson[question-id='+markerJson.questionMarkers[0].questionId+']').attr('id',data.id);
                 }
                 tempid++;
-                
-            }
-            else {
-                // 失败将li恢复到原位
-                //判断是否移除时间轴:如果当前为第一个li则需要删除时间轴
-                // 无需重新排序：添加总是为最后一个所以直接移除无需再重新排序
-            }
+            });
+
+
+            // if(true) {//成功回调
+            //     //如果时间轴ID为空，为新增加的时间轴需要返回的ID
+            //     if(markerJson.id == undefined) {
+            //         markerJson.id = tempid;
+            //         $marker.attr('id',markerJson.id)
+            //     }
+            //     // 返回题目的ID
+            //     if(markerJson.questionMarkers[0].id == undefined) {
+            //         markerJson.questionMarkers[0].id = tempid;
+            //         $marker.find('.item-lesson[question-id='+markerJson.questionMarkers[0].questionId+']').attr('id',markerJson.questionMarkers[0].id);
+            //     }
+            //     tempid++;
+            //     console.log("markerJson.id"+markerJson.id);
+            //     console.log("markerJson.questionMarkers.id:   "+markerJson.questionMarkers[0].id);
+            // }
+            // else {
+            //     // 失败将li恢复到原位
+            //     //判断是否移除时间轴:如果当前为第一个li则需要删除时间轴
+            //     // 无需重新排序：添加总是为最后一个所以直接移除无需再重新排序
+            // }
             // var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             // $.post(url,{
             //     questionId:scalejson.subject[0].id,
@@ -104,7 +126,16 @@ define(function(require, exports, module) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.merg_id:   "+markerJson.merg_id);
+            var url = $('.toolbar-question-marker').data('queston-marker-merge-url');
+
+
+            $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
+                
+                //console.log(scalejson);
+            });
+
             if(true) {
+                console.log(markerJson);
                 //后台需要将，markerJson.id中的所有题目移动到markerJson.merg_id中，如两id都分别有2题，那被移动题目的序号由1，2变为3，4
                 //成功回调，将$marker真移除
                 $marker.remove();
@@ -131,20 +162,36 @@ define(function(require, exports, module) {
             // console.log("markerJson.questionMarkers.id:   "+markerJson.questionMarkers[0].id);
             // console.log("markerJson.questionMarkers.seq:   "+markerJson.questionMarkers[0].seq);
             // console.log("markerJson.questionMarkers.questionId:   "+markerJson.questionMarkers[0].questionId);
-            if(true) {
-                //后台需注意：移除题目后前台已经重新排序，后台数据的序号也需要改变：将当前移除的题目序号后的题目序号依次加一
-                // 成功回调
-                // console.log($marker);
-                // console.log($marker_list_item);
-                //判断$marker是否hide，如果hide需要直接移除{时间轴上的所有题目已经移除}
-                if($marker.is(":hidden")) {
-                    $marker.remove();
-                }
-            }
-            else {
-                // 将？$marker_list_item放回到$marker中，并将$marker显示；
-                // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
-            }
+            //  var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
+
+            // $.post(url,{questionId:20},function(data){
+                
+            //     console.log(scalejson);
+            // });
+
+            var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
+
+            $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
+                
+                //console.log(scalejson);
+            });
+
+
+            // if(true) {
+            //     //后台需注意：移除题目后前台已经重新排序，后台数据的序号也需要改变：将当前移除的题目序号后的题目序号依次加一
+            //     // 成功回调
+
+            //     console.log($marker);
+            //     console.log($marker_list_item);
+            //     //判断$marker是否hide，如果hide需要直接移除{时间轴上的所有题目已经移除}
+            //     if($marker.is(":hidden")) {
+            //         $marker.remove();
+            //     }
+            // }
+            // else {
+            //     // 将？$marker_list_item放回到$marker中，并将$marker显示；
+            //     // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
+            // }
         },
         updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
             // var markerJson = {
