@@ -76,7 +76,10 @@ define(function(require, exports, module) {
                               if(self.isPlaying() && marker.finished == false){
                                 player.pause();
                                 $.get('/course/lesson/'+marker.id+'/questionmarker/show',{"markerId":marker.id},function(data){
-                                    $('.vjs-break-overlay-text').html(data);
+                                   // var $modal = $(window.parent.document).find('.modal');
+                                   // $modal.html(data);
+                                   // $modal.show();
+                                    // $('.vjs-break-overlay-text').html(data);
                                 });
                               }
                             }

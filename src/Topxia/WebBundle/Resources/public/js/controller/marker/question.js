@@ -42,7 +42,7 @@ define(function(require, exports, module) {
 
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
-        initMarkerArry:initMarkerArry,
+        initMarkerArry:[],
         addScale: function(markerJson,$marker) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
@@ -51,7 +51,7 @@ define(function(require, exports, module) {
             // console.log("markerJson.questionMarkers.id:   "+markerJson.questionMarkers[0].id);
             // console.log("markerJson.questionMarkers.seq:   "+markerJson.questionMarkers[0].seq);
             // console.log("markerJson.questionMarkers.questionId:   "+markerJson.questionMarkers[0].questionId);
-            //console.log(markerJson);
+            // console.log(markerJson);
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             var param = {
                 markerId:markerJson.id,

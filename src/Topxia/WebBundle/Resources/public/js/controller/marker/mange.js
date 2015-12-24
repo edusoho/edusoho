@@ -6,15 +6,15 @@ define(function(require, exports, module) {
         attrs: {
             item: '.item-lesson',
             placeholder: '.placeholder',
-            videotime: '68',//视频总时长
+            videotime: '68', //视频总时长
             editbox: '.editbox',
             scalebox: '.scalebox',
             timepartnum: '6',
             subject_lesson_list: '#subject-lesson-list',
             editbox_lesson_list: "#editbox-lesson-list",
             group_list: ".gruop-lesson-list",
-            isDraggable: 'false',//拖动时阻止滑动事件响应
-            initMarkerArry: [],//初始化数据
+            isDraggable: 'false', //拖动时阻止滑动事件响应
+            initMarkerArry: [], //初始化数据
             updateSqeArry: [],
             addScale: function(markerJson, $marker, $item_lesson) {
                 return markerJson;
@@ -38,7 +38,7 @@ define(function(require, exports, module) {
             'mousedown .scale.blue': 'slideScale',
             'mouseenter .scale.blue': 'hoverScale',
             'mousedown .scale.blue .item-lesson': 'itemSqe',
-            'mousedown .marker-preview':'previewMouseDown'
+            'mousedown .marker-preview': 'previewMouseDown'
         },
         setup: function() {
             this._initSortable();
@@ -48,7 +48,7 @@ define(function(require, exports, module) {
         itemDraggable: function(e) {
             var _obj = this;
             console.log("开始拖拽");
-             //开始拖动事件
+            //开始拖动事件
             _obj.set('isDraggable', 'true');
 
             var $this = $(e.currentTarget);
@@ -84,7 +84,8 @@ define(function(require, exports, module) {
             }).mouseup(function() {
                 console.log("停止拖拽");
                 // 停止拖动
-                //$(document).off();
+                $(document).off('mousemove');
+                $(document).off('mouseup');
                 isMove = false;
                 // 隐藏默认时间轴
                 $scale.css("visibility", "hidden");
@@ -123,9 +124,13 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
                         _obj._newSortList($new_scale.find('.lesson-list'));
-                        console.log("处理增加时间轴回调");
-                        _obj._addScale($new_scale, timestr, $new_scale.css("left"),$new_scale.find('.lesson-list').children().num );
-                        console.log("增加时间轴完成");
+                        if ($new_scale.find('.lesson-list .item-lesson').length > 0) {
+                            console.log("处理增加时间轴回调:li已经移动完成");
+                            _obj._addScale($new_scale, timestr, $new_scale.css("left"), $new_scale.find('.lesson-list').children().num);
+                        } else {
+                            // 判断
+                            console.log("增加时间轴完成:li未移动完成需要在drop 中去传递数据到后台");
+                        }
                     } else {
                         //相同直接获取存在的ID
                         console.log("需要合并");
@@ -134,11 +139,14 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
                         $_scale.find('.border').removeClass('show');
-                        console.log("排序和处理合并回调");
-                        _obj._sortList($_scale.find('.lesson-list'));
-                        _obj._addScale($_scale, timestr, $_scale.css("left"),$_scale.find('.lesson-list').children().length );
-                        console.log("合并和排序完成");
 
+                        if ($_scale.find('.lesson-list .item-lesson').length > 0) {
+                            console.log("排序和处理合并回调:li已经移动完成");
+                            _obj._sortList($_scale.find('.lesson-list'));
+                            _obj._addScale($_scale, timestr, $_scale.css("left"), $_scale.find('.lesson-list').children().length);
+                        } else {
+                            console.log("合并和排序完成li未移动完成需要在drop 中去传递数据到后台");
+                        }
                     }
                 }
                 console.log("拖拽处理完成");
@@ -195,9 +203,11 @@ define(function(require, exports, module) {
                     }
                 }).mouseup(function() {
                     console.log("停止滑动");
-                    //$(document).off();
+                    $(document).off('mousemove');
+                    $(document).off('mouseup');
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
+                        console.log("sfsdf");
                         isMove = false;
                         var arry = [];
                         $scalebox.children('.scale.blue').each(function() {
@@ -210,6 +220,7 @@ define(function(require, exports, module) {
                         });
                         var new_time = _obj._convertSec($time.html());
                         // 判断是否移动，阻止点击事件触发方法，或者移动回原位置；
+                        console.log(old_time != new_time);
                         if (old_time != new_time) {
                             var additem = true;
                             var mergeid = -1;
@@ -225,25 +236,24 @@ define(function(require, exports, module) {
                                         }
                                     }
                                 }
-                                if (additem) {
-                                    console.log("滑动修改");
-                                    // 做修改操作：直接改变时间轴的时间即可
-                                    _obj._updateScale($this, new_time, old_position, old_time);
-                                } else {
-                                    console.log('滑动合并');
-                                    // 合并后被合并元素可能会触发该事件加判断$this.length后期优化
-                                    if ($this.length > 0) {
-                                        console.log('开始滑动合并');
-                                        var $_scale = $scalebox.find('.scale.blue[id=' + mergeid + ']');
-                                        var childrenum = $this.find('.lesson-list').children().length;
-                                        $this.find('.lesson-list').children().appendTo($_scale.find('.lesson-list'));
-                                        // 假删除：防止请求成功后再真删
-                                        $this.hide();
-                                        _obj._sortList($_scale.find('.lesson-list'));
-                                        _obj._mergeScale($this, $_scale, childrenum);
-                                        console.log('滑动处理结束');
-                                    }
-
+                            }
+                            if (additem) {
+                                console.log("滑动修改");
+                                // 做修改操作：直接改变时间轴的时间即可
+                                _obj._updateScale($this, new_time, old_position, old_time);
+                            } else {
+                                console.log('滑动合并');
+                                // 合并后被合并元素可能会触发该事件加判断$this.length后期优化
+                                if ($this.length > 0) {
+                                    console.log('开始滑动合并');
+                                    var $_scale = $scalebox.find('.scale.blue[id=' + mergeid + ']');
+                                    var childrenum = $this.find('.lesson-list').children().length;
+                                    $this.find('.lesson-list').children().appendTo($_scale.find('.lesson-list'));
+                                    // 假删除：防止请求成功后再真删
+                                    $this.hide();
+                                    _obj._sortList($_scale.find('.lesson-list'));
+                                    _obj._mergeScale($this, $_scale, childrenum);
+                                    console.log('滑动处理结束');
                                 }
                             }
                             $scalebox.find('.border').removeClass('show');
@@ -264,9 +274,9 @@ define(function(require, exports, module) {
             //阻止默认事件，父层的滑动
             e.stopPropagation();
         },
-        previewMouseDown:function(e) {
-           //阻止默认事件，父层的拖动
-            e.stopPropagation(); 
+        previewMouseDown: function(e) {
+            //阻止默认事件，父层的拖动
+            e.stopPropagation();
         },
         _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
             var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
@@ -307,15 +317,18 @@ define(function(require, exports, module) {
             var oldContainer;
             var $list = $(_classname).sortable({
                 group: _classname,
-                afterMove: function(placeholder, container) {
-                    console.log("_initSortable ::afterMove");
-                    if (oldContainer != container) {
-                        oldContainer = container;
-                    }
-                },
+                delay: 500,
                 onDrop: function($item, container, _super) {
+                    console.log("onDrop");
                     _super($item, container);
-                    console.log("_initSortable:::onDrop");
+                    var $_scale = $item.closest('.scale.blue');
+                    if ($_scale.find('.lesson-list .item-lesson').length > 0) {
+                        console.log("在onDrop中传递数据到后台");
+                        _obj._sortList($_scale.find('.lesson-list'));
+                        _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.lesson-list').children().length);
+
+                    }
+                    console.log("onDrop over");
                 }
             });
         },
