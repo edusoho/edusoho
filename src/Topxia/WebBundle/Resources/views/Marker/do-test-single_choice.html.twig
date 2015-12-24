@@ -1,10 +1,4 @@
-<div class="modal-dialog  modal-lg">
-	<div class="modal-content">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h4 class="modal-title">题目预览</h4>
-		</div>
-		<div class="modal-body">
+
 			<div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
 				<div class="question-heading editor-text">
 					{% if question.type == 'single_choice' %}（单选）{% elseif question.type == 'choice' %}（多选）{% endif %}{{ question.stem|bbCode2Html|raw }}
@@ -35,6 +29,3 @@
 					<button id="submit" class="btn btn-success btn-sm">提交</button>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
