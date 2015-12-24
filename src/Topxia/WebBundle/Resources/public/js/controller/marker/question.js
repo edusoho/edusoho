@@ -4,35 +4,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
     // 未避免初始化前端排序操作，将questionMarkers按生序方式返回，可省略questionMarkers.seq
-    var initMarkerArry =[{
-        "id": 1,
-        "second":39,
-        "position":'528px',
-        "questionMarkers":[{
-            "id":22,
-            "seq":1,
-            "questionId":1
-        },
-        {
-            "id":23,
-            "seq":2,
-            "questionId":2
-        }]
-    },{
-        "id": 2,
-        "second":19,
-        "position":'256px',
-        "questionMarkers":[{
-            "id":32,
-            "seq":1,
-            "questionId":3
-        },
-        {
-            "id":33,
-            "seq":2,
-            "questionId":4
-        }]
-    }];
+    var initMarkerArry =[];
 
     var tempid = 0;
 
@@ -65,7 +37,7 @@ define(function(require, exports, module) {
                 }
                 if(markerJson.id == undefined) {
                     console.log("新增ID");
-                    markerJson.id = tempid;
+                    markerJson.id = data.markerId;
                     $marker.attr('id',data.markerId);
                 }
                 // 返回题目的ID
@@ -75,7 +47,7 @@ define(function(require, exports, module) {
                 }
                 tempid++;
             });
-
+            console.log(markerJson);
 
             // if(true) {//成功回调
             //     //如果时间轴ID为空，为新增加的时间轴需要返回的ID
@@ -138,6 +110,8 @@ define(function(require, exports, module) {
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.second:   "+markerJson.second);
             // console.log("markerJson.position:   "+markerJson.position);
+            console.log(markerJson);
+            
             if(true) {
                 //成功回调，后台直接修改数据即可
             }else {
