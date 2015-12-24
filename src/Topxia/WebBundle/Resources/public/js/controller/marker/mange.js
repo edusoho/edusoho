@@ -123,9 +123,13 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
                         _obj._newSortList($new_scale.find('.lesson-list'));
-                        console.log("处理增加时间轴回调");
-                        _obj._addScale($new_scale, timestr, $new_scale.css("left"),$new_scale.find('.lesson-list').children().num );
-                        console.log("增加时间轴完成");
+                        if($new_scale.find('.lesson-list .item-lesson').length>0) {
+                            console.log("处理增加时间轴回调:li已经移动完成");
+                            _obj._addScale($new_scale, timestr, $new_scale.css("left"),$new_scale.find('.lesson-list').children().num );
+                        }else {
+                            // 判断
+                            console.log("增加时间轴完成:li未移动完成需要在drop 中去传递数据到后台");
+                        }
                     } else {
                         //相同直接获取存在的ID
                         console.log("需要合并");
@@ -134,11 +138,14 @@ define(function(require, exports, module) {
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
                         $_scale.find('.border').removeClass('show');
-                        console.log("排序和处理合并回调");
-                        _obj._sortList($_scale.find('.lesson-list'));
-                        _obj._addScale($_scale, timestr, $_scale.css("left"),$_scale.find('.lesson-list').children().length );
-                        console.log("合并和排序完成");
 
+                        if($_scale.find('.lesson-list .item-lesson').length>0) {
+                            console.log("排序和处理合并回调:li已经移动完成");
+                            _obj._sortList($_scale.find('.lesson-list'));
+                            _obj._addScale($_scale, timestr, $_scale.css("left"),$_scale.find('.lesson-list').children().length );
+                        }else {
+                            console.log("合并和排序完成li未移动完成需要在drop 中去传递数据到后台");
+                        }
                     }
                 }
                 console.log("拖拽处理完成");
@@ -307,15 +314,18 @@ define(function(require, exports, module) {
             var oldContainer;
             var $list = $(_classname).sortable({
                 group: _classname,
-                afterMove: function(placeholder, container) {
-                    console.log("_initSortable ::afterMove");
-                    if (oldContainer != container) {
-                        oldContainer = container;
-                    }
-                },
+                delay: 500,
                 onDrop: function($item, container, _super) {
+                    console.log("onDrop");
                     _super($item, container);
-                    console.log("_initSortable:::onDrop");
+                    var $_scale = $item.closest('.scale.blue');
+                    if($_scale.find('.lesson-list .item-lesson').length>0) {
+                        console.log("在onDrop中传递数据到后台");
+                        _obj._sortList($_scale.find('.lesson-list'));
+                        _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"),$_scale.find('.lesson-list').children().length );
+
+                    }
+                    console.log("onDrop over");
                 }
             });
         },
