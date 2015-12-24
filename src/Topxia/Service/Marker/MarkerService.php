@@ -15,6 +15,8 @@ interface MarkerService
 
     public function deleteMarker($id);
 
+    public function canManageMarker($lessonUserId);
+
     public function merge($sourceMarkerId, $targetMarkerId);
 
 }
