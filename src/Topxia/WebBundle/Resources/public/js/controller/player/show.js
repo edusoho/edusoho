@@ -105,12 +105,13 @@ define(function(require, exports, module) {
             // $('.vjs-break-overlay-text').html("");
             $.get('/course/lesson/'+markerId+'/questionmarker/show',{"markerId":markerId},function(data){
                 // $('.vjs-break-overlay-text').html(data);
-                var $modal = $(window.parent.document).find('.modal');
-                $modal.html(data);
-                $modal.show();
+                var $modal = $(window.parent.parent.document).find('.modal');
                 if (data == "") {
-                    //console.log(data);
+                    $modal.hide();
                     player.finishMarker(markerId);
+                } else {
+                    $modal.html(data);
+                    $modal.show();
                 }
             });
         });

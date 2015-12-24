@@ -15,7 +15,7 @@ define(function(require, exports, module) {
                 player.trigger('doNextQuestionMarker', data);
             });
         });
-        $("input[name='answer[" + questionId + "]']").on('click', function() {
+        $parentdocment.find("input[name='answer[" + questionId + "]']").on('click', function() {
             if ($(this).is(':checked')) {
                 $(this).attr("checked", "checked").parent().siblings().find("input").removeAttr("checked");
             }

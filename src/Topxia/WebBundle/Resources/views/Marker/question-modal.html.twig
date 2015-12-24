@@ -1,17 +1,17 @@
 {% set type = question.type|default(false) %}
-<div class="modal-dialog  modal-lg">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4 class="modal-title">题目预览</h4>
-    </div>
-    <div class="modal-body">
-      {% if type %}
-        {% include 'TopxiaWebBundle:Marker:do-test-' ~ type ~ '.html.twig' %}
-      {% endif %}
-    </div>
-    <div class="modal-footer">
-      <script>app.load('marker/do-test')</script>
-    </div>
-  </div>
-</div>
+{% if type %}
+	<div class="modal-dialog  modal-lg">
+	  <div class="modal-content">
+	    <div class="modal-header">
+	      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	      <h4 class="modal-title">题目预览</h4>
+	    </div>
+	    <div class="modal-body">
+	        {% include 'TopxiaWebBundle:Marker:do-test-' ~ type ~ '.html.twig' %}
+	    </div>
+	    <div class="modal-footer">
+	      <script>app.load('marker/do-test')</script>
+	    </div>
+	  </div>
+	</div>
+{% endif %}
