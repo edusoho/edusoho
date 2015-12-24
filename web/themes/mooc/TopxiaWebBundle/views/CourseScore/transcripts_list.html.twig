@@ -28,6 +28,8 @@
                data-id="{{ usersScore[user.id].id }}">
                <i class="iconfont icon-edit" data-toggle="tooltip" data-placement="top" title="编辑"></i>
           </a>
+          {% endif %}
+
           <a {% if courseScoreSetting.status == 'published'%}href="{{ path('course_manage_student_grades_cards',{courseId:course.id,userId:user.id}) }}"{% endif %}>
             <i class="iconfont icon-wendangkeshi" data-toggle="tooltip" data-placement="top"
                 title="{% if courseScoreSetting.status == 'published'%}查看{% else %}成绩发布后可查看{% endif %}"></i>
