@@ -42,7 +42,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             $fields['updatedTime'] = time();
         }
 
-        if (isset($fields['second']) || $fields['second'] == "") {
+        if (empty($fields['second'])) {
             throw $this->createServiceException("更新驻点时间不存在");
         }
 

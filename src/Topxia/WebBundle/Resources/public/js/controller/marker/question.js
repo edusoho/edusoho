@@ -110,14 +110,20 @@ define(function(require, exports, module) {
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.second:   "+markerJson.second);
             // console.log("markerJson.position:   "+markerJson.position);
+            
+
+            var url = $('.toolbar-question-marker').data('marker-update-url');
+
+            console.log($marker);
+            
             console.log(markerJson);
-
-            var url = $('.toolbar-question-marker').data('marker-merge-url');
-
-
-            $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
+            var param = {
+                id:markerJson.id,
+                second:markerJson.second
+            };
+            $.post(url,param,function(data){
                 
-                //console.log(scalejson);
+                console.log(scalejson);
             });
 
             // if(true) {
