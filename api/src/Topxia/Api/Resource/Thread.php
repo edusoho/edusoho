@@ -40,7 +40,7 @@ class Thread extends BaseResource
             	return array("threadId" => $thread['id']);
             }
         } catch (\Exception $e){
-            return $this->error('500', "发帖错误");
+            return $this->error('500', $e->getMessage());
         }
 
         return $this->error('500', '发帖错误');
@@ -54,5 +54,10 @@ class Thread extends BaseResource
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
