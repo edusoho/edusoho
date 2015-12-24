@@ -85,9 +85,16 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
 
-        return $this->getConnection()->fetchAll($sql, $ids);
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
     }
 
     public function getUserByInviteCode($inviteCode)

@@ -40,8 +40,15 @@ class CacheDaoImpl extends BaseDao implements CacheDao
         }
 
         $marks = str_repeat('?,', count($names) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE name IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $names);
+
+        $that = $this;
+        $keys = implode(',', $names);
+        return $this->fetchCached("names:{$keys}", $marks, $names, function ($marks, $names) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE name IN ({$marks});";
+            return $that->getConnection()->fetchAll($sql, $names);
+        }
+
+        );
     }
 
     public function deleteCacheByName($name)
