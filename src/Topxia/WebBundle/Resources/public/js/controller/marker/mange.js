@@ -83,7 +83,7 @@ define(function(require, exports, module) {
             }).mouseup(function() {
                 console.log("停止拖拽");
                 // 停止拖动
-                $(document).off();
+                //$(document).off();
                 isMove = false;
                 // 隐藏默认时间轴
                 $scale.css("visibility", "hidden");
@@ -194,7 +194,7 @@ define(function(require, exports, module) {
                     }
                 }).mouseup(function() {
                     console.log("停止滑动");
-                    $(document).off();
+                    //$(document).off();
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
                         isMove = false;

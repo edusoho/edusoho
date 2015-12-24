@@ -34,17 +34,6 @@ define(function(require, exports, module) {
         }]
     }];
 
-    var markerJson = {
-        "id": 22,
-        "second":23,
-        "position":'310px',
-        "questionMarkers":[{
-            "id":1,
-            "seq":1,
-            "questionId":21
-        }]
-    } 
-
     var tempid = 0;
 
     var videoHtml = $('#lesson-dashboard');
@@ -62,7 +51,7 @@ define(function(require, exports, module) {
             // console.log("markerJson.questionMarkers.id:   "+markerJson.questionMarkers[0].id);
             // console.log("markerJson.questionMarkers.seq:   "+markerJson.questionMarkers[0].seq);
             // console.log("markerJson.questionMarkers.questionId:   "+markerJson.questionMarkers[0].questionId);
-            console.log(markerJson);
+            //console.log(markerJson);
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             var param = {
                 markerId:markerJson.id,
@@ -134,14 +123,14 @@ define(function(require, exports, module) {
                 //console.log(scalejson);
             });
 
-            if(true) {
-                console.log(markerJson);
-                //后台需要将，markerJson.id中的所有题目移动到markerJson.merg_id中，如两id都分别有2题，那被移动题目的序号由1，2变为3，4
-                //成功回调，将$marker真移除
-                $marker.remove();
-            }else {
-                // 将merg_emarker中list的最后面取childrenum个子元素放回$marker中的list，并将$marker重新排序
-            }
+            // if(true) {
+            //     console.log(markerJson);
+            //     //后台需要将，markerJson.id中的所有题目移动到markerJson.merg_id中，如两id都分别有2题，那被移动题目的序号由1，2变为3，4
+            //     //成功回调，将$marker真移除
+            //     $marker.remove();
+            // }else {
+            //     // 将merg_emarker中list的最后面取childrenum个子元素放回$marker中的list，并将$marker重新排序
+            // }
             return markerJson;
         },
         updateScale: function($marker,markerJson,old_position,old_time) {
@@ -207,7 +196,7 @@ define(function(require, exports, module) {
             }else {
                 //撤销排序
             }  
-        },
+        }
     })
     exports.run = function() {
         $form = $('.mark-from');
