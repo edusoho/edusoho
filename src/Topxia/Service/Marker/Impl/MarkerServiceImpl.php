@@ -115,6 +115,21 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return $conditions;
     }
 
+    public function canManageMarker($lessonUserId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        if ($user['id'] != $lessonUserId) {
+            throw $this->createAccessDeniedException('该视频不属于你，无权操作！');
+        }
+
+        return true;
+    }
+
     public function merge($sourceMarkerId, $targetMarkerId)
     {
         $this->getQuestionMarkerService()->merge($sourceMarkerId, $targetMarkerId);
