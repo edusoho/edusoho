@@ -343,6 +343,7 @@ CREATE TABLE `course_lesson` (
   `userId` int(10) unsigned NOT NULL COMMENT '发布人ID',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
   `copyId` INT(10) NOT NULL DEFAULT '0' COMMENT '复制课时id',
+  `suggestHours` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '建议学习时长',
   `testMode` ENUM('normal', 'realTime') NULL DEFAULT 'normal' COMMENT '考试模式',
   `testStartTime` INT(10) NULL DEFAULT '0' COMMENT '实时考试开始时间',
   PRIMARY KEY (`id`)
@@ -376,6 +377,7 @@ CREATE TABLE IF NOT EXISTS `course_lesson_replay` (
   `replayId` text NOT NULL COMMENT '云直播中的回放id',
   `userId` int(10) unsigned NOT NULL COMMENT '创建者',
   `createdTime` int(10) unsigned NOT NULL COMMENT '创建时间',
+  `hidden` tinyint(1) unsigned DEFAULT '0' COMMENT '观看状态',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -944,7 +946,7 @@ CREATE TABLE `testpaper_result` (
   `subjectiveScore` float(10,1) unsigned NOT NULL DEFAULT '0.0' COMMENT '客观题得分',
   `teacherSay` text COMMENT '老师评价',
   `rightItemCount` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '正确题目数',
-  `passedStatus` enum('none','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '考试通过状态，none表示该考试没有',
+  `passedStatus` enum('none','excellent','good','passed','unpassed') NOT NULL DEFAULT 'none' COMMENT '考试通过状态，none表示该考试没有',
   `limitedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '试卷限制时间(秒)',
   `beginTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '开始时间',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '结束时间',
@@ -1578,6 +1580,19 @@ CREATE TABLE `batch_notification` (
   `sendedTime` int(10) NOT NULL DEFAULT '0' COMMENT '群发通知的发送时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='群发通知表';
+
+DROP TABLE IF EXISTS `card`;
+CREATE TABLE `card` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cardId` varchar(255)  NOT NULL DEFAULT '' COMMENT '卡的ID',
+  `cardType` varchar(255) NOT NULL DEFAULT '' COMMENT '卡的类型',
+  `deadline` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '到期时间',
+  `useTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
+  `status` ENUM('used','receive','invalid','deleted') NOT NULL DEFAULT 'receive' COMMENT '使用状态',
+  `userId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '使用者',
+  `createdTime` int(10) unsigned NOT NULL COMMENT '领取时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `course_score_setting` (
     `courseId` int(10) unsigned NOT NULL COMMENT 'course id主键',
