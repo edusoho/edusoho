@@ -87,7 +87,7 @@ define(function(require, exports, module) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.merg_id:   "+markerJson.merg_id);
-            var url = $('.toolbar-question-marker').data('queston-marker-merge-url');
+            var url = $('.toolbar-question-marker').data('marker-merge-url');
 
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
@@ -111,12 +111,20 @@ define(function(require, exports, module) {
             // console.log("markerJson.second:   "+markerJson.second);
             // console.log("markerJson.position:   "+markerJson.position);
             console.log(markerJson);
-            
-            if(true) {
-                //成功回调，后台直接修改数据即可
-            }else {
-                // 前台：将时间轴移动回原来的位置并改变时间轴的时间
-            }
+
+            var url = $('.toolbar-question-marker').data('marker-merge-url');
+
+
+            $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
+                
+                //console.log(scalejson);
+            });
+
+            // if(true) {
+            //     //成功回调，后台直接修改数据即可
+            // }else {
+            //     // 前台：将时间轴移动回原来的位置并改变时间轴的时间
+            // }
             return markerJson;
         },
         deleteScale: function(markerJson,$marker,$marker_list_item) {
@@ -157,6 +165,13 @@ define(function(require, exports, module) {
             // }
         },
         updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
+
+            var url = $('.toolbar-question-marker').data('queston-marker-update-url');
+            
+            $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
+                
+            });
+
             // var markerJson = {
             //     "id": $marker.attr('id'),
             //     "questionMarkers": [{
