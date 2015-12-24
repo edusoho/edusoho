@@ -182,7 +182,7 @@ define(function(require, exports, module) {
             //     // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
             // }
         },
-        updateSqe:function($marker,questionMarkers_id,seq,new_seq) {
+        updateSeq:function(markerJson,$marker,questionMarkers_id,seq,new_seq) {
             // var markerJson = {
             //     "id": $marker.attr('id'),
             //     "questionMarkers": [{
@@ -191,6 +191,7 @@ define(function(require, exports, module) {
             //         "new_seq": new_seq
             //     }]
             // }  
+            console.log(markerJson);
             if(true) {
                 // 后台： 更据当前的序号编号，重新排序
             }else {

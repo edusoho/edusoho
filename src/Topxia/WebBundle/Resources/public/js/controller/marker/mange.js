@@ -28,8 +28,8 @@ define(function(require, exports, module) {
             deleteScale: function(markerJson, $marker, $marker_list_item) {
                 return markerJson;
             },
-            updateSqe: function($marker, questionMarkers_id, seq, new_seq) {
-                return true;
+            updateSeq: function(markerJson,$marker,questionMarkers_id, seq,new_seq) {
+                return markerJson;
             }
         },
         events: {
@@ -380,16 +380,20 @@ define(function(require, exports, module) {
             $list.sortable({
                 distance: 20,
                 itemSelector: '.item-lesson',
-                onDrop: function(item, container, _super) {
+                onDrop: function($item, container, _super) {
                     console.log("onDrop");
-                    _super(item, container);
+                    _super($item, container);
                     _obj._sortList($list);
                     //判断是否需要传给后台进行排序
                     if (_obj.get('updateSqeArry').length > 0) {
-                        if ($(item).find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
-                            后台进
+                        if ($item.find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
+                            // 后台进
+                            // $marker, questionMarkers_id, seq, new_seq
+                            console.log("处理排序");
+                            _obj._updateSeq($item.closest(".scale.blue"),$item.attr('id'),$item.find('.number .num').html(),_obj.get('updateSqeArry')[0]);
                         }
                     }
+                    _obj.set('updateSqeArry',[]);
 
                 },
                 serialize: function(parent, children, isContainer) {
@@ -397,8 +401,11 @@ define(function(require, exports, module) {
                     return isContainer ? children : parent.attr('id');
                 },
                 isValidTarget: function(item, container) {
-                    if (_obj.get('updateSqeArry').length < 0) {
+                    console.log("isValidTarget");
+                    if (_obj.get('updateSqeArry').length <= 0) {
+
                         _obj.get('updateSqeArry').push($(item).find('.number .num').html());
+                        console.log(_obj.get('updateSqeArry'));
                     }
                     if (item.siblings('li').length) {
                         return true;
@@ -496,7 +503,7 @@ define(function(require, exports, module) {
             };
             $.extend(this.get("deleteScale")(markerJson, $marker, $marker_list_item));
         },
-        _updateSqe: function($marker, questionMarkers_id, seq, new_seq) {
+        _updateSeq: function($marker, questionMarkers_id, seq, new_seq) {
             var markerJson = {
                 "id": $marker.attr('id'),
                 "questionMarkers": [{
@@ -505,7 +512,7 @@ define(function(require, exports, module) {
                     "new_seq": new_seq
                 }]
             };
-            $.extend(this.get("updateSqe")(markerJson, $marker, $marker_list_item));
+            $.extend(this.get("updateSeq")(markerJson,$marker,questionMarkers_id, seq,new_seq));
         }
     });
     module.exports = DraggableWidget;
