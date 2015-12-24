@@ -8,6 +8,13 @@ parameters:
     blocks:
       left:
         - title: ""
+          count: "8"
+          orderBy: ""
+          background: ""
+          code: category-and-announcement
+          defaultTitle: "专业-公告"
+          id: "categoryAnnouncement"
+        - title: ""
           count: "12"
           orderBy: "latest"
           background: ""
@@ -52,6 +59,13 @@ parameters:
     navigationcolor: default
     blocks:
       left:
+        - title: ""
+          count: "8"
+          orderBy: ""
+          background: ""
+          code: category-and-announcement
+          defaultTitle: "专业-公告"
+          id: "categoryAnnouncement"
         - title: ""
           count: "12"
           orderBy: "latest"
