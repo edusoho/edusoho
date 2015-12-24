@@ -37,7 +37,8 @@ define(function(require, exports, module) {
             'click .lesson-list .icon-close': 'itemRmove',
             'mousedown .scale.blue': 'slideScale',
             'mouseenter .scale.blue': 'hoverScale',
-            'mousedown .scale.blue .item-lesson': 'itemSqe'
+            'mousedown .scale.blue .item-lesson': 'itemSqe',
+            'mousedown .marker-preview':'previewMouseDown'
         },
         setup: function() {
             this._initSortable();
@@ -262,6 +263,10 @@ define(function(require, exports, module) {
         itemSqe: function(e) {
             //阻止默认事件，父层的滑动
             e.stopPropagation();
+        },
+        previewMouseDown:function(e) {
+           //阻止默认事件，父层的拖动
+            e.stopPropagation(); 
         },
         _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
             var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();

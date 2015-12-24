@@ -233,15 +233,12 @@ define(function(require, exports, module) {
             })
         })
 
-        $(".question-tr").on('click', '.marker-preview', function() {
+        $("#subject-lesson-list").on('click', '.marker-preview', function() {
             $.get($(this).data('url'), function(response) {
                 $('.modal').modal('show');
                 $('.modal').html(response);
 
             })
         })
-
-
-
     }
 });
