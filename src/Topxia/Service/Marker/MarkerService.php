@@ -7,6 +7,10 @@ interface MarkerService
 
     public function getMarkersByIds($ids);
 
+    public function findMarkersByMediaId($mediaId);
+
+    public function findMarkersMetaByMediaId($mediaId);
+
     public function searchMarkers($conditions, $orderBy, $start, $limit);
 
     public function updateMarker($id, $fields);

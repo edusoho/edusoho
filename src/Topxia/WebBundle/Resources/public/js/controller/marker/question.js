@@ -4,45 +4,26 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var DraggableWidget = require('../marker/mange');
     // 未避免初始化前端排序操作，将questionMarkers按生序方式返回，可省略questionMarkers.seq
-    var initMarkerArry =[{
-        "id": 1,
-        "second":39,
-        "position":'528px',
-        "questionMarkers":[{
-            "id":22,
-            "seq":1,
-            "questionId":1
-        },
-        {
-            "id":23,
-            "seq":2,
-            "questionId":2
-        }]
-    },{
-        "id": 2,
-        "second":19,
-        "position":'256px',
-        "questionMarkers":[{
-            "id":32,
-            "seq":1,
-            "questionId":3
-        },
-        {
-            "id":33,
-            "seq":2,
-            "questionId":4
-        }]
-    }];
-
-    var tempid = 0;
-
+    var initMarkerArry =[];
     var videoHtml = $('#lesson-dashboard');
     var courseId = videoHtml.data("course-id");
     var lessonId = videoHtml.data("lesson-id");
 
+    $.ajax({ 
+      type: "get", 
+      url: $('.toolbar-question-marker').data('marker-metas-url'), 
+      cache:false, 
+      async:false, 
+      success:function(data){
+        initMarkerArry = data;
+      }
+    });
+
+    var tempid = 0;
+
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
-        initMarkerArry:[],
+        initMarkerArry:initMarkerArry,
         addScale: function(markerJson,$marker) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
@@ -65,7 +46,7 @@ define(function(require, exports, module) {
                 }
                 if(markerJson.id == undefined) {
                     console.log("新增ID");
-                    markerJson.id = tempid;
+                    markerJson.id = data.markerId;
                     $marker.attr('id',data.markerId);
                 }
                 // 返回题目的ID
@@ -75,7 +56,7 @@ define(function(require, exports, module) {
                 }
                 tempid++;
             });
-
+            console.log(markerJson);
 
             // if(true) {//成功回调
             //     //如果时间轴ID为空，为新增加的时间轴需要返回的ID
@@ -115,9 +96,7 @@ define(function(require, exports, module) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.merg_id:   "+markerJson.merg_id);
-            
-            var url = $('.toolbar-question-marker').data('queston-marker-merge-url');
-
+            var url = $('.toolbar-question-marker').data('marker-merge-url');
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
                 
@@ -139,11 +118,27 @@ define(function(require, exports, module) {
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.second:   "+markerJson.second);
             // console.log("markerJson.position:   "+markerJson.position);
-            if(true) {
-                //成功回调，后台直接修改数据即可
-            }else {
-                // 前台：将时间轴移动回原来的位置并改变时间轴的时间
-            }
+            
+
+            var url = $('.toolbar-question-marker').data('marker-update-url');
+
+            console.log($marker);
+            
+            console.log(markerJson);
+            var param = {
+                id:markerJson.id,
+                second:markerJson.second
+            };
+            $.post(url,param,function(data){
+                
+                console.log(scalejson);
+            });
+
+            // if(true) {
+            //     //成功回调，后台直接修改数据即可
+            // }else {
+            //     // 前台：将时间轴移动回原来的位置并改变时间轴的时间
+            // }
             return markerJson;
         },
         deleteScale: function(markerJson,$marker,$marker_list_item) {
@@ -184,6 +179,9 @@ define(function(require, exports, module) {
             // }
         },
         updateSeq:function($scale,markerJson) {
+            console.log(questionMarkers_id);
+            var url = $('.toolbar-question-marker').data('queston-marker-sort-url');
+
             // var markerJson = {
             //     "id": $marker.attr('id'),
             //     "questionMarkers": [{

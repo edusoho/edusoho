@@ -35,6 +35,12 @@ class MarkerController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function markerMetasAction(Request $request, $mediaId)
+    {
+        $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
+        return $this->createJsonResponse($markersMeta);
+    }
+
     //新增弹题
     public function addQuestionMarkerAction(Request $request, $courseId, $lessonId)
     {

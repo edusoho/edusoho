@@ -24,6 +24,28 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return $this->getMarkerDao()->findMarkersByMediaId($mediaId);
     }
 
+    public function findMarkersMetaByMediaId($mediaId)
+    {
+        $markers = $this->findMarkersByMediaId($mediaId);
+
+        if (empty($markers)) {
+            return array();
+        }
+
+        $markerIds = ArrayToolkit::column($markers, 'id');
+
+        $questionMarkers      = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds);
+        $questionMarkerGroups = ArrayToolkit::group($questionMarkers, 'markerId');
+
+        foreach ($markers as $index => $marker) {
+            if (!empty($questionMarkerGroups[$marker['id']])) {
+                $markers[$index]['questionMarkers'] = $questionMarkerGroups[$marker['id']];
+            }
+        }
+
+        return $markers;
+    }
+
     public function searchMarkers($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareMarkerConditions($conditions);
@@ -42,7 +64,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             $fields['updatedTime'] = time();
         }
 
-        if (isset($fields['second']) || $fields['second'] == "") {
+        if (empty($fields['second'])) {
             throw $this->createServiceException("更新驻点时间不存在");
         }
 
