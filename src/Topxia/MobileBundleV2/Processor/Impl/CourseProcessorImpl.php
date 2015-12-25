@@ -667,6 +667,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
     public function getFavoriteNormalCourse()
     {
         $result = $this->getFavoriteCourse();
+        if (isset($result['error'])) {
+            return $result;
+        }
         $courses = $result["data"];
 
         $normalCourses = array();
