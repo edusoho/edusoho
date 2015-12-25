@@ -968,6 +968,10 @@ course_lesson_marker_show:
     pattern:  /course/lesson/{mediaId}/marker/show
     defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
 
+course_lesson_marker_list:
+    pattern:  /course/lesson/{mediaId}/marker/list
+    defaults: { _controller: TopxiaWebBundle:Marker:markerList }
+
 course_lesson_marker_merge:
     pattern:  /course/{courseId}/lesson/{lessonId}/marker/merge
     defaults: { _controller: TopxiaWebBundle:Marker:merge }

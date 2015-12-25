@@ -24,6 +24,17 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         return $this->getMarkerDao()->findMarkersByMediaId($mediaId);
     }
 
+    public function findMarkersMetaByMediaId($mediaId)
+    {
+        $markers = $this->findMarkersByMediaId($mediaId);
+
+        if (empty($markers)) {
+            return array();
+        }
+
+        $markerIds = ArrayToolkit::index($markers, 'id');
+    }
+
     public function searchMarkers($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->prepareMarkerConditions($conditions);
@@ -113,6 +124,21 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         return $conditions;
+    }
+
+    public function canManageMarker($lessonUserId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        if ($user['id'] != $lessonUserId) {
+            throw $this->createAccessDeniedException('该视频不属于你，无权操作！');
+        }
+
+        return true;
     }
 
     public function merge($sourceMarkerId, $targetMarkerId)
