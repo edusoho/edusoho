@@ -339,7 +339,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $homeworkResult = $event->getSubject();
 
         $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
-        $lesson = $this->getCourseService()->getLesson($homeworkResult['courseId']);
+        $lesson = $this->getCourseService()->getLesson($homeworkResult['lessonId']);
         $target = $this->getTarget('course', $homeworkResult['courseId']);
         $from   = array(
             'type'  => 'course',
