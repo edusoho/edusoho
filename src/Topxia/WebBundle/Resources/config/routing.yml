@@ -965,7 +965,7 @@ course_lesson_marker_manage:
     defaults: { _controller: TopxiaWebBundle:Marker:manage }
 
 course_lesson_marker_show:
-    pattern:  /course/lesson/{mediaId}/marker/show
+    pattern:  /course/lesson/{lessonId}/marker/show
     defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
 
 course_lesson_marker_metas:

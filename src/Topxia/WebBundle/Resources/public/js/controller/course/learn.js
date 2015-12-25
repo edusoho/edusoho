@@ -291,6 +291,24 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("ready", function(){
+                          var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                          var markersUrl =  '/course/lesson/'+lesson.id+'/marker/show';
+                           $.ajax({
+                            type: "get",
+                            url: markersUrl,
+                            dataType: "json",
+                            success:function(data){
+                              for(var index in data) {
+                                var marker={
+                                  "id":data[index].id,
+                                  "time":data[index].second,
+                                  "text":"ads",
+                                  "finished":data[index].finish
+                                };
+                                player.addMarker([marker]);
+                              }
+                            }
+                          });
                         });
 
                         messenger.on("ended", function(){
