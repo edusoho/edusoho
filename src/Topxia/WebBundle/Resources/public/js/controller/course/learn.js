@@ -330,13 +330,14 @@ define(function(require, exports, module) {
                             that.set("player", player);
                         });
 
-                        messenger.on("doNextQuestionMarker", function(data){
-                            $.get('/course/lesson/'+data.markerId+'/questionmarker/show','',function(data){
+                        messenger.on("doNextQuestionMarker", function(marker){
+                            var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                            $.get('/course/lesson/'+marker.markerId+'/questionmarker/show','',function(data){
                                 // $('.vjs-break-overlay-text').html(data);
                                 var $modal = $('.modal');
                                 if (data == "") {
                                     $modal.hide();
-                                    player.finishMarker(markerId);
+                                    player.finishMarker(marker.markerId);
                                 } else {
                                     $modal.html(data);
                                     $modal.show();

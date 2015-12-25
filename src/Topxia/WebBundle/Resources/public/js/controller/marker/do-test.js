@@ -6,12 +6,11 @@ define(function(require, exports, module) {
         var markerId = $data.data('markerid');
         var questionId = $data.data('questionid');
         $btn.on('click', function() {
-            console.log($data.data('url'));
             $.get($data.data('url'), {
                 "markerId": markerId,
                 "questionId": questionId
             }, function(data) {
-                var player = window.BalloonPlayer;
+                var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 player.trigger('doNextQuestionMarker', data);
             });
         });
