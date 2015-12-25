@@ -60,7 +60,6 @@ define(function(require, exports, module) {
                             },
                             onMarkerReached:function(marker,player){
                               if(self.isPlaying() && marker.finished == false){
-                                player.pause();
                                 window.BalloonPlayer.trigger('doNextQuestionMarker', marker.id);
                               }
                             }
@@ -139,7 +138,7 @@ define(function(require, exports, module) {
                 });
                 
                 self.set('player', player);
-                
+
                 BalloonCloudVideoPlayer.superclass.setup.call(self);
 
             }, 'json');

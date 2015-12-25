@@ -332,6 +332,9 @@ define(function(require, exports, module) {
 
                         messenger.on("doNextQuestionMarker", function(marker){
                             var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                            if(player.isPlaying()){
+                              player.pause();
+                            }
                             $.get('/course/lesson/'+marker.markerId+'/questionmarker/show','',function(data){
                                 // $('.vjs-break-overlay-text').html(data);
                                 var $modal = $('.modal');
