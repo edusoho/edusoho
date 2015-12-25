@@ -10,7 +10,7 @@
 <form class="form-horizontal" method="post" novalidate>
 
   <div class="form-group">
-    <div class="controls col-md-12">
+    <div class="controls col-md-10 radios">
       {{ radios('mode', {'pdo':'pdo', 'redis':'redis', 'native':'native'}, sessionHandler.mode|default('pdo')) }}
     </div>
   </div>
