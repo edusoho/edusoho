@@ -329,6 +329,22 @@ define(function(require, exports, module) {
                             player.playing = false;
                             that.set("player", player);
                         });
+
+                        messenger.on("doNextQuestionMarker", function(data){
+                            $.get('/course/lesson/'+data.markerId+'/questionmarker/show','',function(data){
+                                // $('.vjs-break-overlay-text').html(data);
+                                var $modal = $('.modal');
+                                if (data == "") {
+                                    $modal.hide();
+                                    player.finishMarker(markerId);
+                                } else {
+                                    $modal.html(data);
+                                    $modal.show();
+                                }
+                            });
+                        });
+
+
                         that.set("player", {});
 
                     } else {

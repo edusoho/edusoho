@@ -2,11 +2,12 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $parentdocment =$(window.parent.document); 
         var $close = $parentdocment.find(".modal-header .close");
-        var $btn =$parentdocment.find('#submit');
+        var $btn =$parentdocment.find('#submitQuestion');
         var $data = $parentdocment.find("#data");
         var markerId = $data.data('markerid');
         var questionId = $data.data('questionid');
         $btn.on('click', function() {
+            console.log($data.data('url'));
             $.get($data.data('url'), {
                 "markerId": markerId,
                 "questionId": questionId

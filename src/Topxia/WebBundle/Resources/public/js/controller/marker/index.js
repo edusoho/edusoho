@@ -22,11 +22,10 @@ define(function(require, exports, module) {
 
         messenger.on("ready", function(){
             var player = window.frames["viewerIframe"].window.BalloonPlayer;
-            var markersUrl =  '/course/lesson/'+mediaId+'/marker/show';
+            var markersUrl =  '/course/lesson/'+lessonId+'/marker/show';
              $.ajax({
                 type: "post",
                 url: markersUrl,
-                data:{"mediaId":mediaId},
                 dataType: "json",
                 success:function(data){
                     for(var index in data) {
