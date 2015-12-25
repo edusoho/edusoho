@@ -5,16 +5,25 @@ define(function(require, exports, module) {
     var DraggableWidget = require('../marker/mange');
     // 未避免初始化前端排序操作，将questionMarkers按生序方式返回，可省略questionMarkers.seq
     var initMarkerArry =[];
-
-    var tempid = 0;
-
     var videoHtml = $('#lesson-dashboard');
     var courseId = videoHtml.data("course-id");
     var lessonId = videoHtml.data("lesson-id");
 
+    $.ajax({ 
+      type: "get", 
+      url: $('.toolbar-question-marker').data('marker-metas-url'), 
+      cache:false, 
+      async:false, 
+      success:function(data){
+        initMarkerArry = data;
+      }
+    });
+
+    var tempid = 0;
+
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
-        initMarkerArry:[],
+        initMarkerArry:initMarkerArry,
         addScale: function(markerJson,$marker) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
@@ -88,7 +97,6 @@ define(function(require, exports, module) {
             // console.log("markerJson.id"+markerJson.id);
             // console.log("markerJson.merg_id:   "+markerJson.merg_id);
             var url = $('.toolbar-question-marker').data('marker-merge-url');
-
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
                 
@@ -170,9 +178,10 @@ define(function(require, exports, module) {
             //     // 如果list中item数量大于1，而且？$marker_list_item不是最后一个孩子需要重新排序
             // }
         },
-        updateSeq:function(markerJson,$marker,questionMarkers_id,seq,new_seq) {
+        updateSeq:function($scale,markerJson) {
             console.log(questionMarkers_id);
             var url = $('.toolbar-question-marker').data('queston-marker-sort-url');
+
             // var markerJson = {
             //     "id": $marker.attr('id'),
             //     "questionMarkers": [{

@@ -1,5 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 <div class="toolbar toolbar-open toolbar-question-marker" 
+	data-marker-metas-url="
+	{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}"
 	data-queston-marker-add-url="{{path('course_lesson_question_marker_add',{'courseId':course.id,'lessonId':lesson.id})}}" 
 	data-queston-marker-delete-url="{{path('course_lesson_question_marker_delete',{'courseId':course.id,'lessonId':lesson.id})}}" 
 	data-marker-merge-url="{{path('course_lesson_marker_merge',{'courseId':course.id,'lessonId':lesson.id})}}" 

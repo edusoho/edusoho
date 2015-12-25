@@ -10,6 +10,8 @@ interface QuestionMarkerService
 
     public function findQuestionMarkersByMarkerId($markerId);
 
+    public function findQuestionMarkersByMarkerIds($markerIds);
+
     public function findQuestionMarkersByQuestionId($questionId);
 
     public function addQuestionMarker($questionId, $markerId, $seq);

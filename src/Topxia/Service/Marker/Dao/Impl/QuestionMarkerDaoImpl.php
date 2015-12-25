@@ -52,6 +52,18 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
 
+    public function findQuestionMarkersByMarkerIds($markerIds)
+    {
+        if (empty($markerIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($markerIds) - 1).'?';
+
+        $sql = "SELECT * FROM {$this->table} where markerId IN ({$marks}) order by markerId asc, seq asc";
+        return $this->getConnection()->fetchAll($sql, $markerIds);
+    }
+
     public function findQuestionMarkersByQuestionId($questionId)
     {
         $sql             = "SELECT * FROM {$this->table} where questionId = ?";

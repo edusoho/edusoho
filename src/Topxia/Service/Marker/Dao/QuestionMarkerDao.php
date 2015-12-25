@@ -14,6 +14,8 @@ interface QuestionMarkerDao
 
     public function findQuestionMarkersByMarkerId($markerId);
 
+    public function findQuestionMarkersByMarkerIds($markerIdss);
+
     public function findQuestionMarkersByQuestionId($questionId);
 
     public function addQuestionMarker($questionMarker);

@@ -28,6 +28,11 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->getQuestionMarkerDao()->findQuestionMarkersByMarkerId($markerId);
     }
 
+    public function findQuestionMarkersByMarkerIds($markerIds)
+    {
+        return $this->getQuestionMarkerDao()->findQuestionMarkersByMarkerIds($markerIds);
+    }
+
     public function findQuestionMarkersByQuestionId($questionId)
     {
         return $this->getQuestionMarkerDao()->findQuestionMarkersByQuestionId($questionId);
