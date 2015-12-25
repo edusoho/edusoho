@@ -29,6 +29,7 @@ class BuildCommand extends BaseCommand
         $this->buildWebDirectory();
         $this->buildPluginsDirectory();
         $this->buildFixPdoSession();
+        $this->buildFixPluginAppUpgradeTemplate();
         $this->buildDefaultBlocks();
         $this->cleanMacosDirectory();
 
@@ -357,6 +358,15 @@ class BuildCommand extends BaseCommand
 
         $targetPath = "{$this->distDirectory}/vendor2/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PdoSessionHandler.php";
         $sourcePath = __DIR__."/Fixtures/PdoSessionHandler.php";
+        $this->filesystem->copy($sourcePath, $targetPath, true);
+    }
+
+    public function buildFixPluginAppUpgradeTemplate()
+    {
+        $this->output->writeln('build fix PluginAppUpgradeTemplate .');
+
+        $targetPath = "{$this->distDirectory}/vendor2/symfony/symfony/src/Symfony/Component/HttpFoundation/Session/Storage/Handler/PluginAppUpgradeTemplate.php";
+        $sourcePath = __DIR__."/Fixtures/PluginAppUpgradeTemplate.php";
         $this->filesystem->copy($sourcePath, $targetPath, true);
     }
 
