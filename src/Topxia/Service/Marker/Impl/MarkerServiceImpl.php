@@ -39,8 +39,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
 
         foreach ($markers as $index => $marker) {
             if (!empty($questionMarkerGroups[$marker['id']])) {
-                $markers[$index]['questiomMarkers'] = $questionMarkerGroups[$marker['id']];
-                $markers[$index]['position']        = '169px';
+                $markers[$index]['questionMarkers'] = $questionMarkerGroups[$marker['id']];
             }
         }
 
