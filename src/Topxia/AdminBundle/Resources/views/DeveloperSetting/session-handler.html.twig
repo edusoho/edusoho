@@ -1,0 +1,53 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% block title %}Redis Setting - {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="page-header"><h1>Session Handle Setting</h1></div>
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post" novalidate>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      {{ radios('mode', {'pdo':'pdo', 'redis':'redis', 'native':'native'}, sessionHandler.mode|default('pdo')) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <textarea class="form-control" rows="10" name="setting">{{ sessionHandler.setting }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="controls col-md-12">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+</form>
+
+<div class="alert alert-danger">
+  {% verbatim %}
+    <h4>注意事项</h4>
+    <ul>
+      <li>
+        redis配置案例：{
+          "default" :{
+            "host": "127.0.0.1",
+            "port": 6379,
+            "timeout": 1,
+            "reserved": null,
+            "retry_interval": 100
+          }
+        }
+    </li>
+    </ul>
+  {% endverbatim %}
+</div>
+
+{% endblock %}

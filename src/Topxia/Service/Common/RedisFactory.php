@@ -39,7 +39,7 @@ class RedisFactory
 
     private function getRedisPool()
     {
-        $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/config/redis.php';
+        $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
 
         if (file_exists($redisConfigFile)) {
             $redisConfig     = include $redisConfigFile;
@@ -48,5 +48,10 @@ class RedisFactory
         }
 
         return false;
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
