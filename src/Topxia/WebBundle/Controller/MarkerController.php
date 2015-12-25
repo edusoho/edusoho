@@ -133,20 +133,18 @@ class MarkerController extends BaseController
     }
 
     //获取驻点弹题
-    public function showMarkerQuestionAction(Request $request)
+    public function showMarkerQuestionAction(Request $request, $markerId)
     {
-        $data             = $request->query->all();
-        $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
-        $questions        = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
-        $user             = $this->getUserService()->getCurrentUser();
-        $question         = array();
+        $questions = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
+        $user      = $this->getUserService()->getCurrentUser();
+        $question  = array();
 
         foreach ($questions as $key => $value) {
             $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
 
             if (empty($questionResult)) {
                 $this->getQuestionMarkerResultService()->addQuestionMarkerResult(array(
-                    'markerId'         => $data['markerId'],
+                    'markerId'         => $markerId,
                     'questionMarkerId' => $value['id'],
                     'userId'           => $user['id'],
                     'status'           => 'none',
@@ -163,7 +161,7 @@ class MarkerController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
-            'markerId' => $data['markerId'],
+            'markerId' => $markerId,
             'question' => $question
         ));
     }
