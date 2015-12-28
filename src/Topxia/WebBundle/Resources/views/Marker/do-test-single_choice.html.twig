@@ -22,7 +22,7 @@
 				<input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key ==  answerChoiceIndex %}checked="checked"{% endif %}>{{ choiceIndex }}</label>
 			{% endfor %}
 		</div>
-		<input id="data" data-markerid="{{markerId}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-answer="{{question.answer[0]}}" hidden="hidden">
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
 		<button id="submitQuestion" class="btn btn-success btn-sm">提交</button>
 	</div>
 </div>

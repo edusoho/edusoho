@@ -25,8 +25,18 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->updateQuestionMarkerResult($id, $result);
     }
 
-    public function finishCurrentQuestion($userId, $questionMarkerId, $status)
+    public function finishCurrentQuestion($userId, $questionMarkerId, $answer, $type)
     {
+        if ($type == 'single_choice') {
+            $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
+            $status         = in_array($answer, $questionMarker['answer']) ? 'right' : 'wrong';
+        }
+
+        if ($type == 'uncertain_choice') {
+            $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
+            $status         = in_array($answer, $questionMarker['answer']) ? 'right' : 'wrong';
+        }
+
         $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
         $this->updateQuestionMarkerResult($questionMarkerResult['id'], array(
             'status'      => $status,
@@ -54,4 +64,8 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->createDao('Marker.QuestionMarkerResultDao');
     }
 
+    protected function getQuestionMarkerService()
+    {
+        return $this->createService('Marker.QuestionMarkerService');
+    }
 }
