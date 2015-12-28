@@ -291,6 +291,24 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("ready", function(){
+                          var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                          var markersUrl =  '/course/lesson/'+lesson.id+'/marker/show';
+                           $.ajax({
+                            type: "get",
+                            url: markersUrl,
+                            dataType: "json",
+                            success:function(data){
+                              for(var index in data) {
+                                var marker={
+                                  "id":data[index].id,
+                                  "time":data[index].second,
+                                  "text":"ads",
+                                  "finished":data[index].finish
+                                };
+                                player.addMarker([marker]);
+                              }
+                            }
+                          });
                         });
 
                         messenger.on("ended", function(){
@@ -311,6 +329,26 @@ define(function(require, exports, module) {
                             player.playing = false;
                             that.set("player", player);
                         });
+
+                        messenger.on("doNextQuestionMarker", function(marker){
+                            var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                            if(player.isPlaying()){
+                              player.pause();
+                            }
+                            $.get('/course/lesson/'+marker.markerId+'/questionmarker/show','',function(data){
+                                // $('.vjs-break-overlay-text').html(data);
+                                var $modal = $('.modal');
+                                if (data == "") {
+                                    $modal.hide();
+                                    player.finishMarker(marker.markerId);
+                                } else {
+                                    $modal.html(data);
+                                    $modal.show();
+                                }
+                            });
+                        });
+
+
                         that.set("player", {});
 
                     } else {

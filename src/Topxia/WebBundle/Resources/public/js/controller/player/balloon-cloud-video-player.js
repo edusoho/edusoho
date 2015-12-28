@@ -58,29 +58,9 @@ define(function(require, exports, module) {
                             markerTip: {
                                display: false
                             },
-                            breakOverlay:{
-                               display: true,
-                               displayTime: 1,
-                               text: function(marker) {
-                                  return "Break overlay: " + marker.text;
-                               },
-                               style: {
-                                  'width':'100%',
-                                  'bottom': '60px',
-                                  'background-color': 'rgba(0,0,0,0.7)',
-                                  'color': 'white',
-                                  'font-size': '17px'
-                               }
-                            },
                             onMarkerReached:function(marker,player){
                               if(self.isPlaying() && marker.finished == false){
-                                player.pause();
-                                $.get('/course/lesson/'+marker.id+'/questionmarker/show',{"markerId":marker.id},function(data){
-                                   var $modal = $(window.parent.document).find('.modal');
-                                   $modal.html(data);
-                                   $modal.show();
-                                    // $('.vjs-break-overlay-text').html(data);
-                                });
+                                window.BalloonPlayer.trigger('doNextQuestionMarker', marker.id);
                               }
                             }
                         }
@@ -157,7 +137,6 @@ define(function(require, exports, module) {
                     self.trigger("paused", e);
                 });
                 
-
                 self.set('player', player);
 
                 BalloonCloudVideoPlayer.superclass.setup.call(self);
