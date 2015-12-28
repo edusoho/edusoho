@@ -5,6 +5,7 @@ CREATE TABLE `article` (
   `title` varchar(255) NOT NULL COMMENT '文章标题',
   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '栏目',
   `tagIds` tinytext COMMENT 'tag标签',
+  `attachmentIds` TINYTEXT CHARACTER SET utf8 NULL,
   `source` varchar(1024) DEFAULT '' COMMENT '来源',
   `sourceUrl` varchar(1024) DEFAULT '' COMMENT '来源URL',
   `publishedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '发布时间',
