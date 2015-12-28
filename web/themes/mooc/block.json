@@ -137,7 +137,7 @@
     },
     "mooc:footer_link":
     {
-        "title": "慕课主题:底部合作伙伴",
+        "title": "慕课主题：底部合作伙伴",
         "category": "mooc",
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
@@ -186,9 +186,35 @@
             }
         }
     },
+    "mooc:login_background":
+    {
+        "title": "慕课主题：登陆页面.背景图 ",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/login.background.template.html.twig",
+        "items": {
+            "posters":{
+                "title":"背景",
+                "desc":"背景",
+                "count":1,
+                "type":"poster",
+                "default":[
+                    {
+                        "src" : "\/themes\/mooc\/img\/banner1.jpg",
+                        "alt" : "背景",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    }
+                ]
+            }
+        }
+    },
     "mooc:bottom_info":
     {
-        "title": "慕课主题: 首页底部.链接区域",
+        "title": "慕课主题：首页底部.链接区域",
         "category": "mooc",
         "templateName": "@theme/mooc/block/bottom_info.template.html.twig",
         "items": {
