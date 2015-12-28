@@ -1374,11 +1374,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             $result = $client->getRoomUrl($params, 'root');
         }
 
-        return array('data' => ;
-            array(
-                'lesson' => $lesson,
-                'result' => $result
-            ));
+        return array('data' => array(
+            'lesson' => $lesson,
+            'result' => $result
+        ));
     }
 
     protected function makeSign($string)
