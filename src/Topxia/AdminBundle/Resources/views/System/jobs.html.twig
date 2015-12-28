@@ -35,15 +35,21 @@
 
   <table class="table table-hover" id="log-table">
     <tr>
-      <th width="25%">任务名称</th>
-      <th width="25%">执行周期</th>
-      <th width="25%">下一次执行时间</th>
-      <th width="25%">创建时间</th>
-    </tr>   
+      <th width="5%">编号</th>
+      <th width="20%">任务名称</th>
+      <th width="10%">执行周期</th>
+      <th width="20%">下一次执行时间</th>
+      <th width="20%">创建时间</th>
+      <th width="20%">运行状态</th>
+    </tr>
     {% for job in jobs %}
       <tr>
         <td>
+          {{ job.id }}
+        </td>
+        <td>
           {{ job.name }}
+        </td>
         <td>
           {{ dict_text('jobCycle',job.cycle) }}
         </td>
@@ -52,6 +58,9 @@
         </td>
         <td>
           {% if job.createdTime %}{{ job.createdTime|date('Y-m-d H:i:s') }}{% else %}--{% endif %}
+        </td>
+        <td>
+          {% if job.executing == 1 %}运行中{% elseif job.executing == 0 %}等待{% endif %}
         </td>
       </tr>
     {% else %}
