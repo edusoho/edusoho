@@ -106,7 +106,6 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $formData['content'] = $content;
         unset($formData['imageCount']);
         $post                = $this->controller->getThreadService()->createPost($formData);
-        $post                = $this->controller->getThreadService()->createPost($formData);
         $post['createdTime'] = Date('c', $post['createdTime']);
         return $post;
     }
