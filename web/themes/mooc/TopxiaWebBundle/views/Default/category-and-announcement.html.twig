@@ -1,0 +1,24 @@
+<h1>分类</h1>
+{# {% set categories = data('Categories',{'count':config.count|default(8)}) %} #}
+
+{% set categories = data('Categories',{'group':'course', 'parentId':0}) %}
+	{% if categories %}
+		{% for category in categories %}
+			<span class="text-muted"><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></span>
+		{% endfor %}
+	{% else %}
+		暂无分类
+	{% endif %}
+</br>
+{# <h1>通知</h1>
+</br> #}
+<h1>公告</h1>
+{% set announcements = data('Announcement',{ count:3 }) %}
+	{% if announcements %}
+		{% for announcement in announcements %}
+			<a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a>
+		{% endfor %}
+	{% else %}
+		<div>暂无公告</div>
+	{% endif %}
+</br>
