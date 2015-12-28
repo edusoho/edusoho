@@ -238,7 +238,6 @@ define(function(require, exports, module) {
 			//totalPrice = afterDiscountCourses(totalPrice);
 			
 			data.amount = totalPrice;
-			
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				$('[role="code-notify"]').css("display","inline-block");
 				if(data.useable == "no") {
@@ -264,11 +263,21 @@ define(function(require, exports, module) {
 			var coupon = $(this).children('option:selected');
 			if(coupon.data('code') == "")
 			{
+			
+				var coinNum = $('[role="total-price"]').text();
+				coinNum = parseFloat(coinNum);
+				var currentCash = parseFloat($('[role="accountCash"]').text());
 
+				if(currentCash < coinNum){
+					coinNum = currentCash;
+				}
+
+				$('[role="coinNum"]').val(coinNum);
+				$('[role="password-input"]').show();
+				$('#payPassword').focus();
 				$('[role="cancel-coupon"]').trigger('click');
 				return;
 			}
-
 			couponCode = $('[role="coupon-code-input"]');
 			couponCode.val(coupon.data('code'));
 			$('button[role="coupon-use"]').trigger('click');

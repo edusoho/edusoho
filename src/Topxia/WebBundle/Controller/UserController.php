@@ -385,39 +385,6 @@ class UserController extends BaseController
         ));
     }
 
-    protected function getTargetPath($request)
-    {
-        if ($request->query->get('goto')) {
-            $targetPath = $request->query->get('goto');
-        } elseif ($request->getSession()->has('_target_path')) {
-            $targetPath = $request->getSession()->get('_target_path');
-        } else {
-            $targetPath = $request->headers->get('Referer');
-        }
-
-        if ($targetPath == $this->generateUrl('login')) {
-            return $this->generateUrl('homepage');
-        }
-
-        $url = explode('?', $targetPath);
-
-        if ($url[0] == $this->generateUrl('partner_logout')) {
-            return $this->generateUrl('homepage');
-        }
-
-        if ($url[0] == $this->generateUrl('password_reset_update')) {
-            $targetPath = $this->generateUrl('homepage');
-        }
-
-        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob')) ||
-            $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
-        ) {
-            $targetPath = $this->generateUrl('homepage');
-        }
-
-        return $targetPath;
-    }
-
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
