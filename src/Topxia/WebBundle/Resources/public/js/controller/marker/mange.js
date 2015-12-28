@@ -167,7 +167,7 @@ define(function(require, exports, module) {
             //将li移除，放回原位，然后list重新排序{
             // $list_item.appendTo($(this.get("subject_lesson_list")));
             //移除的li不再放回到右边；
-
+            $list_item.remove();
             this._sortList($list);
 
             //判断当前子元数小于0移除蓝色的时间挫；
@@ -371,6 +371,8 @@ define(function(require, exports, module) {
                         $li.appendTo($lesson_list);
                     }
                 }
+                var $list = $editbox.find('.lesson-list');
+                this._newSortList($list);
             }
         },
         _sortList: function($list) {
@@ -399,6 +401,7 @@ define(function(require, exports, module) {
                             };
                             markerJson.id = $scale.attr('id');
                             var arry = [];
+                            _obj._sortList($scale.find('.lesson-list'));
                             $scale.find(".lesson-list .item-lesson").each(function() {
                                 var questionMarkers = {
                                     'id': $(this).attr('id'),
