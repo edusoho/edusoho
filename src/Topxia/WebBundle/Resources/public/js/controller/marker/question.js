@@ -179,7 +179,7 @@ define(function(require, exports, module) {
             // }
         },
         updateSeq:function($scale,markerJson) {
-            console.log(questionMarkers_id);
+            // console.log(questionMarkers_id);
             var url = $('.toolbar-question-marker').data('queston-marker-sort-url');
 
             // var markerJson = {
