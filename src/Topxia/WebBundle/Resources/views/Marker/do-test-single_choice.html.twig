@@ -1,30 +1,28 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-<div class="question-heading editor-text">
-	{% if question.type == 'single_choice' %}（单选）{% elseif question.type == 'choice' %}（多选）{% endif %}{{ question.stem|bbCode2Html|raw }}
-</div>
-<div class="question-body clearfix">
-	<ul class="question-choices">
-		{% for key, choice in question.metas.choices %}
-	{% set choiceIndex = (65+key)|chr %}
-		<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
-			<div class="choice-index">{{ choiceIndex }}.</div>
-			<div class="choice-body editor-text">{{ choice|bbCode2Html|raw }}</div>
-		</li>
-		{% endfor %}
-	</ul>
-	{% if question.answer|default(null) %}
-			{% set answerChoiceIndex = question.answer[0]|chr %}
-		{% else %}
-			{% set answerChoiceIndex = '-1' %}
-	{% endif %}
-	<div class="question-choices-inputs">
-		{% for key, choice in question.metas.choices %}
-	{% set choiceIndex = (65+key)|chr %}
-		<label class="radio-inline">
-			<input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key ==  answerChoiceIndex %}checked="checked"{% endif %}>{{ choiceIndex }}</label>
-		{% endfor %}
+	<div class="question-heading editor-text">（单选）{{ question.stem|bbCode2Html|raw }}</div>
+	<div class="question-body clearfix">
+		<ul class="question-choices">
+			{% for key, choice in question.metas.choices %}
+		{% set choiceIndex = (65+key)|chr %}
+			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
+				<div class="choice-index">{{ choiceIndex }}.</div>
+				<div class="choice-body editor-text">{{ choice|bbCode2Html|raw }}</div>
+			</li>
+			{% endfor %}
+		</ul>
+		{% if question.answer|default(null) %}
+				{% set answerChoiceIndex = question.answer[0]|chr %}
+			{% else %}
+				{% set answerChoiceIndex = '-1' %}
+		{% endif %}
+		<div class="question-choices-inputs">
+			{% for key, choice in question.metas.choices %}
+		{% set choiceIndex = (65+key)|chr %}
+			<label class="radio-inline">
+				<input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key ==  answerChoiceIndex %}checked="checked"{% endif %}>{{ choiceIndex }}</label>
+			{% endfor %}
+		</div>
+		<input id="data" data-markerid="{{markerId}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-answer="{{question.answer[0]}}" hidden="hidden">
+		<button id="submitQuestion" class="btn btn-success btn-sm">提交</button>
 	</div>
-	<input id="data" data-markerid="{{markerId}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-answer="{{question.answer[0]}}" hidden="hidden">
-	<button id="submitQuestion" class="btn btn-success btn-sm">提交</button>
-</div>
 </div>
