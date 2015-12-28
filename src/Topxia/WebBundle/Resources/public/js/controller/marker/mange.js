@@ -401,6 +401,7 @@ define(function(require, exports, module) {
                             };
                             markerJson.id = $scale.attr('id');
                             var arry = [];
+                            _obj._sortList($scale.find('.lesson-list'));
                             $scale.find(".lesson-list .item-lesson").each(function() {
                                 var questionMarkers = {
                                     'id': $(this).attr('id'),
