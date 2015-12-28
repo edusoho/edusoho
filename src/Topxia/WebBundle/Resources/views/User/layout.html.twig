@@ -16,7 +16,6 @@
 {% block content %}
 <div class="es-section">
   <ul class="nav nav-tabs clearfix">
-    <li><a href="">个人简介</a></li>
   	{% if 'ROLE_TEACHER' in user.roles %}
 	    <li {% if pageNav == 'teach' %}class="active"{% endif %}><a href="{{ path('user_teach', {id: user.id}) }}">在教课程</a></li>
     {% endif %}
