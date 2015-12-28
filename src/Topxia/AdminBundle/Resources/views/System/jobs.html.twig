@@ -60,7 +60,7 @@
           {% elseif job.targetType == 'lesson' %}
             {% set lesson = data('CourseLesson',{'lessonId':job.targetId}) %}
             {% set course = data('Course',{'courseId':lesson.courseId}) %}
-            课程：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.name}}</a>》,课时：{{lesson.name}}
+            课程：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.name}}</a>》,课时：{{lesson.title}}
           {% else %}--{% endif %}
         </td>
         <td>
