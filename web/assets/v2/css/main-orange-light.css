@@ -5,6 +5,9 @@
 /* =========================== img =========================== */
 /* =========================== color =========================== */
 /* =========================== media =========================== */
+.group-page-header h4 {
+  border-bottom: none;
+}
 .group-page .grouplist {
   height: 120px;
   width: 76px;
@@ -5347,6 +5350,21 @@ a.homework-essay-textarea-pack-up {
   margin-right: 5px;
   font-size: 14px;
 }
+.group-page-header {
+  border-bottom: none;
+  position: relative;
+  padding: 0 15px;
+  font-size: 16px;
+}
+.group-page-header:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 0;
+  height: 16px;
+  width: 5px;
+  background: #f9b469;
+}
 .media-dynamic:last-child .media-body {
   border: none;
 }
@@ -6196,7 +6214,7 @@ textarea {
   margin-right: 5px;
 }
 .nav-pills > li > a {
-  padding: 10px 15px;
+  padding: 10px 27px;
   color: #616161;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -12076,9 +12094,6 @@ textarea {
   font-size: 18px;
   margin-bottom: 20px;
   color: #fff;
-}
-.user-center-header .actions .btn + .btn {
-  margin-left: 20px;
 }
 .user-center-header .user-about {
   float: left;
