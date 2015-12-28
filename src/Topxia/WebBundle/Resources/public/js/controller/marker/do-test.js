@@ -1,14 +1,27 @@
 define(function(require, exports, module) {
     exports.run = function() {
-        var $close = $(".modal-header .close");
-        var $btn =$('#submitQuestion');
-        var $data = $("#data");
-        var markerId = $data.data('markerid');
-        var questionId = $data.data('questionid');
-        $btn.on('click', function() {
-            $.get($data.data('url'), {
+        // var close = $(".modal-header .close");
+        var btn =$('#submitQuestion');
+        var data = $("#data");
+        var markerId = data.data('markerid');
+        var questionId = data.data('questionid');
+        btn.on('click', function() {
+        	var status = "none";
+        	var answer = data.data('answer');
+			    	var answers = $("input[name='answer["+questionId+"]']");
+				    for(var i=0;i<4;i++) {
+				    	if(answers[i].checked) {
+								if(answers[i].value == answer)	{
+				    			status = "right";
+				    		} else {
+				    			status = "wrong"
+				    		}
+				    	}
+				    }
+            $.get(data.data('url'), {
                 "markerId": markerId,
-                "questionId": questionId
+                "questionId": questionId,
+                "status": status
             }, function(data) {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 player.trigger('doNextQuestionMarker', data);
@@ -19,8 +32,8 @@ define(function(require, exports, module) {
                 $(this).attr("checked", "checked").parent().siblings().find("input").removeAttr("checked");
             }
         });
-        $close.on('click',function() {
-            $(".modal").html("").hide();
-        });
+        // close.on('click',function() {
+        //     $(".modal").html("").hide();
+        // });
     }
 });
