@@ -112,21 +112,24 @@
                         "value" : "横幅1介绍",
                         "src" : "\/themes\/mooc\/img\/feature_1.png",
                         "desc": "建议图片大小为130*130",
-                        "alt" : "横幅1"
+                        "alt" : "横幅1",
+                        "href": ""
                     },
                     {
                         "title" : "横幅2标题",
                         "value" : "横幅2介绍",
                         "src" : "\/themes\/mooc\/img\/feature_2.png",
                         "desc": "建议图片大小为130*130",
-                        "alt" : "横幅2"
+                        "alt" : "横幅2",
+                        "href": ""
                     },
                     {
                         "title" : "横幅3标题",
                         "value" : "横幅3介绍",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
                         "desc": "建议图片大小为130*130",
-                        "alt" : "横幅3"
+                        "alt" : "横幅3",
+                        "href": ""
                     }
                 ]
             }
@@ -138,26 +141,46 @@
         "category": "mooc",
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
+            "text": {
+                "title": "合作伙伴文本标题",
+                "desc": "",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "Edusoho高教版"
+                    }
+                ]
+            },
             "partners": {
                 "title": "友情链接",
                 "desc": "最大可设置28个",
-                "count": 28,
-                "type": "link",
+                "count": 10,
+                "type": "banner",
                 "default": [
                     {
-                        "value": "EduSoho",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
+                        "title" : "合作伙伴1名称",
+                        "value" : "合作伙伴1介绍",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "合作伙伴1",
+                        "href": ""
                     },
                     {
-                        "value": "气球鱼学院",
-                        "href": "http:\/\/www.qiqiuyu.com\/",
-                        "target": "_blank"
+                        "title" : "合作伙伴2名称",
+                        "value" : "合作伙伴2介绍",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "合作伙伴2",
+                        "href": ""
                     },
                     {
-                        "value": "好知网",
-                        "href": "http:\/\/www.howzhi.com\/",
-                        "target": "_blank"
+                        "title" : "合作伙伴3名称",
+                        "value" : "合作伙伴3介绍",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "合作伙伴3",
+                        "href": ""
                     }
                 ]
             }
