@@ -337,7 +337,7 @@ define(function(require, exports, module) {
                             }
                             $.get('/course/lesson/'+marker.markerId+'/questionmarker/show','',function(data){
                                 // $('.vjs-break-overlay-text').html(data);
-                                var $modal = $('.modal');
+                                var $modal = $("#modal");
                                 if (data == "") {
                                     $modal.hide();
                                     player.finishMarker(marker.markerId);
