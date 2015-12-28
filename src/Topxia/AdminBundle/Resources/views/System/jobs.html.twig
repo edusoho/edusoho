@@ -57,6 +57,10 @@
           {% elseif job.targetType == 'classroom' %}
             {% set classroom = data('Classroom',{'classroomId':job.targetId}) %}
             班级：《<a href="{{path('classroom_show', {id:classroom.id})}}" target='_blank'>{{classroom.name}}</a>》
+          {% elseif job.targetType == 'lesson' %}
+            {% set lesson = data('CourseLesson',{'lessonId':job.targetId}) %}
+            {% set course = data('Course',{'courseId':lesson.courseId}) %}
+            课程：《<a href="{{path('course_show', {id:course.id})}}" target='_blank'>{{course.name}}</a>》,课时：{{lesson.name}}
           {% else %}--{% endif %}
         </td>
         <td>
