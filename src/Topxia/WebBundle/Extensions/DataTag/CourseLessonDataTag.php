@@ -20,8 +20,6 @@ class CourseLessonDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         $this->checkLessonId($arguments);
-        $lessons = $this->getCourseService()->getLesson($arguments['lessonId']);
-
-        return $this->getCoursesAndUsers($lessons);
+        return $this->getCourseService()->getLesson($arguments['lessonId']);
     }
 }
