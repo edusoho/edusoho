@@ -40,7 +40,6 @@
       <th width="10%">执行周期</th>
       <th width="20%">下一次执行时间</th>
       <th width="20%">创建时间</th>
-      <th width="20%">运行状态</th>
     </tr>
     {% for job in jobs %}
       <tr>
@@ -58,9 +57,6 @@
         </td>
         <td>
           {% if job.createdTime %}{{ job.createdTime|date('Y-m-d H:i:s') }}{% else %}--{% endif %}
-        </td>
-        <td>
-          {% if job.executing == 1 %}运行中{% elseif job.executing == 0 %}等待{% endif %}
         </td>
       </tr>
     {% else %}
