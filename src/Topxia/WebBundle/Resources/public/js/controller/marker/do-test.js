@@ -7,7 +7,8 @@ define(function(require, exports, module) {
         var questionId = data.data('questionid');
         btn.on('click', function() {
         	var status = "none";
-			    	var answers = data.data('answer');
+        	var answer = data.data('answer');
+			    	var answers = $("input[name='answer["+questionId+"]']");
 				    for(var i=0;i<4;i++) {
 				    	if(answers[i].checked) {
 								if(answers[i].value == answer)	{
@@ -19,7 +20,7 @@ define(function(require, exports, module) {
 				    }
             $.get(data.data('url'), {
                 "markerId": markerId,
-                "questionId": questionId
+                "questionId": questionId,
                 "status": status
             }, function(data) {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
