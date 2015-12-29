@@ -18,9 +18,7 @@ define(function(require, exports, module) {
             });
         });
         $(".marker-modal .question-single_choice li").on('click', function() {
-            console.log("type");
             var $this = $(this).find('input');
-            console.log($this);
             if (!$this.is(':checked')) {
                 $this.prop("checked", true);
                 $this.attr("checked", "checked");
@@ -29,7 +27,7 @@ define(function(require, exports, module) {
         });
         $(".marker-modal .question-uncertain_choice li").on("click", function(){
             var $this = $(this).find('input');
-            if($this.is(':checked')) {
+            if(!$this.is(':checked')) {
                 $this.prop("checked", true);
                 $this.attr("checked", "checked");
             } else {

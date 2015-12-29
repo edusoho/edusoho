@@ -23,6 +23,7 @@ define(function(require, exports, module) {
         messenger.on("ready", function(){
             var player = window.frames["viewerIframe"].window.BalloonPlayer;
             var markersUrl =  '/course/lesson/'+lessonId+'/marker/show';
+            player.setMarkerEscepe(false);
              $.ajax({
                 type: "post",
                 url: markersUrl,

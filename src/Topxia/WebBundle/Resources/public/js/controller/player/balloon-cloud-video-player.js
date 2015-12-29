@@ -12,7 +12,6 @@ define(function(require, exports, module) {
             dynamicSource: '',
             markers: [{id:0,time:-1,text:'',finished:true}],
             starttime: '0',
-            mode:'play',
             timelimit:'0'
         },
 
@@ -59,6 +58,7 @@ define(function(require, exports, module) {
                             markerTip: {
                                display: false
                             },
+                            markerEscape: true,
                             onMarkerReached:function(marker,player){
                               if(self.isPlaying() && marker.finished == false){
                                 window.BalloonPlayer.trigger('onMarkerReached', marker.id);
@@ -211,9 +211,9 @@ define(function(require, exports, module) {
             return false;
         },
 
-        setModelTrue: function() {
-            this.model = true;
-            return;
+        setMarkerEscepe: function(mode) {
+            var player = this.get("player");
+            player.markers.setMarkerEscape(mode);
         },
 
         destroy: function() {

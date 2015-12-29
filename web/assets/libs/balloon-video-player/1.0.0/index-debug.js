@@ -12547,6 +12547,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               'font-size': '17px'
            }
         },
+        markerEscape:true,
         onMarkerClick: function(marker) {},
         onMarkerReached: function(marker) {},
         markers: []
@@ -12583,6 +12584,10 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            markersList.sort(function(a, b){
               return setting.markerTip.time(a) - setting.markerTip.time(b);
            });
+        }
+
+        function setMarkerEscape(mode) {
+          return setting.markerEscape = mode;
         }
         
         function addMarkers(newMarkers) {
@@ -12781,8 +12786,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            var fastMarkerTime = getFastMarkerTime();
            var currentTime = player.currentTime();
            var newMarkerIndex;
-           
-           if(fastMarkerTime>0 && currentTime>fastMarkerTime && player.model){
+           if(fastMarkerTime>0 && currentTime>fastMarkerTime && setting.markerEscape){
              // if(!player.paused()){
              //   player.pause();
              // }
@@ -12912,6 +12916,9 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               markerTip.remove();
               player.off("timeupdate", updateBreakOverlay);
               delete player.markers;
+           },
+           setMarkerEscape: function(mode){
+              setMarkerEscape(mode);
            },
         };
      }

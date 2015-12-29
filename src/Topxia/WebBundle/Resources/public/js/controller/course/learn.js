@@ -292,7 +292,6 @@ define(function(require, exports, module) {
 
                         messenger.on("ready", function(){
                           var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                          player.setModelTrue();
                           var markersUrl =  '/course/lesson/'+lesson.id+'/marker/show';
                            $.ajax({
                             type: "get",
