@@ -189,11 +189,11 @@ directive('imgError', function($timeout) {
                   });
 
                   if ("classroom" == attributes.imgError
-                     && attributes.ngSrc.indexOf("course-large.png") != -1) {
+                     && attributes.imgSrc.indexOf("course-large.png") != -1) {
                     return;
                   }
                   $timeout(function() {
-                    element.attr('src', attributes.ngSrc);
+                    element.attr('src', attributes.imgSrc);
                   }, 100);
                 }
             };
