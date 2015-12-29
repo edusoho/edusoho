@@ -57,7 +57,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
 
             );
             $questionMarkers = $this->findQuestionMarkersByMarkerId($markerId);
-            $this->getQuestionMarkerDao()->updateQuestionMarkersSeq($markerId, $seq);
+            $this->getQuestionMarkerDao()->updateQuestionMarkersSeqBehind($markerId, $seq);
             $questionmarker = $this->getQuestionMarkerDao()->addQuestionMarker($questionMarker);
             //$this->getQuestionMarkerService()->updateQuestionMarkerSeq($questionmarker['seq']);
             return $questionmarker;
@@ -78,6 +78,9 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         }
 
         $this->getQuestionMarkerDao()->deleteQuestionMarker($questionMarker['id']);
+
+        $this->getQuestionMarkerDao()->updateQuestionMarkersSeqForward($questionMarker['markerId'], $questionMarker['seq']);
+
         $questionmarkers = $this->findQuestionMarkersByMarkerId($questionMarker['markerId']);
 
         if (empty($questionmarkers)) {
