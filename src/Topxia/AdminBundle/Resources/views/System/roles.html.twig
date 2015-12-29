@@ -1,21 +1,21 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
-{% block title %}管理后台{% endblock %}
-{% set menu = 'admin_role' %}
-{% set script_controller = 'role/role' %}
-{% block main %}
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% block title %}新增权限{% endblock %}
+{% set role = role|default(null) %}
+
+{% block body %}
 {{ web_macro.flash_messages() }}
 <div class="content_wrap">
-	<div class="zTreeDemoBackground left" data-menus="{{menus}}">
-		<ul id="treeDemo" class="ztree"></ul>
-	</div>
+  <div class="zTreeDemoBackground left" data-menus="{{menus}}">
+    <ul id="treeDemo" class="ztree"></ul>
+  </div>
 </div>
-<form class="form-horizontal" id="role-form" method="post">
+<form class="form-horizontal" id="role-form" method="post" action="{{path('admin_roles_create')}}">
   <div class="form-group">
     <div class="col-md-2 control-label">
       <label for="name">权限名称</label>
     </div>
     <div class="col-md-8 controls">
-      <input type="text" id="name" name="name" class="form-control" value="" placeholder="管理员">
+      <input type="text" id="name" name="name" class="form-control" value="{{role.name|default('')}}" placeholder="管理员" data-url="{{ path('admin_roles_check_name', {exclude:role.name|default('')}) }}">
     </div>
   </div>
   <div class="form-group">
@@ -23,17 +23,17 @@
       <label for="code">CODE</label> 
     </div>
     <div class="col-md-8 controls">
-      <input type="text" id="code" name="pageNums" class="form-control" value="" placeholder="ROLE_ADMIN">
+      <input type="text" id="code" name="code" class="form-control" value="" placeholder="ROLE_ADMIN" data-url="{{ path('admin_roles_check_code', {exclude:role.code|default('')}) }}">
     </div>
   </div>
-  <input type="text" id="menus" class="hide" value="">
-  <div class="form-group">
-    <div class="col-md-2 control-label"></div>
-    <div class="controls col-md-8">
-      <button type="submit" class="btn btn-primary" id="role-submit">提交</button>  
-    </div>
-  </div>
+  <input type="text" id="menus" name="data" class="hide" value="">
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>
 
+{% endblock %}
+
+{% block footer %}
+  <button id="role-submit" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#role-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">关闭</button>
+  <script>app.load('role/create')</script>
 {% endblock %}

@@ -709,9 +709,21 @@ admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
 
-admin_role:
+admin_roles:
     pattern:  /setting/roles
     defaults: { _controller: TopxiaAdminBundle:Role:index }
+
+admin_roles_create:
+    pattern:  /setting/roles/create
+    defaults: { _controller: TopxiaAdminBundle:Role:create }
+
+admin_roles_check_name:
+    pattern:  /setting/roles/checkName
+    defaults: { _controller: TopxiaAdminBundle:Role:checkName }
+
+admin_roles_check_code:
+    pattern:  /setting/roles/checkCode
+    defaults: { _controller: TopxiaAdminBundle:Role:checkCode }
 
 admin_logs_prod:
     pattern:  /setting/logs/prod

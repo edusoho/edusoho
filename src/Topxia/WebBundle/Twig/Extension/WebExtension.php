@@ -106,8 +106,14 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
-            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork'))
+            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
+            new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles'))
         );
+    }
+
+    public function getAdminRoles()
+    {
+        return ServiceKernel::instance()->createService('System.RoleService')->searchRoles(array(), 'created', 0, 1000);
     }
 
     public function isWithoutNetwork()

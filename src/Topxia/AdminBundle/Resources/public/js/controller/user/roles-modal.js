@@ -56,6 +56,14 @@ define(function(require, exports, module) {
             return false;
         });
 
+        $('#old-checkboxs').change(function(){
+            if ($('#admin').prop('checked')) {
+                $('#admin-checkboxs').show();
+            } else {
+                $('#admin-checkboxs').hide();
+            }
+        });
+
 	};
 
 });
