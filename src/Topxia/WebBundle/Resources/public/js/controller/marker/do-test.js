@@ -14,7 +14,7 @@ define(function(require, exports, module) {
                 "type":questionType
             }, function(data) {
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                player.trigger('doNextQuestionMarker', data);
+                player.trigger('onMarkerReached', data);
             });
         });
         $("input[name='answer[" + questionId + "]']").on('click', function() {

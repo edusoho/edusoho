@@ -12,6 +12,7 @@ define(function(require, exports, module) {
             dynamicSource: '',
             markers: [{id:0,time:-1,text:'',finished:true}],
             starttime: '0',
+            mode:'play',
             timelimit:'0'
         },
 
@@ -60,7 +61,7 @@ define(function(require, exports, module) {
                             },
                             onMarkerReached:function(marker,player){
                               if(self.isPlaying() && marker.finished == false){
-                                window.BalloonPlayer.trigger('doNextQuestionMarker', marker.id);
+                                window.BalloonPlayer.trigger('onMarkerReached', marker.id);
                               }
                             }
                         }
@@ -208,6 +209,11 @@ define(function(require, exports, module) {
                 return !this.get("player").paused();
             }
             return false;
+        },
+
+        setModelTrue: function() {
+            this.model = true;
+            return;
         },
 
         destroy: function() {

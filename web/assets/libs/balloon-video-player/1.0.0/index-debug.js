@@ -12782,7 +12782,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            var currentTime = player.currentTime();
            var newMarkerIndex;
            
-           if(fastMarkerTime>0 && currentTime>fastMarkerTime){
+           if(fastMarkerTime>0 && currentTime>fastMarkerTime && player.model){
              // if(!player.paused()){
              //   player.pause();
              // }
