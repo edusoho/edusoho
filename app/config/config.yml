@@ -56,7 +56,7 @@ doctrine:
             enum: Topxia\Common\DoctrineEnumType
         connections:
             default:
-                wrapper_class: 'Topxia\Service\Common\Connection'
+                wrapper_class: Topxia\Service\Common\Connection
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
