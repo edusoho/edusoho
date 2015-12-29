@@ -83,9 +83,15 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         return $this->getQuestionMarker($this->getConnection()->lastInsertId());
     }
 
-    public function updateQuestionMarkersSeq($markerId, $seq)
+    public function updateQuestionMarkersSeqBehind($markerId, $seq)
     {
         $sql = "UPDATE {$this->table} SET seq = seq + 1 WHERE markerId = ? AND seq >= ? ";
+        return $this->getConnection()->executeQuery($sql, array($markerId, $seq));
+    }
+
+    public function updateQuestionMarkersSeqForward($markerId, $seq)
+    {
+        $sql = "UPDATE {$this->table} SET seq = seq - 1 WHERE markerId = ? AND seq >= ? ";
         return $this->getConnection()->executeQuery($sql, array($markerId, $seq));
     }
 

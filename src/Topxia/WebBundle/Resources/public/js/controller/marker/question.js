@@ -157,7 +157,11 @@ define(function(require, exports, module) {
             var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
 
             $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
-                
+                //if(data==true){
+                    if($marker.is(":hidden")) {
+                        $marker.remove();
+                    }
+                //}
                 //console.log(scalejson);
             });
 
@@ -179,6 +183,7 @@ define(function(require, exports, module) {
             // }
         },
         updateSeq:function($scale,markerJson) {
+            console.log(markerJson);
             // console.log(questionMarkers_id);
             var url = $('.toolbar-question-marker').data('queston-marker-sort-url');
 
@@ -190,7 +195,6 @@ define(function(require, exports, module) {
             //         "new_seq": new_seq
             //     }]
             // }  
-            console.log(markerJson);
             if(true) {
                 // 后台： 更据当前的序号编号，重新排序
             }else {
