@@ -17,16 +17,23 @@ define(function(require, exports, module) {
                 player.trigger('doNextQuestionMarker', data);
             });
         });
-        $("input[name='answer[" + questionId + "]']").on('click', function() {
-            if ($(this).is(':checked')) {
-                $(this).attr("checked", "checked").parent().siblings().find("input").removeAttr("checked");
+        $(".marker-modal .question-single_choice li").on('click', function() {
+            console.log("type");
+            var $this = $(this).find('input');
+            console.log($this);
+            if (!$this.is(':checked')) {
+                $this.prop("checked", true);
+                $this.attr("checked", "checked");
+                $(this).siblings().find("input").removeAttr("checked");
             }
         });
-        $("input[name='answer[" + questionId + "][]']").on("click", function(){
-          if($(this).is(':checked')) {
-              $(this).attr("checked", "checked");
-          } else {
-              $(this).removeAttr("checked");
+        $(".marker-modal .question-uncertain_choice li").on("click", function(){
+            var $this = $(this).find('input');
+            if($this.is(':checked')) {
+                $this.prop("checked", true);
+                $this.attr("checked", "checked");
+            } else {
+                $this.removeAttr("checked");
           }
         });
         var doMarkerQuestion = function(type){
