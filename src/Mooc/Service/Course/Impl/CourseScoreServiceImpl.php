@@ -134,8 +134,11 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
             throw $this->createServiceException('成绩发布预告时间，无法更新设置课程评分！');
         }
 
-        $fields['expectPublishTime'] = strtotime($fields['expectPublishTime']);
-        $scoreSetting                = $this->getCourseScoreSettingDao()->updateScoreSetting($courseId, $fields);
+        if (!empty($fields['expectPublishTime'])) {
+            $fields['expectPublishTime'] = strtotime($fields['expectPublishTime']);
+        }
+
+        $scoreSetting = $this->getCourseScoreSettingDao()->updateScoreSetting($courseId, $fields);
         $this->dispatchEvent("scoreSetting.update", $scoreSetting);
 
         return $scoreSetting;
