@@ -12007,6 +12007,19 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+.marker-modal .question-heading {
+  color: #313131;
+  font-size: 16px;
+}
+.marker-modal .question-body {
+  padding-left: 10px;
+}
+.marker-modal .question-choices > li {
+  padding: 10px 0;
+}
+.marker-modal .question-choices > li:hover {
+  background-color: transparent;
+}
 .question-manage {
   background-color: #eeeeee;
 }
