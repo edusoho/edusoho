@@ -3,44 +3,38 @@ date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor2/autoload.php';
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
 use Doctrine\DBAL\DriverManager;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\ParameterBag;
 // use Symfony\Component\Debug\Debug;
 
-// Debug::enable();
-ErrorHandler::register();
-ExceptionHandler::register();
-$paramaters = include __DIR__ . '/config/paramaters.php';
-$paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
+ErrorHandler::register(0);
+ExceptionHandler::register(false);
+$config         = include __DIR__.'/config.php';
+$config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
 $connection = DriverManager::getConnection(array(
-    'dbname' => $paramaters['database_name'],
-    'user' => $paramaters['database_user'],
-    'password' => $paramaters['database_password'],   
-    'host' => $paramaters['database_host'],
-    'driver' => $paramaters['database_driver'],
-    'charset' => 'utf8',
+    'dbname'   => $config['database_name'],
+    'user'     => $config['database_user'],
+    'password' => $config['database_password'],
+    'host'     => $config['database_host'],
+    'driver'   => $config['database_driver'],
+    'charset'  => 'utf8'
 ));
 
-$serviceKernel = ServiceKernel::create($paramaters['environment'], true);
-$serviceKernel->setParameterBag(new ParameterBag($paramaters));
+$serviceKernel = ServiceKernel::create($config['environment'], true);
+$serviceKernel->setParameterBag(new ParameterBag($config));
 $serviceKernel->setConnection($connection);
 // $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
-
-include __DIR__ . '/src/functions.php';
-
+include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
 
 $app->view(function (array $result, Request $request) use ($app) {
     // 兼容气球云搜索的接口
@@ -55,9 +49,9 @@ $app->view(function (array $result, Request $request) use ($app) {
         $result = $obj->filter($result);
     }
     return new JsonResponse($result);
-});
+}
 
-include __DIR__ . '/config/container.php';
+);
 
 $app->before(function (Request $request) use ($app) {
 
@@ -126,7 +120,7 @@ $app->before(function (Request $request) use ($app) {
         setCurrentUser($user);
     }
 
-});
+);
 
 $app->error(function (\Exception $e, $code) {
     return array(
@@ -135,8 +129,10 @@ $app->error(function (\Exception $e, $code) {
             'message' => $e->getMessage(),
         ),
     );
-});
+}
 
-include __DIR__ . '/config/routing.php';
+);
+
+include __DIR__.'/config/routing.php';
 
 $app->run();

@@ -107,8 +107,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
-        $course['updatedTime'] = time();
-        $affected = $this->getConnection()->insert(self::TABLENAME, $course);
+        $course['createdTime'] = time();
+        $course['updatedTime'] = $course['createdTime'];
+        $affected              = $this->getConnection()->insert(self::TABLENAME, $course);
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
