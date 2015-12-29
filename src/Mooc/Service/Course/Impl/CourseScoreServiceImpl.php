@@ -134,7 +134,7 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
             throw $this->createServiceException('成绩发布预告时间，无法更新设置课程评分！');
         }
 
-        if (!empty($fields['expectPublishTime'])) {
+        if (isset($fields['expectPublishTime'])) {
             $fields['expectPublishTime'] = strtotime($fields['expectPublishTime']);
         }
 
