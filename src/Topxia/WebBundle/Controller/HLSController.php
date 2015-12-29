@@ -142,7 +142,7 @@ class HLSController extends BaseController
         $params['key'] = $file['metas2'][$level]['key'];
 
         if (!empty($token['data']['watchTimeLimit'])) {
-            $params['trialSeconds'] = $token['data']['watchTimeLimit'];
+            $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
         $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));

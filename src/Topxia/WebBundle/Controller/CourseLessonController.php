@@ -74,7 +74,7 @@ class CourseLessonController extends BaseController
 
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
-        if (empty($lesson['free']) && empty($course['tryLookable']) && !($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
+        if (empty($lesson['free']) && !(!empty($course['tryLookable']) && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -94,6 +94,7 @@ class CourseLessonController extends BaseController
         }
 
         $hasVideoWatermarkEmbedded = 0;
+        $tryLookTime               = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
