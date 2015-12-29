@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
     exports.run = function() {
-        // var close = $(".modal-header .close");
         var btn =$('#submitQuestion');
         var data = $("#data");
         var markerId = data.data('markerid');
@@ -8,7 +7,6 @@ define(function(require, exports, module) {
         var questionType = data.data('type');
         btn.on('click', function() {
         		var answer = doMarkerQuestion(questionType);
-        		console.log(answer);
             $.get(data.data('url'), {
                 "markerId": markerId,
                 "questionId": questionId,
@@ -31,9 +29,6 @@ define(function(require, exports, module) {
               $(this).removeAttr("checked");
           }
         });
-        // close.on('click',function() {
-        //     $(".modal").html("").hide();
-        // });
         var doMarkerQuestion = function(type){
         	switch(type){
         		case "single_choice" :
@@ -54,11 +49,17 @@ define(function(require, exports, module) {
 				    return answer;
 	        };
 	        function doUncertainChoice(){
-	        	var answers = null;
-	        	answers = $("input[checked=checked]").val();
+	        	var answers = [];
+	        	$("input[name='answer[" + questionId + "][]']:checked").each(function(){ 
+							answers.push($(this).val()); 
+						});
 	        	return answers;
-	        }
-
+	        };
+	        function doDetermine(){
+        		var answer = null;
+	        	answer = $("input[checked=checked]").val();
+				    return answer;
+	        };
         };
     }
 });
