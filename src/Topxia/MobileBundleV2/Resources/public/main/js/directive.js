@@ -367,7 +367,10 @@ directive('uiSliderBox', function($parse) {
               });
 
               slider.on('beforeScrollStart', function(fromIndex, toIndex) {
-
+                if (attrs.scrollChange) {
+                  scope.scrollIndex = toIndex;
+                  $parse(attrs.scrollChange)(scope);
+                }
               });
 
               slider.on('scrollEnd', function() {
@@ -446,13 +449,17 @@ directive('modal', function () {
     },
     link : function(scope, element, attrs) {
       element.addClass("ui-modal");
+      element.addClass("item");
       element.on('click', function(event) {
         scope.$emit("closeTab", {});
+        $(".ui-scroller").css("overflow","scroll");
       });
 
       element.on('touchmove', function(event) {
-        event.preventDefault();
+        //event.preventDefault();
       });
+
+      $(".ui-scroller").css("overflow","hidden");
     }
   }
 }).

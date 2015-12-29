@@ -8,6 +8,33 @@ use Topxia\Common\ArrayToolkit;
 
 class HomeworkManager extends BaseResource
 {
+    public function check(Application $app, Request $request, $homeworkResultId)
+    {
+        $homeworkResource = $app["res.Homework"];
+        $homework = $homeworkResource->result($app, $request, $homeworkResultId);
+
+        if (empty($homework) || isset($homework['error'])) {
+            return $this->error($homework['error']['code'], $homework['error']['message']);
+        }
+
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $checkHomeworkData = $request->request->all();
+            $checkHomeworkData = empty($checkHomeworkData['data']) ? "" : $checkHomeworkData['data'];
+            $this->getHomeworkService()->checkHomework($homeworkResultId, $userId, $checkHomeworkData);
+
+            return $this->createJsonResponse(
+                array(
+                    'courseId' => $courseId,
+                    'lessonId' => $homework['lessonId']
+                )
+            );
+        }
+
+        return $homework;
+    }
+
 	public function teaching(Application $app, Request $request)
     {
         $start = $request->query->get('start', 5);

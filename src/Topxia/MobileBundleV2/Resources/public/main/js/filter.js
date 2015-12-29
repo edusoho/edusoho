@@ -256,6 +256,38 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 		return app.viewFloder  + "img/avatar.png";
 	}
 }]).
+filter('questionResultStatusColor', function() {
+
+	return function(status) {
+		if ("noAnswer" == status) {
+
+		}
+
+		return "wrong";
+	}
+}).
+filter('questionResultStatusIcon', function() {
+
+	return function(status) {
+		if ("noAnswer" == status) {
+
+		}
+
+		return "icon-wrong";
+	}
+}).
+filter('fillAnswer', function() {
+
+	return function(answer, index) {
+		if (!answer) {
+			return "";
+		}
+
+		if (answer[index]) {
+			return "selected";
+		}
+	}
+}).
 filter('coverUserRole', function(AppUtil){
 
 	return function(roles) {

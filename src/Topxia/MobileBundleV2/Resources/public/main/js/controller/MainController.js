@@ -11,6 +11,9 @@ function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $stat
     };
 
     $scope.toggle = function() {
+        if ($scope.platform.native) {
+            return;
+        }
         cordovaUtil.openDrawer("open");
     };
 

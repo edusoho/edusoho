@@ -357,6 +357,16 @@ appProvider.provider('appRouter', function($stateProvider) {
           }
         });
 
+        $stateProvider.state('homeworkCheck', {
+          url: "/homeworkcheck/:homeworkResultId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/homework_check.html",
+              controller : HomeworkCheckController
+            }
+          }
+        });
+
 	    this.initPlugin($stateProvider);
 	}
 

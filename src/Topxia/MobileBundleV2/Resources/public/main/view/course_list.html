@@ -11,7 +11,7 @@
         <li><span class="line">{{ categoryTab.type }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
         <li><span class="line">{{ categoryTab.sort }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
     </ul>
-    <ul class="ui-tab-content tab-display top-tab-header" style="position: fixed;">
+    <div class="ui-tab-content tab-display top-tab-header" style="position: fixed;">
         <li modal>
                   <div class="content category-card">
                       <category-tree ng-if="categoryTree" data="categoryTree" listener="categorySelectedListener">
@@ -39,7 +39,7 @@
             </div>
             <div class="backdrop-bg"></div>
         </li>
-    </ul>
+    </div>
 
     <div class="ui-scroller course-card" ui-scroll data="courses" on-infinite="loadMore(successCallback)">
       <ul class="ui-list ui-border-tb">

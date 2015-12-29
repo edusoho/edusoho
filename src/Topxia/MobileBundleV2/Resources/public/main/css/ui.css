@@ -2347,3 +2347,159 @@ a {
   line-height: 44px;
 }
 /* todo list */
+
+/* ui-homework */
+.ui-homework {
+  background: #f7f7f7;
+}
+
+.ui-homework .ui-slider-content  {
+  position: relative;
+}
+
+.ui-choice {
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+}
+
+.ui-choice .item {
+  width: 32px;
+  display: inline-block;
+  border: solid 1px #bbb;
+  border-radius: 50%;
+  height: 32px;
+  color: #bbb;
+  text-align: center;
+  font-size: 16px;
+  line-height: 32px;
+}
+
+.ui-choice .body {
+  height: 32px;
+  color: #333;
+  font-weight: 400;
+  line-height: 32px;
+  padding-left: 16px;
+  display: inline-block;
+}
+
+.ui-choice li {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.ui-homework .ui-header {
+  height: 48px;
+  line-height: 48px;
+  padding-left: 16px;
+  background-color: #fff;
+  position: relative;
+}
+
+.ui-homework .question-container .header {
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+}
+
+.ui-homework .ui-header .label {
+  right: 16px;
+  position: absolute;
+}
+
+.ui-homework .ui-header .label label {
+  color: #37b97d;
+  font-size: x-large;
+}
+
+.ui-homework .ui-answer .wrong {
+  color: #DB8F6D;
+  border-color: #DB8F6D;
+}
+
+.ui-homework .ui-answer .primary {
+  color: #37b97d;
+  border-color: #37b97d;
+}
+
+.ui-homework .ui-answer .half-success {
+  color: #EA6A6B;
+  border-color: #EA6A6B;
+}
+
+.ui-homework .ui-answer .answer-status-label {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  line-height: 48px;
+  border: solid 1px;
+  text-align: center;
+}
+
+.ui-homework .ui-essay .success-result {
+  background: #FAFAFA;
+  border-top: solid 1px #e0e0e0;
+}
+
+.ui-homework .ui-essay .success-result h4 {
+
+}
+
+.ui-essay .body {
+  padding: 8px;
+  margin-top: 8px;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.ui-essay .success-result {
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+}
+
+.ui-homework .ui-title {
+  padding: 16px;
+}
+
+.ui-choice .selected .item {
+  color: #fff;
+  background: #4B8FE0;
+  border: solid 1px #4B8FE0;
+}
+
+.ui-determine .ui-answer li {
+  width: 40%;
+  padding: 0;
+  margin: 8px;
+  height: 40px;
+  line-height: 40px;
+  border: solid 1px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.ui-determine {
+  position: relative;
+}
+
+.ui-determine .ui-grid-halve {
+  width: 60%;
+  right: 16px;
+  position: absolute;
+}
+
+.ui-fill .body {
+  padding: 8px;
+  border: solid 1px #ddd;
+  background-color: #fff;
+  margin: 16px;
+  width: auto;
+}
+/* ui-homework */
