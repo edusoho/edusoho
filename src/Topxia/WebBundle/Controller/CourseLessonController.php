@@ -851,6 +851,23 @@ class CourseLessonController extends BaseController
         return $this->forward('TopxiaWebBundle:Testpaper:reDoTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
     }
 
+    public function statusBallAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $media  = array();
+
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
+            $media = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return $this->Render('TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig', array(
+            'item'   => $lesson,
+            'course' => $course,
+            'media'  => $media
+        ));
+    }
+
     private function checkTestPaper($lessonId, $testId, $status)
     {
         $user = $this->getCurrentUser();
