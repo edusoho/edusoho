@@ -587,6 +587,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $thread['user']           = $user;
         $thread['createdTime']    = date('c', $thread['createdTime']);
         $thread['latestPostTime'] = date('c', $thread['latestPostTime']);
+        if (isset($thread['updatedTime'])) {
+            $thread['updatedTime'] = date('c', $thread['updatedTime']);
+        }
 
         return $thread;
     }
