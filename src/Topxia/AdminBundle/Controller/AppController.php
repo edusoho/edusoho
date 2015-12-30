@@ -25,7 +25,8 @@ class AppController extends BaseController
         $api = CloudAPIFactory::create('root');
 
         $content = $api->get("/users/{$api->getAccessKey()}/overview");
-        $info    = $api->get('/me');
+
+        $info = $api->get('/me');
 
         $eduSohoOpenClient = new EduSohoOpenClient();
 
@@ -52,13 +53,94 @@ class AppController extends BaseController
         return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
     }
 
+    // public function myCloudOverviewAction(Request $request)
+    // {
+    //     // @apitodo 需改成leaf
+    //     $api = CloudAPIFactory::create('root');
+
+    //     $content = $api->get("/users/{$api->getAccessKey()}/overview");
+    //     $info = $api->get('/me');
+
+    //     if (isset($info['licenseDomains'])) {
+    //         $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+    //     }
+
+    //     $isBinded = $this->getAppService()->getBinded();
+
+    //     $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
+
+    //     $eduSohoOpenClient = new EduSohoOpenClient;
+
+    //     $currentTime = date('Y-m-d', time());
+
+    //     $account = isset($content['account']) ? $content['account'] : null;
+    //     $day     = '';
+
+    //     if (isset($content['account']['arrearageDate']) && $content['account']['arrearageDate'] != 0) {
+    //         $day = ceil((strtotime($currentTime) - $content['account']['arrearageDate']) / 86400);
+    //     }
+
+    //     $user        = isset($content['user']) ? $content['user'] : null;
+    //     $endDate     = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '';
+    //     $startDate   = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '';
+    //     $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) / 86400) : '';
+
+    //     $tlp          = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0;
+    //     $storage      = isset($content['service']['storage']) ? $content['service']['storage'] : null;
+    //     $storageDate  = isset($content['service']['storage']['expire']) ? ceil(($content['service']['storage']['expire'] - strtotime($currentTime)) / 86400) : '';
+    //     $month        = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'], -2) : '';
+    //     $startYear    = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], 0, 4) : '';
+    //     $startMonth   = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], -2) : '';
+    //     $endYear      = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], 0, 4) : '';
+    //     $endMonth     = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], -2) : '';
+    //     $storageStart = $startYear.'.'.$startMonth;
+    //     $storageEnd   = $endYear.'.'.$endMonth;
+
+    //     $live     = isset($content['service']['live']) ? $content['service']['live'] : null;
+    //     $liveDate = isset($content['service']['live']['expire']) ? ceil(($content['service']['live']['expire'] - strtotime($currentTime)) / 86400) : '';
+
+    //     $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null;
+
+    //     $notices = $eduSohoOpenClient->getNotices();
+    //     $notices = json_decode($notices, true);
+
+    //     if ($this->getWebExtension()->isTrial()) {
+    //         $trialHtml = $this->getCloudCenterExperiencePage();
+    //     }
+
+    //     return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
+    //         'content'      => $content,
+    //         'packageDate'  => $packageDate,
+    //         'storageDate'  => $storageDate,
+    //         'startDate'    => $startDate,
+    //         'endDate'      => $endDate,
+    //         'liveDate'     => $liveDate,
+    //         'storageStart' => $storageStart,
+    //         'storageEnd'   => $storageEnd,
+    //         'day'          => $day,
+    //         'month'        => $month,
+    //         'storage'      => $storage,
+    //         'live'         => $live,
+    //         'user'         => $user,
+    //         'sms'          => $sms,
+    //         'account'      => $account,
+    //         "notices"      => $notices,
+    //         'info'         => $info,
+    //         'isBinded'     => $isBinded,
+    //         'email'        => $email,
+    //         'tlp'          => $tlp,
+    //         'trialhtml'    => (isset($trialHtml['content'])) ? $trialHtml['content'] : null
+    //     ));
+    // }
+
     public function myCloudOverviewAction(Request $request)
     {
-        // @apitodo 需改成leaf
         $api = CloudAPIFactory::create('root');
 
-        $content = $api->get("/users/{$api->getAccessKey()}/overview");
-        $info    = $api->get('/me');
+        // $content = $api->get("/users/{$api->getAccessKey()}/overview");
+        $info = $api->get('/me');
+        // var_dump($content);
+        // var_dump($info);
 
         if (isset($info['licenseDomains'])) {
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -69,36 +151,43 @@ class AppController extends BaseController
         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
         $eduSohoOpenClient = new EduSohoOpenClient;
+        $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        // var_dump($s);
 
-        $currentTime = date('Y-m-d', time());
+        // $currentTime = date('Y-m-d', time());
 
-        $account = isset($content['account']) ? $content['account'] : null;
-        $day     = '';
+        // $account = isset($content['account']) ? $content['account'] : null;
+        // $day     = '';
 
-        if (isset($content['account']['arrearageDate']) && $content['account']['arrearageDate'] != 0) {
-            $day = ceil((strtotime($currentTime) - $content['account']['arrearageDate']) / 86400);
-        }
+        // if (isset($content['account']['arrearageDate']) && $content['account']['arrearageDate'] != 0) {
+        //     $day = ceil((strtotime($currentTime) - $content['account']['arrearageDate']) / 86400);
+        // }
+        $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
+        $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
+        $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
+        $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
+        $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
+        $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
+        // $user        = isset($content['user']) ? $content['user'] : null;
+        // $endDate     = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '';
+        // $startDate   = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '';
+        // $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) / 86400) : '';
 
-        $user        = isset($content['user']) ? $content['user'] : null;
-        $endDate     = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '';
-        $startDate   = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '';
-        $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) / 86400) : '';
+        // $tlp          = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0;
+        // $storage      = isset($content['service']['storage']) ? $content['service']['storage'] : null;
+        // $storageDate  = isset($content['service']['storage']['expire']) ? ceil(($content['service']['storage']['expire'] - strtotime($currentTime)) / 86400) : '';
+        // $month        = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'], -2) : '';
+        // $startYear    = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], 0, 4) : '';
+        // $startMonth   = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], -2) : '';
+        // $endYear      = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], 0, 4) : '';
+        // $endMonth     = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], -2) : '';
+        // $storageStart = $startYear.'.'.$startMonth;
+        // $storageEnd   = $endYear.'.'.$endMonth;
 
-        $tlp          = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0;
-        $storage      = isset($content['service']['storage']) ? $content['service']['storage'] : null;
-        $storageDate  = isset($content['service']['storage']['expire']) ? ceil(($content['service']['storage']['expire'] - strtotime($currentTime)) / 86400) : '';
-        $month        = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'], -2) : '';
-        $startYear    = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], 0, 4) : '';
-        $startMonth   = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], -2) : '';
-        $endYear      = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], 0, 4) : '';
-        $endMonth     = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], -2) : '';
-        $storageStart = $startYear.'.'.$startMonth;
-        $storageEnd   = $endYear.'.'.$endMonth;
+        // $live     = isset($content['service']['live']) ? $content['service']['live'] : null;
+        // $liveDate = isset($content['service']['live']['expire']) ? ceil(($content['service']['live']['expire'] - strtotime($currentTime)) / 86400) : '';
 
-        $live     = isset($content['service']['live']) ? $content['service']['live'] : null;
-        $liveDate = isset($content['service']['live']['expire']) ? ceil(($content['service']['live']['expire'] - strtotime($currentTime)) / 86400) : '';
-
-        $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null;
+        // $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null;
 
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
@@ -108,27 +197,33 @@ class AppController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-            'content'      => $content,
-            'packageDate'  => $packageDate,
-            'storageDate'  => $storageDate,
-            'startDate'    => $startDate,
-            'endDate'      => $endDate,
-            'liveDate'     => $liveDate,
-            'storageStart' => $storageStart,
-            'storageEnd'   => $storageEnd,
-            'day'          => $day,
-            'month'        => $month,
-            'storage'      => $storage,
-            'live'         => $live,
-            'user'         => $user,
-            'sms'          => $sms,
-            'account'      => $account,
-            "notices"      => $notices,
-            'info'         => $info,
-            'isBinded'     => $isBinded,
-            'email'        => $email,
-            'tlp'          => $tlp,
-            'trialhtml'    => (isset($trialHtml['content'])) ? $trialHtml['content'] : null
+            // 'content'      => $content,
+            // 'packageDate'  => $packageDate,
+            // 'storageDate'  => $storageDate,
+            // 'startDate'    => $startDate,
+            // 'endDate'      => $endDate,
+            // 'liveDate'     => $liveDate,
+            // 'storageStart' => $storageStart,
+            // 'storageEnd'   => $storageEnd,
+            // 'day'          => $day,
+            // 'month'        => $month,
+            // 'storage'      => $storage,
+            // 'live'         => $live,
+            // 'user'         => $user,
+            // 'sms'          => $sms,
+            // 'account'      => $account,
+            "notices"    => $notices,
+            // 'info'         => $info,
+            'isBinded'   => $isBinded,
+            // 'email'        => $email,
+            // 'tlp'          => $tlp,
+            // 'trialhtml'    => (isset($trialHtml['content'])) ? $trialHtml['content'] : null
+            'cashInfo'   => $cashInfo,
+            'couponInfo' => $couponInfo,
+            'videoInfo'  => $videoInfo,
+            'liveInfo'   => $liveInfo,
+            'smsInfo'    => $smsInfo,
+            'emailInfo'  => $emailInfo
         ));
     }
 
