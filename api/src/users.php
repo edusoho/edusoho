@@ -346,6 +346,7 @@ POST /users/{id}/followers
 $api->post('/{id}/followers', function (Request $request, $id) {
     $method = $request->request->get('method');
     $fromUser = getCurrentUser();
+
     if (!empty($method) && $method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.UserService')->unFollow($fromUser['id'], $id);
     } else {
@@ -358,7 +359,6 @@ $api->post('/{id}/followers', function (Request $request, $id) {
 }
 
 );
-
 
 //获得用户的好友关系
 /*
@@ -391,13 +391,14 @@ follower : toId用户关注了id用户
 friend : 互相关注
  */
 $api->get('/{id}/friendship', function (Request $request, $id) {
-    $user = getCurrentUser();
+    $currentUser = getCurrentUser();
+    $user = convert($id, 'user');
     $toIds = $request->query->get('toIds');
 
     if (!empty($toIds)) {
         $toIds = explode(',', $toIds);
     } else {
-        return array();
+        $toIds = array($currentUser['id']);
     }
 
     foreach ($toIds as $toId) {
@@ -426,4 +427,5 @@ $api->get('/{id}/friendship', function (Request $request, $id) {
 }
 
 );
+
 return $api;
