@@ -73,7 +73,7 @@ define(function(require, exports, module) {
             if($(this).val()=="1"){
                 $('#tryLookTimeGroup').removeClass('hide');
             }else {
-                $('#tryLookTimeGroup').attr('class','hide');
+                $('#tryLookTimeGroup').addClass('hide');
             }
         });
 
