@@ -77,7 +77,6 @@
             <label class="col-md-2 control-label">试看时长</label>
             <div class="col-md-8 controls radios">
                <select name="tryLookTime">
-                  <option></option>
                 {% for minute in 1..10 %}
                   <option value="{{ minute }}" {% if minute == course.tryLookTime %}selected{% endif %}>{{minute}}分钟</option>
                 {% endfor %}

@@ -46,25 +46,6 @@ define(function(require, exports, module) {
             }
         });
 
-        Validator.addRule('tryLookTimeVali', function(options) {
-            
-            var tryLookTime = $('select[name=tryLookTime]').val();
-
-            var tryLookable = $('input[name=tryLookable]:checked').val();
-            if(tryLookable == "1"){
-                return true;
-            }else if(tryLookTime == ''){
-                console.log('return false');
-                return false;
-            }
-            return true;
-        }, '请选择试看时间');
-
-        validator.addItem({
-            element: '[name=tryLookTime]',
-            rule: 'tryLookTimeVali'
-        });
-
         validator.addItem({
             element: '[name="coinPrice"]',
             rule: 'currency',
