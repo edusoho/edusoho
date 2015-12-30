@@ -332,6 +332,17 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return "VipBundle:Vip:orderInfo";
     }
 
+    public function isTargetExist($targetId)
+    {
+        $level = $this->getLevelService()->getLevel($targetId);
+
+        if (empty($level) || $level['enabled'] == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
