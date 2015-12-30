@@ -1,5 +1,4 @@
 <?php
-
 namespace Classroom\Service\Classroom\Impl;
 
 use Topxia\Common\ArrayToolkit;
