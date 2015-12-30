@@ -140,6 +140,9 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function addThread($fields)
     {
+        $fields['createdTime'] = time();
+        $fields['updatedTime'] = $fields['createdTime'];
+
         $affected = $this->getConnection()->insert($this->table, $fields);
 
         if ($affected <= 0) {
@@ -151,6 +154,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
     public function updateThread($id, $fields)
     {
+        $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getThread($id);
@@ -169,7 +173,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
 
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $currentTime = time();
+        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = {$currentTime} WHERE id = ? LIMIT 1";
 
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }

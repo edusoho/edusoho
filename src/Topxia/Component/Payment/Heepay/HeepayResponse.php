@@ -96,7 +96,14 @@ class HeepayResponse extends Response
 
     public function getOrderSn($token)
     {
-        $order = $this->getOrderService()->getOrderByToken($token);
+        if (stripos($token, 'c') !== false) {
+            $order = $this->getOrderService()->getOrderByToken($token);
+        }
+
+        if (stripos($token, 'o') !== false) {
+            $order = $this->getCashOrdersService()->getOrderByToken($token);
+        }
+
         return $order['sn'];
     }
 
@@ -142,5 +149,10 @@ class HeepayResponse extends Response
     protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 }

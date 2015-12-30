@@ -236,8 +236,15 @@ class DefaultController extends BaseController
         }
 
         unset($conditions['orderBy']);
-        $config               = $this->getThemeService()->getCurrentThemeConfig();
-        $config               = $config['confirmConfig']['blocks']['left'][0];
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+        $config = $config['confirmConfig']['blocks']['left'];
+
+        foreach ($config as $template) {
+            if ($template['code'] == "course-grid-with-condition-index") {
+                $config = $template;
+            }
+        }
+
         $config['orderBy']    = $orderBy;
         $config['categoryId'] = $categoryId;
         return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(

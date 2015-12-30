@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
     // require('webuploader');
-    require('ckeditor');
+    require('es-ckeditor');
 
     var EssayQuestion = BaseQuestion.extend({
         setup: function() {
