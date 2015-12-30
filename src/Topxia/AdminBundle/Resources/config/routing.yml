@@ -1075,6 +1075,18 @@ admin_article_delete:
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
 
+admin_invite:
+    pattern:  /invite
+    defaults: { _controller: TopxiaAdminBundle:Invite:index }
+
+admin_invite_detail:
+    pattern:  /invite/detail
+    defaults: { _controller: TopxiaAdminBundle:Invite:inviteDetail }
+
+admin_invite_set:
+    pattern:  /setting/invite
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
+
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }

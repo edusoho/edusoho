@@ -288,6 +288,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
+
+        $this->dispatchEvent('course.thread.elite', new ServiceEvent($thread));
     }
 
     public function uneliteThread($courseId, $threadId)
@@ -387,6 +389,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         //创建post过滤html
         $post['content'] = $this->filterSensitiveWord($this->purifyHtml($post['content']));
         $post            = $this->getThreadPostDao()->addPost($post);
+
+        foreach ($course['teacherIds'] as $teacherId) {
+            if ($teacherId == $post['userId'] && $thread['type'] == 'question') {
+                $this->dispatchEvent('course.thread.teacher_answer', $post);
+            }
+        }
 
         // 高并发的时候， 这样更新postNum是有问题的，这里暂时不考虑这个问题。
         $threadFields = array(

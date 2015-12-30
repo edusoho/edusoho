@@ -233,7 +233,15 @@ interface UserService
     public function parseAts($text);
 
     /**
-     *
+     *  邀请码相关
+     */
+    public function getUserByInviteCode($inviteCode);
+
+    public function findUserIdsByInviteCode($inviteCode);
+
+    public function createInviteCode($userId);
+
+    /**
      * 用户授权
      */
 
