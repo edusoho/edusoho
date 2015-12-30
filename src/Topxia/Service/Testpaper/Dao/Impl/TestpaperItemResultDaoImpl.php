@@ -4,60 +4,61 @@ namespace Topxia\Service\Testpaper\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
 use Topxia\Service\Testpaper\Dao\TestpaperItemResultDao;
-use Doctrine\DBAL\Query\QueryBuilder,
-    Doctrine\DBAL\Connection;
 
 class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultDao
 {
-	protected $table = "testpaper_item_result";
+    protected $table = "testpaper_item_result";
 
     private $serializeFields = array(
-            'answer' => 'json'
+        'answer' => 'json'
     );
 
     public function getItemResult($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql        = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $itemResult = $this->getConnection()->fetchAssoc($sql, array($id));
         return $itemResult ? $this->createSerializer()->unserialize($itemResult, $this->serializeFields) : null;
     }
 
     public function addItemResult($fields)
     {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $fields   = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $fields);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert ItemResult error.');
         }
+
         return $this->getItemResult($this->getConnection()->lastInsertId());
     }
 
-	public function addItemAnswers ($testPaperResultId, $answers, $testPaperId, $userId)
-	{
-		if(empty($answers)){ 
-            return array(); 
+    public function addItemAnswers($testPaperResultId, $answers, $testPaperId, $userId)
+    {
+        if (empty($answers)) {
+            return array();
         }
 
-        $answers = array_map(function($answer){
+        $answers = array_map(function ($answer) {
             return json_encode($answer);
         }, $answers);
 
-        $mark = "(".str_repeat('?,', 4)."? )";
-        $marks = str_repeat($mark.',', count($answers) - 1).$mark;
+        $mark          = "(".str_repeat('?,', 4)."? )";
+        $marks         = str_repeat($mark.',', count($answers) - 1).$mark;
         $answersForSQL = array();
+
         foreach ($answers as $key => $value) {
-        	array_push($answersForSQL, (int)$testPaperId, (int)$testPaperResultId, (int)$userId, (int)$key, $value);
+            array_push($answersForSQL, (int) $testPaperId, (int) $testPaperResultId, (int) $userId, (int) $key, $value);
         }
 
-		$sql = "INSERT INTO {$this->table} (`testId`, `testPaperResultId`, `userId`, `questionId`, `answer`) VALUES {$marks};";
+        $sql = "INSERT INTO {$this->table} (`testId`, `testPaperResultId`, `userId`, `questionId`, `answer`) VALUES {$marks};";
 
-		return $this->getConnection()->executeUpdate($sql, $answersForSQL);
-	}
+        return $this->getConnection()->executeUpdate($sql, $answersForSQL);
+    }
 
-    public function addItemResults ($testPaperResultId, $answers, $testId, $userId)
+    public function addItemResults($testPaperResultId, $answers, $testId, $userId)
     {
-        // if(empty($answers)){ 
-        //     return array(); 
+        // if(empty($answers)){
+        //     return array();
         // }
 
         // $answers = $this->createSerializer()->serializes($answers, $this->serializeFields);
@@ -75,104 +76,110 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
     }
 
     //要不要给这三个字段加上索引呢
-	public function updateItemAnswers ($testPaperResultId, $answers)
-	{
+    public function updateItemAnswers($testPaperResultId, $answers)
+    {
         //事务
-		if(empty($answers)){
-            return array(); 
+
+        if (empty($answers)) {
+            return array();
         }
 
-        $answers = array_map(function($answer){
+        $answers = array_map(function ($answer) {
             return json_encode($answer);
         }, $answers);
 
-        $sql ='';
+        $sql           = '';
         $answersForSQL = array();
 
         $this->getConnection()->beginTransaction();
-        try{
+        try {
             foreach ($answers as $key => $value) {
-            	$sql = "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-            	$answersForSQL = array($value, (int)$key, (int)$testPaperResultId); 
+                $sql           = "UPDATE {$this->table} set `answer` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+                $answersForSQL = array($value, (int) $key, (int) $testPaperResultId);
                 $this->getConnection()->executeQuery($sql, $answersForSQL);
             }
+
             $this->getConnection()->commit();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
         }
-
-	}
-
-    public function updateItemResults ($answers, $testPaperResultId)
-    {
-        //事务
-        if(empty($answers)){ 
-            return array(); 
-        }
-        $sql ='';
-        $answersForSQL = array();
-
-        $this->getConnection()->beginTransaction();
-        try{
-            foreach ($answers as $key => $value) {
-                $sql = "UPDATE {$this->table} set `status` = ?, `score` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-                $answersForSQL = array($value['status'], $value['score'], (int)$key, (int)$testPaperResultId); 
-                $this->getConnection()->executeQuery($sql, $answersForSQL);
-            }
-            $this->getConnection()->commit();
-        }catch(\Exception $e){
-            $this->getConnection()->rollback();
-            throw $e;
-        }
-        
     }
 
-    public function updateItemEssays ($answers, $testPaperResultId)
+    public function updateItemResults($answers, $testPaperResultId)
     {
         //事务
-        if(empty($answers)){
-            return array(); 
+
+        if (empty($answers)) {
+            return array();
         }
-        $sql ='';
+
+        $sql           = '';
         $answersForSQL = array();
 
         $this->getConnection()->beginTransaction();
-        try{
+        try {
             foreach ($answers as $key => $value) {
-                $sql = "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
-                $answersForSQL = array($value['score'], $value['teacherSay'], $value['status'], (int)$key, (int)$testPaperResultId); 
+                $sql           = "UPDATE {$this->table} set `status` = ?, `score` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+                $answersForSQL = array($value['status'], $value['score'], (int) $key, (int) $testPaperResultId);
                 $this->getConnection()->executeQuery($sql, $answersForSQL);
             }
+
             $this->getConnection()->commit();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
         }
-
     }
 
-	public function findTestResultsByItemIdAndTestId ($questionIds, $testPaperResultId)
-	{
-		if(empty($questionIds)){ 
-            return array(); 
+    public function updateItemEssays($answers, $testPaperResultId)
+    {
+        //事务
+
+        if (empty($answers)) {
+            return array();
         }
-        $marks = str_repeat('?,', count($questionIds) - 1) . '?';
+
+        $sql           = '';
+        $answersForSQL = array();
+
+        $this->getConnection()->beginTransaction();
+        try {
+            foreach ($answers as $key => $value) {
+                $sql           = "UPDATE {$this->table} set `score` = ?, `teacherSay` = ?, `status` = ? WHERE `questionId` = ? AND `testPaperResultId` = ?;";
+                $answersForSQL = array($value['score'], $value['teacherSay'], $value['status'], (int) $key, (int) $testPaperResultId);
+                $this->getConnection()->executeQuery($sql, $answersForSQL);
+            }
+
+            $this->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->getConnection()->rollback();
+            throw $e;
+        }
+    }
+
+    public function findTestResultsByItemIdAndTestId($questionIds, $testPaperResultId)
+    {
+        if (empty($questionIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($questionIds) - 1).'?';
 
         $questionIds[] = $testPaperResultId;
 
-        $sql ="SELECT * FROM {$this->table} WHERE questionId IN ({$marks}) AND testPaperResultId = ?";
-        return $this->getConnection()->fetchAll($sql, $questionIds) ? : array();
-	}
+        $sql = "SELECT * FROM {$this->table} WHERE questionId IN ({$marks}) AND testPaperResultId = ?";
+        return $this->getConnection()->fetchAll($sql, $questionIds) ?: array();
+    }
 
-    public function findTestResultsByTestPaperResultId ($testPaperResultId)
+    public function findTestResultsByTestPaperResultId($testPaperResultId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE testPaperResultId = ?";
+        $sql     = "SELECT * FROM {$this->table} WHERE testPaperResultId = ?";
         $results = $this->getConnection()->fetchAll($sql, array($testPaperResultId));
         return $this->createSerializer()->unserializes($results, $this->serializeFields);
     }
 
-    public function findRightItemCountByTestPaperResultId ($testPaperResultId)
+    public function findRightItemCountByTestPaperResultId($testPaperResultId)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE testPaperResultId = ? AND status = 'right' ";
         return $this->getConnection()->fetchColumn($sql, array($testPaperResultId));
@@ -182,10 +189,10 @@ class TestpaperItemResultDaoImpl extends BaseDao implements TestpaperItemResultD
     {
         $this->filterStartLimit($start, $limit);
         $sql = "SELECT * FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong') LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($id)) ? : array();
+        return $this->getConnection()->fetchAll($sql, array($id)) ?: array();
     }
 
-    public function findWrongResultCountByUserId ($id)
+    public function findWrongResultCountByUserId($id)
     {
         $sql = "SELECT COUNT(id) FROM {$this->table} WHERE `userId` = ? AND `status` in ('wrong')";
         return $this->getConnection()->fetchColumn($sql, array($id));
