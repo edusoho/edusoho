@@ -4,9 +4,9 @@
             </h4>
             <p>
               {% if cashInfo.cash|default('0') > 0 %}
-                <span class="text-warning balance">{{cashInfo.cash|default(0) }}</span>元
+                <span class="text-warning balance">{{ cashInfo.cash|default(0) }}</span>元
               {% else %}
-                <span class="text-danger balance">{{cashinfo.cash|default(0) }}</span>元
+                <span class="text-danger balance">{{ cashinfo.cash|default(0) }}</span>元
               {% endif %}
               <a href="{{path('admin_cloud_recharge')}}" class="btn-recharge btn btn-warning" target="_blank">充值</a>
               <a href="{{path('admin_cloud_detail')}}" class="btn btn-link" target="_blank">查看账单</a>  
@@ -20,6 +20,11 @@
                 <p class="text-danger text-sm">您已欠费{{ cashInfo.arrearageDays }}天，教育云服务已暂停，请尽快充值</p>
               {% endif %}
             {% endif %}
+            <hr>
+            <div class="col-md-2">
+            代金券余额: <span class="" >{{ couponInfo.availableMoney|default("0.00") }}</span> 
+            </div> 
+            <div class=""><a href="">激活代金券</a></div>
            {# {% if account %}
            <!--不足50元-->
            {% if 0 < content.account.cash|default(0) and content.account.cash|default(0) < 50 %}
