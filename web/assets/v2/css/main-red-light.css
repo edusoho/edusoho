@@ -6338,7 +6338,7 @@ textarea {
 .es-piece .piece-header {
   position: relative;
   margin: 5px auto 20px auto;
-  padding-right: 30px;
+  padding: 0 30px 0 15px;
   color: #313131;
   font-size: 16px;
 }
@@ -8863,6 +8863,7 @@ textarea {
   font-size: 14px;
   height: 24px;
   line-height: 24px;
+  vertical-align: super;
 }
 .course-detail-header .discount-price .discount:before {
   top: 0;
@@ -9762,6 +9763,16 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+.class-detail-main .piece-header:after,
+.course-detail-main .piece-header:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 4px;
+  height: 16px;
+  background: #fd5f56;
 }
 .class-course-list .course-item {
   margin-top: 30px;

@@ -6338,7 +6338,7 @@ textarea {
 .es-piece .piece-header {
   position: relative;
   margin: 5px auto 20px auto;
-  padding: 0 30px 0 20px;
+  padding: 0 30px 0 15px;
   color: #313131;
   font-size: 16px;
 }
@@ -9769,13 +9769,10 @@ textarea {
   content: "";
   position: absolute;
   left: 0;
-  top: 2px;
+  top: 3px;
   width: 4px;
   height: 16px;
   background: #9e9abd;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
 }
 .class-course-list .course-item {
   margin-top: 30px;
