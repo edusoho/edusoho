@@ -361,6 +361,12 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
     public function isTargetExist($targetId)
     {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        if (empty($classroom) || $classroom['status'] == 'closed') {
+            return false;
+        }
+
         return true;
     }
 

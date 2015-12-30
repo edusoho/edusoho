@@ -336,7 +336,7 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $level = $this->getLevelService()->getLevel($targetId);
 
-        if (!empty($level) || $level['enabled'] == 0) {
+        if (empty($level) || $level['enabled'] == 0) {
             return false;
         }
 

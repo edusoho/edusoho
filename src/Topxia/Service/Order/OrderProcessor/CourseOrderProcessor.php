@@ -233,7 +233,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         $course = $this->getCourseService()->getCourse($targetId);
 
-        if (!empty($course) || $course['status'] == 'closed') {
+        if (empty($course) || $course['status'] == 'closed') {
             return false;
         }
 
