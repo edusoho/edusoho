@@ -171,9 +171,10 @@ class MarkerController extends BaseController
         $data               = $request->query->all();
         $data['markerId']   = isset($data['markerId']) ? $data['markerId'] : 0;
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
-        $data['status']     = isset($data['status']) ? $data['status'] : 'none';
+        $data['answer']     = isset($data['answer']) ? $data['answer'] : null;
+        $data['type']       = isset($data['type']) ? $data['type'] : null;
         $user               = $this->getUserService()->getCurrentUser();
-        $this->getQuestionMarkerResultService()->finishCurrentQuestion($user['id'], $data['questionId'], $data['status']);
+        $this->getQuestionMarkerResultService()->finishCurrentQuestion($user['id'], $data['questionId'], $data['answer'], $data['type']);
         $conditions = array(
             'markerId' => $data['markerId']
         );

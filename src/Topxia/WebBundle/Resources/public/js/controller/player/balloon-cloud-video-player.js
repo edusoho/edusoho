@@ -58,9 +58,10 @@ define(function(require, exports, module) {
                             markerTip: {
                                display: false
                             },
+                            markerEscape: true,
                             onMarkerReached:function(marker,player){
                               if(self.isPlaying() && marker.finished == false){
-                                window.BalloonPlayer.trigger('doNextQuestionMarker', marker.id);
+                                window.BalloonPlayer.trigger('onMarkerReached', marker.id);
                               }
                             }
                         }
@@ -208,6 +209,11 @@ define(function(require, exports, module) {
                 return !this.get("player").paused();
             }
             return false;
+        },
+
+        setMarkerEscepe: function(mode) {
+            var player = this.get("player");
+            player.markers.setMarkerEscape(mode);
         },
 
         destroy: function() {

@@ -1,7 +1,7 @@
 {% set type = question.type|default(false) %}
 {% if type %}
-	<div class="modal-dialog  modal-md">
-	  <div class="modal-content">
+	<div class="modal-dialog marker-modal">
+	  <div class="modal-content ">
 	    <div class="modal-body">
 	        {% include 'TopxiaWebBundle:Marker:do-test-' ~ type ~ '.html.twig' %}
 	    </div>

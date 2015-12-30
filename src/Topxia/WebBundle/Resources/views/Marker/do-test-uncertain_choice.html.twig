@@ -1,30 +1,22 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-	<div class="question-heading editor-text">  （不定项）{{ question.stem|bbCode2Html|raw }}</div>
+	<div class="question-heading editor-text">  （不定项）{{ question.stem|bbCode2Html|striptags|raw }}</div>
 	<div class="question-body clearfix">
+		{% if itemResult.answer|default(null) %}
+		  {% set answerChoiceIndex = itemResult.answer %}
+		{% endif %}
 		<ul class="question-choices">
 		  {% for key, choice in question.metas.choices %}
 		    {% set choiceIndex = (65+key)|chr %}
 		    <li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
-		      <div class="choice-index">{{ choiceIndex }}.</div>
-		      <div class="choice-body editor-text">{{ choice|bbCode2Html|raw }}</div>
+		      <label class="checkbox-inline mrm">
+			    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}>{{ choiceIndex }}.
+			  </label>
+		      <span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw }}</span>
 		    </li>
 		  {% endfor %}
 		</ul>
-
-		{% if itemResult.answer|default(null) %}
-		  {% set answerChoiceIndex = itemResult.answer %}
-		{% endif %}
-
-		<div class="question-choices-inputs">
-			{% for key, choice in question.metas.choices %}
-				{% set choiceIndex = (65+key)|chr %}
-				  <label class="checkbox-inline">
-				    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}> {{ choiceIndex }}
-				  </label>
-			{% endfor %}
-		</div>
-		<input id="data" data-markerid="{{markerId}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-answer="{{question.answer[0]}}" hidden="hidden">
-		<button id="submitQuestion" class="btn btn-success btn-sm">提交</button>
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		<button id="submitQuestion" class="btn btn-primary btn-md mvm">提交</button>
 	</div>
 	<div class="question-footer">
 	</div>

@@ -330,7 +330,7 @@ define(function(require, exports, module) {
                             that.set("player", player);
                         });
 
-                        messenger.on("doNextQuestionMarker", function(marker){
+                        messenger.on("onMarkerReached", function(marker){
                             var player = window.frames["viewerIframe"].window.BalloonPlayer;
                             if(player.isPlaying()){
                               player.pause();
