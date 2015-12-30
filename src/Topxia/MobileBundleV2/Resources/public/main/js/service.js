@@ -233,7 +233,8 @@ service('ClassRoomService', ['httpService', function(httpService) {
 	}
 
 	this.getStudents = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/ClassRoom/getStudents", arguments);
+		httpService.apiGet("/api/classrooms/" + arguments[0]['classRoomId'] + "/members", arguments);
+		//httpService.simpleGet("/mapi_v2/ClassRoom/getStudents", arguments);
 	}
 
 	this.getReviewInfo = function(params, callback) {
@@ -329,6 +330,10 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 	
+	this.getStudents = function(params, callback) {
+		httpService.apiGet("/api/courses/" + arguments[0]['courseId'] + "/members", arguments);
+	}
+
 	this.updateModifyInfo = function(params, callback) {
 		httpService.simplePost("/mapi_v2/Course/updateModifyInfo", arguments);
 	}
