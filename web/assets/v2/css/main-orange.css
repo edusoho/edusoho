@@ -6338,7 +6338,7 @@ textarea {
 .es-piece .piece-header {
   position: relative;
   margin: 5px auto 20px auto;
-  padding: 0 30px 0 20px;
+  padding: 0 30px 0 0;
   color: #313131;
   font-size: 16px;
 }
@@ -9764,18 +9764,19 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.class-detail-main .piece-header,
+.course-detail-main .piece-header {
+  padding: 0 30px 0 15px;
+}
 .class-detail-main .piece-header:after,
 .course-detail-main .piece-header:after {
   content: "";
   position: absolute;
   left: 0;
-  top: 2px;
+  top: 3px;
   width: 4px;
   height: 16px;
   background: #ff7200;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
 }
 .class-course-list .course-item {
   margin-top: 30px;
