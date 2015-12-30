@@ -122,7 +122,6 @@ define(function(require, exports, module) {
 
         if (flag) {
             var currentWeight = 'input' + options.element.selector;
-            console.log(currentWeight);
             $.each(weights, function(index, weight) {
                 if (currentWeight != weight) {
                     $(weight).next().empty().parent().parent().removeClass('has-error');
