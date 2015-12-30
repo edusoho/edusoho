@@ -62,7 +62,7 @@ class CourseLessonController extends BaseController
 
         //开启限制加入
 
-        if (empty($lesson['free']) && empty($course['buyable'])) {
+        if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
