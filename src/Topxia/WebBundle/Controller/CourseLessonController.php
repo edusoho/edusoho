@@ -99,7 +99,7 @@ class CourseLessonController extends BaseController
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (empty($lesson['free']) && empty($course['tryLookable']) && $file['storage'] != 'cloud') {
+            if (empty($lesson['free']) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }
