@@ -40,9 +40,12 @@ class CourseScoreController extends BaseController
             }
         }
 
+        $endTime = $course['endTime'] + (24 * 60 * 60);
+
         return $this->render('TopxiaWebBundle:CourseScore:setting.html.twig', array(
-            'course' => $course,
-            'score'  => $scoreSetting
+            'course'       => $course,
+            'classEndTime' => $endTime,
+            'score'        => $scoreSetting
         ));
     }
 
