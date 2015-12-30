@@ -80,7 +80,7 @@ appProvider.provider('appRouter', function($stateProvider) {
        });
 
         $stateProvider.state('courseList', {
-          url: "/courselist/:categoryId",
+          url: "/courselist/:type/:categoryId",
           views: {
             'rootView': {
               templateUrl: app.viewFloder  + "view/course_list.html",

@@ -24,11 +24,29 @@
   .border-radius;
 }
 
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
 // 富文本编辑器样式统一处理
 .editor-text {
   img {
     max-width: 100%;
     height: auto;
+  }
+}
+
+.section-gray {
+  background-color: @bg-color !important;
+  .text-line h5 > span {
+    background-color: @bg-color !important;
+  }
+}
+
+.section-wihte {
+  background-color: #fff !important;
+  .text-line h5 > span {
+    background-color: #fff !important;
   }
 }
 

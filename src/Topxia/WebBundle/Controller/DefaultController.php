@@ -206,14 +206,24 @@ class DefaultController extends BaseController
         return new Response($jumpScript);
     }
 
-    public function CoursesCategoryAction(Request $request)
+    public function coursesCategoryAction(Request $request)
     {
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-        $categoryId             = $conditions['categoryId'];
+        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
 
-        if ($conditions['categoryId'] != 'all') {
+        if (isset($conditions['config'])) {
+            $config = $conditions['config'];
+            unset($conditions['config']);
+        } else {
+            $config = array();
+            unset($conditions['config']);
+        }
+
+        //var_dump($conditions);
+
+        if (!empty($conditions['categoryId'])) {
             $conditions['categoryId'] = intval($conditions['categoryId']);
         } else {
             unset($conditions['categoryId']);
@@ -226,13 +236,19 @@ class DefaultController extends BaseController
         }
 
         unset($conditions['orderBy']);
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+        $config = $config['confirmConfig']['blocks']['left'];
 
-        $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 12);
+        foreach ($config as $template) {
+            if ($template['code'] == "course-grid-with-condition-index") {
+                $config = $template;
+            }
+        }
 
-        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig', array(
-            'orderBy'    => $orderBy,
-            'categoryId' => $categoryId,
-            'courses'    => $courses
+        $config['orderBy']    = $orderBy;
+        $config['categoryId'] = $categoryId;
+        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+            'config' => $config
         ));
     }
 
@@ -294,6 +310,11 @@ class DefaultController extends BaseController
     protected function getBatchNotificationService()
     {
         return $this->getServiceKernel()->createService('User.BatchNotificationService');
+    }
+
+    protected function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 
     private function getBlacklistService()

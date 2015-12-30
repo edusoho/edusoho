@@ -1125,6 +1125,10 @@ class WebExtension extends \Twig_Extension
                 if ($order['amount'] > 0) {
                     if ($order['payment'] == 'wxpay') {
                         $default = "微信支付";
+                    } elseif ($order['payment'] == 'heepay') {
+                        $default = "网银支付";
+                    } elseif ($order['payment'] == 'quickpay') {
+                        $default = "快捷支付";
                     } else {
                         $default = "支付宝";
                     }
@@ -1142,6 +1146,10 @@ class WebExtension extends \Twig_Extension
                     $default = "无";
                 } elseif ($order['payment'] == 'wxpay') {
                     $default = "微信支付";
+                } elseif ($order['payment'] == 'heepay') {
+                    $default = "网银支付";
+                } elseif ($order['payment'] == 'quickpay') {
+                    $default = "快捷支付";
                 } else {
                     $default = "支付宝";
                 }

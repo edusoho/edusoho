@@ -32,7 +32,6 @@ $api->get('/{id}', function ($id) {
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| userId | int | 否 | 黑名单拥有者，不传则默认为当前登录用户 |
 | blackId | int | 是 | 被加入黑名单的用户id |
 | method | string | 否 | delete时表示删除，其他均为新增 |
 
@@ -48,7 +47,7 @@ $api->get('/{id}', function ($id) {
 $api->post('/', function (Request $request) {
     $blackId = $request->request->get('blackId',0);
     $userId = $request->request->get('userId',0);
-    $user = empty($userId) ? getCurrentUser() : convert($userId,'user');
+    $user = getCurrentUser();
     $method = $request->request->get('method','post');
     if ($method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.BlacklistService')->deleteBlacklistByUserIdAndBlackId($user['id'],$blackId);
