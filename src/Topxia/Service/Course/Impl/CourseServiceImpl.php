@@ -1492,7 +1492,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $user                  = $this->getCurrentUser();
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
-
         $this->dispatchEvent(
             'course.lesson_start',
             new ServiceEvent($lesson, array('course' => $course))
@@ -1513,8 +1512,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'startTime'    => time(),
                 'finishedTime' => 0
             ));
-
-            $this->dispatchEvent('course.lesson_start_tui', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId));
 
             return true;
         }
@@ -1595,8 +1592,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'finishedTime' => time()
             ));
         }
-
-        $this->dispatchEvent('course.lesson_finish_tui', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId));
 
         $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
 
