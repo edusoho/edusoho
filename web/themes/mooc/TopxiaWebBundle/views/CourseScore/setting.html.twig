@@ -24,6 +24,7 @@
                      <div class="col-md-8 controls">
                          <input type="text" id="score_examWeight" name="examWeight" required="required" class="form-control width-input width-input-large"  value="{{ score.examWeight|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;"> %   
                          <div class="help-block" style="display:none;"></div>
+                          <div class="help" style="display:none;"></div>
                      </div>
                  </div>
 
@@ -32,6 +33,7 @@
                      <div class="col-md-8 controls">
                          <input type="text" id="score_homeworkWeight" name="homeworkWeight" required="required"   class="form-control width-input width-input-large"  value="{{ score.homeworkWeight|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;"> %
                          <div class="help-block" style="display:none;"></div>
+                         <div class="help" style="display:none;"></div>
                      </div>
                  </div>
 
@@ -40,6 +42,7 @@
                      <div class="col-md-8 controls">
                          <input type="text" id="score_otherWeight" name="otherWeight" required="required"   class="form-control width-input width-input-large"  value="{{ score.otherWeight|default('') }}" {% if readonly %} readonly {% endif %}  style="background-color: white;"> %
                          <div class="help-block" style="display:none;"></div>
+                         <div class="help" style="display:none;"></div>
                      </div>
                  </div>
                  <hr />
@@ -54,7 +57,7 @@
                  <div class="form-group">
                      <label class="col-md-2 control-label" for="score_expectPublishTime">成绩发布预告时间</label>
                      <div class="col-md-8 controls">
-                         <input type="text" id="score_expectPublishTime" name="expectPublishTime" required="required"   class="form-control width-input width-input-large mrl"  value="{{ score.expectPublishTime|default(null)|date_format('Y-m-d')}}" {% if readonly %} readonly {% endif %} style="background-color: white;">
+                         <input type="text" id="score_expectPublishTime" name="expectPublishTime" data-value="{{ classEndTime|default(null)|date_format('Y-m-d') }}"required="required"   class="form-control width-input width-input-large mrl"  value="{{ score.expectPublishTime|default(null)|date_format('Y-m-d')}}" {% if readonly %} readonly {% endif %} style="background-color: white;">
                    
                          <label  class="prl" > 
                             <input type="radio"  id ="score_publishType" name ="publishType" value="auto"  {% if score.publishType|default('manual')  == 'auto'%}checked="checked" {% endif %}> 自动发布
