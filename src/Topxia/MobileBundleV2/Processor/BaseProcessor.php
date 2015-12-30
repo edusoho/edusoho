@@ -4,16 +4,10 @@ namespace Topxia\MobileBundleV2\Processor;
 
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
-<<<<<<< HEAD
 class BaseProcessor {
 
     const API_VERSIN_RANGE = '3.4.0';
-=======
-class BaseProcessor
-{
-    const API_VERSIN_RANGE = '3.3.0';
 
->>>>>>> 36e53c45e153e2c390d608455e28bf992f6d377a
     public $formData;
     public $controller;
     public $request;
