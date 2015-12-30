@@ -462,6 +462,18 @@
       .es-transition;
     }
   }
+  .piece-header{
+    &:after{
+      content: "";
+      position: absolute;
+      left: 0;
+      top:2px;
+      width: 4px;
+      height: 16px;
+      background: @brand-primary;
+      .border-radius(4px);
+    }
+  }
 }
 
 .class-course-list {
