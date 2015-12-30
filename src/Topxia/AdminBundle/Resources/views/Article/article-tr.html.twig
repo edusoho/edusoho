@@ -10,7 +10,7 @@
 		<span class="text-muted">未分类</span>
 	{% endif %}
 	</td>
-	<td>{{ article.updatedTime|date('Y-n-d H:i') }}</td>
+	<td>{{ article.publishedTime|date('Y-n-d H:i') }}</td>
 	<td>
 	<a href="javascript:;" class="featured-label" data-set-url="{{ path('admin_article_set_property', {id:article.id,property:'featured'}) }}" data-cancel-url="{{ path('admin_article_cancel_property', {id:article.id,property:'featured'}) }}">{% if article.featured == 1 %}<span class="label label-success">{% else %}<span class="label label-default">{% endif %}头</span></a>
 

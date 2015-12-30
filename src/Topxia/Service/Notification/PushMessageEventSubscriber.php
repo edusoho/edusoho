@@ -12,6 +12,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+
             'testpaper.reviewed'           => 'onTestPaperReviewed',
             'course.lesson.publish'        => 'onLessonPubilsh',
             'course.publish'               => 'onCoursePublish',
@@ -31,6 +32,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'homework.reviewed'            => 'onHomeworkReviewed',
             'course.lesson_finish_tui'     => 'onCourseLessonFinishTui',
             'course.lesson_start_tui'      => 'onCourseLessonStartTui'
+
         );
     }
 
