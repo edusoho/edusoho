@@ -56,7 +56,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type'     => 'testpaper.reviewed',
             'id'       => $result['id'],
             'lessonId' => $lesson['id']
-
         );
 
         $this->push($lesson['title'], $result['paperName'], $from, $to, $body);
