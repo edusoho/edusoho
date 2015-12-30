@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     require('jquery.select2');
     require('jquery.bootstrap-datetimepicker');
     require('jquery.form');
-    require('ckeditor');
+    require('es-ckeditor');
 
 exports.run = function() {
     

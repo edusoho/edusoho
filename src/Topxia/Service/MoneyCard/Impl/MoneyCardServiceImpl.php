@@ -4,12 +4,13 @@ namespace Topxia\Service\MoneyCard\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceKernel;
 
 class MoneyCardServiceImpl extends BaseService
 {
-    public function getMoneyCard($id)
+    public function getMoneyCard($id, $lock = false)
     {
-        return $this->getMoneyCardDao()->getMoneyCard($id);
+        return $this->getMoneyCardDao()->getMoneyCard($id, $lock);
     }
 
     public function getMoneyCardByIds($ids)
@@ -438,47 +439,62 @@ class MoneyCardServiceImpl extends BaseService
 
     public function updateMoneyCard($id, $fields)
     {
-        $moneyCard = $this->getMoneyCard($id);
-        $this->getLogService()->info('money_card', 'update', "update卡号为{$moneyCard['cardId']}的充值卡");
-
         return $this->getMoneyCardDao()->updateMoneyCard($id, $fields);
     }
 
     public function useMoneyCard($id, $fields)
     {
-        $moneyCard = $this->updateMoneyCard($id, $fields);
+        $connection = ServiceKernel::instance()->getConnection();
 
-        $batch = $this->getBatch((int) $moneyCard['batchId']);
+        try {
+            $connection->beginTransaction();
 
-        $flow = array(
-            'userId'   => $fields['rechargeUserId'],
-            'amount'   => $batch['coin'],
-            'name'     => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
-            'orderSn'  => '',
-            'category' => 'inflow',
-            'note'     => ''
-        );
+            $moneyCard = $this->getMoneyCard($id, true);
 
-        $this->getCashService()->inflowByCoin($flow);
-        $batch['rechargedNumber'] += 1;
-        $this->updateBatch($batch['id'], $batch);
-        $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+            if ($moneyCard['cardStatus'] == 'recharged') {
+                $connection->rollback();
+                return $moneyCard;
+            }
 
-        if (!empty($card)) {
-            $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array(
-                'status'  => 'used',
-                'useTime' => $moneyCard['rechargeTime']
-            ));
-        } else {
-            $this->getCardService()->addCard(array(
-                'cardId'      => $moneyCard['id'],
-                'cardType'    => 'moneyCard',
-                'status'      => 'used',
-                'deadline'    => strtotime($moneyCard['deadline']),
-                'useTime'     => $moneyCard['rechargeTime'],
-                'userId'      => $moneyCard['rechargeUserId'],
-                'createdTime' => time()
-            ));
+            $moneyCard = $this->updateMoneyCard($id, $fields);
+
+            $batch = $this->getBatch((int) $moneyCard['batchId']);
+
+            $flow = array(
+                'userId'   => $fields['rechargeUserId'],
+                'amount'   => $batch['coin'],
+                'name'     => '学习卡'.$moneyCard['cardId'].'充值'.$batch['coin'],
+                'orderSn'  => '',
+                'category' => 'inflow',
+                'note'     => ''
+            );
+
+            $this->getCashService()->inflowByCoin($flow);
+            $batch['rechargedNumber'] += 1;
+            $this->updateBatch($batch['id'], $batch);
+            $card = $this->getCardService()->getCardByCardIdAndCardType($moneyCard['id'], 'moneyCard');
+
+            if (!empty($card)) {
+                $this->getCardService()->updateCardByCardIdAndCardType($moneyCard['id'], 'moneyCard', array(
+                    'status'  => 'used',
+                    'useTime' => $moneyCard['rechargeTime']
+                ));
+            } else {
+                $this->getCardService()->addCard(array(
+                    'cardId'      => $moneyCard['id'],
+                    'cardType'    => 'moneyCard',
+                    'status'      => 'used',
+                    'deadline'    => strtotime($moneyCard['deadline']),
+                    'useTime'     => $moneyCard['rechargeTime'],
+                    'userId'      => $moneyCard['rechargeUserId'],
+                    'createdTime' => time()
+                ));
+            }
+
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollback();
+            throw $e;
         }
 
         return $moneyCard;

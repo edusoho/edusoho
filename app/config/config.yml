@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.9.0
+        assets_version: 6.12.4
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -56,6 +56,7 @@ doctrine:
             enum: Topxia\Common\DoctrineEnumType
         connections:
             default:
+                wrapper_class: Topxia\Service\Common\Connection
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
@@ -167,9 +168,3 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}
-
-    kernel.listener.admin_user_login_listener:
-        class: Topxia\WebBundle\Listener\UserLoginIpCheckListener
-        arguments:    [@service_container]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onUserLoginIpCheckListener}

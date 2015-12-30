@@ -93,6 +93,48 @@ class OrderServiceTest extends BaseTestCase
         $this->assertEquals($result['id'], $createOrder['id']);
     }
 
+    public function testGetOrderByToken()
+    {
+        $user        = $this->createUser();
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $payment = array(
+            'enabled'          => 1,
+            'disabled_message' => '尚未开启支付模块，无法购买课程。',
+            'bank_gateway'     => 'none',
+            'alipay_enabled'   => 0,
+            'alipay_key'       => '',
+            'alipay_secret'    => '',
+            'alipay_account'   => '',
+            'alipay_type'      => 'direct',
+            'tenpay_enabled'   => 1,
+            'tenpay_key'       => '',
+            'tenpay_secret'    => ''
+        );
+        $this->getSettingService()->set('payment', $payment);
+        $course = array(
+            'title' => 'course 1'
+        );
+        $createCourse = $this->getCourseService()->createCourse($course);
+        $user         = $this->createNormalUser();
+        $currentUser  = new CurrentUser();
+        $currentUser->fromArray($user);
+        $this->getServiceKernel()->setCurrentUser($currentUser);
+        $order = array(
+            'userId'     => $user['id'],
+            'title'      => 'buy course 1',
+            'amount'     => '100',
+            'targetType' => 'course',
+            'targetId'   => $createCourse['id'],
+            'payment'    => 'none'
+        );
+        $createOrder = $this->getOrderService()->createOrder($order);
+        $this->getOrderService()->updateOrder($createOrder['id'], array('token' => 'heepay_123'));
+        $result = $this->getOrderService()->getOrderByToken('heepay_123');
+        $this->assertEquals($result['id'], $createOrder['id']);
+    }
+
     public function testFindOrdersBySns()
     {
         $user        = $this->createUser();
@@ -544,7 +586,7 @@ class OrderServiceTest extends BaseTestCase
         );
         $this->getOrderService()->createOrder($order1);
         $this->getOrderService()->createOrder($order2);
-        $conditions = array("userId" => $user['id'], "amount" => 0.00);
+        $conditions = array("userId" => $user['id']);
         $result     = $this->getOrderService()->searchOrders($conditions, "early", 0, 5);
         $this->assertCount(2, $result);
         $result = $this->getOrderService()->searchOrders($conditions, 'latest', 0, 5);
@@ -837,7 +879,7 @@ class OrderServiceTest extends BaseTestCase
         );
         $this->getOrderService()->createOrder($order1);
         $this->getOrderService()->createOrder($order2);
-        $conditions = array("userId" => $user['id'], "amount" => 0.00);
+        $conditions = array("userId" => $user['id']);
         $result     = $this->getOrderService()->searchOrderCount($conditions);
         $this->assertEquals(2, $result);
     }
