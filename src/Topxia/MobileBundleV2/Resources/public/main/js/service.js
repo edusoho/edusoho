@@ -510,16 +510,29 @@ service('SchoolService', ['httpService', function(httpService) {
 		});
 	}
 }]).
-service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($http, $rootScope, platformUtil, $q) {
+service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', 'cordovaUtil', function($http, $rootScope, platformUtil, $q, cordovaUtil) {
 	
 	var self = this;
+	this.filterCallback = function(data, callback) {
+		if ("AuthToken is not exist." == data.message) {
+			cordovaUtil.sendNativeMessage("token_lose", {});
+			return;
+		}
+
+		if (data.error && "not_login" == data.error.name) {
+			cordovaUtil.sendNativeMessage("token_lose", {});
+			return;
+		}
+		callback(data);
+	};
+
 	this.getOptions = function(method, url, params, callback, errorCallback) {
 		var options = {
 			method : method,
 			url : app.host + url,
 			headers : { "token" : $rootScope.token },
 			success : function(data, status, headers, config) {
-				callback(data);
+				self.filterCallback(data, callback);
 			},
 			error : function(data) {
 				if (errorCallback) {
@@ -593,7 +606,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		options.headers = options.headers || {};
 		options.headers["token"] = $rootScope.token;
 
-		var http = $http(options).success(options.success);
+		var http = $http(options).success(function(data) {
+			self.filterCallback(data, options.success);
+		});
 
 		if (options.error) {
 			http.error(options.error);
@@ -631,7 +646,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		options.headers["token"] = $rootScope.token;
 
 		var angularPost = function(options) {
-			var http = $http(options).success(options.success);
+			var http = $http(options).success(function(data) {
+				self.filterCallback(data, options.success);
+			});
 			if (options.error) {
 				http.error(options.error);
 			} else {

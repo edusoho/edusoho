@@ -107,6 +107,9 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             }, null, "ESNativeCore", "getThirdConfig", []);
 
             return deferred.promise;
+        },
+        sendNativeMessage : function(type, data) {
+            exec(null, null, "ESNativeCore", "sendNativeMessage", [ type, data ]);
         }
     };
 });

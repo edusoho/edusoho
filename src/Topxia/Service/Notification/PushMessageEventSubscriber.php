@@ -12,7 +12,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-
             'testpaper.reviewed'        => 'onTestPaperReviewed',
             'course.lesson.publish'     => 'onLessonPubilsh',
             'course.publish'            => 'onCoursePublish',
@@ -32,7 +31,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
             'course.lesson_start'       => 'onCourseLessonStart'
-
         );
     }
 
@@ -58,7 +56,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type'     => 'testpaper.reviewed',
             'id'       => $result['id'],
             'lessonId' => $lesson['id']
-
         );
 
         $this->push($lesson['title'], $result['paperName'], $from, $to, $body);
