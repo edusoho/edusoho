@@ -5,16 +5,14 @@ namespace Topxia\Api\Resource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
-class ClassroomMember extends BaseResource
+class CourseMember extends BaseResource
 {
-    public function get(Application $app, Request $request, $classroomId, $memberId)
-    {
-    }
 
     public function filter(&$res)
     {
         unset($res['userId']);
-        $res['user']        = $this->callSimplify('User', $res['user']);
+        $res['user'] = $this->callSimplify('User', $res['user']);
+        $res['noteLastUpdateTime'] = date('c', $res['noteLastUpdateTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
         return $res;
     }

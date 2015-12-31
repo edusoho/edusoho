@@ -12,21 +12,25 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.reviewed'      => 'onTestPaperReviewed',
-            'course.lesson.publish'   => 'onLessonPubilsh',
-            'course.publish'          => 'onCoursePublish',
-            'course.lesson.delete'    => 'onCourseLessonDelete',
-            'course.lesson.update'    => 'onCourseLessonUpdate',
-            'course.lesson.unpublish' => 'onCourseLessonUnpublish',
-            'course.close'            => 'onCourseClose',
-            'announcement.create'     => 'onAnnouncementCreate',
-            'classroom.join'          => 'onClassroomJoin',
-            'classroom.quit'          => 'onClassroomQuit',
-            'classroom.put_course'    => 'onClassroomPutCourse',
-            'article.create'          => 'onArticleCreate',
-            'discount.pass'           => 'onDiscountPass',
-            'course.join'             => 'onCourseJoin',
-            'course.quit'             => 'onCourseQuit'
+            'testpaper.reviewed'           => 'onTestPaperReviewed',
+            'course.lesson.publish'        => 'onLessonPubilsh',
+            'course.publish'               => 'onCoursePublish',
+            'course.lesson.delete'         => 'onCourseLessonDelete',
+            'course.lesson.update'         => 'onCourseLessonUpdate',
+            'course.lesson.unpublish'      => 'onCourseLessonUnpublish',
+            'course.close'                 => 'onCourseClose',
+            'announcement.create'          => 'onAnnouncementCreate',
+            'classroom.join'               => 'onClassroomJoin',
+            'classroom.quit'               => 'onClassroomQuit',
+            'classroom.put_course'         => 'onClassroomPutCourse',
+            'article.create'               => 'onArticleCreate',
+            'discount.pass'                => 'onDiscountPass',
+            'course.join'                  => 'onCourseJoin',
+            'course.quit'                  => 'onCourseQuit',
+            'course.thread.teacher_answer' => 'onCourseThreadTeacherAnswer',
+            'homework.reviewed'            => 'onHomeworkReviewed',
+            'course.lesson_finish_tui'     => 'onCourseLessonFinishTui',
+            'course.lesson_start_tui'      => 'onCourseLessonStartTui'
         );
     }
 
@@ -35,9 +39,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $testpaper = $event->getSubject();
         $result    = $event->getArgument('testpaperResult');
 
-        $testpaper['target'] = explode('-', $testpaper['target']);
-
-        $target = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
+        $testpaper['target']       = explode('-', $testpaper['target']);
+        $testpaperResult['target'] = explode('-', $result['target']);
+        $lesson                    = $this->getCourseService()->getLesson($testpaperResult['target'][2]);
+        $target                    = $this->getTarget($testpaper['target'][0], $testpaper['target'][1]);
 
         $from = array(
             'type'  => $target['type'],
@@ -48,11 +53,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $to = array('type' => 'user', 'id' => $result['userId']);
 
         $body = array(
-            'type' => 'testpaper.reviewed',
-            'id'   => $result['id']
+            'type'     => 'testpaper.reviewed',
+            'id'       => $result['id'],
+            'lessonId' => $lesson['id']
         );
 
-        $this->push($target['title'], $result['paperName'], $from, $to, $body);
+        $this->push($lesson['title'], $result['paperName'], $from, $to, $body);
     }
 
     public function onLessonPubilsh(ServiceEvent $event)
@@ -304,6 +310,97 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->push('打折活动', $content.$discount['name'], $from, $to, $body);
     }
 
+    public function onCourseThreadTeacherAnswer(ServiceEvent $event)
+    {
+        $post     = $event->getSubject();
+        $course   = $this->getCourseService()->getCourse($post['courseId']);
+        $question = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
+        $target   = $this->getTarget('course', $post['courseId']);
+        $from     = array(
+            'type'  => 'course',
+            'id'    => $post['courseId'],
+            'image' => $target['image']
+        );
+        $to   = array('type' => 'user', 'id' => $question['userId']);
+        $body = array(
+            'type'                => 'question.answered',
+            'questionId'          => $question['id'],
+            'courseId'            => $question['courseId'],
+            'lessonId'            => $question['lessonId'],
+            'questionCreatedTime' => $question['createdTime'],
+            'questionTitle'       => $question['title']
+        );
+        $this->push($course['title'], $question['title'], $from, $to, $body);
+    }
+
+    public function onHomeworkReviewed(ServiceEvent $event)
+    {
+        $homeworkResult = $event->getSubject();
+
+        $course = $this->getCourseService()->getCourse($homeworkResult['courseId']);
+        $lesson = $this->getCourseService()->getLesson($homeworkResult['lessonId']);
+        $target = $this->getTarget('course', $homeworkResult['courseId']);
+        $from   = array(
+            'type'  => 'course',
+            'id'    => $homeworkResult['courseId'],
+            'image' => $target['image']
+        );
+        $to   = array('type' => 'user', 'id' => $homeworkResult['userId']);
+        $body = array(
+            'type'             => 'homework.reviewed',
+            'homeworkId'       => $homeworkResult['homeworkId'],
+            'homeworkResultId' => $homeworkResult['id'],
+            'lessonId'         => $homeworkResult['lessonId'],
+            'courseId'         => $homeworkResult['courseId'],
+            'teacherSay'       => $homeworkResult['teacherSay']
+        );
+
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+    }
+
+    public function onCourseLessonFinishTui(ServiceEvent $event)
+    {
+        $learn  = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($learn['courseId']);
+        $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
+        $target = $this->getTarget('course', $learn['courseId']);
+        $from   = array(
+            'type'  => 'course',
+            'id'    => $learn['courseId'],
+            'image' => $target['image']
+        );
+        $to   = array('type' => 'user', 'id' => $learn['userId']);
+        $body = array(
+            'type'            => 'lesson.finish',
+            'lessonId'        => $learn['lessonId'],
+            'courseId'        => $learn['courseId'],
+            'learnStartTime'  => $learn['startTime'],
+            'learnFinishTime' => $learn['finishedTime']
+        );
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+    }
+
+    public function onCourseLessonStartTui(ServiceEvent $event)
+    {
+        $learn  = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($learn['courseId']);
+        $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
+        $target = $this->getTarget('course', $learn['courseId']);
+        $from   = array(
+            'type'  => 'course',
+            'id'    => $learn['courseId'],
+            'image' => $target['image']
+        );
+        $to   = array('type' => 'user', 'id' => $learn['userId']);
+        $body = array(
+            'type'           => 'lesson.start',
+            'lessonId'       => $learn['lessonId'],
+            'courseId'       => $learn['courseId'],
+            'learnStartTime' => $learn['startTime']
+        );
+        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+    }
+
     protected function push($title, $content, $from, $to, $body)
     {
         $message = array(
@@ -410,6 +507,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $this->getCrontabService()->deleteJob($job['id']);
             }
         }
+    }
+
+    protected function getThreadService()
+    {
+        return ServiceKernel::instance()->createService('Course.ThreadService');
     }
 
     protected function getCourseService()
