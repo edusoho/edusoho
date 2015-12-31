@@ -8,23 +8,17 @@
     {% if item.free or member or course.buyable or course.tryLookable %}
       <a {% if member %}href="{{ lessonUrl }}" {% else %}href="#modal" data-toggle="modal" data-url="{{ lessonUrl }}"{% endif %}
       title="{{ item.title }}">
-      {% if fromPlugin|default(false) == false %}
-      {{ render(controller('TopxiaWebBundle:CourseLesson:statusBall', {courseId:course.id,lessonId:item.id})) }}
-      {% endif %}
+      {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
       <span class="title">  {% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
       {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
       </a>
     {% else %}
-      {% if fromPlugin|default(false) == false %}
-      {{ render(controller('TopxiaWebBundle:CourseLesson:statusBall', {courseId:course.id,lessonId:item.id})) }}
-      {% endif %}
+      {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
       <span class="title">  {% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
       {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
     {% endif %}
   {% else %}
-    {% if fromPlugin|default(false) == false %}
-    {{ render(controller('TopxiaWebBundle:CourseLesson:statusBall', {courseId:course.id,lessonId:item.id})) }}
-    {% endif %}
+    {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
     <span class="title">{% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
     {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
   {% endif %}
