@@ -15,6 +15,7 @@ class HLSController extends BaseController
         $levelParam    = $request->query->get('level', "");
         $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
         $fromApi       = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $inWhiteList   = $this->agentInWhiteList($request->headers->get("user-agent"));
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -45,7 +46,7 @@ class HLSController extends BaseController
                         'id'      => $file['id'].$level,
                         'fromApi' => $fromApi
                     ),
-                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                    'times'    => $inWhiteList ? 0 : 1,
                     'duration' => 3600
                 );
 
@@ -86,7 +87,7 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        if (!$fromApi && !$this->agentInWhiteList($request) && $this->setting("developer.balloon_player")) {
+        if (!$fromApi && !$inWhiteList && $this->setting("developer.balloon_player")) {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
             return $this->createJsonResponse($playlist);
         } else {
