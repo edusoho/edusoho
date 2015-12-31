@@ -117,9 +117,8 @@ class MarkerController extends BaseController
     //获取当前播放器的驻点
     public function showMarkersAction(Request $request, $lessonId)
     {
-        $data   = $request->request->all();
-        $lesson = $this->getCourseService()->getLesson($lessonId);
-        //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $data    = $request->request->all();
+        $lesson  = $this->getCourseService()->getLesson($lessonId);
         $markers = $this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']);
         $results = array();
         $user    = $this->getUserService()->getCurrentUser();

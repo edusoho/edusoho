@@ -340,7 +340,7 @@ define(function(require, exports, module) {
                                 var $modal = $("#modal");
                                 if (data == "") {
                                     $modal.hide();
-                                    player.finishMarker(marker.markerId);
+                                    player.finishMarker(marker.markerId,true);
                                 } else {
                                     $modal.html(data);
                                     $modal.show();

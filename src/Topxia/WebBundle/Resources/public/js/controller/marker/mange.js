@@ -367,7 +367,7 @@ define(function(require, exports, module) {
                     var $lesson_list = $newscale.find('.lesson-list');
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        var $li = $('<li class="row item-lesson" question-id="'+questionMarkers[j].questionId+'" id="'+questionMarkers[j].id+'"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">'+questionMarkers[j].seq+'</span>.</span>'+questionMarkers[j].stem+'</div><i class="icon-close glyphicon glyphicon-remove"></i></div></li>');
+                        var $li = $('<li class="row item-lesson" question-id="'+questionMarkers[j].questionId+'" id="'+questionMarkers[j].id+'"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">'+questionMarkers[j].seq+'</span>.</span>'+questionMarkers[j].stem.replace(/<.*?>/ig,"")+'</div><i class="icon-close glyphicon glyphicon-remove"></i></div></li>');
                         $li.appendTo($lesson_list);
                     }
                 }

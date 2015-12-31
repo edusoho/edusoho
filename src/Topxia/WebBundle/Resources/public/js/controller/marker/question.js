@@ -8,7 +8,6 @@ define(function(require, exports, module) {
     var videoHtml = $('#lesson-dashboard');
     var courseId = videoHtml.data("course-id");
     var lessonId = videoHtml.data("lesson-id");
-
     $.ajax({ 
       type: "get", 
       url: $('.toolbar-question-marker').data('marker-metas-url'), 
@@ -48,6 +47,14 @@ define(function(require, exports, module) {
                     console.log("新增ID");
                     markerJson.id = data.markerId;
                     $marker.attr('id',data.markerId);
+                    var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                    var markerData={
+                        "id":data.markerId,
+                        "time":markerJson.second,
+                        "text":"new",
+                        "finished":false
+                    };
+                    player.addMarker([markerData]);
                 }
                 // 返回题目的ID
                 if(markerJson.questionMarkers[0].id == undefined) {
@@ -99,8 +106,14 @@ define(function(require, exports, module) {
             var url = $('.toolbar-question-marker').data('marker-merge-url');
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
-                
-                //console.log(scalejson);
+                var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                var markers = player.get("player").markers.getMarkers();
+                for(var key in markers) {
+                    if(markerJson.id == markers[key].id) {
+                        player.get("player").markers.remove(key);   
+                    }
+                }
+                console.log(markers);
             });
 
             // if(true) {
@@ -130,8 +143,24 @@ define(function(require, exports, module) {
                 second:markerJson.second
             };
             $.post(url,param,function(data){
-                
-                console.log(scalejson);
+                var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                var markers = player.get("player").markers.getMarkers();
+                for(var key in markers) {
+                    if(markerJson.id == markers[key].id) {
+                        markers[key].time = markerJson.second;
+                        var finished = markers[key].finished;
+                        player.get("player").markers.remove(key);
+                        var markerData={
+                            "id":data.markerId,
+                            "time":markerJson.second,
+                            "text":"update",
+                            "finished":finished
+                        };
+                        player.addMarker([markerData]);
+                        break;
+                    }
+                }
+                console.log(markers);
             });
 
             // if(true) {
@@ -159,6 +188,14 @@ define(function(require, exports, module) {
             $.post(url,{questionId:markerJson.questionMarkers[0].id},function(data){
                 //if(data==true){
                     if($marker.is(":hidden")) {
+                        var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                        var markers = player.get("player").markers.getMarkers();
+                        for(var key in markers) {
+                            if(markerJson.id == markers[key].id) {
+                                player.get("player").markers.remove(key);   
+                            }
+                        }
+                        console.log(markers);
                         $marker.remove();
                     }
                 //}
