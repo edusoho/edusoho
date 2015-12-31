@@ -87,7 +87,7 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        if (!$fromApi && !$inWhiteList && $this->setting("developer.balloon_player")) {
+        if (!$fromApi && $this->setting("developer.balloon_player")) {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
             return $this->createJsonResponse($playlist);
         } else {
