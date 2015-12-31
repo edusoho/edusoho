@@ -9,7 +9,7 @@ define(function (require, exports, module) {
     Validator.addRule(
         'gt_current_time',
         function() {
-            var testStartTime = new Date($('#lesson-testpaper-start-time-field').val());
+            var testStartTime = new Date($('#lesson-testpaper-start-time-field').val().replace(/-/g,"/"));
             var now = new Date();
             return testStartTime > now;
         },
