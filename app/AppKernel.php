@@ -34,7 +34,9 @@ class AppKernel extends Kernel
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Classroom\ClassroomBundle\ClassroomBundle(),
             new Mooc\AdminBundle\MoocAdminBundle(),
-            new Mooc\WebBundle\MoocWebBundle()
+            new Mooc\WebBundle\MoocWebBundle(),
+            new Custom\WebBundle\CustomWebBundle(),
+            new Custom\AdminBundle\CustomAdminBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
@@ -47,29 +49,23 @@ class AppKernel extends Kernel
             if (is_array($pluginMeta)) {
                 foreach ($pluginMeta['installed'] as $c) {
                     if ($pluginMeta['protocol'] == '1.0') {
-                        $c  = ucfirst($c);
-                        $p  = base64_decode('QnVuZGxl');
-                        $cl = "{$c}\\".substr(str_repeat("{$c}
-{$p}\\", 2), 0, -1);
+                        $c         = ucfirst($c);
+                        $p         = base64_decode('QnVuZGxl');
+                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     } elseif ($pluginMeta['protocol'] == '2.0') {
                         if ($c['type'] != 'plugin') {
                             continue;
                         }
 
-                        $c  = ucfirst($c['code']);
-                        $p  = base64_decode('QnVuZGxl');
-                        $cl = "{$c}\\".substr(str_repeat("{$c}
-{$p}\\", 2), 0, -1);
+                        $c         = ucfirst($c['code']);
+                        $p         = base64_decode('QnVuZGxl');
+                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     }
                 }
             }
         }
-
-/*
-$bundles[] = new Custom\WebBundle\CustomWebBundle();
-$bundles[] = new Custom\AdminBundle\CustomAdminBundle();*/
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();

@@ -21,9 +21,6 @@ classroom_admin:
     resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
-_plugins:
-    resource: routing_plugins.yml
-
 mooc_web:
     resource: "@MoocWebBundle/Resources/config/routing.yml"
     prefix:   /
@@ -36,6 +33,16 @@ mooc_mobile_v2:
     resource: "@MoocWebBundle/Resources/config/mobile_routing.yml"
     prefix:   /mapi_v2
 
+custom_admin:
+    resource: "@CustomAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+custom_web:
+    resource: "@CustomWebBundle/Resources/config/routing.yml"
+    prefix:   /
+
+_plugins:
+    resource: routing_plugins.yml
 
 # Internal routing configuration to handle ESI
 # _internal:

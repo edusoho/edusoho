@@ -1,0 +1,4 @@
+services:
+#    custom_web.example:
+#        class: Custom\WebBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
