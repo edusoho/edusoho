@@ -251,7 +251,7 @@ class MarkerController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            5
+            6
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
