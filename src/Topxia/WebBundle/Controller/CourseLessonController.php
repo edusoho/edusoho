@@ -104,6 +104,10 @@ class CourseLessonController extends BaseController
                     throw $this->createAccessDeniedException();
                 }
 
+                if ($course["parentId"] > 0) {
+                    return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+                }
+
                 return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
             }
 
