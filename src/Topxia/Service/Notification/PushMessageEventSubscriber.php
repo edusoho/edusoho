@@ -31,7 +31,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.thread.teacher_answer' => 'onCourseThreadTeacherAnswer',
             'homework.reviewed'            => 'onHomeworkReviewed',
             'course.lesson_finish_tui'     => 'onCourseLessonFinishTui',
-            'course.lesson_start_tui'      => 'onCourseLessonStartTui'
+            'course.lesson_start'          => 'onCourseLessonStart'
 
         );
     }
@@ -383,7 +383,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
-    public function onCourseLessonStartTui(ServiceEvent $event)
+    public function onCourseLessonStart(ServiceEvent $event)
     {
         $learn  = $event->getSubject();
         $course = $this->getCourseService()->getCourse($learn['courseId']);

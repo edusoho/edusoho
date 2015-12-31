@@ -163,8 +163,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onLessonStart(ServiceEvent $event)
     {
-        $lesson  = $event->getSubject();
-        $course  = $event->getArgument('course');
+        $learn   = $event->getSubject();
+        $course  = $this->getCourseService()->getCourse($learn['courseId']);
+        $lesson  = $this->getCourseService()->getLesson($learn['lessonId']);
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {

@@ -1493,12 +1493,25 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
 
-        $this->dispatchEvent(
-            'course.lesson_start',
-            new ServiceEvent($lesson, array('course' => $course))
-        );
+        if (!empty($lesson)) {
+            if ($lesson['type'] == 'video') {
+                $createLessonView['courseId'] = $courseId;
+                $createLessonView['lessonId'] = $lessonId;
+                $createLessonView['fileId']   = $lesson['mediaId'];
 
-        if (!empty($lesson) && $lesson['type'] != 'video') {
+                $file = array();
+
+                if (!empty($createLessonView['fileId'])) {
+                    $file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
+                }
+
+                $createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
+                $createLessonView['fileType']    = $lesson['type'];
+                $createLessonView['fileSource']  = $lesson['mediaSource'];
+
+                $this->createLessonView($createLessonView);
+            }
+
             $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
 
             if ($learn) {
@@ -1514,43 +1527,12 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'finishedTime' => 0
             ));
 
-            $this->dispatchEvent('course.lesson_start_tui', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId));
+            $this->dispatchEvent('course.lesson_start', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId));
 
             return true;
         }
 
-        $createLessonView['courseId'] = $courseId;
-        $createLessonView['lessonId'] = $lessonId;
-        $createLessonView['fileId']   = $lesson['mediaId'];
-
-        $file = array();
-
-        if (!empty($createLessonView['fileId'])) {
-            $file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
-        }
-
-        $createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
-        $createLessonView['fileType']    = $lesson['type'];
-        $createLessonView['fileSource']  = $lesson['mediaSource'];
-
-        $this->createLessonView($createLessonView);
-
-        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
-
-        if ($learn) {
-            return false;
-        }
-
-        $this->getLessonLearnDao()->addLearn(array(
-            'userId'       => $user['id'],
-            'courseId'     => $courseId,
-            'lessonId'     => $lessonId,
-            'status'       => 'learning',
-            'startTime'    => time(),
-            'finishedTime' => 0
-        ));
-
-        return true;
+        return false;
     }
 
     public function createLessonView($createLessonView)
