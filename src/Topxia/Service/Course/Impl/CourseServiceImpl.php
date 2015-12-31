@@ -1518,7 +1518,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 return false;
             }
 
-            $this->getLessonLearnDao()->addLearn(array(
+            $learn = $this->getLessonLearnDao()->addLearn(array(
                 'userId'       => $user['id'],
                 'courseId'     => $courseId,
                 'lessonId'     => $lessonId,
@@ -1529,7 +1529,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
             $this->dispatchEvent(
                 'course.lesson_start',
-                new ServiceEvent($lesson, array('course' => $course, 'learn' => $this->getLearnByUserIdAndLessonId($user['id'], $lessonId)))
+                new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
             );
 
             return true;
@@ -1566,12 +1566,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
 
         if ($learn) {
-            $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+            $learn = $this->getLessonLearnDao()->updateLearn($learn['id'], array(
                 'status'       => 'finished',
                 'finishedTime' => time()
             ));
         } else {
-            $this->getLessonLearnDao()->addLearn(array(
+            $learn = $this->getLessonLearnDao()->addLearn(array(
                 'userId'       => $member['userId'],
                 'courseId'     => $courseId,
                 'lessonId'     => $lessonId,
@@ -1588,8 +1588,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $memberFields               = array();
         $memberFields['learnedNum'] = count($learns);
 
-        $course = $this->getCourseDao()->getCourse($courseId);
-
         if ($course['serializeMode'] != 'serialize') {
             $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
         }
@@ -1600,7 +1598,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent(
             'course.lesson_finish',
-            new ServiceEvent($lesson, array('course' => $course, 'learn' => $this->getLearnByUserIdAndLessonId($member['userId'], $lessonId)))
+            new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
         );
     }
 
