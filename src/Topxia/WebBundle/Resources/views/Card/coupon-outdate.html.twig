@@ -18,6 +18,9 @@
       <p class="title">用于抵扣指定会员</p>
     {% endif %}
   {% endif %}
+  {% if cardDetail.targetType == "all" %}
+    <p class="title">可用于抵扣全站所有类型消费</p>
+  {% endif %}
   <p class="price">
     {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}折{% endif %}
   </p>
