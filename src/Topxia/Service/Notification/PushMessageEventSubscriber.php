@@ -315,14 +315,14 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onCourseThreadPostCreate(ServiceEvent $event)
     {
-        $post   = $event->getSubject();
-        $course = $this->getCourseService()->getCourse($post['courseId']);
+        $post     = $event->getSubject();
+        $course   = $this->getCourseService()->getCourse($post['courseId']);
+        $question = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
 
         foreach ($course['teacherIds'] as $teacherId) {
-            if ($teacherId == $post['userId'] && $thread['type'] == 'question') {
-                $question = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
-                $target   = $this->getTarget('course', $post['courseId']);
-                $from     = array(
+            if ($teacherId == $post['userId'] && $question['type'] == 'question') {
+                $target = $this->getTarget('course', $post['courseId']);
+                $from   = array(
                     'type'  => 'course',
                     'id'    => $post['courseId'],
                     'image' => $target['image']
