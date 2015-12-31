@@ -163,9 +163,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onLessonStart(ServiceEvent $event)
     {
-        $learn   = $event->getSubject();
-        $course  = $this->getCourseService()->getCourse($learn['courseId']);
-        $lesson  = $this->getCourseService()->getLesson($learn['lessonId']);
+        $lesson  = $event->getSubject();
+        $course  = $event->getArgument('course');
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {
@@ -194,9 +193,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onLessonFinish(ServiceEvent $event)
     {
-        $learn   = $event->getSubject();
-        $course  = $this->getCourseService()->getCourse($learn['courseId']);
-        $lesson  = $this->getCourseService()->getLesson($learn['lessonId']);
+        $lesson  = $event->getSubject();
+        $course  = $event->getArgument('course');
         $private = $course['status'] == 'published' ? 0 : 1;
 
         if ($course['parentId']) {

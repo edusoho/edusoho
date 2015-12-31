@@ -365,9 +365,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonFinish(ServiceEvent $event)
     {
-        $learn  = $event->getSubject();
-        $course = $this->getCourseService()->getCourse($learn['courseId']);
-        $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
+        $lesson = $event->getSubject();
+        $course = $event->getArgument('course');
+        $learn  = $event->getArgument('learn');
+
         $target = $this->getTarget('course', $learn['courseId']);
         $from   = array(
             'type'  => 'course',
@@ -387,9 +388,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonStart(ServiceEvent $event)
     {
-        $learn  = $event->getSubject();
-        $course = $this->getCourseService()->getCourse($learn['courseId']);
-        $lesson = $this->getCourseService()->getLesson($learn['lessonId']);
+        $lesson = $event->getSubject();
+        $course = $event->getArgument('course');
+        $learn  = $event->getArgument('learn');
         $target = $this->getTarget('course', $learn['courseId']);
         $from   = array(
             'type'  => 'course',

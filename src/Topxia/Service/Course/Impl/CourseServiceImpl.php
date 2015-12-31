@@ -1527,7 +1527,10 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'finishedTime' => 0
             ));
 
-            $this->dispatchEvent('course.lesson_start', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId));
+            $this->dispatchEvent(
+                'course.lesson_start',
+                new ServiceEvent($lesson, array('course' => $course, 'learn' => $this->getLearnByUserIdAndLessonId($user['id'], $lessonId)))
+            );
 
             return true;
         }
@@ -1595,7 +1598,10 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getMemberDao()->updateMember($member['id'], $memberFields);
 
-        $this->dispatchEvent('course.lesson_finish', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId));
+        $this->dispatchEvent(
+            'course.lesson_finish',
+            new ServiceEvent($lesson, array('course' => $course, 'learn' => $this->getLearnByUserIdAndLessonId($member['userId'], $lessonId)))
+        );
     }
 
     public function searchLearnCount($conditions)
