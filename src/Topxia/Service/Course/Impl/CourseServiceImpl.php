@@ -1578,8 +1578,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             ));
         }
 
-        $this->dispatchEvent('course.lesson_finish_tui', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId));
-
         $learns = $this->getLessonLearnDao()->findLearnsByUserIdAndCourseIdAndStatus($member['userId'], $course['id'], 'finished');
 
         $totalCredits = $this->getLessonDao()->sumLessonGiveCreditByLessonIds(ArrayToolkit::column($learns, 'lessonId'));
@@ -1597,10 +1595,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getMemberDao()->updateMember($member['id'], $memberFields);
 
-        $this->dispatchEvent(
-            'course.lesson_finish',
-            new ServiceEvent($lesson, array('course' => $course))
-        );
+        $this->dispatchEvent('course.lesson_finish', $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId));
     }
 
     public function searchLearnCount($conditions)
