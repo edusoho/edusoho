@@ -12,7 +12,7 @@
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">	
 		<div class="form-group">
 			<select class="form-control" name="target" >
-				{{ select_options(targetChoices, app.request.query.get('target'))}}
+				{{ select_options(targetChoices, app.request.get('target'))}}
 			</select>
 		</div>
 

@@ -27,6 +27,6 @@
   {% else %}
     <div class="empty">一道题都没有</div>
   {% endfor %}
+  {{ web_macro.paginator(paginator) }}
 </ul>
-<div colspan="5">{{ web_macro.paginator(paginator) }}</div>
 

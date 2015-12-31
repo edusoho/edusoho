@@ -117,8 +117,9 @@ class MarkerController extends BaseController
     //获取当前播放器的驻点
     public function showMarkersAction(Request $request, $lessonId)
     {
-        $data    = $request->request->all();
-        $lesson  = $this->getCourseService()->getLesson($lessonId);
+        $data   = $request->request->all();
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
         $markers = $this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']);
         $results = array();
         $user    = $this->getUserService()->getCurrentUser();
@@ -198,7 +199,7 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $conditions                  = $request->query->all();
+        $conditions                  = $request->request->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
             'course'        => $course,
@@ -214,7 +215,8 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $conditions                  = $request->request->all();
+        $conditions = $request->request->all();
+
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
             'course'        => $course,
@@ -236,7 +238,8 @@ class MarkerController extends BaseController
 
     protected function getPaginatorAndQuestion($request, $conditions, $course)
     {
-        if (empty($conditions['target'])) {
+        if (!isset($conditions['target']) || empty($conditions['target'])) {
+            unset($conditions['target']);
             $conditions['targetPrefix'] = "course-{$course['id']}";
         }
 
@@ -247,11 +250,10 @@ class MarkerController extends BaseController
         $conditions['parentId'] = 0;
         $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice');
         $orderBy                = array('createdTime', 'DESC');
-
-        $paginator = new Paginator(
+        $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            6
+            1
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
@@ -260,7 +262,6 @@ class MarkerController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         return array($paginator, $questions);
     }
 

@@ -250,15 +250,15 @@ define(function(require, exports, module) {
                     return;
                 }
                 $.post($form.attr('action'), $form.serialize(), function(response) {
+                    console.log(response);
                     $('.question').html(response);
                 });
-
             }
         });
-
-        $(".pagination a").on('click', function(e) {
-            e.preventDefault();
-            $.get($(this).attr('href'), function(response) {
+        var target = $('select[name=target]');
+        $(".pagination a").on('click', function(event) {
+            event.preventDefault();
+            $.post($(this).attr('href'),{"target":target.val()}, function(response) {
                 $('.question').html(response);
             })
         })
