@@ -15,7 +15,6 @@ class HLSController extends BaseController
         $levelParam    = $request->query->get('level', "");
         $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
         $fromApi       = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
-        $inWhiteList   = $this->agentInWhiteList($request->headers->get("user-agent"));
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -46,7 +45,7 @@ class HLSController extends BaseController
                         'id'      => $file['id'].$level,
                         'fromApi' => $fromApi
                     ),
-                    'times'    => $inWhiteList ? 0 : 1,
+                    'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600
                 );
 
