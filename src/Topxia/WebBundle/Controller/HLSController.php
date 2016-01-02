@@ -138,8 +138,9 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params        = array();
-        $params['key'] = $file['metas2'][$level]['key'];
+        $params           = array();
+        $params['key']    = $file['metas2'][$level]['key'];
+        $params['fileId'] = $file['id'];
 
         if (!empty($token['data']['watchTimeLimit'])) {
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
