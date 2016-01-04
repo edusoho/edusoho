@@ -1,14 +1,4 @@
-{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<div class="row list-title">
-  <div class="col-md-6">题干</div>
-  <div class="col-md-2">题型</div>
-  <div class="col-md-2">难度</div>
-  <div class="col-md-2">操作</div>
-</div>
-
-
-<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list">
   {% for question in questions %} 
   <li class="row item-lesson" id="" question-id="{{question.id}}">
     <div class="col-md-6 title">
@@ -27,6 +17,5 @@
   {% else %}
     <div class="empty">一道题都没有</div>
   {% endfor %}
-  {{ web_macro.paginator(paginator) }}
-</ul>
+
 

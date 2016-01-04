@@ -251,7 +251,7 @@ define(function(require, exports, module) {
                 }
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     console.log(response);
-                    $('.question').html(response);
+                    $('#subject-lesson-list').html(response);
                 });
             }
         });
@@ -259,7 +259,8 @@ define(function(require, exports, module) {
         $(".pagination a").on('click', function(event) {
             event.preventDefault();
             $.post($(this).attr('href'),{"target":target.val()}, function(response) {
-                $('.question').html(response);
+                console.log(response);
+                $('#subject-lesson-list').html(response);
             })
         })
 

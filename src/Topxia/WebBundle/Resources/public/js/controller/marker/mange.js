@@ -321,7 +321,8 @@ define(function(require, exports, module) {
                 group: _classname,
                 delay: 500,
                 onDrop: function($item, container, _super) {
-                    console.log("onDrop");
+                    if($item.hasClass('item-lesson')) {
+                        console.log("onDrop");
                     _super($item, container);
                     var $_scale = $item.closest('.scale.blue');
                     if ($_scale.find('.lesson-list .item-lesson').length > 0) {
@@ -331,6 +332,7 @@ define(function(require, exports, module) {
 
                     }
                     console.log("onDrop over");
+                    }
                 }
             });
         },
