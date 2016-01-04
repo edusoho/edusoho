@@ -23,7 +23,7 @@ define(function(require, exports, module) {
                 $("#article-thumb").val(data.large.file.uri);
                 $("#article-originalThumb").val(data.origin.file.uri);
                 $('#article-thumb-preview').attr('src',data.large.file.url);
-                $("#article-thumb-container").html("<img src='"+data.large.file.url+"'>")
+                $("#article-thumb-container").html("<img class='img-responsive' src='"+data.large.file.url+"'>")
             });
 
         });
