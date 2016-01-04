@@ -525,6 +525,7 @@ CREATE TABLE `file` (
   `groupId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传文件组ID',
   `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上传人ID',
   `uri` varchar(255) NOT NULL COMMENT '文件URI',
+  `fileName` VARCHAR(512),
   `mime` varchar(255) NOT NULL COMMENT '文件MIME',
   `size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '文件状态',
