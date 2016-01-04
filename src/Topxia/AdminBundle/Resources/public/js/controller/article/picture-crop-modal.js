@@ -10,8 +10,8 @@ define(function(require, exports, module) {
         var imageCrop = new ImageCrop({
             element: "#article-pic-crop",
             group: 'article',
-            cropedWidth: 216,
-            cropedHeight: 120
+            cropedWidth: 754,
+            cropedHeight: 424
         });
 
         imageCrop.on("afterCrop", function(response){
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 
             var postData = {
                 imgs: {
-                    large: [216, 120]
+                    large: [754, 424]
                 },
                 deleteOriginFile: 0
             };

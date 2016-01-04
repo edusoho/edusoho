@@ -8349,9 +8349,8 @@ textarea {
   margin: 0 -5px;
 }
 .aricle-carousel {
-  padding: 0 5px;
   overflow: hidden;
-  height: 410px;
+  height: 424px;
 }
 @media (max-width: 1199px) {
   .aricle-carousel {
@@ -8376,7 +8375,7 @@ textarea {
 .aricle-carousel .swiper-slide {
   position: relative;
   width: 100%;
-  height: 410px;
+  height: 424px;
 }
 @media (max-width: 1199px) {
   .aricle-carousel .swiper-slide {
@@ -8465,13 +8464,10 @@ textarea {
 .aricle-carousel .swiper-pager span:hover {
   cursor: pointer;
 }
-.article-header-right {
-  padding: 0 5px;
-}
 .topic-post-small {
   width: 100%;
   margin-bottom: 10px;
-  height: 200px;
+  height: 207px;
   border-collapse: collapse;
   display: table;
   color: #fff;
@@ -8560,6 +8556,9 @@ textarea {
 }
 .article-list-mian .media img {
   border-radius: 6px;
+}
+.article-list-mian .media .thumb-img {
+  width: 260px;
 }
 .article-list-mian .pager {
   margin: 40px 0 20px 0;
