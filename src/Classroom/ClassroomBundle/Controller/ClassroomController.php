@@ -804,6 +804,7 @@ class ClassroomController extends BaseController
             $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
             $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
+            $formData['vipStatus']  = 'ok';
 
             $order = $this->getClassroomOrderService()->createOrder($formData);
 
