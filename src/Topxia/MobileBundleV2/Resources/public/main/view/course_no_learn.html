@@ -130,6 +130,8 @@
                 </li>
         </ul>
     </div>
+
+    <div ng-if="isCanShowConsultBtn()" ng-click="consultCourseTeacher()" class="ui-btn btn-ask">咨询</div>
 </div>
 <div ng-if="0 == course.parentId" ng-controller="CourseToolController">
     <div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);">

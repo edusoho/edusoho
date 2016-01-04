@@ -522,6 +522,30 @@ a {
   width: 30%;
 }
 
+.ui-btn.btn-ask {
+  bottom: 15%;
+  right: 16px;
+  position: fixed;
+  width: 72px;
+  height: 72px;
+  box-shadow: 2px 2px 2px #539E7F;
+  background-color: #37b97d;
+  border-width: 0;
+  background-image : none;
+  z-index: 13;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 72px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.ui-btn.btn-ask:not(.disabled):not(:disabled):active, .active.ui-btn.btn-ask{
+  color: #fff;
+  background: #27A86C;
+  border: solid 0px #27A86C;
+}
+
 /* ui-button */
 
 /* ui-slider */

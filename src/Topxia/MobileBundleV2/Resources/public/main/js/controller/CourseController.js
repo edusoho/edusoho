@@ -357,6 +357,7 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
       $scope.member = data.member;
       $scope.isFavorited = data.userFavorited;
       $scope.discount = data.discount;
+      $scope.teachers = data.course.teachers;
 
       if (data.member) {
         var progress = data.course.lessonNum == 0 ? 0 : data.member.learnedNum / data.course.lessonNum;
@@ -398,6 +399,28 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
     $scope.$parent.$on("refresh", function(event, data) {
       window.location.reload();
     });
+
+    $scope.isCanShowConsultBtn = function() {
+      if ("classroom" == $scope.course.source) {
+        return false;
+      }
+
+      if (!$scope.teachers || $scope.teachers.length == 0) {
+        return false;
+      }
+
+      return true;
+    };
+
+    $scope.consultCourseTeacher = function() {
+      if (!$scope.teachers || $scope.teachers.length == 0) {
+        alert("该课程暂无教师");
+        return;
+      }
+
+      var userId = $scope.teachers[0].id;
+      cordovaUtil.startAppView("courseConsult", { userId : userId });
+    };
 }
 
 app.controller('ClassRoomController', ['$scope', '$stateParams', 'ClassRoomService', 'AppUtil', '$state', 'cordovaUtil', 'ClassRoomUtil', ClassRoomController]);
