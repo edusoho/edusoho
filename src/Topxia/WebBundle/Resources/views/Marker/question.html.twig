@@ -1,4 +1,3 @@
-{% import _self as paginator_macro %}
 <div class="toolbar toolbar-open toolbar-question-marker" 
 	data-marker-metas-url="
 	{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}"
@@ -30,29 +29,10 @@
 
 
 	<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list">
-	{% include 'TopxiaWebBundle:Marker:question-tr.html.twig' %}
-	{{ paginator_macro.paginator(paginator) }}
 	</ul>
 
 </div>
 
-{% macro paginator(paginator, class) %}
-  {% if paginator.lastPage > 1 %}
-    <div class="pagination {{ class }}">
-      {% if paginator.currentPage != paginator.firstPage %}
-        <div><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">首页</a></div>
-        <div><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></div>
-      {% endif %}
-      {% for page in paginator.pages %}
-        <div {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></div>
-      {% endfor %}
 
-      {% if paginator.currentPage != paginator.lastPage %}
-        <div><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></div>
-        <div><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">尾页</a></div>
-      {% endif %}
-    </div>
-  {% endif %}
-{% endmacro %}
 
 <script>app.load('marker/question')</script>

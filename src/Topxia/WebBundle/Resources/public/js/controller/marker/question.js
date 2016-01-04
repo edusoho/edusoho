@@ -240,7 +240,11 @@ define(function(require, exports, module) {
         }
     })
     exports.run = function() {
+
         $form = $('.mark-from');
+        $.post($form.attr('action'), $form.serialize(), function(response) {
+            $('#subject-lesson-list').html(response);
+        });
         var validator = new Validator({
             element: $form,
             autoSubmit: false,
@@ -250,16 +254,15 @@ define(function(require, exports, module) {
                     return;
                 }
                 $.post($form.attr('action'), $form.serialize(), function(response) {
-                    console.log(response);
                     $('#subject-lesson-list').html(response);
                 });
             }
         });
         var target = $('select[name=target]');
-        $(".pagination a").on('click', function(event) {
+
+        $("#subject-lesson-list").on('click','.pagination a', function(event) {
             event.preventDefault();
             $.post($(this).attr('href'),{"target":target.val()}, function(response) {
-                console.log(response);
                 $('#subject-lesson-list').html(response);
             })
         })
