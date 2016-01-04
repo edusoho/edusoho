@@ -19,12 +19,13 @@ $config         = include __DIR__.'/config.php';
 $config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
 $connection = DriverManager::getConnection(array(
-    'dbname'   => $config['database_name'],
-    'user'     => $config['database_user'],
-    'password' => $config['database_password'],
-    'host'     => $config['database_host'],
-    'driver'   => $config['database_driver'],
-    'charset'  => 'utf8'
+    'wrapperClass' => 'Topxia\Service\Common\Connection',
+    'dbname'       => $config['database_name'],
+    'user'         => $config['database_user'],
+    'password'     => $config['database_password'],
+    'host'         => $config['database_host'],
+    'driver'       => $config['database_driver'],
+    'charset'      => 'utf8'
 ));
 
 $serviceKernel = ServiceKernel::create($config['environment'], true);
