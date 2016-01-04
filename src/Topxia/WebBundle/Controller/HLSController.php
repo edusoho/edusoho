@@ -152,7 +152,7 @@ class HLSController extends BaseController
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $token['data']['fromApi'] || $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
+                'keyencryption' => $token['data']['fromApi'] || empty($isBalloonPlayer) ? 0 : 1
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
