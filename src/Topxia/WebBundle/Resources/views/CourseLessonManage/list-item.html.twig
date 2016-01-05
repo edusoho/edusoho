@@ -120,11 +120,11 @@
         {% endif %}
 
         {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
-          <li class="{% if file.createdUserId|default(null) != app.user.id or file.convertStatus != 'success' %}hidden {% endif %}">
-            <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
-            <span class="glyphicon glyphicon-list prs"></span>弹题管理
-            </a>
-          </li>
+          {% if file.createdUserId|default(null) != app.user.id or file.convertStatus != 'success' %}
+            <li><a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
+              <span class="glyphicon glyphicon-list prs"></span>弹题管理
+              </a></li>
+          {% endif %}
           <li class="divider"></li>
         {% endif %}
 
