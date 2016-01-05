@@ -1,7 +1,7 @@
 {
     "mooc:home_top_banner":
     {
-        "title": "慕课主题：首页顶部.轮播图 ",
+        "title": "高教主题：首页顶部.轮播图 ",
         "category": "mooc",
         "templateName": "@theme/mooc/block/carousel.template.html.twig",
         "items": {
@@ -97,7 +97,7 @@
     },
     "mooc:middle_banner":
     {
-        "title": "慕课主题：首页中部.横幅",
+        "title": "高教主题：首页中部.横幅",
         "category": "mooc",
         "templateName": "@theme/mooc/block/middle_banner.template.html.twig",
         "items": {
@@ -210,7 +210,7 @@
     },
     "mooc:footer_link":
     {
-        "title": "慕课主题:底部合作伙伴",
+        "title": "高教主题:底部合作伙伴",
         "category": "mooc",
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
@@ -241,7 +241,7 @@
     },
     "mooc:bottom_info":
     {
-        "title": "慕课主题: 首页底部.链接区域",
+        "title": "高教主题: 首页底部.链接区域",
         "category": "mooc",
         "templateName": "@theme/mooc/block/bottom_info.template.html.twig",
         "items": {
@@ -447,7 +447,7 @@
     },
     "mooc:branch_school_top_banner":
     {
-        "title": "慕课主题：分校.首页顶部.轮播图 ",
+        "title": "高教主题：分校.首页顶部.轮播图 ",
         "category": "mooc",
         "templateName": "@theme/mooc/block/branch_school_carousel.template.html.twig",
         "items": {
