@@ -5948,7 +5948,7 @@ textarea.form-control-o {
   transition: all 0.3s ease;
   filter: alpha(opacity=30);
   background: #000\9;
-  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-image: -webkit-linear-gradient(top, rgba(225, 225, 225, 0) 50%, rgba(0, 0, 0, 0.3) 100%);
   background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%);
   background-image: linear, top, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.5) 100%;
 }
@@ -8354,7 +8354,7 @@ textarea {
 }
 @media (max-width: 1199px) {
   .aricle-carousel {
-    height: 338px;
+    height: 346px;
   }
 }
 @media (max-width: 991px) {
@@ -8379,7 +8379,7 @@ textarea {
 }
 @media (max-width: 1199px) {
   .aricle-carousel .swiper-slide {
-    height: 338px;
+    height: 346px;
   }
 }
 @media (max-width: 991px) {
@@ -8465,6 +8465,7 @@ textarea {
   cursor: pointer;
 }
 .topic-post-small {
+  position: relative;
   width: 100%;
   margin-bottom: 10px;
   height: 207px;
@@ -8480,7 +8481,12 @@ textarea {
 }
 @media (max-width: 1199px) {
   .topic-post-small {
-    height: 165px;
+    height: 168px;
+  }
+  .topic-post-small .content {
+    line-height: 20px;
+    max-height: 120px;
+    overflow: hidden;
   }
 }
 .topic-post-small.one {
@@ -8488,7 +8494,6 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #46c37b;
 }
 .topic-post-small.one:hover {
   -webkit-transition: all 0.3s ease;
@@ -8504,7 +8509,6 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  background-color: #702adb;
 }
 .topic-post-small.two:hover {
   -webkit-transition: all 0.3s ease;
@@ -8515,8 +8519,10 @@ textarea {
   filter: alpha(opacity=80);
 }
 .topic-post-small .content {
-  padding-right: 30%;
-  padding-left: 20px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 20px;
   display: table-cell;
   vertical-align: middle;
 }

@@ -14,7 +14,7 @@
               {% if featuredArticle.thumb %}
                 <img class="img-responsive" src="{{ filepath(featuredArticle.thumb, '') }}" alt="{{ featuredArticle.title }}">
               {% else %}
-                <img class="img-responsive" src="{{ asset(featuredArticle.picture) }}"  alt="{{ featuredArticle.title }}">  
+                <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}"  alt="{{ featuredArticle.title }}">  
               {% endif %}
               <div class="swiper-caption">{{ featuredArticle.title }}</div>
               <div class="image-overlay"></div>
@@ -28,10 +28,12 @@
     <div class="col-md-4 hidden-sm hidden-xs">
       {% for index,promotedArticle in promotedArticles %}
       <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small {% if loop.index == 1 %}one{% else %}two{% endif %}">
+        <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ ( 8 - loop.index ) ~ ".jpg" ) }}"  alt="{{ promotedArticle.title }}"> 
         <div class="content">
           <p>{{ promotedCategories[promotedArticle['id']].name }}</p>
           <h4 class="title">{{ promotedArticle.title|plain_text(125) }}</h4>
         </div>
+        <div class="image-overlay"></div>
       </a>
       {% endfor %}
     </div>
