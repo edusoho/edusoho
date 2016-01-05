@@ -15,6 +15,7 @@
 }
 
 .question-manage {
+  min-width: 1200px;
   background-color: #eeeeee;
   .breadcrumb {
     margin-bottom: 0;
@@ -101,6 +102,7 @@
         position: absolute;
         left: 50%;
         top: 50%;
+        visibility: visible;
         width: 300px;
         margin-top: -10px;
         margin-left: -150px;
@@ -167,7 +169,9 @@
           background-color: rgba(0, 0, 0, 0.8);
           z-index: 1;
           .lesson-list  {
+            min-height: 40px;
             height: auto;
+            margin: 0;
             .title {
               position: relative;
               .before {
@@ -224,24 +228,26 @@
           }
         }
       }
-      // .question-scale.show {
-      //   visibility: visible;
-      // }
       .tooltip-inner {
         background-color: #000;
         background-color: rgba(0, 0, 0, 0.8)
       }
     }
     .lesson-list {
-      min-height: 40px;
-      height: 130px;
+      height: 150px;
+      margin-top: -20px;
       .item-lesson.transparent{
         visibility: hidden;
       }
       .placeholder {
-        background-color: #000;
-        color: #fff;
+        height: 100%;
+        line-height: 150px;
+        background-color: #fff9c4;
+        border:1px dashed #ff6d00;
+        color: #ff6d00;
         text-align: center;
+        height: 100%;
+        margin: 0;
         .show-sub {
           display: none;
         }
