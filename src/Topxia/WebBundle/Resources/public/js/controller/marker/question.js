@@ -23,6 +23,7 @@ define(function(require, exports, module) {
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
         initMarkerArry:initMarkerArry,
+        videotime:
         addScale: function(markerJson,$marker) {
             // console.log(markerJson);
             // console.log("markerJson.id"+markerJson.id);
@@ -150,8 +151,9 @@ define(function(require, exports, module) {
                         markers[key].time = markerJson.second;
                         var finished = markers[key].finished;
                         player.get("player").markers.remove(key);
+                        console.log(data.markerId);
                         var markerData={
-                            "id":data.markerId,
+                            "id":markerJson.id,
                             "time":markerJson.second,
                             "text":"update",
                             "finished":finished
