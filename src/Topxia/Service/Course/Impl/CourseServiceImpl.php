@@ -1235,7 +1235,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0'
+            'suggestHours'  => '1.0',
+            'replayStatus'  => 'ungenerated'
         ));
 
         if (isset($fields['title'])) {
@@ -2641,11 +2642,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
         }
 
+        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+
         $fields = array(
             "replayStatus" => "generated"
         );
-        $lesson = $this->getLessonDao()->updateLesson($lessonId, $fields);
-        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+        $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+
         return $replayList;
     }
 
