@@ -25,20 +25,11 @@
                   </div>
                 </div>
               {% else %}
-                {% if isAnalysis|default(null) and role|default(null) == 'teacher' %}
-                  {% if type in ['single_choice', 'choice', 'uncertain_choice'] %}
-                    {% include 'TopxiaWebBundle:QuizQuestionTest/Analysis:analysis-choice.html.twig' %}
-                  {% else %}
-                    {% include 'TopxiaWebBundle:QuizQuestionTest/Analysis:analysis-' ~ type ~ '.html.twig' %}
-                  {% endif %}
+                {% if type in ['single_choice', 'choice', 'uncertain_choice'] %}
+                  {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
                 {% else %}
-                  {% if type in ['single_choice', 'choice', 'uncertain_choice'] %}
-                    {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-choice.html.twig' %}
-                  {% else %}
-                    {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
-                  {% endif %}
+                  {% include 'TopxiaWebBundle:QuizQuestionTest:do-test-' ~ type ~ '.html.twig' %}
                 {% endif %}
-                
               {% endif %}
             {% endfor %}
           </div>
