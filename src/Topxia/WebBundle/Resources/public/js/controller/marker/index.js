@@ -24,6 +24,7 @@ define(function(require, exports, module) {
             var player = window.frames["viewerIframe"].window.BalloonPlayer;
             var markersUrl =  '/course/lesson/'+lessonId+'/marker/show';
             player.setMarkerEscepe(false);
+            player.setControlBarLock(true);
              $.ajax({
                 type: "post",
                 url: markersUrl,
