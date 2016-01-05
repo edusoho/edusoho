@@ -1,16 +1,15 @@
-define("balloon-video-player/1.0.0/index-debug", [], function(require, exports, module){
-require("balloon-video-player/1.0.0/src/video-js/video.dev-debug");
+define("balloon-video-player/1.1.0/index-debug", [], function(require, exports, module){
+require("balloon-video-player/1.1.0/src/video-js/video.dev-debug");
 videojs.options.flash.swf = require.resolve("./src/video-js/video-js.swf#");
-require("balloon-video-player/1.0.0/src/video-js/lang/zh-CN-debug");
-require("balloon-video-player/1.0.0/src/plugins/fingerprint/fingerprint-debug");
-require("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-selector-debug");
-require("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug");
-require("balloon-video-player/1.0.0/src/plugins/markers/markers-debug");
-require("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug");
-
+require("balloon-video-player/1.1.0/src/video-js/lang/zh-CN-debug");
+require("balloon-video-player/1.1.0/src/plugins/fingerprint/fingerprint-debug");
+require("balloon-video-player/1.1.0/src/plugins/quality-selector/video-quality-selector-debug");
+require("balloon-video-player/1.1.0/src/plugins/watermark/watermark-debug");
+require("balloon-video-player/1.1.0/src/plugins/marker/marker-debug");
+require("balloon-video-player/1.1.0/src/plugins/pluck/pluck-debug");
 
 });
-define("balloon-video-player/1.0.0/src/video-js/video.dev-debug", [], function(require, exports, module){
+define("balloon-video-player/1.1.0/src/video-js/video.dev-debug", [], function(require, exports, module){
 /**
  * @fileoverview Main function src.
  */
@@ -10277,7 +10276,7 @@ vjs.plugin = function(name, init){
 
   var scrollSetting = {
     "": true,
-    "up": true
+    "up": true,
   };
 
   function findScrollSetting(value) {
@@ -11193,7 +11192,7 @@ vjs.plugin = function(name, init){
     if (cue.vertical === "") {
       this.applyStyles({
         left:  this.formatStyle(textPos, "%"),
-        width: this.formatStyle(cue.size, "%")
+        width: this.formatStyle(cue.size, "%"),
       });
     // Vertical box orientation; textPos is the distance from the top edge of the
     // area to the top edge of the box and cue.size is the height extending
@@ -11212,7 +11211,7 @@ vjs.plugin = function(name, init){
         left: this.formatStyle(box.left, "px"),
         right: this.formatStyle(box.right, "px"),
         height: this.formatStyle(box.height, "px"),
-        width: this.formatStyle(box.width, "px")
+        width: this.formatStyle(box.width, "px"),
       });
     };
   }
@@ -11879,7 +11878,7 @@ vjs.plugin = function(name, init){
 }(this, (this.vttjs || {})));
 
 });
-define("balloon-video-player/1.0.0/src/video-js/lang/zh-CN-debug", [], function(require, exports, module){
+define("balloon-video-player/1.1.0/src/video-js/lang/zh-CN-debug", [], function(require, exports, module){
 videojs.addLanguage("zh-CN",{
  "Play": "播放",
  "Pause": "暂停",
@@ -11887,7 +11886,7 @@ videojs.addLanguage("zh-CN",{
  "Duration Time": "时长",
  "Remaining Time": "剩余时间",
  "Stream Type": "媒体流类型",
- "LIVE": " ",
+ "LIVE": "直播",
  "Loaded": "加载完毕",
  "Progress": "进度",
  "Fullscreen": "全屏",
@@ -11911,7 +11910,7 @@ videojs.addLanguage("zh-CN",{
  "SHD": "超清"
 });
 });
-define("balloon-video-player/1.0.0/src/plugins/fingerprint/fingerprint-debug", [], function(require, exports, module){
+define("balloon-video-player/1.1.0/src/plugins/fingerprint/fingerprint-debug", [], function(require, exports, module){
 videojs.plugin('fingerprint', function(options) {
     var defaults = {
         html : 'Fingerprint',
@@ -12006,7 +12005,7 @@ videojs.plugin('fingerprint', function(options) {
     hideFingerprint();
 });
 });
-define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-selector-debug", [], function(require, exports, module){
+define("balloon-video-player/1.1.0/src/plugins/quality-selector/video-quality-selector-debug", [], function(require, exports, module){
 /**
  * Video.js Resolution Selector
  *
@@ -12209,7 +12208,7 @@ define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-se
 			
 			// Split default resolutions if set and valid, otherwise default to an empty array
 			default_resolutions = ( settings.default_res && typeof settings.default_res == 'string' ) ? settings.default_res.split( ',' ) : [];
-
+		
 		// Get all of the available resoloutions
 		while ( i > 0 ) {
 			
@@ -12270,10 +12269,10 @@ define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-se
 				}
 			}
 		}
-    
-    // Make sure we have at least 2 available resolutions before we add the button
-    if ( available_res.length < 1 ) { return; }
-
+		
+		// Make sure we have at least 1 available resolutions before we add the button
+		if ( available_res.length < 1 ) { return; }
+		
 		// Loop through the choosen default resolutions if there were any
 		for ( i = 0; i < default_resolutions.length; i++ ) {
 			
@@ -12429,14 +12428,14 @@ define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-se
 
 })( videojs );
 });
-define("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug", [], function(require, exports, module){
+define("balloon-video-player/1.1.0/src/plugins/watermark/watermark-debug", [], function(require, exports, module){
 (function() {
   var defaults = {
         file: 'Owned_Stamp.png',
         xpos: 0,
         ypos: 0,
         xrepeat: 0,
-        opacity: 100
+        opacity: 100,
     },
     extend = function() {
       var args, target, i, object, property;
@@ -12516,13 +12515,15 @@ define("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug", [], f
   });
 })();
 
-define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], function(require, exports, module){
-  (function() {
+});
+define("balloon-video-player/1.1.0/src/plugins/marker/marker-debug", [], function(require, exports, module){
+(function() {
      //default setting
      var defaultSetting = {
         markerStyle: {
            'width':'8px',
            'border-radius': '10%',
+           'background-color': 'red'
         },
         markerTip: {
            display: true,
@@ -12541,13 +12542,12 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            },
            style: {
               'width':'100%',
-              'bottom': '80px',
+              'height': '20%',
               'background-color': 'rgba(0,0,0,0.7)',
               'color': 'white',
               'font-size': '17px'
            }
         },
-        markerEscape:true,
         onMarkerClick: function(marker) {},
         onMarkerReached: function(marker) {},
         markers: []
@@ -12585,10 +12585,6 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               return setting.markerTip.time(a) - setting.markerTip.time(b);
            });
         }
-
-        function setMarkerEscape(mode) {
-          return setting.markerEscape = mode;
-        }
         
         function addMarkers(newMarkers) {
            // create the markers
@@ -12611,19 +12607,12 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
         }
         
         function createMarkerDiv(marker, duration) {
-           var markerDiv = $("<div class='vjs-marker'></div>");
+           var markerDiv = $("<div class='vjs-marker'></div>")
            markerDiv.css(setting.markerStyle)
-              .css({"left" : getPosition(marker) + '%'})
+              .css({"margin-left" : -parseFloat(markerDiv.css("width"))/2 + 'px', 
+                 "left" : getPosition(marker) + '%'})
               .attr("data-marker-key", marker.key)
               .attr("data-marker-time", setting.markerTip.time(marker));
-              
-           if(marker.finished !=undefined && marker.finished==true){
-               markerDiv.css('background-color','red');
-           }
-           // add user-defined class to marker
-           if (marker.class) {
-              markerDiv.addClass(marker.class);
-           }
            
            // bind click event to seek to marker time
            markerDiv.on('click', function(e) {
@@ -12657,9 +12646,6 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               if (markerDiv.data('marker-time') != markerTime) {
                  markerDiv.css({"left": getPosition(marker) + '%'})
                     .attr("data-marker-time", markerTime);
-                 if(marker.finished !=undefined && marker.finished==true){
-                     markerDiv.css('background-color','red');
-                 }
               }
            }
            sortMarkersList();
@@ -12730,9 +12716,6 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            var marker = markersList[currentMarkerIndex];
            var markerTime = setting.markerTip.time(marker);
         
-           if(marker.finished != undefined &&marker.finished ==true){
-             return ;
-           }
            if (currentTime >= markerTime && 
               currentTime <= (markerTime + setting.breakOverlay.displayTime)) {
 
@@ -12771,28 +12754,9 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               // next marker time of last marker would be end of video time
               return player.duration();
            }
-
-           // get early unfinished marker time
-           var getFastMarkerTime = function(){
-             for (var i = 0; i < markersList.length; i++) {
-               var marker = markersList[i];
-               if(marker.finished ==undefined || marker.finished ==false){
-                return marker.time;
-               }
-             }
-             return -1;
-           }
-
-           var fastMarkerTime = getFastMarkerTime();
            var currentTime = player.currentTime();
            var newMarkerIndex;
-           if(fastMarkerTime>0 && currentTime>fastMarkerTime && setting.markerEscape){
-             // if(!player.paused()){
-             //   player.pause();
-             // }
-             player.currentTime(fastMarkerTime);
-           }
-
+           
            if (currentMarkerIndex != -1) {
               // check if staying at same marker
               var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
@@ -12824,7 +12788,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            if (newMarkerIndex != currentMarkerIndex) {
               // trigger event
               if (newMarkerIndex != -1 && options.onMarkerReached) {
-                options.onMarkerReached(markersList[newMarkerIndex],player);
+                options.onMarkerReached(markersList[newMarkerIndex]);
               }
               currentMarkerIndex = newMarkerIndex;
            }
@@ -12917,9 +12881,6 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               player.off("timeupdate", updateBreakOverlay);
               delete player.markers;
            },
-           setMarkerEscape: function(mode){
-              setMarkerEscape(mode);
-           },
         };
      }
 
@@ -12927,9 +12888,8 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
 
   })(videojs);
 });
-
-define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(require, exports, module){
-  (function() {
+define("balloon-video-player/1.1.0/src/plugins/pluck/pluck-debug", [], function(require, exports, module){
+(function() {
     var defaults = {
           text: 'Owned_Stamp.png',
           opacity: 100,
@@ -12956,6 +12916,7 @@ define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(
       createDom = function(video,text){
         div = document.createElement('div');
         div.className = 'vjs-pluck';
+        div.id = 'vjs-pluck';
         span = document.createElement('span');
         span.innerHTML = text;
         span.className = 'vjs-pluck-text';
@@ -12969,7 +12930,7 @@ define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(
       settings = extend(defaults, options);
 
       video = this.el();
-      div = document.getElementsByClassName('vjs-pluck')[0];
+      div = document.getElementById('vjs-pluck');
 
       if(settings.display == false){
         if(div != undefined){
@@ -12981,6 +12942,5 @@ define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(
       }
     });
   })(videojs);
-});
 
 });
