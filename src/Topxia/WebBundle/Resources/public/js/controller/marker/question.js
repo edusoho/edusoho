@@ -100,7 +100,8 @@ define(function(require, exports, module) {
                         break;
                     }
                 }
-                console.log(markers);
+            });
+            console.log(markers);
 
             return markerJson;
         },
