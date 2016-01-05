@@ -174,13 +174,13 @@ define(function(require, exports, module) {
             return this.get('markers');
         },
 
-        finishMarker: function(id) {
+        finishMarker: function(id,isFinish) {
             var player = this.get("player");
             var markers = player.markers.getMarkers();
             for(var key in markers) 
             {
                 if(markers[key].id == id) {
-                    markers[key].finished = true;
+                    markers[key].finished = isFinish;
                     var marker = markers[key];
                     player.markers.remove(key);
                     player.markers.add([marker]);

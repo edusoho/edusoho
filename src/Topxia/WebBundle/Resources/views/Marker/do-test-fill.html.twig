@@ -1,0 +1,19 @@
+<div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">
+	  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+	</div>
+	<div class="question-body clearfix">
+		{% if itemResult.answer[0]|default(null) %}
+		{% set fileItemResultAnswer = itemResult.answer[0] %}
+		{% endif %}
+		<div class="homework-question-fill question-fill-inputs">
+		    {% for index,answer in question.answer %}
+		    <input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里" value="{% if fileItemResultAnswer[index]|default("") %} {{ fileItemResultAnswer[index]|default("") }}  {% endif %}" />
+		    {% endfor %}
+		</div>
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		<button id="submitQuestion" class="btn btn-success btn-sm">提交</button>
+	</div>
+	<div class="question-footer">
+	</div>
+</div>

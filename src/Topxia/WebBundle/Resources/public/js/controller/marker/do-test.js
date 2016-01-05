@@ -25,6 +25,7 @@ define(function(require, exports, module) {
                 $(this).siblings().find("input").removeAttr("checked");
             }
         });
+        
         $(".marker-modal .question-uncertain_choice li").on("click", function(){
             var $this = $(this).find('input');
             if(!$this.is(':checked')) {
@@ -45,6 +46,9 @@ define(function(require, exports, module) {
         		case "determine" :
         		return doDetermine();
         		break;
+        		case "fill" :
+        		return doFill();
+        		break;
         		default:
         		break;
         	};
@@ -63,6 +67,12 @@ define(function(require, exports, module) {
 	        function doDetermine(){
         		var answer = null;
 	        	answer = $("input[checked=checked]").val();
+				    return answer;
+	        };
+	        function doFill(){
+
+        		var answer = 11;
+						answer=$("input[name='answer[" + questionId + "][]']").val();
 				    return answer;
 	        };
         };

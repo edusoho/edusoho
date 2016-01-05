@@ -45,6 +45,12 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
             }
         }
 
+        if ($type == 'fill') {
+            foreach ($questionMarker['answer'] as $key => $questionMarkerAnswer) {
+                $status = in_array($answer, $questionMarkerAnswer) ? 'right' : 'wrong';
+            }
+        }
+
         $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
         $this->updateQuestionMarkerResult($questionMarkerResult['id'], array(
             'status'      => $status,

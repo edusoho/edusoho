@@ -321,7 +321,8 @@ define(function(require, exports, module) {
                 group: _classname,
                 delay: 500,
                 onDrop: function($item, container, _super) {
-                    console.log("onDrop");
+                    if($item.hasClass('item-lesson')) {
+                        console.log("onDrop");
                     _super($item, container);
                     var $_scale = $item.closest('.scale.blue');
                     if ($_scale.find('.lesson-list .item-lesson').length > 0) {
@@ -331,6 +332,7 @@ define(function(require, exports, module) {
 
                     }
                     console.log("onDrop over");
+                    }
                 }
             });
         },
@@ -367,7 +369,7 @@ define(function(require, exports, module) {
                     var $lesson_list = $newscale.find('.lesson-list');
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        var $li = $('<li class="row item-lesson" question-id="'+questionMarkers[j].questionId+'" id="'+questionMarkers[j].id+'"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">'+questionMarkers[j].seq+'</span>.</span>'+questionMarkers[j].stem+'</div><i class="icon-close glyphicon glyphicon-remove"></i></div></li>');
+                        var $li = $('<li class="row item-lesson" question-id="'+questionMarkers[j].questionId+'" id="'+questionMarkers[j].id+'"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">'+questionMarkers[j].seq+'</span>.</span>'+questionMarkers[j].stem.replace(/<.*?>/ig,"")+'</div><i class="icon-close glyphicon glyphicon-remove"></i></div></li>');
                         $li.appendTo($lesson_list);
                     }
                 }

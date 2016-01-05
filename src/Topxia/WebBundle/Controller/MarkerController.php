@@ -199,13 +199,12 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $conditions                  = $request->query->all();
+        $conditions                  = $request->request->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
             'course'        => $course,
             'lesson'        => $lesson,
             'questions'     => $questions,
-            'paginator'     => $paginator,
             'targetChoices' => $this->getQuestionTargetChoices($course, $lesson)
         ));
     }
@@ -215,9 +214,11 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $conditions                  = $request->request->all();
+        $conditions = $request->request->all();
+
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
-        return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
+
+        return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
             'course'        => $course,
             'lesson'        => $lesson,
             'paginator'     => $paginator,
@@ -237,7 +238,8 @@ class MarkerController extends BaseController
 
     protected function getPaginatorAndQuestion($request, $conditions, $course)
     {
-        if (empty($conditions['target'])) {
+        if (!isset($conditions['target']) || empty($conditions['target'])) {
+            unset($conditions['target']);
             $conditions['targetPrefix'] = "course-{$course['id']}";
         }
 
@@ -246,13 +248,12 @@ class MarkerController extends BaseController
         }
 
         $conditions['parentId'] = 0;
-        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice');
+        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill');
         $orderBy                = array('createdTime', 'DESC');
-
-        $paginator = new Paginator(
+        $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            12
+            3
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
@@ -261,7 +262,6 @@ class MarkerController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
         return array($paginator, $questions);
     }
 
