@@ -2642,12 +2642,13 @@ class CourseServiceImpl extends BaseService implements CourseService
             $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
         }
 
-        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
-
         $fields = array(
             "replayStatus" => "generated"
         );
+
         $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+
+        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
 
         return $replayList;
     }
