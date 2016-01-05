@@ -63,7 +63,6 @@ define(function(require, exports, module) {
             var url = $('.toolbar-question-marker').data('marker-merge-url');
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
-<<<<<<< HEAD
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 var markers = player.get("player").markers.getMarkers();
                 for(var key in markers) {
@@ -72,8 +71,6 @@ define(function(require, exports, module) {
                     }
                 }
                 console.log(markers);
-=======
->>>>>>> feature/9416-video-marker
             });
 
             return markerJson;
@@ -86,7 +83,6 @@ define(function(require, exports, module) {
                 second:markerJson.second
             };
             $.post(url,param,function(data){
-<<<<<<< HEAD
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 var markers = player.get("player").markers.getMarkers();
                 for(var key in markers) {
