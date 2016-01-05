@@ -8371,6 +8371,9 @@ textarea {
   position: relative;
   width: 100%;
   height: 100%;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .aricle-carousel .swiper-slide {
   position: relative;
@@ -8476,6 +8479,12 @@ textarea {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.topic-post-small img,
+.topic-post-small .image-overlay {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
 .topic-post-small:hover {
   color: #fff;
 }
@@ -8525,6 +8534,7 @@ textarea {
   margin: 20px;
   display: table-cell;
   vertical-align: middle;
+  z-index: 1;
 }
 .topic-post-small .content .title {
   margin: 0;

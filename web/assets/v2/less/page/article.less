@@ -23,6 +23,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    .border-radius(2px);
   }
   .swiper-slide {
     position: relative;
@@ -110,6 +111,9 @@
   border-collapse: collapse; 
   display: table;
   color: #fff;
+  img,.image-overlay{
+    .border-radius(2px);
+  }
   &:hover {
     color: #fff;
   }
@@ -149,9 +153,7 @@
     margin: 20px;
     display: table-cell;
     vertical-align: middle;
-    @media(max-width:@screen-md-max) {
-      
-    }
+    z-index: 1;
     .title {
       margin: 0;
       line-height: 25px;
