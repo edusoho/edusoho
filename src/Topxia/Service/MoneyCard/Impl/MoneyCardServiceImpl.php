@@ -595,6 +595,9 @@ class MoneyCardServiceImpl extends BaseService
                 $this->getNotificationService()->notify($userId, 'default', $message);
             }
 
+            $batch['receivedNumber'] += 1;
+            $this->getMoneyCardBatchDao()->updateBatch($batch['id'],array('receivedNumber'=>$batch['receivedNumber']));
+            
             $this->getMoneyCardBatchDao()->getConnection()->commit();
 
             return array(
