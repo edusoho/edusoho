@@ -12613,11 +12613,6 @@ define("balloon-video-player/1.1.0/src/plugins/marker/marker-debug", [], functio
                  "left" : getPosition(marker) + '%'})
               .attr("data-marker-key", marker.key)
               .attr("data-marker-time", setting.markerTip.time(marker));
-              
-           // add user-defined class to marker
-           if (marker.class) {
-              markerDiv.addClass(marker.class);
-           }
            
            // bind click event to seek to marker time
            markerDiv.on('click', function(e) {
