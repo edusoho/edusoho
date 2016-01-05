@@ -29,6 +29,7 @@
     position: relative;
     width: 100%;
     height: 424px;
+    left: 1px;
     @media (max-width: @screen-md-max) {
       height: 346px;
     }
@@ -45,6 +46,9 @@
     .image-overlay {
       .border-radius;
     }
+  }
+  .swiper-slide.swiper-slide-active {
+    left: 0;
   }
   .swiper-caption {
     position: absolute;

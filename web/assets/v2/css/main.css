@@ -8379,6 +8379,7 @@ textarea {
   position: relative;
   width: 100%;
   height: 424px;
+  left: 1px;
 }
 @media (max-width: 1199px) {
   .aricle-carousel .swiper-slide {
@@ -8405,6 +8406,9 @@ textarea {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+}
+.aricle-carousel .swiper-slide.swiper-slide-active {
+  left: 0;
 }
 .aricle-carousel .swiper-caption {
   position: absolute;
