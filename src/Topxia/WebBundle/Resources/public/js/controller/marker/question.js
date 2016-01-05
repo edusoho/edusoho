@@ -8,21 +8,24 @@ define(function(require, exports, module) {
     var videoHtml = $('#lesson-dashboard');
     var courseId = videoHtml.data("course-id");
     var lessonId = videoHtml.data("lesson-id");
+    var mediaLength = 30;
     $.ajax({ 
       type: "get", 
       url: $('.toolbar-question-marker').data('marker-metas-url'), 
       cache:false, 
       async:false, 
       success:function(data){
-        initMarkerArry = data;
+        initMarkerArry = data.markersMeta;
+        mediaLength =data.videoTime;
       }
     });
-
+    console.log(initMarkerArry);
     var tempid = 0;
 
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
         initMarkerArry:initMarkerArry,
+        videotime:mediaLength,
         addScale: function(markerJson,$marker) {
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             var param = {
@@ -62,11 +65,12 @@ define(function(require, exports, module) {
             var url = $('.toolbar-question-marker').data('marker-merge-url');
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                
                 var markers = player.get("player").markers.getMarkers();
                 for(var key in markers) {
                     if(markerJson.id == markers[key].id) {
-                        player.get("player").markers.remove(key);   
+                        player.get("player").markers.remove(key);
+                        $marker.remove();   
                     }
                 }
                 console.log(markers);
@@ -100,8 +104,8 @@ define(function(require, exports, module) {
                         break;
                     }
                 }
+                console.log(markers);
             });
-            console.log(markers);
 
             return markerJson;
         },

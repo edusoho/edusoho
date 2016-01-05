@@ -38,7 +38,12 @@ class MarkerController extends BaseController
     public function markerMetasAction(Request $request, $mediaId)
     {
         $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
-        return $this->createJsonResponse($markersMeta);
+        $file        = $this->getUploadFileService()->getFile($mediaId);
+        $result      = array(
+            'markersMeta' => $markersMeta,
+            'videoTime'   => $file['length']
+        );
+        return $this->createJsonResponse($result);
     }
 
     //新增弹题
@@ -293,5 +298,10 @@ class MarkerController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }
