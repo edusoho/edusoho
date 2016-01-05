@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         attrs: {
             item: '.item-lesson',
             placeholder: '.placeholder',
-            videotime: '68', //视频总时长
+            videotime: '18', //视频总时长
             editbox: '.editbox',
             scalebox: '.scalebox',
             timepartnum: '6',
