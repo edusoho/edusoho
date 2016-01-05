@@ -198,13 +198,14 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        if (!empty($token['userId'])) {
+        if (!$inWhiteList && !empty($token['userId'])) {
             if (!($this->getCurrentUser()->isLogin()
                 && $this->getCurrentUser()->getId() == $token['userId'])) {
                 return $this->makeFakeTokenString();
