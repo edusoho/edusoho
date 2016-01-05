@@ -43,19 +43,6 @@ class PlayerController extends BaseController
         ));
     }
 
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos($userAgent, $value) > -1) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     protected function getPlayUrl($id, $context)
     {
         $file = $this->getUploadFileService()->getFile($id);

@@ -259,19 +259,6 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     protected function getVideoBeginning(Request $request, $level, $userId = 0)
     {
         $beginning = array(
