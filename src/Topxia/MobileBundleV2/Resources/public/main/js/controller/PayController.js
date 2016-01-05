@@ -1,9 +1,13 @@
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
 app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
-app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', VipPayController]);
+app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', 'platformUtil', VipPayController]);
 
-function BasePayController()
+function BasePayController($scope, $stateParams, OrderService, cordovaUtil, platformUtil)
 {
+	var self = this;
+	$scope.priceType = "RMB";
+	$scope.payMode = "alipay";
+
 	this.showPayResultDlg = function() {
 		var dia = $.dialog({
 		        title : '确认支付' ,
@@ -17,46 +21,184 @@ function BasePayController()
 		        }
 		});
 	}
+
+	this.initPayMode = function(data) {
+		$scope.coin = data.coin;
+		if (data.coin && data.coin.priceType) {
+			$scope.priceType = data.coin.priceType;
+			$scope.payMode = ($scope.checkIsCoinMode() || "Coin" == $scope.priceType) ? "coin" : "alipay";
+		}
+		$scope.orderLabel = self.getOrderLabel($stateParams.targetType);
+	}
+
+	$scope.checkIsCoinMode = function() {
+		return platformUtil.ios || platformUtil.iPhone || platformUtil.iPad
+	}
+
+	$scope.changePayMode = function() {
+		if ("Coin" == $scope.priceType) {
+			return;
+		}
+
+		if ($scope.payMode == "coin") {
+			$scope.payMode = "alipay";
+		} else {
+			$scope.payMode = "coin";
+		}
+
+		self.changePrice($scope.payMode);
+	}
+
+	this.showErrorResultDlg = function(error) {
+		if ("coin_no_enough" == error.name) {
+			var dia = $.dialog({
+			        title : '支付提醒' ,
+			        content : '账户余额不足!' ,
+			        button : [ "确认" ,"充值" ]
+			});
+
+			dia.on("dialog:action",function(e){
+			        if (e.index == 1) {
+			        	cordovaUtil.startAppView("rechargeCoin", null);
+			        }
+			});
+			return;
+		}
+		$scope.toast(error.message);
+	}
+
+	this.getOrderLabel  = function(type) {
+		switch(type) {
+			case 'course':
+				return "购买课程";
+			case 'vip':
+				return "购买会员";
+			case 'classroom':
+				return "购买班级";
+		}
+
+		return "";
+	}
+
+	this.payOrder = function(price, params, payPassword) {
+
+		var payment = $scope.payMode;
+		var defaultParams = {
+			payment : payment,
+			payPassword : payPassword ? payPassword : "",
+			totalPrice : price,
+			couponCode : $scope.formData ? $scope.formData.code : "",
+			targetType : $stateParams.targetType,
+			targetId : $stateParams.targetId
+		};
+
+		for(var i in params) {
+			defaultParams[i] = params[i];
+		}
+
+		OrderService.createOrder(defaultParams, function(data) {
+			if (data.status != "ok") {
+				self.showErrorResultDlg(data.error);
+				return;
+			}
+
+			if (data.paid == true) {
+				window.history.back();
+			} else if (data.payUrl != "") {
+				cordovaUtil.pay($scope.orderLabel, data.payUrl);
+				self.showPayResultDlg();
+			}
+		});
+	};
+
+	this.submitToPay = function(price, params) {
+		if ($scope.payMode == "coin") {
+			cordovaUtil.showInput("支付提醒", "请输入支付密码", "password", function(input) {
+				if (!input || input.length == 0) {
+					alert("请输入支付密码!");
+					return;
+				}
+				self.payOrder(price, params, input);
+			});
+			return;
+		}
+
+		self.payOrder(price, params);
+	}
 }
 
-function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderService, cordovaUtil)
+function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderService, cordovaUtil, platformUtil)
 {
 	var self = this;
-	this.__proto__ = new BasePayController();
-
-	$scope.showLoad();
-	SchoolService.getVipPayInfo({
-		levelId : $stateParams.levelId
-	}, function(data) {
-		$scope.hideLoad();
-		$scope.data = data;
-		$scope.payModes = VipUtil.getPayMode(data.buyType);
-		$scope.selectedNum = 1;
-		$scope.selectedPayMode = $scope.payModes[0];
-
-		$scope.sumTotalPirce();
-		$scope.initPopver();
-	});
+	$stateParams.targetType = "vip";
+	$stateParams.targetId = $stateParams.levelId;
+	this.__proto__ = new BasePayController($scope, $stateParams, OrderService, cordovaUtil, platformUtil);
 	
-	$scope.sumTotalPirce = function() {
+	$scope.loadPayOrder = function() {
+		$scope.showLoad();
+		OrderService.getPayOrder({
+			targetType : 'vip',
+			targetId : $stateParams.levelId
+		}, function(data) {
+			$scope.data = data.orderInfo;
+			self.initPayMode(data);
+
+			$scope.payModes = VipUtil.getPayMode(data.orderInfo.buyType);
+			$scope.selectedNum = 1;
+			$scope.selectedPayMode = $scope.payModes[0];
+
+			self.changePrice($scope.payMode);
+			$scope.totalPayPrice = self.sumTotalPirce();
+			$scope.initPopver();
+			$scope.hideLoad();
+		});
+	}
+	
+	this.changePrice = function(payMode) {
+		var price = self.sumTotalPirce();
+		if ($scope.coin && "Coin" != $scope.priceType && payMode == "coin") {
+			price = price * $scope.coin.cashRate;
+		}
+		var couponPrice = $scope.coupon ? $scope.coupon.decreaseAmount : 0;
+		$scope.totalPayPrice = price > couponPrice ? price - couponPrice : 0;
+	}
+
+	$scope.changePayMode = function() {
+		if ("Coin" == $scope.priceType) {
+			return;
+		}
+
+		if ($scope.payMode == "coin") {
+			$scope.payMode = "alipay";
+		} else {
+			$scope.payMode = "coin";
+		}
+
+		self.changePrice($scope.payMode);
+	}
+
+	this.sumTotalPirce = function() {
 		var level = $scope.data.level;
 		var payTypes = VipUtil.getPayType();
 
 		var price = $scope.selectedPayMode.type == payTypes.byMonth ? level.monthPrice : level.yearPrice;
-		$scope.totalPayPrice = $scope.selectedNum * price;
+		var totalPayPrice = $scope.selectedNum * price;
+		return totalPayPrice;
 	}
 
 	$scope.add = function() {
 		if ($scope.selectedNum < 12) {
 			$scope.selectedNum ++;
-			$scope.sumTotalPirce();
+			$scope.totalPayPrice = self.sumTotalPirce();
+			self.changePrice($scope.payMode);
 		}
 	}
 
 	$scope.sub = function() {
 		if ($scope.selectedNum > 1) {
 			$scope.selectedNum --;
-			$scope.sumTotalPirce();
+			$scope.totalPayPrice = self.sumTotalPirce();
+			self.changePrice($scope.payMode);
 		}
 	}
 
@@ -68,9 +210,16 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 
 		  $scope.selectPayMode = function(payMode) {
 		  	$scope.selectedPayMode = payMode;
-			$scope.sumTotalPirce();
+			$scope.totalPayPrice = self.sumTotalPirce();
 		  	$scope.isShowPayMode = false;
 		  }
+	}
+
+	$scope.pay = function() {
+		self.submitToPay($scope.totalPayPrice, {
+			duration : $scope.selectedNum,
+			unitType : $scope.selectedPayMode.name
+		});
 	}
 
 	$scope.payVip = function() {
@@ -94,12 +243,16 @@ function VipListController($scope, $stateParams, SchoolService)
 {
 	var user = null;
 	
-	SchoolService.getSchoolVipList({
-		userId : $scope.user.id
-	}, function(data) {
-		$scope.data = data;
-		user = data.user;
-	});
+	$scope.loadVipList = function() {
+		$scope.showLoad();
+		SchoolService.getSchoolVipList({
+			userId : $scope.user.id
+		}, function(data) {
+			$scope.hideLoad();
+			$scope.data = data;
+			user = data.user;
+		});
+	}
 
 	$scope.getVipName = function() {
 		if (!$scope.data) {
@@ -149,14 +302,11 @@ function CourseCouponController($scope, CouponService, $stateParams, $window)
 	}
 }
 
-app.controller('CoursePayController', ['$scope', '$stateParams', 'OrderService', 'CouponService', 'AppUtil', 'cordovaUtil', CoursePayController]);
-function CoursePayController($scope, $stateParams, OrderService, CouponService, AppUtil, cordovaUtil)
+app.controller('CoursePayController', ['$scope', '$stateParams', 'OrderService', 'CouponService', 'AppUtil', 'cordovaUtil', 'platformUtil', CoursePayController]);
+function CoursePayController($scope, $stateParams, OrderService, CouponService, AppUtil, cordovaUtil, platformUtil)
 {	
 	var self = this;
-	this.__proto__ = new BasePayController();
-
-	$scope.priceType = "RMB";
-	$scope.payMode = "alipay";
+	this.__proto__ = new BasePayController($scope, $stateParams, OrderService, cordovaUtil, platformUtil);
 
 	this.loadOrder = function() {
 		OrderService.getPayOrder({
@@ -164,28 +314,10 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 			targetId : $stateParams.targetId
 		}, function(data) {
 			$scope.data = data;
-			$scope.coin = data.coin;
-			if (data.coin && data.coin.priceType) {
-				$scope.priceType = data.coin.priceType;
-				$scope.payMode = "Coin" == $scope.priceType ? "coin" : "alipay";
-			}
+			self.initPayMode(data);
 			self.changePrice($scope.payMode);
-			$scope.orderLabel = self.getOrderLabel($stateParams.targetType);
 		});
 	};
-
-	this.getOrderLabel  = function(type) {
-		switch(type) {
-			case 'course':
-				return "购买课程";
-			case 'vip':
-				return "购买会员";
-			case 'classroom':
-				return "购买班级";
-		}
-
-		return "";
-	}
 
 	$scope.$parent.$on("coupon", function(event, data) {
 		$scope.coupon = data.coupon;
@@ -220,43 +352,8 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		self.changePrice($scope.payMode);
 	}
 
-	this.payOrder = function(payPassword) {
-
-		var payment = $scope.payMode;
-		OrderService.createOrder({
-			payment : payment,
-			payPassword : payPassword ? payPassword : "",
-			totalPrice : $scope.data.orderInfo.price,
-			couponCode : $scope.formData ? $scope.formData.code : "",
-			targetType : $stateParams.targetType,
-			targetId : $stateParams.targetId
-		}, function(data) {
-			if (data.status != "ok") {
-				$scope.toast(data.error.message);
-				return;
-			}
-
-			if (data.paid == true) {
-				window.history.back();
-			} else if (data.payUrl != "") {
-				cordovaUtil.pay("支付课程", data.payUrl);
-				self.showPayResultDlg();
-			}
-		});
-	};
-
 	$scope.pay = function() {
-		if ($scope.payMode == "coin") {
-			cordovaUtil.showInput("支付提醒", "请输入支付密码", "password", function(input) {
-				if (!input || input.length == 0) {
-					alert("请输入支付密码!");
-					return;
-				}
-				self.payOrder(input);
-			});
-			return;
-		}
-		self.payOrder();
+		self.submitToPay($scope.data.orderInfo.price, null);
 	}
 
 	$scope.checkCoupon = function() {

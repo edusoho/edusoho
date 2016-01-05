@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    require('es-ckeditor');
     var WebUploader = require('edusoho.webuploader');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
@@ -26,7 +26,7 @@ define(function(require, exports, module) {
             },
             _initValidator: function() {
                 var editor = CKEDITOR.replace('thread-content-field', {
-                    toolbar: 'Simple',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread-content-field').data('imageUploadUrl')
                 });
 

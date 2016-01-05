@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class MobileAppController extends MobileBaseController
 {
+	const API_VERSIN = '1.4.0';
+
 	public function indexAction(Request $request)
 	{
 		$userAgent = $request->headers->get("user-agent");
@@ -25,15 +27,21 @@ class MobileAppController extends MobileBaseController
 
 	public function versionAction(Request $request)
 	{
+		$code = $request->query->get("code", "edusoho");
 		$userAgent = $request->headers->get("user-agent");
 		$clientType = $this->getClientType($userAgent);
 
-		$versionStr = $this->sendRequest("GET", "http://www.edusoho.com/version/edusoho-html5-main", array());
+		$versionStr = $this->sendRequest("GET", "http://www.edusoho.com/version/{$code}-html5-main", array());
+		
 		if (empty($versionStr)) {
 			return $this->createJson($request, array());
 		}
 
 		$main = (Array) json_decode($versionStr);
+		if (isset($main['error'])) {
+			return $this->createJson($request, array());
+		}
+		
 		$supportVersion = $main["support_version"];
 		if (strnatcasecmp(System::VERSION, $supportVersion) < 0) {
 			return $this->createJson($request, array());

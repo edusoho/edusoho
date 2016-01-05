@@ -2,14 +2,14 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    require('es-ckeditor');
 
     exports.run = function() {
         require('./common').run();
 
         // group: 'default'
         var editor = CKEDITOR.replace('thread_content', {
-            toolbar: 'Simple',
+            toolbar: 'Thread',
             filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
         });
 

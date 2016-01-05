@@ -19,6 +19,15 @@ class LessonLessonPluginController extends BaseController
         $homeworkLessonIds =array();
         $exercisesLessonIds =array();
 
+        $testpaperIds = array();
+        array_walk($items, function($item, $key)use(&$testpaperIds){
+            if($item['type'] == 'testpaper'){
+                array_push($testpaperIds, $item['mediaId']);
+            }
+        });
+
+        $testpapers = $this->getTestpaperService()->findTestpapersByIds($testpaperIds);
+
         if($homeworkPlugin) {
             $lessons = $this->getCourseService()->getCourseLessons($course['id']);
             $lessonIds = ArrayToolkit::column($lessons, 'id');
@@ -36,7 +45,8 @@ class LessonLessonPluginController extends BaseController
             'weeks' => array("日","一","二","三","四","五","六"),
             'homeworkLessonIds' => $homeworkLessonIds,
             'exercisesLessonIds' => $exercisesLessonIds,
-            'member' => $member
+            'member' => $member,
+            'testpapers' => $testpapers
         ));
     }
 
@@ -52,12 +62,16 @@ class LessonLessonPluginController extends BaseController
 
     protected function getHomeworkService()
     {
-            return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
+        return $this->getServiceKernel()->createService('Homework:Homework.HomeworkService');
     } 
 
     protected function getExerciseService()
     {
-            return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+        return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
     }
 
+    protected function getTestpaperService()
+    {
+        return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
+    }
 }

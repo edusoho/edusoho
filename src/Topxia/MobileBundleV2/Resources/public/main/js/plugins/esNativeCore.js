@@ -23,7 +23,7 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
             var deferred = $q.defer(); 
             exec(function(data) {
                 deferred.resolve(data);
-            }, null, "ESNativeCore", "getUserToken", []);
+            }, null, "ESNativeCore", "getUserToken", [], true);
 
             return deferred.promise;
         },
@@ -99,6 +99,17 @@ cordova.define("com.edusoho.kuozhi.v3.plugin.MenuClickPlugin", function(require,
         },
         redirect : function(body) {
             exec(null, null, "ESNativeCore", "redirect", [ body ]);
+        },
+        getThirdConfig : function ($q) {
+            var deferred = $q.defer(); 
+            exec(function(data) {
+                deferred.resolve(data);
+            }, null, "ESNativeCore", "getThirdConfig", []);
+
+            return deferred.promise;
+        },
+        sendNativeMessage : function(type, data) {
+            exec(null, null, "ESNativeCore", "sendNativeMessage", [ type, data ]);
         }
     };
 });

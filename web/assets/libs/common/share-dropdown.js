@@ -6,6 +6,9 @@ define(function(require, exports, module) {
         var params = $btn.parents('.js-social-share-params').data();
 
         var url = '';
+        if($(".point-share-url").length>0) {
+            $.post($(".point-share-url").val(), function () {});
+        }
         switch(type) {
             case 'weibo':
                 url = weibo(params);
@@ -71,7 +74,7 @@ define(function(require, exports, module) {
         var query = {};
         query.url = params.url;
         query.title = params.message;
-        query.pic = params.picture;
+        query.pic = document.domain + params.picture; 
         return 'http://service.weibo.com/share/share.php?' + buildUrlQuery(query);
     }
 

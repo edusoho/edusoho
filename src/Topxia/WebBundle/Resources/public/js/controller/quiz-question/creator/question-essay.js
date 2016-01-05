@@ -3,8 +3,8 @@ define(function(require, exports, module) {
     var BaseQuestion = require('./question-base');
     var Uploader = require('upload');
     var Notify = require('common/bootstrap-notify');
-    require('webuploader');
-    require('ckeditor');
+    // require('webuploader');
+    require('es-ckeditor');
 
     var EssayQuestion = BaseQuestion.extend({
         setup: function() {
@@ -21,6 +21,7 @@ define(function(require, exports, module) {
             // group: 'default'
             var editor = CKEDITOR.replace('question-answer-field', {
                 toolbar: 'Minimal',
+                filebrowserImageUploadUrl: $('#question-answer-field').data('imageUploadUrl'),
                 height: 120
             });
 
@@ -30,32 +31,32 @@ define(function(require, exports, module) {
 
             var $trigger = this.$('[data-role=answer-uploader]');
 
-            var uploader = WebUploader.create({
-                swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                server: this.element.data('uploadUrl'),
-                pick: '#answer-stem-uploader',
-                formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                accept: {
-                    title: 'Images',
-                    extensions: 'gif,jpg,jpeg,png',
-                    mimeTypes: 'image/*'
-                }
-            });
+            // var uploader = WebUploader.create({
+            //     swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+            //     server: this.element.data('uploadUrl'),
+            //     pick: '#answer-stem-uploader',
+            //     formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
+            //     accept: {
+            //         title: 'Images',
+            //         extensions: 'gif,jpg,jpeg,png',
+            //         mimeTypes: 'image/*'
+            //     }
+            // });
 
-            uploader.on( 'fileQueued', function( file ) {
-                Notify.info('正在上传，请稍等！', 0);
-                uploader.upload();
-            });
+            // uploader.on( 'fileQueued', function( file ) {
+            //     Notify.info('正在上传，请稍等！', 0);
+            //     uploader.upload();
+            // });
 
-            uploader.on( 'uploadSuccess', function( file, response ) {
-                Notify.success('上传成功！', 1);
-                var result = '[image]' + response.hashId + '[/image]';
-                editor.insertHtml(result);
-            });
+            // uploader.on( 'uploadSuccess', function( file, response ) {
+            //     Notify.success('上传成功！', 1);
+            //     var result = '[image]' + response.hashId + '[/image]';
+            //     editor.insertHtml(result);
+            // });
 
-            uploader.on( 'uploadError', function( file, response ) {
-                Notify.danger('上传失败，请重试！');
-            });
+            // uploader.on( 'uploadError', function( file, response ) {
+            //     Notify.danger('上传失败，请重试！');
+            // });
         }
     });
 

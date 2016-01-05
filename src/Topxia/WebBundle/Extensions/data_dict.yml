@@ -20,6 +20,7 @@ couponType:
 couponStatus:
     used: 已使用
     unused: 未使用
+    receive: 已领取
 
 fileType:
     video: 视频
@@ -66,6 +67,8 @@ refundStatus:html:
 payment:
     alipay: 支付宝
     wxpay: 微信支付
+    heepay: 网银支付
+    quickpay: 快捷支付
 
 moneyRecordType:
     income: 充值
@@ -201,6 +204,8 @@ analysisDateType:
     netVideoViewed: └─ 网络视频观看数
     income: 营收额
     courseIncome: └─ 课程营收额
+    classroomIncome: └─ 班级营收额
+    vipIncome: └─ 会员营收额
     courseSum: 课程总数
     userSum: 用户总数
     # exitLesson: 退出学习数

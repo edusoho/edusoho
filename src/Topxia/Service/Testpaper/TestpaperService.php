@@ -87,6 +87,8 @@ interface TestpaperService
 
     public function updateTestpaperResult($id, $usedTime);
 
+    public function updateTestResultsByLessonId($lessonId, $fields);
+
     public function findTeacherTestpapersByTeacherId ($teacherId);
 
     /**
@@ -99,4 +101,7 @@ interface TestpaperService
     public function getTestpaperItems($testpaperId);
 
     public function updateTestpaperItems($testpaperId, $items);
+
+    public function getItemsCountByParams($conditions, $groupBy='');
+
 }

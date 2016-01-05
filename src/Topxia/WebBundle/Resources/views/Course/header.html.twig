@@ -4,7 +4,7 @@
   <a href="{{ path('course_show', {id:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
   </a>
-  <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
+  <h1 class="title"><a class="link-dark" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a> 
     {% if course.status=='closed' %}  
       <span class="label label-danger ">已关闭</span>
     {% elseif course.status=='draft' %}
@@ -23,7 +23,7 @@
       教师：
       {% for id in course.teacherIds %}
         {% set user = users[id] %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
       {% endfor %}
     {% endif  %}
   </div>

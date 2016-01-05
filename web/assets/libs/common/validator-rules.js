@@ -53,6 +53,11 @@ define(function(require, exports, module) {
             '{{display}}必须是中文字、英文字母、数字及下划线组成'
         ],
         [
+           'reg_inviteCode',
+            /^[a-z0-9A-Z]{5}$/,
+            '{{display}}必须是5位数字、英文字母组成'
+        ],
+        [
             'alphanumeric',
             /^[a-zA-Z0-9_]+$/i,
             '{{display}}必须是英文字母、数字及下划线组成'
@@ -211,6 +216,17 @@ define(function(require, exports, module) {
         [
             'email_remote',
             function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    value = element.val().replace(/\./g, "!");
+                $.get(url, {value:value}, function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
+        ],
+        [
+            'invitecode_remote',
+            function(options,commit) {
                 var element = options.element,
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                     value = element.val().replace(/\./g, "!");

@@ -21,15 +21,18 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
-    public function get($name, $default = NULL)
+    public function get($name, $default = null)
     {
         if (is_null($this->cached)) {
             $this->cached = $this->getCacheService()->get(self::CACHE_NAME);
+
             if (is_null($this->cached)) {
                 $settings = $this->getSettingDao()->findAllSettings();
+
                 foreach ($settings as $setting) {
                     $this->cached[$setting['name']] = $setting['value'];
                 }
+
                 $this->getCacheService()->set(self::CACHE_NAME, $this->cached);
             }
         }
@@ -43,8 +46,6 @@ class SettingServiceImpl extends BaseService implements SettingService
         $this->clearCache();
     }
 
-    
-
     protected function clearCache()
     {
         $this->getCacheService()->clear(self::CACHE_NAME);
@@ -56,9 +57,8 @@ class SettingServiceImpl extends BaseService implements SettingService
         return $this->createService('System.CacheService');
     }
 
-    protected function getSettingDao ()
+    protected function getSettingDao()
     {
         return $this->createDao('System.SettingDao');
     }
-
 }

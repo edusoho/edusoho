@@ -5,7 +5,8 @@
   height: 40px;
   margin-bottom: 30px;
   .nav-sort {
-    padding-right: 200px;
+    float: left;
+    padding-right: 300px;
     @media (max-width: @screen-xs-max) {
       padding-right: 0;
     }
@@ -17,13 +18,16 @@
       padding: 10px 15px;
       color: @gray-dark;
       .es-transition;
-      &.active {
-        color: #fff;
-        background-color: @brand-primary;
-      }
       &:hover {
         color: @brand-primary;
         .es-transition;
+      }
+      &.active {
+        color: #fff;
+        background-color: @brand-primary;
+        &:hover {
+          color: #fff;
+        }
       }
     }
   }
@@ -35,8 +39,10 @@
 
   .filter {
     position: absolute;
+    text-align: right;
     top: 0;
     right: 15px;
+    width: 300px;
     .btn {
       background: none;
       padding: 10px 0;
@@ -51,6 +57,8 @@
     }
     label {
       margin-left: 15px;
+      margin-top: 11px;
+      vertical-align: top;
       .es-transition;
       &:hover {
         color: @brand-primary;

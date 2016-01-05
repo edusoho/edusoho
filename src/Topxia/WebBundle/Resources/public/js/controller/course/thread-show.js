@@ -1,14 +1,15 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-    require('ckeditor');
+    require('es-ckeditor');
+    Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
         require('./common').run();
 
         // group: 'course'
         var editor =  CKEDITOR.replace('post_content', {
-            toolbar: 'Simple',
+            toolbar: 'Thread',
             filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
         });
 
@@ -33,15 +34,27 @@ define(function(require, exports, module) {
             $('.thread-post-list').find('li.empty').remove();
             var $form = $("#thread-post-form");
 
-            $form.find('[type=submit]').attr('disabled', 'disabled');
-            $.post($form.attr('action'), $form.serialize(), function(html) {
-                $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
-                var id = $(html).appendTo('.thread-post-list').attr('id');
-                editor.setData('');
+            $.ajax({
+                'url':$form.attr('action'), 
+                'type':'post',
+                'data':$form.serialize(), 
+                'success': function(html) {
+                    $("#thread-post-num").text(parseInt($("#thread-post-num").text()) + 1);
+                    var id = $(html).appendTo('.thread-post-list').attr('id');
+                    editor.setData('');
 
-                $form.find('[type=submit]').removeAttr('disabled');
+                    $form.find('[type=submit]').removeAttr('disabled');
 
-                window.location.href = '#' + id;
+                    window.location.href = '#' + id;
+                },
+                'error': function(data) {
+                    data = $.parseJSON(data.responseText);
+                    if(data.error) {
+                        Notify.danger(data.error.message);
+                    } else {
+                        Notify.danger('发表回复失败，请重试');
+                    }
+                }
             });
 
             return false;

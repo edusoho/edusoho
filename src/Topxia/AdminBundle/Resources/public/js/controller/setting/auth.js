@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
   var Validator = require('bootstrap.validator');
-  require('ckeditor');
+  require('es-ckeditor');
   require('common/validator-rules').inject(Validator);
   var Notify = require('common/bootstrap-notify');
   require('/bundles/topxiaadmin/js/controller/system/common');
