@@ -11886,7 +11886,7 @@ videojs.addLanguage("zh-CN",{
  "Duration Time": "时长",
  "Remaining Time": "剩余时间",
  "Stream Type": "媒体流类型",
- "LIVE": "直播",
+ "LIVE": "",
  "Loaded": "加载完毕",
  "Progress": "进度",
  "Fullscreen": "全屏",
@@ -12270,8 +12270,8 @@ define("balloon-video-player/1.1.0/src/plugins/quality-selector/video-quality-se
 			}
 		}
 		
-		// Make sure we have at least 2 available resolutions before we add the button
-		if ( available_res.length < 2 ) { return; }
+		// Make sure we have at least 1 available resolutions before we add the button
+		if ( available_res.length < 1 ) { return; }
 		
 		// Loop through the choosen default resolutions if there were any
 		for ( i = 0; i < default_resolutions.length; i++ ) {
