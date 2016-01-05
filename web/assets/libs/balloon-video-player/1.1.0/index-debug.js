@@ -12916,6 +12916,7 @@ define("balloon-video-player/1.1.0/src/plugins/pluck/pluck-debug", [], function(
       createDom = function(video,text){
         div = document.createElement('div');
         div.className = 'vjs-pluck';
+        div.id = 'vjs-pluck';
         span = document.createElement('span');
         span.innerHTML = text;
         span.className = 'vjs-pluck-text';
@@ -12929,7 +12930,7 @@ define("balloon-video-player/1.1.0/src/plugins/pluck/pluck-debug", [], function(
       settings = extend(defaults, options);
 
       video = this.el();
-      div = document.getElementsByClassName('vjs-pluck')[0];
+      div = document.getElementById('vjs-pluck');
 
       if(settings.display == false){
         if(div != undefined){
