@@ -1235,7 +1235,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0'
+            'suggestHours'  => '1.0',
+            'replayStatus'  => 'ungenerated'
         ));
 
         if (isset($fields['title'])) {
@@ -2613,12 +2614,11 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function generateLessonReplay($courseId, $lessonId)
     {
-        $courseReplay = array('courseId' => $courseId, 'lessonId' => $lessonId);
-        $course       = $this->tryManageCourse($courseId);
-        $lesson       = $this->getLessonDao()->getLesson($lessonId);
-        $mediaId      = $lesson["mediaId"];
-        $client       = new EdusohoLiveClient();
-        $replayList   = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+        $course     = $this->tryManageCourse($courseId);
+        $lesson     = $this->getLessonDao()->getLesson($lessonId);
+        $mediaId    = $lesson["mediaId"];
+        $client     = new EdusohoLiveClient();
+        $replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
 
         if (array_key_exists("error", $replayList)) {
             return $replayList;
@@ -2639,13 +2639,14 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields["userId"]      = $this->getCurrentUser()->id;
             $fields["createdTime"] = time();
             $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
+            $this->dispatchEvent("course.lesson.generate.replay", $fields);
         }
 
         $fields = array(
             "replayStatus" => "generated"
         );
-        $lesson = $this->getLessonDao()->updateLesson($lessonId, $fields);
-        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+        $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+
         return $replayList;
     }
 

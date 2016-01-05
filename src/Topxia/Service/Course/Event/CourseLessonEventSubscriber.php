@@ -108,7 +108,10 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($context['lessonId'], $courseIds), 'id');
 
             foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->generateLessonReplay($courseId, $lessonIds[$key]);
+                $context['courseId']    = $courseId;
+                $context['lessonId']    = $lessonIds[$key];
+                $context['createdTime'] = time();
+                $this->getCourseService()->addCourseLessonReplay($context);
             }
         }
     }
