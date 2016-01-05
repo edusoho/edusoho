@@ -37,7 +37,7 @@ class PayCenterController extends BaseController
         $isTargetExist           = $processor->isTargetExist($targetId);
 
         if (!$isTargetExist) {
-            return $this->createMessageResponse('error', '课程或班级或会员已关闭或已删除');
+            return $this->createMessageResponse('error', '该订单已失效');
         }
 
         if (empty($order)) {
