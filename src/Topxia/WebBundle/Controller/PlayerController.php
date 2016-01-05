@@ -21,7 +21,11 @@ class PlayerController extends BaseController
                 $file['videoWatermarkEmbedded'] = 1;
             }
 
-            $player = "balloon-cloud-video-player";
+            if ($this->setting('developer.balloon_player', 0)) {
+                $player = "balloon-cloud-video-player";
+            } else {
+                $player = "cloud-video-player";
+            }
         } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
             $player = "local-video-player";
         } elseif ($file["type"] == 'audio') {
