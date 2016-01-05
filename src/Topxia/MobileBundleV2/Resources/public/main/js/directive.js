@@ -181,15 +181,19 @@ directive('imgError', function($timeout) {
                       errorSrc = app.viewFloder  + "img/default_class.jpg";
                       break;
                   }
-                  
+
                   element.attr('src', errorSrc);
                   element.on("error", function(e) {
                     element.attr("src", errorSrc);
                     element.on("error", null);
                   });
 
+                  if ("classroom" == attributes.imgError
+                     && attributes.imgSrc.indexOf("course-large.png") != -1) {
+                    return;
+                  }
                   $timeout(function() {
-                    element.attr('src', attributes.ngSrc);
+                    element.attr('src', attributes.imgSrc);
                   }, 100);
                 }
             };
@@ -445,11 +449,13 @@ directive('modal', function () {
       element.addClass("ui-modal");
       element.on('click', function(event) {
         scope.$emit("closeTab", {});
+        $(".ui-scroller").css("overflow","scroll");
       });
 
       element.on('touchmove', function(event) {
-        event.preventDefault();
+        
       });
+      $(".ui-scroller").css("overflow","hidden");
     }
   }
 }).
