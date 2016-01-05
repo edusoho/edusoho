@@ -65,6 +65,7 @@ define(function(require, exports, module) {
             var $scale_details = $scale.find(".scale-details");
             $scale.css("visibility", "visible");
             $scale_details.css("visibility", "visible");
+            $editbox.find('.remask').css("visibility", "hidden")
 
             var arry = [];
             // 遍历时间刻度
@@ -90,6 +91,8 @@ define(function(require, exports, module) {
                 // 隐藏默认时间轴
                 $scale.css("visibility", "hidden");
                 $scale_details.css("visibility", "hidden");
+                $editbox.find('.remask').css("visibility", "visible")
+
                 var timestr = $scale_details.html();
                 var postionleft = $scale.css("left");
                 var timesec = _obj._convertSec(timestr);
@@ -126,6 +129,7 @@ define(function(require, exports, module) {
                         _obj._newSortList($new_scale.find('.lesson-list'));
                         if ($new_scale.find('.lesson-list .item-lesson').length > 0) {
                             console.log("处理增加时间轴回调:li已经移动完成");
+                            $new_scale.hide();
                             _obj._addScale($new_scale, timestr, $new_scale.css("left"), $new_scale.find('.lesson-list').children().num);
                         } else {
                             // 判断
@@ -320,6 +324,7 @@ define(function(require, exports, module) {
             var $list = $(_classname).sortable({
                 group: _classname,
                 delay: 500,
+                handle: '.item-lesson',
                 onDrop: function($item, container, _super) {
                     if($item.hasClass('item-lesson')) {
                         console.log("onDrop");
@@ -334,7 +339,7 @@ define(function(require, exports, module) {
                     console.log("onDrop over");
                     }
                 }
-            });
+            });      
         },
         _initeditbox: function() {
             var _obj = this;
