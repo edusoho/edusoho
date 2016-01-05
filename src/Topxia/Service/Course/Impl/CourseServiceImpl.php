@@ -2614,11 +2614,12 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function generateLessonReplay($courseId, $lessonId)
     {
-        $course     = $this->tryManageCourse($courseId);
-        $lesson     = $this->getLessonDao()->getLesson($lessonId);
-        $mediaId    = $lesson["mediaId"];
-        $client     = new EdusohoLiveClient();
-        $replayList = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
+        $courseReplay = array('courseId' => $courseId, 'lessonId' => $lessonId);
+        $course       = $this->tryManageCourse($courseId);
+        $lesson       = $this->getLessonDao()->getLesson($lessonId);
+        $mediaId      = $lesson["mediaId"];
+        $client       = new EdusohoLiveClient();
+        $replayList   = $client->createReplayList($mediaId, "录播回放", $lesson["liveProvider"]);
 
         if (array_key_exists("error", $replayList)) {
             return $replayList;
@@ -2639,8 +2640,9 @@ class CourseServiceImpl extends BaseService implements CourseService
             $fields["userId"]      = $this->getCurrentUser()->id;
             $fields["createdTime"] = time();
             $courseLessonReplay    = $this->getCourseLessonReplayDao()->addCourseLessonReplay($fields);
-            $this->dispatchEvent("course.lesson.generate.replay", $fields);
         }
+
+        $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
 
         $fields = array(
             "replayStatus" => "generated"

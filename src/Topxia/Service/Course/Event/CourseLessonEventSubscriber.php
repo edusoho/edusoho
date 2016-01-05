@@ -101,17 +101,23 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonGenerateReplay(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
+        $context       = $event->getSubject();
+        $courseIds     = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
+        $lessonReplays = $this->getCourseService()->getCourseLessonReplayByLessonId($context['lessonId']);
 
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($context['lessonId'], $courseIds), 'id');
 
             foreach ($courseIds as $key => $courseId) {
-                $context['courseId']    = $courseId;
-                $context['lessonId']    = $lessonIds[$key];
-                $context['createdTime'] = time();
-                $this->getCourseService()->addCourseLessonReplay($context);
+                if ($lessonReplays) {
+                    foreach ($lessonReplays as $lessonReplay) {
+                        unset($lessonReplay['id']);
+                        $lessonReplay['courseId']    = $courseId;
+                        $lessonReplay['lessonId']    = $lessonIds[$key];
+                        $lessonReplay['createdTime'] = time();
+                        $this->getCourseService()->addCourseLessonReplay($lessonReplay);
+                    }
+                }
             }
         }
     }
