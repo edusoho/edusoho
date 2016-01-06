@@ -8513,8 +8513,14 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+}
+.topic-post-small.one:hover .image-overlay {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
 }
 .topic-post-small.two {
   margin-bottom: 0;
@@ -8523,13 +8529,13 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.topic-post-small.two:hover {
+.topic-post-small.two:hover .image-overlay {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
+  opacity: 0.2;
+  filter: alpha(opacity=20);
 }
 .topic-post-small .content {
   position: absolute;

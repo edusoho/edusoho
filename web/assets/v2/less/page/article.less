@@ -133,10 +133,12 @@
   &.one {
     .es-transition;
     // background-color: @brand-primary;
-    
     &:hover {
       .es-transition;
-      .opacity(0.8);
+      .image-overlay {
+        .es-transition;
+        .opacity(0.2);
+      }
     }
   }
   &.two {
@@ -144,8 +146,10 @@
     .es-transition;
     // background-color: #702adb;
     &:hover {
-      .es-transition;
-      .opacity(0.8);
+      .image-overlay {
+        .es-transition;
+        .opacity(0.2);
+      }
     }  
   }
   .content {
