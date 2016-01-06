@@ -1386,3 +1386,7 @@ admin_report_status:
 admin_report_status_php:
     pattern: /reports/status/php
     defaults: { _controller: TopxiaAdminBundle:System:php }
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
