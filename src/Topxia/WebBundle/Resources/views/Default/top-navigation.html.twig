@@ -1,5 +1,3 @@
-<nav class="mooc-nav">
-  <div class="container">
     <ul class="nav navbar-nav">
     {% for nav in navigations if nav.isOpen %}
       {% set subNavs = nav.children|default([]) %}
@@ -23,5 +21,4 @@
       {% endif %}
     {% endfor %} 
     </ul>
-  </div>
-</nav>    
+  

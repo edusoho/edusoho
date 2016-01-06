@@ -7,7 +7,11 @@
 {% set bodyClass = 'indexpage' %}
 
 {% block full_content %}
+ <nav class="mooc-nav hidden-xs hidden-sm">
+  <div class="container"> 
   {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+  </div>
+</nav>  
 <section class="es-poster swiper-container">
   {{ block_show('mooc:home_top_banner') }}
   <a class="arrow-left" href="#">
@@ -27,7 +31,6 @@
         </ul>
       </div>
     </div>
-  </div>
   </div>
 </section>
 <section class="mooc-navset">
