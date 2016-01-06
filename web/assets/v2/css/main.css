@@ -12047,6 +12047,13 @@ textarea {
 .question-manage .lesson-dashboard .dashboard-content {
   right: 510px;
 }
+.question-manage .lesson-dashboard .mask {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 30%;
+}
 .question-manage .list-title {
   padding: 10px 0;
   border-bottom: 1px solid #e1e1e1;
@@ -12077,6 +12084,17 @@ textarea {
 }
 .question-manage .lesson-list .item-lesson .content {
   text-align: center;
+  padding-left: 0;
+}
+.question-manage .lesson-list .item-lesson.disdrag {
+  background-color: #f1f1f1;
+  cursor: default;
+  color: #919191;
+  border: 1px dashed  #e1e1e1;
+}
+.question-manage .lesson-list .item-lesson.disdrag a {
+  color: #919191;
+  cursor: default;
 }
 .question-manage .lesson-list .item-lesson.dragged {
   background-color: #feffeb;
@@ -12101,6 +12119,10 @@ textarea {
 }
 .question-manage .lesson-list .placeholder .show-edit {
   display: none;
+}
+.question-manage .lesson-list .pagination {
+  position: absolute;
+  bottom: 0;
 }
 .question-manage .editbox {
   position: absolute;
