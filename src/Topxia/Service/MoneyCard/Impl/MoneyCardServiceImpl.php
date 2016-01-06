@@ -594,10 +594,9 @@ class MoneyCardServiceImpl extends BaseService
                 $message = "您有一张价值为".$batch['coin'].$this->getSettingService()->get("coin.coin_name", "虚拟币")."的充值卡领取成功";
                 $this->getNotificationService()->notify($userId, 'default', $message);
             }
-
-            $batch['receivedNumber'] += 1;
-            $this->getMoneyCardBatchDao()->updateBatch($batch['id'],array('receivedNumber'=>$batch['receivedNumber']));
             
+            $this->dispatchEvent('moneyCard.receive', $batch);
+
             $this->getMoneyCardBatchDao()->getConnection()->commit();
 
             return array(
