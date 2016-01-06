@@ -6,9 +6,7 @@
 
 // 轮播
 .aricle-carousel {
-  // padding: 0 5px;
   overflow: hidden;
-  // height: 410px;
   height: 424px;
   @media (max-width: @screen-md-max) {
     height: 346px;
@@ -102,24 +100,21 @@
   }
 }
 
-// .article-header-right {
-//   // padding: 0 5px;
-// }
-
 .topic-post-small {
   position: relative;
   width: 100%;
-  margin-bottom: 10px;
   height: 207px;
   color: #fff;
   border-collapse: collapse; 
   display: table;
   color: #fff;
-  img,.image-overlay{
-    .border-radius(2px);
-  }
   &:hover {
     color: #fff;
+    .es-transition;
+    .image-overlay {
+      .es-transition;
+      .opacity(0.2);
+    }
   }
   @media (max-width: @screen-md-max) {
     height: 168px;
@@ -129,35 +124,13 @@
       overflow: hidden;
     }
   }
-  .border-radius; 
-  &.one {
-    .es-transition;
-    // background-color: @brand-primary;
-    &:hover {
-      .es-transition;
-      .image-overlay {
-        .es-transition;
-        .opacity(0.2);
-      }
-    }
-  }
-  &.two {
-    margin-bottom: 0;
-    .es-transition;
-    // background-color: #702adb;
-    &:hover {
-      .image-overlay {
-        .es-transition;
-        .opacity(0.2);
-      }
-    }  
+  img,.image-overlay{
+    .border-radius(2px);
   }
   .content {
     position: absolute;
     left: 0;
     bottom: 0;
-    // padding-right: 30%;
-    // padding-left: 20px;
     margin: 20px;
     display: table-cell;
     vertical-align: middle;

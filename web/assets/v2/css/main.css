@@ -8474,23 +8474,25 @@ textarea {
 .topic-post-small {
   position: relative;
   width: 100%;
-  margin-bottom: 10px;
   height: 207px;
   border-collapse: collapse;
   display: table;
   color: #fff;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-}
-.topic-post-small img,
-.topic-post-small .image-overlay {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
 }
 .topic-post-small:hover {
   color: #fff;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.topic-post-small:hover .image-overlay {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
 }
 @media (max-width: 1199px) {
   .topic-post-small {
@@ -8502,40 +8504,11 @@ textarea {
     overflow: hidden;
   }
 }
-.topic-post-small.one {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.topic-post-small.one:hover {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.topic-post-small.one:hover .image-overlay {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
-}
-.topic-post-small.two {
-  margin-bottom: 0;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.topic-post-small.two:hover .image-overlay {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  opacity: 0.2;
-  filter: alpha(opacity=20);
+.topic-post-small img,
+.topic-post-small .image-overlay {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .topic-post-small .content {
   position: absolute;
