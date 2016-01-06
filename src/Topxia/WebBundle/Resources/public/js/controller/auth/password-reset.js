@@ -73,7 +73,13 @@ define(function(require, exports, module) {
         }
 
         
+        $('.email-back').click(function(){
+            $('#alertxx').hide();
+        });
 
+        $('.mobile-back').click(function(){
+            $('#alertxx').hide();
+        });
 
         makeValidator('email');
         $('.js-find-by-email').mouseover(function () {
