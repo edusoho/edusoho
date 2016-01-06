@@ -1378,3 +1378,11 @@ admin_batch_notification_send:
 admin_feedback:
     pattern: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
