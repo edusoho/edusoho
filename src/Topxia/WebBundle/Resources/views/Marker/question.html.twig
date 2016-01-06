@@ -7,24 +7,26 @@
 	data-marker-update-url="{{path('course_lesson_marker_update',{'courseId':course.id,'lessonId':lesson.id})}}"
 	data-queston-marker-sort-url="{{path('course_lesson_question_marker_sort',{'courseId':course.id,'lessonId':lesson.id})}}"
 	>
-	<form class="form-inline mark-from" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
+	<form class="form-horizontal mark-from" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
 		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">	
 		<div class="form-group">
-			<select class="form-control" name="target" >
-				{{ select_options(targetChoices, app.request.request.get('target'))}}
-			</select>
+			<div class="col-xs-5">
+				<select class="form-control" name="target" >
+					{{ select_options(targetChoices, app.request.request.get('target'))}}
+				</select>
+			</div>
+			<div class="col-xs-5">
+				<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词"  ></div>
+			<div class="col-xs-2">
+				<button class="btn btn-primary btn-md">搜索</button>
+			</div>
 		</div>
-
-		<div class="form-group">
-			<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词"></div>
-
-		<button class="btn btn-primary btn-md">搜索</button>
 	</form>
 	<div class="row list-title">
-	  <div class="col-md-6">题干</div>
-	  <div class="col-md-2">题型</div>
-	  <div class="col-md-2">难度</div>
-	  <div class="col-md-2">操作</div>
+	  <div class="col-xs-6">题干</div>
+	  <div class="col-xs-2">题型</div>
+	  <div class="col-xs-2">难度</div>
+	  <div class="col-xs-2">操作</div>
 	</div>
 
 

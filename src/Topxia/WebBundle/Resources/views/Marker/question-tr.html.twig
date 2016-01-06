@@ -1,8 +1,7 @@
-
-{% import _self as paginator_macro %}
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   {% for question in questions %} 
   <li class="row item-lesson" id="" question-id="{{question.id}}">
-    <div class="col-md-6 title">
+    <div class="col-xs-6 title">
       <div class="before">
         <span class="idname">{{question.id}}</span>
         <span class="glyphicon glyphicon-move mrm"></span>
@@ -11,29 +10,14 @@
       </div>
       <i class="icon-close glyphicon glyphicon-remove"></i>
     </div>
-    <div class="col-md-2 content">{{ dict('questionType')[question.type] }}</div>
-    <div class="col-md-2 content">{{ dict('difficulty')[question.difficulty] }}</div>
-    <div class="col-md-2 content"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></div>
+    <div class="col-xs-2 content">{{ dict('questionType')[question.type] }}</div>
+    <div class="col-xs-2 content">{{ dict('difficulty')[question.difficulty] }}</div>
+    <div class="col-xs-2 content"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></div>
   </li>
+
   {% else %}
     <div class="empty">一道题都没有</div>
   {% endfor %}
-{{ paginator_macro.paginator(paginator) }}
-{% macro paginator(paginator, class) %}
-  {% if paginator.lastPage > 1 %}
-    <div class="pagination {{ class }}">
-      {% if paginator.currentPage != paginator.firstPage %}
-        <div><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">首页</a></div>
-        <div><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></div>
-      {% endif %}
-      {% for page in paginator.pages %}
-        <div {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></div>
-      {% endfor %}
+  {{ web_macro.paginator(paginator) }}
 
-      {% if paginator.currentPage != paginator.lastPage %}
-        <div><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></div>
-        <div><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">尾页</a></div>
-      {% endif %}
-    </div>
-  {% endif %}
-{% endmacro %}
+

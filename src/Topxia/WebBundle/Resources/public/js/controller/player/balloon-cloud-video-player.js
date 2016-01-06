@@ -12,7 +12,8 @@ define(function(require, exports, module) {
             dynamicSource: '',
             markers: [{id:0,time:-1,text:'',finished:true}],
             starttime: '0',
-            timelimit:'0'
+            timelimit:'0',
+            controlBarLock:false
         },
 
         events: {},
@@ -98,6 +99,12 @@ define(function(require, exports, module) {
 
                 player.on('changeRes', function() {
                     Cookie.set("currentRes", player.getCurrentRes());
+                });
+
+                player.on('userinactive', function() {
+                    if(self.get('controlBarLock')!==false){
+                        player.userActive(true);
+                    }
                 });
 
                 player.on('loadedmetadata', function(e){
@@ -220,6 +227,10 @@ define(function(require, exports, module) {
             this.get("player").dispose();
         },
 
+        setControlBarLock: function (bool){
+            this.set("controlBarLock",bool);
+        },
+        
         durationFormat: function(secondTime) {
             var minutes = parseInt(secondTime / 60);
             var seconds = secondTime - minutes * 60;
