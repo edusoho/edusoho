@@ -2,8 +2,8 @@
 
 {% block title %}学生成绩单 - {{ parent() }}{% endblock %}
 {% set side_nav = 'transcripts' %}
-{% set script_controller = 'theme/course-manage/repost-table' %}	
+{% set script_controller = '../../../moocweb/js/controller/course-manage/repost-table' %}	
 
 {% block main %}
-	{% include 'TopxiaWebBundle:MyGrades:cards.html.twig' %}
+	{% include 'MoocWebBundle:MyGrades:cards.html.twig' %}
 {% endblock %}
