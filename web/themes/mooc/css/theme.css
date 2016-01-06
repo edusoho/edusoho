@@ -2818,14 +2818,31 @@ label {
   right: 50%;
   margin-right: -290px;
 }
+@media (max-width: 1200px) {
+  .es-poster .arrow-right {
+    margin-right: -392px;
+    margin-top: -20px;
+  }
+}
 .es-poster .arrow-left {
   left: 50%;
   margin-left: -550px;
+}
+@media (max-width: 1200px) {
+  .es-poster .arrow-left {
+    margin-left: -450px;
+    margin-top: -20px;
+  }
 }
 .es-poster .swiper-pager {
   text-align: left;
   left: 50%;
   margin-left: -200px;
+}
+@media (max-width: 1200px) {
+  .es-poster .swiper-pager {
+    margin-left: -50px;
+  }
 }
 .es-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
   width: 30px;
