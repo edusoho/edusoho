@@ -20,7 +20,7 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   this.loadCourseReviews = function(callback) {
     CourseService.getReviews({
       start : $scope.start,
-      limit : 10,
+      limit : 50,
       courseId : $stateParams.targetId
     }, callback);
   };
@@ -28,7 +28,7 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   this.loadClassRoomReviews = function(callback) {
     ClassRoomService.getReviews({
       start : $scope.start,
-      limit : 10,
+      limit : 50,
       classRoomId : $stateParams.targetId
     }, callback);
   };
@@ -46,7 +46,7 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   this.loadReviews = function() {
     self.targetService(function(data) {
       var length  = data ? data.data.length : 0;
-      if (!data || length == 0 || length < 10) {
+      if (!data || length == 0 || length < 50) {
           $scope.canLoad = false;
       }
 
@@ -401,6 +401,10 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
     });
 
     $scope.isCanShowConsultBtn = function() {
+      if (! $scope.user) {
+        return false;
+      }
+      
       if ("classroom" == $scope.course.source) {
         return false;
       }

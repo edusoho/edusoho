@@ -1,6 +1,6 @@
 app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', 'platformUtil', '$stateParams', '$q', MyInfoController]);
 app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
-app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
+app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', 'cordovaUtil', UserInfoController]);
 app.controller('StudentListController', ['$scope', 'ClassRoomService', 'CourseService', '$stateParams', StudentListController]);
 
 function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
@@ -175,7 +175,7 @@ function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $state
 	}
 }
 
-function UserInfoController($scope, UserService, $stateParams, AppUtil) 
+function UserInfoController($scope, UserService, $stateParams, AppUtil, cordovaUtil) 
 {
 	var self = this;
 
@@ -245,6 +245,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}, function(data) {
 			if (data && data.toId == $stateParams.userId) {
 				$scope.isFollower = true;
+				cordovaUtil.sendNativeMessage("refresh_friend_list", {});
 			}
 		});
 	}
@@ -255,6 +256,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}, function(data) {
 			if (data) {
 				$scope.isFollower = false;
+				cordovaUtil.sendNativeMessage("refresh_friend_list", {});
 			}
 		});
 	}

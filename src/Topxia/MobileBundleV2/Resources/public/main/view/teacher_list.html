@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="top-header" ng-init="loadUsers()">
+<div class="top-header ui-scroller" ng-init="loadUsers()">
 	<ul class="ui-list ui-list-text">  
 		<li class="ui-border-t" ng-repeat="user in users" ui-sref="userInfo({ userId : user.id })">
 	        <div class="ui-avatar-s">

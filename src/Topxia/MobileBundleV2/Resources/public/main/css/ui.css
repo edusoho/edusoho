@@ -522,12 +522,12 @@ a {
   width: 30%;
 }
 
-.ui-btn.btn-ask {
+.ui-btn.btn-consult {
   bottom: 15%;
-  right: 16px;
+  right: 32px;
   position: fixed;
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   box-shadow: 2px 2px 2px #539E7F;
   background-color: #37b97d;
   border-width: 0;
@@ -535,12 +535,12 @@ a {
   z-index: 13;
   border-radius: 50%;
   text-align: center;
-  line-height: 72px;
+  line-height: 64px;
   color: #ffffff;
   font-size: 18px;
 }
 
-.ui-btn.btn-ask:not(.disabled):not(:disabled):active, .active.ui-btn.btn-ask{
+.ui-btn.btn-consult:not(.disabled):not(:disabled):active, .active.ui-btn.btn-consult{
   color: #fff;
   background: #27A86C;
   border: solid 0px #27A86C;
@@ -1597,7 +1597,7 @@ a {
 .ui-course-review .ui-scroller {
   top: 0;
   background: #fff;
-  padding-top: 214px;
+  padding-top: 240px;
 }
 
 .ui-course-review .top-header {

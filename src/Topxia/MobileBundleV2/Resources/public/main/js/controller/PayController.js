@@ -1,5 +1,5 @@
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
-app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
+app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', 'cordovaUtil', VipListController]);
 app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', 'platformUtil', VipPayController]);
 
 function BasePayController($scope, $stateParams, OrderService, cordovaUtil, platformUtil)
@@ -239,7 +239,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 
 }
 
-function VipListController($scope, $stateParams, SchoolService)
+function VipListController($scope, $stateParams, SchoolService, cordovaUtil)
 {
 	var user = null;
 	
@@ -249,6 +249,10 @@ function VipListController($scope, $stateParams, SchoolService)
 			userId : $scope.user.id
 		}, function(data) {
 			$scope.hideLoad();
+			if (! data || !data.vips || data.vips.length == 0) {
+				alert("网校尚未开启Vip服务");
+				cordovaUtil.closeWebView();
+			}
 			$scope.data = data;
 			user = data.user;
 		});

@@ -566,11 +566,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', 'cordovaUti
 	this.nativePost = function(options) {
 		esNativeCore.post($q, options.url,  options.headers , options.data )
 		.then(function(data) {
-			console.log(data);
-			options.success(angular.fromJson(data));
+			self.filterCallback(angular.fromJson(data), options.success);
 		}, function(error) {
-			console.log(error);
-			options.error(angular.fromJson(error));
+			self.filterCallback(angular.fromJson(error), options.error);
 		});
 	};
 
