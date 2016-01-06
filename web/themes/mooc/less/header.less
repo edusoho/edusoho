@@ -1,235 +1,160 @@
-/* =========================== header =========================== */
-.navbar {
-  position: relative;
-  background-color: @white;
-  border: 0;
-  padding: 0 40px;
-  @media (max-width: @screen-sm-min) {
-    border-radius: 0;
-    padding: 0;
-  }
-}
 .mooc-header{
-  @media (max-width: @screen-sm-min) {
-    height: 50px;
+  background: @white;
+  height: 80px;
+  border:none;
+  @media (max-width : @screen-xs-max){
+    height: 60px;
   }
-}
-
-.indexpage {
-  background-color: #fff;
-  .navbar {
-    margin-bottom: 0;
+  .navbar-mobile .navbar-more{
+    padding: 20px 10px;
   }
-}
-.navbar-header{
-   @media (max-width: @screen-sm-min) {
-    text-align: center;
-  }
-}
-.navbar-brand {
-  height: 70px;
-  line-height: 40px;
-  color: @color-primary;
-  @media (max-width: @screen-sm-min) {
-    height: 50px;
-    float: none;
-    line-height: 50px;
-  }
-  &:hover {
-    color: @color-primary;
-  }
-}
-
-.navbar-toggle {
-  margin-top: 18px;
-  .icon-bar {
-    background-color: @color-primary;
-  }
-}
-
-.nav.navbar-nav {
-  >li {
-    >a {
-      padding: 25px 15px;
-      font-size: 16px;
-      font-weight: bold;
-      @media (max-width: @screen-md-max) and (min-width: @screen-md-min){
-        padding: 25px 10px;
-      }
-      @media (max-width: @screen-sm-max) {
-        padding: 25px 10px;
-        font-size: 14px;
-      }
-      &:hover,
-      &:focus {
-        background: none;
-      }
-    }
-  }
-  .dropdown-menu {
-    border-radius: 0;
-    border: 1px solid #eee;
-    box-shadow: none;
-  }
-  .dropdown-menu > li {
-    border-bottom: 1px solid #e5e5e5;
-    &:last-child{
-      border-bottom: 0;
-    }
-  }
-  .dropdown-menu > li > a {
-    padding: 8px 32px;
-  }
-  .dropdown-menu>li>a:hover,
-  .dropdown-menu>li>a:focus {
-    background: none;
-    color: @color-primary;
-  }
-}
-
-.navbar-form {
-  float: left;
-  padding: 21px 10px 21px 40px;
-  margin: 0;
-  .form-group {
+  .container{
     position: relative;
   }
-  .form-control {
-    height: 30px;
-    width: 206px;
-    padding: 6px 20px;
-    font-size: 12px;
-    background-color: #f6f6f6;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
+  .navbar-header{
+    .navbar-brand{
+      height: 80px;
+      line-height: 70px;
+      padding: 5px 10px;
+      color: @color-primary;
+    }
+    @media (max-width : @screen-xs-max){
+      text-align: center;
+      .navbar-brand{
+        float: none;
+        height: 60px;
+        line-height: 40px;
+        padding: 10px;
+        display: inline-block;
+      }
+    }
   }
-  .button {
+  .mooc-navbar-form{
     position: absolute;
-    top: 5px;
-    right: 8px;
-    background: none;
-    border: 0;
-    padding: 0;
-  }
-  .icon-search {
-    display: block;
-    width: 18px;
-    height: 18px;
-    background: url("../img/search.png") no-repeat;
-  }
-}
-
-.nav-user {
-  position: absolute;
-  right: 40px;
-  top: 0;
-  @media (max-width: @screen-sm-max) {
-   right: 0;
-  }
- 
-  img {
-    width: 42px;
-    height: 42px;
-    padding: 2px;
-    margin-right: 10px;
-    background-color: #f6f6f6;
-    border: 1px solid #f2f2f2;
-    border-radius: 50%;
-  }
-  .user {
-    position: relative;
-    float: left;
-    width: 160px;
-    padding: 3px 10px;
-    margin: 12px 0 8px 0;
-    border: 1px solid #fff;
-     @media (max-width: @screen-md-max) {
-
-    width: auto;
-    border:none;
-     }
-      @media (max-width: @screen-xs-max) {
-    margin: 0;
-   
-     }
-
-    &:hover {
-      border-color: #eee;
-      .dropdown-menu {
-        display: block;
-      }
+    left: 50%;
+    margin-left: -180px;
+    padding: 20px 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    .form-control{
+      width: 300px;
+      height: 40px;
+      background: #f0f5f9;
+      .border-radius(4px);
     }
-    .name {
-      font-size: 14px;
-      &:hover {
-        .zan-transition;
-        color: @color-primary;
-      }
-    }
-    .dropdown-menu {
+    .button{
       position: absolute;
-      top: 45px;
-      left: -1px;
-      right: -1px;
-      padding: 0;
-      border-radius: 0;
-      border-color: #eee;
-      box-shadow: none;
-     @media (max-width: @screen-md-max) {
-      margin: 0;
-      left: auto;
-      right: 0;
-     }
-      .divider {
-        margin: 0;
-      }
-      >li>a {
-        padding: 7px 20px;
-        font-size: 14px;
-        &:hover {
-          background: none;
-          color: @color-primary;
-          .icons-user-1 {
-            background-position: -30px 0;
-          }
-          .icons-user-2 {
-            background-position: -90px 0;
-          }
-          .icons-user-3 {
-            background-position: -150px 0;
-          }
-          .icons-user-4 {
-            background-position: -210px 0;
-          }
-        }
-        span {
-          .inline-block;
-          margin-right: 15px;
-          vertical-align: middle;
-        }
-      }
-    }
-    .dropdown-header {
-      padding: 10px 15px;
+      right: 2px;
+      top: 6px;
+      border: none;
+      background: none;
+      font-size: 20px;
     }
   }
-  >ul {
-    float: left;
-    height: 70px;
-    padding: 17px 0;
-    margin: 0;
-    >li {
-      .inline-block;
-      margin: 0 5px;
-      .icon-xuetang{
-        font-size: 24px;
-        vertical-align: text-bottom;
+  .navbar-user{
+     z-index: initial;
+    @media (max-width : @screen-xs-max){
+      z-index: 2;
+    }
+    .nav.user-nav{
+      float: left;
+     > li{
+        height: 80px;
+        >a{
+          padding: 30px 15px;
+          color: #272a41;
+          font-size: 16px;
+          cursor: pointer;
+        }
+        >a.dropdown-toggle{
+          padding: 20px 15px;
+          @media (max-width : @screen-xs-max){
+             padding: 10px 0;  
+          }
+        }
+        .message{
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          background-color: red;
+          border-radius: 50%;
+          color: #fff;
+          font-weight: bold;
+          line-height: 20px;
+          text-align: center;
+          font-size: 10px;
+          margin-left: 6px;
+        }
       }
-      .branchSchool{
-        color: #cbcbcb;
+      .dropdown-menu{
+        right: -46px;
+        @media (max-width : @screen-xs-max){
+          right: 0;
+          top: 60px;
+        }
+        .divider{
+          margin: 0;
+        }
+      }
+    }
+    .user-roles{
+      line-height: 80px;
+      font-size: 16px;
+      color: #272a41;
+      padding: 0 30px 0 15px;
+      &:hover{
+        color:@color-primary;
+      }
+    }
+    .user-message{
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: #70d8b9;
+      .border-radius(50%);
+      position: relative;
+      &:hover{
+        i{
+          background: #17b083;
+        }
+      }
+      i{
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        background: #10be8b;
+        .border-radius(50%);
+        color: @white;
+        margin: 5px;
+        text-align: center;
+        line-height: 30px;
+      }
+      .message{
+        position: absolute;
+        top: -4px;
+        right: 3px;
+        color: @red;
+        font-size: 14px;
+        font-weight: bold;
       }
     }
   }
 }
-
+.mooc-nav{
+  background: #272a41;
+  ul{
+    >li>a{
+      color: @white;
+      padding: 15px 38px;
+      &:hover{
+        background: #333755;
+      }
+    }
+    >li>ul>li>a{
+      color: #272a41!important;
+      &:hover{
+        color: @white!important;
+      }
+    }
+  }
+}

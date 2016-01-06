@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var swiper = new Swiper('.es-poster.swiper-container', {
-            pagination: '.swiper-pager',
+            pagination: '.es-poster .swiper-pager',
             paginationClickable: true,
             autoplay: 5000,
             autoplayDisableOnInteraction: false,
@@ -17,52 +17,80 @@ define(function(require, exports, module) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }
         });
-        Lazyload.init();
+        $('.es-poster .arrow-left').on('click', function(e){
+            e.preventDefault()
+            swiper.swipePrev()
+           })
+       $('.es-poster .arrow-right').on('click', function(e){
+            e.preventDefault()
+            swiper.swipeNext()
+        })
 
-        $("#course-list").on('click','.js-course-filter',function(){
-            var $btn = $(this);
-            $btn.addClass('active');
-            $btn.siblings('.active').removeClass('active');
-            $.get($btn.data('url'),function(html){
-                $('.home-course-list').html(html);
-                Lazyload.init();
-            })
-        });
-
-    
-
-        $('.recommend-teacher').on('click', '.teacher-item .follow-btn', function(){
-            var $btn = $(this);
-            var loggedin = $btn.data('loggedin');
-            if(loggedin == "1"){
-                showUnfollowBtn($btn);
+        var swiper2 = new Swiper('.set-right.swiper-container', {
+            autoplay: 6000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            calculateHeight: true,
+            roundLengths: true,
+            slidesPerView: 4,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
             }
-            $.post($btn.data('url'));
-        }).on('click', '.teacher-item .unfollow-btn', function(){
-            var $btn = $(this);
-            showFollowBtn($btn);
-            $.post($btn.data('url'));
+        });
+        $('.set-right .arrow-left').on('click', function(e){
+            e.preventDefault()
+            swiper2.swipePrev()
+           })
+       $('.set-right .arrow-right').on('click', function(e){
+            e.preventDefault()
+            swiper2.swipeNext()
         })
 
 
-        function showFollowBtn($btn)
-        {
-            $btn.hide();
-            $btn.siblings('.follow-btn').show();
-            $actualCard = $('#user-card-'+ $btn.closest('.js-card-content').data('userId'));
-            $actualCard.find('.unfollow-btn').hide();
-            $actualCard.find('.follow-btn').show();
-        }
+        var swiper3 = new Swiper('.class-list.swiper-container', {
+            loop: true,
+            calculateHeight: true,
+            roundLengths: true,
+            slidesPerView: 4,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
+            }
+        });
+        $('.class-list .arrow-left').on('click', function(e){
+            e.preventDefault()
+            swiper3.swipePrev()
+           })
+       $('.class-list .arrow-right').on('click', function(e){
+            e.preventDefault()
+            swiper3.swipeNext()
+        })
+     
+        var swiper4 = new Swiper('.teach-list.swiper-container', {
+            pagination: '.teach-list .swiper-pager',
+            paginationClickable: true,
+            autoplay: 5000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            calculateHeight: true,
+            roundLengths: true,
+            slidesPerView: 4,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
+            }
+        });
+        Lazyload.init();
 
-        function showUnfollowBtn($btn)
-        {
-            $btn.hide();
-            $btn.siblings('.unfollow-btn').show();
-            $actualCard = $('#user-card-'+ $btn.closest('.js-card-content').data('userId'));
-            $actualCard.find('.follow-btn').hide();
-            $actualCard.find('.unfollow-btn').show();
-        }
-        
+         $(window).scroll(function() {   
+            var scroll = $(window).scrollTop();
+
+            if($(".mooc-cooperate").length){
+              var mottotop = $(".mooc-cooperate").position().top-$(window).height();
+              if (scroll >= mottotop) {
+                  $(".mooc-cooperate .img").addClass("animate");
+              }       
+            }
+
+          });
+
     };
-
 });

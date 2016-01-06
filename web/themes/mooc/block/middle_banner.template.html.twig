@@ -1,12 +1,11 @@
-
-  <div class="container">
-    <div class="cow">
+<div class="container">
+ <div class="row">
       {% for i in 0..2 %}
-        <div class="feature-item col-sm-4">
-          <a href="{{ banner[i].href|default('') }}"><img class="img-responsive" src="{{ banner[i].src|default('') }}" alt="{{ banner[i].alt|default('') }}"></a>
-          <a href="{{ banner[i].href|default('') }}"><h4>{{ banner[i].value|default('') }}</h4></a>
-        </div>
+      <div class="col-md-4 col-sm-4">
+        <a href="{{ banner[i].href|default('') }}"><img src="{{ banner[i].src|default('') }}" alt="{{ banner[i].alt|default('') }}" class="img-responsive"></a>
+        <h4>{{ banner[i].title|default('') }}</h4>
+        <p>{{ banner[i].value|default('') }}</p>
+      </div>
       {% endfor %}
-
-    </div>
-  </div>
+ </div>
+</div>

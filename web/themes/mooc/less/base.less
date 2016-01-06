@@ -7,6 +7,7 @@
 body {
   font-family: "Hiragino Sans GB","Helvetica Neue",Helvetica,Arial,"Microsoft YaHei",sans-serif;
   color: @font-color;
+  background: #f0f5f9;
 }
 
 li {
@@ -277,7 +278,12 @@ input:focus {
           transform: scale(1.1, 1.1);
 }
 
-
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+};
 
 .icons-user-1,
 .icons-user-2,
@@ -706,6 +712,29 @@ input:focus {
     }
   }
 }
+
+.avatar-ss{
+    .border-radius(50%);
+    width: 20px !important;
+    height: 20px !important;
+}
+.avatar-ll{
+    .border-radius(50%);
+    width: 100px !important;
+    height: 100px !important;
+}
+.label-sm{
+  padding: 4px 8px;
+}
+.moocindex-more-btn{
+  width: 108px;
+  height: 36px;
+  border:2px solid #a5a7b3;
+  .border-radius(2px);
+  padding: 8px 20px;
+  color: #a5a7b3;
+}
+
 
 
 

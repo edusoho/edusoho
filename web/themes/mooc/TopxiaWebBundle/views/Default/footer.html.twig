@@ -1,39 +1,3 @@
-{#  <footer class="footer">
-    <div class="container">
-      <ul class="contact clearfix">
-        <li class="clearfix"> 
-        {#   <img src="{{asset('themes/mooc/img/footer_logo.png')}}" alt=""> 
-
-        {% if setting('site.logo') %}
-          <a href="{{ path('homepage') }}">
-            <img src="{{ asset(setting('site.logo')) }}">
-          </a>
-        {% else %}
-          <a href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
-        {% endif %}
-
-        </li>
-        <li class="footer-line"></li>
-        <li class="phone clearfix">
-          <img src="{{asset('themes/mooc/img/icon_phone.png')}}" alt="">0571-8681-9929
-        </li>
-        <li class="footer-line"></li>
-        <li class="mail clearfix">
-          <img src="{{ asset('themes/mooc/img/icon_mail.png') }}"  alt="">
-          {{ setting('site.master_email')|default('support@edusoho.com') }}
-        </li>
-      </ul>
-      <div class="copyright">
-        课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有&nbsp;{{ setting('site.icp') }}
-        {{ setting('site.analytics')|raw }}
-      </div>
-    </div>
-  </footer> #}
-  <section class="friendlink">
-    <div class="container">
-      {{ block_show('mooc:footer_link') }}
-    </div>
-  </section>
   <footer>
     <div class="container">
       <div class="row">
@@ -62,7 +26,3 @@
       </div>
     </section>
   </footer>
-<!--   <section class="footer-by">
-    <p>Powered by EduSoho v6.6.4 ©2014-2015 课程存档</p>
-    <p>课程内容版权均归 杭州阔知网络科技有限公司 所有 浙ICP备13006852号-1</p>
-  </section> -->

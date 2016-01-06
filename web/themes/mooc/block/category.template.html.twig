@@ -1,0 +1,24 @@
+
+  <div class="container clearfix">
+    <div class="set-left hidden-md hidden-sm hidden-xs">
+      <h2><i class="mc-icon icon-similar"></i>{{ text[0].value|default() }}</h2>
+      <p>{{ text[1].value|default() }}</p>
+    </div>
+    <div class="set-right swiper-container  hidden-sm hidden-xs">
+      <div class="swiper-wrapper">
+        {% for category in categories %}
+          <div class="width-25 swiper-slide">
+          <div class="navset-wrapper">
+            <i class="iconfont icon-lingdang"></i>{{}}
+          </div>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="arrow-left" href="#">
+        <i class="iconfont icon-icon30"></i>
+      </a>
+      <a class="arrow-right" href="#">
+        <i class="iconfont icon-icon32"></i>
+      </a>
+    </div>
+  </div>

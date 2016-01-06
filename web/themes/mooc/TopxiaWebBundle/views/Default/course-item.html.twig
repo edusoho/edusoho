@@ -1,4 +1,4 @@
-{% for course in courses %}
+{# {% for course in courses %}
   <div class="col-md-4 col-sm-6">
     <div class="course-item">
       <div class="course-img ">
@@ -35,4 +35,32 @@
       </div>
     </div>
   </div>
+{% endfor %} #}
+{% for course in courses %}
+<div class="course-item width-20">
+  <div class="course-img">
+    <a href="{{ path('course_show', {id:course.id}) }}">
+      <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
+    </a>
+    {% if course.certi %}
+      <span class="mooc-certificate-2">电子证书<i class="iconfont icon-xunzhang"></i></span>
+    {% endif %}
+  </div>
+  <div class="course-caption">
+     <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
+     <div class="metas clearfix">
+        {% set teacher = course.teachers|first|default(null) %}
+          {% if teacher %}
+            <a href="{{ path('user_show', {id:teacher.id}) }}" target="_blank"><img src="{{ filepath(teacher.smallAvatar, 'course.png') }}" class="avatar-ss"></a>
+            <span class="teacher-name">{{ teacher.nickname }}</span>
+          {% endif %}
+          {% if course.type == 'periodic' %}
+          {% set now = 'now'|date('U') %}
+          {% if course.startTime <= now and course.endTime > now %}<span class="label label-primary label-sm  pull-right">已开课</span>{% endif %}
+          {% if course.startTime > now %}<span class="label label-ing label-sm  pull-right">报名中</span>{% endif %}
+          {% if course.startTime < now and course.endTime < now %}<span class="label label-gray-light label-sm  pull-right">已结束</span>{% endif %}
+          {% endif %}
+     </div>
+  </div>
+</div>
 {% endfor %}

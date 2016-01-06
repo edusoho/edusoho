@@ -108,27 +108,85 @@
                 "type":"banner",
                 "default":[
                     {
-                        "title" : "横幅1标题",
-                        "value" : "横幅1介绍",
-                        "src" : "\/themes\/mooc\/img\/feature_1.png",
+                        "title" : "社区型网校",
+                        "value" : "与同学和老师实时讨论课程细节，让你全面掌握所有知识点，巩固知识，学习不再孤单！",
+                        "src" : "\/themes\/mooc\/img\/badge.svg",
                         "desc": "建议图片大小为130*130",
-                        "alt" : "横幅1",
+                        "alt" : "社区型网校",
                         "href": ""
                     },
                     {
-                        "title" : "横幅2标题",
-                        "value" : "横幅2介绍",
-                        "src" : "\/themes\/mooc\/img\/feature_2.png",
+                        "title" : "随时随地学习",
+                        "value" : "网校结合移动端，能够让你随时随地掏出手机就进行学习，方便快捷，没有任何负担。",
+                        "src" : "\/themes\/mooc\/img\/community.svg",
                         "desc": "建议图片大小为130*130",
-                        "alt" : "横幅2",
+                        "alt" : "随时随地学习",
                         "href": ""
                     },
                     {
-                        "title" : "横幅3标题",
-                        "value" : "横幅3介绍",
+                        "title" : "权威电子证书",
+                        "value" : "重点课程提供权威电子证书认证，让你的学习获得认可，为你的就业添砖加瓦。",
+                        "src" : "\/themes\/mooc\/img\/shake.svg",
+                        "desc": "建议图片大小为130*130",
+                        "alt" : "权威电子证书",
+                        "href": ""
+                    }
+                ]
+            }
+        }
+    },
+    "mooc:category_nav":
+    {
+        "title": "慕课主题：首页.分类导航",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/category.template.html.twig",
+        "items": {
+            "text": {
+                "title": "分类导航",
+                "desc": "",
+                "count": 2,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "学院设置"
+                    },
+                    {
+                        "value": "快速选择学院入口立即学习"
+                    }
+                ]
+            },
+            "categories": {
+                "title": "友情链接",
+                "desc": "最大可设置28个",
+                "count": 10,
+                "type": "imglink",
+                "default": [
+                    {
+                        "title" : "学院名称",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图片大小为130*130",
-                        "alt" : "横幅3",
+                        "desc": "建议图标大小为130*130",
+                        "alt" : "学院名称",
+                        "href": ""
+                    },
+                    {
+                        "title" : "学院名称",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图标大小为130*130",
+                        "alt" : "学院名称",
+                        "href": ""
+                    },
+                    {
+                        "title" : "学院名称",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图标大小为130*130",
+                        "alt" : "学院名称",
+                        "href": ""
+                    },
+                    {
+                        "title" : "学院名称",
+                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "desc": "建议图标大小为130*130",
+                        "alt" : "学院名称",
                         "href": ""
                     }
                 ]
