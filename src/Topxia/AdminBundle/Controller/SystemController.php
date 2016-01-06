@@ -5,6 +5,7 @@ namespace Topxia\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Finder\Finder;
+use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
 class SystemController extends BaseController
 {
@@ -21,21 +22,45 @@ class SystemController extends BaseController
         return new Response();
     }
 
-    public function sendEmailCheckAction()
+    public function ucenterAction()
     {
-        try {
-            $this->sendEmail(
-                $user['email'],
-                '请激活你的帐号 完成注册',
-                $emailBody
-            );
-            $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
-        } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
-            throw $e;
+        $setting = $this->getSettingService()->get('user_partner', array());
+
+        if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
+            $discuzProvider = new DiscuzAuthProvider();
+            if ($discuzProvider->checkConnect()) {
+                return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
+            } else {
+                return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
+            }
+        } else {
+            return $this->createJsonResponse(array('status' => true,'message' => '未开通Ucenter'));
+        }
+    }
+
+    public function emailSendCheckAction()
+    {
+        $user = $this->getCurrentUser();
+        $site = $this->getSettingService()->get('site', array());
+        $mailer  = $this->getSettingService()->get('mailer', array());
+
+        if (!empty($mailer['enabled'])) {
+            try {
+                $this->sendEmail(
+                    $user['email'],
+                    "【{$site['name']}】系统自检邮件",
+                    '系统邮件发送检测测试，请不要回复此邮件！'
+                );
+
+                return $this->createJsonResponse(array('status' => true,'message' => '邮件发送正常'));
+            } catch (\Exception $e) {
+                $this->getLogService()->error('user', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
+                return $this->createJsonResponse(array('status' => false,'message' => '邮件发送异常'));
+            }
+        } else {
+            return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送服务并没开通！'));
         }
 
-        return $this->createJsonResponse(true);
     }
 
     public function checkDirAction()
@@ -104,5 +129,10 @@ class SystemController extends BaseController
         $env['safemode'] = ini_get('safe_mode');
 
         return $env;
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

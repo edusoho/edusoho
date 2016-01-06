@@ -80,6 +80,11 @@ class DiscuzAuthProvider implements AuthProvider
         return array('success', '');
     }
 
+    public function checkConnect()
+    {
+        $this->initDiscuzApi();
+        return !empty(uc_app_ls());
+    }
 
     public function checkPassword($userId, $password)
     {
@@ -171,7 +176,7 @@ class DiscuzAuthProvider implements AuthProvider
         return 'discuz';
     }
 
-    protected function initDiscuzApi()
+    public function initDiscuzApi()
     {
         require_once __DIR__ .'/../../../../../app/config/uc_client_config.php';
         require_once __DIR__ .'/../../../../../vendor_user/uc_client/client.php';
