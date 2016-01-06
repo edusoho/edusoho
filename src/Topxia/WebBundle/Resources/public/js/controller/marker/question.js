@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     var courseId = videoHtml.data("course-id");
     var lessonId = videoHtml.data("lesson-id");
     var mediaLength = 30;
-    $.ajax({ 
+    $.ajax({
       type: "get", 
       url: $('.toolbar-question-marker').data('marker-metas-url'), 
       cache:false, 
@@ -121,9 +121,6 @@ define(function(require, exports, module) {
         },
         deleteScale: function(markerJson, $marker, $marker_list_item) {
             var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
-            console.log(markerJson);
-            console.log($marker);
-            console.log($marker_list_item);
             $.post(url, {
                 questionId: markerJson.questionMarkers[0].id
             }, function(data) {

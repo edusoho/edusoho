@@ -258,7 +258,7 @@ class MarkerController extends BaseController
         $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            6
+            7
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
@@ -267,6 +267,11 @@ class MarkerController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        foreach ($questions as $key => $question) {
+            $questions[$key]['exist'] = $this->getQuestionMarkerService()->findQuestionMarkersByQuestionId($question['id']) ? true : false;
+        }
+
         return array($paginator, $questions);
     }
 
