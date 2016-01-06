@@ -185,7 +185,7 @@ define(function(require, exports, module) {
 
             //将li移除，放回原位，然后list重新排序{
             // $list_item.appendTo($(this.get("subject_lesson_list")));
-            $(this.get("subject_lesson_list")).find('.item-lesson[question-id='+$list_item.attr('question-id')+']').attr('id',$list_item.attr('id')).removeClass('disdrag').addClass('drag');
+            $(this.get("subject_lesson_list")).find('.item-lesson[question-id='+$list_item.attr('question-id')+']').removeClass('disdrag').addClass('drag');
             //移除的li不再放回到右边；
             $list_item.remove();
             this._sortList($list);

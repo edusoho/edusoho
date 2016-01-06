@@ -57,6 +57,8 @@ define(function(require, exports, module) {
                 }
                 // 返回题目的ID
                 if (markerJson.questionMarkers[0].id == undefined) {
+                    console.log(markerJson.questionMarkers[0].id);
+                    console.log("markerquestionId"+data.id);
                     $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
                 }
             });
@@ -79,8 +81,7 @@ define(function(require, exports, module) {
                 var markers = player.get("player").markers.getMarkers();
                 for(var key in markers) {
                     if(markerJson.id == markers[key].id) {
-                        player.get("player").markers.remove(key);
-                        $marker.remove();   
+                        player.get("player").markers.remove(key);  
                     }
                 }
             });
@@ -120,7 +121,9 @@ define(function(require, exports, module) {
         },
         deleteScale: function(markerJson, $marker, $marker_list_item) {
             var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
-
+            console.log(markerJson);
+            console.log($marker);
+            console.log($marker_list_item);
             $.post(url, {
                 questionId: markerJson.questionMarkers[0].id
             }, function(data) {
