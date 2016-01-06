@@ -33,7 +33,7 @@ define(function(require, exports, module) {
             }
         },
         events: {
-            'mousedown .gruop-lesson-list .item-lesson': 'itemDraggable',
+            'mousedown .gruop-lesson-list .drag': 'itemDraggable',
             'click .lesson-list .icon-close': 'itemRmove',
             'mousedown .scale.blue': 'slideScale',
             'mouseenter .scale.blue': 'hoverScale',
@@ -65,8 +65,11 @@ define(function(require, exports, module) {
             var $scale_details = $scale.find(".scale-details");
             $scale.css("visibility", "visible");
             $scale_details.css("visibility", "visible");
-            $editbox.find('.remask').css("visibility", "hidden")
-
+            $editbox.find('.remask').css("visibility", "hidden");
+            $('.dashboard-content .mask').show();
+            var $dragcopy = $this.clone().removeClass('drag').addClass('disdrag').hide();
+            //生成副本
+            $this.after($dragcopy);
             var arry = [];
             // 遍历时间刻度
             $scalebox.children('.scale.blue').each(function() {
@@ -80,6 +83,12 @@ define(function(require, exports, module) {
             $(document).mousemove(function(event) {
                 if (isMove) {
                     $subject_lesson_list.find(_obj.get('placeholder')).html(value);
+                    //editbox_lesson_list
+                    if($editbox_lesson_list.find(".placeholder").length>0) {
+                        $dragcopy.show();
+                    }else {
+                        $dragcopy.hide();
+                    }
                     _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
                 }
             }).mouseup(function() {
@@ -92,6 +101,7 @@ define(function(require, exports, module) {
                 $scale.css("visibility", "hidden");
                 $scale_details.css("visibility", "hidden");
                 $editbox.find('.remask').css("visibility", "visible")
+                $('.dashboard-content .mask').hide();
 
                 var timestr = $scale_details.html();
                 var postionleft = $scale.css("left");
@@ -109,6 +119,7 @@ define(function(require, exports, module) {
                 });
 
                 if ($editbox_lesson_list.children().length > 0) {
+                    $dragcopy.show();
                     var bool = true;
                     if (arry.length > 0) {
                         // 遍历所有元素都与当前时间差，一旦遍历有时间挫小于5秒就跳出循环，认定为最接近元素。
@@ -153,6 +164,10 @@ define(function(require, exports, module) {
                         }
                     }
                 }
+                else {
+                    //未添加拖动，删除生产的副本
+                    $dragcopy.remove();
+                }
                 console.log("拖拽处理完成");
                 // 拖动时间停止
                 _obj.set('isDraggable', 'false');
@@ -170,6 +185,7 @@ define(function(require, exports, module) {
 
             //将li移除，放回原位，然后list重新排序{
             // $list_item.appendTo($(this.get("subject_lesson_list")));
+            $(this.get("subject_lesson_list")).find('.item-lesson[question-id='+$list_item.attr('question-id')+']').attr('id',$list_item.attr('id')).removeClass('disdrag').addClass('drag');
             //移除的li不再放回到右边；
             $list_item.remove();
             this._sortList($list);
@@ -324,7 +340,7 @@ define(function(require, exports, module) {
             var $list = $(_classname).sortable({
                 group: _classname,
                 delay: 500,
-                handle: '.item-lesson',
+                handle: '.drag',
                 onDrop: function($item, container, _super) {
                     if($item.hasClass('item-lesson')) {
                         console.log("onDrop");

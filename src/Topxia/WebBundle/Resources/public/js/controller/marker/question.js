@@ -126,6 +126,7 @@ define(function(require, exports, module) {
             }, function(data) {
                 if ($marker.is(":hidden")) {
                     $marker.remove();
+                    //查找
                     var player = window.frames["viewerIframe"].window.BalloonPlayer;
                     var markers = player.get("player").markers.getMarkers();
                     for (var key in markers) {
@@ -186,7 +187,7 @@ define(function(require, exports, module) {
             })
         })
 
-        $("#subject-lesson-list").on('click', '.marker-preview', function() {
+        $("#subject-lesson-list").on('click', '.drag .marker-preview', function() {
             $.get($(this).data('url'), function(response) {
                 $('.modal').modal('show');
                 $('.modal').html(response);
