@@ -1,3 +1,99 @@
+
+.mooc-index-title{
+  font-size: 18px;
+  color: #272a41;
+  position: relative;
+  padding: 0 15px;
+  margin: 40px 0 30px;
+  &:after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 3px;
+    width: 5px;
+    height: 100%;
+    background: #15c288;
+    height: 20px;
+  }
+}
+.es-poster{
+  .Wleft{
+    max-width: 880px;
+  }
+  .arrow-left,.arrow-right{
+    position: absolute;
+    top:50%;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    color: @white;
+    .border-radius(50%);
+    text-align: center;
+    i{
+      font-size: 26px;
+    }
+   }
+  .arrow-right{
+    right: 50%;
+    margin-right: -290px;
+  }
+  .arrow-left{
+    left: 50%;
+    margin-left: -550px;
+  }
+  .swiper-pager{
+    text-align: left;
+    left: 50%;
+    margin-left: -200px;
+  }
+  span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch{
+    width: 30px;
+    .border-radius(20px);
+  }
+  .mooc-notice{
+    width: 260px;
+    position: absolute;
+    top: 20px;
+    right: 50%;
+    margin-right: -570px;
+    .panel-heading{
+      i{
+        color: @color-primary;
+        padding-right: 10px;
+        font-size: 18px;
+      }
+    }
+    .panel-body{
+      ul{
+        padding: 0 12px; 
+      }
+      li{
+        list-style-type: disc;
+        color: @color-primary;
+        a{
+          color: #272a41;
+          display: inline-block;
+          width: 150px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          vertical-align: bottom;
+          margin-right: 12px;
+          &:hover{
+            color: @color-primary;
+          }
+        }
+        span{
+          color: #c1c1c1;
+
+        }
+      }
+    }
+  }
+}
+
 .course-filter.section-header {
   margin: 35px 0 50px 0;
   min-height: 0;
@@ -5,6 +101,399 @@
     top: -3px;
   }
 }
+.mooc-navset{
+  .set-left{
+    width: 228px;
+    background: @color-primary;
+    color: @white;
+    padding: 30px;
+    text-align: center;
+    float: left;
+    h2{
+      font-size: 32px;
+      margin: 0;
+    }
+    i{
+      font-size: 38px;
+    }
+    p{
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+  .set-right{
+    width: 912px;
+    float: left;
+    background: @white;
+    position: relative;
+    &:hover{
+      .arrow-left,.arrow-right{
+        .opacity(1);
+      }
+    }
+    .navset-wrapper{
+    padding: 0 1px;
+    border-right: 1px solid #f1f1f1;
+  
+    }
+    .width-25{
+      width: 24.6%;
+      font-size: 18px;
+      text-align: center;
+      margin: 35px 0;
+      &:last-child{
+        border-right: none;
+      }
+      i{
+        color:@color-primary;
+        font-size: 34px;
+        vertical-align: middle;
+      }
+    }
+    .arrow-left{
+      left: 0;
+    }
+    .arrow-left,.arrow-right{
+      position: absolute;
+      top: 30px;
+      display: inline-block;
+      width: 20px;
+      height: 60px;
+      line-height: 60px;
+      background: rgba(0, 0, 0, 0.1);
+      color: #ffffff;
+      text-align: center;
+      right: 0;
+      .opacity(0);
+      i{
+        font-size: 22px;
+      }
+    }
+  }
+}
+.mooc-course{
+  .width-20{
+    width: 20%;
+    float: left;
+    @media (max-width:@screen-sm-max){
+      width: 33.33%;
+    }
+   @media (max-width:@screen-xs-max){
+      width: 100%;
+    }
+  }
+  .course-list{
+  
+    .course-item{
+      position: relative;
+      z-index: 1;
+      margin-bottom: 30px;
+      .box-shadow(none);
+      .border-radius(0);
+      background: transparent;
+       &:hover{
+          .border-radius(2px);
+          .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1));
+          background: @white;
+        }
+      .title{
+        margin: 0;
+        padding: 0 10px;
+        display: block;
+        height: 40px;
+        white-space: inherit;
+      }
+      .metas{
+        .teacher-name{
+          font-size: 12px;
+          padding-left: 6px;
+        }
+      }
+    }
+    .course-img{
+      position: relative;
+      overflow: hidden;
+      border-top-left-radius: 2px;
+      border-top-right-radius: 2px;
+      img{
+        padding: 10px;
+      }
+      .mooc-certificate-2{
+        position: absolute;
+        bottom: 10px;
+        height: 28px;
+        line-height: 28px;
+        background: #ffb300;
+        width: 92%;
+        padding: 0 5px;
+        margin: 0 10px;
+        color: @white;
+        text-align: right;
+        i{
+          color: @white;
+          font-size: 22px;
+        }
+      }
+    }
+  }
+}
+.mooc-classroom{
+  .class-wrapper{
+    margin: 0 10px;
+    background: @white;
+    padding: 0 10px;
+  }
+  .class-list{
+     .arrow-left{
+      left: 0;
+    }
+    .arrow-left,.arrow-right{
+      position: absolute;
+      top: 50%;
+      margin-top: -45px;
+      display: inline-block;
+      width: 20px;
+      height: 60px;
+      line-height: 60px;
+      background: rgba(0, 0, 0, 0.1);
+      color: #ffffff;
+      text-align: center;
+      right: 0;
+      i{
+        font-size: 22px;
+      }
+    }
+  }
+  .class-item{
+    background: transparent;
+    padding: 0;
+    .box-shadow(none);
+    &:hover{
+      .class-wrapper{
+        .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1));
+      }
+    }
+    .class-img{
+      padding: 10px 0;
+    }
+    .metas{
+      color: #a5a7b3;
+    
+    }
+
+  }
+}
+
+.mooc-feature{
+  background: @white;
+  text-align: center;
+  padding: 85px 0;
+  margin-top: 40px;
+  img{
+   width: 42%;
+   margin: 0 auto;
+  }
+  h4{
+    color: #272a41;
+    margin-top: 30px 0 20px;
+  }
+  p{
+    color:#9496a1;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+}
+
+.mooc-teacher{
+  position: relative;
+  .swiper-slide{
+    -webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+  }
+  .teach-list{
+    padding: 15px 0 30px;
+      .swiper-pager{
+    position: absolute;
+    bottom: -5px;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+    span{
+      font-size: 0;
+      margin: 0 4px;
+      width: 10px;
+      height: 10px;
+       display: inline-block;
+      .border-radius(50%);
+      background: rgba(16, 190, 139, 0.3)
+    }
+   span.swiper-active-switch{
+      background: rgba(16, 190, 139, 0.9)
+   }
+  }
+  }
+  .teach-item{
+    position: relative;
+    padding: 0;
+    .teach-wrapper{
+      background: @white;
+      padding: 15px 30px;
+      margin: 0 15px;
+      .border-radius(2px);
+
+    }
+    .teacher-img{
+      position: absolute;
+      top:-15px;
+      right: 36px;
+    }
+    .teacher-name{
+      margin-top: 80px;
+      font-size: 22px;
+      color: #272a41;
+      margin-bottom: 5px;
+    }
+    .teacher-position{
+      color: #9496a1;
+      height: 20px;
+      line-height: 20px;
+      overflow: hidden;
+    }
+    .teacher-about{
+      color: #9496a1;
+      height: 118px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+    .teacher-kown{
+      text-align: center;
+      margin-bottom: 30px;
+      a{
+        border: 2px solid @color-primary;
+        padding: 12px 32px;
+        font-size: 16px;
+        .border-radius(4px);
+        color: @color-primary;
+        &:hover{
+          background: @color-primary;
+          color: @white;
+        }
+      }
+    }
+  }
+
+}
+
+.mooc-cooperate{
+  margin-bottom: 20px;
+  .cooperate-list{
+    padding: 0;
+    li{
+      float: left;
+      width: 20%;
+      text-align: center;
+      @media (max-width:@screen-sm-max){
+        width: 33.33%;
+      }
+      a{
+        display: block;
+        background: @white;
+        margin:10px;
+        padding: 28px 0;
+      }
+    }
+  }
+}
+.mooc-learn{
+
+  background: @color-primary;
+  .learn-list{
+    position: relative;
+      height: 240px;
+      overflow: hidden;
+    .mobile,.calculator,.book,.earphone,.coffee{
+      display: inline-block;
+      position: absolute;
+      background: url("../img/index-bg.png") no-repeat;
+      .opacity(0);
+    }
+    .mobile{
+      width: 136px;
+      height: 224px;
+      background-position: 0 0;
+      bottom: -54px;
+      left: 38px;
+    }
+    .mobile.animate{
+      .animation(fadeInUp 1s .3s ease both);
+    }
+    .calculator{
+      width: 124px;
+      height: 164px;
+      background-position: -138px 0;
+      left: 206px;
+      bottom: -82px;
+    }
+    .calculator.animate{
+      .animation(fadeInUp 1s .5s ease both);
+    }
+    .book{
+      width: 328px;
+      height: 266px;
+      background-position: 0 -232px;
+      left: 50%;
+      margin-left: -176px;
+      bottom: -200px;
+    }
+    .book.animate{
+      .animation(fadeInUp 1s .8s ease both);
+    }
+    .earphone{
+      width: 184px;
+      height: 206px;
+      background-position: -370px 0;
+      right: 50%;
+      margin-right: -371px;
+      bottom: -59px;
+    }
+    .earphone.animate{
+      .animation(fadeInUp 1s .8s ease both);
+    }
+    .coffee{
+      width: 134px;
+      height: 164px;
+      background-position: -568px 0;
+      right: 20px;
+      bottom: -30px;
+    }
+    .coffee.animate{
+      .animation(fadeInUp 1s .3s ease both);
+    }
+    .learning-btn{
+      display: inline-block;
+      border:2px solid @white;
+      background: rgba(255, 255, 255, 0.5);
+      color: @white;
+      padding: 13px 62px;
+      font-size: 22px;
+      position: absolute;
+      left: 50%;
+      margin-left: -152px;
+      bottom: 90px;
+       .opacity(0);
+       &:hover{
+          background: rgba(255, 255, 255, 0.9);
+          color: @color-primary;
+
+       }
+    }
+     .learning-btn.animate{
+      .animation(fadeInDown 1s .8s ease both);
+    }
+  }
+}
+
 
 .section-header {
   margin: 35px 0 50px 0;

@@ -62,12 +62,98 @@
 .label-gray-light {
   background-color: #bfbfbf;
 }
+.es-box-shadow {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(80px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+@-moz-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -moz-transform: translateY(80px);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translateY(0);
+  }
+}
+@-o-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -o-transform: translateY(80px);
+  }
+  100% {
+    opacity: 1;
+    -o-transform: translateY(0);
+  }
+}
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+  }
+}
+@-moz-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -moz-transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    -moz-transform: translateY(0);
+  }
+}
+@-o-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -o-transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    -o-transform: translateY(0);
+  }
+}
 /*重写*/
 /* =========================== color =========================== */
 /* =========================== common =========================== */
 body {
   font-family: "Hiragino Sans GB", "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif;
   color: #666666;
+  background: #f0f5f9;
 }
 li {
   list-style-type: none;
@@ -234,6 +320,9 @@ input:focus {
   right: 0;
   border-radius: 0;
   border-color: #ededed;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
 }
@@ -740,6 +829,33 @@ input:focus {
     display: none !important;
   }
 }
+.avatar-ss {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  width: 20px !important;
+  height: 20px !important;
+}
+.avatar-ll {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  width: 100px !important;
+  height: 100px !important;
+}
+.label-sm {
+  padding: 4px 8px;
+}
+.moocindex-more-btn {
+  width: 108px;
+  height: 36px;
+  border: 2px solid #a5a7b3;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  padding: 8px 20px;
+  color: #a5a7b3;
+}
 /*module*/
 .week-reminder,
 .time-reminder {
@@ -823,6 +939,9 @@ input:focus {
   padding: 2px 10px;
   margin-top: 15px;
   background-color: #f8f8f8;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
   border-radius: 4px;
 }
 @media (max-width: 767px) {
@@ -914,6 +1033,9 @@ input:focus {
   margin-bottom: 50px;
 }
 .course-list.explore .course-item {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
 }
@@ -1251,6 +1373,9 @@ input:focus {
   margin-top: 5px;
 }
 .course-detail-header-join .course-header-info .dropdown-menu {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
   border-radius: 0;
@@ -2285,257 +2410,180 @@ input:focus {
     padding: 10px;
   }
 }
-/* =========================== header =========================== */
-.navbar {
-  position: relative;
-  background-color: #ffffff;
-  border: 0;
-  padding: 0 40px;
-}
-@media (max-width: 768px) {
-  .navbar {
-    border-radius: 0;
-    padding: 0;
-  }
-}
-@media (max-width: 768px) {
-  .mooc-header {
-    height: 50px;
-  }
-}
-.indexpage {
-  background-color: #fff;
-}
-.indexpage .navbar {
-  margin-bottom: 0;
-}
-@media (max-width: 768px) {
-  .navbar-header {
-    text-align: center;
-  }
-}
-.navbar-brand {
-  height: 70px;
-  line-height: 40px;
-  color: #10b67c;
-}
-@media (max-width: 768px) {
-  .navbar-brand {
-    height: 50px;
-    float: none;
-    line-height: 50px;
-  }
-}
-.navbar-brand:hover {
-  color: #10b67c;
-}
-.navbar-toggle {
-  margin-top: 18px;
-}
-.navbar-toggle .icon-bar {
-  background-color: #10b67c;
-}
-.nav.navbar-nav > li > a {
-  padding: 25px 15px;
-  font-size: 16px;
-  font-weight: bold;
-}
-@media (max-width: 1199px) and (min-width: 992px) {
-  .nav.navbar-nav > li > a {
-    padding: 25px 10px;
-  }
-}
-@media (max-width: 991px) {
-  .nav.navbar-nav > li > a {
-    padding: 25px 10px;
-    font-size: 14px;
-  }
-}
-.nav.navbar-nav > li > a:hover,
-.nav.navbar-nav > li > a:focus {
-  background: none;
-}
-.nav.navbar-nav .dropdown-menu {
-  border-radius: 0;
-  border: 1px solid #eee;
-  box-shadow: none;
-}
-.nav.navbar-nav .dropdown-menu > li {
-  border-bottom: 1px solid #e5e5e5;
-}
-.nav.navbar-nav .dropdown-menu > li:last-child {
-  border-bottom: 0;
-}
-.nav.navbar-nav .dropdown-menu > li > a {
-  padding: 8px 32px;
-}
-.nav.navbar-nav .dropdown-menu > li > a:hover,
-.nav.navbar-nav .dropdown-menu > li > a:focus {
-  background: none;
-  color: #10b67c;
-}
-.navbar-form {
-  float: left;
-  padding: 21px 10px 21px 40px;
-  margin: 0;
-}
-.navbar-form .form-group {
-  position: relative;
-}
-.navbar-form .form-control {
-  height: 30px;
-  width: 206px;
-  padding: 6px 20px;
-  font-size: 12px;
-  background-color: #f6f6f6;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-.navbar-form .button {
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  background: none;
-  border: 0;
-  padding: 0;
-}
-.navbar-form .icon-search {
-  display: block;
-  width: 18px;
-  height: 18px;
-  background: url("../img/search.png") no-repeat;
-}
-.nav-user {
-  position: absolute;
-  right: 40px;
-  top: 0;
-}
-@media (max-width: 991px) {
-  .nav-user {
-    right: 0;
-  }
-}
-.nav-user img {
-  width: 42px;
-  height: 42px;
-  padding: 2px;
-  margin-right: 10px;
-  background-color: #f6f6f6;
-  border: 1px solid #f2f2f2;
-  border-radius: 50%;
-}
-.nav-user .user {
-  position: relative;
-  float: left;
-  width: 160px;
-  padding: 3px 10px;
-  margin: 12px 0 8px 0;
-  border: 1px solid #fff;
-}
-@media (max-width: 1199px) {
-  .nav-user .user {
-    width: auto;
-    border: none;
-  }
+.mooc-header {
+  background: #ffffff;
+  height: 80px;
+  border: none;
 }
 @media (max-width: 767px) {
-  .nav-user .user {
-    margin: 0;
+  .mooc-header {
+    height: 60px;
   }
 }
-.nav-user .user:hover {
-  border-color: #eee;
+.mooc-header .navbar-mobile .navbar-more {
+  padding: 20px 10px;
 }
-.nav-user .user:hover .dropdown-menu {
-  display: block;
+.mooc-header .container {
+  position: relative;
 }
-.nav-user .user .name {
-  font-size: 14px;
-}
-.nav-user .user .name:hover {
-  -webkit-transition: all .3s ease;
-  -moz-transition: all .3s ease;
-  -o-transition: all .3s ease;
-  transition: all .3s ease;
+.mooc-header .navbar-header .navbar-brand {
+  height: 80px;
+  line-height: 70px;
+  padding: 5px 10px;
   color: #10b67c;
 }
-.nav-user .user .dropdown-menu {
+@media (max-width: 767px) {
+  .mooc-header .navbar-header {
+    text-align: center;
+  }
+  .mooc-header .navbar-header .navbar-brand {
+    float: none;
+    height: 60px;
+    line-height: 40px;
+    padding: 10px;
+    display: inline-block;
+  }
+}
+.mooc-header .mooc-navbar-form {
   position: absolute;
-  top: 45px;
-  left: -1px;
-  right: -1px;
-  padding: 0;
-  border-radius: 0;
-  border-color: #eee;
-  box-shadow: none;
+  left: 50%;
+  margin-left: -180px;
+  padding: 20px 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
-@media (max-width: 1199px) {
-  .nav-user .user .dropdown-menu {
-    margin: 0;
-    left: auto;
-    right: 0;
+.mooc-header .mooc-navbar-form .form-control {
+  width: 300px;
+  height: 40px;
+  background: #f0f5f9;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.mooc-header .mooc-navbar-form .button {
+  position: absolute;
+  right: 2px;
+  top: 6px;
+  border: none;
+  background: none;
+  font-size: 20px;
+}
+.mooc-header .navbar-user {
+  z-index: initial;
+}
+@media (max-width: 767px) {
+  .mooc-header .navbar-user {
+    z-index: 2;
   }
 }
-.nav-user .user .dropdown-menu .divider {
+.mooc-header .navbar-user .nav.user-nav {
+  float: left;
+}
+.mooc-header .navbar-user .nav.user-nav > li {
+  height: 80px;
+}
+.mooc-header .navbar-user .nav.user-nav > li > a {
+  padding: 30px 15px;
+  color: #272a41;
+  font-size: 16px;
+  cursor: pointer;
+}
+.mooc-header .navbar-user .nav.user-nav > li > a.dropdown-toggle {
+  padding: 20px 15px;
+}
+@media (max-width: 767px) {
+  .mooc-header .navbar-user .nav.user-nav > li > a.dropdown-toggle {
+    padding: 10px 0;
+  }
+}
+.mooc-header .navbar-user .nav.user-nav > li .message {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  line-height: 20px;
+  text-align: center;
+  font-size: 10px;
+  margin-left: 6px;
+}
+.mooc-header .navbar-user .nav.user-nav .dropdown-menu {
+  right: -46px;
+}
+@media (max-width: 767px) {
+  .mooc-header .navbar-user .nav.user-nav .dropdown-menu {
+    right: 0;
+    top: 60px;
+  }
+}
+.mooc-header .navbar-user .nav.user-nav .dropdown-menu .divider {
   margin: 0;
 }
-.nav-user .user .dropdown-menu > li > a {
-  padding: 7px 20px;
-  font-size: 14px;
+.mooc-header .navbar-user .user-roles {
+  line-height: 80px;
+  font-size: 16px;
+  color: #272a41;
+  padding: 0 30px 0 15px;
 }
-.nav-user .user .dropdown-menu > li > a:hover {
-  background: none;
+.mooc-header .navbar-user .user-roles:hover {
   color: #10b67c;
 }
-.nav-user .user .dropdown-menu > li > a:hover .icons-user-1 {
-  background-position: -30px 0;
-}
-.nav-user .user .dropdown-menu > li > a:hover .icons-user-2 {
-  background-position: -90px 0;
-}
-.nav-user .user .dropdown-menu > li > a:hover .icons-user-3 {
-  background-position: -150px 0;
-}
-.nav-user .user .dropdown-menu > li > a:hover .icons-user-4 {
-  background-position: -210px 0;
-}
-.nav-user .user .dropdown-menu > li > a span {
+.mooc-header .navbar-user .user-message {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  margin-right: 15px;
-  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+  background: #70d8b9;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  position: relative;
 }
-.nav-user .user .dropdown-header {
-  padding: 10px 15px;
+.mooc-header .navbar-user .user-message:hover i {
+  background: #17b083;
 }
-.nav-user > ul {
-  float: left;
-  height: 70px;
-  padding: 17px 0;
-  margin: 0;
-}
-.nav-user > ul > li {
+.mooc-header .navbar-user .user-message i {
   display: inline-block;
-  *display: inline;
-  *zoom: 1;
-  margin: 0 5px;
+  width: 30px;
+  height: 30px;
+  background: #10be8b;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  color: #ffffff;
+  margin: 5px;
+  text-align: center;
+  line-height: 30px;
 }
-.nav-user > ul > li .icon-xuetang {
-  font-size: 24px;
-  vertical-align: text-bottom;
+.mooc-header .navbar-user .user-message .message {
+  position: absolute;
+  top: -4px;
+  right: 3px;
+  color: #ff0000;
+  font-size: 14px;
+  font-weight: bold;
 }
-.nav-user > ul > li .branchSchool {
-  color: #cbcbcb;
+.mooc-nav {
+  background: #272a41;
+}
+.mooc-nav ul > li > a {
+  color: #ffffff;
+  padding: 15px 38px;
+}
+.mooc-nav ul > li > a:hover {
+  background: #333755;
+}
+.mooc-nav ul > li > ul > li > a {
+  color: #272a41!important;
+}
+.mooc-nav ul > li > ul > li > a:hover {
+  color: #ffffff !important;
 }
 .es-banner .title > i {
   margin-top: 4px;
 }
 /*首页*/
-.navbar-brand {
-  padding: 15px;
-}
 @media (max-width: 768px) {
   .navbar-collapse {
     display: block;
@@ -2727,12 +2775,525 @@ label {
 .period-list .lesson-item:hover {
   background: #fafafa;
 }
+.mooc-index-title {
+  font-size: 18px;
+  color: #272a41;
+  position: relative;
+  padding: 0 15px;
+  margin: 40px 0 30px;
+}
+.mooc-index-title:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 5px;
+  height: 100%;
+  background: #15c288;
+  height: 20px;
+}
+.es-poster .Wleft {
+  max-width: 880px;
+}
+.es-poster .arrow-left,
+.es-poster .arrow-right {
+  position: absolute;
+  top: 50%;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  text-align: center;
+}
+.es-poster .arrow-left i,
+.es-poster .arrow-right i {
+  font-size: 26px;
+}
+.es-poster .arrow-right {
+  right: 50%;
+  margin-right: -290px;
+}
+.es-poster .arrow-left {
+  left: 50%;
+  margin-left: -550px;
+}
+.es-poster .swiper-pager {
+  text-align: left;
+  left: 50%;
+  margin-left: -200px;
+}
+.es-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
+  width: 30px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+.es-poster .mooc-notice {
+  width: 260px;
+  position: absolute;
+  top: 20px;
+  right: 50%;
+  margin-right: -570px;
+}
+.es-poster .mooc-notice .panel-heading i {
+  color: #10b67c;
+  padding-right: 10px;
+  font-size: 18px;
+}
+.es-poster .mooc-notice .panel-body ul {
+  padding: 0 12px;
+}
+.es-poster .mooc-notice .panel-body li {
+  list-style-type: disc;
+  color: #10b67c;
+}
+.es-poster .mooc-notice .panel-body li a {
+  color: #272a41;
+  display: inline-block;
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  margin-right: 12px;
+}
+.es-poster .mooc-notice .panel-body li a:hover {
+  color: #10b67c;
+}
+.es-poster .mooc-notice .panel-body li span {
+  color: #c1c1c1;
+}
 .course-filter.section-header {
   margin: 35px 0 50px 0;
   min-height: 0;
 }
 .course-filter.section-header .course-sort {
   top: -3px;
+}
+.mooc-navset .set-left {
+  width: 228px;
+  background: #10b67c;
+  color: #ffffff;
+  padding: 30px;
+  text-align: center;
+  float: left;
+}
+.mooc-navset .set-left h2 {
+  font-size: 32px;
+  margin: 0;
+}
+.mooc-navset .set-left i {
+  font-size: 38px;
+}
+.mooc-navset .set-left p {
+  font-size: 12px;
+  margin: 0;
+}
+.mooc-navset .set-right {
+  width: 912px;
+  float: left;
+  background: #ffffff;
+  position: relative;
+}
+.mooc-navset .set-right:hover .arrow-left,
+.mooc-navset .set-right:hover .arrow-right {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.mooc-navset .set-right .navset-wrapper {
+  padding: 0 1px;
+  border-right: 1px solid #f1f1f1;
+}
+.mooc-navset .set-right .width-25 {
+  width: 24.6%;
+  font-size: 18px;
+  text-align: center;
+  margin: 35px 0;
+}
+.mooc-navset .set-right .width-25:last-child {
+  border-right: none;
+}
+.mooc-navset .set-right .width-25 i {
+  color: #10b67c;
+  font-size: 34px;
+  vertical-align: middle;
+}
+.mooc-navset .set-right .arrow-left {
+  left: 0;
+}
+.mooc-navset .set-right .arrow-left,
+.mooc-navset .set-right .arrow-right {
+  position: absolute;
+  top: 30px;
+  display: inline-block;
+  width: 20px;
+  height: 60px;
+  line-height: 60px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  text-align: center;
+  right: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.mooc-navset .set-right .arrow-left i,
+.mooc-navset .set-right .arrow-right i {
+  font-size: 22px;
+}
+.mooc-course .width-20 {
+  width: 20%;
+  float: left;
+}
+@media (max-width: 991px) {
+  .mooc-course .width-20 {
+    width: 33.33%;
+  }
+}
+@media (max-width: 767px) {
+  .mooc-course .width-20 {
+    width: 100%;
+  }
+}
+.mooc-course .course-list .course-item {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 30px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.mooc-course .course-list .course-item:hover {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+}
+.mooc-course .course-list .course-item .title {
+  margin: 0;
+  padding: 0 10px;
+  display: block;
+  height: 40px;
+  white-space: inherit;
+}
+.mooc-course .course-list .course-item .metas .teacher-name {
+  font-size: 12px;
+  padding-left: 6px;
+}
+.mooc-course .course-list .course-img {
+  position: relative;
+  overflow: hidden;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.mooc-course .course-list .course-img img {
+  padding: 10px;
+}
+.mooc-course .course-list .course-img .mooc-certificate-2 {
+  position: absolute;
+  bottom: 10px;
+  height: 28px;
+  line-height: 28px;
+  background: #ffb300;
+  width: 92%;
+  padding: 0 5px;
+  margin: 0 10px;
+  color: #ffffff;
+  text-align: right;
+}
+.mooc-course .course-list .course-img .mooc-certificate-2 i {
+  color: #ffffff;
+  font-size: 22px;
+}
+.mooc-classroom .class-wrapper {
+  margin: 0 10px;
+  background: #ffffff;
+  padding: 0 10px;
+}
+.mooc-classroom .class-list .arrow-left {
+  left: 0;
+}
+.mooc-classroom .class-list .arrow-left,
+.mooc-classroom .class-list .arrow-right {
+  position: absolute;
+  top: 50%;
+  margin-top: -45px;
+  display: inline-block;
+  width: 20px;
+  height: 60px;
+  line-height: 60px;
+  background: rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  text-align: center;
+  right: 0;
+}
+.mooc-classroom .class-list .arrow-left i,
+.mooc-classroom .class-list .arrow-right i {
+  font-size: 22px;
+}
+.mooc-classroom .class-item {
+  background: transparent;
+  padding: 0;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+.mooc-classroom .class-item:hover .class-wrapper {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
+.mooc-classroom .class-item .class-img {
+  padding: 10px 0;
+}
+.mooc-classroom .class-item .metas {
+  color: #a5a7b3;
+}
+.mooc-feature {
+  background: #ffffff;
+  text-align: center;
+  padding: 85px 0;
+  margin-top: 40px;
+}
+.mooc-feature img {
+  width: 42%;
+  margin: 0 auto;
+}
+.mooc-feature h4 {
+  color: #272a41;
+  margin-top: 30px 0 20px;
+}
+.mooc-feature p {
+  color: #9496a1;
+  max-width: 280px;
+  margin: 0 auto;
+}
+.mooc-teacher {
+  position: relative;
+}
+.mooc-teacher .swiper-slide {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+.mooc-teacher .teach-list {
+  padding: 15px 0 30px;
+}
+.mooc-teacher .teach-list .swiper-pager {
+  position: absolute;
+  bottom: -5px;
+  z-index: 100;
+  width: 100%;
+  text-align: center;
+}
+.mooc-teacher .teach-list .swiper-pager span {
+  font-size: 0;
+  margin: 0 4px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: rgba(16, 190, 139, 0.3);
+}
+.mooc-teacher .teach-list .swiper-pager span.swiper-active-switch {
+  background: rgba(16, 190, 139, 0.9);
+}
+.mooc-teacher .teach-item {
+  position: relative;
+  padding: 0;
+}
+.mooc-teacher .teach-item .teach-wrapper {
+  background: #ffffff;
+  padding: 15px 30px;
+  margin: 0 15px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.mooc-teacher .teach-item .teacher-img {
+  position: absolute;
+  top: -15px;
+  right: 36px;
+}
+.mooc-teacher .teach-item .teacher-name {
+  margin-top: 80px;
+  font-size: 22px;
+  color: #272a41;
+  margin-bottom: 5px;
+}
+.mooc-teacher .teach-item .teacher-position {
+  color: #9496a1;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+}
+.mooc-teacher .teach-item .teacher-about {
+  color: #9496a1;
+  height: 118px;
+  overflow: hidden;
+  margin: 24px 0;
+}
+.mooc-teacher .teach-item .teacher-kown {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.mooc-teacher .teach-item .teacher-kown a {
+  border: 2px solid #10b67c;
+  padding: 12px 32px;
+  font-size: 16px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  color: #10b67c;
+}
+.mooc-teacher .teach-item .teacher-kown a:hover {
+  background: #10b67c;
+  color: #ffffff;
+}
+.mooc-cooperate {
+  margin-bottom: 20px;
+}
+.mooc-cooperate .cooperate-list {
+  padding: 0;
+}
+.mooc-cooperate .cooperate-list li {
+  float: left;
+  width: 20%;
+  text-align: center;
+}
+@media (max-width: 991px) {
+  .mooc-cooperate .cooperate-list li {
+    width: 33.33%;
+  }
+}
+.mooc-cooperate .cooperate-list li a {
+  display: block;
+  background: #ffffff;
+  margin: 10px;
+  padding: 28px 0;
+}
+.mooc-learn {
+  background: #10b67c;
+}
+.mooc-learn .learn-list {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+.mooc-learn .learn-list .mobile,
+.mooc-learn .learn-list .calculator,
+.mooc-learn .learn-list .book,
+.mooc-learn .learn-list .earphone,
+.mooc-learn .learn-list .coffee {
+  display: inline-block;
+  position: absolute;
+  background: url("../img/index-bg.png") no-repeat;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.mooc-learn .learn-list .mobile {
+  width: 136px;
+  height: 224px;
+  background-position: 0 0;
+  bottom: -54px;
+  left: 38px;
+}
+.mooc-learn .learn-list .mobile.animate {
+  -webkit-animation: fadeInUp 1s 0.3s ease both;
+  -moz-animation: fadeInUp 1s 0.3s ease both;
+  -o-animation: fadeInUp 1s 0.3s ease both;
+  animation: fadeInUp 1s 0.3s ease both;
+}
+.mooc-learn .learn-list .calculator {
+  width: 124px;
+  height: 164px;
+  background-position: -138px 0;
+  left: 206px;
+  bottom: -82px;
+}
+.mooc-learn .learn-list .calculator.animate {
+  -webkit-animation: fadeInUp 1s 0.5s ease both;
+  -moz-animation: fadeInUp 1s 0.5s ease both;
+  -o-animation: fadeInUp 1s 0.5s ease both;
+  animation: fadeInUp 1s 0.5s ease both;
+}
+.mooc-learn .learn-list .book {
+  width: 328px;
+  height: 266px;
+  background-position: 0 -232px;
+  left: 50%;
+  margin-left: -176px;
+  bottom: -200px;
+}
+.mooc-learn .learn-list .book.animate {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
+}
+.mooc-learn .learn-list .earphone {
+  width: 184px;
+  height: 206px;
+  background-position: -370px 0;
+  right: 50%;
+  margin-right: -371px;
+  bottom: -59px;
+}
+.mooc-learn .learn-list .earphone.animate {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
+}
+.mooc-learn .learn-list .coffee {
+  width: 134px;
+  height: 164px;
+  background-position: -568px 0;
+  right: 20px;
+  bottom: -30px;
+}
+.mooc-learn .learn-list .coffee.animate {
+  -webkit-animation: fadeInUp 1s 0.3s ease both;
+  -moz-animation: fadeInUp 1s 0.3s ease both;
+  -o-animation: fadeInUp 1s 0.3s ease both;
+  animation: fadeInUp 1s 0.3s ease both;
+}
+.mooc-learn .learn-list .learning-btn {
+  display: inline-block;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  padding: 13px 62px;
+  font-size: 22px;
+  position: absolute;
+  left: 50%;
+  margin-left: -152px;
+  bottom: 90px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.mooc-learn .learn-list .learning-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: #10b67c;
+}
+.mooc-learn .learn-list .learning-btn.animate {
+  -webkit-animation: fadeInDown 1s 0.8s ease both;
+  -moz-animation: fadeInDown 1s 0.8s ease both;
+  -o-animation: fadeInDown 1s 0.8s ease both;
+  animation: fadeInDown 1s 0.8s ease both;
 }
 .section-header {
   margin: 35px 0 50px 0;
@@ -2859,9 +3420,23 @@ label {
 .friendlink ul li a:hover {
   color: #10b67c;
 }
+.footer-logo .footer-sns i.es-icon-weibo,
+.footer-logo .footer-sns i.es-icon-weixin,
+.footer-logo .footer-sns i.es-icon-apple,
+.footer-logo .footer-sns i.es-icon-android {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
 footer {
   padding: 40px 0 0;
-  background: #f7f7f7;
+  background: #333755;
+}
+footer .weichat {
+  text-align: center;
+}
+footer .weichat p {
+  color: #ffffff;
+  margin-top: 10px;
 }
 footer .link-item {
   width: 32%;
@@ -2888,11 +3463,16 @@ footer .footer-attr p i {
   padding-right: 10px;
 }
 .footer-by {
-  background: #eee;
+  background: #272a41;
   padding-top: 30px;
   text-align: center;
   margin-top: 40px;
   padding-bottom: 30px;
+  color: #ffffff;
+  font-size: 12px;
+}
+.footer-by a {
+  color: #ffffff;
 }
 .footer-by p {
   margin-bottom: 0;
