@@ -8,20 +8,25 @@ define(function(require, exports, module) {
     var videoHtml = $('#lesson-dashboard');
     var courseId = videoHtml.data("course-id");
     var lessonId = videoHtml.data("lesson-id");
+    var mediaLength = 30;
     $.ajax({
-        type: "get",
-        url: $('.toolbar-question-marker').data('marker-metas-url'),
-        cache: false,
-        async: false,
-        success: function(data) {
-            initMarkerArry = data;
-        }
+      type: "get", 
+      url: $('.toolbar-question-marker').data('marker-metas-url'), 
+      cache:false, 
+      async:false, 
+      success:function(data){
+        initMarkerArry = data.markersMeta;
+        mediaLength =data.videoTime;
+      }
     });
+    console.log(initMarkerArry);
+    var tempid = 0;
 
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
-        initMarkerArry: initMarkerArry,
-        addScale: function(markerJson, $marker) {
+        initMarkerArry:initMarkerArry,
+        videotime:mediaLength,
+        addScale: function(markerJson,$marker) {
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             var param = {
                 markerId: markerJson.id,
@@ -52,6 +57,8 @@ define(function(require, exports, module) {
                 }
                 // 返回题目的ID
                 if (markerJson.questionMarkers[0].id == undefined) {
+                    console.log(markerJson.questionMarkers[0].id);
+                    console.log("markerquestionId"+data.id);
                     $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
                 }
             });
@@ -72,9 +79,9 @@ define(function(require, exports, module) {
                 //删除驻点
                 var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 var markers = player.get("player").markers.getMarkers();
-                for (var key in markers) {
-                    if (markerJson.id == markers[key].id) {
-                        player.get("player").markers.remove(key);
+                for(var key in markers) {
+                    if(markerJson.id == markers[key].id) {
+                        player.get("player").markers.remove(key);  
                     }
                 }
             });
@@ -107,12 +114,13 @@ define(function(require, exports, module) {
                         break;
                     }
                 }
+                console.log(markers);
             });
+
             return markerJson;
         },
         deleteScale: function(markerJson, $marker, $marker_list_item) {
             var url = $('.toolbar-question-marker').data('queston-marker-delete-url');
-
             $.post(url, {
                 questionId: markerJson.questionMarkers[0].id
             }, function(data) {
