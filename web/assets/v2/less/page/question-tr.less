@@ -39,6 +39,13 @@
     .dashboard-content {
       right: 510px;
     }
+    .mask {
+      display: none;
+      position: absolute;
+      width: 100%;
+      top:0;
+      bottom: 30%;
+    }
   }
   .list-title {
     padding: 10px 0;
@@ -61,6 +68,17 @@
       }
       .content {
         text-align: center;
+        padding-left:0;
+      }
+    }
+    .item-lesson.disdrag {
+      background-color: #f1f1f1;
+      cursor: default;
+      color: @gray;
+      border: 1px dashed  #e1e1e1;
+      a {
+        color: @gray;
+        cursor: default;
       }
     }
     .item-lesson.dragged {
@@ -86,6 +104,10 @@
       .show-edit {
         display: none;
       }
+    }
+    .pagination  {
+      position: absolute;
+      bottom: 0;
     }
   }
   .editbox {

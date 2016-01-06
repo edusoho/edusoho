@@ -1,6 +1,6 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   {% for question in questions %} 
-  <li class="row item-lesson" id="" question-id="{{question.id}}">
+  <li class="row item-lesson drag" id="" question-id="{{question.id}}">
     <div class="col-xs-6 title">
       <div class="before">
         <span class="idname">{{question.id}}</span>
@@ -10,9 +10,9 @@
       </div>
       <i class="icon-close glyphicon glyphicon-remove"></i>
     </div>
-    <div class="col-xs-2 content">{{ dict('questionType')[question.type] }}</div>
+    <div class="col-xs-3 content">{{ dict('questionType')[question.type] }}</div>
     <div class="col-xs-2 content">{{ dict('difficulty')[question.difficulty] }}</div>
-    <div class="col-xs-2 content"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></div>
+    <div class="col-xs-1 content"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></div>
   </li>
 
   {% else %}
