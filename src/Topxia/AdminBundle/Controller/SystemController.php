@@ -21,6 +21,23 @@ class SystemController extends BaseController
         return new Response();
     }
 
+    public function sendEmailCheckAction()
+    {
+        try {
+            $this->sendEmail(
+                $user['email'],
+                '请激活你的帐号 完成注册',
+                $emailBody
+            );
+            $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
+        } catch (\Exception $e) {
+            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
+            throw $e;
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     public function checkDirAction()
     {
         $paths = array(
