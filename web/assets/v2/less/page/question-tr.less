@@ -1,3 +1,24 @@
+@-webkit-keyframes boxshow{
+        0%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
+        25%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
+        50%{box-shadow:0 0 5px #2db7f5;width: 6px; margin-left: -3px;}
+        75%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
+        100%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
+      }
+      @-moz-keyframes boxshow{/* Firefox */
+        0%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
+        25%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
+        50%{box-shadow:0 0 5px #2db7f5;width: 6px; margin-left: -3px;}
+        75%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
+        100%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
+      }
+      @keyframes boxshow{
+        0%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
+        25%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
+        50%{box-shadow:0 0 5px #2db7f5;width: 6px; margin-left: -3px;}
+        75%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
+        100%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
+      }
 .marker-modal {
   .question-heading {
     color: @gray-darker;
@@ -45,6 +66,7 @@
       width: 100%;
       top:0;
       bottom: 30%;
+      background-color: rgba(0, 0, 0, 0.2);
     }
   }
   .list-title {
@@ -162,24 +184,28 @@
         border-color: #2998c9;
         height: 78px;
         &:hover {
+          border-color: rgba(41,152,201, 0.5);
+          .border {
+            .border.show();
+          }
           .scale-details  {
             .es-transition;
             visibility: visible;
              .opacity(1);
           }
-          .border {
-            background-color:rgba(41,152,201,0.6);
-          }
         }
         .border {
-          width: 10px;
-          margin-left: -5px;
+          position: absolute;
+          width: 8px;
+          margin-left: -4px;
           height: 78px;
           cursor: pointer;
         }
         .border.show {
-          background-color:rgba(41,152,201,0.3);
-          .opacity(1);
+          background-color: rgba(41,152,201, 0.5);
+          -moz-animation:boxshow 1s ease infinite;
+          -webkit-animation:boxshow 1s ease infinite;
+          animation:boxshow 1s ease infinite;
         }
         .scale-details {
           .es-transition;
@@ -236,6 +262,11 @@
             display: none;
           }
         }
+      }
+      .scale.blue.show {
+        -moz-animation:boxshow 1s ease infinite;
+        -webkit-animation:boxshow 1s ease infinite;
+        animation:boxshow 1s ease infinite;
       }
       .transparent {
         visibility: hidden;
