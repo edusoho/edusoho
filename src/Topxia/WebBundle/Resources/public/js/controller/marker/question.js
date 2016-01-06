@@ -65,7 +65,7 @@ define(function(require, exports, module) {
             var url = $('.toolbar-question-marker').data('marker-merge-url');
 
             $.post(url,{sourceMarkerId:markerJson.id,targetMarkerId:markerJson.merg_id},function(data){
-                
+                var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 var markers = player.get("player").markers.getMarkers();
                 for(var key in markers) {
                     if(markerJson.id == markers[key].id) {
