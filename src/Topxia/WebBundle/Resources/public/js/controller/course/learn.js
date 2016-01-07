@@ -343,6 +343,9 @@ define(function(require, exports, module) {
                                     player.finishMarker(marker.markerId,true);
                                 } else {
                                     $modal.html(data);
+                                    //设置modal显示位置
+                                    var $modaldialog = $modal.find('.modal-dialog');
+                                    $modaldialog.css('margin-left',($('body').width()-$('.toolbar').width()-$modaldialog.width()) / 2);
                                     $modal.show();
                                 }
                             });

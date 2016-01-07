@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class MarkerController extends BaseController
@@ -204,12 +205,9 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $conditions                  = $request->request->all();
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
         return $this->render('TopxiaWebBundle:Marker:question.html.twig', array(
             'course'        => $course,
             'lesson'        => $lesson,
-            'questions'     => $questions,
             'targetChoices' => $this->getQuestionTargetChoices($course, $lesson)
         ));
     }
@@ -221,7 +219,7 @@ class MarkerController extends BaseController
 
         $conditions = $request->request->all();
 
-        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course);
+        list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $lesson);
 
         return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
             'course'        => $course,
@@ -241,7 +239,7 @@ class MarkerController extends BaseController
         return $choices;
     }
 
-    protected function getPaginatorAndQuestion($request, $conditions, $course)
+    protected function getPaginatorAndQuestion($request, $conditions, $course, $lesson)
     {
         if (!isset($conditions['target']) || empty($conditions['target'])) {
             unset($conditions['target']);
@@ -267,9 +265,11 @@ class MarkerController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $markerIds         = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']), 'id');
+        $questionMarkerIds = ArrayToolkit::column($this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds), 'questionId');
 
         foreach ($questions as $key => $question) {
-            $questions[$key]['exist'] = $this->getQuestionMarkerService()->findQuestionMarkersByQuestionId($question['id']) ? true : false;
+            $questions[$key]['exist'] = in_array($question['id'], $questionMarkerIds) ? true : false;
         }
 
         return array($paginator, $questions);
