@@ -1,0 +1,3 @@
+{% set category = data('Category',{categoryId:data.categoryId}) %}
+<a class="glyphicon glyphicon-picture pull-left js-img-preview" href="{{path('course_explore',{category:category.code})}}" target="_blank"></a>
+<span class="mls title-label js-title-label ellipsis">{{ category.name|default('') }}</span>

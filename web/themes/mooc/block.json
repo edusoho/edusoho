@@ -156,38 +156,30 @@
                 ]
             },
             "categories": {
-                "title": "友情链接",
+                "title": "分类名称",
                 "desc": "最大可设置28个",
                 "count": 10,
-                "type": "imglink",
+                "type": "category",
                 "default": [
                     {
-                        "title" : "学院名称",
+                        "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为130*130",
-                        "alt" : "学院名称",
-                        "href": ""
+                        "desc": "建议图标大小为50*50"
                     },
                     {
-                        "title" : "学院名称",
+                        "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为130*130",
-                        "alt" : "学院名称",
-                        "href": ""
+                        "desc": "建议图标大小为50*50"
                     },
                     {
-                        "title" : "学院名称",
+                        "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为130*130",
-                        "alt" : "学院名称",
-                        "href": ""
+                        "desc": "建议图标大小为50*50"
                     },
                     {
-                        "title" : "学院名称",
+                        "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为130*130",
-                        "alt" : "学院名称",
-                        "href": ""
+                        "desc": "建议图标大小为50*50"
                     }
                 ]
             }

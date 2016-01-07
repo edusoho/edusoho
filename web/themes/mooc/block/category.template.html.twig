@@ -7,9 +7,10 @@
     <div class="set-right swiper-container  hidden-sm hidden-xs">
       <div class="swiper-wrapper">
         {% for category in categories %}
+          {% set category = data('Category',{categoryId:category.categoryId}) %}
           <div class="width-25 swiper-slide">
           <div class="navset-wrapper">
-            <i class="iconfont icon-lingdang"></i>{{}}
+            <a href="{{path('course_explore',{category:category.code})}}"><i class="iconfont icon-lingdang"></i>{{ category.name|default() }}</a>
           </div>
           </div>
         {% endfor %}
