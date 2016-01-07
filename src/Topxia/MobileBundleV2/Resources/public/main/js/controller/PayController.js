@@ -250,8 +250,15 @@ function VipListController($scope, $stateParams, SchoolService, cordovaUtil)
 		}, function(data) {
 			$scope.hideLoad();
 			if (! data || !data.vips || data.vips.length == 0) {
-				alert("网校尚未开启Vip服务");
-				cordovaUtil.closeWebView();
+				var dia = $.dialog({
+			        title : '会员提醒' ,
+			        content : '网校尚未开启Vip服务!' ,
+			        button : [ "退出" ]
+				});
+
+				dia.on("dialog:action",function(e){
+					cordovaUtil.closeWebView();
+				});
 			}
 			$scope.data = data;
 			user = data.user;
