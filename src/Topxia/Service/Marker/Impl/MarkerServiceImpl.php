@@ -149,6 +149,12 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             throw $this->createAccessDeniedException('该视频不属于你，无权操作！');
         }
 
+        $uploadMode = $this->getSettingService()->get('storage');
+
+        if ($uploadMode['upload_mode'] == 'local') {
+            throw $this->createAccessDeniedException('请到我的教育云开启云视频！');
+        }
+
         return true;
     }
 
@@ -172,6 +178,11 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     protected function getQuestionMarkerResultService()
     {
         return $this->createService('Marker.QuestionMarkerResultService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
     protected function getUploadFileService()
