@@ -72,12 +72,21 @@ define(function(require, exports, module) {
             }
         }
 
-        if($('.js-find-by-mobile').length == 1){
+        if($('.js-find-password li').length > 1){
             $('.js-find-by-email').hover(function(){
-                $('#alertxx').hide();
+                if($('.js-find-by-email').hasClass('active')){
+                    return;
+                }else{
+                    $('#alertxx').hide();
+                }
             });
             $('.js-find-by-mobile').hover(function(){
-                $('#alertxx').hide();
+                if($('.js-find-by-mobile').hasClass('active')){
+                    return;
+                }else{
+                    $('#alertxx').hide();
+                }
+
             });
         }
 
