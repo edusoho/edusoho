@@ -90,6 +90,7 @@
         {% endif %}
       </a>
       <a href="{{ path('message') }}" class="hidden-xs user-message">
+       {#  <span class="red-dot"></span> #}
         <i class="iconfont icon-lingdang"></i>
         {% if app.user.newMessageNum > 0 %}
           <span class="message">{{ app.user.newMessageNum }}</span>

@@ -113,6 +113,17 @@
       background: #70d8b9;
       .border-radius(50%);
       position: relative;
+      .red-dot{
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: @red;
+        .border-radius(50%);
+        position: absolute;
+        top:5px;
+        right: 0;
+      }
+      
       &:hover{
         i{
           background: #17b083;
@@ -138,6 +149,19 @@
         font-weight: bold;
       }
     }
+     .user-message.hasmessage{
+        &:after{
+        background: @color-primary;
+        content: '';
+        display: block;
+        text-align: center;
+        position: relative;
+        z-index: 100;
+        top: -40px;
+        left: -1px;
+         .animation(active-wave 1s  linear infinite);
+       }
+      }
   }
 }
 .mooc-nav{
