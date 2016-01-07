@@ -19,7 +19,6 @@ define(function(require, exports, module) {
         mediaLength =data.videoTime;
       }
     });
-    console.log(initMarkerArry);
     var tempid = 0;
 
     var myDraggableWidget = new DraggableWidget({
@@ -39,7 +38,6 @@ define(function(require, exports, module) {
                     return;
                 }
                 if (markerJson.id == undefined) {
-                    console.log("新增ID");
                     markerJson.id = data.markerId;
                     $marker.attr('id', data.markerId);
                     var player = window.frames["viewerIframe"].window.BalloonPlayer;
@@ -57,15 +55,12 @@ define(function(require, exports, module) {
                 }
                 // 返回题目的ID
                 if (markerJson.questionMarkers[0].id == undefined) {
-                    console.log(markerJson.questionMarkers[0].id);
-                    console.log("markerquestionId"+data.id);
                     $marker.find('.item-lesson[question-id=' + markerJson.questionMarkers[0].questionId + ']').attr('id', data.id);
                 }
             });
             return markerJson;
         },
         mergeScale: function(markerJson, $marker, $merg_emarker, childrenum) {
-            console.log(markerJson);
             var url = $('.toolbar-question-marker').data('marker-merge-url');
 
             $.post(url, {
@@ -103,7 +98,6 @@ define(function(require, exports, module) {
                         markers[key].time = markerJson.second;
                         var finished = markers[key].finished;
                         player.get("player").markers.remove(key);
-                        console.log(data.markerId);
                         var markerData = {
                             "id": markerJson.id,
                             "time": markerJson.second,
@@ -114,7 +108,6 @@ define(function(require, exports, module) {
                         break;
                     }
                 }
-                console.log(markers);
             });
 
             return markerJson;

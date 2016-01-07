@@ -9,7 +9,7 @@
 		    {% set choiceIndex = (65+key)|chr %}
 		    <li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
 		      <label class="checkbox-inline mrm">
-			    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  {% if key in answerChoiceIndex|default(null) %}checked{% endif %}>{{ choiceIndex }}.
+			    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  >{{ choiceIndex }}.
 			  </label>
 		      <span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw }}</span>
 		    </li>

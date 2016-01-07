@@ -66,7 +66,7 @@ define(function(require, exports, module) {
 	        };
 	        function doDetermine(){
         		var answer = null;
-	        	answer = $("input[checked=checked]").val();
+	        	answer = $("input[name='answer[" + questionId + "]']:checked").val();
 				    return answer;
 	        };
 	        function doFill(){

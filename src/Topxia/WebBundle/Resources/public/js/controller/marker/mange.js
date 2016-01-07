@@ -38,16 +38,16 @@ define(function(require, exports, module) {
             'mousedown .scale.blue': 'slideScale',
             'mouseenter .scale.blue': 'hoverScale',
             'mousedown .scale.blue .item-lesson': 'itemSqe',
-            'mousedown .marker-preview': 'previewMouseDown'
+            'mousedown .marker-preview': 'previewMouseDown',
         },
         setup: function() {
             this._initSortable();
-            this._initeditbox();
+            this._initeditbox(false);
             this._initMarkerArry(this.get('initMarkerArry'));
+            this._lisentresize();
         },
         itemDraggable: function(e) {
             var _obj = this;
-            console.log("开始拖拽");
             //开始拖动事件
             _obj.set('isDraggable', 'true');
 
@@ -84,15 +84,14 @@ define(function(require, exports, module) {
                 if (isMove) {
                     $subject_lesson_list.find(_obj.get('placeholder')).html(value);
                     //editbox_lesson_list
-                    if($editbox_lesson_list.find(".placeholder").length>0) {
+                    if ($editbox_lesson_list.find(".placeholder").length > 0) {
                         $dragcopy.show();
-                    }else {
+                    } else {
                         $dragcopy.hide();
                     }
                     _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
                 }
             }).mouseup(function() {
-                console.log("停止拖拽");
                 // 停止拖动
                 $(document).off('mousemove');
                 $(document).off('mouseup');
@@ -102,6 +101,7 @@ define(function(require, exports, module) {
                 $scale_details.css("visibility", "hidden");
                 $editbox.find('.remask').css("visibility", "visible")
                 $('.dashboard-content .mask').hide();
+                $scalebox.find('.scale.blue').removeClass('show');
 
                 var timestr = $scale_details.html();
                 var postionleft = $scale.css("left");
@@ -133,42 +133,32 @@ define(function(require, exports, module) {
                         }
                     }
                     if (bool) {
-                        console.log("增加时间轴");
                         var $new_scale = $('<a class="scale blue" id=""><div class="border"></div><div class="scale-details"><ul class="lesson-list"></ul><div class="time">' + timestr + '</div></div></a>').css("left", postionleft).appendTo($scalebox);
                         $editbox_lesson_list.children().appendTo($new_scale.find('.lesson-list'));
                         // 新生成的scale注册拖动事件:
                         _obj._newSortList($new_scale.find('.lesson-list'));
                         if ($new_scale.find('.lesson-list .item-lesson').length > 0) {
-                            console.log("处理增加时间轴回调:li已经移动完成");
                             $new_scale.hide();
                             _obj._addScale($new_scale, timestr, $new_scale.css("left"), $new_scale.find('.lesson-list').children().num);
                         } else {
                             // 判断
-                            console.log("增加时间轴完成:li未移动完成需要在drop 中去传递数据到后台");
                         }
                     } else {
                         //相同直接获取存在的ID
-                        console.log("需要合并");
-                        console.log("id " + id);
                         var $_scale = $scalebox.find('a[id=' + id + ']');
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
-                        $_scale.find('.border').removeClass('show');
+                        $_scale.removeClass('show');
 
                         if ($_scale.find('.lesson-list .item-lesson').length > 0) {
-                            console.log("排序和处理合并回调:li已经移动完成");
                             _obj._sortList($_scale.find('.lesson-list'));
                             _obj._addScale($_scale, timestr, $_scale.css("left"), $_scale.find('.lesson-list').children().length);
-                        } else {
-                            console.log("合并和排序完成li未移动完成需要在drop 中去传递数据到后台");
                         }
                     }
-                }
-                else {
+                } else {
                     //未添加拖动，删除生产的副本
                     $dragcopy.remove();
                 }
-                console.log("拖拽处理完成");
                 // 拖动时间停止
                 _obj.set('isDraggable', 'false');
 
@@ -200,7 +190,6 @@ define(function(require, exports, module) {
         slideScale: function(e) {
             //避免拖动过程中触发事件
             if (this.get('isDraggable') == 'false') {
-                console.log("开始滑动");
                 var _obj = this;
                 var $this = $(e.currentTarget);
                 var $scalebox = $(_obj.get("scalebox"));
@@ -224,12 +213,11 @@ define(function(require, exports, module) {
                         _obj._moveShow($this, $time, $scalebox, _obj, arry);
                     }
                 }).mouseup(function() {
-                    console.log("停止滑动");
                     $(document).off('mousemove');
                     $(document).off('mouseup');
+                    $scalebox.find('.scale.blue').removeClass('show');
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
-                        console.log("sfsdf");
                         isMove = false;
                         var arry = [];
                         $scalebox.children('.scale.blue').each(function() {
@@ -242,7 +230,6 @@ define(function(require, exports, module) {
                         });
                         var new_time = _obj._convertSec($time.html());
                         // 判断是否移动，阻止点击事件触发方法，或者移动回原位置；
-                        console.log(old_time != new_time);
                         if (old_time != new_time) {
                             var additem = true;
                             var mergeid = -1;
@@ -260,14 +247,11 @@ define(function(require, exports, module) {
                                 }
                             }
                             if (additem) {
-                                console.log("滑动修改");
                                 // 做修改操作：直接改变时间轴的时间即可
                                 _obj._updateScale($this, new_time, old_position, old_time);
                             } else {
-                                console.log('滑动合并');
                                 // 合并后被合并元素可能会触发该事件加判断$this.length后期优化
                                 if ($this.length > 0) {
-                                    console.log('开始滑动合并');
                                     var $_scale = $scalebox.find('.scale.blue[id=' + mergeid + ']');
                                     var childrenum = $this.find('.lesson-list').children().length;
                                     $this.find('.lesson-list').children().appendTo($_scale.find('.lesson-list'));
@@ -275,10 +259,9 @@ define(function(require, exports, module) {
                                     $this.hide();
                                     _obj._sortList($_scale.find('.lesson-list'));
                                     _obj._mergeScale($this, $_scale, childrenum);
-                                    console.log('滑动处理结束');
                                 }
                             }
-                            $scalebox.find('.border').removeClass('show');
+
                         }
                     }
                 });
@@ -326,9 +309,9 @@ define(function(require, exports, module) {
             if (arry.length > 0) {
                 for (var i = arry.length - 1; i >= 0; i--) {
                     if (Math.abs(parseInt(timesec) - parseInt(arry[i].sec)) <= 5) {
-                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').find('.border').addClass('show');
+                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').addClass('show');
                     } else {
-                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').find('.border').removeClass('show');
+                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').removeClass('show');
                     }
                 }
             }
@@ -343,42 +326,51 @@ define(function(require, exports, module) {
                 handle: '.drag',
                 onDrop: function($item, container, _super) {
                     if($item.hasClass('item-lesson')) {
-                        console.log("onDrop");
                     _super($item, container);
                     var $_scale = $item.closest('.scale.blue');
                     if ($_scale.find('.lesson-list .item-lesson').length > 0) {
-                        console.log("在onDrop中传递数据到后台");
                         _obj._sortList($_scale.find('.lesson-list'));
                         _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.lesson-list').children().length);
-
-                    }
-                    console.log("onDrop over");
+                        }
                     }
                 }
-            });      
+            });
         },
-        _initeditbox: function() {
+        _initeditbox: function(isresize) {
             var _obj = this;
             var $_editbox = $(_obj.get("editbox"));
             var _width = $_editbox.width();
+            $_editbox.find('.scale-white').remove();
             // 以秒为单位
             var _totaltime = _obj.get("videotime");
             var _partnum = _obj.get("timepartnum");
-
             if (_partnum > 0) {
                 var _parttime = Math.round(_totaltime / _partnum);
                 var _partwidth = Math.round(_width / _partnum);
-                for (var i = 1; i <= _partnum; i++) {
+                for (var i = 1; i <= _partnum-1; i++) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(num);
 
-                    $_editbox.find(_obj.get("scalebox")).append('<a style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
+                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale-white" style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
                 }
                 $('[data-toggle="tooltip"]').tooltip();
             }
+            if(isresize) {
+                //找到所有的蓝色时间轴计算时间轴位置；
+                $_editbox.find('.scale.blue').each(function(){
+                    var $this = $(this);
+                    var _selftime =_obj._convertSec($this.find('.time').html());
+                    $this.css('left', Math.round(_selftime * _width / _totaltime));
+                });
+            }
+        },
+        _lisentresize: function() {
+            var _obj = this;
+            $(window).resize(function() {
+                _obj._initeditbox(true);
+            });
         },
         _initMarkerArry: function(initMarkerArry) {
-            console.log(initMarkerArry);
             if (initMarkerArry.length > 0) {
                 var $editbox = $(this.get('editbox'));
                 var $subject_lesson_list = $(this.get('subject_lesson_list'));
@@ -390,7 +382,7 @@ define(function(require, exports, module) {
                     var $lesson_list = $newscale.find('.lesson-list');
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        var $li = $('<li class="row item-lesson" question-id="'+questionMarkers[j].questionId+'" id="'+questionMarkers[j].id+'"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">'+questionMarkers[j].seq+'</span>.</span>'+questionMarkers[j].stem.replace(/<.*?>/ig,"")+'</div><i class="icon-close glyphicon glyphicon-remove"></i></div></li>');
+                        var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
                         $li.appendTo($lesson_list);
                     }
                 }
@@ -411,45 +403,44 @@ define(function(require, exports, module) {
                 distance: 20,
                 itemSelector: '.item-lesson',
                 onDrop: function($item, container, _super) {
-                    console.log("onDrop");
+                    $('.dashboard-content .mask').hide();
+
                     _super($item, container);
-                    _obj._sortList($list);
                     //判断是否需要传给后台进行排序
-                    if (_obj.get('updateSqeArry').length > 0) {
-                        if ($item.find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
-                            var $scale = $item.closest(".scale.blue");
-                            var markerJson = {
-                                "id": '',
-                                "questionMarkers": []
-                            };
-                            markerJson.id = $scale.attr('id');
-                            var arry = [];
-                            _obj._sortList($scale.find('.lesson-list'));
-                            $scale.find(".lesson-list .item-lesson").each(function() {
-                                var questionMarkers = {
-                                    'id': $(this).attr('id'),
-                                    'seq': $(this).find('.number .num').html()
-                                };
-                                markerJson.questionMarkers.push(questionMarkers);
-                            });
-                            _obj._updateSeq($scale, markerJson);
-                        }
-                    }
-                    _obj.set('updateSqeArry', []);
+                    // if (_obj.get('updateSqeArry').length > 0) {
+                    // if ($item.find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
+                    var $scale = $item.closest(".scale.blue");
+                    var markerJson = {
+                        "id": '',
+                        "questionMarkers": []
+                    };
+                    markerJson.id = $scale.attr('id');
+                    var arry = [];
+                    _obj._sortList($scale.find('.lesson-list'));
+                    $scale.find(".lesson-list .item-lesson").each(function() {
+                        var questionMarkers = {
+                            'id': $(this).attr('id'),
+                            'seq': $(this).find('.number .num').html()
+                        };
+                        markerJson.questionMarkers.push(questionMarkers);
+                    });
+                    _obj._updateSeq($scale, markerJson);
+                    $item.closest('.scale-details').removeClass('visible');
+                    // }
+                    // }
+                    // _obj.set('updateSqeArry', []);
 
                 },
                 serialize: function(parent, children, isContainer) {
-                    console.log("serialize");
                     return isContainer ? children : parent.attr('id');
                 },
-                isValidTarget: function(item, container) {
-                    console.log("isValidTarget");
+                isValidTarget: function($item, container) {
+                    $('.dashboard-content .mask').show();
+                    $item.closest('.scale-details').addClass('visible');
                     if (_obj.get('updateSqeArry').length <= 0) {
-
-                        _obj.get('updateSqeArry').push($(item).find('.number .num').html());
-                        console.log(_obj.get('updateSqeArry'));
+                        _obj.get('updateSqeArry').push($item.find('.number .num').html());
                     }
-                    if (item.siblings('li').length) {
+                    if ($item.siblings('li').length) {
                         return true;
                     } else {
                         return false;
