@@ -1,5 +1,4 @@
 {% do load_script('review/list') %}
-
 {% if member and member.role != 'auditor' and ('periodic'!=course.type or ('periodic'==course.type and "now"|date('U') >= course.startTime))%}
   <div class="clearfix">
     <button class="btn btn-primary btn-sm pull-right js-show-review-form" {% if not userReview %}style="display:none;"{% endif %}>重新评价</button>
