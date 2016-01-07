@@ -269,7 +269,141 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil, cordovaU
 		}
 		
 	}
+}
 
+app.controller('TeacherTodoListController', ['$scope', '$stateParams', 'AnalysisService', TeacherTodoListController]);
+function TeacherTodoListController($scope, $stateParams, AnalysisService) {
+
+	Chart.defaults.global.tooltipTemplate = "<%= value %>";
+	Chart.defaults.global.tooltipEvents = [""];
+	Chart.defaults.global.animation = false;
+	Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0)";
+	Chart.defaults.global.tooltipFontColor = "#000";
+	Chart.defaults.global.scaleLineColor = "rgba(0,0,0,0)";
+
+	var self = this;
+
+	$scope.initChartData = function() {
+		$scope.showLoad();
+		AnalysisService.getCourseChartData({
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.hideLoad();
+			if (data.error) {
+				$scope.toast(data.error.message);
+				return;
+			}
+			$scope.charts = data;
+		});
+	}
+
+	$scope.loadCharts = function() {
+		setTimeout(function(){
+			for (var i = 0; i < $scope.charts.length; i++) {
+				initChart($scope.charts[i], i);
+			};
+		}, 10);	
+	};
 	
+	function initChart(chartData, id) {
+		var ctx = document.getElementById("chart_" + id).getContext("2d");
+		var chartLineColor = chartData.chartLineColor || "#37b97d";
+		var data = {
+		    labels: chartData.labelData,
+		    datasets: [
+		        {
+		            label: "My First dataset",
+		            fillColor: "rgba(0, 0, 0, 0)",
+		            strokeColor: chartLineColor,
+		            pointColor: chartLineColor,
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: chartLineColor,
+		            pointHighlightStroke: chartLineColor,
+		            data: chartData.pointData
+		        }
+		    ]
+		};
 
+		var defaults = {
+			scaleShowGridLines : true,
+			bezierCurve  : false,
+			pointDot : true,
+			pointDotRadius : 2
+		};
+
+		function showToolTips(lineChart) {
+			var activePoints = lineChart.datasets[0].points;
+			lineChart.eachPoints(function(point){
+				point.restore(['fillColor', 'strokeColor']);
+			});
+			Chart.helpers.each(activePoints, function(activePoint){
+				activePoint.fillColor = activePoint.highlightFill;
+				activePoint.strokeColor = activePoint.highlightStroke;
+			});
+			lineChart.showTooltip(activePoints);
+		}
+		var myLineChart, chart = new Chart(ctx);
+		var render = Chart.types.Line.prototype.render;
+
+		Chart.types.Line.prototype.render = function(reflow) {
+			var self = this;
+			render.call(this, reflow);
+			setTimeout(function() {
+				showToolTips(self);
+			}, 10);
+		};
+
+		myLineChart = chart.Line(data, defaults);
+	}
+}
+
+app.controller('HomeworkTeachingController', ['$scope', '$stateParams', 'HomeworkManagerService', HomeworkTeachingController]);
+function HomeworkTeachingController($scope, $stateParams, HomeworkManagerService) {
+
+	var self = this;
+
+	this.filter = function(data) {
+		var users = data.users;
+		var homeworkResults = data.homeworkResults;
+		for (var i = 0; i < homeworkResults.length; i++) {
+			homeworkResults[i]["user"] = users[homeworkResults[i]["userId"]];
+		};
+		data.homeworkResults = homeworkResults;
+		console.log(data);
+		return data;
+	};
+
+	$scope.initTeachingResult = function() {
+		HomeworkManagerService.teachingResult({
+			start : 3,
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.teachingResult = self.filter(data);
+		});
+	};
+}
+
+app.controller('ThreadTeachingController', ['$scope', '$stateParams', 'ThreadManagerService', ThreadTeachingController]);
+function ThreadTeachingController($scope, $stateParams, ThreadManagerService) {
+
+	var self = this;
+
+	this.filter = function(data) {
+		var users = data.users;
+		var threads = data.threads;
+		for (var i = 0; i < threads.length; i++) {
+			threads[i]["user"] = users[threads[i]["userId"]];
+		};
+		data.threads = threads;
+		return data;
+	};
+
+	$scope.initQuestionResult = function() {
+		ThreadManagerService.questionResult({
+			start : 3,
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.teachingResult = self.filter(data);
+		});
+	};
 }

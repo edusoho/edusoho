@@ -349,13 +349,16 @@ directive('uiScroll', function($parse) {
     }
   }
 }).
-directive('uiSliderBox', function() {
+directive('uiSliderBox', function($parse) {
   return {
     restrict: 'A',
     link : function(scope, element, attrs) {
           scope.$watch(attrs.uiSliderBox, function(newValue) {
             if (newValue && newValue.length > 0) {
                 initSlider();
+                if (attrs.onLoad) {
+                  $parse(attrs.onLoad)(scope, element);
+                }
             }
           });
 
@@ -368,7 +371,10 @@ directive('uiSliderBox', function() {
               });
 
               slider.on('beforeScrollStart', function(fromIndex, toIndex) {
-
+                if (attrs.scrollChange) {
+                  scope.scrollIndex = toIndex;
+                  $parse(attrs.scrollChange)(scope);
+                }
               });
 
               slider.on('scrollEnd', function() {
@@ -447,6 +453,7 @@ directive('modal', function () {
     },
     link : function(scope, element, attrs) {
       element.addClass("ui-modal");
+      element.addClass("item");
       element.on('click', function(event) {
         scope.$emit("closeTab", {});
         $(".ui-scroller").css("overflow","scroll");
@@ -459,13 +466,12 @@ directive('modal', function () {
     }
   }
 }).
-directive('listEmptyView', function () {
+directive('listEmptyView', function (AppUtil) {
   return {
     restrict: 'EA',
     link : function(scope, element, attrs) {
-      var html = '<div class="list-empty">' + 
-      '<a> <i class="icon iconfont icon-ebook"></i> <span>' + attrs.title + '</span> </a>' +
-      '</div>';
+      var html = '<div class="list-empty"><a> <i class="icon iconfont icon-%1"></i> <span>%2</span> </a></div>';
+      html = AppUtil.formatString(html, attrs.icon || "ebook", attrs.title);
       scope.$watch(attrs.data, function(newValue) {
         if (newValue && newValue.length == 0) {
           element.html(html);

@@ -38,12 +38,34 @@ class Homework extends BaseResource
 
     public function result(Application $app, Request $request, $id)
     {
+        $currentUser = $this->getCurrentUser();
         $homeworkResult = $this->getHomeworkService()->getResult($id);
+        if ($homeworkResult['status'] != 'reviewing') {
+            return $this->error('500', '作业已批阅或者未做完');
+        }
+
         $homework = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
+
+        if (empty($homework)) {
+            return $this->error('500', '作业不存在！');
+        }
+
+        $canCheckHomework = $this->getHomeworkService()->canCheckHomework($homework['id']);
+        if (!$canCheckHomework) {
+            return $this->error('500', '不能批阅该作业');
+        }
+
+        if (empty($currentUser) || (!$canCheckHomework && $homeworkResult['userId'] != $currentUser['id']) ) {
+            return $this->error('500', '不能查看该作业结果');
+        }
 
         $course = $this->getCorrseService()->getCourse($homework['courseId']);
         $homework['courseTitle'] = $course['title'];
         $lesson = $this->getCorrseService()->getLesson($homework['lessonId']);
+        if (empty($lesson)) {
+            return $this->error('500', '作业所属课时不存在！');
+        }
+
         $homework['lessonTitle'] = $lesson['title'];
 
         $items = $this->getHomeworkService()->findItemsByHomeworkId($homework['id']);
