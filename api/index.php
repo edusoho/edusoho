@@ -28,10 +28,7 @@ $connection = DriverManager::getConnection(array(
     'charset'      => 'utf8'
 ));
 
-<<<<<<< HEAD
-=======
 $request = Request::createFromGlobals();
->>>>>>> feature/9372-teacher-data
 $serviceKernel = ServiceKernel::create($config['environment'], true);
 $serviceKernel->setEnvVariable(array(
     'host' => $request->getHttpHost(),
@@ -98,11 +95,8 @@ $app->before(function (Request $request) use ($app) {
     if (!$inWhiteList && empty($user)) {
         throw createNotFoundException("Auth user is not found.");
     }
-<<<<<<< HEAD
 
-=======
     $user['currentIp'] = $request->getClientIp();
->>>>>>> feature/9372-teacher-data
     setCurrentUser($user);
 }
 
