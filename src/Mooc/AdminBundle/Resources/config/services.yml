@@ -1,7 +1,121 @@
 parameters:
-#    mooc_admin.example.class: Mooc\AdminBundle\Example
 
+  theme_mooc_name: "慕课"
+
+  theme_mooc_default:
+    maincolor: default
+    navigationcolor: default
+    blocks:
+      right:
+        - title: ""
+          count: "8"
+          orderBy: ""
+          code: "announcement"
+          defaultTitle: "公告"
+          id: "announcement"
+      left:
+        - title: ""
+          count: ""
+          code: "category"
+          defaultTitle: "分类设置"
+          id: "category"
+        - title: ""
+          count: "12"
+          orderBy: "latest"
+          background: ""
+          categoryId: 0
+          code: "course-grid-with-condition-index"
+          categoryCount: "4"
+          defaultTitle: "网校课程"
+          subTitle: ""
+          defaultSubTitle: "精选网校课程，满足你的学习兴趣。"
+          id: "latestCourse"
+        - title: ""
+          count: ""
+          code: "middle-banner"
+          defaultTitle: "中部banner"
+          id: "middle-banner"
+        - title: ""
+          count: "4"
+          code: "latest-classroom"
+          defaultTitle: "最新专业"
+          subTitle: ""
+          background: ""
+          defaultSubTitle: "专业化学习体系，给你更多的课程相关服务。"
+          id: "latestClassrooms"
+        - title: ""
+          count: "4"
+          categoryId: ""
+          code: "recommend-teacher"
+          defaultTitle: "名师风采"
+          subTitle: ""
+          background: ""
+          defaultSubTitle: "名师汇集，保证教学质量与学习效果。"
+          id: "RecommendTeachers"
+        - title: ""
+          count: ""
+          code: "bottom-partner"
+          defaultTitle: "底部合作伙伴"
+          id: "bottom-partner"
+    bottom: simple
+
+  theme_mooc_all:
+    maincolor: default
+    navigationcolor: default
+    blocks:
+      right:
+        - title: ""
+          count: "8"
+          orderBy: ""
+          code: "announcement"
+          defaultTitle: "公告"
+          id: "announcement"
+      left:
+        - title: ""
+          count: ""
+          code: "category"
+          defaultTitle: "分类设置"
+          id: "category"
+        - title: ""
+          count: "12"
+          orderBy: "latest"
+          background: ""
+          categoryId: 0
+          code: "course-grid-with-condition-index"
+          categoryCount: "4"
+          defaultTitle: "网校课程"
+          subTitle: ""
+          defaultSubTitle: "精选网校课程，满足你的学习兴趣。"
+          id: "latestCourse"
+        - title: ""
+          count: ""
+          code: "middle-banner"
+          defaultTitle: "中部banner"
+          id: "middle-banner"
+        - title: ""
+          count: "4"
+          code: "latest-classroom"
+          defaultTitle: "热门专业"
+          subTitle: ""
+          background: ""
+          defaultSubTitle: "专业化学习体系，给你更多的课程相关服务。"
+          id: "latestClassrooms"
+        - title: ""
+          count: "4"
+          categoryId: ""
+          code: "recommend-teacher"
+          defaultTitle: "名师风采"
+          subTitle: ""
+          background: ""
+          defaultSubTitle: "名师汇集，保证教学质量与学习效果。"
+          id: "RecommendTeachers"
+        - title: ""
+          count: ""
+          code: "bottom-partner"
+          defaultTitle: "底部合作伙伴"
+          id: "bottom-partner"
+    bottom: simple
 services:
-#    mooc_admin.example:
-#        class: %mooc_admin.example.class%
+#    topxia_admin.example:
+#        class: %topxia_admin.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

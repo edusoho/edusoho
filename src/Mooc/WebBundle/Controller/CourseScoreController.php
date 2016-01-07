@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseScoreController extends BaseController
 {
@@ -33,13 +33,23 @@ class CourseScoreController extends BaseController
                 $scoreSetting          = $this->getCourseScoreService()->addScoreSetting($postDates);
             }
 
-            $this->setFlashMessage('success', '课程评分信息已保存！');
+            if ($this->getWeight($scoreSetting) == 0) {
+                $this->setFlashMessage('warning', '成绩权重未设置，将会影响最终成绩核算！');
+            } else {
+                $this->setFlashMessage('success', '课程评分信息已保存！');
+            }
         }
 
         return $this->render('TopxiaWebBundle:CourseScore:setting.html.twig', array(
             'course' => $course,
             'score'  => $scoreSetting
         ));
+    }
+
+    private function getWeight($scoreSetting)
+    {
+        $totoalWeight = $scoreSetting['examWeight'] + $scoreSetting['homeworkWeight'] + $scoreSetting['otherWeight'];
+        return $totoalWeight;
     }
 
     public function scorePublishedAction(Request $request, $courseId)
@@ -98,8 +108,8 @@ class CourseScoreController extends BaseController
         $course                                                                                   = $this->getCourseService()->getCourse($courseId);
         list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
 
-        if(empty($courseScoreSetting)){
-            return $this->redirect($this->generateUrl('course_manage_score',array('courseId' => $course['id'])));
+        if (empty($courseScoreSetting)) {
+            return $this->redirect($this->generateUrl('course_manage_score', array('courseId' => $course['id'])));
         }
 
         return $this->render('TopxiaWebBundle:CourseScore:transcripts.html.twig', array(

@@ -1,4 +1,4 @@
-{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{# {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
 {% block description %}{{ setting('site.seo_description') }}{% endblock %}
@@ -255,4 +255,6 @@
 </section>
 
 {% endblock %}
-{% do load_script('theme/default/index') %}
+{% do load_script('theme/default/index') %} #}
+
+{{ render(controller('TopxiaWebBundle:Theme:index')) }}

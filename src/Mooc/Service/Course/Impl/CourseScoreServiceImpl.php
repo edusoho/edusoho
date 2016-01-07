@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\Service\Course\Impl;
 
-use Mooc\Service\Course\CourseScoreService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
+use Mooc\Service\Course\CourseScoreService;
 
 class CourseScoreServiceImpl extends BaseService implements CourseScoreService
 {
@@ -103,33 +103,20 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
             throw $this->createServiceException('课程不存在，无法设置课程评分！');
         }
 
+        if (!isset($scoreSetting['expectPublishTime'])) {
+            throw $this->createServiceException('成绩发布预告时间，无法更新设置课程评分！');
+        }
+
         $course = $this->getcourseService()->getCourse($scoreSetting['courseId']);
 
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，无法设置课程评分！');
         }
 
-        $scoreSetting['createdTime'] = time();
-        $scoreSetting                = $this->refilldatas($scoreSetting);
-        $scoreSetting                = $this->getCourseScoreSettingDao()->addScoreSetting($scoreSetting);
+        $scoreSetting['expectPublishTime'] = strtotime($scoreSetting['expectPublishTime']);
+        $scoreSetting['createdTime']       = time();
+        $scoreSetting                      = $this->getCourseScoreSettingDao()->addScoreSetting($scoreSetting);
         $this->dispatchEvent("scoreSetting.add", $scoreSetting);
-        return $scoreSetting;
-    }
-
-    private function refilldatas($scoreSetting)
-    {
-        if (isset($scoreSetting['expectPublishTime']) && !empty($scoreSetting['expectPublishTime'])) {
-            $scoreSetting['expectPublishTime'] = strtotime($scoreSetting['expectPublishTime']);
-        }
-
-        if (isset($scoreSetting['credit']) && empty($scoreSetting['credit'])) {
-            unset($scoreSetting['credit']);
-        }
-
-        if (isset($scoreSetting['otherWeight']) && empty($scoreSetting['otherWeight'])) {
-            unset($scoreSetting['otherWeight']);
-        }
-
         return $scoreSetting;
     }
 
@@ -143,8 +130,12 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
             throw $this->createServiceException('课程不存在，无法更新设置课程评分！');
         }
 
-        $fields       = $this->refilldatas($fields);
-        $scoreSetting = $this->getCourseScoreSettingDao()->updateScoreSetting($courseId, $fields);
+        if (!isset($scoreSetting['expectPublishTime'])) {
+            throw $this->createServiceException('成绩发布预告时间，无法更新设置课程评分！');
+        }
+
+        $fields['expectPublishTime'] = strtotime($fields['expectPublishTime']);
+        $scoreSetting                = $this->getCourseScoreSettingDao()->updateScoreSetting($courseId, $fields);
         $this->dispatchEvent("scoreSetting.update", $scoreSetting);
 
         return $scoreSetting;
@@ -160,7 +151,6 @@ class CourseScoreServiceImpl extends BaseService implements CourseScoreService
         $this->getCourseScoreSettingDao()->deleteSettingByCourseId($courseId);
         $this->getCourseScoreDao()->deleteScoresByCourseId($courseId);
     }
-
 
     private function checkCourseAndUser($courseId, $userId)
     {

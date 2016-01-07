@@ -1,0 +1,139 @@
+{#<!-- 最新专业 --> 
+  {% set LatestClassrooms = data('LatestClassrooms',{'count':config.count|default(4)})%} 
+  {% if LatestClassrooms %} 
+    <section class="class-section {{config.background|default("")}}"> 
+      <div class="container"> 
+        <div class="text-line"> 
+          <h5> 
+            <span>{{config.title|default("最新专业")}}</span> 
+            <div class="line"></div> 
+          </h5> 
+          <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div> 
+        </div> 
+        <div class="recommend-class-list row"> 
+          {% for classroom in LatestClassrooms %} 
+            <div class="col-md-3 col-sm-6"> 
+               {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %} 
+            </div> 
+          {% endfor %} 
+        </div> 
+        <div class="text-center mvl"> 
+          <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg"> 
+            更多{{ setting('classroom.name')|default("专业") }} <i class="mrs-o es-icon es-icon-chevronright"></i> 
+          </a> 
+        </div> 
+      </div> 
+    </section> 
+  {% endif %} 
+
+
+
+
+{% set LatestClassrooms = data('LatestClassrooms',{'count':2})%}
+  {% if LatestClassrooms %}
+    <section class="mooc-class-section">
+      <div class="container">
+        <div class="section-header" id="course-filter">
+         最新{{setting('classroom.name')|default("专业") }}
+        </div>
+        <div class="recommend-class-list index">
+          {% for classroom in LatestClassrooms %}
+          <div class="class-list clearfix">
+            <div class="class-img">
+              <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+              </a>
+            </div>
+            <div class="class-info">
+              <p class="title text-overflow">
+                <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+              </p>
+              <p class="info hidden-xs hidden-sm">{{classroom.about|striptags|raw}}</p>
+              <p class="num"> <i class="es-icon es-icon-people mrm"></i>
+                {{classroom.studentNum + classroom.auditorNum }}人
+                <a class="btn btn-primary btn-md visible-xs visible-sm pull-right">{{setting('classroom.name')|default("班级") }}详情</a>
+              </p>
+            </div>
+            <div class="class-teacher hidden-xs hidden-sm">
+              <div class="top">
+                {% if classroom.headTeacherId %}
+                  {% set user = data('User', {userId:classroom.headTeacherId}) %}
+                  {% if user %}
+                    <img src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="">
+                    <p>班主任：{{user.nickname}}</p>
+                  {% endif %}
+                {% else %}
+                  <p>暂无班主任</p>
+                {% endif %}
+
+              </div>
+              <div class="bottom">
+                <a class="btn btn-primary btn-md" href="{{ path('classroom_show', {'id': classroom.id}) }}">{{setting('classroom.name')|default("班级") }}详情</a>
+              </div>
+            </div>
+          </div>
+         {% endfor %}
+        </div>
+        <div class="text-center mvl">
+          <a href="{{ path('classroom_explore') }}" class="btn btn-gylight btn-md">
+            更多<i class="fa fa-angle-right mls"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  {% endif %} #}
+
+
+
+{% set RecommendClassrooms = data('RecommendClassrooms',{'count':4})%}
+<section class="mooc-classroom hidden-xs">
+  <div class="container">
+    {% if RecommendClassrooms %}
+      <div class="mooc-index-title">
+      学校{{setting('classroom.name')|default("专业") }}
+      </div>
+      <div class="class-list row swiper-container">
+        <div class="swiper-wrapper">
+        {% for classroom in RecommendClassrooms %}
+          <div class="class-item col-md-3 swiper-slide clearfix">
+            <div class="class-wrapper">
+              <div class="class-img">
+                <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+                  {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                </a>
+              </div>
+              <div class="metas pbm clearfix">
+                <p class="title text-overflow">
+                  <a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                </p>
+                {% if classroom.headTeacherId %}
+                  {% set user = data('User', {userId:classroom.headTeacherId}) %}
+                    {% if user %}
+                    <img src="{{ filepath(user.largeAvatar, 'avatar.png') }}" alt="" class="avatar-ss">
+                     <span>{{user.nickname}}</span>
+                    {% endif %}
+                  {% else %}
+                  <span>暂无班主任</span>
+                {% endif %}
+                <span class="num pull-right"><i class="es-icon es-icon-people mrs"></i>
+                {{classroom.studentNum + classroom.auditorNum }}人</span>
+              </div>
+            </div>  
+          </div>
+        {% endfor %}
+        </div>
+        <a class="arrow-left" href="#">
+          <i class="iconfont icon-icon30"></i>
+        </a>
+        <a class="arrow-right" href="#">
+          <i class="iconfont icon-icon32"></i>
+        </a>  
+      </div>
+    {% endif %}
+    <div class="text-center mvl">
+      <a href="{{ path('classroom_explore') }}"  class="moocindex-more-btn">
+        更多{{setting('classroom.name')|default("专业") }}
+      </a>
+    </div>
+  </div>
+</section>

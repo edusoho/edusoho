@@ -1,0 +1,50 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set bodyClass = 'homepage' %}
+{% set siteNav = '/' %}
+{% set script_controller = 'index' %}
+{% set _target_path = path('homepage') %}
+
+{% block full_content %}
+
+	<nav class="mooc-nav hidden-xs hidden-sm">
+	  <div class="container"> 
+	  {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+	  </div>
+	</nav> 
+	<section class="mooc-poster">
+	  <div class="container clearfix">
+	    <div class="slide-wrapper">
+	      <div id="slider" class="novoSlider slideitem">
+	        <a href=""><img src="{{asset('themes/mooc/img/banner1.jpg')}}" alt="" /></a>
+	        <a href=""><img src="{{asset('themes/mooc/img/banner2.png')}}" alt="" /></a>
+	        <a href=""><img src="{{asset('themes/mooc/img/banner3.jpg')}}" alt="" /></a>
+	      </div>
+	    </div>
+	    <div class="mooc-notice hidden-sm hidden-xs hidden-md">
+	      <div class="panel panel-default">
+	        <div class="panel-heading clearfix">
+	          <i class="mc-icon icon-iconfontgonggao"></i>学校公告
+	        </div>
+	        <div class="panel-body">
+	          <ul>
+	            <li><a href="">这条文字最多11个字哦耶</a><span>12/20</span></li>
+	          </ul>
+	        </div>
+	      </div> 
+	    </div>   
+	  </div>
+	</section>
+
+  {{ block_show('mooc:home_top_banner') }}
+
+    {% for pendant in themeConfig.blocks.left|default([]) %}
+
+      {{ render(controller('TopxiaWebBundle:Theme:pendant', {config:pendant})) }}
+
+    {% endfor %}
+
+{% endblock %}
