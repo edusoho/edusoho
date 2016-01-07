@@ -24,10 +24,10 @@
       <div class="section-bodyer">
         <div class="home-course-list row">
         {% if recommendCourses %}
-          {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
+          {% include 'MoocWebBundle:Default:course-item.html.twig' with {courses:recommendCourses}%}
         {% else %}
           {% set courses = data('LatestCourses',{count:3}) %}
-          {% include 'TopxiaWebBundle:Default:course-item.html.twig'%}
+          {% include 'MoocWebBundle:Default:course-item.html.twig'%}
         {% endif %}
         </div>
         <div class="text-center mvl">

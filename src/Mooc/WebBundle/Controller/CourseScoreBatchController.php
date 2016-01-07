@@ -2,21 +2,21 @@
 
 namespace Mooc\WebBundle\Controller;
 
-use Mooc\Common\SimpleValidator;
 use PHPExcel_Cell;
 use PHPExcel_IOFactory;
+use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
+use Topxia\Common\ArrayToolkit;
+use Mooc\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\Paginator;
 
 class CourseScoreBatchController extends BaseController
 {
     public function importAction($id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-        return $this->render('TopxiaWebBundle:CourseScoreBatch:import.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScoreBatch:import.html.twig', array(
             'course' => $course
         ));
     }
@@ -29,7 +29,7 @@ class CourseScoreBatchController extends BaseController
             throw $this->createNotFoundException("未发布课程不能导入学员成绩!");
         }
 
-        return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step3.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScoreBatch:import.step3.html.twig', array(
             'course' => $course
         ));
     }
@@ -73,7 +73,7 @@ class CourseScoreBatchController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseScoreBatch:import.finish.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScoreBatch:import.finish.html.twig', array(
             'course' => $course,
             'count'  => $count
         ));
@@ -98,7 +98,7 @@ class CourseScoreBatchController extends BaseController
             if (!is_object($file)) {
                 $this->setFlashMessage('danger', '请选择上传的文件');
 
-                return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step1.html.twig', array(
+                return $this->render('MoocWebBundle:CourseScoreBatch:import.step1.html.twig', array(
                     'course' => $course,
                     'data'   => $data
                 ));
@@ -107,7 +107,7 @@ class CourseScoreBatchController extends BaseController
             if (FileToolkit::validateFileExtension($file, 'xls xlsx')) {
                 $this->setFlashMessage('danger', 'Excel格式不正确！');
 
-                return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step1.html.twig', array(
+                return $this->render('MoocWebBundle:CourseScoreBatch:import.step1.html.twig', array(
                     'course' => $course,
                     'data'   => $data
                 ));
@@ -123,7 +123,7 @@ class CourseScoreBatchController extends BaseController
             if ($highestRow > 1000) {
                 $this->setFlashMessage('danger', 'Excel超过1000行数据!');
 
-                return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step1.html.twig', array(
+                return $this->render('MoocWebBundle:CourseScoreBatch:import.step1.html.twig', array(
                     'course' => $course,
                     'data'   => $data
                 ));
@@ -141,7 +141,7 @@ class CourseScoreBatchController extends BaseController
             if (!$this->checkNecessaryFields($excelField)) {
                 $this->setFlashMessage('danger', '缺少必要的字段');
 
-                return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step1.html.twig', array(
+                return $this->render('MoocWebBundle:CourseScoreBatch:import.step1.html.twig', array(
                     'course' => $course,
                     'data'   => $data
                 ));
@@ -154,7 +154,7 @@ class CourseScoreBatchController extends BaseController
 
             if ($repeatInfo) {
                 $errorInfo[] = $repeatInfo;
-                return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step2.html.twig', array(
+                return $this->render('MoocWebBundle:CourseScoreBatch:import.step2.html.twig', array(
                     "errorInfo" => $errorInfo,
                     'data'      => $data,
                     'course'    => $course
@@ -188,6 +188,7 @@ class CourseScoreBatchController extends BaseController
                 }
 
 //字段信息校验
+
                 if ($this->validFields($userData, $row, $fieldCol, $course['id'])) {
                     $errorInfo = array_merge($errorInfo, $this->validFields($userData, $row, $fieldCol, $course['id']));
                     continue;
@@ -195,6 +196,7 @@ class CourseScoreBatchController extends BaseController
 
                 $user      = $this->getUserService()->getUserByStaffNo($userData['staffNo']);
                 $userScore = $this->getCourseScoreService()->getUserScoreByUserIdAndCourseId($user['id'], $course['id']);
+
                 if (!empty($userData['truename']) && $userScore) {
                     if ($userScore['importOtherScore']) {
                         $checkInfo[] = "第".$row."行的用户评分已存在，将会更新";
@@ -213,7 +215,7 @@ class CourseScoreBatchController extends BaseController
 
             $allUserData = json_encode($allUserData);
 
-            return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step2.html.twig', array(
+            return $this->render('MoocWebBundle:CourseScoreBatch:import.step2.html.twig', array(
                 'userCount'   => $userCount,
                 'errorInfo'   => $errorInfo,
                 'checkInfo'   => $checkInfo,
@@ -224,7 +226,7 @@ class CourseScoreBatchController extends BaseController
             ));
         }
 
-        return $this->render('TopxiaWebBundle:CourseScoreBatch:import.step1.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScoreBatch:import.step1.html.twig', array(
             'course' => $course,
             'data'   => $data
         ));
@@ -233,6 +235,7 @@ class CourseScoreBatchController extends BaseController
     private function validFields($userData, $row, $fieldCol, $courseId)
     {
         $errorInfo = array();
+
         if (!isset($userData['truename']) || empty($userData['truename'])) {
             $errorInfo[] = "第 ".$row."行".$fieldCol["truename"]." 列 的数据存在问题，请检查。";
         }
@@ -402,6 +405,7 @@ class CourseScoreBatchController extends BaseController
         $conditions['courseId'] = $course['id'];
 
 //学号筛选
+
         if (empty($parameters) || (isset($parameters) && empty($parameters['staffNo']) && empty($parameters['organizationId']))) {
             $users = $this->getCourseScoreService()->findAllMemberScore($course['id']);
         } else {

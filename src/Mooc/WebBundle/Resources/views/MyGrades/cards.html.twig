@@ -1,0 +1,110 @@
+<div class="mooc-report-detail panel panel-default">
+  <div class="panel-heading">
+    <h4>{% if previewAs|default() %}{{ userProfile.truename }}{% else %}我{% endif %}的成绩</h4>
+  </div>
+  <div class="panel-body">
+    <div class="clearfix">
+      <div class="report-title">
+        <span class="bg-blue"><i class="iconfont icon-wendangkeshi"></i></span>
+        <strong>{{ course.title }}</strong>
+
+        <div class="pull-right">
+          <span>学分：<strong>{% if scores.totalScore|default(0) >= courseSetting.standardScore %}{{ courseSetting.credit }}{% else %}0{% endif %}
+              学分</strong></span>
+          <span>课时：<strong>{{ learnedLessonsNum }}课时</strong></span>
+                    <span>总成绩：<i class="es-icon es-icon-help text-primary js-icon"></i><strong
+                          class="text-primary">{{ scores.totalScore|default(0) }}分</strong></span>
+        </div>
+      </div>
+      <div class="report-intro">
+        <p><i class="es-icon es-icon-help"></i>考试成绩：<span>{{ scores.examScore|default(0) }}
+            分</span>；作业成绩<span>{{ scores.homeworkScore|default(0) }}
+            分</span>；其他：<span>{{ scores.otherScore|default(0) }}分</span>；</p>
+      </div>
+      <div class="hover-model">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>总成绩计算公式</h4>
+          </div>
+          <div class="panel-body">
+            <div class="alert alert-info" role="alert">
+              <span>{{ courseSetting.examWeight }}%</span>*考试成绩+<span>{{ courseSetting.homeworkWeight }}
+                %</span>作业成绩+<span>{{ courseSetting.otherWeight }}%</span>*其他
+            </div>
+            <p class="content">
+              <i class="es-icon es-icon-info"></i>本课程的最终成绩由三部分组成，考试成绩权重为{{ courseSetting.examWeight }}
+              %，作业成绩权重为{{ courseSetting.homeworkWeight }}%，其他权重为{{ courseSetting.otherWeight }}
+              %。本课程成绩{{ courseSetting.standardScore }}分为合格，成绩预计公布时间为{{ courseSetting.expectPublishTime|date('Y-m-d') }}
+              日。请大家及时完成作业及考试，以免影响最终成绩。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mooc-report-tab panel panel-default">
+  <div class="panel-body">
+    <ul role="tablist" class="detail-nav clearfix">
+      <li role="presentation" class="active">
+        <a href="#homework" role="tab" data-toggle="tab">作业</a>
+      </li>
+      <li role="presentation">
+        <a href="#test" role="tab" data-toggle="tab">考试</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane active" id="homework">
+        <div class="mooc-report-table panel ">
+          <div class="panel-body">
+            <table class="table report-table-body">
+              <tbody>
+              <tr>
+                <th>作业名称</th>
+                <th>所属课时</th>
+                <th>状态</th>
+                <th>总分</th>
+                <th>得分</th>
+              </tr>
+                {% for homework in homeworks %}
+                  {% include 'MoocWebBundle:MyGrades:homework-tr.html.twig' %}
+                {% else %}
+                  <tr>
+                    <td colspan="20">
+                      <div class="empty">暂无作业记录</div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="test">
+        <div class="mooc-report-table panel ">
+          <div class="panel-body">
+            <table class="table report-table-body table-responsive">
+              <tbody>
+              <tr>
+                <th>考试名称</th>
+                <th>状态</th>
+                <th>总分</th>
+                <th>得分</th>
+              </tr>
+                {% for testpaper in testpapers %}
+                  {% include 'MoocWebBundle:MyGrades:testpaper-tr.html.twig' %}
+                {% else %}
+                  <tr>
+                    <td colspan="20">
+                      <div class="empty">暂无考试记录</div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

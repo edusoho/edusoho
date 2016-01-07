@@ -47,7 +47,7 @@ class DefaultController extends BaseDefaultController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Default:course-item.html.twig', array(
+        return $this->render('MoocWebBundle:Default:course-item.html.twig', array(
             'courses' => $courses
         ));
     }
