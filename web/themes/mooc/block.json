@@ -191,17 +191,6 @@
         "category": "mooc",
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
-            "text": {
-                "title": "合作伙伴文本标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default": [
-                    {
-                        "value": "Edusoho高教版"
-                    }
-                ]
-            },
             "partners": {
                 "title": "友情链接",
                 "desc": "最大可设置28个",
@@ -209,26 +198,20 @@
                 "type": "banner",
                 "default": [
                     {
-                        "title" : "合作伙伴1名称",
-                        "value" : "合作伙伴1介绍",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图片大小为130*130",
+                        "src" : "\/themes\/mooc\/img\/temp\/cooperate-img1.png",
+                        "desc": "建议图片大小为122*122",
                         "alt" : "合作伙伴1",
                         "href": ""
                     },
                     {
-                        "title" : "合作伙伴2名称",
-                        "value" : "合作伙伴2介绍",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图片大小为130*130",
+                        "src" : "\/themes\/mooc\/img\/temp\/cooperate-img1.png",
+                        "desc": "建议图片大小为122*122",
                         "alt" : "合作伙伴2",
                         "href": ""
                     },
                     {
-                        "title" : "合作伙伴3名称",
-                        "value" : "合作伙伴3介绍",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图片大小为130*130",
+                        "src" : "\/themes\/mooc\/img\/temp\/cooperate-img1.png",
+                        "desc": "建议图片大小为122*122",
                         "alt" : "合作伙伴3",
                         "href": ""
                     }

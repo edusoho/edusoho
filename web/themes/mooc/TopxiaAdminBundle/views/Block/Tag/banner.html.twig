@@ -1,18 +1,8 @@
-
  <div class="form-group">
-    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][title]">标题</label>
-    <div class="col-md-8 col-xs-8">
-      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][title]" id="data[{{ code }}][{{ dataId }}][title]" value="{{ data.title|default('') }}" >
-    </div>
-    
- </div>
-
-  <div class="form-group">
-    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][value]">介绍</label>
-    <div class="col-md-8 col-xs-8">
-      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][value]" id="data[{{ code }}][{{ dataId }}][value]" value="{{ data.value|default('') }}" >
-    </div>
-    
+  <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">链接地址</label>
+  <div class="col-md-8 col-xs-8">
+    <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][href]" value="{{ data.href|default('') }}" placeholder="http://" >
+  </div>
  </div>
 
 <div class="form-group">
@@ -24,13 +14,6 @@
     </div>
 
     
- </div>
-
- <div class="form-group">
-  <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">链接地址</label>
-  <div class="col-md-8 col-xs-8">
-    <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][href]" value="{{ data.href|default('') }}" placeholder="http://" >
-  </div>
  </div>
 
 

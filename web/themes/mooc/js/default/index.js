@@ -83,10 +83,10 @@ define(function(require, exports, module) {
          $(window).scroll(function() {   
             var scroll = $(window).scrollTop();
 
-            if($(".mooc-cooperate").length){
-              var mottotop = $(".mooc-cooperate").position().top-$(window).height();
+            if($(".mooc-learn").length){
+              var mottotop = $(".mooc-learn").position().top-$(window).height();
               if (scroll >= mottotop) {
-                  $(".mooc-cooperate .img").addClass("animate");
+                  $(".mooc-learn .img").addClass("animate");
               }       
             }
 

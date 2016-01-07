@@ -1,8 +1,11 @@
-<h4>友情链接 :</h4>
-<p>{{ text[0].value|default('') }}</p>
-<p></p>
-<ul>
-  {% for partner in partners|default('') %}
-    <li><img src="{{ partner.src|default('') }}"><a href="{{ partner.title|default('') }}"></a><a href="{{ partner.href }}" target="_blank">{{ partner.value }}</a></li>
-  {% endfor %}
+
+
+<ul class="cooperate-list clearfix">
+	 {% for partner in partners|default('') %}
+      <li>
+        <a href="{{ partner.title|default('') }}">
+          <img src="{{ partner.src|default('') }}" alt="{{ partner.alt|default('') }}">
+        </a>
+      </li>
+     {% endfor %}
 </ul>
