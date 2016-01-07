@@ -26,11 +26,11 @@
 
 
 
-{% set teachers = data('RecommendTeachers',{'count':12}) %}
+{% set teachers = data('RecommendTeachers',{'count':config.count|default(4)}) %}
 <section class="mooc-teacher hidden-xs hidden-sm">
   <div class="container">
      <div class="mooc-index-title">
-        名师风采
+        {{ config.title|default(config.defaultTitle) }}
       </div>
     {% if teachers %}
       <div class="row swiper-container teach-list">

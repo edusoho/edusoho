@@ -26,11 +26,13 @@
   </div>
 </section> #}
 
-{% set recommendCourses = data('RecommendCourses',{ count:10 }) %}
+{% set count = config.count|default(10) %}
+
+{% set recommendCourses = data('RecommendCourses',{ count:count }) %}
 <section class="mooc-course">
   <div class="container">
     <div class="mooc-index-title">
-      学校课程
+      {{ config.title|default(config.defaultTitle) }}
     </div>
     <div class="course-list clearfix">
      {% if recommendCourses %}

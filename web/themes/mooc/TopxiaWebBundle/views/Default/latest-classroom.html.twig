@@ -85,12 +85,12 @@
 
 
 
-{% set RecommendClassrooms = data('RecommendClassrooms',{'count':4})%}
+{% set RecommendClassrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%}
 <section class="mooc-classroom hidden-xs">
   <div class="container">
     {% if RecommendClassrooms %}
       <div class="mooc-index-title">
-      学校{{setting('classroom.name')|default("专业") }}
+        {{config.title|default("学校专业")}}
       </div>
       <div class="class-list row swiper-container">
         <div class="swiper-wrapper">
