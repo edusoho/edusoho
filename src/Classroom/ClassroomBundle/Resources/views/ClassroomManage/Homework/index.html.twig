@@ -21,6 +21,8 @@
         </li>
       </ul>
       {% include 'HomeworkBundle:CourseHomeworkManage:teaching-homework-list.html.twig' %}
+
+      {{ web_macro.paginator(paginator) }}
     </div>
   </div>
 {% endblock %}
