@@ -38,12 +38,13 @@ define(function(require, exports, module) {
             'mousedown .scale.blue': 'slideScale',
             'mouseenter .scale.blue': 'hoverScale',
             'mousedown .scale.blue .item-lesson': 'itemSqe',
-            'mousedown .marker-preview': 'previewMouseDown'
+            'mousedown .marker-preview': 'previewMouseDown',
         },
         setup: function() {
             this._initSortable();
-            this._initeditbox();
+            this._initeditbox(false);
             this._initMarkerArry(this.get('initMarkerArry'));
+            this._lisentresize();
         },
         itemDraggable: function(e) {
             var _obj = this;
@@ -84,9 +85,9 @@ define(function(require, exports, module) {
                 if (isMove) {
                     $subject_lesson_list.find(_obj.get('placeholder')).html(value);
                     //editbox_lesson_list
-                    if($editbox_lesson_list.find(".placeholder").length>0) {
+                    if ($editbox_lesson_list.find(".placeholder").length > 0) {
                         $dragcopy.show();
-                    }else {
+                    } else {
                         $dragcopy.hide();
                     }
                     _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
@@ -102,6 +103,7 @@ define(function(require, exports, module) {
                 $scale_details.css("visibility", "hidden");
                 $editbox.find('.remask').css("visibility", "visible")
                 $('.dashboard-content .mask').hide();
+                $scalebox.find('.scale.blue').removeClass('show');
 
                 var timestr = $scale_details.html();
                 var postionleft = $scale.css("left");
@@ -153,7 +155,7 @@ define(function(require, exports, module) {
                         var $_scale = $scalebox.find('a[id=' + id + ']');
                         $editbox_lesson_list.children().appendTo($_scale.find(".lesson-list"));
                         //隐藏
-                        $_scale.find('.border').removeClass('show');
+                        $_scale.removeClass('show');
 
                         if ($_scale.find('.lesson-list .item-lesson').length > 0) {
                             console.log("排序和处理合并回调:li已经移动完成");
@@ -163,8 +165,7 @@ define(function(require, exports, module) {
                             console.log("合并和排序完成li未移动完成需要在drop 中去传递数据到后台");
                         }
                     }
-                }
-                else {
+                } else {
                     //未添加拖动，删除生产的副本
                     $dragcopy.remove();
                 }
@@ -185,7 +186,7 @@ define(function(require, exports, module) {
 
             //将li移除，放回原位，然后list重新排序{
             // $list_item.appendTo($(this.get("subject_lesson_list")));
-            $(this.get("subject_lesson_list")).find('.item-lesson[question-id='+$list_item.attr('question-id')+']').attr('id',$list_item.attr('id')).removeClass('disdrag').addClass('drag');
+            $(this.get("subject_lesson_list")).find('.item-lesson[question-id=' + $list_item.attr('question-id') + ']').attr('id', $list_item.attr('id')).removeClass('disdrag').addClass('drag');
             //移除的li不再放回到右边；
             $list_item.remove();
             this._sortList($list);
@@ -227,9 +228,9 @@ define(function(require, exports, module) {
                     console.log("停止滑动");
                     $(document).off('mousemove');
                     $(document).off('mouseup');
+                    $scalebox.find('.scale.blue').removeClass('show');
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
-                        console.log("sfsdf");
                         isMove = false;
                         var arry = [];
                         $scalebox.children('.scale.blue').each(function() {
@@ -278,7 +279,7 @@ define(function(require, exports, module) {
                                     console.log('滑动处理结束');
                                 }
                             }
-                            $scalebox.find('.border').removeClass('show');
+
                         }
                     }
                 });
@@ -326,9 +327,9 @@ define(function(require, exports, module) {
             if (arry.length > 0) {
                 for (var i = arry.length - 1; i >= 0; i--) {
                     if (Math.abs(parseInt(timesec) - parseInt(arry[i].sec)) <= 5) {
-                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').find('.border').addClass('show');
+                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').addClass('show');
                     } else {
-                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').find('.border').removeClass('show');
+                        $scalebox.find('.scale.blue' + '[id=' + arry[i].id + ']').removeClass('show');
                     }
                 }
             }
@@ -342,40 +343,54 @@ define(function(require, exports, module) {
                 delay: 500,
                 handle: '.drag',
                 onDrop: function($item, container, _super) {
-                    if($item.hasClass('item-lesson')) {
+                    if ($item.hasClass('item-lesson')) {
                         console.log("onDrop");
-                    _super($item, container);
-                    var $_scale = $item.closest('.scale.blue');
-                    if ($_scale.find('.lesson-list .item-lesson').length > 0) {
-                        console.log("在onDrop中传递数据到后台");
-                        _obj._sortList($_scale.find('.lesson-list'));
-                        _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.lesson-list').children().length);
+                        _super($item, container);
+                        var $_scale = $item.closest('.scale.blue');
+                        if ($_scale.find('.lesson-list .item-lesson').length > 0) {
+                            console.log("在onDrop中传递数据到后台");
+                            _obj._sortList($_scale.find('.lesson-list'));
+                            _obj._addScale($_scale, $_scale.find('.time').html(), $_scale.css("left"), $_scale.find('.lesson-list').children().length);
 
-                    }
-                    console.log("onDrop over");
+                        }
+                        console.log("onDrop over");
                     }
                 }
-            });      
+            });
         },
-        _initeditbox: function() {
+        _initeditbox: function(isresize) {
             var _obj = this;
             var $_editbox = $(_obj.get("editbox"));
             var _width = $_editbox.width();
+            $_editbox.find('.scale-white').remove();
             // 以秒为单位
             var _totaltime = _obj.get("videotime");
             var _partnum = _obj.get("timepartnum");
-
             if (_partnum > 0) {
                 var _parttime = Math.round(_totaltime / _partnum);
                 var _partwidth = Math.round(_width / _partnum);
-                for (var i = 1; i <= _partnum; i++) {
+                for (var i = 1; i <= _partnum-1; i++) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(num);
 
-                    $_editbox.find(_obj.get("scalebox")).append('<a style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
+                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale-white" style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
                 }
                 $('[data-toggle="tooltip"]').tooltip();
             }
+            if(isresize) {
+                //找到所有的蓝色时间轴计算时间轴位置；
+                $_editbox.find('.scale.blue').each(function(){
+                    var $this = $(this);
+                    var _selftime =_obj._convertSec($this.find('.time').html());
+                    $this.css('left', Math.round(_selftime * _width / _totaltime));
+                });
+            }
+        },
+        _lisentresize: function() {
+            var _obj = this;
+            $(window).resize(function() {
+                _obj._initeditbox(true);
+            });
         },
         _initMarkerArry: function(initMarkerArry) {
             console.log(initMarkerArry);
@@ -390,7 +405,7 @@ define(function(require, exports, module) {
                     var $lesson_list = $newscale.find('.lesson-list');
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        var $li = $('<li class="row item-lesson" question-id="'+questionMarkers[j].questionId+'" id="'+questionMarkers[j].id+'"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">'+questionMarkers[j].seq+'</span>.</span>'+questionMarkers[j].stem.replace(/<.*?>/ig,"")+'</div><i class="icon-close glyphicon glyphicon-remove"></i></div></li>');
+                        var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
                         $li.appendTo($lesson_list);
                     }
                 }
@@ -412,44 +427,51 @@ define(function(require, exports, module) {
                 itemSelector: '.item-lesson',
                 onDrop: function($item, container, _super) {
                     console.log("onDrop");
+                    $('.dashboard-content .mask').hide();
+
                     _super($item, container);
                     _obj._sortList($list);
                     //判断是否需要传给后台进行排序
-                    if (_obj.get('updateSqeArry').length > 0) {
-                        if ($item.find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
-                            var $scale = $item.closest(".scale.blue");
-                            var markerJson = {
-                                "id": '',
-                                "questionMarkers": []
-                            };
-                            markerJson.id = $scale.attr('id');
-                            var arry = [];
-                            _obj._sortList($scale.find('.lesson-list'));
-                            $scale.find(".lesson-list .item-lesson").each(function() {
-                                var questionMarkers = {
-                                    'id': $(this).attr('id'),
-                                    'seq': $(this).find('.number .num').html()
-                                };
-                                markerJson.questionMarkers.push(questionMarkers);
-                            });
-                            _obj._updateSeq($scale, markerJson);
-                        }
-                    }
-                    _obj.set('updateSqeArry', []);
+                    // if (_obj.get('updateSqeArry').length > 0) {
+                    // if ($item.find('.number .num').html() != _obj.get('updateSqeArry')[0]) {
+                    var $scale = $item.closest(".scale.blue");
+                    var markerJson = {
+                        "id": '',
+                        "questionMarkers": []
+                    };
+                    markerJson.id = $scale.attr('id');
+                    var arry = [];
+                    console.log("排序");
+                    _obj._sortList($scale.find('.lesson-list'));
+                    console.log();
+                    $scale.find(".lesson-list .item-lesson").each(function() {
+                        var questionMarkers = {
+                            'id': $(this).attr('id'),
+                            'seq': $(this).find('.number .num').html()
+                        };
+                        markerJson.questionMarkers.push(questionMarkers);
+                    });
+                    console.log(markerJson);
+                    _obj._updateSeq($scale, markerJson);
+                    $item.closest('.scale-details').removeClass('visible');
+                    // }
+                    // }
+                    // _obj.set('updateSqeArry', []);
 
                 },
                 serialize: function(parent, children, isContainer) {
                     console.log("serialize");
                     return isContainer ? children : parent.attr('id');
                 },
-                isValidTarget: function(item, container) {
+                isValidTarget: function($item, container) {
+                    $('.dashboard-content .mask').show();
+                    $item.closest('.scale-details').addClass('visible');
                     console.log("isValidTarget");
-                    if (_obj.get('updateSqeArry').length <= 0) {
-
-                        _obj.get('updateSqeArry').push($(item).find('.number .num').html());
-                        console.log(_obj.get('updateSqeArry'));
-                    }
-                    if (item.siblings('li').length) {
+                    // if (_obj.get('updateSqeArry').length <= 0) {
+                    //     _obj.get('updateSqeArry').push($(item).find('.number .num').html());
+                    //     console.log(_obj.get('updateSqeArry'));
+                    // }
+                    if ($item.siblings('li').length) {
                         return true;
                     } else {
                         return false;
