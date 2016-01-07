@@ -68,7 +68,8 @@ seajs.config({
         'dc': 'gallery2/dc/2.0.0/js/dc-debug',
         'dc-css': 'gallery2/dc/2.0.0/css/dc.css',
         'd3': 'gallery2/d3/3.5.9/js/d3-debug',
-        'crossfilter': 'gallery2/dc/2.0.0/js/crossfilter'
+        'crossfilter': 'gallery2/dc/2.0.0/js/crossfilter',
+        'jquery.nivo.slider' : 'jquery.nivo.slider/jquery.Nivo.slider'
     },
 
 	// 预加载项

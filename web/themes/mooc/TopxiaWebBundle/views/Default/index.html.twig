@@ -7,30 +7,32 @@
 {% set bodyClass = 'indexpage' %}
 
 {% block full_content %}
- <nav class="mooc-nav hidden-xs hidden-sm">
+<nav class="mooc-nav hidden-xs hidden-sm">
   <div class="container"> 
   {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
   </div>
-</nav>  
-<section class="es-poster swiper-container">
-  {{ block_show('mooc:home_top_banner') }}
-  <a class="arrow-left hidden-sm hidden-xs" href="#">
-    <i class="mc-icon icon-iconfontback"></i>
-  </a>
-  <a class="arrow-right hidden-sm hidden-xs " href="#">
-    <i class="mc-icon icon-arrowright"></i>
-  </a>
-  <div class="mooc-notice hidden-sm hidden-xs hidden-md">
-    <div class="panel panel-default">
-      <div class="panel-heading clearfix">
-        <i class="mc-icon icon-iconfontgonggao"></i>学校公告
-      </div>
-      <div class="panel-body">
-        <ul>
-          <li><a href="">这条文字最多11个字哦耶</a><span>12/20</span></li>
-        </ul>
+</nav> 
+<section class="mooc-poster">
+  <div class="container clearfix">
+    <div class="slide-wrapper">
+      <div id="slider" class="novoSlider slideitem">
+        <a href=""><img src="{{asset('themes/mooc/img/temp/banner.jpg')}}" alt="" /></a>
+        <a href=""><img src="{{asset('themes/mooc/img/temp/banner1.jpg')}}" alt="" /></a>
+        <a href=""><img src="{{asset('themes/mooc/img/temp/banner.jpg')}}" alt="" /></a>
       </div>
     </div>
+    <div class="mooc-notice hidden-sm hidden-xs hidden-md">
+      <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+          <i class="mc-icon icon-iconfontgonggao"></i>学校公告
+        </div>
+        <div class="panel-body">
+          <ul>
+            <li><a href="">这条文字最多11个字哦耶</a><span>12/20</span></li>
+          </ul>
+        </div>
+      </div> 
+    </div>   
   </div>
 </section>
 <section class="mooc-navset">
@@ -39,7 +41,7 @@
       <h2><i class="mc-icon icon-similar"></i>学院设置</h2>
       <p>快速选择学院入口立即学习</p>
     </div>
-    <div class="set-right swiper-container  hidden-sm hidden-xs">
+    <div class="set-right swiper-container  hidden-sm hidden-md hidden-xs">
       <div class="swiper-wrapper">
         <div class="width-25 swiper-slide">
           <div class="navset-wrapper">
@@ -247,7 +249,7 @@
       <i class="book img"></i>
       <i class="earphone img hidden-sm hidden-xs"></i>
       <i class="coffee img hidden-sm hidden-xs"></i>
-      <a href="{{ path('course_explore') }}" class="learning-btn img">开启学习之旅</a>
+      <a href="{{ path('course_explore') }}" class="learning-btn img"><i class="mc-icon icon-iconfontwrite"></i>开启学习之旅</a>
     </div>
   </div>
 </section>

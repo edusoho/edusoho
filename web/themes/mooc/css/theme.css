@@ -2792,99 +2792,6 @@ label {
   background: #15c288;
   height: 20px;
 }
-.es-poster .Wleft {
-  max-width: 880px;
-}
-.es-poster .arrow-left,
-.es-poster .arrow-right {
-  position: absolute;
-  top: 50%;
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-  text-align: center;
-}
-.es-poster .arrow-left i,
-.es-poster .arrow-right i {
-  font-size: 26px;
-}
-.es-poster .arrow-right {
-  right: 50%;
-  margin-right: -290px;
-}
-@media (max-width: 1200px) {
-  .es-poster .arrow-right {
-    margin-right: -392px;
-    margin-top: -20px;
-  }
-}
-.es-poster .arrow-left {
-  left: 50%;
-  margin-left: -550px;
-}
-@media (max-width: 1200px) {
-  .es-poster .arrow-left {
-    margin-left: -450px;
-    margin-top: -20px;
-  }
-}
-.es-poster .swiper-pager {
-  text-align: left;
-  left: 50%;
-  margin-left: -200px;
-}
-@media (max-width: 1200px) {
-  .es-poster .swiper-pager {
-    margin-left: -50px;
-  }
-}
-.es-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
-  width: 30px;
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-}
-.es-poster .mooc-notice {
-  width: 260px;
-  position: absolute;
-  top: 20px;
-  right: 50%;
-  margin-right: -570px;
-}
-.es-poster .mooc-notice .panel-heading i {
-  color: #10b67c;
-  padding-right: 10px;
-  font-size: 18px;
-}
-.es-poster .mooc-notice .panel-body ul {
-  padding: 0 12px;
-}
-.es-poster .mooc-notice .panel-body li {
-  list-style-type: disc;
-  color: #10b67c;
-}
-.es-poster .mooc-notice .panel-body li a {
-  color: #272a41;
-  display: inline-block;
-  width: 150px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-  margin-right: 12px;
-}
-.es-poster .mooc-notice .panel-body li a:hover {
-  color: #10b67c;
-}
-.es-poster .mooc-notice .panel-body li span {
-  color: #c1c1c1;
-}
 .course-filter.section-header {
   margin: 35px 0 50px 0;
   min-height: 0;
@@ -3302,6 +3209,10 @@ label {
   opacity: 0;
   filter: alpha(opacity=0);
 }
+.mooc-learn .learn-list .learning-btn i {
+  font-size: 22px;
+  padding-right: 10px;
+}
 .mooc-learn .learn-list .learning-btn:hover {
   background: rgba(255, 255, 255, 0.9);
   color: #10b67c;
@@ -3475,7 +3386,7 @@ footer .footer-attr p {
   margin-top: 25px;
 }
 footer .footer-attr p i {
-  color: #addbdb;
+  color: #ffffff;
   font-size: 22px;
   padding-right: 10px;
 }
@@ -3494,6 +3405,143 @@ footer .footer-attr p i {
 .footer-by p {
   margin-bottom: 0;
   padding-bottom: 15px;
+}
+.mooc-poster {
+  position: relative;
+}
+.mooc-poster .slide-wrapper {
+  width: 880px;
+  height: 400px;
+  position: relative;
+}
+@media (max-width: 1199px) {
+  .mooc-poster .slide-wrapper {
+    width: 100%;
+  }
+}
+@media (max-width: 991px) {
+  .mooc-poster .slide-wrapper {
+    height: auto;
+  }
+}
+.mooc-poster .slideitem {
+  position: relative;
+  width: 100%;
+}
+.mooc-poster .slideitem img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: none;
+}
+.mooc-poster .mooc-notice {
+  width: 260px;
+  position: absolute;
+  top: 20px;
+  right: 50%;
+  margin-right: -570px;
+}
+.mooc-poster .mooc-notice .panel-heading i {
+  color: #10b67c;
+  padding-right: 10px;
+  font-size: 18px;
+}
+.mooc-poster .mooc-notice .panel-body ul {
+  padding: 0 12px;
+}
+.mooc-poster .mooc-notice .panel-body li {
+  list-style-type: disc;
+  color: #10b67c;
+}
+.mooc-poster .mooc-notice .panel-body li a {
+  color: #272a41;
+  display: inline-block;
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  margin-right: 12px;
+}
+.mooc-poster .mooc-notice .panel-body li a:hover {
+  color: #10b67c;
+}
+.mooc-poster .mooc-notice .panel-body li span {
+  color: #c1c1c1;
+}
+.nivo-directionNav a {
+  display: block;
+  width: 52px;
+  height: 52px;
+  background: url(../img/bannerarrow.png) no-repeat;
+  text-indent: -9999px;
+  border: 0;
+}
+@media (max-width: 991px) {
+  .nivo-directionNav a {
+    display: none;
+  }
+}
+a.nivo-nextNav {
+  background-position: -52px 0;
+  right: 10px;
+}
+a.nivo-prevNav {
+  left: 10px;
+}
+.nivo-controlNav {
+  position: absolute;
+  bottom: 30px;
+  z-index: 9;
+  left: 50%;
+  margin-left: -40px;
+}
+@media (max-width: 1199px) {
+  .nivo-controlNav {
+    bottom: -20px;
+  }
+}
+@media (max-width: 991px) {
+  .nivo-controlNav {
+    bottom: 10px;
+  }
+}
+.nivo-controlNav a {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.3);
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  font-size: 0;
+  margin-right: 20px;
+}
+@media (max-width: 991px) {
+  .nivo-controlNav a {
+    width: 10px;
+    height: 10px;
+    margin-right: 15px;
+  }
+}
+@media (max-width: 991px) {
+  .nivo-controlNav a {
+    display: none;
+  }
+}
+.nivo-controlNav a.active {
+  width: 30px;
+  height: 14px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  background: #ffffff;
+}
+@media (max-width: 991px) {
+  .nivo-controlNav a.active {
+    width: 18px;
+    height: 10px;
+  }
 }
 /*插件*/
 /*! fancyBox v2.1.5 fancyapps.com | fancyapps.com/fancybox/#license */
@@ -3732,6 +3780,114 @@ footer .footer-attr p i {
   padding: 10px;
   background: #000;
   background: rgba(0, 0, 0, 0.8);
+}
+/* The Nivo Slider styles */
+.nivoSlider {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: hidden;
+}
+.nivoSlider img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  max-width: none;
+}
+.nivo-main-image {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+}
+/* If an image is wrapped in a link */
+.nivoSlider a.nivo-imageLink {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  z-index: 6;
+  display: none;
+  background: white;
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+/* The slices and boxes in the Slider */
+.nivo-slice {
+  display: block;
+  position: absolute;
+  z-index: 5;
+  height: 100%;
+  top: 0;
+}
+.nivo-box {
+  display: block;
+  position: absolute;
+  z-index: 5;
+  overflow: hidden;
+}
+.nivo-box img {
+  display: block;
+}
+/* Caption styles */
+.nivo-caption {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  background: #000;
+  color: #fff;
+  width: 100%;
+  z-index: 8;
+  padding: 5px 10px;
+  opacity: 0.8;
+  overflow: hidden;
+  display: none;
+  -moz-opacity: 0.8;
+  filter: alpha(opacity=8);
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+  /* Opera/IE 8+ */
+}
+.nivo-caption p {
+  padding: 5px;
+  margin: 0;
+}
+.nivo-caption a {
+  display: inline !important;
+}
+.nivo-html-caption {
+  display: none;
+}
+/* Direction nav styles (e.g. Next & Prev) */
+.nivo-directionNav a {
+  position: absolute;
+  top: 45%;
+  z-index: 9;
+  cursor: pointer;
+}
+.nivo-prevNav {
+  left: 0px;
+}
+.nivo-nextNav {
+  right: 0px;
+}
+/* Control nav styles (e.g. 1,2,3...) */
+.nivo-controlNav {
+  text-align: center;
+  padding: 15px 0;
+}
+.nivo-controlNav a {
+  cursor: pointer;
+}
+.nivo-controlNav a.active {
+  font-weight: bold;
 }
 /*插件模块*/
 .certificate-upload-img .panel-heading h4 {
