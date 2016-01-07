@@ -72,18 +72,14 @@ define(function(require, exports, module) {
             }
         }
 
-        
-        $('.email-back').hover(function(){
-            setTimeout(function () {
-            $('#alertxx').hide();
-            }, 3000)
-        });
-
-        $('.mobile-back').hover(function(){
-            setTimeout(function () {
-            $('#alertxx').hide();
-            }, 3000)
-        });
+        if($('.js-find-by-mobile').length == 1){
+            $('.js-find-by-email').hover(function(){
+                $('#alertxx').hide();
+            });
+            $('.js-find-by-mobile').hover(function(){
+                $('#alertxx').hide();
+            });
+        }
 
         makeValidator('email');
         $('.js-find-by-email').mouseover(function () {

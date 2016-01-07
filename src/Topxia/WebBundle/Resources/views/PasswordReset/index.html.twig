@@ -11,12 +11,12 @@
 
         <ul class="nav nav-tabs mbl">
           <li class="active js-find-by-email">
-            <a style="cursor: pointer;" class="email-back">邮箱地址
+            <a style="cursor: pointer;">邮箱地址
             </a>
           </li>
           {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
             <li class="js-find-by-mobile">
-              <a style="cursor: pointer;" class="mobile-back">手机号码
+              <a style="cursor: pointer;">手机号码
               </a>
             </li>
           {% endif %}
