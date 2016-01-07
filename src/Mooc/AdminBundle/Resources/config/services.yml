@@ -6,14 +6,19 @@ parameters:
     maincolor: default
     navigationcolor: default
     blocks:
-      left:
+      right:
         - title: ""
           count: "8"
           orderBy: ""
-          background: ""
-          code: "category-and-announcement"
-          defaultTitle: "专业-公告"
-          id: "categoryAnnouncement"
+          code: "announcement"
+          defaultTitle: "公告"
+          id: "announcement"
+      left:
+        - title: ""
+          count: ""
+          code: "category"
+          defaultTitle: "分类设置"
+          id: "category"
         - title: ""
           count: "12"
           orderBy: "latest"
@@ -58,14 +63,19 @@ parameters:
     maincolor: default
     navigationcolor: default
     blocks:
-      left:
+      right:
         - title: ""
           count: "8"
           orderBy: ""
-          background: ""
-          code: "category-and-announcement"
-          defaultTitle: "专业-公告"
-          id: "categoryAnnouncement"
+          code: "announcement"
+          defaultTitle: "公告"
+          id: "announcement"
+      left:
+        - title: ""
+          count: ""
+          code: "category"
+          defaultTitle: "分类设置"
+          id: "category"
         - title: ""
           count: "12"
           orderBy: "latest"
