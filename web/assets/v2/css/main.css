@@ -11356,6 +11356,60 @@ textarea {
   padding: 10px;
   line-height: 22px;
 }
+@-webkit-keyframes boxshow {
+  0% {
+    box-shadow: 0 0 15px #2db7f5;
+    width: 8px;
+    margin-left: -4px;
+  }
+  25% {
+    box-shadow: 0 0 10px #2db7f5;
+    width: 7px;
+    margin-left: -3.5px;
+  }
+  50% {
+    box-shadow: 0 0 5px #2db7f5;
+    width: 6px;
+    margin-left: -3px;
+  }
+  75% {
+    box-shadow: 0 0 10px #2db7f5;
+    width: 7px;
+    margin-left: -3.5px;
+  }
+  100% {
+    box-shadow: 0 0 15px #2db7f5;
+    width: 8px;
+    margin-left: -4px;
+  }
+}
+@keyframes boxshow {
+  0% {
+    box-shadow: 0 0 15px #2db7f5;
+    width: 8px;
+    margin-left: -4px;
+  }
+  25% {
+    box-shadow: 0 0 10px #2db7f5;
+    width: 7px;
+    margin-left: -3.5px;
+  }
+  50% {
+    box-shadow: 0 0 5px #2db7f5;
+    width: 6px;
+    margin-left: -3px;
+  }
+  75% {
+    box-shadow: 0 0 10px #2db7f5;
+    width: 7px;
+    margin-left: -3.5px;
+  }
+  100% {
+    box-shadow: 0 0 15px #2db7f5;
+    width: 8px;
+    margin-left: -4px;
+  }
+}
 .marker-modal .question-heading {
   color: #313131;
   font-size: 16px;
@@ -11402,6 +11456,7 @@ textarea {
   width: 100%;
   top: 0;
   bottom: 30%;
+  background-color: rgba(0, 0, 0, 0.2);
 }
 .question-manage .list-title {
   padding: 10px 0;
@@ -11527,6 +11582,14 @@ textarea {
   border-color: #2998c9;
   height: 78px;
 }
+.question-manage .editbox .scalebox .scale.blue:hover {
+  border-color: rgba(41, 152, 201, 0.5);
+}
+.question-manage .editbox .scalebox .scale.blue:hover .border {
+  background-color: rgba(41, 152, 201, 0.5);
+  -webkit-animation: boxshow 1s ease infinite;
+  animation: boxshow 1s ease infinite;
+}
 .question-manage .editbox .scalebox .scale.blue:hover .scale-details {
   -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
@@ -11534,19 +11597,17 @@ textarea {
   opacity: 1;
   filter: alpha(opacity=100);
 }
-.question-manage .editbox .scalebox .scale.blue:hover .border {
-  background-color: rgba(41, 152, 201, 0.6);
-}
 .question-manage .editbox .scalebox .scale.blue .border {
-  width: 10px;
-  margin-left: -5px;
+  position: absolute;
+  width: 8px;
+  margin-left: -4px;
   height: 78px;
   cursor: pointer;
 }
 .question-manage .editbox .scalebox .scale.blue .border.show {
-  background-color: rgba(41, 152, 201, 0.3);
-  opacity: 1;
-  filter: alpha(opacity=100);
+  background-color: rgba(41, 152, 201, 0.5);
+  -webkit-animation: boxshow 1s ease infinite;
+  animation: boxshow 1s ease infinite;
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details {
   -webkit-transition: all 0.3s ease;
@@ -11604,6 +11665,10 @@ textarea {
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details .content {
   display: none;
+}
+.question-manage .editbox .scalebox .scale.blue.show {
+  -webkit-animation: boxshow 1s ease infinite;
+  animation: boxshow 1s ease infinite;
 }
 .question-manage .editbox .scalebox .transparent {
   visibility: hidden;
