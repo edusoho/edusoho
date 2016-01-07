@@ -115,7 +115,7 @@ class SmsController extends BaseController
         $url .= $request->query->get('url');
         $arrResponse = CurlToolkit::request('POST', "http://dwz.cn/create.php",array('url' => $url));
         if ($arrResponse['status'] != 0) {
-            throw new \RuntimeException("短链接生成失败!");
+            throw new \RuntimeException("短链接生成失败!错误信息：{$arrResponse['err_msg']}");
         }
         $shortUrl = $arrResponse['tinyurl'].' ';
 

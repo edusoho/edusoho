@@ -3,18 +3,18 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class ClassroomMembers extends BaseResource
 {
     public function get(Application $app, Request $request, $classroomId)
     {
         $conditions = array('classroomId' => $classroomId);
-        $start = $request->query->get('start', 0);
-        $limit = $request->query->get('limit', 10);
+        $start      = $request->query->get('start', 0);
+        $limit      = $request->query->get('limit', 10);
 
-        $total = $this->getClassroomService()->searchMemberCount($conditions);
+        $total   = $this->getClassroomService()->searchMemberCount($conditions);
         $members = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($members, 'userId'));
@@ -40,5 +40,4 @@ class ClassroomMembers extends BaseResource
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
 }
