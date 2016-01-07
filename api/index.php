@@ -30,24 +30,8 @@ $connection = DriverManager::getConnection(array(
 
 $request = Request::createFromGlobals();
 $serviceKernel = ServiceKernel::create($config['environment'], true);
-$serviceKernel->setEnvVariable(array(
-    'host' => $request->getHttpHost(),
-    'clientIp' => $request->getClientIp(),
-    'schemeAndHost' => $request->getSchemeAndHttpHost(),
-    'basePath' => $request->getBasePath(),
-    'uri' => $request->getUri(),
-    'baseUrl' => $request->getSchemeAndHttpHost().$request->getBasePath(),
-));
 $serviceKernel->setParameterBag(new ParameterBag($config));
 $serviceKernel->setConnection($connection);
-$currentUser = new CurrentUser();
-$currentUser->fromArray(array(
-    'id'        => 0,
-    'nickname'  => '游客',
-    'currentIp' => $request->getClientIp(),
-    'roles'     => array()
-));
-$serviceKernel->setCurrentUser($currentUser);
 // $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
 include __DIR__.'/src/functions.php';
@@ -95,7 +79,7 @@ $app->before(function (Request $request) use ($app) {
     if (!$inWhiteList && empty($user)) {
         throw createNotFoundException("Auth user is not found.");
     }
-
+    
     $user['currentIp'] = $request->getClientIp();
     setCurrentUser($user);
 }
