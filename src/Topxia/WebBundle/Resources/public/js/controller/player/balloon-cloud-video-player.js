@@ -10,7 +10,7 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: [{id:0,time:-1,text:'',finished:true}],
+            markers: [{id:0,time:-10,text:'',finished:true}],
             starttime: '0',
             timelimit:'0',
             controlBarLock:false

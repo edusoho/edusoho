@@ -11,7 +11,7 @@
 		{% set choiceIndex = (65+key)|chr %}
 			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
 				<label class="radio-inline mrm">
-					<input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}" {% if key ==  answerChoiceIndex %}checked="checked"{% endif %}>{{ choiceIndex }}.</label><span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw}}</span>
+					<input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}" {{ choiceIndex }}.</label><span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw}}</span>
 			</li>
 			{% endfor %}
 		</ul>
