@@ -73,12 +73,16 @@ define(function(require, exports, module) {
         }
 
         
-        $('.email-back').click(function(){
+        $('.email-back').hover(function(){
+            setTimeout(function () {
             $('#alertxx').hide();
+            }, 3000)
         });
 
-        $('.mobile-back').click(function(){
+        $('.mobile-back').hover(function(){
+            setTimeout(function () {
             $('#alertxx').hide();
+            }, 3000)
         });
 
         makeValidator('email');
