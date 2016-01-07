@@ -67,6 +67,48 @@
   -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
+@keyframes active-wave {
+  0% {
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    opacity: 0.35;
+    position: relative;
+  }
+  100% {
+    width: 80px;
+    height: 80px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    margin-left: -20px;
+    margin-top: -20px;
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes active-wave {
+  0% {
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    opacity: 0.35;
+    position: relative;
+  }
+  100% {
+    width: 80px;
+    height: 80px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    margin-left: -20px;
+    margin-top: -20px;
+    opacity: 0.0;
+  }
+}
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -2564,6 +2606,20 @@ input:focus {
   font-size: 14px;
   font-weight: bold;
 }
+.mooc-header .navbar-user .user-message.hasmessage:after {
+  background: #10b67c;
+  content: '';
+  display: block;
+  text-align: center;
+  position: relative;
+  z-index: 100;
+  top: -40px;
+  left: -1px;
+  -webkit-animation: active-wave 1s linear infinite;
+  -moz-animation: active-wave 1s linear infinite;
+  -o-animation: active-wave 1s linear infinite;
+  animation: active-wave 1s linear infinite;
+}
 .mooc-nav {
   background: #272a41;
 }
@@ -3102,6 +3158,13 @@ label {
   .mooc-cooperate .cooperate-list li {
     width: 33.33%;
   }
+}
+.mooc-cooperate .cooperate-list li img {
+  width: 122px;
+  height: 122px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
 }
 .mooc-cooperate .cooperate-list li a {
   display: block;
