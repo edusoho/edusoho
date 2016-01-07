@@ -3424,6 +3424,10 @@ footer .footer-attr p i {
     height: auto;
   }
 }
+.mooc-poster .slide-wrapper:hover .nivo-directionNav a {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
 .mooc-poster .slideitem {
   position: relative;
   width: 100%;
@@ -3476,6 +3480,8 @@ footer .footer-attr p i {
   background: url(../img/bannerarrow.png) no-repeat;
   text-indent: -9999px;
   border: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 @media (max-width: 991px) {
   .nivo-directionNav a {

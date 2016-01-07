@@ -20,26 +20,7 @@ define(function(require, exports, module) {
               manualAdvance:false
           });
       });
-       //  var swiper = new Swiper('.es-poster.swiper-container', {
-       //      pagination: '.es-poster .swiper-pager',
-       //      paginationClickable: true,
-       //      autoplay: 5000,
-       //      autoplayDisableOnInteraction: false,
-       //      loop: true,
-       //      calculateHeight: true,
-       //      roundLengths: true,
-       //      onInit: function(swiper) {
-       //         $(".swiper-slide").removeClass('swiper-hidden'); 
-       //      }
-       //  });
-       //  $('.es-poster .arrow-left').on('click', function(e){
-       //      e.preventDefault()
-       //      swiper.swipePrev()
-       //     })
-       // $('.es-poster .arrow-right').on('click', function(e){
-       //      e.preventDefault()
-       //      swiper.swipeNext()
-       //  })
+      
 
         var swiper2 = new Swiper('.set-right.swiper-container', {
             autoplay: 6000,
@@ -83,12 +64,9 @@ define(function(require, exports, module) {
         var swiper4 = new Swiper('.teach-list.swiper-container', {
             pagination: '.teach-list .swiper-pager',
             paginationClickable: true,
-            autoplay: 5000,
-            autoplayDisableOnInteraction: false,
-            loop: true,
             calculateHeight: true,
             roundLengths: true,
-             slidesPerView: 4,
+            slidesPerView: 4,
             onInit: function(swiper) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }

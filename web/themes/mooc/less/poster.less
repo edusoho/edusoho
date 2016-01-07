@@ -11,6 +11,11 @@
    @media(max-width:@screen-sm-max){
       height: auto;
     }
+     &:hover{
+      .nivo-directionNav a{
+       .opacity(1);
+      }
+    }
   }
   .slideitem{
     position: relative;
@@ -71,6 +76,8 @@
     background:url(../img/bannerarrow.png) no-repeat;
     text-indent:-9999px;
     border:0;
+    .opacity(0);
+
      @media(max-width:@screen-sm-max){
      display: none;
      }
@@ -123,73 +130,4 @@
     }
   }
 
-// #slider-wrapper {
-//     background:url(../images/slider.png) no-repeat;
-//     width:998px;
-//     height:392px;
-//     margin:0 auto;
-//     padding-top:74px;
-//     margin-top:50px;
-// }
 
-// #slider {
-//   position:relative;
-//     width:618px;
-//     height:246px;
-//     margin-left:190px;
-//   background:url(../images/loading.gif) no-repeat 50% 50%;
-// }
-// #slider img {
-//   position:absolute;
-//   top:0px;
-//   left:0px;
-//   display:none;
-// }
-// #slider a {
-//   border:0;
-//   display:block;
-// }
-
-// .nivo-controlNav {
-//   position:absolute;
-//   left:260px;
-//   bottom:-42px;
-// }
-// .nivo-controlNav a {
-//   display:block;
-//   width:22px;
-//   height:22px;
-//   background:url(../images/bullets.png) no-repeat;
-//   text-indent:-9999px;
-//   border:0;
-//   margin-right:3px;
-//   float:left;
-// }
-// .nivo-controlNav a.active {
-//   background-position:0 -22px;
-// }
-
-// .nivo-directionNav a {
-//   display:block;
-//   width:30px;
-//   height:30px;
-//   background:url(../images/arrows.png) no-repeat;
-//   text-indent:-9999px;
-//   border:0;
-// }
-// a.nivo-nextNav {
-//   background-position:-30px 0;
-//   right:15px;
-// }
-// a.nivo-prevNav {
-//   left:15px;
-// }
-
-// .nivo-caption {
-//     text-shadow:none;
-//     font-family: Helvetica, Arial, sans-serif;
-// }
-// .nivo-caption a { 
-//     color:#efe9d1;
-//     text-decoration:underline;
-// }
