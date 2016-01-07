@@ -127,12 +127,12 @@ class SmsController extends BaseController
             $qqArrResponse = CurlToolkit::request('POST', "http://qqurl.com/create/", array('url' => $url));
 
             if ($qqArrResponse['status'] != 0) {
-                return $url.' ';
+                return $this->createJsonResponse(array('url' => $url.' '));
             } else {
-                return $qqArrResponse['short_url'].' ';
+                return $this->createJsonResponse(array('url' => $qqArrResponse['short_url'].' '));
             }
         } else {
-            return $arrResponse['tinyurl'].' ';
+            return $this->createJsonResponse(array('url' => $arrResponse['tinyurl'].' '));
         }
     }
 
