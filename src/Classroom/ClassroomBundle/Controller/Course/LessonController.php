@@ -2,20 +2,18 @@
 namespace Classroom\ClassroomBundle\Controller\Course;
 
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\Util\CloudClientFactory;
 use Topxia\WebBundle\Controller\BaseController;
 
 class LessonController extends BaseController
 {
-
     public function previewAction(Request $request, $classroomId, $courseId)
     {
-        $lessonId = $request->query->get('lessonId', 0);
-        $course = $this->getCourseService()->getCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lessonId  = $request->query->get('lessonId', 0);
+        $course    = $this->getCourseService()->getCourse($courseId);
+        $lesson    = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $user = $this->getCurrentUser();
-        $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
+        $user      = $this->getCurrentUser();
+        $member    = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$user->isLogin()) {
             return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
@@ -23,8 +21,8 @@ class LessonController extends BaseController
                 'lessonId' => $lessonId
             ));
         }
-        
-        if ($lesson['free'] || ($member && !$member['locked'])) {
+
+        if ($lesson['free'] || $course['tryLookable'] || ($member && !$member['locked'])) {
             return $this->forward('TopxiaWebBundle:CourseLesson:preview', array(
                 'courseId' => $courseId,
                 'lessonId' => $lessonId
@@ -38,10 +36,10 @@ class LessonController extends BaseController
     {
         $classrooms = $this->getClassroomService()->findClassroomsByCourseId($courseId);
 
-        if(!empty($classrooms) && count($classrooms)>0){
-            $keys = array_keys($classrooms);
+        if (!empty($classrooms) && count($classrooms) > 0) {
+            $keys      = array_keys($classrooms);
             $classroom = $this->getClassroomService()->getClassroom($keys[0]);
-        }else{
+        } else {
             $classroom = array();
         }
 
@@ -52,12 +50,12 @@ class LessonController extends BaseController
 
     public function listAction(Request $request, $classroomId, $courseId)
     {
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroomId, $user['id']) : null;
         return $this->render('ClassroomBundle:Classroom/Course:lessons-list.html.twig', array(
             'classroomId' => $classroomId,
-            'courseId' => $courseId,
-            'member' => $member
+            'courseId'    => $courseId,
+            'member'      => $member
         ));
     }
 

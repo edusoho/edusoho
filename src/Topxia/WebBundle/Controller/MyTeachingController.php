@@ -80,9 +80,8 @@ class MyTeachingController extends BaseController
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user->id, $classroomIds);
 
         foreach ($classrooms as $key => $classroom) {
-            $courses   = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
-            $courseIds = ArrayToolkit::column($courses, 'courseId');
-
+            $courses      = $this->getClassroomService()->findActiveCoursesByClassroomId($classroom['id']);
+            $courseIds    = ArrayToolkit::column($courses, 'id');
             $coursesCount = count($courses);
 
             $classrooms[$key]['coursesCount'] = $coursesCount;
