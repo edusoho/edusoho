@@ -5,7 +5,7 @@
 
 {% set bodyClass = 'homepage' %}
 {% set siteNav = '/' %}
-{% set script_controller = 'index' %}
+{% set script_controller = 'theme/default/index' %}
 {% set _target_path = path('homepage') %}
 
 {% block full_content %}
@@ -31,7 +31,15 @@
 			    </div>
 			    <div class="panel-body">
 			      <ul>
-			        <li><a href="">这条文字最多11个字哦耶</a><span>12/20</span></li>
+							{% set announcements = data('Announcement',{ count:3 }) %}
+							{% if announcements %}
+								{% for announcement in announcements %}
+									<a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a>
+								{% endfor %}
+							{% else %}
+								<div>暂无公告</div>
+							{% endif %}
+			        {#<li><a href="">这条文字最多11个字哦耶</a><span>12/20</span></li>#}
 			      </ul>
 			    </div>
 			  </div> 
@@ -43,5 +51,18 @@
   {% for pendant in themeConfig.blocks.left|default([]) %}
     {{ render(controller('TopxiaWebBundle:Theme:pendant', {config:pendant})) }}
   {% endfor %}
+
+<section class="mooc-learn">
+  <div class="container">
+    <div class="learn-list">
+      <i class="mobile img hidden-sm hidden-xs"></i>
+      <i class="calculator img hidden-sm hidden-xs"></i>
+      <i class="book img"></i>
+      <i class="earphone img hidden-sm hidden-xs"></i>
+      <i class="coffee img hidden-sm hidden-xs"></i>
+      <a href="{{ path('course_explore') }}" class="learning-btn img"><i class="mc-icon icon-iconfontwrite"></i>开启学习之旅</a>
+    </div>
+  </div>
+</section>
 
 {% endblock %}
