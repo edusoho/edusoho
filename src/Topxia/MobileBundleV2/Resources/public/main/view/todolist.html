@@ -87,13 +87,13 @@
             </list-empty-view>
             <ul class="ui-list ui-list-pure ui-border-t">
                 <li ng-repeat="thread in teachingResult.threads">
-                    <div class="ui-list-info ui-border-t">
+                    <div class="ui-list-info ui-border-t" ng-click="showThreadChatView(thread)">
                         <h2 class="ui-nowrap">{{ thread.title }}</h2>
                         <p>{{ thread.lessonTitle }}</p>
 
                         <div class="bottom">
                             <div class="ui-avatar-s rr">
-                                    <img ng-src="{{ thread.user.avatar | coverAvatar }}" />
+                                <img ng-src="{{ thread.user.avatar | coverAvatar }}" />
                             </div>
                                 
                             <span class="bottom-label">
