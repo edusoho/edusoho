@@ -1,4 +1,4 @@
-  <div class="swiper-wrapper nivoSlider" id="slider">
+  {#<div class="swiper-wrapper nivoSlider" id="slider">
     {% for poster in posters %}
       {% if poster.status == 1 %}
         {% if poster.mode == "img" %}
@@ -16,5 +16,18 @@
       {% endif %}
     {% endfor %}
   </div>
-  <div class="swiper-pager"></div>
+  <div class="swiper-pager"></div>#}
 
+  <div class="slide-wrapper">
+    <div id="slider" class="novoSlider slideitem">
+    {% for poster in posters %}
+      {% if poster.status == 1 %}
+        {% if poster.mode == "img" %}
+          <a href="{{ poster.href|default('') }}"><img src="{{ poster.src|default('') }}" alt="" /></a>
+        {% elseif poster.mode == "html"%}
+          {{ poster.html|raw }}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>

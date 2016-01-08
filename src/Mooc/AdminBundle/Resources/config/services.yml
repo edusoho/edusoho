@@ -6,13 +6,13 @@ parameters:
     maincolor: default
     navigationcolor: default
     blocks:
-      right:
-        - title: ""
-          count: "8"
-          orderBy: ""
-          code: "announcement"
-          defaultTitle: "公告"
-          id: "announcement"
+      # right:
+      #   - title: ""
+      #     count: "8"
+      #     orderBy: ""
+      #     code: "announcement"
+      #     defaultTitle: "公告"
+      #     id: "announcement"
       left:
         - title: ""
           count: ""
@@ -58,13 +58,13 @@ parameters:
     maincolor: default
     navigationcolor: default
     blocks:
-      right:
-        - title: ""
-          count: "8"
-          orderBy: ""
-          code: "announcement"
-          defaultTitle: "公告"
-          id: "announcement"
+      # right:
+      #   - title: ""
+      #     count: "8"
+      #     orderBy: ""
+      #     code: "announcement"
+      #     defaultTitle: "公告"
+      #     id: "announcement"
       left:
         - title: ""
           count: ""
