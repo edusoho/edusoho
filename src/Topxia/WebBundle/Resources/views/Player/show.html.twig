@@ -32,6 +32,7 @@
           class="local-video-player "
           {% elseif setting("developer.balloon_player")|default(0) %}
           class="ballon-video-player"
+          data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-markerurl="{{ context.markerUrl|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
           {% endif %}
