@@ -55,7 +55,7 @@
      <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
       <li class="active"><a href="#left" role="tab" data-toggle="tab">组件</a></li>
-      <li><a href="#maincolor" role="tab" data-toggle="tab">配色方案</a></li>
+      {#<li><a href="#maincolor" role="tab" data-toggle="tab">配色方案</a></li>#}
       <a href="{{ path('admin_reset_currentTheme_config', {uri:themeUri}) }}" class="btn btn-primary pull-right">全部重置</a>
     </ul>
 
@@ -108,7 +108,7 @@
         </div>
       </div>
 
-
+      {# 配色方案
       <div class="tab-pane" id="maincolor">
         <div class="panel panel-default">
           <div class="panel-heading">主色调</div>
@@ -323,7 +323,7 @@
             </div>  
           </form>
         </div>
-      </div>
+      </div> #}
     </div>
   </div>
 </div>
