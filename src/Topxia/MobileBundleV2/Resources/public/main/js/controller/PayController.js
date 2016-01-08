@@ -32,7 +32,7 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 	}
 
 	$scope.checkIsCoinMode = function() {
-		return platformUtil.ios || platformUtil.iPhone || platformUtil.iPad
+		return false;
 	}
 
 	$scope.changePayMode = function() {
