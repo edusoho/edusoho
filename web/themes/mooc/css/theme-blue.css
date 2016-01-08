@@ -14,7 +14,7 @@
   color: #bfbfbf !important;
 }
 .primary-color {
-  color: #0fbe8a !important;
+  color: #1b8ce4 !important;
 }
 .ing-bg {
   background-color: #59a8e8 !important;
@@ -23,7 +23,7 @@
   background-color: #bfbfbf !important;
 }
 .primary-bg {
-  background-color: #0fbe8a !important;
+  background-color: #1b8ce4 !important;
 }
 .btn {
   border-radius: 20px;
@@ -37,8 +37,8 @@
 }
 .btn-gylight:hover,
 .btn-gylight:focus {
-  border: 1px solid #0fbe8a;
-  color: #0fbe8a;
+  border: 1px solid #1b8ce4;
+  color: #1b8ce4;
 }
 .bar-main-body .btn-group.btn-action .btn {
   border: 1px solid #34a263;
@@ -222,15 +222,15 @@ input:focus {
 .btn-mooc-primary {
   padding: 3px 15px;
   background-color: #fff;
-  color: #0fbe8a;
-  border: 1px solid #0fbe8a;
+  color: #1b8ce4;
+  border: 1px solid #1b8ce4;
   border-radius: 0;
 }
 .btn-mooc-primary:hover,
 .btn-mooc-primary:focus {
-  background-color: #0fbe8a;
+  background-color: #1b8ce4;
   color: #fff;
-  border: 1px solid #0fbe8a;
+  border: 1px solid #1b8ce4;
   border-radius: 0;
 }
 .stars-0,
@@ -293,40 +293,40 @@ input:focus {
 /* =========================== rewrite =========================== */
 .list-group-panel .list-group-item.active,
 .list-group-panel .list-group-item.active:hover {
-  color: #10b67c;
-  border-color: #10b67c;
+  color: #0081e6;
+  border-color: #0081e6;
 }
 .btn-primary {
-  background-color: #0fbe8a;
-  border-color: #0fbe8a;
+  background-color: #1b8ce4;
+  border-color: #1b8ce4;
 }
 .btn-primary:hover,
 .btn-primary:focus {
-  background-color: #11bf82;
-  border-color: #11bf82;
+  background-color: #0087f0;
+  border-color: #0087f0;
 }
 .tooltip.top .tooltip-arrow {
-  border-top-color: #0fbe8a;
+  border-top-color: #1b8ce4;
 }
 .tooltip.bottom .tooltip-arrow {
-  border-bottom-color: #0fbe8a;
+  border-bottom-color: #1b8ce4;
 }
 .tooltip.left .tooltip-arrow {
-  border-left-color: #0fbe8a;
+  border-left-color: #1b8ce4;
 }
 .tooltip.right .tooltip-arrow {
-  border-left-color: #0fbe8a;
+  border-left-color: #1b8ce4;
 }
 .tooltip-inner {
-  background-color: #0fbe8a;
+  background-color: #1b8ce4;
   border-radius: 0;
 }
 .btn-link {
-  color: #10b67c;
+  color: #0081e6;
 }
 .btn-link:hover,
 .btn-link:focus {
-  color: #0fad76;
+  color: #007bdc;
 }
 .pagination > .active > a,
 .pagination > .active > span,
@@ -334,27 +334,27 @@ input:focus {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #0fbe8a;
-  border-color: #0fbe8a;
+  background-color: #1b8ce4;
+  border-color: #1b8ce4;
 }
 .pagination > li > a:hover,
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-  color: #10b67c;
+  color: #0081e6;
 }
 .pagination > li > a,
 .pagination > li > span {
-  color: #10b67c;
+  color: #0081e6;
 }
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  background-color: #0fbe8a;
+  background-color: #1b8ce4;
 }
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  background-color: #0fbe8a;
+  background-color: #1b8ce4;
   color: #fff;
 }
 .zan-share .dropdown-menu {
@@ -558,7 +558,7 @@ input:focus {
   height: 4px;
   width: 21px;
   margin: 0 3px;
-  background-color: #10b67c;
+  background-color: #0081e6;
 }
 .carousel-left,
 .carousel-right {
@@ -909,7 +909,7 @@ input:focus {
   font-size: 12px;
 }
 .week-reminder {
-  background: #0fbe8a;
+  background: #1b8ce4;
 }
 .time-reminder {
   background: #ff815a;
@@ -975,7 +975,7 @@ input:focus {
 }
 .class-tab .options a.active {
   color: #fff;
-  background-color: #0fbe8a;
+  background-color: #1b8ce4;
 }
 .class-tab .tab-pane {
   padding: 2px 10px;
@@ -1016,10 +1016,10 @@ input:focus {
   }
 }
 .class-tab .tab-pane li a:hover {
-  color: #10b67c;
+  color: #0081e6;
 }
 .class-tab .tab-pane li.active a {
-  color: #10b67c;
+  color: #0081e6;
 }
 .class-tab .tab-pane li:last-child a {
   border-right: 0;
@@ -1029,7 +1029,7 @@ input:focus {
   padding: 14px 25px;
   margin-bottom: 18px;
   border-radius: 0;
-  border-bottom: 2px solid #0fbe8a;
+  border-bottom: 2px solid #1b8ce4;
   font-weight: bold;
 }
 @media (max-width: 767px) {
@@ -1057,7 +1057,7 @@ input:focus {
 }
 .category-filters a:hover,
 .category-filters a.selected {
-  color: #10b67c;
+  color: #0081e6;
   font-weight: inherit;
 }
 .category-filters a:last-child {
@@ -1199,7 +1199,7 @@ input:focus {
 }
 .course-list.explore .course-info .student-mun span,
 .container-gap .course-info .student-mun span {
-  color: #10b67c;
+  color: #0081e6;
   margin: 0 3px;
 }
 .course-list.explore .course-teacher,
@@ -1847,8 +1847,8 @@ input:focus {
 }
 .course-nav .btn-join {
   padding: 6px 15px;
-  border: 1px solid #10b67c;
-  color: #10b67c;
+  border: 1px solid #0081e6;
+  color: #0081e6;
   float: right;
   margin-top: 8px;
   font-size: 16px;
@@ -1864,8 +1864,8 @@ input:focus {
   background: url('../img/icon_join.png') no-repeat;
 }
 .course-nav .btn-join:hover {
-  background-color: #10b67c;
-  border: 1px solid #10b67c;
+  background-color: #0081e6;
+  border: 1px solid #0081e6;
   color: #fff;
 }
 .course-nav .btn-join:hover .icon-join {
@@ -1897,11 +1897,11 @@ input:focus {
   color: #ff854a;
 }
 .course-nav .nav li.active a {
-  border-color: #10b67c;
+  border-color: #0081e6;
 }
 .course-nav .nav li.active a,
 .course-nav .nav li:hover a {
-  color: #10b67c;
+  color: #0081e6;
   background: none;
 }
 .course-column {
@@ -2095,7 +2095,7 @@ input:focus {
   font-size: 16px;
 }
 .es-panel.open-class .panel-heading .active {
-  color: #0fbe8a;
+  color: #1b8ce4;
 }
 .es-panel.open-class .panel-heading .active:hover {
   color: #fff;
@@ -2444,7 +2444,7 @@ input:focus {
   display: block;
   padding: 20px;
   font-size: 16px;
-  color: #10b67c;
+  color: #0081e6;
 }
 @media (max-width: 991px) {
   .show-more a {
@@ -2472,7 +2472,7 @@ input:focus {
   height: 80px;
   line-height: 70px;
   padding: 5px 10px;
-  color: #10b67c;
+  color: #0081e6;
 }
 @media (max-width: 767px) {
   .mooc-header .navbar-header {
@@ -2570,7 +2570,7 @@ input:focus {
   padding: 0 30px 0 15px;
 }
 .mooc-header .navbar-user .user-roles:hover {
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-header .navbar-user .user-message {
   display: inline-block;
@@ -2619,7 +2619,7 @@ input:focus {
   font-weight: bold;
 }
 .mooc-header .navbar-user .user-message.hasmessage:after {
-  background: #10b67c;
+  background: #0081e6;
   content: '';
   display: block;
   text-align: center;
@@ -2687,7 +2687,7 @@ input:focus {
   -o-transform: translateY(0px);
 }
 .navbar-mobile .navbar-more {
-  color: #10b67c;
+  color: #0081e6;
   padding: 15px 10px;
 }
 /*加入课程前*/
@@ -2835,10 +2835,10 @@ label {
 .mooc-exam-column.period {
   padding: 10px 100px 10px 15px;
   background: #f1fae5;
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-exam-column.period .title {
-  color: #10b67c;
+  color: #0081e6;
 }
 .period-list .lesson-item:hover {
   background: #fafafa;
@@ -2869,7 +2869,7 @@ label {
 }
 .mooc-navset .set-left {
   width: 228px;
-  background: #10b67c;
+  background: #0081e6;
   color: #ffffff;
   padding: 30px;
   text-align: center;
@@ -2911,7 +2911,7 @@ label {
   border-right: none;
 }
 .mooc-navset .set-right .width-25 i {
-  color: #10b67c;
+  color: #0081e6;
   font-size: 34px;
   vertical-align: middle;
 }
@@ -3146,16 +3146,16 @@ label {
   margin-bottom: 30px;
 }
 .mooc-teacher .teach-item .teacher-kown a {
-  border: 2px solid #10b67c;
+  border: 2px solid #0081e6;
   padding: 12px 32px;
   font-size: 16px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-teacher .teach-item .teacher-kown a:hover {
-  background: #10b67c;
+  background: #0081e6;
   color: #ffffff;
 }
 .mooc-cooperate {
@@ -3188,7 +3188,7 @@ label {
   padding: 28px 0;
 }
 .mooc-learn {
-  background: #10b67c;
+  background: #0081e6;
 }
 .mooc-learn .learn-list {
   position: relative;
@@ -3293,7 +3293,7 @@ label {
 }
 .mooc-learn .learn-list .learning-btn:hover {
   background: rgba(255, 255, 255, 0.9);
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-learn .learn-list .learning-btn.animate {
   -webkit-animation: fadeInDown 1s 0.8s ease both;
@@ -3306,7 +3306,7 @@ label {
   padding-left: 25px;
   color: #444444;
   font-size: 20px;
-  border-left: 4px solid #0fbe8a;
+  border-left: 4px solid #1b8ce4;
 }
 .mooc-class-section {
   padding-bottom: 30px;
@@ -3424,7 +3424,7 @@ label {
   color: #999999;
 }
 .friendlink ul li a:hover {
-  color: #10b67c;
+  color: #0081e6;
 }
 .footer-logo .footer-sns i.es-icon-weibo,
 .footer-logo .footer-sns i.es-icon-weixin,
@@ -3455,7 +3455,7 @@ footer .link-item ul li {
   margin-top: 25px;
 }
 footer .link-item ul li a:hover {
-  color: #10b67c;
+  color: #0081e6;
 }
 footer .link-item h4 {
   color: #addbdb;
@@ -3524,7 +3524,7 @@ footer .footer-attr p i {
   margin-right: -570px;
 }
 .mooc-poster .mooc-notice .panel-heading i {
-  color: #10b67c;
+  color: #0081e6;
   padding-right: 10px;
   font-size: 18px;
 }
@@ -3533,7 +3533,7 @@ footer .footer-attr p i {
 }
 .mooc-poster .mooc-notice .panel-body li {
   list-style-type: disc;
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-poster .mooc-notice .panel-body li a {
   color: #272a41;
@@ -3546,7 +3546,7 @@ footer .footer-attr p i {
   margin-right: 12px;
 }
 .mooc-poster .mooc-notice .panel-body li a:hover {
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-poster .mooc-notice .panel-body li span {
   color: #c1c1c1;
@@ -4011,7 +4011,7 @@ a.nivo-prevNav {
 .certificate-upload-img .panel-heading .certificate-btn-upload {
   padding: 6px 8px;
   color: #8a9197;
-  border: 1px solid #0fbe8a;
+  border: 1px solid #1b8ce4;
   background: #f4fdf8;
 }
 .certificate-upload-table .panel-heading {
@@ -4023,7 +4023,7 @@ a.nivo-prevNav {
 .certificate-upload-table .panel-heading .apply-btn {
   padding: 6px 8px;
   color: #8a9197;
-  border: 1px solid #0fbe8a;
+  border: 1px solid #1b8ce4;
   background: #f4fdf8;
 }
 .certificate-upload-table .panel-heading .navbar-form {
@@ -4041,7 +4041,7 @@ a.nivo-prevNav {
   height: 30px;
   top: 1px;
   right: 1px;
-  background: #10b67c;
+  background: #0081e6;
 }
 .certificate-upload-table .panel-heading .navbar-form .button i {
   color: #ffffff;
@@ -4064,10 +4064,10 @@ a.nivo-prevNav {
   color: #7e9696;
 }
 .certificate-upload-table .panel-body ul li.active {
-  border-bottom: 1px solid #10b67c;
+  border-bottom: 1px solid #0081e6;
 }
 .certificate-upload-table .panel-body ul li.active a {
-  color: #10b67c;
+  color: #0081e6;
 }
 .certificate-upload-table .panel-body table thead {
   background: #f0f5f9;
@@ -4185,7 +4185,7 @@ a.nivo-prevNav {
   padding-top: 42px;
 }
 .coursedata-course-adds .adds-total .adds-num p {
-  color: #0fbe8a;
+  color: #1b8ce4;
   font-size: 24px;
   margin: 0;
 }
@@ -4224,7 +4224,7 @@ a.nivo-prevNav {
   background: #ffffff;
 }
 .TAFE-poster .swiper-pager span.swiper-active-switch {
-  background: #10b67c;
+  background: #0081e6;
 }
 .TAFE-download {
   background: #ffffff;
@@ -4238,7 +4238,7 @@ a.nivo-prevNav {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #10b67c;
+  background: #0081e6;
   position: absolute;
   top: 50%;
   margin-top: -4px;
@@ -4283,7 +4283,7 @@ a.nivo-prevNav {
   padding-right: 0;
 }
 .TAFE-section .course-filter a {
-  color: #10b67c;
+  color: #0081e6;
   font-size: 14px;
 }
 .mooc-report-header {
@@ -4354,7 +4354,7 @@ a.nivo-prevNav {
   display: block;
   font-size: 12px;
   padding-top: 15px;
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-report-content .mooc-report-count ul li span strong {
   font-size: 16px;
@@ -4418,7 +4418,7 @@ a.nivo-prevNav {
   border: 1px solid #e1e1e1;
 }
 .mooc-report-table .report-table-header .input-group-b {
-  background: #10b67c;
+  background: #0081e6;
   border: none;
   outline: none;
   height: 36px;
@@ -4439,7 +4439,7 @@ a.nivo-prevNav {
 }
 .mooc-report-table .report-table-header .btn-right a:hover {
   border: 1px solid #def9ea;
-  color: #10b67c;
+  color: #0081e6;
   background: #def9ea;
 }
 .mooc-report-table .report-table-body tr td a {
@@ -4503,7 +4503,7 @@ a.nivo-prevNav {
   color: #00a8ff;
 }
 .mooc-report-modal .report-intro p .es-icon-help {
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-report-modal .report-intro p span {
   font-size: 14px;
@@ -4615,10 +4615,10 @@ a.nivo-prevNav {
 }
 .mooc-report-tab .detail-nav li.active {
   background: #f4fdf8;
-  border-bottom: 1px solid #10b67c;
+  border-bottom: 1px solid #0081e6;
 }
 .mooc-report-tab .detail-nav li.active a {
-  color: #10b67c;
+  color: #0081e6;
 }
 .mooc-report-tab .mooc-report-table {
   margin: 30px;
@@ -4650,7 +4650,7 @@ a.nivo-prevNav {
   color: #fff;
 }
 .homework-time .homework-btn .green {
-  background: #0fbe8a;
+  background: #1b8ce4;
 }
 .homework-time .homework-btn .gary {
   background: #999999;
@@ -4728,9 +4728,9 @@ a.nivo-prevNav {
   background: #fff;
 }
 .h-Evaluate .btn-common {
-  border: 1px solid #10b67c;
+  border: 1px solid #0081e6;
   padding: 2px 4px;
-  color: #10b67c;
+  color: #0081e6;
   background: #fff;
 }
 .question-evaluate-table th {
