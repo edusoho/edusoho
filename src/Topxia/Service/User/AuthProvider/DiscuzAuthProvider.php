@@ -83,7 +83,12 @@ class DiscuzAuthProvider implements AuthProvider
     public function checkConnect()
     {
         $this->initDiscuzApi();
-        return !empty(uc_app_ls());
+        try {
+            uc_app_ls();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function checkPassword($userId, $password)
