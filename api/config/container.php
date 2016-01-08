@@ -10,6 +10,7 @@ $resources = array(
     'Classrooms',
     'CourseMember',
     'CourseMembers',
+    'CourseMembership',
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
