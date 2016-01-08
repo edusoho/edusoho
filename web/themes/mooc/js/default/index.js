@@ -65,7 +65,8 @@ define(function(require, exports, module) {
             pagination: '.teach-list .swiper-pager',
             paginationClickable: true,
             calculateHeight: true,
-           slidesPerView: 'auto',
+            roundLengths: true,
+            slidesPerView: 4,
             onInit: function(swiper) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }
