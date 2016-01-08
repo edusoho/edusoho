@@ -16,14 +16,9 @@
 	</nav> 
 	<section class="mooc-poster">
 	  <div class="container clearfix">
-	    {#<div class="slide-wrapper">
-	      <div id="slider" class="novoSlider slideitem">
-	        <a href=""><img src="{{asset('themes/mooc/img/banner1.jpg')}}" alt="" /></a>
-	        <a href=""><img src="{{asset('themes/mooc/img/banner2.png')}}" alt="" /></a>
-	        <a href=""><img src="{{asset('themes/mooc/img/banner3.jpg')}}" alt="" /></a>
-	      </div>
-	    </div>#}
+	    
 	    {{ block_show('mooc:home_top_banner') }}
+
 	    <div class="mooc-notice hidden-sm hidden-xs hidden-md">
 			  <div class="panel panel-default">
 			    <div class="panel-heading clearfix">
@@ -34,7 +29,7 @@
 							{% set announcements = data('Announcement',{ count:3 }) %}
 							{% if announcements %}
 								{% for announcement in announcements %}
-									<a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a>
+									<li><a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a></li>
 								{% endfor %}
 							{% else %}
 								<div>暂无公告</div>
