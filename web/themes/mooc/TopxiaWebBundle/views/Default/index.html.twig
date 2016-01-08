@@ -72,7 +72,8 @@
       </a>
     </div>
   </div>
-</section>
+ {{ block_show('mooc:category_nav') }}
+
 
 <!-- 课程 -->
 {% set recommendCourses = data('RecommendCourses',{ count:10 }) %}
@@ -147,30 +148,14 @@
   </div>
 </section>
 
+
+
 <section class="mooc-feature">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4 col-sm-4">
-        <img src="{{asset('themes/mooc/img/badge.svg')}}" class="img-responsive">
-        <h4>社区型网校</h4>
-        <p>与同学和老师实时讨论课程细节，让你全面掌
-          握所有知识点，巩固知识，学习不再孤单！</p>
-      </div>
-      <div class="col-md-4 col-sm-4">
-        <img src="{{asset('themes/mooc/img/community.svg')}}" class="img-responsive">
-        <h4>随时随地学习</h4>
-        <p>网校结合移动端，能够让你随时随地掏出手
-          机就进行学习，方便快捷，没有任何负担。</p>
-      </div>
-      <div class="col-md-4 col-sm-4">
-        <img src="{{asset('themes/mooc/img/shake.svg')}}" class="img-responsive">
-        <h4>权威电子证书</h4>
-        <p>重点课程提供权威电子证书认证，让你的学
-          习获得认可，为你的就业添砖加瓦。</p>
-      </div>
-    </div>
-  </div>
+
+   {{ block_show('mooc:middle_banner') }}
+
 </section>
+
 {% set teachers = data('RecommendTeachers',{'count':12}) %}
 <section class="mooc-teacher hidden-xs hidden-sm">
   <div class="container">
@@ -196,48 +181,9 @@
     <div class="mooc-index-title">
      合作院校
     </div>
-    <ul class="cooperate-list clearfix">
-      <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-       <li>
-        <a href="javascript:;">
-          <img src="{{asset('themes/mooc/img/temp/cooperate-img1.png')}}">
-        </a>
-      </li>
-    </div>
+
+    {{ block_show('mooc:footer_link') }}
+    
   </div>
 </section>
 

@@ -10,7 +10,7 @@
 </br> #}
 
 <section class="mooc-navset">
-  <div class="container clearfix">
+  {#<div class="container clearfix">
     <div class="set-left hidden-md hidden-sm hidden-xs">
       <h2><i class="mc-icon icon-similar"></i>学院设置</h2>
       <p>快速选择学院入口立即学习</p>
@@ -45,9 +45,9 @@
         <i class="iconfont icon-icon32"></i>
       </a>
     </div>
-  </div>
+  </div> #}
+  {{ block_show('mooc:category_nav') }}
 </section>
-
 
 {#<h1>公告</h1>
 {% set announcements = data('Announcement',{ count:3 }) %}

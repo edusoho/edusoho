@@ -1,6 +1,11 @@
-<h4>友情链接 :</h4>
-<ul>
-  {% for partner in partners|default('') %}
-    <li><a href="{{ partner.href }}" target="{{ partner.target }}">{{ partner.value }}</a></li>
-  {% endfor %}
+
+
+<ul class="cooperate-list clearfix">
+	 {% for partner in partners|default('') %}
+      <li>
+        <a href="{{ partner.title|default('') }}">
+          <img src="{{ partner.src|default('') }}" alt="{{ partner.alt|default('') }}">
+        </a>
+      </li>
+     {% endfor %}
 </ul>

@@ -21,7 +21,7 @@ define(function(require, exports, module) {
     require('ckeditor');
 
     exports.run = function() {
-
+alert(2);
         var editor = CKEDITOR.replace('profile_about', {
             toolbar: 'Simple',
             filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
