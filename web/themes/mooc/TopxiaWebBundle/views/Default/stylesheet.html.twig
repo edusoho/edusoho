@@ -29,7 +29,7 @@
 {% if maincolor == 'default' %}
   <link href="{{ asset('assets/v2/css/main.css') }}" rel="stylesheet" />
 {% else %}
-  <link href="{{ asset('themes/mooc/css/theme-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
 {% endif %}
 
 {% if navigationcolor != 'default' %}
@@ -37,7 +37,6 @@
 {% endif %}
 
 
-
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/theme.css') }}" />
+<link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/theme.css') }}" />
 <link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/iconfont.css') }}" />
 <link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/newiconfont.css') }}" />
