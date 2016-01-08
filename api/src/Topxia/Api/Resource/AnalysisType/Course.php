@@ -71,7 +71,7 @@ class Course extends BaseAnalysisType
             $totalPercent += $point / $studentNum;
         }
 
-        $totalPercent = (int)($totalPercent / 7 * 100);
+        $totalPercent = (int)($totalPercent / $studentNum * 100);
 
         $header = array(
             array(
