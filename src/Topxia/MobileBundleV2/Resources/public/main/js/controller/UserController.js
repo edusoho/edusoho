@@ -383,8 +383,8 @@ function HomeworkTeachingController($scope, $stateParams, HomeworkManagerService
 	};
 }
 
-app.controller('ThreadTeachingController', ['$scope', '$stateParams', 'ThreadManagerService', ThreadTeachingController]);
-function ThreadTeachingController($scope, $stateParams, ThreadManagerService) {
+app.controller('ThreadTeachingController', ['$scope', '$stateParams', 'ThreadManagerService', 'cordovaUtil', ThreadTeachingController]);
+function ThreadTeachingController($scope, $stateParams, ThreadManagerService, cordovaUtil) {
 
 	var self = this;
 
@@ -396,6 +396,15 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService) {
 		};
 		data.threads = threads;
 		return data;
+	};
+
+	$scope.showThreadChatView = function(thread) {
+		cordovaUtil.startAppView("threadDiscuss", {
+			type : "thread.post",
+			courseId : thread.courseId,
+			lessonId : thread.lessonId,
+			threadId : thread.id
+		});
 	};
 
 	$scope.initQuestionResult = function() {
