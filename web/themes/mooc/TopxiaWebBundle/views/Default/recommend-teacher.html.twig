@@ -50,35 +50,19 @@
         </ol>
          <div class="carousel-inner" role="listbox">
         
-           <div class="item active row">
-             <div class="col-md-3">
-                
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
+          {% for item in 1..10 %}
+            {% if (loop.index-1) % 4 == 0 %}
+           <div class="item {% if loop.index == 1 %}active{% endif %} row">
+           {% endif %}
+
+               <div class="col-md-3">
+                  1
+               </div>
+            {% if loop.index % 4 == 0 %}
            </div>
-         
-           <div class="item row">
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-           </div>
+           {% endif %}
+          {% endfor %}
+        
          </div>
       </div>
      {% endif %}
