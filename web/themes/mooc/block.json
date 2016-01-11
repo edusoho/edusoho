@@ -198,22 +198,22 @@
                 "type": "banner",
                 "default": [
                     {
-                        "src" : "\/themes\/mooc\/img\/temp\/cooperate-img1.png",
+                        "src" : "\/themes\/mooc\/img\/es.jpg",
                         "desc": "建议图片大小为122*122",
                         "alt" : "合作伙伴1",
-                        "href": ""
+                        "href": "http://www.edusoho.com"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/temp\/cooperate-img1.png",
+                        "src" : "\/themes\/mooc\/img\/howzhi.jpg",
                         "desc": "建议图片大小为122*122",
                         "alt" : "合作伙伴2",
-                        "href": ""
+                        "href": "http://www.howzhi.com"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/temp\/cooperate-img1.png",
+                        "src" : "\/themes\/mooc\/img\/qiqiuyu.jpg",
                         "desc": "建议图片大小为122*122",
                         "alt" : "合作伙伴3",
-                        "href": ""
+                        "href": "http://www.qiqiuyu.com"
                     }
                 ]
             }

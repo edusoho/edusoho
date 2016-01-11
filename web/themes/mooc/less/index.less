@@ -243,11 +243,48 @@
 
 .mooc-teacher{
   position: relative;
-  .swiper-slide{
-    -webkit-box-sizing: inherit;
-    -moz-box-sizing: inherit;
-    box-sizing: inherit;
+  .mooc-carousel-indicators{
+    li{
+      width: 10px;
+      height: 10px;
+      .border-radius(50%);
+      background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.3);
+    }
+    li.active{
+      background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.8);
+    }
   }
+  .carousel-fade {
+    .carousel-inner {
+        .item {
+            transition-property: opacity;
+        }
+        
+        .item,
+        .active.left,
+        .active.right {
+            opacity: 0;
+        }
+
+        .active,
+        .next.left,
+        .prev.right {
+            opacity: 1;
+        }
+
+        .next,
+        .prev,
+        .active.left,
+        .active.right {
+            left: 0;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .carousel-control {
+        z-index: 2;
+    }
+}
   .teach-list{
     padding: 15px 0 30px;
       .swiper-pager{
@@ -275,11 +312,10 @@
   }
   .teach-item{
     position: relative;
-    padding: 0;
+    padding: 20px 0;
     .teach-wrapper{
       background: @white;
       padding: 15px 30px;
-      margin: 0 15px;
       .border-radius(2px);
       &:hover{
         .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;

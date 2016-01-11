@@ -3,7 +3,7 @@
 <ul class="cooperate-list clearfix">
 	 {% for partner in partners|default('') %}
       <li>
-        <a href="{{ partner.title|default('') }}">
+        <a href="{{ partner.href|default('') }}">
           <img src="{{ partner.src|default('') }}" alt="{{ partner.alt|default('') }}">
         </a>
       </li>
