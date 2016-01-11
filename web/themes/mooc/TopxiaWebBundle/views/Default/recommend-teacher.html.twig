@@ -29,10 +29,9 @@
 {% set teachers = data('RecommendTeachers',{'count':config.count|default(8)}) %}
 <section class="mooc-teacher hidden-xs hidden-sm">
   <div class="container">
-     <div class="mooc-index-title">
-        {{ config.title|default(config.defaultTitle) }}
-      </div>
-    {% if teachers %}
+    <div class="mooc-index-title">
+      {{ config.title|default(config.defaultTitle) }}
+    </div>
      {#  <div class="row swiper-container teach-list">
         <div class="swiper-wrapper">
           {% for teacher in teachers %}
@@ -43,44 +42,187 @@
         </div>
         <div class="swiper-pager"></div>
       </div>   #}
-      <div class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target=".carousel" data-slide-to="0" class="active"></li>
-          <li data-target=".carousel" data-slide-to="1"></li>
-        </ol>
-         <div class="carousel-inner" role="listbox">
-        
-           <div class="item active row">
-             <div class="col-md-3">
-                
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-           </div>
-         
-           <div class="item row">
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-             <div class="col-md-3">
-              1
-             </div>
-           </div>
-         </div>
+    <div class="carousel slide carousel-fade">
+      <ol class="carousel-indicators mooc-carousel-indicators">
+      </ol>
+      <div class="teach-list">
+        <div class="carousel-inner" role="listbox">
+          <div class="item active">
+            <div class="row teach-item">
+              
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+             
+           
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+          
+            
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+          
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+              
+            </div>
+          </div>
+          <div class="item">
+            <div class="row teach-item">
+              
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+             
+           
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+          
+            
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+          
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{asset('themes/mooc/images/nemo.jpg')}}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">11</a>
+                      </div>
+                      <div class="teacher-position">
+                          22
+                      </div>
+                          <div class="teacher-about">暂无简介</div>
+                      <div class="teacher-kown">
+                        <a href="">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+              
+            </div>
+          </div>
+        </div>  
       </div>
-     {% endif %}
+    </div>
   </div>
 </section>
