@@ -1,5 +1,5 @@
 
-.es-poster{
+.mooc-poster{
   .Wleft{
     max-width: 880px;
   }
@@ -27,7 +27,7 @@
     margin-left: -550px;
   }
   .swiper-pager{
-    text-align: left;
+    text-align: left!important;
     left: 50%;
     margin-left: -200px;
     @media (max-width : @screen-sm-max){
@@ -41,10 +41,14 @@
   .mooc-notice{
     width: 260px;
     position: absolute;
-    top: 40px;
+    top: 50px;
     right: 50%;
     margin-right: -570px;
+    .panel{
+      height: 300px;
+    }
     .panel-heading{
+      font-size: 14px;
       i{
         color: @color-primary;
         padding-right: 10px;
@@ -54,7 +58,9 @@
     .panel-body{
       ul{
         padding: 0 12px; 
+        font-size: 14px;
       }
+
       li{
         list-style-type: disc;
         color: @color-primary;

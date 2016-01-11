@@ -195,7 +195,7 @@
 body {
   font-family: "Hiragino Sans GB", "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif;
   color: #666666;
-  background: #f0f5f9;
+  background: #f0f5f9!important;
 }
 li {
   list-style-type: none;
@@ -2576,7 +2576,7 @@ input:focus {
   display: inline-block;
   width: 40px;
   height: 40px;
-  background: #70d8b9;
+  background: rgba(241, 113, 106, 0.7);
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
@@ -2595,13 +2595,13 @@ input:focus {
   right: 0;
 }
 .mooc-header .navbar-user .user-message:hover i {
-  background: #17b083;
+  background: #fd5f56;
 }
 .mooc-header .navbar-user .user-message i {
   display: inline-block;
   width: 30px;
   height: 30px;
-  background: #10be8b;
+  background: #f1716a;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
@@ -2637,7 +2637,8 @@ input:focus {
 }
 .mooc-nav ul > li > a {
   color: #ffffff;
-  padding: 15px 38px;
+  padding: 20px 38px;
+  font-size: 16px;
 }
 .mooc-nav ul > li > a:hover {
   background: #333755;
@@ -2855,9 +2856,9 @@ label {
   position: absolute;
   left: 0;
   top: 3px;
-  width: 5px;
+  width: 4px;
   height: 100%;
-  background: #15c288;
+  background: #fd5f56;
   height: 20px;
 }
 .course-filter.section-header {
@@ -2909,6 +2910,15 @@ label {
 }
 .mooc-navset .set-right .width-25:last-child {
   border-right: none;
+}
+.mooc-navset .set-right .width-25 img {
+  width: 34px;
+  height: 34px;
+  display: inline-block;
+  margin-right: 6px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
 }
 .mooc-navset .set-right .width-25 i {
   color: #fd5f56;
@@ -3035,11 +3045,11 @@ label {
   font-size: 22px;
 }
 .mooc-classroom .class-item {
-  background: transparent;
-  padding: 0;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+  background: transparent !important;
+  padding: 0!important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
 }
 .mooc-classroom .class-item:hover .class-wrapper {
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -3098,13 +3108,13 @@ label {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  background: rgba(16, 190, 139, 0.1);
+  background: rgba(241, 113, 106, 0.1);
 }
 .mooc-teacher .teach-list .swiper-pager span.swiper-active-switch.swiper-visible-switch {
-  background: rgba(16, 190, 139, 0.9);
+  background: rgba(241, 113, 106, 0.9);
 }
 .mooc-teacher .teach-list .swiper-pager span.swiper-visible-switch {
-  background: rgba(16, 190, 139, 0.5);
+  background: rgba(241, 113, 106, 0.5);
 }
 .mooc-teacher .teach-item {
   position: relative;
@@ -3440,8 +3450,8 @@ label {
 .footer-logo .footer-sns i.es-icon-weixin,
 .footer-logo .footer-sns i.es-icon-apple,
 .footer-logo .footer-sns i.es-icon-android {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
 }
 footer {
   padding: 40px 0 0;
@@ -3472,6 +3482,7 @@ footer .link-item h4 {
 }
 footer .footer-attr p {
   margin-top: 25px;
+  color: #ffffff;
 }
 footer .footer-attr p i {
   color: #ffffff;
@@ -3494,11 +3505,11 @@ footer .footer-attr p i {
   margin-bottom: 0;
   padding-bottom: 15px;
 }
-.es-poster .Wleft {
+.mooc-poster .Wleft {
   max-width: 880px;
 }
-.es-poster .arrow-left,
-.es-poster .arrow-right {
+.mooc-poster .arrow-left,
+.mooc-poster .arrow-right {
   position: absolute;
   top: 50%;
   display: inline-block;
@@ -3512,58 +3523,65 @@ footer .footer-attr p i {
   border-radius: 50%;
   text-align: center;
 }
-.es-poster .arrow-left i,
-.es-poster .arrow-right i {
+.mooc-poster .arrow-left i,
+.mooc-poster .arrow-right i {
   font-size: 26px;
 }
-.es-poster .arrow-right {
+.mooc-poster .arrow-right {
   right: 50%;
   margin-right: -290px;
 }
-.es-poster .arrow-left {
+.mooc-poster .arrow-left {
   left: 50%;
   margin-left: -550px;
 }
-.es-poster .swiper-pager {
-  text-align: left;
+.mooc-poster .swiper-pager {
+  text-align: left!important;
   left: 50%;
   margin-left: -200px;
 }
 @media (max-width: 991px) {
-  .es-poster .swiper-pager {
+  .mooc-poster .swiper-pager {
     margin-left: -70px;
   }
 }
-.es-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
+.mooc-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
   width: 30px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
 }
-.es-poster .mooc-notice {
+.mooc-poster .mooc-notice {
   width: 260px;
   position: absolute;
-  top: 40px;
+  top: 50px;
   right: 50%;
   margin-right: -570px;
 }
-.es-poster .mooc-notice .panel-heading i {
+.mooc-poster .mooc-notice .panel {
+  height: 300px;
+}
+.mooc-poster .mooc-notice .panel-heading {
+  font-size: 14px;
+}
+.mooc-poster .mooc-notice .panel-heading i {
   color: #fd5f56;
   padding-right: 10px;
   font-size: 18px;
 }
-.es-poster .mooc-notice .panel-body ul {
+.mooc-poster .mooc-notice .panel-body ul {
   padding: 0 12px;
+  font-size: 14px;
 }
-.es-poster .mooc-notice .panel-body li {
+.mooc-poster .mooc-notice .panel-body li {
   list-style-type: disc;
   color: #fd5f56;
   margin-bottom: 10px;
 }
-.es-poster .mooc-notice .panel-body li:last-child {
+.mooc-poster .mooc-notice .panel-body li:last-child {
   margin-bottom: 0;
 }
-.es-poster .mooc-notice .panel-body li a {
+.mooc-poster .mooc-notice .panel-body li a {
   color: #272a41;
   display: inline-block;
   width: 150px;
@@ -3573,10 +3591,10 @@ footer .footer-attr p i {
   vertical-align: bottom;
   margin-right: 12px;
 }
-.es-poster .mooc-notice .panel-body li a:hover {
+.mooc-poster .mooc-notice .panel-body li a:hover {
   color: #fd5f56;
 }
-.es-poster .mooc-notice .panel-body li span {
+.mooc-poster .mooc-notice .panel-body li span {
   color: #c1c1c1;
 }
 /*插件*/
