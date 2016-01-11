@@ -12,7 +12,7 @@
     top: 3px;
     width: 5px;
     height: 100%;
-    background: #15c288;
+    background: @color-primary;
     height: 20px;
   }
 }
@@ -188,9 +188,9 @@
     }
   }
   .class-item{
-    background: transparent;
-    padding: 0;
-    .box-shadow(none);
+    background: transparent !important;
+    padding: 0!important;
+    .box-shadow(none)!important;
     &:hover{
       .class-wrapper{
         .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1));
@@ -249,13 +249,13 @@
       height: 10px;
        display: inline-block;
       .border-radius(50%);
-      background: rgba(16, 190, 139, 0.1)
+       background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.1);
     }
    span.swiper-active-switch.swiper-visible-switch {
-      background: rgba(16, 190, 139, 0.9)
+      background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.9);
    }
    span.swiper-visible-switch{
-      background: rgba(16, 190, 139, 0.5)
+       background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.5);
    }
   }
   }

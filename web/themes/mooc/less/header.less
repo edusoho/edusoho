@@ -110,7 +110,7 @@
       display: inline-block;
       width: 40px;
       height: 40px;
-      background: #70d8b9;
+      background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.7);
       .border-radius(50%);
       position: relative;
       .red-dot{
@@ -126,14 +126,14 @@
       
       &:hover{
         i{
-          background: #17b083;
+          background: @color-primary;
         }
       }
       i{
         display: inline-block;
         width: 30px;
         height: 30px;
-        background: #10be8b;
+        background: @bg-primary;
         .border-radius(50%);
         color: @white;
         margin: 5px;
