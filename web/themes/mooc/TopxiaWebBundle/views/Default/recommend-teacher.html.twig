@@ -33,7 +33,7 @@
         {{ config.title|default(config.defaultTitle) }}
       </div>
     {% if teachers %}
-      <div class="row swiper-container teach-list">
+     {#  <div class="row swiper-container teach-list">
         <div class="swiper-wrapper">
           {% for teacher in teachers %}
             <div class="teach-item swiper-slide col-md-3">
@@ -42,7 +42,45 @@
           {% endfor %}
         </div>
         <div class="swiper-pager"></div>
-      </div>  
+      </div>   #}
+      <div class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target=".carousel" data-slide-to="0" class="active"></li>
+          <li data-target=".carousel" data-slide-to="1"></li>
+        </ol>
+         <div class="carousel-inner" role="listbox">
+        
+           <div class="item active row">
+             <div class="col-md-3">
+                
+             </div>
+             <div class="col-md-3">
+              1
+             </div>
+             <div class="col-md-3">
+              1
+             </div>
+             <div class="col-md-3">
+              1
+             </div>
+           </div>
+         
+           <div class="item row">
+             <div class="col-md-3">
+              1
+             </div>
+             <div class="col-md-3">
+              1
+             </div>
+             <div class="col-md-3">
+              1
+             </div>
+             <div class="col-md-3">
+              1
+             </div>
+           </div>
+         </div>
+      </div>
      {% endif %}
   </div>
 </section>

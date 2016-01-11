@@ -3028,19 +3028,26 @@ label {
 .mooc-classroom .class-list .arrow-left {
   left: 0;
 }
+.mooc-classroom .class-list:hover .arrow-left,
+.mooc-classroom .class-list:hover .arrow-right {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
 .mooc-classroom .class-list .arrow-left,
 .mooc-classroom .class-list .arrow-right {
   position: absolute;
   top: 50%;
   margin-top: -45px;
   display: inline-block;
-  width: 20px;
-  height: 60px;
-  line-height: 60px;
-  background: rgba(0, 0, 0, 0.1);
+  width: 30px;
+  height: 80px;
+  line-height: 80px;
+  background: rgba(223, 233, 242, 0.8);
   color: #ffffff;
   text-align: center;
   right: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 .mooc-classroom .class-list .arrow-left i,
 .mooc-classroom .class-list .arrow-right i {
@@ -3184,7 +3191,12 @@ label {
 .mooc-cooperate .cooperate-list li {
   float: left;
   width: 20%;
-  text-align: center;
+}
+.mooc-cooperate .cooperate-list li:hover img {
+  -webkit-filter: grayscale(0);
+  -moz-filter: grayscale(0);
+  -o-filter: grayscale(0);
+  filter: grayscale(0);
 }
 @media (max-width: 991px) {
   .mooc-cooperate .cooperate-list li {
@@ -3192,17 +3204,20 @@ label {
   }
 }
 .mooc-cooperate .cooperate-list li img {
-  width: 122px;
-  height: 122px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
+  max-width: 100%;
+  -webkit-filter: grayscale(1);
+  -moz-filter: grayscale(1);
+  -o-filter: grayscale(1);
+  filter: grayscale(1);
 }
 .mooc-cooperate .cooperate-list li a {
   display: block;
   background: #ffffff;
-  margin: 10px;
-  padding: 28px 0;
+  width: 208px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+  overflow: hidden;
 }
 .mooc-cooperate .cooperate-list li a:hover {
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
