@@ -21,4 +21,9 @@ parameters:
         'Course.ThreadDao' : 'Mooc\Service\Course\Dao\Impl\ThreadDaoImpl'
         'Testpaper.TestpaperItemResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperItemResultDaoImpl'
 
+    template_overwrite_map: 
+       TopxiaAdminBundle: MoocAdminBundle
+       TopxiaWebBundle: MoocWebBundle
+       ClassroomBundle: MoocWebBundle
+
 

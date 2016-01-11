@@ -9,7 +9,3 @@ parameters:
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    template_overwrite_map: 
-       TopxiaAdminBundle: MoocAdminBundle
-       TopxiaWebBundle: MoocWebBundle
-       ClassroomBundle: MoocWebBundle
