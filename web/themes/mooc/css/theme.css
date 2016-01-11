@@ -3514,6 +3514,7 @@ footer .footer-attr p i {
 .mooc-poster .arrow-right {
   position: absolute;
   top: 50%;
+  margin-top: -25px;
   display: inline-block;
   width: 50px;
   height: 50px;
