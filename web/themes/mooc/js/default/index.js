@@ -30,7 +30,6 @@ define(function(require, exports, module) {
         var swiper2 = new Swiper('.set-right.swiper-container', {
             autoplay: 6000,
             autoplayDisableOnInteraction: false,
-            loop: true,
             calculateHeight: true,
             roundLengths: true,
             slidesPerView: 4,
