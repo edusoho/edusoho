@@ -49,7 +49,6 @@ define(function(require, exports, module) {
 
 
         var swiper3 = new Swiper('.class-list.swiper-container', {
-            loop: true,
             calculateHeight: true,
             roundLengths: true,
             slidesPerView: 4,
