@@ -34,7 +34,7 @@ class UserFilter implements Filter
         $user = getCurrentUser();
         $profile = $userService->getUserProfile($data['id']);
         $profile['about'] = $this->convertAbsoluteUrl($host, $profile['about']);
-        if (!($user->isAdmin() || $user['id'] == $data['id'])) {
+        if (!$user->isLogin() || !$user->isAdmin() || ($user['id'] != $data['id'])) {
             unset($data['email']);
             unset($data['verifiedMobile']);
             unset($data['uri']);
