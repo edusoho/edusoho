@@ -3547,6 +3547,9 @@ footer .footer-attr p i {
   right: 50%;
   margin-right: -570px;
 }
+.mooc-poster .mooc-notice .panel {
+  height: 326px;
+}
 .mooc-poster .mooc-notice .panel-heading i {
   color: #fd5f56;
   padding-right: 10px;
