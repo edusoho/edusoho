@@ -18,7 +18,7 @@ class Version20160111172145 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
 
         if (!$this->isFieldExist('question_marker_result', 'answer')) {
-            $this->addSql("ALTER TABLE `question_marker_result` ADD `answer` text  NOT NULL  AFTER `status`;");
+            $this->addSql("ALTER TABLE `question_marker_result` ADD `answer` text  DEFAULT NULL  AFTER `status`;");
         }
     }
 
