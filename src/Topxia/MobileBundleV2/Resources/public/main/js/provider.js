@@ -367,6 +367,16 @@ appProvider.provider('appRouter', function($stateProvider) {
           }
         });
 
+        $stateProvider.state('teachingThreadList', {
+          url: "/teaching/threadlist/:courseId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/teaching_thread_list.html",
+              controller : ThreadTeachingController
+            }
+          }
+        });
+
 	    this.initPlugin($stateProvider);
 	}
 

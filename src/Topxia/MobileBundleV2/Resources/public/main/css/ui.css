@@ -1229,7 +1229,6 @@ a {
 .ui-course .course-title {
   overflow: hidden;
   display: inline-block;
-  max-height: 40px;
   font-size: 18px;
   line-height: 24px;
   width: 100%
