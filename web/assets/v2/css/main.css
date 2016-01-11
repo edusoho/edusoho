@@ -11411,17 +11411,38 @@ textarea {
   }
 }
 .marker-modal .question-heading {
-  color: #313131;
-  font-size: 16px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  color: #000;
+  font-size: 18px;
+  border-bottom: 1px solid #f1f1f1;
 }
-.marker-modal .question-body {
+.marker-modal .question-choices {
   padding-left: 10px;
 }
-.marker-modal .question-choices > li {
+.marker-modal .question-choices li {
   padding: 10px 0;
 }
-.marker-modal .question-choices > li:hover {
+.marker-modal .question-choices li:hover {
   background-color: transparent;
+}
+.marker-modal .type-check {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  background-color: #f1f1f1;
+  color: #616161;
+  border-radius: 50%;
+}
+.marker-modal .type-check.correct {
+  background-color: #70d445;
+  color: #fff;
+}
+.marker-modal .type-check.error {
+  background-color: #e83d2c;
+  color: #fff;
 }
 .question-manage {
   background-color: #eeeeee;

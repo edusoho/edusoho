@@ -1,8 +1,10 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
 	<div class="question-heading editor-text">
-	  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+		填空题<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	</div>
 	<div class="question-body clearfix">
+	  <div class="gray-darker mbl">{{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+	  </div>
 		{% if itemResult.answer[0]|default(null) %}
 		{% set fileItemResultAnswer = itemResult.answer[0] %}
 		{% endif %}
@@ -12,7 +14,7 @@
 		    {% endfor %}
 		</div>
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
-		<button id="submitQuestion" class="btn btn-success btn-sm">提交</button>
+		<button id="submitQuestion" class="btn btn-primary btn-lg mvm pull-right">提交</button>
 	</div>
 	<div class="question-footer">
 	</div>

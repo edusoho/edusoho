@@ -1,6 +1,7 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-	<div class="question-heading editor-text">  （不定项）{{ question.stem|bbCode2Html|striptags|raw }}</div>
+	<div class="question-heading editor-text">不定项选择题<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div>
 	<div class="question-body clearfix">
+		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw }}</div>
 		{% if itemResult.answer|default(null) %}
 		  {% set answerChoiceIndex = itemResult.answer %}
 		{% endif %}
@@ -8,15 +9,19 @@
 		  {% for key, choice in question.metas.choices %}
 		    {% set choiceIndex = (65+key)|chr %}
 		    <li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
-		      <label class="checkbox-inline mrm">
+		      {#<label class="checkbox-inline mrm">
 			    <input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="checkbox" name="answer[{{ question.id }}][]" value="{{ key }}"  >{{ choiceIndex }}.
 			  </label>
-		      <span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw }}</span>
+		      <span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw }}</span>#}
+		      <span class="type-check" id="question-{{ question.id }}-input-{{ choiceIndex }}" name="answer[{{ question.id }}][]" value="{{ key }}">
+					{{ choiceIndex }}
+					</span>
+					<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
 		    </li>
 		  {% endfor %}
 		</ul>
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
-		<button id="submitQuestion" class="btn btn-primary btn-md mvm">提交</button>
+		<button id="submitQuestion" class="btn btn-primary btn-lg mvm pull-right">提交</button>
 	</div>
 	<div class="question-footer">
 	</div>

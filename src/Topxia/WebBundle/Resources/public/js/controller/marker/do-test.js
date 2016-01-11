@@ -6,7 +6,7 @@ define(function(require, exports, module) {
         var questionId = data.data('questionid');
         var questionType = data.data('type');
         btn.on('click', function() {
-        		var answer = doMarkerQuestion(questionType);
+        	var answer = doMarkerQuestion(questionType);
             $.get(data.data('url'), {
                 "markerId": markerId,
                 "questionId": questionId,
@@ -17,23 +17,16 @@ define(function(require, exports, module) {
                 player.trigger('onMarkerReached', data);
             });
         });
-        $(".marker-modal .question-single_choice li").on('click', function() {
-            var $this = $(this).find('input');
-            if (!$this.is(':checked')) {
-                $this.prop("checked", true);
-                $this.attr("checked", "checked");
-                $(this).siblings().find("input").removeAttr("checked");
-            }
+        
+        $(".marker-modal .question-single_choice li,.marker-modal .question-determine li").on('click', function() {
+            var $this = $(this);
+            var $typecheck = $(this).find('.type-check').addClass('correct');
+            $this.siblings().find(".type-check").removeClass("correct");
         });
         
         $(".marker-modal .question-uncertain_choice li").on("click", function(){
-            var $this = $(this).find('input');
-            if(!$this.is(':checked')) {
-                $this.prop("checked", true);
-                $this.attr("checked", "checked");
-            } else {
-                $this.removeAttr("checked");
-          }
+            var $this = $(this);
+            var $typecheck = $(this).find('.type-check').toggleClass('correct');
         });
         var doMarkerQuestion = function(type){
         	switch(type){
@@ -54,20 +47,20 @@ define(function(require, exports, module) {
         	};
         	function doSingleChoice(){
         		var answer = null;
-	        	answer = $("input[checked=checked]").val();
-				    return answer;
+	        	answer = $("span.type-check.correct").attr('value');
+				return answer;
 	        };
 	        function doUncertainChoice(){
 	        	var answers = [];
-	        	$("input[name='answer[" + questionId + "][]']:checked").each(function(){ 
-							answers.push($(this).val()); 
-						});
-	        	return answers;
+                $("span.type-check.correct").each(function(){ 
+                    answers.push($(this).attr('value')); 
+                });
+                return answers;
 	        };
 	        function doDetermine(){
         		var answer = null;
-	        	answer = $("input[name='answer[" + questionId + "]']:checked").val();
-				    return answer;
+                answer = $("span.type-check.correct").attr('value');
+				return answer;
 	        };
 	        function doFill(){
 
