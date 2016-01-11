@@ -2908,7 +2908,7 @@ label {
   width: 24.6%;
   font-size: 18px;
   text-align: center;
-  margin: 35px 0;
+  margin: 42px 0;
 }
 .mooc-navset .set-right .width-25:last-child {
   border-right: none;
@@ -3028,19 +3028,26 @@ label {
 .mooc-classroom .class-list .arrow-left {
   left: 0;
 }
+.mooc-classroom .class-list:hover .arrow-left,
+.mooc-classroom .class-list:hover .arrow-right {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
 .mooc-classroom .class-list .arrow-left,
 .mooc-classroom .class-list .arrow-right {
   position: absolute;
   top: 50%;
   margin-top: -45px;
   display: inline-block;
-  width: 20px;
-  height: 60px;
-  line-height: 60px;
-  background: rgba(0, 0, 0, 0.1);
+  width: 30px;
+  height: 80px;
+  line-height: 80px;
+  background: rgba(223, 233, 242, 0.8);
   color: #ffffff;
   text-align: center;
   right: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 .mooc-classroom .class-list .arrow-left i,
 .mooc-classroom .class-list .arrow-right i {
@@ -3086,10 +3093,39 @@ label {
 .mooc-teacher {
   position: relative;
 }
-.mooc-teacher .swiper-slide {
-  -webkit-box-sizing: inherit;
-  -moz-box-sizing: inherit;
-  box-sizing: inherit;
+.mooc-teacher .mooc-carousel-indicators li {
+  width: 10px;
+  height: 10px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: rgba(207, 54, 63, 0.3);
+}
+.mooc-teacher .mooc-carousel-indicators li.active {
+  background: rgba(207, 54, 63, 0.8);
+}
+.mooc-teacher .carousel-fade .carousel-inner .item {
+  transition-property: opacity;
+}
+.mooc-teacher .carousel-fade .carousel-inner .item,
+.mooc-teacher .carousel-fade .carousel-inner .active.left,
+.mooc-teacher .carousel-fade .carousel-inner .active.right {
+  opacity: 0;
+}
+.mooc-teacher .carousel-fade .carousel-inner .active,
+.mooc-teacher .carousel-fade .carousel-inner .next.left,
+.mooc-teacher .carousel-fade .carousel-inner .prev.right {
+  opacity: 1;
+}
+.mooc-teacher .carousel-fade .carousel-inner .next,
+.mooc-teacher .carousel-fade .carousel-inner .prev,
+.mooc-teacher .carousel-fade .carousel-inner .active.left,
+.mooc-teacher .carousel-fade .carousel-inner .active.right {
+  left: 0;
+  transform: translate3d(0, 0, 0);
+}
+.mooc-teacher .carousel-fade .carousel-control {
+  z-index: 2;
 }
 .mooc-teacher .teach-list {
   padding: 15px 0 30px;
@@ -3120,12 +3156,11 @@ label {
 }
 .mooc-teacher .teach-item {
   position: relative;
-  padding: 0;
+  padding: 20px 0;
 }
 .mooc-teacher .teach-item .teach-wrapper {
   background: #ffffff;
   padding: 15px 30px;
-  margin: 0 15px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -3184,7 +3219,12 @@ label {
 .mooc-cooperate .cooperate-list li {
   float: left;
   width: 20%;
-  text-align: center;
+}
+.mooc-cooperate .cooperate-list li:hover img {
+  -webkit-filter: grayscale(0);
+  -moz-filter: grayscale(0);
+  -o-filter: grayscale(0);
+  filter: grayscale(0);
 }
 @media (max-width: 991px) {
   .mooc-cooperate .cooperate-list li {
@@ -3192,17 +3232,20 @@ label {
   }
 }
 .mooc-cooperate .cooperate-list li img {
-  width: 122px;
-  height: 122px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
+  max-width: 100%;
+  -webkit-filter: grayscale(1);
+  -moz-filter: grayscale(1);
+  -o-filter: grayscale(1);
+  filter: grayscale(1);
 }
 .mooc-cooperate .cooperate-list li a {
   display: block;
   background: #ffffff;
-  margin: 10px;
-  padding: 28px 0;
+  width: 208px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+  overflow: hidden;
 }
 .mooc-cooperate .cooperate-list li a:hover {
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -3507,6 +3550,11 @@ footer .footer-attr p i {
   margin-bottom: 0;
   padding-bottom: 15px;
 }
+.mooc-poster:hover .arrow-left,
+.mooc-poster:hover .arrow-right {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
 .mooc-poster .Wleft {
   max-width: 880px;
 }
@@ -3514,6 +3562,7 @@ footer .footer-attr p i {
 .mooc-poster .arrow-right {
   position: absolute;
   top: 50%;
+  margin-top: -25px;
   display: inline-block;
   width: 50px;
   height: 50px;
@@ -3524,6 +3573,8 @@ footer .footer-attr p i {
   -moz-border-radius: 50%;
   border-radius: 50%;
   text-align: center;
+  opacity: 0;
+  filter: alpha(opacity=0);
 }
 .mooc-poster .arrow-left i,
 .mooc-poster .arrow-right i {

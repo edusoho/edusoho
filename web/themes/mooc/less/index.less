@@ -168,6 +168,7 @@
   }
 }
 .mooc-classroom{
+
   .class-wrapper{
     margin: 0 10px;
     background: @white;
@@ -177,18 +178,24 @@
      .arrow-left{
       left: 0;
     }
+     &:hover{
+       .arrow-left,.arrow-right{
+        .opacity(1);
+       }
+    }
     .arrow-left,.arrow-right{
       position: absolute;
       top: 50%;
       margin-top: -45px;
       display: inline-block;
-      width: 20px;
-      height: 60px;
-      line-height: 60px;
-      background: rgba(0, 0, 0, 0.1);
+      width: 30px;
+      height: 80px;
+      line-height: 80px;
+      background: rgba(223, 233,242, 0.8);
       color: #ffffff;
       text-align: center;
       right: 0;
+      .opacity(0);
       i{
         font-size: 22px;
       }
@@ -236,11 +243,48 @@
 
 .mooc-teacher{
   position: relative;
-  .swiper-slide{
-    -webkit-box-sizing: inherit;
-    -moz-box-sizing: inherit;
-    box-sizing: inherit;
+  .mooc-carousel-indicators{
+    li{
+      width: 10px;
+      height: 10px;
+      .border-radius(50%);
+      background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.3);
+    }
+    li.active{
+      background:rgba(red(@bg-primary), green(@bg-primary),blue(@bg-primary),0.8);
+    }
   }
+  .carousel-fade {
+    .carousel-inner {
+        .item {
+            transition-property: opacity;
+        }
+        
+        .item,
+        .active.left,
+        .active.right {
+            opacity: 0;
+        }
+
+        .active,
+        .next.left,
+        .prev.right {
+            opacity: 1;
+        }
+
+        .next,
+        .prev,
+        .active.left,
+        .active.right {
+            left: 0;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+    .carousel-control {
+        z-index: 2;
+    }
+}
   .teach-list{
     padding: 15px 0 30px;
       .swiper-pager{
@@ -268,11 +312,10 @@
   }
   .teach-item{
     position: relative;
-    padding: 0;
+    padding: 20px 0;
     .teach-wrapper{
       background: @white;
       padding: 15px 30px;
-      margin: 0 15px;
       .border-radius(2px);
       &:hover{
         .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;
@@ -327,21 +370,32 @@
     li{
       float: left;
       width: 20%;
-      text-align: center;
-
+      &:hover{
+      img{
+         -webkit-filter:grayscale(0);
+         -moz-filter:grayscale(0);
+         -o-filter:grayscale(0);
+         filter:grayscale(0);
+        }
+      }
       @media (max-width:@screen-sm-max){
         width: 33.33%;
       }
       img{
-        width: 122px;
-        height: 122px;
-        .border-radius(50%);
+       max-width: 100%;
+       -webkit-filter:grayscale(1);
+       -moz-filter:grayscale(1);
+       -o-filter:grayscale(1);
+       filter:grayscale(1);
       }
       a{
         display: block;
         background: @white;
-        margin:10px;
-        padding: 28px 0;
+        width: 208px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+        overflow: hidden;
          &:hover{
           .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;
           }

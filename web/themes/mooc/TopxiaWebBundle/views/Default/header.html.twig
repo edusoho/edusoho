@@ -45,8 +45,8 @@
             <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="iconfont icon-fangzi"></i>个人主页</a></li>
             <li class="divider"></li>
             <li><a href="{{ path('settings') }}"><i class="iconfont icon-shezhi"></i>个人设置</a></li>
-            <li class="divider"></li>
             {% if is_granted('ROLE_ADMIN') %}
+            <li class="divider"></li>
             <li><a href="{{ path('admin') }}"><i class="iconfont icon-dashboard"></i>管理后台</a></li>
             {% endif %} 
             <li class="divider"></li>
@@ -89,7 +89,7 @@
           我的学习
         {% endif %}
       </a>
-      <a href="{{ path('notification') }}" class="hidden-xs user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}">
+      <a href="{{ path('notification') }}" class="hidden-xs user-message {% if app.user.newNotificationNum > 0 %} hasmessage {% endif %}">
         <i class="iconfont icon-lingdang"></i>
         {% if app.user.newNotificationNum > 0 %}
           <span class="message red-dot"></span>

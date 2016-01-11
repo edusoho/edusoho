@@ -30,7 +30,6 @@ define(function(require, exports, module) {
         var swiper2 = new Swiper('.set-right.swiper-container', {
             autoplay: 6000,
             autoplayDisableOnInteraction: false,
-            loop: true,
             calculateHeight: true,
             roundLengths: true,
             slidesPerView: 4,
@@ -49,7 +48,6 @@ define(function(require, exports, module) {
 
 
         var swiper3 = new Swiper('.class-list.swiper-container', {
-            loop: true,
             calculateHeight: true,
             roundLengths: true,
             slidesPerView: 4,
@@ -77,7 +75,18 @@ define(function(require, exports, module) {
             }
         });
         Lazyload.init();
-
+         var carousel = function() {
+            var $this = $(".mooc-teacher .carousel-inner .item");
+            for (var i = 0; i < $this.length; i++) {
+              if (i == 0) {
+                var html = '<li data-target=".carousel" data-slide-to="0" class="active"></li>';
+                $this.parents(".teach-list").siblings(".carousel-indicators").append(html);
+              }else {
+                var html = '<li data-target=".carousel" data-slide-to="'+i+'"></li>';
+                $this.parents(".teach-list").siblings(".carousel-indicators").append(html);
+              }
+            }
+          }();
          $(window).scroll(function() {   
             var scroll = $(window).scrollTop();
 

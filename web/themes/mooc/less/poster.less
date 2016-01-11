@@ -1,11 +1,17 @@
 
 .mooc-poster{
+  &:hover{
+    .arrow-left,.arrow-right{
+      .opacity(1);
+    }
+  }
   .Wleft{
     max-width: 880px;
   }
   .arrow-left,.arrow-right{
     position: absolute;
     top:50%;
+    margin-top: -25px;
     display: inline-block;
     width: 50px;
     height: 50px;
@@ -14,6 +20,7 @@
     color: @white;
     .border-radius(50%);
     text-align: center;
+    .opacity(0);
     i{
       font-size: 26px;
     }
