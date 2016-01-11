@@ -11463,12 +11463,27 @@ textarea {
   width: 490px;
   padding-right: 20px;
 }
+@media (max-width: 991px) {
+  .question-manage .lesson-dashboard .toolbar {
+    width: 350px;
+  }
+}
 .question-manage .lesson-dashboard .dashboard-body {
   top: 0;
   bottom: 30%;
 }
 .question-manage .lesson-dashboard .dashboard-content {
   right: 510px;
+}
+@media (max-width: 991px) and (min-width: 768px) {
+  .question-manage .lesson-dashboard .dashboard-content {
+    right: 370px;
+  }
+}
+@media (max-width: 767px) {
+  .question-manage .lesson-dashboard .dashboard-content {
+    right: 20px;
+  }
 }
 .question-manage .lesson-dashboard .mask {
   display: none;
@@ -11478,61 +11493,74 @@ textarea {
   bottom: 30%;
   background-color: rgba(0, 0, 0, 0.2);
 }
-.question-manage .list-title {
-  padding: 10px 0;
-  border-bottom: 1px solid #e1e1e1;
-  margin: 10px 0;
-}
 .question-manage .lesson-list {
   border: 0;
   margin: 0;
-  min-height: 100px;
 }
 .question-manage .lesson-list .item-lesson {
   margin: 0 0 10px;
+}
+.question-manage .question-menu .list-title {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e1e1e1;
+}
+.question-manage .question-menu .lesson-list {
+  min-height: 100px;
+}
+.question-manage .question-menu .lesson-list .item-lesson {
   line-height: 46px;
   cursor: pointer;
 }
-.question-manage .lesson-list .item-lesson .before {
+@media (max-width: 991px) {
+  .question-manage .question-menu .lesson-list .item-lesson .title {
+    width: 100%;
+  }
+}
+.question-manage .question-menu .lesson-list .item-lesson .title .before {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
 }
-.question-manage .lesson-list .item-lesson .idname,
-.question-manage .lesson-list .item-lesson .number,
-.question-manage .lesson-list .item-lesson .icon-close,
-.question-manage .lesson-list .item-lesson .icon-close {
+.question-manage .question-menu .lesson-list .item-lesson .title .idname,
+.question-manage .question-menu .lesson-list .item-lesson .title .number,
+.question-manage .question-menu .lesson-list .item-lesson .title .icon-close {
   display: none;
 }
-.question-manage .lesson-list .item-lesson .content {
+.question-manage .question-menu .lesson-list .item-lesson .content {
   text-align: center;
   padding-left: 0;
 }
-.question-manage .lesson-list .item-lesson.disdrag {
-  background-color: #f1f1f1;
-  cursor: default;
-  color: #919191;
-  border: 1px dashed  #e1e1e1;
+@media (max-width: 991px) {
+  .question-manage .question-menu .lesson-list .item-lesson .content {
+    display: none;
+  }
 }
-.question-manage .lesson-list .item-lesson.disdrag a {
-  color: #919191;
-  cursor: default;
-}
-.question-manage .lesson-list .item-lesson.dragged {
+.question-manage .question-menu .lesson-list .item-lesson.dragged {
   background-color: #feffeb;
   background-color: rgba(254, 255, 235, 0.9);
   width: 150px!important;
   overflow: hidden;
 }
-.question-manage .lesson-list .item-lesson.dragged .title {
+.question-manage .question-menu .lesson-list .item-lesson.dragged .title {
   width: 100%;
 }
-.question-manage .lesson-list .item-lesson.dragged .content {
+.question-manage .question-menu .lesson-list .item-lesson.dragged .content {
   display: none;
 }
-.question-manage .lesson-list .placeholder {
+.question-manage .question-menu .lesson-list .item-lesson.disdrag {
+  background-color: #f1f1f1;
+  cursor: default;
+  color: #919191;
+  border: 1px dashed  #e1e1e1;
+}
+.question-manage .question-menu .lesson-list .item-lesson.disdrag a {
+  color: #919191;
+  cursor: default;
+}
+.question-manage .question-menu .lesson-list .placeholder {
   background-color: #f1f1f1;
   border: 1px dashed  #e1e1e1;
   margin-bottom: 10px;
@@ -11541,10 +11569,10 @@ textarea {
   padding: 0 10px;
   color: #919191;
 }
-.question-manage .lesson-list .placeholder .show-edit {
+.question-manage .question-menu .lesson-list .placeholder .remask {
   display: none;
 }
-.question-manage .lesson-list .pagination {
+.question-manage .question-menu .lesson-list .pagination {
   position: absolute;
   bottom: -155px;
   margin-bottom: 0;
@@ -11555,13 +11583,10 @@ textarea {
   right: 0;
   bottom: 0;
   top: 70%;
-  height: 150px;
+  height: 20%;
   background-color: #313131;
 }
-.question-manage .editbox .editbox-body {
-  position: relative;
-}
-.question-manage .editbox .editbox-body .remask {
+.question-manage .editbox .remask {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -11574,22 +11599,31 @@ textarea {
 .question-manage .editbox .scalebox {
   position: relative;
   height: 20px;
+  z-index: 2;
 }
-.question-manage .editbox .scalebox a {
+.question-manage .editbox .scalebox .scale {
   position: absolute;
   display: block;
   height: 100%;
   width: 1px;
   background-color: #fff;
 }
-.question-manage .editbox .scalebox .scale {
+.question-manage .editbox .scalebox .scale.red,
+.question-manage .editbox .scalebox .scale.blue {
   left: 0;
   bottom: 100%;
-  height: 208px;
+  height: 100%;
   top: -58px;
   background-color: #c33b2d;
 }
-.question-manage .editbox .scalebox .scale .scale-details {
+@media (max-width: 1297px) {
+  .question-manage .editbox .scalebox .scale.red,
+  .question-manage .editbox .scalebox .scale.blue {
+    top: -40px;
+  }
+}
+.question-manage .editbox .scalebox .scale.red .scale-details,
+.question-manage .editbox .scalebox .scale.blue .scale-details {
   position: absolute;
   left: 0;
   bottom: 100%;
@@ -11603,6 +11637,11 @@ textarea {
 .question-manage .editbox .scalebox .scale.blue {
   background-color: #2998c9;
   height: 78px;
+}
+@media (max-width: 1297px) {
+  .question-manage .editbox .scalebox .scale.blue {
+    height: 60px;
+  }
 }
 .question-manage .editbox .scalebox .scale.blue:hover {
   background-color: transparent;
@@ -11623,7 +11662,7 @@ textarea {
   position: absolute;
   width: 8px;
   margin-left: -4px;
-  height: 78px;
+  height: 100%;
   cursor: pointer;
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details {
@@ -11643,23 +11682,7 @@ textarea {
   height: auto;
   margin: 0;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .title {
-  position: relative;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .title .before {
-  width: 180px;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .title .before .number {
-  display: inline;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .title .icon-close {
-  display: inline;
-  position: absolute;
-  top: 15px;
-  right: 10px;
-  color: #fff;
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .item-lesson {
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson {
   background-color: transparent;
   border: none;
   margin-bottom: 0;
@@ -11667,21 +11690,33 @@ textarea {
   height: 46px;
   overflow: hidden;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .item-lesson:hover {
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson:hover {
   background-color: #46c37b;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .placeholder {
-  background-color: #f1f1f1;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-.question-manage .editbox .scalebox .scale.blue .scale-details .title {
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title {
+  position: relative;
   width: 100%;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .glyphicon {
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before {
+  width: 180px;
+}
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .before .number {
+  display: inline;
+}
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .title .icon-close {
+  display: inline;
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  color: #fff;
+}
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-close,
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .content {
   display: none;
 }
-.question-manage .editbox .scalebox .scale.blue .scale-details .content {
-  display: none;
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .placeholder {
+  background-color: #f1f1f1;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details.visible {
   opacity: 1;
@@ -11696,46 +11731,20 @@ textarea {
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
 }
-.question-manage .editbox .scalebox .transparent {
-  visibility: hidden;
-}
-.question-manage .editbox .scalebox .transparent:hover .scale-details {
-  -webkit-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-  visibility: hidden;
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.question-manage .editbox .scalebox .transparent:hover .border {
-  background-color: transparent;
-}
-.question-manage .editbox .scalebox .tooltip-inner {
-  background-color: #000;
-  background-color: rgba(0, 0, 0, 0.8);
-}
 .question-manage .editbox .lesson-list {
-  height: 150px;
+  z-index: 1;
+  height: 100%;
   margin-top: -20px;
 }
-.question-manage .editbox .lesson-list .item-lesson.transparent {
-  visibility: hidden;
-}
 .question-manage .editbox .lesson-list .placeholder {
-  line-height: 150px;
+  height: 100%;
+  position: relative;
   background-color: #fff9c4;
   border: 1px dashed #ff6d00;
   color: #ff6d00;
   text-align: center;
-  height: 100%;
   margin: 0;
 }
-.question-manage .editbox .lesson-list .placeholder .show-sub {
+.question-manage .editbox .lesson-list .placeholder .sub-remask {
   display: none;
-}
-.question-manage .editbox .lesson-list .placeholder .show-edit {
-  display: inline;
-}
-.question-manage .question-menu {
-  position: relative;
-  height: 70%;
 }

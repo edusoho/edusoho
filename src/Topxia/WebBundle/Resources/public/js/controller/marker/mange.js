@@ -58,10 +58,11 @@ define(function(require, exports, module) {
             var $scalebox = $(_obj.get("scalebox"));
             var $subject_lesson_list = $(this.element).find(_obj.get('subject_lesson_list'));
             var $editbox_lesson_list = $(this.element).find(_obj.get('editbox_lesson_list'));
-            var value = '<span class="show-sub"><i class="es-icon es-icon-infooutline mrm"></i>' + '将题目拖至左侧时间条' + '</span>' + '<span class="show-edit">左右拖动选择时间确定位置后松开鼠标</span>';
-
+            var value = '<span class="sub-remask"><i class="es-icon es-icon-infooutline mrm"></i>' + '将题目拖至左侧时间条' + '</span>' + '<span class="remask">左右拖动选择时间确定位置后松开鼠标</span>';
+            var player = $(document.getElementById('viewerIframe').contentDocument);
+            var _height = player.find('.vjs-progress-control').height()+player.find('.vjs-control-bar').height()+$editbox.height();
             // 显示红色时间轴
-            var $scale = $editbox.find("#default-scale");
+            var $scale = $editbox.find("#default-scale").css('height',_height);
             var $scale_details = $scale.find(".scale-details");
             $scale.css("visibility", "visible");
             $scale_details.css("visibility", "visible");
@@ -340,7 +341,7 @@ define(function(require, exports, module) {
             var _obj = this;
             var $_editbox = $(_obj.get("editbox"));
             var _width = $_editbox.width();
-            $_editbox.find('.scale-white').remove();
+            $_editbox.find('.scale.white').remove();
             // 以秒为单位
             var _totaltime = _obj.get("videotime");
             var _partnum = _obj.get("timepartnum");
@@ -351,7 +352,7 @@ define(function(require, exports, module) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(num);
 
-                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale-white" style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
+                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale white" style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
                 }
                 $('[data-toggle="tooltip"]').tooltip();
             }
