@@ -3519,6 +3519,11 @@ footer .footer-attr p i {
   left: 50%;
   margin-left: -200px;
 }
+@media (max-width: 991px) {
+  .es-poster .swiper-pager {
+    margin-left: -70px;
+  }
+}
 .es-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
   width: 30px;
   -webkit-border-radius: 20px;
@@ -3528,7 +3533,7 @@ footer .footer-attr p i {
 .es-poster .mooc-notice {
   width: 260px;
   position: absolute;
-  top: 20px;
+  top: 40px;
   right: 50%;
   margin-right: -570px;
 }
@@ -3543,6 +3548,10 @@ footer .footer-attr p i {
 .es-poster .mooc-notice .panel-body li {
   list-style-type: disc;
   color: #fd5f56;
+  margin-bottom: 10px;
+}
+.es-poster .mooc-notice .panel-body li:last-child {
+  margin-bottom: 0;
 }
 .es-poster .mooc-notice .panel-body li a {
   color: #272a41;
