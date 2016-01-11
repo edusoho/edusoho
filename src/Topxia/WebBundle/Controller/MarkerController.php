@@ -266,7 +266,9 @@ class MarkerController extends BaseController
             $this->getQuestionService()->searchQuestionsCount($conditions),
             5
         );
-        $paginator->setPageRange(4);
+        // var_dump($paginator->getItemCount());
+        // exit();
+        $paginator->setPageRange(8);
 
         $questions = $this->getQuestionService()->searchQuestions(
             $conditions,
