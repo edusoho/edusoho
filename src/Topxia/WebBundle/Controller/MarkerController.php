@@ -38,9 +38,16 @@ class MarkerController extends BaseController
 
     public function markerMetasAction(Request $request, $mediaId)
     {
-        $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
-        $file        = $this->getUploadFileService()->getFile($mediaId);
-        $result      = array(
+        $markersMeta  = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
+        $file         = $this->getUploadFileService()->getFile($mediaId);
+        $storage      = $this->getSettingService()->get('storage');
+        $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
+
+        if ($storage['video_header']) {
+            $file['length'] = $video_header['length'] + $file['length'];
+        }
+
+        $result = array(
             'markersMeta' => $markersMeta,
             'videoTime'   => $file['length']
         );
@@ -318,5 +325,10 @@ class MarkerController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
