@@ -230,12 +230,20 @@ class MarkerController extends BaseController
         ));
     }
 
-    protected function getQuestionTargetChoices($course, $lesson)
+    protected function getQuestionTargetChoices($course)
     {
-        $lessons                                                  = $this->getCourseService()->getCourseLessons($course['id']);
-        $choices                                                  = array();
-        $choices["course-{$course['id']}"]                        = '本课程';
-        $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+        $lessons                           = $this->getCourseService()->getCourseLessons($course['id']);
+        $choices                           = array();
+        $choices["course-{$course['id']}"] = '本课程';
+
+        foreach ($lessons as $lesson) {
+            if ($lesson['type'] == 'testpaper') {
+                continue;
+            }
+
+            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+        }
+
         return $choices;
     }
 
@@ -256,7 +264,7 @@ class MarkerController extends BaseController
         $paginator              = new Paginator(
             $request,
             $this->getQuestionService()->searchQuestionsCount($conditions),
-            7
+            5
         );
 
         $questions = $this->getQuestionService()->searchQuestions(
