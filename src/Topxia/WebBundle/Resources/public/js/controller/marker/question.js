@@ -17,7 +17,6 @@ define(function(require, exports, module) {
       success:function(data){
         initMarkerArry = data.markersMeta;
         mediaLength =data.videoTime;
-        console.log(mediaLength);
       }
     });
     var tempid = 0;
