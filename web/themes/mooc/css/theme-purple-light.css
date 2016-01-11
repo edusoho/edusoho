@@ -2910,6 +2910,15 @@ label {
 .mooc-navset .set-right .width-25:last-child {
   border-right: none;
 }
+.mooc-navset .set-right .width-25 img {
+  width: 34px;
+  height: 34px;
+  display: inline-block;
+  margin-right: 6px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
 .mooc-navset .set-right .width-25 i {
   color: #9e9abd;
   font-size: 34px;
