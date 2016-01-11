@@ -111,7 +111,7 @@
                         "title" : "社区型网校",
                         "value" : "与同学和老师实时讨论课程细节，让你全面掌握所有知识点，巩固知识，学习不再孤单！",
                         "src" : "\/themes\/mooc\/img\/badge.svg",
-                        "desc": "建议图片大小为130*130",
+                        "desc": "建议图片大小为154*154",
                         "alt" : "社区型网校",
                         "href": ""
                     },
@@ -119,7 +119,7 @@
                         "title" : "随时随地学习",
                         "value" : "网校结合移动端，能够让你随时随地掏出手机就进行学习，方便快捷，没有任何负担。",
                         "src" : "\/themes\/mooc\/img\/community.svg",
-                        "desc": "建议图片大小为130*130",
+                        "desc": "建议图片大小为154*154",
                         "alt" : "随时随地学习",
                         "href": ""
                     },
@@ -127,7 +127,7 @@
                         "title" : "权威电子证书",
                         "value" : "重点课程提供权威电子证书认证，让你的学习获得认可，为你的就业添砖加瓦。",
                         "src" : "\/themes\/mooc\/img\/shake.svg",
-                        "desc": "建议图片大小为130*130",
+                        "desc": "建议图片大小为154*154",
                         "alt" : "权威电子证书",
                         "href": ""
                     }
@@ -164,22 +164,22 @@
                     {
                         "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为50*50"
+                        "desc": "建议图标大小为34*34"
                     },
                     {
                         "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为50*50"
+                        "desc": "建议图标大小为34*34"
                     },
                     {
                         "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为50*50"
+                        "desc": "建议图标大小为34*34"
                     },
                     {
                         "categoryId" : "1",
                         "src" : "\/themes\/mooc\/img\/feature_3.png",
-                        "desc": "建议图标大小为50*50"
+                        "desc": "建议图标大小为34*34"
                     }
                 ]
             }
