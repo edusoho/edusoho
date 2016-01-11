@@ -28,7 +28,7 @@
 
 {% set count = config.count|default(10) %}
 
-{% set recommendCourses = data('RecommendCourses',{ count:count }) %}
+{% set recommendCourses = data('LatestCourses',{ count:count }) %}
 <section class="mooc-course">
   <div class="container">
     <div class="mooc-index-title">
