@@ -5,21 +5,26 @@ define(function(require, exports, module) {
     var Swiper = require('swiper');
 
     exports.run = function() {
-      $(window).load(function() {
-          $('#slider').nivoSlider({
-             effect:"boxRandom",
-              slices:15,
-              boxCols:8,
-              boxRows:4,
-              animSpeed:500,
-              startSlide:0,
-              directionNav:true,
-              controlNav:true,
-              controlNavThumbs:false,
-              pauseOnHover:true,
-              manualAdvance:false
-          });
-      });
+    var swiper = new Swiper('.es-poster.swiper-container', {
+            pagination: '.es-poster .swiper-pager',
+            paginationClickable: true,
+            autoplay: 5000,
+            autoplayDisableOnInteraction: false,
+            loop: true,
+            calculateHeight: true,
+            roundLengths: true,
+            onInit: function(swiper) {
+               $(".swiper-slide").removeClass('swiper-hidden'); 
+            }
+        });
+        $('.es-poster .arrow-left').on('click', function(e){
+            e.preventDefault()
+            swiper.swipePrev()
+           })
+       $('.es-poster .arrow-right').on('click', function(e){
+            e.preventDefault()
+            swiper.swipeNext()
+        })
       
 
         var swiper2 = new Swiper('.set-right.swiper-container', {

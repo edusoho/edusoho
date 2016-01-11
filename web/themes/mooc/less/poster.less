@@ -1,36 +1,47 @@
 
-.mooc-poster{
-  position: relative;
-  .slide-wrapper{
-    width: 880px;
-    height: 400px;
-    position: relative;
-    @media(max-width:@screen-md-max){
-      width: 100%;
+.es-poster{
+  .Wleft{
+    max-width: 880px;
+  }
+  .arrow-left,.arrow-right{
+    position: absolute;
+    top:50%;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    color: @white;
+    .border-radius(50%);
+    text-align: center;
+    i{
+      font-size: 26px;
     }
-   @media(max-width:@screen-sm-max){
-      height: auto;
-    }
-     &:hover{
-      .nivo-directionNav a{
-       .opacity(1);
-      }
+   }
+  .arrow-right{
+    right: 50%;
+    margin-right: -290px;
+  }
+  .arrow-left{
+    left: 50%;
+    margin-left: -550px;
+  }
+  .swiper-pager{
+    text-align: left;
+    left: 50%;
+    margin-left: -200px;
+    @media (max-width : @screen-sm-max){
+      margin-left: -70px;
     }
   }
-  .slideitem{
-    position: relative;
-    width: 100%;
-    img{
-      position:absolute;
-      top:0px;
-      left:0px;
-      display:none;
-    }
+  span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch{
+    width: 30px;
+    .border-radius(20px);
   }
-    .mooc-notice{
+  .mooc-notice{
     width: 260px;
     position: absolute;
-    top: 20px;
+    top: 40px;
     right: 50%;
     margin-right: -570px;
     .panel-heading{
@@ -47,6 +58,10 @@
       li{
         list-style-type: disc;
         color: @color-primary;
+        margin-bottom: 10px;
+        &:last-child{
+          margin-bottom: 0;
+        }
         a{
           color: #272a41;
           display: inline-block;
@@ -67,67 +82,4 @@
       }
     }
   }
-
 }
-  .nivo-directionNav a{
-    display:block;
-    width:52px;
-    height:52px;
-    background:url(../img/bannerarrow.png) no-repeat;
-    text-indent:-9999px;
-    border:0;
-    .opacity(0);
-
-     @media(max-width:@screen-sm-max){
-     display: none;
-     }
-    }
-     a.nivo-nextNav {
-     background-position:-52px 0;
-     right:10px;
-    }
-    a.nivo-prevNav{
-      left: 10px;
-    }
-    .nivo-controlNav {
-       position: absolute;
-      bottom: 30px;
-      z-index: 9;
-      left: 50%;
-      margin-left: -40px;
-     @media(max-width:@screen-md-max){
-       bottom: -20px;
-      }
-     @media(max-width:@screen-sm-max){
-       bottom: 10px;
-      }
-      a{
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background: rgba(255, 255, 255, 0.3);
-      .border-radius(50%);
-      font-size: 0;
-      margin-right: 20px;
-       @media(max-width:@screen-sm-max){
-         width: 10px;
-         height: 10px;
-         margin-right: 15px;
-       }
-        @media(max-width:@screen-sm-max){
-          display: none;
-        }
-    }
-    a.active{
-      width: 30px;
-      height: 14px;
-      .border-radius(20px);
-      background: rgba(255, 255, 255, 1);
-      @media(max-width:@screen-sm-max){
-         width: 18px;
-         height: 10px;
-       }
-    }
-  }
-
-
