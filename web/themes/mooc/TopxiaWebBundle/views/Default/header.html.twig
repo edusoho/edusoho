@@ -89,7 +89,7 @@
           我的学习
         {% endif %}
       </a>
-      <a href="{{ path('notification') }}" class="hidden-xs user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}">
+      <a href="{{ path('notification') }}" class="hidden-xs user-message {% if app.user.newNotificationNum > 0 %} hasmessage {% endif %}">
         <i class="iconfont icon-lingdang"></i>
         {% if app.user.newNotificationNum > 0 %}
           <span class="message red-dot"></span>
