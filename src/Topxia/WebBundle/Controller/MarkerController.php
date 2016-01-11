@@ -161,6 +161,7 @@ class MarkerController extends BaseController
                     'questionMarkerId' => $value['id'],
                     'userId'           => $user['id'],
                     'status'           => 'none',
+                    'answer'           => array(),
                     'createdTime'      => time(),
                     'updatedTime'      => time()
                 ));
@@ -188,23 +189,36 @@ class MarkerController extends BaseController
         $data['type']       = isset($data['type']) ? $data['type'] : null;
         $user               = $this->getUserService()->getCurrentUser();
         $this->getQuestionMarkerResultService()->finishCurrentQuestion($user['id'], $data['questionId'], $data['answer'], $data['type']);
-        $conditions = array(
-            'markerId' => $data['markerId']
-        );
-        $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 999);
+        // $conditions = array(
+        //     'markerId' => $data['markerId']
+        // );
+        // $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 999);
 
-        $question = array();
+        // $question = array();
 
-        foreach ($questions as $key => $value) {
-            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
+        // foreach ($questions as $key => $value) {
+        //     $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
 
-            if ($questionMarkerResult['status'] == 'none') {
-                $question = $value;
-                break;
-            }
-        }
+        //     if ($questionMarkerResult['status'] == 'none') {
+        //         $question = $value;
+        //         break;
+        //     }
+        // }
 
         return $this->createJsonResponse($data['markerId']);
+    }
+
+    public function showQuestionAnswerAction(Request $request, $questionId)
+    {
+        $data                 = $request->query->all();
+        $user                 = $this->getUserService()->getCurrentUser();
+        $questionMarker       = $this->getQuestionMarkerService()->getQuestionMarker($questionId);
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $questionMarker['id']);
+        return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
+            'markerId'   => $data['markerId'],
+            'question'   => $questionMarker,
+            'selfAnswer' => $questionMarkerResult['answer']
+        ));
     }
 
     public function questionAction(Request $request, $courseId, $lessonId)

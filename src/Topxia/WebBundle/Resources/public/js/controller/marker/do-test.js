@@ -12,9 +12,15 @@ define(function(require, exports, module) {
                 "questionId": questionId,
                 "answer": answer,
                 "type":questionType
-            }, function(data) {
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                player.trigger('onMarkerReached', data);
+            }, function(result) {
+            		$.get(data.data('show-questionanswer'),{
+            			"markerId": markerId,
+            			"questionId":questionId
+            		},function(data) {
+            			$("#modal").html(data);
+            		});
+                // var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                // player.trigger('onMarkerReached', data);
             });
         });
         
