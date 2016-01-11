@@ -70,7 +70,7 @@
         
     </section>
 
-    <section class="ui-panel ui-panel-card ui-border-t" ng-controller="ThreadTeachingController" ng-init="initQuestionResult()">
+    <section class="ui-panel ui-panel-card ui-border-t" ng-controller="ThreadTeachingController" ng-init="initQuestionResult(3)">
         <h2 class="title-body">
             <span class="title">
                 <span class="circle-label"></span>
@@ -110,7 +110,7 @@
                 </li>
             </ul>
             <div class="ui-btn-group" ng-if="teachingResult.threads.length < teachingResult.threadCount">
-                <button type="button" class="btn-green">更多</button>
+                <button type="button" class="btn-green" ng-href="#/teaching/threadlist/{{ courseId }}">更多</button>
             </div>
         </div>
         

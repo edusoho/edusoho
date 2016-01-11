@@ -388,6 +388,8 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 
 	var self = this;
 
+	$scope.courseId  =$stateParams.courseId;
+
 	this.filter = function(data) {
 		var users = data.users;
 		var threads = data.threads;
@@ -407,9 +409,9 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 		});
 	};
 
-	$scope.initQuestionResult = function() {
+	$scope.initQuestionResult = function(limit) {
 		ThreadManagerService.questionResult({
-			start : 3,
+			start : limit,
 			courseId : $stateParams.courseId
 		}, function(data) {
 			$scope.teachingResult = self.filter(data);
