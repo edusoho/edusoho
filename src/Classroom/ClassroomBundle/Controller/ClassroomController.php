@@ -352,7 +352,7 @@ class ClassroomController extends BaseController
         $member       = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
         if (!$this->getClassroomService()->canLookClassroom($classroom['id'])) {
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroom['title']}，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         if (!$classroom) {
@@ -640,7 +640,7 @@ class ClassroomController extends BaseController
         }
 
         if (!$classroom['buyable']) {
-            return $this->createMessageResponse('info', "非常抱歉，该{$classroomSetting['name']}不允许加入，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', "非常抱歉，该{$classroom['title']}不允许加入，如有需要请联系客服", '', 3, $this->generateUrl('homepage'));
         }
 
         if ($this->getClassroomService()->canTakeClassroom($id)) {
@@ -759,7 +759,7 @@ class ClassroomController extends BaseController
         $classroom = $this->getClassroomService()->getClassroom($formData['targetId']);
 
         if (empty($classroom)) {
-            return $this->createMessageResponse('error', "{$classroomSetting['name']}不存在，不能购买。");
+            return $this->createMessageResponse('error', "{$classroom['title']}不存在，不能购买。");
         }
 
         $userInfo = ArrayToolkit::parts($formData, array(
@@ -804,6 +804,7 @@ class ClassroomController extends BaseController
             $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
             $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
+            $formData['vipStatus']  = 'ok';
 
             $order = $this->getClassroomOrderService()->createOrder($formData);
 
@@ -1023,6 +1024,23 @@ class ClassroomController extends BaseController
             'users'      => $users,
             'classrooms' => $classrooms
         ));
+    }
+
+    public function orderInfoAction(Request $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (empty($order)) {
+            throw $this->createNotFoundException('订单不存在!');
+        }
+
+        $classroom = $this->getClassroomService()->getClassroom($order['targetId']);
+
+        if (empty($classroom)) {
+            throw $this->createNotFoundException("找不到要购买的班级!");
+        }
+
+        return $this->render('ClassroomBundle:Classroom:classroom-order.html.twig', array('order' => $order, 'classroom' => $classroom));
     }
 
     protected function getEnabledPayments()

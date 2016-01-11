@@ -243,12 +243,16 @@ function VipListController($scope, $stateParams, SchoolService)
 {
 	var user = null;
 	
-	SchoolService.getSchoolVipList({
-		userId : $scope.user.id
-	}, function(data) {
-		$scope.data = data;
-		user = data.user;
-	});
+	$scope.loadVipList = function() {
+		$scope.showLoad();
+		SchoolService.getSchoolVipList({
+			userId : $scope.user.id
+		}, function(data) {
+			$scope.hideLoad();
+			$scope.data = data;
+			user = data.user;
+		});
+	}
 
 	$scope.getVipName = function() {
 		if (!$scope.data) {

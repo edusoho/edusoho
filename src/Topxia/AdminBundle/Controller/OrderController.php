@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OrderController extends BaseController
 {
@@ -16,8 +16,7 @@ class OrderController extends BaseController
 
     public function manageAction(Request $request, $targetType)
     {
-
-        $conditions = $request->query->all();
+        $conditions               = $request->query->all();
         $conditions['targetType'] = $targetType;
 
         if (isset($conditions['keywordType'])) {
@@ -26,14 +25,14 @@ class OrderController extends BaseController
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']);
-        } 
-        
+            $conditions['endTime']   = strtotime($conditions['endDateTime']);
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchOrderCount($conditions),
             20
-        ); 
+        );
         $orders = $this->getOrderService()->searchOrders(
             $conditions,
             array('createdTime', 'DESC'),
@@ -43,25 +42,26 @@ class OrderController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
-        foreach ($orders as $index => $expiredOrderToBeUpdated ){
-            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
-               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-               $orders[$index]['status'] = 'cancelled';
+        foreach ($orders as $index => $expiredOrderToBeUpdated) {
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated["status"] == 'created')) {
+                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+                $orders[$index]['status'] = 'cancelled';
             }
         }
+
         return $this->render('TopxiaAdminBundle:Order:manage.html.twig', array(
-            'request' => $request,
+            'request'    => $request,
             'targetType' => $targetType,
-            'orders' => $orders,
-            'users' => $users,
-            'paginator' => $paginator,
+            'orders'     => $orders,
+            'users'      => $users,
+            'paginator'  => $paginator
         ));
     }
 
     public function detailAction(Request $request, $id)
     {
-        return $this->forward('TopxiaWebBundle:Order:detail',array(
-            'id' => $id,
+        return $this->forward('TopxiaWebBundle:Order:detail', array(
+            'id' => $id
         ));
     }
 
@@ -93,27 +93,27 @@ class OrderController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:CourseOrder:refund-confirm-modal.html.twig', array(
-            'order' => $order,
+            'order' => $order
         ));
-
     }
 
     /**
      *  导出订单
-     * @param  string  $targetType    classroom | course | vip
+     * @param string $targetType classroom | course | vip
      */
     public function exportCsvAction(Request $request, $targetType)
     {
-
         $conditions = $request->query->all();
-        if(!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
+
+        if (!empty($conditions['startTime']) && !empty($conditions['endTime'])) {
             $conditions['startTime'] = strtotime($conditions['startTime']);
-            $conditions['endTime'] = strtotime($conditions['endTime']);
+            $conditions['endTime']   = strtotime($conditions['endTime']);
         }
+
         $conditions['targetType'] = $targetType;
-        $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
-        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','coin'=>'虚拟币支付','none'=>'--');
-        $orders = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $status                   = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+        $payment                  = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
+        $orders                   = $this->getOrderService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
@@ -121,13 +121,14 @@ class OrderController extends BaseController
         $users = ArrayToolkit::index($users, 'id');
 
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
-        $profiles = ArrayToolkit::index($profiles, 'id');    
+        $profiles = ArrayToolkit::index($profiles, 'id');
 
         $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
 
         $str .= "\r\n";
 
         $results = array();
+
         foreach ($orders as $key => $orders) {
             $member = "";
             $member .= $orders['sn'].",";
@@ -138,19 +139,20 @@ class OrderController extends BaseController
             $member .= $orders['amount'].",";
             $member .= $payment[$orders['payment']].",";
             $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
-            if ($orders['paidTime'] != 0 ){
-            $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+
+            if ($orders['paidTime'] != 0) {
+                $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            } else {
+                $member .= "-".",";
             }
-            else{
-            $member .= "-".","; 
-            }
+
             $results[] = $member;
         }
 
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
-        
-        $filename = sprintf("%s-order-(%s).csv",$targetType,date('Y-n-d'));
+
+        $filename = sprintf("%s-order-(%s).csv", $targetType, date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');
@@ -158,14 +160,13 @@ class OrderController extends BaseController
         $response->headers->set('Content-length', strlen($str));
         $response->setContent($str);
 
-
         return $response;
     }
 
-    
     protected function sendAuditRefundNotification($order, $pass, $amount, $note)
     {
         $course = $this->getClassroomService()->getClassroom($order['targetId']);
+
         if (empty($course)) {
             return false;
         }
@@ -181,12 +182,12 @@ class OrderController extends BaseController
         }
 
         $classroomUrl = $this->generateUrl('classroom_show', array('id' => $classroom['id']));
-        $variables = array(
+        $variables    = array(
             'classroom' => "<a href='{$classroomUrl}'>{$classroom['title']}</a>",
-            'amount' => $amount,
-            'note' => $note,
+            'amount'    => $amount,
+            'note'      => $note
         );
-        
+
         $message = StringToolkit::template($message, $variables);
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
 
@@ -197,19 +198,19 @@ class OrderController extends BaseController
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
-   
+
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
-    protected function getCashService(){
-      
+    protected function getCashService()
+    {
         return $this->getServiceKernel()->createService('Cash.CashService');
     }
 
-    protected function getCashOrdersService(){
-      
+    protected function getCashOrdersService()
+    {
         return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 }

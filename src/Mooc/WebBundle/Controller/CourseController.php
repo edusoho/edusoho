@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends BaseController
 {
@@ -68,7 +68,7 @@ class CourseController extends BaseController
             return $this->createMessageModalResponse('info', '非周期课程不可开设下一期', '周期课程', 3);
         }
 
-        return $this->render('TopxiaWebBundle:Course:next-round.html.twig', array(
+        return $this->render('MoocWebBundle:Course:next-round.html.twig', array(
             'course' => $course
         ));
     }

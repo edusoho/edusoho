@@ -1,0 +1,40 @@
+{% extends 'TopxiaWebBundle:My:layout.html.twig' %}
+
+{% block title %}我的成绩 - {{ parent() }}{% endblock %} 
+
+{% set side_nav = 'my-grades' %}
+
+{% block main %}
+
+<div class="panel panel-default panel-col">
+		<div class="panel-heading">我的成绩</div>
+			<div class="panel-body">
+				 
+				 <table class="table table-striped">
+					<thead>
+							<th width="20%">课程名称</th>
+							<th width="30%">时间</th>
+							<th width="10%">成绩</th>
+							<th width="10%">状态</th>
+							<th width="10%">学分</th>
+							<th width="20%"></th>
+					</thead>
+					<tbody>
+						{% if courses %}
+							{% for course in courses %}
+								{% include 'MoocWebBundle:MyGrades:list-tr.html.twig' %}
+							{% endfor %}
+						{% else %}
+						 <tr><td colspan="20"><div class="empty">暂无成绩记录</div></td></tr>
+						{% endif %}
+
+					</tbody>
+			</table>
+
+						</div>
+			</div>
+	</div>
+
+{{ web_macro.paginator(paginator) }}
+
+{% endblock %}

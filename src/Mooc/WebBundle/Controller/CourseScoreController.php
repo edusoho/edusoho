@@ -40,9 +40,12 @@ class CourseScoreController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseScore:setting.html.twig', array(
-            'course' => $course,
-            'score'  => $scoreSetting
+        $endTime = $course['endTime'] + (24 * 60 * 60);
+
+        return $this->render('MoocWebBundle:CourseScore:setting.html.twig', array(
+            'course'       => $course,
+            'classEndTime' => $endTime,
+            'score'        => $scoreSetting
         ));
     }
 
@@ -112,7 +115,7 @@ class CourseScoreController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_score', array('courseId' => $course['id'])));
         }
 
-        return $this->render('TopxiaWebBundle:CourseScore:transcripts.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScore:transcripts.html.twig', array(
             'studentNum'         => $studentNum,
             'passStudentNum'     => $passStudentNum,
             'averageScore'       => $averageScore,
@@ -131,7 +134,7 @@ class CourseScoreController extends BaseController
     {
         $course                                                                                   = $this->getCourseService()->tryManageCourse($courseId);
         list($users, $usersProfile, $usersScore, $courseScoreSetting, $organizations, $paginator) = $this->getTranscripts($request, $courseId);
-        return $this->render('TopxiaWebBundle:CourseScore:transcripts_list.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScore:transcripts_list.html.twig', array(
             'users'              => $users,
             'usersProfile'       => $usersProfile,
             'usersScore'         => $usersScore,
@@ -180,7 +183,7 @@ class CourseScoreController extends BaseController
             $homeworkLessons    = $this->getCourseService()->findLessonsByIds($homeworksLessonIds);
         }
 
-        return $this->render('TopxiaWebBundle:CourseScore:student-grades-cards.html.twig', array(
+        return $this->render('MoocWebBundle:CourseScore:student-grades-cards.html.twig', array(
             'course'            => $course,
             'learnedLessonsNum' => $learnedLessonsNum,
             'scores'            => $scores,

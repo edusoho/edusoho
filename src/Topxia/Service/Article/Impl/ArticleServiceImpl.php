@@ -320,6 +320,21 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
     }
 
+    public function viewArticle($id)
+    {
+        $article = $this->getArticle($id);
+
+        if (empty($article)) {
+            return;
+        }
+
+        $user = $this->getCurrentUser();
+        $this->dispatchEvent('article.view', new ServiceEvent($article));
+        $this->hitArticle($id);
+
+        return $article;
+    }
+
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article = array();
@@ -329,7 +344,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
         $article['thumb']         = $fields['thumb'];
         $article['originalThumb'] = $fields['originalThumb'];
-
         $article['title']         = $fields['title'];
         $article['body']          = $fields['body'];
         $article['featured']      = empty($fields['featured']) ? 0 : 1;

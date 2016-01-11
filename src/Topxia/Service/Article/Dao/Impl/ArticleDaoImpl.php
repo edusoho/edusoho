@@ -122,6 +122,9 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
 
     public function addArticle($article)
     {
+        $article['createdTime'] = time();
+        $article['updatedTime'] = $article['createdTime'];
+
         $article  = $this->createSerializer()->serialize($article, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $article);
 
@@ -140,14 +143,16 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
 
-        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $currentTime = time();
+        $sql         = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = {$currentTime} WHERE id = ? LIMIT 1";
 
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
     public function updateArticle($id, $article)
     {
-        $article = $this->createSerializer()->serialize($article, $this->serializeFields);
+        $article                = $this->createSerializer()->serialize($article, $this->serializeFields);
+        $article['updatedTime'] = time();
         $this->getConnection()->update($this->table, $article, array('id' => $id));
 
         return $this->getArticle($id);
