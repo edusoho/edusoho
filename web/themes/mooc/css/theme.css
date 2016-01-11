@@ -195,7 +195,7 @@
 body {
   font-family: "Hiragino Sans GB", "Helvetica Neue", Helvetica, Arial, "Microsoft YaHei", sans-serif;
   color: #666666;
-  background: #f0f5f9;
+  background: #f0f5f9!important;
 }
 li {
   list-style-type: none;
@@ -2637,7 +2637,8 @@ input:focus {
 }
 .mooc-nav ul > li > a {
   color: #ffffff;
-  padding: 15px 38px;
+  padding: 20px 38px;
+  font-size: 16px;
 }
 .mooc-nav ul > li > a:hover {
   background: #333755;
@@ -2855,7 +2856,7 @@ label {
   position: absolute;
   left: 0;
   top: 3px;
-  width: 5px;
+  width: 4px;
   height: 100%;
   background: #10b67c;
   height: 20px;
@@ -3449,8 +3450,8 @@ label {
 .footer-logo .footer-sns i.es-icon-weixin,
 .footer-logo .footer-sns i.es-icon-apple,
 .footer-logo .footer-sns i.es-icon-android {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
 }
 footer {
   padding: 40px 0 0;
@@ -3481,6 +3482,7 @@ footer .link-item h4 {
 }
 footer .footer-attr p {
   margin-top: 25px;
+  color: #ffffff;
 }
 footer .footer-attr p i {
   color: #ffffff;
@@ -3552,12 +3554,15 @@ footer .footer-attr p i {
 .mooc-poster .mooc-notice {
   width: 260px;
   position: absolute;
-  top: 40px;
+  top: 50px;
   right: 50%;
   margin-right: -570px;
 }
 .mooc-poster .mooc-notice .panel {
-  height: 326px;
+  height: 300px;
+}
+.mooc-poster .mooc-notice .panel-heading {
+  font-size: 14px;
 }
 .mooc-poster .mooc-notice .panel-heading i {
   color: #10b67c;
@@ -3566,6 +3571,7 @@ footer .footer-attr p i {
 }
 .mooc-poster .mooc-notice .panel-body ul {
   padding: 0 12px;
+  font-size: 14px;
 }
 .mooc-poster .mooc-notice .panel-body li {
   list-style-type: disc;
