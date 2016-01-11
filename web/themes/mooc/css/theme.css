@@ -3118,6 +3118,11 @@ label {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.mooc-teacher .teach-item .teach-wrapper:hover {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
 .mooc-teacher .teach-item .teacher-img {
   position: absolute;
   top: -15px;
@@ -3186,6 +3191,11 @@ label {
   background: #ffffff;
   margin: 10px;
   padding: 28px 0;
+}
+.mooc-cooperate .cooperate-list li a:hover {
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 .mooc-learn {
   background: #10b67c;

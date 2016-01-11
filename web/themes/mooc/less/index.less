@@ -267,7 +267,9 @@
       padding: 15px 30px;
       margin: 0 15px;
       .border-radius(2px);
-
+      &:hover{
+        .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;
+      }
     }
     .teacher-img{
       position: absolute;
@@ -319,6 +321,7 @@
       float: left;
       width: 20%;
       text-align: center;
+
       @media (max-width:@screen-sm-max){
         width: 33.33%;
       }
@@ -332,6 +335,9 @@
         background: @white;
         margin:10px;
         padding: 28px 0;
+         &:hover{
+          .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;
+          }
       }
     }
   }
