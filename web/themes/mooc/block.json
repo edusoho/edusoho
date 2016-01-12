@@ -200,19 +200,19 @@
                     {
                         "src" : "\/themes\/mooc\/img\/es.jpg",
                         "desc": "建议图片大小为122*122",
-                        "alt" : "合作伙伴1",
+                        "alt" : "Edusoho",
                         "href": "http://www.edusoho.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/howzhi.jpg",
                         "desc": "建议图片大小为122*122",
-                        "alt" : "合作伙伴2",
+                        "alt" : "好知网",
                         "href": "http://www.howzhi.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/qiqiuyu.jpg",
                         "desc": "建议图片大小为122*122",
-                        "alt" : "合作伙伴3",
+                        "alt" : "气球鱼",
                         "href": "http://www.qiqiuyu.com"
                     }
                 ]
