@@ -12,9 +12,9 @@
 
 {%- macro user_link(user, class, card = true) -%}
   {% if user %}
-    <a class="link-light {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+    <a class="gray-darker {{ class }}" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
   {% else %}
-    <a class="link-light {{ class }}" href="javascript:;"><del>用户不存在</del></a>
+    <a class="gray-darker {{ class }}" href="javascript:;"><del>用户不存在</del></a>
   {% endif %}
 {%- endmacro -%}
 
