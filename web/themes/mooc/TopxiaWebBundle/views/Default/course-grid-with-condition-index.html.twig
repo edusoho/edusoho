@@ -1,6 +1,6 @@
 {% set count = config.count|default(10) %}
 
-{# {% set latestCourses = data('LatestCourses',{ count:count }) %}
+{% set latestCourses = data('LatestCourses',{ count:count }) %}
 <section class="mooc-course">
   <div class="container">
     <div class="mooc-index-title">
@@ -17,4 +17,4 @@
       </a>
     </div>
   </div>
-</section> #}
+</section>

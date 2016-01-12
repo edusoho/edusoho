@@ -163,22 +163,22 @@
                 "default": [
                     {
                         "categoryId" : "1",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
                         "desc": "建议图标大小为34*34"
                     },
                     {
                         "categoryId" : "1",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
                         "desc": "建议图标大小为34*34"
                     },
                     {
                         "categoryId" : "1",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
                         "desc": "建议图标大小为34*34"
                     },
                     {
                         "categoryId" : "1",
-                        "src" : "\/themes\/mooc\/img\/feature_3.png",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
                         "desc": "建议图标大小为34*34"
                     }
                 ]
