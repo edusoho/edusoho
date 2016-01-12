@@ -10,7 +10,7 @@
           {% set category = data('Category',{categoryId:item.categoryId}) %}
           <div class="width-25 swiper-slide">
           <div class="navset-wrapper">
-            <a href="{{path('course_explore',{category:category.code})}}">{# <i class="iconfont icon-lingdang"></i> #}<img style="width: 34px;height: 34px;" src="{{ asset(item.src) }}">{{ category.name|default() }}</a>
+            <a href="{{path('course_explore',{category:category.code})}}"><img style="width: 34px;height: 34px;" src="{{ asset(item.src) }}">{{ category.name|default() }}</a>
           </div>
           </div>
         {% endfor %}
