@@ -94,6 +94,11 @@ define(function(require, exports, module) {
               var mottotop = $(".mooc-learn").position().top-$(window).height();
               if (scroll >= mottotop) {
                   $(".mooc-learn .img").addClass("animate");
+              }else if($(".mooc-feature").length){
+                var mottotop = $(".mooc-feature").position().top-$(window).height();
+                if (scroll >= mottotop) {
+                    $(".mooc-feature .row").addClass("animate");
+                }
               }       
             }
 
