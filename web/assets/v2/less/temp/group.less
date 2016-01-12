@@ -40,33 +40,40 @@
 
 .group-header .group-header-inner {
   border-radius: 5px;
-  height: 150px;
+  height: 190px;
   position: relative;
 }
 
 .group-header .media {
-  background: #fff;
-  background-color: rgba(255, 255, 255, 0.70);
   position: absolute;
-  top: 15px;
-  left: 15px;
+  bottom: 40px;
+  left: 50px;
   border-radius: 3px;
   padding: 10px;
   min-width: 20%;
 }
 
 .group-header-inner .media-body {
+  padding-top: 5px;
   width: auto;
 }
-
+.group-header-inner .media-left{
+  padding-right: 20px;
+}
 .group-header .media-heading {
   font-size: 18px;
-  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12px;
 }
-
+.group-header .media-heading .btn-xs{
+  padding: 3px 15px 2px;
+  vertical-align: text-top;
+  margin-left: 12px;
+  border:none;
+}
 .group-header .media-metas {
   font-size: 12px;
-  color: #666;
+  color: #fff;
 }
 
 .group-header .nav {
@@ -185,6 +192,8 @@
 
 .group-page .alert {
   word-break:break-all;
+  background: @bg-color;
+  color: @gray-darker;
 }
 .group-page .alert img{
   max-width:100%;
@@ -212,7 +221,7 @@
 }
 
 .thread-list .title {
-  margin-bottom: 5px;
+  vertical-align: middle;
 }
 
 .thread-list .metas {

@@ -44,7 +44,7 @@
       padding-right: 18px;
     }
     .media-heading{
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
     span.reply-num{
       display: inline-block;
@@ -61,6 +61,15 @@
         font-weight: normal;
         padding: 7px 0 0;
       }
+    }
+  }
+  .breadcrumb{
+    background: none;
+    a{
+      color: @gray-dark;
+    }
+    > li + li:before{
+      color: @gray-dark;
     }
   }
 }

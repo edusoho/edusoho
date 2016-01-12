@@ -10,14 +10,14 @@
          <strong>{% if thread.postNum %} {{thread.postNum}} {% else %} 0 {% endif %}</strong> 回复
         </span>
       </div>
-      <div class="media-body">
+      <div class="media-body pts">
         <div class="media-heading">
          <a class="title gray-darker" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isStick and not group %}
-            <span class="label label-danger">置顶</span>
+            <span class="label label-primary">置顶</span>
           {% endif %}
           {% if thread.isElite %}
-            <span class="label label-warning">精</span>
+            <span class="label label-danger">精华</span>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}

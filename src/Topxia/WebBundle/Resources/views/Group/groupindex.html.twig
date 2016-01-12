@@ -6,13 +6,28 @@
 {% set groupNav = 'index' %}
 
 {% block group_main %}
-  
+  <div class="panel panel-default">
+    <div class="panel-heading">小组介绍</div>
+    <div class="panel-body">
+      {% if paginator.currentPage == paginator.firstPage %}
+        <div class="alert">
+          <div class="clearfix">
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
+          </div>
+          <hr>
+          <div class="">
+            <span class="text-muted fsn mrm">组长：{{ web_macro.user_link(groupOwner, 'link-muted ') }}</span>
+            {% if is_groupmember==1 or is_groupmember==3 %}
+              <span class="text-muted fsn ">你已经是小组成员，
+              <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id})}}"> &raquo; 退出小组</a></span>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
   <div class="panel panel-default">
     <div class="panel-body">
-      <ol class="breadcrumb">
-        <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
-        <li class="active">{{groupinfo.title}}</li>
-      </ol>
       <ul class="nav nav-tabs">
         <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
         <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
@@ -20,28 +35,7 @@
           <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">小组设置</a></li>
         {% endif %}
       </ul>
-      {% if paginator.currentPage == paginator.firstPage %}
-        <div class="alert alert-info ">
-          <div class="clearfix">
-          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
-          </div>
-          <hr>
-          <div class="">
-            {% if is_groupmember==0%}
-              <a id="add-btn" class="btn btn-info btn-sm pull-right" href="{{path('group_join',{id:groupinfo.id})}}">加入小组</a>
-            {% endif %}
-
-            <span class="text-muted fsn mrm">创建时间：{{groupinfo.createdTime|date('Y-m-d')}}</span>
-            <span class="text-muted fsn mrm">组长：{{ web_macro.user_link(groupOwner, 'link-muted ') }}</span>
-
-            {% if is_groupmember==1 or is_groupmember==3 %}
-              <span class="text-muted fsn ">你已经是小组成员，
-              <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id})}}"> &raquo; 退出小组</a></span>
-            {% endif %}
-
-          </div>
-        </div>
-      {% endif %}
+    
       {{ web_macro.flash_messages() }}
       <div class="nav-filter clearfix mbl">
 
@@ -98,6 +92,19 @@
     </span>
   </div>
   </form>
+  <div class="panel panel-default">
+    <div class="panel-heading">小组组长</div>
+    <div class="panel-body">
+      <div class="media group-item">
+        <div class="media-left">
+          {{ web_macro.user_avatar(groupOwner, '') }}
+        </div>
+        <div class="media-body">
+          <p></p>
+        </div>
+      </div>
+    </div>
+  </div>
   {% if is_groupmember in [1, 2, 3] %}
     <div class="panel panel-default">
       <div class="panel-heading">我在小组</div>
