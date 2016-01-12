@@ -10,14 +10,12 @@
          <strong>{% if thread.postNum %} {{thread.postNum}} {% else %} 0 {% endif %}</strong> 回复
         </span>
       </div>
-       {# {{ web_macro.user_avatar(user, 'pull-left', 'avatar-md') }} #}
       <div class="media-body">
-        {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
         <div class="media-heading">
+         <a class="title" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isStick and not group %}
             <span class="label label-danger">置顶</span>
           {% endif %}
-          <a class="title" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isElite %}
             <span class="label label-warning">精</span>
           {% endif %}
@@ -30,11 +28,12 @@
         </div>
         
         <div class="metas">
+            {{ web_macro.user_avatar(user, 'userImg', 'avatar-ss') }}
           {% if group %}
             <a class="link-muted" href="{{path('group_show',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
             <span class="divider">•</span>
           {% endif %}
-          {{ web_macro.user_link(user , 'link-muted') }}
+          {{ web_macro.user_link(user , 'link-muted plm') }}
           <span class="divider">•</span>
           {{thread.createdTime|smart_time}}
           {% if thread.lastPostTime %}
