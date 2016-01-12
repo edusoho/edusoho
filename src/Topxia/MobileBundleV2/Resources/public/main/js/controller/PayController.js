@@ -98,7 +98,10 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 
 		OrderService.createOrder(defaultParams, function(data) {
 			if (data.status != "ok") {
-				self.showErrorResultDlg(data.error);
+				self.showErrorResultDlg({
+					name : "error",
+					message : data.message
+				});
 				return;
 			}
 
