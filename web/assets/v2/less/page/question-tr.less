@@ -55,6 +55,50 @@
     background-color: @brand-danger;
     color: #fff;
   }
+  .answer-title {
+    font-size: 12px;
+    color: #919191;
+  }
+  .fill-answer {
+    position: relative;
+    padding: 10px 15px;
+    color: @gray-darker;
+    background-color: #fafafa;
+    margin-bottom: 10px;
+    &.correct,&.error {
+      color: #fff;
+      padding-right: 50px;
+    }
+    &.correct {
+      background-color: @brand-success;
+    }
+    &.error {
+      background-color: @brand-danger;
+    }
+    .type {
+      position: absolute;
+      right: 15px;
+      top:10px;
+    }
+  }
+  .answer-progress {
+    float: left;
+    width: 350px;
+    margin-top: 10px;
+    margin-left: 10px;
+    .progress {
+      float: left;
+      width: 300px;
+      height: 10px;
+      .border-radius(20px);
+    }
+    .num {
+      float: right;
+      margin-top: -3px;
+      font-size: 12px;
+      color: #919191;
+    }
+  }
 }
 
 .question-manage {

@@ -1,5 +1,5 @@
-<div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-	<div class="question-heading editor-text">判断题<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<div class="question"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">判断题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a>
 	</div>
 	<div class="question-body clearfix">
 		<div class="gray-darker mbm">
@@ -10,7 +10,7 @@
 		{% endif %}
 		<ul class="question-choices">
 		  <li>
-		  	<span class="type-check" type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1">
+		  	<span class="type-check error" type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1">
 		  		<i class="es-icon es-icon-done"></i>
 		  	</span>
 		  	<span class="mll">正确</span>
@@ -20,6 +20,7 @@
 		  		<i class="es-icon es-icon-close01"></i>
 		  	</span>
 		  	<span class="mll">错误</span>
+					<span class="label label-success label-md mll">正确答案</span>
 		  </li>
 		</ul>
 		{#<div class="question-choices-inputs">
@@ -27,6 +28,15 @@
 		    <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="0" {% if 0 in answerChoiceIndex|default(null) %}checked{% endif %}>错误</label>
 		</div>#}
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		<div class="answer-progress">
+			<p class="answer-title">答题进度</p>
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+					<span class="sr-only">80% Complete (danger)</span>
+				</div>
+			</div>
+			<div class="num"><span class="gray-darker">6</span><span class="mhs">/</span>14</div>
+		</div>
 		<button id="submitQuestion" class="btn btn-primary btn-lg mvm pull-right">提交</button>
 	</div>
 	<div class="question-footer">
