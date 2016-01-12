@@ -18,6 +18,7 @@
       <img class="img-responsive mtm img-mtl" style="width:200px;height:200px" src="{{ asset(data.src) }}" alt="{{ data.alt|default('') }}">
       <p class="text-success">推荐尺寸：{{data.desc|default('')}}</p>
       <input class="form-control js-label-input" type="hidden" name="data[{{ code }}][{{ dataId }}][desc]" id="data[{{ code }}][{{ dataId }}][desc]" value="{{ data.desc|default('') }}" >
+      <input class="form-control js-label-input" type="hidden" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt|default('') }}" >
     </div>
 
     
@@ -26,9 +27,17 @@
 
 
  <div class="form-group">
-    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][alt]">图片描述</label>
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][title]">标题</label>
     <div class="col-md-8 col-xs-8">
-      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][alt]" id="data[{{ code }}][{{ dataId }}][alt]" value="{{ data.alt|default('') }}" >
+      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][title]" id="data[{{ code }}][{{ dataId }}][title]" value="{{ data.title|default('') }}" >
+    </div>
+    
+ </div>
+
+  <div class="form-group">
+    <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][value]">描述</label>
+    <div class="col-md-8 col-xs-8">
+      <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][value]" id="data[{{ code }}][{{ dataId }}][value]" value="{{ data.value|default('') }}" >
     </div>
     
  </div>
