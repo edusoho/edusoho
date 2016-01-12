@@ -86,17 +86,23 @@
             {% endif %}
           </div>
           <div class="panel-body">
-            <div class="row group-grids">
+            <div class="group-grids">
               {% for group in myJoinGroup %}
-                <div class="col-lg-3 col-md-4 col-sm-2 col-xs-4 grid">
-                  <p>
+                <div class="grid media media-group">
+                  <div class="media-left">
                     <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
-                      <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-sm">
+                      <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
                     </a>
-                  </p>
-                  <p class="title">
-                    <a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
-                  </p>
+                  </div>
+                  <div class="media-body">
+                      <div class="title">
+                        <a class="link-light" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                      </div>
+                      <div class="metas">
+                        <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                        <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                      </div>
+                  </div>
                 </div>
               {% endfor %}
             </div>
