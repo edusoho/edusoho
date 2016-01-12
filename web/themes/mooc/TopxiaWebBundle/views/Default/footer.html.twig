@@ -1,67 +1,28 @@
-{#  <footer class="footer">
+<footer>
+  <div class="container">
+    <div class="row">
+      {{ block_show('mooc:bottom_info') }}
+    </div>
+  </div>
+  <div class="footer-by">
     <div class="container">
-      <ul class="contact clearfix">
-        <li class="clearfix"> 
-        {#   <img src="{{asset('themes/mooc/img/footer_logo.png')}}" alt=""> 
-
-        {% if setting('site.logo') %}
-          <a href="{{ path('homepage') }}">
-            <img src="{{ asset(setting('site.logo')) }}">
+      {% include "TopxiaWebBundle::powered-by.html.twig" %}
+      {{ setting('site.analytics')|raw }} 
+      <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
+      <div class="mts">
+        {% if setting('site.copyright') %}
+          课程内容版权均归
+          <a href="/">
+            {{ setting('site.copyright') }}
           </a>
-        {% else %}
-          <a href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+          所有
         {% endif %}
-
-        </li>
-        <li class="footer-line"></li>
-        <li class="phone clearfix">
-          <img src="{{asset('themes/mooc/img/icon_phone.png')}}" alt="">0571-8681-9929
-        </li>
-        <li class="footer-line"></li>
-        <li class="mail clearfix">
-          <img src="{{ asset('themes/mooc/img/icon_mail.png') }}"  alt="">
-          {{ setting('site.master_email')|default('support@edusoho.com') }}
-        </li>
-      </ul>
-      <div class="copyright">
-        课程内容版权均归<a href="/">{{ setting('site.copyright') }}</a>所有&nbsp;{{ setting('site.icp') }}
-        {{ setting('site.analytics')|raw }}
+        {% if setting('site.icp') %}
+          <a class="mlm" href="http://www.miibeian.gov.cn/" target="_blank">
+            {{ setting('site.icp') }}
+          </a>
+        {% endif %}
       </div>
     </div>
-  </footer> #}
-  
-<!-- 底部合作伙伴，改挂件 -->
-  {#<section class="friendlink">
-    <div class="container">
-      {{ block_show('mooc:footer_link') }}
-    </div>
-  </section> #}
-  
-  <footer>
-    <div class="container">
-      <div class="row">
-        {{ block_show('mooc:bottom_info') }}
-      </div>
-    </div>
-    <div class="footer-by">
-      <div class="container">
-        {% include "TopxiaWebBundle::powered-by.html.twig" %}
-        {{ setting('site.analytics')|raw }} 
-        <a class="mlm" href="{{ path('course_archive') }}">课程存档</a>
-        <div class="mts">
-          {% if setting('site.copyright') %}
-            课程内容版权均归
-            <a href="/">
-              {{ setting('site.copyright') }}
-            </a>
-            所有
-          {% endif %}
-          {% if setting('site.icp') %}
-            <a class="mlm" href="http://www.miibeian.gov.cn/" target="_blank">
-              {{ setting('site.icp') }}
-            </a>
-          {% endif %}
-        </div>
-      </div>
-    </section>
-  </footer>
+  </section>
+</footer>

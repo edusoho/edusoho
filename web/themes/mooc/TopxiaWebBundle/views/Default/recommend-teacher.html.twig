@@ -1,47 +1,9 @@
-{# {% set teachers = data('RecommendTeachers',{'count':config.count|default(4)}) %}
-  {% if teachers %}
-  <section class="recommend-teacher {{config.background|default("")}}">
-    <div class="container">
-      <div class="text-line">
-        <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
-        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
-      </div>
-      <div class="row">
-        {% for teacher in teachers %}
-        {% set profile = teacher.profile %}
-        {% set isFollowed = teacher.isFollowed %}
-          <div class="col-md-3 col-sm-6">
-            {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
-          </div>
-        {% endfor %}
-      </div>
-      <div class="text-center mvl">
-        <a href="{{ path('teacher') }}" class="btn btn-default btn-lg">
-          更多教师 <i class="mrs-o es-icon es-icon-chevronright"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-  {% endif %} #}
-
-
-
 {% set teachers = data('RecommendTeachers',{'count':config.count|default(8)}) %}
 <section class="mooc-teacher hidden-xs hidden-sm">
   <div class="container">
     <div class="mooc-index-title">
       {{ config.title|default(config.defaultTitle) }}
     </div>
-     {#  <div class="row swiper-container teach-list">
-        <div class="swiper-wrapper">
-          {% for teacher in teachers %}
-            <div class="teach-item swiper-slide col-md-3">
-            {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
-            </div>
-          {% endfor %}
-        </div>
-        <div class="swiper-pager"></div>
-      </div>   #}
 
     <div class="carousel slide carousel-fade">
       <ol class="carousel-indicators mooc-carousel-indicators">
@@ -53,8 +15,6 @@
           <div class="item {% if loop.index == 1 %}active{% endif %} ">
              <div class="row teach-item">
           {% endif %}
-           
-              
                  <div class="col-md-3">
                     <div class="teach-wrapper">  
                       <div class="teacher-img">
@@ -81,7 +41,6 @@
           {% endif %}
         {% endfor %}
         </div>  
-
       </div>
     </div>
   </div>
