@@ -1,10 +1,9 @@
 <?php
-namespace Topxia\Service\Theme\Impl;
+namespace Mooc\Service\Theme\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Theme\ThemeService;
+use Topxia\Service\Theme\Impl\ThemeServiceImpl as BaseThemeServiceImpl;
 
-class ThemeServiceImpl extends BaseService implements ThemeService
+class ThemeServiceImpl extends BaseThemeServiceImpl
 {
     private $defaultConfig;
     private $allConfig;
@@ -29,7 +28,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = "简墨";
+            $currentTheme['name'] = "慕课";
         }
 
         if (empty($this->themeName) && empty($this->defaultConfig)) {
@@ -60,7 +59,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = "简墨";
+                $currentTheme['name'] = "慕课";
             }
 
             $config['name'] = $currentTheme['name'];
@@ -74,7 +73,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = "简墨";
+            $currentTheme['name'] = "慕课";
         }
 
         return $this->getThemeConfigByName($currentTheme['name']);
@@ -85,7 +84,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = "简墨";
+            $currentTheme['name'] = "慕课";
         }
 
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
@@ -94,7 +93,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = "简墨";
+                $currentTheme['name'] = "慕课";
             }
 
             return $this->createThemeConfig($currentTheme['name'], $config);
@@ -105,21 +104,12 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         ));
     }
 
-    public function saveConfirmConfig()
-    {
-        $currentTheme = $this->getCurrentThemeConfig();
-
-        return $this->editThemeConfig($currentTheme['name'], array(
-            'confirmConfig' => $currentTheme['config']
-        ));
-    }
-
     public function resetConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = "简墨";
+            $currentTheme['name'] = "慕课";
         }
 
         return $this->saveCurrentThemeConfig($this->defaultConfig);
@@ -130,7 +120,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = "简墨";
+            $currentTheme['name'] = "慕课";
         }
 
         $currentTheme = $this->getThemeConfigDao()->getThemeConfigByName($currentTheme['name']);
@@ -139,7 +129,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
             $currentTheme = $this->getSettingService()->get('theme');
 
             if (!isset($currentTheme['name'])) {
-                $currentTheme['name'] = "简墨";
+                $currentTheme['name'] = "慕课";
             }
 
             return $this->createThemeConfig($currentTheme['name'], $this->defaultConfig);
@@ -147,33 +137,5 @@ class ThemeServiceImpl extends BaseService implements ThemeService
 
         $config['config'] = empty($currentTheme['confirmConfig']) ? $this->defaultConfig : $currentTheme['confirmConfig'];
         return $this->editThemeConfig($currentTheme['name'], $config);
-    }
-
-    protected function createThemeConfig($name, $config)
-    {
-        return $this->getThemeConfigDao()->addThemeConfig(array(
-            'name'          => $name,
-            'config'        => $config,
-            'updatedTime'   => time(),
-            'createdTime'   => time(),
-            'updatedUserId' => $this->getCurrentUser()->id
-        ));
-    }
-
-    protected function editThemeConfig($name, $config)
-    {
-        $config['updatedTime']   = time();
-        $config['updatedUserId'] = $this->getCurrentUser()->id;
-        return $this->getThemeConfigDao()->updateThemeConfigByName($name, $config);
-    }
-
-    protected function getThemeConfigDao()
-    {
-        return $this->createDao('Theme.ThemeConfigDao');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->createService('System.SettingService');
     }
 }
