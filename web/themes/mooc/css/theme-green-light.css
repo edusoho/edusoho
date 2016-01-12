@@ -892,10 +892,10 @@ input:focus {
   width: 108px;
   height: 36px;
   border: 2px solid #a5a7b3;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  padding: 8px 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding: 12px 22px;
   color: #a5a7b3;
 }
 /*module*/
@@ -2641,7 +2641,7 @@ input:focus {
   font-size: 16px;
 }
 .mooc-nav ul > li > a:hover {
-  background: #333755;
+  background: #81d867;
 }
 .mooc-nav ul > li > ul > li > a {
   color: #272a41!important;
@@ -2901,8 +2901,8 @@ label {
   filter: alpha(opacity=100);
 }
 .mooc-navset .set-right .navset-wrapper {
-  padding: 0 1px;
   border-right: 1px solid #f1f1f1;
+  margin-right: -1px;
 }
 .mooc-navset .set-right .width-25 {
   width: 24.6%;
@@ -2910,7 +2910,7 @@ label {
   text-align: center;
   margin: 42px 0;
 }
-.mooc-navset .set-right .width-25:last-child {
+.mooc-navset .set-right .width-25:last-child .navset-wrapper {
   border-right: none;
 }
 .mooc-navset .set-right .width-25 img {
@@ -2918,9 +2918,6 @@ label {
   height: 34px;
   display: inline-block;
   margin-right: 6px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
 }
 .mooc-navset .set-right .width-25 i {
   color: #81d867;
@@ -2942,6 +2939,7 @@ label {
   color: #ffffff;
   text-align: center;
   right: 0;
+  margin-top: 0;
   opacity: 0;
   filter: alpha(opacity=0);
 }
@@ -2976,12 +2974,12 @@ label {
   background: transparent;
 }
 .mooc-course .course-list .course-item:hover {
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
   background: #ffffff;
 }
 .mooc-course .course-list .course-item .title {
@@ -3010,7 +3008,7 @@ label {
   height: 28px;
   line-height: 28px;
   background: #ffb300;
-  width: 92%;
+  width: 91.5%;
   padding: 0 5px;
   margin: 0 10px;
   color: #ffffff;
@@ -3059,11 +3057,14 @@ label {
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 .mooc-classroom .class-item:hover .class-wrapper {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
 }
 .mooc-classroom .class-item .class-img {
   padding: 10px 0;
@@ -3071,11 +3072,28 @@ label {
 .mooc-classroom .class-item .metas {
   color: #a5a7b3;
 }
+@media (max-width: 1199px) {
+  .mooc-classroom .class-item .metas span.num {
+    display: block;
+    float: none !important;
+    text-align: right;
+  }
+}
 .mooc-feature {
   background: #ffffff;
   text-align: center;
   padding: 85px 0;
   margin-top: 40px;
+}
+.mooc-feature .row {
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.mooc-feature .row.animate {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
 }
 .mooc-feature img {
   width: 42%;
@@ -3166,9 +3184,9 @@ label {
   border-radius: 2px;
 }
 .mooc-teacher .teach-item .teach-wrapper:hover {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
 }
 .mooc-teacher .teach-item .teacher-img {
   position: absolute;
@@ -3248,9 +3266,9 @@ label {
   overflow: hidden;
 }
 .mooc-cooperate .cooperate-list li a:hover {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
 }
 .mooc-learn {
   background: #81d867;
@@ -3366,107 +3384,6 @@ label {
   -o-animation: fadeInDown 1s 0.8s ease both;
   animation: fadeInDown 1s 0.8s ease both;
 }
-.section-header {
-  margin: 35px 0 50px 0;
-  padding-left: 25px;
-  color: #444444;
-  font-size: 20px;
-  border-left: 4px solid #90e577;
-}
-.mooc-class-section {
-  padding-bottom: 30px;
-  background-color: #fff;
-}
-.recommend-class-list.index {
-  margin-bottom: 45px;
-}
-.recommend-class-list.index .class-list {
-  border: 1px solid #e6e6e6;
-  box-shadow: 0 2px 2px #edecec;
-  height: 322px;
-  margin-bottom: 30px;
-}
-@media (max-width: 991px) {
-  .recommend-class-list.index .class-list {
-    height: auto;
-  }
-}
-.recommend-class-list.index .class-img {
-  float: left;
-  width: 42%;
-}
-@media (max-width: 991px) {
-  .recommend-class-list.index .class-img {
-    width: 100%;
-  }
-}
-.recommend-class-list.index .class-img img {
-  width: 100%;
-}
-.recommend-class-list.index .class-info {
-  float: left;
-  width: 40%;
-  padding: 50px;
-  height: 100%;
-}
-@media (max-width: 991px) {
-  .recommend-class-list.index .class-info {
-    width: 100%;
-    height: auto;
-    padding: 20px;
-  }
-}
-.recommend-class-list.index .class-info .title {
-  max-width: 100%;
-  color: #333333;
-  font-size: 16px;
-  font-weight: bold;
-}
-.recommend-class-list.index .class-info .info {
-  max-height: 136px;
-  overflow: hidden;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: #666666;
-}
-.recommend-class-list.index .class-info .num {
-  color: #ff9600;
-}
-@media (max-width: 991px) {
-  .recommend-class-list.index .class-info .num {
-    line-height: 35px;
-  }
-}
-.recommend-class-list.index .class-teacher {
-  width: 18%;
-  float: right;
-  height: 100%;
-  border-left: 1px solid #e6e6e6;
-  text-align: center;
-}
-.recommend-class-list.index .class-teacher .top {
-  height: 240px;
-  padding: 40px 0;
-  background-color: #f0f0f0;
-  font-size: 16px;
-  color: #333333;
-}
-.recommend-class-list.index .class-teacher .top img {
-  width: 120px;
-  height: 120px;
-  margin-bottom: 20px;
-  border-radius: 50%;
-}
-.recommend-class-list.index .class-teacher .top p {
-  margin-bottom: 0;
-}
-.recommend-class-list.index .class-teacher .bottom {
-  height: 80px;
-  line-height: 80px;
-}
-.mooc-class-section .recommend-class-list .class-img img {
-  height: 320px;
-}
 .friendlink {
   padding: 48px 0;
 }
@@ -3497,6 +3414,18 @@ label {
 .footer-logo .footer-sns i.es-icon-android {
   background: rgba(255, 255, 255, 0.2) !important;
   color: #ffffff !important;
+}
+.footer-logo .footer-sns i.es-icon-weibo:hover {
+  background: #c4000b!important;
+}
+.footer-logo .footer-sns i.es-icon-weixin:hover {
+  background: #1ec354!important;
+}
+.footer-logo .footer-sns i.es-icon-apple:hover {
+  background: #3793f1!important;
+}
+.footer-logo .footer-sns i.es-icon-android:hover {
+  background: #78c257!important;
 }
 footer {
   padding: 40px 0 0;
@@ -3598,6 +3527,10 @@ footer .footer-attr p i {
     margin-left: -70px;
   }
 }
+.mooc-poster span.swiper-pagination-switch {
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+}
 .mooc-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
   width: 30px;
   -webkit-border-radius: 20px;
@@ -3616,6 +3549,9 @@ footer .footer-attr p i {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  -webkit-box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
 }
 .mooc-poster .mooc-notice .panel-heading {
   font-size: 14px;
