@@ -251,6 +251,9 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 
 	return function(src) {
 		if (src) {
+			if (src.indexOf("http://") == -1) {
+				src = app.host + src;
+			}
 			return src;
 		}
 		return app.viewFloder  + "img/avatar.png";

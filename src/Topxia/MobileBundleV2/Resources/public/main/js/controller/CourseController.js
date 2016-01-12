@@ -146,12 +146,12 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       });
     }
 
-  this.vipLeand = function(callback) {
+  this.vipLeand = function(vipLevelId, callback) {
     if ($scope.user == null) {
       cordovaUtil.openWebView(app.rootPath + "#/login/course");
       return;
     }
-    if ($scope.user.vip == null || $scope.user.vip.levelId < $scope.course.vipLevelId) {
+    if ($scope.user.vip == null || $scope.user.vip.levelId < vipLevelId) {
       cordovaUtil.openWebView(app.rootPath + "#/viplist");
       return;
     }
@@ -271,7 +271,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     };
 
     $scope.vipLeand = function() {
-      self.vipLeand(function() {
+      self.vipLeand($scope.course.vipLevelId, function() {
         CourseService.vipLearn({
           courseId : $stateParams.courseId
         }, function(data){
@@ -464,7 +464,7 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
     };
 
     $scope.learnByVip = function() {
-      self.vipLeand(function() {
+      self.vipLeand($scope.classRoom.vipLevelId, function() {
         ClassRoomService.learnByVip({
           classRoomId : $stateParams.classRoomId
         }, function(data){
