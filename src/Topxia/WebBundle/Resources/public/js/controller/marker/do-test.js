@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             			"questionId":questionId
             		},function(data) {
             			$("#modal").html(data);
+            			$("#modal").show();
             		});
                 // var player = window.frames["viewerIframe"].window.BalloonPlayer;
                 // player.trigger('onMarkerReached', data);
