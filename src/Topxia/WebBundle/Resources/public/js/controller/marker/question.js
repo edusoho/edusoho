@@ -24,7 +24,7 @@ define(function(require, exports, module) {
     var myDraggableWidget = new DraggableWidget({
         element: "#lesson-dashboard",
         initMarkerArry:initMarkerArry,
-        videotime:68,
+        videotime:mediaLength,
         addScale: function(markerJson,$marker) {
             var url = $('.toolbar-question-marker').data('queston-marker-add-url');
             var param = {
