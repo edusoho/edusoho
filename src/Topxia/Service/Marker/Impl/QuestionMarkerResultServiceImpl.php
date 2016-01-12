@@ -54,7 +54,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
         $this->updateQuestionMarkerResult($questionMarkerResult['id'], array(
             'status'      => $status,
-            'answer'      => $answer,
+            'answer'      => serialize($answer),
             'updatedTime' => time()
         ));
     }

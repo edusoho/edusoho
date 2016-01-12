@@ -2,24 +2,23 @@
 	<div class="question-heading editor-text">单选题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
 	<div class="question-body clearfix">
 		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw}}</div>
-		{% if question.answer|default(null) %}
-			{% set answerChoiceIndex = question.answer[0]|chr %}
+		{% if answer|default(null) %}
+			{% set answerChoiceIndex = (1+answer[0]) %}
 		{% else %}
 			{% set answerChoiceIndex = '-1' %}
 		{% endif %}
 		<ul class="question-choices">
 			{% for key, choice in question.metas.choices %}
-		{% set choiceIndex = (65+key)|chr %}
+			{% set choiceIndex = (65+key)|chr %}
 			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
-				<span class="type-check {% if loop.index == 1 %} correct {% else %} error {% endif %} " id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">{{ choiceIndex }}</span>
+				<span class="type-check {% if loop.index == answerChoiceIndex %} correct {% elseif loop.index == (selfAnswer+1) %} error {% endif %} " id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">{{ choiceIndex }}</span>
 				<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
-				{% if loop.index == 1 %}
+				{% if loop.index == answerChoiceIndex %}
 					<span class="label label-success label-md mll">正确答案</span>
 				{% endif %}
 			</li>
 			{% endfor %}
 		</ul>
-		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
 		<div class="answer-progress">
 			<p class="answer-title">答题进度</p>
 			<div class="progress">
@@ -29,6 +28,7 @@
 			</div>
 			<div class="num"><span class="gray-darker">6</span><span class="mhs">/</span>14</div>
 		</div>
-		<button id="submitQuestion" class="btn btn-primary btn-lg mvm pull-right">提 交111</button>
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">完成</button>
 	</div>
 </div>

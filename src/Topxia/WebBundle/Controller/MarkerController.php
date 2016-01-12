@@ -161,7 +161,7 @@ class MarkerController extends BaseController
                     'questionMarkerId' => $value['id'],
                     'userId'           => $user['id'],
                     'status'           => 'none',
-                    'answer'           => array(),
+                    'answer'           => null,
                     'createdTime'      => time(),
                     'updatedTime'      => time()
                 ));
@@ -214,10 +214,13 @@ class MarkerController extends BaseController
         $user                 = $this->getUserService()->getCurrentUser();
         $questionMarker       = $this->getQuestionMarkerService()->getQuestionMarker($questionId);
         $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $questionMarker['id']);
+
         return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
             'markerId'   => $data['markerId'],
             'question'   => $questionMarker,
-            'selfAnswer' => $questionMarkerResult['answer']
+            'answer'     => $questionMarker['answer'],
+            'selfAnswer' => unserialize($questionMarkerResult['answer']),
+            'status'     => $questionMarkerResult['status']
         ));
     }
 
