@@ -24,6 +24,10 @@ define(function(require, exports, module) {
                 // player.trigger('onMarkerReached', data);
             });
         });
+        $(".marker-modal .close").on('click', function() {
+            console.log($(this).closest('#modal'));
+            $(this).closest('#modal').hide();
+        });
         
         $(".marker-modal .question-single_choice li,.marker-modal .question-determine li").on('click', function() {
             var $this = $(this);

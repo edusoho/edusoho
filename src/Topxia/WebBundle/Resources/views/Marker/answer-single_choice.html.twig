@@ -1,5 +1,5 @@
-<div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-	<div class="question-heading editor-text">单选题<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div>
+<div class="question"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">单选题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
 	<div class="question-body clearfix">
 		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw}}</div>
 		{% if question.answer|default(null) %}
@@ -11,16 +11,24 @@
 			{% for key, choice in question.metas.choices %}
 		{% set choiceIndex = (65+key)|chr %}
 			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
-				{#<label class="radio-inline mrm">
-					<input id="question-{{ question.id }}-input-{{ choiceIndex }}" type="radio" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}" {{ choiceIndex }}.</label><span class="choice-body editor-text">{{ choice|bbCode2Html|striptags|raw}}</span>#}
-				<span class="type-check" id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">
-					{{ choiceIndex }}
-				</span>
+				<span class="type-check {% if loop.index == 1 %} correct {% else %} error {% endif %} " id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">{{ choiceIndex }}</span>
 				<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
+				{% if loop.index == 1 %}
+					<span class="label label-success label-md mll">正确答案</span>
+				{% endif %}
 			</li>
 			{% endfor %}
 		</ul>
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		<div class="answer-progress">
+			<p class="answer-title">答题进度</p>
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+					<span class="sr-only">80% Complete (danger)</span>
+				</div>
+			</div>
+			<div class="num"><span class="gray-darker">6</span><span class="mhs">/</span>14</div>
+		</div>
 		<button id="submitQuestion" class="btn btn-primary btn-lg mvm pull-right">提 交111</button>
 	</div>
 </div>

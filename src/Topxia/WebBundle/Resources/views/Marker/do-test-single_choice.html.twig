@@ -1,5 +1,5 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-	<div class="question-heading editor-text">单选题<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button></div>
+	<div class="question-heading editor-text">单选题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
 	<div class="question-body clearfix">
 		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw}}</div>
 		{% if question.answer|default(null) %}

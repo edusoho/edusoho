@@ -11444,6 +11444,51 @@ textarea {
   background-color: #e83d2c;
   color: #fff;
 }
+.marker-modal .answer-title {
+  font-size: 12px;
+  color: #919191;
+}
+.marker-modal .fill-answer {
+  position: relative;
+  padding: 10px 15px;
+  color: #313131;
+  background-color: #fafafa;
+  margin-bottom: 10px;
+}
+.marker-modal .fill-answer.correct,
+.marker-modal .fill-answer.error {
+  color: #fff;
+  padding-right: 50px;
+}
+.marker-modal .fill-answer.correct {
+  background-color: #70d445;
+}
+.marker-modal .fill-answer.error {
+  background-color: #e83d2c;
+}
+.marker-modal .fill-answer .type {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+.marker-modal .answer-progress {
+  float: left;
+  width: 350px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.marker-modal .answer-progress .progress {
+  float: left;
+  width: 300px;
+  height: 10px;
+  border-radius: 20px;
+}
+.marker-modal .answer-progress .num {
+  float: right;
+  margin-top: -3px;
+  font-size: 12px;
+  color: #919191;
+}
 .question-manage {
   background-color: #eeeeee;
 }
