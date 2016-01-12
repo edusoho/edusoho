@@ -5,7 +5,12 @@
     {% set user = users[thread.userId]|default(null) %}
     {% endif %}
     <li class="media">
-       {{ web_macro.user_avatar(user, 'pull-left', 'avatar-md') }}
+      <div class="media-left">
+        <span class="reply-num">
+         <strong>{% if thread.postNum %} {{thread.postNum}} {% else %} 0 {% endif %}</strong> 回复
+        </span>
+      </div>
+       {# {{ web_macro.user_avatar(user, 'pull-left', 'avatar-md') }} #}
       <div class="media-body">
         {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
         <div class="media-heading">
