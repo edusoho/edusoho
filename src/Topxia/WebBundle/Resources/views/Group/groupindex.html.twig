@@ -127,29 +127,57 @@
               <span>我的回复: {{userIsGroupMember.postNum}}</span>
             </p>
           </div>
-
         </div>
       </div>
     </div>
   {% endif %}
 
   <div class="panel panel-default">
-    <div class="panel-heading">最近加入</div>
+    <div class="panel-heading">新加组员</div>
     <div class="panel-body">
       {% if recentlyJoinMember %}
         <ul class="user-avatar-list clearfix">
           {% for member in recentlyJoinMember %}
             <li>
               {{ web_macro.user_avatar(members[member.userId] ,'', 'avatar-sm') }}
-              <div class="name">
-                {{ web_macro.user_link(members[member.userId] , '') }}
-              </div>
             </li>
           {% endfor %}
         </ul>
       {% else %}
         <div class="empty">还没有小组成员！</div>
       {% endif %}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">热门小组</div>
+    <div class="panel-body">
+      <div class="group-grids">
+      {% set hotGroups = data('HotGroup',{'count':3}) %}
+      {% for group in hotGroups %}
+        <div class="media media-group">
+          <div class="media-left">
+            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              <a class="link-light" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+                {{group.title}}
+              </a>
+            </div>
+            <div class="metas">
+              <span><i class="es-icon es-icon-people"></i>{{group.memberNum}}</span>
+              <span><i class="es-icon es-icon-textsms"></i>{{group.threadNum}}</span>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="empty">暂无小组信息！</div>
+      {% endfor %}
+      </div>
+      
     </div>
   </div>
 
