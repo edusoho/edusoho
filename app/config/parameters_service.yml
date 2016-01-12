@@ -9,6 +9,7 @@ parameters:
         'Crontab.CrontabService' : 'Mooc\Service\CrontabJob\Impl\CrontabJobServiceImpl'
         'Testpaper.TestpaperService' : 'Mooc\Service\Testpaper\Impl\TestpaperServiceImpl'
         'Course.ThreadService' : 'Mooc\Service\Course\Impl\ThreadServiceImpl'
+        'Theme.ThemeService' : 'Mooc\Service\Theme\Impl\ThemeServiceImpl'
 
     topxia_daos:
         'Course.CourseDao' : 'Mooc\Service\Course\Dao\Impl\CourseDaoImpl'
