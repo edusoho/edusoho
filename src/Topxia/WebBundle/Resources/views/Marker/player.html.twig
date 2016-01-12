@@ -10,6 +10,7 @@
       {% if setting('storage.video_fingerprint') and app.user %}
         data-fingerprint="{{ finger_print() }}"
       {% endif %}
+        data-hideBeginning="{{ true }}"
         data-user-id="{{ app.user.id }}"
     ></div>
     <div class="watermarkEmbedded" ></div>
