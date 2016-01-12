@@ -1108,11 +1108,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', 'cordovaUti
 	this.nativePost = function(options) {
 		esNativeCore.post($q, options.url,  options.headers , options.data )
 		.then(function(data) {
-			console.log(data);
-			options.success(angular.fromJson(data));
+			self.filterCallback(angular.fromJson(data), options.success);
 		}, function(error) {
-			console.log(error);
-			options.error(angular.fromJson(error));
+			self.filterCallback(angular.fromJson(error), options.error);
 		});
 	};
 
@@ -1484,6 +1482,9 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 
 	return function(src) {
 		if (src) {
+			if (src.indexOf("http://") == -1) {
+				src = app.host + src;
+			}
 			return src;
 		}
 		return app.viewFloder  + "img/avatar.png";
@@ -1721,15 +1722,19 @@ directive('imgError', function($timeout) {
                       errorSrc = app.viewFloder  + "img/default_class.jpg";
                       break;
                   }
-                  
+
                   element.attr('src', errorSrc);
                   element.on("error", function(e) {
                     element.attr("src", errorSrc);
                     element.on("error", null);
                   });
 
+                  if ("classroom" == attributes.imgError
+                     && attributes.imgSrc.indexOf("course-large.png") != -1) {
+                    return;
+                  }
                   $timeout(function() {
-                    element.attr('src', attributes.ngSrc);
+                    element.attr('src', attributes.imgSrc);
                   }, 100);
                 }
             };
@@ -1996,9 +2001,8 @@ directive('modal', function () {
       });
 
       element.on('touchmove', function(event) {
-        //event.preventDefault();
+        
       });
-
       $(".ui-scroller").css("overflow","hidden");
     }
   }
@@ -2456,6 +2460,16 @@ appProvider.provider('appRouter', function($stateProvider) {
           }
         });
 
+        $stateProvider.state('teachingThreadList', {
+          url: "/teaching/threadlist/:courseId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/teaching_thread_list.html",
+              controller : ThreadTeachingController
+            }
+          }
+        });
+
 	    this.initPlugin($stateProvider);
 	}
 
@@ -2676,7 +2690,7 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   this.loadCourseReviews = function(callback) {
     CourseService.getReviews({
       start : $scope.start,
-      limit : 10,
+      limit : 50,
       courseId : $stateParams.targetId
     }, callback);
   };
@@ -2684,7 +2698,7 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   this.loadClassRoomReviews = function(callback) {
     ClassRoomService.getReviews({
       start : $scope.start,
-      limit : 10,
+      limit : 50,
       classRoomId : $stateParams.targetId
     }, callback);
   };
@@ -2702,7 +2716,7 @@ function CourseReviewController($scope, $stateParams, CourseService, ClassRoomSe
   this.loadReviews = function() {
     self.targetService(function(data) {
       var length  = data ? data.data.length : 0;
-      if (!data || length == 0 || length < 10) {
+      if (!data || length == 0 || length < 50) {
           $scope.canLoad = false;
       }
 
@@ -3013,6 +3027,7 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
       $scope.member = data.member;
       $scope.isFavorited = data.userFavorited;
       $scope.discount = data.discount;
+      $scope.teachers = data.course.teachers;
 
       if (data.member) {
         var progress = data.course.lessonNum == 0 ? 0 : data.member.learnedNum / data.course.lessonNum;
@@ -3054,6 +3069,32 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
     $scope.$parent.$on("refresh", function(event, data) {
       window.location.reload();
     });
+
+    $scope.isCanShowConsultBtn = function() {
+      if (! $scope.user) {
+        return false;
+      }
+      
+      if ("classroom" == $scope.course.source) {
+        return false;
+      }
+
+      if (!$scope.teachers || $scope.teachers.length == 0) {
+        return false;
+      }
+
+      return true;
+    };
+
+    $scope.consultCourseTeacher = function() {
+      if (!$scope.teachers || $scope.teachers.length == 0) {
+        alert("该课程暂无教师");
+        return;
+      }
+
+      var userId = $scope.teachers[0].id;
+      cordovaUtil.startAppView("courseConsult", { userId : userId });
+    };
 }
 
 app.controller('ClassRoomController', ['$scope', '$stateParams', 'ClassRoomService', 'AppUtil', '$state', 'cordovaUtil', 'ClassRoomUtil', ClassRoomController]);
@@ -3445,6 +3486,11 @@ app.controller('HomeWorkController', ['$scope', '$stateParams', 'HomeworkManager
 
 function HomeworkCheckController($scope, $stateParams, HomeworkManagerService, AppUtil)
 {
+	function uncertainChoiceType(item) {
+		return new choiceType(item);
+
+	}
+
 	function choiceType(item) {
 		var self = this;
 
@@ -3535,13 +3581,16 @@ function HomeworkCheckController($scope, $stateParams, HomeworkManagerService, A
 
 	var questionType = {
 		single_choice : choiceType,
-		essay : essayType
+		essay : essayType,
+		uncertain_choice : choiceType
 	};
 
 	$scope.loadHomeworkResult = function() {
+		$scope.showLoad();
 		HomeworkManagerService.showCheck({
 			homeworkResultId : $stateParams.homeworkResultId
 		}, function(data) {
+			$scope.hideLoad();
 			$scope.homeworkResult = data;
 			$scope.items = data.items;
 			$scope.currentQuestionIndex = 1;
@@ -3604,6 +3653,15 @@ function HomeworkCheckController($scope, $stateParams, HomeworkManagerService, A
 	$scope.getItemIndex = function(item, index) {
 		var type = questionType[item.type];
 		return type(item).getIndexType(index);
+	}
+
+	$scope.getFillQuestionItem = function(item) {
+		var items = [], answer = item.answer;
+		for (var i = 0; i < answer.length; i++) {
+			items[i] = AppUtil.formatString("填写空(%1)答案", i + 1);
+		};
+
+		return items;
 	}
 };
 app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'cordovaUtil', LessonController]);
@@ -4112,7 +4170,7 @@ function MyLearnController($scope, CourseService, ClassRoomService)
   	$scope.loadCourses();
 };
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
-app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
+app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', 'cordovaUtil', VipListController]);
 app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', 'platformUtil', VipPayController]);
 
 function BasePayController($scope, $stateParams, OrderService, cordovaUtil, platformUtil)
@@ -4145,7 +4203,7 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 	}
 
 	$scope.checkIsCoinMode = function() {
-		return platformUtil.ios || platformUtil.iPhone || platformUtil.iPad
+		return false;
 	}
 
 	$scope.changePayMode = function() {
@@ -4211,7 +4269,10 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 
 		OrderService.createOrder(defaultParams, function(data) {
 			if (data.status != "ok") {
-				self.showErrorResultDlg(data.error);
+				self.showErrorResultDlg({
+					name : "error",
+					message : data.message
+				});
 				return;
 			}
 
@@ -4352,7 +4413,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 
 }
 
-function VipListController($scope, $stateParams, SchoolService)
+function VipListController($scope, $stateParams, SchoolService, cordovaUtil)
 {
 	var user = null;
 	
@@ -4362,6 +4423,17 @@ function VipListController($scope, $stateParams, SchoolService)
 			userId : $scope.user.id
 		}, function(data) {
 			$scope.hideLoad();
+			if (! data || !data.vips || data.vips.length == 0) {
+				var dia = $.dialog({
+			        title : '会员提醒' ,
+			        content : '网校尚未开启Vip服务!' ,
+			        button : [ "退出" ]
+				});
+
+				dia.on("dialog:action",function(e){
+					cordovaUtil.closeWebView();
+				});
+			}
 			$scope.data = data;
 			user = data.user;
 		});
@@ -4760,7 +4832,7 @@ function SettingController($scope, UserService, $state)
 };
 app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', 'platformUtil', '$stateParams', '$q', MyInfoController]);
 app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
-app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
+app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', 'cordovaUtil', UserInfoController]);
 app.controller('StudentListController', ['$scope', 'ClassRoomService', 'CourseService', '$stateParams', StudentListController]);
 
 function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
@@ -4935,7 +5007,7 @@ function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $state
 	}
 }
 
-function UserInfoController($scope, UserService, $stateParams, AppUtil) 
+function UserInfoController($scope, UserService, $stateParams, AppUtil, cordovaUtil) 
 {
 	var self = this;
 
@@ -5005,6 +5077,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}, function(data) {
 			if (data && data.toId == $stateParams.userId) {
 				$scope.isFollower = true;
+				cordovaUtil.sendNativeMessage("refresh_friend_list", {});
 			}
 		});
 	}
@@ -5015,6 +5088,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}, function(data) {
 			if (data) {
 				$scope.isFollower = false;
+				cordovaUtil.sendNativeMessage("refresh_friend_list", {});
 			}
 		});
 	}
@@ -5141,10 +5215,12 @@ function HomeworkTeachingController($scope, $stateParams, HomeworkManagerService
 	};
 }
 
-app.controller('ThreadTeachingController', ['$scope', '$stateParams', 'ThreadManagerService', ThreadTeachingController]);
-function ThreadTeachingController($scope, $stateParams, ThreadManagerService) {
+app.controller('ThreadTeachingController', ['$scope', '$stateParams', 'ThreadManagerService', 'cordovaUtil', ThreadTeachingController]);
+function ThreadTeachingController($scope, $stateParams, ThreadManagerService, cordovaUtil) {
 
 	var self = this;
+
+	$scope.courseId  =$stateParams.courseId;
 
 	this.filter = function(data) {
 		var users = data.users;
@@ -5156,9 +5232,18 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService) {
 		return data;
 	};
 
-	$scope.initQuestionResult = function() {
+	$scope.showThreadChatView = function(thread) {
+		cordovaUtil.startAppView("threadDiscuss", {
+			type : "thread.post",
+			courseId : thread.courseId,
+			lessonId : thread.lessonId,
+			threadId : thread.id
+		});
+	};
+
+	$scope.initQuestionResult = function(limit) {
 		ThreadManagerService.questionResult({
-			start : 3,
+			start : limit,
 			courseId : $stateParams.courseId
 		}, function(data) {
 			$scope.teachingResult = self.filter(data);

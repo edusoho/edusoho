@@ -87,7 +87,7 @@ directive('uiTab', function ($parse) {
           var scroller = element[0].querySelector('.ui-tab-content');
           var nav = element[0].querySelector('.ui-tab-nav');
 
-          function itmOnLoadListener(currentItem) {
+          function itemOnLoadListener(currentItem) {
             var isFirstRun = currentItem.attr("isFirstRun");
             var itemOnLoad = currentItem.attr("ng-onload");
             if ("true" != isFirstRun) {
@@ -111,7 +111,7 @@ directive('uiTab', function ($parse) {
 
             angular.element(scroller.children[childrenIndex]).addClass('current');
             angular.element(nav.children[childrenIndex]).addClass('current');
-            itmOnLoadListener(angular.element(scroller.children[childrenIndex]));
+            itemOnLoadListener(angular.element(scroller.children[childrenIndex]));
           }
 
           this.currentPage = 0;
@@ -138,6 +138,10 @@ directive('uiTab', function ($parse) {
 
                 if (tempCurrentPage == self.currentPage && "empty"  == attrs.select && tagetHasCurrent) {
                   changeTabContentHeight(0);
+                  scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : false
+                  });
                   return;
                 }
 
@@ -145,8 +149,12 @@ directive('uiTab', function ($parse) {
                 currentItem.addClass('current');
                 currentScrooler.addClass("current");
 
-                itmOnLoadListener(currentScrooler);
+                itemOnLoadListener(currentScrooler);
                 changeTabContentHeight("100%");
+                scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : true
+                });
             });
           });
 
@@ -459,10 +467,14 @@ directive('modal', function () {
         $(".ui-scroller").css("overflow","scroll");
       });
 
-      element.on('touchmove', function(event) {
-        
+      scope.$on("tabClick", function(event, data) {
+        if (!data.isShow) {
+          return;
+        }
+
+        $(".ui-scroller").css("overflow","hidden");
       });
-      $(".ui-scroller").css("overflow","hidden");
+
     }
   }
 }).

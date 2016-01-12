@@ -5,11 +5,23 @@
     </div>
 </div>
 
-<div class="ui-tab tab-top" ui-tab select="empty">
+<div class="ui-tab tab-top ui-courselist" ui-tab select="empty">
     <ul class="ui-tab-nav ui-border-b">
-        <li><span class="line">{{ categoryTab.category }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
-        <li><span class="line">{{ categoryTab.type }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
-        <li><span class="line">{{ categoryTab.sort }}<i class="iconfont icon-keyboardarrowdown"></i></span></li>
+        <li>
+          <span class="line">
+          <label>{{ categoryTab.category }}</label><i class="iconfont icon-keyboardarrowdown"></i>
+        </span>
+      </li>
+        <li>
+          <span class="line">
+          <label>{{ categoryTab.type }}</label><i class="iconfont icon-keyboardarrowdown"></i>
+        </span>
+      </li>
+        <li>
+          <span class="line">
+          <label>{{ categoryTab.sort }}</label><i class="iconfont icon-keyboardarrowdown"></i>
+        </span>
+      </li>
     </ul>
     <div class="ui-tab-content tab-display top-tab-header" style="position: fixed;">
         <li modal>

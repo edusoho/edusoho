@@ -247,11 +247,20 @@ a {
 }
 
 .ui-tab.tab-top .ui-tab-nav .line{
-  display: inline-block;
-  height: 25px;
   width: 100%;
+  height: 25px;
   line-height: 25px;
+  display: inline-block;
   border-right: solid 1px #ddd;
+}
+
+.ui-tab.tab-top .ui-tab-nav .line label{
+    width: auto;
+    max-width: 70%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
 }
 
 .ui-tab.tab-bottom .ui-tab-content {
@@ -1997,6 +2006,22 @@ a {
 }
 
 /** ui-list **/
+
+/** ui-courselist **/
+
+.ui-courselist .ui-tab-nav li {
+  width: 33%;
+}
+
+.ui-courselist .ui-tab-nav .line {
+  margin-top: 10px;
+}
+
+.ui-courselist .ui-tab-nav .line i {
+  position: absolute;
+}
+
+/** ui-courselist **/
 
 /** ui-pop **/
 .ui-pop {
