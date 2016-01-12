@@ -18,7 +18,7 @@ interface SensitiveService {
     
     public function searchkeywordsCount();
     
-    public function searchKeywords($start, $limit);
+    public function searchKeywords($conditions, $orderBy,$start, $limit);
     
     public function searchBanlogsCount($conditions);
     

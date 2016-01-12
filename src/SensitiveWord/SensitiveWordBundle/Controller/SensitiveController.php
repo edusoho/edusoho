@@ -10,8 +10,14 @@ class SensitiveController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $fields = $request->query->all();
+        $conditions = array('keyword' => '');
+        if(empty($fields)) {
+            $fields = array();
+        }
+        $conditions = array_merge($conditions, $fields);
         $paginator = new Paginator($this->get('request') , $this->getSensitiveService()->searchkeywordsCount() , 50);
-        $keywords = $this->getSensitiveService()->searchKeywords($paginator->getOffsetCount() , $paginator->getPerPageCount());
+        $keywords = $this->getSensitiveService()->searchKeywords($conditions, array('id', 'DESC'), $paginator->getOffsetCount() , $paginator->getPerPageCount());
 
 
         return $this->render('SensitiveWordBundle:SensitiveAdmin:index.html.twig', array(

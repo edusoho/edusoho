@@ -6,9 +6,15 @@
 {% set script_controller='sensitivebundle/controller/keyword/list' %}
 
 {% block main %}
+  <form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" valus="{{  app.request.query.get('keyword')  }}" placeholder="关键词" novalidate>
+    </div>
+    <button class="btn btn-primary">搜索</button>
 
+  </form>
   {% if keywords %}
-    <table class="table table-striped table-hover" id="keyword-table">
+    <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
       <thead>
       <tr>
         <th>编号</th>

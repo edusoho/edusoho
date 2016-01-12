@@ -42,20 +42,51 @@ class SensitiveDaoImpl extends BaseDao implements SensitiveDao
     }
 
     public function searchkeywordsCount()
-    {
+    {   
         $sql = "SELECT COUNT(*) FROM {$this->table}";
         return $this->getConnection()->fetchColumn($sql) ? : null;
     }
 
-    public function searchKeywords($start, $limit)
+    public function searchKeywords($conditions, $orderBy, $start, $limit)
     {
-        $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start},{$limit}";
-        return $this->getConnection()->fetchAll($sql)?:null;
+        
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createUserQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
     }
-     public function waveBannedNum($id, $diff)
-     {
-         $sql = "UPDATE {$this->table} SET bannedNum = bannedNum + ? WHERE id = ? LIMIT 1";
-         return $this->getConnection()->executeQuery($sql, array($diff, $id));
-     }
+    //     $sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC LIMIT {$start},{$limit}";
+    //     return $this->getConnection()->fetchAll($sql)?:null;
+    // }
 
+    public function waveBannedNum($id, $diff)
+    {
+        
+        $sql = "UPDATE {$this->table} SET bannedNum = bannedNum + ? WHERE id = ? LIMIT 1";
+        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+    }
+
+    protected function createUserQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions,function($v){
+            if($v === 0){
+                return true;
+            }
+                
+            if(empty($v)){
+                return false;
+            }
+            return true;
+        });
+        if (isset($conditions['keyword'])) {
+            $conditions['name'] = "%{$conditions['keyword']}%";
+        }
+
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'keyword')
+            ->andWhere('UPPER(name) LIKE :name');
+    }
 }

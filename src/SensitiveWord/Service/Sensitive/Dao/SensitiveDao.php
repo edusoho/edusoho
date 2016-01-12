@@ -15,7 +15,7 @@ interface SensitiveDao
 
     public function searchkeywordsCount();
 
-    public function searchKeywords($start, $limit);
+    public function searchKeywords($condtions, $orderBy, $start, $limit);
 
     public function waveBannedNum($id, $diff);
 

@@ -133,9 +133,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $this->getSensitiveDao()->searchkeywordsCount();
     }
     
-    public function searchKeywords($start, $limit)
+    public function searchKeywords($conditions, $orderBy, $start, $limit)
     {
-        return $this->getSensitiveDao()->searchKeywords($start, $limit);
+        return $this->getSensitiveDao()->searchKeywords($conditions, $orderBy, $start, $limit);
     }
     
     public function searchBanlogsCount($conditions)
