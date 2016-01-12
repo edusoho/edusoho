@@ -305,3 +305,10 @@ passedStatus:
     passed: 合格
     unpassed: 不合格
 
+state:
+    baned: 黑名单
+    replaced: 灰名单
+
+searchKeyWord:
+    name: 关键词
+    id: 编号

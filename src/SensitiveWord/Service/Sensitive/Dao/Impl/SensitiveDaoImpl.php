@@ -49,7 +49,7 @@ class SensitiveDaoImpl extends BaseDao implements SensitiveDao
 
     public function searchKeywords($conditions, $orderBy, $start, $limit)
     {
-        
+
         $this->filterStartLimit($start, $limit);
         $builder = $this->createUserQueryBuilder($conditions)
             ->select('*')
@@ -82,11 +82,18 @@ class SensitiveDaoImpl extends BaseDao implements SensitiveDao
             return true;
         });
         if (isset($conditions['keyword'])) {
-            $conditions['name'] = "%{$conditions['keyword']}%";
+            if($conditions['searchKeyWord'] == 'id') {
+                $conditions['id'] = $conditions['keyword'];
+            }
+            else if ($conditions['searchKeyWord'] == 'name') {
+                $conditions['name'] = "%{$conditions['keyword']}%";
+            }
         }
-
+        
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'keyword')
+            ->andWhere('id = :id')
+            ->andWhere('state = :state')
             ->andWhere('UPPER(name) LIKE :name');
     }
 }

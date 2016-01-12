@@ -8,7 +8,17 @@
 {% block main %}
   <form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
     <div class="form-group">
-      <input type="text" id="keyword" name="keyword" class="form-control" valus="{{  app.request.query.get('keyword')  }}" placeholder="关键词" novalidate>
+      <select class="form-control" name="state">
+        {{ select_options(dict('state'), app.request.query.get('state'), '所有名单') }}
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" name="searchKeyWord">
+        {{ select_options(dict('searchKeyWord'), app.request.query.get('searchKeyWord')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" valus="{{  app.request.query.get('keyword')  }}" placeholder="搜索关键字">
     </div>
     <button class="btn btn-primary">搜索</button>
 
