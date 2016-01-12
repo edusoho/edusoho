@@ -244,7 +244,8 @@ class MarkerController extends BaseController
         $conditions = $request->request->all();
 
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $lesson);
-
+        var_dump($paginator);
+        exit();
         return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
             'course'        => $course,
             'lesson'        => $lesson,
