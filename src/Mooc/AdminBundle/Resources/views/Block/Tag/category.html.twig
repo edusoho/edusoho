@@ -23,9 +23,9 @@
  <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">图片</label>
     <div class="col-md-8 col-xs-8">
-      <img class="img-responsive mtm img-mtl" src="{{ asset(data.src) }}" alt="{{ data.alt|default('') }}">
-      <p class="text-success">推荐尺寸：{{data.desc|default('')}}</p>
-      <input class="form-control js-label-input" type="hidden" name="data[{{ code }}][{{ dataId }}][desc]" id="data[{{ code }}][{{ dataId }}][desc]" value="{{ data.desc|default('') }}" >
+      <img class="img-responsive mtm img-mtl" src="{% if data.src|length > 10 %}{{ asset(data.src) }}{% else %}{{ asset('/themes/mooc/img/cat-3.png') }}{% endif %}" alt="{{ data.alt|default('') }}">
+      <p class="text-success">推荐尺寸：{{data.desc|default('建议图标大小为34*34')}}</p>
+      <input class="form-control js-label-input" type="hidden" name="data[{{ code }}][{{ dataId }}][desc]" id="data[{{ code }}][{{ dataId }}][desc]" value="{{ data.desc|default('建议图标大小为34*34') }}" >
     </div>
 
     

@@ -62,6 +62,7 @@ define(function(require, exports, module) {
                     $model.find('input').attr('value', '').val('');
                     $model.find('textarea').attr('html', '');
                     $model.find('.title-label').html('');
+                    $model.find('.img-responsive').attr('src', '').val('');
                     $model.find('.js-img-preview').attr('href', '');
                     var headingId = new Date().getTime() + '-heading';
                     $model.find('.panel-heading').attr('id', headingId);
