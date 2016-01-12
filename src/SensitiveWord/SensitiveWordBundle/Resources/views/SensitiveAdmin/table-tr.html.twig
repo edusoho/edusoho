@@ -4,6 +4,12 @@
 
     <td>{{ keyword.name }}</td>
 
+    <td>
+      {% if keyword.state == "banned" %}黑名单
+      {% elseif  keyword.state == "replaced" %}灰名单
+      {% endif %}
+    </td>
+
     <td>{{ keyword.bannedNum }}</td>
 
     <td>{{ keyword.createdTime|date('Y-n-d H:i:s') }}</td>
