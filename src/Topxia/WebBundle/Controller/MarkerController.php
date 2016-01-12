@@ -241,8 +241,7 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $conditions = $request->request->all();
-
+        $conditions                  = $request->request->all();
         list($paginator, $questions) = $this->getPaginatorAndQuestion($request, $conditions, $course, $lesson);
 
         return $this->render('TopxiaWebBundle:Marker:question-tr.html.twig', array(
@@ -250,7 +249,7 @@ class MarkerController extends BaseController
             'lesson'        => $lesson,
             'paginator'     => $paginator,
             'questions'     => $questions,
-            'targetChoices' => $this->getQuestionTargetChoices($course, $lesson)
+            'targetChoices' => $this->getQuestionTargetChoices($course)
         ));
     }
 
@@ -261,10 +260,6 @@ class MarkerController extends BaseController
         $choices["course-{$course['id']}"] = '本课程';
 
         foreach ($lessons as $lesson) {
-            if ($lesson['type'] == 'testpaper') {
-                continue;
-            }
-
             $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
         }
 
@@ -297,8 +292,9 @@ class MarkerController extends BaseController
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+            5
         );
+
         $markerIds         = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']), 'id');
         $questionMarkerIds = ArrayToolkit::column($this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds), 'questionId');
 
