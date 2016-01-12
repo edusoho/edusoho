@@ -1,10 +1,28 @@
 <?php
 namespace Mooc\Service\Theme\Impl;
 
-use Topxia\Service\Theme\ThemeServiceImpl as BaseThemeServiceImpl;
+use Topxia\Service\Theme\Impl\ThemeServiceImpl as BaseThemeServiceImpl;
 
 class ThemeServiceImpl extends BaseThemeServiceImpl
 {
+    private $defaultConfig;
+    private $allConfig;
+    private $themeName;
+    public function __construct()
+    {
+        $currentTheme = $this->getSettingService()->get('theme');
+
+        try {
+            $this->defaultConfig = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_default");
+            $this->allConfig     = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_all");
+            $this->themeName     = $this->getKernel()->getParameter("theme_{$currentTheme["uri"]}_name");
+        } catch (\Exception $e) {
+            $this->defaultConfig = array();
+            $this->allConfig     = array();
+            $this->themeName     = null;
+        }
+    }
+
     public function isAllowedConfig()
     {
         $currentTheme = $this->getSettingService()->get('theme');
