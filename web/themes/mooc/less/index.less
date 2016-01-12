@@ -72,7 +72,6 @@
         height: 34px;
         display: inline-block;
         margin-right: 6px;
-        .border-radius(50%);
       }
       i{
         color:@color-primary;
@@ -94,6 +93,7 @@
       color: #ffffff;
       text-align: center;
       right: 0;
+      margin-top: 0;
       .opacity(0);
       i{
         font-size: 22px;
@@ -122,8 +122,8 @@
       .border-radius(0);
       background: transparent;
        &:hover{
-          .border-radius(2px);
-          .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1));
+          .border-radius(4px);
+          .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
           background: @white;
         }
       .title{
@@ -205,9 +205,10 @@
     background: transparent !important;
     padding: 0!important;
     .box-shadow(none)!important;
+    .border-radius(4px);
     &:hover{
       .class-wrapper{
-        .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1));
+        .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
       }
     }
     .class-img{
@@ -215,7 +216,13 @@
     }
     .metas{
       color: #a5a7b3;
-    
+      span.num{
+        @media (max-width :@screen-md-max){
+          display: block;
+          float: none !important;
+          text-align: right;
+        }
+      }
     }
 
   }
@@ -226,6 +233,12 @@
   text-align: center;
   padding: 85px 0;
   margin-top: 40px;
+  .row{
+    .opacity(0);
+  }
+  .row.animate{
+    .animation(fadeInUp 1s .8s ease both);
+  }
   img{
    width: 42%;
    margin: 0 auto;
@@ -318,7 +331,7 @@
       padding: 15px 30px;
       .border-radius(2px);
       &:hover{
-        .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;
+        .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
       }
     }
     .teacher-img{
@@ -397,7 +410,7 @@
         text-align: center;
         overflow: hidden;
          &:hover{
-          .box-shadow(0 1px 2px 0 rgba(0, 0, 0, 0.1)) ;
+          .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
           }
       }
     }
@@ -497,105 +510,5 @@
 }
 
 
-.section-header {
-  margin: 35px 0 50px 0;
-  padding-left: 25px;
-  color: @title-color;
-  font-size: 20px;
-  border-left: 4px solid @bg-primary;
-}
-
-.mooc-class-section {
-  padding-bottom: 30px;
-  background-color: #fff;
-}
-
-.recommend-class-list.index {
-  margin-bottom: 45px;
-  .class-list {
-    border: 1px solid #e6e6e6;
-    box-shadow: 0 2px 2px #edecec;
-    height: 322px;
-    margin-bottom: 30px;
-    @media(max-width: @screen-sm-max) {
-      height: auto;
-    }
-  }
-  
-  .class-img {
-    float: left;
-    width: 42%;
-    @media(max-width: @screen-sm-max) {
-      width: 100%;
-    }
-    img {
-      // height: 320px;
-      width: 100%;
-    }
-  }
-  .class-info {
-    float: left;
-    width: 40%;
-    padding:50px;
-    height: 100%;
-    @media(max-width: @screen-sm-max) {
-      width: 100%;
-      height: auto;
-      padding: 20px;
-    }
-    .title {
-      max-width: 100%;
-      color: @black;
-      font-size: 16px;
-      font-weight: bold;
-    }
-    .info {
-      max-height: 136px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      font-size: 14px;
-      color: @font-color;
-    }
-    .num {
-      color: #ff9600;
-      @media(max-width: @screen-sm-max) {
-        line-height: 35px;
-      }
-    }
-  }
-  .class-teacher {
-    width: 18%;
-    float: right;
-    height: 100%;
-    border-left: 1px solid #e6e6e6;
-    text-align: center;
-    .top {
-      height: 240px;
-      padding: 40px 0;
-      background-color: #f0f0f0;
-      font-size: 16px;
-      color: @black;
-      img {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 20px;
-        border-radius:50%;
-      }
-      p {
-        margin-bottom: 0;
-      }
-    }
-    .bottom {
-      height: 80px;
-      line-height: 80px;
-    }
-  }
-}
-
-.mooc-class-section {
-  .recommend-class-list .class-img img {
-    height: 320px;
-  }
-}
 
 

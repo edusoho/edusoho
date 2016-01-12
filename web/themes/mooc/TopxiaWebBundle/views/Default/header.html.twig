@@ -49,8 +49,8 @@
             <li class="divider"></li>
             <li><a href="{{ path('admin') }}"><i class="iconfont icon-dashboard"></i>管理后台</a></li>
             {% endif %} 
-            <li class="divider"></li>
-            <li><a href="{{ path('message') }}"><i class="iconfont icon-sixin"></i> 私信
+            <li class="divider visible-xs"></li>
+            <li  class="visible-xs"><a href="{{ path('message') }}"><i class="iconfont icon-sixin"></i> 私信
               {% if app.user.newMessageNum > 0 %}
                 <span class="message">{{ app.user.newMessageNum }}</span>
               {% endif %}
@@ -89,9 +89,9 @@
           我的学习
         {% endif %}
       </a>
-      <a href="{{ path('notification') }}" class="hidden-xs user-message {% if app.user.newNotificationNum > 0 %} hasmessage {% endif %}">
-        <i class="iconfont icon-lingdang"></i>
-        {% if app.user.newNotificationNum > 0 %}
+      <a href="{{ path('message') }}" class="hidden-xs user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}">
+        <i class="iconfont icon-sixin"></i>
+          {% if app.user.newMessageNum > 0 %}
           <span class="message red-dot"></span>
         {% endif %}
       </a>
