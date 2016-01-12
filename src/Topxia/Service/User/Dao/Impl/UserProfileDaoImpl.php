@@ -118,7 +118,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         });
 
         if (isset($conditions['mobile'])) {
-            $conditions['mobile'] = "{$conditions['mobile']}%";
+            $conditions['mobile'] = "%{$conditions['mobile']}%";
         }
 
         if (isset($conditions['qq'])) {
@@ -135,7 +135,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'user_profile')
-            ->andWhere('mobile LIKE :mobile')
+            ->andWhere('UPPER(mobile) LIKE :mobile')
             ->andWhere('truename LIKE :truename')
             ->andWhere('idcard LIKE :idcard')
             ->andWhere('qq LIKE :qq');
