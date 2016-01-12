@@ -36,12 +36,14 @@
           </div>
         {% endfor %}
         </div>
-        <a class="arrow-left" href="#">
-          <i class="iconfont icon-icon30"></i>
-        </a>
-        <a class="arrow-right" href="#">
-          <i class="iconfont icon-icon32"></i>
-        </a>  
+        {% if LatestClassrooms|length >= 5 %}
+          <a class="arrow-left" href="#">
+            <i class="iconfont icon-icon30"></i>
+          </a>
+          <a class="arrow-right" href="#">
+            <i class="iconfont icon-icon32"></i>
+          </a>
+        {% endif %}
       </div>
     {% endif %}
     <div class="text-center mvl">
