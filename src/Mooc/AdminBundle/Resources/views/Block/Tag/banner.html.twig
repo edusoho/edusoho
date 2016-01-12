@@ -15,7 +15,7 @@
 <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][src]">图片</label>
     <div class="col-md-8 col-xs-8">
-      <img class="img-responsive mtm img-mtl" src="{{ asset(data.src) }}" alt="{{ data.alt|default('') }}">
+      <img class="img-responsive mtm img-mtl" style="width:200px;height:200px" src="{{ asset(data.src) }}" alt="{{ data.alt|default('') }}">
       <p class="text-success">推荐尺寸：{{data.desc|default('')}}</p>
       <input class="form-control js-label-input" type="hidden" name="data[{{ code }}][{{ dataId }}][desc]" id="data[{{ code }}][{{ dataId }}][desc]" value="{{ data.desc|default('') }}" >
     </div>
