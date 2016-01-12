@@ -9,7 +9,7 @@
 		  {% for key, choice in question.metas.choices %}
 		    {% set choiceIndex = (65+key)|chr %}
 		    <li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
-		      <span class="type-check {% if (key+1) in answer %} correct {% elseif key in selfAnswer %}error{% endif %}" id="question-{{ question.id }}-input-{{ choiceIndex }}" name="answer[{{ question.id }}][]" value="{{ key }}">
+		      <span class="type-check {% if (key+1) in answer and key in selfAnswer %} correct {% elseif key in selfAnswer %}error{% endif %}" id="question-{{ question.id }}-input-{{ choiceIndex }}" name="answer[{{ question.id }}][]" value="{{ key }}">
 					{{ choiceIndex }}
 					</span>
 					<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
