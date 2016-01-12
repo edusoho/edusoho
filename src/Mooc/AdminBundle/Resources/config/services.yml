@@ -33,7 +33,7 @@ parameters:
           defaultTitle: "中部banner"
           id: "middle-banner"
         - title: ""
-          count: "4"
+          count: "6"
           code: "latest-classroom"
           defaultTitle: "学校专业"
           subTitle: ""
