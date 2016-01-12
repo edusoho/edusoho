@@ -2901,8 +2901,8 @@ label {
   filter: alpha(opacity=100);
 }
 .mooc-navset .set-right .navset-wrapper {
-  padding: 0 1px;
   border-right: 1px solid #f1f1f1;
+  margin-right: -1px;
 }
 .mooc-navset .set-right .width-25 {
   width: 24.6%;
@@ -2910,7 +2910,7 @@ label {
   text-align: center;
   margin: 42px 0;
 }
-.mooc-navset .set-right .width-25:last-child {
+.mooc-navset .set-right .width-25:last-child .navset-wrapper {
   border-right: none;
 }
 .mooc-navset .set-right .width-25 img {
@@ -3549,6 +3549,9 @@ footer .footer-attr p i {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  -webkit-box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 6px 0px rgba(0, 0, 0, 0.2);
 }
 .mooc-poster .mooc-notice .panel-heading {
   font-size: 14px;

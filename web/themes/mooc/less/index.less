@@ -55,8 +55,8 @@
       }
     }
     .navset-wrapper{
-    padding: 0 1px;
     border-right: 1px solid #f1f1f1;
+    margin-right: -1px;
   
     }
     .width-25{
@@ -65,7 +65,9 @@
       text-align: center;
       margin: 42px 0;
       &:last-child{
-        border-right: none;
+        .navset-wrapper{
+          border-right: none;
+        }
       }
       img{
         width: 34px;
