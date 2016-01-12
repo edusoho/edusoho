@@ -104,5 +104,13 @@ define(function(require, exports, module) {
 
           });
 
+         var swiperLength = function (obj,parentsObj) {
+           if($(obj).length<=4){
+            $(obj).parents(parentsObj).siblings().remove();
+           }
+         }
+         swiperLength('.set-right .swiper-slide','.set-right .swiper-wrapper');
+         swiperLength('.class-list .swiper-slide','.class-list .swiper-wrapper');
+
     };
 });
