@@ -11548,7 +11548,7 @@ textarea {
 }
 .question-manage .question-menu {
   position: relative;
-  height: 70%;
+  height: 90%;
 }
 .question-manage .question-menu .list-title {
   padding-bottom: 10px;
@@ -11624,7 +11624,7 @@ textarea {
 }
 .question-manage .question-menu .lesson-list .pagination {
   position: absolute;
-  bottom: -155px;
+  bottom: -5px;
   margin-bottom: 0;
 }
 .question-manage .editbox {
@@ -11658,6 +11658,17 @@ textarea {
   width: 1px;
   background-color: #fff;
 }
+.question-manage .editbox .scalebox .scale .scale-details {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  visibility: hidden;
+  min-width: 50px;
+  margin-left: -25px;
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  color: #fff;
+}
 .question-manage .editbox .scalebox .scale.red,
 .question-manage .editbox .scalebox .scale.blue {
   left: 0;
@@ -11672,17 +11683,8 @@ textarea {
     top: -40px;
   }
 }
-.question-manage .editbox .scalebox .scale.red .scale-details,
-.question-manage .editbox .scalebox .scale.blue .scale-details {
-  position: absolute;
-  left: 0;
-  bottom: 100%;
-  visibility: hidden;
-  min-width: 50px;
-  margin-left: -25px;
-  background-color: rgba(0, 0, 0, 0.8);
-  text-align: center;
-  color: #fff;
+.question-manage .editbox .scalebox .scale.white .scale-details {
+  visibility: visible;
 }
 .question-manage .editbox .scalebox .scale.blue {
   background-color: #2998c9;
