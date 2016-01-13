@@ -92,43 +92,29 @@
     </span>
   </div>
   </form>
-  <div class="panel panel-default">
-    <div class="panel-heading">小组组长</div>
-    <div class="panel-body">
-      <div class="media group-item">
-        <div class="media-left">
-          {{ web_macro.user_avatar(groupOwner, '') }}
-        </div>
-        <div class="media-body">
-          <p><a class="link-light" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></p>
-        </div>
-      </div>
-    </div>
-  </div>
   {% if is_groupmember in [1, 2, 3] %}
     <div class="panel panel-default">
-      <div class="panel-heading">我在小组</div>
       <div class="panel-body">
         <div class="media group-item">
           <div class="media-left">
-            {{ web_macro.user_avatar(user, '') }}
+            {{ web_macro.user_avatar(user, '' ,'avatar-md') }}
           </div>
           <div class="media-body">
-            <p>{{ web_macro.user_link(user , 'link-muted') }}
+            <p>{{ web_macro.user_link(user , '') }}
 
               {% if is_groupmember==1%}
-              <span class="label label-success">组员</span>
+              <span class="label label-default">组员</span>
               {% endif %} 
 
               {% if is_groupmember==2%} 
-              <span class="label label-info">组长</span>  
+              <span class="label label-danger">组长</span>  
               {% endif %}
 
               {% if is_groupmember==3%} 
               <span class="label label-info">副组长</span>  
               {% endif %}  
             </p>
-
+            <a href="" class="btn btn-info btn-sm" role="button">我的小组</a>
             <p class="text-muted fsn">
               <span class="mrm">我的话题: {{userIsGroupMember.threadNum}}</span>
               <span>我的回复: {{userIsGroupMember.postNum}}</span>
@@ -138,6 +124,21 @@
       </div>
     </div>
   {% endif %}
+  <div class="panel panel-default">
+    <div class="panel-heading">小组组长</div>
+    <div class="panel-body">
+      <div class="media group-item">
+        <div class="media-left">
+          {{ web_macro.user_avatar(groupOwner, '') }}
+        </div>
+        <div class="media-body">
+          <div><a class="gray-darker" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></div>
+          <span class="text-sm gray-medium">{{groupOwner.title|default("无")}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <div class="panel panel-default">
     <div class="panel-heading">新加组员</div>

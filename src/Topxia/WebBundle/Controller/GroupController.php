@@ -379,7 +379,6 @@ class GroupController extends BaseController
         $groupAbout = strip_tags($group['about'],'');
 
         $groupAbout =  preg_replace("/ /","",$groupAbout);  
-        
         return $this->render("TopxiaWebBundle:Group:groupindex.html.twig", array(
             'groupinfo' => $group,
             'is_groupmember' => $this->getGroupMemberRole($id),
