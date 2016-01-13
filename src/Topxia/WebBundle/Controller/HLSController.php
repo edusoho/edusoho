@@ -58,7 +58,7 @@ class HLSController extends BaseController
                 }
 
                 if (isset($token['data']['hideBeginning'])) {
-                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'];
+                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'] == "true" ? true : false;
                 }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
@@ -76,9 +76,15 @@ class HLSController extends BaseController
                 $params['line'] = $line;
             }
 
-            if (!$this->haveHeadLeader()) {
-                $params['hideBeginning'] = 0;
-            }
+            // if (isset($token['hideBeginning'])) {
+            //     $params['hideBeginning'] = $token['hideBeginning'] ? 1 : 0;
+            // } else {
+
+            // if (!$this->haveHeadLeader()) {
+            $params['hideBeginning'] = 0;
+            // }
+
+            // }
 
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
         }
@@ -108,6 +114,8 @@ class HLSController extends BaseController
     public function streamAction(Request $request, $id, $level, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+        // var_dump($token);
+        // exit();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
