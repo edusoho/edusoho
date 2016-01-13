@@ -25,7 +25,7 @@
  </div>
 
 
-
+{% if  data.title|default('') %}
  <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][title]">标题</label>
     <div class="col-md-8 col-xs-8">
@@ -33,7 +33,9 @@
     </div>
     
  </div>
+{% endif  %}
 
+{% if  data.value|default('') %}
   <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][value]">描述</label>
     <div class="col-md-8 col-xs-8">
@@ -41,6 +43,7 @@
     </div>
     
  </div>
+ {% endif  %}
 
   <div class="form-group">
   <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">链接地址</label>
