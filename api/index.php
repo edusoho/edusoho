@@ -10,11 +10,11 @@ use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
-// use Symfony\Component\Debug\Debug;
+use Symfony\Component\Debug\Debug;
 
-// Debug::enable();
-ErrorHandler::register(0);
-ExceptionHandler::register(false);
+Debug::enable();
+// ErrorHandler::register(0);
+// ExceptionHandler::register(false);
 $config         = include __DIR__.'/config.php';
 $config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
@@ -37,6 +37,7 @@ $serviceKernel->setConnection($connection);
 include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();
+$app['debug'] = true;
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app->view(function (array $result, Request $request) use ($app) {
@@ -61,20 +62,21 @@ $app->before(function (Request $request) use ($app) {
         }
     }
 
-    $token = $request->headers->get('Auth-Token', '');
+    // $token = $request->headers->get('Auth-Token', '');
 
-    if (!$inWhiteList && empty($token)) {
-        throw createNotFoundException("AuthToken is not exist.");
-    }
+    // if (!$inWhiteList && empty($token)) {
+    //     throw createNotFoundException("AuthToken is not exist.");
+    // }
 
     $userService = ServiceKernel::instance()->createService('User.UserService');
-    $token = $userService->getToken('mobile_login', $token);
+    // $token = $userService->getToken('mobile_login', $token);
 
-    if (!$inWhiteList && empty($token['userId'])) {
-        throw createAccessDeniedException("AuthToken is invalid.");
-    }
+    // if (!$inWhiteList && empty($token['userId'])) {
+    //     throw createAccessDeniedException("AuthToken is invalid.");
+    // }
 
-    $user = $userService->getUser($token['userId']);
+    // $user = $userService->getUser($token['userId']);
+    $user = $userService->getUser(1);
 
     if (!$inWhiteList && empty($user)) {
         throw createNotFoundException("Auth user is not found.");
@@ -87,6 +89,7 @@ $app->before(function (Request $request) use ($app) {
 );
 
 $app->error(function (\Exception $e, $code) {
+    return ;
     return array(
         'code'    => $code,
         'message' => $e->getMessage()

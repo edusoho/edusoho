@@ -11,6 +11,8 @@ $resources = array(
     'CourseMember',
     'CourseMembers',
     'CourseMembership',
+    'LessonLiveTickets',
+    'LessonLiveTicket',
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
@@ -23,7 +25,7 @@ $resources = array(
     'HomeworkManager',
     'ThreadManager',
     'Thread',
-    'Upload'
+    'Upload',
 );
 
 foreach ($resources as $res) {
