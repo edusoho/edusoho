@@ -356,14 +356,16 @@
     <div class="panel-heading">话题作者</div>
     <div class="panel-body">
       <div class="media">
-        <a class="pull-left" href="{{ path('user_show', {id:owner.id}) }}">
-          <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="avatar-md">
-        </a>
-        <div class="media-body">
-          <div class="metas mbm">
-            <strong>{{ web_macro.user_link(owner)}}</strong>
+        <div class="media-left prm">
+          <a class="" href="{{ path('user_show', {id:owner.id}) }}">
+            <img src="{{ filepath(owner.smallAvatar, 'avatar.png') }}" class="avatar-md">
+          </a>
+        </div>
+        <div class="media-body ptm">
+          <div>
+            <a class="gray-darker">{{ web_macro.user_link(owner)}}</a>
           </div>
-          <div class="content"> <span class="text-muted">头衔:</span>{{owner.title|default("无")}}</div>
+          <span class="text-sm gray-medium">{{owner.title|default("无")}}</span>
         </div>
       </div>
     </div>
