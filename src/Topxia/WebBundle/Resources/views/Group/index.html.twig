@@ -88,6 +88,7 @@
           <div class="panel-body">
             <div class="group-grids">
               {% for group in myJoinGroup %}
+                {% if loop.index <= 6 %}
                 <div class="grid media media-group">
                   <div class="media-left">
                     <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
@@ -104,6 +105,7 @@
                     </div>
                   </div>
                 </div>
+              {% endif %}
               {% endfor %}
             </div>
           </div>
