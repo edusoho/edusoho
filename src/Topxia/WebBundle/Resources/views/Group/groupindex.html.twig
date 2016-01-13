@@ -94,9 +94,9 @@
   </form>
   {% if is_groupmember in [1, 2, 3] %}
     <div class="panel panel-default">
-      <div class="panel-body">
+      <div class="panel-body group-user-info">
         <div class="media group-item">
-          <div class="media-left">
+          <div class="media-left prl">
             {{ web_macro.user_avatar(user, '' ,'avatar-md') }}
           </div>
           <div class="media-body">
@@ -115,11 +115,12 @@
               {% endif %}  
             </p>
             <a href="" class="btn btn-info btn-sm" role="button">我的小组</a>
-            <p class="text-muted fsn">
-              <span class="mrm">我的话题: {{userIsGroupMember.threadNum}}</span>
-              <span>我的回复: {{userIsGroupMember.postNum}}</span>
-            </p>
           </div>
+          <hr>
+           <p class="group-message clearfix">
+              <span><strong>{{userIsGroupMember.threadNum}}</strong>话题</span>
+              <span><strong>{{userIsGroupMember.postNum}}</strong>回复</span>
+            </p>
         </div>
       </div>
     </div>
@@ -164,14 +165,14 @@
       {% set hotGroups = data('HotGroup',{'count':3}) %}
       {% for group in hotGroups %}
         <div class="media media-group">
-          <div class="media-left">
+          <div class="media-left prm">
             <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
               <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
             </a>
           </div>
           <div class="media-body">
             <div class="title">
-              <a class="link-light" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+              <a class="gray-darker" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
                 {{group.title}}
               </a>
             </div>

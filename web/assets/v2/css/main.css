@@ -152,6 +152,26 @@
 .group-page .alert img {
   max-width: 100%;
 }
+.group-page .group-user-info hr {
+  margin: 15px 0;
+  background: #e1e1e1;
+}
+.group-page .group-user-info .group-message {
+  margin: 0;
+}
+.group-page .group-user-info .group-message span {
+  float: left;
+  width: 50%;
+  text-align: center;
+  font-size: 12px;
+  color: #919191;
+}
+.group-page .group-user-info .group-message strong {
+  display: block;
+  color: #313131;
+  font-size: 18px;
+  font-weight: normal;
+}
 .group-page .hideContent {
   border: 1px solid #999;
   padding: 10px;
