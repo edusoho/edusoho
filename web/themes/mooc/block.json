@@ -192,26 +192,26 @@
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
             "partners": {
-                "title": "友情链接",
-                "desc": "最大可设置28个",
+                "title": "合作伙伴",
+                "desc": "最大可设置10个",
                 "count": 10,
                 "type": "banner",
                 "default": [
                     {
                         "src" : "\/themes\/mooc\/img\/es.jpg",
-                        "desc": "建议图片大小为122*122",
+                        "desc": "建议图片大小为212*180",
                         "alt" : "Edusoho",
                         "href": "http://www.edusoho.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/howzhi.jpg",
-                        "desc": "建议图片大小为122*122",
+                        "desc": "建议图片大小为212*180",
                         "alt" : "好知网",
                         "href": "http://www.howzhi.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/qiqiuyu.jpg",
-                        "desc": "建议图片大小为122*122",
+                        "desc": "建议图片大小为212*180",
                         "alt" : "气球鱼",
                         "href": "http://www.qiqiuyu.com"
                     }
