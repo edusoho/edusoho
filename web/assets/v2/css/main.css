@@ -11545,6 +11545,10 @@ textarea {
 .question-manage .lesson-list .item-lesson {
   margin: 0 0 10px;
 }
+.question-manage .question-menu {
+  position: relative;
+  height: 70%;
+}
 .question-manage .question-menu .list-title {
   padding-bottom: 10px;
   margin-bottom: 10px;
