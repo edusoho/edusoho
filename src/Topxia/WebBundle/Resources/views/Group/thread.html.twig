@@ -378,4 +378,37 @@
     {% if activeMembers %}
       {% include 'TopxiaWebBundle:Group:active-member-list.html.twig' with {activeMembers:activeMembers} %}
     {% endif %}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">热门小组</div>
+    <div class="panel-body">
+      <div class="group-grids">
+      {% set hotGroups = data('HotGroup',{'count':3}) %}
+      {% for group in hotGroups %}
+        <div class="media media-group">
+          <div class="media-left">
+            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+              <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title">
+              <a class="link-light" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
+                {{group.title}}
+              </a>
+            </div>
+            <div class="metas">
+              <span><i class="es-icon es-icon-people"></i>{{group.memberNum}}</span>
+              <span><i class="es-icon es-icon-textsms"></i>{{group.threadNum}}</span>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="empty">暂无小组信息！</div>
+      {% endfor %}
+      </div>
+      
+    </div>
+  </div>
+
 {% endblock %}
