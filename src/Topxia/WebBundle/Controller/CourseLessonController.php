@@ -13,8 +13,7 @@ class CourseLessonController extends BaseController
     //加载播放器的地址
     public function playerAction(Request $request, $courseId, $lessonId = 0)
     {
-        $lesson        = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $hideBeginning = $request->query->get('hideBeginning', false);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
