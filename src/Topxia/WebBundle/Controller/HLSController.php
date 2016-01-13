@@ -57,9 +57,9 @@ class HLSController extends BaseController
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
-                if (isset($token['data']['hideBeginning'])) {
-                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'] == "true" ? true : false;
-                }
+                // if (isset($token['data']['hideBeginning'])) {
+                //     $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'] == "true" ? true : false;
+                // }
 
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
             } else {
@@ -75,6 +75,9 @@ class HLSController extends BaseController
             if ($line) {
                 $params['line'] = $line;
             }
+
+            var_dump($token);
+            exit();
 
             if (isset($token['hideBeginning'])) {
                 $params['hideBeginning'] = $token['hideBeginning'] ? 0 : 1;
