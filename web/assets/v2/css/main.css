@@ -95,7 +95,7 @@
 .group-page .group-thread .panel-heading h2 {
   font-size: 16px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 12px 0 20px;
 }
 .group-page .group-thread .panel-heading .thread-list {
   float: right;
@@ -103,7 +103,7 @@
 }
 .group-page .group-thread .panel-heading .metas {
   font-size: 12px;
-  color: #888;
+  color: #919191;
 }
 .group-page .group-thread .panel-heading .metas .divider {
   color: #bbb;
@@ -165,6 +165,7 @@
 }
 .group-page .panel-default > .panel-heading {
   color: #313131;
+  border-bottom: 1px solid #ebebeb;
 }
 .group-page .alert {
   word-break: break-all;
@@ -1891,7 +1892,7 @@ a.link-muted {
   margin: 8px 1%;
   font-size: 12px;
   vertical-align: top;
-  height: 80px;
+  height: 40px;
   overflow: hidden;
 }
 .user-grids li p {
@@ -5726,6 +5727,15 @@ textarea.form-control-o {
 .btn-link:hover,
 .btn-link:focus,
 .btn-link.focus {
+  color: #46c37b;
+  text-decoration: none;
+}
+.btn-gray {
+  color: #616161;
+}
+.btn-gray:hover,
+.btn-gray:focus,
+.btn-gray.focus {
   color: #46c37b;
   text-decoration: none;
 }
