@@ -65,6 +65,7 @@
     color: @gray-darker;
     background-color: #fafafa;
     margin-bottom: 10px;
+    min-height: 40px;
     &.correct,&.error {
       color: #fff;
       padding-right: 50px;
@@ -154,7 +155,7 @@
 
 .question-manage .question-menu{
   position: relative;
-  height: 70%;
+  height: 90%;
   .list-title {
     padding-bottom: 10px;
     margin-bottom: 10px;
@@ -220,7 +221,7 @@
     }
     .pagination  {
       position: absolute;
-      bottom: -155px;
+      bottom: -5px;
       margin-bottom: 0;
     }
   }
@@ -254,6 +255,17 @@
       height: 100%;
       width: 1px;
       background-color: #fff;
+      .scale-details {
+        position: absolute;
+        left: 0;
+        bottom:100%;
+        visibility: hidden;
+        min-width: 50px;
+        margin-left: -25px;
+        background-color: rgba(0, 0, 0, 0.8);
+        text-align: center;
+        color: #fff;
+      }
     }
     .scale.red,
     .scale.blue{
@@ -265,16 +277,12 @@
       @media(max-width:1297px) {
         top: -40px;
       }
+    }
+    .scale.white{
       .scale-details {
-        position: absolute;
-        left: 0;
-        bottom:100%;
-        visibility: hidden;
-        min-width: 50px;
-        margin-left: -25px;
-        background-color: rgba(0, 0, 0, 0.8);
-        text-align: center;
-        color: #fff;
+        visibility: visible;
+        // bottom:-20px;
+        // background-color: transparent;
       }
     }
     .scale.blue{

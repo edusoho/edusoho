@@ -352,7 +352,7 @@ define(function(require, exports, module) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(num);
 
-                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale white" style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
+                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale white" style="left:' + i * _partwidth + 'px"><div class="scale-details">'+time+'</div></a>');
                 }
                 $('[data-toggle="tooltip"]').tooltip();
             }
