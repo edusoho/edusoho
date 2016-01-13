@@ -19,6 +19,8 @@ define(function(require, exports, module) {
                         "questionMarkerResultId": result.questionMarkerResultId
             		},function(data) {
             			$("#modal").html(data);
+                        var $modaldialog = $("#modal").find('.modal-dialog');
+                        $modaldialog.css('margin-left',($('body').width()-$('.toolbar').width()-$modaldialog.width()) / 2);
             			$("#modal").show();
             		});
                 // var player = window.frames["viewerIframe"].window.BalloonPlayer;

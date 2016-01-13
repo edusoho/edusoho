@@ -191,7 +191,7 @@ define(function(require, exports, module) {
                     var marker = markers[key];
                     player.markers.remove(key);
                     player.markers.add([marker]);
-                    player.currentTime(markers[key].time);
+                    player.currentTime(parseFloat(markers[key].time)+0.5);
                     break;
                 }
             }
