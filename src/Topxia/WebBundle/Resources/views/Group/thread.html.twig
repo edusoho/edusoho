@@ -40,14 +40,14 @@
       </h2>
       <div class="actions thread-list" id="thread-list" >
             {% if threadMain.userId != user.id %}
-              <a class="btn btn-gray uncollect-btn" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star"></i> 已收藏</a>
-              <a class="btn btn-gray  collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="glyphicon glyphicon-star-empty"></i>收藏</a>
+              <a class="btn btn-gray uncollect-btn" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite prs"></i> 已收藏</a>
+              <a class="btn btn-gray  collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline prs"></i>收藏</a>
             {% endif %}
       </div>
       <div class="metas clearfix">
         <div class="es-share dropdown pull-right">
           <span class="es-share top" style="font-size:14px;">
-            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share"></i> 分享</a>
+            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share  prs"></i> 分享</a>
             {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
           </span>
         </div>
