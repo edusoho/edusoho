@@ -308,7 +308,9 @@ define(function(require, exports, module) {
                                 };
                                 markers.push(marker);
                               }
-                              player.setMarkers(markers);
+                              if(data.length != 0) {
+                                player.setMarkers(markers);
+                              }
                             }
                           });
                         });
@@ -340,10 +342,11 @@ define(function(require, exports, module) {
                             }
                             $.get('/course/lesson/'+marker.markerId+'/questionmarker/show',{"questionId":marker.questionId},function(data){
                                 // $('.vjs-break-overlay-text').html(data);
+                                console.log((data == ""));
                                 var $modal = $("#modal");
                                 if (data == "") {
                                     $modal.hide();
-                                    marker.finished == false && player.finishMarker(marker.markerId,true);
+                                    player.finishMarker(marker.markerId,true);
                                 } else {
                                     $modal.html(data);
                                     //设置modal显示位置

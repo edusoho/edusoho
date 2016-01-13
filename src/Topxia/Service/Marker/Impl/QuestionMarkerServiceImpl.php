@@ -22,7 +22,7 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         $marker = $this->getMarkerService()->getMarker($markerId);
 
         if (empty($marker)) {
-            throw $this->createServiceException("驻点不存在11");
+            throw $this->createServiceException("驻点不存在");
         }
 
         return $this->getQuestionMarkerDao()->findQuestionMarkersByMarkerId($markerId);

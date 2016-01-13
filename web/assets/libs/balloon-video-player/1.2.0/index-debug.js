@@ -12830,7 +12830,7 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (currentMarkerIndex!=-1 && newMarkerIndex != -1 && options.onMarkerReached) {
+            if ( newMarkerIndex != -1 && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex],player);
             }
             currentMarkerIndex = newMarkerIndex;

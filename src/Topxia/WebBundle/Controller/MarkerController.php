@@ -148,36 +148,36 @@ class MarkerController extends BaseController
     //获取驻点弹题
     public function showMarkerQuestionAction(Request $request, $markerId)
     {
-        $questions = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
         $user      = $this->getUserService()->getCurrentUser();
         $question  = array();
         $data      = $request->query->all();
+        $questions = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($markerId);
 
-        if (isset($data['questionId'])) {
-            $question = $this->getQuestionMarkerService()->getQuestionMarker($data['questionId']);
+        if ($this->getMarkerService()->isFinishMarker($user['id'], $markerId)) {
+            if (isset($data['questionId'])) {
+                $question   = $this->getQuestionMarkerService()->getQuestionMarker($data['questionId']);
+                $conditions = array(
+                    'seq'      => ++$question['seq'],
+                    'markerId' => $markerId
+                );
+                $question = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 1);
 
-            return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
-                'markerId' => $markerId,
-                'question' => $question
-            ));
+                if (!empty($question)) {
+                    $question = $question['0'];
+                }
+            } else {
+                $conditions = array(
+                    'seq'      => 1,
+                    'markerId' => $markerId
+                );
+                $question = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 1);
+                $question = $question['0'];
+            }
         } else {
             foreach ($questions as $key => $value) {
                 $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
 
                 if (empty($questionResult)) {
-                    $this->getQuestionMarkerResultService()->addQuestionMarkerResult(array(
-                        'markerId'         => $markerId,
-                        'questionMarkerId' => $value['id'],
-                        'userId'           => $user['id'],
-                        'status'           => 'none',
-                        'answer'           => null,
-                        'createdTime'      => time(),
-                        'updatedTime'      => time()
-                    ));
-                    $questionResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
-                }
-
-                if ($questionResult['status'] == 'none') {
                     $question = $value;
                     break;
                 }
@@ -192,13 +192,13 @@ class MarkerController extends BaseController
 
     public function doNextTestAction(Request $request)
     {
-        $data               = $request->query->all();
-        $data['markerId']   = isset($data['markerId']) ? $data['markerId'] : 0;
-        $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
-        $data['answer']     = isset($data['answer']) ? $data['answer'] : null;
-        $data['type']       = isset($data['type']) ? $data['type'] : null;
-        $user               = $this->getUserService()->getCurrentUser();
-        $this->getQuestionMarkerResultService()->finishCurrentQuestion($data['markerId'], $user['id'], $data['questionId'], $data['answer'], $data['type']);
+        $data                 = $request->query->all();
+        $data['markerId']     = isset($data['markerId']) ? $data['markerId'] : 0;
+        $data['questionId']   = isset($data['questionId']) ? $data['questionId'] : 0;
+        $data['answer']       = isset($data['answer']) ? $data['answer'] : null;
+        $data['type']         = isset($data['type']) ? $data['type'] : null;
+        $user                 = $this->getUserService()->getCurrentUser();
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($data['markerId'], $user['id'], $data['questionId'], $data['answer'], $data['type']);
         // $conditions = array(
         //     'markerId' => $data['markerId']
         // );
@@ -214,8 +214,11 @@ class MarkerController extends BaseController
         //         break;
         //     }
         // }
-
-        return $this->createJsonResponse($data['markerId']);
+        $data = array(
+            'markerId'               => $data['markerId'],
+            'questionMarkerResultId' => $questionMarkerResult['id']
+        );
+        return $this->createJsonResponse($data);
     }
 
     public function showQuestionAnswerAction(Request $request, $questionId)
@@ -223,17 +226,16 @@ class MarkerController extends BaseController
         $data                 = $request->query->all();
         $user                 = $this->getUserService()->getCurrentUser();
         $questionMarker       = $this->getQuestionMarkerService()->getQuestionMarker($questionId);
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $questionMarker['id']);
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->getQuestionMarkerResult($data['questionMarkerResultId']);
         $conditions           = array(
             'markerId' => $data['markerId']
         );
-
-        $count           = $this->getQuestionMarkerService()->searchQuestionMarkersCount($conditions);
-        $question['seq'] = isset($question['seq']) ? $question['seq'] : 1;
-        $progress        = array(
-            'seq'     => $question['seq'],
+        $count                 = $this->getQuestionMarkerService()->searchQuestionMarkersCount($conditions);
+        $questionMarker['seq'] = isset($questionMarker['seq']) ? $questionMarker['seq'] : 1;
+        $progress              = array(
+            'seq'     => $questionMarker['seq'],
             'count'   => $count,
-            'percent' => floor($question['seq'] / $count * 100)
+            'percent' => floor($questionMarker['seq'] / $count * 100)
         );
         return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
             'markerId'   => $data['markerId'],

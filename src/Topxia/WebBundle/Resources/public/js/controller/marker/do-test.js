@@ -15,7 +15,8 @@ define(function(require, exports, module) {
             }, function(result) {
             		$.get(data.data('show-questionanswer'),{
             			"markerId": markerId,
-            			"questionId":questionId
+            			"questionId": questionId,
+                        "questionMarkerResultId": result.questionMarkerResultId
             		},function(data) {
             			$("#modal").html(data);
             			$("#modal").show();

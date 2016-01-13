@@ -40,7 +40,10 @@ define(function(require, exports, module) {
                         };
                         markers.push(marker);
                     }
-                  player.setMarkers(markers);
+                    if(data.length != 0) {
+                        player.setMarkers(markers);
+                    }
+                    console.log(markers);
                 }
             });
         });

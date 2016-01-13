@@ -52,7 +52,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         }
 
         $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
-        $this->addQuestionMarkerResult(array(
+        return $this->addQuestionMarkerResult(array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
             'userId'           => $userId,
