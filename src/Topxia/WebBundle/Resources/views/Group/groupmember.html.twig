@@ -2,17 +2,29 @@
 {% set script_controller = 'group/group_member' %}
 {% block title %}{{groupinfo.title}}小组 - {{ parent() }}{% endblock %}
 {% set groupNav = 'member' %}
-{% block group_body %}
-  {{ web_macro.flash_messages() }}
+{% block group_main %}
+  <div class="panel panel-default">
+    <div class="panel-heading">小组介绍</div>
+    <div class="panel-body">
+      {% if paginator.currentPage == paginator.firstPage %}
+        <div class="alert">
+          <div class="clearfix">
+          {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
   <div class="panel panel-default">
     <div class="panel-body">
-      <ul class="nav nav-tabs">
+       <ul class="nav nav-tabs">
         <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
         <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
           <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">小组设置</a></li>
         {% endif %}
       </ul>
+      {{ web_macro.flash_messages() }}
       <h4 class="mtl">组长</h4>
       <div class="clearfix">
         <div class="grouplist"  style="width: 108px;">
@@ -84,4 +96,11 @@
       </nav>
     </div>
   </div>
+      
+    </div>
+  </div>
+{% endblock %}
+{% block group_side %}
+
+
 {% endblock %}

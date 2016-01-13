@@ -14,11 +14,6 @@
           <div class="clearfix">
           {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
           </div>
-        {#   <div class="">
-            {% if is_groupmember==1 or is_groupmember==3 %}
-              <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id})}}"> &raquo; 退出小组</a></span>
-            {% endif %}
-          </div> #}
         </div>
       {% endif %}
     </div>
@@ -77,10 +72,10 @@
 {% endblock %}
 
 {% block group_side %}
-    {% if is_groupmember !=0 %}
-      <div class="group-topic-btn"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success " role="button"><i class="es-icon es-icon-comment"></i>发表话题</a>
-      </div>
-    {% endif %}
+  {% if is_groupmember !=0 %}
+    <div class="group-topic-btn"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success " role="button"><i class="es-icon es-icon-comment"></i>发表话题</a>
+    </div>
+  {% endif %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
   <div class="group-search">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
