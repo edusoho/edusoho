@@ -13,7 +13,8 @@ class CourseLessonController extends BaseController
     //加载播放器的地址
     public function playerAction(Request $request, $courseId, $lessonId = 0)
     {
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson        = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $hideBeginning = $request->query->get('hideBeginning', false);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException();
@@ -36,9 +37,10 @@ class CourseLessonController extends BaseController
             ));
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        $context               = array();
-        $context['starttime']  = $request->query->get('starttime');
+        list($course, $member)    = $this->getCourseService()->tryTakeCourse($courseId);
+        $context                  = array();
+        $context['starttime']     = $request->query->get('starttime');
+        $context['hideBeginning'] = $request->query->get('hideBeginning', false);
 
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
