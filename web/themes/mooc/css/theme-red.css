@@ -546,10 +546,14 @@ input:focus {
 .carousel-indicators {
   bottom: 0px;
 }
+.carousel-indicators li.active {
+  margin: 0 7px;
+}
 .carousel-indicators li {
+  display: inline-block;
   height: 4px;
   width: 21px;
-  margin: 0 3px;
+  margin: 0 7px 0;
   border-radius: 0;
   border: 0;
   background-color: #d4d4d4;
@@ -3230,9 +3234,9 @@ label {
   right: 36px;
 }
 .mooc-teacher .teach-item .teacher-name {
-  margin-top: 80px;
-  font-size: 22px;
-  margin-bottom: 5px;
+  margin-top: 65px;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 .mooc-teacher .teach-item .teacher-name a {
   color: #272a41;
@@ -3244,10 +3248,10 @@ label {
   overflow: hidden;
 }
 .mooc-teacher .teach-item .teacher-about {
-  color: #9496a1;
+  color: #272a41;
   height: 118px;
   overflow: hidden;
-  margin: 24px 0;
+  margin: 15px 0 34px;
 }
 .mooc-teacher .teach-item .teacher-kown {
   text-align: center;
@@ -3255,7 +3259,7 @@ label {
 }
 .mooc-teacher .teach-item .teacher-kown a {
   border: 2px solid #cf010e;
-  padding: 12px 32px;
+  padding: 10px 32px;
   font-size: 16px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -3397,7 +3401,7 @@ label {
 .mooc-learn .learn-list .learning-btn {
   display: inline-block;
   border: 2px solid #ffffff;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
   color: #ffffff;
   padding: 13px 62px;
   font-size: 22px;
