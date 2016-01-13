@@ -1,4 +1,8 @@
-
+.homepage{
+  .text-center{
+    margin:40px 0;
+  }
+}
 .mooc-index-title{
   font-size: 22px;
   color: #272a41;
@@ -29,12 +33,12 @@
     width: 228px;
     background: @color-primary;
     color: @white;
-    padding: 30px;
     text-align: center;
     float: left;
     h2{
       font-size: 32px;
-      margin: 0;
+      margin:30px 0 8px ;
+      line-height: 32px;
     }
     i{
       font-size: 38px;
@@ -42,6 +46,7 @@
     p{
       font-size: 12px;
       margin: 0;
+      padding-bottom: 31px;
     }
   }
   .set-right{
@@ -63,7 +68,7 @@
       width: 24.6%;
       font-size: 18px;
       text-align: center;
-      margin: 42px 0;
+      margin: 43px 0;
       &:last-child{
         .navset-wrapper{
           border-right: none;
@@ -186,10 +191,12 @@
 .mooc-classroom{
 
   .class-wrapper{
-    margin: 0 10px;
     background: @white;
     padding: 0 10px;
   }
+   .swiper-container{
+      margin:0 -10px!important;
+    }
   .class-list{
      .arrow-left{
       left: 0;
@@ -219,7 +226,6 @@
   }
   .class-item{
     background: transparent !important;
-    padding: 0!important;
     .box-shadow(none)!important;
     .border-radius(4px);
     &:hover{
@@ -227,6 +233,7 @@
         .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
       }
     }
+
     .class-img{
       padding: 10px 0;
     }
@@ -251,7 +258,7 @@
 .mooc-feature{
   background: @white;
   text-align: center;
-  padding: 70px 0;
+  padding: 69px 0 68px;
   margin-top: 40px;
   .row{
     .opacity(0);
@@ -266,6 +273,7 @@
   h4{
     color: #272a41;
     margin: 30px 0 20px;
+    font-size: 18px;
   }
   p{
     color:#9496a1;

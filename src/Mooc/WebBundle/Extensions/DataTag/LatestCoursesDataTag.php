@@ -36,7 +36,7 @@ class LatestCoursesDataTag extends BaseTag
             $conditions['originPrice_GT'] = '0.00';
         }
 
-        $conditions['table'] = 'singleCourse';
+       // $conditions['table'] = 'singleCourse';
         $courses             = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $arguments['count']);
 
         return $this->getCourseTeachersAndCategories($courses);
