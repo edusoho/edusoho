@@ -100,7 +100,7 @@
           {{ web_macro.user_avatar(groupOwner, '') }}
         </div>
         <div class="media-body">
-          <p></p>
+          <p><a class="link-light" href="{{path('user_show',{id:groupOwner.id})}}" title="{{groupOwner.nickname}}">{{groupOwner.nickname}}</a></p>
         </div>
       </div>
     </div>
