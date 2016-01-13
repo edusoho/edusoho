@@ -348,9 +348,14 @@ define(function(require, exports, module) {
                                     console.log(4311);
                                 } else {
                                     $modal.html(data);
-                                    //设置modal显示位置
-                                    var $modaldialog = $modal.find('.modal-dialog');
-                                    $modaldialog.css('margin-left',($('body').width()-$('.toolbar').width()-$modaldialog.width()) / 2);
+                                    var $player = $(document.getElementById('viewerIframe').contentDocument);
+                                    //判断是否全屏
+                                    if($player.width() == $('body').width()) {
+                                        $modal.css('z-index','2147483647');
+                                    }else {
+                                        var $modaldialog = $modal.find('.modal-dialog');
+                                        $modaldialog.css('margin-left',($('body').width()-$('.toolbar').width()-$modaldialog.width()) / 2);
+                                    }
                                     $modal.show();
                                 }
                             });
