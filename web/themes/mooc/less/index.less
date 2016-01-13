@@ -1,6 +1,6 @@
 
 .mooc-index-title{
-  font-size: 18px;
+  font-size: 22px;
   color: #272a41;
   position: relative;
   padding: 0 15px;
@@ -13,7 +13,7 @@
     width: 4px;
     height: 100%;
     background: @color-primary;
-    height: 20px;
+    height: 24px;
   }
 }
 
@@ -69,6 +69,10 @@
           border-right: none;
         }
       }
+      a{
+        color: #272a41;
+        font-size: 18px;
+      }
       img{
         width: 34px;
         height: 34px;
@@ -123,10 +127,12 @@
       .box-shadow(none);
       .border-radius(0);
       background: transparent;
+      .es-transition;
        &:hover{
           .border-radius(4px);
           .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
           background: @white;
+          .es-transition;
         }
       .title{
         margin: 0;
@@ -134,9 +140,14 @@
         display: block;
         height: 40px;
         white-space: inherit;
+        a{
+          color: #272a41;
+        }
       }
       .metas{
+        color: #a5a7b3;
         .teacher-name{
+          color: #a5a7b3;
           font-size: 12px;
           padding-left: 6px;
         }
@@ -152,18 +163,21 @@
       }
       .mooc-certificate-2{
         position: absolute;
-        bottom: 10px;
-        height: 28px;
-        line-height: 28px;
+        right: 30px;
+        height: 24px;
+        line-height: 20px;
         background: #ffb300;
-        width: 91.5%;
         padding: 0 5px;
-        margin: 0 10px;
-        color: @white;
+        color: #ffffff;
         text-align: right;
+        top: 24px;
+        border-radius: 4px;
+        font-size: 12px;
         i{
           color: @white;
           font-size: 22px;
+          position: relative;
+          bottom: -2px;
         }
       }
     }
@@ -219,11 +233,15 @@
     .metas{
       color: #a5a7b3;
       span.num{
+        color: #a5a7b3;
         @media (max-width :@screen-md-max){
           display: block;
           float: none !important;
           text-align: right;
         }
+      }
+      .title a{
+        color: #272a41;
       }
     }
 
@@ -233,7 +251,7 @@
 .mooc-feature{
   background: @white;
   text-align: center;
-  padding: 85px 0;
+  padding: 70px 0;
   margin-top: 40px;
   .row{
     .opacity(0);
@@ -247,7 +265,7 @@
   }
   h4{
     color: #272a41;
-    margin-top: 30px 0 20px;
+    margin: 30px 0 20px;
   }
   p{
     color:#9496a1;
@@ -344,8 +362,10 @@
     .teacher-name{
       margin-top: 80px;
       font-size: 22px;
-      color: #272a41;
       margin-bottom: 5px;
+      a{
+         color: #272a41;
+      }
     }
     .teacher-position{
       color: #9496a1;
@@ -406,9 +426,9 @@
       a{
         display: block;
         background: @white;
-        width: 208px;
-        height: 178px;
-        line-height: 178px;
+        width: 212px;
+        height: 180px;
+        line-height: 180px;
         text-align: center;
         overflow: hidden;
          &:hover{
