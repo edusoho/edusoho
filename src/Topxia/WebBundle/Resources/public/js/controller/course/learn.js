@@ -335,14 +335,12 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("onMarkerReached", function(marker,questionId){
-                            console.log(marker.questionId);
                             var player = window.frames["viewerIframe"].window.BalloonPlayer;
                             if(player.isPlaying()){
                               player.pause();
                             }
                             $.get('/course/lesson/'+marker.markerId+'/questionmarker/show',{"questionId":marker.questionId},function(data){
                                 // $('.vjs-break-overlay-text').html(data);
-                                console.log((data == ""));
                                 var $modal = $("#modal");
                                 if (data == "") {
                                     $modal.hide();
