@@ -345,7 +345,6 @@ define(function(require, exports, module) {
                                 if (data == "") {
                                     $modal.hide();
                                     player.finishMarker(marker.markerId,true);
-                                    console.log(4311);
                                 } else {
                                     $modal.html(data);
                                     //设置modal显示位置
