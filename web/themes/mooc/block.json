@@ -108,14 +108,6 @@
                 "type":"banner",
                 "default":[
                     {
-                        "title" : "社区型网校",
-                        "value" : "与同学和老师实时讨论课程细节，让你全面掌握所有知识点，巩固知识，学习不再孤单！",
-                        "src" : "\/themes\/mooc\/img\/badge.svg",
-                        "desc": "建议图片大小为154*154",
-                        "alt" : "社区型网校",
-                        "href": ""
-                    },
-                    {
                         "title" : "随时随地学习",
                         "value" : "网校结合移动端，能够让你随时随地掏出手机就进行学习，方便快捷，没有任何负担。",
                         "src" : "\/themes\/mooc\/img\/community.svg",
@@ -129,6 +121,14 @@
                         "src" : "\/themes\/mooc\/img\/shake.svg",
                         "desc": "建议图片大小为154*154",
                         "alt" : "权威电子证书",
+                        "href": ""
+                    },
+                    {
+                        "title" : "社区型网校",
+                        "value" : "与同学和老师实时讨论课程细节，让你全面掌握所有知识点，巩固知识，学习不再孤单！",
+                        "src" : "\/themes\/mooc\/img\/badge.svg",
+                        "desc": "建议图片大小为154*154",
+                        "alt" : "社区型网校",
                         "href": ""
                     }
                 ]
@@ -192,54 +192,28 @@
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
             "partners": {
-                "title": "友情链接",
-                "desc": "最大可设置28个",
+                "title": "合作伙伴",
+                "desc": "最大可设置10个",
                 "count": 10,
                 "type": "banner",
                 "default": [
                     {
                         "src" : "\/themes\/mooc\/img\/es.jpg",
-                        "desc": "建议图片大小为122*122",
+                        "desc": "建议图片大小为212*180",
                         "alt" : "Edusoho",
                         "href": "http://www.edusoho.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/howzhi.jpg",
-                        "desc": "建议图片大小为122*122",
+                        "desc": "建议图片大小为212*180",
                         "alt" : "好知网",
                         "href": "http://www.howzhi.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/qiqiuyu.jpg",
-                        "desc": "建议图片大小为122*122",
+                        "desc": "建议图片大小为212*180",
                         "alt" : "气球鱼",
                         "href": "http://www.qiqiuyu.com"
-                    }
-                ]
-            }
-        }
-    },
-    "mooc:login_background":
-    {
-        "title": "慕课主题：登陆页面.背景图 ",
-        "category": "mooc",
-        "templateName": "@theme/mooc/block/login.background.template.html.twig",
-        "items": {
-            "posters":{
-                "title":"背景",
-                "desc":"背景",
-                "count":1,
-                "type":"poster",
-                "default":[
-                    {
-                        "src" : "\/themes\/mooc\/img\/banner1.jpg",
-                        "alt" : "背景",
-                        "layout" : "tile",
-                        "background" : "#3ec768",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
                     }
                 ]
             }

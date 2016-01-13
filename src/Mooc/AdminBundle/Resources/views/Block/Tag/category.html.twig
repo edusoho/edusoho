@@ -1,4 +1,4 @@
-{% set categories = data('Categories',{group:'course'}) %}
+{% set categories = data('Categories',{group:'course',parentId:0}) %}
 <div class="form-group">
   <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][categoryId]">分类</label>
     <div class="col-md-7 col-xs-7">
