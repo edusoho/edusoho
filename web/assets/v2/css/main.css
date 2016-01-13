@@ -152,6 +152,31 @@
 .group-page .alert img {
   max-width: 100%;
 }
+.group-page .group-topic-btn a {
+  display: block;
+  height: 45px;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+.group-page .group-topic-btn a i {
+  font-size: 18px;
+  margin-right: 10px;
+}
+.group-page .group-search {
+  position: relative;
+}
+.group-page .group-search .form-control {
+  height: 40px;
+  color: #c1c1c1;
+}
+.group-page .group-search .btn-nobg {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: 0;
+  top: 5px;
+  color: #c1c1c1;
+}
 .group-page .group-user-info hr {
   margin: 15px 0;
   background: #e1e1e1;

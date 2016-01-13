@@ -14,14 +14,11 @@
           <div class="clearfix">
           {% if groupinfo.about%} {{groupinfo.about|raw}} {% else %} 暂无简介 {% endif %}
           </div>
-          <hr>
-          <div class="">
-            <span class="text-muted fsn mrm">组长：{{ web_macro.user_link(groupOwner, 'link-muted ') }}</span>
+        {#   <div class="">
             {% if is_groupmember==1 or is_groupmember==3 %}
-              <span class="text-muted fsn ">你已经是小组成员，
               <a  id="exit-btn" class="text-muted" href="{{path('group_exit',{id:groupinfo.id})}}"> &raquo; 退出小组</a></span>
             {% endif %}
-          </div>
+          </div> #}
         </div>
       {% endif %}
     </div>
@@ -69,10 +66,7 @@
         </li>
       </ul>
 
-      {% if is_groupmember !=0 %}
-          <div class="pull-right"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-primary btn-sm" role="button">发话题</a>
-          </div>
-      {% endif %}
+   
       </div>
 
       {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {users:owner} %}
@@ -83,13 +77,15 @@
 {% endblock %}
 
 {% block group_side %}
+    {% if is_groupmember !=0 %}
+      <div class="group-topic-btn"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success " role="button"><i class="es-icon es-icon-comment"></i>发表话题</a>
+      </div>
+    {% endif %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
-  <div class="input-group group-search">
+  <div class="group-search">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
-    <span class="input-group-btn">
-    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-    </span>
+    <button class="btn btn-default btn-nobg" type="submit"><span class="glyphicon glyphicon-search"></span></button>
   </div>
   </form>
   {% if is_groupmember in [1, 2, 3] %}

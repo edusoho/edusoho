@@ -17,6 +17,10 @@
           {% if is_groupmember==0%}
             <a id="add-btn" class="btn btn-success btn-xs" href="{{path('group_join',{id:groupinfo.id})}}">加入</a>
           {% endif %}
+          {% if is_groupmember==1 or is_groupmember==3 %}
+            <a id="exit-btn" class="btn btn-default btn-xs"  href="{{path('group_exit',{id:groupinfo.id})}}">退出小组</a>
+          {% endif %} 
+
         </h2>
         <div class="media-metas">
           {{groupinfo.memberNum}}个成员
