@@ -2612,8 +2612,8 @@ input:focus {
 }
 .mooc-header .navbar-user .user-message .message {
   position: absolute;
-  top: -4px;
-  right: 3px;
+  top: 10px;
+  right: 7px;
   color: #ff0000;
   font-size: 14px;
   font-weight: bold;
@@ -2847,7 +2847,7 @@ label {
   background: #fafafa;
 }
 .mooc-index-title {
-  font-size: 18px;
+  font-size: 22px;
   color: #272a41;
   position: relative;
   padding: 0 15px;
@@ -2861,7 +2861,7 @@ label {
   width: 4px;
   height: 100%;
   background: #81d867;
-  height: 20px;
+  height: 24px;
 }
 .course-filter.section-header {
   margin: 35px 0 50px 0;
@@ -2912,6 +2912,10 @@ label {
 }
 .mooc-navset .set-right .width-25:last-child .navset-wrapper {
   border-right: none;
+}
+.mooc-navset .set-right .width-25 a {
+  color: #272a41;
+  font-size: 18px;
 }
 .mooc-navset .set-right .width-25 img {
   width: 34px;
@@ -2972,6 +2976,10 @@ label {
   -moz-border-radius: 0;
   border-radius: 0;
   background: transparent;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .mooc-course .course-list .course-item:hover {
   -webkit-border-radius: 4px;
@@ -2981,6 +2989,10 @@ label {
   -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
   box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
   background: #ffffff;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .mooc-course .course-list .course-item .title {
   margin: 0;
@@ -2989,7 +3001,14 @@ label {
   height: 40px;
   white-space: inherit;
 }
+.mooc-course .course-list .course-item .title a {
+  color: #272a41;
+}
+.mooc-course .course-list .course-item .metas {
+  color: #a5a7b3;
+}
 .mooc-course .course-list .course-item .metas .teacher-name {
+  color: #a5a7b3;
   font-size: 12px;
   padding-left: 6px;
 }
@@ -3004,19 +3023,22 @@ label {
 }
 .mooc-course .course-list .course-img .mooc-certificate-2 {
   position: absolute;
-  bottom: 10px;
-  height: 28px;
-  line-height: 28px;
+  right: 30px;
+  height: 24px;
+  line-height: 20px;
   background: #ffb300;
-  width: 91.5%;
   padding: 0 5px;
-  margin: 0 10px;
   color: #ffffff;
   text-align: right;
+  top: 24px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 .mooc-course .course-list .course-img .mooc-certificate-2 i {
   color: #ffffff;
   font-size: 22px;
+  position: relative;
+  bottom: -2px;
 }
 .mooc-classroom .class-wrapper {
   margin: 0 10px;
@@ -3072,6 +3094,9 @@ label {
 .mooc-classroom .class-item .metas {
   color: #a5a7b3;
 }
+.mooc-classroom .class-item .metas span.num {
+  color: #a5a7b3;
+}
 @media (max-width: 1199px) {
   .mooc-classroom .class-item .metas span.num {
     display: block;
@@ -3079,10 +3104,13 @@ label {
     text-align: right;
   }
 }
+.mooc-classroom .class-item .metas .title a {
+  color: #272a41;
+}
 .mooc-feature {
   background: #ffffff;
   text-align: center;
-  padding: 85px 0;
+  padding: 70px 0;
   margin-top: 40px;
 }
 .mooc-feature .row {
@@ -3101,7 +3129,7 @@ label {
 }
 .mooc-feature h4 {
   color: #272a41;
-  margin-top: 30px 0 20px;
+  margin: 30px 0 20px;
 }
 .mooc-feature p {
   color: #9496a1;
@@ -3196,8 +3224,10 @@ label {
 .mooc-teacher .teach-item .teacher-name {
   margin-top: 80px;
   font-size: 22px;
-  color: #272a41;
   margin-bottom: 5px;
+}
+.mooc-teacher .teach-item .teacher-name a {
+  color: #272a41;
 }
 .mooc-teacher .teach-item .teacher-position {
   color: #9496a1;
@@ -3259,9 +3289,9 @@ label {
 .mooc-cooperate .cooperate-list li a {
   display: block;
   background: #ffffff;
-  width: 208px;
-  height: 178px;
-  line-height: 178px;
+  width: 212px;
+  height: 180px;
+  line-height: 180px;
   text-align: center;
   overflow: hidden;
 }
@@ -3462,6 +3492,8 @@ footer .footer-attr p i {
   color: #ffffff;
   font-size: 22px;
   padding-right: 10px;
+  position: relative;
+  top: 2px;
 }
 .footer-by {
   background: #272a41;
@@ -3563,18 +3595,20 @@ footer .footer-attr p i {
 }
 .mooc-poster .mooc-notice .panel-body ul {
   padding: 0 0 0 12px;
-  font-size: 14px;
+  font-size: 12px;
+  margin: 0;
 }
 .mooc-poster .mooc-notice .panel-body li {
   list-style-type: disc;
   color: #81d867;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .mooc-poster .mooc-notice .panel-body li:last-child {
   margin-bottom: 0;
 }
 .mooc-poster .mooc-notice .panel-body li a {
   color: #272a41;
+  font-size: 12px;
   display: inline-block;
   width: 162px;
   overflow: hidden;
