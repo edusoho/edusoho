@@ -77,7 +77,7 @@ class HLSController extends BaseController
             }
 
             if (!$this->haveHeadLeader()) {
-                $params['hideBeginning'] = 1;
+                $params['hideBeginning'] = 0;
             }
 
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
