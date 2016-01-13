@@ -298,6 +298,7 @@ define(function(require, exports, module) {
                             url: markersUrl,
                             dataType: "json",
                             success:function(data){
+                              var markers = new Array();
                               for(var index in data) {
                                 var marker={
                                   "id":data[index].id,
@@ -305,8 +306,9 @@ define(function(require, exports, module) {
                                   "text":"ads",
                                   "finished":data[index].finish
                                 };
-                                player.addMarker([marker]);
+                                markers.push(marker);
                               }
+                              player.setMarkers(markers);
                             }
                           });
                         });
@@ -330,17 +332,18 @@ define(function(require, exports, module) {
                             that.set("player", player);
                         });
 
-                        messenger.on("onMarkerReached", function(marker){
+                        messenger.on("onMarkerReached", function(marker,questionId){
+                            console.log(marker.questionId);
                             var player = window.frames["viewerIframe"].window.BalloonPlayer;
                             if(player.isPlaying()){
                               player.pause();
                             }
-                            $.get('/course/lesson/'+marker.markerId+'/questionmarker/show','',function(data){
+                            $.get('/course/lesson/'+marker.markerId+'/questionmarker/show',{"questionId":marker.questionId},function(data){
                                 // $('.vjs-break-overlay-text').html(data);
                                 var $modal = $("#modal");
                                 if (data == "") {
                                     $modal.hide();
-                                    player.finishMarker(marker.markerId,true);
+                                    marker.finished == false && player.finishMarker(marker.markerId,true);
                                 } else {
                                     $modal.html(data);
                                     //设置modal显示位置

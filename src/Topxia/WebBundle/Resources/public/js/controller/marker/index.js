@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         var lessonId = videoHtml.data("lesson-id");
         var mediaId = videoHtml.data("lesson-mediaid");
 
-        var playerUrl = '/course/'+courseId+'/lesson/'+lessonId+'/player';
+        var playerUrl = '/course/'+courseId+'/lesson/'+lessonId+'/player?';
         var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
         $("#lesson-video-content").html(html);
         var messenger = new Messenger({
@@ -30,15 +30,17 @@ define(function(require, exports, module) {
                 url: markersUrl,
                 dataType: "json",
                 success:function(data){
+                    var markers = new Array();
                     for(var index in data) {
-                        var marker={
-                            "id":data[index].id,
-                            "time":data[index].second,
-                            "text":"ads",
-                            "finished":data[index].finish
+                      var marker={
+                        "id":data[index].id,
+                        "time":data[index].second,
+                        "text":"ads",
+                        "finished":data[index].finish
                         };
-                        player.addMarker([marker]);
+                        markers.push(marker);
                     }
+                  player.setMarkers(markers);
                 }
             });
         });

@@ -61,7 +61,7 @@ define(function(require, exports, module) {
                             },
                             markerEscape: true,
                             onMarkerReached:function(marker,player){
-                              if(self.isPlaying() && marker.finished == false){
+                              if(self.isPlaying() ){
                                 window.BalloonPlayer.trigger('onMarkerReached', marker.id);
                               }
                             }

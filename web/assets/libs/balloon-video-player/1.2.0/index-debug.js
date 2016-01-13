@@ -12804,6 +12804,8 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
          }
          
          // check first marker, no marker is selected
+         // 
+         
          if (markersList.length > 0 &&
             currentTime < setting.markerTip.time(markersList[0])) {
             newMarkerIndex = -1;
@@ -12812,6 +12814,8 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
             for (var i = 0; i < markersList.length; i++) {
                nextMarkerTime = getNextMarkerTime(i);
                
+               
+               console.log(setting.markerTip.time(markersList[i]));
                if(currentTime >= setting.markerTip.time(markersList[i]) &&
                   currentTime < nextMarkerTime) {
                   
@@ -12821,10 +12825,12 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
             }
          }
          
+         //console.log(currentMarkerIndex);
+
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (newMarkerIndex != -1 && options.onMarkerReached) {
+            if (currentMarkerIndex!=-1 && newMarkerIndex != -1 && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex],player);
             }
             currentMarkerIndex = newMarkerIndex;

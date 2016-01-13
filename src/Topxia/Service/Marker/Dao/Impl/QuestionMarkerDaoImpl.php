@@ -71,6 +71,13 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
 
+    public function searchQuestionMarkersCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
     public function addQuestionMarker($questionMarker)
     {
         $questionMarker = $this->createSerializer()->serialize($questionMarker, $this->serializeFields);

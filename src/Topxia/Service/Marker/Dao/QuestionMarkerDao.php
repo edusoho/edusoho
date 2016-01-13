@@ -29,4 +29,6 @@ interface QuestionMarkerDao
     public function updateQuestionMarkersSeqForward($markerId, $seq);
 
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit);
+
+    public function searchQuestionMarkersCount($conditions);
 }
