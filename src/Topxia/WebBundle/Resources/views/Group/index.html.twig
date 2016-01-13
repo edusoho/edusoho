@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-md-9">
       <div class="panel panel-default">
-        <div class="panel-heading gray-darker">
+        <div class="panel-heading">
           热门小组
           <a href="{{path('group_search_group')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
         </div>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="panel panel-default">
-        <div class="panel-heading gray-darker">最近话题</div>
+        <div class="panel-heading">最近话题</div>
         <div class="panel-body">
           {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
           threads:recentlyThread,
@@ -55,7 +55,7 @@
                 {{ web_macro.user_avatar(user, '','avatar-md') }}
               </div>
               <div class="media-body">
-                <p>{{ web_macro.user_link(user , 'gray-darker') }}</p>
+                <p>{{ web_macro.user_link(user , 'link-light') }}</p>
                 <div class="metas">
                   <a href="{{ path ('group_member_center') }}" class="btn btn-primary btn-xs btn-default active" role="button">我的小组主页</a>
                   {% if is_granted('ROLE_ADMIN') %}
@@ -78,7 +78,7 @@
       </form>
       {% if myJoinGroup %}
         <div class="panel panel-default">
-          <div class="panel-heading gray-darker">
+          <div class="panel-heading">
             我的小组
             {% if user.id %} 
               <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="more">
