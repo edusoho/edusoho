@@ -3133,12 +3133,6 @@ label {
   opacity: 0;
   filter: alpha(opacity=0);
 }
-.mooc-feature .row.animate {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
-}
 .mooc-feature img {
   width: 42%;
   margin: 0 auto;
@@ -3343,24 +3337,12 @@ label {
   bottom: -13px;
   left: 38px;
 }
-.mooc-learn .learn-list .mobile.animate {
-  -webkit-animation: fadeInUp 1s 0.3s ease both;
-  -moz-animation: fadeInUp 1s 0.3s ease both;
-  -o-animation: fadeInUp 1s 0.3s ease both;
-  animation: fadeInUp 1s 0.3s ease both;
-}
 .mooc-learn .learn-list .calculator {
   width: 124px;
   height: 164px;
   background-position: -138px 0;
   left: 206px;
   bottom: -34px;
-}
-.mooc-learn .learn-list .calculator.animate {
-  -webkit-animation: fadeInUp 1s 0.5s ease both;
-  -moz-animation: fadeInUp 1s 0.5s ease both;
-  -o-animation: fadeInUp 1s 0.5s ease both;
-  animation: fadeInUp 1s 0.5s ease both;
 }
 .mooc-learn .learn-list .book {
   width: 328px;
@@ -3370,12 +3352,6 @@ label {
   margin-left: -176px;
   bottom: -129px;
 }
-.mooc-learn .learn-list .book.animate {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
-}
 .mooc-learn .learn-list .earphone {
   width: 184px;
   height: 206px;
@@ -3384,24 +3360,12 @@ label {
   margin-right: -371px;
   bottom: -39px;
 }
-.mooc-learn .learn-list .earphone.animate {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
-}
 .mooc-learn .learn-list .coffee {
   width: 134px;
   height: 164px;
   background-position: -568px 0;
   right: 20px;
   bottom: 0px;
-}
-.mooc-learn .learn-list .coffee.animate {
-  -webkit-animation: fadeInUp 1s 0.3s ease both;
-  -moz-animation: fadeInUp 1s 0.3s ease both;
-  -o-animation: fadeInUp 1s 0.3s ease both;
-  animation: fadeInUp 1s 0.3s ease both;
 }
 .mooc-learn .learn-list .learning-btn {
   display: inline-block;
@@ -3427,11 +3391,47 @@ label {
 .mooc-learn .learn-list .learning-btn:hover {
   background: rgba(255, 255, 255, 0.5);
 }
-.mooc-learn .learn-list .learning-btn.animate {
+.js-animate-item.active .mobile {
+  -webkit-animation: fadeInUp 1s 0.3s ease both;
+  -moz-animation: fadeInUp 1s 0.3s ease both;
+  -o-animation: fadeInUp 1s 0.3s ease both;
+  animation: fadeInUp 1s 0.3s ease both;
+}
+.js-animate-item.active .calculator {
+  -webkit-animation: fadeInUp 1s 0.5s ease both;
+  -moz-animation: fadeInUp 1s 0.5s ease both;
+  -o-animation: fadeInUp 1s 0.5s ease both;
+  animation: fadeInUp 1s 0.5s ease both;
+}
+.js-animate-item.active .book {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
+}
+.js-animate-item.active .earphone {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
+}
+.js-animate-item.active .learning-btn {
   -webkit-animation: fadeInDown 1s 0.8s ease both;
   -moz-animation: fadeInDown 1s 0.8s ease both;
   -o-animation: fadeInDown 1s 0.8s ease both;
   animation: fadeInDown 1s 0.8s ease both;
+}
+.js-animate-item.active .coffee {
+  -webkit-animation: fadeInUp 1s 0.3s ease both;
+  -moz-animation: fadeInUp 1s 0.3s ease both;
+  -o-animation: fadeInUp 1s 0.3s ease both;
+  animation: fadeInUp 1s 0.3s ease both;
+}
+.js-animate-item.active .row {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
 }
 .friendlink {
   padding: 48px 0;

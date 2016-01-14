@@ -267,9 +267,7 @@
   .row{
     .opacity(0);
   }
-  .row.animate{
-    .animation(fadeInUp 1s .8s ease both);
-  }
+  
   img{
    width: 42%;
    margin: 0 auto;
@@ -470,9 +468,7 @@
       bottom: -13px;
       left: 38px;
     }
-    .mobile.animate{
-      .animation(fadeInUp 1s .3s ease both);
-    }
+  
     .calculator{
       width: 124px;
       height: 164px;
@@ -480,9 +476,7 @@
       left: 206px;
       bottom: -34px;
     }
-    .calculator.animate{
-      .animation(fadeInUp 1s .5s ease both);
-    }
+  
     .book{
       width: 328px;
       height: 266px;
@@ -491,9 +485,7 @@
       margin-left: -176px;
       bottom: -129px;
     }
-    .book.animate{
-      .animation(fadeInUp 1s .8s ease both);
-    }
+   
     .earphone{
       width: 184px;
       height: 206px;
@@ -502,9 +494,7 @@
       margin-right: -371px;
       bottom: -39px;
     }
-    .earphone.animate{
-      .animation(fadeInUp 1s .8s ease both);
-    }
+   
     .coffee{
       width: 134px;
       height: 164px;
@@ -512,9 +502,7 @@
       right: 20px;
       bottom: 0px;
     }
-    .coffee.animate{
-      .animation(fadeInUp 1s .3s ease both);
-    }
+   
     .learning-btn{
       display: inline-block;
       border:2px solid @white;
@@ -537,12 +525,33 @@
 
        }
     }
-     .learning-btn.animate{
-      .animation(fadeInDown 1s .8s ease both);
-    }
+    
   }
 }
+.js-animate-item.active{
+  .mobile{
+      .animation(fadeInUp 1s .3s ease both);
+  }
+  .calculator{
+      .animation(fadeInUp 1s .5s ease both);
+  }
+  .book{
+      .animation(fadeInUp 1s .8s ease both);
+  }
+  .earphone{
+      .animation(fadeInUp 1s .8s ease both);
+  }
+  .learning-btn{
+    .animation(fadeInDown 1s .8s ease both);
+  }
+  .coffee{
+    .animation(fadeInUp 1s .3s ease both);
+  }
+  .row{
+      .animation(fadeInUp 1s .8s ease both);
+  }
 
+}
 
 
 
