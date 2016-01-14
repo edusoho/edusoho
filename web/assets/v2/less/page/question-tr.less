@@ -153,6 +153,9 @@
     margin: 0;
     .item-lesson {
       margin: 0 0 10px;
+      .before {
+        .text-overflow;
+      }
     }
   }
 }
@@ -173,9 +176,6 @@
       .title {
         @media(max-width:@screen-sm-max) {
           width: 100%;
-        }
-        .before {
-          .text-overflow;
         }
         .idname,.number,.icon-close{
           display: none;
@@ -286,8 +286,6 @@
     .scale.white{
       .scale-details {
         visibility: visible;
-        // bottom:-20px;
-        // background-color: transparent;
       }
     }
     .scale.blue{
@@ -336,6 +334,7 @@
             margin-bottom: 0;
             text-align: left;
             height: 46px;
+            line-height: 46px;
             overflow: hidden;
             &:hover {
               background-color: @brand-primary;

@@ -11553,6 +11553,13 @@ textarea {
 .question-manage .lesson-list .item-lesson {
   margin: 0 0 10px;
 }
+.question-manage .lesson-list .item-lesson .before {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
 .question-manage .question-menu {
   position: relative;
   height: 90%;
@@ -11573,13 +11580,6 @@ textarea {
   .question-manage .question-menu .lesson-list .item-lesson .title {
     width: 100%;
   }
-}
-.question-manage .question-menu .lesson-list .item-lesson .title .before {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
 }
 .question-manage .question-menu .lesson-list .item-lesson .title .idname,
 .question-manage .question-menu .lesson-list .item-lesson .title .number,
@@ -11748,6 +11748,7 @@ textarea {
   margin-bottom: 0;
   text-align: left;
   height: 46px;
+  line-height: 46px;
   overflow: hidden;
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson:hover {
