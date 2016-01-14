@@ -135,7 +135,7 @@ class MarkerController extends BaseController
         $user         = $this->getUserService()->getCurrentUser();
 
         if ($storage['video_header']) {
-            $result['videoHeaderTime'] = $video_header['length'];
+            $results['videoHeaderTime'] = $video_header['length'];
         }
 
         foreach ($markers as $key => $marker) {
