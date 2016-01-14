@@ -23,7 +23,7 @@
             <div class="media">
               <img class="media-object pull-left" src="{{ asset('themes/' ~ theme.uri ~ '/' ~ theme.thumb) }}" width="150">
               <div class="media-body">
-                <h5 class="media-heading">{{ theme.name }}</h5>
+                <h5 class="media-heading">{% if theme.uri == 'mooc' %}高教{% else %}{{ theme.name }}{% endif %}</h5>
                 {{ theme.description|default('')|raw }}
                 {% if theme.setting|default(null) %}
                   <a href="../{{ theme.setting }}">设置</a>
