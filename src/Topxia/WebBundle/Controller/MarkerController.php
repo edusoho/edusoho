@@ -38,15 +38,14 @@ class MarkerController extends BaseController
 
     public function markerMetasAction(Request $request, $mediaId)
     {
-        $markersMeta  = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
-        $file         = $this->getUploadFileService()->getFile($mediaId);
-        $storage      = $this->getSettingService()->get('storage');
-        $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
+        $file        = $this->getUploadFileService()->getFile($mediaId);
 
         $result = array(
             'markersMeta' => $markersMeta,
             'videoTime'   => $file['length']
         );
+
         return $this->createJsonResponse($result);
     }
 
@@ -129,9 +128,15 @@ class MarkerController extends BaseController
         $data   = $request->request->all();
         $lesson = $this->getCourseService()->getLesson($lessonId);
         //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
-        $markers = $this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']);
-        $results = array();
-        $user    = $this->getUserService()->getCurrentUser();
+        $storage      = $this->getSettingService()->get('storage');
+        $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        $markers      = $this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']);
+        $results      = array();
+        $user         = $this->getUserService()->getCurrentUser();
+
+        if ($storage['video_header']) {
+            $result['videoHeaderTime'] = $video_header['length'];
+        }
 
         foreach ($markers as $key => $marker) {
             $results[$key]           = $marker;

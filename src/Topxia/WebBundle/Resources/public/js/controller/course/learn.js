@@ -298,6 +298,8 @@ define(function(require, exports, module) {
                             url: markersUrl,
                             dataType: "json",
                             success:function(data){
+                              console.log(111);
+                              console.log(data);
                               var markers = new Array();
                               for(var index in data) {
                                 var marker={
