@@ -35,15 +35,7 @@
 		    <label class="radio-inline"><input type="radio" data-type="determine" name="answer[{{ question.id }}]" value="0" {% if 0 in answerChoiceIndex|default(null) %}checked{% endif %}>错误</label>
 		</div>#}
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
-		<div class="answer-progress">
-			<p class="answer-title">答题进度</p>
-			<div class="progress">
-				<div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-					<span class="sr-only">80% Complete (danger)</span>
-				</div>
-			</div>
-			<div class="num"><span class="gray-darker">6</span><span class="mhs">/</span>14</div>
-		</div>
+		{% include 'TopxiaWebBundle:Marker:answer-progress.html.twig' %}
 		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">完成</button>
 	</div>
 	<div class="question-footer">

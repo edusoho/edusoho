@@ -45,7 +45,6 @@ class MarkerController extends BaseController
             'markersMeta' => $markersMeta,
             'videoTime'   => $file['length']
         );
-
         return $this->createJsonResponse($result);
     }
 

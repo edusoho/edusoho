@@ -19,6 +19,7 @@
 		    </li>
 		  {% endfor %}
 		</ul>
+		{% include 'TopxiaWebBundle:Marker:answer-progress.html.twig' %}
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
 		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">完成</button>
 	</div>
