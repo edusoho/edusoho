@@ -1,5 +1,5 @@
 {% import _self as self_macro %}
-<div class="col-md-4 footer-logos hidden-sm hidden-xs footer-logo">
+<div class="col-md-3 footer-logos hidden-sm hidden-xs footer-logo">
   <a class="" href="{{ bottomLogo[0].href|default('') }}" target="{{ bottomLogo[0].target|default('') }}"><img src="{{ asset(bottomLogo[0].src|default('')) }}" alt="{{ bottomLogo[0].alt|default('') }}"></a>
   <div class="footer-sns">
     {% if (weibo[0].href) %}
@@ -32,13 +32,13 @@
   </div>
 </div>
 
-<div class="col-md-4 footer-attr hidden-sm hidden-xs">
+<div class="col-md-6 footer-attr hidden-sm hidden-xs">
   <p>
-    <i class="mc-icon icon-iconfontphone"></i>
+    <i class="mc-icon icon-iconfontlocation"></i>
     {{ bottomAddr[0].value|default('') }}
   </p>
   <p>
-    <i class="mc-icon icon-iconfontlocation"></i>
+    <i class="mc-icon icon-iconfontphone"></i>
     {{ bottomPhone[0].value|default('') }}
   </p>
   <p>
@@ -48,7 +48,7 @@
 </div>
 
 
-<div class="col-md-4 clearfix weichat">
+<div class="col-md-3 clearfix weichat">
   <img src="{{asset('themes/mooc/img/temp/weixin.jpg')}}">
   <p>扫一扫关注微信</p>
 </div>

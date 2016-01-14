@@ -546,10 +546,14 @@ input:focus {
 .carousel-indicators {
   bottom: 0px;
 }
+.carousel-indicators li.active {
+  margin: 0 7px;
+}
 .carousel-indicators li {
+  display: inline-block;
   height: 4px;
   width: 21px;
-  margin: 0 3px;
+  margin: 0 7px 0;
   border-radius: 0;
   border: 0;
   background-color: #d4d4d4;
@@ -2509,6 +2513,7 @@ input:focus {
   border: none;
   background: none;
   font-size: 20px;
+  color: #272a41;
 }
 .mooc-header .navbar-user {
   z-index: initial;
@@ -2542,7 +2547,7 @@ input:focus {
   display: inline-block;
   width: 20px;
   height: 20px;
-  background-color: red;
+  background-color: #de4f4f;
   border-radius: 50%;
   color: #fff;
   font-weight: bold;
@@ -2641,7 +2646,7 @@ input:focus {
   font-size: 16px;
 }
 .mooc-nav ul > li > a:hover {
-  background: #81d867;
+  background: #333755;
 }
 .mooc-nav ul > li > ul > li > a {
   color: #272a41!important;
@@ -2650,6 +2655,7 @@ input:focus {
 }
 .mooc-nav ul > li > ul > li > a:hover {
   color: #ffffff !important;
+  background: #81d867;
 }
 .es-banner .title > i {
   margin-top: 4px;
@@ -2846,6 +2852,9 @@ label {
 .period-list .lesson-item:hover {
   background: #fafafa;
 }
+.homepage .text-center {
+  margin: 40px 0;
+}
 .mooc-index-title {
   font-size: 22px;
   color: #272a41;
@@ -2874,13 +2883,13 @@ label {
   width: 228px;
   background: #81d867;
   color: #ffffff;
-  padding: 30px;
   text-align: center;
   float: left;
 }
 .mooc-navset .set-left h2 {
   font-size: 32px;
-  margin: 0;
+  margin: 30px 0 8px ;
+  line-height: 32px;
 }
 .mooc-navset .set-left i {
   font-size: 38px;
@@ -2888,6 +2897,7 @@ label {
 .mooc-navset .set-left p {
   font-size: 12px;
   margin: 0;
+  padding-bottom: 31px;
 }
 .mooc-navset .set-right {
   width: 912px;
@@ -2908,7 +2918,7 @@ label {
   width: 24.6%;
   font-size: 18px;
   text-align: center;
-  margin: 42px 0;
+  margin: 43px 0;
 }
 .mooc-navset .set-right .width-25:last-child .navset-wrapper {
   border-right: none;
@@ -3041,12 +3051,14 @@ label {
   bottom: -2px;
 }
 .mooc-classroom .class-wrapper {
-  margin: 0 10px;
   background: #ffffff;
   padding: 0 10px;
 }
+.mooc-classroom .swiper-container {
+  margin: 0 -10px !important;
+}
 .mooc-classroom .class-list .arrow-left {
-  left: 0;
+  left: 10px;
 }
 .mooc-classroom .class-list:hover .arrow-left,
 .mooc-classroom .class-list:hover .arrow-right {
@@ -3062,20 +3074,24 @@ label {
   width: 30px;
   height: 80px;
   line-height: 80px;
-  background: rgba(223, 233, 242, 0.8);
+  background: rgba(215, 228, 239, 0.8);
   color: #ffffff;
   text-align: center;
-  right: 0;
+  right: 10px;
   opacity: 0;
   filter: alpha(opacity=0);
 }
+.mooc-classroom .class-list .arrow-left:hover,
+.mooc-classroom .class-list .arrow-right:hover {
+  background: #d7e4ef;
+}
 .mooc-classroom .class-list .arrow-left i,
 .mooc-classroom .class-list .arrow-right i {
-  font-size: 22px;
+  font-size: 30px;
+  font-weight: bold;
 }
 .mooc-classroom .class-item {
   background: transparent !important;
-  padding: 0!important;
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
@@ -3110,18 +3126,12 @@ label {
 .mooc-feature {
   background: #ffffff;
   text-align: center;
-  padding: 70px 0;
-  margin-top: 40px;
+  padding: 69px 0 68px;
+  margin-top: 30px;
 }
 .mooc-feature .row {
   opacity: 0;
   filter: alpha(opacity=0);
-}
-.mooc-feature .row.animate {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
 }
 .mooc-feature img {
   width: 42%;
@@ -3130,6 +3140,7 @@ label {
 .mooc-feature h4 {
   color: #272a41;
   margin: 30px 0 20px;
+  font-size: 18px;
 }
 .mooc-feature p {
   color: #9496a1;
@@ -3222,9 +3233,9 @@ label {
   right: 36px;
 }
 .mooc-teacher .teach-item .teacher-name {
-  margin-top: 80px;
-  font-size: 22px;
-  margin-bottom: 5px;
+  margin-top: 65px;
+  font-size: 18px;
+  margin-bottom: 15px;
 }
 .mooc-teacher .teach-item .teacher-name a {
   color: #272a41;
@@ -3236,10 +3247,10 @@ label {
   overflow: hidden;
 }
 .mooc-teacher .teach-item .teacher-about {
-  color: #9496a1;
+  color: #272a41;
   height: 118px;
   overflow: hidden;
-  margin: 24px 0;
+  margin: 15px 0 34px;
 }
 .mooc-teacher .teach-item .teacher-kown {
   text-align: center;
@@ -3247,7 +3258,7 @@ label {
 }
 .mooc-teacher .teach-item .teacher-kown a {
   border: 2px solid #81d867;
-  padding: 12px 32px;
+  padding: 10px 32px;
   font-size: 16px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -3305,7 +3316,7 @@ label {
 }
 .mooc-learn .learn-list {
   position: relative;
-  height: 240px;
+  height: 300px;
   overflow: hidden;
 }
 .mooc-learn .learn-list .mobile,
@@ -3323,27 +3334,15 @@ label {
   width: 136px;
   height: 224px;
   background-position: 0 0;
-  bottom: -54px;
+  bottom: -13px;
   left: 38px;
-}
-.mooc-learn .learn-list .mobile.animate {
-  -webkit-animation: fadeInUp 1s 0.3s ease both;
-  -moz-animation: fadeInUp 1s 0.3s ease both;
-  -o-animation: fadeInUp 1s 0.3s ease both;
-  animation: fadeInUp 1s 0.3s ease both;
 }
 .mooc-learn .learn-list .calculator {
   width: 124px;
   height: 164px;
   background-position: -138px 0;
   left: 206px;
-  bottom: -82px;
-}
-.mooc-learn .learn-list .calculator.animate {
-  -webkit-animation: fadeInUp 1s 0.5s ease both;
-  -moz-animation: fadeInUp 1s 0.5s ease both;
-  -o-animation: fadeInUp 1s 0.5s ease both;
-  animation: fadeInUp 1s 0.5s ease both;
+  bottom: -34px;
 }
 .mooc-learn .learn-list .book {
   width: 328px;
@@ -3351,13 +3350,7 @@ label {
   background-position: 0 -232px;
   left: 50%;
   margin-left: -176px;
-  bottom: -200px;
-}
-.mooc-learn .learn-list .book.animate {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
+  bottom: -129px;
 }
 .mooc-learn .learn-list .earphone {
   width: 184px;
@@ -3365,54 +3358,80 @@ label {
   background-position: -370px 0;
   right: 50%;
   margin-right: -371px;
-  bottom: -59px;
-}
-.mooc-learn .learn-list .earphone.animate {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
+  bottom: -39px;
 }
 .mooc-learn .learn-list .coffee {
   width: 134px;
   height: 164px;
   background-position: -568px 0;
   right: 20px;
-  bottom: -30px;
+  bottom: 0px;
 }
-.mooc-learn .learn-list .coffee.animate {
+.mooc-learn .learn-list .learning-btn {
+  display: inline-block;
+  border: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  padding: 10px 41px 9px 40px;
+  font-size: 22px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  margin-left: -143px;
+  bottom: 137px;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+.mooc-learn .learn-list .learning-btn i {
+  font-size: 26px;
+  padding-right: 15px;
+}
+.mooc-learn .learn-list .learning-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+.js-animate-item.active .mobile {
   -webkit-animation: fadeInUp 1s 0.3s ease both;
   -moz-animation: fadeInUp 1s 0.3s ease both;
   -o-animation: fadeInUp 1s 0.3s ease both;
   animation: fadeInUp 1s 0.3s ease both;
 }
-.mooc-learn .learn-list .learning-btn {
-  display: inline-block;
-  border: 2px solid #ffffff;
-  background: rgba(255, 255, 255, 0.5);
-  color: #ffffff;
-  padding: 13px 62px;
-  font-size: 22px;
-  position: absolute;
-  left: 50%;
-  margin-left: -152px;
-  bottom: 90px;
-  opacity: 0;
-  filter: alpha(opacity=0);
+.js-animate-item.active .calculator {
+  -webkit-animation: fadeInUp 1s 0.5s ease both;
+  -moz-animation: fadeInUp 1s 0.5s ease both;
+  -o-animation: fadeInUp 1s 0.5s ease both;
+  animation: fadeInUp 1s 0.5s ease both;
 }
-.mooc-learn .learn-list .learning-btn i {
-  font-size: 22px;
-  padding-right: 10px;
+.js-animate-item.active .book {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
 }
-.mooc-learn .learn-list .learning-btn:hover {
-  background: rgba(255, 255, 255, 0.9);
-  color: #81d867;
+.js-animate-item.active .earphone {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
 }
-.mooc-learn .learn-list .learning-btn.animate {
+.js-animate-item.active .learning-btn {
   -webkit-animation: fadeInDown 1s 0.8s ease both;
   -moz-animation: fadeInDown 1s 0.8s ease both;
   -o-animation: fadeInDown 1s 0.8s ease both;
   animation: fadeInDown 1s 0.8s ease both;
+}
+.js-animate-item.active .coffee {
+  -webkit-animation: fadeInUp 1s 0.3s ease both;
+  -moz-animation: fadeInUp 1s 0.3s ease both;
+  -o-animation: fadeInUp 1s 0.3s ease both;
+  animation: fadeInUp 1s 0.3s ease both;
+}
+.js-animate-item.active .row {
+  -webkit-animation: fadeInUp 1s 0.8s ease both;
+  -moz-animation: fadeInUp 1s 0.8s ease both;
+  -o-animation: fadeInUp 1s 0.8s ease both;
+  animation: fadeInUp 1s 0.8s ease both;
 }
 .friendlink {
   padding: 48px 0;
@@ -3458,15 +3477,18 @@ label {
   background: #78c257!important;
 }
 footer {
-  padding: 40px 0 0;
+  padding: 45px 0 0;
   background: #333755;
+}
+footer .footer-logo {
+  margin-top: 0;
 }
 footer .weichat {
   text-align: center;
 }
 footer .weichat p {
   color: #ffffff;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 footer .link-item {
   width: 32%;
@@ -3484,8 +3506,11 @@ footer .link-item ul li a:hover {
 footer .link-item h4 {
   color: #addbdb;
 }
+footer .footer-attr {
+  padding-left: 160px;
+}
 footer .footer-attr p {
-  margin-top: 25px;
+  margin-bottom: 28px;
   color: #ffffff;
 }
 footer .footer-attr p i {
@@ -3499,8 +3524,8 @@ footer .footer-attr p i {
   background: #272a41;
   padding-top: 30px;
   text-align: center;
-  margin-top: 40px;
-  padding-bottom: 30px;
+  margin-top: 8px;
+  padding-bottom: 31px;
   color: #ffffff;
   font-size: 12px;
 }
@@ -3587,6 +3612,7 @@ footer .footer-attr p i {
 }
 .mooc-poster .mooc-notice .panel-heading {
   font-size: 14px;
+  color: #272a41;
 }
 .mooc-poster .mooc-notice .panel-heading i {
   color: #81d867;
@@ -3594,12 +3620,19 @@ footer .footer-attr p i {
   font-size: 18px;
 }
 .mooc-poster .mooc-notice .panel-body ul {
-  padding: 0 0 0 12px;
+  padding: 0;
   font-size: 12px;
   margin: 0;
 }
+.mooc-poster .mooc-notice .panel-body .mc-dot {
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  margin-right: 15px;
+  vertical-align: middle;
+  background: #81d867;
+}
 .mooc-poster .mooc-notice .panel-body li {
-  list-style-type: disc;
   color: #81d867;
   margin-bottom: 15px;
 }
@@ -3616,6 +3649,7 @@ footer .footer-attr p i {
   white-space: nowrap;
   vertical-align: bottom;
   margin-right: 12px;
+  line-height: 16px;
 }
 .mooc-poster .mooc-notice .panel-body li a:hover {
   color: #81d867;

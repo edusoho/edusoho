@@ -33,7 +33,7 @@
               {% set announcements = data('Announcement',{ count:8 }) %}
               {% if announcements %}
                 {% for announcement in announcements %}
-                  <li><a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a><span>{{announcement.startTime|date('m/d')}}</span></li>
+                  <li><span class="mc-dot"></span><a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a><span>{{announcement.startTime|date('m/d')}}</span></li>
                 {% endfor %}
               {% else %}
                 <div>暂无公告</div>
