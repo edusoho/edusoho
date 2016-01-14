@@ -42,7 +42,9 @@
     <a href="{{ path('course_show', {id:course.id}) }}">
       <img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}" />
     </a>
-    
+    {% if course.certi %}
+      <span class="mooc-certificate-2"></span>
+    {% endif %}
   </div>
   <div class="course-caption">
      <div class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></div>
