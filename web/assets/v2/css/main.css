@@ -2602,6 +2602,9 @@ select:-webkit-autofill {
 .gray-lighter {
   color: #f5f5f5 !important;
 }
+.bg-primary {
+  background-color: #46c37b !important;
+}
 .width-input {
   display: inline-block !important;
   margin-right: 6px;
@@ -11435,6 +11438,10 @@ textarea {
   background-color: #f1f1f1;
   color: #616161;
   border-radius: 50%;
+}
+.marker-modal .type-check.active {
+  background-color: #46c37b;
+  color: #fff;
 }
 .marker-modal .type-check.correct {
   background-color: #70d445;

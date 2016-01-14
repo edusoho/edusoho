@@ -46,14 +46,18 @@
     background-color: #f1f1f1;
     color: @gray-dark;
     .border-radius(50%);
-  }
-  .type-check.correct {
-    background-color: @brand-success;
-    color: #fff;
-  }
-  .type-check.error {
-    background-color: @brand-danger;
-    color: #fff;
+    &.active {
+      background-color: @brand-primary;
+      color: #fff;
+    }
+    &.correct {
+      background-color: @brand-success;
+      color: #fff;
+    }
+    &.error {
+      background-color: @brand-danger;
+      color: #fff;
+    }
   }
   .answer-title {
     font-size: 12px;
