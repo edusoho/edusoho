@@ -76,13 +76,15 @@ class HLSController extends BaseController
                 $params['line'] = $line;
             }
 
-            if (isset($token['data']['hideBeginning'])) {
-                $params['hideBeginning'] = $token['data']['hideBeginning'] ? 0 : 1;
-            } else {
-                if (!$this->haveHeadLeader()) {
-                    $params['hideBeginning'] = 1;
-                }
+            // if (isset($token['data']['hideBeginning'])) {
+            //     $params['hideBeginning'] = $token['data']['hideBeginning'] ? 0 : 1;
+            // } else {
+
+            if (!$this->haveHeadLeader()) {
+                $params['hideBeginning'] = 1;
             }
+
+            // }
 
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
         }
