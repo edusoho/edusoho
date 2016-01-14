@@ -40,8 +40,8 @@ class Homework extends BaseResource
     {
         $currentUser = $this->getCurrentUser();
         $homeworkResult = $this->getHomeworkService()->getResult($id);
-        if ($homeworkResult['status'] != 'reviewing') {
-            return $this->error('500', '作业已批阅或者未做完');
+        if ($homeworkResult['status'] != 'finished') {
+            return $this->error('500', '作业还未批阅');
         }
 
         $homework = $this->getHomeworkService()->getHomework($homeworkResult['homeworkId']);
