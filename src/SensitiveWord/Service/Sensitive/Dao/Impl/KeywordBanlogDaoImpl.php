@@ -34,12 +34,11 @@ class KeywordBanlogDaoImpl extends BaseDao implements KeywordBanlogDao {
     public function searchBanlogs($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $builder = $this->createLogQueryBuilder($conditions)
+        $builder = $this->createBanlogQueryBuilder($conditions)
             ->select('*')
-            ->from($this->table, $this->table);
-        $builder->addOrderBy($orderBy[0], $orderBy[1]);
-
-        $builder->setFirstResult($start)->setMaxResults($limit);    
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ? : array();
     }
 
@@ -58,4 +57,32 @@ class KeywordBanlogDaoImpl extends BaseDao implements KeywordBanlogDao {
             ->andWhere('keywordId = :keywordId');
     }
 
+    protected function createBanlogQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions,function($v){
+            if($v === 0){
+                return true;
+            }
+                
+            if(empty($v)){
+                return false;
+            }
+            return true;
+        });
+        if (isset($conditions['keyword'])) {
+            if($conditions['searchBanlog'] == 'id') {
+                $conditions['id'] = $conditions['keyword'];
+            }
+            else if ($conditions['searchBanlog'] == 'name') {
+                $conditions['keywordName'] = "%{$conditions['keyword']}%";
+            }
+        }
+        // var_dump($conditions['userId']);exit();
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'keyword_banlog')
+            ->andWhere('id = :id')
+            ->andWhere('userId = :userId')
+            ->andWhere('state = :state')
+            ->andWhere('UPPER(keywordName) LIKE :keywordName');
+    }
 }

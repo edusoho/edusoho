@@ -312,3 +312,8 @@ state:
 searchKeyWord:
     name: 关键词
     id: 编号
+
+searchBanlog:
+    name: 关键词
+    id: 编号
+    userName: 用户名

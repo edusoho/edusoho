@@ -17,6 +17,7 @@ class Version20160112171411 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("ALTER TABLE `keyword` ADD `state` ENUM('','replaced','banned') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `name`;");
+        $this->addSql("ALTER TABLE `keyword_banlog` ADD `state` ENUM('banned','replaced') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `keywordName`;");
     }
 
     /**

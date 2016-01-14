@@ -83,7 +83,27 @@ class SensitiveController extends BaseController
 
     public function banlogsAction(Request $request)
     {
-        $conditions = array();
+        $fields = $request->query->all();
+        $conditions = array(
+            'keyword' => '',
+            'searchBanlog' => '',
+            'state' => ''
+            );
+        if(empty($fields)) {
+            $fields = array();
+        }
+        $conditions = array_merge($conditions, $fields);
+        if ($conditions['searchBanlog'] == 'userName') {
+            $userName =$conditions['keyword'];
+            $userTemp = $this->getUserService()->getUserByNickname($userName);
+            if (!empty($userTemp)) {
+                $conditions['userId'] = $userTemp['id'];
+            }
+            else {
+                if(!empty($conditions['keyword']))
+                    $conditions['userId'] = 0;
+            }
+        }
         
         $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
         $paginator = new Paginator($this->get('request') , $count, 50);
@@ -92,9 +112,7 @@ class SensitiveController extends BaseController
             'createdTime',
             'DESC'
         ) , $paginator->getOffsetCount() , $paginator->getPerPageCount());
-        
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($banlogs, 'userId'));
-        
         return $this->render('SensitiveWordBundle:SensitiveAdmin:banlogs.html.twig', array(
             'banlogs' => $banlogs,
             'users' => $users,

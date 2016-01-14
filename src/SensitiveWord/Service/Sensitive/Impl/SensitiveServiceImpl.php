@@ -49,6 +49,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $banlog = array(
             'keywordId' => $bannedKeyword['id'],
             'keywordName' => $bannedKeyword['name'],
+            'state' => $bannedKeyword['state'],
             'text' => $text,
             'userId' => $user ? $user['id'] : 0,
             'ip' => empty($user['loginIp'])?0 : $user['loginIp'],
@@ -96,6 +97,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $banlog = array(
             'keywordId' => $bannedKeyword['id'],
             'keywordName' => $bannedKeyword['name'],
+            'state' => $bannedKeyword['state'],
             'text' => $text,
             'userId' => $currentUser ? $currentUser['id'] : 0,
             'ip' => 0,
