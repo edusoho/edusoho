@@ -45,13 +45,13 @@ define(function(require, exports, module) {
 
         $(".marker-modal .question-single_choice li,.marker-modal .question-determine li").on('click', function() {
             var $this = $(this);
-            var $typecheck = $(this).find('.type-check').addClass('correct');
-            $this.siblings().find(".type-check").removeClass("correct");
+            var $typecheck = $(this).find('.type-check').addClass('active');
+            $this.siblings().find(".type-check").removeClass("active");
         });
 
         $(".marker-modal .question-uncertain_choice li").on("click", function() {
             var $this = $(this);
-            var $typecheck = $(this).find('.type-check').toggleClass('correct');
+            var $typecheck = $(this).find('.type-check').toggleClass('active');
         });
         var doMarkerQuestion = function(type) {
             switch (type) {
@@ -73,13 +73,13 @@ define(function(require, exports, module) {
 
             function doSingleChoice() {
                 var answer = null;
-                answer = $("span.type-check.correct").attr('value');
+                answer = $("span.type-check.active").attr('value');
                 return answer;
             };
 
             function doUncertainChoice() {
                 var answers = [];
-                $("span.type-check.correct").each(function() {
+                $("span.type-check.active").each(function() {
                     answers.push($(this).attr('value'));
                 });
                 return answers;
@@ -87,7 +87,7 @@ define(function(require, exports, module) {
 
             function doDetermine() {
                 var answer = null;
-                answer = $("span.type-check.correct").attr('value');
+                answer = $("span.type-check.active").attr('value');
                 return answer;
             };
 

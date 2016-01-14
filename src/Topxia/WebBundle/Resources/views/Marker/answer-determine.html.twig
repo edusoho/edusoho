@@ -12,7 +12,7 @@
 		{% endif %}
 		<ul class="question-choices">
 		  <li>
-		  	<span class="type-check {% if answerChoiceIndex == 1 and selfAnswer|default(null) == 1 %}correct {% elseif selfAnswer|default(null) == 1 %} error {% endif %}" type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1">
+		  	<span class="type-check {% if answerChoiceIndex == 1 and selfAnswer|default(null) == 1 %}active {% elseif selfAnswer|default(null) == 1 %} error {% endif %}" type="radio" data-type="determine" name="answer[{{ question.id }}]" value="1">
 		  		<i class="es-icon es-icon-done"></i>
 		  	</span>
 		  	<span class="mll">正确</span>
