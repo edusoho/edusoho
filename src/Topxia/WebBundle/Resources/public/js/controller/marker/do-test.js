@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         btn.on('click', function() {
             var answer = doMarkerQuestion(questionType);
             if(!answer){
-                Notify.danger("请先选择你的答案");
+                Notify.danger("请先作答");
                 return;
             }
             $.get(data.data('url'), {
