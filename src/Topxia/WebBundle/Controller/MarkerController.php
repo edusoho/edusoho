@@ -41,6 +41,14 @@ class MarkerController extends BaseController
         $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
         $file        = $this->getUploadFileService()->getFile($mediaId);
 
+        foreach ($markersMeta as $key => $value) {
+            foreach ($markersMeta[$key]['questionMarkers'] as $index => $questionMarker) {
+                if ($questionMarker['type'] == 'fill') {
+                    $markersMeta[$key]['questionMarkers'][$index]['stem'] = preg_replace('/\[\[.+?\]\]/', '____', $questionMarker['stem']);
+                }
+            }
+        }
+
         $result = array(
             'markersMeta' => $markersMeta,
             'videoTime'   => $file['length']
