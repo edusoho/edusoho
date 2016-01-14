@@ -11440,11 +11440,11 @@ textarea {
   background-color: #46c37b;
   color: #fff;
 }
-.marker-modal .type-check .correct {
+.marker-modal .type-check.correct {
   background-color: #70d445;
   color: #fff;
 }
-.marker-modal .type-check .error {
+.marker-modal .type-check.error {
   background-color: #e83d2c;
   color: #fff;
 }
