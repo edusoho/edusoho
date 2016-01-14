@@ -3008,7 +3008,7 @@ label {
 .mooc-navset .set-right .arrow-left,
 .mooc-navset .set-right .arrow-right {
   position: absolute;
-  top: 30px;
+  top: 25px;
   display: inline-block;
   width: 20px;
   height: 60px;
