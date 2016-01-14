@@ -29,8 +29,8 @@
                          {{ teacher.title }}
                       </div>
                           <div class="teacher-about">{{ teacher.about|plain_text(88) }}</div>
-                      <div class="teacher-kown">
-                        <a href="{{ path('user_show', {id:teacher.id}) }}">了解老师</a>
+                      <div class="teacher-know">
+                        <a href="{{ path('user_show', {id:teacher.id}) }}" class="btn btn-primary">了解老师</a>
                       </div>
                     </div>
                  </div>
