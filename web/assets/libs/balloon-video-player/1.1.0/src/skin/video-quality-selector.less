@@ -1,0 +1,30 @@
+@charset "utf-8";
+/*
+You are free to style the button however you wish. I plan to use
+an icon from my site's own icon font to make it more visible. These
+are just basic styles to make it look ok with plain text.
+*/
+.ballon-video-player {
+/* Position the button */
+.vjs-res-button {
+  float: right;
+  line-height: 3em;
+}
+
+/* Don't show hover effects on title */
+ul li.vjs-menu-title.vjs-res-menu-title:hover {
+  cursor: default;
+  background-color: transparent;
+  color: #CCC;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+/* Needed to keep text visible in video.js 4.9 */
+.vjs-res-button .vjs-control-text {
+  width: auto;
+  height: auto;
+  clip: auto;
+}
+}

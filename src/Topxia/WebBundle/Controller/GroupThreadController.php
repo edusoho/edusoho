@@ -34,11 +34,12 @@ class GroupThreadController extends BaseController
                 if (empty($title)) {
                     $this->setFlashMessage('danger', "话题名称不能为空！");
 
-                    return $this->render('TopxiaWebBundle:Group:add-thread.html.twig', array(
-                        'id'             => $id,
-                        'groupinfo'      => $groupinfo,
-                        'is_groupmember' => $this->getGroupMemberRole($id)
-                    ));
+                    return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
+                        array(
+                            'id'             => $id,
+                            'groupinfo'      => $groupinfo,
+                            'is_groupmember' => $this->getGroupMemberRole($id)
+                        ));
                 }
 
                 $info = array(
@@ -63,11 +64,12 @@ class GroupThreadController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:Group:add-thread.html.twig', array(
-            'id'             => $id,
-            'groupinfo'      => $groupinfo,
-            'is_groupmember' => $this->getGroupMemberRole($id)
-        ));
+        return $this->render('TopxiaWebBundle:Group:add-thread.html.twig',
+            array(
+                'id'             => $id,
+                'groupinfo'      => $groupinfo,
+                'is_groupmember' => $this->getGroupMemberRole($id)
+            ));
     }
 
     public function updateThreadAction(Request $request, $id, $threadId)
@@ -552,16 +554,7 @@ class GroupThreadController extends BaseController
     public function searchResultAction(Request $request, $id)
     {
         $keyWord = $request->query->get('keyWord') ?: "";
-        $pattern = $this->setting('magic.cloud_search');
-
-        if ($pattern) {
-            return $this->redirect($this->generateUrl('group_cloud_search', array(
-                'keyWord' => $keyWord,
-                'id'      => $id
-            )));
-        }
-
-        $group = $this->getGroupService()->getGroup($id);
+        $group   = $this->getGroupService()->getGroup($id);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -589,75 +582,6 @@ class GroupThreadController extends BaseController
             'paginator'       => $paginator,
             'lastPostMembers' => $lastPostMembers,
             'is_groupmember'  => $this->getGroupMemberRole($id)));
-    }
-
-    public function cloudSearchResultAction(Request $request, $id)
-    {
-        $keyWord = $request->query->get('keyWord') ?: "";
-        $type    = 'Thread';
-        $group   = $this->getGroupService()->getGroup($id);
-        $page    = $request->query->get('page', '1');
-
-        $conditions = array(
-            'type'    => $type,
-            'words'   => $keyWord,
-            'page'    => $page,
-            'filters' => json_encode(array(
-                'targetType' => 'group',
-                'targetId'   => $id
-            ))
-        );
-
-        try {
-            list($threads, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
-        } catch (\Exception $e) {
-            return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
-                'keywords'     => $keyWord,
-                'type'         => $type,
-                'errorMessage' => '搜索失败，请稍候再试.'
-            ));
-        }
-
-        $threads = $this->filterCloudSearch($threads);
-
-        $paginator = new Paginator($this->get('request'), $counts, 10);
-        $ownerIds  = ArrayToolkit::column($threads, 'userId');
-
-        $userIds = ArrayToolkit::column($threads, 'lastPostMemberId');
-
-        $owner = $this->getUserService()->findUsersByIds($ownerIds);
-
-        $lastPostMembers = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('TopxiaWebBundle:Group:group-search-result.html.twig', array(
-            'groupinfo'       => $group,
-            'threads'         => $threads,
-            'owner'           => $owner,
-            'paginator'       => $paginator,
-            'lastPostMembers' => $lastPostMembers,
-            'is_groupmember'  => $this->getGroupMemberRole($id)));
-    }
-
-    private function filterCloudSearch($threads)
-    {
-        $localThreadIds = ArrayToolkit::column($threads, 'id');
-        $localThreads   = ArrayToolkit::index($this->getThreadService()->getThreadsByIds($localThreadIds), 'id');
-        $filterResult   = array();
-
-        foreach ($threads as $index => $thread) {
-            if (array_key_exists($thread['id'], $localThreads)) {
-                $localThread                = $localThreads[$thread['id']];
-                $thread['groupId']          = $localThread['groupId'];
-                $thread['isStick']          = $localThread['isStick'];
-                $thread['isElite']          = $localThread['isElite'];
-                $thread['lastPostTime']     = $localThread['lastPostTime'];
-                $thread['lastPostMemberId'] = $localThread['lastPostMemberId'];
-
-                array_push($filterResult, $thread);
-            }
-        }
-
-        return $filterResult;
     }
 
     public function setEliteAction($threadId)
@@ -1229,10 +1153,5 @@ class GroupThreadController extends BaseController
     protected function getCashAccountService()
     {
         return $this->getServiceKernel()->createService('Cash.CashAccountService');
-    }
-
-    protected function getSearchService()
-    {
-        return $this->getServiceKernel()->createService('Search.SearchService');
     }
 }

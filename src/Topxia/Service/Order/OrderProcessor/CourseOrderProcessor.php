@@ -229,6 +229,17 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return "TopxiaWebBundle:Course:orderInfo";
     }
 
+    public function isTargetExist($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+
+        if (empty($course) || $course['status'] == 'closed') {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getCouponService()
     {
         return ServiceKernel::instance()->createService('Coupon.CouponService');

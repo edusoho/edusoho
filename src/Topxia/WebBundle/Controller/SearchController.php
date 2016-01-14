@@ -63,9 +63,13 @@ class SearchController extends BaseController
 
         if ($fliter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } elseif ($fliter == 'live') {
+        } else
+
+        if ($fliter == 'live') {
             $conditions['type'] = 'live';
-        } elseif ($fliter == 'free') {
+        } else
+
+        if ($fliter == 'free') {
             $conditions['price'] = '0.00';
         }
 

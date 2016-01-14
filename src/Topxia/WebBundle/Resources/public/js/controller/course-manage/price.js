@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     function roundUp(amount){
-            return (amount*100/100).toFixed(2);
+        return (amount*100/100).toFixed(2);
     }
 
     exports.run = function() {
@@ -66,6 +66,14 @@ define(function(require, exports, module) {
                 }
 
                 $discountPrice.text(roundUp($element.val() * $discountPrice.data('discount') / 10));
+            }
+        });
+
+        $('input[name=tryLookable]').change(function(){
+            if($(this).val()=="1"){
+                $('#tryLookTimeGroup').removeClass('hide');
+            }else {
+                $('#tryLookTimeGroup').addClass('hide');
             }
         });
 
