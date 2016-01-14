@@ -3265,6 +3265,14 @@
             getResponseAsJson: function() {
                 return this.exec('getResponseAsJson');
             },
+
+            getResponseHeaders: function() {
+                return this.exec('getResponseHeaders');
+            },
+    
+            getResponseHeadersAsJson: function() {
+                return this.exec('getResponseHeadersAsJson');
+            },
     
             getStatus: function() {
                 return this.exec('getStatus');
@@ -4019,9 +4027,9 @@
                 // 用来询问，是否返回的结果是有错误的。
                 requestAccept = function( reject ) {
                     var fn;
-    
                     ret = tr.getResponseAsJson() || {};
                     ret._raw = tr.getResponse();
+                    ret._xhr = tr.getResponseHeadersAsJson() || {};
                     fn = function( value ) {
                         reject = value;
                     };
@@ -6772,6 +6780,7 @@
             init: function() {
                 this._status = 0;
                 this._response = null;
+                this._xhr1 = null;
             },
     
             send: function() {
@@ -6839,6 +6848,14 @@
             getResponseAsJson: function() {
                 return this._parseJson( this._response );
             },
+
+            getResponseHeaders: function() {
+                return this._responseHeader;
+            },
+    
+            getResponseHeadersAsJson: function() {
+                return this._xhr1;
+            },
     
             getStatus: function() {
                 return this._status;
@@ -6892,6 +6909,7 @@
                     me._status = xhr.status;
     
                     if ( xhr.status >= 200 && xhr.status < 300 ) {
+                        me._xhr1 = xhr;
                         me._response = xhr.responseText;
                         return me.trigger('load');
                     } else if ( xhr.status >= 500 && xhr.status < 600 ) {
@@ -7820,6 +7838,7 @@
                 this._status = 0;
                 this._response = null;
                 this._responseJson = null;
+                this._responseHeader = null;
             },
     
             send: function() {
@@ -7864,7 +7883,17 @@
             },
     
             getResponseAsJson: function() {
+
                 return this._responseJson;
+            },
+
+            getResponseHeaders: function() {
+                return this._responseHeader || '';
+            },
+    
+            getResponseHeadersAsJson: function() {
+                console.log('flash');
+                return this._responseHeader;
             },
     
             abort: function() {
@@ -7910,9 +7939,10 @@
                     }
     
                     if ( readBody ) {
+
+                        me._responseHeader = xhr.exec('getResponseHeaders');
                         me._response = xhr.exec('getResponse');
                         me._response = decodeURIComponent( me._response );
-    
                         // flash 处理可能存在 bug, 没辙只能靠 js 了
                         // try {
                         //     me._responseJson = xhr.exec('getResponseAsJson');

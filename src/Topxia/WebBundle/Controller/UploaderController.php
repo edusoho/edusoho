@@ -23,7 +23,6 @@ class UploaderController extends BaseController
 
         $params['uploadCallback']  = $this->generateUrl('uploader_upload_callback', array(), true);
         $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), true);
-
         $result = $this->getUploadFileService()->initUpload($params);
 
         $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');

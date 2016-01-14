@@ -156,7 +156,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function(file) {
-                
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers) {
@@ -281,7 +280,7 @@ define(function(require, exports, module) {
 
                     var strategy = file.uploaderWidget.get('strategy');
                     var data = strategy.finishUpload(deferred);
-
+                    return;
                     data.filename = file.name;
                     data.size = file.size;
                     data.id = file.fileId;

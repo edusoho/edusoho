@@ -132,7 +132,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $result['outerId']  = $file['id'];
 
         $result['uploadMode']     = $apiResult['uploadMode'];
-        $result['uploadUrl']      = 'http://upload.edusoho.net';
+        $result['uploadUrl']      = $apiResult['uploadUrl'];#'http://upload.edusoho.net';
         $result['uploadProxyUrl'] = '';
         $result['uploadToken']    = $apiResult['uploadToken'];
 
