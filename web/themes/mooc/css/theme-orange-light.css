@@ -3058,7 +3058,7 @@ label {
   margin: 0 -10px !important;
 }
 .mooc-classroom .class-list .arrow-left {
-  left: 0;
+  left: 10px;
 }
 .mooc-classroom .class-list:hover .arrow-left,
 .mooc-classroom .class-list:hover .arrow-right {
@@ -3074,16 +3074,21 @@ label {
   width: 30px;
   height: 80px;
   line-height: 80px;
-  background: rgba(223, 233, 242, 0.8);
+  background: rgba(215, 228, 239, 0.8);
   color: #ffffff;
   text-align: center;
-  right: 0;
+  right: 10px;
   opacity: 0;
   filter: alpha(opacity=0);
 }
+.mooc-classroom .class-list .arrow-left:hover,
+.mooc-classroom .class-list .arrow-right:hover {
+  background: #d7e4ef;
+}
 .mooc-classroom .class-list .arrow-left i,
 .mooc-classroom .class-list .arrow-right i {
-  font-size: 22px;
+  font-size: 30px;
+  font-weight: bold;
 }
 .mooc-classroom .class-item {
   background: transparent !important;
@@ -3122,7 +3127,7 @@ label {
   background: #ffffff;
   text-align: center;
   padding: 69px 0 68px;
-  margin-top: 40px;
+  margin-top: 30px;
 }
 .mooc-feature .row {
   opacity: 0;
@@ -3317,7 +3322,7 @@ label {
 }
 .mooc-learn .learn-list {
   position: relative;
-  height: 240px;
+  height: 300px;
   overflow: hidden;
 }
 .mooc-learn .learn-list .mobile,
@@ -3335,7 +3340,7 @@ label {
   width: 136px;
   height: 224px;
   background-position: 0 0;
-  bottom: -54px;
+  bottom: -13px;
   left: 38px;
 }
 .mooc-learn .learn-list .mobile.animate {
@@ -3349,7 +3354,7 @@ label {
   height: 164px;
   background-position: -138px 0;
   left: 206px;
-  bottom: -82px;
+  bottom: -34px;
 }
 .mooc-learn .learn-list .calculator.animate {
   -webkit-animation: fadeInUp 1s 0.5s ease both;
@@ -3363,7 +3368,7 @@ label {
   background-position: 0 -232px;
   left: 50%;
   margin-left: -176px;
-  bottom: -200px;
+  bottom: -129px;
 }
 .mooc-learn .learn-list .book.animate {
   -webkit-animation: fadeInUp 1s 0.8s ease both;
@@ -3377,7 +3382,7 @@ label {
   background-position: -370px 0;
   right: 50%;
   margin-right: -371px;
-  bottom: -59px;
+  bottom: -39px;
 }
 .mooc-learn .learn-list .earphone.animate {
   -webkit-animation: fadeInUp 1s 0.8s ease both;
@@ -3390,7 +3395,7 @@ label {
   height: 164px;
   background-position: -568px 0;
   right: 20px;
-  bottom: -30px;
+  bottom: 0px;
 }
 .mooc-learn .learn-list .coffee.animate {
   -webkit-animation: fadeInUp 1s 0.3s ease both;
@@ -3403,22 +3408,24 @@ label {
   border: 2px solid #ffffff;
   background: rgba(255, 255, 255, 0.3);
   color: #ffffff;
-  padding: 13px 62px;
+  padding: 10px 41px 9px 40px;
   font-size: 22px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   position: absolute;
   left: 50%;
-  margin-left: -152px;
-  bottom: 90px;
+  margin-left: -143px;
+  bottom: 137px;
   opacity: 0;
   filter: alpha(opacity=0);
 }
 .mooc-learn .learn-list .learning-btn i {
-  font-size: 22px;
-  padding-right: 10px;
+  font-size: 26px;
+  padding-right: 15px;
 }
 .mooc-learn .learn-list .learning-btn:hover {
-  background: rgba(255, 255, 255, 0.9);
-  color: #f9b469;
+  background: rgba(255, 255, 255, 0.5);
 }
 .mooc-learn .learn-list .learning-btn.animate {
   -webkit-animation: fadeInDown 1s 0.8s ease both;
@@ -3470,15 +3477,18 @@ label {
   background: #78c257!important;
 }
 footer {
-  padding: 40px 0 0;
+  padding: 45px 0 0;
   background: #333755;
+}
+footer .footer-logo {
+  margin-top: 0;
 }
 footer .weichat {
   text-align: center;
 }
 footer .weichat p {
   color: #ffffff;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 footer .link-item {
   width: 32%;
@@ -3496,8 +3506,11 @@ footer .link-item ul li a:hover {
 footer .link-item h4 {
   color: #addbdb;
 }
+footer .footer-attr {
+  padding-left: 160px;
+}
 footer .footer-attr p {
-  margin-top: 25px;
+  margin-bottom: 28px;
   color: #ffffff;
 }
 footer .footer-attr p i {
@@ -3511,8 +3524,8 @@ footer .footer-attr p i {
   background: #272a41;
   padding-top: 30px;
   text-align: center;
-  margin-top: 40px;
-  padding-bottom: 30px;
+  margin-top: 8px;
+  padding-bottom: 31px;
   color: #ffffff;
   font-size: 12px;
 }

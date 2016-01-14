@@ -199,7 +199,7 @@
     }
   .class-list{
      .arrow-left{
-      left: 0;
+      left: 10px;
     }
      &:hover{
        .arrow-left,.arrow-right{
@@ -214,13 +214,17 @@
       width: 30px;
       height: 80px;
       line-height: 80px;
-      background: rgba(223, 233,242, 0.8);
+      background: rgba(215, 228, 239, 0.8);
       color: #ffffff;
       text-align: center;
-      right: 0;
+      right: 10px;
       .opacity(0);
+      &:hover{
+        background: rgba(215, 228, 239, 1);
+      }
       i{
-        font-size: 22px;
+        font-size: 30px;
+        font-weight: bold;
       }
     }
   }
@@ -259,7 +263,7 @@
   background: @white;
   text-align: center;
   padding: 69px 0 68px;
-  margin-top: 40px;
+  margin-top: 30px;
   .row{
     .opacity(0);
   }
@@ -451,7 +455,7 @@
   background: @color-primary;
   .learn-list{
     position: relative;
-      height: 240px;
+      height: 300px;
       overflow: hidden;
     .mobile,.calculator,.book,.earphone,.coffee{
       display: inline-block;
@@ -463,7 +467,7 @@
       width: 136px;
       height: 224px;
       background-position: 0 0;
-      bottom: -54px;
+      bottom: -13px;
       left: 38px;
     }
     .mobile.animate{
@@ -474,7 +478,7 @@
       height: 164px;
       background-position: -138px 0;
       left: 206px;
-      bottom: -82px;
+      bottom: -34px;
     }
     .calculator.animate{
       .animation(fadeInUp 1s .5s ease both);
@@ -485,7 +489,7 @@
       background-position: 0 -232px;
       left: 50%;
       margin-left: -176px;
-      bottom: -200px;
+      bottom: -129px;
     }
     .book.animate{
       .animation(fadeInUp 1s .8s ease both);
@@ -496,7 +500,7 @@
       background-position: -370px 0;
       right: 50%;
       margin-right: -371px;
-      bottom: -59px;
+      bottom: -39px;
     }
     .earphone.animate{
       .animation(fadeInUp 1s .8s ease both);
@@ -506,7 +510,7 @@
       height: 164px;
       background-position: -568px 0;
       right: 20px;
-      bottom: -30px;
+      bottom: 0px;
     }
     .coffee.animate{
       .animation(fadeInUp 1s .3s ease both);
@@ -516,20 +520,20 @@
       border:2px solid @white;
       background: rgba(255, 255, 255, 0.3);
       color: @white;
-      padding: 13px 62px;
+      padding: 10px 41px 9px 40px;
       font-size: 22px;
+      .border-radius(4px);
       position: absolute;
       left: 50%;
-      margin-left: -152px;
-      bottom: 90px;
+      margin-left: -143px;
+      bottom: 137px;
        .opacity(0);
        i{
-        font-size: 22px;
-        padding-right: 10px;
+        font-size: 26px;
+        padding-right: 15px;
        }
        &:hover{
-          background: rgba(255, 255, 255, 0.9);
-          color: @color-primary;
+          background: rgba(255, 255, 255, 0.5);
 
        }
     }
