@@ -12618,7 +12618,7 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
             .attr("data-marker-time", setting.markerTip.time(marker));
             
          if(marker.finished !=undefined && marker.finished==true){
-             markerDiv.css('background-color','red');
+             markerDiv.addClass('bg-primary');
          }
          // add user-defined class to marker
          if (marker.class) {
@@ -12658,7 +12658,7 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
                markerDiv.css({"left": getPosition(marker) + '%'})
                   .attr("data-marker-time", markerTime);
                if(marker.finished !=undefined && marker.finished==true){
-                   markerDiv.css('background-color','red');
+                   markerDiv.addClass('bg-primary');
                }
             }
          }
