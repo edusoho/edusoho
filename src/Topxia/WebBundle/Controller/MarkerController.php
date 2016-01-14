@@ -43,10 +43,6 @@ class MarkerController extends BaseController
         $storage      = $this->getSettingService()->get('storage');
         $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
-        if ($storage['video_header']) {
-            $file['length'] = $video_header['length'] + $file['length'];
-        }
-
         $result = array(
             'markersMeta' => $markersMeta,
             'videoTime'   => $file['length']
