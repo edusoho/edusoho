@@ -89,6 +89,11 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
         return "ChargeCoinBundle:Coin:orderInfo";
     }
 
+    public function isTargetExist($targetId)
+    {
+        return true;
+    }
+
     protected function getCashOrdersService()
     {
         return ServiceKernel::instance()->createService('Cash.CashOrdersService');

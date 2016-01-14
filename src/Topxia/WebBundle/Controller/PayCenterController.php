@@ -33,6 +33,12 @@ class PayCenterController extends BaseController
         $processor               = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template']   = $processor->getOrderInfoTemplate();
         $order                   = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist           = $processor->isTargetExist($targetId);
+
+        if (!$isTargetExist) {
+            return $this->createMessageResponse('error', '该订单已失效');
+        }
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
