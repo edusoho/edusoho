@@ -12776,11 +12776,21 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
          var getFastMarkerTime = function(){
            for (var i = 0; i < markersList.length; i++) {
              var marker = markersList[i];
-             if(marker.finished ==undefined || marker.finished ==false){
+             if(marker.finished ==undefined || marker.finished == false){
               return marker.time;
              }
            }
            return -1;
+         }
+
+         var isFinishAllMarker = function(){
+          for (var i = 0; i < markersList.length; i++) {
+             var marker = markersList[i];
+             if(marker.finished ==undefined || marker.finished == false){
+              return false;
+             }
+           }
+           return true;
          }
 
          var fastMarkerTime = getFastMarkerTime();
@@ -12793,6 +12803,7 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
            // }
            player.currentTime(fastMarkerTime);
          }
+
 
          if (currentMarkerIndex != -1) {
             // check if staying at same marker
@@ -12813,9 +12824,6 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
             // look for new index
             for (var i = 0; i < markersList.length; i++) {
                nextMarkerTime = getNextMarkerTime(i);
-               
-               
-               console.log(setting.markerTip.time(markersList[i]));
                if(currentTime >= setting.markerTip.time(markersList[i]) &&
                   currentTime < nextMarkerTime) {
                   
@@ -12827,10 +12835,11 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
          
          //console.log(currentMarkerIndex);
 
+
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if ( newMarkerIndex != -1 && options.onMarkerReached) {
+            if (  newMarkerIndex != -1 && currentTime ==markersList[newMarkerIndex].time && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex],player);
             }
             currentMarkerIndex = newMarkerIndex;

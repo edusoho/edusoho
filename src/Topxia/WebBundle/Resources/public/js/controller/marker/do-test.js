@@ -38,9 +38,10 @@ define(function(require, exports, module) {
                 });
             });
         });
-        $(".marker-modal .close").on('click', function() {
+        $(".marker-modal .close").on('click', function(e) {
             console.log($(this).closest('#modal'));
             $(this).closest('#modal').hide();
+            e.preventDefault();
         });
 
         $(".marker-modal .question-single_choice li,.marker-modal .question-determine li").on('click', function() {
