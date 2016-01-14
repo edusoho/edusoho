@@ -12837,9 +12837,11 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
 
 
          // set new marker index
+         //currentMarkerIndex!=-1 &&console.log(setting.markerTip.time(markersList[currentMarkerIndex]));
+         //console.log(markersList[newMarkerIndex].time);
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (  newMarkerIndex != -1 && currentTime ==markersList[newMarkerIndex].time && options.onMarkerReached) {
+            if (  newMarkerIndex != -1 && Math.round(currentTime,0) == setting.markerTip.time(markersList[newMarkerIndex]) && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex],player);
             }
             currentMarkerIndex = newMarkerIndex;
