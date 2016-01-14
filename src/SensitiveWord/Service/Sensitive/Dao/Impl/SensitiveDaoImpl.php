@@ -41,6 +41,11 @@ class SensitiveDaoImpl extends BaseDao implements SensitiveDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
+    public function updateKeyword($id, $conditions)
+    {
+        return $this->getConnection()->update($this->table, $conditions, array('id' => $id));
+    }
+
     public function searchkeywordsCount()
     {   
         $sql = "SELECT COUNT(*) FROM {$this->table}";

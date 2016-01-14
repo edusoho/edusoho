@@ -13,6 +13,8 @@ interface SensitiveDao
 
     public function deleteKeyword($id);
 
+    public function updateKeyword($id, $conditions);
+
     public function searchkeywordsCount();
 
     public function searchKeywords($condtions, $orderBy, $start, $limit);

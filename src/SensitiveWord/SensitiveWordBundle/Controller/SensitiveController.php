@@ -50,7 +50,12 @@ class SensitiveController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $keyword = $request->request->get('name');
-            $keyword = $this->getSensitiveService()->addKeyword($keyword);
+            $keyword = trim($keyword);
+            $keyword = preg_split('/\r/', $keyword, -1, PREG_SPLIT_NO_EMPTY);
+            $state = $request->request->get('state');
+            foreach ($keyword as $key => $value) {
+                $keyword = $this->getSensitiveService()->addKeyword($value, $state);
+            }
             return $this->redirect($this->generateUrl('admin_keyword'));
         }
         
@@ -63,6 +68,19 @@ class SensitiveController extends BaseController
         return $this->redirect($this->generateUrl('admin_keyword'));
     }
     
+    public function changeAction(Request $request, $id)
+    {
+        $state = $request->query->get('state');
+        if ($state == 'banned') {
+            $conditions['state'] = 'replaced';
+        }
+        else {
+            $conditions['state'] = 'banned';
+        }
+        $this->getSensitiveService()->updateKeyword($id, $conditions);
+        return $this->redirect($this->generateUrl('admin_keyword'));
+    }
+
     public function banlogsAction(Request $request)
     {
         $conditions = array();

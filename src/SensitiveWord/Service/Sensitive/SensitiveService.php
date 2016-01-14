@@ -12,9 +12,11 @@ interface SensitiveService {
     
     public function findAllKeywords();
     
-    public function addKeyword($keyword);
+    public function addKeyword($keyword, $state);
     
     public function deleteKeyword($id);
+
+    public function updateKeyword($id, $conditions);
     
     public function searchkeywordsCount();
     

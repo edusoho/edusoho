@@ -114,13 +114,14 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $this->getSensitiveDao()->findAllKeywords();
     }
     
-    public function addKeyword($keyword)
+    public function addKeyword($keyword, $state)
     {
-        $keyword = array(
+        $conditions = array(
             'name' => $keyword,
+            'state' => $state,
             'createdTime' => time()
         );
-        return $this->getSensitiveDao()->addKeyword($keyword);
+        return $this->getSensitiveDao()->addKeyword($conditions);
     }
     
     public function deleteKeyword($id)
@@ -128,6 +129,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $this->getSensitiveDao()->deleteKeyword($id);
     }
     
+    public function updateKeyword($id,$conditions)
+    {
+        return $this->getSensitiveDao()->updateKeyword($id, $conditions);
+    }
+
     public function searchkeywordsCount()
     {
         return $this->getSensitiveDao()->searchkeywordsCount();

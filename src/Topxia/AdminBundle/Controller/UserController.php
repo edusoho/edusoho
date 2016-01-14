@@ -109,6 +109,7 @@ class UserController extends BaseController
     {
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
+            var_dump($formData);exit();
             $formData['type'] = 'import';
 
             $user = $this->getAuthService()->register($this->getRegisterData($formData, $request->getClientIp()));
