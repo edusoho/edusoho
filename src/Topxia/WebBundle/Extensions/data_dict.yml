@@ -306,8 +306,8 @@ passedStatus:
     unpassed: 不合格
 
 state:
-    baned: 黑名单
-    replaced: 灰名单
+    banned: 禁用
+    replaced: 替换
 
 searchKeyWord:
     name: 关键词
