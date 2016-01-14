@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    var Notify = require('common/bootstrap-notify');
     exports.run = function() {
         var btn = $('#submitQuestion');
         var data = $("#data");
@@ -7,6 +8,10 @@ define(function(require, exports, module) {
         var questionType = data.data('type');
         btn.on('click', function() {
             var answer = doMarkerQuestion(questionType);
+            if(!answer){
+                Notify.danger("请先选择你的答案");
+                return;
+            }
             $.get(data.data('url'), {
                 "markerId": markerId,
                 "questionId": questionId,
