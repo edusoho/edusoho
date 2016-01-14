@@ -26,7 +26,48 @@
   background-color: #0fbe8a !important;
 }
 .btn {
-  border-radius: 20px;
+  padding: 8px 24px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.btn:hover,
+.btn:focus,
+.btn.focus,
+.btn.active {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+.btn-default {
+  border: 2px solid #a5a7b3;
+  color: #a5a7b3;
+  background: transparent;
+}
+.btn-default:hover,
+.btn-default:focus,
+.btn-default.focus,
+.btn-default.active {
+  background: #a5a7b3;
+  color: #fff;
+}
+.btn-primary {
+  border: 2px solid #10b67c;
+  color: #10b67c;
+  background-color: transparent!important;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary.active {
+  background: #10b67c !important;
+  color: #fff;
 }
 .btn-md {
   padding: 6px 25px;
@@ -545,6 +586,7 @@ input:focus {
 }
 .carousel-indicators {
   bottom: 0px;
+  margin-bottom: 0;
 }
 .carousel-indicators li.active {
   margin: 0 7px;
@@ -895,12 +937,17 @@ input:focus {
 .moocindex-more-btn {
   width: 108px;
   height: 36px;
+  line-height: 38px;
   border: 2px solid #a5a7b3;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
   padding: 12px 22px;
   color: #a5a7b3;
+}
+.moocindex-more-btn:hover {
+  background: #a5a7b3;
+  color: #fff;
 }
 /*module*/
 .week-reminder,
@@ -2853,20 +2900,21 @@ label {
   background: #fafafa;
 }
 .homepage .text-center {
-  margin: 40px 0;
+  margin-top: 40px;
 }
 .mooc-index-title {
   font-size: 22px;
   color: #272a41;
   position: relative;
   padding: 0 15px;
-  margin: 40px 0 30px;
+  line-height: 22px;
+  margin-bottom: 20px;
 }
 .mooc-index-title:after {
   content: "";
   position: absolute;
   left: 0;
-  top: 3px;
+  top: 0;
   width: 4px;
   height: 100%;
   background: #10b67c;
@@ -2879,25 +2927,32 @@ label {
 .course-filter.section-header .course-sort {
   top: -3px;
 }
+.mooc-navset {
+  background: #fff;
+}
+.mooc-navset .left-wrapper {
+  padding-bottom: 10px;
+}
 .mooc-navset .set-left {
   width: 228px;
-  background: #10b67c;
-  color: #ffffff;
+  color: #10b67c;
   text-align: center;
   float: left;
+  margin: 25px 0;
+  border-right: 1px solid #f1f1f1;
 }
 .mooc-navset .set-left h2 {
-  font-size: 32px;
-  margin: 30px 0 8px ;
-  line-height: 32px;
+  font-size: 24px;
+  margin: 0 0 8px ;
+  line-height: 24px;
 }
 .mooc-navset .set-left i {
-  font-size: 38px;
+  font-size: 27px;
+  padding-right: 16px;
 }
 .mooc-navset .set-left p {
   font-size: 12px;
   margin: 0;
-  padding-bottom: 31px;
 }
 .mooc-navset .set-right {
   width: 912px;
@@ -2913,25 +2968,34 @@ label {
 .mooc-navset .set-right .navset-wrapper {
   border-right: 1px solid #f1f1f1;
   margin-right: -1px;
+  padding: 15px;
+  height: 60px;
+  overflow: hidden;
+  line-height: 16px;
 }
 .mooc-navset .set-right .width-25 {
   width: 24.6%;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
-  margin: 43px 0;
+  margin: 25px 0;
 }
 .mooc-navset .set-right .width-25:last-child .navset-wrapper {
   border-right: none;
 }
 .mooc-navset .set-right .width-25 a {
   color: #272a41;
-  font-size: 18px;
+  font-size: 16px;
+}
+.mooc-navset .set-right .width-25 a:hover {
+  color: #10b67c;
 }
 .mooc-navset .set-right .width-25 img {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   display: inline-block;
-  margin-right: 6px;
+  margin-right: 15px;
+  position: relative;
+  top: -2px;
 }
 .mooc-navset .set-right .width-25 i {
   color: #10b67c;
@@ -2960,6 +3024,12 @@ label {
 .mooc-navset .set-right .arrow-left i,
 .mooc-navset .set-right .arrow-right i {
   font-size: 22px;
+}
+.mooc-course {
+  padding: 50px 0;
+}
+.mooc-course .text-center {
+  margin-top: 10px;
 }
 .mooc-course .width-20 {
   width: 20%;
@@ -3007,9 +3077,6 @@ label {
 .mooc-course .course-list .course-item .title {
   margin: 0;
   padding: 0 10px;
-  display: block;
-  height: 40px;
-  white-space: inherit;
 }
 .mooc-course .course-list .course-item .title a {
   color: #272a41;
@@ -3032,23 +3099,15 @@ label {
   padding: 10px;
 }
 .mooc-course .course-list .course-img .mooc-certificate-2 {
+  background: url("../img/badge.png") no-repeat;
+  width: 54px;
+  height: 54px;
   position: absolute;
-  right: 30px;
-  height: 24px;
-  line-height: 20px;
-  background: #ffb300;
-  padding: 0 5px;
-  color: #ffffff;
-  text-align: right;
-  top: 24px;
-  border-radius: 4px;
-  font-size: 12px;
+  right: 10px;
+  top: 10px;
 }
-.mooc-course .course-list .course-img .mooc-certificate-2 i {
-  color: #ffffff;
-  font-size: 22px;
-  position: relative;
-  bottom: -2px;
+.mooc-classroom {
+  padding: 50px 0;
 }
 .mooc-classroom .class-wrapper {
   background: #ffffff;
@@ -3098,6 +3157,7 @@ label {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
+  margin: 0;
 }
 .mooc-classroom .class-item:hover .class-wrapper {
   -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
@@ -3126,15 +3186,14 @@ label {
 .mooc-feature {
   background: #ffffff;
   text-align: center;
-  padding: 69px 0 68px;
-  margin-top: 30px;
+  padding: 70px 0 70px;
 }
 .mooc-feature .row {
   opacity: 0;
   filter: alpha(opacity=0);
 }
 .mooc-feature img {
-  width: 42%;
+  width: 110px;
   margin: 0 auto;
 }
 .mooc-feature h4 {
@@ -3148,6 +3207,8 @@ label {
   margin: 0 auto;
 }
 .mooc-teacher {
+  background: #fff;
+  padding: 50px 0;
   position: relative;
 }
 .mooc-teacher .mooc-carousel-indicators li {
@@ -3185,7 +3246,7 @@ label {
   z-index: 2;
 }
 .mooc-teacher .teach-list {
-  padding: 15px 0 30px;
+  padding: 0 0 50px;
 }
 .mooc-teacher .teach-list .swiper-pager {
   position: absolute;
@@ -3213,7 +3274,7 @@ label {
 }
 .mooc-teacher .teach-item {
   position: relative;
-  padding: 20px 0;
+  padding: 20px 0 0;
 }
 .mooc-teacher .teach-item .teach-wrapper {
   background: #ffffff;
@@ -3221,6 +3282,7 @@ label {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
+  border: 1px solid #e4ebf3;
 }
 .mooc-teacher .teach-item .teach-wrapper:hover {
   -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
@@ -3229,7 +3291,7 @@ label {
 }
 .mooc-teacher .teach-item .teacher-img {
   position: absolute;
-  top: -15px;
+  top: -20px;
   right: 36px;
 }
 .mooc-teacher .teach-item .teacher-name {
@@ -3252,25 +3314,15 @@ label {
   overflow: hidden;
   margin: 15px 0 34px;
 }
-.mooc-teacher .teach-item .teacher-kown {
+.mooc-teacher .teach-item .teacher-know {
   text-align: center;
   margin-bottom: 30px;
 }
-.mooc-teacher .teach-item .teacher-kown a {
-  border: 2px solid #10b67c;
-  padding: 10px 32px;
-  font-size: 16px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  color: #10b67c;
-}
-.mooc-teacher .teach-item .teacher-kown a:hover {
-  background: #10b67c;
-  color: #ffffff;
+.mooc-teacher .teach-item .teacher-know a {
+  padding: 8px 35px;
 }
 .mooc-cooperate {
-  margin-bottom: 20px;
+  padding: 50px 0;
 }
 .mooc-cooperate .cooperate-list {
   padding: 0;
@@ -3392,46 +3444,46 @@ label {
   background: rgba(255, 255, 255, 0.5);
 }
 .js-animate-item.active .mobile {
-  -webkit-animation: fadeInUp 1s 0.3s ease both;
-  -moz-animation: fadeInUp 1s 0.3s ease both;
-  -o-animation: fadeInUp 1s 0.3s ease both;
-  animation: fadeInUp 1s 0.3s ease both;
+  -webkit-animation: fadeInUp 1s ease both;
+  -moz-animation: fadeInUp 1s ease both;
+  -o-animation: fadeInUp 1s ease both;
+  animation: fadeInUp 1s ease both;
 }
 .js-animate-item.active .calculator {
-  -webkit-animation: fadeInUp 1s 0.5s ease both;
-  -moz-animation: fadeInUp 1s 0.5s ease both;
-  -o-animation: fadeInUp 1s 0.5s ease both;
-  animation: fadeInUp 1s 0.5s ease both;
+  -webkit-animation: fadeInUp 1s ease both;
+  -moz-animation: fadeInUp 1s ease both;
+  -o-animation: fadeInUp 1s ease both;
+  animation: fadeInUp 1s ease both;
 }
 .js-animate-item.active .book {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
+  -webkit-animation: fadeInUp 1s ease both;
+  -moz-animation: fadeInUp 1s ease both;
+  -o-animation: fadeInUp 1s ease both;
+  animation: fadeInUp 1s ease both;
 }
 .js-animate-item.active .earphone {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
+  -webkit-animation: fadeInUp 1s ease both;
+  -moz-animation: fadeInUp 1s ease both;
+  -o-animation: fadeInUp 1s ease both;
+  animation: fadeInUp 1s ease both;
 }
 .js-animate-item.active .learning-btn {
-  -webkit-animation: fadeInDown 1s 0.8s ease both;
-  -moz-animation: fadeInDown 1s 0.8s ease both;
-  -o-animation: fadeInDown 1s 0.8s ease both;
-  animation: fadeInDown 1s 0.8s ease both;
+  -webkit-animation: fadeInDown 1s ease both;
+  -moz-animation: fadeInDown 1s ease both;
+  -o-animation: fadeInDown 1s ease both;
+  animation: fadeInDown 1s ease both;
 }
 .js-animate-item.active .coffee {
-  -webkit-animation: fadeInUp 1s 0.3s ease both;
-  -moz-animation: fadeInUp 1s 0.3s ease both;
-  -o-animation: fadeInUp 1s 0.3s ease both;
-  animation: fadeInUp 1s 0.3s ease both;
+  -webkit-animation: fadeInUp 1s ease both;
+  -moz-animation: fadeInUp 1s ease both;
+  -o-animation: fadeInUp 1s ease both;
+  animation: fadeInUp 1s ease both;
 }
 .js-animate-item.active .row {
-  -webkit-animation: fadeInUp 1s 0.8s ease both;
-  -moz-animation: fadeInUp 1s 0.8s ease both;
-  -o-animation: fadeInUp 1s 0.8s ease both;
-  animation: fadeInUp 1s 0.8s ease both;
+  -webkit-animation: fadeInUp 1s ease both;
+  -moz-animation: fadeInUp 1s ease both;
+  -o-animation: fadeInUp 1s ease both;
+  animation: fadeInUp 1s ease both;
 }
 .friendlink {
   padding: 48px 0;
@@ -3587,12 +3639,20 @@ footer .footer-attr p i {
 .mooc-poster span.swiper-pagination-switch {
   background: rgba(255, 255, 255, 0.5);
   border: none;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .mooc-poster span.swiper-pagination-switch.swiper-visible-switch.swiper-active-switch {
   width: 30px;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .mooc-poster .mooc-notice {
   width: 260px;
