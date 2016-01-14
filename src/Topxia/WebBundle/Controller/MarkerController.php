@@ -134,13 +134,13 @@ class MarkerController extends BaseController
         $results      = array();
         $user         = $this->getUserService()->getCurrentUser();
 
-        if ($storage['video_header']) {
-            $results['videoHeaderTime'] = $video_header['length'];
-        }
-
         foreach ($markers as $key => $marker) {
             $results[$key]           = $marker;
             $results[$key]['finish'] = $this->getMarkerService()->isFinishMarker($user['id'], $marker['id']);
+
+            if ($storage['video_header']) {
+                $results['videoHeaderTime'] = $video_header['length'];
+            }
         }
 
         return $this->createJsonResponse($results);
