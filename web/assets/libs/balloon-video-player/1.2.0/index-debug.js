@@ -12802,6 +12802,7 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
            //   player.pause();
            // }
            player.currentTime(fastMarkerTime);
+           return ;
          }
 
 
