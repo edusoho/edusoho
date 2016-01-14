@@ -12521,7 +12521,7 @@ define("balloon-video-player/1.2.0/src/plugins/marker/marker-debug", [], functio
    //default setting
    var defaultSetting = {
       markerStyle: {
-         'width':'8px',
+         'width':'4px',
          'border-radius': '10%',
       },
       markerTip: {
