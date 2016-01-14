@@ -191,6 +191,7 @@ define(function(require, exports, module) {
         slideScale: function(e) {
             //避免拖动过程中触发事件
             if (this.get('isDraggable') == 'false') {
+                $('.dashboard-content .mask').show();
                 var _obj = this;
                 var $this = $(e.currentTarget);
                 var $scalebox = $(_obj.get("scalebox"));
@@ -216,6 +217,7 @@ define(function(require, exports, module) {
                 }).mouseup(function() {
                     $(document).off('mousemove');
                     $(document).off('mouseup');
+                    $('.dashboard-content .mask').hide();
                     $scalebox.find('.scale.blue').removeClass('show');
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
