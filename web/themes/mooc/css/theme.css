@@ -2945,6 +2945,8 @@ label {
   font-size: 24px;
   margin: 0 0 8px ;
   line-height: 24px;
+  height: 24px;
+  overflow: hidden;
 }
 .mooc-navset .set-left i {
   font-size: 27px;
