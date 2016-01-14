@@ -139,7 +139,7 @@ class MarkerController extends BaseController
             $results[$key]['finish'] = $this->getMarkerService()->isFinishMarker($user['id'], $marker['id']);
 
             if ($storage['video_header']) {
-                $results['videoHeaderTime'] = $video_header['length'];
+                $results[$key]['videoHeaderTime'] = $video_header['length'];
             }
         }
 
