@@ -1,5 +1,6 @@
 {% set groupNav = groupNav|default(null) %} 
 <ol class="breadcrumb">
+  <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页') }}</a></li>
   <li><a href="{{path('group')}}">{{ setting('group.name', '小组频道') }}</a></li>
   <li><a href="{{path('group_show',{id:groupinfo.id})}}">{{groupinfo.title}}</a></li>
 </ol>
