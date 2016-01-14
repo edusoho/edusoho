@@ -11763,7 +11763,8 @@ textarea {
   color: #fff;
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-close,
-.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .content {
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .content,
+.question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .item-lesson .icon-drag {
   display: none;
 }
 .question-manage .editbox .scalebox .scale.blue .scale-details .lesson-list .placeholder {

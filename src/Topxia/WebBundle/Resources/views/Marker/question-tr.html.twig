@@ -3,7 +3,7 @@
   <li class="row item-lesson {% if question.exist|default(false) %}disdrag {% else %} drag {% endif %}" id="" question-id="{{question.id}}">
     <div class="col-xs-6 title">
       <div class="before">
-        <span class="glyphicon glyphicon-move mrm"></span>
+        <span class="icon-drag glyphicon glyphicon-move mrm "></span>
         <span class="number"><span class="num">1</span>.</span>
         {{question.stem|fill_question_stem_text|plain_text(12) }}
       </div>
