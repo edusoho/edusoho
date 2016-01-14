@@ -299,10 +299,11 @@ define(function(require, exports, module) {
                             dataType: "json",
                             success:function(data){
                               var markers = new Array();
+
                               for(var index in data) {
                                 var marker={
                                   "id":data[index].id,
-                                  "time":data[index].second+data[index].videoHeaderTime,
+                                  "time":(parseInt(data[index].second) + data[index].videoHeaderTime),
                                   "text":"ads",
                                   "finished":data[index].finish
                                 };
