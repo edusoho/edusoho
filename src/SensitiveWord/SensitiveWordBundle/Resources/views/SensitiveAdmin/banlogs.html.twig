@@ -46,7 +46,7 @@
 					    	{% endif %}
 					    </td>
 
-					    <td class>{{ banlog.text }}</td>
+					    <td class>{{ banlog.text|raw }}</td>
 					    
 					    <td>{% if banlog.userId %}{{ users[banlog.userId].nickname }} {% else %} - {% endif %}</td>
 

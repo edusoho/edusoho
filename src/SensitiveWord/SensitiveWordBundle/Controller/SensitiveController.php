@@ -93,25 +93,56 @@ class SensitiveController extends BaseController
             $fields = array();
         }
         $conditions = array_merge($conditions, $fields);
+
+        if(empty($banlogs)) {
+            $banlogs = array();
+        }
+
         if ($conditions['searchBanlog'] == 'userName') {
             $userName =$conditions['keyword'];
-            $userTemp = $this->getUserService()->getUserByNickname($userName);
+            $userTemp = $this->getUserService()->searchUsers(
+                array('nickname' => $userName),
+                array('createdTime', 'DESC'),
+                0,
+                1000
+            );
+            $userIds = ArrayToolkit::column($userTemp, 'id');
             if (!empty($userTemp)) {
-                $conditions['userId'] = $userTemp['id'];
+                $conditions['userId'] = $userIds;
             }
             else {
                 if(!empty($conditions['keyword']))
                     $conditions['userId'] = 0;
             }
+            $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
+            
+            $paginator = new Paginator($this->get('request') , $count, 50);
+
+            foreach ($userIds as $value) {
+                $conditions['userId'] = $value; 
+                $banlogsTemp = $this->getSensitiveService()->searchBanlogs($conditions, array(
+                    'createdTime',
+                    'DESC'
+                ) , $paginator->getOffsetCount() , $paginator->getPerPageCount());
+                $banlogs = array_merge($banlogs, $banlogsTemp);
+            }
         }
-        
-        $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
-        $paginator = new Paginator($this->get('request') , $count, 50);
-        
-        $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
-            'createdTime',
-            'DESC'
-        ) , $paginator->getOffsetCount() , $paginator->getPerPageCount());
+        else {
+            $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
+            
+            $paginator = new Paginator($this->get('request') , $count, 50);
+
+            $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
+                    'createdTime',
+                    'DESC'
+                ) , $paginator->getOffsetCount() , $paginator->getPerPageCount());
+        }
+
+
+        foreach ($banlogs as &$value) {
+            $value['text'] = str_replace($value['keywordName'], "<span style='color:#FF0000'>".$value['keywordName']."</span>", $value['text']);
+        }
+
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($banlogs, 'userId'));
         return $this->render('SensitiveWordBundle:SensitiveAdmin:banlogs.html.twig', array(
             'banlogs' => $banlogs,
