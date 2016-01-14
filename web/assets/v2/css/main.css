@@ -11691,6 +11691,11 @@ textarea {
     top: -40px;
   }
 }
+.question-manage .editbox .scalebox .scale.white {
+  height: 80%;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
 .question-manage .editbox .scalebox .scale.white .scale-details {
   visibility: visible;
 }
