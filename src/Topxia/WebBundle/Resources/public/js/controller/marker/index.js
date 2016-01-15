@@ -30,20 +30,20 @@ define(function(require, exports, module) {
                 url: markersUrl,
                 dataType: "json",
                 success:function(data){
-                    var markers = new Array();
-                    for(var index in data) {
-                      var marker={
-                        "id":data[index].id,
-                        "time":data[index].second,
-                        "text":"ads",
-                        "finished":data[index].finish
-                        };
-                        markers.push(marker);
-                    }
-                    if(data.length != 0) {
-                        player.setMarkers(markers);
-                    }
-                    console.log(markers);
+                    // var markers = new Array();
+                    // for(var index in data) {
+                    //   var marker={
+                    //     "id":data[index].id,
+                    //     "time":data[index].second,
+                    //     "text":"ads",
+                    //     "finished":data[index].finish
+                    //     };
+                    //     markers.push(marker);
+                    // }
+                    // if(data.length != 0) {
+                    //     player.setMarkers(markers);
+                    // }
+                    // console.log(markers);
                 }
             });
         });
