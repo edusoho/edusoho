@@ -41,3 +41,8 @@ admin_organization_delete:
 admin_teacher:
     pattern:  /teacher
     defaults: { _controller: MoocAdminBundle:Teacher:index }
+
+admin_setting_theme:
+    pattern:  /setting/theme
+    defaults: { _controller: MoocAdminBundle:Theme:index }
+
