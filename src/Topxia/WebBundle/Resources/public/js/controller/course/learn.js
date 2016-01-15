@@ -754,33 +754,6 @@ define(function(require, exports, module) {
 
             return $countDown;          
         },
-        _keyDow:function() {
-            // var $player = $(document.getElementById('viewerIframe').contentDocument);
-            // console.log($player);
-            // $player.keydown(function(event) {
-            //     console.log("ok");
-            //     console.log(event.keyCode );
-            //     if (event.keyCode == 27) {
-            //         alert('左');
-            //     }
-            // });
-            $(document).keydown(function(event) {
-                //判断当event.keyCode 为37时（即左方面键），执行函数to_left();
-                //判断当event.keyCode 为39时（即右方面键），执行函数to_right();
-                console.log(event.keyCode);
-                if (event.keyCode == 37) {
-                    alert('左');
-                } else if (event.keyCode == 39) {
-                    alert('右');
-                } else if (event.keyCode == 27) {
-                    alert('esc键');
-                } else if (event.keyCode == 13) {
-                    alert('回车键');
-                } else {
-                    alert('这按钮的ASCII码,是' + event.keyCode);
-                }
-            });
-        }
 
     });
 
