@@ -9,7 +9,8 @@ define(function(require, exports, module) {
         btn.on('click', function() {
             var answer = doMarkerQuestion(questionType);
             if(!answer|| answer.length==0){
-                Notify.danger("请先作答");
+                $('.text-danger').html("请先作答!");
+                setTimeout(clearHtml,2000);
                 return;
             }
             $.get(data.data('url'), {
@@ -59,6 +60,9 @@ define(function(require, exports, module) {
             var $this = $(this);
             var $typecheck = $(this).find('.type-check').toggleClass('active');
         });
+        function clearHtml(){
+            $('.text-danger').html("");
+        };
         var doMarkerQuestion = function(type) {
             switch (type) {
                 case "single_choice":

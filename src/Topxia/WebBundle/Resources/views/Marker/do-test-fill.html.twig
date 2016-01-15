@@ -14,7 +14,14 @@
 		    {% endfor %}
 		</div>
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
-		<button id="submitQuestion" class="btn btn-primary btn-lg mvm pull-right">提交</button>
+		<div class="row">
+			<div class="col-xs-10 text-right">
+				<div class="pvm text-danger mbl"></div>
+			</div>
+			<div class="col-xs-2">
+				<button id="submitQuestion" class="btn btn-primary btn-lg mbl pull-right">提 交</button>
+			</div>
+		</div>
 	</div>
 	<div class="question-footer">
 	</div>
