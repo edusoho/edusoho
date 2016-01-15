@@ -5199,11 +5199,11 @@ a.homework-essay-textarea-pack-up {
   border-color: #f5f5f5;
 }
 .nav.nav-tabs.nav-tabs-lg > li > a {
-  padding: 10px 30px 15px 30px;
+  padding: 5px 30px 15px 30px;
 }
 @media (max-width: 1199px) {
   .nav.nav-tabs.nav-tabs-lg > li > a {
-    padding: 8px 20px 13px 20px;
+    padding: 3px 20px 13px 20px;
   }
 }
 @media (max-width: 767px) {
@@ -5279,7 +5279,7 @@ a.homework-essay-textarea-pack-up {
 }
 .nav-btn-tab .btnbar {
   position: absolute;
-  top: 5px;
+  top: 0;
   right: 0;
 }
 .pager > li > a {
@@ -9835,18 +9835,12 @@ textarea {
 }
 .class-detail-main .nav.nav-tabs > li > a,
 .course-detail-main .nav.nav-tabs > li > a {
-  padding: 10px 20px;
+  padding: 5px 20px 15px;
 }
 @media (max-width: 1199px) {
   .class-detail-main .nav.nav-tabs > li > a,
   .course-detail-main .nav.nav-tabs > li > a {
-    padding: 10px 20px;
-  }
-}
-@media (max-width: 1199px) {
-  .class-detail-main .nav.nav-tabs > li > a,
-  .course-detail-main .nav.nav-tabs > li > a {
-    padding: 10px 10px;
+    padding: 5px 10px 10px;
     font-size: 14px;
   }
 }
