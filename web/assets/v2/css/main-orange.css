@@ -3949,7 +3949,7 @@ Pagination Styles
   color: #fff;
 }
 .course-item-list-multi .item-object .item-free {
-  background: url('/assets/v2/img/old/course-item-free.png') 0 0 no-repeat;
+  background: url('../img/old/course-item-free.png') 0 0 no-repeat;
   position: absolute;
   top: 0;
   left: 0;
@@ -6930,10 +6930,10 @@ textarea {
   top: 0;
   width: 68px;
   height: 68px;
-  background: url("/assets/v2/img/tag_discount.png");
+  background: url("../img/tag_discount.png");
 }
 .course-list .course-item .course-img .tag-discount.free {
-  background: url("/assets/v2/img/tag_limitfree.png");
+  background: url("../img/tag_limitfree.png");
 }
 .course-list .course-item .course-img .img-responsive {
   width: 100%;
@@ -6951,13 +6951,13 @@ textarea {
   height: 50px;
 }
 .course-list .course-item .tags .tag-live {
-  background: url("/assets/v2/img/tag_live.png") no-repeat;
+  background: url("../img/tag_live.png") no-repeat;
 }
 .course-list .course-item .tags .tag-serialing {
-  background: url("/assets/v2/img/tag_serialing.png") no-repeat;
+  background: url("../img/tag_serialing.png") no-repeat;
 }
 .course-list .course-item .tags .tag-finished {
-  background: url("/assets/v2/img/tag_finished.png") no-repeat;
+  background: url("../img/tag_finished.png") no-repeat;
 }
 .course-list .course-item .title {
   margin-top: 10px;
@@ -7765,7 +7765,7 @@ textarea {
 }
 .sign_main .signed_day,
 .sign_main .signed_anime_day {
-  background: url('/assets/v2/img/sign_have_anime.gif') center no-repeat;
+  background: url('../img/sign_have_anime.gif') center no-repeat;
 }
 .order-nav {
   margin: 0 0 30px 0;
@@ -7962,34 +7962,34 @@ textarea {
   left: 15px;
 }
 .card-pack-item .stamp.stamp-outdate {
-  background: url('/assets/v2/img/card.png') no-repeat 0 -349px;
+  background: url('../img/card.png') no-repeat 0 -349px;
 }
 .card-pack-item .stamp.stamp-cancel {
-  background: url('/assets/v2/img/card.png') no-repeat -410px -351px;
+  background: url('../img/card.png') no-repeat -410px -351px;
 }
 .card-pack-item.coupon-item {
-  background: url('/assets/v2/img/card.png') no-repeat;
+  background: url('../img/card.png') no-repeat;
 }
 .card-pack-item.coupon-item.useless {
-  background: url('/assets/v2/img/card.png') no-repeat 0 -174px;
+  background: url('../img/card.png') no-repeat 0 -174px;
 }
 .card-pack-item.coupon-item .title {
   padding-top: 38px;
 }
 .card-pack-item.coupon-item .stamp-used {
-  background: url('/assets/v2/img/card.png') no-repeat -140px -349px;
+  background: url('../img/card.png') no-repeat -140px -349px;
 }
 .card-pack-item.card-item {
-  background: url('/assets/v2/img/card.png') no-repeat -260px 0;
+  background: url('../img/card.png') no-repeat -260px 0;
 }
 .card-pack-item.card-item.useless {
-  background: url('/assets/v2/img/card.png') no-repeat -260px -174px;
+  background: url('../img/card.png') no-repeat -260px -174px;
 }
 .card-pack-item.card-item .title {
   padding-top: 58px;
 }
 .card-pack-item.card-item .stamp-used {
-  background: url('/assets/v2/img/card.png') no-repeat -275px -351px;
+  background: url('../img/card.png') no-repeat -275px -351px;
 }
 .modal-card-pack.modal-logined .modal-content:after {
   position: absolute;
@@ -7998,7 +7998,7 @@ textarea {
   top: 105px;
   right: 90px;
   content: '';
-  background: url('/assets/v2/img/card_user.png') center center no-repeat;
+  background: url('../img/card_user.png') center center no-repeat;
 }
 @media (max-width: 767px) {
   .modal-card-pack.modal-logined .modal-content:after {
@@ -8007,7 +8007,7 @@ textarea {
 }
 .modal-card-pack .modal-content {
   position: relative;
-  background: url('/assets/v2/img/card_bg.png') #feba37 center center no-repeat;
+  background: url('../img/card_bg.png') #feba37 center center no-repeat;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
@@ -8907,19 +8907,19 @@ textarea {
   width: 40px;
   height: 50px;
   margin-right: 6px;
-  background: url("/assets/v2/img/tag_serialing.png") no-repeat;
+  background: url("../img/tag_serialing.png") no-repeat;
 }
 .course-detail-header .course-img .tag-live {
   display: inline-block;
   width: 40px;
   height: 50px;
-  background: url("/assets/v2/img/tag_live.png") no-repeat;
+  background: url("../img/tag_live.png") no-repeat;
 }
 .course-detail-header .course-img .tag-finished {
   display: inline-block;
   width: 40px;
   height: 50px;
-  background: url("/assets/v2/img/tag_finished.png") no-repeat;
+  background: url("../img/tag_finished.png") no-repeat;
 }
 .course-detail-header .title {
   color: #313131;
@@ -10388,7 +10388,7 @@ textarea {
   text-align: center;
 }
 .search-banner {
-  background: url('/assets/v2/img/banner_search.jpg') top center no-repeat;
+  background: url('../img/banner_search.jpg') top center no-repeat;
   height: 200px;
 }
 .search-banner .search-input-group {
@@ -10692,7 +10692,7 @@ textarea {
   right: 30px;
   width: 191px;
   height: 241px;
-  background: url('/assets/v2/img/icon_search.png') no-repeat;
+  background: url('../img/icon_search.png') no-repeat;
 }
 .error-panel .well .error-403-icon {
   position: absolute;
@@ -10700,7 +10700,7 @@ textarea {
   bottom: -28px;
   width: 245px;
   height: 248px;
-  background: url('/assets/v2/img/icon_lock.png') no-repeat;
+  background: url('../img/icon_lock.png') no-repeat;
 }
 @media (max-width: 1199px) {
   .error-panel .well .error-403-icon {
@@ -10713,7 +10713,7 @@ textarea {
   right: -140px;
   width: 297px;
   height: 219px;
-  background: url('/assets/v2/img/icon_server.png') no-repeat;
+  background: url('../img/icon_server.png') no-repeat;
 }
 @media (max-width: 1199px) {
   .error-panel .well .error-500-icon {
@@ -11136,7 +11136,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('/assets/v2/img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -11532,7 +11532,7 @@ textarea {
 }
 .form-paytype .check .icon {
   display: none;
-  background: url('/assets/v2/img/old/pay_check_status.png') no-repeat;
+  background: url('../img/old/pay_check_status.png') no-repeat;
   top: -2px;
   right: -2px;
   width: 23px;
@@ -11554,7 +11554,7 @@ textarea {
 .pay-agreement-list li.checked .pay-bank:after {
   position: absolute;
   content: "";
-  background: url('/assets/v2/img/old/pay_check_status.png') no-repeat;
+  background: url('../img/old/pay_check_status.png') no-repeat;
   top: -2px;
   right: -2px;
   width: 23px;
@@ -11783,7 +11783,7 @@ textarea {
   }
 }
 .es-mobile .mobile-first {
-  background: url("/assets/v2/img/mobile/mobile_bg.jpg") top center;
+  background: url("../img/mobile/mobile_bg.jpg") top center;
 }
 .es-mobile .mobile-first .container {
   position: relative;
@@ -11871,7 +11871,7 @@ textarea {
   }
 }
 .es-mobile .mobile-first .label-mobile {
-  background: url("/assets/v2/img/mobile/label_mobile_bg.png") top center no-repeat;
+  background: url("../img/mobile/label_mobile_bg.png") top center no-repeat;
   width: 240px;
   line-height: 50px;
   font-size: 16px;
@@ -12081,7 +12081,7 @@ textarea {
   position: relative;
   padding-top: 100px;
   min-height: 200px;
-  background: #fafafa url('/assets/v2/img/mobile/mobile_bg2.jpg') center 82% no-repeat;
+  background: #fafafa url('../img/mobile/mobile_bg2.jpg') center 82% no-repeat;
 }
 @media (max-width: 1199px) {
   .es-mobile .mobile-third {
