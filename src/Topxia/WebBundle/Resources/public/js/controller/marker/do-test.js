@@ -54,6 +54,11 @@ define(function(require, exports, module) {
             var $this = $(this);
             var $typecheck = $(this).find('.type-check').toggleClass('active');
         });
+
+        $(".marker-modal .question-choice li").on("click", function() {
+            var $this = $(this);
+            var $typecheck = $(this).find('.type-check').toggleClass('active');
+        });
         var doMarkerQuestion = function(type) {
             switch (type) {
                 case "single_choice":
@@ -67,6 +72,9 @@ define(function(require, exports, module) {
                     break;
                 case "fill":
                     return doFill();
+                    break;
+                case "choice":
+                    return doChoice();
                     break;
                 default:
                     break;
@@ -97,6 +105,13 @@ define(function(require, exports, module) {
                 var answer = 11;
                 answer = $("input[name='answer[" + questionId + "][]']").val();
                 return answer;
+            };
+            function doChoice() {
+                var answers = [];
+                $("span.type-check.active").each(function() {
+                    answers.push($(this).attr('value'));
+                });
+                return answers;
             };
         };
     }

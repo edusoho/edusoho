@@ -51,6 +51,14 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
             }
         }
 
+        if ($type == 'choice') {
+            if (array_diff($questionMarker['answer'], $answer) && array_diff($answer, $questionMarker['answer'])) {
+                $status = 'wrong';
+            } else {
+                $status = 'right';
+            }
+        }
+
         $questionMarkerResult = $this->findByUserIdAndQuestionMarkerId($userId, $questionMarkerId);
         return $this->addQuestionMarkerResult(array(
             'markerId'         => $markerId,

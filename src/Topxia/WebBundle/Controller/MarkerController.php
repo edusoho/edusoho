@@ -309,7 +309,7 @@ class MarkerController extends BaseController
         }
 
         $conditions['parentId'] = 0;
-        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill');
+        $conditions['types']    = array('determine', 'single_choice', 'uncertain_choice', 'fill', "choice");
         $orderBy                = array('createdTime', 'DESC');
         $paginator              = new Paginator(
             $request,
