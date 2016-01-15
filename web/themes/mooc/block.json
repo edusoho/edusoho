@@ -265,7 +265,7 @@
                 "type": "imglink",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/bottom_logo.png",
+                        "src": "\/themes\/mooc\/img\/theme.png",
                         "alt": "建议图片大小为233*64",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
