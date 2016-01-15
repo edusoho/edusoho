@@ -210,7 +210,7 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         //优惠码优惠价格
 
-        if ($fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if (!empty($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'classroom',
@@ -357,6 +357,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getOrderInfoTemplate()
     {
         return "ClassroomBundle:Classroom:orderInfo";
+    }
+
+    public function isTargetExist($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        if (empty($classroom) || $classroom['status'] == 'closed') {
+            return false;
+        }
+
+        return true;
     }
 
     protected function getClassroomService()

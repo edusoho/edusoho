@@ -3,6 +3,7 @@ namespace Topxia\Service\Task\Impl;
 
 use Topxia\Service\Task\TaskService;
 use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceEvent;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -95,7 +96,11 @@ class TaskServiceImpl extends BaseService implements TaskService
                     $updateInfo['intervalDate'] = ceil((time() - $getTask['taskStartTime']) / (24 * 3600));
                 }
 
-                return $this->updateTask($getTask['id'], $updateInfo);
+                $task = $this->updateTask($getTask['id'], $updateInfo);
+
+                $this->dispatchEvent('task.finished', new ServiceEvent($task));
+
+                return $task;
             }
         }
 

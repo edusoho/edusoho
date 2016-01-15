@@ -141,7 +141,9 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
     public function addLesson($lesson)
     {
-        $affected = $this->getConnection()->insert($this->table, $lesson);
+        $lesson['createdTime'] = time();
+        $lesson['updatedTime'] = $lesson['createdTime'];
+        $affected              = $this->getConnection()->insert($this->table, $lesson);
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course lesson error.');

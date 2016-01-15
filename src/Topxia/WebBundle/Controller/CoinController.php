@@ -299,8 +299,9 @@ class CoinController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $card     = $this->getCardService()->getCardByUserId($user['id']);
-        $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $card['cardId'])));
+        $record = $this->getInviteRecordService()->getRecordByInvitedUserId($user['id']);
+
+        $response = $this->redirect($this->generateUrl('my_cards', array('cardType' => 'coupon', 'cardId' => $record['invitedUserCardId'])));
         $response->headers->setCookie(new Cookie("modalOpened", '1'));
         return $response;
     }

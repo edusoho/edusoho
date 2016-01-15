@@ -2,7 +2,7 @@
 
 namespace Topxia\Service\Common;
 
-use Doctrine\DBAL\Connection;
+use Topxia\Service\Common\Connection;
 
 class TestCaseConnection extends Connection
 {

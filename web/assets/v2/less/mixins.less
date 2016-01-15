@@ -24,6 +24,10 @@
   .border-radius;
 }
 
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
 // 富文本编辑器样式统一处理
 .editor-text {
   img {
@@ -33,9 +37,9 @@
 }
 
 .section-gray {
-  background-color: #fafafa !important;
+  background-color: @bg-color !important;
   .text-line h5 > span {
-    background-color: #fafafa !important;
+    background-color: @bg-color !important;
   }
 }
 

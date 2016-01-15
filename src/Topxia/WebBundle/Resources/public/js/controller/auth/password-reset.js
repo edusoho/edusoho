@@ -72,8 +72,18 @@ define(function(require, exports, module) {
             }
         }
 
-        
-
+        if($('.js-find-password li').length > 1){
+            $('.js-find-by-email').hover(function(){
+                if(!$('.js-find-by-email').hasClass('active')){
+                    $('#alertxx').hide();
+                }
+            });
+            $('.js-find-by-mobile').hover(function(){
+                if(!$('.js-find-by-mobile').hasClass('active')){
+                    $('#alertxx').hide();
+                }
+            });
+        }
 
         makeValidator('email');
         $('.js-find-by-email').mouseover(function () {
