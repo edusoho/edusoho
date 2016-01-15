@@ -16,7 +16,7 @@
 				<span class="type-check" id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">
 					{{ choiceIndex }}
 				</span>
-				<span class="choice-body editor-text mll">{{ choice|bbCode2Html|striptags|raw|nl2br}}</span>
+				<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
 			</li>
 			{% endfor %}
 		</ul>

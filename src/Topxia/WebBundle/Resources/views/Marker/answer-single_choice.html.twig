@@ -12,7 +12,7 @@
 			{% set choiceIndex = (65+key)|chr %}
 			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
 				<span class="type-check {% if loop.index == answerChoiceIndex and loop.index == (selfAnswer+1) %} correct {% elseif loop.index == (selfAnswer+1) %} error {% endif %} " id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">{{ choiceIndex }}</span>
-				<span class="choice-body editor-text mll">{{ choice|bbCode2Html|striptags|raw|nl2br}}</span>
+				<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
 				{% if loop.index == answerChoiceIndex %}
 					<span class="label label-success label-md mll">正确答案</span>
 				{% endif %}
