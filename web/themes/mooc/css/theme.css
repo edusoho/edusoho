@@ -2911,6 +2911,12 @@ label {
 .homepage .text-center {
   margin-top: 40px;
 }
+.moocbg-white {
+  background: #fff;
+}
+.moocbg-blue {
+  background: #f0f5f9;
+}
 .mooc-index-title {
   font-size: 22px;
   color: #272a41;
@@ -2935,9 +2941,6 @@ label {
 }
 .course-filter.section-header .course-sort {
   top: -3px;
-}
-.mooc-navset {
-  background: #fff;
 }
 .mooc-navset .left-wrapper {
   padding: 5px 0 6px;
@@ -3201,7 +3204,6 @@ label {
   color: #272a41;
 }
 .mooc-feature {
-  background: #ffffff;
   text-align: center;
   padding: 70px 0 70px;
 }
