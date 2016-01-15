@@ -338,7 +338,6 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("onMarkerReached", function(marker,questionId){
-                            self._keyDow();
                             var player = window.frames["viewerIframe"].window.BalloonPlayer;
                             if(player.isPlaying()){
                               player.pause();
