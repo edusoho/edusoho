@@ -2,9 +2,9 @@
 
 namespace Mooc\AdminBundle\Controller;
 
-use Topxia\AdminBundle\Controller\ThemeController as BaseController;
+use Topxia\AdminBundle\Controller\ThemeController as ThemeBaseController;
 
-class ThemeController extends BaseController
+class ThemeController extends ThemeBaseController
 {
     protected function getTheme($uri)
     {
