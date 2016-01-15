@@ -1,4 +1,7 @@
-
+<div class="container">
+<div class="mooc-index-title">
+ {{ text[0].value|default('合作伙伴') }}
+</div>
 <ul class="cooperate-list clearfix">
 	 {% for partner in partners|default('') %}
       <li>
@@ -9,3 +12,4 @@
      {% endfor %}
 </ul>
 
+</div>
