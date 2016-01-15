@@ -1,6 +1,15 @@
-<h4>友情链接 :</h4>
-<ul>
-  {% for partner in partners|default('') %}
-    <li><a href="{{ partner.href }}" target="{{ partner.target }}">{{ partner.value }}</a></li>
-  {% endfor %}
+<div class="container">
+<div class="mooc-index-title">
+ {{ text[0].value|default('合作伙伴') }}
+</div>
+<ul class="cooperate-list clearfix">
+	 {% for partner in partners|default('') %}
+      <li>
+        <a href="{{ partner.href|default('') }}">
+          <img src="{{ partner.src|default('') }}" alt="{{ partner.alt|default('') }}">
+        </a>
+      </li>
+     {% endfor %}
 </ul>
+
+</div>

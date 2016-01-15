@@ -7,6 +7,7 @@
 body {
   font-family: "Hiragino Sans GB","Helvetica Neue",Helvetica,Arial,"Microsoft YaHei",sans-serif;
   color: @font-color;
+  background: #f0f5f9!important;
 }
 
 li {
@@ -277,7 +278,12 @@ input:focus {
           transform: scale(1.1, 1.1);
 }
 
-
+.animation(@animation) {
+  -webkit-animation: @animation;
+     -moz-animation: @animation;
+       -o-animation: @animation;
+          animation: @animation;
+};
 
 .icons-user-1,
 .icons-user-2,
@@ -400,10 +406,15 @@ input:focus {
 
 .carousel-indicators {
   bottom: 0px;
+  margin-bottom: 0;
+  li.active{
+    margin: 0 7px;
+  }
   li {
+    display: inline-block;
     height: 4px;
     width: 21px;
-    margin: 0 3px;
+    margin: 0 7px 0;
     border-radius: 0;
     border: 0;
     background-color: #d4d4d4;
@@ -706,6 +717,34 @@ input:focus {
     }
   }
 }
+
+.avatar-ss{
+    .border-radius(50%);
+    width: 20px !important;
+    height: 20px !important;
+}
+.avatar-ll{
+    .border-radius(50%);
+    width: 100px !important;
+    height: 100px !important;
+}
+.label-sm{
+  padding: 4px 8px;
+}
+.moocindex-more-btn{
+  width: 108px;
+  height: 36px;
+  line-height: 38px;
+  border:2px solid #a5a7b3;
+  .border-radius(4px);
+  padding: 12px 22px;
+  color: #a5a7b3;
+  &:hover{
+    background: #a5a7b3;
+    color: #fff;
+  }
+}
+
 
 
 

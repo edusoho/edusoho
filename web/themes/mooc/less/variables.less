@@ -1,58 +1,46 @@
+/*主色调*/
 @color-primary:         #10b67c;
-
-@color-darkprimary:     darken(@color-primary, 2%);
-@color-lightprimary:    lighten(@color-primary, 2%);
-@color-assist:          #ff854a;
-
+/*比主色调谈一点*/
 @bg-primary:            #0fbe8a;
-@bg-darkprimary:     	darken(@color-primary, 2%);
-@bg-lightprimary:       lighten(@color-primary, 2%);
-
+/*边框*/
 @color-border:          #e9e9e9;
-
+@little-gray:           #e1e1e1;
+@gray-light:            #bfbfbf;
+/*背景灰*/
 @bg-gray:               #f8f8f8;
-
+@gray:                  #999;
+/*常用字体色*/
 @title-color:           #444;
 @hover-color:           #777;
 @font-color:            #666;
 @font-lightcolor:       #b6b6b6;
-@gray:                  #999;
-@little-gray:           #e1e1e1;
-
-@gray-light:            #bfbfbf;
 @black:                 #333;
-
+/*辅助色*/
 @ing-color:             #59a8e8;
 @white:                 #ffffff;
-@blue:					#00a8ff;
-@blue-little:            #f6fbff;
-
-@blue-border:             #f1f5f9;
-
-
+@blue:					        #00a8ff;
+@blue-little:           #f6fbff;
+@blue-border:           #f1f5f9;
 @green-bg:              #f1fae5;
-
-@green-little:           #7e9696;
+@green-little:          #7e9696;
+@red:                   #ff0000;
 /* =========================== media =========================== */
 
-@screen-xs:                  480px;
-@screen-xs-min:              @screen-xs;
-@screen-phone:               @screen-xs-min;
+@screen-xs-min:              480px;
+@screen-sm-min:              768px;
+@screen-md-min:              992px;
+@screen-lg-min:              1200px;
 
-@screen-sm:                  768px;
-@screen-sm-min:              @screen-sm;
-@screen-tablet:              @screen-sm-min;
-
-
-@screen-md:                  992px;
-@screen-md-min:              @screen-md;
-@screen-desktop:             @screen-md-min;
-
-
-@screen-lg:                  1200px;
-@screen-lg-min:              @screen-lg;
-@screen-lg-desktop:          @screen-lg-min;
 
 @screen-xs-max:              (@screen-sm-min - 1);
 @screen-sm-max:              (@screen-md-min - 1);
 @screen-md-max:              (@screen-lg-min - 1);
+
+
+/* ===========================即将删除，禁用=========================== */
+
+@color-darkprimary:     darken(@color-primary, 2%);
+@color-lightprimary:    lighten(@color-primary, 2%);
+
+@bg-darkprimary:        darken(@color-primary, 2%);
+@bg-lightprimary:       lighten(@color-primary, 2%);

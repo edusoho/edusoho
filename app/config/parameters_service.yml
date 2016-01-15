@@ -9,6 +9,7 @@ parameters:
         'Crontab.CrontabService' : 'Mooc\Service\CrontabJob\Impl\CrontabJobServiceImpl'
         'Testpaper.TestpaperService' : 'Mooc\Service\Testpaper\Impl\TestpaperServiceImpl'
         'Course.ThreadService' : 'Mooc\Service\Course\Impl\ThreadServiceImpl'
+        'Theme.ThemeService' : 'Mooc\Service\Theme\Impl\ThemeServiceImpl'
 
     topxia_daos:
         'Course.CourseDao' : 'Mooc\Service\Course\Dao\Impl\CourseDaoImpl'
@@ -20,5 +21,10 @@ parameters:
         'Course.ThreadPostDao' : 'Mooc\Service\Course\Dao\Impl\ThreadPostDaoImpl'
         'Course.ThreadDao' : 'Mooc\Service\Course\Dao\Impl\ThreadDaoImpl'
         'Testpaper.TestpaperItemResultDao' : 'Mooc\Service\Testpaper\Dao\Impl\TestpaperItemResultDaoImpl'
+
+    template_overwrite_map: 
+       TopxiaAdminBundle: MoocAdminBundle
+       TopxiaWebBundle: MoocWebBundle
+       ClassroomBundle: MoocWebBundle
 
 

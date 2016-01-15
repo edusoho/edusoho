@@ -1,9 +1,34 @@
+{% if isEditColor %}
+	{% set maincolor = config.config.maincolor|default('default') %}
+	{% set navigationcolor = config.config.navigationcolor|default('default') %}
+{% else %}
+	{% set maincolor = config.confirmConfig.maincolor|default('default') %}
+	{% set navigationcolor = config.confirmConfig.navigationcolor|default('default') %}
+{% endif %}
 
-<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+
+{% if maincolor == 'default' %}
+  <link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+{% else %}
+  <link href="{{ asset('assets/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
 <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
 <link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
 <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
-<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/main.css') }}" />
-<link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/theme.css') }}" />
-<link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/iconfont.css') }}" />
 
+{% if maincolor == 'default' %}
+	<link href="{{ asset('assets/v2/css/main.css') }}" rel="stylesheet" />
+  <link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/theme.css') }}" />
+{% else %}
+  <link href="{{ asset('assets/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+  <link href="{{ asset('themes/mooc/css/theme-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
+{% if navigationcolor != 'default' %}
+  <link href="{{ asset('assets/v2/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
+{% endif %}
+
+
+<link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/iconfont.css') }}" />
+<link rel="stylesheet" media="screen" href="{{ asset('themes/mooc/css/newiconfont.css') }}" />

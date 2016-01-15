@@ -1,0 +1,58 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set bodyClass = 'homepage' %}
+{% set siteNav = '/' %}
+{% set script_controller = 'theme/default/index' %}
+{% set _target_path = path('homepage') %}
+
+{% block full_content %}
+	
+  <section class="es-poster swiper-container mooc-poster">
+    {{ block_show('mooc:home_top_banner') }}
+    <a class="arrow-left hidden-sm hidden-md" href="#">
+      <i class="mc-icon icon-iconfontback"></i>
+    </a>
+    <a class="arrow-right hidden-sm hidden-md hidden-xs" href="#">
+      <i class="mc-icon icon-arrowright"></i>
+    </a>
+    <div class="mooc-notice hidden-sm hidden-xs hidden-md">
+      <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+          <i class="mc-icon icon-iconfontgonggao"></i>学校公告
+        </div>
+        <div class="panel-body">
+           <ul>
+              {% set announcements = data('Announcement',{ count:8 }) %}
+              {% if announcements %}
+                {% for announcement in announcements %}
+                  <li><span class="mc-dot"></span><a href="{{announcement.url}}" target="_content">{{announcement.content|sub_text(50)}}</a><span>{{announcement.startTime|date('m/d')}}</span></li>
+                {% endfor %}
+              {% else %}
+                <div>暂无公告</div>
+              {% endif %}
+            </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% for pendant in themeConfig.blocks.left|default([]) %}
+    {{ render(controller('TopxiaWebBundle:Theme:pendant', {config:pendant})) }}
+  {% endfor %}
+
+  <section class="mooc-learn js-animate-item">
+    <div class="container">
+      <div class="learn-list">
+        <i class="mobile img hidden-sm hidden-xs"></i>
+        <i class="calculator img hidden-sm hidden-xs"></i>
+        <i class="book img"></i>
+        <i class="earphone img hidden-sm hidden-xs"></i>
+        <i class="coffee img hidden-sm hidden-xs"></i>
+        <a href="{{ path('course_explore') }}" class="learning-btn img"><i class="mc-icon icon-iconfontwrite"></i>开启学习之旅</a>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+
+@font-face {font-family: "mc-icon";
+  src: url('../newiconfont/iconfont.eot'); /* IE9*/
+  src: url('../newiconfont/iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('../newiconfont/iconfont.woff') format('woff'), /* chrome, firefox */
+  url('../newiconfont/iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('../newiconfont/iconfont.svg#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.mc-icon {
+  font-family:"mc-icon" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.icon-search:before { content: "\e601"; }
+.icon-settings:before { content: "\e615"; }
+.icon-home:before { content: "\e616"; }
+.icon-similar:before { content: "\e605"; }
+.icon-noticefill:before { content: "\e602"; }
+.icon-notice:before { content: "\e603"; }
+.icon-creative:before { content: "\e606"; }
+.icon-apps:before { content: "\e617"; }
+.icon-plane:before { content: "\e600"; }
+.icon-exit:before { content: "\e618"; }
+.icon-iconfontback:before { content: "\e613"; }
+.icon-iconfontcommunity:before { content: "\e604"; }
+.icon-iconfontdiannao1:before { content: "\e607"; }
+.icon-iconfontgonggao:before { content: "\e608"; }
+.icon-iconfontguanli:before { content: "\e609"; }
+.icon-iconfonthot:before { content: "\e60a"; }
+.icon-iconfontjiaotongtongxin:before { content: "\e60b"; }
+.icon-iconfontlocation:before { content: "\e60c"; }
+.icon-iconfontmore:before { content: "\e60d"; }
+.icon-iconfontpeople:before { content: "\e60e"; }
+.icon-iconfontphone:before { content: "\e60f"; }
+.icon-iconfontselection:before { content: "\e610"; }
+.icon-iconfontshake:before { content: "\e611"; }
+.icon-iconfontwrite:before { content: "\e612"; }
+.icon-arrowright:before { content: "\e614"; }
+.icon-message:before { content: "\e619"; }
