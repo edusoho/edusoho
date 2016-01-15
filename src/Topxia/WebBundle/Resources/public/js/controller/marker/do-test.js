@@ -8,7 +8,7 @@ define(function(require, exports, module) {
         var questionType = data.data('type');
         btn.on('click', function() {
             var answer = doMarkerQuestion(questionType);
-            if(!answer){
+            if(!answer|| answer.length==0){
                 Notify.danger("请先作答");
                 return;
             }
