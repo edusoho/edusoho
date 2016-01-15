@@ -25,11 +25,11 @@ define(function(require, exports, module) {
             var markersUrl =  '/course/lesson/'+lessonId+'/marker/show';
             player.setMarkerEscepe(false);
             player.setControlBarLock(true);
-             $.ajax({
-                type: "post",
-                url: markersUrl,
-                dataType: "json",
-                success:function(data){
+             // $.ajax({
+             //    type: "post",
+             //    url: markersUrl,
+             //    dataType: "json",
+             //    success:function(data){
                     // var markers = new Array();
                     // for(var index in data) {
                     //   var marker={
@@ -44,8 +44,8 @@ define(function(require, exports, module) {
                     //     player.setMarkers(markers);
                     // }
                     // console.log(markers);
-                }
-            });
+                //}
+            //});
         });
         $.get($('.question').data('url'),function(response){
         	$('.question').html(response);
