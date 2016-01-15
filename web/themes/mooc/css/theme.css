@@ -3388,6 +3388,7 @@ label {
 }
 .mooc-cooperate .cooperate-list {
   padding: 0;
+  margin: 0;
 }
 .mooc-cooperate .cooperate-list li {
   float: left;
