@@ -1,22 +1,19 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Topxia\Common\Paginator;
-use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class NotificationController extends BaseController
 {
-
-
-    public function indexAction (Request $request)
+    public function indexAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
-        
+
         $paginator = new Paginator(
             $request,
             $this->getNotificationService()->getUserNotificationCount($user->id),
@@ -30,16 +27,17 @@ class NotificationController extends BaseController
         );
         $this->getNotificationService()->clearUserNewNotificationCounter($user->id);
         $user->clearNotifacationNum();
+
         return $this->render('TopxiaWebBundle:Notification:index.html.twig', array(
             'notifications' => $notifications,
-            'paginator' => $paginator
+            'paginator'     => $paginator
         ));
     }
 
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request, $id)
     {
         $batchnotification = $this->getBatchNotificationService()->getBatchNotification($id);
-        return $this->render('TopxiaWebBundle:Notification:batch-notification-show.html.twig',array(
+        return $this->render('TopxiaWebBundle:Notification:batch-notification-show.html.twig', array(
             'batchnotification' => $batchnotification
         ));
     }
@@ -58,8 +56,9 @@ class NotificationController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
+
     protected function getBatchNotificationService()
     {
         return $this->getServiceKernel()->createService('User.BatchNotificationService');
-    }   
+    }
 }
