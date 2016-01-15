@@ -112,7 +112,7 @@
           </div>
         </div>
         {% if inviteCode != null  %}
-          <label>邀请人：{{ inviteUser['nickname'] }}。</label>
+          <div>您正在通过<a>{{ inviteUser['nickname'] }}</a>的邀请注册。</div>
         {% endif %}
 
         <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
