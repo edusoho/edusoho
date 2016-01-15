@@ -213,31 +213,44 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil, cordovaU
 		});
 	}
 
-	UserService.getUserInfo({
-		userId : $stateParams.userId
-	}, function(data) {
-		if (! data) {
-			$scope.toast("获取用户信息失败！");
-			return;
-		}
-		$scope.userinfo = data;
-		$scope.isTeacher = self.isTeacher(data.roles);
-		if ($scope.isTeacher) {
-			self.getUserTeachCourse();
-		} else {
-			self.getUserLearnCourse();
+	$scope.isUnOwner = function() {
+
+		if ($scope.user && $scope.user.id == $stateParams.userId) {
+			return false;
 		}
 
-		if ($scope.user) {
-			UserService.searchUserIsFollowed({
-				userId : $scope.user.id,
-				toId : $stateParams.userId
-			}, function(data) {
-				$scope.isFollower = (true == data || "true" == data) ? true : false;
-				console.log($scope.isFollower);
-			});
-		}
-	});
+		return true;
+	};
+
+	$scope.loadUserInfo = function() {
+		$scope.showLoad();
+		UserService.getUserInfo({
+			userId : $stateParams.userId
+		}, function(data) {
+			$scope.hideLoad();
+			if (! data) {
+				$scope.toast("获取用户信息失败！");
+				return;
+			}
+			$scope.userinfo = data;
+			$scope.isTeacher = self.isTeacher(data.roles);
+			if ($scope.isTeacher) {
+				self.getUserTeachCourse();
+			} else {
+				self.getUserLearnCourse();
+			}
+
+			if ($scope.user) {
+				UserService.searchUserIsFollowed({
+					userId : $scope.user.id,
+					toId : $stateParams.userId
+				}, function(data) {
+					$scope.isFollower = (true == data || "true" == data) ? true : false;
+					console.log($scope.isFollower);
+				});
+			}
+		});
+	};
 
 	this.follow = function() {
 		UserService.follow({
