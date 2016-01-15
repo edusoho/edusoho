@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
     var Swiper = require('swiper');
     exports.run = function() {
-    var swiper = new Swiper('.es-poster.swiper-container', {
+      var bannerSwiper = new Swiper('.es-poster.swiper-container', {
             pagination: '.es-poster .swiper-pager',
             paginationClickable: true,
             autoplay: 5000,
@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }
         });
-        $('.es-poster .arrow-left').on('click', function(e){
+       $('.es-poster .arrow-left').on('click', function(e){
             e.preventDefault()
             swiper.swipePrev()
            })
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
             e.preventDefault()
             swiper.swipeNext()
         })
-        var swiper2 = new Swiper('.set-right.swiper-container', {
+        var setSwiper = new Swiper('.set-right.swiper-container', {
             autoplay: 6000,
             autoplayDisableOnInteraction: false,
             calculateHeight: true,
@@ -42,7 +42,7 @@ define(function(require, exports, module) {
             e.preventDefault()
             swiper2.swipeNext()
         })
-        var swiper3 = new Swiper('.class-list.swiper-container', {
+        var classSwiper = new Swiper('.class-list.swiper-container', {
             calculateHeight: true,
             roundLengths: true,
             slidesPerView: 4,
@@ -58,18 +58,8 @@ define(function(require, exports, module) {
             e.preventDefault()
             swiper3.swipeNext()
         })
-        var swiper4 = new Swiper('.teach-list.swiper-container', {
-            pagination: '.teach-list .swiper-pager',
-            paginationClickable: true,
-            calculateHeight: true,
-            roundLengths: true,
-            slidesPerView: 4,
-            onInit: function(swiper) {
-               $(".swiper-slide").removeClass('swiper-hidden'); 
-            }
-        });
         Lazyload.init();
-         var carousel = function() {
+         var teachCarousel = function() {
             var $this = $(".mooc-teacher .carousel-inner .item");
             for (var i = 0; i < $this.length; i++) {
               if (i == 0) {
@@ -80,17 +70,13 @@ define(function(require, exports, module) {
                 $this.parents(".teach-list").siblings(".carousel-indicators").append(html);
               }
             }
-          }();
-          var indexAnimate = function () {
+         }();
+         var indexAnimate = function () {
               $(".js-animate-item").waypoint(function(){
                 $(this).addClass('active');
               },{offset:500});
-          }();
-        
-       
-         
-
-         var swiperLength = function (obj,parentsObj) {
+        }();
+        var swiperLength = function (obj,parentsObj) {
            if($(obj).length<=4){
             $(obj).parents(parentsObj).siblings().remove();
            }

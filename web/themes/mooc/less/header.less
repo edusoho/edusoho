@@ -56,11 +56,28 @@
     .dropdown-menu{
       right: -62px;
       left: auto;
-      padding: 0;
       top: 46px;
+      i{
+        padding: 0 10px;
+        position: relative;
+        top: 1px;
+      }
       .divider{
         margin: 0;
       }
+       .message{
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          background-color: #de4f4f;
+          border-radius: 50%;
+          color: #fff;
+          font-weight: bold;
+          line-height: 20px;
+          text-align: center;
+          font-size: 10px;
+          margin-left: 6px;
+        }
     }
   }
   .navbar-user{
@@ -127,9 +144,9 @@
       position: relative;
       .red-dot{
         display: inline-block;
-        width: 8px;
-        height: 8px;
-        background: @red;
+        width: 4px;
+        height: 4px;
+        background: #de4f4f;
         .border-radius(50%);
         position: absolute;
         top:5px;
@@ -150,12 +167,12 @@
         color: @white;
         margin: 5px;
         text-align: center;
-        line-height: 30px;
+        line-height: 33px;
       }
       .message{
         position: absolute;
-        top: 10px;
-        right: 7px;
+        top: 13px;
+        right: 10px;
         color: @red;
         font-size: 14px;
         font-weight: bold;

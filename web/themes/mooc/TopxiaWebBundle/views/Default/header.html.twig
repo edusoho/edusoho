@@ -42,15 +42,15 @@
           </a>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
-            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="iconfont icon-fangzi"></i>个人主页</a></li>
+            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="mc-icon icon-home"></i>个人主页</a></li>
             <li class="divider"></li>
-            <li><a href="{{ path('settings') }}"><i class="iconfont icon-shezhi"></i>个人设置</a></li>
+            <li><a href="{{ path('settings') }}"><i class="mc-icon icon-settings"></i>个人设置</a></li>
             {% if is_granted('ROLE_ADMIN') %}
             <li class="divider"></li>
-            <li><a href="{{ path('admin') }}"><i class="iconfont icon-dashboard"></i>管理后台</a></li>
+            <li><a href="{{ path('admin') }}"><i class="mx-icon icon-apps"></i>管理后台</a></li>
             {% endif %} 
             <li class="divider visible-xs"></li>
-            <li  class="visible-xs"><a href="{{ path('message') }}"><i class="iconfont icon-sixin"></i> 私信
+            <li  class="visible-xs"><a href="{{ path('message') }}"><i class="mc-icon icon-message"></i> 私信
               {% if app.user.newMessageNum > 0 %}
                 <span class="message">{{ app.user.newMessageNum }}</span>
               {% endif %}
@@ -64,7 +64,7 @@
              </a>
             </li>
             <li class="divider"></li>
-            <li><a href="{{ path('logout') }}"><i class="iconfont icon-tuichu"></i>退出登录</a></li>
+            <li><a href="{{ path('logout') }}"><i class="mc-icon icon-exit"></i>退出登录</a></li>
           </ul>
         </li>
         {% else %}
@@ -91,14 +91,14 @@
       </a>
       <span class="dropdown hidden-xs user-messages">
         <a href="{{ path('message') }}" class="dropdown-toggle user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}" data-toggle="dropdown">
-          <i class="iconfont icon-sixin " ></i>
+          <i class="mc-icon icon-message" ></i>
             {% if app.user.newMessageNum > 0 %}
             <span class="message red-dot"></span>
           {% endif %}
         </a>
         <ul class="dropdown-menu" role="menu">
           <li>
-            <a href="{{ path('message') }}"><i class="iconfont icon-sixin"></i> 私信
+            <a href="{{ path('message') }}"><i class="mc-icon icon-message"></i> 私信
             {% if app.user.newMessageNum > 0 %}
               <span class="message">{{ app.user.newMessageNum }}</span>
             {% endif %}

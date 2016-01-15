@@ -2565,11 +2565,28 @@ input:focus {
 .mooc-header .user-messages .dropdown-menu {
   right: -62px;
   left: auto;
-  padding: 0;
   top: 46px;
+}
+.mooc-header .user-messages .dropdown-menu i {
+  padding: 0 10px;
+  position: relative;
+  top: 1px;
 }
 .mooc-header .user-messages .dropdown-menu .divider {
   margin: 0;
+}
+.mooc-header .user-messages .dropdown-menu .message {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #de4f4f;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  line-height: 20px;
+  text-align: center;
+  font-size: 10px;
+  margin-left: 6px;
 }
 .mooc-header .navbar-user {
   z-index: initial;
@@ -2645,9 +2662,9 @@ input:focus {
 }
 .mooc-header .navbar-user .user-message .red-dot {
   display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: #ff0000;
+  width: 4px;
+  height: 4px;
+  background: #de4f4f;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
@@ -2669,12 +2686,12 @@ input:focus {
   color: #ffffff;
   margin: 5px;
   text-align: center;
-  line-height: 30px;
+  line-height: 33px;
 }
 .mooc-header .navbar-user .user-message .message {
   position: absolute;
-  top: 10px;
-  right: 7px;
+  top: 13px;
+  right: 10px;
   color: #ff0000;
   font-size: 14px;
   font-weight: bold;
@@ -3126,6 +3143,9 @@ label {
 .mooc-classroom .class-wrapper {
   background: #ffffff;
   padding: 0 10px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 .mooc-classroom .swiper-wrapper {
   padding-bottom: 10px;
@@ -3179,6 +3199,10 @@ label {
   border-radius: 4px;
   margin: 0;
 }
+.mooc-classroom .class-item .img-responsive {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
 .mooc-classroom .class-item:hover .class-wrapper {
   -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5) !important;
   -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5) !important;
@@ -3226,7 +3250,6 @@ label {
   margin: 0 auto;
 }
 .mooc-teacher {
-  background: #fff;
   padding: 50px 0;
   position: relative;
 }
@@ -3301,12 +3324,20 @@ label {
 .mooc-teacher .teach-item .teach-wrapper {
   background: #ffffff;
   padding: 15px 30px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   border: 1px solid #e4ebf3;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .mooc-teacher .teach-item .teach-wrapper:hover {
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
   -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
   -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
   box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
