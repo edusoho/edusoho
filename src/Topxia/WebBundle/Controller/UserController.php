@@ -18,9 +18,16 @@ class UserController extends BaseController
             $isFollowed = false;
         }
 
+        // 关注数
+        $following = $this->getUserService()->findUserFollowingCount($user['id']);
+        // 粉丝数
+        $follower = $this->getUserService()->findUserFollowerCount($user['id']);
+
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user'       => $user,
-            'isFollowed' => $isFollowed
+            'isFollowed' => $isFollowed,
+            'following'  => $following,
+            'follower'   => $follower
         ));
     }
 
@@ -216,10 +223,19 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         $followings           = $this->getUserService()->findAllUserFollowing($user['id']);
+
+        if ($this->getCurrentUser()->isLogin()) {
+            $isFollowed = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']);
+        } else {
+            $isFollowed = false;
+        }
+
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'      => $user,
-            'friends'   => $followings,
-            'friendNav' => 'following'
+            'user'        => $user,
+            'friends'     => $followings,
+            'userProfile' => $userProfile,
+            'isFollowed'  => $isFollowed,
+            'friendNav'   => 'following'
         ));
     }
 
@@ -232,10 +248,18 @@ class UserController extends BaseController
         $user                 = array_merge($user, $userProfile);
         $followers            = $this->getUserService()->findAllUserFollower($user['id']);
 
+        if ($this->getCurrentUser()->isLogin()) {
+            $isFollowed = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']);
+        } else {
+            $isFollowed = false;
+        }
+
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'      => $user,
-            'friends'   => $followers,
-            'friendNav' => 'follower'
+            'user'        => $user,
+            'friends'     => $followers,
+            'userProfile' => $userProfile,
+            'isFollowed'  => $isFollowed,
+            'friendNav'   => 'follower'
         ));
     }
 

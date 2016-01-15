@@ -4,8 +4,7 @@
       <div class="avatar-wrap">
         <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
         {% if 'ROLE_TEACHER' in user.roles %}
-          <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span
-        >
+          <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span>
         {% endif %}
       </div>
       <div class="name">
@@ -24,7 +23,7 @@
         {% endif %}
       </div>
       <div class="mates">
-        <span class="mrm">2012</span>粉丝<span class="mlm mrm">｜</span><span class="mrm">522</span>关注
+        <span class="mrm">{{follower|default(0)}}</span>粉丝<span class="mlm mrm">｜</span><span class="mrm">{{following|default(0)}}</span>关注
       </div>
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
@@ -42,8 +41,8 @@
   </div>
 </div>
 
-{#
-<div class="es-section userpage-header hidden">
+
+{# <div class="es-section userpage-header hidden">
   <div class="media">
     <div class="media-left">
       <div class="avatar-bg">
@@ -76,4 +75,4 @@
       {% endif %}
     </div>
   </div>
-</div>#}
+</div> #}
