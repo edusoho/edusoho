@@ -14,6 +14,7 @@
 
 <div class="row">
   {% for friend in friends if friends %}
+    {% set isFollowed = (friend.id in myfollowings)|default(false) %}
     <div class="col-md-3">
       <div class="teacher-item">
         <div class="teacher-top">
@@ -39,6 +40,8 @@
               暂无简介
             {% endif %}
           </div>
+          {# <a class="btn btn-primary btn-xlg follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
+          <a class="btn btn-default btn-xlg unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a> #}
           <div class="metas">
             {% if not app.user or (friend.id != app.user.id) %}
               <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:friend.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>关注</a>

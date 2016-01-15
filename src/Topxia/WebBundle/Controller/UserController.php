@@ -223,19 +223,14 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         $followings           = $this->getUserService()->findAllUserFollowing($user['id']);
-
-        if ($this->getCurrentUser()->isLogin()) {
-            $isFollowed = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']);
-        } else {
-            $isFollowed = false;
-        }
+        $myfollowings         = $this->_getUserFollowing($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'        => $user,
-            'friends'     => $followings,
-            'userProfile' => $userProfile,
-            'isFollowed'  => $isFollowed,
-            'friendNav'   => 'following'
+            'user'         => $user,
+            'friends'      => $followings,
+            'userProfile'  => $userProfile,
+            'myfollowings' => $myfollowings,
+            'friendNav'    => 'following'
         ));
     }
 
@@ -247,19 +242,13 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         $followers            = $this->getUserService()->findAllUserFollower($user['id']);
-
-        if ($this->getCurrentUser()->isLogin()) {
-            $isFollowed = $this->getUserService()->isFollowed($this->getCurrentUser()->id, $user['id']);
-        } else {
-            $isFollowed = false;
-        }
-
+        $myfollowings         = $this->_getUserFollowing($user['id']);
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'        => $user,
-            'friends'     => $followers,
-            'userProfile' => $userProfile,
-            'isFollowed'  => $isFollowed,
-            'friendNav'   => 'follower'
+            'user'         => $user,
+            'friends'      => $followers,
+            'userProfile'  => $userProfile,
+            'myfollowings' => $myfollowings,
+            'friendNav'    => 'follower'
         ));
     }
 
@@ -491,6 +480,14 @@ class UserController extends BaseController
             'paginator' => $paginator,
             'type'      => 'teach'
         ));
+    }
+
+    protected function _getUserFollowing($userId)
+    {
+        $followings   = $this->getUserService()->findAllUserFollowing($userId);
+        $followingIds = ArrayToolkit::column($followings, 'id');
+        $myfollowings = $this->getUserService()->filterFollowingIds($userId, $followingIds);
+        return $myfollowings;
     }
 
     protected function getGroupService()
