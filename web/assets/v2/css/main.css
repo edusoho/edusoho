@@ -11424,12 +11424,22 @@ textarea {
   padding-left: 10px;
 }
 .marker-modal .question-choices li {
-  padding: 10px 0;
+  padding: 10px 0 10px 50px;
+  position: relative;
+  line-height: 30px;
 }
 .marker-modal .question-choices li:hover {
   background-color: transparent;
 }
+.marker-modal .question-choices li p {
+  margin-bottom: 0;
+  display: inline-block;
+  margin-right: 10px;
+}
 .marker-modal .type-check {
+  position: absolute;
+  left: 0;
+  top: 10px;
   display: inline-block;
   width: 30px;
   height: 30px;

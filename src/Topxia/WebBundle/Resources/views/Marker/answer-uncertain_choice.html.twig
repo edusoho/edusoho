@@ -1,7 +1,7 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
 	<div class="question-heading editor-text">不定项选择题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
 	<div class="question-body clearfix">
-		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw }}</div>
+		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|raw }}</div>
 		{% if answer|default(null) %}
 		  {% set answerChoiceIndex = answer %}
 		{% endif %}
@@ -12,9 +12,9 @@
 		      <span class="type-check {% if (key+1) in answer and key in selfAnswer %} correct {% elseif key in selfAnswer %}error{% endif %}" id="question-{{ question.id }}-input-{{ choiceIndex }}" name="answer[{{ question.id }}][]" value="{{ key }}">
 					{{ choiceIndex }}
 					</span>
-					<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
+					{{ choice|bbCode2Html|raw}}
 					{% if (key+1) in answer %}
-					<span class="label label-success label-md mll">正确答案</span>
+					<span class="label label-success label-md">正确答案</span>
 					{% endif %}
 		    </li>
 		  {% endfor %}
