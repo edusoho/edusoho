@@ -6322,9 +6322,10 @@ textarea {
   margin-bottom: 10px;
 }
 .score i {
-  color: #ff8a0c;
+  color: #e1e1e1;
 }
 .score span {
+  color: #919191;
   font-size: 12px;
   margin-left: 8px;
 }
@@ -10471,6 +10472,9 @@ textarea {
     margin-top: 10px;
   }
 }
+.search-course-list .course-item .content {
+  color: #313131;
+}
 .search-course-list .course-item .title {
   margin-top: 0;
 }
@@ -10493,8 +10497,12 @@ textarea {
   padding: 0;
 }
 .search-course-list .course-item .ul-lesson li {
+  font-size: 12px;
   list-style-type: none;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+.search-course-list .course-item .ul-lesson li i {
+  font-size: 12px;
 }
 .search-result em {
   color: #e83d2c;
