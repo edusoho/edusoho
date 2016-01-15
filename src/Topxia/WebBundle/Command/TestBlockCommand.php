@@ -2,11 +2,11 @@
 
 namespace Topxia\WebBundle\Command;
 
+use Topxia\Common\BlockToolkit;
+use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Topxia\Common\BlockToolkit;
-use Topxia\Service\Common\ServiceKernel;
-use Topxia\Service\User\CurrentUser;
 
 class TestBlockCommand extends BaseCommand
 {
@@ -29,12 +29,11 @@ class TestBlockCommand extends BaseCommand
 
         $this->replaceContent($block, $output);
 
-        $block = $this->getBlockService()->updateBlock($block['id'],$block);
+        $block = $this->getBlockService()->updateBlock($block['id'], $block);
         $output->writeln('<info>简墨编辑区替换完成</info>');
     }
 
-
-    protected function replaceData(&$block,$output)
+    protected function replaceData(&$block, $output)
     {
         $output->writeln('<info>替换DATA数据</info>');
         $oldData = $block['data'];
@@ -42,78 +41,78 @@ class TestBlockCommand extends BaseCommand
         $newData = array(
             'posters' => array(
                 array(
-                    'src' => $oldData['carousel1ground'][0]['src'],
-                    'alt' => "海报1",
-                    'layout' => 'limitWide',
+                    'src'        => $oldData['carousel1ground'][0]['src'],
+                    'alt'        => "海报1",
+                    'layout'     => 'limitWide',
                     'background' => $oldData['carousel1background'][0]['value'],
-                    'href' => $oldData['carousel1ground'][0]['href'],
-                    'html' => $newHtml[0],
-                    'status' => 1,
-                    'mode' => 'html'
+                    'href'       => $oldData['carousel1ground'][0]['href'],
+                    'html'       => $newHtml[0],
+                    'status'     => 1,
+                    'mode'       => 'html'
                 ), array(
-                    'src' => $oldData['carousel2ground'][0]['src'],
-                    'alt' => "海报2",
-                    'layout' => 'limitWide',
+                    'src'        => $oldData['carousel2ground'][0]['src'],
+                    'alt'        => "海报2",
+                    'layout'     => 'limitWide',
                     'background' => $oldData['carousel2background'][0]['value'],
-                    'href' => $oldData['carousel2ground'][0]['href'],
-                    'html' => $newHtml[1],
-                    'status' => 1,
-                    'mode' => 'html'
+                    'href'       => $oldData['carousel2ground'][0]['href'],
+                    'html'       => $newHtml[1],
+                    'status'     => 1,
+                    'mode'       => 'html'
                 ), array(
-                    'src' => $oldData['carousel3ground'][0]['src'],
-                    'alt' => "海报3",
-                    'layout' => 'limitWide',
+                    'src'        => $oldData['carousel3ground'][0]['src'],
+                    'alt'        => "海报3",
+                    'layout'     => 'limitWide',
                     'background' => $oldData['carousel3background'][0]['value'],
-                    'href' => $oldData['carousel3ground'][0]['href'],
-                    'html' => $newHtml[2],
-                    'status' => 1,
-                    'mode' => 'html'
+                    'href'       => $oldData['carousel3ground'][0]['href'],
+                    'html'       => $newHtml[2],
+                    'status'     => 1,
+                    'mode'       => 'html'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
-                    'alt' => "海报4",
-                    'layout' => 'limitWide',
+                    'src'        => '/assets/v2/img/poster_bg.jpg',
+                    'alt'        => "海报4",
+                    'layout'     => 'limitWide',
                     'background' => "#3F3F3F",
-                    'href' => "",
-                    'html' => "",
-                    'status' => 0,
-                    'mode' => 'img'
+                    'href'       => "",
+                    'html'       => "",
+                    'status'     => 0,
+                    'mode'       => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
-                    'alt' => "海报5",
-                    'layout' => 'limitWide',
+                    'src'        => '/assets/v2/img/poster_bg.jpg',
+                    'alt'        => "海报5",
+                    'layout'     => 'limitWide',
                     'background' => "#3F3F3F",
-                    'href' => "",
-                    'html' => "",
-                    'status' => 0,
-                    'mode' => 'img'
+                    'href'       => "",
+                    'html'       => "",
+                    'status'     => 0,
+                    'mode'       => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
-                    'alt' => "海报6",
-                    'layout' => 'limitWide',
+                    'src'        => '/assets/v2/img/poster_bg.jpg',
+                    'alt'        => "海报6",
+                    'layout'     => 'limitWide',
                     'background' => "#3F3F3F",
-                    'href' => "",
-                    'html' => "",
-                    'status' => 0,
-                    'mode' => 'img'
+                    'href'       => "",
+                    'html'       => "",
+                    'status'     => 0,
+                    'mode'       => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
-                    'alt' => "海报7",
-                    'layout' => 'limitWide',
+                    'src'        => '/assets/v2/img/poster_bg.jpg',
+                    'alt'        => "海报7",
+                    'layout'     => 'limitWide',
                     'background' => "#3F3F3F",
-                    'href' => "",
-                    'html' => "",
-                    'status' => 0,
-                    'mode' => 'img'
+                    'href'       => "",
+                    'html'       => "",
+                    'status'     => 0,
+                    'mode'       => 'img'
                 ), array(
-                    'src' => '/assets/v2/img/poster_bg.jpg',
-                    'alt' => "海报8",
-                    'layout' => 'limitWide',
+                    'src'        => '/assets/v2/img/poster_bg.jpg',
+                    'alt'        => "海报8",
+                    'layout'     => 'limitWide',
                     'background' => "#3F3F3F",
-                    'href' => "",
-                    'html' => "",
-                    'status' => 0,
-                    'mode' => 'img'
-                ),
+                    'href'       => "",
+                    'html'       => "",
+                    'status'     => 0,
+                    'mode'       => 'img'
+                )
             )
         );
 
@@ -124,14 +123,16 @@ class TestBlockCommand extends BaseCommand
     {
         $output->writeln('<info>替换META数据</info>');
         $default = array();
-        foreach ( $block['data']['posters'] as $poster){
+
+        foreach ($block['data']['posters'] as $poster) {
             $default[] = $poster;
         }
+
         $newItems = array(
-            "title" => "海报",
-            "desc" => "首页海报",
-            "count" => 1,
-            "type" => "poster",
+            "title"   => "海报",
+            "desc"    => "首页海报",
+            "count"   => 1,
+            "type"    => "poster",
             "default" => $default
         );
 
@@ -144,14 +145,14 @@ class TestBlockCommand extends BaseCommand
     {
         $output->writeln('<info>替换CONTENT数据</info>');
 
-        $newContent = BlockToolkit::render($block, $this->getContainer());
+        $newContent       = BlockToolkit::render($block, $this->getContainer());
         $block['content'] = $newContent;
     }
 
     protected function oldDataConvertHtml($oldData)
     {
         $html1 = !empty($oldData['carousel1banner']) ?
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
+        "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel1ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel1ground'][0]['src']}\">
@@ -169,8 +170,8 @@ class TestBlockCommand extends BaseCommand
                     </a>
                 </div>
             </div>"
-            :
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
+        :
+        "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel1background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel1ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel1ground'][0]['src']}\">
@@ -187,7 +188,7 @@ class TestBlockCommand extends BaseCommand
             </div>";
 
         $html2 = !empty($oldData['carousel2banner']) ?
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
+        "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel2ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel2ground'][0]['src']}\">
@@ -205,8 +206,8 @@ class TestBlockCommand extends BaseCommand
                     </a>
                 </div>
             </div>"
-            :
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
+        :
+        "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel2background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel2ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel2ground'][0]['src']}\">
@@ -223,7 +224,7 @@ class TestBlockCommand extends BaseCommand
             </div>";
 
         $html3 = !empty($oldData['carousel3banner']) ?
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
+        "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel3ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel3ground'][0]['src']}\">
@@ -241,8 +242,8 @@ class TestBlockCommand extends BaseCommand
                     </a>
                 </div>
             </div>"
-            :
-            "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
+        :
+        "<div class=\"swiper-slide\" style=\"background: {$oldData['carousel3background'][0]['value']};\">
                 <div class=\"container\">
                     <a href=\"{$oldData['carousel3ground'][0]['href']}\" target=\"_blank\" >
                         <img class=\"img-responsive\" src=\"{$oldData['carousel3ground'][0]['src']}\">
@@ -257,7 +258,6 @@ class TestBlockCommand extends BaseCommand
                     </a>
                 </div>
             </div>";
-
 
         return array($html1, $html2, $html3);
     }
@@ -282,10 +282,10 @@ class TestBlockCommand extends BaseCommand
         $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
-            'id' => 0,
-            'nickname' => '游客',
+            'id'        => 0,
+            'nickname'  => '游客',
             'currentIp' => '127.0.0.1',
-            'roles' => array(),
+            'roles'     => array()
         ));
         $serviceKernel->setCurrentUser($currentUser);
     }

@@ -1,0 +1,28 @@
+
+  <div class="container clearfix">
+    <div class="set-left hidden-md hidden-sm hidden-xs">
+      <div class="left-wrapper">
+        <h2><i class="mc-icon icon-similar"></i>{{ text[0].value|default() }}</h2>
+        <p>{{ text[1].value|default() }}</p>
+      </div>
+    </div>
+    <div class="set-right swiper-container  hidden-sm hidden-xs">
+      <div class="swiper-wrapper">
+        {% for item in categories %}
+          {% set category = data('Category',{categoryId:item.categoryId}) %}
+          <div class="width-25 swiper-slide">
+          <div class="navset-wrapper">
+            <img style="width: 30px;height: 30px;" src="{% if item.src|default() %}{{ asset(item.src) }}{% else %}{{ asset('/themes/mooc/img/cat-3.png') }}{% endif %}">
+            <a href="{{path('course_explore',{category:category.code|default('')})}}">{{ category.name|default() }}</a>
+          </div>
+          </div>
+        {% endfor %}
+      </div>
+      <a class="arrow-left" href="#">
+        <i class="iconfont icon-icon30"></i>
+      </a>
+      <a class="arrow-right" href="#">
+        <i class="iconfont icon-icon32"></i>
+      </a>
+    </div>
+  </div>

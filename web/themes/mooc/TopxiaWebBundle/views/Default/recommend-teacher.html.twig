@@ -1,0 +1,47 @@
+{% set teachers = data('RecommendTeachers',{'count':config.count|default(8)}) %}
+<section class="mooc-teacher hidden-xs hidden-sm {{config.background|default("")}}">
+  <div class="container">
+    <div class="mooc-index-title">
+      {{ config.title|default(config.defaultTitle) }}
+    </div>
+
+    <div class="carousel slide carousel-fade">
+      <ol class="carousel-indicators mooc-carousel-indicators">
+      </ol>
+      <div class="teach-list">
+        <div class="carousel-inner" role="listbox">
+        {% for teacher in teachers %}
+          {% if (loop.index-1) % 4 == 0 %}
+          <div class="item {% if loop.index == 1 %}active{% endif %} ">
+             <div class="row teach-item">
+          {% endif %}
+                 <div class="col-md-3">
+                    <div class="teach-wrapper">  
+                      <div class="teacher-img">
+                         <a href="">
+                            <img class="avatar-ll" src="{{ filepath(teacher.largeAvatar,'avatar.png') }}" alt=""> 
+                         </a>   
+                      </div>
+                      <div class="teacher-name">
+                        <a href="">{{ teacher.nickname|default() }}</a>
+                      </div>
+                      <div class="teacher-position">
+                         {{ teacher.title }}
+                      </div>
+                          <div class="teacher-about">{{ teacher.about|plain_text(83) }}</div>
+                      <div class="teacher-know">
+                        <a href="{{ path('user_show', {id:teacher.id}) }}" class="btn btn-primary">了解老师</a>
+                      </div>
+                    </div>
+                 </div>
+
+          {% if loop.index % 4 == 0 %} 
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+        </div>  
+      </div>
+    </div>
+  </div>
+</section>

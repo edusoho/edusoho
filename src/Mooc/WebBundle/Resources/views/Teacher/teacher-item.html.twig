@@ -1,14 +1,9 @@
+{# 
+<div class="teach-wrapper">  
   <div class="teacher-img">
-    <a href="{{ path('user_show', {id:teacher.id}) }}">
-      <img class="img-responsive" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
-      {# {% if teacher.about %} #}
-        <div class="mask">
-          <div class="teacher-about">
-            {{teacher.about|plain_text(40) }}
-          </div>
-        </div>
-      {# {% endif %} #}
-    </a>
+     <a href="{{ path('user_show', {id:teacher.id}) }}">
+        <img class="avatar-ll" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""> 
+     </a>   
   </div>
   <div class="teacher-name">
     <a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
@@ -16,3 +11,14 @@
   <div class="teacher-position">
       {{ teacher.title }}
   </div>
+  {% if teacher.about %}
+      <div class="teacher-about">
+        {{teacher.about|plain_text(40) }}
+      </div>
+      {% else %}
+       <div class="teacher-about">暂无简介</div>
+  {% endif %}
+  <div class="teacher-kown">
+    <a href="{{ path('user_show', {id:teacher.id}) }}">了解老师</a>
+  </div>
+</div>  #}

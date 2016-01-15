@@ -1,5 +1,38 @@
 .btn {
-	border-radius: 20px;
+	padding: 8px 24px;
+	.border-radius(4px);
+	.es-transition;
+  &:hover,
+  &:focus,
+  &.focus,
+  &.active {
+    .es-transition;
+    text-decoration: none;
+  }
+}
+.btn-default{
+	border:2px solid #a5a7b3;
+	color: #a5a7b3;
+	background: transparent;
+	&:hover,
+  &:focus,
+  &.focus,
+  &.active {
+  	background: #a5a7b3;
+  	color: #fff;
+  }
+}
+.btn-primary{
+	border:2px solid @color-primary;
+	color: @color-primary;
+	background-color: transparent!important;
+	&:hover,
+  &:focus,
+  &.focus,
+  &.active {
+  	background: @color-primary!important;
+  	color: #fff;
+  }
 }
 
 .btn-md {
@@ -34,3 +67,4 @@
 		cursor: default;
 	}
 }
+

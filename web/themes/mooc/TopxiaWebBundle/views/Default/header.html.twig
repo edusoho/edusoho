@@ -1,163 +1,120 @@
-  <header class="mooc-header navbar">
-    <!-- <div class="container"> -->
-      <div class="navbar-header">
-         <div class="visible-xs  navbar-mobile">
-          <a href="javascript:;" class="navbar-more js-navbar-more">
-            <i class="es-icon es-icon-menu"></i>
-          </a>
-          <div class="html-mask"></div>
-          <div class="nav-mobile">
-            <form class="navbar-form" action="{{ path('search') }}" method="get">
-              <div class="form-group">
-                <input class="form-control" placeholder="搜索" name="q">
-                <button class="button es-icon es-icon-search"></button>
-              </div>
-            </form>
-            <ul class="nav navbar-nav">
-              {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
-            </ul>
-          </div>
-        </div>
-        {% if setting('site.logo') %}
-          <a class="navbar-brand" href="{{ path('homepage') }}">
-            <img src="{{ asset(setting('site.logo')) }}">
-          </a>
-        {% else %}
-          <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
-        {% endif %}
-      {#   <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button> #}
-      </div>
-      <nav class="collapse navbar-collapse" role="navigation">
-         <ul class="nav navbar-nav clearfix hidden-xs ">
-        {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
-         </ul>
-        <div class="nav-user clearfix">
-          <form class="navbar-form visible-lg" role="search" action="/search">
+{# 头部 #}
+<header class="mooc-header">
+  <div class="container clearfix">
+    <div class="navbar-header">
+      <div class="visible-xs  navbar-mobile">
+        <a href="javascript:;" class="navbar-more js-navbar-more">
+          <i class="es-icon es-icon-menu"></i>
+        </a>
+        <div class="html-mask"></div>
+        <div class="nav-mobile">
+          <form class="navbar-form" action="{{ path('search') }}" method="get">
             <div class="form-group">
-              <input type="text" class="form-control" name="q" placeholder="搜索课程">        
-              <button type="submit" class="button">
-                <span class="icon-search"></span>
-              </button>
+              <input class="form-control" placeholder="搜索" name="q">
+              <button class="button mc-icon icon-search"></button>
             </div>
           </form>
-          {% if app.user %}
-            <div class="user">
-              <a href="{{ path('user_show', {id:app.user.id}) }}">
-                <img src="{{filepath(app.user.smallAvatar, 'avatar.png')}}" />            
-                <span class="name hidden-sm hidden-xs">{{ app.user.nickname }}</span>
-              </a>
-
-              <ul class="dropdown-menu">
-                <li role="presentation" class="dropdown-header visible-sm visible-xs">{{ app.user.nickname }}</li>
-                <li>
-                  <a href="{{ path('user_show', {id:app.user.id}) }}">
-                    <span class="icons-user-1"></span>
-                    <span>我的主页</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a href="{{ path('settings') }}">
-                    <span class="icons-user-2"></span>
-                    <span>账号设置</span>
-                  </a>
-                </li>
-                <li class="divider"></li>
-                {% if is_granted('ROLE_ADMIN') %}
-                <li>
-                  <a href="{{ path('admin') }}">
-                    <span class="icons-user-3"></span>
-                    <span>管理后台</span>
-                  </a>
-                </li>
-                 <li class="divider "></li>
-                 <li>
-                  <a href="{{ path('my') }}" class="hidden-lg">
-                    <span class="icons-user-5"></span>
-                    <span>课程</span>
-                  </a>
-                </li>
-
-              <li class="divider hidden-lg"></li>
-              <li>
-                <a href="{{ path('message') }}" class="hidden-lg">
-                  <span class="icons-user-6">
-                    {% if app.user.newMessageNum > 0 %}
-                    <span class="message">{{ app.user.newMessageNum }}</span>
-                    {% endif %}
-                  </span>
-                  <span>私信</span>
-                </a>
-              </li>
-              <li class="divider hidden-lg"></li>
-              <li>
-                <a href="{{ path('notification') }}" class="hidden-lg">
-                  <span class="icons-user-7">
-                    {% if app.user.newNotificationNum > 0 %}
-                    <span class="message">{{ app.user.newNotificationNum }}</span>
-                    {% endif %}
-                  </span>
-                  <span>通知</span>
-                </a>
-              </li>
-                <li class="divider"></li>
-                {% endif  %}
-                <li>
-                  <a href="{{ path('logout') }}">
-                    <span class="icons-user-4"></span>
-                    <span>退出账户</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <ul class="visible-lg">
-              {% if app.user.id ==  branchSchool.adminId|default() %}
-              <li>
-                <a class="tooltop branchSchool" href="{{ path('branch_school_settings',{domain:branchSchool.domain}) }}" data-toggle="tooltip" data-placement="bottom" title="分校">
-                  <span class="iconfont icon-xuetang"></span>
-                </a>
-              </li>
-              {% endif %}
-              <li>
-                <a class="tooltop" href="{{ path('my') }}" data-toggle="tooltip" data-placement="bottom" title="课程">
-                  <span class="icons-user-5"></span>
-                </a>
-              </li>
-              <li>
-                <a class="tooltop" href="{{ path('message') }}" data-toggle="tooltip" data-placement="bottom" title="私信">
-                  <span class="icons-user-6">
-                    {% if app.user.newMessageNum > 0 %}
-                    <span class="message">{{ app.user.newMessageNum }}</span>
-                    {% endif %}
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a class="tooltop" href="{{ path('notification') }}" data-toggle="tooltip" data-placement="bottom" title="通知">
-                  <span class="icons-user-7">
-                    {% if app.user.newNotificationNum > 0 %}
-                    <span class="message">{{ app.user.newNotificationNum }}</span>
-                    {% endif %}
-                  </span>
-                </a>
-              </li>
-            </ul>
-          {% else %}
-            <ul class="login-menu">
-              <li>
-                <a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a>
-              </li>
-              <li>
-                <a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a>
-              </li>
-            </ul>
-          {% endif %}
+          <ul class="nav navbar-nav">
+            {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+          </ul>
         </div>
-      </nav>
-    <!-- </div> -->
-  </header>
+      </div>
+     {% if setting('site.logo') %}
+        <a class="navbar-brand" href="{{ path('homepage') }}">
+          <img class="img-responsive" src="{{ asset(setting('site.logo')) }}">
+        </a>
+      {% else %}
+        <a class="navbar-brand" href="{{ path('homepage') }}">{{ setting('site.name', 'EDUSOHO') }}</a>
+      {% endif %}
+    </div>
+    <form class="navbar-form hidden-xs hidden-sm mooc-navbar-form" role="search" action="/search">
+      <div class="form-group">
+        <input type="text" class="form-control" name="q" placeholder="搜索关键词...">
+        <button class="button mc-icon icon-search"></button>
+      </div>
+    </form>
+    <div class="navbar-user pull-right">
+      <ul class="nav user-nav dropdown">
+        {% if app.user %}
+        <li class="user-avatar">
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <img class="avatar-sm" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
+            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="mc-icon icon-home"></i>个人主页</a></li>
+            <li class="divider"></li>
+            <li><a href="{{ path('settings') }}"><i class="mc-icon icon-settings"></i>个人设置</a></li>
+            {% if is_granted('ROLE_ADMIN') %}
+            <li class="divider"></li>
+            <li><a href="{{ path('admin') }}"><i class="mc-icon icon-apps"></i>管理后台</a></li>
+            {% endif %} 
+            <li class="divider visible-xs"></li>
+            <li  class="visible-xs"><a href="{{ path('message') }}"><i class="mc-icon icon-message"></i> 私信
+              {% if app.user.newMessageNum > 0 %}
+                <span class="message">{{ app.user.newMessageNum }}</span>
+              {% endif %}
+             </a>
+            </li>
+            <li class="divider visible-xs"></li>
+            <li class="visible-xs"><a href="{{ path('notification') }}"><i class="mc-icon icon-notice"></i> 通知
+              {% if app.user.newNotificationNum > 0 %}
+                <span class="message">{{ app.user.newNotificationNum }}</span>
+              {% endif %}
+             </a>
+            </li>
+            <li class="divider"></li>
+            <li><a href="{{ path('logout') }}"><i class="mc-icon icon-exit"></i>退出登录</a></li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="user-avatar-li nav-hover visible-xs">
+          <a href="javascript:;" class="dropdown-toggle">
+            <img class="avatar-sm" src="{{ asset('assets/img/default/avatar.png') }}">
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+          </ul>
+        </li>
+        <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
+        <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li> 
+        {% endif %}
+      </ul>
+      {% if app.user %}
+      <a href="{{ path('my') }}" class="hidden-xs user-roles">
+        {% if 'ROLE_TEACHER' in app.user.roles %}
+          我的教学
+        {% else %} 
+          我的学习
+        {% endif %}
+      </a>
+      <span class="dropdown hidden-xs user-messages">
+        <a href="{{ path('message') }}" class="dropdown-toggle user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}" {% if setting('esBar.enabled', 0) %}{% else %} data-toggle="dropdown" {% endif %}>
+          <i class="mc-icon icon-message" ></i>
+            {% if app.user.newMessageNum > 0 %}
+            <span class="message red-dot"></span>
+          {% endif %}
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <a href="{{ path('message') }}"><i class="mc-icon icon-message"></i> 私信
+            {% if app.user.newMessageNum > 0 %}
+              <span class="message">{{ app.user.newMessageNum }}</span>
+            {% endif %}
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="{{ path('notification') }}"><i class="mc-icon icon-notice"></i> 通知
+            {% if app.user.newNotificationNum > 0 %}
+            <span class="message">{{ app.user.newNotificationNum }}</span>
+            {% endif %}
+             </a>
+          </li>
+        </ul>
+      </span>
+     {% endif %}
+    </div>
+  </div>
+</header>
