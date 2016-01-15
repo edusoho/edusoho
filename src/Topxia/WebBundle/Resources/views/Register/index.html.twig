@@ -111,6 +111,9 @@
             <button type="submit" id="register-btn" data-submiting-text="正在提交" class="btn btn-primary btn-lg btn-block">注册</button>
           </div>
         </div>
+        {% if inviteCode != null  %}
+          <label>邀请人：{{ inviteUser['nickname'] }}。</label>
+        {% endif %}
 
         <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
