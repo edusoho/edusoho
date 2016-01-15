@@ -2692,7 +2692,7 @@ input:focus {
   color: #ffffff;
   margin: 5px;
   text-align: center;
-  line-height: 33px;
+  line-height: 30px;
 }
 .mooc-header .navbar-user .user-message .message {
   position: absolute;
