@@ -45,6 +45,12 @@
     {% block header %}
       {% include 'TopxiaWebBundle:Default:header.html.twig' %}
     {% endblock %}
+
+    <nav class="mooc-nav hidden-xs hidden-sm">
+      <div class="container"> 
+      {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+      </div>
+    </nav>
     
     {% block full_content %}
       {% block top_content %}{% endblock %}
