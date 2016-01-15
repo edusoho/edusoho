@@ -1,5 +1,5 @@
 {% set teachers = data('RecommendTeachers',{'count':config.count|default(8)}) %}
-<section class="mooc-teacher hidden-xs hidden-sm  moocbg-white">
+<section class="mooc-teacher hidden-xs hidden-sm {{config.background|default("")}}">
   <div class="container">
     <div class="mooc-index-title">
       {{ config.title|default(config.defaultTitle) }}

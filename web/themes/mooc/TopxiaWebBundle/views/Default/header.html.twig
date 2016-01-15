@@ -90,7 +90,7 @@
         {% endif %}
       </a>
       <span class="dropdown hidden-xs user-messages">
-        <a href="{{ path('message') }}" class="dropdown-toggle user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}" data-toggle="dropdown">
+        <a href="{{ path('message') }}" class="dropdown-toggle user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}" {% if setting('esBar.enabled', 0) %}{% else %} data-toggle="dropdown" {% endif %}>
           <i class="mc-icon icon-message" ></i>
             {% if app.user.newMessageNum > 0 %}
             <span class="message red-dot"></span>

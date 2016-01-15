@@ -1,7 +1,8 @@
 {% set count = config.count|default(10) %}
 
 {% set latestCourses = data('LatestCourses',{ count:count }) %}
-<section class="mooc-course moocbg-blue">
+
+<section class="mooc-course {{config.background|default("")}}">
   <div class="container">
     <div class="mooc-index-title">
       {{ config.title|default(config.defaultTitle) }}

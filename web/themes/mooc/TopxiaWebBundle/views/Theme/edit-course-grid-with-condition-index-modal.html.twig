@@ -76,16 +76,16 @@
         </div>
       </div> #}
 
-      {#<div class="form-group"> 
+      <div class="form-group"> 
         <label class="col-sm-3 control-label">背景颜色设置</label> 
         <div class="col-sm-9 check-box">
         <input type="hidden"  name="background" value={{config.background|default("")}}>
           <label class="radio-inline"> 
-            <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}> 
-            灰色 
+            <input type="radio"  value="moocbg-blue"{% if config.background|default("") == "moocbg-blue"%} checked="checked"{% endif %}> 
+            浅灰 
           </label> 
           <label class="radio-inline" > 
-            <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} > 
+            <input type="radio"  value="moocbg-white"{% if config.background|default("") == "moocbg-white"%} checked="checked"{% endif %} > 
             白色 
           </label>
           <label class="radio-inline" > 
@@ -93,7 +93,7 @@
             默认 
           </label>  
         </div> 
-      </div> #}
+      </div>
     </form>
 
 {% endblock %}
