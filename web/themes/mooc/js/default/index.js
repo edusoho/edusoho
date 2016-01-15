@@ -18,11 +18,11 @@ define(function(require, exports, module) {
         });
        $('.es-poster .arrow-left').on('click', function(e){
             e.preventDefault()
-            swiper.swipePrev()
+            bannerSwiper.swipePrev()
            })
        $('.es-poster .arrow-right').on('click', function(e){
             e.preventDefault()
-            swiper.swipeNext()
+            bannerSwiper.swipeNext()
         })
         var setSwiper = new Swiper('.set-right.swiper-container', {
             autoplay: 6000,
@@ -36,11 +36,11 @@ define(function(require, exports, module) {
         });
         $('.set-right .arrow-left').on('click', function(e){
             e.preventDefault()
-            swiper2.swipePrev()
+            setSwiper.swipePrev()
            })
        $('.set-right .arrow-right').on('click', function(e){
             e.preventDefault()
-            swiper2.swipeNext()
+            setSwiper.swipeNext()
         })
         var classSwiper = new Swiper('.class-list.swiper-container', {
             calculateHeight: true,
@@ -52,11 +52,11 @@ define(function(require, exports, module) {
         });
         $('.class-list .arrow-left').on('click', function(e){
             e.preventDefault()
-            swiper3.swipePrev()
+            classSwiper.swipePrev()
            })
        $('.class-list .arrow-right').on('click', function(e){
             e.preventDefault()
-            swiper3.swipeNext()
+            classSwiper.swipeNext()
         })
         Lazyload.init();
          var teachCarousel = function() {
