@@ -49,7 +49,7 @@
 
 
 <div class="col-md-3 clearfix weichat">
-  <img src="{{asset('themes/mooc/img/temp/weixin.jpg')}}">
+  <img src="{% if weixin[0].src %}{{ asset(weixin[0].src|default('')) }}{% else %}{{asset('themes/mooc/img/temp/weixin.jpg')}}{% endif %}">
   <p>扫一扫关注微信</p>
 </div>
 

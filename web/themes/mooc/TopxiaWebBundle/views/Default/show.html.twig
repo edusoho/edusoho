@@ -9,11 +9,6 @@
 {% set _target_path = path('homepage') %}
 
 {% block full_content %}
-	<nav class="mooc-nav hidden-xs hidden-sm">
-	  <div class="container"> 
-	  {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
-	  </div>
-	</nav> 
 	
   <section class="es-poster swiper-container mooc-poster">
     {{ block_show('mooc:home_top_banner') }}
