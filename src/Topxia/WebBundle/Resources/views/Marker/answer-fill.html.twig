@@ -21,7 +21,7 @@
 		</div>
 		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
 		{% include 'TopxiaWebBundle:Marker:answer-progress.html.twig' %}
-		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">完成</button>
+		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">{% if compelete %}完成{% else %}下一题{% endif %}</button>
 	</div>
 	<div class="question-footer">
 	</div>
