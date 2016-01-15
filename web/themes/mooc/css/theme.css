@@ -2572,6 +2572,9 @@ input:focus {
   position: relative;
   top: 1px;
 }
+.mooc-header .user-messages .dropdown-menu > li > a:hover {
+  background: #10b67c;
+}
 .mooc-header .user-messages .dropdown-menu .divider {
   margin: 0;
 }
@@ -2631,6 +2634,9 @@ input:focus {
 }
 .mooc-header .navbar-user .nav.user-nav .dropdown-menu {
   right: -46px;
+}
+.mooc-header .navbar-user .nav.user-nav .dropdown-menu > li > a:hover {
+  background: #10b67c;
 }
 @media (max-width: 767px) {
   .mooc-header .navbar-user .nav.user-nav .dropdown-menu {

@@ -62,6 +62,11 @@
         position: relative;
         top: 1px;
       }
+      >li>a{
+        &:hover{
+          background: @color-primary;
+        }
+      }
       .divider{
         margin: 0;
       }
@@ -117,6 +122,11 @@
       }
       .dropdown-menu{
         right: -46px;
+          >li>a{
+        &:hover{
+          background: @color-primary;
+        }
+      }
         @media (max-width : @screen-xs-max){
           right: 0;
           top: 60px;
