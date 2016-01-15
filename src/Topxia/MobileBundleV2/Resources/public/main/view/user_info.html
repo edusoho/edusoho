@@ -4,7 +4,7 @@
       <h3 class="title">用户信息</h3>
     </div>
 </div>
-<div class="ui-details ui-scroller" ui-scroll data="userinfo" on-scroll="changeTabStatus(headTop, scrollTop)">
+<div class="ui-details ui-scroller" ui-scroll data="userinfo" on-scroll="changeTabStatus(headTop, scrollTop)" ng-init="loadUserInfo()">
     <ul class="ui-list transparent ui-details-panel ui-details-head">
     	<li>
     		<div class="ui-details-avatar">
@@ -13,7 +13,7 @@
 		        </div>
 		        <h4 class="ui-nowrap">{{ userinfo.nickname }}</h4>
 		        <p class="ui-nowrap">{{ userinfo.signature }}</p>
-		        <button class="ui-btn btn-green" ng-click="changeFollowUser()" ng-if="isFollower != null ">
+		        <button ng-if="isUnOwner()" class="ui-btn btn-green" ng-click="changeFollowUser()" ng-if="isFollower != null ">
 			        {{ isFollower ? "已关注" : "+关注" }}
 		        </button>
     		</div>
