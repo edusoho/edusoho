@@ -4,7 +4,7 @@ function CourseNoticeController($scope, CourseService, ClassRoomService, $stateP
 {
 	var limit = 10;
 	$scope.start = 0;
-	$scope.showLoadMore = true;
+	$scope.showLoadMore = false;
 	
 	this.loadCourseNotices = function(callback) {
 	    CourseService.getCourseNotices({
@@ -34,18 +34,20 @@ function CourseNoticeController($scope, CourseService, ClassRoomService, $stateP
 
 
 	function loadNotices(start, limit) {
+		$scope.showLoad();
 		self.targetService(function(data) {
+			$scope.hideLoad();
 			$scope.notices = $scope.notices || [];
 			
-			if (! data || data.length == 0) {
+			if (! data || data.length < 10) {
 				$scope.showLoadMore = false;
-				$scope.toast("没有更多消息");
 				return;
 			}
-			
+
+			$scope.showLoadMore = true;
 			for (var i = 0; i < data.length; i++) {
-		                  $scope.notices.push(data[i]);
-		           };
+                $scope.notices.push(data[i]);
+           	};
 			$scope.start += limit;
 		});
 	}
