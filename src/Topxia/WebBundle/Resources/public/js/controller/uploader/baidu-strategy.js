@@ -22,33 +22,11 @@ define(function(require, exports, module) {
             $.ajax({
                 url: self.get('uploadUrl')+ '?uploads',
                 type:'POST',
-                // dataType:'json',
                 async: false,
-                data:baiduParts,
                 beforeSend: function(xhr){
-                    // xhr.setRequestHeader("Content-Type", "application/json");
-                    
-                    headers = $.parseJSON(self.get('uploadToken'));
-                    console.log(headers);
-                    $.each(headers, function(index, val) {
-                         // console.log(index);
-                         // console.log(val);
-
-                         xhr.setRequestHeader(index, val);
-                    });
-                    // xhr.setRequestHeader("Accept", "");
-                    // xhr.setRequestHeader("Accept-Encoding", "");
-                    // xhr.setRequestHeader("Accept-Language", "");
-                    // xhr.setRequestHeader("Cache-Control", "");
-                    // xhr.setRequestHeader("Connection", "");
-                    // xhr.setRequestHeader("Origin", "");
-                    // xhr.setRequestHeader("Pragma", "");
-                    // xhr.setRequestHeader("Referer", "");
-                    // xhr.setRequestHeader("User-Agent", "");
-                    // xhr.setRequestHeader("X-CSRF-Token", "");
-                    // xhr.setRequestHeader("Origin", "");
+                    // headers = $.parseJSON(self.get('uploadToken'));
                     // xhr.setRequestHeader("Authorization", headers['Authorization']);
-                    // xhr.setRequestHeader("x-bce-date", headers['x-bce-date']);
+                    
                 },
                 success:function(data) {
                     self.set('uploadId', data.uploadId);
