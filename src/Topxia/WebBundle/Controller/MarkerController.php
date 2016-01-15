@@ -242,6 +242,7 @@ class MarkerController extends BaseController
             'count'   => $count,
             'percent' => floor($questionMarker['seq'] / $count * 100)
         );
+
         return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
             'markerId'   => $data['markerId'],
             'question'   => $questionMarker,
