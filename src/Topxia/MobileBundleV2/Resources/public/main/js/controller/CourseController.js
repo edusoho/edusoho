@@ -570,7 +570,22 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
       classRoomId : $stateParams.classRoomId,
       limit : 3
     }, function(data) {
-      $scope.students = data.data;
+      $scope.students = data.resources;
+    });
+  };
+
+  $scope.loadTeachers = function() {
+    ClassRoomService.getTeachers({
+      classRoomId : $stateParams.classRoomId,
+    }, function(data) {
+      if (data && data.length > 1) {
+        var length = data.length;
+        for (var i = 2; i < length; i++) {
+          data.pop();
+        };
+      }
+
+      $scope.classRoom.teachers = data;
     });
   };
 

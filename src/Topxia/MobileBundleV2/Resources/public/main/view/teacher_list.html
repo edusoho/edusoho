@@ -9,7 +9,7 @@
 	<ul class="ui-list ui-list-text">  
 		<li class="ui-border-t" ng-repeat="user in users" ui-sref="userInfo({ userId : user.id })">
 	        <div class="ui-avatar-s">
-	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar"/>
+	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar" />
 	        </div>
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap">
