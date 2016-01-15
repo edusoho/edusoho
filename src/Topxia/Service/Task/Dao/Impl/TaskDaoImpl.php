@@ -67,7 +67,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
     public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('id', 'createdTime', 'taskStartTime', 'taskEndTime', 'completedTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('id', 'createdTime', 'taskStartTime', 'taskEndTime', 'completedTime', 'intervalDate'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')
@@ -101,6 +101,7 @@ class TaskDaoImpl extends BaseDao implements TaskDao
                         ->andWhere('taskStartTime < :taskStartTimeLessThan')
                         ->andWhere('taskEndTime >= :taskEndTimeGreaterThan')
                         ->andWhere('taskEndTime <= :taskEndTimeLessThan')
+                        ->andWhere('intervalDate > intervalDateGreaterThan')
                         ->andWhere('batchId IN ( :batchIds )');
 
         return $builder;
