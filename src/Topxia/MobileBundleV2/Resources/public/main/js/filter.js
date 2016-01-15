@@ -307,4 +307,17 @@ filter('coverUserRole', function(AppUtil){
 		};
 		return "学生";
 	}
+}).
+filter('isTeacherRole', function(AppUtil){
+
+	return function(roles) {
+		if (AppUtil.inArray("ROLE_TEACHER", roles) != -1) {
+			return true;
+		}
+
+		if (AppUtil.inArray("teacher", roles) != -1) {
+			return true;
+		}
+		return false;
+	}
 });

@@ -14,6 +14,7 @@
 	        <div class="ui-list-info">
 	            <h4 class="ui-nowrap">
 	            	{{ user.nickname }} 
+	            	<label ng-if=" user.roles | isTeacherRole" class="ui-label">教师</label>
 	            </h4>
 	            <p class="ui-nowrap">{{ user.title }}</p>
 	        </div>
