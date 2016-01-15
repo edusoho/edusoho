@@ -1,7 +1,7 @@
 <div class="question"  data-question-id="{{ question.id }}">
 	<div class="question-heading editor-text">单选题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
 	<div class="question-body clearfix">
-		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw}}</div>
+		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|raw}}</div>
 		{% if answer|default(null) %}
 			{% set answerChoiceIndex = (1+answer[0]) %}
 		{% else %}
@@ -12,9 +12,9 @@
 			{% set choiceIndex = (65+key)|chr %}
 			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
 				<span class="type-check {% if loop.index == answerChoiceIndex and loop.index == (selfAnswer+1) %} correct {% elseif loop.index == (selfAnswer+1) %} error {% endif %} " id="question-{{ question.id }}-input-{{ choiceIndex }}" data-type="single_choice" name="answer[{{ question.id }}]" value="{{ key }}">{{ choiceIndex }}</span>
-				<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
+				{{ choice|bbCode2Html|raw}}
 				{% if loop.index == answerChoiceIndex %}
-					<span class="label label-success label-md mll">正确答案</span>
+					<span class="label label-success label-md">正确答案</span>
 				{% endif %}
 			</li>
 			{% endfor %}

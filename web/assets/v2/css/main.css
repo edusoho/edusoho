@@ -11424,12 +11424,22 @@ textarea {
   padding-left: 10px;
 }
 .marker-modal .question-choices li {
-  padding: 10px 0;
+  padding: 10px 0 10px 50px;
+  position: relative;
+  line-height: 30px;
 }
 .marker-modal .question-choices li:hover {
   background-color: transparent;
 }
+.marker-modal .question-choices li p {
+  margin-bottom: 0;
+  display: inline-block;
+  margin-right: 10px;
+}
 .marker-modal .type-check {
+  position: absolute;
+  left: 0;
+  top: 10px;
   display: inline-block;
   width: 30px;
   height: 30px;
@@ -11569,6 +11579,13 @@ textarea {
   margin-bottom: 10px;
   border-bottom: 1px solid #e1e1e1;
 }
+.question-manage .question-menu .list-title .row {
+  margin: 0;
+}
+.question-manage .question-menu .list-title .content {
+  padding-left: 0;
+  text-align: center;
+}
 .question-manage .question-menu .lesson-list {
   min-height: 100px;
 }
@@ -11691,8 +11708,14 @@ textarea {
     top: -40px;
   }
 }
+.question-manage .editbox .scalebox .scale.white {
+  height: 80%;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
 .question-manage .editbox .scalebox .scale.white .scale-details {
   visibility: visible;
+  background-color: transparent;
 }
 .question-manage .editbox .scalebox .scale.blue {
   background-color: #2998c9;

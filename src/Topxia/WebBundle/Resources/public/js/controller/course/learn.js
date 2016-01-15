@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             'click [data-role=next-lesson]': 'onNextLesson',
             'click [data-role=prev-lesson]': 'onPrevLesson',
             'click [data-role=finish-lesson]': 'onFinishLesson',
-            'click [data-role=ask-question]': 'onAskQuestion'
+            'click [data-role=ask-question]': 'onAskQuestion',
         },
 
         attrs: {
@@ -51,6 +51,7 @@ define(function(require, exports, module) {
             this._initRouter();
             this._initListeners();
             this._initChapter();
+            
 
             $('.prev-lesson-btn, .next-lesson-btn').tooltip();
         },
@@ -187,6 +188,7 @@ define(function(require, exports, module) {
 
         _onChangeLessonId: function(id) {
             var self = this;
+
             if (!this._toolbar) {
                 return ;
             }
@@ -336,6 +338,7 @@ define(function(require, exports, module) {
                         });
 
                         messenger.on("onMarkerReached", function(marker,questionId){
+                            self._keyDow();
                             var player = window.frames["viewerIframe"].window.BalloonPlayer;
                             if(player.isPlaying()){
                               player.pause();
@@ -360,10 +363,7 @@ define(function(require, exports, module) {
                                 }
                             });
                         });
-
-
                         that.set("player", {});
-
                     } else {
                         $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
                         swfobject.embedSWF(lesson.mediaUri, 
@@ -754,6 +754,33 @@ define(function(require, exports, module) {
             };  
 
             return $countDown;          
+        },
+        _keyDow:function() {
+            // var $player = $(document.getElementById('viewerIframe').contentDocument);
+            // console.log($player);
+            // $player.keydown(function(event) {
+            //     console.log("ok");
+            //     console.log(event.keyCode );
+            //     if (event.keyCode == 27) {
+            //         alert('左');
+            //     }
+            // });
+            $(document).keydown(function(event) {
+                //判断当event.keyCode 为37时（即左方面键），执行函数to_left();
+                //判断当event.keyCode 为39时（即右方面键），执行函数to_right();
+                console.log(event.keyCode);
+                if (event.keyCode == 37) {
+                    alert('左');
+                } else if (event.keyCode == 39) {
+                    alert('右');
+                } else if (event.keyCode == 27) {
+                    alert('esc键');
+                } else if (event.keyCode == 13) {
+                    alert('回车键');
+                } else {
+                    alert('这按钮的ASCII码,是' + event.keyCode);
+                }
+            });
         }
 
     });
@@ -826,10 +853,10 @@ define(function(require, exports, module) {
     });
 
     exports.run = function() {
-        
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
+
         $(".es-qrcode").click(function(){
             var $this = $(this); 
             var url=document.location.href.split("#");
@@ -847,7 +874,7 @@ define(function(require, exports, module) {
                     }
                 });
             }
-        });
+        }); 
     };
 
 });

@@ -31,13 +31,23 @@
   .question-choices {
     padding-left: 10px;
     li {
-      padding: 10px 0;
+      padding: 10px 0 10px 50px;
+      position: relative;
+      line-height: 30px;
       &:hover {
         background-color: transparent;
+      }
+      p {
+        margin-bottom: 0;
+        display: inline-block;
+        margin-right: 10px;
       }
     } 
   }
   .type-check {
+    position: absolute;
+    left: 0;
+    top: 10px;
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -167,6 +177,13 @@
     padding-bottom: 10px;
     margin-bottom: 10px;
     border-bottom: 1px solid #e1e1e1;
+    .row {
+      margin: 0;
+    }
+    .content {
+      padding-left: 0;
+      text-align: center;
+    }
   }
   .lesson-list {
     min-height: 100px;
@@ -284,8 +301,11 @@
       }
     }
     .scale.white{
+      height: 80%;
+      .opacity(0.6);
       .scale-details {
         visibility: visible;
+        background-color: transparent;
       }
     }
     .scale.blue{
