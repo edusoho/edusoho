@@ -187,12 +187,23 @@
     },
     "mooc:footer_link":
     {
-        "title": "慕课主题：底部合作伙伴",
+        "title": "慕课主题：底部合作院校",
         "category": "mooc",
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
+            "text": {
+                "title": "栏目标题",
+                "desc":"",
+                "count": 1,
+                "type": "text",
+                "default": [
+                    {
+                        "value": "合作院校"
+                    }
+                ]
+            },
             "partners": {
-                "title": "合作伙伴",
+                "title": "合作院校",
                 "desc": "最大可设置10个",
                 "count": 10,
                 "type": "banner",

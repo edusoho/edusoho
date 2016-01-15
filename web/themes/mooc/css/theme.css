@@ -2521,9 +2521,12 @@ input:focus {
 }
 .mooc-header .navbar-header .navbar-brand {
   height: 80px;
-  line-height: 70px;
-  padding: 5px 10px;
+  line-height: 60px;
+  padding: 10px;
   color: #10b67c;
+}
+.mooc-header .navbar-header .navbar-brand img {
+  height: 50px;
 }
 @media (max-width: 767px) {
   .mooc-header .navbar-header {
@@ -3381,14 +3384,16 @@ label {
   padding: 8px 35px;
 }
 .mooc-cooperate {
-  padding: 50px 0;
+  padding: 34px 0;
 }
 .mooc-cooperate .cooperate-list {
   padding: 0;
+  margin: 0;
 }
 .mooc-cooperate .cooperate-list li {
   float: left;
   width: 20%;
+  margin-bottom: 16px;
 }
 .mooc-cooperate .cooperate-list li:hover img {
   -webkit-filter: grayscale(0);
