@@ -125,14 +125,10 @@ $app->before(function (Request $request) use ($app) {
 
 $app->error(function (\Exception $e, $code) {
     return array(
-        'error' => array(
-            'code' => $code,
-            'message' => $e->getMessage(),
-        ),
+        'code' => $code,
+        'message' => $e->getMessage(),
     );
-}
-
-);
+});
 
 include __DIR__.'/config/routing.php';
 
