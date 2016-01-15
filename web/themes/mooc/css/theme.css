@@ -2562,6 +2562,15 @@ input:focus {
   font-size: 20px;
   color: #272a41;
 }
+.mooc-header .user-messages .dropdown-menu {
+  right: -62px;
+  left: auto;
+  padding: 0;
+  top: 46px;
+}
+.mooc-header .user-messages .dropdown-menu .divider {
+  margin: 0;
+}
 .mooc-header .navbar-user {
   z-index: initial;
 }
@@ -2931,7 +2940,7 @@ label {
   background: #fff;
 }
 .mooc-navset .left-wrapper {
-  padding-bottom: 10px;
+  padding: 5px 0 6px;
 }
 .mooc-navset .set-left {
   width: 228px;
@@ -3115,8 +3124,14 @@ label {
   background: #ffffff;
   padding: 0 10px;
 }
+.mooc-classroom .swiper-wrapper {
+  padding-bottom: 10px;
+}
 .mooc-classroom .swiper-container {
   margin: 0 -10px !important;
+}
+.mooc-classroom .text-center {
+  margin-top: 30px;
 }
 .mooc-classroom .class-list .arrow-left {
   left: 10px;
@@ -3162,9 +3177,9 @@ label {
   margin: 0;
 }
 .mooc-classroom .class-item:hover .class-wrapper {
-  -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
-  -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
-  box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5) !important;
+  -moz-box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5) !important;
+  box-shadow: 0 4px 8px 0 rgba(204, 209, 212, 0.5) !important;
 }
 .mooc-classroom .class-item .class-img {
   padding: 10px 0;
@@ -3212,6 +3227,9 @@ label {
   background: #fff;
   padding: 50px 0;
   position: relative;
+}
+.mooc-teacher .carousel-inner {
+  overflow: inherit;
 }
 .mooc-teacher .mooc-carousel-indicators li {
   width: 10px;
@@ -3446,46 +3464,46 @@ label {
   background: rgba(255, 255, 255, 0.5);
 }
 .js-animate-item.active .mobile {
-  -webkit-animation: fadeInUp 1s ease both;
-  -moz-animation: fadeInUp 1s ease both;
-  -o-animation: fadeInUp 1s ease both;
-  animation: fadeInUp 1s ease both;
+  -webkit-animation: fadeInUp 0.6s ease both;
+  -moz-animation: fadeInUp 0.6s ease both;
+  -o-animation: fadeInUp 0.6s ease both;
+  animation: fadeInUp 0.6s ease both;
 }
 .js-animate-item.active .calculator {
-  -webkit-animation: fadeInUp 1s ease both;
-  -moz-animation: fadeInUp 1s ease both;
-  -o-animation: fadeInUp 1s ease both;
-  animation: fadeInUp 1s ease both;
+  -webkit-animation: fadeInUp 0.6s ease both;
+  -moz-animation: fadeInUp 0.6s ease both;
+  -o-animation: fadeInUp 0.6s ease both;
+  animation: fadeInUp 0.6s ease both;
 }
 .js-animate-item.active .book {
-  -webkit-animation: fadeInUp 1s ease both;
-  -moz-animation: fadeInUp 1s ease both;
-  -o-animation: fadeInUp 1s ease both;
-  animation: fadeInUp 1s ease both;
+  -webkit-animation: fadeInUp 0.6s ease both;
+  -moz-animation: fadeInUp 0.6s ease both;
+  -o-animation: fadeInUp 0.6s ease both;
+  animation: fadeInUp 0.6s ease both;
 }
 .js-animate-item.active .earphone {
-  -webkit-animation: fadeInUp 1s ease both;
-  -moz-animation: fadeInUp 1s ease both;
-  -o-animation: fadeInUp 1s ease both;
-  animation: fadeInUp 1s ease both;
+  -webkit-animation: fadeInUp 0.6s ease both;
+  -moz-animation: fadeInUp 0.6s ease both;
+  -o-animation: fadeInUp 0.6s ease both;
+  animation: fadeInUp 0.6s ease both;
 }
 .js-animate-item.active .learning-btn {
-  -webkit-animation: fadeInDown 1s ease both;
-  -moz-animation: fadeInDown 1s ease both;
-  -o-animation: fadeInDown 1s ease both;
-  animation: fadeInDown 1s ease both;
+  -webkit-animation: fadeInDown 0.6s ease both;
+  -moz-animation: fadeInDown 0.6s ease both;
+  -o-animation: fadeInDown 0.6s ease both;
+  animation: fadeInDown 0.6s ease both;
 }
 .js-animate-item.active .coffee {
-  -webkit-animation: fadeInUp 1s ease both;
-  -moz-animation: fadeInUp 1s ease both;
-  -o-animation: fadeInUp 1s ease both;
-  animation: fadeInUp 1s ease both;
+  -webkit-animation: fadeInUp 0.6s ease both;
+  -moz-animation: fadeInUp 0.6s ease both;
+  -o-animation: fadeInUp 0.6s ease both;
+  animation: fadeInUp 0.6s ease both;
 }
 .js-animate-item.active .row {
-  -webkit-animation: fadeInUp 1s ease both;
-  -moz-animation: fadeInUp 1s ease both;
-  -o-animation: fadeInUp 1s ease both;
-  animation: fadeInUp 1s ease both;
+  -webkit-animation: fadeInUp 0.6s ease both;
+  -moz-animation: fadeInUp 0.6s ease both;
+  -o-animation: fadeInUp 0.6s ease both;
+  animation: fadeInUp 0.6s ease both;
 }
 .friendlink {
   padding: 48px 0;

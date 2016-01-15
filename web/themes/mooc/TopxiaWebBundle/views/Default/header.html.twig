@@ -89,12 +89,31 @@
           我的学习
         {% endif %}
       </a>
-      <a href="{{ path('message') }}" class="hidden-xs user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}">
-        <i class="iconfont icon-sixin"></i>
-          {% if app.user.newMessageNum > 0 %}
-          <span class="message red-dot"></span>
-        {% endif %}
-      </a>
+      <span class="dropdown hidden-xs user-messages">
+        <a href="{{ path('message') }}" class="dropdown-toggle user-message {% if app.user.newMessageNum > 0 %} hasmessage {% endif %}" data-toggle="dropdown">
+          <i class="iconfont icon-sixin " ></i>
+            {% if app.user.newMessageNum > 0 %}
+            <span class="message red-dot"></span>
+          {% endif %}
+        </a>
+        <ul class="dropdown-menu" role="menu">
+          <li>
+            <a href="{{ path('message') }}"><i class="iconfont icon-sixin"></i> 私信
+            {% if app.user.newMessageNum > 0 %}
+              <span class="message">{{ app.user.newMessageNum }}</span>
+            {% endif %}
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="{{ path('notification') }}"><i class="mc-icon icon-notice"></i> 通知
+            {% if app.user.newNotificationNum > 0 %}
+            <span class="message">{{ app.user.newNotificationNum }}</span>
+            {% endif %}
+             </a>
+          </li>
+        </ul>
+      </span>
      {% endif %}
     </div>
   </div>

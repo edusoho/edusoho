@@ -34,7 +34,7 @@
 .mooc-navset{
   background: #fff;
   .left-wrapper{
-    padding-bottom: 10px;
+    padding: 5px 0 6px;
   }
   .set-left{
     width: 228px;
@@ -47,8 +47,8 @@
       font-size: 24px;
       margin:0 0 8px ;
       line-height: 24px;
-      height: 24px;
-      overflow: hidden;
+          height: 24px;
+    overflow: hidden;
     }
     i{
       font-size: 27px;
@@ -204,9 +204,15 @@
     background: @white;
     padding: 0 10px;
   }
+  .swiper-wrapper{
+    padding-bottom: 10px;
+  }
    .swiper-container{
       margin:0 -10px!important;
     }
+  .text-center{
+    margin-top: 30px;
+  }
   .class-list{
      .arrow-left{
       left: 10px;
@@ -245,7 +251,7 @@
     margin: 0;
     &:hover{
       .class-wrapper{
-        .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) );
+        .box-shadow(0 4px 8px 0 rgba(204, 209, 212, .5) )!important;
       }
     }
 
@@ -299,6 +305,9 @@
   background: #fff;
   padding: 50px 0;
   position: relative;
+  .carousel-inner{
+    overflow: inherit;
+  }
   .mooc-carousel-indicators{
     li{
       width: 10px;
@@ -536,25 +545,25 @@
 }
 .js-animate-item.active{
   .mobile{
-      .animation(fadeInUp 1s  ease both);
+      .animation(fadeInUp .6s  ease both);
   }
   .calculator{
-      .animation(fadeInUp 1s  ease both);
+      .animation(fadeInUp .6s  ease both);
   }
   .book{
-      .animation(fadeInUp 1s  ease both);
+      .animation(fadeInUp .6s  ease both);
   }
   .earphone{
-      .animation(fadeInUp 1s  ease both);
+      .animation(fadeInUp .6s  ease both);
   }
   .learning-btn{
-    .animation(fadeInDown 1s  ease both);
+    .animation(fadeInDown .6s  ease both);
   }
   .coffee{
-    .animation(fadeInUp 1s  ease both);
+    .animation(fadeInUp .6s  ease both);
   }
   .row{
-      .animation(fadeInUp 1s  ease both);
+      .animation(fadeInUp .6s  ease both);
   }
 
 }
