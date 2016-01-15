@@ -13,7 +13,7 @@
     </ul>
     <ul class="ui-tab-content tab-display ui-course-learn">
         <li>
-            <div class="ui-scroller course-card" ui-scroll data="course.data" on-infinite="loadMore('course')">
+            <div class="ui-scroller course-card" ui-scroll data="course.data" on-infinite="loadMore('course', successCallback)">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in course.data" ng-href="#/course/{{ course.id  }}">
                       <div class="ui-list-img">
@@ -46,7 +46,7 @@
 
         </li>
         <li ng-onload="loadLiveCourses()">
-            <div class="ui-scroller course-card" ui-scroll data="live.data" on-infinite="loadMore('live')">
+            <div class="ui-scroller course-card" ui-scroll data="live.data" on-infinite="loadMore('live', successCallback)">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="course in live.data" ng-href="#/course/{{ course.id  }}">
                       <div class="ui-list-img">
@@ -78,7 +78,7 @@
             </div>
         </li>
         <li ng-onload="loadClassRooms()">
-            <div class="ui-scroller course-card" ui-scroll data="classroom.data" on-infinite="loadMore('classroom')">
+            <div class="ui-scroller course-card" ui-scroll data="classroom.data" on-infinite="loadMore('classroom', successCallback)">
               <ul class="ui-list ui-border-tb">
                   <li class="ui-border-t ui-list-avatar" ng-repeat="classroom in classroom.data" ng-href="#/classroom/{{ classroom.id  }}">
                       <div class="ui-list-img">
