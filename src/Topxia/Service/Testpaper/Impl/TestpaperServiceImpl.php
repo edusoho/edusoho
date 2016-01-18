@@ -299,6 +299,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             'userId'      => $this->getCurrentUser()->id,
             'limitedTime' => $testpaper['limitedTime'],
             'beginTime'   => time(),
+            'active'      => 1,
             'status'      => 'doing',
             'usedTime'    => 0,
             'target'      => empty($target['type']) ? '' : $testpaper['target']."/".$target['type']."-".$target['id']
