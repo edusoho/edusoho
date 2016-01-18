@@ -178,7 +178,7 @@ class MarkerController extends BaseController
                     'markerId' => $markerId
                 );
                 $question = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 1);
-                $question = $question['0'];
+                $question = $question[0];
             }
         } else {
             foreach ($questions as $key => $value) {
