@@ -1,0 +1,22 @@
+.coin-block {
+  padding: 40px 0 25px 0;
+}
+.coin-block .coin-text {
+  float: left;
+}
+.coin-block .coin-text img {
+  margin: 0 10px 14px 0;
+}
+.coin-block .coin-text strong {
+  font-size: 30px;
+  color: #ff5d42;
+}
+.coin-block .coin-btn {
+  float: left;
+  margin: 4px 0 0 55px;
+}
+.table.order-table > tbody > tr > td,
+.table.order-table > tbody > tr > th {
+  padding: 10px;
+  line-height: 22px;
+}

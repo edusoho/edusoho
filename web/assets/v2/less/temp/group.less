@@ -40,33 +40,40 @@
 
 .group-header .group-header-inner {
   border-radius: 5px;
-  height: 150px;
+  height: 190px;
   position: relative;
 }
 
 .group-header .media {
-  background: #fff;
-  background-color: rgba(255, 255, 255, 0.70);
   position: absolute;
-  top: 15px;
-  left: 15px;
+  bottom: 40px;
+  left: 50px;
   border-radius: 3px;
   padding: 10px;
   min-width: 20%;
 }
 
 .group-header-inner .media-body {
+  padding-top: 5px;
   width: auto;
 }
-
+.group-header-inner .media-left{
+  padding-right: 20px;
+}
 .group-header .media-heading {
   font-size: 18px;
-  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12px;
 }
-
+.group-header .media-heading .btn-xs{
+  padding: 3px 15px 2px;
+  vertical-align: text-top;
+  margin-left: 12px;
+  border:none;
+}
 .group-header .media-metas {
   font-size: 12px;
-  color: #666;
+  color: #fff;
 }
 
 .group-header .nav {
@@ -117,7 +124,7 @@
 .group-page .group-thread .panel-heading h2 {
   font-size: 16px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 12px 0 20px;
 }
 
 .group-page .group-thread .panel-heading .thread-list  {
@@ -127,13 +134,34 @@
 
 .group-page .group-thread .panel-heading .metas {
   font-size: 12px;
-  color: #888;
+  color: @gray;
 }
 
 .group-page .group-thread .panel-heading .metas .divider {
   color: #bbb;
   margin: 0 5px;
 
+}
+
+.group-page .group-main .group-member-wrapper{
+  padding-top: 10px;
+}
+
+.group-page .group-main .group-user-title{
+  margin-top:  20px;
+  padding-bottom: 20px;
+  color: @gray-darker;
+  position: relative;
+  padding-left: 15px;
+  &:after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 16px;
+    background: @brand-primary;
+  }
 }
 
 .group-page .group-post-list .metas {
@@ -182,14 +210,63 @@
   width: 50px;
   height: 50px;
 }
-
+.group-page .panel-default > .panel-heading{
+  color: @gray-darker; 
+  border-bottom: 1px solid #ebebeb;
+}
 .group-page .alert {
   word-break:break-all;
+  background: @bg-color;
+  color: @gray-darker;
 }
 .group-page .alert img{
   max-width:100%;
 }
+.group-page .group-topic-btn a{
+  display: block;
+  height: 45px;
+  line-height: 30px;
+  margin-bottom: 10px;
+  i{
+    font-size: 18px;
+    margin-right: 10px;
+  }
+}
+.group-page .group-search{
+  position: relative;
+  .form-control{
+    height: 40px;
+   color: @gray-medium;
+  }
+  .btn-nobg{
+  background: transparent;
+  border:none;
+  position: absolute;
+  right: 0;top:5px;
+  color: @gray-medium;
+  }
+}
 
+.group-page .group-user-info hr{
+  margin: 15px 0;
+  background: @gray-light;
+}
+.group-page .group-user-info .group-message{
+  margin: 0;
+  span{
+    float: left;
+    width: 50%;
+    text-align: center;
+    font-size: 12px;
+    color: @gray;
+  }
+  strong{
+    display: block;
+    color: @gray-darker;
+    font-size: 18px;
+    font-weight: normal;
+  }
+}
 .nav.nav-pills li {
   // background: #fff;
   // background-color: rgba(255, 255, 255, 0.70);
@@ -212,14 +289,16 @@
 }
 
 .thread-list .title {
-  margin-bottom: 5px;
+  vertical-align: middle;
 }
 
 .thread-list .metas {
   font-size: 12px;
   color: #999;
 }
-
+.thread-list .metas .userImg{
+  vertical-align: bottom;
+}
 .thread-list .metas .divider {
   margin: 0 5px;
   color: #ccc;
@@ -233,3 +312,33 @@
   width: 60px;
   height: 60px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
