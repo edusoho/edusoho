@@ -199,12 +199,29 @@ class EduCloudController extends BaseController
 
     public function searchCallBackAction(Request $request)
     {
+        $originSign = rawurldecode($request->query->get('sign'));
+
         $searchSetting = $this->getSettingService()->get('cloud_search');
+
+        $siteSetting        = $this->getSettingService()->get('site');
+        $siteSetting['url'] = rtrim($siteSetting['url']);
+        $siteSetting['url'] = rtrim($siteSetting['url'], '/');
+
+        $url = $siteSetting['url'];
+        $url .= $this->generateUrl('edu_cloud_search_callback');
+        $api  = CloudAPIFactory::create('root');
+        $sign = $this->getSignEncoder()->encodeSign($url, $api->getAccessKey());
+
+        if ($originSign != $sign) {
+            return $this->createJsonResponse(array('error' => 'sign不正确'));
+        }
 
         $searchSetting['search_enabled'] = 1;
         $searchSetting['status']         = 'ok';
 
-        $this->getSettingService()->set('cloud_search');
+        $this->getSettingService()->set('cloud_search', $searchSetting);
+
+        return $this->createJsonResponse(true);
     }
 
     protected function generateSmsCode($length = 6)

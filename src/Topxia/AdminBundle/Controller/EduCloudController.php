@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
 class EduCloudController extends BaseController
 {
@@ -200,12 +201,11 @@ class EduCloudController extends BaseController
         if (!$cloud_search_settting) {
             $cloud_search_settting = array(
                 'search_enabled' => 0,
-                'status'         => 'none' //'none':未开启；'waiting':'索引中';'ok':'索引完成'
+                'status'         => 'closed' //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
             );
             $this->getSettingService()->set('cloud_search', $cloud_search_settting);
         }
 
-        echo $this->generateUrl('admin_edu_cloud_search_callback');
         $data = array('status' => 'success');
         //是否接入教育云
         $api = CloudAPIFactory::create('root');
@@ -225,6 +225,7 @@ class EduCloudController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            'data' => $data
         ));
     }
 
@@ -237,28 +238,47 @@ class EduCloudController extends BaseController
             $siteSetting['url'] = rtrim($siteSetting['url']);
             $siteSetting['url'] = rtrim($siteSetting['url'], '/');
 
+            $api  = CloudAPIFactory::create('root');
             $urls = array(
                 array('category' => 'course', 'url' => $siteSetting['url'].'/api/courses?cursor=0&start=0&limit=100'),
-                array('lesson' => 'course', 'url' => $siteSetting['url'].'/api/lessons?cursor=0&start=0&limit=100'),
-                array('user' => 'course', 'url' => $siteSetting['url'].'/api/users?cursor=0&start=0&limit=100'),
-                array('thread' => 'course', 'url' => $siteSetting['url'].'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-                array('article' => 'course', 'url' => $siteSetting['url'].'/api/articles?cursor=0&start=0&limit=100')
+                array('category' => 'lesson', 'url' => $siteSetting['url'].'/api/lessons?cursor=0&start=0&limit=100'),
+                array('category' => 'user', 'url' => $siteSetting['url'].'/api/users?cursor=0&start=0&limit=100'),
+                array('category' => 'thread', 'url' => $siteSetting['url'].'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
+                array('category' => 'article', 'url' => $siteSetting['url'].'/api/articles?cursor=0&start=0&limit=100')
             );
             $urls = urlencode(json_encode($urls));
 
-            $api    = CloudAPIFactory::create('root');
-            $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $this->generateUrl('admin_edu_cloud_search_callback')));
+            $callbackUrl = $siteSetting['url'];
+            $callbackUrl .= $this->generateUrl('edu_cloud_search_callback');
+            $sign = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
+            $sign = rawurlencode($sign);
+            $callbackUrl .= '?sign='.$sign;
+
+            $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
 
             if ($result['success']) {
                 $searchSetting['search_enabled'] = 1;
                 $searchSetting['status']         = 'waiting';
-                $this->getSettingService()->set('cloud_search');
-
-                return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+                $this->getSettingService()->set('cloud_search', $searchSetting);
             }
+
+            return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-clause-modal.html.twig');
+    }
+
+    public function searchCloseAction()
+    {
+        $searchSetting['search_enabled'] = 0;
+        $searchSetting['status']         = 'closed';
+        $this->getSettingService()->set('cloud_search', $searchSetting);
+
+        $data = array('status' => 'success');
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            'data' => $data
+        ));
     }
 
     protected function getSchoolName()
@@ -338,5 +358,10 @@ class EduCloudController extends BaseController
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getSignEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 }

@@ -1342,7 +1342,11 @@ admin_edu_cloud_search:
 
 admin_edu_cloud_search_clause:
     pattern: /setting/edu_cloud/search/clause
-    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchCallback }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
+
+admin_edu_cloud_search_close:
+    pattern: /setting/edu_cloud/search/close
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
 
 admin_announcement:
     pattern:  /announcement
