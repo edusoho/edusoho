@@ -8,3 +8,4 @@ parameters:
 
     locale:            zh_CN
     secret:            ThisTokenIsNotSoSecretChangeIt
+

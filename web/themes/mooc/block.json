@@ -1,7 +1,7 @@
 {
     "mooc:home_top_banner":
     {
-        "title": "慕课主题：首页顶部.轮播图 ",
+        "title": "高教主题：首页顶部.轮播图 ",
         "category": "mooc",
         "templateName": "@theme/mooc/block/carousel.template.html.twig",
         "items": {
@@ -15,17 +15,17 @@
                         "src" : "\/themes\/mooc\/img\/banner1.jpg",
                         "alt" : "海报1",
                         "layout" : "tile",
-                        "background" : "#3ec768",
+                        "background" : "#4959ea",
                         "href" : "",
                         "html" : "",
                         "status" : "1",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/banner2.png",
+                        "src" : "\/themes\/mooc\/img\/banner2.jpg",
                         "alt" : "海报2",
                         "layout" : "tile",
-                        "background" : "#0984f7",
+                        "background" : "#4c52aa",
                         "href" : "",
                         "html" : "",
                         "status" : "1",
@@ -35,57 +35,57 @@
                         "src" : "\/themes\/mooc\/img\/banner3.jpg",
                         "alt" : "海报3",
                         "layout" : "tile",
-                        "background" : "#3b4250",
+                        "background" : "#4636a1",
                         "href" : "",
                         "html" : "",
                         "status" : "1",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/banner4.jpg",
+                        "src" : "\/themes\/mooc\/img\/banner1.jpg",
                         "alt" : "海报4",
                         "layout" : "tile",
-                        "background" : "#3ec768",
+                        "background" : "#4959ea",
                         "href" : "",
                         "html" : "",
                         "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/banner4.jpg",
+                        "src" : "\/themes\/mooc\/img\/banner2.jpg",
                         "alt" : "海报5",
                         "layout" : "tile",
-                        "background" : "#3ec768",
+                        "background" : "#4c52aa",
                         "href" : "",
                         "html" : "",
                         "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/banner4.jpg",
+                        "src" : "\/themes\/mooc\/img\/banner3.jpg",
                         "alt" : "海报6",
                         "layout" : "tile",
-                        "background" : "#3ec768",
+                        "background" : "#4636a1",
                         "href" : "",
                         "html" : "",
                         "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/banner4.jpg",
+                        "src" : "\/themes\/mooc\/img\/banner1.jpg",
                         "alt" : "海报7",
                         "layout" : "tile",
-                        "background" : "#3ec768",
+                        "background" : "#4959ea",
                         "href" : "",
                         "html" : "",
                         "status" : "0",
                         "mode" : "img"
                     },
                     {
-                        "src" : "\/themes\/mooc\/img\/banner4.jpg",
+                        "src" : "\/themes\/mooc\/img\/banner2.jpg",
                         "alt" : "海报8",
                         "layout" : "tile",
-                        "background" : "#3ec768",
+                        "background" : "#4c52aa",
                         "href" : "",
                         "html" : "",
                         "status" : "0",
@@ -97,112 +97,89 @@
     },
     "mooc:middle_banner":
     {
-        "title": "慕课主题：首页中部.横幅",
+        "title": "高教主题：首页中部.横幅",
         "category": "mooc",
         "templateName": "@theme/mooc/block/middle_banner.template.html.twig",
         "items": {
-            "icon1":
-            {   
-                "title": "中部图标１",
-                "desc": "建议图片大小为130*130",
-                "count": 1,
-                "type": "img",
+            "banner":{
+                "title":"横幅",
+                "desc":"首页中部.横幅",
+                "count":3,
+                "type":"banner",
+                "default":[
+                    {
+                        "title" : "随时随地学习",
+                        "value" : "网校结合移动端，能够让你随时随地掏出手机就进行学习，方便快捷，没有任何负担。",
+                        "src" : "\/themes\/mooc\/img\/community.svg",
+                        "desc": "建议图片大小为154*154",
+                        "alt" : "随时随地学习",
+                        "href": ""
+                    },
+                    {
+                        "title" : "权威电子证书",
+                        "value" : "重点课程提供权威电子证书认证，让你的学习获得认可，为你的就业添砖加瓦。",
+                        "src" : "\/themes\/mooc\/img\/shake.svg",
+                        "desc": "建议图片大小为154*154",
+                        "alt" : "权威电子证书",
+                        "href": ""
+                    },
+                    {
+                        "title" : "社区型网校",
+                        "value" : "与同学和老师实时讨论课程细节，让你全面掌握所有知识点，巩固知识，学习不再孤单！",
+                        "src" : "\/themes\/mooc\/img\/badge.svg",
+                        "desc": "建议图片大小为154*154",
+                        "alt" : "社区型网校",
+                        "href": ""
+                    }
+                ]
+            }
+        }
+    },
+    "mooc:category_nav":
+    {
+        "title": "高教主题：首页.分类导航",
+        "category": "mooc",
+        "templateName": "@theme/mooc/block/category.template.html.twig",
+        "items": {
+            "text": {
+                "title": "分类导航",
+                "desc": "",
+                "count": 2,
+                "type": "text",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/icon_introduction_1.png",
-                        "alt": "中部横幅"
-                    }
-                ]
-            },
-            "icon1title": {
-                "title": "图标１标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
+                        "value": "学院设置"
+                    },
                     {
-                        "value": "网校功能强大"
+                        "value": "快速选择学院入口立即学习"
                     }
                 ]
             },
-            "icon1introduction": {
-                "title": "图标１介绍",
-                "desc": "",
-                "count": 1,
-                "type": "textarea",
-                "default":[
-                    {
-                        "value": "一万多家网校共同选择，值得信赖"
-                    }
-                ]
-            },
-            "icon2":
-            {   
-                "title": "中部图标２",
-                "desc": "建议图片大小为130*130",
-                "count": 1,
-                "type": "img",
+            "categories": {
+                "title": "分类名称",
+                "desc": "最大可设置28个",
+                "count": 10,
+                "type": "category",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/icon_introduction_2.png",
-                        "alt": "中部横幅"
-                    }
-                ]
-            },
-            "icon2title": {
-                "title": "图标２标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
+                        "categoryId" : "1",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
+                        "desc": "建议图标大小为30*30"
+                    },
                     {
-                        "value": "响应式页面技术"
-                    }
-                ]
-            },
-            "icon2introduction": {
-                "title": "图标２介绍",
-                "desc": "",
-                "count": 1,
-                "type": "textarea",
-                "default":[
+                        "categoryId" : "1",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
+                        "desc": "建议图标大小为30*30"
+                    },
                     {
-                        "value": "采用响应式技术，完美适配任意终端"
-                    }
-                ]
-            },
-            "icon3":
-            {   
-                "title": "中部图标３",
-                "desc": "建议图片大小为130*130",
-                "count": 1,
-                "type": "img",
-                "default": [
+                        "categoryId" : "1",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
+                        "desc": "建议图标大小为30*30"
+                    },
                     {
-                        "src": "\/assets\/v2\/img\/icon_introduction_3.png",
-                        "alt": "中部横幅"
-                    }
-                ]
-            },
-            "icon3title": {
-                "title": "图标３标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "教育云服务支持"
-                    }
-                ]
-            },
-            "icon3introduction": {
-                "title": "图标３介绍",
-                "desc": "",
-                "count": 1,
-                "type": "textarea",
-                "default":[
-                    {
-                        "value": "强力教育云支持，免除你的后顾之忧"
+                        "categoryId" : "1",
+                        "src" : "\/themes\/mooc\/img\/cat-3.png",
+                        "desc": "建议图标大小为30*30"
                     }
                 ]
             }
@@ -210,30 +187,44 @@
     },
     "mooc:footer_link":
     {
-        "title": "慕课主题:底部合作伙伴",
+        "title": "高教主题：底部合作院校",
         "category": "mooc",
         "templateName": "@theme/mooc/block/link.template.html.twig",
         "items": {
-            "partners": {
-                "title": "友情链接",
-                "desc": "最大可设置28个",
-                "count": 28,
-                "type": "link",
+            "text": {
+                "title": "栏目标题",
+                "desc":"",
+                "count": 1,
+                "type": "text",
                 "default": [
                     {
-                        "value": "EduSoho",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
+                        "value": "合作院校"
+                    }
+                ]
+            },
+            "partners": {
+                "title": "合作院校",
+                "desc": "最大可设置10个",
+                "count": 10,
+                "type": "banner",
+                "default": [
+                    {
+                        "src" : "\/themes\/mooc\/img\/es.jpg",
+                        "desc": "建议图片大小为212*180",
+                        "value" : "Edusoho",
+                        "href": "http://www.edusoho.com"
                     },
                     {
-                        "value": "气球鱼学院",
-                        "href": "http:\/\/www.qiqiuyu.com\/",
-                        "target": "_blank"
+                        "src" : "\/themes\/mooc\/img\/howzhi.jpg",
+                        "desc": "建议图片大小为212*180",
+                        "value" : "好知网",
+                        "href": "http://www.howzhi.com"
                     },
                     {
-                        "value": "好知网",
-                        "href": "http:\/\/www.howzhi.com\/",
-                        "target": "_blank"
+                        "src" : "\/themes\/mooc\/img\/qiqiuyu.jpg",
+                        "desc": "建议图片大小为212*180",
+                        "value" : "气球鱼",
+                        "href": "http://www.qiqiuyu.com"
                     }
                 ]
             }
@@ -241,112 +232,10 @@
     },
     "mooc:bottom_info":
     {
-        "title": "慕课主题: 首页底部.链接区域",
+        "title": "高教主题：首页底部.链接区域",
         "category": "mooc",
         "templateName": "@theme/mooc/block/bottom_info.template.html.twig",
         "items": {
-            "firstColumnText": {
-                "title": "第１列链接标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default": [
-                    {
-                        "value": "我是老师"
-                    }
-                ]
-            },
-            "firstColumnLinks": {
-                "title": "第１列链接",
-                "desc": "",
-                "count": 5,
-                "type": "link",
-                "default": [
-                    {
-                        "value": "发布课程",
-                        "href": "http:\/\/www.qiqiuyu.com\/course\/22",
-                        "target": "_blank"
-                    },
-                    {
-                        "value": "使用题库",
-                        "href": "http:\/\/www.qiqiuyu.com\/course\/147",
-                        "target": "_blank"
-                    },
-                    {
-                        "value": "教学资料库",
-                        "href": "http:\/\/www.qiqiuyu.com\/course\/372",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "secondColumnText": {
-                "title": "第２列链接标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default": [
-                    {
-                        "value": "我是管理员"
-                    }
-                ]
-            },
-            "secondColumnLinks": {
-                "title": "第２列链接",
-                "desc": "",
-                "count": 5,
-                "type": "link",
-                "default": [
-                    {
-                        "value": "系统设置",
-                        "href": "http:\/\/www.qiqiuyu.com\/course\/340",
-                        "target": "_blank"
-                    },
-                    {
-                        "value": "课程设置",
-                        "href": "http:\/\/www.qiqiuyu.com\/course\/341",
-                        "target": "_blank"
-                    },
-                    {
-                        "value": "用户管理",
-                        "href": "http:\/\/www.qiqiuyu.com\/course\/343",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "thirdColumnText": {
-                "title": "第３列链接标题",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default": [
-                    {
-                        "value": "关于我们"
-                    }
-                ]
-            },
-            "thirdColumnLinks": {
-                "title": "第３列链接",
-                "desc": "",
-                "count": 5,
-                "type": "link",
-                "default": [
-                    {
-                        "value": "ES官网",
-                        "href": "http:\/\/www.edusoho.com\/",
-                        "target": "_blank"
-                    },
-                    {
-                        "value": "官方微博",
-                        "href": "http:\/\/weibo.com\/qiqiuyu\/profile?rightmod=1&wvr=6&mod=personinfo",
-                        "target": "_blank"
-                    },
-                    {
-                        "value": "加入我们",
-                        "href": "http:\/\/www.edusoho.com\/abouts\/joinus",
-                        "target": "_blank"
-                    }
-                ]
-            },
             "bottomAddr": {
                 "title": "底部地址",
                 "desc": "",
@@ -387,7 +276,7 @@
                 "type": "imglink",
                 "default": [
                     {
-                        "src": "\/assets\/v2\/img\/bottom_logo.png",
+                        "src": "\/themes\/mooc\/img\/theme.png",
                         "alt": "建议图片大小为233*64",
                         "href": "http:\/\/www.edusoho.com",
                         "target": "_blank"
@@ -440,52 +329,6 @@
                     {
                         "src": "\/assets\/img\/default\/android.png",
                         "alt": "网校的Android版APP"
-                    }
-                ]
-            }
-        }
-    },
-    "mooc:branch_school_top_banner":
-    {
-        "title": "慕课主题：分校.首页顶部.轮播图 ",
-        "category": "mooc",
-        "templateName": "@theme/mooc/block/branch_school_carousel.template.html.twig",
-        "items": {
-            "posters":{
-                "title":"海报",
-                "desc":"首页海报",
-                "count":1,
-                "type":"poster",
-                "default":[
-                    {
-                        "src" : "\/themes\/mooc\/img\/TAFE-banner-1.jpg",
-                        "alt" : "海报1",
-                        "layout" : "tile",
-                        "background" : "#fff",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
-                    },
-                    {
-                        "src" : "\/themes\/mooc\/img\/TAFE-banner-2.jpg",
-                        "alt" : "海报2",
-                        "layout" : "tile",
-                        "background" : "#0984f7",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
-                    },
-                    {
-                        "src" : "\/themes\/mooc\/img\/TAFE-banner-3.jpg",
-                        "alt" : "海报3",
-                        "layout" : "tile",
-                        "background" : "#3b4250",
-                        "href" : "",
-                        "html" : "",
-                        "status" : "1",
-                        "mode" : "img"
                     }
                 ]
             }

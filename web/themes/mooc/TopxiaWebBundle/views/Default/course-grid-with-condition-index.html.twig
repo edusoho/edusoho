@@ -1,0 +1,21 @@
+{% set count = config.count|default(10) %}
+
+{% set latestCourses = data('LatestCourses',{ count:count }) %}
+
+<section class="mooc-course {{config.background|default("")}}">
+  <div class="container">
+    <div class="mooc-index-title">
+      {{ config.title|default(config.defaultTitle) }}
+    </div>
+    <div class="course-list clearfix">
+     {% if latestCourses %}
+          {% include 'TopxiaWebBundle:Default:course-item.html.twig' with {courses:latestCourses}%}
+      {% endif %}    
+    </div>
+    <div class="text-center">
+      <a href="{{ path('course_explore') }}"  class="moocindex-more-btn">
+        更多课程
+      </a>
+    </div>
+  </div>
+</section>

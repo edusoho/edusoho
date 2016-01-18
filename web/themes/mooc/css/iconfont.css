@@ -15,12 +15,22 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-fangzi:before { content: "\e609"; }
+.icon-shezhi:before { content: "\e60a"; }
+.icon-tuichu:before { content: "\e60b"; }
 .icon-xiangqing:before { content: "\e605"; }
+.icon-sixin:before { content: "\e610"; }
 .icon-edit:before { content: "\e607"; }
 .icon-exam:before { content: "\e603"; }
 .icon-xuetang:before { content: "\e608"; }
+.icon-dashboard:before { content: "\e60c"; }
+.icon-icon30:before { content: "\e611"; }
+.icon-icon32:before { content: "\e612"; }
+.icon-kecheng:before { content: "\e60d"; }
 .icon-time:before { content: "\e600"; }
 .icon-xiala:before { content: "\e601"; }
 .icon-xunzhang:before { content: "\e602"; }
 .icon-wendangkeshi:before { content: "\e606"; }
+.icon-fangdajing:before { content: "\e60e"; }
 .icon-fafang01:before { content: "\e604"; }
+.icon-lingdang:before { content: "\e60f"; }

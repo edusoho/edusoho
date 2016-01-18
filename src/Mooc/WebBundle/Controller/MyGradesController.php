@@ -2,9 +2,9 @@
 
 namespace Mooc\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class MyGradesController extends BaseController
 {
@@ -44,7 +44,7 @@ class MyGradesController extends BaseController
             $settings      = ArrayToolkit::index($scoreSettings, 'courseId');
         }
 
-        return $this->render('TopxiaWebBundle:MyGrades:layout.html.twig', array(
+        return $this->render('MoocWebBundle:MyGrades:layout.html.twig', array(
             'courses'   => $courses,
             'scores'    => $scores,
             'settings'  => $settings,
@@ -91,7 +91,7 @@ class MyGradesController extends BaseController
             $homeworkLessons    = $this->getCourseService()->findLessonsByIds($homeworksLessonIds);
         }
 
-        return $this->render('TopxiaWebBundle:MyGrades:grades-cards.html.twig', array(
+        return $this->render('MoocWebBundle:MyGrades:grades-cards.html.twig', array(
             'course'            => $course,
             'learnedLessonsNum' => $learnedLessonsNum,
             'scores'            => $scores,
