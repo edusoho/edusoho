@@ -13,7 +13,7 @@
 					{{ choiceIndex }}
 					</span>
 					{{ choice|bbCode2Html|raw}}
-					{% if (key+1) in answer %}
+					{% if key in answer %}
 					<span class="label label-success label-md">正确答案</span>
 					{% endif %}
 		    </li>
