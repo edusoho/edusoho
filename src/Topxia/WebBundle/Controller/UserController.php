@@ -86,7 +86,19 @@ class UserController extends BaseController
             'showable'     => '1',
             'classroomIds' => $classroomIds
         );
-        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->searchClassroomsCount($conditions),
+            12
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
@@ -102,6 +114,7 @@ class UserController extends BaseController
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
 
         return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig", array(
+            'paginator'  => $paginator,
             'classrooms' => $classrooms,
             'members'    => $members,
             'user'       => $user
@@ -128,7 +141,18 @@ class UserController extends BaseController
             'classroomIds' => $classroomIds
         );
 
-        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->searchClassroomsCount($conditions),
+            12
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
 
@@ -144,6 +168,7 @@ class UserController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
+            'paginator'  => $paginator,
             'classrooms' => $classrooms,
             'members'    => $members,
             'user'       => $user
@@ -439,7 +464,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
-            10
+            12
         );
 
         $courses = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
@@ -466,7 +491,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($conditions),
-            10
+            12
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
