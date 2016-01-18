@@ -64,7 +64,7 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
-        'video-player': 'balloon-video-player/1.0.0/index'
+        'video-player': 'balloon-video-player/1.2.0/index'
     },
 
 	// 预加载项
