@@ -160,9 +160,8 @@ define(function(require, exports, module) {
                     uploader.on( 'uploadSuccess', function( file, response ) {
                         self.closest('.form-group').find('input[data-role=img-url]').val(response.url);
                         Notify.success('上传成功！', 1);
-                        if($('.img-responsive').length > 0){
-                            $('.img-responsive').attr('src',response.url);
-                        }
+                        self.closest('.form-group').next().find('.img-responsive').attr('src',response.url);
+
                    });
 
                     uploader.on( 'uploadError', function( file, response ) {
