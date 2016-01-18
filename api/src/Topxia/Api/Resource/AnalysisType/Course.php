@@ -72,7 +72,7 @@ class Course extends BaseAnalysisType
         $header = array(
             array(
                 "title"=>"每日一课完成率",
-                "value"=>$totalPercent . "%"
+                "value"=>($totalPercent > 100 ? 100 : $totalPercent) . "%"
             ),
             array(
                 "title"=>"学员数",
