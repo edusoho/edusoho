@@ -207,23 +207,26 @@ class EduCloudController extends BaseController
         }
 
         $data = array('status' => 'success');
-        //是否接入教育云
-        $api = CloudAPIFactory::create('root');
 
-        $content = $api->get("/users/{$api->getAccessKey()}/overview");
-        $info    = $api->get('/me');
+        try {
+            $api = CloudAPIFactory::create('root');
+
+            $content = $api->get("/users/{$api->getAccessKey()}/overview");
+            $info    = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+                'data' => array('status' => 'unlink')
+            ));
+        }
+
+        //是否接入教育云
 
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])))) {
             $data['status'] = 'unconnect';
+            goto response;
         }
 
-        //网络没有连上api
-        $apps = $this->getAppService()->getCenterApps();
-
-        if (!$apps) {
-            $data['status'] = 'unlink';
-        }
-
+        response:
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
             'data' => $data
         ));
