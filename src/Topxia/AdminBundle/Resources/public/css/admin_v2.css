@@ -419,7 +419,10 @@ fieldset #checkboxChoices{
   transition: all .3s ease;
 }
 
+.form-horizontal .col-md-10.form-group{
+  margin-left: 0;
 
+}
 .form-horizontal .form-group .control-label{
   text-align: left;
 }
@@ -429,4 +432,17 @@ margin-top: 14px;
 .form-horizontal .form-group .cloud-warning{
   padding-top: 14px;
   margin-left: -45px;
+}
+.form-horizontal .form-group .cloud-warning .mhs{
+  margin-left: -27px;
+}
+.form-horizontal .item h5{
+  font-weight: bold;
+}
+.modal-open .modal-dialog{
+  margin: 20px auto;
+}
+.modal-open .modal-body{
+  height: 360px;
+  overflow: auto;
 }
