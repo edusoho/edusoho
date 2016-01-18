@@ -9,7 +9,7 @@ define(function(require, exports, module) {
             var answer = doMarkerQuestion(questionType);
             if(!answer|| answer.length==0){
                 $('.text-danger').html("请先作答!");
-                setTimeout(clearHtml,2000);
+                setTimeout(clearHtml,1500);
                 return;
             }
             $.get(data.data('url'), {
@@ -39,7 +39,6 @@ define(function(require, exports, module) {
             });
         });
         $(".marker-modal .close").on('click', function(e) {
-            console.log($(this).closest('#modal'));
             $(this).closest('#modal').hide();
             e.preventDefault();
         });
