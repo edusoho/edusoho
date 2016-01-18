@@ -243,6 +243,8 @@ class MarkerController extends BaseController
             'percent' => floor($questionMarker['seq'] / $count * 100)
         );
         $compelete = $progress['percent'] == 100 ? true : false;
+        // var_dump($questionMarker['answer']);
+        // exit();
         return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
             'markerId'   => $data['markerId'],
             'question'   => $questionMarker,

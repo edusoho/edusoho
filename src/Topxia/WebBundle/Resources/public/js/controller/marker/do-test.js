@@ -104,9 +104,14 @@ define(function(require, exports, module) {
 
             function doFill() {
 
-                var answer = 11;
-                answer = $("input[name='answer[" + questionId + "][]']").val();
-                return answer;
+                var answers = [];
+                $("input[name='answer[" + questionId + "][]']").each(function() {
+                    answers.push($(this).val());
+                    if($(this).val() == ""){
+                        return answers=false;
+                    }
+                });
+                return answers;
             };
             function doChoice() {
                 var answers = [];
