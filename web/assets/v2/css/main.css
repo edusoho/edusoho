@@ -11729,7 +11729,7 @@ textarea {
   bottom: 100%;
   height: 100%;
   top: -58px;
-  background-color: #c33b2d;
+  background-color: #ed634a;
 }
 @media (max-width: 1297px) {
   .question-manage .editbox .scalebox .scale.red,
@@ -11745,9 +11745,10 @@ textarea {
 .question-manage .editbox .scalebox .scale.white .scale-details {
   visibility: visible;
   background-color: transparent;
+  bottom: -20px;
 }
 .question-manage .editbox .scalebox .scale.blue {
-  background-color: #2998c9;
+  background-color: #2db7f5;
   height: 78px;
 }
 @media (max-width: 1297px) {
@@ -11756,12 +11757,12 @@ textarea {
   }
 }
 .question-manage .editbox .scalebox .scale.blue:hover {
-  background-color: #2998c9;
-  background-color: rgba(41, 152, 201, 0);
+  background-color: #2db7f5;
+  background-color: rgba(45, 183, 245, 0);
 }
 .question-manage .editbox .scalebox .scale.blue:hover .border {
-  background-color: #2998c9;
-  background-color: rgba(41, 152, 201, 0.5);
+  background-color: #2db7f5;
+  background-color: rgba(45, 183, 245, 0.5);
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
 }
@@ -11842,7 +11843,7 @@ textarea {
   background-color: transparent;
 }
 .question-manage .editbox .scalebox .scale.blue.show .border {
-  background-color: rgba(41, 152, 201, 0.5);
+  background-color: rgba(45, 183, 245, 0.5);
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
 }
@@ -11854,9 +11855,10 @@ textarea {
 .question-manage .editbox .lesson-list .placeholder {
   height: 100%;
   position: relative;
-  background-color: #fff9c4;
-  border: 1px dashed #ff6d00;
-  color: #ff6d00;
+  background-color: #2db7f5;
+  background-color: rgba(45, 183, 245, 0.5);
+  border: 1px dashed #2db7f5;
+  color: #2db7f5;
   text-align: center;
   margin: 0;
 }
