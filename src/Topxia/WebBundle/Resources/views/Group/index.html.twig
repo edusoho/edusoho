@@ -24,7 +24,7 @@
                 <div class="media-body">
                   <div class="title">
                     <a class="gray-darker" href="{{ path('group_show',{id:group.id}) }}" title="{{group.title}}">
-                      {{ group.title }}
+                      {{ group.title|sub_text(9) }}
                     </a>
                   </div>
                   <div class="metas">
