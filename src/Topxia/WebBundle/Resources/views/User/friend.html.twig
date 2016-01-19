@@ -35,8 +35,8 @@
 
         <div class="teacher-bottom">
           <div class="about">
-            {% if friend.userProfile %}
-              {{ friend.userProfile.about|plain_text(30) }}
+            {% if allUserProfile[friend.id]|default('') %}
+              {{ allUserProfile[friend.id].about|plain_text(30) }}
             {% endif %}
           </div>
           <div class="metas">

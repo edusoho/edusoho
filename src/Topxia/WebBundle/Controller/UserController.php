@@ -268,20 +268,20 @@ class UserController extends BaseController
         $followings = $this->getUserService()->findUserFollowing($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         if ($followings) {
-            foreach ($followings as $key => $following) {
-                $followings[$key]['userProfile'] = $this->getUserService()->getUserProfile($following['id']);
-            }
+            $followingIds          = ArrayToolkit::column($followings, 'id');
+            $followingUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followingIds), array('id', 'ASC'), 0, count($followingIds)), 'id');
         }
 
         $myfollowings = $this->_getUserFollowing($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'         => $user,
-            'paginator'    => $paginator,
-            'friends'      => $followings,
-            'userProfile'  => $userProfile,
-            'myfollowings' => $myfollowings,
-            'friendNav'    => 'following'
+            'user'           => $user,
+            'paginator'      => $paginator,
+            'friends'        => $followings,
+            'userProfile'    => $userProfile,
+            'myfollowings'   => $myfollowings,
+            'allUserProfile' => $followingUserProfiles ?: array(),
+            'friendNav'      => 'following'
         ));
     }
 
@@ -303,18 +303,18 @@ class UserController extends BaseController
         $followers = $this->getUserService()->findUserFollowers($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         if ($followers) {
-            foreach ($followers as $key => $follower) {
-                $followers[$key]['userProfile'] = $this->getUserService()->getUserProfile($follower['id']);
-            }
+            $followerIds          = ArrayToolkit::column($followers, 'id');
+            $followerUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followerIds), array('id', 'ASC'), 0, count($followerIds)), 'id');
         }
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'         => $user,
-            'paginator'    => $paginator,
-            'friends'      => $followers,
-            'userProfile'  => $userProfile,
-            'myfollowings' => $myfollowings,
-            'friendNav'    => 'follower'
+            'user'           => $user,
+            'paginator'      => $paginator,
+            'friends'        => $followers,
+            'userProfile'    => $userProfile,
+            'myfollowings'   => $myfollowings,
+            'allUserProfile' => $followerUserProfiles ?: array(),
+            'friendNav'      => 'follower'
         ));
     }
 
