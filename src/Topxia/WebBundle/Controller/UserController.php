@@ -46,6 +46,17 @@ class UserController extends BaseController
         return $this->_learnAction($user);
     }
 
+    public function pageShowAction()
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        } else {
+            return $this->redirect($this->generateUrl('user_show', array('id' => $user['id'])));
+        }
+    }
+
     public function learnAction(Request $request, $id)
     {
         $user                 = $this->tryGetUser($id);
