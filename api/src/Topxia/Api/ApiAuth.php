@@ -100,7 +100,7 @@ class ApiAuth
         }
 
         if (time() > $policy['deadline']) {
-            throw new \RuntimeException("API Token 已过期！");
+            throw new \RuntimeException(sprintf("API Token 已过期！(%s)", date('Y-m-d H:i:s')));
         }
 
         return $policy;
