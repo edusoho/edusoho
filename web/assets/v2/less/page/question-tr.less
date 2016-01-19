@@ -1,3 +1,4 @@
+
 @-webkit-keyframes boxshow{
   0%{box-shadow:0 0 15px #2db7f5;width: 8px; margin-left: -4px;}
   25%{box-shadow:0 0 10px #2db7f5;width: 7px; margin-left: -3.5px;}
@@ -127,6 +128,12 @@
   }
 }
 
+.question-manage.slideing {
+  -moz-user-select: none; 
+  -khtml-user-select: none;
+   user-select: none;
+   cursor: move!important;
+}
 .question-manage {
   background-color: #eeeeee;
   .breadcrumb {
@@ -166,7 +173,7 @@
       width: 100%;
       top:0;
       bottom: 30%;
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: transparent;
     }
   }
   .lesson-list  {

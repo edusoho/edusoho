@@ -12201,6 +12201,12 @@ textarea {
   font-size: 12px;
   color: #919191;
 }
+.question-manage.slideing {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
+  cursor: move!important;
+}
 .question-manage {
   background-color: #eeeeee;
 }
@@ -12248,7 +12254,7 @@ textarea {
   width: 100%;
   top: 0;
   bottom: 30%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: transparent;
 }
 .question-manage .lesson-list {
   border: 0;
