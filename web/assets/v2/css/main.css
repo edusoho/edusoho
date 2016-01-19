@@ -11738,9 +11738,11 @@ textarea {
   }
 }
 .question-manage .editbox .scalebox .scale.blue:hover {
-  background-color: transparent;
+  background-color: #2998c9;
+  background-color: rgba(41, 152, 201, 0);
 }
 .question-manage .editbox .scalebox .scale.blue:hover .border {
+  background-color: #2998c9;
   background-color: rgba(41, 152, 201, 0.5);
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;
