@@ -423,10 +423,10 @@ fieldset #checkboxChoices{
   margin-left: 0;
 
 }
-.form-horizontal .form-group .control-label{
+.form-horizontal .form-group .control-cloud{
   text-align: left;
 }
-.form-horizontal .form-group .control-label.success{
+.form-horizontal .form-group .control-cloud.success{
 margin-top: 14px;
 }
 .form-horizontal .form-group .cloud-warning{
