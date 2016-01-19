@@ -20,6 +20,7 @@
 .es-icon-anonymous-iconfont:before { content: "\e666"; }
 .es-icon-wenhao:before { content: "\e671"; }
 .es-icon-dot:before { content: "\e68a"; }
+.es-icon-close01:before { content: "\e68e"; }
 .es-icon-icon_close_circle:before { content: "\e687"; }
 .es-icon-angledoubleright:before { content: "\e67d"; }
 .es-icon-angledoubleleft:before { content: "\e67e"; }
@@ -42,6 +43,7 @@
 .es-icon-keyboardarrowdown:before { content: "\e663"; }
 .es-icon-keyboardarrowup:before { content: "\e664"; }
 .es-icon-language:before { content: "\e65b"; }
+.es-icon-link:before { content: "\e690"; }
 .es-icon-livehelp:before { content: "\e680"; }
 .es-icon-locallibrary:before { content: "\e66e"; }
 .es-icon-loyalty:before { content: "\e65c"; }
@@ -156,3 +158,5 @@
 .es-icon-lock1:before { content: "\e689"; }
 .es-icon-iccheckcircleblack24px:before { content: "\e68b"; }
 .es-icon-viewcomfy:before { content: "\e68c"; }
+.es-icon-loading:before { content: "\e68d"; }
+.es-icon-arrowdropleft:before { content: "\e68f"; }

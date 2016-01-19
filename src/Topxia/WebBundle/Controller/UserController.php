@@ -18,9 +18,16 @@ class UserController extends BaseController
             $isFollowed = false;
         }
 
+        // 关注数
+        $following = $this->getUserService()->findUserFollowingCount($user['id']);
+        // 粉丝数
+        $follower = $this->getUserService()->findUserFollowerCount($user['id']);
+
         return $this->render('TopxiaWebBundle:User:header-block.html.twig', array(
             'user'       => $user,
-            'isFollowed' => $isFollowed
+            'isFollowed' => $isFollowed,
+            'following'  => $following,
+            'follower'   => $follower
         ));
     }
 
@@ -37,6 +44,17 @@ class UserController extends BaseController
         }
 
         return $this->_learnAction($user);
+    }
+
+    public function pageShowAction()
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return $this->createMessageResponse('error', '用户未登录，请先登录！');
+        } else {
+            return $this->redirect($this->generateUrl('user_show', array('id' => $user['id'])));
+        }
     }
 
     public function learnAction(Request $request, $id)
@@ -79,7 +97,19 @@ class UserController extends BaseController
             'showable'     => '1',
             'classroomIds' => $classroomIds
         );
-        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->searchClassroomsCount($conditions),
+            12
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         foreach ($classrooms as $key => $classroom) {
             if (empty($classroom['teacherIds'])) {
@@ -95,6 +125,7 @@ class UserController extends BaseController
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
 
         return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig", array(
+            'paginator'  => $paginator,
             'classrooms' => $classrooms,
             'members'    => $members,
             'user'       => $user
@@ -121,7 +152,18 @@ class UserController extends BaseController
             'classroomIds' => $classroomIds
         );
 
-        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'DESC'), 0, count($classroomIds));
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getClassroomService()->searchClassroomsCount($conditions),
+            12
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
 
@@ -137,6 +179,7 @@ class UserController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
+            'paginator'  => $paginator,
             'classrooms' => $classrooms,
             'members'    => $members,
             'user'       => $user
@@ -216,10 +259,14 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         $followings           = $this->getUserService()->findAllUserFollowing($user['id']);
+        $myfollowings         = $this->_getUserFollowing($user['id']);
+
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'      => $user,
-            'friends'   => $followings,
-            'friendNav' => 'following'
+            'user'         => $user,
+            'friends'      => $followings,
+            'userProfile'  => $userProfile,
+            'myfollowings' => $myfollowings,
+            'friendNav'    => 'following'
         ));
     }
 
@@ -231,11 +278,13 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         $followers            = $this->getUserService()->findAllUserFollower($user['id']);
-
+        $myfollowings         = $this->_getUserFollowing($user['id']);
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
-            'user'      => $user,
-            'friends'   => $followers,
-            'friendNav' => 'follower'
+            'user'         => $user,
+            'friends'      => $followers,
+            'userProfile'  => $userProfile,
+            'myfollowings' => $myfollowings,
+            'friendNav'    => 'follower'
         ));
     }
 
@@ -426,7 +475,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
-            10
+            12
         );
 
         $courses = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
@@ -453,7 +502,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($conditions),
-            10
+            12
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
@@ -467,6 +516,14 @@ class UserController extends BaseController
             'paginator' => $paginator,
             'type'      => 'teach'
         ));
+    }
+
+    protected function _getUserFollowing($userId)
+    {
+        $followings   = $this->getUserService()->findAllUserFollowing($userId);
+        $followingIds = ArrayToolkit::column($followings, 'id');
+        $myfollowings = $this->getUserService()->filterFollowingIds($userId, $followingIds);
+        return $myfollowings;
     }
 
     protected function getGroupService()

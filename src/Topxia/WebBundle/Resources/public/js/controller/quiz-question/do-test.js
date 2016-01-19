@@ -529,7 +529,7 @@ define(function(require, exports, module) {
                 var scoreTotal = 0;
                 $('[name^="score_"]').each(function(){
                     var score = $(this).val();
-                    scoreTotal = scoreTotal + score;
+                    scoreTotal = scoreTotal + Number(score);
                 });
                 var subjectiveScore = Number($('[name="objectiveScore"]').val());
                 var totalScore = Number(scoreTotal) + subjectiveScore;
