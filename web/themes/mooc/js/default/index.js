@@ -29,6 +29,7 @@ define(function(require, exports, module) {
             autoplayDisableOnInteraction: false,
             calculateHeight: true,
             roundLengths: true,
+            loop: true,
             slidesPerView: 4,
             onInit: function(swiper) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
