@@ -59,7 +59,7 @@ define(function(require, exports, module) {
                     Notify.danger('最多只能添加' + $panelGroup.data('count') + '个!');
                 } else {
                     $model = $($panels[0]).clone();
-                    $model.find('input').attr('value', '').val('');
+                    $model.find('input[type!=hidden]').attr('value', '').val('');
                     $model.find('textarea').attr('html', '');
                     $model.find('.title-label').html('');
                     $model.find('.img-responsive').attr('src', '').val('');
