@@ -5,6 +5,7 @@ define(function(require, exports, module) {
         var markerId = data.data('markerid');
         var questionId = data.data('questionid');
         var questionType = data.data('type');
+        var lessonId = data.data('lessonid');
         btn.on('click', function() {
             var answer = doMarkerQuestion(questionType);
             if(!answer|| answer.length==0){
@@ -16,7 +17,8 @@ define(function(require, exports, module) {
                 "markerId": markerId,
                 "questionId": questionId,
                 "answer": answer,
-                "type": questionType
+                "type": questionType,
+                "lessonId": lessonId
             }, function(result) {
                 $.get(data.data('show-questionanswer'), {
                     "markerId": markerId,

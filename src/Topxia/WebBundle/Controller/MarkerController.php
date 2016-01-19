@@ -193,7 +193,8 @@ class MarkerController extends BaseController
 
         return $this->render('TopxiaWebBundle:Marker:question-modal.html.twig', array(
             'markerId' => $markerId,
-            'question' => $question
+            'question' => $question,
+            'lessonId' => $data['lessonId']
         ));
     }
 
@@ -205,22 +206,8 @@ class MarkerController extends BaseController
         $data['answer']       = isset($data['answer']) ? $data['answer'] : null;
         $data['type']         = isset($data['type']) ? $data['type'] : null;
         $user                 = $this->getUserService()->getCurrentUser();
-        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($data['markerId'], $user['id'], $data['questionId'], $data['answer'], $data['type']);
-        // $conditions = array(
-        //     'markerId' => $data['markerId']
-        // );
-        // $questions = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('seq', 'ASC'), 0, 999);
+        $questionMarkerResult = $this->getQuestionMarkerResultService()->finishCurrentQuestion($data['markerId'], $user['id'], $data['questionId'], $data['answer'], $data['type'], $data['lessonId']);
 
-        // $question = array();
-
-        // foreach ($questions as $key => $value) {
-        //     $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($user['id'], $value['id']);
-
-        //     if ($questionMarkerResult['status'] == 'none') {
-        //         $question = $value;
-        //         break;
-        //     }
-        // }
         $data = array(
             'markerId'               => $data['markerId'],
             'questionMarkerResultId' => $questionMarkerResult['id']

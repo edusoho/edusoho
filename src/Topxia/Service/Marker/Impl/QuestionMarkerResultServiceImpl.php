@@ -25,7 +25,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->getQuestionMarkerResultDao()->updateQuestionMarkerResult($id, $result);
     }
 
-    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type)
+    public function finishCurrentQuestion($markerId, $userId, $questionMarkerId, $answer, $type, $lessonId)
     {
         $questionMarker = $this->getQuestionMarkerService()->getQuestionMarker($questionMarkerId);
 
@@ -63,6 +63,7 @@ class QuestionMarkerResultServiceImpl extends BaseService implements QuestionMar
         return $this->addQuestionMarkerResult(array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
+            'lessonId'         => $lessonId,
             'userId'           => $userId,
             'status'           => $status,
             'answer'           => serialize($answer),

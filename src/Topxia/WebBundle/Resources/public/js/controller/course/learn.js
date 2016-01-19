@@ -363,7 +363,8 @@ define(function(require, exports, module) {
                                 player.pause();
                             }
                             $.get('/course/lesson/' + marker.markerId + '/questionmarker/show', {
-                                "questionId": marker.questionId
+                                "questionId": marker.questionId,
+                                "lessonId":lesson.id
                             }, function(data) {
                                 // $('.vjs-break-overlay-text').html(data);
                                 var $modal = $("#modal");
