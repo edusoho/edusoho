@@ -2,8 +2,8 @@
 @font-face {font-family: "es-icon";
   src: url('fonts/es-icon.eot'); /* IE9*/
   src: url('fonts/es-icon.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('fonts/es-icon.woff') format('woff'), /* chrome, firefox */
-  url('fonts/es-icon.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('fonts/es-icon.woff') format('woff'), /* chrome、firefox */
+  url('fonts/es-icon.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
   url('fonts/es-icon.svg#es-icon') format('svg'); /* iOS 4.1- */
 }
 
@@ -160,4 +160,3 @@
 .es-icon-viewcomfy:before { content: "\e68c"; }
 .es-icon-loading:before { content: "\e68d"; }
 .es-icon-arrowdropleft:before { content: "\e68f"; }
-
