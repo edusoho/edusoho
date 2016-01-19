@@ -15,29 +15,30 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 // ErrorHandler::register(0);
 // ExceptionHandler::register(false);
-$config         = include __DIR__.'/config.php';
-$config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
+$paramaters         = include __DIR__.'/config/paramaters.php';
+$paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
 $connection = DriverManager::getConnection(array(
     'wrapperClass' => 'Topxia\Service\Common\Connection',
-    'dbname'       => $config['database_name'],
-    'user'         => $config['database_user'],
-    'password'     => $config['database_password'],
-    'host'         => $config['database_host'],
-    'driver'       => $config['database_driver'],
+    'dbname'       => $paramaters['database_name'],
+    'user'         => $paramaters['database_user'],
+    'password'     => $paramaters['database_password'],
+    'host'         => $paramaters['database_host'],
+    'driver'       => $paramaters['database_driver'],
     'charset'      => 'utf8'
 ));
 
-$serviceKernel = ServiceKernel::create($config['environment'], true);
-$serviceKernel->setParameterBag(new ParameterBag($config));
+$serviceKernel = ServiceKernel::create($paramaters['environment'], true);
+$serviceKernel->setParameterBag(new ParameterBag($paramaters));
 $serviceKernel->setConnection($connection);
-// $serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
 include __DIR__.'/src/functions.php';
 
-
-
 $app = new Silex\Application();
+
+include __DIR__.'/config/container.php';
+include __DIR__.'/config/routing.php';
+
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app->view(function (array $result, Request $request) use ($app) {
@@ -55,13 +56,9 @@ $app->view(function (array $result, Request $request) use ($app) {
     return new JsonResponse($result);
 });
 
-include __DIR__.'/config/container.php';
-
 $app->before(function (Request $request) use ($app) {
-
     $auth = new ApiAuth(include __DIR__ . '/config/whitelist.php');
     $auth->auth($request);
-
 });
 
 $app->error(function (\Exception $e, $code) {
@@ -70,7 +67,5 @@ $app->error(function (\Exception $e, $code) {
         'message' => $e->getMessage(),
     );
 });
-
-include __DIR__.'/config/routing.php';
 
 $app->run();
