@@ -439,10 +439,7 @@ margin-top: 14px;
 .form-horizontal .item h5{
   font-weight: bold;
 }
-.modal-open .modal-dialog{
-  margin: 20px auto;
-}
 .modal-open .modal-body{
-  height: 360px;
+  max-height: 435px;
   overflow: auto;
 }
