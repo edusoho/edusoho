@@ -37,11 +37,12 @@ class ApiAuth
 
         } else {
 
+            $whilelist = isset($this->whilelist[$request->getMethod()]) ? $this->whilelist[$request->getMethod()] : array();
+
             $path = rtrim($request->getPathInfo(), '/');
 
             $inWhiteList = 0;
-            foreach ($this->whilelist as $pattern) {
-                // var_dump($pattern);exit();
+            foreach ($whilelist as $pattern) {
                 if (preg_match($pattern, $path)) {
                     $inWhiteList = 1;
                     break;
