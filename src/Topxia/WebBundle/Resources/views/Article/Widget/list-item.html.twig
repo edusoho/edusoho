@@ -19,7 +19,7 @@
   <div class="media">
     <div class="media-left">
       <a href="{{ path('article_detail', { id:article.id }) }}">
-        <img class="thumb-img" class="media-object" src="{{ filepath(article.thumb, '') }}" alt="{{ article.title }}"></a>
+        <img class="thumb-img"  src="{{ filepath(article.thumb, '') }}" alt="{{ article.title }}"></a>
     </div>
     <div class="media-body">{{ article.body|plain_text(150) }}</div>
   </div>

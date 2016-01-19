@@ -1,41 +1,18 @@
-.article-list-header {
-  .row {
-    margin: 0 -5px;
-  }
-}
-
 // 轮播
 .aricle-carousel {
   overflow: hidden;
-  height: 424px;
-  @media (max-width: @screen-md-max) {
-    height: 346px;
-  }
-  @media (max-width: @screen-sm-max) {
-    height: 387px;
-  }
-  @media (max-width: @screen-xs-max) {
-    height: 150px;
-  }
   .swiper-container {
     position: relative;
     width: 100%;
     height: 100%;
-    .border-radius(2px);
+    .border-radius;
   }
   .swiper-slide {
     position: relative;
     width: 100%;
-    height: 424px;
-    left: 1px;
-    @media (max-width: @screen-md-max) {
-      height: 346px;
-    }
-    @media (max-width: @screen-sm-max) {
-      height: 387px;
-    }
-    @media (max-width: @screen-xs-max) {
-      height: 150px;
+    height: 100%;
+    &.swiper-slide-active {
+      left: -1px;
     }
     img {
       width: 100%;
@@ -44,9 +21,6 @@
     .image-overlay {
       .border-radius;
     }
-  }
-  .swiper-slide.swiper-slide-active {
-    left: 0;
   }
   .swiper-caption {
     position: absolute;
@@ -103,11 +77,13 @@
 .topic-post-small {
   position: relative;
   width: 100%;
-  height: 207px;
   color: #fff;
   border-collapse: collapse; 
   display: table;
   color: #fff;
+  + .topic-post-small {
+    margin-top: 12px;
+  }
   &:hover {
     color: #fff;
     .es-transition;
@@ -117,15 +93,14 @@
     }
   }
   @media (max-width: @screen-md-max) {
-    height: 168px;
     .content {
       line-height: 20px;
       max-height: 120px;
       overflow: hidden;
     }
   }
-  img,.image-overlay{
-    .border-radius(2px);
+  img,.image-overlay {
+    .border-radius;
   }
   .content {
     position: absolute;
@@ -155,13 +130,14 @@
       .media-left {
         width: 100%;
         display: block;
+        padding-right: 0;
         margin-bottom: 10px;
-        img {
-          width: 100%;
-        }
+      }
+      .media .thumb-img {
+        width: 100%;
       }
     }
-     .content {
+    .content {
       margin-top: 15px;
       color: @gray;
     }
@@ -172,11 +148,9 @@
       padding-left: 10px;
       line-height: 25px;
     }
-    img {
-      border-radius: 6px;
-    }
     .thumb-img {
       width: 260px;
+      .border-radius;
     }
   }
   .pager {
