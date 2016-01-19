@@ -76,6 +76,11 @@ define(function(require, exports, module) {
                     return false;
                 }
             });
+            if ($("#testpaper-table").find('[name="scores[]"]').length == 0) {
+                Notify.danger('请选择题目。');
+                isOk = false;
+                return false;
+            }
 
             if (!isOk) {
                 return ;
