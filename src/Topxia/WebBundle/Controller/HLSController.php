@@ -114,8 +114,6 @@ class HLSController extends BaseController
     public function streamAction(Request $request, $id, $level, $token)
     {
         $token = $this->getTokenService()->verifyToken('hls.stream', $token);
-        // var_dump($token);
-        // exit();
 
         if (empty($token)) {
             throw $this->createNotFoundException();

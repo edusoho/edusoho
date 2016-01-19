@@ -12,8 +12,6 @@ class MarkerController extends BaseController
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        //$this->getMarkerService()->canManageMarker($lesson['userId']);
-
         return $this->render('TopxiaWebBundle:Marker:index.html.twig', array(
             'course' => $course,
             'lesson' => $lesson
@@ -134,9 +132,8 @@ class MarkerController extends BaseController
     //获取当前播放器的驻点
     public function showMarkersAction(Request $request, $lessonId)
     {
-        $data   = $request->request->all();
-        $lesson = $this->getCourseService()->getLesson($lessonId);
-        //$data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
+        $data         = $request->request->all();
+        $lesson       = $this->getCourseService()->getLesson($lessonId);
         $storage      = $this->getSettingService()->get('storage');
         $video_header = $this->getUploadFileService()->getFileByTargetType('headLeader');
         $markers      = $this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']);
@@ -232,8 +229,7 @@ class MarkerController extends BaseController
             'percent' => floor($questionMarker['seq'] / $count * 100)
         );
         $compelete = $progress['percent'] == 100 ? true : false;
-        // var_dump($questionMarker['answer']);
-        // exit();
+
         return $this->render('TopxiaWebBundle:Marker:answer.html.twig', array(
             'markerId'   => $data['markerId'],
             'question'   => $questionMarker,
@@ -316,8 +312,7 @@ class MarkerController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        // var_dump($paginator->getPerPageCount());
-        // exit();
+
         $markerIds         = ArrayToolkit::column($this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']), 'id');
         $questionMarkerIds = ArrayToolkit::column($this->getQuestionMarkerService()->findQuestionMarkersByMarkerIds($markerIds), 'questionId');
 
