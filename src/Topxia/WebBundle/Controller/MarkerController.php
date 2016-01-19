@@ -126,10 +126,6 @@ class MarkerController extends BaseController
         $data             = $request->request->all();
         $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
 
-        if ($this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1) {
-            return createJsonResponse(array());
-        }
-
         $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
         return $this->createJsonResponse($questionMarkers);
     }
@@ -144,6 +140,10 @@ class MarkerController extends BaseController
         $markers      = $this->getMarkerService()->findMarkersByMediaId($lesson['mediaId']);
         $results      = array();
         $user         = $this->getUserService()->getCurrentUser();
+
+        if ($this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1) {
+            return $this->createJsonResponse(array());
+        }
 
         foreach ($markers as $key => $marker) {
             $results[$key]                    = $marker;
