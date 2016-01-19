@@ -11597,6 +11597,11 @@ textarea {
   padding-left: 0;
   text-align: center;
 }
+@media (max-width: 991px) {
+  .question-manage .question-menu .list-title .content {
+    display: none;
+  }
+}
 .question-manage .question-menu .lesson-list {
   min-height: 100px;
 }
