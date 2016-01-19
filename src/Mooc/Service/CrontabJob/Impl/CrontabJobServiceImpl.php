@@ -30,7 +30,9 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
             case 'createdByAsc':
                 $sort = array('createdTime', 'ASC');
                 break;
-
+            case 'nextExcutedTime':
+                $sort = array('nextExcutedTime', 'DESC');
+                break;
             default:
                 throw $this->createServiceException('参数sort不正确。');
                 break;
@@ -58,7 +60,8 @@ class CrontabJobServiceImpl extends BaseServiceImpl implements CrontabJobService
             // 加锁
             $job = $this->getJob($id, true);
 
-// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+            // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+
             if (empty($job) || $job['executing']) {
                 $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");
                 $this->getJobDao()->getConnection()->commit();
