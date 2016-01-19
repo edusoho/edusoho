@@ -20,7 +20,7 @@ class GroupController extends BaseController
                 'createdTime' => time() - 30 * 24 * 60 * 60,
                 'status'      => 'open'
             ),
-            $this->filterSort('byCreatedTimeOnly'), 0, 25
+            $this->filterSort('byStick'), 0, 25
         );
 
         $ownerIds = ArrayToolkit::column($recentlyThread, 'userId');
