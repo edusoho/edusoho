@@ -5,6 +5,7 @@ require_once __DIR__.'/../vendor2/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Api\ApiAuth;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,8 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
 // use Symfony\Component\Debug\Debug;
 
-ErrorHandler::register(0);
-ExceptionHandler::register(false);
+// ErrorHandler::register(0);
+// ExceptionHandler::register(false);
 $config         = include __DIR__.'/config.php';
 $config['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
@@ -56,72 +57,10 @@ $app->view(function (array $result, Request $request) use ($app) {
 
 $app->before(function (Request $request) use ($app) {
 
-    $path = rtrim($request->getPathInfo(), '/');
+    $auth = new ApiAuth(include __DIR__ . '/config/whitelist.php');
+    $auth->auth($request);
 
-    $whilelist = include __DIR__ . '/config/whitelist.php';
-
-    $inWhiteList = 0;
-    foreach ($whilelist as $pattern) {
-        // var_dump($pattern);exit();
-        if (preg_match($pattern, $path)) {
-            $inWhiteList = 1;
-            break;
-        }
-    }
-
-    $authMethod = $request->headers->get('X-Auth-Method');
-
-    if ($authMethod == 'key') {
-        $accessKey = $request->headers->get('X-Auth-Key');
-        $secretKey = $request->headers->get('X-Auth-Secret');
-
-        if (empty($accessKey) or empty($secretKey)) {
-            throw createAccessDeniedException("Auth Params is invalid.");
-        }
-
-        $settings = ServiceKernel::instance()->createService('System.SettingService')->get('storage', array());
-        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            throw createAccessDeniedException("Auth Params is invalid..");
-        }
-
-        if (($accessKey != $settings['cloud_access_key']) || ($secretKey != $settings['cloud_secret_key'])) {
-            throw createAccessDeniedException("Auth Params is invalid...");
-        }
-
-        setCurrentUser(array(
-            'id' => 0,
-            'nickname' => '游客',
-            'currentIp' =>  $request->getClientIp(),
-            'roles' => array(),
-        ));
-
-    } else {
-        $token = $request->headers->get('X-Auth-Token');
-        if (empty($token)) {
-            // 兼容老的协议，即将去除
-            $token = $request->headers->get('Auth-Token', '');
-        }
-
-        if (!$inWhiteList && empty($token)) {
-            throw createNotFoundException("AuthToken is not exist.");
-        }
-
-        $userService = ServiceKernel::instance()->createService('User.UserService');
-        $token = $userService->getToken('mobile_login', $token);
-
-        if (!$inWhiteList && empty($token['userId'])) {
-            throw createAccessDeniedException("AuthToken is invalid.");
-        }
-
-        $user = $userService->getUser($token['userId']);
-        if (!$inWhiteList && empty($user)) {
-            throw createNotFoundException("Auth user is not found.");
-        }
-
-        setCurrentUser($user);
-    }
-
-);
+});
 
 $app->error(function (\Exception $e, $code) {
     return array(
