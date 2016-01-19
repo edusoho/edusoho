@@ -12,18 +12,6 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <h2 class="panel-title">所有小组</h2>
-          {#<form class="form-inline more hidden-xs" style="top:7px" action="{{path('group_search_group')}}" method="get">
-            <div class="form-group">
-              <div class="input-group group-search">
-                <input type="text" class="form-control" placeholder="小组搜索" name="keyWord" value="{{app.request.get('keyWord') }}">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit">
-                    <span class="glyphicon glyphicon-search"></span>
-                  </button>
-                </span>
-              </div>
-            </div>
-          </form>#}
         </div>
 
         <div class="panel-body">
@@ -63,6 +51,61 @@
           </button>
         </div>
       </form>
+      {% if user.id %}
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="media">
+              <div class="media-left">
+                {{ web_macro.user_avatar(user, '','avatar-md') }}
+              </div>
+              <div class="media-body">
+                <p>{{ web_macro.user_link(user , 'link-light') }}</p>
+                <div class="metas">
+                  <a href="{{ path ('group_member_center') }}" class="btn btn-info btn-sm" role="button">我的小组</a>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if myJoinGroup %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            我的小组
+            {% if user.id %} 
+              <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="more">
+              <i class="es-icon es-icon-morehoriz"></i></a>
+            {% endif %}
+          </div>
+          <div class="panel-body">
+            <div class="group-grids">
+              {% for group in myJoinGroup %}
+                {% if loop.index <= 6 %}
+                <div class="grid media media-group">
+                  <div class="media-left">
+                    <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+                      <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+                    </a>
+                  </div>
+                  <div class="media-body">
+                    <div class="title">
+                      <a class="gray-darker" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                    </div>
+                    <div class="metas">
+                      <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                      <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+      {% include 'TopxiaWebBundle:Group:new-group-list.html.twig' %}
 
     </div>
   </div>
