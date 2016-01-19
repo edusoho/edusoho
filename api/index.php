@@ -7,6 +7,7 @@ require_once __DIR__.'/../vendor2/autoload.php';
 use Doctrine\DBAL\DriverManager;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Api\ApiAuth;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,14 +65,52 @@ $app->before(function (Request $request) use ($app) {
     $auth->auth($request);
 });
 
-$app->error(function (\Exception $e, $code) use ($app) {
-    if ($app['debug']) {
-        return ;
-    }
-    return array(
+$app->error(function (\Exception $exception, $code) use ($app) {
+    $error = array(
         'code' => $code,
-        'message' => $e->getMessage(),
+        'message' => $exception->getMessage(),
     );
+
+    if ($app['debug']) {
+
+        if (!$exception instanceof FlattenException) {
+            $exception = FlattenException::create($exception);
+        }
+
+        $error['previous'] = array();
+
+        $flags = PHP_VERSION_ID >= 50400 ? ENT_QUOTES | ENT_SUBSTITUTE : ENT_QUOTES;
+
+        $count = count($exception->getAllPrevious());
+        $total = $count + 1;
+        foreach ($exception->toArray() as $position => $e) {
+            $previous = array();
+
+            $ind = $count - $position + 1;
+
+            $previous['message'] = "{$ind}/{$total} {$e['class']}: {$e['message']}";
+            $previous['trace'] = array();
+
+            foreach ($e['trace'] as $position => $trace) {
+                $content = sprintf('%s. ', $position+1);
+                if ($trace['function']) {
+                    // var_dump($trace['args']);
+                    $content .= sprintf('at %s%s%s(%s)', $trace['class'], $trace['type'], $trace['function'], '...args...');
+                }
+                if (isset($trace['file']) && isset($trace['line'])) {
+                    $content .= sprintf(' in %s line %d', htmlspecialchars($trace['file'], $flags, 'UTF-8'), $trace['line']);
+                }
+
+                $previous['trace'][] = $content;
+            }
+
+            $error['previous'][] = $previous;
+        }
+
+    }
+
+    return $error;
+
 });
 
 $app->run();
