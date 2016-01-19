@@ -40,29 +40,38 @@
 }
 .group-header .group-header-inner {
   border-radius: 5px;
-  height: 150px;
+  height: 190px;
   position: relative;
 }
 .group-header .media {
-  background: #fff;
-  background-color: rgba(255, 255, 255, 0.7);
   position: absolute;
-  top: 15px;
-  left: 15px;
+  bottom: 40px;
+  left: 50px;
   border-radius: 3px;
   padding: 10px;
   min-width: 20%;
 }
 .group-header-inner .media-body {
+  padding-top: 5px;
   width: auto;
+}
+.group-header-inner .media-left {
+  padding-right: 20px;
 }
 .group-header .media-heading {
   font-size: 18px;
-  font-weight: bold;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.group-header .media-heading .btn-xs {
+  padding: 3px 15px 2px;
+  vertical-align: text-top;
+  margin-left: 12px;
+  border: none;
 }
 .group-header .media-metas {
   font-size: 12px;
-  color: #666;
+  color: #fff;
 }
 .group-header .nav {
   position: absolute;
@@ -86,7 +95,7 @@
 .group-page .group-thread .panel-heading h2 {
   font-size: 16px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 12px 0 20px;
 }
 .group-page .group-thread .panel-heading .thread-list {
   float: right;
@@ -94,11 +103,30 @@
 }
 .group-page .group-thread .panel-heading .metas {
   font-size: 12px;
-  color: #888;
+  color: #919191;
 }
 .group-page .group-thread .panel-heading .metas .divider {
   color: #bbb;
   margin: 0 5px;
+}
+.group-page .group-main .group-member-wrapper {
+  padding-top: 10px;
+}
+.group-page .group-main .group-user-title {
+  margin-top: 20px;
+  padding-bottom: 20px;
+  color: #313131;
+  position: relative;
+  padding-left: 15px;
+}
+.group-page .group-main .group-user-title:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 16px;
+  background: #ff7200;
 }
 .group-page .group-post-list .metas {
   font-size: 12px;
@@ -135,11 +163,62 @@
   width: 50px;
   height: 50px;
 }
+.group-page .panel-default > .panel-heading {
+  color: #313131;
+  border-bottom: 1px solid #ebebeb;
+}
 .group-page .alert {
   word-break: break-all;
+  background: #fafafa;
+  color: #313131;
 }
 .group-page .alert img {
   max-width: 100%;
+}
+.group-page .group-topic-btn a {
+  display: block;
+  height: 45px;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+.group-page .group-topic-btn a i {
+  font-size: 18px;
+  margin-right: 10px;
+}
+.group-page .group-search {
+  position: relative;
+}
+.group-page .group-search .form-control {
+  height: 40px;
+  color: #c1c1c1;
+}
+.group-page .group-search .btn-nobg {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: 0;
+  top: 5px;
+  color: #c1c1c1;
+}
+.group-page .group-user-info hr {
+  margin: 15px 0;
+  background: #e1e1e1;
+}
+.group-page .group-user-info .group-message {
+  margin: 0;
+}
+.group-page .group-user-info .group-message span {
+  float: left;
+  width: 50%;
+  text-align: center;
+  font-size: 12px;
+  color: #919191;
+}
+.group-page .group-user-info .group-message strong {
+  display: block;
+  color: #313131;
+  font-size: 18px;
+  font-weight: normal;
 }
 .group-page .hideContent {
   border: 1px solid #999;
@@ -154,11 +233,14 @@
   width: 36px;
 }
 .thread-list .title {
-  margin-bottom: 5px;
+  vertical-align: middle;
 }
 .thread-list .metas {
   font-size: 12px;
   color: #999;
+}
+.thread-list .metas .userImg {
+  vertical-align: bottom;
 }
 .thread-list .metas .divider {
   margin: 0 5px;
@@ -1810,7 +1892,7 @@ a.link-muted {
   margin: 8px 1%;
   font-size: 12px;
   vertical-align: top;
-  height: 80px;
+  height: 40px;
   overflow: hidden;
 }
 .user-grids li p {
@@ -5648,6 +5730,15 @@ textarea.form-control-o {
   color: #ff7200;
   text-decoration: none;
 }
+.btn-gray {
+  color: #616161;
+}
+.btn-gray:hover,
+.btn-gray:focus,
+.btn-gray.focus {
+  color: #ff7200;
+  text-decoration: none;
+}
 .btn-default {
   color: #616161;
   background-color: #f5f5f5;
@@ -6149,6 +6240,13 @@ textarea {
 .form-control:-ms-input-placeholder {
   color: #919191;
 }
+.avatar-ss {
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  width: 20px !important;
+  height: 20px !important;
+}
 .avatar-xs {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -6184,7 +6282,6 @@ textarea {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  border: 1px solid #fff;
 }
 .avatar-square-sm,
 .group-avatar-sm {
@@ -6193,7 +6290,6 @@ textarea {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  border: 1px solid #fff;
 }
 .progress {
   -webkit-border-radius: 0;
@@ -6263,6 +6359,39 @@ textarea {
 }
 .sidenav .list-group .list-group-item.active > a {
   color: #ff7200;
+}
+.thread-list .media-left {
+  padding-right: 18px;
+}
+.thread-list .media-heading {
+  margin-bottom: 10px;
+}
+.thread-list span.reply-num {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #f1f1f1;
+  color: #919191;
+  text-align: center;
+  font-size: 12px;
+}
+.thread-list span.reply-num strong {
+  display: block;
+  font-size: 20px;
+  font-weight: normal;
+  padding: 7px 0 0;
+}
+.breadcrumb {
+  background: none;
+}
+.breadcrumb a {
+  color: #616161;
+}
+.breadcrumb > li + li:before {
+  color: #616161;
 }
 .sidenav {
   padding: 20px 0 10px 0;
