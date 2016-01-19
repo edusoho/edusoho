@@ -90,7 +90,7 @@ define(function(require, exports, module) {
                     } else {
                         $dragcopy.hide();
                     }
-                    _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
+                    _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry,event);
                 }
             }).mouseup(function() {
                 // 停止拖动
@@ -212,7 +212,7 @@ define(function(require, exports, module) {
                 });
                 $(document).mousemove(function(event) {
                     if (isMove) {
-                        _obj._moveShow($this, $time, $scalebox, _obj, arry);
+                        _obj._moveShow($this, $time, $scalebox, _obj, arry,event);
                     }
                 }).mouseup(function() {
                     $(document).off('mousemove');
@@ -286,7 +286,7 @@ define(function(require, exports, module) {
             //阻止默认事件，父层的拖动
             e.stopPropagation();
         },
-        _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
+        _moveShow: function($scale, $scale_details, $scalebox, _obj, arry,event) {
             var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
 
             var left = 0;

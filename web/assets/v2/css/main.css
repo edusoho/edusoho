@@ -11420,6 +11420,14 @@ textarea {
   font-size: 18px;
   border-bottom: 1px solid #f1f1f1;
 }
+.marker-modal .question-body {
+  max-height: 500px;
+  overflow: auto;
+  margin-bottom: 15px;
+}
+.marker-modal .question-footer {
+  padding: 15px 0;
+}
 .marker-modal .question-choices {
   padding-left: 10px;
 }
@@ -11489,16 +11497,19 @@ textarea {
   right: 15px;
   top: 10px;
 }
+.marker-modal .fill-answer p {
+  margin-bottom: 0;
+}
 .marker-modal .answer-progress {
   float: left;
   width: 350px;
-  margin-top: 10px;
   margin-left: 10px;
 }
 .marker-modal .answer-progress .progress {
   float: left;
   width: 300px;
   height: 10px;
+  margin-bottom: 0;
   border-radius: 20px;
 }
 .marker-modal .answer-progress .num {
@@ -11585,6 +11596,11 @@ textarea {
 .question-manage .question-menu .list-title .content {
   padding-left: 0;
   text-align: center;
+}
+@media (max-width: 991px) {
+  .question-manage .question-menu .list-title .content {
+    display: none;
+  }
 }
 .question-manage .question-menu .lesson-list {
   min-height: 100px;
@@ -11727,9 +11743,11 @@ textarea {
   }
 }
 .question-manage .editbox .scalebox .scale.blue:hover {
-  background-color: transparent;
+  background-color: #2998c9;
+  background-color: rgba(41, 152, 201, 0);
 }
 .question-manage .editbox .scalebox .scale.blue:hover .border {
+  background-color: #2998c9;
   background-color: rgba(41, 152, 201, 0.5);
   -webkit-animation: boxshow 1s ease infinite;
   animation: boxshow 1s ease infinite;

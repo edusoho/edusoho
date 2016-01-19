@@ -28,6 +28,14 @@
     font-size: 18px;
     border-bottom: 1px solid #f1f1f1;
   }
+  .question-body {
+    max-height: 500px;
+    overflow: auto;
+    margin-bottom: 15px;
+  }
+  .question-footer {
+    padding: 15px 0;
+  }
   .question-choices {
     padding-left: 10px;
     li {
@@ -95,16 +103,19 @@
       right: 15px;
       top:10px;
     }
+    p {
+      margin-bottom: 0;
+    }
   }
   .answer-progress {
     float: left;
     width: 350px;
-    margin-top: 10px;
     margin-left: 10px;
     .progress {
       float: left;
       width: 300px;
       height: 10px;
+      margin-bottom: 0;
       .border-radius(20px);
     }
     .num {
@@ -183,6 +194,9 @@
     .content {
       padding-left: 0;
       text-align: center;
+      @media(max-width:@screen-sm-max) {
+        display: none;
+      }
     }
   }
   .lesson-list {
@@ -315,8 +329,10 @@
         height: 60px;
       }
       &:hover {
-        background-color: transparent;
+        background-color: #2998c9;
+        background-color: rgba(41,152,201, 0);
         .border {
+          background-color: #2998c9;
           background-color: rgba(41,152,201, 0.5);
           -moz-animation:boxshow 1s ease infinite;
           -webkit-animation:boxshow 1s ease infinite;
