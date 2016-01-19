@@ -76,6 +76,11 @@ define(function(require, exports, module) {
                     return false;
                 }
             });
+            if ($("#testpaper-table").find('[name="scores[]"]').length == 0) {
+                Notify.danger('请选择题目。');
+                isOk = false;
+                return false;
+            }
 
             if (!isOk) {
                 return ;
@@ -169,13 +174,16 @@ define(function(require, exports, module) {
             })
 
             if (hasEssay) {
-                $('.passedScoreDiv').html('');
+                $('input[name="passedScore"]').val('0');
+                $('.passedScoreDiv').hide();
+                validator.removeItem('[name="passedScore"]');
             } else {
                 var stats = this._calTestpaperStats();
                 var passeScoreDefault = Math.ceil(stats.total.score * 0.6);
-                var html = '这是一份纯客观题的试卷, 达到 <input type="text" name="passedScore" class="form-control width-input width-input-small" value="'+passeScoreDefault+'" data-score-total="'+stats.total.score+'" />分（含）可以自动审阅通过考试。';
 
-                $('.passedScoreDiv').html(html);
+                $('input[name="passedScore"]').val(passeScoreDefault);
+                $('input[name="passedScore"]').data('scoreTotal',stats.total.score);
+                $('.passedScoreDiv').show();
 
                 validator.addItem({
                     element: '[name="passedScore"]',
@@ -314,12 +322,5 @@ define(function(require, exports, module) {
             element: '#testpaper-items-manager',
         });
 
-        validator.addItem({
-            element: '[name="passedScore"]',
-            required: true,
-            rule: 'score',
-            display: '分数'
-        });
-        
     }
 });
