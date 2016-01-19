@@ -29,7 +29,7 @@
     border-bottom: 1px solid #f1f1f1;
   }
   .question-body {
-    max-height: 500px;
+    max-height: 300px;
     overflow: auto;
     margin-bottom: 15px;
   }
@@ -205,9 +205,6 @@
       line-height: 46px;
       cursor: pointer;
       .title {
-        @media(max-width:@screen-sm-max) {
-          width: 100%;
-        }
         .idname,.number,.icon-close{
           display: none;
         }
@@ -216,6 +213,12 @@
         text-align: center;
         padding-left:0;
         @media(max-width:@screen-sm-max) {
+          display: none;
+        }
+        &.not-add {
+          display: inline-block;
+        }
+        &.have-add {
           display: none;
         }
       }
@@ -240,6 +243,14 @@
       a {
         color: @gray;
         cursor: default;
+      }
+      .content {
+        &.not-add {
+          display: none;
+        }
+        &.have-add {
+          display: inline-block;
+        }
       }
     }
     .placeholder {
