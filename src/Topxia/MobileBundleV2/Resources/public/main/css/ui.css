@@ -876,8 +876,10 @@ a {
 /* sign */
 
 .sign {
+  top: 0;
   height: 100%;
   margin-bottom: 0;
+  padding-top: 44px;
   background: #fff;
 }
 
@@ -943,6 +945,12 @@ a {
   line-height: 26px;
   height: 26px;
   width: 20px;
+}
+
+.sign .ui-btn.more-btn {
+  color: #333;
+  bottom: 10px;
+  position: fixed;
 }
 
 /** login **/

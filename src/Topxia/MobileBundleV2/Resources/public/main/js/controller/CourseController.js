@@ -198,6 +198,13 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       
       return content;
   }
+
+  $scope.isCanShowVip = function(vipLevelId) {
+    if (vipLevelId <= 0) {
+      return false;
+    }
+    return $scope.vipLevels.length <= 0;
+  }
 }
 
 function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)

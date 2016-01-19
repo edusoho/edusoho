@@ -163,6 +163,10 @@ directive('uiTab', function ($parse) {
                 angular.element(scroller.children[self.currentPage]).removeClass('current');
                 angular.element(nav.children[self.currentPage]).removeClass('current');
                 changeTabContentHeight(0);
+                scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : false
+                });
               });
           }
     }
@@ -469,6 +473,7 @@ directive('modal', function () {
 
       scope.$on("tabClick", function(event, data) {
         if (!data.isShow) {
+          $(".ui-scroller").css("overflow","scroll");
           return;
         }
 

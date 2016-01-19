@@ -400,5 +400,15 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		self.dialog.dialog("hide");
 	}
 
+	$scope.isShowCoupon = function() {
+		if (platformUtil.native && (platformUtil.iPhone || platformUtil.iPad)) {
+			return false;
+		}
+		if ($scope.data && $scope.data.isInstalledCoupon) {
+			return true;
+		}
+		return false;
+	};
+
 	self.loadOrder();
 }
