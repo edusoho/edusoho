@@ -11420,6 +11420,14 @@ textarea {
   font-size: 18px;
   border-bottom: 1px solid #f1f1f1;
 }
+.marker-modal .question-body {
+  max-height: 500px;
+  overflow: auto;
+  margin-bottom: 15px;
+}
+.marker-modal .question-footer {
+  padding: 15px 0;
+}
 .marker-modal .question-choices {
   padding-left: 10px;
 }
@@ -11489,16 +11497,19 @@ textarea {
   right: 15px;
   top: 10px;
 }
+.marker-modal .fill-answer p {
+  margin-bottom: 0;
+}
 .marker-modal .answer-progress {
   float: left;
   width: 350px;
-  margin-top: 10px;
   margin-left: 10px;
 }
 .marker-modal .answer-progress .progress {
   float: left;
   width: 300px;
   height: 10px;
+  margin-bottom: 0;
   border-radius: 20px;
 }
 .marker-modal .answer-progress .num {
