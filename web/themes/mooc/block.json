@@ -157,8 +157,8 @@
             },
             "categories": {
                 "title": "分类名称",
-                "desc": "最大可设置28个",
-                "count": 10,
+                "desc": "最大可设置20个",
+                "count": 20,
                 "type": "category",
                 "default": [
                     {
