@@ -16,7 +16,7 @@
     {% else %}
       <div class="row form-group">
         {% if data.status == 'unconnect' %}
-          <div class="col-md-2 control-label">
+          <div class="col-md-2 control-cloud">
             <a class="btn btn-primary mhs" disable="disabled">启用云搜索</a>
           </div>
           <div class="controls col-md-8 cloud-warning">
@@ -24,15 +24,15 @@
           </div>
         {% else %}
           {% if not setting('cloud_search.search_enabled') %}
-            <div class="col-md-2 control-label">
+            <div class="col-md-2 control-cloud">
               <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">启用云搜索</a>
             </div>
           {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'waiting' %}
-            <div class="col-md-10 form-group control-label">
+            <div class="col-md-10 form-group control-cloud">
               <span class="text-warning">正在索引数据，预计1～3天完成</span>
             </div>
           {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'ok' %}
-            <div class="col-md-2 control-label success">
+            <div class="col-md-2 control-cloud success">
               <span class="text-success">已启用</span>
             </div>
             <div class="controls col-md-8 cloud-warning">
