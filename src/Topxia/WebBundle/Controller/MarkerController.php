@@ -125,7 +125,12 @@ class MarkerController extends BaseController
     {
         $data             = $request->request->all();
         $data['markerId'] = isset($data['markerId']) ? $data['markerId'] : 0;
-        $questionMarkers  = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
+
+        if ($this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1) {
+            return createJsonResponse(array());
+        }
+
+        $questionMarkers = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId($data['markerId']);
         return $this->createJsonResponse($questionMarkers);
     }
 
