@@ -2526,7 +2526,12 @@ input:focus {
   color: #10b67c;
 }
 .mooc-header .navbar-header .navbar-brand img {
-  height: 50px;
+  height: 60px;
+}
+@media (max-width: 767px) {
+  .mooc-header .navbar-header .navbar-brand img {
+    height: 40px;
+  }
 }
 @media (max-width: 767px) {
   .mooc-header .navbar-header {
@@ -3605,6 +3610,10 @@ footer .weichat {
 footer .weichat p {
   color: #ffffff;
   margin-top: 8px;
+}
+footer .weichat img {
+  width: 180px;
+  height: auto;
 }
 footer .link-item {
   width: 32%;

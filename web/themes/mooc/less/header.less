@@ -18,7 +18,10 @@
       padding:10px;
       color: @color-primary;
       img{
-        height: 50px;
+        height: 60px;
+        @media (max-width : @screen-xs-max){
+          height: 40px;
+        }
       }
     }
     @media (max-width : @screen-xs-max){
