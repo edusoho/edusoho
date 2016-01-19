@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('UTC');
 
 require_once __DIR__.'/../vendor2/autoload.php';
@@ -11,10 +12,13 @@ use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\ParameterBag;
-// use Symfony\Component\Debug\Debug;
+use Symfony\Component\Debug\Debug;
 
-// ErrorHandler::register(0);
-// ExceptionHandler::register(false);
+if (API_ENV == 'prod') {
+    ErrorHandler::register(0);
+    ExceptionHandler::register(false);
+}
+
 $paramaters         = include __DIR__.'/config/paramaters.php';
 $paramaters['host'] = 'http://'.$_SERVER['HTTP_HOST'];
 
@@ -36,8 +40,7 @@ include __DIR__.'/src/functions.php';
 
 $app = new Silex\Application();
 
-include __DIR__.'/config/container.php';
-include __DIR__.'/config/routing.php';
+include __DIR__ . '/config/' . API_ENV . '.php';
 
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
@@ -61,7 +64,10 @@ $app->before(function (Request $request) use ($app) {
     $auth->auth($request);
 });
 
-$app->error(function (\Exception $e, $code) {
+$app->error(function (\Exception $e, $code) use ($app) {
+    if ($app['debug']) {
+        return ;
+    }
     return array(
         'code' => $code,
         'message' => $e->getMessage(),
