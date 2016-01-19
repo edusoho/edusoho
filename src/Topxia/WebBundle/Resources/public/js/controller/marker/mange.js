@@ -192,6 +192,7 @@ define(function(require, exports, module) {
             //避免拖动过程中触发事件
             if (this.get('isDraggable') == 'false') {
                 $('.dashboard-content .mask').show();
+                $('body').addClass('draging');
                 var _obj = this;
                 var $this = $(e.currentTarget);
                 var $scalebox = $(_obj.get("scalebox"));
