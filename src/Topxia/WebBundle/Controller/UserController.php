@@ -258,11 +258,26 @@ class UserController extends BaseController
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
-        $followings           = $this->getUserService()->findAllUserFollowing($user['id']);
-        $myfollowings         = $this->_getUserFollowing($user['id']);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUserService()->findUserFollowingCount($user['id']),
+            12
+        );
+
+        $followings = $this->getUserService()->findUserFollowing($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        if ($followings) {
+            foreach ($followings as $key => $following) {
+                $followings[$key]['userProfile'] = $this->getUserService()->getUserProfile($following['id']);
+            }
+        }
+
+        $myfollowings = $this->_getUserFollowing($user['id']);
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user'         => $user,
+            'paginator'    => $paginator,
             'friends'      => $followings,
             'userProfile'  => $userProfile,
             'myfollowings' => $myfollowings,
@@ -277,10 +292,25 @@ class UserController extends BaseController
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
-        $followers            = $this->getUserService()->findAllUserFollower($user['id']);
         $myfollowings         = $this->_getUserFollowing($user['id']);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getUserService()->findUserFollowerCount($user['id']),
+            12
+        );
+
+        $followers = $this->getUserService()->findUserFollowers($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        if ($followers) {
+            foreach ($followers as $key => $follower) {
+                $followers[$key]['userProfile'] = $this->getUserService()->getUserProfile($follower['id']);
+            }
+        }
+
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user'         => $user,
+            'paginator'    => $paginator,
             'friends'      => $followers,
             'userProfile'  => $userProfile,
             'myfollowings' => $myfollowings,

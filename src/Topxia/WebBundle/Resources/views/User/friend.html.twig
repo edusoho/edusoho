@@ -28,16 +28,15 @@
             {% if friend.title %}
               {{ friend.title }}
             {% else %}
-              暂无简介
+              暂无头衔
             {% endif %}
           </div>
         </div>
+
         <div class="teacher-bottom">
           <div class="about">
-            {% if userProfile.about %}
-              {{ userProfile.about|plain_text(30) }}
-            {% else %}
-              暂无简介
+            {% if friend.userProfile %}
+              {{ friend.userProfile.about|plain_text(30) }}
             {% endif %}
           </div>
           <div class="metas">
@@ -58,6 +57,6 @@
     {% endif %}
   {% endfor %}
 </div>
-
+{{ web_macro.paginator(paginator) }}
 
 {% endblock %}
