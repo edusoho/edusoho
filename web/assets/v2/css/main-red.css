@@ -6360,13 +6360,13 @@ textarea {
 .sidenav .list-group .list-group-item.active > a {
   color: #cf010e;
 }
-.group-page .thread-list .media-left {
+.thread-list .media-left {
   padding-right: 18px;
 }
-.group-page .thread-list .media-heading {
+.thread-list .media-heading {
   margin-bottom: 10px;
 }
-.group-page .thread-list span.reply-num {
+.thread-list span.reply-num {
   display: inline-block;
   width: 60px;
   height: 60px;
@@ -6378,19 +6378,19 @@ textarea {
   text-align: center;
   font-size: 12px;
 }
-.group-page .thread-list span.reply-num strong {
+.thread-list span.reply-num strong {
   display: block;
   font-size: 20px;
   font-weight: normal;
   padding: 7px 0 0;
 }
-.group-page .breadcrumb {
+.breadcrumb {
   background: none;
 }
-.group-page .breadcrumb a {
+.breadcrumb a {
   color: #616161;
 }
-.group-page .breadcrumb > li + li:before {
+.breadcrumb > li + li:before {
   color: #616161;
 }
 .sidenav {
