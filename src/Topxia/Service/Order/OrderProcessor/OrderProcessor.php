@@ -13,7 +13,25 @@ interface OrderProcessor
 
     public function createOrder($orderInfo, $fields);
 
+    public function getOrderBySn($sn);
+
+    public function updateOrder($id, $fileds);
+
     public function getNote($targetId);
 
     public function getTitle($targetId);
+
+    public function pay($payData);
+
+    public function callbackUrl($router, $order, $container);
+
+    public function cancelOrder($id, $message, $data);
+
+    public function createPayRecord($id, $payData);
+
+    public function generateOrderToken();
+
+    public function getOrderInfoTemplate();
+
+    public function isTargetExist($targetId);
 }

@@ -60,32 +60,6 @@
           </div>
         {% endif %}
 
-        {% if setting('storage.upload_mode') == 'cloud' %}
-        <div class="form-group">
-            <label class="col-md-2 control-label">开启视频试看</label>
-            <div class="col-md-8 controls radios">
-                <label>
-                <input type="radio" name="tryLookable" tabindex="0" value=1 {% if course.tryLookable ==1 %}checked{% endif %}>是</label>
-                <label>
-                  <input  type="radio" name="tryLookable" tabindex="0" value=0 {% if course.tryLookable !=1 %}checked{% endif %}>否
-                </label>
-              <div class="help-block">视频试看功能仅云视频支持</div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label">试看时长</label>
-            <div class="col-md-8 controls radios">
-               <select name="tryLookTime">
-                  <option></option>
-                {% for minute in 1..10 %}
-                  <option value="{{ minute }}" {% if minute == course.tryLookTime %}selected{% endif %}>{{minute}}分钟</option>
-                {% endfor %}
-               </select>
-              <div class="help-block"></div>
-            </div>
-        </div>
-        {% endif %}
         {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
           <div class="form-group">
             <label class="col-md-2 control-label">会员课程设置</label>
@@ -96,6 +70,28 @@
               <div class="help-block">设置会员课程后，该会员及更高等级会员，可免费学习。</div>
             </div>
           </div>
+        {% endif %}
+
+        {% if setting('storage.upload_mode') == 'cloud' %}
+        <div class="form-group">
+            <label class="col-md-2 control-label">开启视频试看</label>
+            <div class="col-md-8 controls radios">
+              {{ radios('tryLookable', {1:'是', 0:'否'}, course.tryLookable|default(0)) }}
+              <div class="help-block">视频试看功能仅云视频支持</div>
+            </div>
+        </div>
+
+        <div class="form-group {% if course.tryLookable|default(0) !=1 %}hide{% endif %}" id = "tryLookTimeGroup">
+            <label class="col-md-2 control-label">试看时长</label>
+            <div class="col-md-8 controls">
+               <select name="tryLookTime" class='form-control width-input width-input-large'>
+                {% for minute in 1..10 %}
+                  <option value="{{ minute }}" {% if minute == course.tryLookTime %}selected{% endif %}>{{minute}}分钟</option>
+                {% endfor %}
+               </select>
+              <div class="help-block"></div>
+            </div>
+        </div>
         {% endif %}
 
         <div class="form-group">

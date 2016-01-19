@@ -494,8 +494,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 				$requestInfo = array('sms_code' => $smsCode, 'mobile' => $phoneNumber);
 				list($result, $sessionField) = $this->smsCheck($this->request, $requestInfo, 'sms_registration');
 				if ($result) {
+					$registTypeName = $auth['register_mode'] == "mobile" ? "mobile" : "emailOrMobile";
 					$user = $this->controller->getAuthService()->register(array(
-						'emailOrMobile' => $sessionField['to'],
+						$registTypeName => $sessionField['to'],
 						'nickname' => $nickname,
 						'password' => $password,
 					));
@@ -544,7 +545,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 		}
 
 		$currentTime = time();
-		$smsLastTime = $sessionField['sms_last_time'];
+		$smsLastTime = isset($sessionField['sms_last_time']) ? $sessionField['sms_last_time'] : 0;
 		if ((strlen($smsLastTime) == 0) || (($currentTime - $smsLastTime) > $allowedTime)) {
 			return false;
 		}
@@ -660,6 +661,17 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 		$this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, "user_login", "用户登录", array(
 			"username" => $username,
 		));
+
+		$delTokens = $this->controller->getTokenService()->findTokensByUserIdAndType($user['id'], MobileBaseController::TOKEN_TYPE);
+		if (empty($delTokens)) {
+			return $result;
+		}
+
+		foreach ($delTokens as $delToken) {
+			if ($delToken['token'] != $token) {
+				$this->controller->getTokenService()->destoryToken($delToken['token']);
+			}
+		}
 
 		return $result;
 	}

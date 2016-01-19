@@ -1075,6 +1075,18 @@ admin_article_delete:
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
 
+admin_invite:
+    pattern:  /invite
+    defaults: { _controller: TopxiaAdminBundle:Invite:index }
+
+admin_invite_detail:
+    pattern:  /invite/detail
+    defaults: { _controller: TopxiaAdminBundle:Invite:inviteDetail }
+
+admin_invite_set:
+    pattern:  /setting/invite
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
+
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
@@ -1366,3 +1378,23 @@ admin_batch_notification_send:
 admin_feedback:
     pattern: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
+
+admin_report_status_ucenter:
+    pattern: /reports/status/ucenter
+    defaults: { _controller: TopxiaAdminBundle:System:ucenter }
+
+admin_report_status_email_send:
+    pattern: /reports/status/email/send
+    defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }

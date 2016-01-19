@@ -17,6 +17,8 @@
     <br>
 
     {% include 'TopxiaWebBundle:MyQuiz:list-teacher-test.html.twig' %}
+
+    {{ web_macro.paginator(paginator) }}
   </div>
 </div>
 {% endblock %}

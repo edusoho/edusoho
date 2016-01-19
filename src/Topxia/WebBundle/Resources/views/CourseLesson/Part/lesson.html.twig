@@ -17,8 +17,7 @@
       <span class="title">  {% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
       {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
     {% endif %}
-
-  {% else %}   
+  {% else %}
     {% include 'TopxiaWebBundle:CourseLesson/Part:status-ball.html.twig' %}
     <span class="title">{% if setting('course.custom_chapter_enabled')|default(true) %} 课时{{ item.number }}：{% endif %}{{ item.title }}</span>
     {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
