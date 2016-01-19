@@ -45,8 +45,7 @@
           <a class="btn btn-default btn-sm img-mode-upload" id="img-{{ code }}-uploadId-{{ dataId }}"
              data-upload-token="{{ upload_token('system', 'image') }}">上传</a>
           <p class="text-success">
-            [ 平铺居中 ] 图片推荐尺寸 宽：880px，高：400px<br>
-            建议所有海报 [ 布局模式 ] 、 [ 海报尺寸 ] 保持一致。
+           图片推荐尺寸 宽：880px，高：400px<br>
           </p>
           <input class="form-control img-value" type="hidden" name="data[{{ code }}][{{ dataId }}][src]"
                  id="data[{{ code }}][{{ dataId }}][src]" data-role="img-url" value="{{ data.src|default('') }}">
