@@ -35,6 +35,8 @@ $serviceKernel->setConnection($connection);
 
 include __DIR__.'/src/functions.php';
 
+
+
 $app = new Silex\Application();
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
@@ -51,9 +53,9 @@ $app->view(function (array $result, Request $request) use ($app) {
         $result = $obj->filter($result);
     }
     return new JsonResponse($result);
-}
+});
 
-);
+include __DIR__.'/config/container.php';
 
 $app->before(function (Request $request) use ($app) {
 
