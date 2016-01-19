@@ -11421,7 +11421,7 @@ textarea {
   border-bottom: 1px solid #f1f1f1;
 }
 .marker-modal .question-body {
-  max-height: 500px;
+  max-height: 300px;
   overflow: auto;
   margin-bottom: 15px;
 }
@@ -11609,11 +11609,6 @@ textarea {
   line-height: 46px;
   cursor: pointer;
 }
-@media (max-width: 991px) {
-  .question-manage .question-menu .lesson-list .item-lesson .title {
-    width: 100%;
-  }
-}
 .question-manage .question-menu .lesson-list .item-lesson .title .idname,
 .question-manage .question-menu .lesson-list .item-lesson .title .number,
 .question-manage .question-menu .lesson-list .item-lesson .title .icon-close {
@@ -11627,6 +11622,12 @@ textarea {
   .question-manage .question-menu .lesson-list .item-lesson .content {
     display: none;
   }
+}
+.question-manage .question-menu .lesson-list .item-lesson .content.not-add {
+  display: inline-block;
+}
+.question-manage .question-menu .lesson-list .item-lesson .content.have-add {
+  display: none;
 }
 .question-manage .question-menu .lesson-list .item-lesson.dragged {
   background-color: #feffeb;
@@ -11649,6 +11650,12 @@ textarea {
 .question-manage .question-menu .lesson-list .item-lesson.disdrag a {
   color: #919191;
   cursor: default;
+}
+.question-manage .question-menu .lesson-list .item-lesson.disdrag .content.not-add {
+  display: none;
+}
+.question-manage .question-menu .lesson-list .item-lesson.disdrag .content.have-add {
+  display: inline-block;
 }
 .question-manage .question-menu .lesson-list .placeholder {
   background-color: #f1f1f1;
