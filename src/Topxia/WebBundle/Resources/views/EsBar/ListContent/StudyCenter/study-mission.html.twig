@@ -8,7 +8,6 @@
     {% if is_plugin_installed('ClassroomPlan') %}
       {% set classroomPlan = data('GetClassroomPlanByClassroomId',{'classroomId':classroom.id})|default(null) %}
       {% set userPlanTaskNumInfo = data('UserClassroomPlanTaskNumInfo',{'classroomId':classroom.id, 'userId':app.user.id})|default(null) %}
-      {% set tasks = null %}
     {% endif %}
     <div class="bar-task">
       <div class="bar-task-header">

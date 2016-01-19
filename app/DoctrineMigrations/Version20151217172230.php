@@ -17,7 +17,7 @@ class Version20151217172230 extends AbstractMigration
     {
         if (!$this->isFieldExist('task', 'intervalDate')) {
             $this->addSql("
-                ALTER TABLE `task` ADD `intervalDate` SMALLINT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '历时天数' AFTER `taskEndTime`;
+                ALTER TABLE `task` ADD `intervalDate` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '历时天数' AFTER `taskEndTime`;
             ");
         }
     }
