@@ -577,6 +577,7 @@ class GroupThreadController extends BaseController
 
         return $this->render('TopxiaWebBundle:Group:group-search-result.html.twig', array(
             'groupinfo'       => $group,
+            'keyWord'         => $keyWord,
             'threads'         => $threads,
             'owner'           => $owner,
             'paginator'       => $paginator,
