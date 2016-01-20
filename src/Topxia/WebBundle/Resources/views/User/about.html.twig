@@ -5,5 +5,7 @@
 {% set pageNav = type %}
 
 {% block main %}
-	{{userProfile.about|raw}}
+  <div class="editor-text">
+	 {{userProfile.about|raw}}
+  </div>
 {% endblock %}
