@@ -40,7 +40,8 @@ class TagServiceImpl extends BaseService implements TagService
 
     public function findTagsByIds(array $ids)
     {
-    	return $this->getTagDao()->findTagsByIds($ids);
+    	$tags = $this->getTagDao()->findTagsByIds($ids);
+        return ArrayToolkit::index($tags, 'id');
     }
 
     public function findTagsByNames(array $names)

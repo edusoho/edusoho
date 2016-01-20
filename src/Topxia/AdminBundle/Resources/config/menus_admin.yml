@@ -448,6 +448,9 @@ admin_cloud_bill:
     name: 云视频账单
     parent: admin_my_cloud
     router_name: admin_cloud_bill
+#admin_edu_cloud_search:
+#   name: 云搜索设置
+#   parent: admin_setting_cloud_video
 admin_batch_notification:
     name: 全站站内通知
     parent: admin_operation

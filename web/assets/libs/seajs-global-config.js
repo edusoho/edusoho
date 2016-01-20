@@ -65,6 +65,9 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
+        'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
+        'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
+        'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
         'video-player': 'balloon-video-player/1.2.0/index'
     },
 

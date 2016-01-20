@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% block title %}搜索 - {{ parent() }}{% endblock %}
 {% block content %}
-  <ol class="breadcrumb">
+  <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
     <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页') }}</a></li>
     <li><a href="{{path('group')}}">{{setting('group.name', '小组主页')}}</a></li>
     <li><a href="{{path('group_search_group')}}">{{setting('search.name', '搜索小组')}}</a></li>
@@ -34,7 +34,7 @@
       </div>
     </div>
   
-    <div class="col-md-3 group-side">
+    {#<div class="col-md-3 group-side">
       {% if is_granted('ROLE_ADMIN') %}
         <div class="group-topic-btn">
           <a href="{{path('group_add')}}" class="btn btn-success" role="button">
@@ -107,6 +107,7 @@
       {% endif %}
       {% include 'TopxiaWebBundle:Group:new-group-list.html.twig' %}
 
-    </div>
+    </div>#}
+    {% include 'TopxiaWebBundle:Group:sidebar.html.twig' %}
   </div>
 {% endblock %}

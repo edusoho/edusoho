@@ -125,7 +125,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         );
 
         if (isset($conditions['mobile'])) {
-            $conditions['mobile'] = "{$conditions['mobile']}%";
+            $conditions['mobile'] = "%{$conditions['mobile']}%";
         }
 
         if (isset($conditions['qq'])) {

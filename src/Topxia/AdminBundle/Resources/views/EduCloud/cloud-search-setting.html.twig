@@ -1,0 +1,52 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_edu_cloud_search' %}
+{% set script_controller = 'setting/cloud' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+
+    {% if data.status == 'unlink' %}
+      <div class="text-center">
+        <h1 class="text-muted">网络问题，无法连接{{ 'EduSoho'|copyright_less }}开放云平台</h1>
+      </div>
+    {% else %}
+      <div class="row form-group">
+        {% if data.status == 'unconnect' %}
+          <div class="col-md-2 control-cloud">
+            <a class="btn btn-primary mhs" disable="disabled">启用云搜索</a>
+          </div>
+          <div class="controls col-md-8 cloud-warning">
+            <span class="text-danger">抱歉，您尚未接入教育云，不能使用云搜索服务</span><a href="">立即接入</a>
+          </div>
+        {% else %}
+          {% if not setting('cloud_search.search_enabled') %}
+            <div class="col-md-2 control-cloud">
+              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">启用云搜索</a>
+            </div>
+          {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'waiting' %}
+            <div class="col-md-10 form-group control-cloud">
+              <span class="text-warning">正在索引数据，预计1～3天完成</span>
+            </div>
+          {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'ok' %}
+            <div class="col-md-2 control-cloud success">
+              <span class="text-success">已启用</span>
+            </div>
+            <div class="controls col-md-8 cloud-warning">
+              <a class="btn btn-primary mhs" href="{{ path('admin_edu_cloud_search_close') }}">关闭</a>
+            </div>
+          {% endif %}
+
+        {% endif %}
+      </div>
+
+      <div class="help-block">云搜索提供强大的全文搜索引擎，帮助学员轻松、精确的搜索课程、话题、老师、资讯。</div>
+    {% endif %}
+
+
+</form>
+
+{% endblock %}
