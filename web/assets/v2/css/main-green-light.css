@@ -166,38 +166,6 @@
   width: 50px;
   height: 50px;
 }
-.group-page .panel-default > .panel-heading {
-  color: #313131;
-  border-bottom: 1px solid #ebebeb;
-}
-.group-page .alert {
-  word-break: break-all;
-  background: #fafafa;
-  color: #313131;
-}
-.group-page .alert img {
-  max-width: 100%;
-}
-.group-page .group-user-info hr {
-  margin: 15px 0;
-  background: #e1e1e1;
-}
-.group-page .group-user-info .group-message {
-  margin: 0;
-}
-.group-page .group-user-info .group-message span {
-  float: left;
-  width: 50%;
-  text-align: center;
-  font-size: 12px;
-  color: #919191;
-}
-.group-page .group-user-info .group-message strong {
-  display: block;
-  color: #313131;
-  font-size: 18px;
-  font-weight: normal;
-}
 .group-page .hideContent {
   border: 1px solid #999;
   padding: 10px;
@@ -6462,30 +6430,6 @@ textarea {
 .sidenav .list-group .list-group-item.active > a {
   color: #81d867;
 }
-.thread-list .media-left {
-  padding-right: 18px;
-}
-.thread-list .media-heading {
-  margin-bottom: 10px;
-}
-.thread-list span.reply-num {
-  display: inline-block;
-  width: 60px;
-  height: 60px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  background: #f1f1f1;
-  color: #919191;
-  text-align: center;
-  font-size: 12px;
-}
-.thread-list span.reply-num strong {
-  display: block;
-  font-size: 20px;
-  font-weight: normal;
-  padding: 7px 0 0;
-}
 .sidenav {
   padding: 20px 0 10px 0;
   margin-bottom: 20px;
@@ -8757,7 +8701,7 @@ textarea {
     padding-right: 0;
     margin-bottom: 10px;
   }
-  .article-list-mian .article-item .media .thumb-img {
+  .article-list .article-item .media .thumb-img {
     width: 100%;
   }
 }
@@ -8772,7 +8716,7 @@ textarea {
   padding-left: 10px;
   line-height: 25px;
 }
-.article-list-mian .media .thumb-img {
+.article-list .media .thumb-img {
   width: 260px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -12534,4 +12478,48 @@ textarea {
 .user-center-header .user-about-content {
   height: 135px;
   overflow: hidden;
+}
+.group-user-info hr {
+  margin: 15px 0;
+  background: #e1e1e1;
+}
+.group-user-info .group-message {
+  margin: 0;
+}
+.group-user-info .group-message span {
+  float: left;
+  width: 50%;
+  text-align: center;
+  font-size: 12px;
+  color: #919191;
+}
+.group-user-info .group-message strong {
+  display: block;
+  color: #313131;
+  font-size: 18px;
+  font-weight: normal;
+}
+.thread-list .media-left {
+  padding-right: 18px;
+}
+.thread-list .media-heading {
+  margin-bottom: 10px;
+}
+.thread-list .reply-num {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  background: #f1f1f1;
+  color: #919191;
+  text-align: center;
+  font-size: 12px;
+}
+.thread-list .reply-num strong {
+  display: block;
+  font-size: 20px;
+  font-weight: normal;
+  padding: 7px 0 0;
 }
