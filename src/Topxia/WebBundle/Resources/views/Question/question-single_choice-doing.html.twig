@@ -5,7 +5,7 @@
   {% include 'TopxiaWebBundle:Question:question-choice-options.html.twig' %}
 
 {% if itemResult.answer|default(null) %}
- {% set answerChoiceIndex = itemResult.answer|chr %}
+ {% set answerChoiceIndex = (65+itemResult.answer[0])|chr %}
  {% else %}
  {% set answerChoiceIndex = '-1' %}
 {% endif %}

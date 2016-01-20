@@ -12,36 +12,39 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
     public function getProfile($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
-	public function addProfile($profile)
-	{
+    public function addProfile($profile)
+    {
         $affected = $this->getConnection()->insert($this->table, $profile);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert profile error.');
         }
-        return $this->getProfile($this->getConnection()->lastInsertId());
-	}
 
-	public function updateProfile($id, $profile)
-	{
+        return $this->getProfile($this->getConnection()->lastInsertId());
+    }
+
+    public function updateProfile($id, $profile)
+    {
         $this->getConnection()->update($this->table, $profile, array('id' => $id));
         return $this->getProfile($id);
-	}
+    }
 
     public function findProfilesByIds(array $ids)
     {
-        if(empty($ids)){
+        if (empty($ids)) {
             return array();
         }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
     public function dropFieldData($fieldName)
-    {   
+    {
         $fieldNames = array(
             'intField1',
             'intField2',
@@ -78,11 +81,12 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             'varcharField8',
             'varcharField9',
             'varcharField10');
+
         if (!in_array($fieldName, $fieldNames)) {
             throw $this->createDaoException('fieldName error');
         }
 
-        $sql="UPDATE {$this->table} set {$fieldName} =null ";
+        $sql = "UPDATE {$this->table} set {$fieldName} =null ";
         return $this->getConnection()->exec($sql);
     }
 
@@ -90,32 +94,35 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createProfileQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ? : array();
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchProfileCount($conditions)
     {
         $builder = $this->createProfileQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
     private function createProfileQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions,function($v){
-            if($v === 0){
+        $conditions = array_filter($conditions, function ($v) {
+            if ($v === 0) {
                 return true;
             }
-                
-            if(empty($v)){
+
+            if (empty($v)) {
                 return false;
             }
+
             return true;
-        });
+        }
+
+        );
 
         if (isset($conditions['mobile'])) {
             $conditions['mobile'] = "{$conditions['mobile']}%";
@@ -131,13 +138,14 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'idcard') {
             $conditions['idcard'] = "%{$conditions['keyword']}%";
-        } 
+        }
 
-        return  $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'user_profile')
-            ->andWhere('mobile LIKE :mobile')
-            ->andWhere('truename LIKE :truename')
-            ->andWhere('idcard LIKE :idcard')
-            ->andWhere('qq LIKE :qq');
+        return $this->createDynamicQueryBuilder($conditions)
+                    ->from($this->table, 'user_profile')
+                    ->andWhere('mobile LIKE :mobile')
+                    ->andWhere('truename LIKE :truename')
+                    ->andWhere('idcard LIKE :idcard')
+                    ->andWhere('id IN (:ids)')
+                    ->andWhere('qq LIKE :qq');
     }
 }
