@@ -31,8 +31,6 @@ define(function(require, exports, module) {
 						btnClear.hide();
 					}
 				})
-
-				$("#search-nav-tabs").lavaLamp();
 			},
 			OnBtnClear: function(e) {
 				var $this = $(e.currentTarget);
