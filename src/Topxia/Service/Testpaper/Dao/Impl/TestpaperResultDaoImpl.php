@@ -20,7 +20,7 @@ class TestpaperResultDaoImpl extends BaseDao implements TestpaperResultDao
 
     public function findTestpaperResultByTestpaperIdAndUserIdAndActive($testpaperId, $userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE testId = ? AND userId = ? AND active = 1";
+    	$sql = "SELECT * FROM {$this->table} WHERE testId = ? AND userId = ? AND active = 1 ORDER BY id DESC ";
         return $this->getConnection()->fetchAssoc($sql, array($testpaperId, $userId));
     }
 
