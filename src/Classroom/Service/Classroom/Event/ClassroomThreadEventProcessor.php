@@ -6,7 +6,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomThreadEventProcessor
 {
-
     public function onThreadCreate(ServiceEvent $event)
     {
         $thread = $event->getSubject();
@@ -17,15 +16,16 @@ class ClassroomThreadEventProcessor
     {
         $thread = $event->getSubject();
         $this->getClassroomService()->waveClassroom($thread['targetId'], 'threadNum', -1);
-        $this->getClassroomService()->waveClassroom($thread['targetId'], 'postNum', 0-$thread['postNum']);
+        $this->getClassroomService()->waveClassroom($thread['targetId'], 'postNum', 0 - $thread['postNum']);
     }
 
     public function onPostCreate(ServiceEvent $event)
     {
         $post = $event->getSubject();
         $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', +1);
-        
-        $isTeacher = $this->getClassroomService()->isClassroomTeacher($post['targetId'],$post['userId']);
+
+        $isTeacher = $this->getClassroomService()->isClassroomTeacher($post['targetId'], $post['userId']);
+
         if ($isTeacher) {
             $this->getThreadService()->setPostAdopted($post['id']);
             $this->getThreadService()->setThreadSolved($post['threadId']);
@@ -35,12 +35,13 @@ class ClassroomThreadEventProcessor
     public function onPostDelete(ServiceEvent $event)
     {
         $post = $event->getSubject();
-        $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', 0-$event->getArgument('deleted'));
-        
+        $this->getClassroomService()->waveClassroom($post['targetId'], 'postNum', 0 - $event->getArgument('deleted'));
+
         $adoptedPostCount = $this->getThreadService()->searchPostsCount(array(
             'threadId' => $post['threadId'],
-            'adopted' => 1
+            'adopted'  => 1
         ));
+
         if (empty($adoptedPostCount)) {
             $this->getThreadService()->cancelThreadSolved($post['threadId']);
         }

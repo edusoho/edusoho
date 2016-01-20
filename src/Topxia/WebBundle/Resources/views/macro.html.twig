@@ -51,20 +51,22 @@
 
 {% macro paginator(paginator, class) %}
   {% if paginator.lastPage > 1 %}
-    <ul class="pagination {{ class }}">
-      {% if paginator.currentPage != paginator.firstPage %}
-        <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">首页</a></li>
-        <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></li>
-      {% endif %}
-      {% for page in paginator.pages %}
-        <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
-      {% endfor %}
+    <nav class=" {{ class|default('text-center') }}">
+      <ul class="pagination">
+        {% if paginator.currentPage != paginator.firstPage %}
+          <li><a  href="{{ paginator.getPageUrl(paginator.firstPage) }}">首页</a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.previousPage) }}"><i class="es-icon es-icon-chevronleft"></i></a></li>
+        {% endif %}
+        {% for page in paginator.pages %}
+          <li {% if page == paginator.currentPage %}class="active"{% endif %}><a href="{{ paginator.getPageUrl(page) }}">{{ page }}</a></li>
+        {% endfor %}
 
-      {% if paginator.currentPage != paginator.lastPage %}
-        <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
-        <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">尾页</a></li>
-      {% endif %}
-    </ul>
+        {% if paginator.currentPage != paginator.lastPage %}
+          <li><a  href="{{ paginator.getPageUrl(paginator.nextPage) }}"><i class="es-icon es-icon-chevronright"></i></a></li>
+          <li><a  href="{{ paginator.getPageUrl(paginator.getLastPage()) }}">尾页</a></li>
+        {% endif %}
+      </ul>
+    </nav>
   {% endif %}
 {% endmacro %}
 

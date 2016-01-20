@@ -135,11 +135,12 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params        = array();
-        $params['key'] = $file['metas2'][$level]['key'];
+        $params           = array();
+        $params['key']    = $file['metas2'][$level]['key'];
+        $params['fileId'] = $file['id'];
 
         if (!empty($token['data']['watchTimeLimit'])) {
-            $params['trialSeconds'] = $token['data']['watchTimeLimit'];
+            $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
         $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));
@@ -194,13 +195,14 @@ class HLSController extends BaseController
 
     public function clefAction(Request $request, $id, $token)
     {
-        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
+        $token       = $this->getTokenService()->verifyToken('hls.clef', $token);
 
         if (empty($token)) {
             return $this->makeFakeTokenString();
         }
 
-        if (!empty($token['userId'])) {
+        if (!$inWhiteList && !empty($token['userId'])) {
             if (!($this->getCurrentUser()->isLogin()
                 && $this->getCurrentUser()->getId() == $token['userId'])) {
                 return $this->makeFakeTokenString();
@@ -253,19 +255,6 @@ class HLSController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function getVideoBeginning(Request $request, $level, $userId = 0)

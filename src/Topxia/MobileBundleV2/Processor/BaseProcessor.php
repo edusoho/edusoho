@@ -6,18 +6,22 @@ use Topxia\MobileBundleV2\Controller\MobileBaseController;
 
 class BaseProcessor {
 
-    const API_VERSIN_RANGE = '3.3.0';
+    const API_VERSIN_RANGE = '3.4.0';
+
     public $formData;
     public $controller;
     public $request;
     protected $delegator;
-    private function __construct($controller) {
+    private function __construct($controller)
+    {
         $this->controller = $controller;
-        $this->request = $controller->request;
-        $this->formData = $controller->formData;
+        $this->request    = $controller->request;
+        $this->formData   = $controller->formData;
     }
-    public static function getInstance($class, $controller) {
-        $instance = new $class($controller);
+
+    public static function getInstance($class, $controller)
+    {
+        $instance           = new $class($controller);
         $processorDelegator = new ProcessorDelegator($instance);
         $instance->setDelegator($processorDelegator);
         return $processorDelegator;
@@ -25,10 +29,11 @@ class BaseProcessor {
 
     protected function stopInvoke()
     {
-        $this->delegator ->stopInvoke();
+        $this->delegator->stopInvoke();
     }
 
-    protected function getParam($name, $default = null) {
+    protected function getParam($name, $default = null)
+    {
         $result = $this->request->get($name, $default);
         return $result;
     }
@@ -36,8 +41,7 @@ class BaseProcessor {
     protected function filterUsersFiled($users)
     {
         $container = $this->controller->getContainer();
-        return array_map(function($user) use ($container)
-        {
+        return array_map(function ($user) use ($container) {
             foreach ($user as $key => $value) {
                 if (!in_array($key, array(
                     "id", "email", "smallAvatar", "mediumAvatar", "largeAvatar", "nickname", "roles", "locked", "about", "title"))) {
@@ -45,46 +49,45 @@ class BaseProcessor {
                 }
             }
 
-            $user['smallAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
+            $user['smallAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['smallAvatar'], 'avatar.png', true);
             $user['mediumAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['mediumAvatar'], 'avatar.png', true);
-            $user['largeAvatar']  = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
-            
+            $user['largeAvatar'] = $container->get('topxia.twig.web_extension')->getFilePath($user['largeAvatar'], 'avatar-large.png', true);
+
             return $user;
         }, $users);
     }
 
     /**
-    * course-large.png
-    */
+     * course-large.png
+     */
     protected function coverPic($src, $srcType)
     {
         $container = $this->controller->getContainer();
-        return $container->get('topxia.twig.web_extension')->getFilePath($src, $srcType, true);      
+        return $container->get('topxia.twig.web_extension')->getFilePath($src, $srcType, true);
     }
 
     protected function log($action, $message, $data)
     {
-        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,  
-                $data
+        $this->controller->getLogService()->info(MobileBaseController::MOBILE_MODULE, $action, $message,
+            $data
         );
     }
 
     protected function filterAnnouncements($announcements)
     {
         $controller = $this->controller;
-        return array_map(function($announcement) use ($controller)
-        {
+        return array_map(function ($announcement) use ($controller) {
             unset($announcement["userId"]);
             unset($announcement["courseId"]);
             unset($announcement["updatedTime"]);
-            $announcement["content"]     = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
+            $announcement["content"] = $controller->convertAbsoluteUrl($controller->request, $announcement["content"]);
             $announcement["createdTime"] = date('c', $announcement['createdTime']);
             $announcement["startTime"] = date('c', $announcement['startTime']);
             $announcement["endTime"] = date('c', $announcement['endTime']);
             return $announcement;
         }, $announcements);
     }
-    
+
     protected function filterAnnouncement($announcement)
     {
         return $this->filterAnnouncements(array(
@@ -97,16 +100,22 @@ class BaseProcessor {
         $this->request->request->set($name, $value);
     }
 
-    public function setDelegator($processorDelegator) {
+    public function setDelegator($processorDelegator)
+    {
         $this->delegator = $processorDelegator;
     }
 
-    public function getDelegator() {
+    public function getDelegator()
+    {
         return $this->delegator;
     }
-    public function after() {
+
+    public function after()
+    {
     }
-    public function before() {
+
+    public function before()
+    {
     }
 
     protected function getContainer()
@@ -139,20 +148,22 @@ class BaseProcessor {
         return $this->controller->getService('File.UploadFileService');
     }
 
-    protected function getUserService(){
+    protected function getUserService()
+    {
         return $this->controller->getService('User.UserService');
     }
 
-    protected function getMessageService(){
+    protected function getMessageService()
+    {
         return $this->controller->getService('User.MessageService');
     }
 
     protected function getCouponService()
     {
-        return $this->controller->getService('Coupon:Coupon.CouponService');
+        return $this->controller->getService('Coupon.CouponService');
     }
-    
-    protected function getQuestionService ()
+
+    protected function getQuestionService()
     {
         return $this->controller->getService('Question.QuestionService');
     }
@@ -195,7 +206,7 @@ class BaseProcessor {
     protected function getFileService()
     {
         return $this->controller->getService('Content.FileService');
-    }  
+    }
 
     protected function getSettingService()
     {
@@ -222,11 +233,13 @@ class BaseProcessor {
         return $this->controller->getService('Announcement.AnnouncementService');
     }
 
-    public function getEduCloudService(){
+    public function getEduCloudService()
+    {
         return $this->controller->getService('EduCloud.EduCloudService');
     }
 
-    protected function getLogService(){
+    protected function getLogService()
+    {
         return $this->controller->getService('System.LogService');
     }
 
@@ -235,66 +248,79 @@ class BaseProcessor {
         return $this->controller->getService('User.UserFieldService');
     }
 
-    public function createErrorResponse($name, $message) {
+    public function createErrorResponse($name, $message)
+    {
         $error = array(
             'error' => array(
-                'name' => $name,
+                'name'    => $name,
                 'message' => $message
             )
         );
         return $error;
     }
 
-    protected function previewAsMember($member, $courseId, $user) {
-
+    protected function previewAsMember($member, $courseId, $user)
+    {
         if (empty($member)) {
             return null;
         }
-    
+
         $userIsTeacher = $this->controller->getCourseService()->isCourseTeacher($courseId, $user['id']);
+
         if ($userIsTeacher) {
             $member['role'] = 'teacher';
         } else {
-            $userIsStudent = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
+            $userIsStudent  = $this->controller->getCourseService()->isCourseStudent($courseId, $user['id']);
             $member['role'] = $userIsStudent ? "student" : null;
         }
-        
+
         return $member;
     }
-    public function array2Map($learnCourses) {
+
+    public function array2Map($learnCourses)
+    {
         $mapCourses = array();
+
         if (empty($learnCourses)) {
             return $mapCourses;
         }
+
         foreach ($learnCourses as $key => $learnCourse) {
             $mapCourses[$learnCourse['id']] = $learnCourse;
         }
+
         return $mapCourses;
     }
-    protected function getSiteInfo($request, $version) {
-        $site = $this->controller->getSettingService()->get('site', array());
+
+    protected function getSiteInfo($request, $version)
+    {
+        $site   = $this->controller->getSettingService()->get('site', array());
         $mobile = $this->controller->getSettingService()->get('mobile', array());
+
         if (!empty($mobile['logo'])) {
-            $logo = $request->getSchemeAndHttpHost() . '/' . $mobile['logo'];
+            $logo = $request->getSchemeAndHttpHost().'/'.$mobile['logo'];
         } else {
             $logo = '';
         }
+
         $splashs = array();
+
         for ($i = 1; $i < 5; $i++) {
-            if (!empty($mobile['splash' . $i])) {
-                $splashs[] = $request->getSchemeAndHttpHost() . '/' . $mobile['splash' . $i];
+            if (!empty($mobile['splash'.$i])) {
+                $splashs[] = $request->getSchemeAndHttpHost().'/'.$mobile['splash'.$i];
             }
         }
+
         return array(
-            'name' => $site['name'],
-            'url' => $request->getSchemeAndHttpHost() . '/mapi_v' . $version,
-            'host' => $request->getSchemeAndHttpHost(),
-            'logo' => $logo,
-            'splashs' => $splashs,
+            'name'            => $site['name'],
+            'url'             => $request->getSchemeAndHttpHost().'/mapi_v'.$version,
+            'host'            => $request->getSchemeAndHttpHost(),
+            'logo'            => $logo,
+            'splashs'         => $splashs,
             'apiVersionRange' => array(
                 "min" => "1.0.0",
-                "max" => BaseProcessor::API_VERSIN_RANGE
-            ) ,
+                "max" => self::API_VERSIN_RANGE
+            )
         );
     }
 
@@ -315,11 +341,11 @@ class BaseProcessor {
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         } else {
             if (!empty($params)) {
-                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
 
-        curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
         curl_close($curl);
@@ -328,11 +354,11 @@ class BaseProcessor {
     }
 
     /**
-     *把\t\n转化成空字符串
-    */
-    public function filterSpace($content){
-        $pattern='[\\n\\t\\s]';
+     * 把\t\n转化成空字符串
+     */
+    public function filterSpace($content)
+    {
+        $pattern = '[\\n\\t\\s]';
         return preg_replace($pattern, '', $content);
     }
 }
-

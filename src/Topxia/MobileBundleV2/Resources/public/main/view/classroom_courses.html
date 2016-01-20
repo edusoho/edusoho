@@ -2,7 +2,7 @@
   <ul class="ui-list ui-border-tb">
       <li class="ui-border-t" ng-repeat="course in courses" ng-href="#/course/{{ course.id }}">
           <div class="ui-list-img">
-              <img ng-src="{{ course.middlePicture }}" img-error="course" />
+              <img img-src="{{ course.middlePicture }}" img-error="course" />
           </div>
           <div class="ui-list-info">
               <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>

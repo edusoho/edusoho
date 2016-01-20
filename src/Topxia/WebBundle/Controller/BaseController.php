@@ -151,6 +151,50 @@ abstract class BaseController extends Controller
         return new JsonResponse($data);
     }
 
+    protected function getTargetPath($request)
+    {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } elseif ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        if ($targetPath == $this->generateUrl('login', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if (strpos($url[0], $request->getPathInfo()) > -1) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weibo'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'renren'))
+            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
+            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
+            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
+
+        ) {
+            $targetPath = $this->generateUrl('homepage');
+        }
+
+        return $targetPath;
+    }
+
     /**
      * JSONM
      * https://github.com/lifesinger/lifesinger.github.com/issues/118
@@ -169,6 +213,19 @@ abstract class BaseController extends Controller
         } else {
             return new AccessDeniedException();
         }
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+
+        foreach ($whiteList as $value) {
+            if (strpos($userAgent, $value) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getServiceKernel()
