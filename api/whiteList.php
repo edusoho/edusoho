@@ -6,7 +6,8 @@ return array(
 		'/\/api\/users\//',
 		'/\/api\/users\/pages/',
 		'/\/api\/users\/\d+/',
-		'/\/api\/mobileschools\/\w+/'
+		'/\/api\/mobileschools\/\w+/',
+		'/\/api\/classrooms\/\w+\/\members/'
 	),
 	'post' => array(
 		'/\/api\/users/',
