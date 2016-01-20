@@ -2,7 +2,7 @@
 <section class="class-header after {% if 'auditor' in member.role %} auditor{% endif %}">
   <div class="container">
   
-    <ol class="breadcrumb">
+    <ol class="breadcrumb breadcrumb-o">
       <li><a href="{{ path('homepage') }}">首页</a></li>
       {% for breadcrumb in breadcrumbs %}
         <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
