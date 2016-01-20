@@ -58,10 +58,11 @@ define(function(require, exports, module) {
             var $scalebox = $(_obj.get("scalebox"));
             var $subject_lesson_list = $(this.element).find(_obj.get('subject_lesson_list'));
             var $editbox_lesson_list = $(this.element).find(_obj.get('editbox_lesson_list'));
-            var value = '<span class="show-sub"><i class="es-icon es-icon-infooutline mrm"></i>' + '将题目拖至左侧时间条' + '</span>' + '<span class="show-edit">左右拖动选择时间确定位置后松开鼠标</span>';
-
+            var value = '<span class="sub-remask"><i class="es-icon es-icon-infooutline mrm"></i>' + '将题目拖至左侧时间条' + '</span>' + '<span class="remask">左右拖动驻点调整刻度位置或与已有驻点合并<p></p>释放后设置将自动保存</span>';
+            var player = $(document.getElementById('viewerIframe').contentDocument);
+            var _height = player.find('.vjs-progress-control').height()+player.find('.vjs-control-bar').height()+$editbox.height();
             // 显示红色时间轴
-            var $scale = $editbox.find("#default-scale");
+            var $scale = $editbox.find("#default-scale").css('height',_height);
             var $scale_details = $scale.find(".scale-details");
             $scale.css("visibility", "visible");
             $scale_details.css("visibility", "visible");
@@ -89,7 +90,7 @@ define(function(require, exports, module) {
                     } else {
                         $dragcopy.hide();
                     }
-                    _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry);
+                    _obj._moveShow($scale, $scale_details, $scalebox, _obj, arry,event);
                 }
             }).mouseup(function() {
                 // 停止拖动
@@ -190,6 +191,8 @@ define(function(require, exports, module) {
         slideScale: function(e) {
             //避免拖动过程中触发事件
             if (this.get('isDraggable') == 'false') {
+                $('.dashboard-content .mask').show();
+                $('.question-manage').addClass('slideing');
                 var _obj = this;
                 var $this = $(e.currentTarget);
                 var $scalebox = $(_obj.get("scalebox"));
@@ -210,12 +213,14 @@ define(function(require, exports, module) {
                 });
                 $(document).mousemove(function(event) {
                     if (isMove) {
-                        _obj._moveShow($this, $time, $scalebox, _obj, arry);
+                        _obj._moveShow($this, $time, $scalebox, _obj, arry,event);
                     }
                 }).mouseup(function() {
                     $(document).off('mousemove');
                     $(document).off('mouseup');
+                    $('.dashboard-content .mask').hide();
                     $scalebox.find('.scale.blue').removeClass('show');
+                    $('.question-manage').removeClass('slideing');
                     // 避免上次被隐藏的元素响应鼠标点击事件，｛发生一次合并后，再次增加时间轴会再次响应。｝
                     if ($this.length > 0 && $this.is(":visible")) {
                         isMove = false;
@@ -283,7 +288,7 @@ define(function(require, exports, module) {
             //阻止默认事件，父层的拖动
             e.stopPropagation();
         },
-        _moveShow: function($scale, $scale_details, $scalebox, _obj, arry) {
+        _moveShow: function($scale, $scale_details, $scalebox, _obj, arry,event) {
             var offsetenter = $(".dashboard-content").offset().left + $(".dashboard-content").width();
 
             var left = 0;
@@ -340,7 +345,7 @@ define(function(require, exports, module) {
             var _obj = this;
             var $_editbox = $(_obj.get("editbox"));
             var _width = $_editbox.width();
-            $_editbox.find('.scale-white').remove();
+            $_editbox.find('.scale.white').remove();
             // 以秒为单位
             var _totaltime = _obj.get("videotime");
             var _partnum = _obj.get("timepartnum");
@@ -351,7 +356,7 @@ define(function(require, exports, module) {
                     var num = i * _parttime;
                     var time = _obj._convertTime(num);
 
-                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale-white" style="left:' + i * _partwidth + 'px" data-toggle="tooltip" data-placement="top"' + 'title="' + time + '"></a>');
+                    $_editbox.find(_obj.get("scalebox")).append('<a class="scale white" style="left:' + i * _partwidth + 'px"><div class="scale-details">'+time+'</div></a>');
                 }
                 $('[data-toggle="tooltip"]').tooltip();
             }
@@ -382,7 +387,8 @@ define(function(require, exports, module) {
                     var $lesson_list = $newscale.find('.lesson-list');
                     var questionMarkers = initMarkerArry[i].questionMarkers;
                     for (var j = 0; j < questionMarkers.length; j++) {
-                        var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
+                        var pic = questionMarkers[j].includeImg ? '<span class="glyphicon glyphicon-picture"></span>':"";
+                        var $li = $('<li class="row item-lesson" question-id="' + questionMarkers[j].questionId + '" id="' + questionMarkers[j].id + '"><div class="col-md-6 title"><div class="before"><span class="number"><span class="num">' + questionMarkers[j].seq + '</span>.</span>' + pic + questionMarkers[j].stem.replace(/<.*?>/ig, "") + '</div><i class="icon-close es-icon es-icon-icon_close_circle"></i></div></li>');
                         $li.appendTo($lesson_list);
                     }
                 }

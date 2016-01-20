@@ -47,7 +47,7 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
 
     public function findQuestionMarkersByMarkerId($markerId)
     {
-        $sql             = "SELECT * FROM {$this->table} where markerId = ?";
+        $sql             = "SELECT * FROM {$this->table} where markerId = ? order by seq asc";
         $questionMarkers = $this->getConnection()->fetchAll($sql, array($markerId));
         return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
     }
@@ -69,6 +69,13 @@ class QuestionMarkerDaoImpl extends BaseDao implements QuestionMarkerDao
         $sql             = "SELECT * FROM {$this->table} where questionId = ?";
         $questionMarkers = $this->getConnection()->fetchAll($sql, array($questionId));
         return $this->createSerializer()->unserializes($questionMarkers, $this->serializeFields);
+    }
+
+    public function searchQuestionMarkersCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function addQuestionMarker($questionMarker)

@@ -982,6 +982,10 @@ course_lesson_question_marker_show:
     pattern:  /course/lesson/{markerId}/questionmarker/show
     defaults: { _controller: TopxiaWebBundle:Marker:showMarkerQuestion }
 
+course_lesson_question_marker_answer_show:
+    pattern:  /course/lesson/questionmarker/{questionId}/show
+    defaults: { _controller: TopxiaWebBundle:Marker:showQuestionAnswer }
+
 course_lesson_question_marker_next:
     pattern:  /course/lesson/{markerId}/questionmarker/next
     defaults: { _controller: TopxiaWebBundle:Marker:doNextTest }

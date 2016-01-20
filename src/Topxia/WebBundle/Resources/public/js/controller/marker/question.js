@@ -40,14 +40,6 @@ define(function(require, exports, module) {
                 if (markerJson.id == undefined) {
                     markerJson.id = data.markerId;
                     $marker.attr('id', data.markerId);
-                    var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                    var markerData = {
-                        "id": data.markerId,
-                        "time": markerJson.second,
-                        "text": "new",
-                        "finished": false
-                    };
-                    player.addMarker([markerData]);
                 }
                 //显示时间轴
                 if ($marker.is(":hidden")) {
@@ -72,13 +64,6 @@ define(function(require, exports, module) {
                     $marker.remove();
                 }
                 //删除驻点
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                var markers = player.get("player").markers.getMarkers();
-                for(var key in markers) {
-                    if(markerJson.id == markers[key].id) {
-                        player.get("player").markers.remove(key);  
-                    }
-                }
             });
             return markerJson;
         },
@@ -91,23 +76,6 @@ define(function(require, exports, module) {
             };
             $.post(url, param, function(data) {
                 //删除驻点
-                var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                var markers = player.get("player").markers.getMarkers();
-                for (var key in markers) {
-                    if (markerJson.id == markers[key].id) {
-                        markers[key].time = markerJson.second;
-                        var finished = markers[key].finished;
-                        player.get("player").markers.remove(key);
-                        var markerData = {
-                            "id": markerJson.id,
-                            "time": markerJson.second,
-                            "text": "update",
-                            "finished": finished
-                        };
-                        player.addMarker([markerData]);
-                        break;
-                    }
-                }
             });
 
             return markerJson;
@@ -120,13 +88,6 @@ define(function(require, exports, module) {
                 if ($marker.is(":hidden")) {
                     $marker.remove();
                     //查找
-                    var player = window.frames["viewerIframe"].window.BalloonPlayer;
-                    var markers = player.get("player").markers.getMarkers();
-                    for (var key in markers) {
-                        if (markerJson.id == markers[key].id) {
-                            player.get("player").markers.remove(key);
-                        }
-                    }
                 }
             });
         },

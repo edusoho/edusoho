@@ -61,7 +61,7 @@ define(function(require, exports, module) {
                             },
                             markerEscape: true,
                             onMarkerReached:function(marker,player){
-                              if(self.isPlaying() && marker.finished == false){
+                              if(self.isPlaying() ){
                                 window.BalloonPlayer.trigger('onMarkerReached', marker.id);
                               }
                             }
@@ -216,6 +216,7 @@ define(function(require, exports, module) {
                     var marker = markers[key];
                     player.markers.remove(key);
                     player.markers.add([marker]);
+                    player.currentTime(parseFloat(markers[key].time)+0.5);
                     break;
                 }
             }

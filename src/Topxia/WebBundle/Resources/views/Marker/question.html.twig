@@ -17,19 +17,24 @@
 					</select>
 				</div>
 				<div class="col-xs-5">
-					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词"  ></div>
+					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词"  >
+				</div>
 				<div class="col-xs-2">
-					<button class="btn btn-primary btn-md">搜索</button>
+					<button class="btn btn-primary">搜索</button>
 				</div>
 			</div>
 		</form>
-		<div class="row list-title">
-			<div class="col-xs-6">题干</div>
-			<div class="col-xs-2">题型</div>
-			<div class="col-xs-2">难度</div>
-			<div class="col-xs-2">操作</div>
+		<div class="list-title">
+			<div class="row ">
+				<div class="col-xs-6">题干</div>
+				<div class="col-xs-3 content">题型</div>
+				<div class="col-xs-1 content">难度</div>
+				<div class="col-xs-2 content ">操作</div>
+			</div>
 		</div>
-		<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list"></ul>
+		<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list">
+			
+		</ul>
 	</div>
 </div>
 <script>app.load('marker/question')</script>

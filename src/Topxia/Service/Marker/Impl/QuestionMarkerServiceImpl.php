@@ -38,6 +38,12 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
         return $this->getQuestionMarkerDao()->findQuestionMarkersByQuestionId($questionId);
     }
 
+    public function searchQuestionMarkersCount($conditions)
+    {
+        $conditions = $this->_prepareQuestionMarkerConditions($conditions);
+        return $this->getQuestionMarkerDao()->searchQuestionMarkersCount($conditions);
+    }
+
     public function addQuestionMarker($questionId, $markerId, $seq)
     {
         $question = $this->getQuestionService()->getQuestion($questionId);
@@ -120,6 +126,11 @@ class QuestionMarkerServiceImpl extends BaseService implements QuestionMarkerSer
     public function searchQuestionMarkers($conditions, $orderBy, $start, $limit)
     {
         return $this->getQuestionMarkerDao()->searchQuestionMarkers($conditions, $orderBy, $start, $limit);
+    }
+
+    protected function _prepareQuestionMarkerConditions($conditions)
+    {
+        return $conditions;
     }
 
     protected function getQuestionMarkerDao()

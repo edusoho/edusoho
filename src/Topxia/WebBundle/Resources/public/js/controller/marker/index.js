@@ -10,7 +10,7 @@ define(function(require, exports, module) {
         var lessonId = videoHtml.data("lesson-id");
         var mediaId = videoHtml.data("lesson-mediaid");
 
-        var playerUrl = '/course/'+courseId+'/lesson/'+lessonId+'/player';
+        var playerUrl = '/course/'+courseId+'/lesson/'+lessonId+'/player?hideBeginning=true';
         var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
         $("#lesson-video-content").html(html);
         var messenger = new Messenger({
@@ -25,22 +25,6 @@ define(function(require, exports, module) {
             var markersUrl =  '/course/lesson/'+lessonId+'/marker/show';
             player.setMarkerEscepe(false);
             player.setControlBarLock(true);
-             $.ajax({
-                type: "post",
-                url: markersUrl,
-                dataType: "json",
-                success:function(data){
-                    for(var index in data) {
-                        var marker={
-                            "id":data[index].id,
-                            "time":data[index].second,
-                            "text":"ads",
-                            "finished":data[index].finish
-                        };
-                        player.addMarker([marker]);
-                    }
-                }
-            });
         });
         $.get($('.question').data('url'),function(response){
         	$('.question').html(response);

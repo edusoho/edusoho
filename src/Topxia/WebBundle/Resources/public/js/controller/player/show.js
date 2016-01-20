@@ -101,9 +101,9 @@ define(function(require, exports, module) {
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
         });
-        player.on("onMarkerReached",function(markerId){
+        player.on("onMarkerReached",function(markerId,questionId){
             // $('.vjs-break-overlay-text').html("");
-            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId});
+            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
         });
 
         player.on("timechange", function(){

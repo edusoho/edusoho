@@ -117,15 +117,13 @@ class MarkerServiceImpl extends BaseService implements MarkerService
             return true;
         }
 
-        foreach ($questionMarkers as $key => $questionMarker) {
-            $questionMarkerResult = $this->getQuestionMarkerResultService()->findByUserIdAndQuestionMarkerId($userId, $questionMarker['id']);
+        $questionMarkerResults = $this->getQuestionMarkerResultService()->findByUserIdAndMarkerId($userId, $markerId);
 
-            if (empty($questionMarkerResult) || $questionMarkerResult['status'] == 'none') {
-                return false;
-            }
+        if (!in_array('none', ArrayToolkit::column($questionMarkerResults, 'status')) && !array_diff(ArrayToolkit::column($questionMarkers, 'id'), ArrayToolkit::column($questionMarkerResults, 'questionMarkerId'))) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     protected function prepareMarkerConditions($conditions)
