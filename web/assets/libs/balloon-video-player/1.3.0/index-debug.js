@@ -12523,7 +12523,7 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
    //default setting
    var defaultSetting = {
       markerStyle: {
-         'width':'8px',
+         'width':'4px',
          'border-radius': '10%',
       },
       markerTip: {
@@ -12620,7 +12620,7 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
             .attr("data-marker-time", setting.markerTip.time(marker));
             
          if(marker.finished !=undefined && marker.finished==true){
-             markerDiv.css('background-color','red');
+             markerDiv.addClass('bg-primary');
          }
          // add user-defined class to marker
          if (marker.class) {
@@ -12660,7 +12660,7 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
                markerDiv.css({"left": getPosition(marker) + '%'})
                   .attr("data-marker-time", markerTime);
                if(marker.finished !=undefined && marker.finished==true){
-                   markerDiv.css('background-color','red');
+                   markerDiv.addClass('bg-primary');
                }
             }
          }
@@ -12778,11 +12778,21 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
          var getFastMarkerTime = function(){
            for (var i = 0; i < markersList.length; i++) {
              var marker = markersList[i];
-             if(marker.finished ==undefined || marker.finished ==false){
+             if(marker.finished ==undefined || marker.finished == false){
               return marker.time;
              }
            }
            return -1;
+         }
+
+         var isFinishAllMarker = function(){
+          for (var i = 0; i < markersList.length; i++) {
+             var marker = markersList[i];
+             if(marker.finished ==undefined || marker.finished == false){
+              return false;
+             }
+           }
+           return true;
          }
 
          var fastMarkerTime = getFastMarkerTime();
@@ -12794,7 +12804,9 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
            //   player.pause();
            // }
            player.currentTime(fastMarkerTime);
+           return ;
          }
+
 
          if (currentMarkerIndex != -1) {
             // check if staying at same marker
@@ -12806,6 +12818,8 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
          }
          
          // check first marker, no marker is selected
+         // 
+         
          if (markersList.length > 0 &&
             currentTime < setting.markerTip.time(markersList[0])) {
             newMarkerIndex = -1;
@@ -12813,7 +12827,6 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
             // look for new index
             for (var i = 0; i < markersList.length; i++) {
                nextMarkerTime = getNextMarkerTime(i);
-               
                if(currentTime >= setting.markerTip.time(markersList[i]) &&
                   currentTime < nextMarkerTime) {
                   
@@ -12822,11 +12835,10 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
                }
             }
          }
-         
          // set new marker index
          if (newMarkerIndex != currentMarkerIndex) {
             // trigger event
-            if (newMarkerIndex != -1 && options.onMarkerReached) {
+            if (  newMarkerIndex != -1 && Math.round(currentTime,0) == setting.markerTip.time(markersList[newMarkerIndex]) && options.onMarkerReached) {
               options.onMarkerReached(markersList[newMarkerIndex],player);
             }
             currentMarkerIndex = newMarkerIndex;
@@ -12928,6 +12940,61 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
 
    videojs.plugin('markers', registerVideoJsMarkersPlugin);
 })(videojs);
+});
+define("balloon-video-player/1.2.0/src/plugins/pluck/pluck-debug", [], function(require, exports, module){
+(function() {
+    var defaults = {
+          text: 'Owned_Stamp.png',
+          opacity: 100,
+          display:true,
+      },
+      extend = function() {
+        var args, target, i, object, property;
+        args = Array.prototype.slice.call(arguments);
+        target = args.shift() || {};
+        for (i in args) {
+          object = args[i];
+          for (property in object) {
+            if (object.hasOwnProperty(property)) {
+              if (typeof object[property] === 'object') {
+                target[property] = extend(target[property], object[property]);
+              } else {
+                target[property] = object[property];
+              }
+            }
+          }
+        }
+        return target;
+      };
+      createDom = function(video,text){
+        div = document.createElement('div');
+        div.className = 'vjs-pluck';
+        div.id = 'vjs-pluck';
+        span = document.createElement('span');
+        span.innerHTML = text;
+        span.className = 'vjs-pluck-text';
+        div.appendChild(span);
+        video.appendChild(div);
+        return div;
+      };
+
+    videojs.plugin('pluck', function(options) {
+      var settings, video, div, img;
+      settings = extend(defaults, options);
+
+      video = this.el();
+      div = document.getElementById('vjs-pluck');
+
+      if(settings.display == false){
+        if(div != undefined){
+          div.style.visibility='hidden';
+        }
+      }else{
+        div = div == undefined?createDom(video,settings.text):div;
+        div.style.visibility='visible';
+      }
+    });
+  })(videojs);
 });
 define("balloon-video-player/1.3.0/src/plugins/pluck/pluck-debug", [], function(require, exports, module){
 (function() {
