@@ -95,6 +95,25 @@ define(function(require, exports, module) {
                         default_res : currentRes,
                         dynamic_source : self.get('url')
                     });
+
+                    player.hotkeys({
+                        volumeStep: 0.1,
+                        customKeys: {
+                          // Create custom hotkeys
+                          ctrldKey: {
+                            key: function(e) {
+                              // Toggle something with CTRL + D Key
+                              return (e.ctrlKey && e.which === 68);
+                            },
+                            handler: function(player, options) {
+                              // Using mute as an example
+                              if (options.enableMute) {
+                                player.muted(!player.muted());
+                              }
+                            }
+                          }
+                        }
+                      });
                 });
 
                 player.on('changeRes', function() {
