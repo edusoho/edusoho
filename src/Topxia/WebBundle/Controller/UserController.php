@@ -33,19 +33,17 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        // $user                 = $this->tryGetUser($id);
-        // $userProfile          = $this->getUserService()->getUserProfile($user['id']);
-        // $userProfile['about'] = strip_tags($userProfile['about'], '');
-        // $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        // $user                 = array_merge($user, $userProfile);
+        $user                 = $this->tryGetUser($id);
+        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        $userProfile['about'] = strip_tags($userProfile['about'], '');
+        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
+        $user                 = array_merge($user, $userProfile);
 
-        // if (in_array('ROLE_TEACHER', $user['roles'])) {
-        //     return $this->_teachAction($user);
-        // }
+        if (in_array('ROLE_TEACHER', $user['roles'])) {
+            return $this->_teachAction($user);
+        }
 
-        // return $this->_learnAction($user);
-        $user = $this->tryGetUser($id);
-        return $this->_aboutAction($user);
+        return $this->_learnAction($user);
     }
 
     public function pageShowAction()
@@ -288,7 +286,7 @@ class UserController extends BaseController
             'friends'        => $followings,
             'userProfile'    => $userProfile,
             'myfollowings'   => $myfollowings,
-            'allUserProfile' => isset($followingUserProfiles) ?: array(),
+            'allUserProfile' => isset($followingUserProfiles) ? $followingUserProfiles : array(),
             'friendNav'      => 'following'
         ));
     }
@@ -321,7 +319,7 @@ class UserController extends BaseController
             'friends'        => $followers,
             'userProfile'    => $userProfile,
             'myfollowings'   => $myfollowings,
-            'allUserProfile' => isset($followerUserProfiles) ?: array(),
+            'allUserProfile' => isset($followerUserProfiles) ? $followerUserProfiles : array(),
             'friendNav'      => 'follower'
         ));
     }
