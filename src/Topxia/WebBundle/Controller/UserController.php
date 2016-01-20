@@ -288,7 +288,7 @@ class UserController extends BaseController
             'friends'        => $followings,
             'userProfile'    => $userProfile,
             'myfollowings'   => $myfollowings,
-            'allUserProfile' => $followingUserProfiles ?: array(),
+            'allUserProfile' => isset($followingUserProfiles) ?: array(),
             'friendNav'      => 'following'
         ));
     }
@@ -321,7 +321,7 @@ class UserController extends BaseController
             'friends'        => $followers,
             'userProfile'    => $userProfile,
             'myfollowings'   => $myfollowings,
-            'allUserProfile' => $followerUserProfiles ?: array(),
+            'allUserProfile' => isset($followerUserProfiles) ?: array(),
             'friendNav'      => 'follower'
         ));
     }
