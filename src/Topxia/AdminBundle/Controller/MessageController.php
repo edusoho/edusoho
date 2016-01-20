@@ -2,21 +2,22 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $fields = $request->query->all();
+        $fields     = $request->query->all();
         $conditions = array(
-            'content' => '',
-            'nickname' => '',
+            'content'   => '',
+            'nickname'  => '',
             'startDate' => 0,
-            'endDate' => time(),
+            'endDate'   => time()
         );
+
         if (!empty($fields)) {
             $conditions = $this->convertConditions($fields);
         }
@@ -35,19 +36,20 @@ class MessageController extends BaseController
         );
 
         $usersFromId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
-        $usersToId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
-        $users = ArrayToolkit::index(array_merge($usersFromId, $usersToId), 'id');
+        $usersToId   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
+        $users       = ArrayToolkit::index(array_merge($usersFromId, $usersToId), 'id');
 
         return $this->render('TopxiaAdminBundle:Message:index.html.twig', array(
-            'users' => $users,
-            'messages' => $messages,
-            'paginator' => $paginator, ));
+            'users'     => $users,
+            'messages'  => $messages,
+            'paginator' => $paginator));
     }
 
     public function deleteChoosedMessagesAction(Request $request)
     {
-        $ids = $request->request->get('ids');
+        $ids    = $request->request->get('ids');
         $result = $this->getMessageService()->deleteMessagesByIds($ids);
+
         if ($result) {
             return $this->createJsonResponse(array('status' => 'failed'));
         } else {
@@ -58,11 +60,14 @@ class MessageController extends BaseController
     protected function convertConditions($conditions)
     {
         if (!empty($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            if (empty($user)) {
-                throw $this->createNotFoundException(sprintf('用户名为%s的用户不存在', $conditions['nickname']));
+            $userConditions['nickname'] = trim($conditions['nickname']);
+
+            $userCount = $this->getUserService()->searchUserCount($userConditions);
+
+            if ($userCount) {
+                $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $userCount);
+                $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
             }
-            $conditions['fromId'] = $user['id'];
         }
 
         unset($conditions['nickname']);
