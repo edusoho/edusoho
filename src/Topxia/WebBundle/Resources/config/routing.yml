@@ -298,6 +298,10 @@ course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: TopxiaWebBundle:Course:info }
 
+course_lesson_list:
+    pattern:  /course/{id}/lesson/list
+    defaults: { _controller: TopxiaWebBundle:Course:lessonList }
+
 course_notes:
     pattern:  /course/{courseId}/notes
     defaults: { _controller: TopxiaWebBundle:Course\Note:showList }

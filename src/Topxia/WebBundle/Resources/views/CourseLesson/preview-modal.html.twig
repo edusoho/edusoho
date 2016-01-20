@@ -65,6 +65,7 @@
 {% endblock %}
 
 {% block footer %}
+  {% if course.buyable %}
   <span class="es-qrcode bottom mrl" data-url="{{path('course_lesson_qrcode',{lessonId: lesson.id,courseId: lesson.courseId})}}">
     <i class="es-icon es-icon-qrcode"></i>
     <span class="qrcode-popover">
@@ -112,5 +113,5 @@
     {% endif %}
   {% endif %} 
  {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
-
+{% endif %}
 {% endblock %}

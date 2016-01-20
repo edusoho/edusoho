@@ -34,8 +34,7 @@ class ArticleController extends BaseController
 
         $featuredConditions = array(
             'status'     => 'published',
-            'featured'   => 1,
-            'hasPicture' => 1
+            'featured'   => 1
         );
 
         $featuredArticles = $this->getArticleService()->searchArticles(

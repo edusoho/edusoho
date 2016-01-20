@@ -115,7 +115,7 @@
 				<div class="panel-body">
 					<div id="article-thumb-container">
 					  	{% if article.thumb|default(null) %}
-						  	<img src='{{ filepath(article.thumb) }}'>
+						  	<img class="img-responsive" src='{{ filepath(article.thumb) }}'>
 					  	{% endif %}
 				   	</div>
 				   	<br>
@@ -124,6 +124,7 @@
 					<input type="hidden" name="thumb" value="{{article.thumb |default()}}" id="article-thumb">
 					<input type="hidden" name="originalThumb" value="{{article.originalThumb |default()}}" id="article-originalThumb">
 					<p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
+					<p class="help-block mbs">请推荐尺寸754*424px。
 				</div>
 			</div>
 
