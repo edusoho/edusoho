@@ -170,7 +170,8 @@ class GroupController extends BaseController
             'groups'      => $groups,
             'user'        => $user,
             'myJoinGroup' => $myJoinGroup,
-            'newGroups'   => $newGroups
+            'newGroups'   => $newGroups,
+            'keyWord'     => $keyWord
         ));
     }
 
