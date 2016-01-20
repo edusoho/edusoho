@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% block title %}搜索 - {{ parent() }}{% endblock %}
 {% block content %}
-  <ol class="breadcrumb">
+  <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
     <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页') }}</a></li>
     <li><a href="{{path('group')}}">{{setting('group.name', '小组主页')}}</a></li>
     <li><a href="{{path('group_search_group')}}">{{setting('search.name', '搜索小组')}}</a></li>

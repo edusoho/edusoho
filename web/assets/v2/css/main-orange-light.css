@@ -5560,6 +5560,8 @@ a.homework-essay-textarea-pack-up {
 }
 .breadcrumb.breadcrumb-o {
   background: none;
+  margin: 12px auto;
+  padding: 8px 0;
 }
 .breadcrumb li.active {
   color: #919191;
@@ -6404,15 +6406,6 @@ textarea {
   font-size: 20px;
   font-weight: normal;
   padding: 7px 0 0;
-}
-.breadcrumb {
-  background: none;
-}
-.breadcrumb a {
-  color: #616161;
-}
-.breadcrumb > li + li:before {
-  color: #616161;
 }
 .sidenav {
   padding: 20px 0 10px 0;
