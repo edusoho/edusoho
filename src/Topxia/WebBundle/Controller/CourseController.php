@@ -92,6 +92,16 @@ class CourseController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 0;
+            $coursesTemp = $this->getCourseService()->searchCourses(
+                $conditions,
+                $orderBy,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $courses = array_merge($courses, $coursesTemp);
+        }
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         if (empty($group)) {
