@@ -62,7 +62,7 @@ class CourseLessonController extends BaseController
 
         //开启限制加入
 
-        if (empty($lesson['free']) && empty($course['buyable'])) {
+        if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
@@ -74,7 +74,7 @@ class CourseLessonController extends BaseController
 
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
-        if (empty($lesson['free']) && empty($course['tryLookable']) && !($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
+        if (empty($lesson['free']) && !(!empty($course['tryLookable']) && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -94,13 +94,18 @@ class CourseLessonController extends BaseController
         }
 
         $hasVideoWatermarkEmbedded = 0;
+        $tryLookTime               = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (empty($lesson['free']) && empty($course['tryLookable']) && empty($timelimit) && $file['storage'] != 'cloud') {
+            if (empty($lesson['free']) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
+                }
+
+                if ($course["parentId"] > 0) {
+                    return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
                 }
 
                 return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
@@ -687,7 +692,7 @@ class CourseLessonController extends BaseController
         if ($user->isLogin()) {
             $appUrl = "{$host}/mapi_v2/mobile/main#/lesson/{$courseId}/{$lessonId}";
         } else {
-            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$id}";
+            $appUrl = "{$host}/mapi_v2/mobile/main#/course/{$courseId}";
         }
 
         $token = $this->getTokenService()->makeToken('qrcode', array(
@@ -850,6 +855,23 @@ class CourseLessonController extends BaseController
         return $this->forward('TopxiaWebBundle:Testpaper:reDoTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
     }
 
+    public function statusLabelAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $media  = array();
+
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
+            $media = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return $this->Render('TopxiaWebBundle:CourseLesson/Part:status-label.html.twig', array(
+            'item'   => $lesson,
+            'course' => $course,
+            'media'  => $media
+        ));
+    }
+
     private function checkTestPaper($lessonId, $testId, $status)
     {
         $user = $this->getCurrentUser();
@@ -896,19 +918,6 @@ class CourseLessonController extends BaseController
                 return $message = '实时考试，不能再考一次!';
             }
         }
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Mac", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function getCourseService()

@@ -1,7 +1,7 @@
 define(function(require, exports, module) {
 
   var Validator = require('bootstrap.validator');
-  require('ckeditor');
+  require('es-ckeditor');
   require('common/validator-rules').inject(Validator);
   var Notify = require('common/bootstrap-notify');
   require('/bundles/topxiaadmin/js/controller/system/common');
@@ -50,7 +50,7 @@ define(function(require, exports, module) {
                 $('[data-modle="'+old_modle_value+'"]').addClass("btn-primary");
                 modle = old_modle_value;
 
-                Notify.danger("请先开启云短信功能！");
+                Notify.danger("请先到【管理后台】-【教育云】-【设置】-【云短信设置】中开启云短信哦~");
             }
         }
 

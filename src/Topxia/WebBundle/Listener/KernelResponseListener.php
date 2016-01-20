@@ -51,7 +51,7 @@ class KernelResponseListener
             $isFillUserInfo = $this->checkUserinfoFieldsFill($currentUser);
 
             if (!$isFillUserInfo) {
-                $url = $this->container->get('router')->generate('login_after_fill_userinfo', array('goto' => $request->getPathInfo()));
+                $url = $this->container->get('router')->generate('login_after_fill_userinfo', array('goto' => $this->getTargetPath($request)));
 
                 $response = new RedirectResponse($url);
                 $event->setResponse($response);
@@ -72,6 +72,51 @@ class KernelResponseListener
             $event->setResponse($response);
             return;
         }
+    }
+
+    protected function generateUrl($router, $params = array(), $withHost = false)
+    {
+        return $this->container->get('router')->generate($router, $params, $withHost);
+    }
+
+    protected function getTargetPath($request)
+    {
+        if ($request->query->get('goto')) {
+            $targetPath = $request->query->get('goto');
+        } elseif ($request->getSession()->has('_target_path')) {
+            $targetPath = $request->getSession()->get('_target_path');
+        } else {
+            $targetPath = $request->headers->get('Referer');
+        }
+
+        if ($targetPath == $this->generateUrl('login', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        $url = explode('?', $targetPath);
+
+        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
+            return $this->generateUrl('homepage');
+        }
+
+        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
+
+        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weibo'))
+            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'renren'))
+            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
+            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
+            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
+
+        ) {
+            $targetPath = $this->generateUrl('homepage');
+        }
+
+        return $targetPath;
     }
 
     private function checkUserinfoFieldsFill($user)

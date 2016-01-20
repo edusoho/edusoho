@@ -3,7 +3,11 @@ namespace Topxia\Service\User\AuthProvider;
 
 class DefaultAuthProvider implements AuthProvider
 {
-
+    public function checkConnect()
+    {
+        return false;
+    }
+    
     public function register($registration)
     {
         return $registration;

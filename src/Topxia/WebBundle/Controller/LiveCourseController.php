@@ -205,7 +205,14 @@ class LiveCourseController extends BaseController
         $params = array();
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
-            $params['role'] = 'teacher';
+            $teachers =$this->getCourseService()->findCourseTeachers($courseId);
+            $teacher = array_shift($teachers);
+            if ($teacher['userId'] == $user['id']) {
+                $params['role'] = 'teacher';
+            } else {
+                $params['role'] = 'speaker';
+            }
+
         } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
@@ -214,11 +221,9 @@ class LiveCourseController extends BaseController
 
         $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
 
-        if (!empty($liveAccount['provider']) && $liveAccount['provider'] == 'sanmang') {
-            $params['id']       = $user['id'];
-            $params['nickname'] = $user['nickname'];
-            return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
-        }
+        $params['id']       = $user['id'];
+        $params['nickname'] = $user['nickname'];
+        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
 
         $params['liveId']   = $lesson['mediaId'];
         $params['provider'] = $lesson['liveProvider'];

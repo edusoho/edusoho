@@ -84,10 +84,6 @@ register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
 
-register_nickname_update:
-    pattern:  /register/nickname/update
-    defaults: { _controller: TopxiaWebBundle:Register:nicknameUpdate }
-
 register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
@@ -116,6 +112,10 @@ register_email_or_mobile_check:
 register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
+
+invitecode_check:
+    pattern:  /register/invitecode/check
+    defaults: { _controller: TopxiaWebBundle:Register:invitecodeCheck }
 
 register_captcha_check:
     pattern:  /register/captcha/check
@@ -285,10 +285,6 @@ course_create:
 course_select:
     pattern:  /course/select
     defaults: { _controller: TopxiaWebBundle:Course:select }
-
-course_search:
-    pattern:  /course/search
-    defaults: { _controller: TopxiaWebBundle:Course:search }
 
 course_show:
     pattern:  /course/{id}
@@ -1328,6 +1324,10 @@ user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
+my_page_show: 
+    pattern:  /my/page/show
+    defaults: { _controller: TopxiaWebBundle:User:pageShow }
+
 user_teach: 
     pattern:  /user/{id}/teach
     defaults: { _controller: TopxiaWebBundle:User:teach }
@@ -1704,6 +1704,20 @@ my_bill:
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
+my_invite_code:
+    path:     /my/invitecode
+    defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
+invite_promote_link:
+    path:     /my/invitecode/promotelink
+    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
+
+write_invitecode:
+    path:     /my/invitecode/writeinvitecode
+    defaults: { _controller: TopxiaWebBundle:Coin:writeInvitecode }
+receive_coupon:
+    path:     /my/invitecode/receivecoupon
+    defaults: { _controller: TopxiaWebBundle:Coin:receiveCoupon }
+
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }

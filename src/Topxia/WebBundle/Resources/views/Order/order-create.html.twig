@@ -40,26 +40,19 @@
         {% endif %}
         </div>
 
-        {% if (is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false)) or setting('coin.coin_enabled') %}
+     
         <div class="order-detail-bg">
+          {% if targetType in ['course','vip','classroom'] %}
 
-        {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) %}
-          {% if version_compare(plugin_version('Coupon'),'1.3.3','>') %}
-          {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
-          {% else %}
-            {% include 'TopxiaWebBundle:Order:order-item-coupon.html.twig' %}
+            {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
+
           {% endif %}
-        {% endif %}
 
-        {% if is_plugin_installed("Coupon") and setting('coupon.enabled') and (targetType in ['course','vip','classroom']) and showCoupon|default(false) and setting('coin.coin_enabled') %}
-        <div class="divider-line"></div>
-        {% endif %}
-
-        {% if setting('coin.coin_enabled') %}
-        	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
-        {% endif %}
+          {% if setting('coin.coin_enabled') %}
+          	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
+          {% endif %}
         </div>
-        {% endif %}
+
 
         <div class="form-group">
           <div class="total-price">

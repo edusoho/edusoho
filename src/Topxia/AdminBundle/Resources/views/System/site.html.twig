@@ -68,7 +68,7 @@
         <button class="btn btn-default" 
         id="site-favicon-remove" 
         type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>删除</button>
-        <p class="help-block">请上传ico格式的图标文件。</p>
+        <p class="help-block">请上传ico格式的图标文件, 建议大小16*16或者32*32。</p>
         <input type="hidden" name="favicon" value="{{ site.favicon }}">
       </div>
     </div>

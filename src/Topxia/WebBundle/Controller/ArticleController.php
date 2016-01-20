@@ -78,7 +78,6 @@ class ArticleController extends BaseController
     public function categoryNavAction(Request $request, $categoryCode)
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($categoryCode);
-
         return $this->render('TopxiaWebBundle:Article/Part:category.html.twig', array(
             'rootCategories' => $rootCategories,
             'categories'     => $categories,
@@ -138,6 +137,8 @@ class ArticleController extends BaseController
             return $this->createMessageResponse('error', '文章不是发布状态，请查看！');
         }
 
+        $this->getArticleService()->viewArticle($id);
+
         $conditions = array(
             'status' => 'published'
         );
@@ -166,8 +167,6 @@ class ArticleController extends BaseController
             $seoKeyword = ArrayToolkit::column($tags, 'name');
             $seoKeyword = implode(",", $seoKeyword);
         }
-
-        $this->getArticleService()->hitArticle($id);
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 

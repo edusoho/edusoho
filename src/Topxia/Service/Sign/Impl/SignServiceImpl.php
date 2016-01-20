@@ -32,7 +32,7 @@ class SignServiceImpl extends BaseService implements SignService
             ->updateSignLog($sign['id'], array('rank' => $statistics['signedNum']));
         $this->refreshKeepDays($userId, $targetType, $targetId);
 
-        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent());
+        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent($sign));
 
         return $sign;
     }
