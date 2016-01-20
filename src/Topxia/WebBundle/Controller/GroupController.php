@@ -840,6 +840,8 @@ class GroupController extends BaseController
     {
         $user = $this->getCurrentUser();
 
+        $myJoinGroup = array();
+
         if ($user['id']) {
             $membersCount = $this->getGroupService()->searchMembersCount(array('userId' => $user['id']));
 
