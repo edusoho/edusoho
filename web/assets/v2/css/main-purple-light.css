@@ -12352,21 +12352,41 @@ textarea {
     padding: 45px 0;
   }
 }
+.user-center-header .container {
+  padding: 0 70px;
+}
+@media (max-width: 1199px) {
+  .user-center-header .container {
+    padding: 0 30px;
+  }
+}
+@media (max-width: 767px) {
+  .user-center-header .container {
+    padding: 0 10px;
+  }
+}
 .user-center-header .user-avatar {
   position: relative;
   float: left;
   width: 66.67%;
   padding-left: 200px;
+  margin-top: 20px;
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .user-center-header .user-avatar {
     width: 100%;
     float: none;
+  }
+}
+@media (max-width: 767px) {
+  .user-center-header .user-avatar {
     text-align: center;
     padding-left: 0;
   }
   .user-center-header .user-avatar .avatar-wrap {
     position: relative;
+    margin-bottom: 10px;
+    border: 3px solid rgba(255, 255, 255, 0.5);
   }
   .user-center-header .user-avatar .avatar-wrap .avatar-lg {
     width: 60px !important;
@@ -12386,32 +12406,32 @@ textarea {
   top: 0;
   left: 0;
   border: 6px solid #585560;
-  border: 6px solid rgba(255, 255, 255, 0.3);
+  border: 6px solid rgba(255, 255, 255, 0.5);
 }
 .user-center-header .name {
   color: #fff;
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 @media (max-width: 767px) {
   .user-center-header .name {
-    font-size: 20px;
-    margin-top: 10px;
+    font-size: 16px;
   }
 }
-.user-center-header .name small {
-  color: #919191;
-  margin: 0 10px;
-  font-size: 14px;
+.user-center-header .position {
+  margin-bottom: 10px;
+  color: #585560;
+  color: rgba(255, 255, 255, 0.5);
 }
-.user-center-header .name > a {
-  color: #9f9d9b;
+.user-center-header .position > a {
+  color: #585560;
+  color: rgba(255, 255, 255, 0.5);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.user-center-header .name > a:hover {
+.user-center-header .position > a:hover {
   color: #fff;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -12420,7 +12440,7 @@ textarea {
 }
 .user-center-header .mates {
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #fff;
 }
 @media (max-width: 767px) {
