@@ -80,7 +80,7 @@
                         <ul class="ui-list">
                             <li class="ui-border-t" ng-if="course.teachers[0]">
                                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : course.teachers[0].id })">
-                                    <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
+                                    <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" img-error="avatar" />
                                 </div>
                                 <div class="ui-list-info">
                                     <h4 class="ui-nowrap">{{ course.teachers[0].nickname }}
@@ -107,7 +107,7 @@
                         <ul class="ui-list">
                             <li class="ui-border-t" ng-if="reviews[0]">
                                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
-                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" />
+                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" img-error="avatar" />
                                 </div>
                                 <div class="ui-list-info">
                                     <h4 class="ui-nowrap ui-review-header">
