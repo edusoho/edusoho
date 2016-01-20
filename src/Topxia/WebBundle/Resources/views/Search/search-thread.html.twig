@@ -1,0 +1,48 @@
+<div class="alert alert-blank alert-sm">
+	EduSoho教育云为您找到话题结果约 <span class="color-danger">{{counts}}</span>个
+</div>
+
+<ul class="nav nav-pills mbl js-nav-pills">
+	<li {% if not targetType %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type})}}" data-url="">全部话题</a></li>
+	<li {% if targetType =='group' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'group'})}}" data-url="">小组话题</a></li>
+	<li {% if targetType =='classroom' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'classroom'})}}" data-url="">班级话题</a></li>
+	<li {% if targetType =='course' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'course'})}}" data-url="">课程话题</a></li>
+</ul>
+
+<div class="media-list">
+	{% for thread in resultSet%}
+		<div class="media media-search">
+			<div class="media-left">
+				<div class="reply">
+					{{thread.postNum}}<br>
+					<span class="text-sm">回复</span>
+				</div>
+			</div>
+			<div class="media-body">
+				<div class="title"><a class="link-dark" href="
+				{% if thread.targetType == 'group'%}
+					{{path('group_thread_show',{id:thread.targetId,threadId:thread.id})}}
+				{% elseif thread.targetType == 'classroom'%}
+					{{path('classroom_thread_show',{classroomId:thread.targetId,threadId:thread.id})}}
+				{% elseif thread.targetType == 'course'%}
+					{{path('course_thread_show',{courseId:thread.targetId,threadId:thread.id})}}
+				{% endif %}
+
+				" target="_blank">{{thread.title|raw}}</a></div>
+				<div class="text-sm color-gray">来自
+					{% if thread.targetType == 'group'%}
+						{% set group = data('Group',{'groupId':thread.targetId}) %}
+						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">{{group.title|default('')}}</a>
+					{% elseif thread.targetType == 'classroom'%}
+						{% set classroom = data('Classroom',{'classroomId':thread.targetId}) %}
+						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">{{classroom.title|default('')}}</a>
+					{% elseif thread.targetType == 'course'%}
+						{% set course = data('Course',{'courseId':thread.targetId}) %}
+						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
+					{% endif %}
+					<span class="mlm">{{thread.createdTime|smart_time}}</span>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+</div>

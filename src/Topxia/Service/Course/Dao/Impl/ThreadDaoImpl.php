@@ -122,6 +122,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, $this->table)
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('courseId = :courseId')
                         ->andWhere('lessonId = :lessonId')
                         ->andWhere('userId = :userId')

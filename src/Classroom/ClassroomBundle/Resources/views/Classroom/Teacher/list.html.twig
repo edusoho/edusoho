@@ -5,7 +5,7 @@
 {% do load_script('classroombundle/controller/classroom/detail/teacher-list') %}
 {% block main %}
 
-  <div class="teacher-list row">
+  <div class="teacher-list no-shadow row">
   {% for teacher in teachers %}
     {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
     {% set member = members[teacher.id] %}
