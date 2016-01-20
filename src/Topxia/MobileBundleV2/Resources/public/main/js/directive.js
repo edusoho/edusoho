@@ -374,6 +374,10 @@ directive('uiSliderBox', function($parse) {
             }
           });
 
+          if (element[0].clientWidth) {
+            element.css('height', (element[0].clientWidth / 1.9) + "px");
+          }
+          
           function initSlider () {
               var slider = new fz.Scroll('.' + attrs.slider, {
                   role: 'slider',
