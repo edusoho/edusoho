@@ -24,6 +24,8 @@
     <div class="media-body">{{ article.body|plain_text(150) }}</div>
   </div>
   {% else %}
-  <div class="content">{{ article.body|plain_text(150) }}</div>
+    <div class="content">
+      {{ article.body|plain_text(150)}}
+    </div>
   {% endif %}
 </article>

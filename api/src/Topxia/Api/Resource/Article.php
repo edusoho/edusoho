@@ -25,6 +25,7 @@ class Article extends BaseResource
 
         $site = $this->getSettingService()->get('site', array());
         $res['source'] = $site['name'];
+
         return $res;
     }
 
