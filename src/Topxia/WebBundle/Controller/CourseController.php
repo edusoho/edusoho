@@ -102,6 +102,7 @@ class CourseController extends CourseBaseController
                 $paginator->getPerPageCount()
             );
             $courses = array_merge($courses, $coursesTemp);
+            $courses = array_slice($courses,0,12);
         }
 
         $group = $this->getCategoryService()->getGroupByCode('course');
