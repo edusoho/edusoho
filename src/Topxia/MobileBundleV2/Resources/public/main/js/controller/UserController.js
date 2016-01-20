@@ -38,6 +38,18 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 		self.targetService();
 	}
 
+	$scope.getUserAvatar = function(user) {
+		if (user.avatar) {
+			return user.avatar;
+		}
+
+		if (user.mediumAvatar) {
+			return user.mediumAvatar;
+		}
+
+		return "";
+	}
+
 	this.initService();
 }
 
@@ -95,6 +107,18 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 		service($stateParams.targetId, function(data) {
 			$scope.users = getStudentArray(data.resources);
 		});
+	}
+
+	$scope.getUserAvatar = function(user) {
+		if (user.avatar) {
+			return user.avatar;
+		}
+
+		if (user.mediumAvatar) {
+			return user.mediumAvatar;
+		}
+
+		return "";
 	}
 }
 
