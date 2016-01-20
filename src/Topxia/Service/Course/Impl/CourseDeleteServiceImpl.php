@@ -31,8 +31,8 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
     public function deleteLessonResult($lessonId)
     {
         $testpaper = $this->getTestpaperDao()->getTestpaper($lessonId);
-        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperId($testpaper['id']);
-        $this->getTestpaperItemResultDao()->deleteTestpaperItemResultByTestpaperId($testpaper['id']);
+        $status = 'reviewing';
+        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperIdAndStatus($testpaper['id'],$status);
         return true;
     }
     
