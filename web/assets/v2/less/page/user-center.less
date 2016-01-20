@@ -1,7 +1,21 @@
 .user-center-header {
+  position: relative;
   height: 300px;
   padding: 60px 0;
   background-color: #1b122d;
+  z-index: 1;
+  .mask {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 0 !important;
+  }
+  .blurr-bg {
+    z-index: -1;
+  }
   @media(max-width:@screen-xs-max) {
     padding: 45px 0;
   }
