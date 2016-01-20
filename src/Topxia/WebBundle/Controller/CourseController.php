@@ -96,7 +96,7 @@ class CourseController extends CourseBaseController
             $conditions['recommended'] = 0;
             $coursesTemp = $this->getCourseService()->searchCourses(
                 $conditions,
-                $orderBy,
+                'createdTime',
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
