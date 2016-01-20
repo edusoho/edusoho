@@ -34,7 +34,7 @@
       </div>
     </div>
   
-    <div class="col-md-3 group-side">
+    {#<div class="col-md-3 group-side">
       {% if is_granted('ROLE_ADMIN') %}
         <div class="group-topic-btn">
           <a href="{{path('group_add')}}" class="btn btn-success" role="button">
@@ -107,6 +107,7 @@
       {% endif %}
       {% include 'TopxiaWebBundle:Group:new-group-list.html.twig' %}
 
-    </div>
+    </div>#}
+    {% include 'TopxiaWebBundle:Group:sidebar.html.twig' %}
   </div>
 {% endblock %}
