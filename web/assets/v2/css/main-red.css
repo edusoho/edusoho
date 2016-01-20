@@ -178,31 +178,6 @@
 .group-page .alert img {
   max-width: 100%;
 }
-.group-page .group-topic-btn a {
-  display: block;
-  height: 45px;
-  line-height: 30px;
-  margin-bottom: 10px;
-}
-.group-page .group-topic-btn a i {
-  font-size: 18px;
-  margin-right: 10px;
-}
-.group-page .group-search {
-  position: relative;
-}
-.group-page .group-search .form-control {
-  height: 40px;
-  color: #c1c1c1;
-}
-.group-page .group-search .btn-nobg {
-  background: transparent;
-  border: none;
-  position: absolute;
-  right: 0;
-  top: 5px;
-  color: #c1c1c1;
-}
 .group-page .group-user-info hr {
   margin: 15px 0;
   background: #e1e1e1;
@@ -3014,16 +2989,16 @@ select:-webkit-autofill {
   color: #e83d2c !important;
 }
 .text-sm {
-  font-size: 12px;
+  font-size: 12px !important;
 }
 .text-md {
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .text-lg {
-  font-size: 16px;
+  font-size: 16px !important;
 }
 .text-xlg {
-  font-size: 18px;
+  font-size: 18px !important;
 }
 .tac {
   text-align: center;
@@ -5736,13 +5711,13 @@ textarea.form-control-o {
 .btn-ghost-white {
   color: #fff;
   border: 1px solid #fff;
-  background: none;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 .btn-ghost-white:hover,
 .btn-ghost-white:focus,
 .btn-ghost-white.focus {
   color: #fff;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 .btn-link {
   color: #313131;
@@ -6250,6 +6225,9 @@ textarea {
 .form-control {
   color: #616161;
   border-color: #e1e1e1;
+}
+.form-control.form-control-lg {
+  height: 40px;
 }
 .form-control::-webkit-input-placeholder {
   color: #919191;
@@ -6871,6 +6849,27 @@ textarea {
 }
 .es-step li.doing {
   color: #616161;
+}
+.search-with-btn {
+  position: relative;
+}
+.search-with-btn.search-sm .form-control {
+  height: 34px;
+}
+.search-with-btn.search-sm .btn {
+  top: 2px;
+}
+.search-with-btn .form-control {
+  height: 40px;
+  color: #c1c1c1;
+}
+.search-with-btn .btn {
+  background: transparent;
+  border: none;
+  position: absolute;
+  right: 0;
+  top: 5px;
+  color: #c1c1c1;
 }
 .class-serve > ul {
   padding: 20px 10px;
@@ -8840,11 +8839,6 @@ textarea {
 .course-detail-header {
   position: relative;
 }
-.course-detail-header .breadcrumb {
-  margin: 12px auto;
-  padding: 8px 0;
-  background: none;
-}
 .course-detail-header .es-section {
   position: relative;
   padding: 0;
@@ -9622,11 +9616,6 @@ textarea {
     top: 2px;
     left: 2px;
   }
-}
-.class-header .breadcrumb {
-  margin: 12px auto;
-  padding: 8px 0;
-  background: none;
 }
 .class-header .class-bg-layer {
   top: 8px;
