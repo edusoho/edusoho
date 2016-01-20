@@ -33,17 +33,19 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $id)
     {
-        $user                 = $this->tryGetUser($id);
-        $userProfile          = $this->getUserService()->getUserProfile($user['id']);
-        $userProfile['about'] = strip_tags($userProfile['about'], '');
-        $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
-        $user                 = array_merge($user, $userProfile);
+        // $user                 = $this->tryGetUser($id);
+        // $userProfile          = $this->getUserService()->getUserProfile($user['id']);
+        // $userProfile['about'] = strip_tags($userProfile['about'], '');
+        // $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
+        // $user                 = array_merge($user, $userProfile);
 
-        if (in_array('ROLE_TEACHER', $user['roles'])) {
-            return $this->_teachAction($user);
-        }
+        // if (in_array('ROLE_TEACHER', $user['roles'])) {
+        //     return $this->_teachAction($user);
+        // }
 
-        return $this->_learnAction($user);
+        // return $this->_learnAction($user);
+        $user = $this->tryGetUser($id);
+        return $this->_aboutAction($user);
     }
 
     public function pageShowAction()
@@ -65,6 +67,12 @@ class UserController extends BaseController
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
         return $this->_learnAction($user);
+    }
+
+    public function aboutAction(Request $request, $id)
+    {
+        $user = $this->tryGetUser($id);
+        return $this->_aboutAction($user);
     }
 
     public function teachAction(Request $request, $id)
@@ -498,6 +506,16 @@ class UserController extends BaseController
         }
 
         return $user;
+    }
+
+    protected function _aboutAction($user)
+    {
+        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        return $this->render('TopxiaWebBundle:User:about.html.twig', array(
+            'user'        => $user,
+            'userProfile' => $userProfile,
+            'type'        => 'about'
+        ));
     }
 
     protected function _learnAction($user)
