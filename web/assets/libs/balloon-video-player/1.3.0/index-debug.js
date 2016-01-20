@@ -13346,9 +13346,6 @@ define("balloon-video-player/1.3.0/src/plugins/progressTips/progressTips-debug",
     var init;
     init = function() {
       var player;
-      if (this.techName !== "Html5") {
-        return;
-      }
       player = this;
       $(".vjs-progress-control").after($("      <div id='vjs-tip'>      <div id='vjs-tip-arrow'></div>      <div id='vjs-tip-inner'></div>      </div>    "));
       $(".vjs-progress-control").on("mousemove", function(event) {

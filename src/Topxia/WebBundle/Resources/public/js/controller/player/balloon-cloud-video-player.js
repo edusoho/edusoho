@@ -68,6 +68,12 @@ define(function(require, exports, module) {
                         }
                     });
 
+                plugins = $.extend(plugins, {
+                        progressTips: {
+                        }
+                    });
+
+
                 var player = videojs(elementId, {
                     techOrder: ["flash", "html5"],
                     controls: true,
