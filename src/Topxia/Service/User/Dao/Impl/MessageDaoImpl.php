@@ -40,6 +40,8 @@ class MessageDaoImpl extends BaseDao implements MessageDao
                     ->andWhere('createdTime = :createdTime')
                     ->andWhere('createdTime >= :startDate')
                     ->andWhere('createdTime < :endDate')
+                    ->andWhere('fromId IN (:fromIds)')
+                    ->andWhere('toId IN (:toIds)')
                     ->andWhere('content LIKE :content');
     }
 

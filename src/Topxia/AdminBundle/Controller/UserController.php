@@ -25,9 +25,22 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
+        $userCount = $this->getUserService()->searchUserCount($conditions);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $userCount,
+            20
+        );
+        $users = $this->getUserService()->searchUsers(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
         //根据mobile查询user_profile获得userIds
 
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile') {
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
             $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
             $userProfiles  = $this->getUserService()->searchUserProfiles(
                 array('mobile' => $conditions['keyword']),
@@ -37,26 +50,28 @@ class UserController extends BaseController
             );
             $userIds = ArrayToolkit::column($userProfiles, 'id');
 
+            $users = $this->getUserService()->searchUsers(
+                $conditions,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
                 $conditions['userIds'] = $userIds;
             }
+
+            $usersTemp = $this->getUserService()->searchUsers(
+                $conditions,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $users = array_merge($users,$usersTemp);
+            
         }
-
-        $userCount = $this->getUserService()->searchUserCount($conditions);
-        $paginator = new Paginator(
-            $this->get('request'),
-            $userCount,
-            20
-        );
-
-        $users = $this->getUserService()->searchUsers(
-            $conditions,
-            array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
 

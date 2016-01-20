@@ -50,18 +50,18 @@ class ApiAuth
             }
 
             if (!$inWhiteList && empty($token)) {
-                throw createNotFoundException("AuthToken is not exist.");
+                throw new \RuntimeException('API Token不存在！');
             }
 
             $token = $this->getUserService()->getToken('mobile_login', $token);
 
             if (!$inWhiteList && empty($token['userId'])) {
-                throw createAccessDeniedException("AuthToken is invalid.");
+                throw new \RuntimeException('API Token不不正确！');
             }
 
             $user = $this->getUserService()->getUser($token['userId']);
             if (!$inWhiteList && empty($user)) {
-                throw createNotFoundException("Auth user is not found.");
+                throw new \RuntimeException('登录用户不存在！');
             }
 
             $this->setCurrentUser($user);
