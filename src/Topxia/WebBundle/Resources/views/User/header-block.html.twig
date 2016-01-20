@@ -1,4 +1,4 @@
-<div class="user-center-header" data-href="{{asset('assets/v2/img/user_bg.jpg')}}" data-sharpness="40">
+<div class="user-center-header" data-href="{{ filepath(user.largeAvatar, 'avatar.png') }}" data-sharpness="40">
   <div class="container clearfix">
     <div class="user-avatar">
       <div class="avatar-wrap">
@@ -35,7 +35,7 @@
     </div>
     <div class="user-about hidden-sm hidden-xs">
       <div class="user-about-content">
-        {% if user.signature %}{{ user.signature }}{% else %}暂无签名{% endif %}
+        {% if user.signature %}{{ user.signature|plain_text(150) }}{% else %}暂无签名{% endif %}
       </div>
     </div>
   </div>

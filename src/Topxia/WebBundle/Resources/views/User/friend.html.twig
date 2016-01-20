@@ -35,8 +35,10 @@
 
         <div class="teacher-bottom">
           <div class="about">
-            {% if allUserProfile[friend.id]|default('') %}
+            {% if allUserProfile[friend.id].about %}
               {{ allUserProfile[friend.id].about|plain_text(30) }}
+            {% else %}
+              暂无简介
             {% endif %}
           </div>
           <div class="metas">

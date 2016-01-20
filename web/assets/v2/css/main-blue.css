@@ -5229,6 +5229,7 @@ a.homework-essay-textarea-pack-up {
 }
 .nav.nav-tabs > li > a {
   border: none;
+  margin-right: 0;
   color: #313131;
   font-size: 16px;
   -webkit-transition: all 0.3s ease;
@@ -5497,21 +5498,6 @@ a.homework-essay-textarea-pack-up {
 .media-group .metas i {
   margin-right: 5px;
   font-size: 14px;
-}
-.group-page-header {
-  border-bottom: none;
-  position: relative;
-  padding: 0 15px;
-  font-size: 16px;
-}
-.group-page-header:after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 0;
-  height: 16px;
-  width: 4px;
-  background: #0081e6;
 }
 .media-dynamic:last-child .media-body {
   border: none;
@@ -12459,6 +12445,7 @@ textarea {
   border-radius: 2px;
 }
 .user-center-header .user-about-content {
-  height: 135px;
+  height: 150px;
   overflow: hidden;
+  line-height: 25px;
 }
