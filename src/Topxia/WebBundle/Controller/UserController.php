@@ -101,7 +101,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
-            12
+            20
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
@@ -155,7 +155,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getClassroomService()->searchClassroomsCount($conditions),
-            12
+            20
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
@@ -196,7 +196,7 @@ class UserController extends BaseController
         $paginator            = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserFavoritedCourseCount($user['id']),
-            10
+            20
         );
 
         $courses = $this->getCourseService()->findUserFavoritedCourses(
@@ -262,7 +262,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->findUserFollowingCount($user['id']),
-            12
+            20
         );
 
         $followings = $this->getUserService()->findUserFollowing($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
@@ -297,7 +297,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getUserService()->findUserFollowerCount($user['id']),
-            12
+            20
         );
 
         $followers = $this->getUserService()->findUserFollowers($user['id'], $paginator->getOffsetCount(), $paginator->getPerPageCount());
@@ -505,7 +505,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
-            12
+            20
         );
 
         $courses = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
@@ -532,7 +532,7 @@ class UserController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($conditions),
-            12
+            20
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(

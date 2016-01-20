@@ -8,7 +8,7 @@
         {% endif %}
       </div>
       <div class="name">
-        {{user.nickname}}<small>{{ user.title }}</small>
+        {{user.nickname}}<small>{{ user.title|plain_text(12) }}</small>
         {% if user.weibo %}
           <a  href="{{ user.weibo }}" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
         {% endif %}
@@ -35,7 +35,7 @@
     </div>
     <div class="user-about hidden-sm hidden-xs">
       <div class="user-about-content">
-        {% if user.signature %}{{ user.signature }}{% else %}暂无签名{% endif %}
+        {% if user.signature %}{{ user.signature|plain_text(150) }}{% else %}暂无签名{% endif %}
       </div>
     </div>
   </div>
