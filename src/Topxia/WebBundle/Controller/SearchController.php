@@ -16,9 +16,9 @@ class SearchController extends BaseController
         $keywords = $request->query->get('q');
         $keywords = $this->filterKeyWord(trim($keywords));
 
-        $pattern = $this->setting('magic.cloud_search');
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
 
-        if ($pattern) {
+        if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
             $type       = $request->query->get('type', 'course');
             $targetType = $request->query->get('targetType', '');
             return $this->redirect($this->generateUrl('cloud_search', array(
@@ -63,13 +63,9 @@ class SearchController extends BaseController
 
         if ($fliter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } else
-
-        if ($fliter == 'live') {
+        } elseif ($fliter == 'live') {
             $conditions['type'] = 'live';
-        } else
-
-        if ($fliter == 'free') {
+        } elseif ($fliter == 'free') {
             $conditions['price'] = '0.00';
         }
 
@@ -194,5 +190,10 @@ class SearchController extends BaseController
     protected function getSearchService()
     {
         return $this->getServiceKernel()->createService('Search.SearchService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
