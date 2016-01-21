@@ -86,7 +86,7 @@ class RegisterController extends BaseController
         }
 
         $inviteCode = '';
-
+        $inviteUser = array();
         if (!empty($fields['inviteCode'])) {
             $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
         }
