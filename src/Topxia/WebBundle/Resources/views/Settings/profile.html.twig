@@ -171,7 +171,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label">个人签名</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
+							<textarea type="text" rows="5" maxlength="150" id="profile_signature" name="profile[signature]" class="form-control">{{ profile.signature|default('') }}</textarea>
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>
