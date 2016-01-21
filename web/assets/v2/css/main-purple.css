@@ -12683,6 +12683,9 @@ textarea {
 .question-manage .editbox .lesson-list .placeholder .sub-remask {
   display: none;
 }
+.ballon-video-player .vjs-marker.bg-primary {
+  background-color: #773cec !important;
+}
 .user-center-header {
   height: 300px;
   padding: 60px 0;
