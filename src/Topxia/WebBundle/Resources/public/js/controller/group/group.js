@@ -102,21 +102,11 @@
                             type: "POST",
                             dataType: 'text',
                             success: function(url) {
-                                if (url) {
-                                    if (url == "/login") {
-                                        window.location.href = url;
-                                        return;
-                                    }
-                                    href = window.location.href;
-                                    var olderHref = checkUrl(href);
-                                    if (checkUrl(url) == olderHref) {
-                                        window.location.reload();
-                                    } else {
-                                        window.location.href = url;
-                                    }
-                                } else {
-                                    window.location.reload();
+                                if (url == "/login") {
+                                    window.location.href = url;
+                                    return;
                                 }
+                                window.location.reload();
                             },
                             error: function(data) {
                                 data = data.responseText;
