@@ -34,6 +34,10 @@ class MarkerController extends BaseController
 
     public function markerMetasAction(Request $request, $mediaId)
     {
+        if (!$this->tryManageMarker()) {
+            return $this->createJsonResponse(false);
+        }
+
         $markersMeta = $this->getMarkerService()->findMarkersMetaByMediaId($mediaId);
         $file        = $this->getUploadFileService()->getFile($mediaId);
 
@@ -57,6 +61,10 @@ class MarkerController extends BaseController
     //更新驻点时间
     public function updateMarkerAction(Request $request)
     {
+        if (!$this->tryManageMarker()) {
+            return $this->createJsonResponse(false);
+        }
+
         $data       = $request->request->all();
         $data['id'] = isset($data['id']) ? $data['id'] : 0;
         $fields     = array(
@@ -89,6 +97,21 @@ class MarkerController extends BaseController
         }
 
         return $this->createJsonResponse($results);
+    }
+
+    protected function tryManageMarker()
+    {
+        $user = $this->getUserService()->getCurrentUser();
+
+        if ($this->getUserService()->hasAdminRoles($user['id'])) {
+            return true;
+        }
+
+        if (in_array("ROLE_TEACHER", $user['roles'])) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getQuestionService()
