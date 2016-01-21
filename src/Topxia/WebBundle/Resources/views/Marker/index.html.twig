@@ -5,13 +5,11 @@
 {% set bodyClass="question-manage" %}
 
 {% block body %}
-    <ul class="breadcrumb">
-      <li>
-        <a href="{{ path('course_show', {id:course.id}) }}">课程</a>
-      </li>
-      <li class="active"><a href="{{ path('course_manage_lesson', {id:course.id}) }}">课时管理</a></li>
-      <li class="active">弹题管理</li>
-    </ul>
+    <div class="mvl mhl">
+      <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class="btn btn-primary mrm">返回课时管理</a>
+      <a href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" class="btn btn-default mrm">预览弹题</a>
+      <span class="text-sm color-gray">本页面所有操作自动保存</span>
+    </div>
   	<div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
