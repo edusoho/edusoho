@@ -233,8 +233,12 @@
     position: relative;
     padding-right: 80px;
     padding-bottom: 8px;
-    border-bottom: 1px solid @gray-lighter;
+    // border-bottom: 1px solid @gray-lighter;
+    @media(max-width:@screen-xs-max) {
+      padding-right: 0;
+    }
     .title {
+      .text-overflow;
       font-size: 12px;
     }
     .content { 
@@ -250,6 +254,9 @@
     top: 9px;
     font-size: 16px;
     color: @gray-medium;
+    @media(max-width:@screen-xs-max) {
+      display: none;
+    }
   }
 }
 
