@@ -15,11 +15,11 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="media">
-          <div class="media-left">
+          <div class="media-left prl">
             {{ web_macro.user_avatar(user, '','avatar-md') }}
           </div>
           <div class="media-body">
-            <p>{{ web_macro.user_link(user , 'link-light') }}</p>
+            <p>{{ web_macro.user_link(user , '') }}</p>
             <div class="metas">
               <a href="{{ path ('group_member_center') }}" class="btn btn-info btn-sm" role="button">我的小组</a>
             </div>
@@ -32,33 +32,35 @@
   {% if myJoinGroup %}
     <div class="panel panel-default">
       <div class="panel-heading">
-        我的小组
+        <h3 class="panel-title">我的小组</h3>
         {% if user.id %} 
           <a href="{{ path ('group_member_join',{type:'myGroup'}) }}" class="more">
           <i class="es-icon es-icon-morehoriz"></i></a>
         {% endif %}
       </div>
       <div class="panel-body">
-        {% for group in myJoinGroup %}
-          {% if loop.index <= 6 %}
-          <div class="media media-group">
-            <div class="media-left">
-              <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
-                <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
-              </a>
-            </div>
-            <div class="media-body">
-              <div class="title">
-                <a class="gray-darker" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+        <div class="media-group-list">
+          {% for group in myJoinGroup %}
+            {% if loop.index <= 6 %}
+            <div class="media media-group">
+              <div class="media-left">
+                <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">
+                  <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md">
+                </a>
               </div>
-              <div class="metas">
-                <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
-                <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+              <div class="media-body">
+                <div class="title">
+                  <a class="gray-darker" href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(9)}}</a>
+                </div>
+                <div class="metas">
+                  <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                  <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          {% endif %}
-        {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   {% endif %}

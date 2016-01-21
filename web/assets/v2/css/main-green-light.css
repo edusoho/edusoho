@@ -5230,6 +5230,9 @@ a.homework-essay-textarea-pack-up {
 .media-body {
   word-break: break-all;
 }
+.media-left {
+  padding-right: 15px;
+}
 .media .media-object-small img {
   width: 48px;
   height: 48px;
@@ -5384,11 +5387,14 @@ a.homework-essay-textarea-pack-up {
 .media-evaluate:hover .actions .show-short-btn {
   visibility: visible;
 }
+.media-group-list {
+  margin-top: -20px;
+}
 .media-group {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .media-group:first-child {
-  margin-top: 15px;
+  margin-top: 20px;
 }
 .media-group .title {
   height: 20px;

@@ -9,11 +9,11 @@
     <div class="col-md-9">
       <div class="panel panel-default">
         <div class="panel-heading">
-          热门小组
+          <h3 class="panel-title">热门小组</h3>
           <a href="{{path('group_search_group')}}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
         </div>
         <div class="panel-body">
-          <div class="row group-grids">
+          <div class="row media-group-list">
             {% for group in activeGroup %}
               <div class="media media-group col-md-4 col-sm-4">
                 <div class="media-left">
@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="panel panel-default">
-        <div class="panel-heading">最近话题</div>
+        <div class="panel-heading"><h3 class="panel-title">最近话题</h3></div>
         <div class="panel-body">
           {% include 'TopxiaWebBundle:Group:groups-threads-ul.html.twig' with {
           threads:recentlyThread,
