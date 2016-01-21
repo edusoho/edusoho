@@ -46,7 +46,7 @@
 
         validator.addItem({
             element: '[name="profile[title]"]',
-            rule: 'maxlength{max:12}',
+            rule: 'chinese_limit{max:24}',
             display:'头衔'
         });
 
