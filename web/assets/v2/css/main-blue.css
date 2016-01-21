@@ -5279,13 +5279,12 @@ a.homework-essay-textarea-pack-up {
   min-height: 34px;
 }
 .media-hot-comment .comments-content {
-  padding: 10px 10px 0 10px;
+  padding: 10px;
+  margin: 10px 0;
   background: #f5f5f5;
   color: #919191;
   line-height: 25px;
   border: 1px solid #f1f1f1;
-  margin-top: 15px;
-  margin-bottom: 10px;
 }
 .media-comment .media-left img,
 .media-subcomment .media-left img {
@@ -8463,14 +8462,22 @@ textarea {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.aricle-carousel .swiper-cat {
+  position: absolute;
+  bottom: 80px;
+  left: 20px;
+  right: 20px;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+  color: #fff;
+  z-index: 1;
+}
 .aricle-carousel .swiper-caption {
   position: absolute;
   font-size: 24px;
-  width: 100%;
-  left: 0;
+  left: 20px;
+  right: 20px;
   bottom: 40px;
-  text-align: left;
-  padding: 0 20px;
   color: #ffffff;
   z-index: 1;
   display: block;
@@ -8578,11 +8585,13 @@ textarea {
 .topic-post-small .content p {
   margin-bottom: 5px;
   font-size: 12px;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
 }
 .article-list-main .article-item {
   margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #efefef;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f5f5f5;
 }
 @media (max-width: 767px) {
   .article-list-main .article-item .media-left {
@@ -8621,7 +8630,6 @@ textarea {
 .article-metas .date {
   height: 45px;
   width: 45px;
-  margin-top: 10px;
   text-align: center;
   color: #919191;
   background-color: #f5f5f5;
@@ -8640,7 +8648,6 @@ textarea {
 }
 .article-metas .metas-body p {
   margin-bottom: 0;
-  margin-top: 10px;
   font-size: 12px;
 }
 .article-metas .metas-body .title {
