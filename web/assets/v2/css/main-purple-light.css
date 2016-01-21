@@ -2719,6 +2719,9 @@ select:-webkit-autofill {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.bg-primary {
+  background-color: #9e9abd !important;
+}
 .color-primary {
   color: #9e9abd !important;
 }
@@ -2754,9 +2757,6 @@ select:-webkit-autofill {
 }
 .gray-lighter {
   color: #f5f5f5 !important;
-}
-.bg-primary {
-  background-color: #9e9abd !important;
 }
 .width-input {
   display: inline-block !important;
