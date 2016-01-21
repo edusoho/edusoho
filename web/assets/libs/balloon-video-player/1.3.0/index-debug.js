@@ -12622,10 +12622,6 @@ define("balloon-video-player/1.3.0/src/plugins/marker/marker-debug", [], functio
          if(marker.finished !=undefined && marker.finished==true){
              markerDiv.addClass('bg-primary');
          }
-         // add user-defined class to marker
-         if (marker.class) {
-            markerDiv.addClass(marker.class);
-         }
          
          // bind click event to seek to marker time
          markerDiv.on('click', function(e) {
