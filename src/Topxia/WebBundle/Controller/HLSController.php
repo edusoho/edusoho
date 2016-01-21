@@ -57,6 +57,10 @@ class HLSController extends BaseController
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
+                if (isset($token['data']['hideBeginning'])) {
+                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'] == "true" ? true : false;
+                }
+
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
             } else {
                 $token['token'] = $this->getTokenService()->makeFakeTokenString();
@@ -72,8 +76,14 @@ class HLSController extends BaseController
                 $params['line'] = $line;
             }
 
-            if (!$this->haveHeadLeader()) {
-                $params['hideBeginning'] = 1;
+            if (isset($token['data']['hideBeginning'])) {
+                if ($token['data']['hideBeginning']) {
+                    $params['hideBeginning'] = $token['data']['hideBeginning'];
+                }
+            } else {
+                if (!$this->haveHeadLeader()) {
+                    $params['hideBeginning'] = 1;
+                }
             }
 
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
@@ -86,21 +96,8 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        if (!$fromApi && $this->setting("developer.balloon_player")) {
-            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
-            return $this->createJsonResponse($playlist);
-        } else {
-            $playlist = $api->get('/hls/playlist', array('streams' => $streams, 'qualities' => $qualities));
-
-            if (empty($playlist['playlist'])) {
-                return $this->createMessageResponse('error', '生成视频播放列表失败！');
-            }
-
-            return new Response($playlist['playlist'], 200, array(
-                'Content-Type'        => 'application/vnd.apple.mpegurl',
-                'Content-Disposition' => 'inline; filename="playlist.m3u8"'
-            ));
-        }
+        $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+        return $this->createJsonResponse($playlist);
     }
 
     protected function haveHeadLeader()
