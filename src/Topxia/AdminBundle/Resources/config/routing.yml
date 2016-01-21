@@ -1336,6 +1336,18 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
 
+admin_edu_cloud_search:
+    pattern: /setting/edu_cloud/search
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
+
+admin_edu_cloud_search_clause:
+    pattern: /setting/edu_cloud/search/clause
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
+
+admin_edu_cloud_search_close:
+    pattern: /setting/edu_cloud/search/close
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
@@ -1378,3 +1390,23 @@ admin_batch_notification_send:
 admin_feedback:
     pattern: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
+
+admin_report_status_ucenter:
+    pattern: /reports/status/ucenter
+    defaults: { _controller: TopxiaAdminBundle:System:ucenter }
+
+admin_report_status_email_send:
+    pattern: /reports/status/email/send
+    defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }

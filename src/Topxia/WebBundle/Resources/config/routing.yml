@@ -298,6 +298,10 @@ course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: TopxiaWebBundle:Course:info }
 
+course_lesson_list:
+    pattern:  /course/{id}/lesson/list
+    defaults: { _controller: TopxiaWebBundle:Course:lessonList }
+
 course_notes:
     pattern:  /course/{courseId}/notes
     defaults: { _controller: TopxiaWebBundle:Course\Note:showList }
@@ -993,6 +997,10 @@ search:
     pattern:  /search
     defaults: { _controller: TopxiaWebBundle:Search:index }
 
+cloud_search:
+    pattern:  /cloud/search
+    defaults: { _controller: TopxiaWebBundle:Search:cloudSearch }
+
 note_show:
     pattern:  /note/{id}
     defaults: { _controller: TopxiaWebBundle:CourseNote:index }
@@ -1266,6 +1274,14 @@ my_favorite_question_preview:
 user_show: 
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
+
+my_page_show: 
+    pattern:  /my/page/show
+    defaults: { _controller: TopxiaWebBundle:User:pageShow }
+
+user_about: 
+    pattern:  /user/{id}/about
+    defaults: { _controller: TopxiaWebBundle:User:about }
 
 user_teach: 
     pattern:  /user/{id}/teach
@@ -1566,6 +1582,9 @@ group_backgroundlogo_set:
 group_search:
     pattern:  /group/{id}/serach
     defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
+group_cloud_search:
+    pattern:  /group/{id}/cloudserach
+    defaults: { _controller: TopxiaWebBundle:GroupThread:cloudSearchResult }
 group_thread_post:
     pattern:  /group/thread/{groupId}/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
@@ -1834,6 +1853,10 @@ edu_cloud_sms_check:
 edu_cloud_sms_send_callback:
     pattern:  /edu_cloud/sms/callback/{targetType}/{targetId}
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
+
+edu_cloud_search_callback:
+    pattern:  /edu_cloud/search/callback
+    defaults: { _controller: TopxiaWebBundle:EduCloud:searchCallBack }
 
 settings_bind_mobile:
     pattern:  /settings/bind_mobile

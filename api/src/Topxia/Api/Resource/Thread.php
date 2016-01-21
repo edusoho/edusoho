@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Thread extends BaseResource
 {
+    /**
+     * @todo  有问题，要重写。
+     */
 	public function create(Application $app, Request $request)
     {
     	try{
@@ -46,11 +49,6 @@ class Thread extends BaseResource
         return $this->error('500', '发帖错误');
     }
 
-    public function filter(&$res)
-    {
-        return $res;
-    }
-
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
@@ -60,4 +58,33 @@ class Thread extends BaseResource
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
+
+    public function filter(&$res)
+    {
+  
+        $res['updateTime'] = date('c', $res['updateTime']);
+        $res['createdTime'] = date('c', $res['createdTime']);
+        $res['threadId'] = $res['id'];
+
+        unset($res['id']);
+        unset($res['relationId']);
+        unset($res['categoryId']);
+        unset($res['ats']);
+        unset($res['nice']);
+        unset($res['sticky']);
+        unset($res['solved']);
+        unset($res['lastPostUserId']);
+        unset($res['lastPostTime']);
+        unset($res['location']);
+        unset($res['memberNum']);
+        unset($res['maxUsers']);
+        unset($res['actvityPicture']);
+        unset($res['status']);
+        unset($res['startTime']);
+        unset($res['endTime']);
+        unset($res['body']);
+
+        return $res;
+    }
+
 }

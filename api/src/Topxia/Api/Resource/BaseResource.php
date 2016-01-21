@@ -43,7 +43,11 @@ abstract class BaseResource
 
     protected function wrap($resources, $total)
     {
-        return array('resources' => $resources, 'total' => $total);
+        if (is_array($total)) {
+            return array('resources' => $resources, 'next' => $total);
+        } else {
+            return array('resources' => $resources, 'total' => $total);
+        }
     }
 
     protected function simpleUsers($users)
@@ -67,6 +71,47 @@ abstract class BaseResource
         $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
 
         return $simple;
+    }
+
+    protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
+    {
+        $end = end($currentRows);
+        if (empty($end)) {
+            return array(
+                'cursor' => $currentCursor + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+        if (count($currentRows) < $currentLimit) {
+            return array(
+                'cursor' => $end['updatedTime'] + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+
+        if ($end['updatedTime'] != $currentCursor) {
+            $next = array(
+                'cursor' => $end['updatedTime'],
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        } else {
+            $next = array(
+                'cursor' => $currentCursor,
+                'start' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        }
+
+        return $next;
     }
 
     protected function filterHtml($text)

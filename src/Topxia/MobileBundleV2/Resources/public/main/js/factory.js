@@ -370,7 +370,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 				$rootScope.token = null;
 				localStore.remove("user");
 				localStore.remove("token");
-				alert("登陆信息失效，请重新登陆");
+				alert("登录信息失效，请重新登录");
 			}
 		}
 	};
