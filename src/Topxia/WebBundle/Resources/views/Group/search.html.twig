@@ -11,16 +11,14 @@
     <div class="col-md-9 group-main">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h2 class="panel-title">所有小组</h2>
+          <h3 class="panel-title">所有小组</h3>
         </div>
 
         <div class="panel-body">
           {% if groups %}
           <div class="row">
             {% for group in groups %}
-              
               {% include 'TopxiaWebBundle:Group:group-media-small.html.twig'  %}
-              
             {% endfor %}
           </div>
           <div class="text-center">

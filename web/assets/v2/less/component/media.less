@@ -22,6 +22,10 @@
   word-break: break-all;
 }
 
+.media-left {
+  padding-right: 15px;
+}
+
 // 即将弃用
 .media .media-object-small img {
   width: 48px;
@@ -82,13 +86,12 @@
     min-height: 34px;
   }
   .comments-content {
-    padding: 10px 10px 0 10px;
+    padding: 10px;
+    margin: 10px 0;
     background: @gray-lighter;
     color: @gray;
     line-height: 25px;
     border: 1px solid #f1f1f1;
-    margin-top: 15px;
-    margin-bottom: 10px;
   }
 }
 
@@ -196,10 +199,13 @@
 }
 
 // 小组
+.media-group-list {
+  margin-top: -20px;
+}
 .media-group {
-  margin-top: 15px;
+  margin-top: 20px;
   &:first-child {
-    margin-top: 15px;
+    margin-top: 20px;
   }
   .title {
     height: 20px;
