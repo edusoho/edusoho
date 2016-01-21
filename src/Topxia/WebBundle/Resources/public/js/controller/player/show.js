@@ -85,14 +85,6 @@ define(function(require, exports, module) {
                 DurationStorage.set(userId, fileId, player.getCurrentTime());
             }
         });
-    
-        // player.on("ready", function(){
-        //     var time = DurationStorage.get(userId, fileId);
-        //     if(time>0){
-        //         player.setCurrentTime(DurationStorage.get(userId, fileId));
-        //     }
-        //     player.play();
-        // });
 
         player.on("firstplay", function(){
  

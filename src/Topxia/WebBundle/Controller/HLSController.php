@@ -78,7 +78,6 @@ class HLSController extends BaseController
 
             if (isset($token['data']['hideBeginning'])) {
                 if ($token['data']['hideBeginning']) {
-                    // $params['hideBeginning'] = 0;
                 }
             } else {
                 if (!$this->haveHeadLeader()) {
