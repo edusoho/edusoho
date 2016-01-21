@@ -65,7 +65,6 @@
 {% endblock %}
 
 {% block footer %}
-  {% if course.buyable %}
   <span class="es-qrcode bottom mrl" data-url="{{path('course_lesson_qrcode',{lessonId: lesson.id,courseId: lesson.courseId})}}">
     <i class="es-icon es-icon-qrcode"></i>
     <span class="qrcode-popover">
@@ -73,6 +72,7 @@
       扫二维码继续学习
     </span>
   </span>
+  {% if course.buyable %}
    {% if lesson.status == 'published' and course.parentId == '0' %}
 
     {% if course.price == '0.00'  %}
