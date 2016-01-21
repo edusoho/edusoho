@@ -10,13 +10,6 @@
       <a href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" class="btn btn-default mrm">预览弹题</a>
       <span class="text-sm color-gray">本页面所有操作自动保存</span>
     </div>
-    <!-- <ul class="breadcrumb">
-      <li>
-        <a href="{{ path('course_show', {id:course.id}) }}">课程</a>
-      </li>
-      <li class="active"><a class="btn btn-primary" href="{{ path('course_manage_lesson', {id:course.id}) }}">返回课时管理</a></li>
-      <li class="active"><a class="btn btn-primary" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank">预览</a></li>
-    </ul> -->
   	<div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-lesson-id="{{ lesson.id }}"
