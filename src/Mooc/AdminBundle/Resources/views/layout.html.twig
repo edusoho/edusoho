@@ -197,6 +197,15 @@
 
 {% block footer %}{% endblock %}
 
+{% if setting('copyright.thirdCopyright') != 1 %}
+    <div class="fixed-bar">
+      <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+        <i class="es-icon es-icon-help"></i>
+        <span>产品<br/>反馈</span>
+      </a>
+    </div>
+{% endif %}
+
 {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
 <div id="modal" class="modal" ></div>
 </body>

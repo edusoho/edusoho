@@ -2526,7 +2526,12 @@ input:focus {
   color: #10b67c;
 }
 .mooc-header .navbar-header .navbar-brand img {
-  height: 50px;
+  height: 60px;
+}
+@media (max-width: 767px) {
+  .mooc-header .navbar-header .navbar-brand img {
+    height: 40px;
+  }
 }
 @media (max-width: 767px) {
   .mooc-header .navbar-header {
@@ -2977,7 +2982,6 @@ label {
   text-align: center;
   float: left;
   margin: 25px 0;
-  border-right: 1px solid #f1f1f1;
 }
 .mooc-navset .set-left h2 {
   font-size: 24px;
@@ -3605,6 +3609,10 @@ footer .weichat {
 footer .weichat p {
   color: #ffffff;
   margin-top: 8px;
+}
+footer .weichat img {
+  width: 180px;
+  height: auto;
 }
 footer .link-item {
   width: 32%;
