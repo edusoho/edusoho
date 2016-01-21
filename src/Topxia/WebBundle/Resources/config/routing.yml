@@ -960,6 +960,63 @@ course_manage_publish:
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
     methods: [POST]
 
+course_lesson_marker_manage:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/manage
+    defaults: { _controller: TopxiaWebBundle:Marker:manage }
+
+course_lesson_marker_show:
+    pattern:  /course/lesson/{lessonId}/marker/show
+    defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
+
+course_lesson_marker_metas:
+    pattern:  /course/lesson/{mediaId}/marker/metas
+    defaults: { _controller: TopxiaWebBundle:Marker:markerMetas }
+
+course_lesson_marker_merge:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/merge
+    defaults: { _controller: TopxiaWebBundle:Marker:merge }
+    methods: [POST]
+
+course_lesson_marker_update:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/update
+    defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
+    methods: [POST]
+
+course_lesson_question_marker_show:
+    pattern:  /course/lesson/{markerId}/questionmarker/show
+    defaults: { _controller: TopxiaWebBundle:Marker:showMarkerQuestion }
+
+course_lesson_question_marker_answer_show:
+    pattern:  /course/lesson/questionmarker/{questionId}/show
+    defaults: { _controller: TopxiaWebBundle:Marker:showQuestionAnswer }
+
+course_lesson_question_marker_next:
+    pattern:  /course/lesson/{markerId}/questionmarker/next
+    defaults: { _controller: TopxiaWebBundle:Marker:doNextTest }
+
+course_lesson_question_marker_add:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/add
+    defaults: { _controller: TopxiaWebBundle:Marker:addQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_delete:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/delete
+    defaults: { _controller: TopxiaWebBundle:Marker:deleteQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_sort:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/sort
+    defaults: { _controller: TopxiaWebBundle:Marker:sortQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_list:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/list
+    defaults: { _controller: TopxiaWebBundle:Marker:question }
+
+course_lesson_question_marker_search:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/search
+    defaults: { _controller: TopxiaWebBundle:Marker:search }
+
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list
     defaults: {_controller:TopxiaWebBundle:Announcement:list }
@@ -1951,5 +2008,6 @@ live_course_manage_lesson_replay_title_update:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+
 
 

@@ -1,0 +1,20 @@
+.video-js .vjs-pluck {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  background-color: black;
+  text-align: center;
+  pointer-events: none;
+}
+
+.video-js .vjs-pluck .vjs-pluck-text {
+  position: absolute;
+  top: 50%;
+  color:#bdbdbd;
+  font-size: 20px;
+  margin-top: -20px;
+  left: 0px;
+  right: 0px;
+}
