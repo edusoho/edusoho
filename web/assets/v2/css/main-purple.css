@@ -1744,10 +1744,6 @@ a.link-muted {
 .origin-price {
   font-size: 12px;
 }
-.article-list .media-object {
-  max-width: 200px;
-  max-height: 200px;
-}
 .nav-course-buy-btn {
   padding-bottom: 8px;
   padding-top: 8px;
@@ -8519,9 +8515,6 @@ textarea {
   width: 100%;
   height: 100%;
 }
-.aricle-carousel .swiper-slide.swiper-slide-active {
-  left: -1px;
-}
 .aricle-carousel .swiper-slide img {
   width: 100%;
   -webkit-border-radius: 2px;
@@ -8648,40 +8641,40 @@ textarea {
   margin-bottom: 5px;
   font-size: 12px;
 }
-.article-list .article-item {
+.article-list-main .article-item {
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid #efefef;
 }
 @media (max-width: 767px) {
-  .article-list .article-item .media-left {
+  .article-list-main .article-item .media-left {
     width: 100%;
     display: block;
     padding-right: 0;
     margin-bottom: 10px;
   }
-  .article-list .article-item .media .thumb-img {
+  .article-list-main .article-item .media .thumb-img {
     width: 100%;
   }
 }
-.article-list .article-item .content {
+.article-list-main .article-item .content {
   margin-top: 15px;
   color: #919191;
 }
-.article-list .media {
+.article-list-main .media {
   color: #919191;
 }
-.article-list .media .media-body {
+.article-list-main .media .media-body {
   padding-left: 10px;
   line-height: 25px;
 }
-.article-list .media .thumb-img {
+.article-list-main .media .thumb-img {
   width: 260px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-.article-list .pager {
+.article-list-main .pager {
   margin: 40px 0 20px 0;
 }
 .article-metas {

@@ -28,7 +28,11 @@
     <div class="col-md-4 hidden-sm hidden-xs">
       {% for index,promotedArticle in promotedArticles %}
       <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small">
-        <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ ( 8 - loop.index ) ~ ".jpg" ) }}"  alt="{{ promotedArticle.title }}">
+        {% if promotedArticle.thumb %}
+          <img class="img-responsive" src="{{ filepath(promotedArticle.thumb, '') }}" alt="{{ promotedArticle.title }}">
+        {% else %}
+          <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ ( 8 - loop.index ) ~ ".jpg" ) }}"  alt="{{ promotedArticle.title }}">
+        {% endif %}
         <div class="content">
           <p>{{ promotedCategories[promotedArticle['id']].name }}</p>
           <h4 class="title">{{ promotedArticle.title|plain_text(125) }}</h4>
