@@ -8546,6 +8546,11 @@ textarea {
   padding: 0 20px;
   color: #ffffff;
   z-index: 1;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 @media (max-width: 1199px) {
   .aricle-carousel .swiper-caption {
@@ -8600,11 +8605,11 @@ textarea {
 .topic-post-small {
   position: relative;
   border-collapse: collapse;
-  display: table;
+  display: block;
   color: #fff;
 }
 .topic-post-small + .topic-post-small {
-  margin-top: 12px;
+  margin-top: 14px;
 }
 .topic-post-small:hover {
   color: #fff;
@@ -8621,15 +8626,7 @@ textarea {
   opacity: 0.2;
   filter: alpha(opacity=20);
 }
-@media (max-width: 1199px) {
-  .topic-post-small .content {
-    line-height: 20px;
-    max-height: 120px;
-    overflow: hidden;
-  }
-}
-.topic-post-small img,
-.topic-post-small .image-overlay {
+.topic-post-small img {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
@@ -8637,15 +8634,19 @@ textarea {
 .topic-post-small .content {
   position: absolute;
   left: 0;
+  right: 0;
   bottom: 0;
   margin: 20px;
-  display: table-cell;
-  vertical-align: middle;
   z-index: 1;
 }
 .topic-post-small .content .title {
   margin: 0;
   line-height: 25px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 .topic-post-small .content p {
   margin-bottom: 5px;

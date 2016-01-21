@@ -29,6 +29,7 @@
     padding: 0 20px;
     color: #ffffff;
     z-index: 1;
+    .text-overflow;
     @media (max-width: @screen-md-max) {
       font-size: 20px;
     }
@@ -75,10 +76,10 @@
   position: relative;
   color: #fff;
   border-collapse: collapse; 
-  display: table;
+  display: block;
   color: #fff;
   + .topic-post-small {
-    margin-top: 12px;
+    margin-top: 14px;
   }
   &:hover {
     color: #fff;
@@ -88,27 +89,20 @@
       .opacity(0.2);
     }
   }
-  @media (max-width: @screen-md-max) {
-    .content {
-      line-height: 20px;
-      max-height: 120px;
-      overflow: hidden;
-    }
-  }
-  img,.image-overlay {
+  img {
     .border-radius;
   }
   .content {
     position: absolute;
     left: 0;
+    right: 0;
     bottom: 0;
     margin: 20px;
-    display: table-cell;
-    vertical-align: middle;
     z-index: 1;
     .title {
       margin: 0;
       line-height: 25px;
+      .text-overflow;
     }
     p {
       margin-bottom: 5px;
