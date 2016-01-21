@@ -1279,6 +1279,10 @@ my_page_show:
     pattern:  /my/page/show
     defaults: { _controller: TopxiaWebBundle:User:pageShow }
 
+user_about: 
+    pattern:  /user/{id}/about
+    defaults: { _controller: TopxiaWebBundle:User:about }
+
 user_teach: 
     pattern:  /user/{id}/teach
     defaults: { _controller: TopxiaWebBundle:User:teach }

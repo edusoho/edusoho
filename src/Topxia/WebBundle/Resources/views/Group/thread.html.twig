@@ -44,10 +44,10 @@
             {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
           </span>
         </div>
-        <div class="pull-right" id="thread-list" style="margin-top:2px;">
+        <div class="pull-right mrm" id="thread-list" style="margin-top:2px;">
           {% if threadMain.userId != user.id %}
-            <a class="uncollect-btn" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> 已收藏</a>
-            <a class="collect-btn" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>收藏</a>
+            <a href="javascript:;" class="uncollect-btn link-dark" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> 已收藏</a>
+            <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>收藏</a>
           {% endif %}
         </div>
         发表于 {{ threadMain.createdTime|smart_time }}

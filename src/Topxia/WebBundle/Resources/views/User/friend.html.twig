@@ -26,7 +26,7 @@
           </h3>
           <div class="position">
             {% if friend.title %}
-              {{ friend.title }}
+              {{ friend.title|sub_text(12) }}
             {% else %}
               暂无头衔
             {% endif %}
@@ -36,7 +36,7 @@
         <div class="teacher-bottom">
           <div class="about">
             {% if allUserProfile[friend.id]|default('') %}
-              {{ allUserProfile[friend.id].about|plain_text(30) }}
+              {{ allUserProfile[friend.id].about|sub_text(30) }}
             {% endif %}
           </div>
           <div class="metas">

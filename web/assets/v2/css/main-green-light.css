@@ -3013,8 +3013,8 @@ fieldset[disabled] a.btn {
   pointer-events: none;
 }
 .editor-text img {
-  max-width: 100%;
-  height: auto;
+  max-width: 100% !important;
+  height: auto !important;
 }
 .section-gray {
   background-color: #fafafa !important;
@@ -5211,6 +5211,7 @@ a.homework-essay-textarea-pack-up {
 }
 .nav.nav-tabs > li > a {
   border: none;
+  margin-right: 0;
   color: #313131;
   font-size: 16px;
   -webkit-transition: all 0.3s ease;
@@ -5479,21 +5480,6 @@ a.homework-essay-textarea-pack-up {
 .media-group .metas i {
   margin-right: 5px;
   font-size: 14px;
-}
-.group-page-header {
-  border-bottom: none;
-  position: relative;
-  padding: 0 15px;
-  font-size: 16px;
-}
-.group-page-header:after {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: 0;
-  height: 16px;
-  width: 4px;
-  background: #81d867;
 }
 .media-dynamic:last-child .media-body {
   border: none;
@@ -6457,16 +6443,29 @@ textarea {
 .es-piece.piece-lg .piece-header {
   font-size: 22px;
   font-weight: 500;
+  padding: 0 30px 0 0;
 }
 .es-piece.piece-lg .piece-header .more {
   font-size: 14px;
 }
+.es-piece.piece-lg .piece-header:after {
+  display: none;
+}
 .es-piece .piece-header {
   position: relative;
   margin: 5px auto 20px auto;
-  padding: 0 30px 0 0;
+  padding: 0 30px 0 15px;
   color: #313131;
   font-size: 16px;
+}
+.es-piece .piece-header:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 4px;
+  height: 16px;
+  background-color: #81d867;
 }
 .es-piece .piece-header .more {
   position: absolute;
@@ -12334,13 +12333,40 @@ textarea {
   line-height: 22px;
 }
 .user-center-header {
+  position: relative;
   height: 300px;
   padding: 60px 0;
-  background-color: #1b122d;
+  background-color: #313131;
+  z-index: 1;
+}
+.user-center-header .mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 0 !important;
+}
+.user-center-header .blurr-bg {
+  z-index: -1;
 }
 @media (max-width: 767px) {
   .user-center-header {
     padding: 45px 0;
+  }
+}
+.user-center-header .container {
+  padding: 0 70px;
+}
+@media (max-width: 1199px) {
+  .user-center-header .container {
+    padding: 0 30px;
+  }
+}
+@media (max-width: 767px) {
+  .user-center-header .container {
+    padding: 0 10px;
   }
 }
 .user-center-header .user-avatar {
@@ -12348,16 +12374,23 @@ textarea {
   float: left;
   width: 66.67%;
   padding-left: 200px;
+  margin-top: 20px;
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .user-center-header .user-avatar {
     width: 100%;
     float: none;
+  }
+}
+@media (max-width: 767px) {
+  .user-center-header .user-avatar {
     text-align: center;
     padding-left: 0;
   }
   .user-center-header .user-avatar .avatar-wrap {
     position: relative;
+    margin-bottom: 10px;
+    border: 3px solid rgba(255, 255, 255, 0.5);
   }
   .user-center-header .user-avatar .avatar-wrap .avatar-lg {
     width: 60px !important;
@@ -12377,32 +12410,32 @@ textarea {
   top: 0;
   left: 0;
   border: 6px solid #585560;
-  border: 6px solid rgba(255, 255, 255, 0.3);
+  border: 6px solid rgba(255, 255, 255, 0.5);
 }
 .user-center-header .name {
   color: #fff;
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 18px;
+  margin-bottom: 10px;
 }
 @media (max-width: 767px) {
   .user-center-header .name {
-    font-size: 20px;
-    margin-top: 10px;
+    font-size: 16px;
   }
 }
-.user-center-header .name small {
-  color: #919191;
-  margin: 0 10px;
-  font-size: 14px;
+.user-center-header .position {
+  margin-bottom: 10px;
+  color: #585560;
+  color: rgba(255, 255, 255, 0.5);
 }
-.user-center-header .name > a {
-  color: #9f9d9b;
+.user-center-header .position > a {
+  color: #585560;
+  color: rgba(255, 255, 255, 0.5);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.user-center-header .name > a:hover {
+.user-center-header .position > a:hover {
   color: #fff;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -12411,7 +12444,7 @@ textarea {
 }
 .user-center-header .mates {
   font-size: 18px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   color: #fff;
 }
 @media (max-width: 767px) {
@@ -12436,8 +12469,9 @@ textarea {
   border-radius: 2px;
 }
 .user-center-header .user-about-content {
-  height: 135px;
+  height: 150px;
   overflow: hidden;
+  line-height: 25px;
 }
 .group-header {
   margin-bottom: 20px;
