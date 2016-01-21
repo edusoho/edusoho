@@ -78,7 +78,7 @@ class CourseController extends BaseController
         $conditions          = $request->query->all();
         $categoryArray       = array();
         $conditions['code']  = $category;
-        $conditions['table'] = 'singleCourse';
+        //$conditions['table'] = 'singleCourse';
 
         if (!empty($conditions['code'])) {
             $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
