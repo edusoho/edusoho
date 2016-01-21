@@ -263,6 +263,7 @@ coinRecordType:
 
 coinOrderType:
     userName: 用户名
+    sn: 订单号
 
 discountType:
     discount: 限时打折
