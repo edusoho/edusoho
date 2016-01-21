@@ -64,7 +64,9 @@ class ApiAuth
                 throw new \RuntimeException('登录用户不存在！');
             }
 
-            $user['currentIp'] = $request->getClientIp();
+            if ($user) {
+                $user['currentIp'] = $request->getClientIp();
+            }
 
             $this->setCurrentUser($user);
         }
