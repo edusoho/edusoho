@@ -68,7 +68,7 @@ seajs.config({
         'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
-        'video-player': 'balloon-video-player/1.3.0/index'
+        'video-player': 'balloon-video-player/1.3.0/index-debug'
     },
 
 	// 预加载项
