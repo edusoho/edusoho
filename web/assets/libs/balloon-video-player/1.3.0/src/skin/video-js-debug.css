@@ -171,7 +171,7 @@ Create your own skin at http://designer.videojs.com
 @media (max-width:767px){.ballon-video-player .vjs-default-skin .vjs-menu-button ul li{font-size:12px;margin:8px 3px}}
 .ballon-video-player .vjs-default-skin .vjs-menu-button ul li.vjs-selected{color:#fff}
 .ballon-video-player .vjs-default-skin .vjs-menu-button ul li.vjs-selected:focus,.ballon-video-player .vjs-default-skin .vjs-menu-button ul li.vjs-selected:hover,.ballon-video-player .vjs-default-skin .vjs-menu-button ul li:focus,.ballon-video-player .vjs-default-skin .vjs-menu-button ul li:hover{-webkit-transition:all .3s ease;-moz-transition:all .3s ease;-o-transition:all .3s ease;transition:all .3s ease;color:#fff}
-.ballon-video-player .vjs-watermark{top:0;bottom:0;right:0;left:inherit!important}
+.ballon-video-player .vjs-watermark{top:10px!important;bottom:0;right:10px!important;left:inherit!important}
 .ballon-video-player .video-js.vjs-default-skin .vjs-control:hover:before,.ballon-video-player .vjs-default-skin .vjs-mute-control:hover:before,.ballon-video-player .vjs-default-skin .vjs-play-control:hover:before,.ballon-video-player .vjs-default-skin .vjs-resolutions-button .vjs-control-content:hover:before,.ballon-video-player .vjs-default-skin .vjs-volume-menu-button:hover:before{color:#fff}
 @font-face{font-family:ESCloudPlayer;src:url(player-icons.eot);src:url(player-icons.eot?#iefix) format('embedded-opentype'),url(player-icons.woff) format('woff'),url(player-icons.ttf) format('truetype'),url(player-icons.svg#iconfont) format('svg')}
 .ballon-video-player .vjs-default-skin .vjs-control:before{font-family:ESCloudPlayer!important}
