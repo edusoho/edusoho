@@ -85,14 +85,6 @@ define(function(require, exports, module) {
                 DurationStorage.set(userId, fileId, player.getCurrentTime());
             }
         });
-    
-        player.on("ready", function(){
-            var time = DurationStorage.get(userId, fileId);
-            if(time>0){
-                player.setCurrentTime(DurationStorage.get(userId, fileId));
-            }
-            player.play();
-        });
 
         player.on("firstplay", function(){
  
@@ -100,6 +92,11 @@ define(function(require, exports, module) {
         
         player.on("ready", function(){
             messenger.sendToParent("ready", {pause: true});
+            var time = DurationStorage.get(userId, fileId);
+            if(time>0){
+                player.setCurrentTime(DurationStorage.get(userId, fileId));
+            }
+            player.play();
         });
         player.on("onMarkerReached",function(markerId,questionId){
             // $('.vjs-break-overlay-text').html("");
