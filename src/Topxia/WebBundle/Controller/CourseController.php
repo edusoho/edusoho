@@ -92,6 +92,19 @@ class CourseController extends CourseBaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 0;
+            $coursesTemp               = $this->getCourseService()->searchCourses(
+                $conditions,
+                'createdTime',
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $courses = array_merge($courses, $coursesTemp);
+            $courses = array_slice($courses,0,12);
+        }
+
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         if (empty($group)) {
@@ -237,6 +250,24 @@ class CourseController extends CourseBaseController
             'member'   => $member,
             'category' => $category,
             'tags'     => $tags
+        ));
+    }
+
+    public function LessonListAction(Request $request, $id)
+    {
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+            if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Course:lesson-list.html.twig', array(
+            'course' => $course,
+            'member' => $member
         ));
     }
 

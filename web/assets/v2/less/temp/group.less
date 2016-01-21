@@ -1,3 +1,9 @@
+.group-page-header h4{
+  border-bottom: none;
+  &:after{
+    
+  }
+}
 .group-page .grouplist{
   height: 120px;
   width: 76px; 
@@ -30,69 +36,6 @@
 .group-page .bottom-thread-post{
   margin-bottom: 0px;
 }
-// .group-page .label {
-//   padding: .2em .6em .2em;
-// }
-
-.group-header {
-  margin-bottom: 20px;
-}
-
-.group-header .group-header-inner {
-  border-radius: 5px;
-  height: 150px;
-  position: relative;
-}
-
-.group-header .media {
-  background: #fff;
-  background-color: rgba(255, 255, 255, 0.70);
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  border-radius: 3px;
-  padding: 10px;
-  min-width: 20%;
-}
-
-.group-header-inner .media-body {
-  width: auto;
-}
-
-.group-header .media-heading {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.group-header .media-metas {
-  font-size: 12px;
-  color: #666;
-}
-
-.group-header .nav {
-  position: absolute;
-  bottom: 0;
-  left: 15px;
-}
-
-// .group-header .nav-pills > li > a {
-//   background-color: #fff;
-//   background-color: rgba(255, 255, 255, 0.70);
-//   color: #444;
-//   padding:6px 15px;
-//   border-bottom-right-radius: 0px;
-//   border-bottom-left-radius: 0px;
-// }
-
-
-// .group-header .nav-pills>li.active>a, 
-// .group-header .nav-pills>li.active>a:hover, 
-// .group-header .nav-pills>li.active>a:focus {
-//   background-color: #fff;
-//   background-color: rgba(255, 255, 255, 0.90);
-//   color: #444;
-//   font-weight: bold;
-// }
 
 
 .group-main > .panel {
@@ -117,7 +60,7 @@
 .group-page .group-thread .panel-heading h2 {
   font-size: 16px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 12px 0 20px;
 }
 
 .group-page .group-thread .panel-heading .thread-list  {
@@ -127,13 +70,34 @@
 
 .group-page .group-thread .panel-heading .metas {
   font-size: 12px;
-  color: #888;
+  color: @gray;
 }
 
 .group-page .group-thread .panel-heading .metas .divider {
   color: #bbb;
   margin: 0 5px;
 
+}
+
+.group-page .group-main .group-member-wrapper{
+  padding-top: 10px;
+}
+
+.group-page .group-main .group-user-title{
+  margin-top:  20px;
+  padding-bottom: 20px;
+  color: @gray-darker;
+  position: relative;
+  padding-left: 15px;
+  &:after{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 16px;
+    background: @brand-primary;
+  }
 }
 
 .group-page .group-post-list .metas {
@@ -177,28 +141,15 @@
   word-break:break-all;
 }
 
-
 .group-page .group-logo-sm {
   width: 50px;
   height: 50px;
 }
 
-.group-page .alert {
-  word-break:break-all;
-}
-.group-page .alert img{
-  max-width:100%;
-}
-
-.nav.nav-pills li {
-  // background: #fff;
-  // background-color: rgba(255, 255, 255, 0.70);
-}
-
+// 待确认
 .group-page .hideContent{
   border: 1px solid #999;
   padding: 10px;
-
 }
 .group-page .hideContent h4{
   color:#999;
@@ -212,14 +163,16 @@
 }
 
 .thread-list .title {
-  margin-bottom: 5px;
+  vertical-align: middle;
 }
 
 .thread-list .metas {
   font-size: 12px;
   color: #999;
 }
-
+.thread-list .metas .userImg{
+  vertical-align: bottom;
+}
 .thread-list .metas .divider {
   margin: 0 5px;
   color: #ccc;

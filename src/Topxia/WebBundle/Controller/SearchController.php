@@ -14,7 +14,19 @@ class SearchController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
+        $keywords = $this->filterKeyWord(trim($keywords));
+
+        $pattern = $this->setting('magic.cloud_search');
+
+        if ($pattern) {
+            $type       = $request->query->get('type', 'course');
+            $targetType = $request->query->get('targetType', '');
+            return $this->redirect($this->generateUrl('cloud_search', array(
+                'q'          => $keywords,
+                'type'       => $type,
+                'targetType' => $targetType
+            )));
+        }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
@@ -86,6 +98,69 @@ class SearchController extends BaseController
         ));
     }
 
+    public function cloudSearchAction(Request $request)
+    {
+        $courses = $paginator = null;
+
+        $currentUser = $this->getCurrentUser();
+        $pageSize    = 10;
+        $keywords    = $request->query->get('q');
+        $keywords    = $this->filterKeyWord(trim($keywords));
+
+        $type       = $request->query->get('type', 'course');
+        $page       = $request->query->get('page', '1');
+        $targetType = $request->query->get('targetType', '');
+
+        $conditions = array(
+            'type'  => $type,
+            'words' => $keywords,
+            'page'  => $page
+        );
+
+        if ($type == 'teacher') {
+            $pageSize              = 9;
+            $conditions['type']    = 'user';
+            $conditions['num']     = $pageSize;
+            $conditions['filters'] = json_encode(array('role' => 'teacher'));
+        } elseif ($type == 'thread' && !empty($targetType)) {
+            $conditions['filters'] = json_encode(array('targetType' => $targetType));
+        }
+
+        $counts = 0;
+        try {
+            list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
+        } catch (\Exception $e) {
+            return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
+                'keywords'     => $keywords,
+                'type'         => $type,
+                'errorMessage' => '搜索失败，请稍候再试.'
+            ));
+        }
+
+        $paginator = new Paginator($this->get('request'), $counts, $pageSize);
+
+        return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
+            'keywords'   => $keywords,
+            'type'       => $type,
+            'resultSet'  => $resultSet,
+            'counts'     => $counts,
+            'paginator'  => $paginator,
+            'targetType' => $targetType
+        ));
+    }
+
+    private function filterKeyWord($keyword)
+    {
+        $keyword = str_replace('<', '', $keyword);
+        $keyword = str_replace('>', '', $keyword);
+        $keyword = str_replace("'", '', $keyword);
+        $keyword = str_replace("\"", '', $keyword);
+        $keyword = str_replace('=', '', $keyword);
+        $keyword = str_replace('&', '', $keyword);
+        $keyword = str_replace('/', '', $keyword);
+        return $keyword;
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -114,5 +189,10 @@ class SearchController extends BaseController
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getSearchService()
+    {
+        return $this->getServiceKernel()->createService('Search.SearchService');
     }
 }

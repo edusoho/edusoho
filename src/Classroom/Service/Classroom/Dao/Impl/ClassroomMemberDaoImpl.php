@@ -18,6 +18,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     public function addMember($member)
     {
         $affected = $this->getConnection()->insert($this->table, $member);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert classroom member error.');
         }
@@ -65,8 +66,9 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         if (empty($classroomIds)) {
             return array();
         }
+
         $marks = str_repeat('?,', count($classroomIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE userId = {$userId} AND classroomId IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->table} WHERE userId = {$userId} AND classroomId IN ({$marks});";
 
         return $this->getConnection()->fetchAll($sql, $classroomIds) ?: array();
     }
@@ -74,7 +76,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     public function searchMemberCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -83,10 +85,10 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
 
         return $builder->execute()->fetchAll() ?: array();
     }
@@ -127,11 +129,13 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     {
         $sql = "SELECT COUNT(m.id) FROM {$this->table}  m ";
         $sql .= " JOIN  `user` As c ON m.classroomId = ?";
+
         if ($locked) {
             $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' AND c.locked != 1 AND m.locked != 1";
         } else {
             $sql .= " AND m.userId = c.id AND c.verifiedMobile != ' ' ";
         }
+
         return $this->getConnection()->fetchColumn($sql, array($classroomId));
     }
 
@@ -139,7 +143,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $role = '%|'.$role.'|%';
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
+        $sql  = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array($classroomId, $role));
     }
@@ -156,27 +160,31 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             $conditions['role'] = "%{$conditions['role']}%";
         }
 
-        $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'classroom_member')
-            ->andWhere('userId = :userId')
-            ->andWhere('classroomId = :classroomId')
-            ->andWhere('noteNum > :noteNumGreaterThan')
-            ->andWhere('role LIKE :role')
-            ->andWhere('createdTime >= :startTimeGreaterThan')
-            ->andWhere('createdTime < :startTimeLessThan');
+        if (isset($conditions['roles'])) {
+            $roles = '';
 
-        // if (isset($conditions['courseIds'])) {
-        //     $courseIds = array();
-        //     foreach ($conditions['courseIds'] as $courseId) {
-        //         if (ctype_digit($courseId)) {
-        //             $courseIds[] = $courseId;
-        //         }
-        //     }
-        //     if ($courseIds) {
-        //         $courseIds = join(',', $courseIds);
-        //         $builder->andStaticWhere("courseId IN ($courseIds)");
-        //     }
-        // }
+            foreach ($conditions['roles'] as $role) {
+                $roles .= "|".$role;
+            }
+
+            $roles = $roles."|";
+
+            foreach ($conditions['roles'] as $role) {
+                $roles .= ",|".$role."|";
+            }
+
+            $conditions['roles'] = $roles;
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+                        ->from($this->table, 'classroom_member')
+                        ->andWhere('userId = :userId')
+                        ->andWhere('classroomId = :classroomId')
+                        ->andWhere('noteNum > :noteNumGreaterThan')
+                        ->andWhere('role LIKE :role')
+                        ->andWhere('role IN ( :roles )')
+                        ->andWhere('createdTime >= :startTimeGreaterThan')
+                        ->andWhere('createdTime < :startTimeLessThan');
 
         return $builder;
     }

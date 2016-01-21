@@ -1,5 +1,5 @@
 <div class="nav-btn-tab">
-  <ul class="nav nav-tabs" role="tablist">
+  <ul class="nav nav-tabs nav-tabs-lg" role="tablist">
     <li role="presentation" class="{% if nav == 'introduction' %}active{% endif %}"><a  href="{{ path('classroom_introductions', {id:classroom.id}) }}">介绍</a></li>
 
     {% if is_plugin_installed('ClassroomPlan') %}

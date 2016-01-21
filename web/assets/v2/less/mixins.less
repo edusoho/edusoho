@@ -6,6 +6,7 @@
 @import "mixins/loader-inner.less";         //css3效果
 @import "mixins/shake.less";                //css3效果-上下抖动
 @import "mixins/transup.less";              //css3效果-向上推动
+@import "mixins/spin.less";                 //css3效果-旋转
 @import "mixins/color.less";                //颜色
 @import "mixins/input.less";                //输入框
 @import "mixins/spacing.less";              //间距
@@ -31,8 +32,8 @@ a.btn.disabled, fieldset[disabled] a.btn {
 // 富文本编辑器样式统一处理
 .editor-text {
   img {
-    max-width: 100%;
-    height: auto;
+    max-width: 100% !important;
+    height: auto !important;
   }
 }
 
@@ -104,6 +105,14 @@ a.btn.disabled, fieldset[disabled] a.btn {
     .es-transition;
   }
 }
+.link-primary {
+  color: @brand-primary;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
+    .es-transition;
+  }
+}
 .link-white {
   color: #fff !important;
   .es-transition;
@@ -156,6 +165,8 @@ a.transition {
   @opacity-ie: (@opacity * 100);
   filter: ~"alpha(opacity=@{opacity-ie})";
 }
+
+
 
 // 图片响应式
 .img-responsive(@display: block) {

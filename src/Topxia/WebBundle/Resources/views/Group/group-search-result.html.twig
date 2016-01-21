@@ -7,12 +7,10 @@
     <div class="panel-heading">
       <h2 class="panel-title">话题搜索</h2>
       <form  class="form-inline more hidden-xs" style="top:7px" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
-        <div class="input-group group-search">
+        <div class="search-with-btn search-sm">
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
-          <span class="input-group-btn">
+          <input type="text" class="form-control" placeholder="组内搜索" name="keyWord" value="{{keyWord|default('组内搜索')}}">
           <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-          </span>
         </div>
       </form>
     </div>
