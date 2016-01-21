@@ -102,7 +102,7 @@ define(function(require, exports, module) {
                 });
 
                 player.on('userinactive', function() {
-                    if(self.get('controlBarLock')!==false){
+                    if(self.get('controlBarLock')!=false){
                         player.userActive(true);
                     }
                 });

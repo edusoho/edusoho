@@ -86,21 +86,26 @@ define(function(require, exports, module) {
             }
         });
     
+        // player.on("ready", function(){
+        //     var time = DurationStorage.get(userId, fileId);
+        //     if(time>0){
+        //         player.setCurrentTime(DurationStorage.get(userId, fileId));
+        //     }
+        //     player.play();
+        // });
+
+        player.on("firstplay", function(){
+ 
+        });
+        
         player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
             var time = DurationStorage.get(userId, fileId);
             if(time>0){
                 player.setCurrentTime(DurationStorage.get(userId, fileId));
             }
             player.play();
         });
-
-        player.on("firstplay", function(){
- 
-        });
-        
-        // player.on("ready", function(){
-        //     messenger.sendToParent("ready", {pause: true});
-        // });
         player.on("onMarkerReached",function(markerId,questionId){
             // $('.vjs-break-overlay-text').html("");
             messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
