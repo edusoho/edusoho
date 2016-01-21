@@ -12645,6 +12645,7 @@ textarea {
 .question-manage .question-menu .lesson-list .pagination {
   position: absolute;
   bottom: -5px;
+  left: 0;
   margin-bottom: 0;
 }
 .question-manage .editbox {
