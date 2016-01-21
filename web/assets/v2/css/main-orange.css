@@ -5631,12 +5631,14 @@ textarea.form-control-o {
 .btn-ghost-white {
   color: #fff;
   border: 1px solid #fff;
+  background-color: #c1c1c1;
   background-color: rgba(255, 255, 255, 0.3);
 }
 .btn-ghost-white:hover,
 .btn-ghost-white:focus,
 .btn-ghost-white.focus {
   color: #fff;
+  background-color: #919191;
   background-color: rgba(255, 255, 255, 0.5);
 }
 .btn-link {
@@ -6705,6 +6707,7 @@ textarea {
 }
 .icon-user-status > i {
   font-size: 12px;
+  vertical-align: middle;
 }
 .icon-user-status > img {
   -webkit-border-radius: 50%;
@@ -12304,11 +12307,11 @@ textarea {
 }
 .user-center-header .position {
   margin-bottom: 10px;
-  color: #585560;
+  color: #919191;
   color: rgba(255, 255, 255, 0.5);
 }
 .user-center-header .position > a {
-  color: #585560;
+  color: #919191;
   color: rgba(255, 255, 255, 0.5);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -12332,16 +12335,11 @@ textarea {
     font-size: 16px;
   }
 }
-@media (max-width: 767px) {
-  .user-center-header .actions .btn-xlg {
-    padding: 6px 27px;
-  }
-}
 .user-center-header .user-about {
   float: left;
   width: 33.33%;
   padding: 15px 10px;
-  background-color: #585560;
+  background-color: #919191;
   background-color: rgba(255, 255, 255, 0.3);
   color: #fff;
   -webkit-border-radius: 2px;
