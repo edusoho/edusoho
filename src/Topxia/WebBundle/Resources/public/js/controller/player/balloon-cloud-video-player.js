@@ -57,7 +57,10 @@ define(function(require, exports, module) {
                         markers: {
                             markers: self.get('markers'),
                             markerTip: {
-                               display: false
+                               display: false,
+                               time: function(marker) {
+                                 return marker==undefined ? -1:marker.time;
+                               }
                             },
                             markerEscape: true,
                             onMarkerReached:function(marker,player){
@@ -104,6 +107,7 @@ define(function(require, exports, module) {
 
                     player.hotkeys({
                         volumeStep: 0.1,
+                        alwaysCaptureHotkeys:true,
                         customKeys: {
                           // Create custom hotkeys
                           ctrldKey: {

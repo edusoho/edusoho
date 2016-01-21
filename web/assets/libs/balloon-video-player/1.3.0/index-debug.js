@@ -13197,9 +13197,13 @@ define("balloon-video-player/1.3.0/src/plugins/hotkeys/hotkeys-debug", [], funct
               break;
             case cForward: // Seek Forward
               ePreventDefault();
-              player.currentTime(player.currentTime() + seekStep);
+              var forwardTime=player.currentTime() + seekStep;
+              if(forwardTime>player.duration()){
+                player.currentTime(Math.floor(player.duration()));
+              }else{
+                player.currentTime(player.currentTime() + seekStep);
+              }
               break;
-
             // Volume control with the up/down arrow keys
             case cVolumeDown:
               ePreventDefault();
