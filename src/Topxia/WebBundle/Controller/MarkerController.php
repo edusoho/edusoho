@@ -141,7 +141,7 @@ class MarkerController extends BaseController
         $results      = array();
         $user         = $this->getUserService()->getCurrentUser();
 
-        if ($this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1) {
+        if ($this->agentInWhiteList($request->headers->get("user-agent")) ? 1 : 0) {
             return $this->createJsonResponse(array());
         }
 
