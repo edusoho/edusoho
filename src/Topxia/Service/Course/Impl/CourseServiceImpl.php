@@ -1235,7 +1235,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0'
+            'suggestHours'  => '1.0',
+            'replayStatus'  => 'ungenerated'
         ));
 
         if (isset($fields['title'])) {
@@ -1495,19 +1496,33 @@ class CourseServiceImpl extends BaseService implements CourseService
         $user                  = $this->getCurrentUser();
 
         $lesson = $this->getCourseLesson($courseId, $lessonId);
-        $this->dispatchEvent(
-            'course.lesson_start',
-            new ServiceEvent($lesson, array('course' => $course))
-        );
 
-        if (!empty($lesson) && $lesson['type'] != 'video') {
+        if (!empty($lesson)) {
+            if ($lesson['type'] == 'video') {
+                $createLessonView['courseId'] = $courseId;
+                $createLessonView['lessonId'] = $lessonId;
+                $createLessonView['fileId']   = $lesson['mediaId'];
+
+                $file = array();
+
+                if (!empty($createLessonView['fileId'])) {
+                    $file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
+                }
+
+                $createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
+                $createLessonView['fileType']    = $lesson['type'];
+                $createLessonView['fileSource']  = $lesson['mediaSource'];
+
+                $this->createLessonView($createLessonView);
+            }
+
             $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
 
             if ($learn) {
                 return false;
             }
 
-            $this->getLessonLearnDao()->addLearn(array(
+            $learn = $this->getLessonLearnDao()->addLearn(array(
                 'userId'       => $user['id'],
                 'courseId'     => $courseId,
                 'lessonId'     => $lessonId,
@@ -1516,41 +1531,15 @@ class CourseServiceImpl extends BaseService implements CourseService
                 'finishedTime' => 0
             ));
 
+            $this->dispatchEvent(
+                'course.lesson_start',
+                new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
+            );
+
             return true;
         }
 
-        $createLessonView['courseId'] = $courseId;
-        $createLessonView['lessonId'] = $lessonId;
-        $createLessonView['fileId']   = $lesson['mediaId'];
-
-        $file = array();
-
-        if (!empty($createLessonView['fileId'])) {
-            $file = $this->getUploadFileService()->getFile($createLessonView['fileId']);
-        }
-
-        $createLessonView['fileStorage'] = empty($file) ? "net" : $file['storage'];
-        $createLessonView['fileType']    = $lesson['type'];
-        $createLessonView['fileSource']  = $lesson['mediaSource'];
-
-        $this->createLessonView($createLessonView);
-
-        $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($user['id'], $lessonId);
-
-        if ($learn) {
-            return false;
-        }
-
-        $this->getLessonLearnDao()->addLearn(array(
-            'userId'       => $user['id'],
-            'courseId'     => $courseId,
-            'lessonId'     => $lessonId,
-            'status'       => 'learning',
-            'startTime'    => time(),
-            'finishedTime' => 0
-        ));
-
-        return true;
+        return false;
     }
 
     public function createLessonView($createLessonView)
@@ -1581,12 +1570,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $learn = $this->getLessonLearnDao()->getLearnByUserIdAndLessonId($member['userId'], $lessonId);
 
         if ($learn) {
-            $this->getLessonLearnDao()->updateLearn($learn['id'], array(
+            $learn = $this->getLessonLearnDao()->updateLearn($learn['id'], array(
                 'status'       => 'finished',
                 'finishedTime' => time()
             ));
         } else {
-            $this->getLessonLearnDao()->addLearn(array(
+            $learn = $this->getLessonLearnDao()->addLearn(array(
                 'userId'       => $member['userId'],
                 'courseId'     => $courseId,
                 'lessonId'     => $lessonId,
@@ -1603,8 +1592,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         $memberFields               = array();
         $memberFields['learnedNum'] = count($learns);
 
-        $course = $this->getCourseDao()->getCourse($courseId);
-
         if ($course['serializeMode'] != 'serialize') {
             $memberFields['isLearned'] = $memberFields['learnedNum'] >= $course['lessonNum'] ? 1 : 0;
         }
@@ -1615,7 +1602,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->dispatchEvent(
             'course.lesson_finish',
-            new ServiceEvent($lesson, array('course' => $course))
+            new ServiceEvent($lesson, array('course' => $course, 'learn' => $learn))
         );
     }
 
@@ -2658,8 +2645,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = array(
             "replayStatus" => "generated"
         );
-        $lesson = $this->getLessonDao()->updateLesson($lessonId, $fields);
+
+        $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+
         $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+
         return $replayList;
     }
 

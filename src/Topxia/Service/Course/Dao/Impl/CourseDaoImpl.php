@@ -107,7 +107,9 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function addCourse($course)
     {
-        $affected = $this->getConnection()->insert(self::TABLENAME, $course);
+        $course['createdTime'] = time();
+        $course['updatedTime'] = $course['createdTime'];
+        $affected              = $this->getConnection()->insert(self::TABLENAME, $course);
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
@@ -118,6 +120,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function updateCourse($id, $fields)
     {
+        $fields['updatedTime'] = time();
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
         return $this->getCourse($id);
     }
@@ -135,14 +138,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
 
-        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
+        $currentTime = time();
+
+        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         return $this->getConnection()->executeQuery($sql, array($diff, $id));
     }
 
     public function clearCourseDiscountPrice($discountId)
     {
-        $sql = "UPDATE course SET price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
+        $currentTime = time();
+        $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
         return $this->getConnection()->executeQuery($sql, array($discountId));
     }
 

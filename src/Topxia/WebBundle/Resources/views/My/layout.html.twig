@@ -9,6 +9,15 @@
 <div class="row row-3-9">
   <div class="col-md-3">
     <div class="sidenav">
+      {% if is_plugin_installed('Point') %}
+        <ul class="list-group">
+          <li class="list-group-heading">我的网校</li>
+          <li class="list-group-item
+           {% if side_nav == 'growth' %} active {% endif %}">
+            <a href="{{path('my')}}">我的成长</a>
+          </li>
+        </ul>
+      {% endif %}
       {% if app.user.isTeacher() %}
         <ul class="list-group">
           <li class="list-group-heading">我的教学</li>

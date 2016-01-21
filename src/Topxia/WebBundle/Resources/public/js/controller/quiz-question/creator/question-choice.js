@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var BaseQuestion = require('./question-base');
     var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
-    require('ckeditor');
+    require('es-ckeditor');
     var ChoiceQuestion = BaseQuestion.extend({
         attrs: {
             globalId: 1

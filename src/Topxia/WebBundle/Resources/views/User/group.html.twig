@@ -6,13 +6,13 @@
 
 {% block main %}
   {% if adminGroups %}
-  <div class="page-header">
-    <h4> 管理的小组</h4>
+  <div class="page-header group-page-header">
+    管理小组
   </div>
   {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':adminGroups,}%}
   {% endif %}
-  <div class="page-header">
-    <h4> 加入的小组</h4>
+  <div class="page-header group-page-header">
+   加入小组
   </div>
   {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':groups} %}
   

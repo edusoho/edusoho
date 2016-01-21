@@ -1,0 +1,105 @@
+.user-center-header {
+  height: 300px;
+  padding: 60px 0;
+  background-color: #1b122d;
+  @media(max-width:@screen-xs-max) {
+    padding: 45px 0;
+  }
+  .container {
+    // padding: 60px 0;
+  }
+  .user-avatar {
+    position: relative;
+    float: left;
+    width: 66.67%;
+    padding-left: 200px;
+    // text-align: center;
+    @media(max-width:@screen-xs-max) {
+      width: 100%;
+      float: none;
+      text-align: center;
+      padding-left: 0;
+      .avatar-wrap{
+        position: relative;
+        .avatar-lg{
+          width: 60px !important;
+          height: 60px !important;
+        }
+        .icon-md{
+          width: 20px;
+          height: 20px;
+          line-height: 15px;
+          >i{
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+  .avatar-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 6px solid #585560;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+  }
+  .name {
+    color: #fff;
+    font-size: 22px;
+    margin-bottom: 20px;
+    @media(max-width:@screen-xs-max) {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    small {
+      color: @gray;
+      margin: 0 10px;
+      font-size: 14px;
+      // font-size: 16px;
+    }
+    >a {
+      color: #9f9d9b;
+      .es-transition;
+      &:hover {
+        color: #fff;
+        .es-transition;
+      }
+    }
+  }
+  .mates {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #fff;
+    @media(max-width:@screen-xs-max) {
+      font-size: 16px;
+    }
+  }
+  // .actions {
+  //   .btn + .btn {
+  //     margin-left: 20px;
+  //   }
+  // }
+  .actions{
+    .btn-xlg{
+      @media(max-width:@screen-xs-max) {
+        padding: 6px 27px;
+      }
+    }
+  }
+  .user-about {
+    float: left;
+    width: 33.33%;
+    //margin-top: 30px;
+    padding: 15px 10px;
+    background-color: #585560;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    .border-radius;
+  }
+  .user-about-content {
+    height: 135px;
+    overflow: hidden;
+    // height: 60px;
+    // overflow: auto;
+  }
+}

@@ -1,5 +1,5 @@
 {% set teachers = data('RecommendTeachers',{'count':config.count|default(4)}) %}
-  {% if teachers %}
+{% if teachers %}
   <section class="recommend-teacher {{config.background|default("")}}">
     <div class="container">
       <div class="text-line">
@@ -22,4 +22,4 @@
       </div>
     </div>
   </section>
-  {% endif %}
+{% endif %}

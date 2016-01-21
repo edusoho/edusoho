@@ -60,11 +60,11 @@ class OrderController extends BaseController
             }
         }
 
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        // $couponApp = $this->getAppService()->findInstallApp("Coupon");
 
-        if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
-            $orderInfo["showCoupon"] = true;
-        }
+        // // if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
+        // $orderInfo["showCoupon"] = true;
+        // // }
 
         $verifiedMobile = '';
 
@@ -73,7 +73,6 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
-
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
@@ -144,7 +143,6 @@ class OrderController extends BaseController
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount                                   = (string) ((float) $amount);
             $shouldPayMoney                           = (string) ((float) $fields["shouldPayMoney"]);
-
             //价格比较
 
             if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
@@ -188,7 +186,8 @@ class OrderController extends BaseController
             }
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn' => $order['sn']
+                'sn'         => $order['sn'],
+                'targetType' => $order['targetType']
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
@@ -246,7 +245,7 @@ class OrderController extends BaseController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 
     protected function getVipService()

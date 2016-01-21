@@ -325,50 +325,6 @@ $api->post('/logout', function (Request $request) {
 
 );
 
-//开通会员
-/*
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| levelId | int | 是 | 会员等级id |
-| boughtUnit | string | 是 | 开通时长 |
-| boughtDuration | string | 是 | 付费方式 |
-
-`boughtDuration`的值有:
-
- * month : 按月
- * year : 按年
-
- ** 响应 **
-
-```
-{
-"success": bool
-}
-```
- */
-$api->post('/{id}/vips', function (Request $request, $id) {
-    $user = convert($id, 'user');
-    $levelId = $request->request->get('levelId');
-    $boughtDuration = $request->request->get('boughtDuration');
-    $boughtUnit = $request->request->get('boughtUnit');
-
-    $member = ServiceKernel::instance()->createService('Vip:Vip.VipService')->becomeMember(
-        $user['id'],
-        $levelId,
-        $boughtDuration,
-        $boughtUnit,
-        $orderId = 0
-    );
-
-    return array(
-        'success' => empty($member) ? false : true
-    );
-}
-
-);
-
 /*
 ## （取消）关注用户
 POST /users/{id}/followers
@@ -377,7 +333,6 @@ POST /users/{id}/followers
 
 | 名称  | 类型  | 必需   | 说明 |
 | ---- | ----- | ----- | ---- |
-| userId | int | 否 | 发起关注操作的用户id,未传则默认为当前用户 |
 | method | string | 否 | 值为delete时为取消关注用户 |
 
  ** 响应 **
@@ -389,9 +344,8 @@ POST /users/{id}/followers
 ```
  */
 $api->post('/{id}/followers', function (Request $request, $id) {
-    $userId = $request->request->get('userId', '');
     $method = $request->request->get('method');
-    $fromUser = empty($userId) ? getCurrentUser() : convert($userId, 'user');
+    $fromUser = getCurrentUser();
 
     if (!empty($method) && $method == 'delete') {
         $result = ServiceKernel::instance()->createService('User.UserService')->unFollow($fromUser['id'], $id);
@@ -402,46 +356,6 @@ $api->post('/{id}/followers', function (Request $request, $id) {
     return array(
         'success' => empty($result) ? false : true
     );
-}
-
-);
-
-//获得用户的关注者
-/*
-
- ** 响应 **
-
-```
-{
-"xxx": "xxx"
-}
-```
-
- */
-$api->get('/{id}/followers', function ($id) {
-    $user = convert($id, 'user');
-    $follwers = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollower($user['id']);
-    return filters($follwers, 'user');
-}
-
-);
-
-//获得用户关注的人
-/*
-
- ** 响应 **
-
-```
-{
-"xxx": "xxx"
-}
-```
-
- */
-$api->get('/{id}/followings', function ($id) {
-    $user = convert($id, 'user');
-    $follwings = ServiceKernel::instance()->createService('User.UserService')->findAllUserFollowing($user['id']);
-    return filters($follwers, 'user');
 }
 
 );
@@ -477,8 +391,8 @@ follower : toId用户关注了id用户
 friend : 互相关注
  */
 $api->get('/{id}/friendship', function (Request $request, $id) {
-    $user = convert($id, 'user');
     $currentUser = getCurrentUser();
+    $user = convert($id, 'user');
     $toIds = $request->query->get('toIds');
 
     if (!empty($toIds)) {
@@ -514,87 +428,4 @@ $api->get('/{id}/friendship', function (Request $request, $id) {
 
 );
 
-//获得用户虚拟币账户信息
-$api->get('{id}/accounts', function ($id) {
-    $user = convert($id, 'user');
-    $accounts = ServiceKernel::instance()->createService('Cash.CashAccountService')->getAccountByUserId($user['id']);
-    return $accounts;
-}
-
-);
-
-/*
-## 获取用户的话题
-GET /users/{id}/coursethreads
-
-[支持分页](global-parameter.md)
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| type | string | 否 | 类型,未传则取全部类型 |
-
-`type`的值有：
-
- * question : 问答
- * discussion : 话题
-
- ** 响应 **
-
-```
-{
-"xxx": "xxx"
-}
-```
- */
-
-$api->get('{id}/coursethreads', function (Request $request, $id) {
-    $user = convert($id, 'user');
-    $start = $request->query->get('start', 0);
-    $limit = $request->query->get('limit', 10);
-    $type = $request->query->get('type', '');
-    $conditions = empty($type) ? array() : array('type' => $type);
-    $conditions['userId'] = $user['id'];
-    $total = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreadCount($conditions);
-    $coursethreads = ServiceKernel::instance()->createService('Course.ThreadService')->searchThreads($conditions, 'created', $start, $limit);
-
-    return array(
-        'data'  => $coursethreads,
-        'total' => $total
-    );
-}
-
-);
-
-/*
-## 好友互粉
-POST /users/friendship
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| fromId | int | 是 | 互粉用户A的Id |
-| toId | int | 是 | 互粉用户B的Id |
-
- ** 响应 **
-
-```
-{
-'success' => bool
-}
-```
- */
-$api->post('/friendship', function (Request $request) {
-    $fromId = $request->request->get('fromId', 0);
-    $toId = $request->request->get('toId', 0);
-    $result1 = ServiceKernel::instance()->createService('User.UserService')->follow($fromId, $toId);
-    $result2 = ServiceKernel::instance()->createService('User.UserService')->follow($toId, $fromId);
-    return array(
-        'success' => ($result1 && $result2) ? true : false
-    );
-}
-
-);
 return $api;

@@ -288,6 +288,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $this->getThreadDao()->updateThread($thread['id'], array('isElite' => 1));
+
+        $this->dispatchEvent('course.thread.elite', new ServiceEvent($thread));
     }
 
     public function uneliteThread($courseId, $threadId)

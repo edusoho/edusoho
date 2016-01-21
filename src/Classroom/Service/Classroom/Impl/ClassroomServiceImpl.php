@@ -768,6 +768,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             } else {
                 $this->getClassroomMemberDao()->addMember($fields);
             }
+
+            $this->dispatchEvent('classMaster.become', new ServiceEvent($member));
         }
     }
 
@@ -978,7 +980,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (in_array('headTeacher', $member['role'])) {
+        if (array_intersect($member['role'], array('headTeacher'))) {
             return true;
         }
 
@@ -1017,11 +1019,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($isStudentOrAuditor) {
-            if (array_intersect($member['role'], array('student', 'auditor', 'teacher', 'headTeacher'))) {
+            if (array_intersect($member['role'], array('student', 'assistant', 'auditor', 'teacher', 'headTeacher'))) {
                 return true;
             }
         } else {
-            if (array_intersect($member['role'], array('student', 'teacher', 'headTeacher'))) {
+            if (array_intersect($member['role'], array('student', 'assistant', 'teacher', 'headTeacher'))) {
                 return true;
             }
         }

@@ -66,6 +66,9 @@
     </tr>
   </thead>
   <tbody>
+    <p class="text-muted">
+      <span class="mrl">用户总数：<strong class="inflow-num">{{userCount}}</strong></span>
+    </p>
     {% for user in users %}
       {% include 'TopxiaAdminBundle:User:user-table-tr.html.twig' with {user:user,profile:profiles[user.id]} %}
     {% endfor %}

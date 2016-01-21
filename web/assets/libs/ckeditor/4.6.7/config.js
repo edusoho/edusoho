@@ -12,6 +12,10 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Source', 'Image', 'kityformula'] }
     ];
 
+    config.toolbar_editVip = [
+        { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList'] }
+    ];
+
     config.toolbar_Simple = [
         { items: [ 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'RemoveFormat', 'PasteText', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Image', '-', 'Source'] }
     ];

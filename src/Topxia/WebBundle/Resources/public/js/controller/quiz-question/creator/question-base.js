@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    require('es-ckeditor');
 
     var QuestionCreator = Widget.extend({
         attrs: {

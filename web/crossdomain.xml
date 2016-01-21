@@ -2,4 +2,5 @@
 <cross-domain-policy>
   <allow-access-from domain="cdn.staticfile.org" />
   <allow-access-from domain="cache.upuday.com" />
+  <allow-access-from domain="*.edusoho.net" />
 </cross-domain-policy>

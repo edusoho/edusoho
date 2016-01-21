@@ -40,7 +40,7 @@
 
         <div class="form-group">
           <label class="col-xs-2 control-label" for="thread_title">标题</label>
-          <div class="col-xs-7 controls">
+          <div class="col-sm-7 col-xs-10 controls">
             <input type="text" id="thread_title" name="thread[title]" class="form-control" value="{{thread.title|default('')}}">
             <div class="help-block" style="display:none;"></div>
           </div>
@@ -48,7 +48,7 @@
 
         <div class="form-group">
           <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">内容</label>
-          <div class="col-xs-7 controls">
+          <div class="col-sm-7 col-xs-10 controls">
             {% if is_feature_enabled('group_reward') %}
             <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% else %}
@@ -58,7 +58,7 @@
         </div>
 
         <div class="row">
-          <div class="col-xs-7 col-xs-offset-2">
+          <div class="col-sm-7 col-xs-10 col-xs-offset-2">
             {% if thread|default(null) %}
             <button id="groupthread-save-btn" data-submiting-text="正在修改" type="submit" class="btn btn-primary">修改</button>
             {% else %}

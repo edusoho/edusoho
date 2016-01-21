@@ -2,7 +2,7 @@
         var Notify = require('common/bootstrap-notify');
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);
-        require('ckeditor');
+        require('es-ckeditor');
 
         function checkUrl(url) {
             var hrefArray = new Array();
@@ -13,6 +13,7 @@
         exports.run = function() {
 
             var add_btn_clicked = false;
+
 
             $('#add-btn').click(function() {
                 if (!add_btn_clicked) {
@@ -39,10 +40,12 @@
 
             if ($('#thread_content').length > 0) {
                 // group: group
+                
                 var editor_thread = CKEDITOR.replace('thread_content', {
                     toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
                 });
+
 
                 var validator_thread = new Validator({
                     element: '#user-thread-form',

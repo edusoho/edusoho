@@ -162,10 +162,8 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $amount = $totalPrice;
         //优惠码优惠价格
-        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
+        if ($orderData["couponCode"] && trim($orderData["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $orderData["couponCode"],
                 'vip',
@@ -235,18 +233,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getOrderService()->createOrder($orderInfo);
     }
 
-    public function getNote($targetId)
-    {
-        $vipLevel = $this->getLevelService()->getLevel($targetId);
-        return str_replace(' ', '', strip_tags($vipLevel['description']));
-    }
-
-    public function getTitle($targetId)
-    {
-        $vipLevel = $this->getLevelService()->getLevel($targetId);
-        return str_replace(' ', '', strip_tags($vipLevel['name']));
-    }
-
     public function doPaySuccess($success, $order)
     {
         if (!$success) {
@@ -288,6 +274,75 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         $this->getNotificationService()->notify($order['userId'], 'default', $message);
     }
 
+    public function getOrderBySn($sn)
+    {
+        return $this->getOrderService()->getOrderBySn($sn);
+    }
+
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderService()->updateOrder($id, $fileds);
+    }
+
+    public function getNote($targetId)
+    {
+        $vipLevel = $this->getLevelService()->getLevel($targetId);
+        return str_replace(' ', '', strip_tags($vipLevel['description']));
+    }
+
+    public function getTitle($targetId)
+    {
+        $vipLevel = $this->getLevelService()->getLevel($targetId);
+        return str_replace(' ', '', strip_tags($vipLevel['name']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getPayCenterService()->pay($payData);
+    }
+
+    public function callbackUrl($router, $order, $container)
+    {
+        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        return $goto;
+    }
+
+    public function cancelOrder($id, $message, $data)
+    {
+        return $this->getOrderService()->cancelOrder($id, $message, $data);
+    }
+
+    public function createPayRecord($id, $payData)
+    {
+        return $this->getOrderService()->createPayRecord($id, $payData);
+    }
+
+    public function generateOrderToken()
+    {
+        return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "VipBundle:Vip:orderInfo";
+    }
+
+    public function isTargetExist($targetId)
+    {
+        $level = $this->getLevelService()->getLevel($targetId);
+
+        if (empty($level) || $level['enabled'] == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
@@ -311,5 +366,10 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getOrderService()
     {
         return ServiceKernel::instance()->createService('Order.OrderService');
+    }
+
+    protected function getPayCenterService()
+    {
+        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
     }
 }

@@ -96,10 +96,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         $amount = $totalPrice;
 
         //优惠码优惠价格
-        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if ($fields["couponCode"] && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'course',
@@ -152,18 +150,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getCourseOrderService()->createOrder($orderInfo);
     }
 
-    public function getNote($targetId)
-    {
-        $course = $this->getCourseService()->getCourse($targetId);
-        return str_replace(' ', '', strip_tags($course['about']));
-    }
-
-    public function getTitle($targetId)
-    {
-        $course = $this->getCourseService()->getCourse($targetId);
-        return str_replace(' ', '', strip_tags($course['title']));
-    }
-
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
@@ -190,9 +176,73 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         return;
     }
 
+    public function getOrderBySn($sn)
+    {
+        return $this->getOrderService()->getOrderBySn($sn);
+    }
+
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderService()->updateOrder($id, $fileds);
+    }
+
+    public function getNote($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        return str_replace(' ', '', strip_tags($course['about']));
+    }
+
+    public function getTitle($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+        return str_replace(' ', '', strip_tags($course['title']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getPayCenterService()->pay($payData);
+    }
+
+    public function callbackUrl($router, $order, $container)
+    {
+        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        return $goto;
+    }
+
+    public function cancelOrder($id, $message, $data)
+    {
+        return $this->getOrderService()->cancelOrder($id, $message, $data);
+    }
+
+    public function createPayRecord($id, $payData)
+    {
+        return $this->getOrderService()->createPayRecord($id, $payData);
+    }
+
+    public function generateOrderToken()
+    {
+        return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "TopxiaWebBundle:Course:orderInfo";
+    }
+
+    public function isTargetExist($targetId)
+    {
+        $course = $this->getCourseService()->getCourse($targetId);
+
+        if (empty($course) || $course['status'] == 'closed') {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getCouponService()
     {
-        return ServiceKernel::instance()->createService('Coupon:Coupon.CouponService');
+        return ServiceKernel::instance()->createService('Coupon.CouponService');
     }
 
     protected function getAppService()
@@ -218,5 +268,15 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getCourseOrderService()
     {
         return ServiceKernel::instance()->createService("Course.CourseOrderService");
+    }
+
+    protected function getOrderService()
+    {
+        return ServiceKernel::instance()->createService('Order.OrderService');
+    }
+
+    protected function getPayCenterService()
+    {
+        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
     }
 }
