@@ -9,6 +9,10 @@ class QuestionMarkerController extends BaseController
 {
     public function sortQuestionAction(Request $Request, $markerId)
     {
+        if (!$this->tryManageQuestionMarker()) {
+            return $this->createJsonResponse(false);
+        }
+
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $ids  = $data['ids'];
@@ -26,6 +30,10 @@ class QuestionMarkerController extends BaseController
     //删除弹题
     public function deleteQuestionMarkerAction(Request $request)
     {
+        if (!$this->tryManageQuestionMarker()) {
+            return $this->createJsonResponse(false);
+        }
+
         $data               = $request->request->all();
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
         $result             = $this->getQuestionMarkerService()->deleteQuestionMarker($data['questionId']);
@@ -35,6 +43,10 @@ class QuestionMarkerController extends BaseController
     //弹题排序
     public function sortQuestionMarkerAction(Request $request)
     {
+        if (!$this->tryManageQuestionMarker()) {
+            return $this->createJsonResponse(false);
+        }
+
         $data   = $request->request->all();
         $data   = isset($data['questionIds']) ? $data['questionIds'] : array();
         $result = $this->getQuestionMarkerService()->sortQuestionMarkers($data);
@@ -44,6 +56,10 @@ class QuestionMarkerController extends BaseController
     //新增弹题
     public function addQuestionMarkerAction(Request $request, $courseId, $lessonId)
     {
+        if (!$this->tryManageQuestionMarker()) {
+            return $this->createJsonResponse(false);
+        }
+
         $data = $request->request->all();
 
         $lesson = $this->getCourseService()->getLesson($lessonId);
@@ -246,6 +262,21 @@ class QuestionMarkerController extends BaseController
         }
 
         return array($paginator, $questions);
+    }
+
+    protected function tryManageQuestionMarker()
+    {
+        $user = $this->getUserService()->getCurrentUser();
+
+        if ($this->getUserService()->hasAdminRoles($user['id'])) {
+            return true;
+        }
+
+        if (in_array("ROLE_TEACHER", $user['roles'])) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getQuestionMarkerService()
