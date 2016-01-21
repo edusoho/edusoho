@@ -245,6 +245,7 @@ class TestpaperController extends BaseController
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
         //获取试卷载体
+        $target = array();
 
         if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
             $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
