@@ -5179,19 +5179,6 @@ a.homework-essay-textarea-pack-up {
   margin-bottom: 25px;
   border-color: #f5f5f5;
 }
-.nav.nav-tabs.nav-tabs-lg > li > a {
-  padding: 5px 30px 15px 30px;
-}
-@media (max-width: 1199px) {
-  .nav.nav-tabs.nav-tabs-lg > li > a {
-    padding: 3px 20px 13px 20px;
-  }
-}
-@media (max-width: 767px) {
-  .nav.nav-tabs.nav-tabs-lg > li > a {
-    padding: 8px;
-  }
-}
 .nav.nav-tabs .highlight {
   position: absolute;
   bottom: -1px;
@@ -5214,10 +5201,17 @@ a.homework-essay-textarea-pack-up {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+  padding: 5px 20px 15px;
+}
+@media (max-width: 1199px) {
+  .nav.nav-tabs > li > a {
+    padding: 5px 10px 10px;
+    font-size: 14px;
+  }
 }
 @media (max-width: 767px) {
   .nav.nav-tabs > li > a {
-    padding: 10px 8px;
+    padding: 8px;
   }
 }
 .nav.nav-tabs > li > a:hover,
@@ -5243,6 +5237,22 @@ a.homework-essay-textarea-pack-up {
 .nav.nav-tabs > li.active > a .text-muted,
 .nav.nav-tabs > li:hover > a .text-muted {
   color: #ff7200;
+}
+.nav.nav-tabs > li.active > a .badge,
+.nav.nav-tabs > li:hover > a .badge {
+  background-color: #ff7200;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.nav.nav-tabs .badge {
+  margin-left: 5px;
+  background-color: #919191;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .nav-btn-tab {
   position: relative;
@@ -10022,48 +10032,6 @@ textarea {
   .class-header.after.auditor .class-auditor {
     padding: 10px 20px;
   }
-}
-.class-detail-main .nav.nav-tabs > li > a,
-.course-detail-main .nav.nav-tabs > li > a {
-  padding: 5px 20px 15px;
-}
-@media (max-width: 1199px) {
-  .class-detail-main .nav.nav-tabs > li > a,
-  .course-detail-main .nav.nav-tabs > li > a {
-    padding: 5px 10px 10px;
-    font-size: 14px;
-  }
-}
-.class-detail-main .nav.nav-tabs > li > a .badge,
-.course-detail-main .nav.nav-tabs > li > a .badge {
-  margin-left: 5px;
-  background-color: #919191;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.class-detail-main .nav.nav-tabs > li > a:hover .badge,
-.course-detail-main .nav.nav-tabs > li > a:hover .badge {
-  background-color: #ff7200;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
-.class-detail-main .piece-header,
-.course-detail-main .piece-header {
-  padding: 0 30px 0 15px;
-}
-.class-detail-main .piece-header:after,
-.course-detail-main .piece-header:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 3px;
-  width: 4px;
-  height: 16px;
-  background: #ff7200;
 }
 .class-course-list .course-item {
   margin-top: 30px;
