@@ -84,8 +84,8 @@ class HLSController extends BaseController
             //         $params['hideBeginning'] = 1;
             //     }
             // }
-            $params['hideBeginning'] = 1;
-            $streams[$level]         = $this->generateUrl('hls_stream', $params, true);
+            //$params['hideBeginning'] = 0;
+            $streams[$level] = $this->generateUrl('hls_stream', $params, true);
         }
 
         $qualities = array(
