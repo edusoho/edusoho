@@ -278,7 +278,7 @@ class UserController extends BaseController
             $followingUserProfiles = ArrayToolkit::index($this->getUserService()->searchUserProfiles(array('ids' => $followingIds), array('id', 'ASC'), 0, count($followingIds)), 'id');
         }
 
-        $myfollowings = $this->_getUserFollowing($user['id']);
+        $myfollowings = $this->_getUserFollowing();
 
         return $this->render('TopxiaWebBundle:User:friend.html.twig', array(
             'user'           => $user,
@@ -298,7 +298,7 @@ class UserController extends BaseController
         $userProfile['about'] = strip_tags($userProfile['about'], '');
         $userProfile['about'] = preg_replace("/ /", "", $userProfile['about']);
         $user                 = array_merge($user, $userProfile);
-        $myfollowings         = $this->_getUserFollowing($user['id']);
+        $myfollowings         = $this->_getUserFollowing();
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -564,11 +564,12 @@ class UserController extends BaseController
         ));
     }
 
-    protected function _getUserFollowing($userId)
+    protected function _getUserFollowing()
     {
-        $followings   = $this->getUserService()->findAllUserFollowing($userId);
+        $user         = $this->getCurrentUser();
+        $followings   = $this->getUserService()->findAllUserFollowing($user['id']);
         $followingIds = ArrayToolkit::column($followings, 'id');
-        $myfollowings = $this->getUserService()->filterFollowingIds($userId, $followingIds);
+        $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $followingIds);
         return $myfollowings;
     }
 

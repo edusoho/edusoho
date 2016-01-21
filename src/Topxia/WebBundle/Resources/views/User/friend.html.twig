@@ -41,8 +41,8 @@
           </div>
           <div class="metas">
             {% if not app.user or (friend.id != app.user.id) %}
-              <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:friend.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>关注</a>
-              <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:friend.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+              <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:app.user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>关注</a>
+              <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:app.user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
               <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static"  data-url="{{path('message_create', {toId:friend.id})}}">私信</a>
             {% endif %}
           </div>
