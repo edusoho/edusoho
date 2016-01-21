@@ -1,7 +1,7 @@
 {% set tab = tab|default(null) %}
 {% set previewAs = get_parameters_from_url(app.request.uri) %}
 <div class="nav-btn-tab">
-  <ul class="nav nav-tabs nav-tabs-lg" role="tablist">
+  <ul class="nav nav-tabs" role="tablist">
     {% if not member %}
       <li role="presentation" {% if tab == 'overview' %}class="active"{% endif %}><a {% if previewAs %}href="{{ path('course_show', {id:course.id,previewAs:'guest'}) }}"{% else %}href="{{ path('course_show', {id:course.id}) }}" {% endif %}>课程概览</a></li>
       <li role="presentation" {% if tab == 'lesson-list' %}class="active"{% endif %}><a {% if previewAs %}href="{{ path('course_lesson_list', {id:course.id, previewAs:'guest'}) }}"{% else %}href="{{ path('course_lesson_list', {id:course.id})}}"{% endif %}>课时</a></li>

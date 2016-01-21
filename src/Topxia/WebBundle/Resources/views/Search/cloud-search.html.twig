@@ -25,7 +25,7 @@
   <div class="row">
     <div class="col-md-8">
       <div class="es-section">
-        <ul class="nav nav-tabs nav-tabs-lg" id="search-nav-tabs" role="tablist">
+        <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
           <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >课程</a></li>
           <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >教师</a></li>
           <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >话题</a></li>
