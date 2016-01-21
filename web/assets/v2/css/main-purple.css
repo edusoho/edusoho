@@ -2697,10 +2697,6 @@ select:-webkit-autofill {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-<<<<<<< HEAD
-.bg-primary {
-  background-color: #773cec !important;
-=======
 @-moz-keyframes spin {
   0% {
     -moz-transform: rotate(0deg);
@@ -2732,7 +2728,9 @@ select:-webkit-autofill {
   100% {
     transform: rotate(359deg);
   }
->>>>>>> develop
+}
+.bg-primary {
+  background-color: #773cec !important;
 }
 .color-primary {
   color: #773cec !important;
