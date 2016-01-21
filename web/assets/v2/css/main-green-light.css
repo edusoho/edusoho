@@ -2981,14 +2981,6 @@ fieldset[disabled] a.btn {
 .h400 {
   min-height: 400px;
 }
-.media-body .editor-text img {
-  width: 100% \9;
-}
-@media screen and (min--moz-device-pixel-ratio: 0) {
-  .media-body .editor-text img {
-    width: 100%;
-  }
-}
 .inline-block {
   display: inline-block;
 }
