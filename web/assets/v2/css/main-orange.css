@@ -2712,6 +2712,21 @@ select:-webkit-autofill {
 .mtl {
   margin-top: 20px;
 }
+.mt0 {
+  margin-top: 0;
+}
+.mts-o {
+  margin-top: -5px;
+}
+.mtm-o {
+  margin-top: -10px;
+}
+.mt15-o {
+  margin-top: -15px;
+}
+.mtl-o {
+  margin-top: -20px;
+}
 .mrs {
   margin-right: 5px;
 }
@@ -2729,6 +2744,21 @@ select:-webkit-autofill {
 }
 .mbl {
   margin-bottom: 20px;
+}
+.mb0 {
+  margin-bottom: 0;
+}
+.mbs-o {
+  margin-bottom: -5px;
+}
+.mbm-o {
+  margin-bottom: -10px;
+}
+.mb15-o {
+  margin-bottom: -15px;
+}
+.mbl-o {
+  margin-bottom: -20px;
 }
 .mls {
   margin-left: 5px;
@@ -5249,8 +5279,7 @@ a.homework-essay-textarea-pack-up {
 }
 .media.media-number,
 .media.media-number-o {
-  border-bottom: 1px solid #f5f5f5;
-  padding-bottom: 15px;
+  padding-bottom: 5px;
 }
 .media.media-number .media-left,
 .media.media-number-o .media-left {
@@ -5979,6 +6008,10 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.image-overlay.image-overlay-o:hover {
+  opacity: 1;
+  filter: alpha(opacity=30);
+}
 .alert > i {
   margin-right: 10px;
 }
@@ -6420,7 +6453,7 @@ textarea {
 .user-avatar-list li {
   float: left;
   width: 20%;
-  margin: 10px auto;
+  margin-bottom: 10px;
   text-align: center;
 }
 @media (max-width: 991px) and (min-width: 768px) {
