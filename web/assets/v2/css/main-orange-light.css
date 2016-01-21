@@ -8648,40 +8648,40 @@ textarea {
   margin-bottom: 5px;
   font-size: 12px;
 }
-.article-list .article-item {
+.article-list-mian .article-item {
   margin-bottom: 20px;
   padding-bottom: 15px;
   border-bottom: 1px solid #efefef;
 }
 @media (max-width: 767px) {
-  .article-list .article-item .media-left {
+  .article-list-mian .article-item .media-left {
     width: 100%;
     display: block;
     padding-right: 0;
     margin-bottom: 10px;
   }
-  .article-list .article-item .media .thumb-img {
+  .article-list-mian .article-item .media .thumb-img {
     width: 100%;
   }
 }
-.article-list .article-item .content {
+.article-list-mian .article-item .content {
   margin-top: 15px;
   color: #919191;
 }
-.article-list .media {
+.article-list-mian .media {
   color: #919191;
 }
-.article-list .media .media-body {
+.article-list-mian .media .media-body {
   padding-left: 10px;
   line-height: 25px;
 }
-.article-list .media .thumb-img {
+.article-list-mian .media .thumb-img {
   width: 260px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-.article-list .pager {
+.article-list-mian .pager {
   margin: 40px 0 20px 0;
 }
 .article-metas {
