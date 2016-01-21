@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                 var l = strlen(element.val());
                 return l <= Number(options.max);
             },
-            '{{display}}的长度必须小于等于{{max}}，一个中文字算2个字符'
+            '{{display}}的长度必须小于等于{{max}}字符,一个中文为2个字符'
         ],
         [
             'chinese',
