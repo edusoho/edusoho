@@ -46,7 +46,7 @@ class DynamicQueryBuilder extends QueryBuilder
         $conditionName = $this->getConditionName($where);
 
         if (empty($this->conditions[$conditionName]) || !is_array($this->conditions[$conditionName])) {
-            return $this->andStaticWhere('1=-1');
+            return $this;
         }
 
         $marks = array();
