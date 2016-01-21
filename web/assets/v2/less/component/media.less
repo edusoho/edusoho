@@ -217,21 +217,7 @@
     }
   }
 }
-.group-page-header{
-  border-bottom: none;
-  position: relative;
-  padding: 0 15px;
-  font-size: 16px;
-    &:after{
-      content: "";
-      position: absolute;
-      top: 3px;
-      left: 0;
-      height: 16px;
-      width: 4px;
-      background: @brand-primary;
-  }
-}
+
 // 动态
 .media-dynamic {
   &:last-child .media-body {
@@ -258,5 +244,25 @@
     top: 9px;
     font-size: 16px;
     color: @gray-medium;
+  }
+}
+
+// 用于搜索页面
+.media-search {
+  .reply {
+    background-color: @gray-lighter;
+    color: @gray;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    padding: 5px;
+    .border-radius;
+  }
+  .title {
+    font-size: 16px;
+    margin-bottom: 10px;
+    @media( max-width: @screen-xs-max) {
+      font-size: 14px;
+    }
   }
 }

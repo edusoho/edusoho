@@ -70,6 +70,7 @@
       扫二维码继续学习
     </span>
   </span>
+  {% if course.buyable %}
    {% if lesson.status == 'published' and course.parentId == '0' %}
 
     {% if course.price == '0.00'  %}
@@ -110,5 +111,5 @@
     {% endif %}
   {% endif %} 
  {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
-
+{% endif %}
 {% endblock %}

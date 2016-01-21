@@ -3,7 +3,7 @@
 {% set layoutClass = 'before' %}
 
 {% block before_content %}
-  <ol class="breadcrumb">
+  <ol class="breadcrumb breadcrumb-o">
     <li><a href="{{ path('homepage') }}">首页</a></li>
     {% for breadcrumb in breadcrumbs %}
       <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>

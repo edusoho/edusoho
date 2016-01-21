@@ -97,7 +97,7 @@ class CourseController extends CourseBaseController
             $conditions['recommended'] = 0;
             $coursesTemp               = $this->getCourseService()->searchCourses(
                 $conditions,
-                $orderBy,
+                'createdTime',
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
@@ -252,6 +252,24 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function LessonListAction(Request $request, $id)
+    {
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+            if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Course:lesson-list.html.twig', array(
+            'course' => $course,
+            'member' => $member
+        ));
+    }
+
     public function membersAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
@@ -307,8 +325,6 @@ class CourseController extends CourseBaseController
             if (isset($member["id"])) {
                 $course['studentNum']++;
             }
-
-            return $this->redirect($this->generateUrl('course_info', array('id' => $course['id'])));
         }
 
         $this->getCourseService()->hitCourse($id);

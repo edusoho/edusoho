@@ -3,14 +3,14 @@
 {% set bodyClass = 'group-page' %}
 {% block content %}
    {% include 'TopxiaWebBundle:Group:group-header.html.twig' with {'groupinfo':groupinfo,'is_groupmember':is_groupmember|default('')} %}
-
+  
   {% block group_body %}
     <div class="row">
-      <div class="col-md-8 group-main">
+      <div class="col-md-9 group-main">
         {% block group_main %}{% endblock %}
       </div>
 
-      <div class="col-md-4 group-side">
+      <div class="col-md-3 group-side">
         {% block group_side %}{% endblock %}
       </div>
     </div>

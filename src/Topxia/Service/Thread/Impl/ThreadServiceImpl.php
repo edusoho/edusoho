@@ -41,6 +41,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function filterSort($sort)
     {
+        if (is_array($sort)) {
+            return $sort;
+        }
         switch ($sort) {
             case 'created':
                 $orderBys = array(

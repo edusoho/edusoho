@@ -86,7 +86,7 @@ class RegisterController extends BaseController
         }
 
         $inviteCode = '';
-
+        $inviteUser = array();
         if (!empty($fields['inviteCode'])) {
             $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
         }
@@ -94,11 +94,11 @@ class RegisterController extends BaseController
         if (!empty($inviteUser)) {
             $inviteCode = $fields['inviteCode'];
         }
-
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
             'inviteCode'        => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort'      => array(),
+            'inviteUser'       => $inviteUser,
             '_target_path'      => $this->getTargetPath($request)
         ));
     }
