@@ -10,8 +10,10 @@ define(function(require, exports, module) {
             watermark: '',
             url: '',
             dynamicSource: '',
-            markers: [],
-            starttime: '0'
+            markers: [{id:0,time:-10,text:'',finished:true}],
+            starttime: '0',
+            timelimit:'0',
+            controlBarLock:false
         },
 
         events: {},
@@ -51,6 +53,30 @@ define(function(require, exports, module) {
                     })
                 }
 
+                plugins = $.extend(plugins, {
+                        markers: {
+                            markers: self.get('markers'),
+                            markerTip: {
+                               display: false,
+                               time: function(marker) {
+                                 return marker==undefined ? -1:marker.time;
+                               }
+                            },
+                            markerEscape: true,
+                            onMarkerReached:function(marker,player){
+                              if(self.isPlaying() ){
+                                window.BalloonPlayer.trigger('onMarkerReached', marker.id);
+                              }
+                            }
+                        }
+                    });
+
+                plugins = $.extend(plugins, {
+                        progressTips: {
+                        }
+                    });
+
+
                 var player = videojs(elementId, {
                     techOrder: ["flash", "html5"],
                     controls: true,
@@ -78,10 +104,36 @@ define(function(require, exports, module) {
                         default_res : currentRes,
                         dynamic_source : self.get('url')
                     });
+
+                    player.hotkeys({
+                        volumeStep: 0.1,
+                        alwaysCaptureHotkeys:true,
+                        customKeys: {
+                          // Create custom hotkeys
+                          ctrldKey: {
+                            key: function(e) {
+                              // Toggle something with CTRL + D Key
+                              return (e.ctrlKey && e.which === 68);
+                            },
+                            handler: function(player, options) {
+                              // Using mute as an example
+                              if (options.enableMute) {
+                                player.muted(!player.muted());
+                              }
+                            }
+                          }
+                        }
+                      });
                 });
 
                 player.on('changeRes', function() {
                     Cookie.set("currentRes", player.getCurrentRes());
+                });
+
+                player.on('userinactive', function() {
+                    if(self.get('controlBarLock')!==false){
+                        player.userActive(true);
+                    }
                 });
 
                 player.on('loadedmetadata', function(e){
@@ -90,6 +142,16 @@ define(function(require, exports, module) {
 
                 player.on("timeupdate", function(e){
                     self.trigger("timechange", e);
+                    var currentTime = player.currentTime();
+                    var timelimit = self.get('timelimit');
+                    if(timelimit>0 && timelimit<currentTime){
+                        self.isPlaying() && player.pause();
+                        player.currentTime(timelimit);
+                        player.pluck({
+                            text: "免费试看结束，购买后可完整观看",
+                            display:true
+                        });
+                    }
                 });
 
                 player.on("ended", function(e){
@@ -102,13 +164,16 @@ define(function(require, exports, module) {
 
                 player.on("play", function(e){
                     self.trigger("playing", e);
+                    player.pluck({
+                        text: "",
+                        display:false
+                    });
                 });
 
                 player.on("pause", function(e){
                     self.trigger("paused", e);
                 });
                 
-
                 self.set('player', player);
 
                 BalloonCloudVideoPlayer.superclass.setup.call(self);
@@ -145,6 +210,23 @@ define(function(require, exports, module) {
             return this.get('markers');
         },
 
+        finishMarker: function(id,isFinish) {
+            var player = this.get("player");
+            var markers = player.markers.getMarkers();
+            for(var key in markers) 
+            {
+                if(markers[key].id == id) {
+                    markers[key].finished = isFinish;
+                    var marker = markers[key];
+                    player.markers.remove(key);
+                    player.markers.add([marker]);
+                    player.currentTime(parseFloat(markers[key].time)+0.5);
+                    break;
+                }
+            }
+            this.get("player").play();
+        },
+
         setMarkers: function(markers) {
             var player = this.get("player");
             player.markers.reset(markers);
@@ -166,10 +248,19 @@ define(function(require, exports, module) {
             return false;
         },
 
+        setMarkerEscepe: function(mode) {
+            var player = this.get("player");
+            player.markers.setMarkerEscape(mode);
+        },
+
         destroy: function() {
             this.get("player").dispose();
         },
 
+        setControlBarLock: function (bool){
+            this.set("controlBarLock",bool);
+        },
+        
         durationFormat: function(secondTime) {
             var minutes = parseInt(secondTime / 60);
             var seconds = secondTime - minutes * 60;

@@ -74,7 +74,7 @@ class KernelResponseListener
         }
     }
 
-    protected function generateUrl($router, $params, $withHost = false)
+    protected function generateUrl($router, $params = array(), $withHost = false)
     {
         return $this->container->get('router')->generate($router, $params, $withHost);
     }
