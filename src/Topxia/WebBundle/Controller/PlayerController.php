@@ -68,10 +68,6 @@ class PlayerController extends BaseController
                         'token' => $token['token']
                     );
 
-                    if ($this->setting("developer.balloon_player")) {
-                        $params['returnJson'] = true;
-                    }
-                    
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
                     $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);

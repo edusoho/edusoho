@@ -11,7 +11,6 @@ class HLSController extends BaseController
     {
         $line          = $request->query->get('line', null);
         $hideBeginning = $request->query->get('hideBeginning', false);
-        $returnJson    = $request->query->get('returnJson', false);
         $levelParam    = $request->query->get('level', "");
         $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
         $fromApi       = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
@@ -96,7 +95,7 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        if ($returnJson) {
+        if ($fromApi) {
             $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
             return $this->createJsonResponse($playlist);
         } else {
