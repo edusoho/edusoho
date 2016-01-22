@@ -95,10 +95,7 @@ class HLSController extends BaseController
 
         $api = CloudAPIFactory::create('leaf');
 
-        if (!$fromApi) {
-            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
-            return $this->createJsonResponse($playlist);
-        } else {
+        if ($fromApi) {
             $playlist = $api->get('/hls/playlist', array('streams' => $streams, 'qualities' => $qualities));
 
             if (empty($playlist['playlist'])) {
@@ -109,6 +106,9 @@ class HLSController extends BaseController
                 'Content-Type'        => 'application/vnd.apple.mpegurl',
                 'Content-Disposition' => 'inline; filename="playlist.m3u8"'
             ));
+        } else {
+            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+            return $this->createJsonResponse($playlist);
         }
     }
 
