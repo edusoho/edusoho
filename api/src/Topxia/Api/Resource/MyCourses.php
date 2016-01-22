@@ -27,7 +27,7 @@ class MyCourses extends BaseResource
 
     public function filter(&$res)
     {
-        return $this->multicallFilter('Course', $res);
+        return $this->multicallFilter('MyCourse', $res);
     }
 
     protected function multicallFilter($name, &$res)
