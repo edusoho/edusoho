@@ -67,6 +67,7 @@ class PlayerController extends BaseController
                         'id'    => $file['id'],
                         'token' => $token['token']
                     );
+
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
                     $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
