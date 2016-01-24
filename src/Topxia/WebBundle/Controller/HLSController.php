@@ -155,13 +155,12 @@ class HLSController extends BaseController
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
         }
 
-        $inWhiteList     = $this->agentInWhiteList($request->headers->get("user-agent"));
-        $isBalloonPlayer = $this->setting('developer.balloon_player', 0);
+        $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
 
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
-                'keyencryption' => $token['data']['fromApi'] || $inWhiteList || empty($isBalloonPlayer) ? 0 : 1
+                'keyencryption' => $token['data']['fromApi'] || $inWhiteList ? 0 : 1
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
