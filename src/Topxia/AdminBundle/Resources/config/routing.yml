@@ -669,8 +669,8 @@ admin_setting_cdn:
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
 
 admin_setting_redis:
-    pattern:  /setting/session_handler
-    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:sessionHandler }
+    pattern:  /setting/redis
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
 
 admin_optimize:
     pattern:  /setting/optimize

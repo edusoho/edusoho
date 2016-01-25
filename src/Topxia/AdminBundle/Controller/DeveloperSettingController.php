@@ -106,33 +106,33 @@ class DeveloperSettingController extends BaseController
         ));
     }
 
-    public function sessionHandlerAction(Request $request)
+    public function redisAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $sessionHandler            = $request->request->all();
-            $sessionHandler['setting'] = json_decode($sessionHandler['setting'], true);
-            $this->getSettingService()->set('sessionHandler', $sessionHandler);
+            $redis            = $request->request->all();
+            $redis['setting'] = json_decode($redis['setting'], true);
+            $this->getSettingService()->set('redis', $redis);
 
-            if ($sessionHandler['mode'] == 'redis') {
-                $config          = "<?php \nreturn ".var_export($sessionHandler['setting'], true).';';
+            if ($redis['opened'] == '1') {
+                $config          = "<?php \nreturn ".var_export($redis['setting'], true).';';
                 $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
                 file_put_contents($redisConfigFile, $config);
             }
 
-            $this->getLogService()->info('system', 'update_sessionHandler', "更新sessionHandler设置", $sessionHandler);
+            $this->getLogService()->info('system', 'update_redis', "更新redis设置", $redis);
             $this->setFlashMessage('success', '设置已保存！');
         }
 
-        $sessionHandler = $this->getSettingService()->get('sessionHandler', array());
+        $redis = $this->getSettingService()->get('redis', array());
 
-        if (isset($sessionHandler['setting']) && !empty($sessionHandler['setting'])) {
-            $sessionHandler['setting'] = JsonToolkit::prettyPrint(json_encode($sessionHandler['setting']));
+        if (isset($redis['setting']) && !empty($redis['setting'])) {
+            $redis['setting'] = JsonToolkit::prettyPrint(json_encode($redis['setting']));
         } else {
-            $sessionHandler['setting'] = '{}';
+            $redis['setting'] = '{}';
         }
 
-        return $this->render('TopxiaAdminBundle:DeveloperSetting:session-handler.html.twig', array(
-            'sessionHandler' => $sessionHandler
+        return $this->render('TopxiaAdminBundle:DeveloperSetting:redis.html.twig', array(
+            'redis' => $redis
         ));
     }
 
