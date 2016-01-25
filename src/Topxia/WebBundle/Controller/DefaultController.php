@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $courses    = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);

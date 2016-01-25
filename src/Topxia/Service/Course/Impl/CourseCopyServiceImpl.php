@@ -172,7 +172,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
         $map     = array();
 
         foreach ($lessons as $lesson) {
-            $fields             = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId', 'replayStatus'));
+            $fields             = ArrayToolkit::parts($lesson, array('number', 'seq', 'free', 'status', 'title', 'summary', 'tags', 'type', 'content', 'giveCredit', 'requireCredit', 'mediaId', 'mediaSource', 'mediaName', 'mediaUri', 'length', 'materialNum', 'startTime', 'endTime', 'liveProvider', 'userId', 'replayStatus', 'suggestHours'));
             $fields['courseId'] = $newCourse['id'];
 
             if ($lesson['chapterId']) {
@@ -282,7 +282,7 @@ class CourseCopyServiceImpl extends BaseService implements CourseCopyService
 
     protected function copyCourse($course, $link = false)
     {
-        $fields                = ArrayToolkit::parts($course, array('coinPrice', 'originCoinPrice', 'price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId'));
+        $fields                = ArrayToolkit::parts($course, array('coinPrice', 'originCoinPrice', 'price', 'originPrice', 'title', 'status', 'subtitle', 'type', 'maxStudentNum', 'price', 'coinPrice', 'expiryDay', 'serializeMode', 'lessonNum', 'giveCredit', 'vipLevelId', 'categoryId', 'tags', 'smallPicture', 'middlePicture', 'largePicture', 'about', 'teacherIds', 'goals', 'audiences', 'userId', 'tryLookTime', 'tryLookable'));
         $fields['createdTime'] = time();
 
         if ($link) {

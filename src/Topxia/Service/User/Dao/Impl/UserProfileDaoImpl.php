@@ -141,7 +141,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         );
 
         if (isset($conditions['mobile'])) {
-            $conditions['mobile'] = "{$conditions['mobile']}%";
+            $conditions['mobile'] = "%{$conditions['mobile']}%";
         }
 
         if (isset($conditions['qq'])) {
@@ -161,6 +161,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
                     ->andWhere('mobile LIKE :mobile')
                     ->andWhere('truename LIKE :truename')
                     ->andWhere('idcard LIKE :idcard')
+                    ->andWhere('id IN (:ids)')
                     ->andWhere('qq LIKE :qq');
     }
 }

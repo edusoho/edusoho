@@ -1,8 +1,8 @@
 <?php
 namespace Topxia\Service\Common;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Topxia\Service\Common\Connection;
 
 class DynamicQueryBuilder extends QueryBuilder
 {

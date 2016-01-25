@@ -30,6 +30,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
+        if (isset($conditions['classroomIds']) && empty($conditions['classroomIds'])) {
+            return array();
+        }
+
         $this->filterStartLimit($start, $limit);
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
 
@@ -60,6 +64,10 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
     public function searchClassroomsCount($conditions)
     {
+        if (isset($conditions['classroomIds']) && empty($conditions['classroomIds'])) {
+            return 0;
+        }
+
         $builder = $this->_createClassroomSearchBuilder($conditions)
                         ->select('count(id)');
 

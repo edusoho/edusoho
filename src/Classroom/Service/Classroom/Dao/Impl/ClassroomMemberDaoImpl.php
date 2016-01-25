@@ -200,27 +200,31 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
             $conditions['role'] = "%{$conditions['role']}%";
         }
 
+        if (isset($conditions['roles'])) {
+            $roles = '';
+
+            foreach ($conditions['roles'] as $role) {
+                $roles .= "|".$role;
+            }
+
+            $roles = $roles."|";
+
+            foreach ($conditions['roles'] as $role) {
+                $roles .= ",|".$role."|";
+            }
+
+            $conditions['roles'] = $roles;
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, 'classroom_member')
                         ->andWhere('userId = :userId')
                         ->andWhere('classroomId = :classroomId')
                         ->andWhere('noteNum > :noteNumGreaterThan')
                         ->andWhere('role LIKE :role')
+                        ->andWhere('role IN ( :roles )')
                         ->andWhere('createdTime >= :startTimeGreaterThan')
                         ->andWhere('createdTime < :startTimeLessThan');
-
-        // if (isset($conditions['courseIds'])) {
-        //     $courseIds = array();
-        //     foreach ($conditions['courseIds'] as $courseId) {
-        //         if (ctype_digit($courseId)) {
-        //             $courseIds[] = $courseId;
-        //         }
-        //     }
-        //     if ($courseIds) {
-        //         $courseIds = join(',', $courseIds);
-        //         $builder->andStaticWhere("courseId IN ($courseIds)");
-        //     }
-        // }
 
         return $builder;
     }

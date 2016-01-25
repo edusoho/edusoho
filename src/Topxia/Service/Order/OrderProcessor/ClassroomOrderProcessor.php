@@ -359,6 +359,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return "ClassroomBundle:Classroom:orderInfo";
     }
 
+    public function isTargetExist($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        if (empty($classroom) || $classroom['status'] == 'closed') {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');

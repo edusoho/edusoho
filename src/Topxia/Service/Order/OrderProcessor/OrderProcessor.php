@@ -32,4 +32,6 @@ interface OrderProcessor
     public function generateOrderToken();
 
     public function getOrderInfoTemplate();
+
+    public function isTargetExist($targetId);
 }
