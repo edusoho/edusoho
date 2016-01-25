@@ -45,7 +45,7 @@
   </div>
 
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}">
-    <div class="col-md-2 control-label"><label for="lesson-summary-field">摘要</label></div>
+    <div class="col-md-2 control-label"><label for="lesson-summary-field">简介</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
 
     </div>
@@ -68,7 +68,7 @@
 
       <textarea class="form-control" id="lesson-content-field" name="content"
       data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
-      data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}"
+      data-flash-upload-url="{{ path('editor_upload', {token:upload_token('course', 'flash')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
       >{{ lesson.content|default('') }}</textarea>
     </div>
   </div>
@@ -129,6 +129,18 @@
     </div>
   </div>
   {% endif %}
+
+  
+  <div class="form-group">
+    <div class="col-md-2 control-label"><label>建议学习时长</label></div>
+    <div class="col-md-9 controls">
+      <input class="form-control width-input width-input-small" id="lesson-suggest-period-field" type="text" name="suggestHours" value="{{ lesson.suggestHours|default('1.0') }}">小时
+      <span class="for-video-type">（如未设置，则默认学习时长为视频时长3倍取整。）</span>
+      <span class="for-audio-type">（如未设置，则默认学习时长为音频时长3倍取整。）</span>
+      <span class="for-flash-type for-text-type for-ppt-type for-document-type">（如未设置，则默认学习时长1小时。）</span>
+      <div class="help-block"></div>
+    </div>
+  </div>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 

@@ -106,76 +106,30 @@ class TestpaperServiceTest extends BaseTestCase
     /* 试卷同步
     */
 
-    public function testAddTestpaper()
+    public function testFindTestpapersByCopyIdAndLockedTarget()
     {
-        $testpaper = array('name' => 'Test');
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-    }
-
-    public function testEditTestpaper()
-    {
-        $testpaper = array('name' => 'Test','pId'=>1);
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-        $testpaper = $this->getTestpaperService()->editTestpaper(1,array('name'=>'Test2'));
-        $this->assertEquals('Test2',$testpaper['name']);    
-    }
-
-
-
-    public function testFindTestpapersByPIdAndLockedTarget()
-    {
-        $testpaper = array('name' => 'Test','pId'=>1,'target'=>'course-1');
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-        $testpaper = $this->getTestpaperService()->findTestpapersByPIdAndLockedTarget(1,"('course-1')");
+        $question = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>0,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+        $question = $this->getQuestionService()->createQuestion($question);
+        $testpaper = array('name' => 'Test',"description"=>'测试',"limitedTime"=>'0',"mode"=>"rand","range"=>"course","ranges"=>array(),"counts"=>array("single_choice"=>"1","choice"=>"0","uncertain_choice"=>"0","fill"=>"0","determine"=>"0","material"=>"0"),'CopyId'=>1,'target'=>'course-1',"scores"=>array("single_choice"=>"2","uncertain_choice"=>"2","choice"=>"2","uncertain_choice"=>"2","fill"=>"2","determine"=>"2","essay"=>"2","material"=>"2"),"missScores"=>array("choice"=>0,"uncertain_choice"=>0),"percentages"=>array("simple"=>"","normal"=>"","difficulty"=>''),"target"=>'course-1',"pattern"=>"QuestionType","copyId"=>"1");
+        $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
+        $testpaper = $this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget(1,"('course-1')");
         $this->assertEquals('Test',$testpaper[0]['name']);
-    }
-
-
-    public function textFindTestpaperItemsByPIdAndLockedTestIds()
-    {
-        $testpaper = array('name' => 'Test','pId'=>1,'target'=>'course-1','testId'=>1);
-        $testpaper = $this->getTestpaperService()->addTestpaper($testpaper);
-        $this->assertEquals('Test',$testpaper['name']);
-
-        $testpaper = $this->getTestpaperService()->findTestpaperItemsByPIdAndLockedTestIds(1,array(1));
-        $this->assertEquals('Test',$testpaper[0]['name']);
-    }
-
-    public function testCreateTestpaperItem()
-    {
-        $testpaperItem = array('questionType'=>'single_choice');
-        $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-        $this->assertEquals('single_choice',$testpaperItem['questionType']);
-    }
-
-    public function testDeleteTestpaperItem()
-    {
-      $testpaperItem = array('questionType'=>'single_choice');
-      $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-      $this->assertEquals('single_choice',$testpaperItem['questionType']);
-      $count = $this->getTestpaperService()->deleteTestpaperItem($testpaperItem['id']);  
-      $this->assertEquals(1,$count);
-    }
-
-    public function testDeleteTestpaperItemByTestId()
-    {
-      $testpaperItem = array('questionType'=>'single_choice','testId'=>1);
-      $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-      $this->assertEquals('single_choice',$testpaperItem['questionType']);
-      $count = $this->getTestpaperService()->deleteTestpaperItemByTestId(1);  
-      $this->assertEquals(1,$count);
-    }
-
-    public function testEditTestpaperItem()
-    {
-      $testpaperItem = array('questionType'=>'single_choice');
-      $testpaperItem = $this->getTestpaperService()->createTestpaperItem($testpaperItem);
-      $this->assertEquals('single_choice',$testpaperItem['questionType']);
-      $testpaperItem = $this->getTestpaperService()->editTestpaperItem($testpaperItem['id'],array('questionType'=>'single'));  
-      $this->assertEquals('single',$testpaperItem['questionType']);
     }
     
     protected function getQuestionService()
@@ -187,4 +141,5 @@ class TestpaperServiceTest extends BaseTestCase
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
 }

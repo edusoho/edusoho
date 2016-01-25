@@ -20,6 +20,7 @@ couponType:
 couponStatus:
     used: 已使用
     unused: 未使用
+    receive: 已领取
 
 fileType:
     video: 视频
@@ -66,6 +67,9 @@ refundStatus:html:
 payment:
     alipay: 支付宝
     wxpay: 微信支付
+    heepay: 网银支付
+    quickpay: 快捷支付
+    iosiap: 苹果应用内支付
 
 moneyRecordType:
     income: 充值
@@ -98,6 +102,15 @@ dateType:
     last_week: 上周
     this_month: 本月
     last_month: 上月
+
+week:
+      1: 一
+      2: 二
+      3: 三
+      4: 四
+      5: 五
+      6: 六
+      7: 日
 
 contentStatus:
     published: 已发布
@@ -160,6 +173,12 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
 
+jobCycle:
+    once: 一次
+    everyhour: 每小时
+    everyday: 每天
+    everymouth: 每月
+
 logLevel:
     info: 提示
     warning: 警告
@@ -178,6 +197,7 @@ analysisDateType:
     lesson: 新增课时数
     joinLesson: 加入学习数
     paidLesson: 购买课程数
+    paidClassroom: 购买班级数
     finishedLesson: 完成课时学习数
     videoViewed: 视频观看数
     cloudVideoViewed: └─ 云视频观看数
@@ -185,6 +205,8 @@ analysisDateType:
     netVideoViewed: └─ 网络视频观看数
     income: 营收额
     courseIncome: └─ 课程营收额
+    classroomIncome: └─ 班级营收额
+    vipIncome: └─ 会员营收额
     courseSum: 课程总数
     userSum: 用户总数
     # exitLesson: 退出学习数
@@ -192,6 +214,9 @@ analysisDateType:
 userType:
     default: 网站注册
     weibo: 微博登录
+    web_email: 网站邮箱注册
+    web_mobile: 网站手机注册
+    import: 手动导入
     renren: 人人连接
     qq: QQ登录
     weixin: 微信登录
@@ -239,6 +264,7 @@ coinRecordType:
 
 coinOrderType:
     userName: 用户名
+    sn: 订单号
 
 discountType:
     discount: 限时打折

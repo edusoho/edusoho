@@ -13,14 +13,14 @@
     text-align: center;
     padding: 20px 0;
     line-height: 30px;
-    color: #b1b1b1;
-    text-shadow: 0 1px 3px #000;
+    color: @gray-medium;
+    // text-shadow: 0 1px 3px #000;
     a {
-      color: #eee;
+      color: @gray-medium;
       .es-transition;
       &:hover {
         .es-transition;
-        color: @brand-primary;
+        color: #fff;
       }
     }
   }
@@ -31,16 +31,17 @@
     width: 20%;
     float: left;
     padding: 0 10px;
-    text-shadow: 0 1px 3px #000;
+    // text-shadow: 0 1px 3px #000;
     @media (max-width: @screen-xs-max) {
       width: 33.33%;
       padding: 0 5px;
     }
   }
   h3 {
-    color: #eeeeee;
+    font-size: 16px;
+    color: #eee;
     margin-top: 0;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     @media (max-width: @screen-xs-max) {
       font-size: 16px;
     }
@@ -54,27 +55,26 @@
     }
   }
   a {
-    color: #b1b1b1;
+    color: @gray-medium;
     .es-transition;
     &:hover {
-      color: @brand-primary;
+      color: #fff;
       .es-transition;
     }
   }
 }
 
 .footer-logo {
-  margin-top: 20px;
+  margin-top: 10px;
   text-align: center;
-  @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-    padding: 0 0 30px 0;
+  >a>img {
+    height: 64px;
   }
   .footer-sns {
     margin-top: 30px;
     >a {
       display: inline-block;
     }
-
     i {
       display: block;
       width: 40px;
@@ -86,7 +86,7 @@
       border-radius: 50%;
       color: #fff;
       text-align: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+      // box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
       .es-transition;
       &:hover {
         .es-transition;
@@ -94,41 +94,30 @@
     }
 
     i.es-icon-weibo {
-      background: @brand-danger;
-      border-color: @brand-danger;
+      background: #e6162d;
       &:hover {
-        background: @brand-danger - #222;
-        cursor: pointer;
+        background: #e6162d - #222;
       }
     }
 
     i.es-icon-weixin {
-      background: @brand-primary;
-      border-color: @brand-primary;
+      background: #1ec354;
       &:hover {
-        background: @brand-primary - #222;
-        .weixin-popover {
-          display: block;
-          transform: scale(1);
-          -webkit-transform: scale(1);
-          .opacity(1);
-        }
+        background: #1ec354 - #222;
       }
     }
 
     i.es-icon-apple {
-      background: @brand-info;
-      border-color: @brand-info;
+      background: #3793f1;
       &:hover {
-        background: @brand-info - #222;
+        background: #3793f1 - #222;
       }
     }
 
     i.es-icon-android {
-      background: @brand-warning;
-      border-color: @brand-warning;
+      background: #78c257;
       &:hover {
-        background: @brand-warning - #222;
+        background: #78c257 - #222;
       }
     }
   }

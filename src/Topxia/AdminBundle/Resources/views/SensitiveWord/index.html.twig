@@ -1,0 +1,79 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_setting_sensitive_word' %}
+{% set script_controller = 'sensitive-word/index' %}
+
+{% block main %}
+
+{{ web_macro.flash_messages() }}
+
+<form class="form-horizontal" method="post">
+  <div class="form-group">
+    <div class="col-md-2 control-label">
+      <label>开启敏感词过滤</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      <label><input type="radio" name="enabled" value="1" 
+        {% if setting("sensitiveWord.enabled")|default(1) %}
+        checked="checked"
+        {% endif %}
+        > 开启</label>
+        <label><input type="radio" name="enabled" value="0"
+        {% if not setting("sensitiveWord.enabled")|default(1) %}
+        checked="checked"
+        {% endif %}
+        > 关闭</label>
+      <div class="help-block"></div>
+    </div>
+  </div>
+
+  <div 
+  id='sensitiveWordRules'
+  {% if not setting("sensitiveWord.enabled")|default(1) %}
+  style="display:none"
+  {% endif %}
+  >
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="name">忽略的单词</label>
+      </div>
+      <div class="col-md-8 controls">
+        <textarea name="ignoreWord" rows="5" class="form-control">{{sensitiveWordSetting.ignoreWord|default('')}}</textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="name">单词替换</label>
+      </div>
+      <div class="col-md-8 controls">
+        <textarea name="wordReplace" rows="5" class="form-control">{{sensitiveWordSetting.wordReplace|default('')}}</textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="name">一级敏感词</label>
+      </div>
+      <div class="col-md-8 controls">
+        <textarea name="firstLevel" rows="5" class="form-control">{{sensitiveWordSetting.firstLevel|default('')}}</textarea>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-2 control-label">
+        <label for="name">二级敏感词</label>
+      </div>
+      <div class="col-md-8 controls">
+        <textarea name="secondLevel" rows="5" class="form-control">{{sensitiveWordSetting.secondLevel|default('')}}</textarea>
+      </div>
+    </div>
+
+  </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label"></div>
+    <div class="controls col-md-8">
+      <button type="submit" class="btn btn-primary">提交</button>
+    </div>
+  </div>
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+
+{% endblock %}

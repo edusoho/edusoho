@@ -6,11 +6,11 @@
   // background-attachment: fixed;
   // padding: 30px 0 10px 0;
   // padding-top: 20px;
-  .breadcrumb {
-    margin: 12px auto;
-    padding: 8px 0;
-    background: none;
-  }
+  // .breadcrumb {
+  //   margin: 12px auto;
+  //   padding: 8px 0;
+  //   background: none;
+  // }
   .es-section {
     position: relative;
     padding: 0;
@@ -51,7 +51,7 @@
         top: 50%;
         left: 50%;
         margin-left: -50px;
-        margin-top: -71px;
+        margin-top: -50px;
       }
     }
     .img-responsive {
@@ -102,7 +102,7 @@
     p {
       font-size: 12px;
       label {
-        width: 60px;
+        width: 40px;
         margin-bottom: 0;
         font-weight: normal;
       }
@@ -128,41 +128,25 @@
       position: relative;
       margin-left: 12px;
       padding: 0 15px 0 15px;
-      display: inline-block;
       font-size: 14px;
-      color: #fff;
-      background-color: @brand-primary;
       height: 24px;
       line-height: 24px;
+      vertical-align: super;
       &:before {
-        content: "";
-        float: left;
-        position: absolute;
         top: 0;
         left: -12px;
-        width: 0;
-        height: 0;
-        border-color: transparent @brand-primary transparent transparent;
-        border-style: solid;
         border-width: 12px 12px 12px 0;
       }
       &:after {
-        content: "";
-        position: absolute;
         top: 10px;
         left: 1px;
-        float: left;
-        width: 4px;
-        height: 4px;
-        .border-radius;
-        background: #fff;
       }
     }
   }
   .activity {
     margin-bottom: 0;
     .name {
-      color: @brand-primary;
+      color: @gray-darker;
       margin-right: 10px;
     }
     i {
@@ -290,7 +274,7 @@
       padding: 10px 10px 0 10px;
     }
     .student-num {
-      border-bottom: 1px solid @gray-lighter;
+      border-bottom: 1px solid #f1f1f1;
       @media (max-width: @screen-sm-max) {
         float: left;
         width: 33.33%;

@@ -28,7 +28,11 @@
     <li class="list-group-item {% if side_nav == 'assistant' %}active{% endif %}">
       <a href="{{ path('classroom_manage_assistants', {id:classroom.id}) }}">助教设置</a>
     </li>
-    
+    {% if is_plugin_installed("ClassroomPlan") %}
+      <li class="list-group-item {% if side_nav == 'plan' %}active{% endif %}">
+        <a href="{{ path('classroom_manage_plan', {classroomId:classroom.id}) }}">学习计划</a>
+      </li>
+    {% endif %}
   </ul>
 {% endif %}
 

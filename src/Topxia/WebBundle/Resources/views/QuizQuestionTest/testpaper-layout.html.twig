@@ -5,9 +5,11 @@
 
 {% set script_controller = 'quiz-question/do-test' %}
 
+{% if setting('course.testpaperCopy_enabled') == '1' %}
+{% do load_script('quiz-question/do-test-prevent-copy') %}
+{% endif %}
+
 {% block content %}
-
-
 <div class="es-section testpaper-heading">
   <div class="testpaper-titlebar clearfix">
     <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}答题人：{{ student.nickname }} 交卷时间：{{ paperResult.endTime|date('Y-n-d H:i') }} 用时：{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
@@ -35,8 +37,8 @@
 </div>
 
 <div class="row">
-  <div class="col-md-9">
-    <div class="testpaper-body" oncopy="return false;" oncut="return false;" onselectstart="return false">
+  <div class="col-md-9 prevent-copy">
+    <div class="testpaper-body" >
       {% include 'TopxiaWebBundle:QuizQuestionTest:do-test.html.twig' %}
     </div>
   </div>
@@ -98,7 +100,17 @@
                   </select>
                 </div>
               </div>
-
+              <div class="form-group">
+                <div class="col-md-4 controls">
+                  {% if paperResult|default(null) %}
+                    <input type="hidden" value="{{ paperResult.objectiveScore }}" name="objectiveScore" />
+                    试卷得分:<span id="totalScore">{{ paperResult.objectiveScore }}</span>
+                  {% endif %}
+                </div>
+                <div class="col-md-8 controls radios">
+                  {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <a href="javascript:;" class="btn btn-default" data-dismiss="modal">取消</a>
@@ -140,7 +152,5 @@
     </div>
 
   {% endblock %}
-
-
 
 {% endblock %}

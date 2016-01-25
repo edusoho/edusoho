@@ -12,7 +12,8 @@
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>设置帐号</h2></div>
 
-      {% if not app.user.setup %}
+      {% set emailArr = app.user.email|split('@') %}
+      {% if not app.user.setup or emailArr[1] == 'edusoho.net' %}
         <form id="setup-form" class="form-vertical" method="post" action="{{ path('settings_setup') }}">
 
           <div class="alert alert-warning"> 为了帐号的安全以及更好的使用体验，请设置以下信息。 </div>

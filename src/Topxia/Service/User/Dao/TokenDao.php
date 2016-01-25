@@ -8,8 +8,6 @@ interface TokenDao
 
     public function getTokenByToken($token);
 
-	public function findTokenByToken($token);
-
 	public function addToken(array $token);
 
 	public function deleteToken($id);
@@ -19,4 +17,6 @@ interface TokenDao
 	public function searchTokenCount($conditions);
 
 	public function deleteTokensByExpiredTime($expiredTime, $limit);
+
+	public function findTokensByUserIdAndType($userId, $type);
 }

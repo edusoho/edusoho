@@ -247,9 +247,9 @@ class MobileBaseController extends BaseController
         $self = $this;
         $container = $this->container;
         return array_map(function($course) use ($self, $container, $teachers, $coinSetting) {
-            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
-            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
-            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
+            $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['smallPicture'], 'course.png', true);
+            $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['middlePicture'], 'course.png', true);
+            $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFurl($course['largePicture'], 'course.png', true);
             $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
             $course['createdTime'] = date("c", $course['createdTime']);
 
@@ -353,6 +353,9 @@ class MobileBaseController extends BaseController
             $user['following'] = $controller->getUserService()->findUserFollowingCount($user['id']);
             $user['follower'] = $controller->getUserService()->findUserFollowerCount($user['id']);
 
+            $user['email'] = "****";
+            $user['mobile'] = "****";
+            $user['verifiedMobile'] = "****";
             unset($user['password']);
             unset($user['payPasswordSalt']);
             unset($user['payPassword']);
@@ -404,30 +407,6 @@ class MobileBaseController extends BaseController
         $tempLiveLesson;
         $recentlyLiveLessonStartTime;
         $tempLessonIndex;
-
-        foreach($tempLessons as $key => $tempLesson){
-            if(!empty($tempLesson)){
-                continue;
-            }
-            if($nowTime <= $tempLesson[0]["endTime"]){
-                $tempLiveLesson = $tempLesson[0];
-            }
-            if(sizeof($tempLesson) > 1){
-                $recentlyLiveLessonStartTime = 2*$nowTime;
-                for($tempLessonIndex=0; $tempLessonIndex < sizeof($tempLesson); $tempLessonIndex++){
-                    if($tempLesson[$tempLessonIndex]["endTime"] >= $nowTime){
-                        if($tempLesson[$tempLessonIndex]["startTime"] < $recentlyLiveLessonStartTime){
-                            $recentlyLiveLessonStartTime = $tempLesson[$tempLessonIndex]["startTime"];
-                            $tempLiveLesson = $tempLesson[$tempLessonIndex];
-                        }
-                    }
-                }
-            }
-            if(isset($tempLiveLesson)){
-                $liveLessons[$key] = $tempLiveLesson;
-                unset($tempLiveLesson);
-            }
-        }
 
         foreach($tempCourses as $key => $value){
             if(isset($liveLessons[$key])){
@@ -563,6 +542,11 @@ class MobileBaseController extends BaseController
     public function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    public function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     public function getCourseOrderService()

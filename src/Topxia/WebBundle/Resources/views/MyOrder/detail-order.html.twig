@@ -2,9 +2,7 @@
 <div class="tab-content">
 
   <div class="tab-pane fade active in" id="detail">
-    {# <table class="table table-striped table-condenseda table-bordered"> #}
      <table class="table table-striped order-table">
-
       <tr> <th width="25%">订单号</th> <td width="75%">{{ order.sn }}</td> </tr>
       <tr> <th width="25%">订单状态</th> 
            <td width="75%">
@@ -64,14 +62,7 @@
           <span class="money-text">{{ order.amount }}</span> 元
         </td>
       </tr>
-      <tr> <th width="25%">是否为赠品</th> 
-           <td width="75%">
-            {% if order.isGift == 0 %} 非赠品
-            {% elseif order.isGift == 1 %} 已赠送
-            {% endif %}
-           </td> 
-      </tr>
-    <tr> <th width="25%">支付方式</th> 
+      <tr> <th width="25%">支付方式</th> 
            <td width="75%">
             {# {% if order.payment == 'none' %} 暂无 #}
             {{ order_payment(order) }}
@@ -85,49 +76,53 @@
            </td> 
       </tr>
       <tr> <th width="25%">创建时间</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
-      <tr> <th width="25%">付款时间</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+      {% if order.status == 'paid' %}
+        <tr> <th width="25%">付款时间</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        {% if order.token %}
+          <tr> <th width="25%">商户订单号</th> <td width="75%">{{order.token}}</td> </tr>
+        {% endif %}
+      {% endif %}
     </table>
   </div>
 
   <div class="tab-pane fade" id="log">
-            
-      {% if orderLogs %}
-        <table class="table">
-          <thead>
+    {% if orderLogs %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th width="50%">日志信息</th>
+            <th width="25%">操作人</th>
+            <th width="25%">创建时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for orderLog in orderLogs %}
+            {% set logUser = users[orderLog.userId]|default(null) %}
             <tr>
-              <th width="50%">日志信息</th>
-              <th width="25%">操作人</th>
-              <th width="25%">创建时间</th>
+              <td>
+                {{ orderLog.message | plain_text(50) }}
+                <br>
+                <span class="text-muted text-sm">{{ orderLog.type }}</span>
+              </td>
+              <td>
+                {% if logUser %}
+                  {{ admin_macro.user_link(logUser) }}
+                {% else %}
+                  --
+                {% endif %}
+              </td>
+              <td>
+                {{ orderLog.createdTime|date('Y-n-d H:i')}}
+                <br>
+                <span class="text-muted text-sm">{{ orderLog.ip}}</span>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for orderLog in orderLogs %}
-              {% set logUser = users[orderLog.userId]|default(null) %}
-              <tr>
-                <td>
-                  {{ orderLog.message | plain_text(50) }}
-                  <br>
-                  <span class="text-muted text-sm">{{ orderLog.type }}</span>
-                </td>
-                <td>
-                  {% if logUser %}
-                    {{ admin_macro.user_link(logUser) }}
-                  {% else %}
-                    --
-                  {% endif %}
-                </td>
-                <td>
-                  {{ orderLog.createdTime|date('Y-n-d H:i')}}
-                  <br>
-                  <span class="text-muted text-sm">{{ orderLog.ip}}</span>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
       <div class="empty">暂无交易日志!</div>
-      {% endif %}
+    {% endif %}
   </div>
      
 </div>

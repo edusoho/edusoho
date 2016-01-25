@@ -61,6 +61,11 @@ class TokenServiceImpl extends BaseService implements TokenService
         $this->getTokenDao()->deleteToken($token['id']);
     }
 
+    public function findTokensByUserIdAndType($userId, $type)
+    {
+        return $this->getTokenDao()->findTokensByUserIdAndType($userId, $type);
+    }
+
     public function deleteExpiredTokens($limit)
     {
         $this->getTokenDao()->deleteTokensByExpiredTime(time(), $limit);

@@ -69,6 +69,7 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     {
         return  $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
+            ->andWhere('courseId = :courseId')
             ->andWhere('courseId IN ( :courseIds )')
             ->andWhere('courseId IN ( :classroomCourseIds ) OR classroomId = :classroomId')
             ->andWhere('classroomId = :onlyClassroomId')
@@ -107,5 +108,21 @@ class StatusDaoImpl extends BaseDao implements StatusDao
             'objectType'=>$objectType,
             'objectId'=>$objectId
             ));
+    }
+
+    public function deleteStatusesByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
+    {
+        return $this->getConnection()->delete($this->table, array(
+            'courseId' => $courseId,
+            'type' =>$type,
+            'objectType'=>$objectType,
+            'objectId'=>$objectId
+            ));
+    }
+
+    public function findStatusesByCourseId($courseId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ?";
+        return $this->getConnection()->fetchAll($sql, array($courseId));
     }
 }

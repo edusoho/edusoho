@@ -6,6 +6,7 @@
 @import "mixins/loader-inner.less";         //css3效果
 @import "mixins/shake.less";                //css3效果-上下抖动
 @import "mixins/transup.less";              //css3效果-向上推动
+@import "mixins/spin.less";                 //css3效果-旋转
 @import "mixins/color.less";                //颜色
 @import "mixins/input.less";                //输入框
 @import "mixins/spacing.less";              //间距
@@ -20,21 +21,53 @@
   margin-bottom: 30px;
 }
 
+.label {
+  .border-radius;
+}
+
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
 // 富文本编辑器样式统一处理
 .editor-text {
   img {
-    max-width: 100%;
-    height: auto;
+    max-width: 100% !important;
+    height: auto !important;
   }
 }
 
-// table-cell引起的兼容问题
-.media-body .editor-text img {
-  width: 100% \9;
-  @media screen and (min--moz-device-pixel-ratio:0) {
-    width: 100%;
+.section-gray {
+  background-color: @bg-color !important;
+  .text-line h5 > span {
+    background-color: @bg-color !important;
   }
 }
+
+.section-wihte {
+  background-color: #fff !important;
+  .text-line h5 > span {
+    background-color: #fff !important;
+  }
+}
+
+// 分割线
+.divider-line {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+// 限制最小高度
+.h400 {
+  min-height: 400px;
+}
+
+// table-cell引起的兼容问题 小图标发引起问题
+// .media-body .editor-text img {
+//   width: 100% \9;
+//   @media screen and (min--moz-device-pixel-ratio:0) {
+//     width: 100%;
+//   }
+// }
 
 .inline-block {
   display: inline-block;
@@ -49,15 +82,31 @@
 
 // 字体颜色变化，一般用于a标签
 .link-dark {
-  color: @gray-darker;
+  color: @gray-darker !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
     .es-transition;
   }
 }
 .link-light {
-  color: @gray-dark;
+  color: @gray-dark !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+.link-lighter {
+  color: @gray !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+.link-primary {
+  color: @brand-primary;
   .es-transition;
   &:hover {
     color: @brand-primary;
@@ -65,10 +114,19 @@
   }
 }
 .link-white {
-  color: #fff;
+  color: #fff !important;
   .es-transition;
   &:hover {
-    color: @brand-primary;
+    color: @brand-primary !important;
+    .es-transition;
+  }
+}
+
+.link-primary {
+  color: @brand-primary !important;
+  .es-transition;
+  &:hover {
+    color: @brand-primary !important;
     .es-transition;
   }
 }
@@ -108,6 +166,8 @@ a.transition {
   filter: ~"alpha(opacity=@{opacity-ie})";
 }
 
+
+
 // 图片响应式
 .img-responsive(@display: block) {
   display: @display;
@@ -138,9 +198,9 @@ a.transition {
 }
 
 .es-box-shadow {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
-     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
-          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1),0 1px 2px -1px rgba(0,0,0,0.1),0 1px 5px 0 rgba(0,0,0,0.1);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+     -moz-box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
 }
 
 .border-radius(@border-radius:2px) {

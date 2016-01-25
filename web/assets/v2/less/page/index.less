@@ -225,28 +225,23 @@
     z-index: 1;
     &:hover {
       .class-bg-layer {
-        transform: translateY(-3px);
-        -webkit-transform: translateY(-3px);
-        -moz-transform: translateY(-3px);
-        -o-transform: translateY(-3px);
-        box-shadow: 0 0px 20px rgba(0,0,0,0.1),0 3px 6px rgba(0,0,0,0.2);
-        -webkit-box-shadow: 0 0px 20px rgba(0,0,0,0.1),0 3px 6px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 0px 20px rgba(0,0,0,0.1),0 3px 6px rgba(0,0,0,0.2);
-        -o-box-shadow: 0 0px 20px rgba(0,0,0,0.1),0 3px 6px rgba(0,0,0,0.2);
-        -webkit-transition: all .4s .05s ease;
-        -moz-transition: all .4s .05s ease;
-        -o-transition: all .4s .05s ease;
-        transition: all .4s .05s ease;
-      }
-      .class-item-bg {
         transform: translateY(-6px);
         -webkit-transform: translateY(-6px);
         -moz-transform: translateY(-6px);
-        -o-transform: translateY(-6px);
-        box-shadow: 0 0px 15px rgba(0,0,0,0.08),0 3px 3px rgba(0,0,0,0.12);
-        -webkit-box-shadow: 0 0px 15px rgba(0,0,0,0.08),0 3px 3px rgba(0,0,0,0.12);
-        -moz-box-shadow: 0 0px 15px rgba(0,0,0,0.08),0 3px 3px rgba(0,0,0,0.12);
-        -o-box-shadow: 0 0px 15px rgba(0,0,0,0.08),0 3px 3px rgba(0,0,0,0.12);
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -webkit-transition: all .4s .05s ease;
+        -moz-transition: all .4s .05s ease;
+        transition: all .4s .05s ease;
+      }
+      .class-item-bg {
+        transform: translateY(-8px);
+        -webkit-transform: translateY(-8px);
+        -moz-transform: translateY(-8px);
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
         .es-transition;
       }
     }
@@ -257,7 +252,7 @@
       background-color: #fff;
       padding: 10px;
       .border-radius;
-      .es-box-shadow;
+      .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
       .es-transition;
     }
     .class-img {
@@ -279,13 +274,101 @@
 }
 
 //小组动态
-.group-dynamic {
+.dynamic-section-main .panel {
+  height: 300px;
+  @media(max-width:@screen-xs-max) {
+    height: auto;
+  }
+}
+
+.dynamic-section {
   padding-bottom: 20px;
   background: @bg-color;
 }
 
 .index-group {
-  padding-bottom: 15px;
+  padding-bottom: 3px;
+}
+
+.index-article {
+  .index-recommend-aricle {
+    float: left;
+    width: 35%;
+    padding-left: 0;
+    margin-bottom: 0;
+    @media(max-width: @screen-md-max) {
+      width: 43%;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 28%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    li {
+      position: relative;
+      list-style-type: none;
+      margin-bottom: 10px;
+      overflow: hidden;
+      &.last {
+        margin-bottom: 0;
+        @media(max-width: @screen-xs-max) {
+          margin-bottom: 20px;
+        }
+      }
+      img {
+        width: 100%;
+        height: 106px;
+        @media(max-width: @screen-sm-max) {
+          height: auto;
+        }
+      }
+    }
+    .title {
+      position: absolute;
+      bottom: 5px;
+      left: 10px;
+      right: 10px;
+      color: #fff;
+      .text-overflow;
+    }
+  }
+  .index-new-article {
+    float: left;
+    width: 65%;
+    padding-left: 20px;
+    margin-bottom: 0;
+    // margin-top: 8px;
+    &.full {
+      width: 100% !important;
+      padding-left: 0;
+    }
+    @media(max-width: @screen-md-max) {
+      width: 57%;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 72%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+      padding-left: 0;
+    }
+    .date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: @gray-medium;
+    }
+    li {
+      position: relative;
+      .text-overflow;
+      margin-bottom: 30px;
+      padding-right: 60px;
+      &.last {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 // 推荐教师

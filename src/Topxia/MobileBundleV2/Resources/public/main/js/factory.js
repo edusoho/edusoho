@@ -153,13 +153,13 @@ factory('ClassRoomUtil', function() {
 factory('VipUtil', function() {
 
 	var payByYear = {
-		title : "按年支付",
+		title : "按年购买",
 		type : 20,
 		name : "year"
 	};
 
 	var payByMonth  ={
-		title : "按月支付",
+		title : "按月购买",
 		type : 30,
 		name : "month"
 	};
@@ -296,7 +296,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 			alert("请在客户端学习非图文课时");
 		},
 		share : function(url, title, about, pic) {
-			alert("请在客户端分享课程");
+			alert("请在客户端分享");
 		},
 		openDrawer : function(state) {
 			sideDelegate.toggleMenu();
@@ -348,6 +348,24 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 			var deferred = $q.defer();
 			deferred.resolve(null);
 			return deferred.promise;
+		},
+		redirect : function(body) {
+			alert("请在app内转发分享");
+		},
+		getThirdConfig : function($q) {
+			var deferred = $q.defer();
+			deferred.resolve([]);
+
+			return deferred.promise;
+		},
+		sendNativeMessage : function(type, data) {
+			if ("token_lose" == type) {
+				$rootScope.user = null;
+				$rootScope.token = null;
+				localStore.remove("user");
+				localStore.remove("token");
+				alert("登录信息失效，请重新登录");
+			}
 		}
 	};
 

@@ -14,17 +14,17 @@
         <li>
             <div class="ui-form">
 	    		<div class="ui-form-item ui-form-item-r ui-border-b">
-		            <input type="text" maxlength="15" placeholder="手机号" ng-model="user.phone">
+		            <input type="text" maxlength="15" placeholder="请输入手机号" ng-model="user.phone">
 
 		            <button type="button" class="ui-border-l ui-btn-code" ng-click="sendSmsCode(user.phone)">发送验证码</button>
 		            <a class="ui-icon-close" ng-show="user.phone.length > 0" ng-click="user.phone = '' "></a>
 		      </div>
 		        <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
-		            <input type="password" placeholder="验证码" ng-model="user.code">
+		            <input type="password" placeholder="请输入验证码" ng-model="user.code">
 		            <a href="#" class="ui-icon-close" ng-show="user.code.length > 0" ng-click="user.code = '' "></a>
 		        </div>
 		         <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
-		            <input type="password" placeholder="密码" ng-model="user.password">
+		            <input type="password" placeholder="请输入密码" ng-model="user.password">
 		            <a href="#" class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
 		        </div>
 		         <div class="ui-btn-wrap padding-none margin-t">
@@ -37,11 +37,11 @@
         <li>
             <div class="ui-form">
 		        <div class="ui-form-item ui-form-item-pure ui-border-b">
-		            <input type="email" placeholder="邮箱" ng-model="user.email">
+		            <input type="email" placeholder="请输入邮箱" ng-model="user.email">
 		            <a href="#" class="ui-icon-close" ng-show="user.email.length > 0" ng-click="user.email = '' "></a>
 		        </div>
 		         <div class="ui-form-item ui-form-item-pure ui-border-b margin-t">
-		            <input type="password" placeholder="密码" ng-model="user.password">
+		            <input type="password" placeholder="请输入密码" ng-model="user.password">
 		            <a href="#" class="ui-icon-close" ng-show="user.password.length > 0" ng-click="user.password = '' "></a>
 		        </div>
 		         <div class="ui-btn-wrap padding-none margin-t">

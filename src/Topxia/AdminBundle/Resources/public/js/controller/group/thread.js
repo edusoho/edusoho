@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 	exports.run = function() {
 		var $table = $('#thread-table');
-		require('../../util/batch-select')($('#thread-table'));
+		require('../../util/batch-select')($('#thread-form'));
 
 		$('#thread-delete-btn').on('click', function() {
 			if ($table.find(":checkbox:checked").length < 1) {

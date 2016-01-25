@@ -29,7 +29,7 @@ classroom_manage_set_price:
 
 classroom_manage_students:
     pattern: /classroom/{id}/manage/students
-    defaults: { _controller: ClassroomBundle:ClassroomManage:students }
+    defaults: { _controller:ClassroomBundle:ClassroomManage:students }
 
 classroom_manage_aduitor:
     pattern: /classroom/{id}/manage/aduitor
@@ -111,6 +111,10 @@ classroom_show:
     pattern:  /classroom/{id}
     defaults: { _controller: ClassroomBundle:Classroom:show }
 
+classroom_qrcode:
+    pattern:  /classroom/{id}/qrcode
+    defaults: { _controller: ClassroomBundle:Classroom:qrcode }
+
 classroom_reviews:
     pattern:  /classroom/{id}/review
     defaults: { _controller: ClassroomBundle:Classroom/Review:list }
@@ -180,6 +184,10 @@ classroom_thread_update:
 classroom_vip_buy:
     pattern: /classroom/{id}/vip_buy
     defaults: { _controller: ClassroomBundle:Classroom:becomeStudent }
+
+classroom_member_ids:
+    pattern: /classroom/{id}/member_ids
+    defaults: { _controller: ClassroomBundle:Classroom:memberIds }
 
 classroom_thread_members_become:
     pattern: /classroom/{classroomId}/thread/{threadId}/members/become

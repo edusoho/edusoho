@@ -104,11 +104,11 @@ class UserEventSubscriber implements EventSubscriberInterface
         //if (strlen($welcomeBody) >= 1000) {
         //    $welcomeBody = $this->getWebExtension()->plainTextFilter($welcomeBody, 1000);
         //}
-
-        $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
-        $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
-        $this->getMessageService()->deleteConversation($conversation['id']);
-
+        if($senderUser['id']<>$user['id']){
+            $this->getMessageService()->sendMessage($senderUser['id'], $user['id'], $welcomeBody);
+            $conversation = $this->getMessageService()->getConversationByFromIdAndToId($user['id'], $senderUser['id']);
+            $this->getMessageService()->deleteConversation($conversation['id']);
+        }
     }
 
     protected function getWelcomeBody($user)

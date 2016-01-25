@@ -2,6 +2,10 @@ admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
 
+admin_inspect:
+    pattern:  /inspect
+    defaults: { _controller: TopxiaAdminBundle:Default:inspect }
+
 admin_popular_courses:
     pattern:  /popular_courses
     defaults: { _controller: TopxiaAdminBundle:Default:popularCourses }
@@ -158,7 +162,7 @@ admin_user_create_mobile_check:
 admin_user_create_email_or_mobile_check:
     pattern:  /user/create/email_or_mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:emailOrMobileCheck }
-    
+
 admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
@@ -288,9 +292,12 @@ admin_course:
     defaults: { _controller: TopxiaAdminBundle:Course:index, filter:'normal' }
 
 admin_course_delete:
-    pattern:  /course/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Course:delete }
-    methods: [POST]
+    pattern:  /course/{courseId}/delete/{type}
+    defaults: { _controller: TopxiaAdminBundle:Course:delete, type:'' }
+
+admin_check_password:
+    pattern:  /check/password
+    defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
 
 admin_course_publish:
     pattern: /course/{id}/publish
@@ -368,6 +375,10 @@ admin_course_search_to_fill_banner:
 admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
+
+admin_live_get_max_online:
+    pattern: /livecourse/get/maxOnline
+    defaults: { _controller: TopxiaAdminBundle:LiveCourse:getMaxOnline }
 
 admin_order:
     pattern: /order
@@ -550,6 +561,10 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
+admin_setting_sensitive_word:
+    pattern:  /setting/sensitive_word
+    defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
+
 admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
@@ -558,6 +573,31 @@ admin_setting_theme_change:
     pattern:  /setting/theme/change
     defaults: { _controller: TopxiaAdminBundle:Theme:change }
     methods:  [POST]
+
+admin_theme_manage:
+    pattern:  /theme/{uri}/manage
+    defaults: { _controller: TopxiaAdminBundle:Theme:manageIndex }
+
+admin_reset_currentTheme_config:
+    pattern:  /theme/{uri}/config/reset
+    defaults: { _controller: TopxiaAdminBundle:Theme:resetConfig }
+
+admin_save_themes_config:
+    pattern:  /theme/{uri}/config/save
+    defaults: { _controller: TopxiaAdminBundle:Theme:saveConfig }
+    methods:  [POST]
+
+admin_confirm_themes_config:
+    pattern:  /theme/{uri}/config/confirm
+    defaults: { _controller: TopxiaAdminBundle:Theme:confirmConfig }
+
+admin_themes_show:
+    pattern:  /theme/{uri}/show
+    defaults: { _controller: TopxiaAdminBundle:Theme:show }
+
+admin_themes_config_edit:
+    pattern:  /theme/{uri}/config/edit
+    defaults: { _controller: TopxiaAdminBundle:Theme:themeConfigEdit }
 
 admin_setting_user_center:
     pattern:  /setting/user-center
@@ -620,9 +660,17 @@ admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
+admin_setting_post_num_rules:
+    pattern:  /setting/post_num_rules
+    defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
+
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
+
+admin_setting_redis:
+    pattern:  /setting/redis
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
 
 admin_optimize:
     pattern:  /setting/optimize
@@ -651,8 +699,15 @@ admin_optimize_backupdb:
 admin_optimize_remove_upload_files:
     pattern:  /setting/optimize/remove-unusedfiles
     defaults: { _controller: TopxiaAdminBundle:Optimize:removeUnusedFiles }
-    methods: [POST]
 
+
+admin_optimize_remove_show_progressbar:
+    pattern:  /setting/optimize/show-progressbar
+    defaults: { _controller: TopxiaAdminBundle:Optimize:showProgressbar }
+
+admin_jobs:
+    pattern: /setting/jobs
+    defaults: { _controller: TopxiaAdminBundle:Job:index }
 admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }
@@ -1024,6 +1079,18 @@ admin_article_delete:
     defaults: { _controller: TopxiaAdminBundle:Article:delete }
     methods:  [POST]
 
+admin_invite:
+    pattern:  /invite
+    defaults: { _controller: TopxiaAdminBundle:Invite:index }
+
+admin_invite_detail:
+    pattern:  /invite/detail
+    defaults: { _controller: TopxiaAdminBundle:Invite:inviteDetail }
+
+admin_invite_set:
+    pattern:  /setting/invite
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
+
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
@@ -1095,6 +1162,10 @@ admin_operation_analysis_lesson_finished:
     pattern:  /operation/analysis/lesson/finished/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:finishedLesson }
 
+admin_operation_analysis_classroom_paid:
+    pattern:  /operation/analysis/classroom/paid/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:paidClassroom }
+
 admin_operation_analysis_video_viewed:
     pattern:  /operation/analysis/video/viewed/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:videoViewed }
@@ -1118,6 +1189,14 @@ admin_operation_analysis_income:
 admin_operation_analysis_course_income:
     pattern:  /operation/analysis/course/income/{tab}
     defaults: { _controller: TopxiaAdminBundle:Analysis:courseIncome }
+
+admin_operation_analysis_classroom_income:
+    pattern:  /operation/analysis/classroom/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:classroomIncome }
+
+admin_operation_analysis_vip_income:
+    pattern:  /operation/analysis/vip/income/{tab}
+    defaults: { _controller: TopxiaAdminBundle:Analysis:vipIncome }
 
 admin_operation_analysis_course_sum:
     pattern:  /operation/analysis/course/sum/{tab}
@@ -1261,6 +1340,18 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
 
+admin_edu_cloud_search:
+    pattern: /setting/edu_cloud/search
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
+
+admin_edu_cloud_search_clause:
+    pattern: /setting/edu_cloud/search/clause
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
+
+admin_edu_cloud_search_close:
+    pattern: /setting/edu_cloud/search/close
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
@@ -1278,3 +1369,48 @@ admin_announcement_edit:
     pattern:  /announcement/edit/{id}
     defaults: { _controller: TopxiaAdminBundle:Announcement:edit }
 
+admin_batch_notification:
+    pattern: /batch_notification
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:index }
+
+admin_batch_notification_create:
+    pattern: /batch_notification/create
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:create }
+
+admin_batch_notification_edit:
+    pattern: /batch_notification/edit/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:edit }
+
+admin_batch_notification_delete:
+    pattern: /batch_notification/delete/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:delete }
+    methods: [POST]
+
+admin_batch_notification_send:
+    pattern: /batch_notification/send/{id}
+    defaults: { _controller: TopxiaAdminBundle:BatchNotification:send }
+    methods:  [POST]
+
+admin_feedback:
+    pattern: /feedback
+    defaults: { _controller: TopxiaAdminBundle:Default:feedback }
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
+
+admin_report_status_ucenter:
+    pattern: /reports/status/ucenter
+    defaults: { _controller: TopxiaAdminBundle:System:ucenter }
+
+admin_report_status_email_send:
+    pattern: /reports/status/email/send
+    defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }

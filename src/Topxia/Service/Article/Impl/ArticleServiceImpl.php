@@ -1,11 +1,10 @@
 <?php
 namespace Topxia\Service\Article\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Topxia\Service\Article\ArticleService;
 use Topxia\Common\ArrayToolkit;
-use Symfony\Component\HttpFoundation\File\File;
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Article\ArticleService;
 
 class ArticleServiceImpl extends BaseService implements ArticleService
 {
@@ -17,12 +16,14 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function getArticlePrevious($currentArticleId)
     {
         $article = $this->getArticle($currentArticleId);
+
         if (empty($article)) {
             $this->createServiceException('文章内容为空,操作失败！');
         }
+
         $createdTime = $article['createdTime'];
-        $categoryId = $article['categoryId'];
-        $category = $this->getCategoryService()->getCategory($categoryId);
+        $categoryId  = $article['categoryId'];
+        $category    = $this->getCategoryService()->getCategory($categoryId);
 
         if (empty($category)) {
             $this->createServiceException('文章分类不存在,操作失败！');
@@ -38,9 +39,10 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         if (empty($article)) {
             $this->createServiceException('文章内容为空,操作失败！');
         }
+
         $createdTime = $article['createdTime'];
-        $categoryId = $article['categoryId'];
-        $category = $this->getCategoryService()->getCategory($categoryId);
+        $categoryId  = $article['categoryId'];
+        $category    = $this->getCategoryService()->getCategory($categoryId);
 
         if (empty($category)) {
             $this->createServiceException('文章分类不存在,操作失败！');
@@ -93,13 +95,15 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function createArticle($article)
     {
         if (empty($article)) {
-           throw $this->createServiceException("文章内容为空，创建文章失败！");
+            throw $this->createServiceException("文章内容为空，创建文章失败！");
         }
 
         $article = $this->filterArticleFields($article, 'add');
         $article = $this->getArticleDao()->addArticle($article);
 
         $this->getLogService()->info('article', 'create', "创建文章《({$article['title']})》({$article['id']})");
+
+        $this->dispatchEvent('article.create', $article);
 
         return $article;
     }
@@ -140,24 +144,27 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function like($articleId)
     {
         $user = $this->getCurrentUser();
+
         if (empty($user)) {
             throw $this->createNotFoundException("用户还未登录,不能点赞。");
         }
 
         $article = $this->getArticle($articleId);
+
         if (empty($article)) {
             throw $this->createNotFoundException("资讯不存在，或已删除。");
         }
 
         $like = $this->getArticleLike($articleId, $user['id']);
+
         if (!empty($like)) {
             throw $this->createAccessDeniedException('不可重复对一条资讯点赞！');
         }
 
         $articleLike = array(
-            'articleId' => $articleId,
-            'userId' => $user['id'],
-            'createdTime' => time(),
+            'articleId'   => $articleId,
+            'userId'      => $user['id'],
+            'createdTime' => time()
         );
 
         $this->getDispatcher()->dispatch('article.liked', new ServiceEvent($article));
@@ -168,11 +175,13 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function cancelLike($articleId)
     {
         $user = $this->getCurrentUser();
+
         if (empty($user)) {
             throw $this->createNotFoundException("用户还未登录,不能点赞。");
         }
 
         $article = $this->getArticle($articleId);
+
         if (empty($article)) {
             throw $this->createNotFoundException("资讯不存在，或已删除。");
         }
@@ -286,14 +295,15 @@ class ArticleServiceImpl extends BaseService implements ArticleService
     public function changeIndexPicture($data)
     {
         $fileIds = ArrayToolkit::column($data, "id");
-        $files = $this->getFileService()->getFilesByIds($fileIds);
+        $files   = $this->getFileService()->getFilesByIds($fileIds);
 
-        $data = ArrayToolkit::index($data, "type");
+        $data  = ArrayToolkit::index($data, "type");
         $files = ArrayToolkit::index($files, "id");
+
         foreach ($data as $key => $value) {
             if ($key == "origin") {
-                $file = $this->getFileService()->getFileObject($value["id"]);
-                $file = $this->getFileService()->uploadFile("article", $file);
+                $file               = $this->getFileService()->getFileObject($value["id"]);
+                $file               = $this->getFileService()->uploadFile("article", $file);
                 $data[$key]["file"] = $file;
 
                 $this->getFileService()->deleteFileByUri($files[$value["id"]]["uri"]);
@@ -310,37 +320,52 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         return $this->getArticleDao()->findPublishedArticlesByTagIdsAndCount($tagIds, $count);
     }
 
+    public function viewArticle($id)
+    {
+        $article = $this->getArticle($id);
+
+        if (empty($article)) {
+            return;
+        }
+
+        $user = $this->getCurrentUser();
+        $this->dispatchEvent('article.view', new ServiceEvent($article));
+        $this->hitArticle($id);
+
+        return $article;
+    }
+
     protected function filterArticleFields($fields, $mode = 'update')
     {
         $article = array();
 
-        $match = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
+        $match              = preg_match('/<\s*img.+?src\s*=\s*[\"|\'](.*?)[\"|\']/i', $fields['body'], $matches);
         $article['picture'] = $match ? $matches[1] : "";
 
-        $article['thumb'] = $fields['thumb'];
+        $article['thumb']         = $fields['thumb'];
         $article['originalThumb'] = $fields['originalThumb'];
-        $article['title'] = $fields['title'];
-        $article['body'] = $fields['body'];
-        $article['featured'] = empty($fields['featured']) ? 0 : 1;
-        $article['promoted'] = empty($fields['promoted']) ? 0 : 1;
-        $article['sticky'] = empty($fields['sticky']) ? 0 : 1;
-        $article['categoryId'] = $fields['categoryId'];
-        $article['source'] = $fields['source'];
-        $article['sourceUrl'] = $fields['sourceUrl'];
+        $article['title']         = $fields['title'];
+        $article['body']          = $fields['body'];
+        $article['featured']      = empty($fields['featured']) ? 0 : 1;
+        $article['promoted']      = empty($fields['promoted']) ? 0 : 1;
+        $article['sticky']        = empty($fields['sticky']) ? 0 : 1;
+        $article['categoryId']    = $fields['categoryId'];
+        $article['source']        = $fields['source'];
+        $article['sourceUrl']     = $fields['sourceUrl'];
         $article['publishedTime'] = strtotime($fields['publishedTime']);
-        $article['updatedTime'] = time();
+        $article['updatedTime']   = time();
 
         if (!empty($fields['tags']) && !is_array($fields['tags'])) {
-            $fields['tags'] = explode(",", $fields['tags']);
+            $fields['tags']    = explode(",", $fields['tags']);
             $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
-        }else{
+        } else {
             $article['tagIds'] = array();
         }
 
         if ($mode == 'add') {
-            $article['tagIds'] = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
-            $article['status'] = 'published';
-            $article['userId'] = $this->getCurrentUser()->id;
+            $article['tagIds']      = ArrayToolkit::column($this->getTagService()->findTagsByNames($fields['tags']), 'id');
+            $article['status']      = 'published';
+            $article['userId']      = $this->getCurrentUser()->id;
             $article['createdTime'] = time();
         }
 
@@ -352,7 +377,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $conditions = array_filter($conditions);
 
         if (!empty($conditions['includeChildren']) && isset($conditions['categoryId'])) {
-            $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
             $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
             unset($conditions['categoryId']);
             unset($conditions['includeChildren']);
@@ -363,30 +388,33 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     protected function filterSort($sort)
     {
-        switch ($sort) {
+        if (is_array($sort)) {
+            return array($sort);
+        }
 
+        switch ($sort) {
             case 'created':
                 $orderBys = array(
-                    array('createdTime', 'DESC'),
+                    array('createdTime', 'DESC')
                 );
                 break;
 
             case 'published':
                 $orderBys = array(
                     array('sticky', 'DESC'),
-                    array('publishedTime', 'DESC'),
+                    array('publishedTime', 'DESC')
                 );
                 break;
 
             case 'normal':
                 $orderBys = array(
-                    array('publishedTime', 'DESC'),
+                    array('publishedTime', 'DESC')
                 );
                 break;
 
             case 'popular':
                 $orderBys = array(
-                    array('hits', 'DESC'),
+                    array('hits', 'DESC')
                 );
                 break;
 

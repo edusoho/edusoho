@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+    {% set data = notification.content %}
+  恭喜您获得{{data.rewardName}}奖励：{{data.settingName}}元面值抵价优惠券一张，已发至您<a href="{{ path('my_cards', {cardType:'coupon'}) }}">我的卡包</a>中。
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

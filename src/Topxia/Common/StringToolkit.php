@@ -64,6 +64,17 @@ class StringToolkit
         return $text;
     }
 
+    public static function createRandomString($length)
+    {
+        $start = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $code = null;
+        for ($i = 0; $i < $length; $i++) {
+        $rand = rand(0,61);
+        $code = $code.$start[$rand];
+        }
+        return $code;
+    }
+
     public static function jsonPettry($json)
     {
         $result = '';
@@ -119,5 +130,16 @@ class StringToolkit
         }
 
         return $result;
+    }
+
+    public static function cutter($name, $leastLength, $prefixLength, $suffixLength)
+    {
+        $afterCutName = $name;
+        $length=mb_strlen($name,'UTF-8');
+        if ($length > $leastLength) {
+            $afterCutName = mb_substr($name, 0, $prefixLength, 'utf-8').'…';
+            $afterCutName .= mb_substr($name, $length-$suffixLength, $length, 'utf-8');
+        }
+        return $afterCutName;
     }
 }

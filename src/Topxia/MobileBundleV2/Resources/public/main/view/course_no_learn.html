@@ -1,4 +1,4 @@
-<div class="ui-course top-header" style="padding-bottom: 58px;">
+<div class="ui-course top-header ui-scroller" style="padding-bottom: 58px;">
     <div class="course-head-body">
         <div class="course-head">
             <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course" />
@@ -14,7 +14,7 @@
         </div>
         <div class="item-body">
             <p class="course-title">{{ course.title }}</p>
-            <p class="course-price ui-nowrap ">
+            <p class="course-price ui-nowrap">
                 <span class="price-block" ng-if="course.priceType != 'Coin'">
                     {{ course.price | formatPrice }}
                 </span>
@@ -22,22 +22,28 @@
                     {{ course.coinPrice | formatCoinPrice }}
                     <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
                 </span>
-                <span ng-if="discount" class="discount-type discount">
-	    			{{ discount.type | coverDiscount : course.discount }}
-                </span>
-                <span ng-if="discount" class="discount-type type">
-                    {{ discount.name }}
+                <span ng-if="discount">
+                    <s ng-if="course.priceType != 'Coin'">
+                        {{ course.originPrice | formatPrice }}
+                    </s>
+                    <s ng-if="course.priceType == 'Coin'">
+                        {{ course.originCoinPrice | formatPrice }}
+                    </s>
                 </span>
             </p>
-            <p ng-if="discount" class="discount-body">
-                <s class="price-block" ng-if="course.priceType != 'Coin'">
-                    {{ course.originPrice | formatPrice }}
-                </s>
-                <s class="price-block" ng-if="course.priceType == 'Coin'">
-                    {{ course.originCoinPrice | formatPrice }}
-                </s>
-                <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
-            </p>
+            <div class="discount-block ui-border-t" ng-if="discount">
+                <p class="course-price ui-nowrap">
+                    <span ng-if="discount" class="discount-type discount">
+    	    			{{ discount.type | coverDiscount : course.discount }}
+                    </span>
+                    <span ng-if="discount" class="discount-type type">
+                        {{ discount.name }}
+                    </span>
+                </p>
+                <p ng-if="discount" class="discount-body">
+                    <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
+                </p>
+            </div>
         </div>
     </div>
     <div class="ui-tab tab-top" ui-tab>

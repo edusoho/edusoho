@@ -22,6 +22,8 @@ seajs.config({
         "jquery.plupload-queue": "jquery-plugin/plupload-queue/2.0.0/queue",
         "jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
         "jquery.waypoints": "jquery-plugin/waypoints/2.0.5/waypoints.min",
+        "jquery.easy-pie-chart": "jquery-plugin/jquery.easy-pie-chart/jquery.easypiechart.min",
+        "jquery.blurr": "jquery-plugin/jquery.blurr/jquery.blurr",
         "mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
         'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
         'echo.js': 'echo.js/1.7.0/index',
@@ -37,6 +39,7 @@ seajs.config({
         'mask': 'arale/overlay/1.1.4/mask',
         'sticky': 'arale/sticky/1.3.1/sticky',
         'cookie': 'arale/cookie/1.0.2/cookie',
+        'messenger': 'arale/messenger/2.0.0/messenger',
         "templatable": "arale/templatable/0.9.1/templatable",
         'placeholder': 'arale/placeholder/1.1.0/placeholder',
         'json': 'gallery/json/1.0.3/json',
@@ -51,6 +54,7 @@ seajs.config({
         'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
         'screenfull': 'screenfull/2.0.0/screenfull',
         'ckeditor': 'ckeditor/4.6.7/ckeditor',
+        'es-ckeditor': 'common/es-ckeditor',
         'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
         'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
         'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
@@ -58,7 +62,13 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
-        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker'
+        'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
+        'fullcalendar': 'fullcalendar/lang-all.js',
+        'momentmin':'fullcalendar/lib/moment.min.js',
+        'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
+        'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
+        'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
+        'video-player': 'balloon-video-player/1.3.0/index'
     },
 
 	// 预加载项

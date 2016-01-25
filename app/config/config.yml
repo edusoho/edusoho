@@ -16,11 +16,11 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.6.4
+        assets_version: 6.14.1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.pdo
+        handler_id:     session.handler.factory
     fragments:       ~
 
 # Twig Configuration
@@ -56,6 +56,7 @@ doctrine:
             enum: Topxia\Common\DoctrineEnumType
         connections:
             default:
+                wrapper_class: Topxia\Service\Common\Connection
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
@@ -85,10 +86,12 @@ doctrine:
 
 parameters:
     session.handler.pdo.options:
-        db_table:    session2
-        db_id_col:   session_id
-        db_data_col: session_value
-        db_time_col: session_time
+         db_table:    sessions
+         db_id_col:   sess_id
+         db_data_col: sess_data
+         db_time_col: sess_time
+         db_lifetime_col: sess_lifetime
+         db_user_id_col: sess_user_id
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
     topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
@@ -112,7 +115,25 @@ services:
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
+
+    session.handler.redis.factory:
+        class: Topxia\Service\Common\RedisFactory
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
+
+    session.handler.redis:
+        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        arguments: [@session.handler.redis.factory, @security.context]
+
+    session.handler.factory:
+        class: SessionHandlerInterface
+        factory_class: Topxia\Service\Common\SessionHandlerFactory
+        factory_method: getSessionHandler
+        arguments: 
+            - "@service_container"
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
@@ -159,7 +180,6 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: twig.extension }
-
 
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener

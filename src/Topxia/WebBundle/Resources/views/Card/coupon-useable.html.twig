@@ -1,0 +1,36 @@
+<div class="card-pack-item coupon-item">
+  {% if cardDetail.targetType == "course" %}
+    {% if cardDetail.targetId == 0 %}
+      <p class="title">可用于抵扣全站课程</p>
+    {% else %}
+      <p class="title">用于抵扣指定课程</p>
+    {% endif %}
+  {% endif %}
+
+  {% if cardDetail.targetType == "classroom" %}
+    <p class="title">可用于抵扣全站班级</p>
+  {% endif %}
+
+  {% if cardDetail.targetType == "vip" %}
+    {% if cardDetail.targetId == 0 %}
+      <p class="title">可用于抵扣全站会员</p>
+    {% else %}
+      <p class="title">用于抵扣指定会员</p>
+    {% endif %}
+  {% endif %}
+
+  {% if cardDetail.targetType == "all" %}
+    <p class="title">可用于抵扣全站所有类型消费</p>
+  {% endif %}
+
+  <p class="price">
+    {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}折{% endif %}
+    {% if cardDetail.targetType == "course" and cardDetail.targetId != 0 %}<a href="{{ path('course_show',{ id : cardDetail.targetId }) }}">去购买课程 ></a>
+    {% elseif cardDetail.targetType == "course" and cardDetail.targetId == 0 %}<a href="{{ path('course_explore') }}">去购买课程 ></a>
+    {% elseif cardDetail.targetType == "vip" %}<a href="{{ path('vip') }}">去开通会员 ></a>
+    {% elseif cardDetail.targetType == "classroom" %}<a href="{{ path('classroom_explore') }}">去购买班级 ></a>
+    {% else %}<a href="{{ path('course_explore') }}">去消费 ></a>
+    {% endif %}
+  </p>  
+  <p>有效期截止：<span>{{ (cardDetail.deadline)|date('Y年n月d日') }}</span></p>
+</div>

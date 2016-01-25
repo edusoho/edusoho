@@ -71,12 +71,18 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         return $this->getConnection()->fetchAll($sql, $params);
 	}
 
+    public function deleteLessonView($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_lesson_view')
             ->andWhere('fileType = :fileType')
             ->andWhere('fileStorage = :fileStorage')
+            ->andWhere('courseId = :courseId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
         return $builder;

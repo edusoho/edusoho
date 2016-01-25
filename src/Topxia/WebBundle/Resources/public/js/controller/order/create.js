@@ -134,6 +134,7 @@ define(function(require, exports, module) {
 				}
 			}
 
+			totalPrice = totalPrice >= 0 ? totalPrice : 0;
 			shouldPay(totalPrice);
 		}
 
@@ -155,12 +156,12 @@ define(function(require, exports, module) {
 		function coinPriceZero(){
 			$('[role="coinNum"]').val(0);
 			$('[role="cash-discount"]').text("0.00");
-			$(".pay-password div[role='password-input']").hide();
+			$("[role='password-input']").hide();
 			validator.removeItem('[name="payPassword"]');
 		}
 
 		function showPayPassword(){
-			$(".pay-password div[role='password-input']").show();
+			$("[role='password-input']").show();
 			validator.addItem({
 				element: '[name="payPassword"]',
 				required: true,
@@ -183,18 +184,34 @@ define(function(require, exports, module) {
 		});
 
 		$("#coupon-code-btn").click(function(e){
+			// $('[role="cancel-coupon"]').trigger('click');
+			$('[role="coupon-price"]').find("[role='price']").text("0.00");
+			$('[role="code-notify"]').text("").removeClass('alert-success');
+			$('[role="coupon-code"]').val("");
+			$('[role="cancel-coupon"]').hide();
+			$('[role="coupon-code-verified"]').val("");
+			$('[role="coupon-code-input"]').val("");
+			conculatePrice();
 			$('[role="coupon-code"]').show();
 			$('[role="coupon-code-input"]').focus();
-			$('[role="no-use-coupon-code"]').hide();
+			// $('[role="no-use-coupon-code"]').hide();
 			$('[role="cancel-coupon"]').show();
+			$('[role="null-coupon-code"]').hide();
+
 			// $('[role="code-notify"]').show();
 			$(this).hide();
 		})
 
 		$('[role="cancel-coupon"]').click(function(e){
+			if($('#coupon-select').val() != "") {
+				couponCode = $('[role="coupon-code-input"]');
+				couponCode.val(couponDefaultSelect);
+				$('button[role="coupon-use"]').trigger('click');
+			}
 			$('[role="coupon-code"]').hide();
-			$('[role="no-use-coupon-code"]').show();
+			// $('[role="no-use-coupon-code"]').show();
 			$("#coupon-code-btn").show();
+			$('[role="null-coupon-code"]').show();
 			$('[role="code-notify"]').hide();
 			$('[role="coupon-price"]').find("[role='price']").text("0.00");
 			$('[role="code-notify"]').text("");
@@ -203,6 +220,7 @@ define(function(require, exports, module) {
 			$('[role="coupon-code-verified"]').val("");
 			$('[role="coupon-code-input"]').val("");
 			conculatePrice();
+
 		});
 
 		$('button[role="coupon-use"]').click(function(e){
@@ -220,18 +238,54 @@ define(function(require, exports, module) {
 			//totalPrice = afterDiscountCourses(totalPrice);
 			
 			data.amount = totalPrice;
-			
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				$('[role="code-notify"]').css("display","inline-block");
 				if(data.useable == "no") {
-					$('[role="code-notify"]').addClass("failure").text(data.message);
+					$('[role=no-use-coupon-code]').show();
+					$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").text(data.message);
 				} else if(data.useable == "yes"){
-					$('[role="code-notify"]').removeClass("failure").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
+					$('[role=no-use-coupon-code]').hide();
+					$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 					$('[role="coupon-code-verified"]').val(couponCode.val());
 				}
 				conculatePrice();
 			})
+		})
+		
+		var couponDefaultSelect = $('#coupon-select').val();
+		if(couponDefaultSelect != "") {
+			couponCode = $('[role="coupon-code-input"]');
+			couponCode.val(couponDefaultSelect);
+			$('button[role="coupon-use"]').trigger('click');
+		}
+
+		$('#coupon-select').change(function(e){
+			//新添加js
+			var coupon = $(this).children('option:selected');
+			if(coupon.data('code') == "")
+			{
+				$('[role=no-use-coupon-code]').show();
+				var coinNum = $('[role="total-price"]').text();
+				coinNum = parseFloat(coinNum);
+				var currentCash = parseFloat($('[role="accountCash"]').text());
+
+				if(currentCash < coinNum){
+					coinNum = currentCash;
+				}
+
+				$('[role="coinNum"]').val(coinNum);
+				$('[role="password-input"]').show();
+				$('#payPassword').focus();
+				$('[role="cancel-coupon"]').trigger('click');
+				return;
+			}else{
+				$('[role=no-use-coupon-code]').hide();
+			}
+			couponCode = $('[role="coupon-code-input"]');
+			couponCode.val(coupon.data('code'));
+			$('button[role="coupon-use"]').trigger('click');
+			$('[role="code-notify"]').removeClass('alert-success');
 		})
 
  		var totalPrice = parseFloat($('[role="total-price"]').text());

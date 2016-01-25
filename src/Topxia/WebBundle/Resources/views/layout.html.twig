@@ -21,11 +21,12 @@
   <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open" />
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+  <link rel="shortcut icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" media="screen"/>
   {% endif %}
 
   {% block stylesheets %}
-    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+    {{ render(controller('TopxiaWebBundle:Theme:getCurrentConfigColor', {isEditColor:isEditColor|default(false)})) }}
   {% endblock %}
   
   <!--[if lt IE 9]>
@@ -39,11 +40,9 @@
 <body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
 
 {% block body %}
-
   <div class="es-wrap">
 
     {% block header %}
-      {% include 'TopxiaWebBundle::weixin-alert.html.twig'%}
       {% include 'TopxiaWebBundle::site-hint.html.twig' %}
       {% include 'TopxiaWebBundle:Default:header.html.twig' %}
     {% endblock %}
@@ -54,6 +53,8 @@
       <div id="content-container" class="container">
         {% block content %}{% endblock %}
       </div>
+      
+      {% block bottom_content %}{% endblock %}
     {% endblock %}
     
     {% block footer %}

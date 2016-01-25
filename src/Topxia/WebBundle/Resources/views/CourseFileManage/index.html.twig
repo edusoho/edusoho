@@ -47,11 +47,19 @@
           </tr>
         </thead>
         <tbody>
-          {% for uploadFile in courseLessons %}
-            {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
-          {% else %}
-            <tr class="empty"><td colspan="20">无文件记录</td></tr>
-          {% endfor %}
+          {% if type == 'courselesson' %}
+            {% for uploadFile in courseLessons %}
+              {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
+            {% else %}
+              <tr class="empty"><td colspan="20">无文件记录</td></tr>
+            {% endfor %}
+          {% elseif type == 'coursematerial' %}
+            {% for uploadFile in courseLessons %}
+              {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr-coursematerial.html.twig' %}
+            {% else %}
+              <tr class="empty"><td colspan="20">无文件记录</td></tr>
+            {% endfor %}
+          {% endif %}
         </tbody>
       </table>
       

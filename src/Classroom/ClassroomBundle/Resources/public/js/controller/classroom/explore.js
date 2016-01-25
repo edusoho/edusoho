@@ -4,7 +4,10 @@ define(function(require, exports, module) {
 
 
     exports.run = function() {
-        Lazyload.init();        
+        Lazyload.init();
+        $('#free').on('click', function(event) {
+        	window.location.href = $(this).val();
+        });
     };
 
 });

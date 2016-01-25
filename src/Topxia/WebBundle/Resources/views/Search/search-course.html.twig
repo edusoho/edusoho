@@ -1,0 +1,8 @@
+<div class="alert alert-blank alert-sm">
+  EduSoho教育云为您找到课程结果约 <span class="color-danger">{{counts|default(0)}}</span>个
+</div>
+<div class="search-course-list" id="search-course">
+  {% for course in resultSet %}
+    {% include 'TopxiaWebBundle:Search:search-course-item.html.twig' %}
+  {% endfor %}
+</div>

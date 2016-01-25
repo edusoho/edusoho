@@ -14,9 +14,9 @@
     
     <ul class="homepage-category-nav">
       {% for category in categories %}
-        <li><a href="{{ path('course_explore', {code:category.code,fliter:'all',orderBy:'latest'}) }}">{{ category.name }}</a></li>
+        <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
-        <li><a href="{{ path('course_explore') }}">更多</a></li>
+      <li><a href="{{ path('course_explore') }}">更多</a></li>
     </ul>
 
     <div class="row row-9-3">
@@ -25,63 +25,60 @@
         {% if setting('classroom.enabled') %}
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           <div class="es-box">
-              <div class="es-box-heading">
-                <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-                <h2>推荐{{ setting('classroom.name')|default("班级") }}</h2>
-              </div>
-              <div class="es-box-body">
-                <ul class="home-class-list">
-                  {% for classroom in classrooms %}
-                 {% set teachers = classroom.users|default(null) %}
-                 {% if loop.index <= 5%}
-                  <li class="class-item">
-                    <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
-                    </a>
-                    <div class="class-body">
-                      <h3 class="class-title">
-                        <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
-                      </h3>
-                      <div class="class-metas">
-                        {% if teachers %}
-                      <span class="class-teacher">
-                        <i class="fa fa-user"></i>
-                        {% for teacher in teachers %}
-                          {% if loop.index <= 5%}
-                          <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-                           {% endif %}
-                        {% endfor %}
-                      </span>
-                    {% endif %}
-                        <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }} 人</span>
-                        <span class="class-price">
-                          {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+            <div class="es-box-heading">
+              <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
+              <h2>推荐{{ setting('classroom.name')|default("班级") }}</h2>
+            </div>
+            <div class="es-box-body">
+              <ul class="home-class-list">
+                {% for classroom in classrooms %}
+                  {% set teachers = classroom.users|default(null) %}
+                  {% if loop.index <= 5%}
+                    <li class="class-item">
+                      <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                        {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                      </a>
+                      <div class="class-body">
+                        <h3 class="class-title">
+                          <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                        </h3>
+                        <div class="class-metas">
+                          {% if teachers %}
+                            <span class="class-teacher">
+                              <i class="fa fa-user"></i>
+                              {% for teacher in teachers %}
+                                {% if loop.index <= 5%}
+                                <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                                 {% endif %}
+                              {% endfor %}
+                            </span>
+                          {% endif %}
+                          <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }} 人</span>
+                          <span class="class-price">
+                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                               {% if classroom.price > 0 %}
                                {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
                               {% else %}
                                 免费
                               {% endif %}
-                          {% else %}
+                            {% else %}
                               {% if classroom.price > 0 %}
                                 {{ classroom.price }}元
                               {% else %}
                                 免费
                               {% endif %}
-                          {% endif %}
-
-                        </span>
+                            {% endif %}
+                          </span>
+                        </div>
+                        <div class="course-num">共{{classroom.courseNum}}课程</div>
                       </div>
-                      <div class="course-num">共{{classroom.courseNum}}课程</div>
-                    </div>
-                  </li>
-                   {% endif %}
-                 {% endfor %}
-                </ul>
-              </div>
+                    </li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
             </div>
-            {% endif %}
-
-
+          </div>
+        {% endif %}
 
         {# 推荐课程 #}
         {% set recommendCourses = data('RecommendCourses', {count:3}) %}
@@ -92,7 +89,7 @@
               <h2>推荐课程</h2>
             </div>
             <div class="es-box-body">
-              {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}            
+              {{ _self.course_grids(data('RecommendCourses',{ count:3 })) }}         
             </div>
           </div>
         {% endif %}
@@ -140,8 +137,8 @@
               {% for article in articles %}
                 {% if article %}
                   <li class="col-md-6">
-                    <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                    <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
+                    <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                    <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
                   </li>
                 {% endif %}
               {% endfor %}
@@ -151,7 +148,7 @@
         {% endif %}
 
         {# 推荐话题 #}
-        <!-- {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
+        {# {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
         {% if threads %}
           <div class="es-box topic">
             <div class="es-box-heading">
@@ -186,7 +183,7 @@
               </ul>
             </div>
           </div>
-        {% endif %} -->
+        {% endif %} #}
 
         {# 讲师团 #}
         {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
@@ -198,18 +195,17 @@
             </div>
             <div class="es-box-body">
               <ul class="row teacher-grids">
-                 {% for teacher in teachers %}
+                {% for teacher in teachers %}
                   {% if teacher %}
                     <li class="col-sm-6 col-md-4">
                       <div class="teachers-item">
                         <a href="{{ path('user_show', {id:teacher.id}) }}">
                          <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
                         </a>
-                 
-                          <span>{{ web_macro.user_link(teacher) }}</span>
-                            <i> {{ teacher.title }}</i>
-                            <p> {{ teacher.about|plain_text(50) }}</p>
-                         </div>
+                        <span>{{ web_macro.user_link(teacher) }}</span>
+                        <i> {{ teacher.title }}</i>
+                        <p> {{ teacher.about|plain_text(50) }}</p>
+                      </div>
                     </li>
                   {% endif %}
                 {% endfor %}
@@ -236,9 +232,9 @@
                           <div class="row">
                             <div class="col-sm-4 col-md-4">
                               <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
-                              <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
+                                <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
+                              </a>
                             </div>
-                            </a>
                             <div class="col-sm-5 col-md-5">
                               <h3>{{ level.name }}</h3>
                               <p>{{ level.description|plain_text(40) }}</p>
@@ -277,9 +273,9 @@
                            <div class="media">
                               <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
                                 {% if group.logo %}
-                                <img src="{{file_path(group.logo)}}" alt="{{group.title}}">
+                                <img class="avatar-square-sm" src="{{file_path(group.logo)}}" alt="{{group.title}}">
                                 {%else%}
-                                <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                                <img class="avatar-square-sm" src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
                                 {%endif%}
                               </a>
                               <div class="media-body">
@@ -299,7 +295,6 @@
             </div>
           {% endif %}
         {% endif %}
-
       </div>
 
       <div class="col-md-3">
@@ -404,11 +399,11 @@
 {% endblock %}
 
 {% block contact %}
-{% if contact %}
-{% if contact.enabled == 1 %}
-{% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
-{% endif %}
-{% endif %}
+  {% if contact %}
+  {% if contact.enabled == 1 %}
+    {% include 'TopxiaWebBundle:ContactFloat:contact.html.twig'   with {contact:contact} %}
+  {% endif %}
+  {% endif %}
 {% endblock %}
 
 {% macro course_grids(courses) %}
@@ -419,25 +414,25 @@
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
           {{ lazy_img(filepath(course.largePicture, 'course.png'), 'img-responsive thumb', '') }}
-            {% if course.status == 'draft' %}
-              <span class="label  label-warning course-status">未发布</span>
-            {% elseif course.status == 'closed' %}
-              <span class="label label-danger course-status">已关闭</span>
-            {% endif %} 
-            {% if course.serializeMode=='serialize' %}
-              <span class="label label-success series-mode-label">更新中</span>
-            {% elseif course.serializeMode=='finished' %}
-              <span class="label label-warning series-mode-label">已完结</span>
-            {% endif %}
+          {% if course.status == 'draft' %}
+            <span class="label  label-warning course-status">未发布</span>
+          {% elseif course.status == 'closed' %}
+            <span class="label label-danger course-status">已关闭</span>
+          {% endif %} 
+          {% if course.serializeMode=='serialize' %}
+            <span class="label label-success series-mode-label">更新中</span>
+          {% elseif course.serializeMode=='finished' %}
+            <span class="label label-warning series-mode-label">已完结</span>
+          {% endif %}
 
-            {% if course.type == 'live' %}
-              {% set lesson = course['lesson']|default(null) %}
-              {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-                <span class="label label-warning series-mode-label">正在直播中</span>
-              {% else %}
-                <span class="label label-success series-mode-label">直播</span>
-              {% endif %}
+          {% if course.type == 'live' %}
+            {% set lesson = course['lesson']|default(null) %}
+            {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
+              <span class="label label-warning series-mode-label">正在直播中</span>
+            {% else %}
+              <span class="label label-success series-mode-label">直播</span>
             {% endif %}
+          {% endif %}
 
           <span class="title">{{ course.title }}</span>
           {% if mode in ['default', 'teach'] %}

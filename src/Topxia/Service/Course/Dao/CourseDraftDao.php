@@ -13,4 +13,10 @@ interface CourseDraftDao
     public function addCourseDraft($draft);
 
     public function updateCourseDraft($courseId,$lessonId, $userId,$fields);
+
+    public function searchDraftCount($conditions);
+    
+    public function searchDrafts($conditions, $orderBy, $start, $limit);
+
+    public function deleteDraft($id);
 }

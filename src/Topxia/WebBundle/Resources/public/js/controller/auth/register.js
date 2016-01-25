@@ -16,12 +16,12 @@ define(function(require, exports, module) {
             var isMobile = reg_mobile.test(emailOrMobile);
             if(isMobile){
                 $(".email_mobile_msg").removeClass('hidden');
-                $('.captcha_div').addClass('hidden');
+                $('.js-captcha').addClass('hidden');
                 $('.js-sms-send').removeClass('disabled');
             }else {
                 $(".email_mobile_msg").addClass('hidden');
                 $('.js-sms-send').addClass('disabled');
-                $('.captcha_div').removeClass('hidden');
+                $('.js-captcha').removeClass('hidden');
             }
             if (isEmail || isMobile) {
                 result = true;
@@ -38,8 +38,7 @@ define(function(require, exports, module) {
             format: 'yyyy-mm-dd',
             minView: 'month'
         });
-        var $form = $('#register-form');
-        
+        var $form = $('#register-form');        
         var validator = new Validator({
             element: $form,
             onFormValidated: function(error, results, $form) {
@@ -58,7 +57,7 @@ define(function(require, exports, module) {
             }); 
 
             validator.addItem({
-                element: '[name="captcha_num"]',
+                element: '[name="captcha_code"]',
                 required: true,
                 rule: 'alphanumeric remote',
                 onItemValidated: function(error, message, eleme) {
@@ -123,6 +122,15 @@ define(function(require, exports, module) {
             rule: 'minlength{min:5} maxlength{max:20}',
             display: '密码'
         });
+        if($('.invitecode').length>0){  
+        validator.addItem({
+            element: '[name="invite_code"]',
+            required: false,
+            rule: 'reg_inviteCode invitecode_remote',
+            display: '邀请码'
+        });
+        }
+
 
         validator.addItem({
             element: '#user_terms',
@@ -153,7 +161,7 @@ define(function(require, exports, module) {
                     display: '短信验证码'           
                 });
 
-                validator.removeItem('[name="captcha_num"]');
+                validator.removeItem('[name="captcha_code"]');
 
                 $form.on('click','.js-sms-send',function(e){
                     var $mobile_target =  validator.query('[name="verifiedMobile"]') == null?  validator.query('[name="emailOrMobile"]') : validator.query('[name="verifiedMobile"]');
@@ -168,7 +176,7 @@ define(function(require, exports, module) {
             }else{
 
                 validator.addItem({
-                    element: '[name="captcha_num"]',
+                    element: '[name="captcha_code"]',
                     required: true,
                     rule: 'alphanumeric remote',
                     onItemValidated: function(error, message, eleme) {

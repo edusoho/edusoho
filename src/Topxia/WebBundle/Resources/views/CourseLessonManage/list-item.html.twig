@@ -36,7 +36,10 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
-    课时 <span class="number">{{ lesson.number }}</span>：{% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
+    {% if setting('course.custom_chapter_enabled')|default(true) %} 
+      课时 <span class="number">{{ lesson.number }}</span>：
+    {% endif %}
+    {% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
     
     {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
       <span class="label label-danger fileDeletedLesson" title="课时文件已删除">无效课时</span>
@@ -116,21 +119,39 @@
           <li class="divider"></li>
         {% endif %}
 
+        {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
+          {% if  file.convertStatus|default(null) == 'success' %}
+          <!-- file.createdUserId|default(null) == app.user.id and -->
+          <li>
+            <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
+            <span class="glyphicon glyphicon-list prs"></span>弹题管理
+            </a>
+          </li>
+          <li class="divider"></li>
+          {% endif %}
+        {% endif %}
+
         {% if lesson.type != 'testpaper' %}
           <li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加资料</a></li>
           <li class="divider"></li>
         {% endif %}
-
+        
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
-          <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-ok-circle prs"></span>发布
+          <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
+            <span class="glyphicon glyphicon-ok-circle prs"></span>发布
           </a>
         </li>
 
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
-          <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-remove-circle prs"></span>取消发布
+          <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
+            <span class="glyphicon glyphicon-remove-circle prs"></span>取消发布
           </a>
         </li>
-        <li><a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-trash prs"></span>删除</a></li>
+        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+          <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
+            <span class="glyphicon glyphicon-trash prs"></span>删除
+          </a>
+        </li>
       </ul>
     </span>
   </div>

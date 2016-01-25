@@ -38,6 +38,10 @@ class CutFileCommand extends BaseCommand
             $output->writeln('<info>文件不存在</info>');
         }
 
+        $command = "rm -rf {$rootPath}web/install/edusoho_init_*.sql";
+        $output->writeln("<info>{$command}</info>");
+        exec($command);
+
         $contents = file($filepath);
         $totalLines = count($contents);
         $fileCount = ceil($totalLines/$line);

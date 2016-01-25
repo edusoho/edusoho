@@ -38,13 +38,12 @@
 
   <div class="form-group">
     <div class="col-md-3 control-label">
-      <label>API故障转移机制</label>
+      <label>Push API地址</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('cloud_api_failover', {1:'开启', 0:'关闭'}, developerSetting.cloud_api_failover|default(0)) }}
+      <input class="form-control" type="text" name="cloud_api_tui_server" value="{{ developerSetting.cloud_api_tui_server|default('') }}">
     </div>
   </div>
-
 
   <div class="form-group">
     <div class="col-md-3 control-label">
@@ -52,6 +51,24 @@
     </div>
     <div class="controls col-md-8 radios">
       {{ radios('hls_encrypted', {1:'开启', 0:'关闭'}, developerSetting.hls_encrypted) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>气球播放器</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('balloon_player', {1:'开启', 0:'关闭'}, developerSetting.balloon_player|default(0)) }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label>是否无外网</label>
+    </div>
+    <div class="controls col-md-8 radios">
+      {{ radios('without_network', {1:'是', 0:'否'}, developerSetting.without_network|default(0)) }}
     </div>
   </div>
 

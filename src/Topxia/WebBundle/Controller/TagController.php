@@ -31,7 +31,8 @@ class TagController extends BaseController
         if($tag) {  
             $conditions = array(
                 'status' => 'published',
-                'tagId' => $tag['id']
+                'tagId' => $tag['id'],
+                'parentId' => 0
             );
 
             $paginator = new Paginator(

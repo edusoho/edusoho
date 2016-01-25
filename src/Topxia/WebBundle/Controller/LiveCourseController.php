@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\Paginator;
-use Topxia\Service\Course\CourseService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
+use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class LiveCourseController extends BaseController
 {
@@ -14,21 +13,20 @@ class LiveCourseController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $client = new EdusohoLiveClient();
+        $client       = new EdusohoLiveClient();
         $liveCapacity = $client->getCapacity();
 
         return $this->createJsonResponse($liveCapacity);
-
     }
 
-	public function exploreAction(Request $request)
-	{
+    public function exploreAction(Request $request)
+    {
         if (!$this->setting('course.live_course_enabled')) {
             return $this->createMessageResponse('info', '直播频道已关闭');
         }
 
         $recenntLessonsCondition = array(
-            'status' => 'published',
+            'status'             => 'published',
             'endTimeGreaterThan' => time()
         );
 
@@ -39,7 +37,7 @@ class LiveCourseController extends BaseController
         );
 
         $recentlessons = $this->getCourseService()->searchLessons(
-            $recenntLessonsCondition,  
+            $recenntLessonsCondition,
             array('startTime', 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -48,48 +46,51 @@ class LiveCourseController extends BaseController
         $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
 
         $recentCourses = array();
+
         foreach ($recentlessons as $lesson) {
             $course = $courses[$lesson['courseId']];
+
             if ($course['status'] != 'published' || $course['parentId'] != '0') {
                 continue;
             }
-            $course['lesson'] = $lesson;
-            $recentCourses[] = $course;
 
+            $course['lesson'] = $lesson;
+            $recentCourses[]  = $course;
         }
 
-        $liveCourses = $this->getCourseService()->searchCourses( array(
-            'status' => 'published',
-            'type' => 'live',
+        $liveCourses = $this->getCourseService()->searchCourses(array(
+            'status'   => 'published',
+            'type'     => 'live',
             'parentId' => '0'
-        ), 'lastest',0, 10 );
+        ), 'lastest', 0, 10);
 
         $userIds = array();
+
         foreach ($liveCourses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
         }
 
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
         $default = $this->getSettingService()->get('default', array());
-        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig',array(
+        return $this->render('TopxiaWebBundle:LiveCourse:index.html.twig', array(
             'recentCourses' => $recentCourses,
-            'liveCourses' => $liveCourses,
-            'users' => $users,
-            'paginator' => $paginator,
-            'default'=> $default
+            'liveCourses'   => $liveCourses,
+            'users'         => $users,
+            'paginator'     => $paginator,
+            'default'       => $default
         ));
-	}
+    }
 
     public function ratingCoursesBlockAction()
-    {   
+    {
         $conditions = array(
-            'status' => 'published',
-            'type' => 'live',
-            'parentId' => '0',
+            'status'            => 'published',
+            'type'              => 'live',
+            'parentId'          => '0',
             'ratingGreaterThan' => 0.01
         );
 
-        $courses = $this->getCourseService()->searchCourses( $conditions, 'Rating',0,10);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'Rating', 0, 10);
 
         return $this->render('TopxiaWebBundle:LiveCourse:rating-courses-block.html.twig', array(
             'courses' => $courses
@@ -97,28 +98,31 @@ class LiveCourseController extends BaseController
     }
 
     public function coursesBlockAction($courses, $view = 'list', $mode = 'default')
-    {   
-
+    {
         $userIds = array();
+
         foreach ($courses as $course) {
-            $userIds = array_merge($userIds, empty($course['teacherIds']) ? array() : $course['teacherIds']) ;
+            $userIds = array_merge($userIds, empty($course['teacherIds']) ? array() : $course['teacherIds']);
         }
+
         $users = $this->getUserService()->findUsersByIds($userIds);
+
         foreach ($courses as &$course) {
             if (empty($course['id'])) {
                 $course = array();
             }
         }
+
         $courses = array_filter($courses);
 
         return $this->render("TopxiaWebBundle:Course:courses-block-{$view}.html.twig", array(
             'courses' => $courses,
-            'users' => $users,
-            'mode' => $mode,
+            'users'   => $users,
+            'mode'    => $mode
         ));
     }
 
-    public function getClassroomUrlAction(Request $request,$courseId, $lessonId)
+    public function getClassroomUrlAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
 
@@ -127,6 +131,7 @@ class LiveCourseController extends BaseController
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         if (empty($lesson)) {
             throw $this->createAccessDeniedException('课时不存在！');
         }
@@ -144,15 +149,15 @@ class LiveCourseController extends BaseController
         }
 
         $params = array(
-            'liveId' => $lesson['mediaId'], 
+            'liveId'   => $lesson['mediaId'],
             'provider' => $lesson['liveProvider'],
-            'user' => $user['email'],
-            'nickname' => $user['nickname'],
+            'user'     => $user['email'],
+            'nickname' => $user['nickname']
         );
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
             $params['role'] = 'teacher';
-        } else if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
             throw $this->createAccessDeniedException('您不是课程学员，不能参加直播！');
@@ -166,20 +171,21 @@ class LiveCourseController extends BaseController
         }
 
         return $this->createJsonResponse(array(
-            'url' => $result['url'],
-            'param' => isset($result['param']) ? $result['param']:null
+            'url'   => $result['url'],
+            'param' => isset($result['param']) ? $result['param'] : null
         ));
-        
     }
 
-    public function entryAction(Request $request,$courseId, $lessonId)
+    public function entryAction(Request $request, $courseId, $lessonId)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
         }
 
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         if (empty($lesson)) {
             return $this->createMessageResponse('info', '课时不存在！');
         }
@@ -196,36 +202,47 @@ class LiveCourseController extends BaseController
             return $this->createMessageResponse('info', '直播已结束!');
         }
 
-        $params = array(
-            'liveId' => $lesson['mediaId'], 
-            'provider' => $lesson['liveProvider'],
-            'user' => $user['email'],
-            'nickname' => $user['nickname'],
-        );
+        $params = array();
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
-            $params['role'] = 'teacher';
-        } else if ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
+            $teachers =$this->getCourseService()->findCourseTeachers($courseId);
+            $teacher = array_shift($teachers);
+            if ($teacher['userId'] == $user['id']) {
+                $params['role'] = 'teacher';
+            } else {
+                $params['role'] = 'speaker';
+            }
+
+        } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
             return $this->createMessageResponse('info', '您不是课程学员，不能参加直播！');
         }
 
-        if($this->setting("developer.cloud_api_failover", 0)) {
-            $client = new EdusohoLiveClient();
-            $result = $client->entryLive($params);
+        $liveAccount = CloudAPIFactory::create('leaf')->get('/me/liveaccount');
 
-            if (empty($result) || isset($result['error'])) {
-                return $this->createMessageResponse('info', $result['errorMsg']);
-            }
+        $params['id']       = $user['id'];
+        $params['nickname'] = $user['nickname'];
+        return $this->forward('TopxiaWebBundle:Liveroom:_entry', array('id' => $lesson['mediaId']), $params);
+
+        $params['liveId']   = $lesson['mediaId'];
+        $params['provider'] = $lesson['liveProvider'];
+        $params['user']     = $user['email'];
+        $params['nickname'] = $user['nickname'];
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryLive($params);
+
+        if (empty($result) || isset($result['error'])) {
+            return $this->createMessageResponse('info', $result['errorMsg']);
         }
 
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-            'courseId' => $courseId, 
+            'courseId' => $courseId,
             'lessonId' => $lessonId,
-            'lesson' => $lesson,
-            'url' => $this->generateUrl('live_classroom_url',array(
-                'courseId' => $courseId, 
+            'lesson'   => $lesson,
+            'url'      => $this->generateUrl('live_classroom_url', array(
+                'courseId' => $courseId,
                 'lessonId' => $lessonId
             ))
         ));
@@ -233,10 +250,9 @@ class LiveCourseController extends BaseController
 
     public function verifyAction(Request $request)
     {
-
         $result = array(
             "code" => "0",
-            "msg" => "ok"
+            "msg"  => "ok"
         );
 
         return $this->createJsonResponse($result);
@@ -245,23 +261,32 @@ class LiveCourseController extends BaseController
     protected function makeSign($string)
     {
         $secret = $this->container->getParameter('secret');
-        return md5($string . $secret);
+        return md5($string.$secret);
     }
 
     public function replayCreateAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
 
-        $resultList = $this->getCourseService()->generateLessonReplay($courseId,$lessonId);
+        $resultList = $this->getCourseService()->generateLessonReplay($courseId, $lessonId);
 
-        if(array_key_exists("error", $resultList)) {
+        if (array_key_exists("error", $resultList)) {
             return $this->createJsonResponse($resultList);
         }
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $lesson["isEnd"] = intval(time()-$lesson["endTime"])>0;
+
+        $lesson          = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $lesson["isEnd"] = intval(time() - $lesson["endTime"]) > 0;
+
+        $client = new EdusohoLiveClient();
+
+        if ($lesson['type'] == 'live') {
+            $result = $client->getMaxOnline($lesson['mediaId']);
+            $this->getCourseService()->setCourseLessonMaxOnlineNum($lesson['id'], $result['onLineNum']);
+        }
+
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(
             'course' => $this->getCourseService()->getCourse($courseId),
-            'lesson' => $lesson,
+            'lesson' => $lesson
         ));
     }
 
@@ -269,12 +294,12 @@ class LiveCourseController extends BaseController
     {
         $course = $this->getCourseService()->tryTakeCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        
+
         return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
             'lesson' => $lesson,
-            'url' => $this->generateUrl('live_classroom_replay_url',array(
-                'courseId' => $courseId, 
-                'lessonId' => $lessonId,
+            'url'    => $this->generateUrl('live_classroom_replay_url', array(
+                'courseId'             => $courseId,
+                'lessonId'             => $lessonId,
                 'courseLessonReplayId' => $courseLessonReplayId
             ))
         ));
@@ -286,40 +311,41 @@ class LiveCourseController extends BaseController
         $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
 
         return $this->createJsonResponse(array(
-            'url' => $result['url'],
-            'param' => isset($result['param']) ? $result['param']:null
+            'url'   => $result['url'],
+            'param' => isset($result['param']) ? $result['param'] : null
         ));
     }
 
     public function replayManageAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course      = $this->getCourseService()->tryManageCourse($id);
         $courseItems = $this->getCourseService()->getCourseItems($course['id']);
 
         foreach ($courseItems as $key => $item) {
-            if($item["itemType"] == "lesson"){
-                $item["isEnd"] = intval(time()-$item["endTime"])>0;
+            if ($item["itemType"] == "lesson") {
+                $item["isEnd"]     = intval(time() - $item["endTime"]) > 0;
                 $courseItems[$key] = $item;
             }
         }
+
         $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:index.html.twig', array(
-            'course' => $course,
-            'items' => $courseItems,
-	'default'=> $default
+            'course'  => $course,
+            'items'   => $courseItems,
+            'default' => $default
         ));
     }
-
 
     protected function getRootCategory($categoryTree, $category)
     {
         $start = false;
+
         foreach (array_reverse($categoryTree) as $treeCategory) {
             if ($treeCategory['id'] == $category['id']) {
                 $start = true;
             }
 
-            if ($start && $treeCategory['depth'] ==1) {
+            if ($start && $treeCategory['depth'] == 1) {
                 return $treeCategory;
             }
         }
@@ -332,8 +358,8 @@ class LiveCourseController extends BaseController
         $categories = array();
 
         $start = false;
+
         foreach ($categoryTree as $treeCategory) {
-            
             if ($start && ($treeCategory['depth'] == 1) && ($treeCategory['id'] != $rootCategory['id'])) {
                 break;
             }
@@ -345,7 +371,6 @@ class LiveCourseController extends BaseController
             if ($start == true) {
                 $categories[] = $treeCategory;
             }
-
         }
 
         return $categories;

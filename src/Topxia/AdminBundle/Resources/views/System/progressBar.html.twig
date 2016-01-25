@@ -1,0 +1,18 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}优化课程文件{% endblock %}
+{% block body %}
+  <div id="optimize-files-progress" class="optimize-files-progress" style="display:none;">
+    <div class="progress progress-striped active">
+      <div class="progress-bar progress-bar-success" style="width: 0%"></div>
+    </div>
+    <div class="text-success progress-text"></div>
+  </div>
+  <div id="optimize-url" data-url="{{ url('admin_optimize_remove_upload_files')}}"></div>
+{% endblock %}
+
+{% block footer %}
+   <strong class="text text-danger" id="optimize-hint">正在优化课程文件，请不要关闭当前窗口...</strong>
+  <button id="finish-optimize-btn" data-loading-text="正在优化, 请稍等..." class="btn btn-primary" style="display:none;"data-dismiss="modal">完成优化</button>
+  <script>app.load('optimize/optimize-modal')</script>
+{% endblock %}

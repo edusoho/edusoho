@@ -2,52 +2,66 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\FileToolkit;
+use Topxia\Common\JsonToolkit;
+use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\EdusohoLiveClient;
-use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class SettingController extends BaseController
 {
+    public function postNumRulesAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $setting = $request->request->get('setting', array());
+            $this->getSettingService()->set('post_num_rules', $setting);
+            $this->getLogService()->info('system', 'update_settings', "更新PostNumSetting设置", $setting);
+            $this->setFlashMessage('success', '设置已保存！');
+        }
+
+        $setting = $this->getSettingService()->get('post_num_rules', array());
+        $setting = JsonToolkit::prettyPrint(json_encode($setting));
+
+        return $this->render('TopxiaAdminBundle:System:post-num-rules.html.twig', array(
+            'setting' => $setting
+        ));
+    }
+
     public function mobileAction(Request $request)
     {
         $operationMobile = $this->getSettingService()->get('operation_mobile', array());
-        $courseGrids = $this->getSettingService()->get('operation_course_grids', array());
-        $settingMobile = $this->getSettingService()->get('mobile', array());
+        $courseGrids     = $this->getSettingService()->get('operation_course_grids', array());
+        $settingMobile   = $this->getSettingService()->get('mobile', array());
 
         $default = array(
-            'enabled' => 1, // 网校状态
-            'ver' => 1,//是否是新版
-            'about' => '', // 网校简介
-            'logo' => '', // 网校Logo
-            'appname' => '',
-            'appabout' =>'',
-            'applogo' =>'',
-            'appcover' =>'',
-            'notice' => '', //公告
-            'splash1' => '', // 启动图1
-            'splash2' => '', // 启动图2
-            'splash3' => '', // 启动图3
-            'splash4' => '', // 启动图4
-            'splash5' => '', // 启动图5
+            'enabled'  => 1, // 网校状态
+            'ver'      => 1, //是否是新版
+            'about'    => '', // 网校简介
+            'logo'     => '', // 网校Logo
+            'appname'  => '',
+            'appabout' => '',
+            'applogo'  => '',
+            'appcover' => '',
+            'notice'   => '', //公告
+            'splash1'  => '', // 启动图1
+            'splash2'  => '', // 启动图2
+            'splash3'  => '', // 启动图3
+            'splash4'  => '', // 启动图4
+            'splash5'  => '' // 启动图5
         );
 
         $mobile = array_merge($default, $settingMobile);
+
         if ($request->getMethod() == 'POST') {
             $settingMobile = $request->request->all();
 
-            $mobile = array_merge($settingMobile,$operationMobile,$courseGrids);
+            $mobile = array_merge($settingMobile, $operationMobile, $courseGrids);
 
             $this->getSettingService()->set('operation_mobile', $operationMobile);
             $this->getSettingService()->set('operation_course_grids', $courseGrids);
             $this->getSettingService()->set('mobile', $mobile);
-
 
             $this->getLogService()->info('system', 'update_settings', "更新移动客户端设置", $mobile);
             $this->setFlashMessage('success', '移动客户端设置已保存！');
@@ -55,33 +69,35 @@ class SettingController extends BaseController
 
         $result = CloudAPIFactory::create('leaf')->get('/me');
 
-        if(array_key_exists('ver',$mobile) && $mobile['ver']){
-            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
-        }else{
-            $mobileCode = ( (array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");  
+        if (array_key_exists('ver', $mobile) && $mobile['ver']) {
+            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusohov3");
+        } else {
+            $mobileCode = ((array_key_exists("mobileCode", $result) && !empty($result["mobileCode"])) ? $result["mobileCode"] : "edusoho");
         }
-        
+
         //是否拥有定制app
-        $hasMobile = $result['hasMobile'] ?$result['hasMobile']:0;
+        $hasMobile = isset($result['hasMobile']) ? $result['hasMobile'] : 0;
         return $this->render('TopxiaAdminBundle:System:mobile.setting.html.twig', array(
-            'mobile' => $mobile,
+            'mobile'     => $mobile,
             'mobileCode' => $mobileCode,
-            'hasMobile'=>$hasMobile
+            'hasMobile'  => $hasMobile
         ));
     }
 
     public function mobilePictureUploadAction(Request $request, $type)
     {
-        $file = $request->files->get($type);
+        $fileId = $request->request->get('id');
+        $file   = $this->getFileService()->getFileObject($fileId);
+
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'mobile_picture' . time() . '.' . $file->getClientOriginalExtension();
+        $filename  = 'mobile_picture'.time().'.'.$file->getExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
+        $file      = $file->move($directory, $filename);
 
-        $mobile = $this->getSettingService()->get('mobile', array());
+        $mobile        = $this->getSettingService()->get('mobile', array());
         $mobile[$type] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
         $mobile[$type] = ltrim($mobile[$type], '/');
 
@@ -91,7 +107,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $mobile[$type],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($mobile[$type]),
+            'url'  => $this->container->get('templating.helper.assets')->getUrl($mobile[$type])
         );
 
         return new Response(json_encode($response));
@@ -99,7 +115,7 @@ class SettingController extends BaseController
 
     public function mobilePictureRemoveAction(Request $request, $type)
     {
-        $setting = $this->getSettingService()->get("mobile");
+        $setting        = $this->getSettingService()->get("mobile");
         $setting[$type] = '';
 
         $this->getSettingService()->set('mobile', $setting);
@@ -111,25 +127,26 @@ class SettingController extends BaseController
 
     public function logoUploadAction(Request $request)
     {
-        $fileId = $request->request->get('id');
+        $fileId     = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
+
         if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $file = $this->getFileService()->getFile($fileId);
+        $file   = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $site = $this->getSettingService()->get('site', array());
 
-        $oldFileId = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
+        $oldFileId            = empty($site['logo_file_id']) ? null : $site['logo_file_id'];
         $site['logo_file_id'] = $fileId;
-        $site['logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
-        $site['logo'] = ltrim($site['logo'], '/');
+        $site['logo']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['logo']         = ltrim($site['logo'], '/');
 
         $this->getSettingService()->set('site', $site);
 
-        if($oldFileId) {
+        if ($oldFileId) {
             $this->getFileService()->deleteFile($oldFileId);
         }
 
@@ -137,23 +154,23 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['logo'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['logo']),
+            'url'  => $this->container->get('templating.helper.assets')->getUrl($site['logo'])
         );
 
         return $this->createJsonResponse($response);
-
     }
 
     public function logoRemoveAction(Request $request)
     {
-        $setting = $this->getSettingService()->get("site");
+        $setting         = $this->getSettingService()->get("site");
         $setting['logo'] = '';
 
-        $fileId = empty($setting['logo_file_id']) ? null : $setting['logo_file_id'];
+        $fileId                  = empty($setting['logo_file_id']) ? null : $setting['logo_file_id'];
         $setting['logo_file_id'] = '';
 
         $this->getSettingService()->set('site', $setting);
-        if($fileId){
+
+        if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
 
@@ -163,26 +180,27 @@ class SettingController extends BaseController
     }
 
     public function liveLogoUploadAction(Request $request)
-    {   
-        $fileId = $request->request->get('id');
+    {
+        $fileId     = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
+
         if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $file = $this->getFileService()->getFile($fileId);
+        $file   = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $site = $this->getSettingService()->get('course', array());
 
-        $oldFileId = empty($site['live_logo_file_id']) ? null : $site['live_logo_file_id'];
+        $oldFileId                 = empty($site['live_logo_file_id']) ? null : $site['live_logo_file_id'];
         $site['live_logo_file_id'] = $fileId;
-        $site['live_logo'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
-        $site['live_logo'] = ltrim($site['live_logo'], '/');
+        $site['live_logo']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['live_logo']         = ltrim($site['live_logo'], '/');
 
         $this->getSettingService()->set('course', $site);
 
-        if($oldFileId) {
+        if ($oldFileId) {
             $this->getFileService()->deleteFile($oldFileId);
         }
 
@@ -190,7 +208,7 @@ class SettingController extends BaseController
 
         $response = array(
             'path' => $site['live_logo'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['live_logo']),
+            'url'  => $this->container->get('templating.helper.assets')->getUrl($site['live_logo'])
         );
 
         return $this->createJsonResponse($response);
@@ -198,14 +216,15 @@ class SettingController extends BaseController
 
     public function liveLogoRemoveAction(Request $request)
     {
-        $setting = $this->getSettingService()->get("course");
+        $setting              = $this->getSettingService()->get("course");
         $setting['live_logo'] = '';
 
-        $fileId = empty($setting['live_logo_file_id']) ? null : $setting['live_logo_file_id'];
+        $fileId                       = empty($setting['live_logo_file_id']) ? null : $setting['live_logo_file_id'];
         $setting['live_logo_file_id'] = '';
-        
+
         $this->getSettingService()->set('course', $setting);
-        if($fileId) {
+
+        if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
 
@@ -216,33 +235,37 @@ class SettingController extends BaseController
 
     public function faviconUploadAction(Request $request)
     {
-        $fileId = $request->request->get('id');
+        $fileId     = $request->request->get('id');
         $objectFile = $this->getFileService()->getFileObject($fileId);
+
         if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $file = $this->getFileService()->getFile($fileId);
+        $file   = $this->getFileService()->getFile($fileId);
         $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $site = $this->getSettingService()->get('site', array());
 
-        $oldFileId = empty($site['favicon_file_id']) ? null : $site['favicon_file_id'];
+        $oldFileId               = empty($site['favicon_file_id']) ? null : $site['favicon_file_id'];
         $site['favicon_file_id'] = $fileId;
-        $site['favicon'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
-        $site['favicon'] = ltrim($site['favicon'], '/');
+        $site['favicon']         = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
+        $site['favicon']         = ltrim($site['favicon'], '/');
 
         $this->getSettingService()->set('site', $site);
 
-        if($oldFileId) {
+        if ($oldFileId) {
             $this->getFileService()->deleteFile($oldFileId);
         }
+
+        //浏览器图标覆盖默认图标
+        copy($this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/'.$site['favicon'], $this->getServiceKernel()->getParameter('kernel.root_dir').'/../web/favicon.ico');
 
         $this->getLogService()->info('system', 'update_settings', "更新浏览器图标", array('favicon' => $site['favicon']));
 
         $response = array(
             'path' => $site['favicon'],
-            'url' => $this->container->get('templating.helper.assets')->getUrl($site['favicon']),
+            'url'  => $this->container->get('templating.helper.assets')->getUrl($site['favicon'])
         );
 
         return $this->createJsonResponse($response);
@@ -250,15 +273,15 @@ class SettingController extends BaseController
 
     public function faviconRemoveAction(Request $request)
     {
-        $setting = $this->getSettingService()->get("site");
+        $setting            = $this->getSettingService()->get("site");
         $setting['favicon'] = '';
 
-        $fileId = empty($setting['favicon_file_id']) ? null : $setting['favicon_file_id'];
+        $fileId                     = empty($setting['favicon_file_id']) ? null : $setting['favicon_file_id'];
         $setting['favicon_file_id'] = '';
 
         $this->getSettingService()->set('site', $setting);
 
-        if($fileId) {
+        if ($fileId) {
             $this->getFileService()->deleteFile($fileId);
         }
 
@@ -269,40 +292,47 @@ class SettingController extends BaseController
 
     protected function setCloudSmsKey($key, $val)
     {
-        $setting = $this->getSettingService()->get('cloud_sms', array());
+        $setting       = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
         $this->getSettingService()->set('cloud_sms', $setting);
     }
 
     public function mailerAction(Request $request)
     {
-        $mailer = $this->getSettingService()->get('mailer', array());
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array());
+        }
+
+        $mailer  = $this->getSettingService()->get('mailer', array());
         $default = array(
-            'enabled' => 0,
-            'host' => '',
-            'port' => '',
+            'enabled'  => 0,
+            'host'     => '',
+            'port'     => '',
             'username' => '',
             'password' => '',
-            'from' => '',
-            'name' => '',
+            'from'     => '',
+            'name'     => ''
         );
         $mailer = array_merge($default, $mailer);
+
         if ($request->getMethod() == 'POST') {
             $mailer = $request->request->all();
             $this->getSettingService()->set('mailer', $mailer);
-            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailer);
+            $mailerWithoutPassword             = $mailer;
+            $mailerWithoutPassword['password'] = '******';
+            $this->getLogService()->info('system', 'update_settings', "更新邮件服务器设置", $mailerWithoutPassword);
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
-            'mailer' => $mailer,
+            'mailer' => $mailer
         ));
     }
 
     public function defaultAction(Request $request)
     {
         $defaultSetting = $this->getSettingService()->get('default', array());
-        $path = $this->container->getParameter('kernel.root_dir') . '/../web/assets/img/default/';
+        $path           = $this->container->getParameter('kernel.root_dir').'/../web/assets/img/default/';
 
         $default = $this->getDefaultSet();
 
@@ -329,7 +359,7 @@ class SettingController extends BaseController
                 $defaultSetting['part_name'] = '节';
             }
 
-            $default = $this->getSettingService()->get('default', array());
+            $default        = $this->getSettingService()->get('default', array());
             $defaultSetting = array_merge($default, $defaultSetting);
 
             $this->getSettingService()->set('default', $defaultSetting);
@@ -338,25 +368,25 @@ class SettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:default.html.twig', array(
-            'defaultSetting' => $defaultSetting,
-            'hasOwnCopyright' => false,
+            'defaultSetting'  => $defaultSetting,
+            'hasOwnCopyright' => false
         ));
     }
 
     protected function getDefaultSet()
     {
         $default = array(
-            'defaultAvatar' => 0,
-            'defaultCoursePicture' => 0,
-            'defaultAvatarFileName' => 'avatar',
+            'defaultAvatar'                => 0,
+            'defaultCoursePicture'         => 0,
+            'defaultAvatarFileName'        => 'avatar',
             'defaultCoursePictureFileName' => 'coursePicture',
-            'articleShareContent' => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
-            'courseShareContent' => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
-            'groupShareContent' => '我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！',
-            'classroomShareContent' => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
-            'user_name' => '学员',
-            'chapter_name' => '章',
-            'part_name' => '节',
+            'articleShareContent'          => '我正在看{{articletitle}}，关注{{sitename}}，分享知识，成就未来。',
+            'courseShareContent'           => '我正在学习{{course}}，收获巨大哦，一起来学习吧！',
+            'groupShareContent'            => '我在{{groupname}}小组，看{{threadname}}，很不错哦，一起来看看吧！',
+            'classroomShareContent'        => '我正在学习{{classroom}}，收获巨大哦，一起来学习吧！',
+            'user_name'                    => '学员',
+            'chapter_name'                 => '章',
+            'part_name'                    => '节'
         );
 
         return $default;
@@ -368,23 +398,23 @@ class SettingController extends BaseController
 
         if (!empty($ips)) {
             $default['ips'] = join("\n", $ips['ips']);
-            $ips = array_merge($ips, $default);
+            $ips            = array_merge($ips, $default);
         }
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $data       = $request->request->all();
             $ips['ips'] = array_filter(explode(' ', str_replace(array("\r\n", "\n", "\r"), " ", $data['ips'])));
             $this->getSettingService()->set('blacklist_ip', $ips);
             $this->getLogService()->info('system', 'update_settings', "更新IP黑名单", $ips);
 
-            $ips = $this->getSettingService()->get('blacklist_ip', array());
+            $ips        = $this->getSettingService()->get('blacklist_ip', array());
             $ips['ips'] = join("\n", $ips['ips']);
 
             $this->setFlashMessage('success', '保存成功！');
         }
 
         return $this->render('TopxiaAdminBundle:System:ip-blacklist.html.twig', array(
-            'ips' => $ips,
+            'ips' => $ips
         ));
     }
 
@@ -394,9 +424,9 @@ class SettingController extends BaseController
 
         $default = array(
             'customer_service_mode' => 'closed',
-            'customer_of_qq' => '',
-            'customer_of_mail' => '',
-            'customer_of_phone' => '',
+            'customer_of_qq'        => '',
+            'customer_of_mail'      => '',
+            'customer_of_phone'     => ''
         );
 
         $customerServiceSetting = array_merge($default, $customerServiceSetting);
@@ -409,7 +439,7 @@ class SettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:System:customer-service.html.twig', array(
-            'customerServiceSetting' => $customerServiceSetting,
+            'customerServiceSetting' => $customerServiceSetting
         ));
     }
 
@@ -418,29 +448,29 @@ class SettingController extends BaseController
         $setting = $this->getSettingService()->get('user_partner', array());
 
         $default = array(
-            'mode' => 'default',
+            'mode'             => 'default',
             'nickname_enabled' => 0,
-            'avatar_alert' => 'none',
-            'email_filter' => '',
+            'avatar_alert'     => 'none',
+            'email_filter'     => ''
         );
 
         $setting = array_merge($default, $setting);
 
-        $configDirectory = $this->getServiceKernel()->getParameter('kernel.root_dir') . '/config/';
-        $discuzConfigPath = $configDirectory . 'uc_client_config.php';
-        $phpwindConfigPath = $configDirectory . 'windid_client_config.php';
+        $configDirectory   = $this->getServiceKernel()->getParameter('kernel.root_dir').'/config/';
+        $discuzConfigPath  = $configDirectory.'uc_client_config.php';
+        $phpwindConfigPath = $configDirectory.'windid_client_config.php';
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $data                 = $request->request->all();
             $data['email_filter'] = trim(str_replace(array("\n\r", "\r\n", "\r"), "\n", $data['email_filter']));
-            $setting = array('mode' => $data['mode'],
-                'nickname_enabled' => $data['nickname_enabled'],
-                'avatar_alert' => $data['avatar_alert'],
-                'email_filter' => $data['email_filter'],
+            $setting              = array('mode' => $data['mode'],
+                'nickname_enabled'                   => $data['nickname_enabled'],
+                'avatar_alert'                       => $data['avatar_alert'],
+                'email_filter'                       => $data['email_filter']
             );
             $this->getSettingService()->set('user_partner', $setting);
 
-            $discuzConfig = $data['discuz_config'];
+            $discuzConfig  = $data['discuz_config'];
             $phpwindConfig = $data['phpwind_config'];
 
             if ($setting['mode'] == 'discuz') {
@@ -448,12 +478,14 @@ class SettingController extends BaseController
                     $this->setFlashMessage('danger', "配置文件{$discuzConfigPath}不可写，请打开此文件，复制Ucenter配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
+
                 file_put_contents($discuzConfigPath, $discuzConfig);
             } elseif ($setting['mode'] == 'phpwind') {
                 if (!file_exists($phpwindConfigPath) || !is_writeable($phpwindConfigPath)) {
                     $this->setFlashMessage('danger', "配置文件{$phpwindConfigPath}不可写，请打开此文件，复制WindID配置的内容，覆盖原文件的配置。");
                     goto response;
                 }
+
                 file_put_contents($phpwindConfigPath, $phpwindConfig);
             }
 
@@ -475,9 +507,9 @@ class SettingController extends BaseController
 
         response:
         return $this->render('TopxiaAdminBundle:System:user-center.html.twig', array(
-            'setting' => $setting,
-            'discuzConfig' => $discuzConfig,
-            'phpwindConfig' => $phpwindConfig,
+            'setting'       => $setting,
+            'discuzConfig'  => $discuzConfig,
+            'phpwindConfig' => $phpwindConfig
         ));
     }
 
@@ -485,26 +517,26 @@ class SettingController extends BaseController
     {
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        $client = new EdusohoLiveClient();
+        $client   = new EdusohoLiveClient();
         $capacity = $client->getCapacity();
 
         $default = array(
-            'welcome_message_enabled' => '0',
-            'welcome_message_body' => '{{nickname}},欢迎加入课程{{course}}',
-            'buy_fill_userinfo' => '0',
-            'teacher_modify_price' => '1',
-            'teacher_search_order' => '0',
-            'teacher_manage_student' => '0',
-            'teacher_export_student' => '0',
-            'student_download_media' => '0',
+            'welcome_message_enabled'  => '0',
+            'welcome_message_body'     => '{{nickname}},欢迎加入课程{{course}}',
+            'buy_fill_userinfo'        => '0',
+            'teacher_modify_price'     => '1',
+            'teacher_search_order'     => '0',
+            'teacher_manage_student'   => '0',
+            'teacher_export_student'   => '0',
+            'student_download_media'   => '0',
             'free_course_nologin_view' => '1',
-            'relatedCourses' => '0',
-            'coursesPrice' => '0',
-            'allowAnonymousPreview' => '1',
-            'live_course_enabled' => '0',
-            'userinfoFields' => array(),
-            "userinfoFieldNameArray" => array(),
-            "copy_enabled" => '0',
+            'relatedCourses'           => '0',
+            'coursesPrice'             => '0',
+            'allowAnonymousPreview'    => '1',
+            'live_course_enabled'      => '0',
+            'userinfoFields'           => array(),
+            "userinfoFieldNameArray"   => array(),
+            "copy_enabled"             => '0'
         );
 
         $this->getSettingService()->set('course', $courseSetting);
@@ -538,23 +570,23 @@ class SettingController extends BaseController
                     $courseSetting['userinfoFieldNameArray'][] = $fieldValue['fieldName'];
                 }
             }
-
         }
 
         return $this->render('TopxiaAdminBundle:System:course-setting.html.twig', array(
             'courseSetting' => $courseSetting,
-            'capacity' => $capacity,
-            'userFields' => $userFields,
-            'capacity' => $capacity
+            'capacity'      => $capacity,
+            'userFields'    => $userFields,
+            'capacity'      => $capacity
         ));
     }
 
     public function questionsSettingAction(Request $request)
     {
         $questionsSetting = $this->getSettingService()->get('questions', array());
+
         if (empty($questionsSetting)) {
             $default = array(
-                'testpaper_answers_show_mode' => 'submitted',
+                'testpaper_answers_show_mode' => 'submitted'
             );
             $questionsSetting = $default;
         }
@@ -572,12 +604,14 @@ class SettingController extends BaseController
     public function adminSyncAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
-        $setting = $this->getSettingService()->get('user_partner', array());
+        $setting     = $this->getSettingService()->get('user_partner', array());
+
         if (empty($setting['mode']) || !in_array($setting['mode'], array('phpwind', 'discuz'))) {
             return $this->createMessageResponse('info', '未开启用户中心，不能同步管理员帐号！');
         }
 
         $bind = $this->getUserService()->getUserBindByTypeAndUserId($setting['mode'], $currentUser['id']);
+
         if ($bind) {
             goto response;
         } else {
@@ -585,8 +619,9 @@ class SettingController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
+            $data        = $request->request->all();
             $partnerUser = $this->getAuthService()->checkPartnerLoginByNickname($data['nickname'], $data['password']);
+
             if (empty($partnerUser)) {
                 $this->setFlashMessage('danger', '用户名或密码不正确。');
                 goto response;
@@ -607,7 +642,7 @@ class SettingController extends BaseController
         response:
         return $this->render('TopxiaAdminBundle:System:admin-sync.html.twig', array(
             'mode' => $setting['mode'],
-            'bind' => $bind,
+            'bind' => $bind
         ));
     }
 
@@ -639,5 +674,10 @@ class SettingController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

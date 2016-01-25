@@ -10,28 +10,27 @@ use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CloudFileImplementorImpl extends BaseService implements FileImplementor
-{   
+{
+    private $cloudClient;
 
-    private  $cloudClient;
-
-	public function getFile($file)
-	{
-       $file['convertParams'] = $this->decodeMetas($file['convertParams']);
-       $file['metas'] = $this->decodeMetas($file['metas']);
-       $file['metas2'] = $this->decodeMetas($file['metas2']);
-	   // $file['path'] = $this->getCloudClient()->getFileUrl($file['hashId'],$file['targetId'],$file['targetType']);
-       return $file;
-	}
-
-    public function addFile($targetType, $targetId, array $fileInfo=array(), UploadedFile $originalFile=null)
+    public function getFile($file)
     {
-        if (!ArrayToolkit::requireds($fileInfo, array('filename','key', 'size'))) {
+        $file['convertParams'] = $this->decodeMetas($file['convertParams']);
+        $file['metas'] = $this->decodeMetas($file['metas']);
+        $file['metas2'] = $this->decodeMetas($file['metas2']);
+       // $file['path'] = $this->getCloudClient()->getFileUrl($file['hashId'],$file['targetId'],$file['targetType']);
+       return $file;
+    }
+
+    public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
+    {
+        if (!ArrayToolkit::requireds($fileInfo, array('filename', 'key', 'size'))) {
             throw $this->createServiceException('参数缺失，添加用户文件失败!');
         }
 
         $uploadFile = array();
         $uploadFile['targetId'] = $targetId;
-        $uploadFile['targetType'] = $targetType; 
+        $uploadFile['targetType'] = $targetType;
         $uploadFile['hashId'] = $fileInfo['key'];
         $uploadFile['filename'] = $fileInfo['filename'];
         $uploadFile['ext'] = pathinfo($uploadFile['filename'], PATHINFO_EXTENSION);
@@ -39,29 +38,26 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['etag'] = empty($fileInfo['etag']) ? '' : $fileInfo['etag'];
         $uploadFile['length'] = empty($fileInfo['length']) ? 0 : intval($fileInfo['length']);
 
-        $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);    
+        $uploadFile['metas'] = $this->encodeMetas(empty($fileInfo['metas']) ? array() : $fileInfo['metas']);
         $uploadFile['metas2'] = $this->encodeMetas(empty($fileInfo['metas2']) ? array() : $fileInfo['metas2']);
 
         if ($fileInfo['lazyConvert']) {
             $fileInfo['convertHash'] = "lazy-{$uploadFile['hashId']}";
         }
-       
+
         if (empty($fileInfo['convertHash'])) {
             $uploadFile['convertHash'] = "ch-{$uploadFile['hashId']}";
             $uploadFile['convertStatus'] = 'none';
             $uploadFile['convertParams'] = '';
-        } else if('document' == FileToolkit::getFileTypeByExtension($uploadFile['ext'])) {
-
+        } elseif ('document' == FileToolkit::getFileTypeByExtension($uploadFile['ext'])) {
             $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
             $uploadFile['convertStatus'] = 'none';
             $uploadFile['convertParams'] = $fileInfo['convertParams'];
-            
-        }else{
+        } else {
             $uploadFile['convertHash'] = "{$fileInfo['convertHash']}";
-            $uploadFile['convertStatus'] = 'waiting';
+            $uploadFile['convertStatus'] = 'none';
             $uploadFile['convertParams'] = $fileInfo['convertParams'];
         }
-
 
         $uploadFile['type'] = FileToolkit::getFileTypeByExtension($uploadFile['ext']);
         $uploadFile['canDownload'] = empty($uploadFile['canDownload']) ? 0 : 1;
@@ -69,8 +65,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $uploadFile['createdUserId'] = $this->getCurrentUser()->id;
         $uploadFile['updatedUserId'] = $uploadFile['createdUserId'];
         $uploadFile['updatedTime'] = $uploadFile['createdTime'] = time();
-    
-        return $uploadFile; 
+
+        return $uploadFile;
     }
 
     public function saveConvertResult($file, array $result = array())
@@ -90,14 +86,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         }
 
         $convertor = $this->getConvertor($file['convertParams']['convertor']);
-        
+
         $file = $convertor->saveConvertResult($file, $result);
-        
+
         return_result:
         return $file;
     }
 
-    public function convertFile($file, $status, $result=null, $callback = null)
+    public function convertFile($file, $status, $result = null, $callback = null)
     {
         if ($status == 'doing') {
             $file['metas2'] = array();
@@ -124,9 +120,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                     $file['convertStatus'] = 'error';
                 }
             }
-
-        } else if ($status == 'success') {
-
+        } elseif ($status == 'success') {
             if ($file['type'] == 'video') {
                 $cmds = $this->getCloudClient()->getVideoConvertCommands();
             } elseif ($file['type'] == 'audio') {
@@ -159,11 +153,9 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 } else {
                     $file['convertStatus'] = 'success';
                 }
-                
             } else {
                 $file['convertStatus'] = 'success';
             }
-
         } else {
             $file['convertStatus'] = $status;
         }
@@ -180,7 +172,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
         foreach (array('sd', 'hd', 'shd') as $key) {
             if (empty($file['metas2'][$key]) || empty($file['metas2'][$key]['key'])) {
-                continue ;
+                continue;
             }
 
             // 防错
@@ -239,7 +231,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'duration' => empty($rawParams['duration']) ? 18000 : $rawParams['duration'],
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
-
         } else {
             $rawUploadParams = array(
                 'convertor' => null,
@@ -249,19 +240,19 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
                 'user' => empty($rawParams['user']) ? 0 : $rawParams['user'],
             );
         }
-     
+
         $tokenAndUrl = $this->getCloudClient()->makeUploadParams($rawUploadParams);
- 
+
         $key = null;
         if (!empty($rawParams['key'])) {
             $key = $rawParams['key'];
         }
 
         if (!empty($rawParams['targetType']) && isset($rawParams['targetId'])) {
-            $keySuffix = date('Ymdhis') . '-' . substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
+            $keySuffix = date('Ymdhis').'-'.substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 16);
             $key = "{$rawParams['targetType']}-{$rawParams['targetId']}/{$keySuffix}";
         }
-        
+
         if (empty($key)) {
             throw $this->createServiceException("key error.");
         }
@@ -274,14 +265,14 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $params['postParams']['key'] = $key;
         // $params['postParams']['x:convertKey'] = md5($params['postParams']['key']);
         $params['postParams']['x:convertParams'] = json_encode($rawUploadParams['convertParams']);
-       
+
         return $params;
     }
 
     public function reconvertFile($file, $convertCallback, $pipeline = null)
     {
         if (empty($file['convertParams'])) {
-            return null;
+            return;
         }
 
         $params = array(
@@ -296,9 +287,8 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $file['convertParams']['hasVideoWatermark'] = empty($watermarks) ? 0 : 1;
             $file['convertParams'] = $this->encodeMetas($file['convertParams']);
 
-            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams'=>$file['convertParams']));
+            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams' => $file['convertParams']));
         }
-
 
         if ($pipeline) {
             $params['pipeline'] = $pipeline;
@@ -310,15 +300,16 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $result = $this->getCloudClient()->reconvertFile($file['hashId'], $params);
 
         if (empty($result['persistentId'])) {
-            return null;
+            return;
         }
+
         return $result['persistentId'];
     }
 
     public function reconvertOldFile($file, $convertCallback, $pipeline = null)
     {
         if (empty($file['convertParams'])) {
-            return null;
+            return;
         }
 
         $params = array(
@@ -333,7 +324,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $file['convertParams']['hasVideoWatermark'] = empty($watermarks) ? 0 : 1;
             $file['convertParams'] = $this->encodeMetas($file['convertParams']);
 
-            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams'=>$file['convertParams']));
+            $this->getUploadFileDao()->updateFile($file['id'], array('convertParams' => $file['convertParams']));
         }
 
         if ($pipeline) {
@@ -354,7 +345,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             'hlsKeyUrl' => $params['convertParams']['hlsKeyUrl'],
         );
 
-
         if (!empty($params['convertParams']['videoWatermarkImages'])) {
             $task['directives']['watermarks'] = $params['convertParams']['videoWatermarkImages'];
         }
@@ -364,27 +354,28 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         $api = CloudAPIFactory::create('root');
         $result = $api->post('/processes', $task);
         if (empty($result['taskNo'])) {
-            return null;
+            return;
         }
 
         return $result['taskNo'];
     }
 
-
-    public function getMediaInfo($key, $mediaType) {
+    public function getMediaInfo($key, $mediaType)
+    {
         return $this->getCloudClient()->getMediaInfo($key, $mediaType);
     }
 
     protected function getFileFullName($file)
     {
-        $diskDirectory= $this->getFilePath($file['targetType'],$file['targetId']);
+        $diskDirectory = $this->getFilePath($file['targetType'], $file['targetId']);
         $filename .= "{$file['hashId']}.{$file['ext']}";
-        return $diskDirectory.$filename; 
+
+        return $diskDirectory.$filename;
     }
 
     protected function getVideoWatermarkImages()
     {
-        $setting = $this->getSettingService()->get('storage',array());
+        $setting = $this->getSettingService()->get('storage', array());
         if (empty($setting['video_embed_watermark_image']) || ($setting['video_watermark'] != 2)) {
             return array();
         }
@@ -397,26 +388,25 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         foreach ($heighs as $height) {
             $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
         }
+
         return $images;
     }
 
-
-
-
-
-    protected function getFilePath($targetType,$targetId)
+    protected function getFilePath($targetType, $targetId)
     {
         $diskDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
         $subDir = DIRECTORY_SEPARATOR.$file['targetType'].DIRECTORY_SEPARATOR;
         $subDir .= "{$file['targetType']}-{$file['targetId']}".DIRECTORY_SEPARATOR;
-        return $diskDirectory.$subDir;    	
+
+        return $diskDirectory.$subDir;
     }
 
     protected function encodeMetas($metas)
     {
-        if(empty($metas) || !is_array($metas)) {
+        if (empty($metas) || !is_array($metas)) {
             $metas = array();
         }
+
         return json_encode($metas);
     }
 
@@ -425,21 +415,24 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         if (empty($metas)) {
             return array();
         }
+
         return json_decode($metas, true);
     }
 
     protected function getCloudClient()
     {
-        if(empty($this->cloudClient)) {
+        if (empty($this->cloudClient)) {
             $factory = new CloudClientFactory();
             $this->cloudClient = $factory->createClient();
         }
+
         return $this->cloudClient;
     }
 
     protected function getConvertor($name)
     {
-        $class = __NAMESPACE__ . '\\' .  ucfirst($name) . 'Convertor';
+        $class = __NAMESPACE__.'\\'.ucfirst($name).'Convertor';
+
         return new $class($this->getCloudClient(), $this->getKernel()->getParameter('cloud_convertor'));
     }
 
@@ -452,7 +445,6 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     {
         return $this->createService('System.SettingService');
     }
-
 }
 
 class HLSVideoConvertor
@@ -511,7 +503,6 @@ class HLSVideoConvertor
 
         return $file;
     }
-
 }
 
 class HLSEncryptedVideoConvertor extends HLSVideoConvertor
@@ -522,6 +513,7 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         $params['convertor'] = 'HLSEncryptedVideo';
         $params['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
         $params['hlsKey'] = $this->generateKey(16);
+
         return $params;
     }
 
@@ -530,7 +522,7 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         $file = parent::saveConvertResult($file, $result);
 
         $moves = array(
-            array("public:{$file['hashId']}", "private:{$file['hashId']}")
+            array("public:{$file['hashId']}", "private:{$file['hashId']}"),
         );
         $result = $this->client->moveFiles($moves);
 
@@ -539,18 +531,17 @@ class HLSEncryptedVideoConvertor extends HLSVideoConvertor
         return $file;
     }
 
-    protected function generateKey ($length = 0 )
+    protected function generateKey($length = 0)
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         $key = '';
-        for ( $i = 0; $i < 16; $i++ ) {
+        for ($i = 0; $i < 16; $i++) {
             $key .= $chars[ mt_rand(0, strlen($chars) - 1) ];
         }
-        
+
         return $key;
     }
-
 }
 
 class AudioConvertor
@@ -563,12 +554,10 @@ class AudioConvertor
 
     public function __construct($client, $config)
     {
-
     }
 
     public function saveConvertResult($file, $result)
     {
-
     }
 
     public function getCovertParams($params)
@@ -585,11 +574,11 @@ class DocumentConvertor
     const NAME = 'document';
 
     public function saveConvertResult($file, $result)
-    {   
+    {
         $metas['thumb'] = $result['thumb'];
         $metas['pdf'] = $result['pdf'];
         $metas['swf'] = $result['swf'];
-        
+
         $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
         $file['metas2'] = array_merge($file['metas2'], $metas);
         $file['convertStatus'] = 'success';
@@ -621,13 +610,13 @@ class PptConvertor
 
     public function getCovertParams($params)
     {
-        $params = array('convertor' => self::NAME,);
+        $params = array('convertor' => self::NAME);
+
         return array_merge($params, $this->config);
     }
 
     public function saveConvertResult($file, $result)
     {
-
         if (!empty($result['nextConvertCallbackUrl'])) {
             $items = (empty($result['items']) || !is_array($result['items'])) ? array() : $result['items'];
 
@@ -642,20 +631,18 @@ class PptConvertor
                 );
             }
 
-            if(isset($result['type']) && isset($result['type']) =="ppt" ){
-  
+            if (isset($result['type']) && isset($result['type']) == "ppt") {
                 $metas['length'] = empty($result['length']) ? 0 : $result['length'];
- 
+
                 $metas['imagePrefix'] = empty($result['imagePrefix']) ? '' : $result['imagePrefix'];
 
                 $file['metas2'] = empty($file['metas2']) ? array() : $file['metas2'];
-    
-                $file['metas2'] = array_merge($file['metas2'], $metas);
-    
-                $file['convertStatus'] = 'success';
-   
-                return $file;
 
+                $file['metas2'] = array_merge($file['metas2'], $metas);
+
+                $file['convertStatus'] = 'success';
+
+                return $file;
             }
 
             $result = $this->client->convertPPT($metas['pdf']['key'], $result['nextConvertCallbackUrl']);

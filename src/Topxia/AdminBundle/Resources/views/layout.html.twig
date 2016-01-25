@@ -10,7 +10,6 @@
 {% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
 {% set menu_main = menu_breadcrumb[2]|default(null) %}
 {% set menu_hiddens = setting('menu_hiddens', []) %}
-{% if hiddenMenus() %}{% endif %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -35,7 +34,8 @@
   </title>
 
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+    <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
   
   {% block stylesheets %}
@@ -52,7 +52,6 @@
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 </head>
-
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -74,18 +73,18 @@
                {% endif %}
             {% endif %}
 
-            {% if m.code != "admin_system" %}
-              {% if not in_menu_blacklist(m.code) %}
+            {% if m.code == "admin_system" %}
+              {% if is_granted('ROLE_SUPER_ADMIN') %}
+              <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {{ self_macro.menu_link_html(_context, m) }}
+              </li>
+              {% endif %}
+            {% else %}    
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
                 <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
-              {% endif %} 
-            {% else %}    
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                  <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ self_macro.menu_link_html(_context, m) }}
-                  </li>
-                {% endif %}
+              {% endif %}
             {% endif %}
 
           {% endfor %}
@@ -111,7 +110,7 @@
       </div><!--/.navbar-collapse -->
     </div>
   </div>
-
+  
   <div class="container">
     <div class="row">
       {% block content %}
@@ -164,6 +163,8 @@
             {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
           {% endif %}
 
+          {% block content_header %}{% endblock %}
+          
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
@@ -195,10 +196,20 @@
     </div>
   </div>
 
-  {% block footer %}{% endblock %}
+  {% block footer %}
+    {{ setting('site.analytics')|raw }} 
+  {% endblock %}
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
+  {% if setting('copyright.thirdCopyright') != 1 %}
+    <div class="fixed-bar">
+      <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+        <i class="es-icon es-icon-help"></i>
+        <span>产品<br/>反馈</span>
+      </a>
+    </div>
+  {% endif %}
 </body>
 </html>
 

@@ -40,6 +40,11 @@ class StatusServiceImpl extends BaseService implements StatusService
         return $this->getStatusDao()->searchStatuses($conditions, $sort, $start, $limit);
     }
 
+    public function searchStatusesCount($conditions)
+    {
+        return $this->getStatusDao()->searchStatusesCount($conditions);
+    }
+
     public function findStatusesByUserIds($userIds, $start, $limit)
     {
         return $this->getStatusDao()->findStatusesByUserIds($userIds, $start, $limit);

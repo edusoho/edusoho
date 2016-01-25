@@ -28,7 +28,7 @@
        <td>
          <a href="">课程-{{ c.objectId }}</a>
        </td>
-       <td>{{ c.content|e|nl2br|raw }}</td>
+       <td>{{ c.content|e|raw|nl2br }}</td>
        <td>{{ m.user_link(u) }}</td>
        <td>{{ c.createdTime|smart_time }}</td>
        <td><a href="javascript:;" class="btn btn-sm comment-delete" data-url="{{ path('admin_comment_delete', {id:c.id}) }}">删除</a></td>

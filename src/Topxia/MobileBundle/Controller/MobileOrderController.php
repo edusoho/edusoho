@@ -75,7 +75,7 @@ class MobileOrderController extends MobileController
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
             'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['targetId']), true),
         );
-var_dump($payRequestParams);
+        
         return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
             'order' => $order,
             'requestParams' => $payRequestParams,

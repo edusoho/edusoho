@@ -6,7 +6,7 @@
 
 {% block main %}
 
-    <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
+  <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
     <div class="form-group">
       <label class="ptm" >创建时间:</label>
@@ -29,14 +29,11 @@
 
     <div class="form-group">
      <label class="ptm" >关键词:</label>
-    <div class="form-group">
         <select class="form-control" name="keywordType">
         {{ select_options(dict('coinOrderType'), app.request.query.get('keywordType'), '--选择类型--') }}
         </select>
-    </div>
-    <div class="form-group">
-        <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
-    </div>
+  
+    <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
     </div>
 
     <button class="btn btn-primary">搜索</button>
@@ -49,14 +46,13 @@
     keyword:request.get('keyword')
     })}}">导出结果</a>
      </div>
-    </form>
+  </form>
 
-    <table class="table table-striped table-hover" id="order-table">
-    {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
-    </table>
+  {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
 
-    <div class="paginator">
+  <div class="paginator">
     {{ web_macro.paginator(paginator) }} 
-    </div>
+  </div>
+
 
 {% endblock %}

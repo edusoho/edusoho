@@ -120,8 +120,8 @@
             {% for article in articles %}
               {% if article %}
                 <li class="col-md-6">
-                  <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
+                  <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                  <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
                 </li>
               {% endif %}
             {% endfor %}
@@ -179,30 +179,30 @@
           <div class="es-box hot-group">
             <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
             <div class="es-box-body">
-               <ul class="list-unstyled">
+              <ul class="list-unstyled">
                 {% for group in groups %}
                   {% if group.status=='open' %} 
                     <li class="col-md-4"> 
                       <div class="panel">
-                         <div class="media">
-                            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
-                              {% if group.logo %}
-                              <img src="{{filepath(group.logo)}}" alt="{{group.title}}">
-                              {%else%}
-                              <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
-                              {%endif%}
-                            </a>
-                            <div class="media-body">
-                              <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
-                              <div class="text-muted text-normal">
-                                {{group.memberNum}}个成员&nbsp;
-                                {{group.threadNum}}个话题
-                              </div>
-                            </div> 
-                          </div>
+                        <div class="media">
+                          <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
+                            {% if group.logo %}
+                            <img class="avatar-square-sm" src="{{filepath(group.logo)}}" alt="{{group.title}}">
+                            {%else%}
+                            <img class="avatar-square-sm" src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                            {%endif%}
+                          </a>
+                          <div class="media-body">
+                            <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
+                            <div class="text-muted text-normal">
+                              {{group.memberNum}}个成员&nbsp;
+                              {{group.threadNum}}个话题
+                            </div>
+                          </div> 
                         </div>
-                      </li>
-                    {% endif %}
+                      </div>
+                    </li>
+                  {% endif %}
                 {% endfor %}
               </ul>
             </div>

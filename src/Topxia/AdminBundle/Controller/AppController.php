@@ -35,8 +35,19 @@ class AppController extends BaseController
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])) )  ) {
             $articles = $eduSohoOpenClient->getArticles();
             $articles = json_decode($articles, true);
+
+            if ($this->getWebExtension()->isTrial()) {
+                $trialHtml = $this->getCloudCenterExperiencePage();
+                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                    'articles' => $articles,
+                    'trial' => $trialHtml['content'],
+                ));
+            }
+            $unTrial = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
+            $unTrialHtml = json_decode($unTrial,true);
             return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
                 'articles' => $articles,
+                'untrial' => $unTrialHtml['content'],
             ));
         }
 
@@ -94,6 +105,10 @@ class AppController extends BaseController
 
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
+
+        if ($this->getWebExtension()->isTrial()) {
+            $trialHtml = $this->getCloudCenterExperiencePage();
+        }
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
             'content' =>$content,
             'packageDate' =>$packageDate,
@@ -114,7 +129,8 @@ class AppController extends BaseController
             'info' => $info,
             'isBinded' => $isBinded,
             'email' => $email,
-            'tlp' => $tlp
+            'tlp' => $tlp,  
+            'trialhtml' => (isset($trialHtml['content'])) ? $trialHtml['content'] : null,
         ));
     }
 
@@ -182,7 +198,7 @@ class AppController extends BaseController
             'allApp' => $app,
             'installedApps' => $installedApps,
             'type' => $postStatus,
-            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null
+            'appTypeChoices' => ($showType == 'hidden') ? 'installedApps' : null,
         ));
     }
 
@@ -248,6 +264,7 @@ class AppController extends BaseController
             }
         }
 
+
         return $this->render('TopxiaAdminBundle:App:installed.html.twig', array(
             'apps' => $apps,
             'theme' => $theme,
@@ -273,7 +290,6 @@ class AppController extends BaseController
             return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array('status' => 'error'));
         }
         $version = $this->getAppService()->getMainVersion();
-
         return $this->render('TopxiaAdminBundle:App:upgrades.html.twig', array(
             'apps' => $apps,
             'version' => $version,
@@ -301,13 +317,19 @@ class AppController extends BaseController
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($logs, 'userId'));
-
         return $this->render('TopxiaAdminBundle:App:logs.html.twig', array(
             'logs' => $logs,
             'users' => $users,
-            'paginator' => $paginator
+            'paginator' => $paginator,
         ));
     }
+    
+    protected function getCloudCenterExperiencePage()
+    {
+        $trial = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
+        $trialHtml = json_decode($trial,true);
+        return $trialHtml;
+    } 
 
     protected function getAppService()
     {
@@ -323,4 +345,9 @@ class AppController extends BaseController
     {
         return $this->getServiceKernel()->createService('User.UserService');
     } 
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
+    }
 }

@@ -6,19 +6,21 @@ interface OrderService
 {
     public function getOrder($id);
 
-    public function getOrderBySn($sn, $lock=false);
+    public function getOrderBySn($sn, $lock = false);
+
+    public function getOrderByToken($token);
 
     public function findOrdersByIds(array $ids);
 
     public function findOrdersBySns(array $sns);
 
     public function searchOrders($conditions, $sort, $start, $limit);
-    
+
     public function searchBill($conditions, $sort, $start, $limit);
 
     public function countUserBillNum($conditions);
-    
-    public function sumOrderAmounts($startTime,$endTime,array $courseId);
+
+    public function sumOrderAmounts($startTime, $endTime, array $courseId);
 
     public function searchOrderCount($conditions);
 
@@ -43,7 +45,7 @@ interface OrderService
     public function findUserRefunds($userId, $start, $limit);
 
     public function searchRefunds($conditions, $sort, $start, $limit);
-    
+
     public function searchRefundCount($conditions);
 
     /**
@@ -54,7 +56,7 @@ interface OrderService
 
     /**
      * 审核退款申请
-     * 
+     *
      * $pass, TRUE为通过退款, FALSE为退款失败
      * $actualAmount为实际退款金额
      */
@@ -62,21 +64,33 @@ interface OrderService
 
     public function cancelRefundOrder($id);
 
-    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+    public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status);
 
-    public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
+    public function analysisPaidCourseOrderDataByTime($startTime, $endTime);
 
-    public function analysisExitCourseDataByTimeAndStatus($startTime,$endTime);
+    public function analysisPaidClassroomOrderDataByTime($startTime, $endTime);
+
+    public function analysisExitCourseDataByTimeAndStatus($startTime, $endTime);
 
     public function analysisAmount($conditions);
 
-    public function analysisAmountDataByTime($startTime,$endTime);
+    public function analysisCoinAmount($conditions);
 
-    public function analysisCourseAmountDataByTime($startTime,$endTime);
+    public function analysisTotalPrice($conditions);
+
+    public function analysisAmountDataByTime($startTime, $endTime);
+
+    public function analysisCourseAmountDataByTime($startTime, $endTime);
+
+    public function analysisClassroomAmountDataByTime($startTime, $endTime);
+
+    public function analysisVipAmountDataByTime($startTime, $endTime);
 
     public function updateOrderCashSn($id, $cashSn);
 
-    public function createPayRecord($id, $payDate);
+    public function updateOrder($id, $orderFileds);
+
+    public function createPayRecord($id, array $payDate);
 
     public function createOrderLog($orderId, $type, $message = '', array $data = array());
 }

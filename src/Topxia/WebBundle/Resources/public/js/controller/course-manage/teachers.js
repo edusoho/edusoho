@@ -7,8 +7,8 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-    	require('./header').run();
-    	
+        require('./header').run();
+
         var dynamicCollection = new DynamicCollection({
             element: '#teachers-form-group',
             onlyAddItemWithModel: true,
@@ -22,19 +22,19 @@ define(function(require, exports, module) {
             }
         });
 
-	    var autocomplete = new AutoComplete({
-	        trigger: '#teacher-input',
-	        dataSource: $("#teacher-input").data('url'),
-	        filter: {
-	            name: 'stringIgnoreCaseMatch',
-	            options: {
-	                key: 'nickname'
-	            }
-	        },
+        var autocomplete = new AutoComplete({
+            trigger: '#teacher-input',
+            dataSource: $("#teacher-input").data('url'),
+            filter: {
+                name: 'stringIgnoreCaseMatch',
+                options: {
+                    key: 'nickname'
+                }
+            },
             selectFirst: true
-	    }).render();
+        }).render();
 
-	    autocomplete.on('itemSelect', function(data){
+        autocomplete.on('itemSelect', function(data){
 	    	var error = '';
 	    	dynamicCollection.element.find('input[name="ids[]"]').each(function(i, item) {
 	    		if (parseInt(data.id) == parseInt($(item).val())) {
@@ -55,10 +55,23 @@ define(function(require, exports, module) {
             autocomplete.setInputValue(value);
         });
 
-		$(".teacher-list-group").sortable({
-			'distance':20
-		});
+        $(".teacher-list-group").sortable({
+            'distance':20
+        });
 
+        $('#teacher-add').on('click', function(){
+            var inputValue = $('#teacher-input').val();
+            if(inputValue.length<1 || !autocomplete.items){
+            	    return ;
+            }
+            for(var i=0;i<autocomplete.items.length;i++){
+            	 if(inputValue == autocomplete.items[i].textContent){
+            	 	autocomplete.set("selectedIndex", i);
+			autocomplete.selectItem(i);
+			return ;
+            	 }
+            }
+        });
 
     };
 

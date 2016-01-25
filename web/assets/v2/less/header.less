@@ -1,3 +1,4 @@
+
 .navbar {
   margin-bottom: 0;
   z-index: 99;
@@ -29,11 +30,6 @@
       line-height: 50px;
       padding: 5px 10px;
       color: #fff;
-      .es-transition;
-      &:hover {
-        color: @brand-primary;
-        .es-transition;
-      }
       @media (max-width: @screen-xs-max) {
         padding: 10px;
         line-height: 40px;
@@ -57,7 +53,7 @@
       >a {
         padding: 20px 30px;
         line-height: 20px;
-        color: #fff;
+        color: @gray-medium;
         background: none;
         .es-transition;
         @media (max-width: @screen-md-max) {
@@ -72,11 +68,12 @@
       &.open.active >a,
       &.open>a:hover, 
       &.open>a:focus,
+      &.open>a,
       &.active >a,
       >a:hover, 
       >a:focus {
         background: none;
-        color: @brand-primary;
+        color: #fff;
         .es-transition;
       }
     }
@@ -86,9 +83,6 @@
       .icon-bar {
         background: #fff;
       }
-    }
-    >li > .dropdown-menu {
-      border-radius: 5px;
     }
   }
   
@@ -167,11 +161,9 @@
     line-height: 28px;
     padding: 0 24px 0 12px;
     .es-transition;
+    border-color: #fff;
     &.active {
       width: 150px;
-    }
-    &:focus {
-      border-color: #fff;
     }
   }
   .button {
@@ -185,14 +177,6 @@
 
 // 隐藏菜单项
 .nav > li.nav-more {
-  // .more {
-  //   padding-top: 17px !important;
-  //   padding-bottom: 17px !important;
-  //   display: inline-block;
-  //   >i {
-  //     font-size: 25px;
-  //   }
-  // }
   li .dropdown-menu {
     left: 100%;
     top: 0;
@@ -233,7 +217,7 @@
     >a {
       display: block;
       padding: 20px 15px;
-      color: #fff;
+      color: @gray-medium;
       .es-transition;
       @media (max-width: @screen-md-max) {
         padding: 20px 10px;
@@ -246,7 +230,7 @@
       }
       &:hover,
       &:focus {
-        color: @brand-primary;
+        color: #fff;
         background: none;
         .es-transition;
       }

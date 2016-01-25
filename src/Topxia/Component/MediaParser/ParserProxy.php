@@ -3,17 +3,18 @@ namespace Topxia\Component\MediaParser;
 
 class ParserProxy
 {
-
     public function parseItem($url)
     {
-        $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'TudouVideo');
+        $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'TudouVideo', 'LetvYun');
 
         foreach ($parsers as $parserName) {
-            $class = __NAMESPACE__ . "\\ItemParser\\{$parserName}ItemParser";
+            $class  = __NAMESPACE__."\\ItemParser\\{$parserName}ItemParser";
             $parser = new $class();
+
             if (!$parser->detect($url)) {
                 continue;
             }
+
             return $parser->parse($url);
         }
 
@@ -23,13 +24,15 @@ class ParserProxy
     public function parseAlbum($url)
     {
         $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'SinaOpenCourse');
+
         foreach ($parsers as $parserName) {
-            $class = __NAMESPACE__ . "\\AlbumParser\\{$parserName}AlbumParser";
+            $class  = __NAMESPACE__."\\AlbumParser\\{$parserName}AlbumParser";
             $parser = new $class();
 
             if (!$parser->detect($url)) {
                 continue;
             }
+
             return $parser->parse($url);
         }
 
@@ -40,6 +43,4 @@ class ParserProxy
     {
         return new ParserNotFoundException($message);
     }
-
-
 }

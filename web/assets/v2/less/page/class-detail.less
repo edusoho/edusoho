@@ -22,22 +22,21 @@
   // background-color: @gray-lighter;
   // padding: 20px 0 30px 0;
   // padding-bottom: 25px;
-  .breadcrumb {
-    margin: 12px auto;
-    padding: 8px 0;
-    background: none;
-  }
+  // .breadcrumb {
+  //   margin: 12px auto;
+  //   padding: 8px 0;
+  //   background: none;
+  // }
   .class-bg-layer {
     top: 8px;
   }
   .class-header-mian {
     position: relative;
-    z-index: 1;
   }
   .class-header-bg {
     background-color: #fff;
     .border-radius;
-    .es-box-shadow;
+    .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
   }
   .class-img {
     float: left;
@@ -106,9 +105,9 @@
     }
     >ul {
       padding: 25px 10px 25px 40px;
-      @media (max-width: @screen-md-max) {
-        // padding: 25px 5px 25px 35px;
-      }
+      // @media (max-width: @screen-md-max) {
+      //   padding: 25px 5px 25px 35px;
+      // }
     }
   }
   .class-data {
@@ -336,7 +335,7 @@
       border-top-right-radius: 2px;
       margin-bottom: 0;
       @media (max-width: @screen-md-max) {
-        padding: 20px 0;
+        padding: 19px 0;
       }
       @media (max-width: @screen-sm-max) {
         padding: 0;
@@ -352,7 +351,7 @@
           width: 100%;
           border: none;
           padding: 0;
-          margin: 5px 0;
+          margin: 4px 0;
         }
         @media (max-width: @screen-xs-max) {
           padding: 10px 0;
@@ -440,57 +439,8 @@
   }
 }
 
-// 学习计划
-.study-plan-info {
-  color: #fff;
-  text-align: center;
-  background-color: @brand-primary;
-  .plan-info-item {
-    font-size: 24px;
-    padding: 10px;
-    margin: 20px auto;
-    &:nth-child(1),
-    &:nth-child(2) {
-      border-right: 1px solid #52db9c;
-    }
-  }
-  .open-plan {
-    margin: 20px auto;
-    padding: 5px 10px;
-    @media (max-width: @screen-sm-max) {
-      padding: 5px 0;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-    }
-  }
-}
 
 // 班级主体、课程主体－－－－－－－－－－－－－－－－－－－－
-.class-detail-main,
-.course-detail-main {
-  .nav.nav-tabs>li>a {
-    padding: 10px 20px;
-    @media (max-width: @screen-md-max) {
-      padding: 10px 20px;
-    }
-    @media (max-width: @screen-md-max) {
-      padding: 10px 10px;
-      font-size: 14px;
-    }
-    .badge {
-      margin-left: 5px;
-      background-color: @gray;
-      .es-transition;
-    }
-    &:hover .badge {
-      background-color: @brand-primary;
-      .es-transition;
-    }
-  }
-}
-
 .class-course-list {
   .course-item {
     margin-top: 30px;
@@ -584,7 +534,7 @@
     }
     .es-icon-toc {
       position: absolute;
-      top: 8px;
+      top: 11px;
       left: 15px;
     }
     .period-show {
@@ -620,7 +570,7 @@
     .es-icon-doing,
     .es-icon-done1 {
       position: absolute;
-      top: 8px;
+      top: 11px;
       left: 15px;
     }
     .title {

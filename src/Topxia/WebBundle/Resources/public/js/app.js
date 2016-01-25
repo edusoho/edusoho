@@ -49,12 +49,14 @@ define(function(require, exports, module) {
 		}
 
 		if (error.name == 'Unlogin') {
-			$('.modal').modal('hide');
+			var $loginModal = $("#login-modal");
 
-			$("#login-modal").modal('show');
-			$.get($('#login-modal').data('url'), function(html){
-				$("#login-modal").html(html);
-			});
+			$('.modal').modal('hide');
+        
+	        $loginModal.modal('show');
+	        $.get($loginModal.data('url'), function(html){
+	            $loginModal.html(html);
+	        });
 		}
 	});
 
@@ -144,5 +146,10 @@ define(function(require, exports, module) {
     }).blur(function () {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
+
+    if($(".nav.nav-tabs").length > 0) {
+        require('jquery.lavalamp');
+        $(".nav.nav-tabs").lavaLamp();
+    }
 
 });

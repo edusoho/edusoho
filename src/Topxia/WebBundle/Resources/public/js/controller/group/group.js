@@ -2,7 +2,7 @@
         var Notify = require('common/bootstrap-notify');
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);
-        require('ckeditor');
+        require('es-ckeditor');
 
         function checkUrl(url) {
             var hrefArray = new Array();
@@ -13,6 +13,7 @@
         exports.run = function() {
 
             var add_btn_clicked = false;
+
 
             $('#add-btn').click(function() {
                 if (!add_btn_clicked) {
@@ -39,10 +40,12 @@
 
             if ($('#thread_content').length > 0) {
                 // group: group
+                
                 var editor_thread = CKEDITOR.replace('thread_content', {
-                    toolbar: 'Group',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread_content').data('imageUploadUrl')
                 });
+
 
                 var validator_thread = new Validator({
                     element: '#user-thread-form',
@@ -78,7 +81,7 @@
             if ($('#post-thread-form').length > 0) {
 
                 var editor = CKEDITOR.replace('post_content', {
-                    toolbar: 'Group',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl')
                 });
 
@@ -90,7 +93,6 @@
                         if (error) {
                             return false;
                         }
-                        $('#post-thread-btn').button('submiting').addClass('disabled');
 
                         $.ajax({
                             url: $("#post-thread-form").attr('post-url'),
@@ -100,20 +102,19 @@
                             type: "POST",
                             dataType: 'text',
                             success: function(url) {
-                                if (url) {
-                                    if (url == "/login") {
-                                        window.location.href = url;
-                                        return;
-                                    }
-                                    href = window.location.href;
-                                    var olderHref = checkUrl(href);
-                                    if (checkUrl(url) == olderHref) {
-                                        window.location.reload();
-                                    } else {
-                                        window.location.href = url;
-                                    }
+                                if (url == "/login") {
+                                    window.location.href = url;
+                                    return;
+                                }
+                                window.location.reload();
+                            },
+                            error: function(data) {
+                                data = data.responseText;
+                                data = $.parseJSON(data);
+                                if(data.error) {
+                                    Notify.danger(data.error.message);
                                 } else {
-                                    window.location.reload();
+                                    Notify.danger('发表回复失败，请重试');
                                 }
                             }
                         });
@@ -244,6 +245,16 @@
                                         return;
                                     }
                                     window.location.reload();
+                                },
+                                error: function(data) {
+                                    data = data.responseText;
+                                    data = $.parseJSON(data);
+                                    if(data.error) {
+                                        Notify.danger(data.error.message);
+                                    } else {
+                                        Notify.danger('发表回复失败，请重试');
+                                    }
+                                    $this.button('reset').removeClass('disabled');
                                 }
                             });
                         }
@@ -315,7 +326,7 @@
 
             if ($('#group').length > 0) {
                 var editor = CKEDITOR.replace('group', {
-                    toolbar: 'Simple',
+                    toolbar: 'Detail',
                     filebrowserImageUploadUrl: $('#group').data('imageUploadUrl')
                 });
 

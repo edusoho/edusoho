@@ -26,18 +26,17 @@
     <div style="margin-top:16px;text-align: center;">
       
         <div class="shard-label">
-          <hr/>
-          <span>其他方式登录</span>
+          <span>| 其他方式登录 |</span>
         </div>
-        <ul class="ui-grid-trisect">
-          <li>
-              <i class="iconfont icon-weixin shard-login weixin-login" ng-click="loginWithOpen('Wechat')"></i>
-          </li>
-          <li>
+        <ul class="{{getThirdStyle()}}" ng-if="thirdConfig.length > 0">
+          <li ng-if="hasThirdType('QQ')">
               <i class="iconfont icon-qq shard-login qq-login" ng-click="loginWithOpen('QQ')"></i>
           </li>
-          <li>
+          <li ng-if="hasThirdType('SinaWeibo')">
               <i class="iconfont icon-icon shard-login weibo-login" ng-click="loginWithOpen('SinaWeibo')"></i>
+          </li>
+          <li ng-if="hasThirdType('Wechat')">
+              <i class="iconfont icon-weixin shard-login weixin-login" ng-click="loginWithOpen('Wechat')"></i>
           </li>
         </ul>
       </div>

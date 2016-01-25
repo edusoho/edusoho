@@ -66,6 +66,15 @@
 			</tr>
 
 			<tr>
+				<td>购买班级数</td>
+				<td><span class="pull-right">{{todayBuyClassroomNum}}</span></td>
+				<td><span class="pull-right">{{yesterdayBuyClassroomNum}}</span></td>
+			{% if is_granted('ROLE_SUPER_ADMIN') %}
+				<td><a href="{{path('admin_operation_analysis_classroom_paid',{tab:"trend",analysisDateType:'paidClassroom'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_classroom_paid',{tab:"detail",analysisDateType:'paidClassroom'})}}">详情</a></td>
+			{% endif %}	
+			</tr>
+
+			<tr>
 				<td>完成课时学习数</td>
 				<td><span class="pull-right">{{todayFinishedLessonNum}}</span></td>
 				<td><span class="pull-right">{{yesterdayFinishedLessonNum}}</span></td>
@@ -128,6 +137,20 @@
 				<td><span class="pull-right">{{todayCourseIncome}}</span></td>
 				<td><span class="pull-right">{{yesterdayCourseIncome}}</span></td>
 				<td><a href="{{path('admin_operation_analysis_course_income',{tab:"trend",analysisDateType:'courseIncome'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_course_income',{tab:"detail",analysisDateType:'courseIncome'})}}">详情</a></td>
+			</tr>
+
+			<tr>
+				<td>└─ 班级营收额</td>
+				<td><span class="pull-right">{{todayClassroomIncome}}</span></td>
+				<td><span class="pull-right">{{yesterdayClassroomIncome}}</span></td>
+				<td><a href="{{path('admin_operation_analysis_classroom_income',{tab:"trend",analysisDateType:'classroomIncome'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_classroom_income',{tab:"detail",analysisDateType:'classroomIncome'})}}">详情</a></td>
+			</tr>
+
+			<tr>
+				<td>└─ 会员营收额</td>
+				<td><span class="pull-right">{{todayVipIncome}}</span></td>
+				<td><span class="pull-right">{{yesterdayVipIncome}}</span></td>
+				<td><a href="{{path('admin_operation_analysis_vip_income',{tab:"trend",analysisDateType:'vipIncome'})}}">趋势</a> <span class="text-muted">|</span> <a href="{{path('admin_operation_analysis_vip_income',{tab:"detail",analysisDateType:'vipIncome'})}}">详情</a></td>
 			</tr>
 			{% endif %}
 			<tr>

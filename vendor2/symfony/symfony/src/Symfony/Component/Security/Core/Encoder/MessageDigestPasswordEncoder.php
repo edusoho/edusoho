@@ -69,4 +69,22 @@ class MessageDigestPasswordEncoder extends BasePasswordEncoder
     {
         return !$this->isPasswordTooLong($raw) && $this->comparePasswords($encoded, $this->encodePassword($raw, $salt));
     }
+
+    public function encodeSign($url, $accessKey)
+    {
+
+        if (!in_array($this->algorithm, hash_algos(), true)) {
+            throw new \LogicException(sprintf('The algorithm "%s" is not supported.', $this->algorithm));
+        }
+
+        $salted = $this->mergePasswordAndSalt($url, $accessKey);
+        $digest = hash($this->algorithm, $salted, true);
+
+        // "stretch" hash
+        for ($i = 1; $i < $this->iterations; $i++) {
+            $digest = hash($this->algorithm, $digest.$salted, true);
+        }
+
+        return $this->encodeHashAsBase64 ? base64_encode($digest) : bin2hex($digest);
+    }
 }

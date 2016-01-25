@@ -187,6 +187,17 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       
       return "";
   }
+
+  this.filterContent = function(content, limit) {
+
+    content = content.replace(/<\/?[^>]*>/g,'');
+    content = content.replace(/[\r\n\s]+/g,'');
+    if (content.length > limit) {
+         content = content.substring(0, limit);
+      }
+      
+      return content;
+  }
 }
 
 function CourseToolController($scope, $stateParams, OrderService, CourseService, cordovaUtil, $state)
@@ -303,20 +314,22 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
           });
         }
       });
-    }
+    };
 
     $scope.shardCourse = function() {
       var about = $scope.course.about;
-      if (about.length > 20) {
-        about = about.substring(0, 20);
-      }
+
       cordovaUtil.share(
         app.host + "/course/" + $scope.course.id, 
         $scope.course.title, 
-        about, 
+        self.filterContent(about, 20), 
         $scope.course.largePicture
       );      
     }
+
+    $scope.continueLearnCourse = function() {
+      $scope.$root.$emit("continueLearnCourse", {});
+    };
 }
 
 function CourseController($scope, $stateParams, CourseService, AppUtil, $state, cordovaUtil)
@@ -441,13 +454,11 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
 
     $scope.shardClassRoom = function() {
       var about = $scope.classRoom.about;
-      if (about.length > 20) {
-        about = about.substring(0, 20);
-      }
+
       cordovaUtil.share(
         app.host + "/classroom/" + $scope.classRoom.id, 
         $scope.classRoom.title, 
-        about, 
+        self.filterContent(about, 20), 
         $scope.classRoom.largePicture
       );
     };

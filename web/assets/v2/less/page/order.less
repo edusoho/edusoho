@@ -1,228 +1,33 @@
 .order-detail-bg {
-  // .border-radius;
-  padding: 3px;
   margin-bottom: 20px;
-  border: 1px solid @gray-light;
-}
-.order-detail-bg .order-detail {
-  position: relative;
-}
-@media (max-width: @screen-xs-max) {
-  .order-detail-bg .order-detail .img-responsive {
-    width: 100%;
-    margin-bottom: 10px;
+  border: 1px solid @gray-lighter;
+  &.checkout {
+    .order-info {
+      padding-top: 30px;
+      width: 70%;
+      @media (max-width: @screen-xs-max) {
+        width: 100%;
+        padding: 15px;
+      }
+      >p {
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+      .pay-rmb {
+        font-size: 18px;
+      }
+    }
   }
-}
-.order-detail-bg .class-count {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  padding: 0;
-  font-size: 16px;
-  color: #666;
-}
-.order-detail-bg .class-count .class-price {
-  font-size: 24px;
-}
-
-.order-detail-bg .order-count {
-  padding: 0;
-}
-.order-detail-bg .order-count .order-price {
-  color: #ff7e00;
-}
-.paid-courses .course-item {
-  padding: 5px;
-}
-.paid-courses .course-item:nth-child(odd) {
-  background-color: #fafafa;
-}
-.paid-courses .course-item .course-img {
-  float: left;
-}
-.paid-courses .course-item .course-img img {
-  width: 112px;
-  height: auto;
-}
-.paid-courses .course-item .course-title {
-  float: left;
-  padding: 10px 20px;
-  margin: 0;
-}
-.paid-courses .course-item .course-title h4 {
-  font-size: 16px;
-}
-.paid-courses .course-item .course-info {
-  padding: 16px 20px;
-  float: right;
-}
-.paid-courses .course-item .more {
-  position: relative;
-}
-.paid-courses .course-item .more:hover {
-  cursor: pointer;
-}
-.paid-courses .course-item .more:hover .more-info {
-  display: block;
-}
-.paid-courses .course-item .more .more-info {
-  position: absolute;
-  display: none;
-  z-index: 1;
-  top: 100%;
-  right: 0;
-  background-color: #fef7ed;
-  border: 1px solid #ffd183;
-  padding: 5px 10px;
-  white-space: nowrap;
-  .border-radius;
-}
-
-// .order-pay .order-item {
-//   padding-top: 30px;
-//   line-height: 30px;
-// }
-
-.order-pay .order-item-clear {
-  border-bottom: 1px solid #E5E5E5;
-}
-
-.order-item-title .add-coun {
-  display: inline-block;
-  font-size: 14px;
-  padding-bottom: 5px;
-  background-color: #fff8ed;
-  border: 1px solid #ffb841;
-  color: #ff7e00;
-  padding: 5px 7px;
-  line-height: 15px;
-  border-radius: 3px;
-  margin-left: 10px;
-  float: left;
-}
-
-.order-item-title .cancel {
-  margin-left: 20px;
-  float: left;
-  text-decoration: none;
-  color: #1071b5;
-  cursor: pointer;
-}
-
-.order-item .price_r {
-  float: right; 
-  margin-top: 4px; 
-  line-height: 19px;
-  position: relative;
-}
-
-.order-item .price_txt {
-  margin-right: 11px; 
-  margin-top: 4px; 
-  line-height: 19px;
-}
-
-.order-item .price_r_mark {
-  margin-right: 5px; 
-}
-
-.order-item .pricehead {
-  float: left;
-  font-size: 15px;
-}
-.order-detail {
-  height: 150px;
-  width: auto;
-  // background-color: #fafafa;
-  background-color: @gray-lighter;
-}
-
-.order-count {
-  padding: 20px 0 40px 0;
-}
-
-.order-item {
-  padding: 0 30px;
-}
-
-.order-panel {
-  padding: 20px 20px 40px 20px;
-}
-
-.course-text {
-  display: block;
-  font-size: 14px;
-  margin: 6px 0;
-}
-
-.coin-block {
-  padding: 40px 0 25px 0;
-}
-
-.coin-text {
-  float: left;
-}
-
-.coin-text img {
-  margin: 0 10px 14px 0;
-}
-
-.coin-text strong {
-  font-size: 30px;
-  color: #ff5d42;
-}
-
-.coin-btn {
-  float: left;
-  margin: 4px 0 0 55px;
-}
-
-.table.order-table > tbody > tr > td,
-.table.order-table > tbody > tr > th {
-  padding:  10px;
-  line-height: 22px;
-}
-
-.order-pay .buy-vip-num {
-  float: right; 
-  margin-right: 15px; 
-  margin-top: 4px; 
-  line-height: 19px;
-  position: relative;
-}
-
-// =============新调整=====
-.order-detail-bg .order-item {
-  border-bottom: 0;
-  padding: 50px 30px 50px 40px;
-  line-height: 33px;
-}
-
-.order-item .coin-detail {
-  margin-left: 20px;
-  font-size: 14px;
-  color: @gray-dark;
-  // @media (max-width: @screen-xs-max) {
-  //   margin-left: 0;
-  // }
-  // @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
-  //   margin-left: 30px;
-  // } 
-  input {
-    height: 27px;
-    line-height: 27px;
-    border: 1px solid #b5b5b5;
-    font-size: 18px;
-    margin: 0 15px;
-    width: 64px;
-    text-align: center;
+  // 订单头部
+  .order-detail {
+    position: relative;
+    height: 150px;
+    width: auto;
+    background-color: @bg-color;
+    @media(max-width:@screen-xs-max) {
+      height: auto;
+    }
   }
-  // span {
-  // color: #ff7e00;
-  // }
-}
-
-.order-detail {
   .order-img  {
     float: left;
     width: 30%;
@@ -237,8 +42,9 @@
     font-size: 18px;
     color: @gray-dark;
     @media (max-width: @screen-xs-max) {
+      float: none;
       width: 100%;
-      padding: 50px 0 0 25px;
+      padding: 15px 15px 0 15px;
     }
   }
   .order-price {
@@ -248,88 +54,112 @@
     text-align: right;
     padding: 60px 30px 0 0;
     @media (max-width: @screen-xs-max) {
+      float: none;
       width: 100%;
-      padding: 0 0 0 25px;
+      padding: 0 0 10px 15px;
       text-align: left;
     }
   }
 }
 
-.pay-rmb {
-  color: #f72848;
-  font-size: 24px;   
+// 购买过的课程
+.order-detail-item {
+  line-height: 30px;
+  padding: 15px 20px;
+}
+.paid-courses .course-item {
+  padding: 5px;
+  &:nth-child(odd) {
+    background-color: @bg-color;
+  }
+  .course-img {
+    float: left;
+    img {
+      width: 112px;
+      height: auto;
+    }
+  }
+  .course-title {
+    float: left;
+    padding: 10px 20px;
+    margin: 0;
+    // h4 {
+    //   font-size: 16px;
+    // }
+  }
+  .course-info {
+    padding: 16px 20px;
+    float: right;
+  }
+  .more {
+    position: relative;
+    &:hover {
+      cursor: pointer;
+      .more-info {
+        display: block;
+      }
+    }
+    .more-info {
+      position: absolute;
+      display: none;
+      z-index: 1;
+      top: 100%;
+      right: 0;
+      background-color: #fef7ed;
+      border: 1px solid #ffd183;
+      padding: 5px 10px;
+      white-space: nowrap;
+      .border-radius;
+    }
+  }
 }
 
+// 优惠券和虚拟币
 .order-item {
+  border-bottom: 0;
+  padding: 50px 30px 50px 40px;
+  line-height: 33px;
+  @media (max-width: @screen-sm-max) {
+    padding: 15px;
+  }
   .order-item-title {
     float: left;
     width: 36%;
-    font-size: 16px;
     color: @gray;
     @media (max-width: @screen-xs-max) {
-      width: 100%;
-      line-height: 50px;
+      width: 100% !important;
     }
     .title {
       font-size: 18px;
-      color: #333;
-      margin: 0 15px 0 25px;
+      color: @gray-darker;
+      margin: 0 15px;
       @media (max-width: @screen-md-max) {
         margin: 0;
       }
     }
     .es-icon {
       font-size: 22px;
-      color: #333;
+      color: @gray-darker;
     }
   }
   .order-item-detail {
     float: left;
     width: 45%;
-    // text-align: center;
-    font-size: 14px;
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      line-height: 50px;
-      text-align: left;
-      .form-control {
-        margin-top: 9px;
-        margin-right: 10px;
-      }
     }
-    >.pay-password {
-      // padding: 0 20%;
-      // text-align: left;
-      // @media(max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-      //   padding:0 9%;
-      // }
-      // @media (max-width: @screen-xs-max) {
-      //   padding: 0;
-      // }
-      .form-control {
+    .help-block {
+      display: none;
+      .text-danger {
         display: inline-block;
-        // width: 48%;
-        margin:0 2%;
-        // text-align: center;
-      }
-      .controls {
-        .form-control {
-          margin-left: 0;
-        }
-        //临时
-        .help-block {
-          display: none;
-          .text-danger {
-            display: inline-block;
-            color: #d85030;
-            width: 130px;
-            margin-top: 10px;
-            padding: 0 15px;
-            line-height: 30px;
-            background-color: #fff1f0;
-            border: 1px solid #f0c7bd;
-          }
-        }
+        color: #d85030;
+        width: 130px;
+        margin-top: 10px;
+        padding: 0 15px;
+        line-height: 20px;
+        font-size: 12px;
+        background-color: #fff1f0;
+        border: 1px solid #f0c7bd;
       }
     }
   }
@@ -340,115 +170,29 @@
     text-align: right;
     color: @gray-dark;
     @media (max-width: @screen-xs-max) {
-      width: 100%;
-      line-height: 50px;
+      width: 100% !important;
       text-align: left;
-    }
-    .cash-discount {
-      font-size: 24px;
-    }
-  }
-  .coupon-detail {
-    .input-group  {
-      display: inline-block;
-      width: 80%;
-      float: left;
-      margin-top: -2px;
-      // .form-control {
-      //   width: 72%;
-      //   margin-right: 2%;
-      //   @media (max-width: @screen-md-max) and (min-width: @screen-sm-min) {
-      //     width: 60%;
-      //     margin-right: 0;
-      //   } 
-      //   @media (max-width: @screen-xs-max) {
-      //     width: 90%;
-      //   } 
-      // }
-    }
-    .code-notify{
-      display: none;
-      float: left;
-      margin-top: 10px;
-      padding:0 15px;
-      background-color: #f2fae3;
-      border: 1px solid #cddfb4;
-      color: #659f13;
-      line-height: 30px;
-    }
-    .code-notify.failure {
-      background-color: #fff1f0;
-      border: 1px solid #f0c7bd;
-      color: #d85030;
     }
   }
   .form-control {
-    // width: 72%;
-    // margin-right: 2%;
     background-color: #fafafa;
-    border:1px solid #f5f5f5;
+    border: 1px solid #f5f5f5;
   }
 }
 
-// .order-item-detail .pay-password {
-//   .set-password {
-//     display: inline-block;
-//     padding: 0 20px;
-//     border: 1px solid #f3d6ba;
-//     background-color: #fffceb;
-//     font-size: 14px;
-//     color: #e28327;
-//     .btn-link {
-//       color: #844d17;
-//     }
-//   }
-// }
-
-.total-price {
-  float: right;
-  text-align: right;
-  margin-bottom: 30px;
-  font-size: 16px;
-}
-
-.order-pay-heading {
-  font-size: 22px;
-  padding: 0 15px 15px 15px;
-  border-bottom: 1px solid #f5f5f5;
-}
-
-.order-pay-body {
-  padding: 30px 0;
-}
-
-.pay  {
-  margin-right: 30px;
-}
-
-
-.order-detail-item {
-  // padding-top: 30px;
-  line-height: 30px;
-  border-bottom: 0;
-  padding: 15px 20px;
-  .order-item-title {
-    // padding-left: 20px;
-    height: 48px;
+// 总价和价格
+.order-pay {
+  .total-price {
+    text-align: right;
+    margin-bottom: 20px;
+    font-size: 16px;
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 15px;
+    }
   }
-  .order-item-title-icon {
-    background-repeat: no-repeat;
-    background-position: -4px -9px;
-    display: inline-block;
-    width: 29px;
-    height: 29px;
-    float: left;
-  }
-  .title {
-    font-size: 18px;
-    font-weight: normal;
-    // margin-left: 20px;
-    // float: left;
-    // margin-top: 2px;
-    line-height: 1.2em;
+  .pay-rmb {
+    color: @brand-danger;
+    font-size: 24px;   
   }
 }
+

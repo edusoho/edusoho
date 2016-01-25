@@ -21,7 +21,7 @@
         <ul class="ui-list">
             <li class="ui-border-t" ng-if="classRoom.teachers[0]">
                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : classRoom.teachers[0].id })">
-                    <img ng-src="{{ classRoom.teachers[0].avatar | coverAvatar }}" />
+                    <img ng-src="{{ classRoom.teachers[0].mediumAvatar | coverAvatar }}" />
                 </div>
                 <div class="ui-list-info">
                     <h4 class="ui-nowrap">{{ classRoom.teachers[0].nickname }}
@@ -31,7 +31,7 @@
                 </div>
             </li>
             <li ng-if="! classRoom.teachers[0]">
-                <p>该课程暂无教师</p>
+                <p>该班级暂无教师</p>
                 </i>
             </li>
         </ul>
@@ -50,7 +50,7 @@
         <ul class="ui-list">
             <li class="ui-border-t" ng-repeat="student in students">
                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : student.id })">
-                    <img ng-src="{{ student.avatar | coverAvatar }}" />
+                    <img ng-src="{{ student.mediumAvatar | coverAvatar }}" />
                 </div>
                 <div class="ui-list-info">
                     <h4 class="ui-nowrap">{{ student.nickname }}
@@ -91,7 +91,7 @@
                 </div>
             </li>
             <li ng-if="! reviews[0]">
-                <p>该课程暂无评价</p>
+                <p>该班级暂无评价</p>
                 </i>
         </ul>
     </div>

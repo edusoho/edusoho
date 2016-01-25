@@ -9,6 +9,15 @@
 <div class="row row-3-9">
   <div class="col-md-3">
     <div class="sidenav">
+      {% if is_plugin_installed('Point') %}
+        <ul class="list-group">
+          <li class="list-group-heading">我的网校</li>
+          <li class="list-group-item
+           {% if side_nav == 'growth' %} active {% endif %}">
+            <a href="{{path('my')}}">我的成长</a>
+          </li>
+        </ul>
+      {% endif %}
       {% if app.user.isTeacher() %}
         <ul class="list-group">
           <li class="list-group-heading">我的教学</li>
@@ -19,7 +28,7 @@
 
           {% if setting('classroom.enabled')|default(0) %}
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-              <a href="{{path('my_teaching_classrooms')}}">所在{{ setting('classroom.name')|default("班级") }}
+              <a href="{{path('my_teaching_classrooms')}}">所教{{ setting('classroom.name')|default("班级") }}
               </a>
            </li>
           {% endif %}
@@ -97,6 +106,12 @@
         {% if side_nav == 'my-group' %} active {% endif %}">
           <a href="{{path('group_member_center')}}">我的小组</a>
         </li>
+        {% if is_plugin_installed('ClassroomPlan') %}
+          <li class="list-group-item
+          {% if side_nav == 'my-task' %} active {% endif %}" >
+            <a href="{{path('my_task_calendar')}}">我的任务</a>
+          </li>
+        {% endif %}
       </ul>
     </div>
   </div>

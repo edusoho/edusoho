@@ -4,7 +4,6 @@ namespace Topxia\Service\Announcement\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Announcement\AnnouncementService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
@@ -47,11 +46,13 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             unset($announcement['notify']);
         }
 
+        $announcement['content'] = $this->purifyHtml(empty($announcement['content']) ? '' : $announcement['content']);
+
 		$announcement['userId'] = $this->getCurrentUser()->id;
 		$announcement['createdTime'] = time();
 
         $announcement = $this->getAnnouncementDao()->addAnnouncement($announcement);
-        $this->getDispatcher()->dispatch('announcement.service.create', new ServiceEvent($announcement));
+        $this->dispatchEvent('announcement.create', $announcement);
         return $announcement;
 	}
 

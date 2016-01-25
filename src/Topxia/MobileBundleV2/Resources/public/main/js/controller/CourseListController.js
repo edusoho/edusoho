@@ -1,9 +1,28 @@
 app.controller('CourseListController', ['$scope', '$stateParams', '$state', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
 function CourseListController($scope, $stateParams, $state, CourseUtil, CourseService, CategoryService)
 {
+    this.getTypeName = function(name, types) {
+
+      var defaultName = "全部分类";
+      if (!name || !types) {
+        return defaultName;
+      }
+
+      for (var i = types.length - 1; i >= 0; i--) {
+        if (name == types[i].type) {
+          defaultName = types[i].name;
+          break;
+        }
+      };
+
+      return defaultName;
+    }
+
+    $scope.courseListSorts = CourseUtil.getCourseListSorts();
+    $scope.courseListTypes = CourseUtil.getCourseListTypes();
     $scope.categoryTab = {
       category : "分类",
-      type : "全部分类",
+      type : this.getTypeName($stateParams.type, $scope.courseListTypes),
       sort : "综合排序",
     };
 
@@ -11,17 +30,16 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
     $scope.start = $scope.start || 0;
 
     console.log("CourseListController");
-      $scope.loadMore = function(){
-            if (! $scope.canLoad) {
-              return;
-            }
-           setTimeout(function() {
-              $scope.loadCourseList($stateParams.sort);
-           }, 200);
-         
+      $scope.loadMore = function(successCallback){
+        if (! $scope.canLoad) {
+            return;
+        }
+        setTimeout(function() {
+            $scope.loadCourseList($stateParams.sort, successCallback);
+        }, 200);
       };
 
-      $scope.loadCourseList = function(sort) {
+      $scope.loadCourseList = function(sort, successCallback) {
              $scope.showLoad();
               CourseService.searchCourse({
                 limit : 10,
@@ -31,6 +49,9 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
                 type : $stateParams.type
               }, function(data) {
                         $scope.hideLoad();
+                        if (successCallback) {
+                          successCallback();
+                        }
                         var length  = data ? data.data.length : 0;
                         if (!data || length == 0 || length < 10) {
                             $scope.canLoad = false;
@@ -44,9 +65,6 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
                         $scope.start += data.limit;
               });
       }
-
-      $scope.courseListSorts = CourseUtil.getCourseListSorts();
-      $scope.courseListTypes = CourseUtil.getCourseListTypes();
 
       CategoryService.getCategorieTree(function(data) {
         $scope.categoryTree = data;
@@ -87,7 +105,6 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
              $scope.$emit("closeTab", {});
              $scope.categoryTab.category = category.name;
              clearData();
-             $stateParams.type = null;
              $stateParams.categoryId  =category.id;
              $scope.loadCourseList($scope.sort);
       }

@@ -15,4 +15,6 @@ interface NotificationDao
     public function searchNotifications($conditions, $orderBy, $start, $limit);
 
     public function searchNotificationCount($conditions);
+
+    public function deleteNotification($id);
 }

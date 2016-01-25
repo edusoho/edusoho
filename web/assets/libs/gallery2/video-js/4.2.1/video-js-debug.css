@@ -47,7 +47,7 @@ The control icons are from a custom font. Each icon corresponds to a character
   box-shadow: 0 0 2em #ffffff;
 }
 .vjs-default-skin .vjs-slider-handle {
-  position: absolute;
+  /* position: absolute; */
   /* Needed for IE6 */
   left: 0;
   top: 0;

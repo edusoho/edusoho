@@ -17,20 +17,19 @@
   display: inline-block;
   font-size: 12px;
   color: #fff;
-  background: #f4511e;
+  background: @brand-danger;
   height: 16px;
   line-height: 16px;
 }
 
 .course-price-widget .discount:before {
   content: "";
-  float: left;
   position: absolute;
   top: 0;
   left: -8px;
   width: 0;
   height: 0;
-  border-color: transparent #f4511e transparent transparent;
+  border-color: transparent @brand-danger transparent transparent;
   border-style: solid;
   border-width: 8px 8px 8px 0;
 }
@@ -40,14 +39,8 @@
   position: absolute;
   top: 7px;
   left: 2px;
-  float: left;
   width: 4px;
   height: 4px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
+  .border-radius;
   background: #fff;
-  -moz-box-shadow: -1px -1px 2px #8e0000;
-  -webkit-box-shadow: -1px -1px 2px #8e0000;
-  box-shadow: -1px -1px 2px #8e0000;
 }

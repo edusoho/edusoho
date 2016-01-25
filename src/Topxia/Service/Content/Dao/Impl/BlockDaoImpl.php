@@ -16,46 +16,60 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 
     public function getBlock($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $block = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            $block = $that->getConnection()->fetchAssoc($sql, array($id));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        }
+
+        );
     }
 
     public function searchBlockCount($condition)
     {
         $sql = "SELECT COUNT(*) FROM {$this->table}";
-        if(isset($condition['category']) && !$this->isSortField($condition)){
-              $sql .= " where category = '{$condition['category']}'";
+
+        if (isset($condition['category']) && !$this->isSortField($condition)) {
+            $sql .= " where category = '{$condition['category']}'";
         }
-        return  $this->getConnection()->fetchColumn($sql, array());
+
+        return $this->getConnection()->fetchColumn($sql, array());
     }
 
-
-     protected function createBlockQueryBuilder($conditions)
+    protected function createBlockQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions,function($v){
-            if($v === 0){
+        $conditions = array_filter($conditions, function ($v) {
+            if ($v === 0) {
                 return true;
             }
-                
-            if(empty($v)){
+
+            if (empty($v)) {
                 return false;
             }
+
             return true;
-        });
+        }
+
+        );
+
         if (isset($conditions['title'])) {
             $conditions['title'] = "%{$conditions['title']}%";
         }
 
-        return  $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'block')
-            ->andWhere('category = :category')
-            ->andWhere('title LIKE :title');
+        return $this->createDynamicQueryBuilder($conditions)
+                    ->from($this->table, 'block')
+                    ->andWhere('category = :category')
+                    ->andWhere('title LIKE :title');
     }
-    protected function isSortField($condition){
-        if(isset($condition['category']) && $condition['category'] =='lastest'){
+
+    protected function isSortField($condition)
+    {
+        if (isset($condition['category']) && $condition['category'] == 'lastest') {
             return true;
         }
+
         return false;
     }
 
@@ -63,36 +77,48 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     {
         $this->createSerializer()->serialize($block, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $block);
+        $this->clearCached();
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert block error.');
         }
+
         return $this->getBlock($this->getConnection()->lastInsertId());
     }
 
     public function deleteBlock($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function getBlockByCode($code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = ?  LIMIT 1";
-        $block = $this->getConnection()->fetchAssoc($sql, array($code));
-        return $block ? $this->createSerializer()->unserialize($block, $this->serializeFields) : null;
+        $that = $this;
+
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ?  LIMIT 1";
+            $block = $that->getConnection()->fetchAssoc($sql, array($code));
+            return $block ? $that->createSerializer()->unserialize($block, $that->serializeFields) : null;
+        }
+
+        );
     }
 
-    public function findBlocks($conditions, $orderBy,$start, $limit)
+    public function findBlocks($conditions, $orderBy, $start, $limit)
     {
-        if(!isset($orderBy) || empty($orderBy)){
-           $orderBy = array('createdTime','DESC');
+        if (!isset($orderBy) || empty($orderBy)) {
+            $orderBy = array('createdTime', 'DESC');
         }
-           $this->filterStartLimit($start, $limit);
-           $builder = $this->createBlockQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
-         $blocks = $builder->execute()->fetchAll() ? : array();
+
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createBlockQueryBuilder($conditions)
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+        $blocks = $builder->execute()->fetchAll() ?: array();
         return $blocks ? $this->createSerializer()->unserializes($blocks, $this->serializeFields) : array();
     }
 
@@ -100,7 +126,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
     {
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getBlock($id);
     }
-
 }

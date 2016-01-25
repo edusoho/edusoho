@@ -31,6 +31,16 @@ define(function(require, exports, module) {
            hideOrShowTimeAndMinutes();
         });
 
+       
+        $('[name=enabled]').change(function (){
+           if ( $('[name=enabled]').filter(':checked').attr("value") == 1 ){
+            $('#third_login').show();
+          }else if ( $('[name=enabled]').filter(':checked').attr("value") == 0 ){
+            $('#third_login').hide();
+          };
+        });
+        
+
         $('[data-role=oauth2-setting]').each(function() {
             var type = $(this).data('type');
             $('[name=' + type + '_enabled]').change(function() {

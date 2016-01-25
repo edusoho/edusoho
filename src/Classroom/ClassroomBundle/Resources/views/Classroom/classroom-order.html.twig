@@ -1,0 +1,17 @@
+ <div class="order-detail-bg  checkout" style="border:none">
+   <div class="order-detail  clearfix">
+     <div class="order-img hidden-xs">
+        <a href="{{ path('classroom_show', {id:classroom.id}) }}">
+          <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png')|default(asset('assets/img/default/classroom-default-213-142.png')) }}"alt="收费">
+        </a>
+     </div>
+     <div class="order-info">
+       <p>订单名称：{{ order.title }}</p>
+       <p>订单号：{{order.sn}}</p>
+       <p>
+         订单价格：
+         <span class="pay-rmb">￥{{order.amount}}</span>
+       </p>
+     </div>
+   </div>
+ </div>

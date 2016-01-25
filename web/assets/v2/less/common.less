@@ -1,18 +1,16 @@
 body { 
-  background: @bg-color;
+  background: #eee;
   word-wrap: break-word;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
   &.bg-blank {
     background-color: #fff;
   }
 }
-
-// @font-face {font-family: "Phosphate";
-//   src: url('fonts/Phosphate.eot'); /* IE9*/
-//   src: url('fonts/Phosphate.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-//   url('fonts/Phosphate.woff') format('woff'), /* chrome、firefox */
-//   url('fonts/Phosphate.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-// }
 
 html.nav-active,
 html.nav-active body {
@@ -41,29 +39,41 @@ html.nav-active body {
   height: 100%;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.2);
-  -webkit-backface-visibility:hidden;
-}
-
-.tooltip {
-  min-width: 40px;
+  -webkit-backface-visibility: hidden;
 }
 
 #content-container {
   margin: 30px auto;
-  min-height: 500px;
+  min-height: 400px;
+  @media(max-width:@screen-xs-max) {
+    min-height: 250px;
+  }
 }
 
-a:hover, 
-a:focus {
-  text-decoration: none;
+input:-webkit-autofill, 
+textarea:-webkit-autofill, 
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px @bg-color inset;
 }
 
 .caret {
   border-top: 4px solid;
 }
 
-.affix {
+.tooltip {
+  min-width: 40px;
+}
+
+.affix,
+.affix-bottom {
   z-index: 1;
+}
+
+// 富文本编辑器
+.cke_chrome {
+  .border-radius();
+  border-color: @gray-light !important;
+  .box-shadow(none) !important;
 }
 
 // 全站公告
@@ -93,11 +103,9 @@ a:focus {
     right: 0;
     width: 30px;
   }
-  a {
-    text-decoration: underline;
-  }
 }
 
+// 站内公告
 .aside-notice {
   padding: 0;
   .swiper-container {
@@ -110,30 +118,5 @@ a:focus {
   .swiper-slide {
     float: none;
     .text-overflow;
-    // a {
-    //   color: @brand-warning;
-    // }
   }
-}
-
-.icon-user-status {
-  display: block;
-  width: 20px;
-  height: 20px;
-  line-height: 17px;
-  text-align: center;
-  border: 1px solid #fff;
-  background: @brand-danger;
-  color: #fff;
-  .border-radius(50%);
-  i {
-    font-size: 12px;
-  }
-}
-
-// 富文本编辑器
-.cke_chrome {
-  .border-radius();
-  border-color: @gray-light !important;
-  .box-shadow(none) !important;
 }
