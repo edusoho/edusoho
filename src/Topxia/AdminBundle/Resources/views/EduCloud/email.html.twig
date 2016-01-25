@@ -1,0 +1,72 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+
+{% set menu = 'admin_edu_cloud_email' %} 
+
+{% set script_controller = 'educloud/sms-setting' %}
+{% block main %}
+	<div class="page-header clearfix">
+	  <h1 class="pull-left">云邮件</h1>
+	</div>
+
+	<div class="edu-service row">
+	  <div class="edu-balance">
+			<div class="alert alert-warning" role="alert">云邮件服务免费公测中，将于2015年3月31日结束</div>
+			<div class="controls col-md-8 radios">
+				<a href=""><button type="button" class="btn btn-primary">启用云邮件</button></a>
+				<div class="help-block">提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。</div>
+			</div>
+		</div>
+	</div>
+  
+	<div class="page-header clearfix">
+	  <h1 class="pull-left">邮件使用场景</h1>
+	</div>
+
+	<table class="table table-bordered">
+
+    <thead>
+      <tr>
+        <th style="width:20%">编号</th>
+        <th style="width:30%">应用场景</th>
+        <th style="width:30%">发送方式</th>
+        <th style="width:20%">状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>
+          用户注册
+          <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips1" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+          <div id="article-property-tips1-html" style="display:none;">
+            <div style="width:250px;font-size:14px;">
+              <span style="color:blue;"> 用户注册:</span><br>
+              这里是用户注册的引导说明
+              <br>
+            </div>
+          </div>
+        </td>
+        <td>自动单发
+        <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips2" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+        <div id="article-property-tips2-html" style="display:none;">
+            <div style="width:250px;font-size:14px;">
+              <span style="color:blue;"> 自助单发:</span><br>
+              这里是自助单发的引导说明
+              <br>
+            </div>
+          </div>
+        </td>
+        <td class="radios" >
+          <label>
+            <input type="hidden" name="sms_bind" value="on" >默认开启
+          </label>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button type="submit" class="btn btn-primary">保存设置</button>
+{% endblock %}

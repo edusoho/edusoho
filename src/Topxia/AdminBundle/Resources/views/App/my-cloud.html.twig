@@ -2,10 +2,12 @@
 
 {% set menu = 'admin_my_cloud' %}
 {% set submenu = 'service-information' %}
-{% set script_controller = 'app/sms-show' %}
+{% set script_controller = 'app/my-cloud' %}
+
 
 {% block main %}
-      {% if not storage and not live and not sms%}
+      <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
+      {% if not videoInfo and not liveInfo and not smsInfo and emailInfo %}
          <ul class="nav nav-tabs mbl">
 
           <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
@@ -28,7 +30,7 @@
         <div class="eduyun-main">
 
           <!--个人资料-->
-          <div class="panel panel-default">
+<!--           <div class="panel panel-default">
             <div class="panel-body">
               <div class="row">
 
@@ -63,12 +65,54 @@
                 </div>
               </div>
             </div>
+          </div> -->
+          <div class=" hidden-sm hidden-xs">
+            {% if notices %}
+            <ul>
+            {% for notice in notices %}
+              {% if loop.index <= 3 %}
+              <li><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a></li>
+              {% endif %}
+            {% endfor %}
+            </ul>
+            {% else %}
+            <span class="empty">暂无公告</span>
+            {% endif %}
           </div>
 
+
+          <div class="page-header clearfix">
+            <h1 class="pull-left">概览</h1>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="row">
+
+                <div class="media edu-user col-md-8">
+                  <div class="pull-left">
+                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.png') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
+                  </div>
+                  <div class="media-body">
+                    {% if isBinded.name|default("")  == "" %}
+                    <br>
+                    <p>您尚未绑定EduSoho开放云平台&nbsp;<a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"><i class="glyphicon glyphicon-question-sign"></i></a></p>
+                    {% else %}
+                    <p>Hi,<span class="name">{{ isBinded.name|default("")}}</span></p>
+                    <p>ES云平台账户名: {{isBinded.email|default('') }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
 
           <!--账户余额-->
           {% include 'TopxiaAdminBundle:App:cloud-account.html.twig'  %}
 
+          
+          {#
 
           <!--套餐信息-->
           <div class="edu-combo row">
@@ -80,31 +124,61 @@
           {% include 'TopxiaAdminBundle:App:cloud-license.html.twig'  %}
 
           </div>
+          #}
 
 
-          <fieldset>
-            <legend>服务动态</legend>
+          <div class="page-header clearfix">
+            <h1 class="pull-left">产品与服务</h1>
+          </div>
 
             <!--服务动态内容 --> 
-            <div class="edu-service row">
+            <!-- <div class="edu-service row"> -->
 
               <!--云视频信息 -->
-              {% include 'TopxiaAdminBundle:App:cloud-storage.html.twig'  %}
+              {#{% include 'TopxiaAdminBundle:App:cloud-storage.html.twig'  %}#}
 
               <!-- 云直播信息 -->
-              {% include 'TopxiaAdminBundle:App:cloud-live.html.twig'  %}
+              {#{% include 'TopxiaAdminBundle:App:cloud-live.html.twig'  %}#}
 
-            </div>
+            <!-- </div> -->
 
 
             <!--服务云视频-->
-            <div class="edu-service row">
+            <!-- <div class="edu-service row"> -->
               <!-- 云短信信息 -->
-              {% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}
+              {#{% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}#}
 
-            </div>
+            <!-- </div> -->
+          <div class="edu-service row">
+            <!-- 云视频包状态 -->
+            {% include 'TopxiaAdminBundle:App:cloud-storage.html.twig'  %}
+            <!-- <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">云视频包状态</h3>
+                </div>
+                <div class="data-tab" style="height: 250px;"></div>
+              </div>
+            </div> -->
 
-          </fieldset>
+            <!-- 云视频使用情况（最近七个月） -->
+            {% include 'TopxiaAdminBundle:App:cloud-storage-chart.html.twig'  %}
+
+            <!-- 云直播信息 -->
+            {% include 'TopxiaAdminBundle:App:cloud-live.html.twig'  %}
+
+            <!-- 参与直播人数（最近七天） -->
+            {% include 'TopxiaAdminBundle:App:cloud-live-chart.html.twig'  %}
+
+            <!-- 云短信信息 -->
+            {% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}
+
+            <!-- 云短信使用情况（最近七天） -->
+            {% include 'TopxiaAdminBundle:App:cloud-sms-chart.html.twig'  %}
+
+            <!-- 云邮件使用情况（最近七天） -->
+            {% include 'TopxiaAdminBundle:App:cloud-email-chart.html.twig'  %}
+          </div>
           
         </div>
       {% endif %}

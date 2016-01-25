@@ -1,14 +1,17 @@
               <div class="col-md-6">
                 <div class="panel panel-default">
-                  <div class="panel-body">
-                    {% set capacity = live.capacity|default(null) %}
-                    {% set expire = live.expire|default(null) %}
+                  <div class="panel-heading" >
+                    <h3 class="panel-title">云直播状态</h3>
+                  </div>
+                  <div class="panel-body" style="height: 250px;">
+                    {#{% set capacity = live.capacity|default(null) %}
+                    {% set expire = live.expire|default(null) %}#}
 
-                  <h4 class="eduyun-title">云直播
+                  <!-- <h4 class="eduyun-title">云直播
                     {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
-                  </h4>
+                  </h4> -->
                    <!--未购买-->
-                    {% if not live %}
+                    {#{% if not live %}
                       <div class="alert alert-warning alert-sm" role="alert">
                         <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">这里</a>了解详情
                       </div>
@@ -29,7 +32,7 @@
                               <p class="text-danger text-sm">云直播服务已过期</p>
                         {% endif %}
                       {% endif %}
-                    {% endif %}
+                    {% endif %}#}
                     <p class="panel-bottom">
                       支持Web端、移动端，让手机也能看直播！
                     </p>

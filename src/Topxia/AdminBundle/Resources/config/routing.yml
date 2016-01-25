@@ -1336,6 +1336,10 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
 
+admin_edu_cloud_email:
+    pattern: /setting/edu_cloud/email
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }

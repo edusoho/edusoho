@@ -1,9 +1,12 @@
 <div class="col-md-6">
   <div class="panel panel-default">
-    <div class="panel-body">
+    <div class="panel-heading" >
+      <h3 class="panel-title">云视频包状态</h3>
+    </div>
+    <div class="panel-body" style="height: 250px;">
       {% set bill = storage.bill|default(null) %}
 
-      <h4 class="eduyun-title">
+      {#<h4 class="eduyun-title">
         云视频
         {% if storage %}
           <a href="{{path('admin_cloud_detail')}}" target="_blank" >账单</a>
@@ -15,15 +18,39 @@
         {% if storage.isBuyVideo|default(0) %}
           <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a> 
         {% endif %}
-      </h4>
+      </h4> #}
       <!--未购买-->
-      {% if not storage %}
-        <div class="alert alert-warning alert-sm" role="alert">
-          <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未开通云视频功能，点击<a href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">这里</a>了解详情
+      {% if  videoInfo.enableBuyVideo != 1|default(0) %}
+        <div style="">
+          <p class="text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</p> 
         </div>
       {% else %}
+      <div class="alert alert-info" role="alert">
+        {% if videoInfo.tlp %}
+          已开通TLP安全加固服务
+        {% else %}
+        TLP安全加固服务，防盗播、防恶意下载，<a href="{{ path('admin_cloud_tlp') }}" target="_blank">了解详情</a>
+        {% endif %}
+      </div>
+      <p class="text-muted">存储空间: {{ videoInfo.freeSpace }}GB</p>
+      {% if not videoInfo.renewVideo.effectiveDate|default(0) %}
+        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
+        <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a> 
+      {% else %}
+      <p>已续费（将于{{ videoInfo.renewVideo.effectiveDate|date("Y年n月j日") }}生效)</p>
+      {% endif %}
+      <p class="text-muted">流量: {{ videoInfo.freeTransfer }}GB</p>
+      {% if videoInfo.firstday and videoInfo.lastday %}
+        <p class="text-muted">服务期限: {{ videoInfo.firstday|date('Y.n.d') }} ~ {{ videoInfo.lastday|date('Y.n.d') }}
+      {% endif %}
+      {% if videoInfo.remaining > 0 and videoInfo.remaining < 30 %}
+        <p class="text-danger text-sm">您的云视频包将于{{ 30 - videoInfo.remaining }}天后到期，请尽快续费</p>
+      {% elseif videoInfo.remaining <= 0 %}
+        <p class="text-danger text-sm">您的云视频包已到期，请尽快续费</p>
+      {% endif %}
 
-        {% if not storage.isBuyVideo|default(0) and not bill %}
+
+       {# {% if not storage.isBuyVideo|default(0) and not bill %}
           <div class="alert alert-warning alert-sm" role="alert">
             <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_buy',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受优惠的视频服务
           </div>
@@ -67,17 +94,9 @@
             </p>
           {% endif %}
 
-        {% endif %}
+        {% endif %}#}
       {% endif %}
-      <p class="panel-bottom">
-        {% if tlp %}
-          已开通TLP安全加固服务
-        {% else %}
-          <a href="{{ path('admin_cloud_tlp') }}" target="_blank">
-            尚未开通TLP安全加固服务
-          </a>
-        {% endif %}
-      </p>
+      
     </div>
   </div>
 </div>
