@@ -120,7 +120,6 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
                         ->orderBy($orderBy[0], $orderBy[1])
                         ->setFirstResult($start)
                         ->setMaxResults($limit);
-
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -201,7 +200,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         }
 
         if (isset($conditions['roles'])) {
-            $roles = '';
+            $roles = "";
 
             foreach ($conditions['roles'] as $role) {
                 $roles .= "|".$role;
@@ -209,11 +208,11 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
             $roles = $roles."|";
 
-            foreach ($conditions['roles'] as $role) {
-                $roles .= ",|".$role."|";
+            foreach ($conditions['roles'] as $key => $role) {
+                $conditions['roles'][$key] = "|".$role."|";
             }
 
-            $conditions['roles'] = $roles;
+            $conditions['roles'][] = $roles;
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -222,7 +221,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
                         ->andWhere('classroomId = :classroomId')
                         ->andWhere('noteNum > :noteNumGreaterThan')
                         ->andWhere('role LIKE :role')
-                        ->andWhere('role IN ( :roles )')
+                        ->andWhere('role IN (:roles)')
                         ->andWhere('createdTime >= :startTimeGreaterThan')
                         ->andWhere('createdTime < :startTimeLessThan');
 
