@@ -9,14 +9,26 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 {
     public function getCourse($id)
     {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTablename()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
     public function getLessonByCourseIdAndNumber($courseId, $number)
     {
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
-        return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
+            $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
+        }
+
+        );
     }
 
     public function findCoursesByIds(array $ids)
@@ -32,12 +44,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function findCoursesByParentIdAndLocked($parentId, $locked)
     {
-        if (empty($parentId)) {
-            return array();
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
+            if (empty($parentId)) {
+                return array();
+            }
+
+            $sql = "SELECT * FROM {$that->getTablename()} WHERE parentId = ? AND locked = ?";
+            return $that->getConnection()->fetchAll($sql, array($parentId, $locked));
         }
 
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = ? AND locked = ?";
-        return $this->getConnection()->fetchAll($sql, array($parentId, $locked));
+        );
     }
 
     public function findCoursesByCourseIds(array $ids, $start, $limit)
@@ -110,6 +128,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $course['createdTime'] = time();
         $course['updatedTime'] = $course['createdTime'];
         $affected              = $this->getConnection()->insert(self::TABLENAME, $course);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course error.');
@@ -122,12 +141,15 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $fields['updatedTime'] = time();
         $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getCourse($id);
     }
 
     public function deleteCourse($id)
     {
-        return $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+        $result = $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function waveCourse($id, $field, $diff)
@@ -142,14 +164,18 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
         $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
-        return $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function clearCourseDiscountPrice($discountId)
     {
         $currentTime = time();
         $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
-        return $this->getConnection()->executeQuery($sql, array($discountId));
+        $result      = $this->getConnection()->executeQuery($sql, array($discountId));
+        $this->clearCached();
+        return $result;
     }
 
     protected function _createSearchQueryBuilder($conditions)
