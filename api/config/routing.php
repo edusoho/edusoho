@@ -52,7 +52,7 @@ $app->post(_u('/exercise_results/{exerciseId}'), 'res.ExerciseResult:post');
 $app->get(_u('/exercise_results/{lessonId}'), 'res.ExerciseResult:get');
 
 $app->get(_u('/me/chatrooms'), 'res.MeChatroomes:get');
-$app->get(_u('/my/courses'), 'res.MyCourses:get');
+$app->get(_u('/me/courses'), 'res.MeCourses:get');
 
 $app->get(_u('/mobileschools/apps'), 'res.Apps:get');
 $app->get(_u('/mobileschools/app/{id}'), 'res.App:get');

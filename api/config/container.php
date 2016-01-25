@@ -16,7 +16,7 @@ $resources = array(
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
-    'MyCourses',
+    'MeCourses',
     'User',
     'Users',
     'Course',
