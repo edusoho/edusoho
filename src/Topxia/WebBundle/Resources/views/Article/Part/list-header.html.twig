@@ -28,7 +28,8 @@
     </div>
     <div class="col-md-4 hidden-sm hidden-xs">
       {% for index,promotedArticle in promotedArticles %}
-      <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small">
+      <a href="{{ path('article_detail', {id:promotedArticle.id}) }}" class="topic-post-small" 
+        {% if loop.index > 1 %}style="margin-top:12px;"{% endif %}>
         {% if promotedArticle.thumb %}
           <img class="img-responsive" src="{{ filepath(promotedArticle.thumb, '') }}" alt="{{ promotedArticle.title }}">
         {% else %}
