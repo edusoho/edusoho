@@ -168,6 +168,9 @@ class AppController extends BaseController
         $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
         $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
         $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
+
+        //videoUsedInfo测试数据
+        $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
         // $user        = isset($content['user']) ? $content['user'] : null;
         // $endDate     = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '';
         // $startDate   = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '';
@@ -212,18 +215,19 @@ class AppController extends BaseController
             // 'user'         => $user,
             // 'sms'          => $sms,
             // 'account'      => $account,
-            "notices"    => $notices,
+            "notices"       => $notices,
             // 'info'         => $info,
-            'isBinded'   => $isBinded,
+            'isBinded'      => $isBinded,
             // 'email'        => $email,
             // 'tlp'          => $tlp,
             // 'trialhtml'    => (isset($trialHtml['content'])) ? $trialHtml['content'] : null
-            'cashInfo'   => $cashInfo,
-            'couponInfo' => $couponInfo,
-            'videoInfo'  => $videoInfo,
-            'liveInfo'   => $liveInfo,
-            'smsInfo'    => $smsInfo,
-            'emailInfo'  => $emailInfo
+            'cashInfo'      => $cashInfo,
+            'couponInfo'    => $couponInfo,
+            'videoInfo'     => $videoInfo,
+            'liveInfo'      => $liveInfo,
+            'smsInfo'       => $smsInfo,
+            'emailInfo'     => $emailInfo,
+            'videoUsedInfo' => $videoUsedInfo
         ));
     }
 
