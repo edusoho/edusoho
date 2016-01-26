@@ -18,15 +18,15 @@ class SearchController extends BaseController
 
         $cloud_search_setting = $this->getSettingService()->get('cloud_search');
 
-        if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
-            $type       = $request->query->get('type', 'course');
-            $targetType = $request->query->get('targetType', '');
-            return $this->redirect($this->generateUrl('cloud_search', array(
-                'q'          => $keywords,
-                'type'       => $type,
-                'targetType' => $targetType
-            )));
-        }
+        // if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
+        //     $type       = $request->query->get('type', 'course');
+        //     $targetType = $request->query->get('targetType', '');
+        //     return $this->redirect($this->generateUrl('cloud_search', array(
+        //         'q'          => $keywords,
+        //         'type'       => $type,
+        //         'targetType' => $targetType
+        //     )));
+        // }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
