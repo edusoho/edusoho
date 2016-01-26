@@ -152,7 +152,12 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
+            if ($conditions['keywordType'] == 'loginIp') {
+                $conditions[$conditions['keywordType']] = "{$conditions['keyword']}";
+            } else {
+                $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
+            }
+
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
