@@ -20,7 +20,7 @@
         {% endif %}
       </h4> #}
       <!--未购买-->
-      {% if  videoInfo.enableBuyVideo != 1|default(0) %}
+      {% if  videoInfo.enableBuyVideo|default(0) != 1 %}
         <div style="">
           <p class="text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</p> 
         </div>

@@ -68,7 +68,25 @@ class EduCloudController extends BaseController
 
     public function emailAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig');
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig');
+        }
+
+        $settings = $this->getSettingService()->get('storage', array());
+
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
+            $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
+        }
+
+        try {
+            $emailStatus = $this->handleEmailSetting($request);
+            return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
+                'smsStatus' => $emailStatus
+            ));
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+        }
     }
 
     public function applyForSmsAction(Request $request)
@@ -155,6 +173,10 @@ class EduCloudController extends BaseController
         }
 
         return $smsStatus;
+    }
+
+    protected function handleEmailSetting(Request $request)
+    {
     }
 
     public function smsNoMessageAction(Request $request)

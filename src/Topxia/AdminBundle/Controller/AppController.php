@@ -137,10 +137,7 @@ class AppController extends BaseController
     {
         $api = CloudAPIFactory::create('root');
 
-        // $content = $api->get("/users/{$api->getAccessKey()}/overview");
         $info = $api->get('/me');
-        // var_dump($content);
-        // var_dump($info);
 
         if (isset($info['licenseDomains'])) {
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -152,42 +149,16 @@ class AppController extends BaseController
 
         $eduSohoOpenClient = new EduSohoOpenClient;
         $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
-        // var_dump($s);
 
-        // $currentTime = date('Y-m-d', time());
-
-        // $account = isset($content['account']) ? $content['account'] : null;
-        // $day     = '';
-
-        // if (isset($content['account']['arrearageDate']) && $content['account']['arrearageDate'] != 0) {
-        //     $day = ceil((strtotime($currentTime) - $content['account']['arrearageDate']) / 86400);
-        // }
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
         $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
         $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
         $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
         $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
         $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
-        // $user        = isset($content['user']) ? $content['user'] : null;
-        // $endDate     = isset($content['user']['endDate']) ? str_replace('-', '.', $content['user']['endDate']) : '';
-        // $startDate   = isset($content['user']['startDate']) ? str_replace('-', '.', $content['user']['startDate']) : '';
-        // $packageDate = isset($content['user']['endDate']) ? ceil((strtotime($content['user']['endDate']) - strtotime($currentTime)) / 86400) : '';
 
-        // $tlp          = isset($content['service']['tlp']) ? $content['service']['tlp'] : 0;
-        // $storage      = isset($content['service']['storage']) ? $content['service']['storage'] : null;
-        // $storageDate  = isset($content['service']['storage']['expire']) ? ceil(($content['service']['storage']['expire'] - strtotime($currentTime)) / 86400) : '';
-        // $month        = isset($content['service']['storage']['bill']['date']) ? substr($content['service']['storage']['bill']['date'], -2) : '';
-        // $startYear    = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], 0, 4) : '';
-        // $startMonth   = isset($content['service']['storage']['startMonth']) ? substr($content['service']['storage']['startMonth'], -2) : '';
-        // $endYear      = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], 0, 4) : '';
-        // $endMonth     = isset($content['service']['storage']['endMonth']) ? substr($content['service']['storage']['endMonth'], -2) : '';
-        // $storageStart = $startYear.'.'.$startMonth;
-        // $storageEnd   = $endYear.'.'.$endMonth;
-
-        // $live     = isset($content['service']['live']) ? $content['service']['live'] : null;
-        // $liveDate = isset($content['service']['live']['expire']) ? ceil(($content['service']['live']['expire'] - strtotime($currentTime)) / 86400) : '';
-
-        // $sms = isset($content['service']['sms']) ? $content['service']['sms'] : null;
+        //videoUsedInfo测试数据
+        $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
 
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
@@ -197,33 +168,15 @@ class AppController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-            // 'content'      => $content,
-            // 'packageDate'  => $packageDate,
-            // 'storageDate'  => $storageDate,
-            // 'startDate'    => $startDate,
-            // 'endDate'      => $endDate,
-            // 'liveDate'     => $liveDate,
-            // 'storageStart' => $storageStart,
-            // 'storageEnd'   => $storageEnd,
-            // 'day'          => $day,
-            // 'month'        => $month,
-            // 'storage'      => $storage,
-            // 'live'         => $live,
-            // 'user'         => $user,
-            // 'sms'          => $sms,
-            // 'account'      => $account,
-            "notices"    => $notices,
-            // 'info'         => $info,
-            'isBinded'   => $isBinded,
-            // 'email'        => $email,
-            // 'tlp'          => $tlp,
-            // 'trialhtml'    => (isset($trialHtml['content'])) ? $trialHtml['content'] : null
-            'cashInfo'   => $cashInfo,
-            'couponInfo' => $couponInfo,
-            'videoInfo'  => $videoInfo,
-            'liveInfo'   => $liveInfo,
-            'smsInfo'    => $smsInfo,
-            'emailInfo'  => $emailInfo
+            "notices"       => $notices,
+            'isBinded'      => $isBinded,
+            'cashInfo'      => $cashInfo,
+            'couponInfo'    => $couponInfo,
+            'videoInfo'     => $videoInfo,
+            'liveInfo'      => $liveInfo,
+            'smsInfo'       => $smsInfo,
+            'emailInfo'     => $emailInfo,
+            'videoUsedInfo' => $videoUsedInfo
         ));
     }
 
