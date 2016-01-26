@@ -1,0 +1,11 @@
+{% set type = question.type|default(false) %}
+{% if type %}
+	<div class="modal-dialog marker-modal">
+	  <div class="modal-content ">
+	    <div class="modal-body">
+	        {% include 'TopxiaWebBundle:Marker:answer-' ~ type ~ '.html.twig' %}
+	    </div>
+	    <script>app.load('marker/answer')</script>
+	  </div>
+	</div>
+{% endif %}

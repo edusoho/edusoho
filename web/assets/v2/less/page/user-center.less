@@ -41,11 +41,11 @@
     @media(max-width:@screen-xs-max) {
       text-align: center;
       padding-left: 0;
-      .avatar-wrap{
+      .avatar-wrap {
         position: relative;
         margin-bottom: 10px;
         border: 3px solid rgba(255, 255, 255, 0.5);
-        .avatar-lg{
+        .avatar-lg {
           width: 60px !important;
           height: 60px !important;
         }
@@ -77,10 +77,10 @@
   }
   .position {
     margin-bottom: 10px;
-    color: #585560;
+    color: @gray;
     color: rgba(255, 255, 255, 0.5);
     >a {
-      color: #585560;
+      color: @gray;
       color: rgba(255, 255, 255, 0.5);
       .es-transition;
       &:hover {
@@ -97,24 +97,12 @@
       font-size: 16px;
     }
   }
-  // .actions {
-  //   .btn + .btn {
-  //     margin-left: 20px;
-  //   }
-  // }
-  .actions{
-    .btn-xlg{
-      @media(max-width:@screen-xs-max) {
-        padding: 6px 27px;
-      }
-    }
-  }
   .user-about {
     float: left;
     width: 33.33%;
     //margin-top: 30px;
     padding: 15px 10px;
-    background-color: #585560;
+    background-color: @gray;
     background-color: rgba(255, 255, 255, 0.3);
     color: #fff;
     .border-radius;

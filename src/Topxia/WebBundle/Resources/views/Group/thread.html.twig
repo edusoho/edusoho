@@ -22,7 +22,7 @@
   
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h2>
+      <h3 class="panel-title">
         {{ threadMain.title }}
         {% if threadMain.isStick %}
           <span class="label label-primary">置顶</span>
@@ -36,7 +36,7 @@
             <span style="color:#d9534f;" class="mll"> 悬赏:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
           {% endif %}
         {% endif %}
-      </h2>
+      </h3>
       <div class="metas text-sm color-gray clearfix">
         <div class="es-share dropdown pull-right">
           <span class="es-share top" style="font-size:14px;">

@@ -67,7 +67,6 @@ class PlayerController extends BaseController
                         'id'    => $file['id'],
                         'token' => $token['token']
                     );
-
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
                     $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
@@ -108,6 +107,10 @@ class PlayerController extends BaseController
 
         if (isset($context['watchTimeLimit'])) {
             $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fileds['data']['hideBeginning'] = $context['hideBeginning'];
         }
 
         $token = $this->getTokenService()->makeToken($type, $fileds);

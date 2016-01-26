@@ -190,6 +190,7 @@ class TestpaperController extends BaseController
         $targets   = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
         //试卷对应的考试（课时）
+        $target = array();
 
         if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
             $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
@@ -245,6 +246,7 @@ class TestpaperController extends BaseController
         $targets = $this->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
         //获取试卷载体
+        $target = array();
 
         if ($targets[$testpaperResult['target']]['type'] == 'lesson') {
             $target = $this->getCourseService()->getLesson($targets[$testpaperResult['target']]['id']);
