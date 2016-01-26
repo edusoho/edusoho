@@ -81,8 +81,11 @@ class EduCloudController extends BaseController
 
         try {
             $emailStatus = $this->handleEmailSetting($request);
+            // var_dump(emailStatus);
+            var_dump($emailStatus);
+            // exit();
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
-                'smsStatus' => $emailStatus
+                'emailStatus' => $emailStatus
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
@@ -177,6 +180,9 @@ class EduCloudController extends BaseController
 
     protected function handleEmailSetting(Request $request)
     {
+        list($emailStatus, $sign) = $this->getSign();
+
+        return $emailStatus;
     }
 
     public function smsNoMessageAction(Request $request)
@@ -218,6 +224,22 @@ class EduCloudController extends BaseController
             'bills'     => $bills,
             'paginator' => $paginator
         ));
+    }
+
+    protected function getSign()
+    {
+        $api    = CloudAPIFactory::create('root');
+        $params = array();
+        // $params = array(
+        //     'sender' => '测试'
+        // );
+        // // var_dump($params);
+        $api->setApiUrl('http://124.160.104.74:8098/');
+        $result = $api->post("/me/email_account", $params);
+        return array(
+            $result,
+            $sign = "geekWeng"
+        );
     }
 
     protected function getSchoolName()

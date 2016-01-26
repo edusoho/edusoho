@@ -13,7 +13,12 @@
 	  <div class="edu-balance">
 			<div class="alert alert-warning" role="alert">云邮件服务免费公测中，将于2015年3月31日结束</div>
 			<div class="controls col-md-8 radios">
-				<a href=""><button type="button" class="btn btn-primary">启用云邮件</button></a>
+      {% if emailStatus.success != 1 %}
+				<button type="button" class="btn btn-primary" >启用云邮件</button>
+        <span class="alert-warning"name='warning'>抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+      {% else %}
+
+      {% endif %}
 				<div class="help-block">提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。</div>
 			</div>
 		</div>
@@ -68,5 +73,5 @@
     </tbody>
   </table>
 
-  <button type="submit" class="btn btn-primary">保存设置</button>
+  <!-- <button type="submit" class="btn btn-primary">保存设置</button> -->
 {% endblock %}
