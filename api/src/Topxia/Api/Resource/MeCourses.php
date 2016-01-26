@@ -33,13 +33,18 @@ class MeCourses extends BaseResource
                 empty($type) ? array() : array('type' => $type)
             );
         } elseif ($relation == 'learn') {
-            $total   = $this->getCourseService()->findUserLearnCourseCount($user['id'], $conditions);
-            $courses = $this->getCourseService()->findUserLearnCourses(
+            $total              = $this->getCourseService()->findUserLearnCourseCount($user['id'], $conditions);
+            $coursesAfterColumn = $this->getCourseService()->findUserLearnCourses(
                 $user['id'],
                 $start,
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
+            $courses = array();
+
+            foreach ($coursesAfterColumn as $course) {
+                $courses[] = $course;
+            }
         } elseif ($relation == 'teaching') {
             $total   = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), false);
             $courses = $this->getCourseService()->findUserTeachCourses(
