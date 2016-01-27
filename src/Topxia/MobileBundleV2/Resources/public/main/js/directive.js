@@ -374,7 +374,7 @@ directive('uiSliderBox', function($parse) {
             }
           });
 
-          if (element[0].clientWidth) {
+          if ("true" != attrs.auto && element[0].clientWidth) {
             element.css('height', (element[0].clientWidth / 1.9) + "px");
           }
           
