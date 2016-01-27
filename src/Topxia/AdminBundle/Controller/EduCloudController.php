@@ -81,9 +81,7 @@ class EduCloudController extends BaseController
 
         try {
             $emailStatus = $this->handleEmailSetting($request);
-            // var_dump(emailStatus);
             var_dump($emailStatus);
-            // exit();
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'emailStatus' => $emailStatus
             ));
@@ -180,8 +178,11 @@ class EduCloudController extends BaseController
 
     protected function handleEmailSetting(Request $request)
     {
-        list($emailStatus, $sign) = $this->getSign();
+        $dataUserPosted           = $request->request->all();
+        list($emailStatus, $sign) = $this->getSign($dataUserPosted);
 
+        $emailStatus = array_merge($emailStatus, $sign);
+        $this->getSettingService()->set('cloud_email', $emailStatus);
         return $emailStatus;
     }
 
@@ -226,20 +227,45 @@ class EduCloudController extends BaseController
         ));
     }
 
-    protected function getSign()
+    protected function getSign($operation)
     {
-        $api    = CloudAPIFactory::create('root');
-        $params = array();
-        // $params = array(
-        //     'sender' => '测试'
-        // );
-        // // var_dump($params);
+        $api = CloudAPIFactory::create('root');
         $api->setApiUrl('http://124.160.104.74:8098/');
-        $result = $api->post("/me/email_account", $params);
-        return array(
-            $result,
-            $sign = "geekWeng"
-        );
+        $settings    = $this->getSettingService()->get('cloud_email', array());
+        $emailStatus = array();
+        $sign        = array();
+        var_dump($settings);
+
+        if (isset($operation['email-open'])) {
+            $result = $api->post("/me/email_account");
+        } elseif (isset($operation['sign'])) {
+            $params = array(
+                'sender' => $operation['sign']
+            );
+            $result = $api->post("/me/email_account", $params);
+        } elseif (isset($operation['email-close'])) {
+            $result = $api->delete("/me/email_account");
+        } elseif (empty($operation)) {
+            $emailStatus['status'] = !empty($settings) ? $settings['status'] : 'error';
+            $sign                  = !empty($settings) ? array('sign' => $settings['sign']) : array('sign' => "");
+        }
+
+        if (isset($result['success']) && $result['success'] == 1) {
+            $emailStatus = array('status' => $result['account']['status']);
+            $sign        = array('sign' => $result['account']['nickname']);
+        }
+
+        if (isset($result['error'])) {
+            $emailStatus['status'] = 'error';
+            $emailStatus['msg']    = $result['error'];
+        }
+
+        if (isset($operation['sign-update'])) {
+            $sign                  = array('sign' => "");
+            $emailStatus['status'] = 'update';
+        }
+
+        return array($emailStatus, $sign);
     }
 
     protected function getSchoolName()
