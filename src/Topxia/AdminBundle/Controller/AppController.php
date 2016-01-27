@@ -256,7 +256,7 @@ class AppController extends BaseController
         );
         $vlseInfo['smsInfo'] = array(
             'remainCount' => '20',
-            'status'      => 'stoped',
+            'status'      => 'used',
             'usedInfo'    => array(
                 '2015-12-22' => '47',
                 '2015-12-23' => '95',

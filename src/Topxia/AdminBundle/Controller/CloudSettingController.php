@@ -198,7 +198,9 @@ class CloudSettingController extends BaseController
 
         return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
             'storageSetting' => $storageSetting,
-            'headLeader'     => $headLeader
+            'headLeader'     => $headLeader,
+            'videoInfo'      => $videoInfo,
+            'info'           => $info
         ));
     }
 
