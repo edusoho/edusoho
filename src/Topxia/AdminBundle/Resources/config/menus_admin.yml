@@ -392,6 +392,10 @@ admin_setting_post_num_rules:
     name: 发帖限制设置
     parent: admin_system
     group: 2
+admin_setting_sensitive_word:
+    name: 关键词设置
+    parent: admin_system
+    group: 2
 admin_report_status:
     name: 系统自检
     parent: admin_system
