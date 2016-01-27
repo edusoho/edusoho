@@ -160,7 +160,12 @@ class AppController extends BaseController
         $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
 
         //videoUsedInfo测试数据
-        $videoUsedInfo = '[{"date":"201503","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
+        // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
+        $chartInfo = array(
+            'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
+            'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
+            'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo'])
+        );
 
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
@@ -170,16 +175,27 @@ class AppController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-            "notices"       => $notices,
-            'isBinded'      => $isBinded,
-            'cashInfo'      => $cashInfo,
-            'couponInfo'    => $couponInfo,
-            'videoInfo'     => $videoInfo,
-            'liveInfo'      => $liveInfo,
-            'smsInfo'       => $smsInfo,
-            'emailInfo'     => $emailInfo,
-            'videoUsedInfo' => $videoUsedInfo
+            "notices"    => $notices,
+            'isBinded'   => $isBinded,
+            'cashInfo'   => $cashInfo,
+            'couponInfo' => $couponInfo,
+            'videoInfo'  => $videoInfo,
+            'liveInfo'   => $liveInfo,
+            'smsInfo'    => $smsInfo,
+            'emailInfo'  => $emailInfo,
+            'chartInfo'  => $chartInfo
         ));
+    }
+
+    public function generateChartData($array)
+    {
+        $chartInfo = array();
+
+        foreach ($array as $key => $value) {
+            $chartInfo[] = '{"date":"'.$key.'","count":'.$value.'}';
+        }
+
+        return '['.implode(',', $chartInfo).']';
     }
 
     public function getContent()
@@ -211,13 +227,13 @@ class AppController extends BaseController
             'remaining'      => 337,
             'tlp'            => '0',
             'usedInfo'       => array(
-                '2015-12-22' => '7',
-                '2015-12-23' => '9',
-                '2015-12-24' => '75',
-                '2015-12-25' => '89',
-                '2015-12-26' => '13',
-                '2015-12-27' => '8',
-                '2015-12-28' => '9'
+                '2015-06' => '7',
+                '2015-07' => '9',
+                '2015-08' => '75',
+                '2015-09' => '89',
+                '2015-10' => '13',
+                '2015-11' => '8',
+                '2015-12' => '9'
             )
 
         );
@@ -239,8 +255,8 @@ class AppController extends BaseController
 
         );
         $vlseInfo['smsInfo'] = array(
-            'remainCount' => '2000',
-            'sttaus'      => 'used',
+            'remainCount' => '20',
+            'status'      => 'stoped',
             'usedInfo'    => array(
                 '2015-12-22' => '47',
                 '2015-12-23' => '95',
