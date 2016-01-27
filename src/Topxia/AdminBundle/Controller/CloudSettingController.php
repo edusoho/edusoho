@@ -184,9 +184,10 @@ class CloudSettingController extends BaseController
         }
 
         //云端视频判断
-        $api       = CloudAPIFactory::create('root');
-        $info      = $api->get('/me');
-        $content   = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        $api  = CloudAPIFactory::create('root');
+        $info = $api->get('/me');
+        // $content   = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        $content   = $this->getContent();
         $videoInfo = $content['vlseInfo']['videoInfo'];
 
         $headLeader = array();
@@ -199,6 +200,80 @@ class CloudSettingController extends BaseController
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader
         ));
+    }
+
+    //此方法做测试用，离线数据
+    public function getContent()
+    {
+        $content             = array();
+        $content['cashInfo'] = array(
+            'cash'          => '13737',
+            'arrearageDays' => '230'
+        );
+        $content['couponInfo'] = array(
+            'availableMoney' => '99.00'
+        );
+        $vlseInfo              = array();
+        $vlseInfo['videoInfo'] = array(
+            'userId'         => '13737',
+            'startMouth'     => '201512',
+            'endMouth'       => '201611',
+            'freeTransfer'   => '100.00',
+            'freeSpace'      => '100.00',
+            'amount'         => '24.00',
+            'enableBuyVideo' => 1,
+            'renewVideo'     => array(
+                'userId'        => '13737',
+                'effectiveDate' => '1480521600'
+            ),
+            'videoBill'      => null,
+            'firstday'       => '1448899200',
+            'lastday'        => '1480435200',
+            'remaining'      => 337,
+            'tlp'            => '0',
+            'usedInfo'       => array(
+                '2015-12-22' => '7',
+                '2015-12-23' => '9',
+                '2015-12-24' => '75',
+                '2015-12-25' => '89',
+                '2015-12-26' => '13',
+                '2015-12-27' => '8',
+                '2015-12-28' => '9'
+            )
+
+        );
+        $vlseInfo['liveInfo'] = array(
+            'userId'      => '13737',
+            'capacity'    => '100',
+            'expire'      => '1453478400',
+            'renewInfo'   => array('effectiveDate' => '1453564800'),
+            'upgradeInfo' => array(),
+            'usedInfo'    => array(
+                '2015-12-22' => '37',
+                '2015-12-23' => '9',
+                '2015-12-24' => '55',
+                '2015-12-25' => '69',
+                '2015-12-26' => '19',
+                '2015-12-27' => '86',
+                '2015-12-28' => '84'
+            )
+
+        );
+        $vlseInfo['smsInfo'] = array(
+            'remainCount' => '2000',
+            'sttaus'      => 'used',
+            'usedInfo'    => array(
+                '2015-12-22' => '47',
+                '2015-12-23' => '95',
+                '2015-12-24' => '65',
+                '2015-12-25' => '9',
+                '2015-12-26' => '18',
+                '2015-12-27' => '89',
+                '2015-12-28' => '86'
+            )
+        );
+        $content['vlseInfo'] = $vlseInfo;
+        return $content;
     }
 
     public function videoWatermarkUploadAction(Request $request)
