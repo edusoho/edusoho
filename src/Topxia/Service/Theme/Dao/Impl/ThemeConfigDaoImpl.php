@@ -9,7 +9,7 @@ class ThemeConfigDaoImpl extends BaseDao implements ThemeConfigDao
 {
     protected $table = 'theme_config';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'config'        => 'json',
         'allConfig'     => 'json',
         'confirmConfig' => 'json'
