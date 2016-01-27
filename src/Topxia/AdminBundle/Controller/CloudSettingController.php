@@ -2,77 +2,67 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Imagine\Image\Box;
+use Imagine\Gd\Imagine;
+use Topxia\Common\FileToolkit;
+use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\File;
-
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Common\Paginator;
-use Topxia\Service\Util\PluginUtil;
-use Topxia\Service\Util\CloudClientFactory;
-
-use Topxia\Service\CloudPlatform\KeyApplier;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Imagine\Image\ImageInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CloudSettingController extends BaseController
 {
     public function keyAction(Request $request)
     {
         $settings = $this->getSettingService()->get('storage', array());
+
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
+
         return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
         ));
     }
 
     public function keyInfoAction(Request $request)
     {
-        $api = CloudAPIFactory::create('root');
+        $api  = CloudAPIFactory::create('root');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
             $settings = $this->getSettingService()->get('storage', array());
+
             if (empty($settings['cloud_key_applied'])) {
                 $settings['cloud_key_applied'] = 1;
                 $this->getSettingService()->set('storage', $settings);
             }
 
             $this->refreshCopyright($info);
-
         } else {
-            $settings = $this->getSettingService()->get('storage', array());
+            $settings                      = $this->getSettingService()->get('storage', array());
             $settings['cloud_key_applied'] = 0;
             $this->getSettingService()->set('storage', $settings);
         }
 
         $currentHost = $request->server->get('HTTP_HOST');
 
-        if(isset($info['licenseDomains'])) {
-
+        if (isset($info['licenseDomains'])) {
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
-
         }
-        
+
         return $this->render('TopxiaAdminBundle:CloudSetting:key-license-info.html.twig', array(
-            'info' => $info,
-            'currentHost' => $currentHost,
-            'isLocalAddress' => $this->isLocalAddress($currentHost),
+            'info'           => $info,
+            'currentHost'    => $currentHost,
+            'isLocalAddress' => $this->isLocalAddress($currentHost)
         ));
     }
 
     public function keyBindAction(Request $request)
     {
-        $api = CloudAPIFactory::create('root');
+        $api         = CloudAPIFactory::create('root');
         $currentHost = $request->server->get('HTTP_HOST');
-        $result = $api->post('/me/license-domain', array('domain' => $currentHost));
+        $result      = $api->post('/me/license-domain', array('domain' => $currentHost));
 
         if (!empty($result['licenseDomains'])) {
             $this->setFlashMessage('success', '授权域名绑定成功！');
@@ -83,13 +73,12 @@ class CloudSettingController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-
-    
     public function keyUpdateAction(Request $request)
     {
         if ($this->getWebExtension()->isTrial()) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
         }
+
         $settings = $this->getSettingService()->get('storage', array());
 
         if ($request->getMethod() == 'POST') {
@@ -106,13 +95,14 @@ class CloudSettingController extends BaseController
             }
 
             $user = $api->get('/me');
+
             if ($user['edition'] != 'opensource') {
                 $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
                 goto render;
             }
 
-            $settings['cloud_access_key'] = $options['accessKey'];
-            $settings['cloud_secret_key'] = $options['secretKey'];
+            $settings['cloud_access_key']  = $options['accessKey'];
+            $settings['cloud_secret_key']  = $options['secretKey'];
             $settings['cloud_key_applied'] = 1;
 
             $this->getSettingService()->set('storage', $settings);
@@ -129,7 +119,7 @@ class CloudSettingController extends BaseController
     public function keyApplyAction(Request $request)
     {
         $applier = new KeyApplier();
-        $keys = $applier->applyKey($this->getCurrentUser());
+        $keys    = $applier->applyKey($this->getCurrentUser());
 
         if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
             return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
@@ -137,8 +127,8 @@ class CloudSettingController extends BaseController
 
         $settings = $this->getSettingService()->get('storage', array());
 
-        $settings['cloud_access_key'] = $keys['accessKey'];
-        $settings['cloud_secret_key'] = $keys['secretKey'];
+        $settings['cloud_access_key']  = $keys['accessKey'];
+        $settings['cloud_secret_key']  = $keys['secretKey'];
         $settings['cloud_key_applied'] = 1;
 
         $this->getSettingService()->set('storage', $settings);
@@ -148,9 +138,9 @@ class CloudSettingController extends BaseController
 
     public function keyCopyrightAction(Request $request)
     {
-        $api = CloudAPIFactory::create('leaf');
+        $api  = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
-        
+
         if (empty($info['copyright'])) {
             throw $this->createAccessDeniedException('您无权操作!');
         }
@@ -158,9 +148,9 @@ class CloudSettingController extends BaseController
         $name = $request->request->get('name');
 
         $this->getSettingService()->set('copyright', array(
-            'owned' => 1,
-            'name' => $request->request->get('name', ''),
-            'thirdCopyright' => isset($info['thirdCopyright']) and $info['thirdCopyright'] == '1' ? 1:0
+            'owned'          => 1,
+            'name'           => $request->request->get('name', ''),
+            'thirdCopyright' => isset($info['thirdCopyright']) && $info['thirdCopyright'] == '1' ? 1 : 0
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
@@ -169,22 +159,21 @@ class CloudSettingController extends BaseController
     public function videoAction(Request $request)
     {
         $storageSetting = $this->getSettingService()->get('storage', array());
-        $default = array(
-            'upload_mode' => 'local',
-            'cloud_bucket' => '',
-            'video_quality' => 'low',
-            'video_audio_quality' => 'low',
-            'video_watermark' => 0,
-            'video_watermark_image' => '',
+        $default        = array(
+            'upload_mode'                 => 'local',
+            'cloud_bucket'                => '',
+            'video_quality'               => 'low',
+            'video_audio_quality'         => 'low',
+            'video_watermark'             => 0,
+            'video_watermark_image'       => '',
             'video_embed_watermark_image' => '',
-            'video_watermark_position' => 'topright',
-            'video_fingerprint' => 0,
-            'video_header' => null,
+            'video_watermark_position'    => 'topright',
+            'video_fingerprint'           => 0,
+            'video_header'                => null
         );
 
         if ($request->getMethod() == 'POST') {
-
-            $set = $request->request->all();
+            $set                 = $request->request->all();
             $set['cloud_bucket'] = trim($set['cloud_bucket']);
 
             $storageSetting = array_merge($default, $storageSetting, $set);
@@ -194,65 +183,73 @@ class CloudSettingController extends BaseController
             $storageSetting = array_merge($default, $storageSetting);
         }
 
+        //云端视频判断
+        $api       = CloudAPIFactory::create('root');
+        $info      = $api->get('/me');
+        $content   = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        $videoInfo = $content['vlseInfo']['videoInfo'];
+
         $headLeader = array();
-        if(!empty($storageSetting) && array_key_exists("video_header", $storageSetting) && $storageSetting["video_header"]){
+
+        if (!empty($storageSetting) && array_key_exists("video_header", $storageSetting) && $storageSetting["video_header"]) {
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
         return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
             'storageSetting' => $storageSetting,
-            'headLeader' => $headLeader
+            'headLeader'     => $headLeader
         ));
     }
 
     public function videoWatermarkUploadAction(Request $request)
     {
         $file = $request->files->get('watermark');
+
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'watermark_' . time() . '.' . $file->getClientOriginalExtension();
-        
+        $filename = 'watermark_'.time().'.'.$file->getClientOriginalExtension();
+
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
-        $path = "system/{$filename}";
+        $file      = $file->move($directory, $filename);
+        $path      = "system/{$filename}";
 
         $response = array(
             'path' => $path,
-            'url' =>  $this->get('topxia.twig.web_extension')->getFileUrl($path),
+            'url'  => $this->get('topxia.twig.web_extension')->getFileUrl($path)
         );
 
         return new Response(json_encode($response));
     }
 
-
-   public function videoEmbedWatermarkUploadAction(Request $request)
+    public function videoEmbedWatermarkUploadAction(Request $request)
     {
         $file = $request->files->get('watermark');
+
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'watermarkembed_' . time() . '.' . $file->getClientOriginalExtension();
-        
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
-        $path = "system/{$filename}";
-        $originFileInfo = getimagesize($file);
-        $filePath = $this->container->getParameter('topxia.upload.public_directory')."/".$path;
-        $imagine = new Imagine();
-        $rawImage = $imagine->open($filePath);
+        $filename = 'watermarkembed_'.time().'.'.$file->getClientOriginalExtension();
 
-        $pathinfo = pathinfo($filePath);
-        $specification['240'] = 20;
-        $specification['360'] = 30;
-        $specification['480'] = 40;
-        $specification['720'] = 60;
+        $directory      = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
+        $file           = $file->move($directory, $filename);
+        $path           = "system/{$filename}";
+        $originFileInfo = getimagesize($file);
+        $filePath       = $this->container->getParameter('topxia.upload.public_directory')."/".$path;
+        $imagine        = new Imagine();
+        $rawImage       = $imagine->open($filePath);
+
+        $pathinfo              = pathinfo($filePath);
+        $specification['240']  = 20;
+        $specification['360']  = 30;
+        $specification['480']  = 40;
+        $specification['720']  = 60;
         $specification['1080'] = 90;
 
         foreach ($specification as $key => $value) {
-            $width= ($originFileInfo[0]*$value/$originFileInfo[1]);
+            $width        = ($originFileInfo[0] * $value / $originFileInfo[1]);
             $specialImage = $rawImage->copy();
             $specialImage->resize(new Box($width, $value));
             $filePath = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$key}.{$pathinfo['extension']}";
@@ -261,7 +258,7 @@ class CloudSettingController extends BaseController
 
         $response = array(
             'path' => $path,
-            'url' =>  $this->get('topxia.twig.web_extension')->getFileUrl($path),
+            'url'  => $this->get('topxia.twig.web_extension')->getFileUrl($path)
         );
 
         return new Response(json_encode($response));
