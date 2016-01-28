@@ -8,30 +8,18 @@ define(function(require, exports, module) {
             file.gid = response.globalId;
             file.globalId = response.globalId;
             file.fileId = response.outerId;
-            file.uploaderWidget.set('uploadToken', response.uploadToken);
             file.uploaderWidget.set('uploadUrl', response.uploadUrl);
             file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
             file.uploaderWidget.set('uploadMode', response.uploadMode);
+            file.uploaderWidget.set('uploadId', response.uploadToken);
+            if (file.uploaderWidget.get('initResponse') && file.uploaderWidget.get('initResponse')['uploadToken']) {
+                file.uploaderWidget.set('uploadId', file.uploaderWidget.get('initResponse')['uploadToken']);
+            }
 
             this.file = file;
 	        var self = file.uploaderWidget;
 	        var cloud2UploadStatus = this._initCloud2UploadStatus();
             var baiduParts = { parts: new Array()};
-
-            $.ajax({
-                url: self.get('uploadUrl')+ '?uploads',
-                type:'POST',
-                async: false,
-                beforeSend: function(xhr){
-                    headers = $.parseJSON(self.get('uploadToken'));
-                    xhr.setRequestHeader("Authorization",  headers['Authorization']);
-                    xhr.setRequestHeader("x-bce-date", headers['x-bce-date']);
-                    
-                },
-                success:function(data) {
-                    self.set('uploadId', data.uploadId);
-                }
-            });
 
             
             self.uploader.option('server', self.get('uploadUrl')+'?partNumber='+cloud2UploadStatus.currentChunkIndex+'&uploadId='+self.get('uploadId'));
@@ -126,10 +114,9 @@ define(function(require, exports, module) {
         uploadAccept: function(object, ret){
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
-
-            if (ret._xhr instanceof XMLHttpRequest && ret._xhr.getResponseHeader('ETag')) {
+            if (ret._responseHeaders && ret._responseHeaders['ETag']) {
                 var baiduParts = self.get('baiduParts');
-                baiduParts.parts.push({partNumber:cloud2UploadStatus.currentChunkIndex, eTag : ret._xhr.getResponseHeader('ETag').replace(/\"/g, '')}); 
+                baiduParts.parts.push({partNumber:cloud2UploadStatus.currentChunkIndex, eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
                 self.set('baiduParts', baiduParts);
             }
 

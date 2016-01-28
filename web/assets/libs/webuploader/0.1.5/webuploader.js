@@ -4029,7 +4029,7 @@
                     var fn;
                     ret = tr.getResponseAsJson() || {};
                     ret._raw = tr.getResponse();
-                    ret._xhr = tr.getResponseHeadersAsJson() || {};
+                    ret._responseHeaders = tr.getResponseHeadersAsJson() || {};
                     fn = function( value ) {
                         reject = value;
                     };
@@ -6780,7 +6780,7 @@
             init: function() {
                 this._status = 0;
                 this._response = null;
-                this._xhr1 = null;
+                this._responseHeaders = null;
             },
     
             send: function() {
@@ -6854,7 +6854,7 @@
             },
     
             getResponseHeadersAsJson: function() {
-                return this._xhr1;
+                return this._responseHeaders;
             },
     
             getStatus: function() {
@@ -6875,6 +6875,24 @@
     
             destroy: function() {
                 this.abort();
+            },
+
+            _parseHeaders: function (headerStr) {
+                var headers = {};
+                if (!headerStr) {
+                    return headers;
+                }
+                var headerPairs = headerStr.split('\u000d\u000a');
+                for (var i = 0, len = headerPairs.length; i < len; i++) {
+                    var headerPair = headerPairs[i];
+                    var index = headerPair.indexOf('\u003a\u0020');
+                    if (index > 0) {
+                      var key = headerPair.substring(0, index);
+                      var val = headerPair.substring(index + 2);
+                      headers[key] = val;
+                    }
+                }
+                return headers;
             },
     
             _initAjax: function() {
@@ -6909,7 +6927,7 @@
                     me._status = xhr.status;
     
                     if ( xhr.status >= 200 && xhr.status < 300 ) {
-                        me._xhr1 = xhr;
+                        me._responseHeaders = me._parseHeaders(xhr.getAllResponseHeaders());
                         me._response = xhr.responseText;
                         return me.trigger('load');
                     } else if ( xhr.status >= 500 && xhr.status < 600 ) {

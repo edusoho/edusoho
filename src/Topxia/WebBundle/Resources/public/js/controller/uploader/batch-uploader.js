@@ -232,6 +232,7 @@ define(function(require, exports, module) {
 
                         var key = 'file_' + file.hash;
                         var value = store.get(key);
+                        
                         if(value && value.id) {
                             params.id = value.id;
                         }
@@ -241,7 +242,13 @@ define(function(require, exports, module) {
                             if(response.resumed != 'ok') {
                                 var value = {};
                                 value.id = response.outerId;
+                                value.response = response;
                                 store.set(key, value);
+                            }
+                            
+                            var value = store.get(key);
+                            if (value.response) {
+                                file.uploaderWidget.set('initResponse', value.response);
                             }
 
                             require.async('./'+response.uploadMode+'-strategy', function(Strategy){
@@ -260,7 +267,6 @@ define(function(require, exports, module) {
                     var deferred = WebUploader.Deferred();
                     var key = 'file_' + block.file.hash;
                     var resumedChunk = store.get(key);
-
                     if (resumedChunk === undefined || resumedChunk[block.chunk] === undefined) {
                         block.file.startUploading = true;
                         deferred.resolve();
