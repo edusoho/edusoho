@@ -115,8 +115,19 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->getPost($id);
     }
 
+    protected function sensitiveFilter($str, $type)
+    {
+        $postStatus = $this->getSensitiveService()->sensitiveCheck($str, $type);
+
+        if ($postStatus) {
+            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
+        }
+    }
+
     public function addThread($thread)
     {
+        $this->sensitiveFilter($thread['content'], 'group-thread-create');
+
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
@@ -316,6 +327,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($id, $fields)
     {
+        $this->sensitiveFilter($fields['content'], 'group-thread-update');
+
         if (empty($fields['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
         }
@@ -350,6 +363,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
+        $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
+
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
         if ($event->isPropagationStopped()) {
@@ -426,6 +441,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updatePost($id, $fields)
     {
+        $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
+
         if (!empty($fields['content'])) {
             $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
         }
@@ -517,5 +534,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getThreadCollectDao()
     {
         return $this->createDao('Group.ThreadCollectDao');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
     }
 }
