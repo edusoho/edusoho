@@ -163,6 +163,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
+        $postStatus = $this->getSensitiveService()->sensitiveCheck($thread['content'], 'threadPost-course');
+
+        if ($postStatus) {
+            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
+        }
+
         $event = $this->dispatchEvent('course.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
@@ -366,6 +372,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($post)
     {
+        $postStatus = $this->getSensitiveService()->sensitiveCheck($post['content'], 'threadPost-course-'.$post['threadId']);
+
+        if ($postStatus) {
+            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
+        }
+
         $event = $this->dispatchEvent('course.thread.post.before_create', $post);
 
         if ($event->isPropagationStopped()) {
@@ -469,6 +481,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
     }
 
     protected function getUserService()

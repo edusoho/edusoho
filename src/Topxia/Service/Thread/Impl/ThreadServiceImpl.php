@@ -44,6 +44,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (is_array($sort)) {
             return $sort;
         }
+
         switch ($sort) {
             case 'created':
                 $orderBys = array(
@@ -121,6 +122,12 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
+        $postStatus = $this->getSensitiveService()->sensitiveCheck($thread['content'], 'thread-'.$thread['type'].'-'.$thread['targetType']);
+
+        if ($postStatus) {
+            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
+        }
+
         $event = $this->dispatchEvent('thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
@@ -141,7 +148,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException("话题内容不能为空！");
         }
 
-        $thread['content'] = $this->filterSensitiveWord($this->purifyHtml(empty($thread['content'])) ? '' : $thread['content']);
+        $thread['content'] = $this->purifyHtml(empty($thread['content'])) ? '' : $thread['content'];
         $thread['ats']     = $this->getUserService()->parseAts($thread['content']);
 
         if (empty($thread['targetId'])) {
@@ -412,9 +419,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $fields['targetId']   = $thread['targetId'];
         }
 
+        $postStatus = $this->getSensitiveService()->sensitiveCheck($fields['content'], 'threadPost-'.$fields['targetType'].'-'.$fields['targetId']);
+
+        if ($postStatus) {
+            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
+        }
+
         $this->tryAccess('post.create', $fields);
 
-        $fields['content']     = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+        $fields['content']     = $this->purifyHtml($fields['content']);
         $fields['ats']         = $this->getUserService()->parseAts($fields['content']);
         $fields['userId']      = $user['id'];
         $fields['createdTime'] = time();
@@ -717,13 +730,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return new $class();
     }
 
-    protected function filterSensitiveWord($text)
+    protected function getSensitiveService()
     {
-        if (empty($text)) {
-            return $text;
-        }
-
-        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
+        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
     }
 
     protected function getThreadDao()
