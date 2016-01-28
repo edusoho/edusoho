@@ -122,7 +122,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
-        $this->sensitiveFilter($thread['content'], $fields['targetType'].'-thread-create');
+        $thread['content'] = $this->sensitiveFilter($thread['content'], $fields['targetType'].'-thread-create');
 
         $event = $this->dispatchEvent('thread.before_create', $thread);
 
@@ -217,7 +217,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('参数缺失，更新失败。');
         }
 
-        $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-update');
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
@@ -231,11 +231,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function sensitiveFilter($str, $type)
     {
-        $postStatus = $this->getSensitiveService()->sensitiveCheck($str, $type);
-
-        if ($postStatus) {
-            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
-        }
+        $result = $this->getSensitiveService()->sensitiveCheck($str, $type);
+        return $result['text'];
     }
 
     public function deleteThread($threadId)
@@ -426,7 +423,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $fields['targetId']   = $thread['targetId'];
         }
 
-        $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');
 
         $this->tryAccess('post.create', $fields);
 

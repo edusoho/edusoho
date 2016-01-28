@@ -163,16 +163,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function sensitiveFilter($str, $type)
     {
-        $postStatus = $this->getSensitiveService()->sensitiveCheck($str, $type);
-
-        if ($postStatus) {
-            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
-        }
+        $result = $this->getSensitiveService()->sensitiveCheck($str, $type);
+        return $result['text'];
     }
 
     public function createThread($thread)
     {
-        $this->sensitiveFilter($thread['content'], 'course-thread-create');
+        $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
 
         $event = $this->dispatchEvent('course.thread.before_create', $thread);
 
@@ -228,7 +225,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($courseId, $threadId, $fields)
     {
-        $this->sensitiveFilter($fields['content'], 'course-thread-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
 
         $thread = $this->getThread($courseId, $threadId);
 
@@ -379,7 +376,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($post)
     {
-        $this->sensitiveFilter($post['content'], 'course-thread-post-create');
+        $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
 
         $event = $this->dispatchEvent('course.thread.post.before_create', $post);
 
@@ -424,7 +421,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updatePost($courseId, $id, $fields)
     {
-        $this->sensitiveFilter($fields['content'], 'course-thread-post-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-post-update');
 
         $post = $this->getPost($courseId, $id);
 

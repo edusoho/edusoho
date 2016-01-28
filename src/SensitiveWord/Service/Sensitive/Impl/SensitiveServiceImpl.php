@@ -6,28 +6,28 @@ use SensitiveWord\Service\Sensitive\SensitiveService;
 
 class SensitiveServiceImpl extends BaseService implements SensitiveService
 {
-    const file = '../app/logs/post-dely.log';
     public function sensitiveCheck($text, $type = '')
     {
-        if (!empty($type)) {
-            $postStatus = $this->getUserLevelService()->checkUserStatusByType($type);
-
-            if ($postStatus) {
-                $user = $this->getCurrentUser();
-                file_put_contents(self::file, "\t\t".$text."\t".$user['id']."\t".$user['nickname']."\t".$type."\n", FILE_APPEND);
-                return array('success' => false, 'message' => '休息一下,去看视频吧，你今天已经到达提交上限了');
-            }
-        }
-
         //预处理内容
         $text = strip_tags($text);
         $text = $this->semiangleTofullangle($text);
         $text = $this->plainTextFilter($text, true);
 
+        $bannedResult = $this->bannedKeyword($text, $type);
+
+        if ($bannedResult['success']) {
+            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
+        } else {
+            return $this->replaceText($text, $type);
+        }
+    }
+
+    protected function bannedKeyword($text, $type = '')
+    {
         $rows = $this->getSensitiveDao()->findKeywordsByState('banned');
 
         if (empty($rows)) {
-            return false;
+            return array('success' => false, 'text' => $text);
         }
 
         $keywords = array();
@@ -40,13 +40,13 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $matched = preg_match($pattern, $text, $match);
 
         if (!$matched) {
-            return false;
+            return array('success' => false, 'text' => $text);
         }
 
         $bannedKeyword = $this->getSensitiveDao()->getKeywordByName($match[1]);
 
         if (empty($bannedKeyword)) {
-            return false;
+            return array('success' => false, 'text' => $text);
         }
 
         $currentUser = $this->getCurrentUser();
@@ -66,7 +66,53 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
         $this->getSensitiveDao()->waveBannedNum($bannedKeyword['id'], 1);
 
-        return array('success' => false, 'message' => '非法输入');
+        return array('success' => true, 'text' => $text);
+    }
+
+    protected function replaceText($text, $type = '')
+    {
+        $rows = $this->getSensitiveDao()->findKeywordsByState('replaced');
+
+        if (empty($rows)) {
+            return array('success' => false, 'text' => $text);
+        }
+
+        $keywords = array();
+
+        foreach ($rows as $row) {
+            $keywords[] = $row['name'];
+        }
+
+        $pattern = '/('.implode('|', $keywords).')/';
+        $matched = preg_match_all($pattern, $text, $match);
+
+        if (!$matched) {
+            return array('success' => false, 'text' => $text);
+        }
+
+        foreach ($match[0] as $key => $value) {
+            $keyword = $this->getSensitiveDao()->getKeywordByName($value);
+
+            $currentUser = $this->getCurrentUser();
+            $user        = $this->getUserService()->getUser($currentUser->id);
+            $env         = $this->getEnvVariable();
+            $banlog      = array(
+                'keywordId'   => $keyword['id'],
+                'keywordName' => $keyword['name'],
+                'state'       => $keyword['state'],
+                'text'        => $text,
+                'userId'      => $user ? $user['id'] : 0,
+                'ip'          => empty($user['loginIp']) ? 0 : $user['loginIp'],
+                'createdTime' => time()
+            );
+
+            $this->getBanlogDao()->addBanlog($banlog);
+
+            $this->getSensitiveDao()->waveBannedNum($keyword['id'], 1);
+        }
+
+        $text = preg_replace($pattern, '*', $text);
+        return array('success' => true, 'text' => $text);
     }
 
     public function scanText($text)
@@ -267,15 +313,5 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     protected function getBanlogDao()
     {
         return $this->createDao('SensitiveWord:Sensitive.KeywordBanlogDao');
-    }
-
-    protected function getUserLevelService()
-    {
-        return $this->createService('SensitiveWord:UserLevel.UserLevelService');
-    }
-
-    protected function getThreadService()
-    {
-        return $this->createService('Group.ThreadService');
     }
 }

@@ -117,16 +117,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function sensitiveFilter($str, $type)
     {
-        $postStatus = $this->getSensitiveService()->sensitiveCheck($str, $type);
-
-        if ($postStatus) {
-            throw $this->createServiceException('您填写的内容中包含敏感词，请稍后尝试');
-        }
+        $result = $this->getSensitiveService()->sensitiveCheck($str, $type);
+        return $result['text'];
     }
 
     public function addThread($thread)
     {
-        $this->sensitiveFilter($thread['content'], 'group-thread-create');
+        $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
 
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
 
@@ -327,7 +324,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($id, $fields)
     {
-        $this->sensitiveFilter($fields['content'], 'group-thread-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
 
         if (empty($fields['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
@@ -363,7 +360,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
-        $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
+        $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
 
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
@@ -441,7 +438,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updatePost($id, $fields)
     {
-        $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
 
         if (!empty($fields['content'])) {
             $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
