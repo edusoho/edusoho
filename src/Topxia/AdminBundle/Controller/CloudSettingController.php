@@ -204,6 +204,19 @@ class CloudSettingController extends BaseController
         ));
     }
 
+    public function videoControlAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $set            = $request->request->all();
+            $storageSetting = $this->getSettingService()->get('storage', array());
+            $storageSetting = array_merge($storageSetting, $set);
+            $this->getSettingService()->set('storage', $storageSetting);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
     //此方法做测试用，离线数据
     public function getContent()
     {
