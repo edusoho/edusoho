@@ -186,9 +186,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     public function deleteKeyword($id)
     {
-        $keyword = $this->getKeywordFilter()->getKeyword($id);
+        $keyword = $this->getSensitiveDao()->getKeyword($id);
         $result  = $this->getSensitiveDao()->deleteKeyword($id);
-        $this->getKeywordFilter()->remove($result);
+        $this->getKeywordFilter()->remove($keyword['name']);
         return $result;
     }
 
