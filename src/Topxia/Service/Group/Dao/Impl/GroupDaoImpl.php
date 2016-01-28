@@ -8,7 +8,7 @@ class GroupDaoImpl extends BaseDao implements GroupDao
 {
     protected $table = 'groups';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'tagIds' => 'json'
     );
 

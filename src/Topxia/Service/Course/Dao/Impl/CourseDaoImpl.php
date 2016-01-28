@@ -268,7 +268,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    protected function getTablename()
+    public function getTablename()
     {
         return self::TABLENAME;
     }

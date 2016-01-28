@@ -9,7 +9,7 @@ class BlockDaoImpl extends BaseDao implements BlockDao
 {
     protected $table = 'block';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'meta' => 'json',
         'data' => 'json'
     );
