@@ -16,6 +16,7 @@ $resources = array(
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
+    'MeCourses',
     'User',
     'Users',
     'Course',
@@ -33,12 +34,14 @@ $resources = array(
     'HomeworkManager',
     'ThreadManager',
     'Thread',
-    'Upload',
+    'Upload'
 );
 
 foreach ($resources as $res) {
-    $app["res.{$res}"] = $app->share(function() use ($res) {
+    $app["res.{$res}"] = $app->share(function () use ($res) {
         $class = "Topxia\\Api\\Resource\\{$res}";
         return new $class();
-    });
+    }
+
+    );
 }
