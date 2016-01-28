@@ -253,6 +253,7 @@
   <div class="balloon-uploader"
     data-init-url="{{ path('uploader_init', {token:token}) }}"
     data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+    data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
     data-accept="{{ uploader_accept(targetType, 'video')|json_encode }}"
     data-process="{{ uploader_process(targetType) }}"
   ></div>
@@ -349,6 +350,7 @@
             <div class="balloon-uploader"
               data-init-url="{{ path('uploader_init', {token:token}) }}"
               data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
               data-accept="{{ uploader_accept(targetType, 'audio')|json_encode }}"
               data-process="{{ uploader_process(targetType) }}"
             >
@@ -431,6 +433,7 @@
             <div class="balloon-uploader"
               data-init-url="{{ path('uploader_init', {token:token}) }}"
               data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
               data-accept="{{ uploader_accept(targetType, 'ppt')|json_encode }}"
               data-process="{{ uploader_process(targetType) }}"
             >
@@ -500,6 +503,7 @@
             <div class="balloon-uploader"
               data-init-url="{{ path('uploader_init', {token:token}) }}"
               data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
               data-accept="{{ uploader_accept(targetType, 'cloud_document')|json_encode }}"
               data-process="{{ uploader_process(targetType) }}"></div>
 
@@ -566,6 +570,7 @@
             <div class="balloon-uploader"
               data-init-url="{{ path('uploader_init', {token:token}) }}"
               data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+              data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
               data-accept="{{ uploader_accept(targetType, 'flash')|json_encode }}"
               data-process="{{ uploader_process(targetType) }}"
             ></div>

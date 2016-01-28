@@ -30,6 +30,13 @@ class UploaderController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function uploadAuthAction(Request $request)
+    {
+        $params = $request->request->all();
+        $auth = $this->getUploadFileService()->getUploadAuth($params);
+        return $this->createJsonResponse($auth);
+    }
+
     public function finishedAction(Request $request)
     {
         $params = $this->parseToken($request);

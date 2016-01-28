@@ -152,6 +152,11 @@ uploader_init:
     defaults: { _controller: TopxiaWebBundle:Uploader:init }
     methods: [POST]
 
+uploader_auth:
+    pattern:  /uploader/auth
+    defaults: { _controller: TopxiaWebBundle:Uploader:uploadAuth }
+    methods: [POST]
+
 uploader_batch_uplod:
     pattern:  /uploader/batch_upload
     defaults: { _controller: TopxiaWebBundle:Uploader:batchUpload }

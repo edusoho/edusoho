@@ -167,6 +167,7 @@ define(function(require, exports, module) {
                 element: $el,
                 initUrl: $el.data('initUrl'),
                 finishUrl: $el.data('finishUrl'),
+                uploadAuthUrl: $el.data('uploadAuthUrl'),
                 multi: false
             });
 

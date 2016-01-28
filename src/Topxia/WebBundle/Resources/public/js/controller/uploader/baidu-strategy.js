@@ -8,7 +8,6 @@ define(function(require, exports, module) {
             file.gid = response.globalId;
             file.globalId = response.globalId;
             file.fileId = response.outerId;
-
             file.uploaderWidget.set('uploadToken', response.uploadToken);
             file.uploaderWidget.set('uploadUrl', response.uploadUrl);
             file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
@@ -24,8 +23,9 @@ define(function(require, exports, module) {
                 type:'POST',
                 async: false,
                 beforeSend: function(xhr){
-                    // headers = $.parseJSON(self.get('uploadToken'));
-                    // xhr.setRequestHeader("Authorization", headers['Authorization']);
+                    headers = $.parseJSON(self.get('uploadToken'));
+                    xhr.setRequestHeader("Authorization",  headers['Authorization']);
+                    xhr.setRequestHeader("x-bce-date", headers['x-bce-date']);
                     
                 },
                 success:function(data) {
@@ -33,6 +33,7 @@ define(function(require, exports, module) {
                 }
             });
 
+            
             self.uploader.option('server', self.get('uploadUrl')+'?partNumber='+cloud2UploadStatus.currentChunkIndex+'&uploadId='+self.get('uploadId'));
             self.uploader.option('method', 'PUT');
 
@@ -47,13 +48,13 @@ define(function(require, exports, module) {
         },
 
         uploadBeforeSend: function(object, data, headers){
-
+            this._setChunkAuth();
         	var self = this.file.uploaderWidget;
         	$.each(data, function(i, n){
                 delete data[i];
             })
-            // headers.Authorization = "UpToken "+self.get('uploadToken');
-            // console.log(headers);
+            headers['x-bce-date'] = self.get('bceDate');
+            headers['Authorization'] = self.get('chunkAuth');
         },
 
         _initCloud2UploadStatus: function(){
@@ -63,12 +64,48 @@ define(function(require, exports, module) {
             };
         },
 
+        _setChunkAuth: function(){
+            var self = this.file.uploaderWidget;
+            var cloud2UploadStatus = self.get('cloud2UploadStatus');
+            var encryptParams = {
+                "partNumber" : cloud2UploadStatus.currentChunkIndex,
+                "uploadId" : self.get('uploadId')
+            }
+            var result = this._getUploadAuth(encryptParams, 'PUT');
+            self.set('chunkAuth', result['Authorization']);
+            self.set('bceDate', result['x-bce-date']);
+        },
+
+        _getUploadAuth: function(encryptParams, httpMethod){
+            var self = this.file.uploaderWidget;
+            var result;
+            $.ajax({
+                url: self.get('uploadAuthUrl'),
+                type:'POST',
+                data:{
+                        "encryptParams" : encryptParams,
+                        "globalId" : this.file.gid,
+                        "httpMethod" : httpMethod
+                    },
+                async: false,
+                success:function(data) {
+                    result = data;
+                }
+            });
+            return result;
+        },
+
         finishUpload: function(deferred) {
             var self = this.file.uploaderWidget;
             var baiduParts = self.get('baiduParts');
             var uploadId = self.get('uploadId');
             var url = self.get('uploadUrl')+'?uploadId='+uploadId;
+            encryptParams = {
+                "uploadId":uploadId
+            };
+            headers = this._getUploadAuth(encryptParams, "POST");
             var result = {};
+
             $.ajax({
                 url: url,
                 type:'POST',
@@ -76,7 +113,8 @@ define(function(require, exports, module) {
                 async: false,
                 data:JSON.stringify(baiduParts),
                 beforeSend: function(xhr){
-                    xhr.setRequestHeader("Content-Type", "application/json");
+                    xhr.setRequestHeader("Authorization", headers['Authorization']);
+                    xhr.setRequestHeader("x-bce-date", headers['x-bce-date']);
                 },
                 success:function(data) {
                     result = data;
@@ -86,7 +124,6 @@ define(function(require, exports, module) {
         },
 
         uploadAccept: function(object, ret){
-            
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
 
@@ -100,6 +137,7 @@ define(function(require, exports, module) {
             self.uploader.option('server', self.get('uploadUrl')+'?partNumber='+cloud2UploadStatus.currentChunkIndex+'&uploadId='+self.get('uploadId'));
             self.uploader.option('method', 'PUT');
             self.set('cloud2UploadStatus', cloud2UploadStatus);
+
         }
     });
 

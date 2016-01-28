@@ -46,6 +46,14 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $files;
     }
 
+    public function getUploadAuth($params)
+    {
+        $api       = CloudAPIFactory::create();
+
+        $apiResult = $api->post("/resources/{$params['globalId']}/upload/auth", $params);
+        return $apiResult;
+    }
+
     public function resumeUpload($file, $initParams)
     {
         $params = array(

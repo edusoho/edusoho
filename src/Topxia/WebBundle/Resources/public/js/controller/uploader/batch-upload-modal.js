@@ -7,7 +7,8 @@ define(function(require, exports, module) {
         var esuploader = new BatchUploader({
             element: $el,
             initUrl: $el.data('initUrl'),
-            finishUrl: $el.data('finishUrl')
+            finishUrl: $el.data('finishUrl'),
+            uploadAuthUrl: $el.data('uploadAuthUrl')
         });
 
 

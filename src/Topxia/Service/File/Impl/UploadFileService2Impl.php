@@ -112,6 +112,22 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getDownloadFile($file);
     }
 
+    public function getUploadAuth($params)
+    {
+        $user = $this->getCurrentUser();
+
+        if (empty($user)) {
+            throw $this->createServiceException("用户未登录，上传初始化失败！");
+        }
+        $setting           = $this->getSettingService()->get('storage');
+        $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
+
+        $implementor       = $this->getFileImplementorByStorage($params['storage']);
+        
+        $auth       = $implementor->getUploadAuth($params);
+        return $auth;
+    }
+
     public function initUpload($params)
     {
         $user = $this->getCurrentUser();
