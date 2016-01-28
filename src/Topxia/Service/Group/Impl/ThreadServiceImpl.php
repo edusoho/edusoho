@@ -117,8 +117,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     protected function sensitiveFilter($str, $type)
     {
-        $result = $this->getSensitiveService()->sensitiveCheck($str, $type);
-        return $result['text'];
+        return $this->getSensitiveService()->sensitiveCheck($str, $type);
     }
 
     public function addThread($thread)

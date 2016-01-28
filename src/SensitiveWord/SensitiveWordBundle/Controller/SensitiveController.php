@@ -31,25 +31,6 @@ class SensitiveController extends BaseController
         ));
     }
 
-    public function sensitiveCheckAction(Request $request, $type = '')
-    {
-        $text = $request->query->get('value');
-
-        if (empty($text)) {
-            $text = $request->request->get('value');
-        }
-
-        $isValidate = $this->getSensitiveService()->sensitiveCheck($text, $type);
-
-        if ($isValidate) {
-            $response = $isValidate;
-        } else {
-            $response = array('success' => true, 'message' => '校验通过');
-        }
-
-        return $this->createJsonResponse($response);
-    }
-
     public function createAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {

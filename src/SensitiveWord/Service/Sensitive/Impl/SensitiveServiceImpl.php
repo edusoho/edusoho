@@ -111,8 +111,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             $this->getSensitiveDao()->waveBannedNum($keyword['id'], 1);
         }
 
-        $text = preg_replace($pattern, '*', $text);
-        return array('success' => true, 'text' => $text);
+        return preg_replace($pattern, '*', $text);
     }
 
     public function scanText($text)
