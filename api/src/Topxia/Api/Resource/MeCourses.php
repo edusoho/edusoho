@@ -40,11 +40,7 @@ class MeCourses extends BaseResource
                 $limit,
                 empty($type) ? array() : array('type' => $type)
             );
-            $courses = array();
-
-            foreach ($coursesAfterColumn as $course) {
-                $courses[] = $course;
-            }
+            $courses = array_values($coursesAfterColumn);
         } elseif ($relation == 'teaching') {
             $total   = $this->getCourseService()->findUserTeachCourseCount(array('userId' => $user['id']), false);
             $courses = $this->getCourseService()->findUserTeachCourses(
@@ -61,8 +57,7 @@ class MeCourses extends BaseResource
                 $limit
             );
         } else {
-            $courses = array();
-            $total   = 0;
+            return $this->error('error', '缺少参数!');
         }
 
         return $this->wrap($this->filter($courses), $total);
