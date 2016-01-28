@@ -16,7 +16,10 @@
         <form class="form-horizontal" method="post" id="email-form" novalidate="">
         {% if emailStatus.status|default('error') in  ['error','stoped'] %}
   				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
-          <span class="alert-warning" name='warning'>抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+          <div name = "warning">
+            <span class="alert-warning" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+            <p><a href="" target="_blank">立即接入</a></p>
+          </div>
         {% elseif emailStatus.status == 'used' and  emailStatus.sign|default(false) %}
           <span>已开启</span>
           <button  class="btn btn-primary" name="email-close">关闭</button>
@@ -81,5 +84,6 @@
     </tbody>
   </table>
   {% endif %}
+  <input name="email-status" hidden="hidden" data-status ="{{emailStatus.status|default("")}}">
  <!--  <button type="submit" class="btn btn-primary">保存设置</button> -->
 {% endblock %}

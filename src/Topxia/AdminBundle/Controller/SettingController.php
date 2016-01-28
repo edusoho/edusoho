@@ -302,7 +302,8 @@ class SettingController extends BaseController
             return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array());
         }
 
-        $mailer  = $this->getSettingService()->get('mailer', array());
+        $mailer = $this->getSettingService()->get('mailer', array());
+
         $default = array(
             'enabled'  => 0,
             'host'     => '',
@@ -323,9 +324,28 @@ class SettingController extends BaseController
             $this->setFlashMessage('success', '电子邮件设置已保存！');
         }
 
+        $status = $this->checkMailerStatus();
         return $this->render('TopxiaAdminBundle:System:mailer.html.twig', array(
-            'mailer' => $mailer
+            'mailer' => $mailer,
+            'status' => $status
         ));
+    }
+
+    protected function checkMailerStatus()
+    {
+        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
+        $mailer     = $this->getSettingService()->get('mailer', array());
+        $status     = "";
+
+        if (!empty($cloudEmail) && $cloudEmail['status'] == 'used') {
+            return $status = "cloud_email";
+        }
+
+        if (!empty($mailer) && $mailer['enabled'] == 1) {
+            return $status = "email";
+        }
+
+        return $status;
     }
 
     public function defaultAction(Request $request)

@@ -81,7 +81,6 @@ class EduCloudController extends BaseController
 
         try {
             $emailStatus = $this->handleEmailSetting($request);
-            var_dump($emailStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'emailStatus' => $emailStatus
             ));
@@ -234,7 +233,6 @@ class EduCloudController extends BaseController
         $settings    = $this->getSettingService()->get('cloud_email', array());
         $emailStatus = array();
         $sign        = array();
-        var_dump($settings);
 
         if (isset($operation['email-open'])) {
             $result = $api->post("/me/email_account");

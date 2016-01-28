@@ -14,6 +14,8 @@ define(function(require, exports, module) {
                 content: $(htmlId).html()
             });
         };
+        $("input[name='email-status']").data('status')=="used" ?$("[name='warning']").hide():"";
+        
 	}
 	
 });
