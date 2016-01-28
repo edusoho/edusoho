@@ -4,7 +4,6 @@ namespace SensitiveWord\Service\Sensitive\Dao;
 
 interface SensitiveDao
 {
-
     public function getKeywordByName($name);
 
     public function findAllKeywords();
@@ -21,6 +20,6 @@ interface SensitiveDao
 
     public function waveBannedNum($id, $diff);
 
-
+    public function findKeywordsByState($state);
 
 }

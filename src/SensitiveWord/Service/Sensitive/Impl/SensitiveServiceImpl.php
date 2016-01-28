@@ -24,7 +24,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $text = $this->semiangleTofullangle($text);
         $text = $this->plainTextFilter($text, true);
 
-        $rows = $this->getSensitiveDao()->findAllKeywords();
+        $rows = $this->getSensitiveDao()->findKeywordsByState('banned');
 
         if (empty($rows)) {
             return false;
