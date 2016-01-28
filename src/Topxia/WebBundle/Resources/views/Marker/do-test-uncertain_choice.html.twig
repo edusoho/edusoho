@@ -1,0 +1,32 @@
+<div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
+	<div class="question-heading editor-text">
+		不定项选择题
+		<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a>
+	</div>
+	<div class="question-body clearfix">
+		<div class="gray-darker">{{ question.stem|bbCode2Html|raw }}</div>
+		{% if itemResult.answer|default(null) %}
+		  {% set answerChoiceIndex = itemResult.answer %}
+		{% endif %}
+		<ul class="question-choices">
+			{% for key, choice in question.metas.choices %}
+		    {% set choiceIndex = (65+key)|chr %}
+			<li data-index="{{ choiceIndex }}" data-for="question-{{ question.id }}-input-{{ choiceIndex }}">
+				<span class="type-check" id="question-{{ question.id }}-input-{{ choiceIndex }}" name="answer[{{ question.id }}][]" value="{{ key }}">{{ choiceIndex }}</span>
+				{{ choice|bbCode2Html|raw}}
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="question-footer">
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" data-show-questionanswer="{{ path('course_lesson_question_marker_answer_show',{markerId:markerId,questionId:question.id}) }}"data-lessonid="{{lessonId}}" hidden="hidden">
+		<div class="row">
+			<div class="col-xs-10 text-right">
+				<div class="pvm text-danger "></div>
+			</div>
+			<div class="col-xs-2">
+				<button id="submitQuestion" class="btn btn-primary btn-lg  pull-right">提 交</button>
+			</div>
+		</div>
+	</div>
+</div>

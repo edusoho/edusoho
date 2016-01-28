@@ -4,7 +4,7 @@ namespace Mooc\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\DefaultController as BaseDefaultController;
 
-class DefaultController extends BaseDefaultController
+class DefaultController extends BaseController
 {
     public function indexAction()
     {
@@ -50,5 +50,15 @@ class DefaultController extends BaseDefaultController
         return $this->render('MoocWebBundle:Default:course-item.html.twig', array(
             'courses' => $courses
         ));
+    }
+
+    public function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getBatchNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.BatchNotificationService');
     }
 }

@@ -5,9 +5,6 @@
   z-index: 1;
   .border-radius;
   .es-box-shadow;
-  &.no-shadow {
-    .box-shadow(none);
-  }
   @media (min-width: @screen-md-min) {
     .es-transup;
   }
@@ -71,6 +68,10 @@
       }
     }
   }
+}
+
+.teacher-list.no-shadow .teacher-item {
+  .box-shadow(none);
 }
 
 .lt-ie9 .teacher-item {

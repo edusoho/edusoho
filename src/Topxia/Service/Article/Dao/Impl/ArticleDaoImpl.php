@@ -124,8 +124,8 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
     {
         $article['createdTime'] = time();
         $article['updatedTime'] = $article['createdTime'];
-
         $article  = $this->createSerializer()->serialize($article, $this->serializeFields);
+
         $affected = $this->getConnection()->insert($this->table, $article);
 
         if ($affected <= 0) {
@@ -222,6 +222,7 @@ class ArticleDaoImpl extends BaseDao implements ArticleDao
                         ->andWhere('title LIKE :keywords')
                         ->andWhere('picture != :pictureNull')
                         ->andWhere('tagIds LIKE :tagId')
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('categoryId = :categoryId')
                         ->andWhere('categoryId IN (:categoryIds)');
 

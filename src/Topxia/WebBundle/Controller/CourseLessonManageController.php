@@ -289,6 +289,7 @@ class CourseLessonManageController extends BaseController
             $this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
         }
 
+        //$this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
         $this->getCourseService()->deleteLesson($course['id'], $lessonId);
         $this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 
@@ -557,5 +558,10 @@ class CourseLessonManageController extends BaseController
     protected function getExerciseService()
     {
         return $this->getServiceKernel()->createService('Homework:Homework.ExerciseService');
+    }
+
+    protected function getCourseDeleteService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseDeleteService');
     }
 }

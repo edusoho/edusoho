@@ -93,7 +93,9 @@ class CourseServiceImpl extends BaseService implements CourseService
     {
         $conditions = $this->_prepareCourseConditions($conditions);
 
-        if ($sort == 'popular') {
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } elseif ($sort == 'popular') {
             $orderBy = array('hitNum', 'DESC');
         } elseif ($sort == 'recommended') {
             $orderBy = array('recommendedTime', 'DESC');
@@ -434,7 +436,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields        = CourseSerialize::serialize($fields);
+        $fields = CourseSerialize::serialize($fields);
+
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
@@ -476,6 +479,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'approval'      => 0,
             'maxRate'       => 0,
             'locked'        => 0,
+            'tryLookable'   => 0,
+            'tryLookTime'   => 0,
             'buyable'       => 0
         ));
 
@@ -1232,7 +1237,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'exerciseId'    => 0,
             'testMode'      => 'normal',
             'testStartTime' => 0,
-            'suggestHours'  => '1.0'
+            'suggestHours'  => '1.0',
+            'replayStatus'  => 'ungenerated'
         ));
 
         if (isset($fields['title'])) {
@@ -2641,8 +2647,11 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = array(
             "replayStatus" => "generated"
         );
-        $lesson = $this->getLessonDao()->updateLesson($lessonId, $fields);
+
+        $lesson = $this->updateLesson($courseId, $lessonId, $fields);
+
         $this->dispatchEvent("course.lesson.generate.replay", $courseReplay);
+
         return $replayList;
     }
 

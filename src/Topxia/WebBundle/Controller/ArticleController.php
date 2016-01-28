@@ -34,8 +34,7 @@ class ArticleController extends BaseController
 
         $featuredConditions = array(
             'status'     => 'published',
-            'featured'   => 1,
-            'hasPicture' => 1
+            'featured'   => 1
         );
 
         $featuredArticles = $this->getArticleService()->searchArticles(
@@ -44,6 +43,14 @@ class ArticleController extends BaseController
             0,
             5
         );
+
+        $featuredCategories = array();
+
+        foreach ($featuredArticles as $key => $value) {
+            $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
+        }
+
+
         $promotedConditions = array(
             'status'   => 'published',
             'promoted' => 1
@@ -66,6 +73,7 @@ class ArticleController extends BaseController
             'categoryTree'       => $categoryTree,
             'latestArticles'     => $latestArticles,
             'featuredArticles'   => $featuredArticles,
+            'featuredCategories' => $featuredCategories,
             'promotedArticles'   => $promotedArticles,
             'promotedCategories' => $promotedCategories,
             'paginator'          => $paginator,
