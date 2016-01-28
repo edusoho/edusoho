@@ -40,7 +40,11 @@ class SensitiveController extends BaseController
             $state   = $request->request->get('state');
 
             foreach ($keyword as $key => $value) {
-                $keyword = $this->getSensitiveService()->addKeyword($value, $state);
+                $value = trim($value);
+
+                if (!empty($value)) {
+                    $keyword = $this->getSensitiveService()->addKeyword($value, $state);
+                }
             }
 
             return $this->redirect($this->generateUrl('admin_keyword'));
