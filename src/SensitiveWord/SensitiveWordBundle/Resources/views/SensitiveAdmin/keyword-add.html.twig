@@ -21,8 +21,8 @@
         <input type="radio" id="replaced" name="state" value="replaced" checked="checked" >
         <label for="replaced">替换</label>
         <input type="radio" id="banned" name="state" value="banned" checked="checked" >
-        <label for="banned">禁止</label>
-        <p class="help-block">选择替换，会将指定关键词替换为*。</p>
+        <label for="banned">禁用</label>
+        <p class="help-block">选择替换，会将指定敏感词替换为*。</p>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
