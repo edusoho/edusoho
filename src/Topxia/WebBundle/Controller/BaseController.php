@@ -115,7 +115,7 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmail($to, $title, $body, $verifyurl, $format = 'text')
+    protected function sendEmail($to, $title, $body, $verifyurl, $nickname, $format = 'text')
     {
         $format = $format == 'html' ? 'text/html' : 'text/plain';
 
@@ -147,13 +147,12 @@ abstract class BaseController extends Controller
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'used') {
             $api    = CloudAPIFactory::create('root');
             $site   = $this->setting('site', array());
-            $user   = $this->getCurrentUser();
             $params = array(
                 'to'       => $to,
                 'template' => "sms_registration",
                 'params'   => array(
                     'sitename'  => $site['name'],
-                    'nickname'  => $user['nickname'],
+                    'nickname'  => $nickname,
                     'verifyurl' => $verifyurl,
                     'siteurl'   => $site['url']
                 )

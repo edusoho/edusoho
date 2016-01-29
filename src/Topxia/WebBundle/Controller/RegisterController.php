@@ -475,7 +475,7 @@ class RegisterController extends BaseController
         $emailTitle        = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
         try {
-            $this->sendEmail($user['email'], $emailTitle, $emailBody, $verifyurl);
+            $this->sendEmail($user['email'], $emailTitle, $emailBody, $verifyurl, $user['nickname']);
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }
