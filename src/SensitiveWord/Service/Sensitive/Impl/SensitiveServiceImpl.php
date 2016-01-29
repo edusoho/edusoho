@@ -22,7 +22,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         //预处理内容
         $text = strip_tags($text);
         $text = $this->semiangleTofullangle($text);
-        $text = $this->plainTextFilter($text, false);
+        $text = $this->plainTextFilter($text, true);
 
         $rows = $this->getSensitiveDao()->findKeywordsByState('banned');
 
