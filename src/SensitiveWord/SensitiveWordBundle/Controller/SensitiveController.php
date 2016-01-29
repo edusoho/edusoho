@@ -121,23 +121,17 @@ class SensitiveController extends BaseController
                 $countTemp = $this->getSensitiveService()->searchBanlogsCount($conditions);
                 $count += $countTemp;
             }
-            var_dump($count);
             $paginator = new Paginator($this->get('request'), $count, 20);
-
-            foreach ($userIds as $value) {
-                $conditions['userId'] = $value;
-                $banlogsTemp          = $this->getSensitiveService()->searchBanlogs($conditions, array(
-                    'createdTime',
-                    'DESC'
-                ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-                $banlogs = array_merge($banlogs, $banlogsTemp);
-            }
+            $banlogs = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
+                'id',
+                'DESC'
+            ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         } else {
             $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
-                'createdTime',
+                'id',
                 'DESC'
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         }

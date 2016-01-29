@@ -27,4 +27,6 @@ interface SensitiveService {
     public function searchBanlogsCount($conditions);
     
     public function searchBanlogs($conditions, $orderBy, $start, $limit);
+
+    public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit);
 }

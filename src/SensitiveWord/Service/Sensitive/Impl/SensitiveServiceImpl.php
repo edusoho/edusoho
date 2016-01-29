@@ -228,6 +228,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $this->getBanlogDao()->searchBanlogs($conditions, $orderBy, $start, $limit);
     }
 
+    public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit)
+    {
+        return $this->getBanlogDao()->searchBanlogsByUserIds($userIds, $orderBy, $start, $limit);
+    }
+
     /**
      * 移除不可见字符
      *
