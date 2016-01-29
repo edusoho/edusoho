@@ -11,6 +11,8 @@ interface SensitiveService {
     public function sensitiveCheck($text, $type = '');
     
     public function findAllKeywords();
+
+    public function getKeywordByName($name);
     
     public function addKeyword($keyword, $state);
     
