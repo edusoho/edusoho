@@ -1,4 +1,4 @@
-<div class="course-img">
+ <div class="course-img">
   <a href="{{ path('course_show', {id:course.id}) }}"><img class="img-responsive" src="{{ filepath(course.largePicture, 'course.png') }}"  /></a>
   
 </div>
@@ -40,4 +40,4 @@
     <div class="teacher-name"><a href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a></div>
     <div class="teacher-position hidden-sm">{{ teacher.title }}</div>
   {% endif %}
-</div>
+</div> 

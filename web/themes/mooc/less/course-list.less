@@ -42,10 +42,11 @@
   .options {
   
     a {
+      color: #272a41;
       position: relative;
-      font-size: 16px;
-      padding: 5px 10px;
+      padding: 10px 16px;
       margin: 0 4px;
+      .border-radius(4px);
       .inline-block;
       @media (max-width: @screen-md-max) {
         font-size: 14px;
@@ -58,7 +59,7 @@
         padding: 3px 5px;
       }
       &:hover {
-        background-color: @bg-gray;
+        color: @color-primary;
       }
       &.active {
         color: #fff;
@@ -79,9 +80,8 @@
   }
 
   .tab-pane {
-    padding: 2px 10px;
     margin-top: 15px;
-    background-color: @bg-gray;
+    border-top: 1px dashed #f0f5f9;
     @media (max-width: @screen-xs-max) {
       margin-top: 10px;
     }
@@ -96,10 +96,9 @@
       a {
         .inline-block;
         line-height: 15px;
-        margin: 10px 0px 10px 15px;
-        padding-right: 15px;
-        border-right: 1px solid #dfdfdf;
-        color: #999;
+        margin: 20px 0px 2px 20px;
+        padding-right: 20px;
+        color: #a5a7b3;
         @media (max-width: @screen-xs-max) {
           margin: 8px 0px 8px 10px;
           padding-right: 10px;
@@ -120,36 +119,29 @@
 
 .category-filters {
   background-color: #fff;
-  padding: 14px 25px;
-  margin-bottom: 18px;
+  margin-bottom: 30px;
   border-radius: 0;
-  border-bottom: 2px solid @bg-primary;
-  font-weight: bold;
   @media (max-width: @screen-xs-max) {
     padding: 10px 15px;
   }
   a {
     .inline-block;
-    margin-left: 15px;
-    padding: 0 15px 0 0;
-    line-height: 15px;
-    font-size: 16px;
-    color: #999;
-    border-right: 1px solid #dfdfdf;
+    padding: 13px 20px;
+    line-height: 14px;
+    color: #272a41;
     @media (max-width: @screen-xs-max) {
-      font-size: 14px;
       margin-left: 10px;
       padding: 0 10px 0 0;
     }
-    &:hover,
-    &.selected {
+    &:hover{
       color: @color-primary;
-      font-weight: inherit;
     }
-    &:last-child {
-      border-right: 0;
-    }
+
   }
+  a.selected {
+      background: @color-primary;
+      color: #fff;
+    }
 }
 
 

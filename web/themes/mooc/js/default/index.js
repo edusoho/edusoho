@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             loop: true,
             calculateHeight: true,
             roundLengths: true,
-            onInit: function(swiper) {
+            onInit: function(bannerSwiper) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }
         });
@@ -31,7 +31,7 @@ define(function(require, exports, module) {
             roundLengths: true,
             loop: true,
             slidesPerView: 4,
-            onInit: function(swiper) {
+            onInit: function(setSwiper) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }
         });
@@ -47,7 +47,7 @@ define(function(require, exports, module) {
             calculateHeight: true,
             roundLengths: true,
             slidesPerView: 4,
-            onInit: function(swiper) {
+            onInit: function(classSwiper) {
                $(".swiper-slide").removeClass('swiper-hidden'); 
             }
         });

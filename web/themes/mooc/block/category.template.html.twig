@@ -6,11 +6,11 @@
         <p>{{ text[1].value|default() }}</p>
       </div>
     </div>
-    <div class="set-right swiper-container  hidden-sm hidden-xs">
+    <div class="set-right swiper-container hidden-sm hidden-xs">
       <div class="swiper-wrapper">
         {% for item in categories %}
           {% set category = data('Category',{categoryId:item.categoryId}) %}
-          <div class="width-25 swiper-slide">
+          <div class="width-25 swiper-slide  swiper-hidden">
           <div class="navset-wrapper">
             <img style="width: 30px;height: 30px;" src="{% if item.src|default() %}{{ asset(item.src) }}{% else %}{{ asset('/themes/mooc/img/cat-3.png') }}{% endif %}">
             <a href="{{path('course_explore',{category:category.code|default('')})}}">{{ category.name|default() }}</a>
