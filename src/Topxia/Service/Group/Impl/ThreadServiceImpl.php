@@ -122,6 +122,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function addThread($thread)
     {
+        $thread['title']   = $this->sensitiveFilter($thread['title'], 'group-thread-create');
         $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
 
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
@@ -323,6 +324,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($id, $fields)
     {
+        $fields['title']   = $this->sensitiveFilter($fields['title'], 'group-thread-update');
         $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
 
         if (empty($fields['title'])) {

@@ -122,6 +122,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
+        $thread['title']   = $this->sensitiveFilter($thread['title'], $fields['targetType'].'-thread-create');
         $thread['content'] = $this->sensitiveFilter($thread['content'], $fields['targetType'].'-thread-create');
 
         $event = $this->dispatchEvent('thread.before_create', $thread);
@@ -218,6 +219,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-update');
+        $fields['title']   = $this->sensitiveFilter($fields['title'], $fields['targetType'].'-thread-update');
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
