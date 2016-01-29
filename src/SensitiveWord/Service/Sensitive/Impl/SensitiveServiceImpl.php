@@ -74,7 +74,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $rows = $this->getSensitiveDao()->findKeywordsByState('replaced');
 
         if (empty($rows)) {
-            return array('success' => false, 'text' => $text);
+            return $text;
         }
 
         $keywords = array();
@@ -87,7 +87,7 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         $matched = preg_match_all($pattern, $text, $match);
 
         if (!$matched) {
-            return array('success' => false, 'text' => $text);
+            return $text;
         }
 
         foreach ($match[0] as $key => $value) {
