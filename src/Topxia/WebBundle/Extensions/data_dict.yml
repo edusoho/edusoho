@@ -336,10 +336,10 @@ state:
     replaced: 替换
 
 searchKeyWord:
-    name: 关键词
+    name: 敏感词
     id: 编号
 
 searchBanlog:
-    name: 关键词
+    name: 敏感词
     id: 编号
     userName: 用户名

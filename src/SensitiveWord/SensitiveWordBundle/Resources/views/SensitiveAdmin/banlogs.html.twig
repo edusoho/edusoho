@@ -6,7 +6,7 @@
 	<form id="banlog-search-form" class="form-inline well well-sm" action="" method="get">
     <div class="form-group">
       <select class="form-control" name="state">
-        {{ select_options(dict('state'), app.request.query.get('state'), '所有名单') }}
+        {{ select_options(dict('state'), app.request.query.get('state'), '所有类型') }}
       </select>
     </div>
     <div class="form-group">
@@ -26,7 +26,7 @@
 	    <tr>
 	      <th>编号</th>
 	      <th width="30%">命中关键词</th>
-	      <th>名单</th>
+	      <th>类型</th>
 	      <th>屏蔽文本</th>
 	      <th>用户</th>
 	      <th>屏蔽时间</th>
