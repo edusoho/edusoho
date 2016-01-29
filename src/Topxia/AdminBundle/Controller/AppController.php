@@ -148,7 +148,9 @@ class AppController extends BaseController
         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
         $eduSohoOpenClient = new EduSohoOpenClient;
-        $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        // $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
+
+        $content = $this->getContent();
 
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
         $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
@@ -158,7 +160,12 @@ class AppController extends BaseController
         $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
 
         //videoUsedInfo测试数据
-        $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
+        // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
+        $chartInfo = array(
+            'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
+            'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
+            'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo'])
+        );
 
         $notices = $eduSohoOpenClient->getNotices();
         $notices = json_decode($notices, true);
@@ -168,16 +175,100 @@ class AppController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-            "notices"       => $notices,
-            'isBinded'      => $isBinded,
-            'cashInfo'      => $cashInfo,
-            'couponInfo'    => $couponInfo,
-            'videoInfo'     => $videoInfo,
-            'liveInfo'      => $liveInfo,
-            'smsInfo'       => $smsInfo,
-            'emailInfo'     => $emailInfo,
-            'videoUsedInfo' => $videoUsedInfo
+            "notices"    => $notices,
+            'isBinded'   => $isBinded,
+            'cashInfo'   => $cashInfo,
+            'couponInfo' => $couponInfo,
+            'videoInfo'  => $videoInfo,
+            'liveInfo'   => $liveInfo,
+            'smsInfo'    => $smsInfo,
+            'emailInfo'  => $emailInfo,
+            'chartInfo'  => $chartInfo
         ));
+    }
+
+    public function generateChartData($array)
+    {
+        $chartInfo = array();
+
+        foreach ($array as $key => $value) {
+            $chartInfo[] = '{"date":"'.$key.'","count":'.$value.'}';
+        }
+
+        return '['.implode(',', $chartInfo).']';
+    }
+
+    public function getContent()
+    {
+        $content             = array();
+        $content['cashInfo'] = array(
+            'cash'          => '13737',
+            'arrearageDays' => '230'
+        );
+        $content['couponInfo'] = array(
+            'availableMoney' => '99.00'
+        );
+        $vlseInfo              = array();
+        $vlseInfo['videoInfo'] = array(
+            'userId'         => '13737',
+            'startMouth'     => '201512',
+            'endMouth'       => '201611',
+            'freeTransfer'   => '100.00',
+            'freeSpace'      => '100.00',
+            'amount'         => '24.00',
+            'enableBuyVideo' => 1,
+            'renewVideo'     => array(
+                'userId'        => '13737',
+                'effectiveDate' => '1480521600'
+            ),
+            'videoBill'      => null,
+            'firstday'       => '1448899200',
+            'lastday'        => '1480435200',
+            'remaining'      => 337,
+            'tlp'            => '0',
+            'usedInfo'       => array(
+                '2015-06' => '7',
+                '2015-07' => '9',
+                '2015-08' => '75',
+                '2015-09' => '89',
+                '2015-10' => '13',
+                '2015-11' => '8',
+                '2015-12' => '9'
+            )
+
+        );
+        $vlseInfo['liveInfo'] = array(
+            'userId'      => '13737',
+            'capacity'    => '100',
+            'expire'      => '1453478400',
+            'renewInfo'   => array('effectiveDate' => '1453564800'),
+            'upgradeInfo' => array(),
+            'usedInfo'    => array(
+                '2015-12-22' => '37',
+                '2015-12-23' => '9',
+                '2015-12-24' => '55',
+                '2015-12-25' => '69',
+                '2015-12-26' => '19',
+                '2015-12-27' => '86',
+                '2015-12-28' => '84'
+            )
+
+        );
+        $vlseInfo['smsInfo'] = array(
+            'remainCount' => '20',
+            'status'      => 'used',
+            'usedInfo'    => array(
+                '2015-12-22' => '47',
+                '2015-12-23' => '95',
+                '2015-12-24' => '65',
+                '2015-12-25' => '9',
+                '2015-12-26' => '18',
+                '2015-12-27' => '89',
+                '2015-12-28' => '86'
+            )
+        );
+        $content['vlseInfo'] = $vlseInfo;
+        return $content;
     }
 
     protected function isLocalAddress($address)
