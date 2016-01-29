@@ -44,6 +44,7 @@ class SensitiveController extends BaseController
 
                 if (!empty($value)) {
                     $keyword = $this->getSensitiveService()->getKeywordByName($value);
+
                     if (empty($keyword)) {
                         $keyword = $this->getSensitiveService()->addKeyword($value, $state);
                     }
@@ -138,6 +139,7 @@ class SensitiveController extends BaseController
 
         foreach ($banlogs as &$value) {
             $value['text'] = str_replace($value['keywordName'], "<span style='color:#FF0000'>".$value['keywordName']."</span>", $value['text']);
+            $value['text'] = preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i", "", $value['text']);
         }
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($banlogs, 'userId'));

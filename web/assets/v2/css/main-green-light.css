@@ -5465,7 +5465,6 @@ a.homework-essay-textarea-pack-up {
   position: absolute;
   right: 0px;
   top: 9px;
-  font-size: 16px;
   color: #c1c1c1;
 }
 @media (max-width: 767px) {
@@ -8475,7 +8474,7 @@ textarea {
   white-space: nowrap;
   word-wrap: normal;
   margin-bottom: 30px;
-  padding-right: 60px;
+  padding-right: 80px;
 }
 .index-article .index-new-article li.last {
   margin-bottom: 0;
@@ -12825,8 +12824,8 @@ textarea {
 }
 .user-center-header {
   position: relative;
-  height: 300px;
-  padding: 60px 0;
+  height: 220px;
+  padding: 40px 0;
   background-color: #313131;
   z-index: 1;
 }
@@ -12865,7 +12864,6 @@ textarea {
   float: left;
   width: 66.67%;
   padding-left: 200px;
-  margin-top: 20px;
 }
 @media (max-width: 991px) {
   .user-center-header .user-avatar {
@@ -12955,7 +12953,7 @@ textarea {
   border-radius: 2px;
 }
 .user-center-header .user-about-content {
-  height: 150px;
+  height: 100px;
   overflow: hidden;
   line-height: 25px;
 }

@@ -8,16 +8,14 @@ class SessionHandlerFactory
 
     public static function getSessionHandler($container)
     {
-        $sessionHandler = self::getSettingService()->get('sessionHandler');
+        $redisSetting = self::getSettingService()->get('redis');
 
-        if (isset($sessionHandler['mode']) && $sessionHandler['mode'] == 'redis') {
+        if (isset($redisSetting['opened']) && $redisSetting['opened']) {
             $redisFactory = $container->get('session.handler.redis.factory');
 
             if ($redisFactory->getRedis()) {
                 return $container->get('session.handler.redis');
             }
-        } elseif (isset($sessionHandler['mode']) && $sessionHandler['mode'] == 'native') {
-            return $container->get('session.handler.native_file');
         }
 
         return $container->get('session.handler.pdo');
