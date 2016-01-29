@@ -22,7 +22,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
-        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount(), 20);
+        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
         $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         return $this->render('SensitiveWordBundle:SensitiveAdmin:index.html.twig', array(
