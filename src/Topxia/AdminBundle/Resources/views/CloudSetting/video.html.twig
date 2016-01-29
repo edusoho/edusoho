@@ -35,7 +35,7 @@
     <div><button type="button" class="btn btn-primary" id="video-open">启用云视频</button></div>
     <div hidden="hidden"><button type="button" class="btn btn-default" id="video-close" >关闭</button></div>
     
-    {% if info.level is null %}<p class="text-danger text-sm">抱歉，您尚未接入教育云，不能启用云视频服务</p><p><a href="">立即介入</a></p>{% endif %}
+    {% if info.level|default(null) is null %}<p class="text-danger text-sm">抱歉，您尚未接入教育云，不能启用云视频服务</p><p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>{% endif %}
 
     <div class="help-block">
       EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
