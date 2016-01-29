@@ -22,8 +22,8 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
-        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount(), 50);
-        $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount(), 20);
+        $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         return $this->render('SensitiveWordBundle:SensitiveAdmin:index.html.twig', array(
             'keywords'  => $keywords,
@@ -43,7 +43,10 @@ class SensitiveController extends BaseController
                 $value = trim($value);
 
                 if (!empty($value)) {
-                    $keyword = $this->getSensitiveService()->addKeyword($value, $state);
+                    $keyword = $this->getSensitiveService()->getKeywordByName($value);
+                    if (empty($keyword)) {
+                        $keyword = $this->getSensitiveService()->addKeyword($value, $state);
+                    }
                 }
             }
 
@@ -112,7 +115,7 @@ class SensitiveController extends BaseController
 
             $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
 
-            $paginator = new Paginator($this->get('request'), $count, 50);
+            $paginator = new Paginator($this->get('request'), $count, 20);
 
             foreach ($userIds as $value) {
                 $conditions['userId'] = $value;
@@ -125,7 +128,7 @@ class SensitiveController extends BaseController
         } else {
             $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
 
-            $paginator = new Paginator($this->get('request'), $count, 50);
+            $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
                 'createdTime',

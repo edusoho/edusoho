@@ -5,26 +5,27 @@
 {% endblock %}
 {% block body %}
   <form class="form-horizontal" id="keyword-form" action="{{ path('admin_keyword_create') }}" method="post">
-    <div class="form-group">
+    <div class="row form-group">
       <label class="col-md-3 control-label" for="keyword-name-field">关键字</label>
       <div class="col-md-6 controls">
-        <textarea style="resize:vertical" class="form-control" id="keyword-name-field"  name="name"></textarea>
+        <textarea style="resize:vertical;height:250px;" class="form-control" id="keyword-name-field"  name="name"></textarea>
+        <p class="help-block">换行可继续添加关键词。</p>
       </div>
     </div>
-    <div class="form-group">
-      <label class="col-md-3 control-label" for="keyword-name-field">过滤动作</label>
-      <div class="col-md-6 controls">
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="keyword-name-field">过滤动作</label>
+      </div>
+      <div class="col-md-7 controls radios">
         
         <input type="radio" id="replaced" name="state" value="replaced" checked="checked" >
         <label for="replaced">替换</label>
         <input type="radio" id="banned" name="state" value="banned" checked="checked" >
         <label for="banned">禁止</label>
+        <p class="help-block">选择替换，会将指定关键词替换为*。</p>
       </div>
     </div>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <div class="form-group tac">
-    <p class="help-block">选择替换，会将指定关键词替换为****。</p>
-    </div>
   </form>
    <script type="text/javascript">app.load('customadminbundle/controller/keyword/keyword-modal')</script>
 {% endblock %}

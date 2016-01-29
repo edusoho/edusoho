@@ -167,6 +167,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $match[1];
     }
 
+    public function getKeywordByName($name)
+    {
+        return $this->getSensitiveDao()->getKeywordByName($name);
+    }
+
     public function findAllKeywords()
     {
         return $this->getSensitiveDao()->findAllKeywords();
