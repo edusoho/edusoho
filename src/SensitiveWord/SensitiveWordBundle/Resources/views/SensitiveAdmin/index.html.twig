@@ -9,7 +9,7 @@
   <form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
     <div class="form-group">
       <select class="form-control" name="state">
-        {{ select_options(dict('state'), app.request.query.get('state'), '所有名单') }}
+        {{ select_options(dict('state'), app.request.query.get('state'), '所有类型') }}
       </select>
     </div>
     <div class="form-group">
@@ -28,8 +28,8 @@
       <thead>
       <tr>
         <th>编号</th>
-        <th width="30%">关键词</th>
-        <th>名单</th>
+        <th width="30%">敏感词</th>
+        <th>类型</th>
         <th>屏蔽次数</th>
         <th>添加时间</th>
         <th>操作</th>
@@ -43,7 +43,7 @@
 
     </table>
   {% else %}
-    <div class="empty">暂无关键字信息!</div>
+    <div class="empty">暂无敏感词信息!</div>
   {% endif %}
   {{ web_macro.paginator(paginator) }}
 {% endblock %}
