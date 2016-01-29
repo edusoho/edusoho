@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
-        var watchLimit = videoHtml.data('watchLimit');
+        var timelimit = videoHtml.data('timelimit');
 
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
@@ -69,7 +69,8 @@ define(function(require, exports, module) {
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
                 starttime: starttime,
-                agentInWhiteList: agentInWhiteList
+                agentInWhiteList: agentInWhiteList,
+                timelimit:timelimit
             }
         );
 
@@ -84,22 +85,26 @@ define(function(require, exports, module) {
                 DurationStorage.set(userId, fileId, player.getCurrentTime());
             }
         });
-    
+
+        player.on("firstplay", function(){
+ 
+        });
+        
         player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
             var time = DurationStorage.get(userId, fileId);
             if(time>0){
                 player.setCurrentTime(DurationStorage.get(userId, fileId));
             }
             player.play();
         });
-
-        player.on("firstplay", function(){
- 
+        player.on("onMarkerReached",function(markerId,questionId){
+            // $('.vjs-break-overlay-text').html("");
+            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
         });
-        
 
-        player.on("ready", function(){
-            messenger.sendToParent("ready", {pause: true});
+        player.on("timechange", function(){
+            messenger.sendToParent("timechange", {pause: true});
         });
 
         player.on("paused", function(){

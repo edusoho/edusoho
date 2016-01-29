@@ -147,4 +147,9 @@ define(function(require, exports, module) {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
 
+    if($(".nav.nav-tabs").length > 0) {
+        require('jquery.lavalamp');
+        $(".nav.nav-tabs").lavaLamp();
+    }
+
 });

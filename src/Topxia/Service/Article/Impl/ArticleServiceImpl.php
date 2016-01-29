@@ -394,6 +394,10 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     protected function filterSort($sort)
     {
+        if (is_array($sort)) {
+            return array($sort);
+        }
+
         switch ($sort) {
             case 'created':
                 $orderBys = array(

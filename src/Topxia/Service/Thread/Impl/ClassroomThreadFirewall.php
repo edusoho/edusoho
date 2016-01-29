@@ -1,12 +1,11 @@
 <?php
 namespace Topxia\Service\Thread\Impl;
 
-use Topxia\Service\Thread\AbstractThreadFirewall;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Thread\AbstractThreadFirewall;
 
 class ClassroomThreadFirewall extends AbstractThreadFirewall
 {
-
     public function accessThreadRead($thread)
     {
         return $this->getClassroomService()->canLookClassroom($thread['targetId']);
@@ -64,10 +63,10 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
 
     public function accessPostAdopted($post)
     {
-        return $this->getClassroomService()->canLookClassroom($post['targetId']);
+        $result = $this->getClassroomService()->canLookClassroom($post['targetId']);
+        return $result;
     }
-    
-    
+
     public function accessEventCreate($resource)
     {
         return $this->getClassroomService()->canCreateThreadEvent($resource);
@@ -80,6 +79,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         }
 
         $user = $this->getCurrentUser();
+
         if ($member['userId'] == $user['id']) {
             return true;
         }
@@ -94,6 +94,7 @@ class ClassroomThreadFirewall extends AbstractThreadFirewall
         }
 
         $user = $this->getCurrentUser();
+
         if ($ownerCanManage && ($resource['userId'] == $user['id'])) {
             return true;
         }

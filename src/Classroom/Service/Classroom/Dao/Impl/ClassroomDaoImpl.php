@@ -6,13 +6,12 @@ use Classroom\Service\Classroom\Dao\ClassroomDao;
 
 class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 {
-
     protected $table = 'classroom';
 
     private $serializeFields = array(
-        'assistantIds' =>'json',
-        'teacherIds' => 'json',
-        'service' => 'json',
+        'assistantIds' => 'json',
+        'teacherIds'   => 'json',
+        'service'      => 'json'
     );
 
     public function getClassroom($id)
@@ -24,19 +23,25 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
             $classroom = $that->getConnection()->fetchAssoc($sql, array($id));
 
             return $classroom ? $that->createSerializer()->unserialize($classroom, $that->getSerializeFields()) : null;
-        });
+        }
+
+        );
     }
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
+        if (isset($conditions['classroomIds']) && empty($conditions['classroomIds'])) {
+            return array();
+        }
+
         $this->filterStartLimit($start, $limit);
         $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum'));
 
         $builder = $this->_createClassroomSearchBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->addOrderBy($orderBy[0], $orderBy[1]);
+                        ->select('*')
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit)
+                        ->addOrderBy($orderBy[0], $orderBy[1]);
 
         $classrooms = $builder->execute()->fetchAll();
 
@@ -48,8 +53,9 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         if (empty($ids)) {
             return array();
         }
+
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
 
         $classrooms = $this->getConnection()->fetchAll($sql, $ids);
 
@@ -58,8 +64,12 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
     public function searchClassroomsCount($conditions)
     {
+        if (isset($conditions['classroomIds']) && empty($conditions['classroomIds'])) {
+            return 0;
+        }
+
         $builder = $this->_createClassroomSearchBuilder($conditions)
-                         ->select('count(id)');
+                        ->select('count(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -71,20 +81,20 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('status = :status')
-            ->andWhere('title like :title')
-            ->andWhere('price > :price_GT')
-            ->andWhere('price = :price')
-            ->andWhere('private = :private')
-            ->andWhere('categoryId IN (:categoryIds)')
-            ->andWhere('id IN (:classroomIds)')
-            ->andWhere('recommended = :recommended')
-            ->andWhere('showable = :showable')
-            ->andWhere('buyable = :buyable')
-            ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
-            ->andWhere('vipLevelId = :vipLevelId')
-            ->andWhere('vipLevelId IN ( :vipLevelIds )');
+                        ->from($this->table, $this->table)
+                        ->andWhere('status = :status')
+                        ->andWhere('title like :title')
+                        ->andWhere('price > :price_GT')
+                        ->andWhere('price = :price')
+                        ->andWhere('private = :private')
+                        ->andWhere('categoryId IN (:categoryIds)')
+                        ->andWhere('id IN (:classroomIds)')
+                        ->andWhere('recommended = :recommended')
+                        ->andWhere('showable = :showable')
+                        ->andWhere('buyable = :buyable')
+                        ->andWhere('vipLevelId >= :vipLevelIdGreaterThan')
+                        ->andWhere('vipLevelId = :vipLevelId')
+                        ->andWhere('vipLevelId IN ( :vipLevelIds )');
 
         return $builder;
     }
@@ -94,6 +104,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $classroom = $this->createSerializer()->serialize($classroom, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $classroom);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Classroom error.');
         }
@@ -109,11 +120,13 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
 
         return $classroom ? $this->createSerializer()->unserialize($classroom, $this->serializeFields) : array();
     }
+
     public function findClassroomsByLikeTitle($title)
     {
         if (empty($title)) {
             return array();
         }
+
         $sql = "SELECT * FROM {$this->table} WHERE `title` LIKE ?; ";
 
         return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
@@ -132,9 +145,11 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     public function waveClassroom($id, $field, $diff)
     {
         $fields = array('hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'noteNum');
+
         if (!in_array($field, $fields)) {
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
         }
+
         $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
 
         $this->clearCached();

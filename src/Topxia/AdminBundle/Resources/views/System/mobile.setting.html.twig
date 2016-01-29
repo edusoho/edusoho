@@ -58,7 +58,7 @@
     </div>
     <div class="col-md-8 controls">
       <div id="mobile-logo-container">{% if mobile.logo %}<img src="{{ asset(mobile.logo) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-logo-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'logo'}) }}">上传</button>
+      <a class="btn btn-default btn-sm" id="mobile-logo-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'logo'}) }}">上传</a>
       <button class="btn btn-default btn-sm" id="mobile-logo-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'logo'}) }}" {% if not mobile.logo %}style="display:none;"{% endif %}>删除</button>
       <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片的高度建议不要超过50px。</p>
       <input type="hidden" name="logo" value="{{ mobile.logo }}">
@@ -103,9 +103,9 @@
         <div class="col-md-8 controls">
 
          <div id="site-applogo-container" class="mbl">{% if mobile.applogo %}<img src="{{ asset(mobile.applogo) }}">{% endif %}</div>
-          <button class="btn btn-default btn-sm" id="site-applogo-upload" type="button"
-          data-url="{{ path('admin_setting_mobile_picture_upload', {type:'applogo'}) }}">上传</button>
-          <button class="btn btn-default btn-sm" id="site-applogo-remove" type="button" 
+          <a class="btn btn-default btn-sm" id="site-applogo-upload" data-upload-token="{{ upload_token('system', 'image') }}"
+          data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'applogo'}) }}">上传</a>
+          <button class="btn btn-default btn-sm" id="site-applogo-remove" type="button"
           data-url="{{ path('admin_setting_mobile_picture_remove', {type:'applogo'}) }}" {% if not mobile.applogo %}style="display:none;"{% endif %}>删除</button>
           <p class="help-block">请上传png, gif, jpg格式的图片文件。推荐尺寸 120*120。</p>
            <input type="hidden" name="applogo" value="{{ mobile.applogo }}">
@@ -118,9 +118,9 @@
         </div>
         <div class="col-md-8 controls">
          <div id="site-appcover-container" class="mbl">{% if mobile.appcover %}<img src="{{ asset(mobile.appcover) }}">{% endif %}</div>
-          <button class="btn btn-default btn-sm" id="site-appcover-upload" type="button" 
-          data-url="{{ path('admin_setting_mobile_picture_upload', {type:'appcover'}) }}">上传</button>
-          <button class="btn btn-default btn-sm" id="site-appcover-remove" type="button" 
+          <a class="btn btn-default btn-sm" id="site-appcover-upload" data-upload-token="{{ upload_token('system', 'image') }}"
+          data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'appcover'}) }}">上传</a>
+          <button class="btn btn-default btn-sm" id="site-appcover-remove" type="button"
           data-url="{{ path('admin_setting_mobile_picture_remove', {type:'appcover'}) }}" {% if not mobile.appcover %}style="display:none;"{% endif %}>删除</button>
           <p class="help-block">请上传png, gif, jpg格式的图片文件。推荐尺寸 225*400。</p>
           <input type="hidden" name="appcover" value="{{ mobile.appcover }}">
@@ -139,7 +139,7 @@
     </div>
     <div class="col-md-8 controls">
       <div id="mobile-splash1-container">{% if mobile.splash1 %}<img src="{{ asset(mobile.splash1) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash1-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash1'}) }}">上传</button>
+      <a class="btn btn-default btn-sm" id="mobile-splash1-upload" data-upload-token="{{ upload_token('system', 'image') }}"data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash1'}) }}">上传</a>
       <button class="btn btn-default btn-sm" id="mobile-splash1-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash1'}) }}" {% if not mobile.splash1 %}style="display:none;"{% endif %}>删除</button>
       <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
       <input type="hidden" name="splash1" value="{{ mobile.splash1 }}">
@@ -152,7 +152,7 @@
     </div>
     <div class="col-md-8 controls">
       <div id="mobile-splash2-container">{% if mobile.splash2 %}<img src="{{ asset(mobile.splash2) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash2-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash2'}) }}">上传</button>
+      <a class="btn btn-default btn-sm" id="mobile-splash2-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash2'}) }}">上传</a>
       <button class="btn btn-default btn-sm" id="mobile-splash2-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash2'}) }}" {% if not mobile.splash2 %}style="display:none;"{% endif %}>删除</button>
       <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
       <input type="hidden" name="splash2" value="{{ mobile.splash2 }}">
@@ -165,7 +165,7 @@
     </div>
     <div class="col-md-8 controls">
       <div id="mobile-splash3-container">{% if mobile.splash3 %}<img src="{{ asset(mobile.splash3) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash3-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash3'}) }}">上传</button>
+      <a class="btn btn-default btn-sm" id="mobile-splash3-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash3'}) }}">上传</a>
       <button class="btn btn-default btn-sm" id="mobile-splash3-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash3'}) }}" {% if not mobile.splash3 %}style="display:none;"{% endif %}>删除</button>
       <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
       <input type="hidden" name="splash3" value="{{ mobile.splash3 }}">
@@ -178,7 +178,7 @@
     </div>
     <div class="col-md-8 controls">
       <div id="mobile-splash4-container">{% if mobile.splash4 %}<img src="{{ asset(mobile.splash4) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash4-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash4'}) }}">上传</button>
+      <a class="btn btn-default btn-sm" id="mobile-splash4-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash4'}) }}">上传</a>
       <button class="btn btn-default btn-sm" id="mobile-splash4-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash4'}) }}" {% if not mobile.splash4 %}style="display:none;"{% endif %}>删除</button>
       <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
       <input type="hidden" name="splash4" value="{{ mobile.splash4 }}">
@@ -191,7 +191,7 @@
     </div>
     <div class="col-md-8 controls">
       <div id="mobile-splash5-container">{% if mobile.splash5 %}<img src="{{ asset(mobile.splash5) }}">{% endif %}</div>
-      <button class="btn btn-default btn-sm" id="mobile-splash5-upload" type="button" data-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash5'}) }}">上传</button>
+      <a class="btn btn-default btn-sm" id="mobile-splash5-upload" data-upload-token="{{ upload_token('system', 'image') }}" data-goto-url="{{ path('admin_setting_mobile_picture_upload', {type:'splash5'}) }}">上传</a>
       <button class="btn btn-default btn-sm" id="mobile-splash5-remove" type="button" data-url="{{ path('admin_setting_mobile_picture_remove', {type:'splash5'}) }}" {% if not mobile.splash5 %}style="display:none;"{% endif %}>删除</button>
       <p class="help-block">请上传png, gif, jpg格式的图片文件。</p>
       <input type="hidden" name="splash5" value="{{ mobile.splash5 }}">

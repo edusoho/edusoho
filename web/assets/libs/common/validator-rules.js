@@ -38,6 +38,15 @@ define(function(require, exports, module) {
             '{{display}}请输入可见性字符'
         ],
         [
+            'chinese_limit',
+            function(options){
+                var element = options.element;
+                var l = strlen(element.val());
+                return l <= Number(options.max);
+            },
+            '{{display}}的长度必须小于等于{{max}}字符,一个中文为2个字符'
+        ],
+        [
             'chinese',
             /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i,
             '{{display}}必须是中文字'
@@ -350,6 +359,20 @@ define(function(require, exports, module) {
         ]        
 
     ];
+
+    function strlen(str){  
+        var len = 0;  
+        for (var i=0; i<str.length; i++) {   
+            var chars = str.charCodeAt(i);   
+            //单字节加1   
+            if ((chars >= 0x0001 && chars <= 0x007e) || (0xff60<=chars && chars<=0xff9f)) {   
+               len++;   
+            } else {   
+               len+=2;   
+            }   
+        }   
+        return len;  
+    }  
 
     exports.inject = function(Validator) {
         $.each(rules, function(index, rule){

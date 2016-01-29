@@ -122,7 +122,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+            $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
@@ -168,17 +168,18 @@ class UserDaoImpl extends BaseDao implements UserDao
                         ->andWhere('loginIp = :loginIp')
                         ->andWhere('createdIp = :createdIp')
                         ->andWhere('approvalStatus = :approvalStatus')
-                        ->andWhere('email = :email')
+                        ->andWhere('UPPER(email) LIKE :email')
                         ->andWhere('level = :level')
                         ->andWhere('createdTime >= :startTime')
                         ->andWhere('createdTime <= :endTime')
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('approvalTime >= :startApprovalTime')
                         ->andWhere('approvalTime <= :endApprovalTime')
                         ->andWhere('loginTime >= :loginStartTime')
                         ->andWhere('loginTime <= :loginEndTime')
                         ->andWhere('locked = :locked')
                         ->andWhere('level >= :greatLevel')
-                        ->andWhere('verifiedMobile = :verifiedMobile')
+                        ->andWhere('UPPER(verifiedMobile) LIKE :verifiedMobile')
                         ->andWhere('type LIKE :type')
                         ->andWhere('id IN ( :userIds)')
                         ->andWhere('inviteCode = :inviteCode')
