@@ -8,7 +8,6 @@
   {% set orderBy = orderBy|default('latest')%}
   {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category|default(''), path:'course_explore',fliter:fliter,orderBy:orderBy})) }}
   <div class="category-filters">
-    <a href="">全部</a>
     <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'latest'}) }}" class=" {% if (orderBy == 'latest') %} selected {% endif %}">最近更新</a>        
     <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'studentNum'}) }}" class=" {% if (orderBy == 'studentNum') %} selected {% endif %}">最热课程</a>
     <a href="{{ path('course_explore', {category:category, fliter:fliter,orderBy: 'recommendedSeq'}) }}" class=" {% if (orderBy == 'recommendedSeq') %} selected {% endif %}">推荐课程</a>
