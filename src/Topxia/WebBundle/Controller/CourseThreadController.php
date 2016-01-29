@@ -164,7 +164,7 @@ class CourseThreadController extends CourseBaseController
                         'threadId' => $thread['id']
                     )));
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示');
+                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
                 }
             }
         }
@@ -226,7 +226,7 @@ class CourseThreadController extends CourseBaseController
                     )));
                 }
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示');
+                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
             }
         }
 
