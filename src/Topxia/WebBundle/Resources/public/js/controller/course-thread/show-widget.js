@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget'),
         Validator = require('bootstrap.validator');
+    var Notify = require('common/bootstrap-notify');
 
     var ThreadShowWidget = Widget.extend({
         events: {
@@ -63,6 +64,9 @@ define(function(require, exports, module) {
                     var number = parseInt(that.$('[data-role=post-number]').text());
                     that.$('[data-role=post-number]').text(number+1+'');
                     $form.find('textarea').val('');
+                }).error(function(response){
+                    var response = $.parseJSON(response.responseText);
+                    Notify.danger(response.error.message);
                 });
 
                 return false;
