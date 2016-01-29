@@ -1,6 +1,8 @@
 <?php
 namespace Mooc\WebBundle\Controller;
 
+use Doctrine\DBAL\Types\TextType;
+use Symfony\Component\Form\FormBuilder;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -131,13 +133,13 @@ class CourseController extends BaseController
             $this->getCourseService()->searchCourseCount($conditions),
             12
         );
-        $courses = $this->getCourseService()->searchCourses(
+        $courses                = $this->getCourseService()->searchCourses(
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $group = $this->getCategoryService()->getGroupByCode('course');
+        $group                  = $this->getCategoryService()->getGroupByCode('course');
 
         if (empty($group)) {
             $categories = array();

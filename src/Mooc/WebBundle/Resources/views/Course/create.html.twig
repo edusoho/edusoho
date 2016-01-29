@@ -11,24 +11,36 @@
       <div class="panel-heading"><h2>创建{% if type == 'normal' %}课程{% elseif type =='periodic' %}周期课程{% else %}直播课程{% endif %}</h2></div>
       
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
-        <div class="alert alert-info">
-          <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
-          <ol>
-            <li>设置头像。
-              {% if app.user.largeAvatar %}
-                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
-              {% else %}
-                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings_avatar', {fromCourse:true}) }}" class="alert-link">去设置</a>
-              {% endif %}
-            <li>设置头衔 、自我介绍。
-              {% if app.user.title and userProfile.about %}
-                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
-              {% else %}
-                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings', {fromCourse:true}) }}" class="alert-link">去设置</a>
-              {% endif %}
-            </li>
-          </ol>
-        </div>
+        <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
+        <form class="user-profile-form">
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="user_title" class="required">用户头衔</label></div>
+            <div class="col-md-8 controls">
+              <input type="text" id="user_title" name="title" required="required" class="form-control"
+                     data-widget-cid="widget-1" data-explain="">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="user_about" class="required">自我介绍</label></div>
+            <div class="col-md-8 controls">
+              <input type="text" id="user_about" name="about" required="required" class="form-control"
+                     data-widget-cid="widget-1" data-explain="">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"><label for="course_title" class="required">设置头像</label></div>
+            <div class="col-md-8 controls">
+              <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+              <div class="help-block" style="display:none;"></div>
+            </div>
+            <a href="javascript:;">上传头像</a> {# 点上传头像后弹出modal框 进行裁剪 #}
+          </div>
+          <a href="javascript:;" class="js-save-btn">完成</a>
+        </form>
       {% else %}
         <form id="course-create-form" class="form-horizontal" method="post">
 

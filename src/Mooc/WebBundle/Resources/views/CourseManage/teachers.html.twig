@@ -52,7 +52,7 @@
           <div class="col-md-8 controls">
             <ul class="list-group teacher-list-group sortable-list" id="teacher-list-group" data-role="list"
                 style="display:none;"></ul>
-            <div class="input-group">
+            <div class="input-group" style="width: 100%;">
               {% set url = path('course_manage_teachers_match', {id:course.id}) ~ '?q={{query}}' %}
               <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             </div>
