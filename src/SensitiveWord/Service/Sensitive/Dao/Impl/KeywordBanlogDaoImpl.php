@@ -44,9 +44,8 @@ class KeywordBanlogDaoImpl extends BaseDao implements KeywordBanlogDao {
 
     public function searchBanlogsCount($conditions)
     {
-        $builder = $this->createLogQueryBuilder($conditions)
-            ->select('count(`id`) AS count')
-            ->from($this->table, $this->table);
+        $builder = $this->createBanlogQueryBuilder($conditions)
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 

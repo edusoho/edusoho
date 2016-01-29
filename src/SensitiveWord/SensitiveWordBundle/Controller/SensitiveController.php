@@ -113,9 +113,15 @@ class SensitiveController extends BaseController
                     $conditions['userId'] = 0;
                 }
             }
-
-            $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
-
+            if (empty($count)) {
+                $count = 0;
+            }
+            foreach ($userIds as $value) {
+                $conditions['userId'] = $value;
+                $countTemp = $this->getSensitiveService()->searchBanlogsCount($conditions);
+                $count += $countTemp;
+            }
+            var_dump($count);
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             foreach ($userIds as $value) {
@@ -128,7 +134,6 @@ class SensitiveController extends BaseController
             }
         } else {
             $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
-
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
