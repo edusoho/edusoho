@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -114,36 +115,57 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmail($to, $title, $body, $format = 'text')
+    protected function sendEmail($to, $title, $body, $verifyurl, $format = 'text')
     {
         $format = $format == 'html' ? 'text/html' : 'text/plain';
 
-        $config = $this->setting('mailer', array());
+        $config      = $this->setting('mailer', array());
+        $cloudConfig = $this->setting('cloud_email', array());
 
-        if (empty($config['enabled'])) {
-            return false;
+        if (!isset($config['enabled']) && $config['enabled'] == 1) {
+            $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
+                ->setUsername($config['username'])
+                ->setPassword($config['password']);
+
+            $mailer = \Swift_Mailer::newInstance($transport);
+
+            $email = \Swift_Message::newInstance();
+            $email->setSubject($title);
+            $email->setFrom(array($config['from'] => $config['name']));
+            $email->setTo($to);
+
+            if ($format == 'text/html') {
+                $email->setBody($body, 'text/html');
+            } else {
+                $email->setBody($body);
+            }
+
+            $mailer->send($email);
+            return true;
         }
 
-        $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
-            ->setUsername($config['username'])
-            ->setPassword($config['password']);
+        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'used') {
+            $api    = CloudAPIFactory::create('root');
+            $site   = $this->setting('site', array());
+            $user   = $this->getCurrentUser();
+            $params = array(
+                'to'       => $to,
+                'template' => "sms_registration",
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'nickname'  => $user['nickname'],
+                    'verifyurl' => $verifyurl,
+                    'siteurl'   => $site['url']
+                )
+            );
 
-        $mailer = \Swift_Mailer::newInstance($transport);
+            $api->setApiUrl('http://124.160.104.74:8098/');
+            $result = $api->post("/me/emails", $params);
 
-        $email = \Swift_Message::newInstance();
-        $email->setSubject($title);
-        $email->setFrom(array($config['from'] => $config['name']));
-        $email->setTo($to);
-
-        if ($format == 'text/html') {
-            $email->setBody($body, 'text/html');
-        } else {
-            $email->setBody($body);
+            return true;
         }
 
-        $mailer->send($email);
-
-        return true;
+        return false;
     }
 
     protected function createJsonResponse($data)

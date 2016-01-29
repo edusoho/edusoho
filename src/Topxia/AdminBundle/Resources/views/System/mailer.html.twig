@@ -38,7 +38,7 @@
       <p ><span class="text-center text-muted">使用第三方邮件发送服务，缺乏稳定性保障。需要配置SMTP服务。有每日发送数量限制。</span></p>
     </div>
     {% elseif status == "cloud_email" %}
-    <span class="text">已使用云邮件服务</span><button class="btn btn-primary">了解详情</button>
+    <span class="text">已使用云邮件服务</span><a href="{{path('admin_edu_cloud_email')}}"><button class="btn btn-primary">了解详情</button></a>
     {% endif %}
     <form class="form-horizontal" method="post" id="mailer-form" hidden="hidden"novalidate>
       <span>EduSoho云邮件服务提供优质的邮件发送通道，保证邮件发送的稳定可靠。无需复杂配置，开通即可使用。无发送数量限制。低至0.06元/封。</span><p><a href="{{path('admin_edu_cloud_email')}}">立即接入</a></p>

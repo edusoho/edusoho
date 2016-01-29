@@ -236,6 +236,26 @@ class EduCloudController extends BaseController
 
         if (isset($operation['email-open'])) {
             $result = $api->post("/me/email_account");
+            $mailer = $this->getSettingService()->get('mailer', array());
+            var_dump($result);
+
+            if (isset($result['account']['status']) && $result['account']['status'] == 'used' && $mailer['enabled'] == "1") {
+                $default = array(
+                    'enabled'  => 0,
+                    'host'     => '',
+                    'port'     => '',
+                    'username' => '',
+                    'password' => '',
+                    'from'     => '',
+                    'name'     => ''
+                );
+                $mailer            = array_merge($default, $mailer);
+                $mailer['enabled'] = 0;
+                $this->getSettingService()->set('mailer', $mailer);
+                $mailerWithoutPassword             = $mailer;
+                $mailerWithoutPassword['password'] = '******';
+                $this->getLogService()->info('system', 'update_settings', "开启云短信关闭第三方邮件服务器设置", $mailerWithoutPassword);
+            }
         } elseif (isset($operation['sign'])) {
             $params = array(
                 'sender' => $operation['sign']

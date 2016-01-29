@@ -18,7 +18,7 @@
   				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
           <div name = "warning">
             <span class="alert-warning" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
-            <p><a href="" target="_blank">立即接入</a></p>
+            <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
           </div>
         {% elseif emailStatus.status == 'used' and  emailStatus.sign|default(false) %}
           <span>已开启</span>
