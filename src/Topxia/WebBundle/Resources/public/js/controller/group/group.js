@@ -61,10 +61,8 @@
                 validator_thread.addItem({
                     element: '[name="thread[title]"]',
                     required: true,
-                    rule: 'minlength{min:2} maxlength{max:200} remote',
+                    rule: 'minlength{min:2} maxlength{max:200}',
                     errormessageUrl: '长度为2-200位'
-
-
                 });
                 validator_thread.addItem({
                     element: '[name="thread[content]"]',

@@ -168,15 +168,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
-        $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
-        $thread['title']   = $this->sensitiveFilter($thread['title'], 'course-thread-create');
-
-        $event = $this->dispatchEvent('course.thread.before_create', $thread);
-
-        if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
-        }
-
         if (empty($thread['courseId'])) {
             throw $this->createServiceException('Course ID can not be empty.');
         }
@@ -184,6 +175,15 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($thread['type']) || !in_array($thread['type'], array('discussion', 'question'))) {
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
+
+        $event = $this->dispatchEvent('course.thread.before_create', $thread);
+
+        if ($event->isPropagationStopped()) {
+            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+        }
+
+        $thread['content'] = $this->sensitiveFilter($thread['content'], 'course-thread-create');
+        $thread['title']   = $this->sensitiveFilter($thread['title'], 'course-thread-create');
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($thread['courseId']);
 
@@ -225,14 +225,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($courseId, $threadId, $fields)
     {
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
-        $fields['title']   = $this->sensitiveFilter($fields['title'], 'course-thread-update');
-
         $thread = $this->getThread($courseId, $threadId);
 
         if (empty($thread)) {
             throw $this->createServiceException('话题不存在，更新失败！');
         }
+
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
+        $fields['title']   = $this->sensitiveFilter($fields['title'], 'course-thread-update');
 
         $user = $this->getCurrentUser();
         ($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($thread['courseId']);
@@ -377,7 +377,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($post)
     {
-        $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
+        $requiredKeys = array('courseId', 'threadId', 'content');
+
+        if (!ArrayToolkit::requireds($post, $requiredKeys)) {
+            throw $this->createServiceException('参数缺失');
+        }
 
         $event = $this->dispatchEvent('course.thread.post.before_create', $post);
 
@@ -385,17 +389,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
 
-        $requiredKeys = array('courseId', 'threadId', 'content');
-
-        if (!ArrayToolkit::requireds($post, $requiredKeys)) {
-            throw $this->createServiceException('参数缺失');
-        }
-
         $thread = $this->getThread($post['courseId'], $post['threadId']);
 
         if (empty($thread)) {
             throw $this->createServiceException(sprintf('课程(ID: %s)话题(ID: %s)不存在。', $post['courseId'], $post['threadId']));
         }
+
+        $post['content'] = $this->sensitiveFilter($post['content'], 'course-thread-post-create');
 
         list($course, $member) = $this->getCourseService()->tryTakeCourse($post['courseId']);
 
