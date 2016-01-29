@@ -90,7 +90,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
             return $text;
         }
 
-        foreach ($match[0] as $key => $value) {
+        $keywords = array_unique($match[0]);
+
+        foreach ($keywords as $key => $value) {
             $keyword = $this->getSensitiveDao()->getKeywordByName($value);
 
             $currentUser = $this->getCurrentUser();
