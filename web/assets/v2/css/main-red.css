@@ -5465,7 +5465,6 @@ a.homework-essay-textarea-pack-up {
   position: absolute;
   right: 0px;
   top: 9px;
-  font-size: 16px;
   color: #c1c1c1;
 }
 @media (max-width: 767px) {
@@ -8475,7 +8474,7 @@ textarea {
   white-space: nowrap;
   word-wrap: normal;
   margin-bottom: 30px;
-  padding-right: 60px;
+  padding-right: 80px;
 }
 .index-article .index-new-article li.last {
   margin-bottom: 0;
