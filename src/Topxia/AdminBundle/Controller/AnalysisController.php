@@ -147,9 +147,10 @@ class AnalysisController extends BaseController
             )));
         }
 
-        $paginator = new Paginator(
+        $timeRange['parentId'] = 0;
+        $paginator             = new Paginator(
             $request,
-            $this->getCourseService()->findCoursesCountByLessThanCreatedTime($timeRange['endTime']),
+            $this->getCourseService()->searchCourseCount($timeRange),
             20
         );
 
@@ -1277,6 +1278,12 @@ class AnalysisController extends BaseController
             foreach ($zeroData as $key => $value) {
                 if ($value["date"] < $courseSumData[0]["date"]) {
                     $countTmp = 0;
+                } else {
+                    foreach ($courseSumData as $courseKey => $val) {
+                        if ($courseKey != 0 && ($value['date'] < $val['date']) && ($value['date'] > $courseSumData[($courseKey - 1)]['date'])) {
+                            $countTmp = $courseSumData[($courseKey - 1)]['count'];
+                        }
+                    }
                 }
 
                 $date = $value['date'];
