@@ -5,21 +5,6 @@
 {% block description %}{{threadMainContent|plain_text(100)}}{% endblock %}
 
 {% block group_main %}
-  <style>
-    .ke-icon-accessory {
-      background-image: url('/assets/img/default/iconfont-accessory.png');
-      background-position:center;
-      width: 16px;
-      height: 16px;
-    }
-    .ke-icon-accessory-red {
-      background-image: url('/assets/img/default/iconfont-accessory-red.png');
-      background-position:center;
-      width: 16px;
-      height: 16px;
-    }
-  </style>
-  
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
@@ -37,14 +22,16 @@
           {% endif %}
         {% endif %}
       </h3>
-      <div class="metas text-sm color-gray clearfix">
+    </div>
+    <div class="panel-body clearfix" id="post-action">
+      <div class="well well-sm text-sm color-gray clearfix" style="line-height:20px">
         <div class="es-share dropdown pull-right">
           <span class="es-share top" style="font-size:14px;">
-            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share  prs"></i> 分享</a>
+            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share"></i> 分享</a>
             {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
           </span>
         </div>
-        <div class="pull-right mrm" id="thread-list" style="margin-top:2px;">
+        <div class="pull-right mrm" id="thread-list">
           {% if threadMain.userId != user.id %}
             <a href="javascript:;" class="uncollect-btn link-dark" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> 已收藏</a>
             <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>收藏</a>
@@ -53,8 +40,7 @@
         发表于 {{ threadMain.createdTime|smart_time }}
         <span class="mll">{{ threadMain.hitNum }} 次查看</span>
       </div>
-    </div>
-    <div class="panel-body clearfix" id="post-action">
+
       {{threadMain.content|raw}}
       {% if attachs %}
         <hr>
