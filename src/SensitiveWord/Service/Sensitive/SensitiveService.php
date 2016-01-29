@@ -20,11 +20,13 @@ interface SensitiveService {
 
     public function updateKeyword($id, $conditions);
     
-    public function searchkeywordsCount();
+    public function searchkeywordsCount($conditions);
     
     public function searchKeywords($conditions, $orderBy,$start, $limit);
     
     public function searchBanlogsCount($conditions);
     
     public function searchBanlogs($conditions, $orderBy, $start, $limit);
+
+    public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit);
 }

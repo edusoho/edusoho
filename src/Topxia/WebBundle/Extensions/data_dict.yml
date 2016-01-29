@@ -341,5 +341,4 @@ searchKeyWord:
 
 searchBanlog:
     name: 敏感词
-    id: 编号
     userName: 用户名

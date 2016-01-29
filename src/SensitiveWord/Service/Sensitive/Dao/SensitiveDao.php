@@ -14,7 +14,7 @@ interface SensitiveDao
 
     public function updateKeyword($id, $conditions);
 
-    public function searchkeywordsCount();
+    public function searchkeywordsCount($conditions);
 
     public function searchKeywords($condtions, $orderBy, $start, $limit);
 

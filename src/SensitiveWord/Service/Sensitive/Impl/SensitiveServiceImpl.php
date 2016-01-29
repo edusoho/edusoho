@@ -208,9 +208,9 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
         return $result;
     }
 
-    public function searchkeywordsCount()
+    public function searchkeywordsCount($conditions)
     {
-        return $this->getSensitiveDao()->searchkeywordsCount();
+        return $this->getSensitiveDao()->searchkeywordsCount($conditions);
     }
 
     public function searchKeywords($conditions, $orderBy, $start, $limit)
@@ -226,6 +226,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
     public function searchBanlogs($conditions, $orderBy, $start, $limit)
     {
         return $this->getBanlogDao()->searchBanlogs($conditions, $orderBy, $start, $limit);
+    }
+
+    public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit)
+    {
+        return $this->getBanlogDao()->searchBanlogsByUserIds($userIds, $orderBy, $start, $limit);
     }
 
     /**

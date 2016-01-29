@@ -42,11 +42,21 @@ class KeywordBanlogDaoImpl extends BaseDao implements KeywordBanlogDao {
         return $builder->execute()->fetchAll() ? : array();
     }
 
+    public function searchBanlogsByUserIds($userIds, $orderBy, $start, $limit)
+    {
+        if (empty($userIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE userId IN ({$marks}) ORDER BY id DESC LIMIT {$start}, {$limit};";
+        return $this->getConnection()->fetchAll($sql, $userIds);
+    }
+
     public function searchBanlogsCount($conditions)
     {
-        $builder = $this->createLogQueryBuilder($conditions)
-            ->select('count(`id`) AS count')
-            ->from($this->table, $this->table);
+        $builder = $this->createBanlogQueryBuilder($conditions)
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 

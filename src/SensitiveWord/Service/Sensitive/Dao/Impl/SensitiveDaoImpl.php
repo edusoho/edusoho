@@ -53,10 +53,11 @@ class SensitiveDaoImpl extends BaseDao implements SensitiveDao
         return $this->getConnection()->update($this->table, $conditions, array('id' => $id));
     }
 
-    public function searchkeywordsCount()
+    public function searchkeywordsCount($conditions)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table}";
-        return $this->getConnection()->fetchColumn($sql) ?: null;
+        $builder = $this->createUserQueryBuilder($conditions)
+                        ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
     public function searchKeywords($conditions, $orderBy, $start, $limit)

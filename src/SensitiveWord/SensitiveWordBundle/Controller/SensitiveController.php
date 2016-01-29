@@ -22,7 +22,7 @@ class SensitiveController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
-        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount(), 20);
+        $paginator  = new Paginator($this->get('request'), $this->getSensitiveService()->searchkeywordsCount($conditions), 20);
         $keywords   = $this->getSensitiveService()->searchKeywords($conditions, array('id', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         return $this->render('SensitiveWordBundle:SensitiveAdmin:index.html.twig', array(
@@ -113,26 +113,25 @@ class SensitiveController extends BaseController
                     $conditions['userId'] = 0;
                 }
             }
-
-            $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
-
-            $paginator = new Paginator($this->get('request'), $count, 20);
-
+            if (empty($count)) {
+                $count = 0;
+            }
             foreach ($userIds as $value) {
                 $conditions['userId'] = $value;
-                $banlogsTemp          = $this->getSensitiveService()->searchBanlogs($conditions, array(
-                    'createdTime',
-                    'DESC'
-                ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-                $banlogs = array_merge($banlogs, $banlogsTemp);
+                $countTemp = $this->getSensitiveService()->searchBanlogsCount($conditions);
+                $count += $countTemp;
             }
+            $paginator = new Paginator($this->get('request'), $count, 20);
+            $banlogs = $this->getSensitiveService()->searchBanlogsByUserIds($userIds, array(
+                'id',
+                'DESC'
+            ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         } else {
             $count = $this->getSensitiveService()->searchBanlogsCount($conditions);
-
             $paginator = new Paginator($this->get('request'), $count, 20);
 
             $banlogs = $this->getSensitiveService()->searchBanlogs($conditions, array(
-                'createdTime',
+                'id',
                 'DESC'
             ), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         }
