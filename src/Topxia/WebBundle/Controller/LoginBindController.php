@@ -260,7 +260,7 @@ class LoginBindController extends BaseController
         }
 
         if ($this->getSensitiveService()->scanText($registration['nickname'])) {
-            return $this->createMessageResponse('error', '用户名中含有屏蔽词！');
+            return $this->createMessageResponse('error', '用户名中含有敏感词！');
         }
 
         $registration['password']  = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);

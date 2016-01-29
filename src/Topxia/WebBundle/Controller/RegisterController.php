@@ -33,7 +33,7 @@ class RegisterController extends BaseController
             }
 
             if ($this->getSensitiveService()->scanText($registration['nickname'])) {
-                return $this->createMessageResponse('error', '用户名中含有屏蔽词！');
+                return $this->createMessageResponse('error', '用户名中含有敏感词！');
             }
 
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
