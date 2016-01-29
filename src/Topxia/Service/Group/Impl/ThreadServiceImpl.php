@@ -122,8 +122,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function addThread($thread)
     {
-        $thread['title']   = $this->sensitiveFilter($thread['title'], 'group-thread-create');
-        $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
+        if (empty($thread['title'])) {
+            throw $this->createServiceException("标题名称不能为空！");
+        }
+
+        if (empty($thread['content'])) {
+            throw $this->createServiceException("话题内容不能为空！");
+        }
 
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
 
@@ -131,16 +136,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
 
-        if (empty($thread['title'])) {
-            throw $this->createServiceException("标题名称不能为空！");
-        }
+        $thread['title']   = $this->sensitiveFilter($thread['title'], 'group-thread-create');
+        $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
 
-        $thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
-
-        if (empty($thread['content'])) {
-            throw $this->createServiceException("话题内容不能为空！");
-        }
-
+        $thread['title']   = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
         $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
 
         if (empty($thread['groupId'])) {
@@ -324,9 +323,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($id, $fields)
     {
-        $fields['title']   = $this->sensitiveFilter($fields['title'], 'group-thread-update');
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
-
         if (empty($fields['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
         }
@@ -334,6 +330,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (empty($fields['content'])) {
             throw $this->createServiceException("话题内容不能为空！");
         }
+
+        $fields['title']   = $this->sensitiveFilter($fields['title'], 'group-thread-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
 
         $this->getThreadGoodsDao()->deleteGoodsByThreadId($id, 'content');
         $this->hideThings($fields['content'], $id);
@@ -361,7 +360,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
-        $threadContent['content'] = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
+        if (empty($threadContent['content'])) {
+            throw $this->createServiceException("回复内容不能为空！");
+        }
 
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
@@ -369,10 +370,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
 
-        if (empty($threadContent['content'])) {
-            throw $this->createServiceException("回复内容不能为空！");
-        }
-
+        $threadContent['content']     = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
         $threadContent['content']     = $this->purifyHtml($threadContent['content']);
         $threadContent['userId']      = $memberId;
         $threadContent['fromUserId']  = $threadContent['fromUserId'];
@@ -439,9 +437,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updatePost($id, $fields)
     {
-        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
-
         if (!empty($fields['content'])) {
+            $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
             $fields['content'] = $this->purifyHtml($fields['content']);
         }
 

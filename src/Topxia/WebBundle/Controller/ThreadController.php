@@ -136,30 +136,34 @@ class ThreadController extends BaseController
     public function updateAction(Request $request, $target, $thread)
     {
         if ($request->getMethod() == 'POST') {
-            $user = $this->getCurrentUser();
-            $data = $request->request->all();
+            try {
+                $user = $this->getCurrentUser();
+                $data = $request->request->all();
 
-            if (isset($data['maxUsers']) && empty($data['maxUsers'])) {
-                $data['maxUsers'] = 0;
+                if (isset($data['maxUsers']) && empty($data['maxUsers'])) {
+                    $data['maxUsers'] = 0;
+                }
+
+                $thread  = $this->getThreadService()->updateThread($thread['id'], $data);
+                $message = array(
+                    'title'      => $thread['title'],
+                    'targetType' => $target['type'],
+                    'targetId'   => $target['id'],
+                    'type'       => 'type-modify',
+                    'userId'     => $user['id'],
+                    'userName'   => $user['nickname']);
+
+                if ($thread['userId'] != $user['id']) {
+                    $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
+                }
+
+                return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
+                    "{$target['type']}Id" => $target['id'],
+                    'threadId'            => $thread['id']
+                )));
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage(), '发帖错误');
             }
-
-            $thread  = $this->getThreadService()->updateThread($thread['id'], $data);
-            $message = array(
-                'title'      => $thread['title'],
-                'targetType' => $target['type'],
-                'targetId'   => $target['id'],
-                'type'       => 'type-modify',
-                'userId'     => $user['id'],
-                'userName'   => $user['nickname']);
-
-            if ($thread['userId'] != $user['id']) {
-                $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
-            }
-
-            return $this->redirect($this->generateUrl("{$target['type']}_thread_show", array(
-                "{$target['type']}Id" => $target['id'],
-                'threadId'            => $thread['id']
-            )));
         }
 
         return $this->render("TopxiaWebBundle:Thread:create.html.twig", array(
