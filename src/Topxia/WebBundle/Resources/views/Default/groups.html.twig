@@ -61,18 +61,20 @@
             {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
             {% if featuredArticles %}
             <ul class="index-recommend-aricle">
-            {% for article in featuredArticles %}
-              {% if article.thumb %}
-              {% set ArticlesIsNull = true %}
-              <li class="{% if loop.index == 2 %}last{% endif %}">
-                <a href="{{ path('article_detail', {id:article.id}) }}">
-                  {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
-                  <div class="image-overlay"></div>
-                  <div class="title">{{ article.title }}</div>
-                </a>
-              </li>
-             {% endif %}
-            {% endfor %}
+              {% for article in featuredArticles %}
+                {% set ArticlesIsNull = true %}
+                <li class="{% if loop.index == 2 %}last{% endif %}">
+                  <a href="{{ path('article_detail', {id:article.id}) }}">
+                    {% if article.thumb %}
+                      {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
+                    {% else %}
+                      <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}"> 
+                    {% endif %}
+                    <div class="image-overlay"></div>
+                    <div class="title">{{ article.title }}</div>
+                  </a>
+                </li>
+              {% endfor %}
             </ul>
             {% endif %}
             <ul class="index-new-article {% if ArticlesIsNull %}{% else %}full{% endif %}">
