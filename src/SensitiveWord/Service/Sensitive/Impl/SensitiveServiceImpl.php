@@ -8,11 +8,6 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 {
     public function sensitiveCheck($text, $type = '')
     {
-        //预处理内容
-        $text = strip_tags($text);
-        $text = $this->semiangleTofullangle($text);
-        $text = $this->plainTextFilter($text, true);
-
         $bannedResult = $this->bannedKeyword($text, $type);
 
         if ($bannedResult['success']) {
@@ -24,6 +19,11 @@ class SensitiveServiceImpl extends BaseService implements SensitiveService
 
     protected function bannedKeyword($text, $type = '')
     {
+        //预处理内容
+        $text = strip_tags($text);
+        $text = $this->semiangleTofullangle($text);
+        $text = $this->plainTextFilter($text, false);
+
         $rows = $this->getSensitiveDao()->findKeywordsByState('banned');
 
         if (empty($rows)) {
