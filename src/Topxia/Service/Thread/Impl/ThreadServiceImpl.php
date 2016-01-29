@@ -162,6 +162,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
                 throw $this->createAccessDeniedException('权限不够!');
             }
 
+            if (!empty($thread['location'])) {
+                $thread['location'] = $this->sensitiveFilter($thread['location'], $thread['targetType'].'-thread-create');
+            }
+
             $thread['startTime'] = strtotime($thread['startTime']);
             $thread['maxUsers']  = empty($thread['maxUsers']) ? 0 : intval($thread['maxUsers']);
         } else {
