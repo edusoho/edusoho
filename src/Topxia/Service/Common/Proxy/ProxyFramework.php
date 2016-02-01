@@ -42,12 +42,18 @@ class ProxyFramework
     }
     /**
      * 调用类方法.
+     * 目前的注解只实现了方法前调用，后期可以通过注解传参的方式实现方法后调用
      *
      * @param type $name
      * @param type $arguments
      */
     public function __call($name, $arguments)
     {
+        if (array_key_exists($name, $this->annotations)) {
+            $annot = $this->annotations[$name];
+            $annot->invoke($this->object, $name, $arguments);
+        }
+
         return call_user_func_array(array($this->object, $name), $arguments);
     }
 }

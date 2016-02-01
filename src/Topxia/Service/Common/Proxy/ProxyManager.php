@@ -4,6 +4,7 @@ namespace Topxia\Service\Common\Proxy;
 
 /**
  * 代理管理.
+ * 思考:单例OR静态？
  */
 class ProxyManager
 {

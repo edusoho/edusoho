@@ -9,11 +9,11 @@ class ProxyManagerTest extends BaseTestCase
 {
     public function testCreate()
     {
-        $this->getUserService();
+        $this->getUserService()->getBlacklist(1);
     }
 
     protected function getUserService()
     {
-        return $this->getServiceKernel()->createService('User.UserService');
+        return $this->getServiceKernel()->createService('User.BlacklistService');
     }
 }

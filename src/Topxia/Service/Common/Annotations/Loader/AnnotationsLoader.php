@@ -2,10 +2,14 @@
 
 namespace Topxia\Service\Common\Annotations\Loader;
 
-use Topxia\Service\Common\Annotations\Reader\SimpleAnnotationReader;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\FileCacheReader;
+use Topxia\Service\Common\ServiceKernel;
 
 class AnnotationsLoader
 {
+    protected static $reader;
+
     public static function load($class)
     {
         if (!class_exists($class)) {
@@ -17,13 +21,19 @@ class AnnotationsLoader
             throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $class));
         }
 
-        $reader = new SimpleAnnotationReader();
+
+        if (!self::$reader) {
+            $env = ServiceKernel::instance()->getEnvironment();
+            $cacheDir = ServiceKernel::instance()->getParameter('kernel.cache_dir').'/'.$env.'/annotations';
+            $debug = $env !== 'prod';
+            self::$reader = new FileCacheReader(new AnnotationReader(), $cacheDir, $debug);
+        }
+        
 
         $collection = array();
         foreach ($class->getMethods() as $method) {
-            foreach ($reader->getMethodAnnotations($method) as $annot) {
-                var_dump($annot);exit();
-                $collection[] = $annot;
+            foreach (self::$reader->getMethodAnnotations($method) as $annot) {
+                $collection[$method->getName()] = $annot;
             }
         }
 
