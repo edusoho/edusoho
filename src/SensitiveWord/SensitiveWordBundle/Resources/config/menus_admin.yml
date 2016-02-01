@@ -1,11 +1,11 @@
 admin_operation_keyword:
-    name: 敏感词屏蔽
+    name: 敏感词管理
     parent: admin_operation
     router_name: admin_keyword
     group: 4
 
 admin_operation_keyword_set:
-    name: 敏感词设置
+    name: 敏感词列表
     parent: admin_operation_keyword
     router_name: admin_keyword
 
