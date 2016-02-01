@@ -20,8 +20,9 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         $conditions = array(
-            'status'   => 'published',
-            'showable' => 1
+            'status'      => 'published',
+            'showable'    => 1,
+            'recommended' => 1
         );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
@@ -30,26 +31,21 @@ class RecommendClassroomsDataTag extends CourseBaseDataTag implements DataTag
             0,
             $arguments['count']
         );
+        $classroomCount = count($classrooms);
 
-        $recommendedClassrooms = array();
-        $normalClassromms      = array();
+        if ($classroomCount < $arguments['count']) {
+            $conditions['recommended'] = 0;
 
-        foreach ($classrooms as $classroom) {
-            if ($classroom['recommended'] == 1) {
-                $recommendedClassrooms[] = $classroom;
-            } else {
-                $normalClassromms[] = $classroom;
-            }
+            $classroomTemp = $this->getClassroomService()->searchClassrooms(
+                $conditions,
+                array('createdTime', 'DESC'),
+                0,
+                $arguments['count'] - $classroomCount
+            );
+            $classrooms = array_merge($classrooms, $classroomTemp);
         }
 
-        foreach ($normalClassromms as $key => $value) {
-            $createdTime[$key] = $value['createdTime'];
-        }
-
-        array_multisort($createdTime, SORT_DESC, $normalClassromms);
-
-        $classrooms = array_merge($recommendedClassrooms, $normalClassromms);
-        $users      = array();
+        $users = array();
 
         foreach ($classrooms as &$classroom) {
             if (empty($classroom['teacherIds'])) {
