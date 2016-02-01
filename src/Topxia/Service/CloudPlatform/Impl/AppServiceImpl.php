@@ -162,7 +162,7 @@ class AppServiceImpl extends BaseService implements AppService
         }
 
         if ($package['backupFile']) {
-            $result['srcBackPath'] = ''; // @todo;
+            $result['sourceBackupPath'] = ''; // @todo;
         }
 
         return $this->getAppLogDao()->addLog($result);
