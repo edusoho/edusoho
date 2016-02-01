@@ -148,8 +148,10 @@ class AppController extends BaseController
         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
         $eduSohoOpenClient = new EduSohoOpenClient;
-        // $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
-
+        $api->setApiUrl('http://124.160.104.74:8098/');
+        $content = $api->get("/users/{$api->getAccessKey()}/overview");
+        var_dump($content);
+        exit();
         $content = $this->getContent();
 
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
