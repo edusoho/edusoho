@@ -138,8 +138,8 @@ class AppController extends BaseController
         $api = CloudAPIFactory::create('root');
         $api->setApiUrl('http://124.160.104.74:8098/');
         $info = $api->get('/me');
-        var_dump($info);
-        var_dump('-----------------------------------------------------');
+        // var_dump($info);
+        // var_dump('-----------------------------------------------------');
 
         if (isset($info['licenseDomains'])) {
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -150,14 +150,14 @@ class AppController extends BaseController
         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
         $eduSohoOpenClient = new EduSohoOpenClient;
-        $content           = $api->get("/users/{$api->getAccessKey()}/overview");
+        $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
         var_dump($content);
 
-        exit();
+        // exit();
         $content = $this->getContent();
 
-        $cashInfo   = isset($content['cash']) ? $content['cash'] : null;
-        $couponInfo = isset($content['coupon']) ? $content['coupon'] : null;
+        $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
+        $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
         $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
         $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
         $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
