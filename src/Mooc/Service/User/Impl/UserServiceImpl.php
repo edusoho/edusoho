@@ -1,9 +1,9 @@
 <?php
 namespace Mooc\Service\User\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Mooc\Common\SimpleValidator;
 use Mooc\Service\User\UserService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\User\Impl\UserServiceImpl as BaseUserServiceImpl;
 
@@ -42,19 +42,21 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         $conditions = array(
             'truename' => $trueName
         );
-        $orderBy = array('id', 'DESC');
+        $orderBy  = array('id', 'DESC');
         $profiles = $this->searchUserProfiles($conditions, $orderBy, 0, 1);
 
         $profile = array_shift($profiles);
 
-        if(empty($profile)){
+        if (empty($profile)) {
             return array();
         }
 
         $user = $this->getUser($profile['id']);
-        if($isNeedProfile){
+
+        if ($isNeedProfile) {
             array_push($user, array('profile' => $profile));
         }
+
         return $user;
     }
 
@@ -87,6 +89,9 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
             'weibo'          => '',
             'weixin'         => '',
             'site'           => '',
+            'smallAvatar'    => '',
+            'mediumAvatar'   => '',
+            'largeAvatar'    => '',
             'intField1'      => null,
             'intField2'      => null,
             'intField3'      => null,
@@ -127,6 +132,18 @@ class UserServiceImpl extends BaseUserServiceImpl implements UserService
         if (empty($fields)) {
             return $this->getProfileDao()->getProfile($id);
         }
+
+        if (isset($fields['smallAvatar']) && isset($fields['mediumAvatar']) && isset($fields['largeAvatar'])) {
+            $this->getUserDao()->updateUser($id, array(
+                'smallAvatar'  => $fields['smallAvatar'],
+                'mediumAvatar' => $fields['mediumAvatar'],
+                'largeAvatar'  => $fields['largeAvatar']
+            ));
+        }
+
+        unset($fields['smallAvatar']);
+        unset($fields['mediumAvatar']);
+        unset($fields['largeAvatar']);
 
         if (isset($fields['title'])) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));

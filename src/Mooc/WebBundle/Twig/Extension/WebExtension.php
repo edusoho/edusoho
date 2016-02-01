@@ -31,8 +31,26 @@ class WebExtension extends \Twig_Extension
         $options = array('is_safe' => array('html'));
         return array(
             new \Twig_SimpleFunction('currentTime', array($this, 'getCurrentTime'), $options),
-            new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist'))
+            new \Twig_SimpleFunction('in_menu_blacklist', array($this, 'inMenuBlacklist')),
+            new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
         );
+    }
+
+    public function getJsPaths()
+    {
+
+        $paths = call_user_func(array(new \Topxia\WebBundle\Twig\Extension\WebExtension($this->container), 'getJsPaths'));
+
+        $basePath = $this->container->get('request')->getBasePath();
+        $names[]  = 'moocweb';
+        $names[]  = 'moocadmin';
+
+        foreach ($names as $name) {
+            $name                   = strtolower($name);
+            $paths["{$name}bundle"] = "{$basePath}/bundles/{$name}/js";
+        }
+
+        return $paths;
     }
 
     public function getCurrentTime()

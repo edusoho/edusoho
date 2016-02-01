@@ -52,7 +52,20 @@
     {#<td><span class="money-text">{{ course.income }}</span></td>#}
   {% endif %}
 
-  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+  <td>
+    {% if course.status == 'published' and course.type == 'periodic' %}
+      {% set present = date().timestamp %}
+      {% if course.startTime < present and course.endTime > present %}
+        <span class="text-success">开课中</span>
+      {% elseif course.startTime > present %}
+        <span class="text-muted">未开课</span>
+      {% elseif course.endTime < present %}
+        <span class="text-danger">已结课</span>
+      {% endif %}
+    {% else %}
+      {{ dict_text('courseStatus:html', course.status) }}
+    {% endif %}
+  </td>
   <td>
     {{ admin_macro.user_link(user) }}
     <br>

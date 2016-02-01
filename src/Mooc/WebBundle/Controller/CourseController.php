@@ -58,6 +58,56 @@ class CourseController extends BaseController
         ));
     }
 
+    public function createSettingsAction(Request $request)
+    {
+        $user = $this->getUserService()->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $profile = $request->request->get('profile');
+
+            if ($this->getUserService()->updateUserProfile($user['id'], $profile)) {
+                $this->setFlashMessage('success', '基础信息保存成功。');
+            } else {
+                $this->setFlashMessage('danger', '基础信息保存失败。');
+            }
+
+            return $this->redirect($this->generateUrl('course_create'));
+        }
+
+        return $this->render('MoocWebBundle:Course:create.html.twig');
+    }
+
+    public function createSettingsAvatarAction(Request $request)
+    {
+        return $this->render('MoocWebBundle:Course:CreateSetting/avatar.html.twig');
+    }
+
+    public function createSettingsAvatarCropAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $data    = array();
+
+            foreach ($options["images"] as $key => $image) {
+                $data[$image['type']]        = $this->getFileService()->getFile($image['id']);
+                $data[$image['type']]['url'] = $this->get('topxia.twig.web_extension')->getFilePath($data[$image['type']]['uri']);
+            }
+
+            return $this->createJsonResponse($data);
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        return $this->render('MoocWebBundle:Course:CreateSetting/avatar-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize
+        ));
+    }
+
     public function nextRoundAction(Request $request, $id)
     {
         $this->checkId($id);
@@ -213,5 +263,10 @@ class CourseController extends BaseController
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 }
