@@ -2,7 +2,7 @@
 
 {% block title %}创建{% if type == 'normal' %}课程{% elseif type =='periodic' %}周期课程{% else %}直播课程{% endif %} - {{ parent() }}{% endblock %}
 
-{% set script_controller = 'course/create' %}
+{% set script_controller = 'moocwebbundle/controller/course/create' %}
 
 {% block content %}
 <div class="row">
@@ -11,23 +11,22 @@
       <div class="panel-heading"><h2>创建{% if type == 'normal' %}课程{% elseif type =='periodic' %}周期课程{% else %}直播课程{% endif %}</h2></div>
       
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
+      <div class="panel-body">
         <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
-        <form class="user-profile-form">
+        <form class="form-horizontal" id="user-profile-form" action="{{ path('settings') }}">
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="user_title" class="required">用户头衔</label></div>
             <div class="col-md-8 controls">
               <input type="text" id="user_title" name="title" required="required" class="form-control"
-                     data-widget-cid="widget-1" data-explain="">
+                     data-widget-cid="widget-1" data-explain=""  value="{{ app.user.title }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="user_about" class="required">自我介绍</label></div>
+            <div class="col-md-2 control-label"><label for="profile_about" class="required">自我介绍</label></div>
             <div class="col-md-8 controls">
-              <input type="text" id="user_about" name="about" required="required" class="form-control"
-                     data-widget-cid="widget-1" data-explain="">
-              <div class="help-block" style="display:none;"></div>
+              <textarea name="profile[about]" rows="10" id="profile_about" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('user')}) }}">{{ app.user.title }}</textarea>
             </div>
           </div>
 
@@ -37,10 +36,24 @@
               <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
-            <a href="javascript:;">上传头像</a> {# 点上传头像后弹出modal框 进行裁剪 #}
           </div>
-          <a href="javascript:;" class="js-save-btn">完成</a>
+
+          <div class="form-group">
+            <div class="col-md-2 control-label"></div>
+            <div class="controls col-md-8 controls">
+              <a id="upload-picture-btn" class="btn btn-primary webuploader-container" data-upload-token="" data-goto-url="/settings/avatar/crop" data-widget-cid="widget-0"><div class="webuploader-pick">上传新头像</div><div id="rt_rt_1aad786v61ecs5tbdts1vna1gos1" style="position: absolute; top: 8px; left: 24px; width: 70px; height: 20px; overflow: hidden; bottom: auto; right: auto;"><input type="file" name="file" class="webuploader-element-invisible" accept="image/*"><label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label></div></a>
+            </div>
+          </div>
+          
+          <div class="row">
+          <div class="col-md-7 col-md-offset-2">
+            <button id="profile-save-btn" data-submiting-text="正在保存" type="submit" class="btn btn-primary">保存</button>
+          </div>
+          </div>
+
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
+      </div>
       {% else %}
         <form id="course-create-form" class="form-horizontal" method="post">
 
