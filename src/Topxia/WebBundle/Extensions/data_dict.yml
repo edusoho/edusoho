@@ -333,7 +333,7 @@ passedStatus:
 
 state:
     banned: 禁用
-    replaced: 替换
+    replaced: 屏蔽
 
 searchKeyWord:
     name: 敏感词

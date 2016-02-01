@@ -4,7 +4,7 @@
   <td>{{ keyword.name }}</td>
   <td>
     {% if keyword.state == "banned" %}禁用
-    {% elseif  keyword.state == "replaced" %}替换
+    {% elseif  keyword.state == "replaced" %}屏蔽
     {% endif %}
   </td>
   <td>{{ keyword.bannedNum }}</td>
@@ -17,11 +17,11 @@
       </a>
       <ul class="dropdown-menu">
         {% if keyword.state == "banned" %}
-          <li><a href="javascript:;" class="replaced-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">更改为替换</a></li>
+          <li><a href="javascript:;" class="replaced-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">更改为屏蔽</a></li>
         {% elseif keyword.state == "replaced" %}
           <li><a href="javascript:;" class="banned-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">更改为禁用</a></li>
         {% else %}
-          <li><a href="javascript:;" class="replaced-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">更改为替换</a></li>
+          <li><a href="javascript:;" class="replaced-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">更改为屏蔽</a></li>
           <li><a href="javascript:;" class="banned-btn" data-url="{{ path('admin_keyword_change', {id:keyword.id,state:keyword.state}) }}">更改为禁用</a></li>
         {% endif %}
       </ul>

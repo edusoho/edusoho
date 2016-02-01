@@ -1,7 +1,6 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-
         $('#keyword-table').on('click','.delete-btn',function(){
 
             if (!confirm('确定删除此关键字吗？')) {
@@ -15,6 +14,29 @@ define(function(require, exports, module) {
             });
         });
 
+        $('#keyword-table').on('click','.replaced-btn',function(){
+            $.post($(this).data('url'),function(){
+                window.location.reload();
+            });
+        });
+
+        $('#keyword-table').on('click','.banned-btn',function(){
+            $.post($(this).data('url'),function(){
+                window.location.reload();
+            });
+        });
+
+        $('body').on('click', '#replaced' ,function(){
+            var $this = $(this);
+            var text = $this.data('text');
+            $this.siblings('.help-block').text(text);
+        });
+
+        $('body').on('click', '#banned' ,function(){
+            var $this = $(this);
+            var text = $this.data('text');
+            $this.siblings('.help-block').text(text);
+        });
     };
 
 });
