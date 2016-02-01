@@ -4,11 +4,17 @@ namespace Topxia\Component\MediaParser\ItemParser;
 class LetvYunItemParser extends AbstractItemParser
 {
     private $patterns = array(
-        'p1' => '/^http:\/\/yuntv\.letv\.com/s'
+        'p1' => '/^http:\/\/yuntv\.letv\.com\/bcloud\.html/s'
     );
 
     public function parse($url)
     {
+        $response = $this->fetchUrl($url);
+
+        if ($response['code'] != 200) {
+            throw $this->createParseException('获取乐视视频信息失败！');
+        }
+
         $item = array(
             "type"     => "video",
             "source"   => "letv",
