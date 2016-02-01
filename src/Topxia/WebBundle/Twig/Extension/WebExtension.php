@@ -357,6 +357,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
+        $names[] = 'sensitiveword';
 
         $paths = array(
             'common' => 'common',
