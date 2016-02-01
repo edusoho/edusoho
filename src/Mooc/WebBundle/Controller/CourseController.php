@@ -1,8 +1,6 @@
 <?php
 namespace Mooc\WebBundle\Controller;
 
-use Doctrine\DBAL\Types\TextType;
-use Symfony\Component\Form\FormBuilder;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,6 +55,56 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
             'userProfile' => $userProfile,
             'type'        => $type
+        ));
+    }
+
+    public function createSettingsAction(Request $request)
+    {
+        $user = $this->getUserService()->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $profile = $request->request->get('profile');
+
+            if ($this->getUserService()->updateUserProfile($user['id'], $profile)) {
+                $this->setFlashMessage('success', '基础信息保存成功。');
+            } else {
+                $this->setFlashMessage('danger', '基础信息保存失败。');
+            }
+
+            return $this->redirect($this->generateUrl('course_create'));
+        }
+
+        return $this->render('MoocWebBundle:Course:create.html.twig');
+    }
+
+    public function createSettingsAvatarAction(Request $request)
+    {
+        return $this->render('MoocWebBundle:Course:CreateSetting/avatar.html.twig');
+    }
+
+    public function createSettingsAvatarCropAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if ($request->getMethod() == 'POST') {
+            $options = $request->request->all();
+            $data    = array();
+
+            foreach ($options["images"] as $key => $image) {
+                $data[$image['type']]        = $this->getFileService()->getFile($image['id']);
+                $data[$image['type']]['url'] = $this->get('topxia.twig.web_extension')->getFilePath($data[$image['type']]['uri']);
+            }
+
+            return $this->createJsonResponse($data);
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 270, 270);
+
+        return $this->render('MoocWebBundle:Course:CreateSetting/avatar-crop.html.twig', array(
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize
         ));
     }
 
@@ -133,13 +181,13 @@ class CourseController extends BaseController
             $this->getCourseService()->searchCourseCount($conditions),
             12
         );
-        $courses                = $this->getCourseService()->searchCourses(
+        $courses = $this->getCourseService()->searchCourses(
             $conditions,
             $orderBy,
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $group                  = $this->getCategoryService()->getGroupByCode('course');
+        $group = $this->getCategoryService()->getGroupByCode('course');
 
         if (empty($group)) {
             $categories = array();
@@ -215,5 +263,10 @@ class CourseController extends BaseController
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 }

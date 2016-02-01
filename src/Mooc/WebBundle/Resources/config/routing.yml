@@ -2,6 +2,18 @@ course_create:
     pattern:  /mooc/course/create
     defaults: { _controller: MoocWebBundle:Course:create }
 
+course_create_settings:
+    pattern:  /mooc/course/create/settings
+    defaults: { _controller: MoocWebBundle:Course:createSettings }
+
+course_create_settings_avatar:
+    pattern:  /mooc/course/create/settings/avatar
+    defaults: { _controller: MoocWebBundle:Course:createSettingsAvatar }
+
+course_create_settings_avatar_crop:
+    pattern:  /mooc/course/create/settings/avatar/crop
+    defaults: { _controller: MoocWebBundle:Course:createSettingsAvatarCrop }
+
 course_next_round:
     pattern: /course/{id}/nextRound
     defaults: { _controller: MoocWebBundle:Course:nextRound }
@@ -110,7 +122,7 @@ course_manage_student_grades_cards:
 course_manage_lesson_create_testpaper:
     pattern:  /course/{id}/manage/lesson/create/testpaper
     defaults: { _controller: MoocWebBundle:CourseLessonManage:createTestpaper }
-    
+
 course_manage_lesson_edit_testpaper:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit/testpaper
     defaults: { _controller: MoocWebBundle:CourseLessonManage:editTestpaper }
@@ -130,3 +142,5 @@ course_manage_lesson_create:
 course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: MoocWebBundle:CourseLessonManage:edit }
+
+

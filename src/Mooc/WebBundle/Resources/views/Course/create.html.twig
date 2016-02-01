@@ -13,11 +13,12 @@
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
       <div class="panel-body">
         <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
-        <form class="form-horizontal" id="user-profile-form" action="{{ path('settings') }}">
+        <form class="form-horizontal" id="user-profile-form" action="{{ path('course_create_settings') }}" method="POST">
+          {{ web_macro.flash_messages() }}
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="user_title" class="required">用户头衔</label></div>
             <div class="col-md-8 controls">
-              <input type="text" id="user_title" name="title" required="required" class="form-control"
+              <input type="text" id="user_title" name="profile[title]" required="required" class="form-control"
                      data-widget-cid="widget-1" data-explain=""  value="{{ app.user.title }}">
               <div class="help-block" style="display:none;"></div>
             </div>
@@ -31,18 +32,21 @@
           </div>
 
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="course_title" class="required">设置头像</label></div>
-            <div class="col-md-8 controls">
-              <img src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
-              <div class="help-block" style="display:none;"></div>
+            <div class="col-md-2 control-label"><label  class="required">设置头像</label></div>
+            <div class="col-md-8 controls" id = "user-avatar">
+              <img  src="{{ filepath(app.user.largeAvatar, 'avatar.png') }}">
+              <p class="help-block">你可以上传JPG、GIF或PNG格式的文件，文件大小不能超过<strong>2M</strong>。</p>
             </div>
           </div>
 
           <div class="form-group">
             <div class="col-md-2 control-label"></div>
             <div class="controls col-md-8 controls">
-              <a id="upload-picture-btn" class="btn btn-primary webuploader-container" data-upload-token="" data-goto-url="/settings/avatar/crop" data-widget-cid="widget-0"><div class="webuploader-pick">上传新头像</div><div id="rt_rt_1aad786v61ecs5tbdts1vna1gos1" style="position: absolute; top: 8px; left: 24px; width: 70px; height: 20px; overflow: hidden; bottom: auto; right: auto;"><input type="file" name="file" class="webuploader-element-invisible" accept="image/*"><label style="opacity: 0; width: 100%; height: 100%; display: block; cursor: pointer; background: rgb(255, 255, 255);"></label></div></a>
+            <a href="#modal" data-toggle="modal" data-url="{{path('course_create_settings_avatar')}}" class="btn btn-primary">上传头像</a>
             </div>
+            <input type="hidden" name="profile[smallAvatar]" id="smallAvatar">
+            <input type="hidden" name="profile[mediumAvatar]" id="mediumAvatar">
+            <input type="hidden" name="profile[largeAvatar]" id="largeAvatar">
           </div>
           
           <div class="row">
