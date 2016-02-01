@@ -117,7 +117,7 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
 
         return $this->fetchCached("courseId:{$courseId}:maxseq", $courseId, function ($courseId) use ($that) {
             $sql = "SELECT MAX(seq) FROM {$that->getTable()} WHERE  courseId = ?";
-            return $this->getConnection()->fetchColumn($sql, array($courseId));
+            return $that->getConnection()->fetchColumn($sql, array($courseId));
         }
 
         );
