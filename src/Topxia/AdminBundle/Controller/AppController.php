@@ -191,11 +191,15 @@ class AppController extends BaseController
         ));
     }
 
-    public function generateChartData($array)
+    public function generateChartData($info)
     {
+        if (empty($info)) {
+            $info = array();
+        }
+
         $chartInfo = array();
 
-        foreach ($array as $key => $value) {
+        foreach ($info as $key => $value) {
             $chartInfo[] = '{"date":"'.$key.'","count":'.$value.'}';
         }
 
