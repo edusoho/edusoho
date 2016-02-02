@@ -6,25 +6,49 @@
 	{% set navigationcolor = config.confirmConfig.navigationcolor|default('default') %}
 {% endif %}
 
+{% if app.request.getLocale() == 'ug_CN' %}
+	{% if maincolor == 'default' %}
+	  <link href="{{ asset('assets/rtl/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+	{% else %}
+	  <link href="{{ asset('assets/rtl/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+	{% endif %}
 
-{% if maincolor == 'default' %}
-  <link href="{{ asset('assets/rtl/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+	<link rel="stylesheet" media="screen" href="{{ asset('assets/rtl/css/common.css') }}" />
+	<link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
+	<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+
+	{% if maincolor == 'default' %}
+	  <link href="{{ asset('assets/rtl/v2/css/main.css') }}" rel="stylesheet" />
+	{% else %}
+	  <link href="{{ asset('assets/rtl/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+	{% endif %}
+
+	{% if navigationcolor != 'default' %}
+	  <link href="{{ asset('assets/rtl/v2/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
+	{% endif %}
+
+	<link href="{{ asset('assets/rtl/v2/css/rtl.css') }}" rel="stylesheet">
+
 {% else %}
-  <link href="{{ asset('assets/rtl/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+
+	{% if maincolor == 'default' %}
+		<link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+	{% else %}
+		<link href="{{ asset('assets/v2/bootstrap/css/bootstrap-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+	{% endif %}
+
+	<link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
+	<link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
+	<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+
+	{% if maincolor == 'default' %}
+		<link href="{{ asset('assets/v2/css/main.css') }}" rel="stylesheet" />
+	{% else %}
+		<link href="{{ asset('assets/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
+	{% endif %}
+
+	{% if navigationcolor != 'default' %}
+		<link href="{{ asset('assets/v2/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
+	{% endif %}
+
 {% endif %}
-
-<link rel="stylesheet" media="screen" href="{{ asset('assets/rtl/css/common.css') }}" />
-<link rel="stylesheet" media="screen" href="{{ asset('assets/css/font-awesome.min.css') }}" />
-<link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
-
-{% if maincolor == 'default' %}
-  <link href="{{ asset('assets/rtl/v2/css/main.css') }}" rel="stylesheet" />
-{% else %}
-  <link href="{{ asset('assets/rtl/v2/css/main-' ~ maincolor ~ '.css') }}" rel="stylesheet" />
-{% endif %}
-
-{% if navigationcolor != 'default' %}
-  <link href="{{ asset('assets/rtl/v2/css/header-' ~ navigationcolor ~ '.css') }}" rel="stylesheet" />
-{% endif %}
-
-<link href="{{ asset('assets/rtl/v2/css/rtl.css') }}" rel="stylesheet">
