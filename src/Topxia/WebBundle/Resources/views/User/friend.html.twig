@@ -8,8 +8,8 @@
 
 
 <ul class="nav nav-pills mbl">
-  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">关注</a></li>
-  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">粉丝</a></li>
+  <li {% if friendNav == 'following' %}class="active"{% endif %}><a href="{{ path('user_following', {id:user.id}) }}">{{'关注'|trans}}</a></li>
+  <li {% if friendNav == 'follower' %}class="active"{% endif %}><a href="{{ path('user_follower', {id:user.id}) }}">{{'粉丝'|trans}}</a></li>
 </ul>
 
 <div class="row">
@@ -25,9 +25,9 @@
   </div>
   {% else %}
     {% if friendNav == 'following' %}
-      <div class="empty">无关注的人</div>
+      <div class="empty">{{'无关注的人'|trans}}</div>
     {% elseif friendNav == 'follower' %}
-      <div class="empty">无粉丝</div>
+      <div class="empty">{{'无粉丝'|trans}}</div>
     {% endif %}
   {% endfor %}
 </div>

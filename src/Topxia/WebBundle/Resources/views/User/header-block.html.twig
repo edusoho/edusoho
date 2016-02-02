@@ -12,9 +12,9 @@
     <div class="media-body">
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
-          <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
-          <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
-          <button class="btn btn-default btn-sm" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
+          <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>{{'关注'|trans}}</a>
+          <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>{{'已关注'|trans}}</a>
+          <button class="btn btn-default btn-sm" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'私信'|trans}}</button>
         </div>
       {% endif %}
       <h2>{{user.nickname}} <small>{{ user.title }}</small></h2>
@@ -22,10 +22,10 @@
       {% if user %}
         <div class="links">
           {% if user.weibo %}
-            <a href="{{ user.weibo }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-weibo.png') }}"> 微博</a>
+            <a href="{{ user.weibo }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-weibo.png') }}"> {{'微博'|trans}}</a>
           {% endif %}
           {% if user.site %}
-            <a href="{{ user.site }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-site.png') }}"> 网站</a>
+            <a href="{{ user.site }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-site.png') }}"> {{'网站'|trans}}</a>
           {% endif %}
         </div>
       {% endif %}
