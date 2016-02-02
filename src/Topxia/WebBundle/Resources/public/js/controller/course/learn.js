@@ -281,7 +281,7 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                if (lesson.mediaSource == 'iframe') {
+                if (lesson.mediaSource == 'iframe' || lesson.mediaSource == 'letv') {
                     var html = '<iframe src="' + lesson.mediaUri + '" style="position:absolute; left:0; top:0; height:100%; width:100%; border:0px;" scrolling="no"></iframe>';
 
                     $("#lesson-iframe-content").html(html);

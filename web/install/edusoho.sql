@@ -1701,5 +1701,30 @@ CREATE TABLE IF NOT EXISTS `question_marker_result` (
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `keyword`;
+CREATE TABLE IF NOT EXISTS `keyword` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `state` ENUM('replaced','banned') NOT NULL DEFAULT 'replaced',
+  `bannedNum` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `keyword_banlog`;
+CREATE TABLE IF NOT EXISTS `keyword_banlog` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `keywordId` int(10) unsigned NOT NULL,
+  `keywordName` varchar(64) NOT NULL DEFAULT '',
+  `state` ENUM('replaced','banned') NOT NULL DEFAULT 'replaced',
+  `text` text NOT NULL,
+  `userId` int(10) unsigned NOT NULL DEFAULT '0',
+  `ip` varchar(64) NOT NULL DEFAULT '',
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `keywordId` (`keywordId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 

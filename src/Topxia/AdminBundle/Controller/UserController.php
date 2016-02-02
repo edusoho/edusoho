@@ -42,6 +42,14 @@ class UserController extends BaseController
                 unset($conditions['keyword']);
                 $conditions['userIds'] = $userIds;
             }
+
+            $usersTemp = $this->getUserService()->searchUsers(
+                $conditions,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $users = array_merge($users, $usersTemp);
         }
 
         $userCount = $this->getUserService()->searchUserCount($conditions);
