@@ -138,8 +138,8 @@ class AppController extends BaseController
         $api = CloudAPIFactory::create('root');
         $api->setApiUrl('http://124.160.104.74:8098/');
         $info = $api->get('/me');
-        // var_dump($info);
-        // var_dump('-----------------------------------------------------');
+        var_dump($info);
+        var_dump('-----------------------------------------------------');
 
         if (isset($info['licenseDomains'])) {
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -154,7 +154,7 @@ class AppController extends BaseController
         var_dump($content);
 
         // exit();
-        $content = $this->getContent();
+        // $content = $this->getContent();
 
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
         $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
