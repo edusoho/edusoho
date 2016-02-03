@@ -4,6 +4,11 @@
                     <h3 class="panel-title">云直播状态</h3>
                   </div>
                   <div class="panel-body" style="height: 250px;">
+                  <!-- {% if liveInfo|default(0) %}
+
+                  {% else %}
+                  <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂
+                  {% endif %} -->
                     {#{% set capacity = live.capacity|default(null) %}
                     {% set expire = live.expire|default(null) %}#}
 
@@ -11,28 +16,19 @@
                     {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
                   </h4> -->
                    <!--未购买-->
-                    {#{% if not live %}
+                    {% if not liveInfo|default(0) %}
                       <div class="alert alert-warning alert-sm" role="alert">
                         <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i>您尚未购买云直播，点击<a href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">这里</a>了解详情
                       </div>
                     {% else %}
-                      <p class="text-muted">教室容量：{{capacity|default(0)}}人</p>
-                      {% if expire and expire > 0  %}
-                        <p class="text-muted">有效期至：{{expire|date("Y-m-d")}}</p>
-                    
-                        {% if liveDate == 0 %}
-                              <p class="text-danger text-sm">云直播服务将于明天过期</p>
-                        {% endif %}
-                        <!--7天警告-->
-                        {% if 7 >= liveDate|default(31)  and liveDate|default(31)  > 0 %}
-                              <p class="text-danger text-sm">云直播服务将于{{liveDate}}天后过期</p>
-                        {% endif %}
-                        <!--已过期-->
-                        {% if liveDate|default(31)  < 0 %}
-                              <p class="text-danger text-sm">云直播服务已过期</p>
+                      <p class="text-muted">教室容量：{{liveInfo.capacity|default(0)}}人/月    <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">续费</a></p>
+                      {% if liveInfo.expire|default(0) and liveInfo.expire > 0  %}
+                        <p class="text-muted">有效期至：{{liveInfo.expire|date("Y-m-d")}}</p>
+                        {% if not videoInfo.renewVideo.effectiveDate|default(0) %}
+                        {% else %}
                         {% endif %}
                       {% endif %}
-                    {% endif %}#}
+                    {% endif %}
                     <p class="panel-bottom">
                       支持Web端、移动端，让手机也能看直播！
                     </p>

@@ -6,10 +6,10 @@
 
                   <div class="panel-body" style="height: 250px;">
                     <p class="text-muted">剩余短信:{{ smsInfo.remainCount|default(0) }}条</p>
-                    {% if smsInfo.status == 'used' and smsInfo.remainCount < 100 %}
+                    {% if smsInfo.status|default(null) == 'used' and smsInfo.remainCount < 100 %}
                       <p class="text-danger text-sm">您的云短信包剩余不足100条短信，请尽快续购。以免影响正常使用</p>
                     {% endif %}
-                    {% if smsInfo.status == 'stoped' %}
+                    {% if smsInfo.status|default(null) == 'stoped' %}
                       <p class="text-danger text-sm">您的云短信包已用完，请尽快续购。以免影响正常使用</p>
                     {% endif %}
                     
