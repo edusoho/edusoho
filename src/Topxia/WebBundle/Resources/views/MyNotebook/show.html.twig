@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的课程 - {{ parent() }}{% endblock %}
+{% block title %}{{'我的课程'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'notes' %}
 {% set script_controller = 'my/notebook-show' %}
@@ -12,11 +12,11 @@
 }
 </style>
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">我的笔记</div>
+  <div class="panel-heading">{{'我的笔记'|trans}}</div>
   <div class="panel-body">
     <div class="notebook" id="notebook">
       <div class="notebook-heading">
-        <a class="btn btn-default btn-sm pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >返回</a>
+        <a class="btn btn-default btn-sm pull-right notebook-back-btn" href="{{ path('my_notebooks') }}" >{{'返回'|trans}}</a>
         <img class="notebook-icon" src="{{ filepath(course.largePicture, 'course.png') }}" />
         《{{ course.title }}》的笔记
       </div>
@@ -28,7 +28,7 @@
               {% if lesson %}
                 <a href="{{ path('course_learn', {id:note.courseId}) }}#lesson/{{ lesson.id }}" target="_blank">课时{{ lesson.number }}：{{ lesson.title }}</a>
               {% else %}
-                <span>该课时已删除</span>
+                <span>{{'该课时已删除'|trans}}</span>
               {% endif %}
               <span class="pull-right notebook-note-length">共{{ note.length }}字</span>
             </div>
@@ -37,7 +37,7 @@
                 {{ note.content|raw }}
 
               <div class="notebook-note-actions clearfix">
-                <a href="javascript:" data-url="{{ path('my_note_delete', {id:note.id}) }}" class="pull-right notebook-note-delete" title="删除笔记"><span class="glyphicon glyphicon-trash"></span></a>
+                <a href="javascript:" data-url="{{ path('my_note_delete', {id:note.id}) }}" class="pull-right notebook-note-delete" title="{{'删除笔记'|trans}}"><span class="glyphicon glyphicon-trash"></span></a>
               </div>
               <div class="notebook-note-collapse-bar"><span class="glyphicon glyphicon-chevron-up"></span></div>
             </div>
