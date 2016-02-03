@@ -49,10 +49,6 @@ class ParserProxy
     {
         $parsers = array('YoukuVideo', 'QQVideo', 'NeteaseOpenCourse', 'SinaOpenCourse');
 
-        if ($kernel->hasParameter('MediaParser')) {
-            $extras = $kernel->getParameter('MediaParser');
-        }
-
         foreach ($parsers as $parserName) {
             $class  = __NAMESPACE__."\\AlbumParser\\{$parserName}AlbumParser";
             $parser = new $class();
