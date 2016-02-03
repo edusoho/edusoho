@@ -57,6 +57,13 @@ class UserController extends BaseController
                 $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
             }
 
+            $userCount = $this->getUserService()->searchUserCount($conditions);
+            $paginator = new Paginator(
+                $this->get('request'),
+                $userCount,
+                20
+            );
+
             $users = $this->getUserService()->searchUsers(
                 $conditions,
                 array('createdTime', 'DESC'),
