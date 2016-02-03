@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}登录 - {{ parent() }}{% endblock %}
+{% block title %}{{'登录'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/login-bind-exist' %}
 
 {% block content %}
@@ -10,10 +10,10 @@
   </div>
  <form id="bind-exist-form" class="form-vertical" method="post" action="{{ path('login_bind_exist', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
     <div class="alert alert-danger" id="bind-exist-form-error" style="display:none;"></div>
-    
+
     {% if (setting('auth.register_mode') == 'mobile' or setting('auth.register_mode') == 'email_or_mobile') and setting('cloud_sms.sms_enabled') %}
     <div class="form-group mbl">
-      <label class="control-label" for="bind-email-field">Email / 手机</label>
+      <label class="control-label" for="bind-email-field">{{'Email / 手机'|trans}}</label>
         <div class="controls">
           <input id="bind-email-field" class="form-control" type="text" name="emailOrMobile">
           <p class="help-block">请填写在{{ setting('site.name') }}注册时填写的Email地址/手机号码</p>
