@@ -70,7 +70,6 @@ class UserController extends BaseController
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-            //$users = array_merge($users, $usersTemp);
         }
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
