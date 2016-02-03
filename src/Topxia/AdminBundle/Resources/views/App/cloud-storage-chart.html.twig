@@ -10,7 +10,6 @@
     <div class="panel-body" id="storage-data-tab" style="height: 250px;">
     {% if  videoInfo.enableBuyVideo|default(0) != 1 %}
     <span>尚未启用云视频服务，<a href="{{path('admin_setting_cloud_video')}}">立即启用</a></span>
-    {% else %}
     {% endif %}
     </div>
     

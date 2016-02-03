@@ -139,8 +139,6 @@ class AppController extends BaseController
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
-            var_dump($info);
-            var_dump('-----------------------------------------------------');
 
             if (isset($info['licenseDomains'])) {
                 $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -152,37 +150,18 @@ class AppController extends BaseController
 
             $eduSohoOpenClient = new EduSohoOpenClient;
             $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
-            var_dump($content);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
         }
 
-        // exit();
-        //$content = $this->getContent($content);
+        $content = $this->getContent($content);
 
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
         $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
         $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
         $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
-        $liveInfo   = $vlseInfo['liveInfo']   = array(
-            'userId'      => '13737',
-            'capacity'    => '100',
-            'expire'      => '1457073507',
-            'renewInfo'   => array('effectiveDate' => '1453564800'),
-            'upgradeInfo' => array(),
-            'usedInfo'    => array(
-                '2015-12-22' => '37',
-                '2015-12-23' => '9',
-                '2015-12-24' => '55',
-                '2015-12-25' => '69',
-                '2015-12-26' => '19',
-                '2015-12-27' => '86',
-                '2015-12-28' => '84'
-            )
-
-        );
-        $smsInfo   = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
-        $emailInfo = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
+        $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
+        $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
 
         // videoUsedInfo测试数据
         // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
