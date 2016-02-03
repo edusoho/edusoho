@@ -53,21 +53,6 @@ class ParserProxy
             $extras = $kernel->getParameter('MediaParser');
         }
 
-        if ($extras['Album']) {
-            $extrasParsers = $extras['Album'];
-
-            foreach ($extrasParsers as $extrasParser) {
-                $class  = $extrasParser['class'];
-                $parser = new $class();
-
-                if (!$parser->detect($url)) {
-                    continue;
-                }
-
-                return $parser->parse($url);
-            }
-        }
-
         foreach ($parsers as $parserName) {
             $class  = __NAMESPACE__."\\AlbumParser\\{$parserName}AlbumParser";
             $parser = new $class();
