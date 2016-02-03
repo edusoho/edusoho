@@ -45,9 +45,9 @@
       </li>
     {% else %}
       {% if type == 'question' %}
-        <li class="empty">你还没提过问题</li>
+        <li class="empty">{{'你还没提过问题'|trans}}</li>
       {% else %}
-        <li class="empty">你还没发表过话题</li>
+        <li class="empty">{{'你还没发表过话题'|trans}}</li>
       {% endif %}
 
     {% endif %}
@@ -56,4 +56,4 @@
 
 </ul>
 
-{{ web_macro.paginator(paginator) }} 
+{{ web_macro.paginator(paginator) }}
