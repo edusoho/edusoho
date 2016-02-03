@@ -36,6 +36,10 @@
       {% endfor %}
     </ul>
   {% else %}
-    <div class="empty">无在教的 {{setting('classroom.name')|default("班级"|trans)}}！</div>
+    {% if app.request.getLocale() == 'ug_CN' %}
+      <div class="empty">ئۆتىۋاتقان {{setting('classroom.name')|default("班级"|trans)}} يوق!</div>
+    {% else %}
+      <div class="empty">无在教的{{setting('classroom.name')|default("班级"|trans)}}！</div>
+    {% endif %}
   {% endif %}
 {% endblock %}
