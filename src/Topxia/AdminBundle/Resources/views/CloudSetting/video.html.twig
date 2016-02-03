@@ -7,13 +7,13 @@
 
 {{ web_macro.flash_messages() }}
 
-  {% if videoInfo.enableBuyVideo == 1 and videoInfo.remaining <= 30 and videoInfo.remaining > 0 %}
-  <div class="alert alert-warning" role="alert">您的云视频包将于{{videoInfo.remaining}}天后到期，请尽快续费。</div>
+  {% if videoInfo.enableBuyVideo|default(0) == 1 and videoInfo.remaining|default(0) <= 30 and videoInfo.remaining|default(0) > 0 %}
+  <div class="alert alert-warning" role="alert">您的云视频包将于{{videoInfo.remaining|default(0)}}天后到期，请尽快续费。</div>
   {% endif %}
-  {% if videoInfo.enableBuyVideo == 1 and videoInfo.remaining <= 0 %}
+  {% if videoInfo.enableBuyVideo|default(0) == 1 and videoInfo.remaining|default(0) <= 0 %}
     <div class="alert alert-warning" role="alert">您的云视频包已到期，请尽快续费。</div>
   {% endif %}
-  {% if videoInfo.enableBuyVideo != 1 %}
+  {% if videoInfo.locked|default(0) == 1 %}
     <div class="alert alert-warning" role="alert">您的云视频已被禁用，请联系客服人员：0571-86819929。（禁用和锁定的状态目前并没有）</div>
   {% endif %}
 
@@ -31,10 +31,15 @@
     <h1 class="pull-left">云视频</h1>
   </div>
 
-  <div class="controls col-md-12 radios">
-    <div><button type="button" class="btn btn-primary" id="video-open">启用云视频</button></div>
-    <div hidden="hidden"><button type="button" class="btn btn-default" id="video-close" >关闭</button></div>
-    
+  <div class="controls col-md-12 radios"> 
+    <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
+      {% if storageSetting.upload_mode|default('local') == "local" or info.level|default(null) is null %}
+      <div><button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default(null) is null %} disabled="disabled"{% endif %} >启用云视频</button></div>
+      {% elseif storageSetting.upload_mode|default('cloud') == "cloud" %}
+      <div><button type="submit" class="btn btn-primary" name="upload_mode"value="local" >关闭</button></div>
+      {% endif %}
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
     {% if info.level|default(null) is null %}<p class="text-danger text-sm">抱歉，您尚未接入教育云，不能启用云视频服务</p><p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>{% endif %}
 
     <div class="help-block">

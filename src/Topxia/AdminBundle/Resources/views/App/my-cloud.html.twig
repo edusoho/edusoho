@@ -7,9 +7,7 @@
 
 {% block main %}
       <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
-      {% if not videoInfo and not liveInfo and not smsInfo and emailInfo %}
          <ul class="nav nav-tabs mbl">
-
           <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
             <a href="{{ url('admin_my_cloud') }}">产品简介
             </a>
@@ -19,9 +17,7 @@
             <a href="{{ url('admin_my_cloud_overview') }}">服务概况
             </a>
           </li>
-
         </ul> 
-      {% endif %}
       {% if is_trial() %}
         {% if trialhtml is not null %}
           {{ trialhtml|raw }}
@@ -66,7 +62,7 @@
               </div>
             </div>
           </div> -->
-          <div class=" hidden-sm hidden-xs">
+          <!-- <div class=" hidden-sm hidden-xs">
             {% if notices %}
             <ul>
             {% for notice in notices %}
@@ -78,7 +74,7 @@
             {% else %}
             <span class="empty">暂无公告</span>
             {% endif %}
-          </div>
+          </div> -->
 
 
           <div class="page-header clearfix">

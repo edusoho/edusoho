@@ -237,7 +237,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-open'])) {
             $result = $api->post("/me/email_account");
             $mailer = $this->getSettingService()->get('mailer', array());
-            var_dump($result);
+            // var_dump($result);
 
             if (isset($result['account']['status']) && $result['account']['status'] == 'used' && $mailer['enabled'] == "1") {
                 $default = array(
@@ -262,7 +262,7 @@ class EduCloudController extends BaseController
             );
             $result = $api->post("/me/email_account", $params);
         } elseif (isset($operation['email-close'])) {
-            $result = $api->delete("/me/email_account");
+            $result = $api->post("/me/delete_account");
         } elseif (empty($operation)) {
             $emailStatus['status'] = !empty($settings) ? $settings['status'] : 'error';
             $sign                  = !empty($settings) ? array('sign' => $settings['sign']) : array('sign' => "");

@@ -14,13 +14,13 @@
 			<div class="alert alert-warning" role="alert">云邮件服务免费公测中，将于2015年3月31日结束</div>
 			<div class="controls col-md-8 radios">
         <form class="form-horizontal" method="post" id="email-form" novalidate="">
-        {% if emailStatus.status|default('error') in  ['error','stoped'] %}
+        {% if emailStatus.status|default('disable') in  ['disable'] %}
   				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
           <div name = "warning">
             <span class="alert-warning" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
           </div>
-        {% elseif emailStatus.status == 'used' and  emailStatus.sign|default(false) %}
+        {% elseif emailStatus.status == 'enable' and  emailStatus.sign|default(false) %}
           <span>已开启</span>
           <button  class="btn btn-primary" name="email-close">关闭</button>
           <p><span>发件人名称：{{ emailStatus.sign }}</span> <button  class="btn btn-primary" name="sign-update">修改</button></p>

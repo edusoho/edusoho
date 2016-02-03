@@ -1,10 +1,15 @@
 
 <div class="col-md-6">
+  <input id="emailUsedInfo"  type="hidden" value='{% if chartInfo.emailUsedInfo %}{{chartInfo.emailUsedInfo}}{% endif %}'>
   <div class="panel panel-default">
     <div class="panel-heading">
       <p class="pull-right"><a href="">明细</a></p>	
       <h3 class="panel-title">云邮件使用情况（最近七天）</h3>
     </div>
-    <div class="panel-body" id="email-data-tab" style="height: 250px;"></div>
+    <div class="panel-body" id="email-data-tab" style="height: 250px;">
+      {% if  emailInfo.status|default(null) != 'enable' %}
+      <span>尚未启用云邮件服务，<a href="{{path('admin_edu_cloud_email')}}">立即启用</a></span>
+      {% endif %}
+    </div>
   </div>
 </div>

@@ -85,6 +85,7 @@ class CloudSettingController extends BaseController
             $options = $request->request->all();
 
             $api = CloudAPIFactory::create('root');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
@@ -173,8 +174,11 @@ class CloudSettingController extends BaseController
         );
 
         if ($request->getMethod() == 'POST') {
-            $set                 = $request->request->all();
-            $set['cloud_bucket'] = trim($set['cloud_bucket']);
+            $set = $request->request->all();
+
+            if (isset($set['cloud_bucket'])) {
+                $set['cloud_bucket'] = trim($set['cloud_bucket']);
+            }
 
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
@@ -184,11 +188,17 @@ class CloudSettingController extends BaseController
         }
 
         //云端视频判断
-        $api  = CloudAPIFactory::create('root');
-        $info = $api->get('/me');
-        // $content   = $api->get("/user/center/{$api->getAccessKey()}/overview");
-        $content   = $this->getContent();
-        $videoInfo = $content['vlseInfo']['videoInfo'];
+        try {
+            $api = CloudAPIFactory::create('root');
+            $api->setApiUrl('http://124.160.104.74:8098/');
+            $info = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
+        }
+
+        // $content = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        // $content   = $this->getContent();
+        $videoInfo = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
 
         $headLeader = array();
 

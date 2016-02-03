@@ -154,8 +154,8 @@ class AppController extends BaseController
             return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
         }
 
-        $content = $this->getContent($content);
-
+        //$content = $this->getContent($content);
+        // var_dump($content);
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
         $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
         $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
@@ -168,7 +168,8 @@ class AppController extends BaseController
         $chartInfo = array(
             'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
             'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
-            'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo'])
+            'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),
+            'emailUsedInfo' => $this->generateChartData($emailInfo['usedInfo'])
         );
 
         $notices = $eduSohoOpenClient->getNotices();
@@ -206,74 +207,74 @@ class AppController extends BaseController
         return '['.implode(',', $chartInfo).']';
     }
 
-    public function getContent($content)
-    {
-        if (empty($content)) {
-            $content = array();
-        }
+    // public function getContent($content)
+    // {
+    //     if (empty($content)) {
+    //         $content = array();
+    //     }
 
-        $vlseInfo              = array();
-        $vlseInfo['videoInfo'] = array(
-            'userId'         => '13737',
-            'startMouth'     => '201512',
-            'endMouth'       => '201611',
-            'freeTransfer'   => '100.00',
-            'freeSpace'      => '100.00',
-            'amount'         => '24.00',
-            'enableBuyVideo' => 1,
-            'renewVideo'     => array(
-                'userId'        => '13737',
-                'effectiveDate' => '1480521600'
-            ),
-            'videoBill'      => null,
-            'firstday'       => '1448899200',
-            'lastday'        => '1480435200',
-            'remaining'      => 337,
-            'tlp'            => '0',
-            'usedInfo'       => array(
-                '2015-06' => '7',
-                '2015-07' => '9',
-                '2015-08' => '75',
-                '2015-09' => '89',
-                '2015-10' => '13',
-                '2015-11' => '8',
-                '2015-12' => '9'
-            )
+    //     $vlseInfo              = array();
+    //     $vlseInfo['videoInfo'] = array(
+    //         'userId'         => '13737',
+    //         'startMouth'     => '201512',
+    //         'endMouth'       => '201611',
+    //         'freeTransfer'   => '100.00',
+    //         'freeSpace'      => '100.00',
+    //         'amount'         => '24.00',
+    //         'enableBuyVideo' => 1,
+    //         'renewVideo'     => array(
+    //             'userId'        => '13737',
+    //             'effectiveDate' => '1480521600'
+    //         ),
+    //         'videoBill'      => null,
+    //         'firstday'       => '1448899200',
+    //         'lastday'        => '1480435200',
+    //         'remaining'      => 337,
+    //         'tlp'            => '0',
+    //         'usedInfo'       => array(
+    //             '2015-06' => '7',
+    //             '2015-07' => '9',
+    //             '2015-08' => '75',
+    //             '2015-09' => '89',
+    //             '2015-10' => '13',
+    //             '2015-11' => '8',
+    //             '2015-12' => '9'
+    //         )
 
-        );
-        $vlseInfo['liveInfo'] = array(
-            'userId'      => '13737',
-            'capacity'    => '100',
-            'expire'      => '1453478400',
-            'renewInfo'   => array('effectiveDate' => '1453564800'),
-            'upgradeInfo' => array(),
-            'usedInfo'    => array(
-                '2015-12-22' => '37',
-                '2015-12-23' => '9',
-                '2015-12-24' => '55',
-                '2015-12-25' => '69',
-                '2015-12-26' => '19',
-                '2015-12-27' => '86',
-                '2015-12-28' => '84'
-            )
+    //     );
+    //     $vlseInfo['liveInfo'] = array(
+    //         'userId'      => '13737',
+    //         'capacity'    => '100',
+    //         'expire'      => '1453478400',
+    //         'renewInfo'   => array('effectiveDate' => '1453564800'),
+    //         'upgradeInfo' => array(),
+    //         'usedInfo'    => array(
+    //             '2015-12-22' => '37',
+    //             '2015-12-23' => '9',
+    //             '2015-12-24' => '55',
+    //             '2015-12-25' => '69',
+    //             '2015-12-26' => '19',
+    //             '2015-12-27' => '86',
+    //             '2015-12-28' => '84'
+    //         )
 
-        );
-        $vlseInfo['smsInfo'] = array(
-            'remainCount' => '20',
-            'status'      => 'used',
-            'usedInfo'    => array(
-                '2015-12-22' => '47',
-                '2015-12-23' => '95',
-                '2015-12-24' => '65',
-                '2015-12-25' => '9',
-                '2015-12-26' => '18',
-                '2015-12-27' => '89',
-                '2015-12-28' => '86'
-            )
-        );
-        $content['vlseInfo'] = $vlseInfo;
-        return $content;
-    }
+    //     );
+    //     $vlseInfo['smsInfo'] = array(
+    //         'remainCount' => '20',
+    //         'status'      => 'used',
+    //         'usedInfo'    => array(
+    //             '2015-12-22' => '47',
+    //             '2015-12-23' => '95',
+    //             '2015-12-24' => '65',
+    //             '2015-12-25' => '9',
+    //             '2015-12-26' => '18',
+    //             '2015-12-27' => '89',
+    //             '2015-12-28' => '86'
+    //         )
+    //     );
+    //     $content['vlseInfo'] = $vlseInfo;
+    //     return $content;
+    // }
 
     protected function isLocalAddress($address)
     {
