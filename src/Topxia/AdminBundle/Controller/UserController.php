@@ -54,16 +54,16 @@ class UserController extends BaseController
             if (!empty($userIds)) {
                 unset($conditions['keywordType']);
                 unset($conditions['keyword']);
-                $conditions['userIds'] = $userIds;
+                $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
             }
 
-            $usersTemp = $this->getUserService()->searchUsers(
+            $users = $this->getUserService()->searchUsers(
                 $conditions,
                 array('createdTime', 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-            $users = array_merge($users, $usersTemp);
+            //$users = array_merge($users, $usersTemp);
         }
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
