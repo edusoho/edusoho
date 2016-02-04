@@ -49,25 +49,25 @@
   display: inline-block;
   *display: inline-block;
   *zoom: 1;
-  background: url(../img/common/social-share-icons.png) 0 0 no-repeat;
+  background: url(../img/common/social-share-icons.png) 100% 0 no-repeat;
   vertical-align: middle;
   margin-left: 6px;
 }
 
 .social-share-icon-qzone {
-  background-position: 0 -00px;
+  background-position: 100% -00px;
 }
 
 .social-share-icon-weibo {
-  background-position: 0 -30px;
+  background-position: 100% -30px;
 }
 
 .social-share-icon-weixin {
-  background-position: 0 -60px;
+  background-position: 100% -60px;
 }
 
 .social-share-icon-qq {
-  background-position: 0 -90px;
+  background-position: 100% -90px;
 }
 
 
@@ -82,28 +82,28 @@
 	display: inline-block;
 	*display: inline-block;
 	*zoom: 1;
-	background: url(../img/social/social-icons.png) 0 0 no-repeat;
+	background: url(../img/social/social-icons.png) 100% 0 no-repeat;
 	vertical-align: middle;
 }
 
 .social-icon-weibo {
-	background-position: 0 -00px;
+	background-position: 100% -00px;
 }
 
 .social-icon-qq {
-	background-position: 0 -40px;
+	background-position: 100% -40px;
 }
 
 .social-icon-renren {
-	background-position: 0 -80px;
+	background-position: 100% -80px;
 }
 
 .social-icon-douban {
-	background-position: 0 -120px;
+	background-position: 100% -120px;
 }
 
 .social-icon-weixin {
-  background-position: 0 -160px;
+  background-position: 100% -160px;
 }
 .stars-0, .stars-1, .stars-2, .stars-3, .stars-4, .stars-5 {
 	display:inline-block;
@@ -113,30 +113,30 @@
 	width:85px;
 	height:16px;
 	background:url("../img/common/stars.png") no-repeat;
-}
+} 
 
 .stars-5 {
-	background-position:0 0px;
+	background-position:100% 0px;
 }
 
 .stars-4 {
-	background-position:0 -16px;
+	background-position:100% -16px;
 }
 
 .stars-3 {
-	background-position:0 -32px;
+	background-position:100% -32px;
 }
 
 .stars-2 {
-	background-position:0 -48px;
+	background-position:100% -48px;
 }
 
 .stars-1 {
-	background-position:0 -64px;
+	background-position:100% -64px;
 }
 
 .stars-0 {
-	background-position:0 -80px;
+	background-position:100% -80px;
 }
 
 @font-face {font-family: "esicon";
@@ -169,13 +169,6 @@
 Video.js Default Styles (http://videojs.com)
 Version 4.2.1
 Create your own skin at http://designer.videojs.com
-*/
-/* SKIN
-================================================================================
-The main class name for all skin-specific styles. To make your own skin,
-replace all occurances of 'vjs-default-skin' with a new name. Then add your new
-skin name to your video tag instead of the default skin.
-e.g. <video class="video-js my-skin-name">
 */
 .local-video-player {
   /* Custom Icon Font
@@ -310,11 +303,11 @@ e.g. <video class="video-js my-skin-name">
   right: 0;
   /* Rotate the square icon to make a diamond */
   /* transform */
-  -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  transform: rotate(-45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 .local-video-player .vjs-default-skin .vjs-control-bar {
   /* Start hidden */
@@ -379,7 +372,7 @@ e.g. <video class="video-js my-skin-name">
   width: 100%;
   height: 100%;
   text-align: center;
-  text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.5);
+  text-shadow: -1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 .local-video-player .vjs-default-skin .vjs-control:focus:before,
 .local-video-player .vjs-default-skin .vjs-control:hover:before {
@@ -449,7 +442,7 @@ e.g. <video class="video-js my-skin-name">
   top: 0;
   right: 0;
   height: 0.5em;
-  background: #66a8cc url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) -50% 0 repeat;
+  background: #66a8cc url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) 150% 0 repeat;
 }
 .local-video-player .vjs-default-skin .vjs-volume-bar .vjs-volume-handle {
   width: 0.5em;
@@ -515,7 +508,7 @@ e.g. <video class="video-js my-skin-name">
       Also using a paralax effect to make the lines move backwards.
         The -50% left position makes that happen.
     */
-  background: #66a8cc url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) -50% 0 repeat;
+  background: #66a8cc url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAGCAYAAADgzO9IAAAAP0lEQVQIHWWMAQoAIAgDR/QJ/Ub//04+w7ZICBwcOg5FZi5iBB82AGzixEglJrd4TVK5XUJpskSTEvpdFzX9AB2pGziSQcvAAAAAAElFTkSuQmCC) 150% 0 repeat;
 }
 .local-video-player .vjs-default-skin .vjs-load-progress {
   background: #646464 /* IE8- Fallback */;
@@ -622,7 +615,7 @@ e.g. <video class="video-js my-skin-name">
   /* In order to center the play icon vertically we need to set the line height
        to the same as the button height */
   line-height: 2.6em;
-  text-shadow: 0-.05em 0.05em 0.1em #000;
+  text-shadow: -0.05em 0.05em 0.1em #000;
   text-align: center /* Needed for IE8 */;
   position: absolute;
   right: 0;
@@ -663,7 +656,7 @@ e.g. <video class="video-js my-skin-name">
     -moz-transform: rotate(0deg);
   }
   100% {
-    -moz-transform: rotate(359deg);
+    -moz-transform: rotate(-359deg);
   }
 }
 @-webkit-keyframes spin {
@@ -671,7 +664,7 @@ e.g. <video class="video-js my-skin-name">
     -webkit-transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(359deg);
+    -webkit-transform: rotate(-359deg);
   }
 }
 @-o-keyframes spin {
@@ -679,7 +672,7 @@ e.g. <video class="video-js my-skin-name">
     -o-transform: rotate(0deg);
   }
   100% {
-    -o-transform: rotate(359deg);
+    -o-transform: rotate(-359deg);
   }
 }
 @keyframes spin {
@@ -687,7 +680,7 @@ e.g. <video class="video-js my-skin-name">
     transform: rotate(0deg);
   }
   100% {
-    transform: rotate(359deg);
+    transform: rotate(-359deg);
   }
 }
 .local-video-player .vjs-default-skin .vjs-menu-button {
@@ -906,11 +899,6 @@ e.g. <video class="video-js my-skin-name">
 /* -----------------------------------------------------------------------------
 The original source of this file lives at
 https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
-
-
-
-
-/*! define gallery2/mediaelement/2.14.2/mediaelementplayer-debug.css */
 .mejs-container {
   position: relative;
   background: #000;
@@ -956,8 +944,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .mejs-clear {
   clear: both;
 }
-
-/* Start: LAYERS */
 .mejs-background {
   position: absolute;
   top: 0;
@@ -1010,12 +996,12 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background: url(mediaelement/bigplay.svg) no-repeat;
 }
 
-.no-svg .mejs-overlay-button {
+.no-svg .mejs-overlay-button { 
   background-image: url(mediaelement/bigplay.png);
 }
 
 .mejs-overlay:hover .mejs-overlay-button {
-  background-position: 0 -100px ;
+  background-position: 100% -100px ;
 }
 
 .mejs-overlay-loading {
@@ -1028,7 +1014,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background: #333;
   background: url(mediaelement/background.png);
   background: rgba(0, 0, 0, 0.9);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(50,50,50,0.9)), to(rgba(0,0,0,0.9)));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50,50,50,0.9)), to(rgba(0,0,0,0.9)));
   background: -webkit-linear-gradient(top, rgba(50,50,50,0.9), rgba(0,0,0,0.9));
   background: -moz-linear-gradient(top, rgba(50,50,50,0.9), rgba(0,0,0,0.9));
   background: -o-linear-gradient(top, rgba(50,50,50,0.9), rgba(0,0,0,0.9));
@@ -1044,8 +1030,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 
 /* End: LAYERS */
-
-/* Start: CONTROL BAR */
 .mejs-container .mejs-controls {
   position: absolute;
   list-style-type: none;
@@ -1055,12 +1039,12 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   right: 0;
   background: url(mediaelement/background.png);
   background: rgba(0, 0, 0, 0.7);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(50,50,50,0.7)), to(rgba(0,0,0,0.7)));
-  background: -webkit-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50,50,50,0.7)), to(rgba(0,0,0,0.7)));
+  background: -webkit-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7)); 
   background: -moz-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
-  background: -o-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
-  background: -ms-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
-  background: linear-gradient(rgba(50,50,50,0.7), rgba(0,0,0,0.7));
+  background: -o-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7)); 
+  background: -ms-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));  
+  background: linear-gradient(rgba(50,50,50,0.7), rgba(0,0,0,0.7));   
   height: 30px;
   width: 100%;
 }
@@ -1094,18 +1078,14 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background: transparent url(mediaelement/controls.svg) no-repeat;
 }
 
-.no-svg .mejs-controls .mejs-button button {
+.no-svg .mejs-controls .mejs-button button { 
   background-image: url(mediaelement/controls.png);
 }
-
-/* :focus for accessibility */
 .mejs-controls .mejs-button button:focus {
   outline: dotted 1px #999;
 }
 
 /* End: CONTROL BAR */
-
-/* Start: Time (Current / Duration) */
 .mejs-container .mejs-controls .mejs-time {
   color: #fff;
   display: block;
@@ -1129,22 +1109,18 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   width: auto;
 }
 /* End: Time (Current / Duration) */
-
-/* Start: Play/Pause/Stop */
 .mejs-controls .mejs-play button {
-  background-position: 0 0;
+  background-position: 100% 0;
 }
 
 .mejs-controls .mejs-pause button {
-  background-position: 0 -16px;
+  background-position: 100% -16px;
 }
 
 .mejs-controls .mejs-stop button {
   background-position: -112px 0;
 }
 /* Start: Play/Pause/Stop */
-
-/* Start: Progress Bar */
 .mejs-controls div.mejs-time-rail {
   direction: rtl;
   width: 200px;
@@ -1166,8 +1142,8 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   margin: 5px;
   background: #333;
   background: rgba(50,50,50,0.8);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(30,30,30,0.8)), to(rgba(60,60,60,0.8)));
-  background: -webkit-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(30,30,30,0.8)), to(rgba(60,60,60,0.8)));
+  background: -webkit-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8)); 
   background: -moz-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
   background: -o-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
   background: -ms-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
@@ -1176,12 +1152,12 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 .mejs-controls .mejs-time-rail .mejs-time-buffering {
   width: 100%;
-  background-image: -o-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.25, rgba(255, 255, 255, 0.15)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(255, 255, 255, 0.15)), color-stop(0.75, rgba(255, 255, 255, 0.15)), color-stop(0.75, transparent), to(transparent));
-  background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: -ms-linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
-  background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: -ms-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   -webkit-background-size: 15px 15px;
   -moz-background-size: 15px 15px;
   -o-background-size: 15px 15px;
@@ -1193,16 +1169,16 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   animation: buffering-stripes 2s linear infinite;
 }
 
-@-webkit-keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
-@-moz-keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
-@-ms-keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
-@-o-keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
-@keyframes buffering-stripes { from {background-position: 0 0;} to {background-position: 30px 0;} }
+@-webkit-keyframes buffering-stripes { from {background-position: 100% 0;} to {background-position: 30px 0;} }
+@-moz-keyframes buffering-stripes { from {background-position: 100% 0;} to {background-position: 30px 0;} }
+@-ms-keyframes buffering-stripes { from {background-position: 100% 0;} to {background-position: 30px 0;} }
+@-o-keyframes buffering-stripes { from {background-position: 100% 0;} to {background-position: 30px 0;} }
+@keyframes buffering-stripes { from {background-position: 100% 0;} to {background-position: 30px 0;} }
 
 .mejs-controls .mejs-time-rail .mejs-time-loaded {
   background: #3caac8;
   background: rgba(60,170,200,0.8);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(44,124,145,0.8)), to(rgba(78,183,212,0.8)));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(44,124,145,0.8)), to(rgba(78,183,212,0.8))); 
   background: -webkit-linear-gradient(top, rgba(44,124,145,0.8), rgba(78,183,212,0.8));
   background: -moz-linear-gradient(top, rgba(44,124,145,0.8), rgba(78,183,212,0.8));
   background: -o-linear-gradient(top, rgba(44,124,145,0.8), rgba(78,183,212,0.8));
@@ -1214,9 +1190,9 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .mejs-controls .mejs-time-rail .mejs-time-current {
   background: #fff;
   background: rgba(255,255,255,0.8);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(255,255,255,0.9)), to(rgba(200,200,200,0.8)));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.9)), to(rgba(200,200,200,0.8)));
   background: -webkit-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
-  background: -moz-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
+  background: -moz-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8)); 
   background: -o-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
   background: -ms-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
   background: linear-gradient(rgba(255,255,255,0.9), rgba(200,200,200,0.8));
@@ -1292,8 +1268,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 */
 /* End: Progress Bar */
-
-/* Start: Fullscreen */
 .mejs-controls .mejs-fullscreen-button button {
   background-position: -32px 0;
 }
@@ -1302,8 +1276,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background-position: -32px -16px;
 }
 /* End: Fullscreen */
-
-/* Start: Mute/Volume */
 .mejs-controls .mejs-volume-button {
 }
 
@@ -1341,12 +1313,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   border-radius: 0 0 4px 4px;
 }
 
-/*
-.mejs-controls .mejs-volume-button:hover .mejs-volume-slider {
-  display: block;
-}
-*/
-
 .mejs-controls .mejs-volume-button .mejs-volume-slider .mejs-volume-total {
   position: absolute;
   right: 11px;
@@ -1383,8 +1349,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   border-radius: 1px;
   margin: 0;
 }
-
-/* horizontal version */
 .mejs-controls div.mejs-horizontal-volume-slider {
   height: 26px;
   width: 60px;
@@ -1402,11 +1366,11 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   font-size: 1px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  border-radius: 2px;
+  border-radius: 2px; 
   background: #333;
   background: rgba(50,50,50,0.8);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(30,30,30,0.8)), to(rgba(60,60,60,0.8)));
-  background: -webkit-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(30,30,30,0.8)), to(rgba(60,60,60,0.8)));
+  background: -webkit-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8)); 
   background: -moz-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
   background: -o-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
   background: -ms-linear-gradient(top, rgba(30,30,30,0.8), rgba(60,60,60,0.8));
@@ -1427,9 +1391,9 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   border-radius: 2px;
   background: #fff;
   background: rgba(255,255,255,0.8);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(255,255,255,0.9)), to(rgba(200,200,200,0.8)));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(255,255,255,0.9)), to(rgba(200,200,200,0.8)));
   background: -webkit-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
-  background: -moz-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
+  background: -moz-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8)); 
   background: -o-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
   background: -ms-linear-gradient(top, rgba(255,255,255,0.9), rgba(200,200,200,0.8));
   background: linear-gradient(rgba(255,255,255,0.9), rgba(200,200,200,0.8));
@@ -1440,8 +1404,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 
 /* End: Mute/Volume */
-
-/* Start: Track (Captions and Chapters) */
 .mejs-controls .mejs-captions-button {
   position: relative;
 }
@@ -1465,12 +1427,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   -moz-border-radius: 0;
   border-radius: 0;
 }
-
-/*
-.mejs-controls .mejs-captions-button:hover  .mejs-captions-selector {
-  visibility: visible;
-}
-*/
 
 .mejs-controls .mejs-captions-button .mejs-captions-selector ul {
   margin: 0;
@@ -1523,13 +1479,13 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   float: right;
   background: #222;
   background: rgba(0, 0, 0, 0.7);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(50,50,50,0.7)), to(rgba(0,0,0,0.7)));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(50,50,50,0.7)), to(rgba(0,0,0,0.7)));
   background: -webkit-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
   background: -moz-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
   background: -o-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
   background: -ms-linear-gradient(top, rgba(50,50,50,0.7), rgba(0,0,0,0.7));
-  background: linear-gradient(rgba(50,50,50,0.7), rgba(0,0,0,0.7));
-  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#323232,endColorstr=#000000);
+  background: linear-gradient(rgba(50,50,50,0.7), rgba(0,0,0,0.7)); 
+  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#323232,endColorstr=#000000);    
   overflow: hidden;
   border: 0;
 }
@@ -1551,13 +1507,13 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .mejs-chapters .mejs-chapter .mejs-chapter-block:hover {
   background: #666;
   background: rgba(102,102,102, 0.7);
-  background: -webkit-gradient(linear, 100% 0%, 0% 100%, from(rgba(102,102,102,0.7)), to(rgba(50,50,50,0.6)));
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(102,102,102,0.7)), to(rgba(50,50,50,0.6)));
   background: -webkit-linear-gradient(top, rgba(102,102,102,0.7), rgba(50,50,50,0.6));
   background: -moz-linear-gradient(top, rgba(102,102,102,0.7), rgba(50,50,50,0.6));
   background: -o-linear-gradient(top, rgba(102,102,102,0.7), rgba(50,50,50,0.6));
   background: -ms-linear-gradient(top, rgba(102,102,102,0.7), rgba(50,50,50,0.6));
   background: linear-gradient(rgba(102,102,102,0.7), rgba(50,50,50,0.6));
-  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#666666,endColorstr=#323232);
+  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, startColorstr=#666666,endColorstr=#323232);    
 }
 
 .mejs-chapters .mejs-chapter .mejs-chapter-block .ch-title {
@@ -1617,8 +1573,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 }
 /* End: Track (Captions and Chapters) */
-
-/* Start: Error */
 .me-cannotplay {
 }
 
@@ -1632,8 +1586,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   display: block;
 }
 /* End: Error */
-
-/* Start: Loop */
 .mejs-controls .mejs-loop-off button {
   background-position: -64px -16px;
 }
@@ -1643,8 +1595,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 }
 
 /* End: Loop */
-
-/* Start: backlight */
 .mejs-controls .mejs-backlight-off button {
   background-position: -80px -16px;
 }
@@ -1653,14 +1603,10 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   background-position: -80px 0;
 }
 /* End: backlight */
-
-/* Start: Picture Controls */
 .mejs-controls .mejs-picturecontrols-button {
   background-position: -96px 0;
 }
 /* End: Picture Controls */
-
-/* context menu */
 .mejs-contextmenu {
   position: absolute;
   width: 150px;
@@ -1676,7 +1622,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   height: 1px;
   font-size: 0;
   margin: 5px 6px;
-  background: #333;
+  background: #333; 
 }
 
 .mejs-contextmenu .mejs-contextmenu-item {
@@ -1684,14 +1630,12 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   font-size: 12px;
   padding: 4px 6px;
   cursor: pointer;
-  color: #333;
+  color: #333;  
 }
 .mejs-contextmenu .mejs-contextmenu-item:hover {
   background: #2C7C91;
   color: #fff;
 }
-
-/* Start: Source Chooser */
 .mejs-controls .mejs-sourcechooser-button {
   position: relative;
 }
@@ -1749,8 +1693,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   font-size: 10px;
 }
 /* End: Source Chooser */
-
-/* Start: Postroll */
 .mejs-postroll-layer {
   position: absolute;
   bottom: 0;
@@ -1777,7 +1719,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   z-index: 100;
   cursor: pointer;
 }
-/* End: Postroll */
 
 .mejs-audio {
   display: inline-block;
@@ -1846,10 +1787,6 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 .outflow-num {
   color: #ff7b0e;
 }
-
-/**
- * jQuery sortable
- */
 body.dragging, body.dragging * {
   cursor: move !important;
 }
@@ -1860,7 +1797,7 @@ body.dragging, body.dragging * {
   z-index: 2000;
 }
 
-ul.sortable-list li.placeholder,
+ul.sortable-list li.placeholder, 
 ol.sortable-list li.placeholder,
 .panel-sortable .placeholder {
   margin-bottom: 10px 0;

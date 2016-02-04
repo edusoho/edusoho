@@ -4,7 +4,6 @@
 */
 /* =========================== img =========================== */
 /* =========================== color =========================== */
-/* =========================== media =========================== */
 .group-page .grouplist {
   height: 120px;
   width: 76px;
@@ -1866,10 +1865,10 @@ html.nav-active body {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  transform: translate3d(250px, 0, 0);
-  -webkit-transform: translate3d(250px, 0, 0);
-  -o-transform: translate3d(250px, 0, 0);
-  -moz-transform: translate3d(250px, 0, 0);
+  transform: translate3d(-250px, 0, 0);
+  -webkit-transform: translate3d(-250px, 0, 0);
+  -o-transform: translate3d(-250px, 0, 0);
+  -moz-transform: translate3d(-250px, 0, 0);
 }
 .html-mask.active {
   position: fixed;
@@ -2095,9 +2094,9 @@ select:-webkit-autofill {
   overflow-x: hidden;
   overflow-y: auto;
   background: #3f3f3f;
-  -webkit-transform: translate3d(-100%, 0, 0);
-  -moz-transform: translate3d(-100%, 0, 0);
-  transform: translate3d(-100%, 0, 0);
+  -webkit-transform: translate3d(100%, 0, 0);
+  -moz-transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
 }
 .navbar-mobile .nav {
   float: none;
@@ -2410,7 +2409,7 @@ select:-webkit-autofill {
 @keyframes fadeInLeft {
   0% {
     opacity: 0;
-    transform: translateX(-80px);
+    transform: translateX(80px);
   }
   100% {
     opacity: 1;
@@ -2420,7 +2419,7 @@ select:-webkit-autofill {
 @-webkit-keyframes fadeInLeft {
   0% {
     opacity: 0;
-    -webkit-transform: translateX(-80px);
+    -webkit-transform: translateX(80px);
   }
   100% {
     opacity: 1;
@@ -2430,7 +2429,7 @@ select:-webkit-autofill {
 @-moz-keyframes fadeInLeft {
   0% {
     opacity: 0;
-    -moz-transform: translateX(-80px);
+    -moz-transform: translateX(80px);
   }
   100% {
     opacity: 1;
@@ -2440,7 +2439,7 @@ select:-webkit-autofill {
 @-o-keyframes fadeInLeft {
   0% {
     opacity: 0;
-    -o-transform: translateX(-80px);
+    -o-transform: translateX(80px);
   }
   100% {
     opacity: 1;
@@ -2490,7 +2489,7 @@ select:-webkit-autofill {
 @keyframes fadeInRight {
   0% {
     opacity: 0;
-    transform: translateX(80px);
+    transform: translateX(-80px);
   }
   100% {
     opacity: 1;
@@ -2500,7 +2499,7 @@ select:-webkit-autofill {
 @-webkit-keyframes fadeInRight {
   0% {
     opacity: 0;
-    -webkit-transform: translateX(80px);
+    -webkit-transform: translateX(-80px);
   }
   100% {
     opacity: 1;
@@ -2510,7 +2509,7 @@ select:-webkit-autofill {
 @-moz-keyframes fadeInRight {
   0% {
     opacity: 0;
-    -moz-transform: translateX(80px);
+    -moz-transform: translateX(-80px);
   }
   100% {
     opacity: 1;
@@ -2520,7 +2519,7 @@ select:-webkit-autofill {
 @-o-keyframes fadeInRight {
   0% {
     opacity: 0;
-    -o-transform: translateX(80px);
+    -o-transform: translateX(-80px);
   }
   100% {
     opacity: 1;
@@ -3148,9 +3147,6 @@ a.transition:hover {
  *
  * Released on: August 30, 2014
 */
-/* ===============================================================
-Basic Swiper Styles
-================================================================*/
 .swiper-container {
   margin: 0 auto;
   position: relative;
@@ -3213,8 +3209,8 @@ Basic Swiper Styles
   visibility: visible !important;
   height: 100% !important;
 }
-.arrow-left,
-.arrow-right {
+.arrow-right,
+.arrow-left {
   position: absolute;
   top: 50%;
   margin-top: -25px;
@@ -3224,16 +3220,16 @@ Basic Swiper Styles
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.arrow-left > i,
-.arrow-right > i {
+.arrow-right > i,
+.arrow-left > i {
   font-size: 50px;
 }
-.arrow-left:focus,
-.arrow-right:focus {
+.arrow-right:focus,
+.arrow-left:focus {
   color: #dbdbdb;
 }
-.arrow-left:hover,
-.arrow-right:hover {
+.arrow-right:hover,
+.arrow-left:hover {
   color: #616161;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -3246,17 +3242,12 @@ Basic Swiper Styles
 .arrow-right {
   left: -50px;
 }
-/* IE10 Windows Phone 8 Fixes */
 .swiper-wp8-horizontal {
   -ms-touch-action: pan-y;
 }
 .swiper-wp8-vertical {
   -ms-touch-action: pan-x;
 }
-/* ===============================================================
-Your custom styles, here you need to specify container's and slide's
-sizes, pagination, etc.
-================================================================*/
 .swiper-container {
   /* Specify Swiper's Size: */
   /*width:200px;
@@ -3273,9 +3264,6 @@ sizes, pagination, etc.
 .swiper-slide-visible {
   /* Specific visible slide styling: */
 }
-/* ===============================================================
-Pagination Styles
-================================================================*/
 .swiper-pagination-switch {
   /* Stylize pagination button: */
 }
@@ -3903,7 +3891,7 @@ Pagination Styles
   color: #fff;
 }
 .course-item-list-multi .item-object .item-free {
-  background: url('/assets/v2/img/old/course-item-free.png') 0 0 no-repeat;
+  background: url('/assets/v2/img/old/course-item-free.png') 100% 0 no-repeat;
   position: absolute;
   top: 0;
   right: 0;
@@ -4128,8 +4116,8 @@ Pagination Styles
   right: 6px;
   color: #999;
 }
-.testpaper-question-choice-right,
-.testpaper-question-choice-right .testpaper-question-choice-index {
+.testpaper-question-choice-left,
+.testpaper-question-choice-left .testpaper-question-choice-index {
   color: #3c763d;
 }
 .question-text-success {
@@ -5272,13 +5260,13 @@ a.homework-essay-textarea-pack-up {
   border-bottom: 1px solid #f5f5f5;
   padding-bottom: 15px;
 }
-.media.media-number .media-left,
-.media.media-number-o .media-left {
+.media.media-number .media-right,
+.media.media-number-o .media-right {
   position: relative;
   color: #919191;
 }
-.media.media-number .media-left .num,
-.media.media-number-o .media-left .num {
+.media.media-number .media-right .num,
+.media.media-number-o .media-right .num {
   display: block;
   width: 20px;
   height: 20px;
@@ -5307,8 +5295,8 @@ a.homework-essay-textarea-pack-up {
   margin-top: 15px;
   margin-bottom: 10px;
 }
-.media-comment .media-left img,
-.media-subcomment .media-left img {
+.media-comment .media-right img,
+.media-subcomment .media-right img {
   width: 48px;
   height: 48px;
   -webkit-border-radius: 50%;
@@ -6518,26 +6506,26 @@ textarea {
 .es-qrcode.toolbar-qrcode .qrcode-popover {
   top: 0;
   left: 100%;
+  transform-origin: 0% 0;
+  -webkit-transform-origin: 0% 0;
+  -moz-transform-origin: 0% 0;
+  -o-transform-origin: 0% 0;
+}
+.es-qrcode.top .qrcode-popover {
+  top: 0;
+  right: 0;
   transform-origin: 100% 0;
   -webkit-transform-origin: 100% 0;
   -moz-transform-origin: 100% 0;
   -o-transform-origin: 100% 0;
 }
-.es-qrcode.top .qrcode-popover {
-  top: 0;
-  right: 0;
-  transform-origin: 0 0;
-  -webkit-transform-origin: 0 0;
-  -moz-transform-origin: 0 0;
-  -o-transform-origin: 0 0;
-}
 .es-qrcode.bottom .qrcode-popover {
   bottom: 0;
   left: 0;
-  transform-origin: 100% 100%;
-  -webkit-transform-origin: 100% 100%;
-  -moz-transform-origin: 100% 100%;
-  -o-transform-origin: 100% 100%;
+  transform-origin: 0% 100%;
+  -webkit-transform-origin: 0% 100%;
+  -moz-transform-origin: 0% 100%;
+  -o-transform-origin: 0% 100%;
 }
 .es-qrcode:hover {
   cursor: pointer;
@@ -6909,7 +6897,7 @@ textarea {
   background: #e1e1e1;
   border: none;
   color: #fff;
-  text-shadow: 0 -1px 1px rgba(73, 73, 73, 0.21);
+  text-shadow: 0 1px 1px rgba(73, 73, 73, 0.21);
   -webkit-box-shadow: inset 0 0 4px rgba(113, 113, 113, 0.3);
   -moz-box-shadow: inset 0 0 4px rgba(113, 113, 113, 0.3);
   box-shadow: inset 0 0 4px rgba(113, 113, 113, 0.3);
@@ -7554,7 +7542,7 @@ textarea {
 .es-card .media {
   padding-left: 70px;
 }
-.es-card .media-left {
+.es-card .media-right {
   position: relative;
 }
 .es-card .avatar-md {
@@ -7859,7 +7847,7 @@ textarea {
   right: 15px;
 }
 .card-pack-item .stamp.stamp-outdate {
-  background: url('/assets/v2/img/card.png') no-repeat 0 -349px;
+  background: url('/assets/v2/img/card.png') no-repeat 100% -349px;
 }
 .card-pack-item .stamp.stamp-cancel {
   background: url('/assets/v2/img/card.png') no-repeat -410px -351px;
@@ -7868,7 +7856,7 @@ textarea {
   background: url('/assets/v2/img/card.png') no-repeat;
 }
 .card-pack-item.coupon-item.useless {
-  background: url('/assets/v2/img/card.png') no-repeat 0 -174px;
+  background: url('/assets/v2/img/card.png') no-repeat 100% -174px;
 }
 .card-pack-item.coupon-item .title {
   padding-top: 38px;
@@ -8465,7 +8453,7 @@ textarea {
 .aricle-carousel .swiper-pager span:hover {
   cursor: pointer;
 }
-.article-header-right {
+.article-header-left {
   padding: 0 5px;
 }
 .topic-post-small {
@@ -8538,12 +8526,12 @@ textarea {
   border-bottom: 1px solid #efefef;
 }
 @media (max-width: 767px) {
-  .article-list-mian .article-item .media-left {
+  .article-list-mian .article-item .media-right {
     width: 100%;
     display: block;
     margin-bottom: 10px;
   }
-  .article-list-mian .article-item .media-left img {
+  .article-list-mian .article-item .media-right img {
     width: 100%;
   }
 }
@@ -9226,7 +9214,7 @@ textarea {
   max-width: 100%;
   height: auto;
 }
-.belongs-class .media-left img {
+.belongs-class .media-right img {
   width: 100px;
   height: auto;
   border: 3px solid #fff;
@@ -9794,7 +9782,7 @@ textarea {
 .class-course-list .course-item .media .media-left {
   padding-left: 35px;
 }
-.class-course-list .course-item .media .media-left img {
+.class-course-list .course-item .media .media-right img {
   width: 160px;
   height: auto;
 }
@@ -9803,7 +9791,7 @@ textarea {
     display: block;
     padding-left: 0;
   }
-  .class-course-list .course-item .media .media-left img {
+  .class-course-list .course-item .media .media-right img {
     width: 100%;
   }
 }
@@ -10057,12 +10045,12 @@ textarea {
     margin-bottom: 20px;
   }
 }
-.topic-detail .topic-body .media-left img {
+.topic-detail .topic-body .media-right img {
   width: 200px;
   height: auto;
 }
 @media (max-width: 767px) {
-  .topic-detail .topic-body .media-left img {
+  .topic-detail .topic-body .media-right img {
     width: 100%;
   }
 }
@@ -11317,7 +11305,7 @@ textarea {
   left: -2px;
   width: 23px;
   height: 23px;
-  background-position: 0 0;
+  background-position: 100% 0;
   position: absolute;
   overflow: hidden;
 }
@@ -11339,7 +11327,7 @@ textarea {
   left: -2px;
   width: 23px;
   height: 23px;
-  background-position: 0 0;
+  background-position: 100% 0;
   z-index: -1;
 }
 .pay-agreement-list .pay-bank {
@@ -11861,7 +11849,7 @@ textarea {
   position: relative;
   padding-top: 100px;
   min-height: 200px;
-  background: #fafafa url('/assets/v2/img/mobile/mobile_bg2.jpg') center 18% no-repeat;
+  background: #fafafa url('/assets/v2/img/mobile/mobile_bg2.jpg') center 82% no-repeat;
 }
 @media (max-width: 1199px) {
   .es-mobile .mobile-third {
