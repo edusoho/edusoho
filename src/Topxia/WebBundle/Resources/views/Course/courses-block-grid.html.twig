@@ -12,23 +12,23 @@
       <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">
         <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb">
           {% if course.status == 'draft' %}
-            <span class="label  label-warning course-status">未发布</span>
+            <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
           {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">已关闭</span>
+            <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
           {% endif %}
-          {% if course.status != 'closed' %} 
+          {% if course.status != 'closed' %}
             {% if course.serializeMode=='serialize' %}
-              <span class="label label-success series-mode-label">更新中</span>
+              <span class="label label-success series-mode-label">{{'更新中'|trans}}</span>
             {% elseif course.serializeMode=='finished' %}
-              <span class="label label-warning series-mode-label">已完结</span>
+              <span class="label label-warning series-mode-label">{{'已完结'|trans}}</span>
             {% endif %}
           {% endif %}
           {% if course.type == 'live' %}
             {% set lesson = course['lesson']|default(null) %}
             {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-              <span class="label label-warning series-mode-label">正在直播中</span>
+              <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
             {% else %}
-              <span class="label label-success series-mode-label">直播</span>
+              <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
             {% endif %}
           {% endif %}
 
@@ -40,36 +40,40 @@
             {% if lesson %}
               <span class="live-course-lesson metas">
                 <span class="text-success mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+                {% if app.request.getLocale() == 'ug_CN' %}
+                  <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+                {% else %}
+                  <span class="text-muted mrm">第{{ lesson.number }}课时</span>
+                {% endif %}
               </span>
             {% endif %}
           {% endif %}
 
           <span class="metas clearfix">
             <span class="price-col">
-              <span class="meta-label">价格</span>
+              <span class="meta-label">{{'价格'|trans}}</span>
               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-              <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}免费{% endif %}</span>
+              <span class="price-num" style="display:inline " >{% if course.coinPrice > 0 %}{{ course.coinPrice }}{{setting('coin.coin_name')}}{% else %}{{'免费'|trans}}{% endif %}</span>
               {% else %}
-              <span class="price-num">{% if course.price > 0 %}{{ course.price }}元{% else %}免费{% endif %}</span>
+              <span class="price-num">{% if course.price > 0 %}{{ course.price }}{{'元'|trans}}{% else %}{{'免费'|trans}}{% endif %}</span>
               {% endif %}
             </span>
 
             {% if setting('course.show_student_num_enabled', '1') == 1 %}
             <span class="student-col">
-              <span class="meta-label">{{setting('default.user_name', '学员')}}</span>
-              <span class="student-num">{{ course.studentNum }}人</span>
+              <span class="meta-label">{{setting('default.user_name', '学员'|trans)}}</span>
+              <span class="student-num">{{ course.studentNum }}{{'人'|trans}}</span>
             </span>
             {% endif %}
 
             <span class="review-col">
               {% if course.ratingNum > 0 %}
-                <span class="meta-label"><strong>{{ course.ratingNum }}</strong> 评价</span>
+                <span class="meta-label"><strong>{{ course.ratingNum }}</strong> {{'评价'|trans}}</span>
                 <span class="review-rating">
                   <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
                 </span>
               {% else %}
-                <span class="meta-label">无评价</span>
+                <span class="meta-label">{{'无评价'|trans}}</span>
                 <span class="review-rating">
                   <span class="stars-0">&nbsp;</span>
                 </span>
@@ -94,12 +98,12 @@
           <div class="learn-status">
 
             {% if setting('classroom.enabled')|default(0) %}
-              <div class="mbm"> 
+              <div class="mbm">
               {% if course.classroomCount > 0 %}
                 {% set classroom = course.classroom %}
                 <img class="classroomPicture" src="{{ filepath(classroom.smallPicture, 'classroom.png') }}"> <span class="text-muted">{{classroom.title}}
                 {% if course.classroomCount > 1 %}
-                等
+                {{'等'|trans}}
                 {% endif %}</span>
               {% endif %}
               </div>
@@ -110,29 +114,29 @@
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: 100%;"></div>
               </div>
-              学习总时长:{{course.learnTime}}
-              <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">查看课程</span></div>
+              {{'学习总时长'|trans}}:{{course.learnTime}}
+              <div class="action clearfix"><span class="btn btn-default btn-sm pull-right">{{'查看课程'|trans}}</span></div>
             {% else %}
               <div class="progress">
                 <div class="progress-bar progress-bar-success" style="width: {{ percent(course.memberLearnedNum, course.lessonNum) }};"></div>
               </div>
-              <div class="action"><span class="btn btn-primary btn-sm">继续学习</span></div>
+              <div class="action"><span class="btn btn-primary btn-sm">{{'继续学习'|trans}}</span></div>
             {% endif %}
           </div>
           {% if course.status == 'draft' %}
-            <span class="label  label-warning course-status">未发布</span>
+            <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
           {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">已关闭</span>
-          {% endif %}       
+            <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
+          {% endif %}
         {% endif %}
 
         {% if mode == 'teach' %}
           {% if course.status == 'published' %}
-            <span class="label label-success course-status">已发布</span>
+            <span class="label label-success course-status">{{'已发布'|trans}}</span>
           {% elseif course.status == 'draft' %}
-            <span class="label  label-warning course-status">未发布</span>
+            <span class="label  label-warning course-status">{{'未发布'|trans}}</span>
           {% elseif course.status == 'closed' %}
-            <span class="label label-danger course-status">已关闭</span>
+            <span class="label label-danger course-status">{{'已关闭'|trans}}</span>
           {% endif %}
         {% endif %}
 

@@ -24,8 +24,10 @@
     {% endif %}
   </div>
 {% else %}
-  <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}</div>
+  {% if app.request.getLocale() == 'ug_CN' %}
+    <div class="empty">ۋاقتىچە {{ setting('classroom.name')|default("班级"|trans) }} يوق</div>
+  {% else %}
+    <div class="empty">暂无{{ setting('classroom.name')|default("班级") }}</div>
+  {% endif %}
 {% endif %}
 {% endblock %}
-
-

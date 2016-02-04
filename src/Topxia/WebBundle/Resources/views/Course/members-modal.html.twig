@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set modalSize = 'large' %}
-{% block title %}课程{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}{% endblock %}
+{% block title %}{{'课程'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{% endblock %}
 {% set hide_footer = true %}
 {% block body %}
 
@@ -15,19 +15,23 @@
 
         {% if app.user.id != user.id %}
           <div class="pull-right">
-            <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>关注</button>
-            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>已关注</button>
-            <button class="btn btn-default btn-sm send-message-btn" data-url="{{path('message_create', {toId:user.id})}}">发私信</button>
+            <button class="btn btn-primary btn-sm follow-student-btn" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowing %} style="display:none;"{% endif %}>{{'关注'|trans}}</button>
+            <button class="btn btn-success btn-sm unfollow-student-btn" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowing %} style="display:none;"{% endif %}>{{'已关注'|trans}}</button>
+            <button class="btn btn-default btn-sm send-message-btn" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
           </div>
         {% endif %}
 
         <p><a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a></p>
-        
+
         {% if student.remark and canManage %}
           <p class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(8) }})</p>
         {% endif %}
         {% if canManage %}
-          <div class="progress" title="已学{{ progress.number }}课时">
+          {% if app.request.getLocale() == 'ug_CN' %}
+            <div class="progress" title="已学{{ progress.number }}课时">
+          {% else %}
+            <div class="progress" title="已学{{ progress.number }}课时">
+          {% endif %}
             <div class="progress-bar" style="width: {{ progress.percent }}">
             </div>
           </div>
@@ -35,7 +39,7 @@
       </div>
     </li>
   {% else  %}
-    <li>本课程暂时还没有学生</li>
+    <li>{{'本课程暂时还没有学生'|trans}}</li>
   {% endfor %}
 </ul>
 <nav class="text-center">

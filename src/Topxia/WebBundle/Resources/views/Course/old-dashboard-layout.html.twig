@@ -28,10 +28,18 @@
       {% if setting('classroom.enabled')|default(0) and isLearnInClassrooms|default(null) %}
       <div class="panel panel-default go-class">
         <div class="panel-body ">
-          <p>您正在以下{{ setting('classroom.name')|default("班级") }}学习此课程</p>
+          {% if app.request.getLocale() == 'ug_CN' %}
+            <p>您正在以下{{ setting('classroom.name')|default("班级") }}学习此课程</p>
+          {% else %}
+            <p>您正在以下{{ setting('classroom.name')|default("班级") }}学习此课程</p>
+          {% endif %}
           {% for classroom in isLearnInClassrooms %}
           <div class="pull-right go-class-link">
-            <a href="{{path('classroom_show',{id:classroom.id})}}">去{{classroom.title}} > </a>
+            {% if app.request.getLocale() == 'ug_CN' %}
+              <a href="{{path('classroom_show',{id:classroom.id})}}">去{{classroom.title}} > </a>
+            {% else %}
+              <a href="{{path('classroom_show',{id:classroom.id})}}">去{{classroom.title}} > </a>
+            {% endif %}
           </div>
           {% endfor %}
         </div>
@@ -39,7 +47,7 @@
       {% endif %}
 
       {{ render(controller('TopxiaWebBundle:Course:progressBlock',{course:course})) }}
-      
+
       {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
 
       {{ render(controller('TopxiaWebBundle:CourseThread:questionBlock',{course:course})) }}

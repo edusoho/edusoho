@@ -1,6 +1,6 @@
 {% if not featuredArticles and not promotedArticles %}
   {% if is_granted('ROLE_ADMIN') %}
-    <div class="alert alert-warning">头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性<a href="{{ path('admin_article') }}">前往设置</a></div>
+    <div class="alert alert-warning">{{'头条大图轮播功能需先在后台资讯管理页面给正文上传图片以及添加头条属性'|trans}}<a href="{{ path('admin_article') }}">{{'前往设置'|trans}}</a></div>
   {% endif %}
 {% else %}
   <div class="es-section article-list-header">
