@@ -100,7 +100,11 @@
           <div class="form-group mbl">
             <div class="controls">
               <label>
-                <input type="checkbox" id="user_terms" checked="checked"> 我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+                {% if app.request.getLocale() == 'ug_CN' %}
+                  <input type="checkbox" id="user_terms" checked="checked"> 我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+                {% else %}
+                  <input type="checkbox" id="user_terms" checked="checked"> 我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+                {% endif %}
               </label>
             </div>
           </div>

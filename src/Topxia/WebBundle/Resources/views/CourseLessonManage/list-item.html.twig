@@ -36,13 +36,13 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
-    {% if setting('course.custom_chapter_enabled')|default(true) %} 
+    {% if setting('course.custom_chapter_enabled')|default(true) %}
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
-    {% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
-    
+    {% if lesson.free == 1 %}<span class="label label-danger">{{'免费'|trans}}</span>{% endif %}
+
     {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
-      <span class="label label-danger fileDeletedLesson" title="课时文件已删除">无效课时</span>
+      <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
     {% endif %}
     {{ lesson.title }}
 
@@ -55,15 +55,21 @@
     {% endif %}
 
     {% if lesson.giveCredit > 0 %}
-      <small class="text-muted">({{ lesson.giveCredit }}学分)</small>
+      <small class="text-muted">({{ lesson.giveCredit }}{{'学分'|trans}})</small>
     {% endif %}
 
     {% if lesson.requireCredit > 0 %}
-      <small class="text-muted">(需{{ lesson.requireCredit }}学分)</small>
+      <small class="text-muted">
+        {% if app.request.getLocale() == 'ug_CN' %}
+          (需{{ lesson.requireCredit }}学分)
+        {% else %}
+          (需{{ lesson.requireCredit }}学分)
+        {% endif %}
+      </small>
     {% endif %}
 
     {% if lesson.type != 'testpaper' %}
-      {% set mediaTypeName = lesson.type == 'video' ? '视频' : (lesson.type == 'audio' ? '音频' : '文件') %}
+      {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}
         <span class="text-warning">(正在等待{{ mediaTypeName }}格式转换)</span>
       {% elseif mediaStatus == 'doing' %}
@@ -97,7 +103,7 @@
       <a class="dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown" style="margin-right:3px" aria-haspopup="true" aria-expanded="false"></i>更多</a>
 
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
-        
+
         {% if is_plugin_installed('Homework') and (lesson.type != 'testpaper') %}
           {% set homework =  homeworks[lesson.id]|default(null) %}
           {% set homeworkId =  homework.id|default(null) %}
@@ -123,7 +129,7 @@
           <li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>添加资料</a></li>
           <li class="divider"></li>
         {% endif %}
-        
+
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-ok-circle prs"></span>发布

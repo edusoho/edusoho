@@ -34,15 +34,15 @@
 						{% if item.status == 'published' %}
 							<span class="item-length">
 								{% if item.type == 'text' %}
-									图文
+									{{'图文'|trans}}
 								{% elseif item.type == 'testpaper' %}
-									试卷
+									{{'试卷'|trans}}
 								{% elseif item.type == 'live' %}
 									{{ item.length|duration }}
 								{% elseif item.type == 'ppt' %}
 									PPT
 								{% elseif item.type == 'document' %}
-									文档
+									{{'文档'|trans}}
 								{% elseif item.type == 'flash' %}
 									Flash
 								{% else %}
@@ -50,7 +50,7 @@
 								{% endif %}
 							</span>
 						{% else %}
-							<span class="item-length">未发布</span>
+							<span class="item-length">{{'未发布'|trans}}</span>
 						{% endif %}
 					</a>
 					<div class="item-body">
@@ -64,18 +64,18 @@
 								{% if item.type == 'live' %}
 
 									{% if item.startTime > currentTime %}
-										<span>{{ item.startTime|date('m月d日') }} 
+										<span>{{ item.startTime|date('m月d日') }}
 											{% for key,week in weeks %}
 												{% if key == item.startTime|date('w')  %}
 													星期{{ week }}
 												{% endif %}
-												{% endfor %}
+											{% endfor %}
 											{{ item.startTime|date('H：i') }}
 										</span>
 									{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
-										<span class="text-warning">正在直播中</span>
+										<span class="text-warning">{{'正在直播中'|trans}}</span>
 									{% elseif item.endTime < currentTime %}
-										<span>直播结束</span>
+										<span>{{'直播结束'|trans}}</span>
 									{% endif %}
 
 								{% endif  %}
