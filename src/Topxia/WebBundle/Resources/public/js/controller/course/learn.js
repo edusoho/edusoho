@@ -6,10 +6,10 @@ define(function(require, exports, module) {
         swfobject = require('swfobject'),
         Scrollbar = require('jquery.perfect-scrollbar'),
         Notify = require('common/bootstrap-notify');
-        chapterAnimate = require('../course/widget/chapter-animate');
-        var Messenger = require('../player/messenger');
+    chapterAnimate = require('../course/widget/chapter-animate');
+    var Messenger = require('../player/messenger');
 
-        require('mediaelementplayer');
+    require('mediaelementplayer');
 
     var Toolbar = require('../lesson/lesson-toolbar');
 
@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             'click [data-role=next-lesson]': 'onNextLesson',
             'click [data-role=prev-lesson]': 'onPrevLesson',
             'click [data-role=finish-lesson]': 'onFinishLesson',
-            'click [data-role=ask-question]': 'onAskQuestion'
+            'click [data-role=ask-question]': 'onAskQuestion',
         },
 
         attrs: {
@@ -52,20 +52,25 @@ define(function(require, exports, module) {
             this._initListeners();
             this._initChapter();
 
+
             $('.prev-lesson-btn, .next-lesson-btn').tooltip();
         },
 
         onNextLesson: function(e) {
             var next = this._getNextLessonId();
             if (next > 0) {
-                this._router.navigate('lesson/' + next, {trigger: true});
+                this._router.navigate('lesson/' + next, {
+                    trigger: true
+                });
             }
         },
 
         onPrevLesson: function(e) {
             var prev = this._getPrevLessonId();
             if (prev > 0) {
-                this._router.navigate('lesson/' + prev, {trigger: true});
+                this._router.navigate('lesson/' + prev, {
+                    trigger: true
+                });
             }
         },
 
@@ -82,15 +87,18 @@ define(function(require, exports, module) {
             var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/start';
             $.post(url, function(result) {
                 if (result == true) {
-                    toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
+                    toolbar.trigger('learnStatusChange', {
+                        lessonId: self.get('lessonId'),
+                        status: 'learning'
+                    });
                 }
             }, 'json');
         },
 
         _onFinishLearnLesson: function() {
             var $btn = this.element.find('[data-role=finish-lesson]'),
-            toolbar = this._toolbar,
-            self = this;
+                toolbar = this._toolbar,
+                self = this;
 
             var url = '../../course/' + this.get('courseId') + '/lesson/' + this.get('lessonId') + '/learn/finish';
             $.post(url, function(response) {
@@ -111,7 +119,10 @@ define(function(require, exports, module) {
                 $btn.addClass('btn-success');
                 $btn.attr('disabled', true);
                 $btn.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
-                toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'finished'});
+                toolbar.trigger('learnStatusChange', {
+                    lessonId: self.get('lessonId'),
+                    status: 'finished'
+                });
 
             }, 'json');
 
@@ -125,7 +136,10 @@ define(function(require, exports, module) {
             $.post(url, function(json) {
                 $btn.removeClass('btn-success');
                 $btn.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
-                toolbar.trigger('learnStatusChange', {lessonId:self.get('lessonId'), status: 'learning'});
+                toolbar.trigger('learnStatusChange', {
+                    lessonId: self.get('lessonId'),
+                    status: 'learning'
+                });
             }, 'json');
         },
 
@@ -140,7 +154,7 @@ define(function(require, exports, module) {
         _initToolbar: function() {
             this._toolbar = new Toolbar({
                 element: '#lesson-dashboard-toolbar',
-                activePlugins:  app.arguments.plugins,
+                activePlugins: app.arguments.plugins,
                 courseId: this.get('courseId')
             }).render();
 
@@ -150,27 +164,32 @@ define(function(require, exports, module) {
         _initRouter: function() {
             var that = this,
                 DashboardRouter = Backbone.Router.extend({
-                routes: {
-                    "lesson/:id": "lessonShow"
-                },
+                    routes: {
+                        "lesson/:id": "lessonShow"
+                    },
 
-                lessonShow: function(id) {
-                    that.set('lessonId', id);
-                }
-            });
+                    lessonShow: function(id) {
+                        that.set('lessonId', id);
+                    }
+                });
 
             this._router = new DashboardRouter();
-            Backbone.history.start({pushState: false, root:this.get('dashboardUri')} );
+            Backbone.history.start({
+                pushState: false,
+                root: this.get('dashboardUri')
+            });
         },
 
         _initListeners: function() {
             var that = this;
-            this._toolbar.on('lessons_ready', function(lessons){
+            this._toolbar.on('lessons_ready', function(lessons) {
                 that._lessons = lessons;
                 that._showOrHideNavBtn();
-                
+
                 if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
-                    $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
+                    $('.es-wrap [data-toggle="tooltip"]').tooltip({
+                        container: 'body'
+                    });
                 }
             });
         },
@@ -182,13 +201,16 @@ define(function(require, exports, module) {
 
             var self = this;
             this._counter = new Counter(self, this.get('courseId'), lessonId, this.get('watchLimit'));
-            this._counter.setTimerId(setInterval(function(){self._counter.execute()}, 1000));
+            this._counter.setTimerId(setInterval(function() {
+                self._counter.execute()
+            }, 1000));
         },
 
         _onChangeLessonId: function(id) {
             var self = this;
+
             if (!this._toolbar) {
-                return ;
+                return;
             }
             this._toolbar.set('lessonId', id);
 
@@ -199,54 +221,54 @@ define(function(require, exports, module) {
 
             this.element.find('[data-role=lesson-content]').hide();
             var that = this;
-            var _readCourseTitle = function (lesson, name) { // chapter unit
-                var data={};
-                if(app.arguments.customChapter == 1){
+            var _readCourseTitle = function(lesson, name) { // chapter unit
+                var data = {};
+                if (app.arguments.customChapter == 1) {
                     data.number = that.element.find('[data-role=' + name + '-number]');
-                    data.title =  name == 'chapter' ? lesson.chapterNumber : lesson.unitNumber;
-                }else{
+                    data.title = name == 'chapter' ? lesson.chapterNumber : lesson.unitNumber;
+                } else {
                     data.number = that.element.find('[data-role=custom-' + name + '-number]');
-                    data.title  =  name == 'chapter' ? (lesson.chapter == null ? "" :lesson.chapter.title) : (lesson.unit == null ? "":lesson.unit.title);
+                    data.title = name == 'chapter' ? (lesson.chapter == null ? "" : lesson.chapter.title) : (lesson.unit == null ? "" : lesson.unit.title);
                 }
                 return data;
             }
             $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
-                
-                that.set('type',lesson.type);
+
+                that.set('type', lesson.type);
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
-                $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="'+lesson.videoWatermarkEmbedded+'" />');
+                $(".watermarkEmbedded").html('<input type="hidden" id="videoWatermarkEmbedded" value="' + lesson.videoWatermarkEmbedded + '" />');
                 var $titleStr = "";
                 $titleArray = document.title.split(' - ');
-                $.each($titleArray,function(key,val){
+                $.each($titleArray, function(key, val) {
                     $titleStr += val + ' - ';
                 })
-                document.title = lesson.title + ' - ' + $titleStr.substr(0,$titleStr.length-3);
-                if(app.arguments.customChapter == 1){
+                document.title = lesson.title + ' - ' + $titleStr.substr(0, $titleStr.length - 3);
+                if (app.arguments.customChapter == 1) {
                     that.element.find('[data-role=lesson-number]').html(lesson.number);
                 }
-               
-                if (parseInt(lesson.chapterNumber) > 0) {
-                    var data= _readCourseTitle(lesson, 'chapter');
-                    data.number.html(data.title).parent().show().next().show();
-                } else {
-                  var data= _readCourseTitle(lesson, 'chapter');
-                  data.number.parent().hide().next().hide();
-                }
 
-                if (parseInt(lesson.unitNumber) > 0) {
-                    var data= _readCourseTitle(lesson, 'unit');
+                if (parseInt(lesson.chapterNumber) > 0) {
+                    var data = _readCourseTitle(lesson, 'chapter');
                     data.number.html(data.title).parent().show().next().show();
                 } else {
-                    var data= _readCourseTitle(lesson, 'unit');
+                    var data = _readCourseTitle(lesson, 'chapter');
                     data.number.parent().hide().next().hide();
                 }
 
-                if ( (lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
+                if (parseInt(lesson.unitNumber) > 0) {
+                    var data = _readCourseTitle(lesson, 'unit');
+                    data.number.html(data.title).parent().show().next().show();
+                } else {
+                    var data = _readCourseTitle(lesson, 'unit');
+                    data.number.parent().hide().next().hide();
+                }
+
+                if ((lesson.status != 'published') && !/preview=1/.test(window.location.href)) {
                     $("#lesson-unpublished-content").show();
                     return;
                 }
 
-                var number = lesson.number -1;
+                var number = lesson.number - 1;
 
                 if (lesson.canLearn.status != 'yes') {
                     $("#lesson-alert-content .lesson-content-text-body").html(lesson.canLearn.message);
@@ -256,7 +278,7 @@ define(function(require, exports, module) {
 
                 if (lesson.mediaError) {
                     Notify.danger(lesson.mediaError);
-                    return ;
+                    return;
                 }
 
                 if (lesson.mediaSource == 'iframe') {
@@ -266,19 +288,19 @@ define(function(require, exports, module) {
                     $("#lesson-iframe-content").show();
 
                 } else if (lesson.type == 'video' || lesson.type == 'audio') {
-                    if(lesson.mediaSource == 'self') {
+                    if (lesson.mediaSource == 'self') {
                         var lessonVideoDiv = $('#lesson-video-content');
 
                         if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
                             Notify.warning('视频文件正在转换中，稍后完成后即可查看');
-                            return ;
+                            return;
                         }
 
                         var playerUrl = '../../course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
-                        if(self.get('starttime')){
+                        if (self.get('starttime')) {
                             playerUrl += "?starttime=" + self.get('starttime');
                         }
-                        var html = '<iframe src=\''+playerUrl+'\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+                        var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
 
                         $("#lesson-video-content").show();
                         $("#lesson-video-content").html(html);
@@ -286,48 +308,103 @@ define(function(require, exports, module) {
                         var messenger = new Messenger({
                             name: 'parent',
                             project: 'PlayerProject',
-                            children: [ document.getElementById('viewerIframe') ],
+                            children: [document.getElementById('viewerIframe')],
                             type: 'parent'
                         });
 
-                        messenger.on("ready", function(){
+                        messenger.on("ready", function() {
+                            var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                            var markersUrl = '/course/lesson/' + lesson.id + '/marker/show';
+                            $.ajax({
+                                type: "get",
+                                url: markersUrl,
+                                dataType: "json",
+                                success: function(data) {
+                                    var markers = new Array();
+
+                                    for (var index in data) {
+                                        var marker = {
+                                            "id": data[index].id,
+                                            "time": (parseInt(data[index].second) + data[index].videoHeaderTime),
+                                            "text": "ads",
+                                            "finished": data[index].finish
+                                        };
+                                        markers.push(marker);
+                                    }
+                                    if (data.length != 0) {
+                                        player.setMarkers(markers);
+                                    }
+                                }
+                            });
                         });
 
-                        messenger.on("ended", function(){
+                        messenger.on("ended", function() {
                             var player = that.get("player");
                             player.playing = false;
                             that.set("player", player);
                             that._onFinishLearnLesson();
                         });
 
-                        messenger.on("playing", function(){
+                        messenger.on("playing", function() {
                             var player = that.get("player");
                             player.playing = true;
                             that.set("player", player);
                         });
 
-                        messenger.on("paused", function(){
+                        messenger.on("paused", function() {
                             var player = that.get("player");
                             player.playing = false;
                             that.set("player", player);
                         });
-                        that.set("player", {});
 
+                        messenger.on("onMarkerReached", function(marker,questionId){
+                            var player = window.frames["viewerIframe"].window.BalloonPlayer;
+                            if (player.isPlaying()) {
+                                player.pause();
+                            }
+                            $.get('/course/lesson/' + marker.markerId + '/questionmarker/show', {
+                                "questionId": marker.questionId,
+                                "lessonId":lesson.id
+                            }, function(data) {
+                                // $('.vjs-break-overlay-text').html(data);
+                                var $modal = $("#modal");
+                                if (data == "") {
+                                    $modal.hide();
+                                    player.finishMarker(marker.markerId, true);
+                                } else {
+                                    $modal.html(data);
+                                    var $player = $(document.getElementById('viewerIframe').contentDocument);
+                                    //判断是否全屏
+                                    if ($player.width() == $('body').width()) {
+                                        $modal.css('z-index', '2147483647');
+                                    } else {
+                                        var $modaldialog = $modal.find('.modal-dialog');
+                                        $modaldialog.css('margin-left', ($('body').width() - $('.toolbar').width() - $modaldialog.width()) / 2);
+                                    }
+                                    $modal.show();
+                                }
+                            });
+                        });
+                        that.set("player", {});
                     } else {
                         $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-                        swfobject.embedSWF(lesson.mediaUri, 
-                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-                            {wmode:'opaque',allowFullScreen:'true'});
+                        swfobject.embedSWF(lesson.mediaUri,
+                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {
+                                wmode: 'opaque',
+                                allowFullScreen: 'true'
+                            });
                         $("#lesson-swf-content").show();
                     }
-                } else if (lesson.type == 'text' ) {
+                } else if (lesson.type == 'text') {
                     $("#lesson-text-content").find('.lesson-content-text-body').html(lesson.content);
                     $("#lesson-text-content").show();
-                    $("#lesson-text-content").perfectScrollbar({wheelSpeed:50});
+                    $("#lesson-text-content").perfectScrollbar({
+                        wheelSpeed: 50
+                    });
                     $("#lesson-text-content").scrollTop(0);
                     $("#lesson-text-content").perfectScrollbar('update');
 
-                } else if (lesson.type =="live") {
+                } else if (lesson.type == "live") {
                     var liveStartTimeFormat = lesson.startTimeFormat;
                     var liveEndTimeFormat = lesson.endTimeFormat;
                     var startTime = lesson.startTime;
@@ -335,8 +412,8 @@ define(function(require, exports, module) {
 
                     var courseId = lesson.courseId;
                     var lessonId = lesson.id;
-                    var $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-                    if(iID) {
+                    var $liveNotice = "<p>直播将于 <strong>" + liveStartTimeFormat + "</strong> 开始，于 <strong>" + liveEndTimeFormat + "</strong> 结束，请在课前10分钟内提早进入。</p>";
+                    if (iID) {
                         clearInterval(iID);
                     }
 
@@ -355,7 +432,7 @@ define(function(require, exports, module) {
                         var $replayGuid = "老师们：";
                         $replayGuid += "<br>";
 
-                        if(lesson.liveProvider == 1) {
+                        if (lesson.liveProvider == 1) {
                             $replayGuid += "&nbsp;&nbsp;&nbsp;&nbsp;录制直播课程时，需在直播课程间点击“";
                             $replayGuid += "<span style='color:red'>录制面板</span>";
                             $replayGuid += "”，录制完成后点击“";
@@ -372,28 +449,28 @@ define(function(require, exports, module) {
                             $replayGuid += "<br>";
                         }
 
-                        $countDown =  that._getCountDown(days,hours,minutes,seconds);
-   
+                        $countDown = that._getCountDown(days, hours, minutes, seconds);
 
-                        if (0< startLeftSeconds && startLeftSeconds < 7200) {
-                             $liveNotice = "<p>直播将于 <strong>"+liveStartTimeFormat+"</strong> 开始，于 <strong>"+liveEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-                             if(lesson.isTeacher) {
+
+                        if (0 < startLeftSeconds && startLeftSeconds < 7200) {
+                            $liveNotice = "<p>直播将于 <strong>" + liveStartTimeFormat + "</strong> 开始，于 <strong>" + liveEndTimeFormat + "</strong> 结束，请在课前10分钟内提早进入。</p>";
+                            var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                            if (lesson.isTeacher) {
                                 $countDown = $replayGuid;
-                                $countDown += "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                            }else{
-                                $countDown = "<p>还剩"+ hours + "小时"+ minutes+ "分钟"+seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                                $countDown += "<p>还剩" + hours + "小时" + minutes + "分钟" + seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
+                            } else {
+                                $countDown = "<p>还剩" + hours + "小时" + minutes + "分钟" + seconds + "秒&nbsp;<a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                             }
                         };
 
                         if (startLeftSeconds <= 0) {
                             clearInterval(iID);
-                             $liveNotice = "<p>直播已经开始，直播将于 <strong>"+liveEndTimeFormat+"</strong> 结束。</p>";
-                             var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
-                            if(lesson.isTeacher) {
+                            $liveNotice = "<p>直播已经开始，直播将于 <strong>" + liveEndTimeFormat + "</strong> 结束。</p>";
+                            var url = self.get('courseUri') + '/lesson/' + id + '/live_entry';
+                            if (lesson.isTeacher) {
                                 $countDown = $replayGuid;
                                 $countDown += "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
-                            }else{
+                            } else {
                                 $countDown = "<p><a class='btn btn-primary' href='" + url + "' target='_blank'>进入直播教室</a><br><br></p>";
                             }
                         };
@@ -401,9 +478,9 @@ define(function(require, exports, module) {
                         if (endLeftSeconds <= 0) {
                             $liveNotice = "<p>直播已经结束</p>";
                             $countDown = "";
-                            if(lesson.replays && lesson.replays.length>0){
-                                $.each(lesson.replays, function(i,n){
-                                    $countDown += "<a class='btn btn-primary' href='"+n.url+"' target='_blank'>"+n.title+"</a>&nbsp;&nbsp;";
+                            if (lesson.replays && lesson.replays.length > 0) {
+                                $.each(lesson.replays, function(i, n) {
+                                    $countDown += "<a class='btn btn-primary' href='" + n.url + "' target='_blank'>" + n.title + "</a>&nbsp;&nbsp;";
                                 });
                             }
                         };
@@ -417,7 +494,9 @@ define(function(require, exports, module) {
                     iID = setInterval(generateHtml, 1000);
 
                     $("#lesson-live-content").show();
-                    $("#lesson-live-content").perfectScrollbar({wheelSpeed:50});
+                    $("#lesson-live-content").perfectScrollbar({
+                        wheelSpeed: 50
+                    });
                     $("#lesson-live-content").scrollTop(0);
                     $("#lesson-live-content").perfectScrollbar('update');
 
@@ -429,7 +508,7 @@ define(function(require, exports, module) {
                     $("#lesson-testpaper-content").show();
 
                     //类型是实时考试
-                    if(lesson.testMode == 'realTime'){
+                    if (lesson.testMode == 'realTime') {
                         var testStartTimeFormat = lesson.testStartTimeFormat;
                         var testEndTimeFormat = lesson.testEndTimeFormat;
                         var testStartTime = lesson.testStartTime;
@@ -438,8 +517,8 @@ define(function(require, exports, module) {
 
                         var courseId = lesson.courseId;
                         var lessonId = lesson.id;
-                        var $testNotice = "<p>实时考试将于 <strong>"+testStartTimeFormat+"</strong> 开始，将于<strong>"+testEndTimeFormat+"</strong> 结束，请在课前10分钟内提早进入。</p>";
-                        if(iID) {
+                        var $testNotice = "<p>实时考试将于 <strong>" + testStartTimeFormat + "</strong> 开始，将于<strong>" + testEndTimeFormat + "</strong> 结束，请在课前10分钟内提早进入。</p>";
+                        if (iID) {
                             clearInterval(iID);
                         }
 
@@ -456,12 +535,12 @@ define(function(require, exports, module) {
                             modulo = modulo % (60 * 60);
                             var minutes = Math.floor(modulo / 60);
                             var seconds = modulo % 60;
-                            var limitedHouse = Math.floor(testEndLeftSeconds / (60 * 60) );
-                            var limitedMinutes  = Math.floor(testEndLeftSeconds % (60 * 60) / 60 );
+                            var limitedHouse = Math.floor(testEndLeftSeconds / (60 * 60));
+                            var limitedMinutes = Math.floor(testEndLeftSeconds % (60 * 60) / 60);
                             var limitedSeconds = (testEndLeftSeconds % 60)
 
-                            if (0 < testStartLeftSeconds ) {
-                                $testNotice = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>欢迎参加考试，本考试离开考还有<span class="gray-darker plm">'+days+'天</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+days+'</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+hours+'</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+minutes+'</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">'+seconds+'</span>秒</p>   <p class="text-center color-gray">考试开始后，请点击<a class="mlm mrm btn btn-sm btn-default" disabled>开始考试</a>进入</p>';
+                            if (0 < testStartLeftSeconds) {
+                                $testNotice = '<p class="text-center mtl mbl"><i class="text-primary mrm es-icon es-icon-info"></i>欢迎参加考试，本考试离开考还有<span class="gray-darker plm">' + days + '天</span></p><p class="text-center text-primary mbl"><span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + days + '</span>天<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + hours + '</span>时<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + minutes + '</span>分<span style="display:inline-block;width:80px;height:80px;line-height:80px;background:#46c37b;color:#fff;font-size:48px;border-radius:4px;margin:0 10px;">' + seconds + '</span>秒</p>   <p class="text-center color-gray">考试开始后，请点击<a class="mlm mrm btn btn-sm btn-default" disabled>开始考试</a>进入</p>';
                             };
 
                             if (0 < testStartRightSeconds) {
@@ -484,17 +563,19 @@ define(function(require, exports, module) {
                         iID = setInterval(generateTestHtml, 1000);
 
                         $("#lesson-testpaper-content").show();
-                        $("#lesson-testpaper-content").perfectScrollbar({wheelSpeed:50});
+                        $("#lesson-testpaper-content").perfectScrollbar({
+                            wheelSpeed: 50
+                        });
                         $("#lesson-testpaper-content").scrollTop(0);
                         $("#lesson-testpaper-content").perfectScrollbar('update');
 
-                    }else{
+                    } else {
                         $.get('../../testpaper/' + lesson.mediaId + '/user_result/json', function(result) {
                             if (result.error) {
                                 html = '<span class="text-danger">' + result.error + '</span>';
                             } else {
                                 if (result.status == 'nodo') {
-                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';                               
+                                    html = '欢迎参加考试，请点击「开始考试」按钮。<a href="' + url + '" class="btn btn-primary btn-sm" target="_blank">开始考试</a>';
                                 } else if (result.status == 'finished') {
                                     var redoUrl = '../../lesson/' + id + '/test/' + lesson.mediaId + '/redo';
                                     var resultUrl = '../../test/' + result.resultId + '/result?targetType=lesson&targetId=' + id;
@@ -518,7 +599,7 @@ define(function(require, exports, module) {
                         if (response.error) {
                             var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
                             $("#lesson-ppt-content").html(html).show();
-                            return ;
+                            return;
                         }
 
                         var html = '<div class="slide-player"><div class="slide-player-body loading-background"></div><div class="slide-notice"><div class="header">已经到最后一张图片了哦<button type="button" class="close">×</button></div></div><div class="slide-player-control clearfix"><a href="javascript:" class="goto-first"><span class="glyphicon glyphicon-step-backward"></span></a><a href="javascript:" class="goto-prev"><span class="glyphicon glyphicon-chevron-left"></span></a><a href="javascript:" class="goto-next"><span class="glyphicon glyphicon-chevron-right"></span></span></a><a href="javascript:" class="goto-last"><span class="glyphicon glyphicon-step-forward"></span></a><a href="javascript:" class="fullscreen"><span class="glyphicon glyphicon-fullscreen"></span></a><div class="goto-index-input"><input type="text" class="goto-index form-control input-sm" value="1">&nbsp;/&nbsp;<span class="total"></span></div></div></div>';
@@ -543,13 +624,13 @@ define(function(require, exports, module) {
 
 
                     }, 'json');
-                } else if (lesson.type == 'document' ) {
+                } else if (lesson.type == 'document') {
 
                     $.get(that.get('courseUri') + '/lesson/' + id + '/document', function(response) {
                         if (response.error) {
                             var html = '<div class="lesson-content-text-body text-danger">' + response.error.message + '</div>';
                             $("#lesson-document-content").html(html).show();
-                            return ;
+                            return;
                         }
 
                         var html = '<iframe id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\'></iframe>';
@@ -560,8 +641,8 @@ define(function(require, exports, module) {
                             $.get(watermarkUrl, function(watermark) {
                                 var player = new DocumentPlayer({
                                     element: '#lesson-document-content',
-                                    swfFileUrl:response.swfUri,
-                                    pdfFileUrl:response.pdfUri,
+                                    swfFileUrl: response.swfUri,
+                                    pdfFileUrl: response.pdfUri,
                                     watermark: {
                                         'xPosition': 'center',
                                         'yPosition': 'center',
@@ -573,13 +654,13 @@ define(function(require, exports, module) {
                         } else {
                             var player = new DocumentPlayer({
                                 element: '#lesson-document-content',
-                                swfFileUrl:response.swfUri,
-                                pdfFileUrl:response.pdfUri
+                                swfFileUrl: response.swfUri,
+                                pdfFileUrl: response.pdfUri
                             });
                         }
                     }, 'json');
-                } else if (lesson.type == 'flash' ) {
-                    
+                } else if (lesson.type == 'flash') {
+
                     if (!swfobject.hasFlashPlayerVersion('11')) {
                         var html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
                         html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
@@ -591,9 +672,11 @@ define(function(require, exports, module) {
                         $("#lesson-swf-content").show();
                     } else {
                         $("#lesson-swf-content").html('<div id="lesson-swf-player"></div>');
-                        swfobject.embedSWF(lesson.mediaUri, 
-                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
-                            {wmode:'opaque',allowFullScreen:'true'});
+                        swfobject.embedSWF(lesson.mediaUri,
+                            'lesson-swf-player', '100%', '100%', "9.0.0", null, null, {
+                                wmode: 'opaque',
+                                allowFullScreen: 'true'
+                            });
                         $("#lesson-swf-content").show();
                     }
 
@@ -623,11 +706,11 @@ define(function(require, exports, module) {
                 var $finishButton = that.element.find('[data-role=finish-lesson]');
                 if (json.status != 'finished') {
                     $finishButton.removeClass('btn-success');
-                    $finishButton.attr('disabled',false);
+                    $finishButton.attr('disabled', false);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
                 } else {
                     $finishButton.addClass('btn-success');
-                    $finishButton.attr('disabled',true);
+                    $finishButton.attr('disabled', true);
                     $finishButton.find('.glyphicon').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
                 }
             }, 'json');
@@ -644,7 +727,7 @@ define(function(require, exports, module) {
             $nextBtn.show();
 
             if (index < 0) {
-                return ;
+                return;
             }
 
             if (index === 0) {
@@ -666,7 +749,7 @@ define(function(require, exports, module) {
                 return -1;
             }
 
-            return this._lessons[index+1];
+            return this._lessons[index + 1];
         },
 
         _getPrevLessonId: function(e) {
@@ -675,19 +758,19 @@ define(function(require, exports, module) {
                 return -1;
             }
 
-            if (index == 0 ) {
+            if (index == 0) {
                 return -1;
             }
 
-            return this._lessons[index-1];
+            return this._lessons[index - 1];
         },
         _initChapter: function(e) {
-           this.chapterAnimate = new chapterAnimate({
-            'element': this.element
-           });
+            this.chapterAnimate = new chapterAnimate({
+                'element': this.element
+            });
         },
 
-        _getCountDown: function(days,hours,minutes,seconds){
+        _getCountDown: function(days, hours, minutes, seconds) {
             $countDown = "还剩: <strong class='text-info'>" + days + "</strong>天<strong class='text-info'>" + hours + "</strong>小时<strong class='text-info'>" + minutes + "</strong>分钟<strong>" + seconds + "</strong>秒<br><br>";
 
             if (days == 0) {
@@ -700,10 +783,10 @@ define(function(require, exports, module) {
 
             if (hours == 0 && days == 0) {
                 $countDown = "还剩: <strong class='text-info'>" + minutes + "</strong>分钟<strong class='text-info'>" + seconds + "</strong>秒<br><br>";
-            };  
+            };
 
             return $countDown;          
-        }
+        },
 
     });
 
@@ -721,41 +804,41 @@ define(function(require, exports, module) {
             this.timerId = timerId;
         },
 
-        execute: function(){
+        execute: function() {
             var posted = this.addMediaPlayingCounter();
             this.addLearningCounter(posted);
         },
 
         addLearningCounter: function(promptlyPost) {
-            var learningCounter = Store.get("lesson_id_"+this.lessonId+"_learning_counter");
-            if(!learningCounter){
+            var learningCounter = Store.get("lesson_id_" + this.lessonId + "_learning_counter");
+            if (!learningCounter) {
                 learningCounter = 0;
             }
             learningCounter++;
 
-            if(promptlyPost || learningCounter >= this.interval){
-                var url="../../../../course/"+this.lessonId+'/learn/time/'+learningCounter;
+            if (promptlyPost || learningCounter >= this.interval) {
+                var url = "../../../../course/" + this.lessonId + '/learn/time/' + learningCounter;
                 $.get(url);
                 learningCounter = 0;
             }
 
-            Store.set("lesson_id_"+this.lessonId+"_learning_counter", learningCounter);
+            Store.set("lesson_id_" + this.lessonId + "_learning_counter", learningCounter);
         },
 
         addMediaPlayingCounter: function() {
-            var mediaPlayingCounter = Store.get("lesson_id_"+this.lessonId+"_playing_counter");
-            if(!mediaPlayingCounter){
+            var mediaPlayingCounter = Store.get("lesson_id_" + this.lessonId + "_playing_counter");
+            if (!mediaPlayingCounter) {
                 mediaPlayingCounter = 0;
             }
-            if(this.dashboard == undefined || this.dashboard.get("player") == undefined) {
+            if (this.dashboard == undefined || this.dashboard.get("player") == undefined) {
                 return;
             }
 
             var playing = this.dashboard.get("player").playing;
             var posted = false;
 
-            if(mediaPlayingCounter >= this.interval || (mediaPlayingCounter>0 && !playing)){
-                var url="../../../../course/"+this.lessonId+'/watch/time/'+mediaPlayingCounter;
+            if (mediaPlayingCounter >= this.interval || (mediaPlayingCounter > 0 && !playing)) {
+                var url = "../../../../course/" + this.lessonId + '/watch/time/' + mediaPlayingCounter;
                 var self = this;
                 $.get(url, function(response) {
                     if (self.watchLimit && response.watchLimited) {
@@ -764,34 +847,34 @@ define(function(require, exports, module) {
                 }, 'json');
                 posted = true;
                 mediaPlayingCounter = 0;
-            } else if(playing) {
+            } else if (playing) {
                 mediaPlayingCounter++;
             }
 
-            Store.set("lesson_id_"+this.lessonId+"_playing_counter", mediaPlayingCounter);
+            Store.set("lesson_id_" + this.lessonId + "_playing_counter", mediaPlayingCounter);
 
             return posted;
         }
     });
 
     exports.run = function() {
-        
         var dashboard = new LessonDashboard({
             element: '#lesson-dashboard'
         }).render();
-        $(".es-qrcode").click(function(){
-            var $this = $(this); 
-            var url=document.location.href.split("#");
-            var id=url[1].split("/");
-            if($this.hasClass('open')) {
+
+        $(".es-qrcode").click(function() {
+            var $this = $(this);
+            var url = document.location.href.split("#");
+            var id = url[1].split("/");
+            if ($this.hasClass('open')) {
                 $this.removeClass('open');
-            }else {
+            } else {
                 $.ajax({
                     type: "post",
-                    url: $this.data("url")+"/lesson/"+id[1]+"/qrcode",
+                    url: $this.data("url") + "/lesson/" + id[1] + "/qrcode",
                     dataType: "json",
-                    success:function(data){
-                        $this.find(".qrcode-popover img").attr("src",data.img);
+                    success: function(data) {
+                        $this.find(".qrcode-popover img").attr("src", data.img);
                         $this.addClass('open');
                     }
                 });

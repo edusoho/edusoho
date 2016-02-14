@@ -14,7 +14,19 @@ class SearchController extends BaseController
         $currentUser = $this->getCurrentUser();
 
         $keywords = $request->query->get('q');
-        $keywords = trim($keywords);
+        $keywords = $this->filterKeyWord(trim($keywords));
+
+        $cloud_search_setting = $this->getSettingService()->get('cloud_search');
+
+        // if ($cloud_search_setting['search_enabled'] && $cloud_search_setting['status'] == 'ok') {
+        //     $type       = $request->query->get('type', 'course');
+        //     $targetType = $request->query->get('targetType', '');
+        //     return $this->redirect($this->generateUrl('cloud_search', array(
+        //         'q'          => $keywords,
+        //         'type'       => $type,
+        //         'targetType' => $targetType
+        //     )));
+        // }
 
         $vip = $this->getAppService()->findInstallApp('Vip');
 
@@ -51,13 +63,9 @@ class SearchController extends BaseController
 
         if ($fliter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } else
-
-        if ($fliter == 'live') {
+        } elseif ($fliter == 'live') {
             $conditions['type'] = 'live';
-        } else
-
-        if ($fliter == 'free') {
+        } elseif ($fliter == 'free') {
             $conditions['price'] = '0.00';
         }
 
@@ -84,6 +92,69 @@ class SearchController extends BaseController
             'fliter'              => $fliter,
             'count'               => $count
         ));
+    }
+
+    public function cloudSearchAction(Request $request)
+    {
+        $courses = $paginator = null;
+
+        $currentUser = $this->getCurrentUser();
+        $pageSize    = 10;
+        $keywords    = $request->query->get('q');
+        $keywords    = $this->filterKeyWord(trim($keywords));
+
+        $type       = $request->query->get('type', 'course');
+        $page       = $request->query->get('page', '1');
+        $targetType = $request->query->get('targetType', '');
+
+        $conditions = array(
+            'type'  => $type,
+            'words' => $keywords,
+            'page'  => $page
+        );
+
+        if ($type == 'teacher') {
+            $pageSize              = 9;
+            $conditions['type']    = 'user';
+            $conditions['num']     = $pageSize;
+            $conditions['filters'] = json_encode(array('role' => 'teacher'));
+        } elseif ($type == 'thread' && !empty($targetType)) {
+            $conditions['filters'] = json_encode(array('targetType' => $targetType));
+        }
+
+        $counts = 0;
+        try {
+            list($resultSet, $counts) = $this->getSearchService()->cloudSearch($type, $conditions);
+        } catch (\Exception $e) {
+            return $this->render('TopxiaWebBundle:Search:cloud-search-failure.html.twig', array(
+                'keywords'     => $keywords,
+                'type'         => $type,
+                'errorMessage' => '搜索失败，请稍候再试.'
+            ));
+        }
+
+        $paginator = new Paginator($this->get('request'), $counts, $pageSize);
+
+        return $this->render('TopxiaWebBundle:Search:cloud-search.html.twig', array(
+            'keywords'   => $keywords,
+            'type'       => $type,
+            'resultSet'  => $resultSet,
+            'counts'     => $counts,
+            'paginator'  => $paginator,
+            'targetType' => $targetType
+        ));
+    }
+
+    private function filterKeyWord($keyword)
+    {
+        $keyword = str_replace('<', '', $keyword);
+        $keyword = str_replace('>', '', $keyword);
+        $keyword = str_replace("'", '', $keyword);
+        $keyword = str_replace("\"", '', $keyword);
+        $keyword = str_replace('=', '', $keyword);
+        $keyword = str_replace('&', '', $keyword);
+        $keyword = str_replace('/', '', $keyword);
+        return $keyword;
     }
 
     protected function getCourseService()
@@ -114,5 +185,15 @@ class SearchController extends BaseController
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getSearchService()
+    {
+        return $this->getServiceKernel()->createService('Search.SearchService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

@@ -33,8 +33,8 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $thread['createdTime'] = time();
         $thread['updatedTime'] = $thread['createdTime'];
-
         $thread   = $this->createSerializer()->serialize($thread, $this->serializeFields);
+
         $affected = $this->getConnection()->insert($this->table, $thread);
 
         if ($affected <= 0) {
@@ -102,6 +102,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
                         ->from($this->table, $this->table)
                         ->andWhere('groupId = :groupId')
                         ->andWhere('createdTime > :createdTime')
+                        ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('isElite = :isElite')
                         ->andWhere('isStick = :isStick')
                         ->andWhere('type = :type')

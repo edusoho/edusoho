@@ -18,31 +18,32 @@
             <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>{{'热门小组'|trans}}</h3>
           </div>
           <div class="panel-body row">
-            {% for group in groups %}
-              <div class="media media-group col-md-6 col-sm-4">
-                <div class="media-left">
-                  <a href="{{ path('group_show',{id:group.id}) }}">
-                  {% if group.logo %}
-                    <img class="avatar-square-md" src="{{file_path(group.logo)}}" alt="{{ group.title }}">
-                  {% else %}
-                    <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}"  alt="{{ group.title }}">
-                  {% endif %}
-                  </a>
-                </div>
-                <div class="media-body">
-                  <div class="title">
-                    <a class="link-light" href="{{ path('group_show',{id:group.id}) }}">
-                      {{ group.title }}
+            <div class="media-group-list">
+              {% for group in groups %}
+                <div class="media media-group col-md-6 col-sm-4">
+                  <div class="media-left">
+                    <a href="{{ path('group_show',{id:group.id}) }}">
+                    {% if group.logo %}
+                      <img class="avatar-square-md" src="{{file_path(group.logo)}}" alt="{{ group.title }}">
+                    {% else %}
+                      <img class="avatar-square-md" src="{{asset('assets/img/default/group.png')}}"  alt="{{ group.title }}">
+                    {% endif %}
                     </a>
                   </div>
-                  <div class="metas">
-                    {# 修改icon方向 #}
-                    <span>{{ group.memberNum }}<i class="es-icon es-icon-people"></i></span>
-                    <span>{{ group.threadNum }}<i class="es-icon es-icon-textsms"></i></span>
+                  <div class="media-body">
+                    <div class="title">
+                      <a class="link-light" href="{{ path('group_show',{id:group.id}) }}">
+                        {{ group.title }}
+                      </a>
+                    </div>
+                    <div class="metas">
+                      <span>{{ group.memberNum }}<i class="es-icon es-icon-people"></i></span>
+                      <span>{{ group.threadNum }}<i class="es-icon es-icon-textsms"></i></span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            {% endfor %}
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
@@ -60,25 +61,27 @@
             {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
             {% if featuredArticles %}
             <ul class="index-recommend-aricle">
-            {% for article in featuredArticles %}
-              {% if article.thumb %}
-              {% set ArticlesIsNull = true %}
-              <li class="{% if loop.index == 2 %}last{% endif %}">
-                <a href="{{ path('article_detail', {id:article.id}) }}">
-                  {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
-                  <div class="image-overlay"></div>
-                  <div class="title">{{ article.title }}</div>
-                </a>
-              </li>
-             {% endif %}
-            {% endfor %}
+              {% for article in featuredArticles %}
+                {% set ArticlesIsNull = true %}
+                <li class="{% if loop.index == 2 %}last{% endif %}">
+                  <a href="{{ path('article_detail', {id:article.id}) }}">
+                    {% if article.thumb %}
+                      {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
+                    {% else %}
+                      <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}">
+                    {% endif %}
+                    <div class="image-overlay"></div>
+                    <div class="title">{{ article.title }}</div>
+                  </a>
+                </li>
+              {% endfor %}
             </ul>
             {% endif %}
             <ul class="index-new-article {% if ArticlesIsNull %}{% else %}full{% endif %}">
-              {% set articles = data('LatestArticles',{'count':6}) %}
+              {% set articles = data('LatestArticles',{'count':5}) %}
               {% if articles %}
                 {% for article in articles %}
-                  <li class="{% if loop.index == 6 %}last{% endif %} clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.createdTime|smart_time }}</span></li>
+                  <li class="{% if loop.index == 5 %}last{% endif %} clearfix"><i class="es-icon es-icon-dot color-primary mrs"></i><a class="link-dark" href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}">{{ article.title }}</a> <span class="date">{{ article.createdTime|smart_time }}</span></li>
                 {% endfor %}
               {% endif %}
             </ul>

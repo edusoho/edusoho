@@ -110,6 +110,10 @@ class PlayerController extends BaseController
             $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
         }
 
+        if (isset($context['hideBeginning'])) {
+            $fileds['data']['hideBeginning'] = $context['hideBeginning'];
+        }
+
         $token = $this->getTokenService()->makeToken($type, $fileds);
         return $token;
     }

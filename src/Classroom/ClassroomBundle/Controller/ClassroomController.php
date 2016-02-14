@@ -56,11 +56,10 @@ class ClassroomController extends BaseController
                 $priceType = $coinSetting["price_type"];
             }
 
-            if ($priceType == 'RMB') {
-                $conditions['price'] = '0.00';
-            } else {
+            if ($priceType == 'Coin') {
                 $conditions['coinPrice'] = '0.00';
             }
+            $conditions['price'] = '0.00';
         }
 
         unset($conditions['fliter']);
