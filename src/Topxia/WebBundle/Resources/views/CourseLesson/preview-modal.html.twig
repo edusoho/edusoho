@@ -5,10 +5,7 @@
 {% block title %}<span class="text-muted">{{'课时预览'|trans}}:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
-  {% if setting("developer.balloon_player")|default(0) %}
-    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
-  {% endif %}
-
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
 	{% if lesson.status == 'published' %}
 	  {% if lesson.mediaSource == 'iframe' %}
       <div id="lesson-preview-iframe" data-url="{{ lesson.mediaUri }}" style="display:none;">
@@ -17,7 +14,7 @@
 			{% if lesson.mediaSource == 'self' %}
 				<div id="lesson-preview-player"
           style="height:300px;overflow:hidden"
-          data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
+          data-balloon-player="1"
           {% if not lesson.free %}
             data-timelimit="{{ course.tryLookTime }}"
           {% endif %}
@@ -76,6 +73,7 @@
       {{'扫二维码继续学习'|trans}}
     </span>
   </span>
+  {% if course.buyable %}
    {% if lesson.status == 'published' and course.parentId == '0' %}
 
     {% if course.price == '0.00'  %}
@@ -116,5 +114,5 @@
     {% endif %}
   {% endif %}
  {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
-
+{% endif %}
 {% endblock %}

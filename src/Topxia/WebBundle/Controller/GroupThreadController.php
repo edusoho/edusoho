@@ -60,7 +60,7 @@ class GroupThreadController extends BaseController
                     'threadId' => $thread['id']
                 )));
             } catch (\Exception $e) {
-                return $this->createMessageResponse('error', $e->getMessage(), '错误提示');
+                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
             }
         }
 
@@ -92,34 +92,38 @@ class GroupThreadController extends BaseController
         $attachs = $this->getThreadService()->searchGoods(array("threadId" => $thread['id'], 'type' => 'attachment'), array("createdTime", "DESC"), 0, 1000);
 
         if ($request->getMethod() == "POST") {
-            $threadData = $request->request->all();
-            $fields     = array(
-                'title'   => $threadData['thread']['title'],
-                'content' => $threadData['thread']['content']);
+            try {
+                $threadData = $request->request->all();
+                $fields     = array(
+                    'title'   => $threadData['thread']['title'],
+                    'content' => $threadData['thread']['content']);
 
-            $thread = $this->getThreadService()->updateThread($threadId, $fields);
+                $thread = $this->getThreadService()->updateThread($threadId, $fields);
 
-            if (isset($threadData['file'])) {
-                $file = $threadData['file'];
-                $this->getThreadService()->addAttach($file, $thread['id']);
-            }
+                if (isset($threadData['file'])) {
+                    $file = $threadData['file'];
+                    $this->getThreadService()->addAttach($file, $thread['id']);
+                }
 
-            if ($user->isAdmin()) {
-                $threadUrl = $this->generateUrl('group_thread_show', array('id' => $id, 'threadId' => $thread['id']), true);
+                if ($user->isAdmin()) {
+                    $threadUrl = $this->generateUrl('group_thread_show', array('id' => $id, 'threadId' => $thread['id']), true);
 
-                $message = array(
+                    $message = array(
+                        'id'       => $id,
+                        'threadId' => $thread['id'],
+                        'title'    => $thread['title'],
+                        'type'     => 'modify'
+                    );
+                    $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
+                }
+
+                return $this->redirect($this->generateUrl('group_thread_show', array(
                     'id'       => $id,
-                    'threadId' => $thread['id'],
-                    'title'    => $thread['title'],
-                    'type'     => 'modify'
-                );
-                $this->getNotifiactionService()->notify($thread['userId'], 'group-thread', $message);
+                    'threadId' => $threadId
+                )));
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
             }
-
-            return $this->redirect($this->generateUrl('group_thread_show', array(
-                'id'       => $id,
-                'threadId' => $threadId
-            )));
         }
 
         return $this->render('TopxiaWebBundle:Group:add-thread.html.twig', array(
@@ -577,6 +581,7 @@ class GroupThreadController extends BaseController
 
         return $this->render('TopxiaWebBundle:Group:group-search-result.html.twig', array(
             'groupinfo'       => $group,
+            'keyWord'         => $keyWord,
             'threads'         => $threads,
             'owner'           => $owner,
             'paginator'       => $paginator,

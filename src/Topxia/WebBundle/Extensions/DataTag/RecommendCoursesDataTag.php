@@ -39,7 +39,13 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
         }
         
         $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);
-
+        $coursesCount = count($courses);
+        if ($coursesCount < $arguments['count']) {
+            $conditions['recommended'] = 0;
+            $coursesTemp = $this->getCourseService()->searchCourses($conditions,'createdTime', 0, $arguments['count']-$coursesCount);
+            $courses = array_merge($courses, $coursesTemp);
+        }
+        
         return $this->getCourseTeachersAndCategories($courses);
     }
 }

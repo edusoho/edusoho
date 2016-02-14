@@ -3,7 +3,8 @@ namespace Topxia\Service\User\AuthProvider;
 
 interface AuthProvider
 {
-
+    public function checkConnect();
+    
     public function register($registration);
 
     public function syncLogin($userId);

@@ -47,12 +47,12 @@
       <div class="controls col-md-8 radios">
         {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
         <div class="help-block">
-          支付宝规定，“立即到账接口”只能以企业名义申请，个人用户只能申请“担保交易接口”。
-          <a href="http://www.edusoho.com/intro/96#payment" target="_blank">如何申请？</a>
+          PID和Key可在申请支付宝接口后获取，
+          <a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218012942" target="_blank">如何申请？</a>
           <br>
-          "立即到账接口"如需在移动客户端使用，还需开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2014110308142133" target="blank">手机网站支付</a>
+          "立即到账接口"如需在移动客户端使用，请开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218008816" target="blank">手机网站支付</a>
           <br>
-          “标准双接口”在2014-12-29日已被支付宝下线，此时间前申请成功的用户还可以在签约期内使用，建议签约担保交易以免过期后影响正常支付。
+          “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。
         </div>
       </div>
     </div>

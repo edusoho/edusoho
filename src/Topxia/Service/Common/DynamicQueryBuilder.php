@@ -49,6 +49,8 @@ class DynamicQueryBuilder extends QueryBuilder
             return $this;
         }
 
+        $this->conditions[$conditionName] = array_unique($this->conditions[$conditionName]);
+
         $marks = array();
 
         foreach (array_values($this->conditions[$conditionName]) as $index => $value) {

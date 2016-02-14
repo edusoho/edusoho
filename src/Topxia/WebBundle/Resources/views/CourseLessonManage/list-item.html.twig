@@ -125,6 +125,18 @@
           <li class="divider"></li>
         {% endif %}
 
+        {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
+          {% if  file.convertStatus|default(null) == 'success' %}
+          <!-- file.createdUserId|default(null) == app.user.id and -->
+          <li>
+            <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
+            <span class="glyphicon glyphicon-list prs"></span>弹题管理
+            </a>
+          </li>
+          <li class="divider"></li>
+          {% endif %}
+        {% endif %}
+
         {% if lesson.type != 'testpaper' %}
           <li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>{{'添加资料'|trans}}</a></li>
           <li class="divider"></li>

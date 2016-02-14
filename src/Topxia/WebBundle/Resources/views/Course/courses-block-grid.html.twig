@@ -96,8 +96,6 @@
 
         {% if mode in ['learn'] %}
           <div class="learn-status">
-
-            {% if setting('classroom.enabled')|default(0) %}
               <div class="mbm">
               {% if course.classroomCount > 0 %}
                 {% set classroom = course.classroom %}
@@ -107,7 +105,7 @@
                 {% endif %}</span>
               {% endif %}
               </div>
-            {% endif %}
+
 
 
             {% if course.memberIsLearned %}

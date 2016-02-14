@@ -17,7 +17,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     {
         $that = $this;
 
-        return $this->fetchCached('id', $id, function ($id) use ($that) {
+        return $this->fetchCached('id:{$id}', $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             $thread = $that->getConnection()->fetchAssoc($sql, array($id));
 
@@ -82,6 +82,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, $this->table)
+                        ->andWhere("updateTime >= :updateTime_GE")
                         ->andWhere("targetType = :targetType")
                         ->andWhere('targetId = :targetId')
                         ->andWhere('userId = :userId')
@@ -110,6 +111,7 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         $this->createSerializer()->serialize($fields, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $fields);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course thread error.');
@@ -121,10 +123,11 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
     public function updateThread($id, $fields)
     {
         $this->clearCached();
+        $fields['updateTime'] = time();
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $fields['updateTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
-
+        $this->clearCached();
         return $this->getThread($id);
     }
 

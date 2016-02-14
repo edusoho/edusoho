@@ -32,6 +32,10 @@ class RegisterController extends BaseController
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
             }
 
+            if ($this->getSensitiveService()->scanText($registration['nickname'])) {
+                return $this->createMessageResponse('error', '用户名中含有敏感词！');
+            }
+
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
             $registration['createdIp'] = $request->getClientIp();
             $authSettings              = $this->getSettingService()->get('auth', array());
@@ -86,6 +90,7 @@ class RegisterController extends BaseController
         }
 
         $inviteCode = '';
+        $inviteUser = array();
 
         if (!empty($fields['inviteCode'])) {
             $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
@@ -99,6 +104,7 @@ class RegisterController extends BaseController
             'inviteCode'        => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort'      => array(),
+            'inviteUser'        => $inviteUser,
             '_target_path'      => $this->getTargetPath($request)
         ));
     }
@@ -519,6 +525,11 @@ class RegisterController extends BaseController
         ) {
             return true;
         }
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function registerLimitValidator($registration, $authSettings, $request)
