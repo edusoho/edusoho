@@ -11,6 +11,7 @@ body {
 }
 .es-poster {
   direction: ltr;
+  @include display-flex;
 }
 
 /*# sourceMappingURL=rtl.css.map */
