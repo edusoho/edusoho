@@ -2,7 +2,7 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}添加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}{% endblock %}
+{% block title %}{{'添加'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{% endblock %}
 {% block body %}
 
 <form id="student-create-form" class="form-horizontal" method="post" action="{{ path('course_manage_student_create', {id:course.id}) }}">
@@ -12,7 +12,7 @@
         <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</label>
       </div>
       <div class="col-md-7 controls">
-        <input type="text" id="student-nickname" name="queryfield" class="form-control" 
+        <input type="text" id="student-nickname" name="queryfield" class="form-control"
         data-url="{{ path('course_manage_student_check',{id:course.id})}}" placeholder='邮箱/手机/用户名' >
       	<div class="help-block">只能添加系统中已注册的用户</div>
     	</div>

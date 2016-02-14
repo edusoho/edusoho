@@ -1,9 +1,11 @@
 {% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
-{% if app.request.getLocale() == 'ug_CN' %}
-  {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
-{% else %}
-  {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
-{% endif %}
+{% block title %}
+  {% if app.request.getLocale() == 'ug_CN' %}
+    我的{{setting('coin.coin_name')}} - {{ parent() }}
+  {% else %}
+    我的{{setting('coin.coin_name')}} - {{ parent() }}
+  {% endif %}
+{% endblock %}
 
 {% set side_nav = 'my-coin' %}
 
