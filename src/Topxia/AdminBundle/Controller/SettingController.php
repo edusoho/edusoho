@@ -337,7 +337,7 @@ class SettingController extends BaseController
         $mailer     = $this->getSettingService()->get('mailer', array());
         $status     = "";
 
-        if (!empty($cloudEmail) && $cloudEmail['status'] == 'used') {
+        if (!empty($cloudEmail) && $cloudEmail['status'] == 'enable') {
             return $status = "cloud_email";
         }
 
