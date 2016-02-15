@@ -2,9 +2,9 @@
 {% do load_script('quiz-question/testpaper-result') %}
 {% block testpaper_heading_status %}
   {% if paperResult.status == 'finished' %}
-    <div class="label label-success">批阅完成</div>
+    <div class="label label-success">{{'批阅完成'|trans}}</div>
   {% elseif paperResult.status == 'reviewing' %}
-    <div class="label label-info">批阅中</div>
+    <div class="label label-info">{{'批阅中'|trans}}</div>
   {% endif %}
 {% endblock %}
 
@@ -13,20 +13,24 @@
   {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
 
   {% if paperResult.status == 'reviewing' %}
-    <div class="alert alert-warning">老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。</div>
+    <div class="alert alert-warning">{{'老师正在批阅试卷，批阅完成后会以站内私信通知您批阅结果，请稍等。'|trans}}</div>
   {% elseif paperResult.status == 'finished' %}
     {% if paperResult.teacherSay %}
       <div class="alert alert-success">
-        <div class=""><strong>评语：</strong></div>
+        <div class=""><strong>{{'评语：'|trans}}</strong></div>
         <div class="mtm">{{ paperResult.teacherSay|bbCode2Html|raw }}</div>
       </div>
     {% endif %}
     {% if paperResult.passedStatus == 'unpassed' and target|default(null) %}
       <div class="alert alert-danger">
-        您未通过考试，请<a href="{{ path('course_lesson_redo_test', {lessonId:target.id,testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+        {% if app.request.getLocale() == 'ug_CN' %}
+          您未通过考试，请<a href="{{ path('course_lesson_redo_test', {lessonId:target.id,testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+        {% else %}
+          您未通过考试，请<a href="{{ path('course_lesson_redo_test', {lessonId:target.id,testId:paperResult.testId}) }}">重新参加考试</a>，或者重新学习课程。
+        {% endif %}
       </div>
     {% elseif paperResult.passedStatus == 'passed' %}
-      <div class="alert alert-success">恭喜您已通过本次考试。</div>
+      <div class="alert alert-success">{{'恭喜您已通过本次考试。'|trans}}</div>
     {% endif %}
   {% endif %}
 
@@ -55,17 +59,17 @@
         {% endfor %}
 
         <div class="testpaper-card-explain clearfix">
-            <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">正确</small>
-            <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">错误</small>
-            <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">待批阅</small>
-            <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">未做</small>
+            <a href="javascript:;" class="btn btn-success btn-index"></a><small class="text-muted">{{'正确'|trans}}</small>
+            <a href="javascript:;" class="btn btn-danger btn-index"></a><small class="text-muted">{{'错误'|trans}}</small>
+            <a href="javascript:;" class="btn btn-warning btn-index"></a><small class="text-muted">{{'待批阅'|trans}}</small>
+            <a href="javascript:;" class="btn btn-default btn-index"></a><small class="text-muted">{{'未做'|trans}}</small>
         </div>
       </div>
       <div class="panel-footer">
         <div class="checkbox">
           <label>
             <input type="checkbox" id="showWrong" />
-            <span class="text-info">只看错题</span>
+            <span class="text-info">{{'只看错题'|trans}}</span>
           </label>
         </div>
       </div>

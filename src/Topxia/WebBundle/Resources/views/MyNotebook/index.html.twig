@@ -18,7 +18,7 @@
                 <div class="media-body">
                   <h4 class="media-heading">{{course.title}}</h4>
                   <div class="notebook-metas">
-                    <span class="notebook-number">共 {{ member.noteNum }} 篇笔记</span>
+                    <span class="notebook-number">{{'共'|trans}} {{ member.noteNum }} {{'篇笔记'|trans}}</span>
                   </div>
                   <div class="notebook-metas">
                     {% if member.noteLastUpdateTime > 0 %}

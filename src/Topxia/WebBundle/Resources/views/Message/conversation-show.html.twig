@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}私信 - {{ parent() }}{% endblock %}
+{% block title %}{{'私信'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/show' %}
 {% block content %}
 
@@ -8,19 +8,23 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <a href="{{ path('message')}}" class="btn btn-default pull-right">返回我的私信</a>
-        <h2>与{{ receiver.nickname }}的私信对话</h2>
+        <a href="{{ path('message')}}" class="btn btn-default pull-right">{{'返回我的私信'|trans}}</a>
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <h2>与{{ receiver.nickname }}的私信对话</h2>
+        {% else %}
+          <h2>与{{ receiver.nickname }}的私信对话</h2>
+        {% endif %}
       </div>
 
-      <form id="message-reply-form" class="message-reply-form clearfix" method="post" 
+      <form id="message-reply-form" class="message-reply-form clearfix" method="post"
       action="{{ path('message_conversation_show', {conversationId:conversation.id}) }}">
         <div class="form-group">
-          {{ form_widget(form.content, {attr:{class:'form-control', rows:3, placeholder:'请输入私信内容'}}) }}
+          {{ form_widget(form.content, {attr:{class:'form-control', rows:3, placeholder:'请输入私信内容'|trans}}) }}
         </div>
 
         <div class="form-group">
           {{ form_rest(form) }}
-          <button id="course-reply-btn" class="btn btn-primary pull-right disabled">发送</button>
+          <button id="course-reply-btn" class="btn btn-primary pull-right disabled">{{'发送'|trans}}</button>
         </div>
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

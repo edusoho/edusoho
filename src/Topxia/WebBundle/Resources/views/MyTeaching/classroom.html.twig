@@ -22,7 +22,7 @@
               <div class="course-body">
                 {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
                   <div style="float:right;" class="text-muted mrm mls">
-                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">管理{{ setting('classroom.name')|default("班级"|trans) }}</a>
+                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'管理'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}</a>
                   </div>
                 {% endif %}
                 <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
@@ -46,7 +46,11 @@
             </li>
             {% endfor %}
             {% else %}
-            <div class="empty">找不到所教{{ setting('classroom.name')|default("班级") }}！</div>
+              {% if app.request.getLocale() == 'ug_CN' %}
+                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              {% else %}
+                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              {% endif %}
             {% endif %}
           </ul>
   </div>

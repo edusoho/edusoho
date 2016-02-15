@@ -3,7 +3,7 @@
   <td width="55%">
     {{ myTestpaper.name|plain_text(60) }}
     <div>
-      <small class="text-muted">来自课程《{{ course.title }}》</small>
+      <small class="text-muted">{{'来自课程'|trans}}《{{ course.title }}》</small>
       <small class="text-muted mhs">•</small>
       <small class="text-muted" title="{{'开始考试时间'|trans}}">{{ myTestpaperResult.beginTime|date("Y年n月d日 H:i") }}</small>
     </div>
@@ -13,8 +13,8 @@
 		{% if myTestpaperResult.status == 'reviewing' %}
 		  <span class="text-warning">{{'正在批阅'|trans}}</span>
 		{% elseif myTestpaperResult.status == 'finished' %}
-			<span class="text-muted">得分<strong class="text-warning">{{ myTestpaperResult.score }}</strong>分</span><br>
-			<small class="text-muted">做对<strong>{{ myTestpaperResult.rightItemCount }}</strong>题 / 共<strong>{{ myTestpaper.itemCount }}</strong>题</small>
+			<span class="text-muted">{{'得分'|trans}}<strong class="text-warning">{{ myTestpaperResult.score }}</strong>{{'分'|trans}}</span><br>
+			<small class="text-muted">{{'做对'|trans}}<strong>{{ myTestpaperResult.rightItemCount }}</strong>{{'题'|trans}} / {{'共'|trans}}<strong>{{ myTestpaper.itemCount }}</strong>{{'题'|trans}}</small>
 		{% else %}
 		  <span class="text-muted">{{'未交卷'|trans}}</span>
 		{% endif %}
