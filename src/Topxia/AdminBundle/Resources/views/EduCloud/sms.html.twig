@@ -31,7 +31,9 @@
     	</div>
 	{% else %}	
     {{ web_macro.flash_messages() }}
-
+    <div class="page-header clearfix">
+      <h1 class="pull-left">云短信</h1>
+    </div>
     {% if not smsStatus or smsStatus.status == 'error' %}
       <div class="panel panel-default">
         <table class="table table-striped table-hover" style="word-break:break-all;">

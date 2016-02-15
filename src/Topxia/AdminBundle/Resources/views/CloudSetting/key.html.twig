@@ -26,7 +26,9 @@
     <hr>
   {% else %}
     {{ web_macro.flash_messages() }}
-
+    <div class="page-header clearfix">
+      <h1 class="pull-left">授权码</h1>
+    </div>
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
       <div class="form-group">
         <label class="col-md-3 control-label">AccessKey</label>
