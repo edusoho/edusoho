@@ -1,5 +1,7 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import _self as self_macro %}
+
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
 {% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
@@ -32,20 +34,24 @@
   </title>
 
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+    <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
+  
+  {% block stylesheets %}
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin.css') }}" rel="stylesheet" />
   <link href="{{ asset('bundles/topxiaadmin/css/admin_v2.css') }}" rel="stylesheet" />
   <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/es-icon.css') }}" />
+  {% endblock %}
+
   {% block javascripts %}{% endblock %}
   <!--[if lt IE 9]>
     <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
     <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
   <![endif]-->
 </head>
-
 <body>
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -58,27 +64,27 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
       </div>
       <div class="navbar-collapse collapse">
-
         <ul class="nav navbar-nav">
-          {% for m in menu_children('admin', 'admin', 1) %}
-
-            {% if m.code == "admin_app"%}
+           {% for m in menu_children('admin', 'admin', 1) %}
+            {% if m.code == "admin_app" %}
                {% if not is_granted('ROLE_SUPER_ADMIN') %}
                 {% set parameter = {'postStatus':'all'} %}
                 {% set m = m|array_merge({'router_params':parameter,'router_name':'admin_app_center'}) %}
                {% endif %}
             {% endif %}
 
-            {% if m.code != "admin_system" %}
-                <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
-                </li>  
+            {% if m.code == "admin_system" %}
+              {% if is_granted('ROLE_SUPER_ADMIN') %}
+              <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
+              {{ self_macro.menu_link_html(_context, m) }}
+              </li>
+              {% endif %}
             {% else %}    
-                {% if is_granted('ROLE_SUPER_ADMIN') %}
-                  <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
-                  {{ _self.menu_link_html(_context, m) }}
-                  </li>
-                {% endif %}
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
+                <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
+                  {{ self_macro.menu_link_html(_context, m) }}
+                </li>
+              {% endif %}
             {% endif %}
 
           {% endfor %}
@@ -104,7 +110,7 @@
       </div><!--/.navbar-collapse -->
     </div>
   </div>
-
+  
   <div class="container">
     <div class="row">
       {% block content %}
@@ -120,7 +126,7 @@
                             
                   {% if not menu_hiddens[m.code]|default(false)  %}
                     {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                    {{ _self.menu_link_html(_context, m, menuClass) }}
+                    {{ self_macro.menu_link_html(_context, m, menuClass) }}
                   {% endif %}
                       
                   {% endif %}
@@ -139,7 +145,7 @@
               {% block page_buttons %}
                 {% for m in menu_children('admin', menu_current.code, 2) %}
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
+                    {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                   {% endif %}
                 {% endfor %}
               {% endblock %}
@@ -157,12 +163,14 @@
             {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
           {% endif %}
 
+          {% block content_header %}{% endblock %}
+          
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m, m.class|default('')) }}
+                    {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -174,7 +182,7 @@
               {% for m in subTabMenus %}
                 <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
                   {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ _self.menu_link_html(_context, m) }}
+                    {{ self_macro.menu_link_html(_context, m) }}
                   {% endif %}
                 </li>
               {% endfor %}
@@ -188,10 +196,20 @@
     </div>
   </div>
 
-  {% block footer %}{% endblock %}
+  {% block footer %}
+    {{ setting('site.analytics')|raw }} 
+  {% endblock %}
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
+  {% if setting('copyright.thirdCopyright') != 1 %}
+    <div class="fixed-bar">
+      <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+        <i class="es-icon es-icon-help"></i>
+        <span>产品<br/>反馈</span>
+      </a>
+    </div>
+  {% endif %}
 </body>
 </html>
 

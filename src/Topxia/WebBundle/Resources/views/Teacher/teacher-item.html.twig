@@ -4,7 +4,7 @@
       <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
     </a>
     <h3 class="title">
-      <a class="link-light" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+      <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
     </h3>
     <div class="position">
       {% if teacher.title %}
@@ -24,9 +24,9 @@
     </div>
     <div class="metas">
       {% if not app.user or (teacher.id != app.user.id) %}
-        <a class="btn btn-primary btn-high btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
-        <a class="btn btn-default btn-high btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
-        <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
+        <a class="btn btn-primary btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:teacher.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>关注</a>
+        <a class="btn btn-default btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:teacher.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+        <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-backdrop="static"  data-url="{{path('message_create', {toId:teacher.id})}}">私信</a>
       {% endif %}
     </div>
   </div>

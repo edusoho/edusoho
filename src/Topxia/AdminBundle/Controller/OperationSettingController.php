@@ -2,23 +2,18 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
-use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class OperationSettingController extends BaseController
 {
     public function articleSetAction(Request $request)
-    {   
+    {
         $articleSetting = $this->getSettingService()->get('article', array());
 
         $default = array(
-            'name' => '资讯频道',
+            'name'     => '资讯频道',
             'pageNums' => 20
         );
 
@@ -39,7 +34,7 @@ class OperationSettingController extends BaseController
     public function groupSetAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $set=$request->request->all();
+            $set = $request->request->all();
 
             $this->getSettingService()->set('group', $set);
             $this->setFlashMessage('success', '小组设置已保存！');
@@ -49,7 +44,44 @@ class OperationSettingController extends BaseController
         ));
     }
 
-    private function getCourseService()
+    public function inviteSetAction(Request $request)
+    {
+        $default = array(
+            'invite_code_setting'       => 0,
+            'promoted_user_value'       => '',
+            'promote_user_value'        => '',
+            'deadline'                  => 90,
+            'inviteInfomation_template' => '{{registerUrl}}'
+        );
+
+        if ($request->getMethod() == 'POST') {
+            $inviteSetting = $request->request->all();
+            $inviteSetting = ArrayToolkit::parts($inviteSetting, array(
+                'invite_code_setting',
+                'promoted_user_value',
+                'promote_user_value',
+                'deadline',
+                'inviteInfomation_template'
+            ));
+
+            $inviteSetting = array_merge($default, $inviteSetting);
+
+            $this->getSettingService()->set('invite', $inviteSetting);
+            $this->setFlashMessage('success', '邀请码设置已保存！');
+            goto response;
+        }
+
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = array_merge($default, $inviteSetting);
+
+        response:
+        return $this->render('TopxiaAdminBundle:Invite:set.html.twig', array(
+            'inviteSetting'             => $inviteSetting,
+            'inviteInfomation_template' => $inviteSetting['inviteInfomation_template']
+        ));
+    }
+
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -79,10 +111,8 @@ class OperationSettingController extends BaseController
         return $this->getServiceKernel()->createService('User.AuthService');
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }
-
-
 }

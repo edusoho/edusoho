@@ -1,0 +1,51 @@
+<div class="ui-bar search-bar">
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <div class="title">
+      	<div class="ui-searchbar-wrap ui-border-b focus" on-element-readey="focusSearchInput()">
+		    <div class="ui-searchbar ui-border-radius">
+		        <i class="ui-icon-search"></i>
+		        <div class="ui-searchbar-text">搜索课程,班级</div>
+		        <div class="ui-searchbar-input">
+		        	<input ng-model="search" ng-keypress="inputKeyPress($event)" placeholder="搜索课程,班级" autocapitalize="off">
+		        </div>
+		        <i class="ui-icon-close" ng-click="search = '' "></i>
+		    </div>
+		    <button class="ui-searchbar-cancel" ng-click="seach()">{{ search.length > 0 ? '搜索' : '取消' }}</button>
+		</div>
+    	</div>
+      </div>
+</div>
+
+<div class="top-header">
+  <div class="course-card" style="margin-bottom: 16px;" ng-if="searchCourse.data.length > 0">
+    <h4><span class="circle-label"></span>课程</h4>
+    <ul class="ui-list ui-border-tb">
+        <li class="ui-border-t" ng-repeat="course in searchCourse.data" ng-href="#/course/{{ course.id  }}" ng-include=" 'view/course_list_item.html' | coverIncludePath ">
+            
+        </li>
+    </ul>
+    <div class="ui-btn-group" ng-if="searchCourse.data.length < searchCourse.total">
+        <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+    </div>
+  </div>
+
+  <div class="course-card classroom-card" ng-if="searchClassRoom.data.length > 0">
+    <h4><span class="circle-label"></span>班级</h4>
+    <ul class="ui-list ui-border-tb">
+          <li class="ui-border-t" ng-repeat="classRoom in searchClassRoom.data" ng-href="#/classroom/{{ classRoom.id }}" ng-include=" 'view/classroom_list_item.html' | coverIncludePath ">
+              
+          </li>
+    </ul>
+    <div class="ui-btn-group" ng-if="searchClassRoom.data.length < searchClassRoom.total">
+        <button type="button" class="btn-green" ng-href="#/classroomlist/">更多</button>
+    </div>
+  </div>
+
+  <div class="list-empty" ng-if="searchClassRoom.data.length == 0 && searchCourse.data.length == 0">
+    <a>
+      <i class="icon iconfont icon-ebook"></i>
+      <span>没有搜到到相关课程或班级</span>
+    </a>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+/* android */
+
+.tabs-android>.tabs, .tabs.tabs-top
+{
+  top: 56px;
+}
+
+.bar.bar-header{
+  height: 56px;
+  line-height: 56px;
+}
+
+.bar.bar-header .button {
+  line-height: 46px;
+}
+
+.platform-android .bar-header .title {
+  height: 56px;
+  line-height: 56px ! important;
+}
+
+.ionic-scroll.has-header.has-tabs-top {
+	top: 105px;
+}
+
+.ionic-scroll.has-header {
+	top: 56px;
+}
+
+.bar .button.button-icon:before {
+	line-height: 46px;
+}
+
+.courselist-padding {
+  top: 100px ! important;
+}
+
+.courselist-tab .content {
+  top: 100px ! important;
+}

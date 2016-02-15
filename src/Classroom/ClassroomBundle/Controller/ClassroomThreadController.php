@@ -9,21 +9,29 @@ class ClassroomThreadController extends BaseController
 {
     public function listAction(Request $request, $classroomId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
-        if ($classroom['private'] && (!$member || ($member && $member['locked']))) {
-            return $this->createMessageResponse('error', '该班级是封闭班级,您无权查看');
+        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && $member['locked'] == '0') {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        } 
         return $this->render('ClassroomBundle:ClassroomThread:list.html.twig', array(
                 'classroom' => $classroom,
                 'filters' => $this->getThreadSearchFilters($request),
@@ -31,22 +39,34 @@ class ClassroomThreadController extends BaseController
                 'service' => $this->getThreadService(),
                 'layout' => $layout,
                 'member' => $member,
+                'classroomDescription' => $classroomDescription
         ));
     }
 
     public function createAction(Request $request, $classroomId, $type)
     {
+        if(!in_array($type, array('discussion', 'question', 'event'))) {
+            throw $this->createAccessDeniedException('类型参数有误!');
+        }
+
+        $user = $this->getCurrentUser();
+        if(!$user->isLogin()) {
+            $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', array('classroomId'=>$classroomId,'type' => $type)));
+            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
             throw $this->createAccessDeniedException('无权限创建活动!');
+        } else if (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
+            throw $this->createAccessDeniedException('无权限创建话题!');
         }
 
         if ($request->getMethod() == 'POST') {
             return $this->forward('TopxiaWebBundle:Thread:create', array('request' => $request, 'target' => array('type' => 'classroom', 'id' => $classroom['id'])));
         }
 
-        $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
 
@@ -65,7 +85,12 @@ class ClassroomThreadController extends BaseController
 
     public function updateAction(Request $request, $classroomId, $threadId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
+        if(!$this->getClassroomService()->canLookClassroom($classroomId)){ 
+                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
+            }
         $thread = $this->getThreadService()->getThread($threadId);
 
         $user = $this->getCurrentUser();
@@ -90,6 +115,8 @@ class ClassroomThreadController extends BaseController
 
     public function showAction(Request $request, $classroomId, $threadId)
     {
+        $classroomSetting = $this->getSettingService()->get('classroom');
+
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $thread = $this->getThreadService()->getThread($threadId);
         $author = $this->getUserService()->getUser($thread['userId']);
@@ -101,7 +128,9 @@ class ClassroomThreadController extends BaseController
         }
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
+        }
         if (empty($thread)) {
             return $this->createMessageResponse('error', '帖子已不存在');
         }
@@ -151,5 +180,10 @@ class ClassroomThreadController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

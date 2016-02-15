@@ -31,6 +31,16 @@ define(function(require, exports, module) {
            hideOrShowTimeAndMinutes();
         });
 
+       
+        $('[name=enabled]').change(function (){
+           if ( $('[name=enabled]').filter(':checked').attr("value") == 1 ){
+            $('#third_login').show();
+          }else if ( $('[name=enabled]').filter(':checked').attr("value") == 0 ){
+            $('#third_login').hide();
+          };
+        });
+        
+
         $('[data-role=oauth2-setting]').each(function() {
             var type = $(this).data('type');
             $('[name=' + type + '_enabled]').change(function() {
@@ -50,6 +60,12 @@ define(function(require, exports, module) {
             })
 
             $('[name=' + type + '_enabled]:checked').change();
+        });
+
+        $('#help').popover({
+            html: true,
+            container:"body",
+            template: '<div class="popover help-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
         });
 
     };

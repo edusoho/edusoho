@@ -2,16 +2,24 @@
   background: #fff;
   padding: 15px;
   margin-bottom: 20px;
-  border: 1px solid @gray-light;
   .border-radius;
-  .box-shadow( 0 2px 4px rgba(0,0,0,.08));
+  .es-box-shadow;
+  &.section-lg {
+    min-height: 400px;
+  }
   .section-header {
     position: relative;
     margin-bottom: 20px;
-    border-bottom: 1px solid @gray-light;
+    border-bottom: 1px solid @gray-lighter;
     h1 {
-      margin-top: 10px;
+      margin-top: 5px;
       margin-bottom: 20px;
+      font-size: 20px;
+    }
+    h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 16px;
     }
     .more {
       position: absolute;
@@ -29,4 +37,8 @@
       }
     }
   }
+}
+
+.lt-ie9 .es-section {
+  border: 1px solid @gray-light;
 }

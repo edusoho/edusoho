@@ -51,7 +51,7 @@ class CommentWidgetController extends BaseController
 		return $this->createJsonResponse(true);
 	}
 
-    private function getCommentService()
+    protected function getCommentService()
     {
         return $this->getServiceKernel()->createService('Content.CommentService');
     }

@@ -57,32 +57,38 @@ class LessonViewDaoImpl extends BaseDao implements LessonViewDao
         $conditionStr = "";
 
         if (array_key_exists("fileType", $conditions)) {
-            $conditionStr .= " and `fileType` = ? ";
+            $conditionStr .= " AND `fileType` = ? ";
             $params[] = $conditions['fileType'];
         }
         
         if (array_key_exists("fileStorage", $conditions)) {
-            $conditionStr .= " and `fileStorage` = ? ";
+            $conditionStr .= " AND `fileStorage` = ? ";
             $params[] = $conditions['fileStorage'];
         }
 
-		$sql="SELECT count(`id`) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? and `createdTime`<=? {$conditionStr} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
+		$sql="SELECT count(`id`) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE  `createdTime`>=? AND `createdTime`<=? {$conditionStr} group by date_format(from_unixtime(`createdTime`),'%Y-%m-%d') order by date ASC ";
 
         return $this->getConnection()->fetchAll($sql, $params);
 	}
 
-    private function _createSearchQueryBuilder($conditions)
+    public function deleteLessonView($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_lesson_view')
             ->andWhere('fileType = :fileType')
             ->andWhere('fileStorage = :fileStorage')
+            ->andWhere('courseId = :courseId')
             ->andWhere('createdTime >= :startTime')
             ->andWhere('createdTime <= :endTime');
         return $builder;
     }
 
-    private function _filterTypeCondition($type)
+    protected function _filterTypeCondition($type)
     {
         if (in_array($type, array('net','local','cloud'))) {
            return "WHERE `fileType` = '{$type}'";

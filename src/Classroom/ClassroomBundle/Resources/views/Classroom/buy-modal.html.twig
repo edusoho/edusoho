@@ -1,0 +1,96 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set billable = false %}
+{% if classroom.price > 0 %}
+  {% set billable = true %}
+{% endif %}
+
+{% block title %}{% if billable %}购买{{setting("classroom.name")|default("班级")}}{% else %}加入学习{% endif %}{% endblock %}
+{% block body %}
+
+  {% if billable %}
+    <div class="alert alert-info">注意：请在30分钟内完成支付，否则订单将会过期失效</div>
+  {% endif %}
+  <form id="classroom-buy-form" class="form-horizontal" method="post" 
+  action="{{ path('classroom_buy_modify_user_info') }}"
+  >
+    <div class="form-group">
+      <div class="col-sm-3 control-label">{{setting("classroom.name")|default("班级")}}名称</div>
+      <div class="col-sm-9 controls">
+      	<span class="control-text text-muted">《{{ classroom.title }}》</span>
+      </div>
+    </div>
+
+    {% if billable %}
+    <div class="form-group">
+      <div class="col-sm-3 control-label">价格</div>
+      <div class="col-sm-9 controls money-text">
+      	<span class="control-text">
+          {% if vipStatus == 'ok' %}
+            会员免费
+          {% else %}
+            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+              <strong class="money">{{classroom.price * setting('coin.cash_rate') }}</strong>
+              <span class="text-muted">{{setting('coin.coin_name')}}</span>
+            {% else %}
+              <strong class="money">{{ classroom.price }}</strong>
+        		  <span class="text-muted">元</span>
+            {% endif %}
+          {% endif %}
+      	</span>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if billable %}
+      {% if not payments %}
+        <div class="alert alert-info">{{ setting('payment.disabled_message')|default('尚未开启支付模块，无法购买课程。')|raw }}</div>
+      {% endif %}
+    {% else %}
+      {% if avatarAlert|default(null) %}
+        <div class="alert alert-warning">您还没有头像，设置以后才能加入学习<br />拥有一个独有的头像，老师和同学们能更容易关注到你哦～～ <a href="{{ path('settings_avatar') }}" class="alert-link" target="_blank">点击设置</a></div>
+      {% else %}
+        <div class="alert alert-info">此{{setting("classroom.name")|default("班级")}}为免费{{setting("classroom.name")|default("班级")}}，无需购买，可直接加入学习。</div>
+      {% endif %}
+    {% endif %}
+    <input type="hidden" name="targetId" value="{{ classroom.id }}" />
+    <input type="hidden" name="payment" value="alipay" />
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+
+    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:courseSetting.buy_fill_userinfo, userinfoFieldsSetting:courseSetting.userinfoFields, userFields:userFields, user:user, showNavTip:1} %}
+  
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% set priceType = setting("coin.price_type") %}
+  {% if billable and classroom.price > 0 %}
+    {% if payments %}
+      {% if member and (member.role == 'student' or member.role == 'teacher') %}
+        <span class="text-muted">预览模式无法支付{{member.role}}</span>
+        <button class="btn btn-primary" disabled="disabled">去支付</button> 
+      {% else %}
+        {% if vipStatus == 'ok'%}
+          <button id="join-course-btn" class="btn btn-primary" data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">加入学习</button>
+        {% else %}
+          <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="正在创建订单..." data-toggle="form-submit" data-target="#classroom-buy-form">去支付</button>
+        {% endif %}
+      {% endif %}
+    {% elseif not payments and vipStatus == 'ok' %}
+     <button {% if classroom.status != 'published'%} disabled="disabled" {% endif %}
+     id="join-course-btn" class="btn btn-primary" data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">加入学习</button>
+    {% endif %}
+  {% else %}
+    {% if member and (member.role == 'student' or member.role == 'teacher') %}
+      <span class="text-muted">预览模式无法加入学习{{member.role}}</span>
+      <button class="btn btn-primary" disabled="disabled">加入学习</button> 
+    {% else %}  
+      {% if not avatarAlert|default(null) and  classroom.showable and classroom.status != 'closed' %}
+        <button id="join-course-btn" class="btn btn-primary" data-loading-text="正在加入..." type="submit" data-toggle="form-submit" data-target="#classroom-buy-form">加入学习</button>
+      {% endif %}
+    {% endif %}
+
+  {% endif %}
+
+  <script>app.load('classroombundle/controller/classroom/buy-modal')</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+        {% if data.type == 'classroom' %}
+           【{{setting("classroom.name")|default("班级")}}公告】
+        {% elseif data.type == 'course' %}
+           【课程公告】
+        {% endif %}
+        你正在学习的<a href='{{data.url}}' target='_blank'>{{data.title}}</a>发布了一个新的公告，<a href='{{data.url}}' target='_blank'>快去看看吧</a>
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

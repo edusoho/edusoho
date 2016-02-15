@@ -205,22 +205,22 @@ class BlockServiceImpl extends BaseService implements BlockService
         ));
     }
 
-    private function getBlockDao()
+    protected function getBlockDao()
     {
         return $this->createDao('Content.BlockDao');
     }
 
-    private function getBlockHistoryDao()
+    protected function getBlockHistoryDao()
     {
         return $this->createDao('Content.BlockHistoryDao');
     }
 
-    private function getLogService()
+    protected function getLogService()
     {
         return $this->createService('System.LogService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->createService('System.SettingService');
     }

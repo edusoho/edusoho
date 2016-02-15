@@ -5,6 +5,7 @@ namespace Topxia\MobileBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Common\SimpleValidator;
+use Topxia\Common\ArrayToolkit;
 
 class UserController extends MobileController
 {
@@ -64,7 +65,7 @@ class UserController extends MobileController
         }
 
         $token = $this->getUserToken($request);
-        if (empty($token) or  $token['type'] != self::TOKEN_TYPE) {
+        if (empty($token) ||  $token['type'] != self::TOKEN_TYPE) {
             $token = null;
         }
 
@@ -163,7 +164,7 @@ class UserController extends MobileController
         }
 
         if (!SimpleValidator::nickname($nickname)) {
-            return $this->createErrorResponse($request, 'nickname_invalid', '昵称格式不正确');
+            return $this->createErrorResponse($request, 'nickname_invalid', '用户名格式不正确');
         }
 
         if (!SimpleValidator::password($password)) {
@@ -175,7 +176,7 @@ class UserController extends MobileController
         }
 
         if (!$this->getUserService()->isNicknameAvaliable($nickname)) {
-            return $this->createErrorResponse($request, 'nickname_exist', '该昵称已被注册');
+            return $this->createErrorResponse($request, 'nickname_exist', '该用户名已被注册');
         }
 
         $user = $this->getAuthService()->register(array(
@@ -272,6 +273,18 @@ class UserController extends MobileController
 
         return $html;
 
+    }
+
+    public function fillUserInfoAction()
+    {
+        $auth = $this->getSettingService()->get('auth');
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+        $userFields = ArrayToolkit::index($userFields,'fieldName');
+        $userInfo = $this->getUserService()->getUserProfile($user['id']);
+
+        return $this->render('TopxiaWebBundle:User:fill-userinfo-fields.html.twig', array(
+            'userFields' => $userFields,
+        ));
     }
     
     private function getSiteInfo($request)

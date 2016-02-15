@@ -18,12 +18,12 @@ class SimpleValidator
     {
         
         $option = array_merge(
-            array('minLength' => 3, 'maxLength' => 20),
+            array('minLength' => 4, 'maxLength' => 18),
             $option
         );
 
         $len = (strlen($value) + mb_strlen($value, 'utf-8')) / 2;
-        if ($len > $option['maxLength'] or $len < $option['minLength']) {
+        if ($len > $option['maxLength'] || $len < $option['minLength']) {
             return false;
         }
         return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.]+$/u', $value);
@@ -52,6 +52,11 @@ class SimpleValidator
     public static function mobile($value)
     {
         return !!preg_match('/^1\d{10}$/', $value);
+    }
+
+    public static function numbers($value)
+    {
+        return !!preg_match('/^(\d+,?)*\d+$/', $value);
     }
 
     public static function phone($value)

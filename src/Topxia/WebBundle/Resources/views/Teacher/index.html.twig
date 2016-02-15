@@ -7,17 +7,25 @@
 {% block description %}{{ setting('site.name') }}的师资介绍。{% endblock %}
 
 
-{% set bodyClass = 'teacherpage' %}
+{% set bodyClass = 'teacherpage bg-blank' %}
 {% do load_script('teacher/explore') %}
 
-{% block content %}
+{% block top_content %}
+  <div class="es-banner">
+    <div class="container">
+      <div class="title">
+        <i class="es-icon es-icon-permcontactcal"></i>所有教师
+      </div>
+    </div>
+  </div>
+{% endblock %}
 
-<div class="es-section">
+{% block content %}
   <div class="teacher-list row">
     {% for teacher in teachers %}
     {% set profile = profiles[teacher.id] %}
     {% set isFollowed = (teacher.id in Myfollowings)|default(false) %}
-      <div class="col-lg-4 col-md-6 col-sm-6">
+      <div class="col-lg-3 col-md-4 col-sm-6">
         {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
       </div>
     {% endfor %}
@@ -25,6 +33,4 @@
   <nav class="text-center">
     {{ web_macro.paginator(paginator) }}
   </nav>
-</div>
-
 {% endblock %}

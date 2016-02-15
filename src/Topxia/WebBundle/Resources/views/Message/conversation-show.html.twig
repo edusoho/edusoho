@@ -28,7 +28,7 @@
 
       <ul class="media-list message-list">
         {% for message in messages %}
-          {% include 'TopxiaWebBundle:Message:message-item.html.twig' with {message:message} %}
+          {% include 'TopxiaWebBundle:Message/Template:message-item-' ~ message.type ~ '.tpl.html.twig' %}
         {% endfor %}
       </ul>
 

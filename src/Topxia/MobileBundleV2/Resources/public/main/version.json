@@ -1,0 +1,10 @@
+{
+  "code" : "main",
+  "icon" : "",
+  "name" : "移动App",
+  "description" : "EduSoho官方移动App",
+  "author" : "官方",
+  "version" : "1.4.0",
+  "support_version" : "6.12.5",
+  "url" : "mapi_v2/mobile/main"
+}

@@ -18,7 +18,7 @@
 		课时 <span class="number">{{ lesson.number }}</span>： {{ lesson.title }}
 
 		{% if lesson.type in ['live'] %}
-		  <span class="text-muted">{{ lesson.startTime|data_format }}</span>
+		  <span class="text-muted">{{ lesson.startTime|date_format }}</span>
 		{% endif %}
 
 		{% if lesson.status == 'unpublished' %}
@@ -39,15 +39,20 @@
 
 	<div class="item-actions prs">
 		<a class="btn btn-link" title="预览" href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" target="_blank"><span class="glyphicon glyphicon-eye-open"></span></a>
-	{% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live' and lesson.isEnd %}
-		<button class="btn btn-link replay-lesson-btn" 
-		{% if lesson.replayStatus == 'ungenerated' %}
-		title="录制"
-		{% else %}
-		title="重新录制"
+
+		{% if lesson.status =='published' and lesson.isEnd and lesson.type == 'live' and lesson.replayStatus == 'generated' %}
+			<a href="#modal" class="btn btn-link " title="编辑" data-toggle="modal" data-url="{{ path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:course.id}) }}" ><span class="glyphicon glyphicon-th-list"></span></a>
 		{% endif %}
-		 data-url="{{ path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-facetime-video"></span></button>
-	{% endif %}
+
+		{% if lesson.status == 'published' and lesson.replayStatus == 'ungenerated' and lesson.type == 'live' and lesson.isEnd %}
+			<button class="btn btn-link replay-lesson-btn" 
+			{% if lesson.replayStatus == 'ungenerated' %}
+			title="录制"
+			{% else %}
+			title="重新录制"
+			{% endif %}
+			 data-url="{{ path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-facetime-video"></span></button>
+		{% endif %}
 
 
 	 

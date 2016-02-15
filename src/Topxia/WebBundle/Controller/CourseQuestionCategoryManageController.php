@@ -77,12 +77,12 @@ class CourseQuestionCategoryManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }

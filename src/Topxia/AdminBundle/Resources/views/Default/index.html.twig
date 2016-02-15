@@ -4,10 +4,10 @@
 {% set script_controller = 'default/index' %}
 {% block content %}
 
+{{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
 <div class="page-header">
   <h1>{{'管理中心'|trans}}  </h1>
 </div>
-
 {% if is_granted('ROLE_ADMIN') %}
   
   <div class="row">
@@ -17,10 +17,12 @@
       </div>
     </div>
 
+{% if setting('copyright.thirdCopyright')|default(null) == 0 and setting('copyright')|default(null) == 0 %}
   <div class="col-md-12">
         {{ render(controller('TopxiaAdminBundle:Default:getCloudNotices')) }}
     </div>
-
+{% endif %}
+ 
 
  <div class="col-md-6">
   <div class="panel panel-default">
@@ -48,6 +50,7 @@
         </div>
       </div>
     </div> #}
+    {% if setting('copyright.thirdCopyright')|default(null) != 1  %}
     <div class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">
@@ -58,6 +61,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
     <div id="popular-courses-panel" class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">

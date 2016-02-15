@@ -1,0 +1,12 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}导入管理 - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'students' %}
+
+{% block main %}
+{{ web_macro.flash_messages() }}
+
+{{ render(controller('TopxiaWebBundle:Importer:ValidateExcelInfo',{request:app.request, target:{type:'course', id:course.id}})) }}
+
+{% endblock %}

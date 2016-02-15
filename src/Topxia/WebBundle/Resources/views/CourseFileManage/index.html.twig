@@ -47,17 +47,25 @@
           </tr>
         </thead>
         <tbody>
-          {% for uploadFile in courseLessons %}
-            {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
-          {% else %}
-            <tr class="empty"><td colspan="20">无文件记录</td></tr>
-          {% endfor %}
+          {% if type == 'courselesson' %}
+            {% for uploadFile in courseLessons %}
+              {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
+            {% else %}
+              <tr class="empty"><td colspan="20">无文件记录</td></tr>
+            {% endfor %}
+          {% elseif type == 'coursematerial' %}
+            {% for uploadFile in courseLessons %}
+              {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr-coursematerial.html.twig' %}
+            {% else %}
+              <tr class="empty"><td colspan="20">无文件记录</td></tr>
+            {% endfor %}
+          {% endif %}
         </tbody>
       </table>
       
-      <label class="checkbox-inline mrm"><input type="checkbox" data-role="batch-select"> 全选</label>
+      <label class="checkbox-inline mrm mbm"><input type="checkbox" data-role="batch-select"> 全选</label>
       
-      <div class="btn-group">
+      <div class="btn-group mbm">
         <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="文件记录" data-url="{{ path('course_manage_upload_course_delete_files', {id:course.id, type:tab}) }}">
         <i class="glyphicon glyphicon-trash"></i>
         删除</button>

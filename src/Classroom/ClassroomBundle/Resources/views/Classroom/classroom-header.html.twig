@@ -1,33 +1,66 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 
-{% if member.locked|default("0") == "1" %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="mtl alert alert-warning">
-      您的退款申请已提交，请等待管理员的处理。
-      <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
-    </div>
-  </div>
-</div>
-{% endif %}
-
 <section class="class-header before">
   <div class="container">
+    {% if member.locked|default("0") == "1" %}
+      <div class="alert alert-warning">
+        您的退款申请已提交，请等待管理员的处理。
+        <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:classroom.id, targetType:"classroom"}) }}">取消退款，继续学习！</button>
+      </div>
+    {% endif %}
+
+    <ol class="breadcrumb breadcrumb-o">
+      <li><a href="{{ path('homepage') }}">首页</a></li>
+      {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ path('classroom_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
+      {% endfor %}
+      <li class="active">{{ classroom.title }}</li>
+    </ol>
+    
     <div class="class-header-mian">
       <div class="class-bg-layer"></div>
-      <div class="class-bg-layer two"></div>
       <div class="class-header-bg clearfix">
         <div class="class-img">
           <a href="{{path('classroom_show',{id:classroom.id})}}">
             <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}" href="{{path('classroom_show',{id:classroom.id})}}">
           </a>
+          {% if classroom.status == 'closed' %}
+            <span class="label label-danger">已关闭</span>
+          {% endif %}
         </div>
         <div class="class-info">
-          <h2 class="title">{{ classroom.title }}</h2>
+          <h2 class="title">
+            {{ classroom.title }}
+            <span class="es-qrcode top" data-url="{{path('classroom_qrcode',{id: classroom.id})}}">
+              <i class="es-icon es-icon-qrcode"></i>
+              <span class="qrcode-popover">
+                <img src="" alt="">
+                扫二维码继续学习
+              </span>
+            </span>
+          </h2>
           <div class="metas">
             <div class="score">
               {{ web_macro.star(classroom.rating) }}
               <span>({{ classroom.ratingNum }}评价)</span>
+            </div>
+            <div class="price">
+              价格： 
+              <span>
+                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                    {% if classroom.price > 0 %}
+                   {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                    {% else %}
+                    免费
+                    {% endif %}
+                {% else %}
+                  {% if classroom.price > 0 %}
+                    {{ classroom.price }}元
+                  {% else %}
+                    免费
+                  {% endif %}
+                {% endif %}
+              </span>
             </div>
           </div>
           <ul class="class-data hidden-sm clearfix {% if classroomMemberLevel %}active{% endif %}">
@@ -48,12 +81,11 @@
                 {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'classroom'} %}
               </span>
             </li>
-          {% if classroomMemberLevel and not classroom.private %}
-
-              <li class="hidden-xs color-warning icon-vip" title="会员班级" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员班级" title="会员班级">
-                <i class="es-icon es-icon-crown"></i><br>
-                  {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
-              </li>
+          {% if classroomMemberLevel and  classroom.showable %}
+            <li class="hidden-xs color-warning icon-vip" title="会员{{setting("classroom.name")|default("班级")}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' with {courseVip:classroomMemberLevel,userVipStatus:checkMemberLevelResult} %}" data-original-title="会员{{setting("classroom.name")|default("班级")}}" title="会员{{setting("classroom.name")|default("班级")}}">
+              <i class="es-icon es-icon-crown"></i><br>
+                {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:checkMemberLevelResult, level: classroomMemberLevel} %}
+            </li>
           {% endif %}
           </ul>
 
@@ -65,51 +97,17 @@
               {% include 'ClassroomBundle:Classroom:service-block.html.twig' with {'services':classroom.service }%}
             </div>
 
-            {% if not classroom.private %}
+            {% if  classroom.showable and classroom.status != 'closed' %}
               <div class="btn-buy">
-                {% if classroom.price > 0 and ( ( not canFreeJoin and classroom.vipLevelId == 0) or checkMemberLevelResult in ['not_member', 'not_login', 'member_expired', 'level_low']) %}
-                  <a class="btn btn-link" href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}">加入购买</a>
-                  <a class="btn btn-primary btn-lg" href="{{path('classroom_become_auditor',{id:classroom.id})}}">进去逛逛</a>
-                {% elseif checkMemberLevelResult in ['not_member', 'member_expired'] %}
-                  <a href="{{ path('vip_buy') }}"  class="btn btn-primary btn-lg" >{{ classroomMemberLevel.name }}，免费学</a>  
-                {% elseif checkMemberLevelResult == 'level_low' %}
-                  <a  class="btn btn-primary btn-lg"  href="{{ path('vip_upgrade', {level:classroomMemberLevel.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
-                {% elseif checkMemberLevelResult == 'ok' %}
-                  <a  class="btn btn-primary btn-lg"  href="{{ path('classroom_vip_buy', {id:classroom.id}) }}" >{{ classroomMemberLevel.name }}，免费学</a>
-                {% else %}
-                  <a  class="btn btn-primary btn-lg"  href="{{path('order_show',{targetId:classroom.id,targetType:'classroom'})}}"
-                    {% if canFreeJoin and app.user %}
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title="您之前已购买了本班级{{setting('classroom.name')}}的所有收费课程，可免费学习！"
-                    {% endif %}
-                  >免费加入</a>
-                {% endif %}
+                {% include 'ClassroomBundle:Classroom:Part/classroom-buy-btn.html.twig' %}
+                
               </div>
             {% endif %}
             
           </div>
         </div>
-        <div class="price">
-          价格： 
-         <span>
-            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                {% if classroom.price > 0 %}
-               {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                {% else %}
-                免费
-                {% endif %}
-            {% else %}
-              {% if classroom.price > 0 %}
-                {{ classroom.price }}元
-              {% else %}
-                免费
-              {% endif %}
-            {% endif %}
-        </span>
-        </div>
-      {% if canManage %}
-        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="setting" title="{{ setting('classroom.name')|default("班级") }}管理">
+      {% if classroom_permit(classroom.id, 'Manage') %}
+        <a href="{{path('classroom_manage',{id:classroom.id})}}" class="btn btn-default setting" title="{{ setting('classroom.name')|default("班级") }}管理">
           <i class="es-icon es-icon-setting"></i>
         </a>
       {% endif %}
@@ -117,4 +115,8 @@
       </div>
     </div>
   </div>
-</section>                
+</section>            
+
+{% if is_plugin_installed('ClassroomPlan') %}
+  {{ render(controller('ClassroomPlanBundle:ClassroomPlan:joinPlanBlock',{classroomId:classroom.id})) }}
+{% endif %}    

@@ -62,7 +62,7 @@ interface ThreadService
      *
      * @return array 获得的话题回帖列表。
      */
-    public function findThreadPosts($targetId, $threadId, $sort = 'default', $start, $limit);
+    public function findThreadPosts($targetId, $threadId, $sort, $start, $limit);
 
     /**
      * 获得话题回帖的数量

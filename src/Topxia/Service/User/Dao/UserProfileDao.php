@@ -13,4 +13,8 @@ interface UserProfileDao
     public function findProfilesByIds(array $ids);
 
     public function dropFieldData($fieldName);
+
+    public function searchProfiles($conditions, $orderBy, $start, $limit);
+
+	public function searchProfileCount($conditions);
 }

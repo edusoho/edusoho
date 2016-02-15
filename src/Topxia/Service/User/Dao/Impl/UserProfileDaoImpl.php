@@ -11,35 +11,54 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
     public function getProfile($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
-	public function addProfile($profile)
-	{
+    public function addProfile($profile)
+    {
         $affected = $this->getConnection()->insert($this->table, $profile);
+        $this->clearCached();
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert profile error.');
         }
-        return $this->getProfile($this->getConnection()->lastInsertId());
-	}
 
-	public function updateProfile($id, $profile)
-	{
+        return $this->getProfile($this->getConnection()->lastInsertId());
+    }
+
+    public function updateProfile($id, $profile)
+    {
         $this->getConnection()->update($this->table, $profile, array('id' => $id));
+        $this->clearCached();
         return $this->getProfile($id);
-	}
+    }
 
     public function findProfilesByIds(array $ids)
     {
-        if(empty($ids)){ return array(); }
-        $marks = str_repeat('?,', count($ids) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
     }
 
     public function dropFieldData($fieldName)
-    {   
+    {
         $fieldNames = array(
             'intField1',
             'intField2',
@@ -76,11 +95,73 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             'varcharField8',
             'varcharField9',
             'varcharField10');
+
         if (!in_array($fieldName, $fieldNames)) {
             throw $this->createDaoException('fieldName error');
         }
 
-        $sql="UPDATE {$this->table} set {$fieldName} =null ";
-        return $this->getConnection()->exec($sql);
+        $sql    = "UPDATE {$this->table} set {$fieldName} =null ";
+        $result = $this->getConnection()->exec($sql);
+        $this->clearCached();
+        return $result;
+    }
+
+    public function searchProfiles($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createProfileQueryBuilder($conditions)
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function searchProfileCount($conditions)
+    {
+        $builder = $this->createProfileQueryBuilder($conditions)
+                        ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    private function createProfileQueryBuilder($conditions)
+    {
+        $conditions = array_filter($conditions, function ($v) {
+            if ($v === 0) {
+                return true;
+            }
+
+            if (empty($v)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        );
+
+        if (isset($conditions['mobile'])) {
+            $conditions['mobile'] = "%{$conditions['mobile']}%";
+        }
+
+        if (isset($conditions['qq'])) {
+            $conditions['qq'] = "{$conditions['qq']}%";
+        }
+
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'truename') {
+            $conditions['truename'] = "%{$conditions['keyword']}%";
+        }
+
+        if (isset($conditions['keywordType']) && isset($conditions['keyword']) && $conditions['keywordType'] == 'idcard') {
+            $conditions['idcard'] = "%{$conditions['keyword']}%";
+        }
+
+        return $this->createDynamicQueryBuilder($conditions)
+                    ->from($this->table, 'user_profile')
+                    ->andWhere('mobile LIKE :mobile')
+                    ->andWhere('truename LIKE :truename')
+                    ->andWhere('idcard LIKE :idcard')
+                    ->andWhere('id IN (:ids)')
+                    ->andWhere('qq LIKE :qq');
     }
 }

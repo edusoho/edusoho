@@ -23,7 +23,8 @@ class PHPExcelToolkit
         $activieSheet = $objPHPExcel->setActiveSheetIndex(0);
         $index = 0;
         foreach ($info['title'] as $key => $value) {
-            $char = chr(65+$index++);
+            $char = chr(65+$index);
+            $index++;
             $activieSheet->setCellValue("{$char}1", $value);
             $activieSheet->getColumnDimension($char)->setWidth(14);
         }
@@ -38,7 +39,8 @@ class PHPExcelToolkit
                     if ($key == 'createdTime') {
                         $cellValue = date('Y-m-d', $cellValue);
                     }
-                    $char = chr(65+$i++);
+                    $char = chr(65+$i);
+                    $i++;
                     $activieSheet->setCellValue("{$char}{$index}", $cellValue);
                 }
                 $activieSheet->getRowDimension($index)->setRowHeight(18);

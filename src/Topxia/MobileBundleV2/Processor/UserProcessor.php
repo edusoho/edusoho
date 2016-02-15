@@ -25,7 +25,7 @@ interface UserProcessor
 	public function getFollowings();
 
 	public function getFollowers();
-
+	
 	public function follow();
 
 	public function unfollow();
@@ -44,4 +44,12 @@ interface UserProcessor
 	*获取学堂页面展示数据
 	*/
 	public function getSchoolRoom();
+
+	public function smsSend();
+
+	public function getCourseTeachers();
+
+	public function updateUserProfile();
+
+	public function uploadAvatar();
 }

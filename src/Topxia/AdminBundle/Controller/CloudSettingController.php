@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
 
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\Paginator;
@@ -15,7 +14,7 @@ use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Util\CloudClientFactory;
 
 use Topxia\Service\CloudPlatform\KeyApplier;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
@@ -27,7 +26,7 @@ class CloudSettingController extends BaseController
     public function keyAction(Request $request)
     {
         $settings = $this->getSettingService()->get('storage', array());
-        if (empty($settings['cloud_access_key']) or empty($settings['cloud_secret_key'])) {
+        if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
         return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
@@ -36,7 +35,7 @@ class CloudSettingController extends BaseController
 
     public function keyInfoAction(Request $request)
     {
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
@@ -71,7 +70,7 @@ class CloudSettingController extends BaseController
 
     public function keyBindAction(Request $request)
     {
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('root');
         $currentHost = $request->server->get('HTTP_HOST');
         $result = $api->post('/me/license-domain', array('domain' => $currentHost));
 
@@ -88,16 +87,16 @@ class CloudSettingController extends BaseController
     
     public function keyUpdateAction(Request $request)
     {
+        if ($this->getWebExtension()->isTrial()) {
+            return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
+        }
         $settings = $this->getSettingService()->get('storage', array());
 
         if ($request->getMethod() == 'POST') {
             $options = $request->request->all();
 
-            if (!empty($settings['cloud_api_server'])) {
-                $options['apiUrl'] = $settings['cloud_api_server'];
-            }
-
-            $api = new CloudAPI($options);
+            $api = CloudAPIFactory::create('root');
+            $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
 
@@ -132,7 +131,7 @@ class CloudSettingController extends BaseController
         $applier = new KeyApplier();
         $keys = $applier->applyKey($this->getCurrentUser());
 
-        if (empty($keys['accessKey']) or empty($keys['secretKey'])) {
+        if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
             return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
         }
 
@@ -149,10 +148,9 @@ class CloudSettingController extends BaseController
 
     public function keyCopyrightAction(Request $request)
     {
-
-        $api = $this->createAPIClient();
+        $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
-
+        
         if (empty($info['copyright'])) {
             throw $this->createAccessDeniedException('您无权操作!');
         }
@@ -162,6 +160,7 @@ class CloudSettingController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned' => 1,
             'name' => $request->request->get('name', ''),
+            'thirdCopyright' => isset($info['thirdCopyright']) and $info['thirdCopyright'] == '1' ? 1:0
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
@@ -201,8 +200,8 @@ class CloudSettingController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
-            'storageSetting'=>$storageSetting,
-            'headLeader'=>$headLeader
+            'storageSetting' => $storageSetting,
+            'headLeader' => $headLeader
         ));
     }
 
@@ -268,13 +267,12 @@ class CloudSettingController extends BaseController
         return new Response(json_encode($response));
     }
 
-
     public function videoWatermarkRemoveAction(Request $request)
     {
         return $this->createJsonResponse(true);
     }
 
-    private function isLocalAddress($address)
+    protected function isLocalAddress($address)
     {
         if (in_array($address, array('localhost', '127.0.0.1'))) {
             return true;
@@ -304,5 +302,10 @@ class CloudSettingController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    private function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }

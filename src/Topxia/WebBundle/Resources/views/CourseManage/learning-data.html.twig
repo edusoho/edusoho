@@ -20,6 +20,7 @@
             <td>课程提问总数</td>
             <td>课程笔记总数</td>
             <td>----</td>
+            {#<td style="width:10%">----</td>#}
           </tr>
           <tr>
             <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_detail_data',{id:course.id})}}" href="javascript:">{{course.title}}</a></td>
@@ -29,6 +30,7 @@
             <td>{{questionCount}}</td>
             <td>{{noteCount}}</td>
             <td>----</td>
+            {#<td>----</td>#}
           </tr>
           <tr class="active">
             <td width="35%">课时名</td>
@@ -38,6 +40,7 @@
             <td>音视频时长(分)</td>
             <td>音视频平均观看时长(分)</td>
             <td>测试平均得分</td>
+         {# <td>直播同时在线人数峰值</td> #}
           </tr>
           {% if lessons %}
             {% for lesson in lessons %}
@@ -49,6 +52,7 @@
                 <td>{% if lesson.type =='audio' or lesson.type =='video' %}{{lesson.length}}{% else %}----{% endif %}</td>
                 <td>{% if lesson.mediaSource != 'self' and lesson.type == 'video' %}无{% elseif lesson.type =='audio' or lesson.type =='video'%}{{(lesson.watchTime/60)|round(0, 'floor')}}{% else %}----{% endif %}</td>
                 <td>{% if lesson.type =='testpaper' %}{{lesson.score}}{% else %}----{% endif %}</td>
+                {#<td>{% if lesson.type =='live' and lesson.replayStatus == 'generated' %}{{lesson.maxOnlineNum}}{% else %}----{% endif %}</td>#}
               </tr>
             {% endfor %}
           {% endif %}

@@ -31,10 +31,10 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Topxia\WebBundle\TopxiaWebBundle(),
             new Topxia\AdminBundle\TopxiaAdminBundle(),
-            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Topxia\MobileBundle\TopxiaMobileBundle(),
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Classroom\ClassroomBundle\ClassroomBundle(),
+            new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
@@ -68,6 +68,7 @@ class AppKernel extends Kernel
         $bundles[] = new Custom\AdminBundle\CustomAdminBundle();
             
         if (in_array($this->getEnvironment(), array('dev' , 'test'))) {
+            $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();

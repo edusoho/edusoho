@@ -1,0 +1,63 @@
+<div class="ui-course ui-classroom top-header ui-scroller" style="padding-bottom: 58px;">
+    <div class="course-head-body">
+        <div class="course-head">
+            <img class="full-image" img-src="{{ classRoom.largePicture }}" img-error="classroom" />
+            <p class="mask">
+                <a class="rating-body">
+                    <span>
+                        <i class="iconfont" ng-class="course.rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
+                    </span>
+                    <span class="rating">{{ classRoom.rating | limitTo : 3 }}</span>
+                </a>
+                <a class="right rating-body">
+                    <span class="rating">{{ classRoom.studentNum }}人在学</span>
+                </a>
+            </p>
+        </div>
+        <div class="item-body">
+            <p class="course-title">{{ classRoom.title }}</p>
+        </div>
+        <div class="service-body ui-border-t" ng-if="classRoom.service.length > 0" ui-service-panel>
+            <ul class="ui-list">
+                <li ng-repeat="service in classRoom.service">
+                <span class="label {{ service.class }}">{{ service.name }}</span>
+                <span class="title">{{ service.title }}</span>
+                </li>
+            </ul>
+            <a class="service-btn" expand="true">
+                {{ classRoom.service.length }}个服务
+                <i class="service-icon iconfont icon-arrowdropdown"></i>
+            </a>
+        </div>
+    </div>
+    <div class="ui-tab tab-top" ui-tab>
+        <ul class="ui-tab-nav ui-border-tb">
+            <li><span class="line">班级课程</span></li>
+            <li><span>班级详情</span></li>
+        </ul>
+        <ul class="ui-tab-content tab-display">
+            <li>
+                <div ng-include=" 'view/classroom_courses_learn.html' | coverIncludePath ">
+                </div>
+            </li>
+            <li ng-onload="loadClassRoomDetail()">
+                <div ng-include=" 'view/classroom_detail.html' | coverIncludePath ">
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="ui-course-tool ui-classroom" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);" ng-controller="ClassRoomToolController">
+    <button class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardClassRoom()">
+    </button>
+
+    <div class="ui-btn btn-gray btn-sign btn-col-75" ng-init="getTodaySignInfo()" ng-click="sign()">
+        <button class="ui-btn sign-left">
+        <i class="iconfont icon-rili"></i>&nbsp;{{ signDate | date : 'MM月dd号'}}
+        </button>
+        <button class="ui-btn sign-right btn-green">
+        {{ signInfo | classRoomSignFilter }}
+        </button>
+    </div>
+    
+</div>

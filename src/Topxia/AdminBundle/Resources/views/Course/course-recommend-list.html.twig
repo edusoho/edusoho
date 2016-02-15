@@ -36,7 +36,7 @@
       {% for course in courses %}
         {% set user = users[course.userId]|default(null) %}
         {% set category = categories[course.categoryId]|default(null) %}
-        {% include 'TopxiaAdminBundle:Course:course-recommend-tr.html.twig' %}
+            {% include 'TopxiaAdminBundle:Course:course-recommend-tr.html.twig' %}
       {% else %}
         <tr><td colspan="20"><div class="empty">暂无推荐课程</div></td></tr>
       {% endfor %}

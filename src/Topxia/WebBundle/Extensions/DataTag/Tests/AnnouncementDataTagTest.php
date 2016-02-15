@@ -10,7 +10,7 @@ class AnnouncementDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-        $Announcement1 = $this->getAnnouncementService()->createAnnouncement(array(
+        $announcement1 = $this->getAnnouncementService()->createAnnouncement(array(
         "title"=>"Announcement1 ",
         "url"=>"http://",
         "userId"=>"1",
@@ -18,7 +18,7 @@ class AnnouncementDataTagTest extends BaseTestCase
         "endTime" => "2015-05-11 15:35"
         ));
 
-        $Announcement2 = $this->getAnnouncementService()->createAnnouncement(array(
+        $announcement2 = $this->getAnnouncementService()->createAnnouncement(array(
         "title"=>"Announcement2 ",
         "url"=>"http://",
         "userId"=>"1",
@@ -26,7 +26,7 @@ class AnnouncementDataTagTest extends BaseTestCase
         "endTime" => "2015-05-11 15:35"
         ));
 
-        $Announcement3 = $this->getAnnouncementService()->createAnnouncement(array(
+        $announcement3 = $this->getAnnouncementService()->createAnnouncement(array(
         "title"=>"Announcement3 ",
         "url"=>"http://",
         "userId"=>"1",
@@ -34,7 +34,7 @@ class AnnouncementDataTagTest extends BaseTestCase
         "endTime" => "2015-05-11 15:35"
         ));
 
-        $Announcement4 = $this->getAnnouncementService()->createAnnouncement(array(
+        $announcement4 = $this->getAnnouncementService()->createAnnouncement(array(
         "title"=>"Announcement4 ",
         "url"=>"http://",
         "userId"=>"1",
@@ -42,7 +42,7 @@ class AnnouncementDataTagTest extends BaseTestCase
         "endTime" => "2015-05-11 15:35"
         ));
 
-        $Announcement5 = $this->getAnnouncementService()->createAnnouncement(array(
+        $announcement5 = $this->getAnnouncementService()->createAnnouncement(array(
         "title"=>"Announcement5 ",
         "url"=>"http://",
         "userId"=>"1",
@@ -50,9 +50,9 @@ class AnnouncementDataTagTest extends BaseTestCase
         "endTime" => "2015-05-11 15:35"
         ));
 
-        $datatag = new AnnouncementDataTag();
-        $Announcement = $datatag->getData(array('count' => "5"));
-        $this->assertEquals(5, count($Announcement));
+        $dataTag = new AnnouncementDataTag();
+        $announcement = $dataTag->getData(array('count' => "5"));
+        $this->assertEquals(5, count($announcement));
     }
 
     private function getAnnouncementService()

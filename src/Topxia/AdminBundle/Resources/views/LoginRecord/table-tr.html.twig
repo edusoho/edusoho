@@ -4,7 +4,12 @@
     <strong>{{ admin_macro.user_link(user) }}</strong>
   </td>
   <td>
-    {{ user.email }}
+    {% set emailArr = user.email|split('@') %}
+    {% if emailArr[1] != 'edusoho.net' %}
+      {{ user.email }}
+    {% else %}
+      暂无
+    {% endif %}
   </td>
   <td>
     <span class="text-sm">{{ logRecord.createdTime|date('Y-n-d H:i:s') }}</span>

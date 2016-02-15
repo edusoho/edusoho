@@ -3,16 +3,10 @@
 namespace Topxia\Service\Util;
 
 use \RuntimeException;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class EdusohoLiveClient
 {
-    protected $cloudApi;
-
-    public function __construct (array $options)
-    {
-        $this->cloudApi = new CloudAPI($options);
-    }
 
     /**
      * 创建直播
@@ -22,12 +16,12 @@ class EdusohoLiveClient
      */
     public function createLive(array $args)
     {
-        return $this->cloudApi->post('/lives', $args);
+        return CloudAPIFactory::create('root')->post('/lives', $args);
     }
 
     public function updateLive(array $args)
     {
-        return $this->cloudApi->patch('/lives/'.$args['liveId'], $args);
+        return CloudAPIFactory::create('root')->patch('/lives/'.$args['liveId'], $args);
     }
 
     public function getCapacity()
@@ -35,12 +29,12 @@ class EdusohoLiveClient
         $args = array(
             'timestamp' => time() . ''
         );
-        return $this->cloudApi->get('/lives/capacity', $args);
+        return CloudAPIFactory::create('leaf')->get('/lives/capacity', $args);
     }
 
-    public function startLive($args)
+    public function getRoomUrl($args, $server='leaf')
     {
-        return $this->cloudApi->post('/lives/'.$args['liveId'].'/room_url', $args);
+        return CloudAPIFactory::create($server)->post('/lives/'.$args['liveId'].'/room_url', $args);
     }
 
     public function deleteLive($liveId, $provider)
@@ -49,17 +43,25 @@ class EdusohoLiveClient
             "liveId" => $liveId, 
             "provider" => $provider
         );
-        return $this->cloudApi->delete('/lives/'.$liveId, $args);
+        return CloudAPIFactory::create('root')->delete('/lives/'.$liveId, $args);
+    }
+
+    public function getMaxOnline($liveId)
+    {
+        $args = array(
+            'liveId' => $liveId
+        );
+        return CloudAPIFactory::create('leaf')->get('/lives/'.$liveId.'/max_online', $args);
     }
 
     public function entryLive($args)
     {
-        return $this->cloudApi->post('/lives/'.$args['liveId'].'/room_url', $args);
+        return CloudAPIFactory::create('leaf')->post('/lives/'.$args['liveId'].'/entry_room', $args);
     }
 
-    public function entryReplay($args)
+    public function entryReplay($args, $server='leaf')
     {
-        return $this->cloudApi->post('/lives/'.$args['liveId'].'/record_url', $args);
+        return CloudAPIFactory::create($server)->post('/lives/'.$args['liveId'].'/record_url', $args);
     }
 
     public function createReplayList($liveId, $title, $provider)
@@ -69,7 +71,7 @@ class EdusohoLiveClient
             "title" => $title,
             "provider" => $provider
         );
-        return $this->cloudApi->post('/lives/'.$liveId.'/records', $args);
+        return CloudAPIFactory::create('root')->post('/lives/'.$liveId.'/records', $args);
     }
 
 }

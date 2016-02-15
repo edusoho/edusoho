@@ -1,45 +1,54 @@
+.class-bg-layer {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  height: 100%;
+  background-color: #fff;
+  .border-radius;
+  .es-box-shadow;
+  z-index: -1;
+  @media (max-width: @screen-xs-max) {
+    top: 2px;
+    left: 2px;
+  }
+}
+
 // 班级头部
 .class-header {
-  padding: 30px 0 40px 0;
-  background: url("../img/class_bg.jpg");
-  background-size: 100% 100%;
+  // background: url("@{img-src}class_bg.jpg");
+  // background-size: 100% 100%;
+  // background-attachment: fixed;
+  // background-color: @gray-lighter;
+  // padding: 20px 0 30px 0;
+  // padding-bottom: 25px;
+  // .breadcrumb {
+  //   margin: 12px auto;
+  //   padding: 8px 0;
+  //   background: none;
+  // }
+  .class-bg-layer {
+    top: 8px;
+  }
   .class-header-mian {
     position: relative;
-    z-index: 2;
-  }
-  .class-bg-layer {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    height: 100%;
-    width: 100%;
-    background-color: #fff;
-    .border-radius;
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    z-index: -1;
-    &.two {
-      top: 10px;
-      left: 10px;
-      z-index: -2;
-    }
   }
   .class-header-bg {
     background-color: #fff;
     .border-radius;
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    z-index: 1;
+    .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
   }
   .class-img {
     float: left;
     img {
       .img-responsive;
       width: 100%;
-      border-top-left-radius: 4px;
+      border-top-left-radius: 2px;
       @media (min-width: @screen-sm-min) {
-        border-bottom-left-radius: 4px;
+        border-bottom-left-radius: 2px;
       }
       @media (max-width: @screen-xs-max) {
-        border-top-right-radius: 4px;
+        border-top-right-radius: 2px;
       }
     }
   }
@@ -51,9 +60,9 @@
       @media (max-width: @screen-md-max) {
         font-size: 20px;
       }
-      @media (min-width: @screen-sm-min) {
-        .text-overflow;
-      }
+      // @media (min-width: @screen-sm-min) {
+      //   .text-overflow;
+      // }
     }
     >.metas {
       min-height: 40px;
@@ -61,10 +70,20 @@
       color: @gray;
       @media (max-width: @screen-md-max) {
         min-height: 30px;
+        margin-bottom: 8px;
         // padding-left: 20px;
       }
       @media (max-width: @screen-sm-max) {
         margin-bottom: 10px;
+      }
+    }
+    .price {
+      span {
+        font-size: 24px;
+        color: @gray-darker;
+        @media (max-width: @screen-md-max) {
+          font-size: 20px;
+        }
       }
     }
   }
@@ -86,22 +105,23 @@
     }
     >ul {
       padding: 25px 10px 25px 40px;
-      @media (max-width: @screen-md-max) {
-        // padding: 25px 5px 25px 35px;
-      }
+      // @media (max-width: @screen-md-max) {
+      //   padding: 25px 5px 25px 35px;
+      // }
     }
   }
   .class-data {
     list-style-type: none;
-    padding: 10px 0;
-    background-color: @gray-lighter;
+    padding: 11px 0;
+    margin-bottom: 0;
+    background-color: @bg-color;
     >li {
       float: left;
       margin: 10px 0;
       color: @gray;
       text-align: center;
       line-height: 30px;
-      border-left: 1px solid @gray-light;
+      border-left: 1px solid @gray-lighter;
       @media (max-width: @screen-md-max) {
         padding: 8px 0;
         line-height: 25px;
@@ -121,83 +141,71 @@
       }
       .dropdown-toggle {
         color:@gray;
-        .es-transition;
-        >i {
-          color: @gray;
-          .es-transition;
-        }
         &:hover {
           color: @brand-primary;
-          .es-transition;
-          >i {
-            color: @brand-primary;
-            .es-transition;
-          }
         } 
       }
     }
   }
-  .price {
-    position: absolute;
-    width: 205px;
-    height: 82px;
-    line-height: 82px;
-    top: 40px;
-    right: -22px;
-    text-align: center;
-    color: #fff;
-    font-size: 12px;
-    background: url("../img/price_bg.png");
-    span {
-      font-size: 24px;
-    }
-    @media (max-width: @screen-md-max) {
-      top: 30px;
-      width: 150px;
-      height: 60px;
-      line-height: 60px;
-      background-size: 150px 60px;
-      span {
-        font-size: 20px;
-      }
-    }
-    @media (max-width: @screen-sm-max) {
-      right: -18px;
-      width: 135px;
-      height: 54px;
-      line-height: 54px;
-      background-size: 135px 54px;
-      span {
-        font-size: 18px;
-      }
-    }
-  }
+  // .price {
+  //   position: absolute;
+  //   width: 205px;
+  //   height: 82px;
+  //   line-height: 77px;
+  //   top: 60px;
+  //   right: -22px;
+  //   text-align: center;
+  //   color: #fff;
+  //   font-size: 12px;
+  //   overflow: hidden;
+  //   background: url("@{img-src}price_bg.png");
+  //   span {
+  //     font-size: 22px;
+  //   }
+  //   @media (max-width: @screen-md-max) {
+  //     top: 50px;
+  //     width: 150px;
+  //     height: 60px;
+  //     line-height: 55px;
+  //     background-size: 150px 60px;
+  //     span {
+  //       font-size: 18px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-sm-max) {
+  //     right: -18px;
+  //     width: 135px;
+  //     height: 54px;
+  //     line-height: 50px;
+  //     background-size: 135px 54px;
+  //     span {
+  //       font-size: 16px;
+  //     }
+  //   }
+  //   @media (max-width: @screen-xs-max) {
+  //     right: -12px;
+  //   }
+  // }
   .setting {
     position: absolute;
-    display: block;
-    top: -10px;
-    right: -15px;
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    text-align: center;
-    .border-radius(50%);
-    background-color: @gray;
-    color: #fff;
-    .es-transition;
-    &:hover {
-      .es-transition;
-      background-color: @brand-primary;
-    }
+    top: 10px;
+    right: 10px;
+    padding: 0 3px;
   }
   &.before {
     .class-img {
+      position: relative;
       width: 50%;
       @media (max-width: @screen-sm-max) {
         width: 40%;
       }
       @media (max-width: @screen-xs-max) {
         width: 100%;
+      }
+      .label {
+        position: absolute;
+        top: 5px;
+        left: 5px;
       }
     }
     .class-info {
@@ -209,14 +217,14 @@
         width: 100%;
       }
       >.title {
-        margin: 30px 30px 20px 30px;
+        margin: 20px;
         @media (max-width: @screen-md-max) {
           margin: 20px 20px 15px 20px;
         }
       }
       >.metas {
         min-height: 60px;
-        padding-left: 30px;
+        padding-left: 20px;
         @media (max-width: @screen-md-max) {
           min-height: 50px;
           padding-left: 20px;
@@ -227,13 +235,16 @@
       }
     }
     .bottom-metas {
-      padding: 20px 10px 20px 30px;
+      padding: 20px;
       @media (max-width: @screen-md-max) {
-        padding: 10px 10px 10px 20px;
+        padding: 10px;
       }
       @media (max-width: @screen-sm-max) {
-        padding: 5px 10px 5px 10px;
+        padding: 0 10px;
       }
+      // @media (max-width: @screen-sm-max) {
+      //   padding: 5px 10px 5px 10px;
+      // }
       .btn-buy {
         float: right;
         width: 50%;
@@ -297,13 +308,16 @@
       @media (max-width: @screen-xs-max) {
         width: 100%;
       }
+      .price span {
+        font-size: 16px;
+      }
     }
     .class-operation {
       float: left;
       width: 430px;
       background-color: @gray-lighter;
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
+      border-top-right-radius: 2px;
+      border-bottom-right-radius: 2px;
       @media (max-width: @screen-md-max) {
         width: 300px;
       }
@@ -318,17 +332,17 @@
       display: inline-block;
     }
     .class-data {
-      border-top-right-radius: 4px;
+      border-top-right-radius: 2px;
       margin-bottom: 0;
       @media (max-width: @screen-md-max) {
-        padding: 20px 0;
+        padding: 19px 0;
       }
       @media (max-width: @screen-sm-max) {
         padding: 0;
       }
       @media (max-width: @screen-xs-max) {
-        border-bootom-left-radius: 4px;
-        border-bootom-right-radius: 4px;
+        border-bootom-left-radius: 2px;
+        border-bootom-right-radius: 2px;
       }
       >li {
         width: 33.33%;
@@ -337,7 +351,7 @@
           width: 100%;
           border: none;
           padding: 0;
-          margin: 5px 0;
+          margin: 4px 0;
         }
         @media (max-width: @screen-xs-max) {
           padding: 10px 0;
@@ -356,7 +370,7 @@
         width: 50%;
         @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
           width: 100%;
-          margin: 19px 0;
+          margin: 17px 0;
         }
       }
     }
@@ -380,12 +394,13 @@
           padding: 20px 0;
         }
       }
-      border-bottom: 1px solid @gray-light;
+      border-bottom: 1px solid @gray-lighter;
     }
     .class-auditor {
       padding: 18px 40px;
       line-height: 30px;
       color: @gray;
+      background-color: @bg-color;
       @media (max-width: @screen-md-max) {
         padding: 18px 20px;
       }
@@ -396,86 +411,36 @@
         padding: 10px 20px;
       }
     }
-    .price {
-      top: 125px;
-      right: -19px;
-      height: 60px;
-      width: 150px;
-      line-height: 60px;
-      background-size: 150px 60px;
-      span {
-        font-size: 20px;
-      }
-      @media (max-width: @screen-md-max) {
-        top: 145px;
-        right: -18px;
-        width: 135px;
-        height: 54px;
-        line-height: 54px;
-        background-size: 135px 54px; 
-        span {
-          font-size: 18px;
-        }
-      }
-      @media (max-width: @screen-xs-max) {
-        top: 30px;
-      }
-    }
+    // .price {
+    //   top: 125px;
+    //   right: -19px;
+    //   height: 60px;
+    //   width: 150px;
+    //   line-height: 60px;
+    //   background-size: 150px 60px;
+    //   span {
+    //     font-size: 20px;
+    //   }
+    //   @media (max-width: @screen-md-max) {
+    //     top: 145px;
+    //     right: -18px;
+    //     width: 135px;
+    //     height: 54px;
+    //     line-height: 54px;
+    //     background-size: 135px 54px; 
+    //     span {
+    //       font-size: 18px;
+    //     }
+    //   }
+    //   @media (max-width: @screen-xs-max) {
+    //     top: 30px;
+    //   }
+    // }
   }
 }
 
-// 学习计划
-.study-plan-info {
-  color: #fff;
-  text-align: center;
-  background-image: -webkit-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
-  background-color: rgb(255, 255, 255);
-  .plan-info-item {
-    font-size: 24px;
-    padding: 10px;
-    margin: 20px auto;
-    &:nth-child(1),
-    &:nth-child(2) {
-      border-right: 1px solid #52db9c;
-    }
-  }
-  .open-plan {
-    margin: 20px auto;
-    padding: 5px 10px;
-    @media (max-width: @screen-sm-max) {
-      padding: 5px 0;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-    }
-  }
-}
 
 // 班级主体、课程主体－－－－－－－－－－－－－－－－－－－－
-.class-detail-main,
-.course-detail-main {
-  .nav.nav-tabs>li>a {
-    padding: 10px 20px;
-    @media (max-width: @screen-md-max) {
-      padding: 10px 20px;
-    }
-    @media (max-width: @screen-md-max) {
-      padding: 10px 10px;
-      font-size: 14px;
-    }
-    .badge {
-      margin-left: 5px;
-      background-color: @gray;
-      .es-transition;
-    }
-    &:hover .badge {
-      background-color: @brand-primary;
-      .es-transition;
-    }
-  }
-}
-
 .class-course-list {
   .course-item {
     margin-top: 30px;
@@ -546,13 +511,13 @@
     } 
   }
 }
+
 // 课时列表
 .period-list {
   margin-top: 20px;
   margin-bottom: 0;
   padding-left: 0;
   list-style-type: none;
-
   >li {
     margin-bottom: 10px;
     padding: 10px 15px;
@@ -569,7 +534,7 @@
     }
     .es-icon-toc {
       position: absolute;
-      top: 8px;
+      top: 11px;
       left: 15px;
     }
     .period-show {
@@ -605,17 +570,11 @@
     .es-icon-doing,
     .es-icon-done1 {
       position: absolute;
-      top: 8px;
+      top: 11px;
       left: 15px;
     }
     .title {
       color: @gray-dark;
-    }
-    i {
-      margin-left: 5px;
-    }
-    .label {
-      margin-left: 10px;
     }
     .date {
       position: absolute;
@@ -624,10 +583,15 @@
     }
     .course-type {
       position: absolute;
-      top: 12px;
+      top: 11px;
       right: 15px;
       line-height: 20px;
-      font-size: 20px;
+      i {
+        font-size: 20px;
+      }
+      small {
+        margin-top: -3px;
+      }
     }
     .period-state {
       position: absolute;
@@ -640,11 +604,16 @@
 
 // 班级tab内容
 .class-detail-content {
+  min-height: 300px;
   .class-about {
     p {
       line-height: 30px;
       margin-bottom: 30px;
-      text-indent: 2em;
+      // text-indent: 2em;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
     }
   }
 }
@@ -822,20 +791,22 @@
   }
   .btn-signin {
     position: absolute;
-    padding: 20px 25px;
-    line-height: 24px;
+    padding: 20px 10px;
+    min-width: 110px;
+    line-height: 40px;
     text-align: center;
     font-size: 16px;
     top: 0;
     bottom: 0;
-    right: -15px;
+    // right: -15px;
+    right: 0;
     color: #fff;
     background-color: @brand-primary;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
     &.after {
-      padding: 8px 15px;
+      // padding: 8px 15px;
+      line-height: 20px;
     }
   }
 }
-

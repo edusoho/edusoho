@@ -4,7 +4,7 @@
 <h5>课时简介</h5>
 <div class="lesson-about">
 	{% if lesson.summary  %}
-	  {{ lesson.summary }}
+    {{ lesson.summary|space2nbsp|raw|nl2br}}
 	{% else %}
 	  此课时无简介。
 	{% endif %}

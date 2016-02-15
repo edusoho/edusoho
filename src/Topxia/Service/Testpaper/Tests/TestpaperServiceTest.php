@@ -14,7 +14,7 @@ class TestpaperServiceTest extends BaseTestCase
 
     }
 
-    private function generateChoiceQuestions($target, $count, $difficulty = null)
+    protected function generateChoiceQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -37,7 +37,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateFillQuestions($target, $count, $difficulty = null)
+    protected function generateFillQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -53,7 +53,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateDetermineQuestions($target, $count, $difficulty = null)
+    protected function generateDetermineQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -70,7 +70,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateEssayQuestions($target, $count, $difficulty = null)
+    protected function generateEssayQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -87,7 +87,7 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function generateMaterialQuestions($target, $count, $difficulty = null)
+    protected function generateMaterialQuestions($target, $count, $difficulty = null)
     {
         $questions = array();
         for ($i=0; $i<$count; $i++) {
@@ -103,13 +103,43 @@ class TestpaperServiceTest extends BaseTestCase
         return $questions;
     }
 
-    private function getQuestionService()
+    /* 试卷同步
+    */
+
+    public function testFindTestpapersByCopyIdAndLockedTarget()
+    {
+        $question = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>0,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+        $question = $this->getQuestionService()->createQuestion($question);
+        $testpaper = array('name' => 'Test',"description"=>'测试',"limitedTime"=>'0',"mode"=>"rand","range"=>"course","ranges"=>array(),"counts"=>array("single_choice"=>"1","choice"=>"0","uncertain_choice"=>"0","fill"=>"0","determine"=>"0","material"=>"0"),'CopyId'=>1,'target'=>'course-1',"scores"=>array("single_choice"=>"2","uncertain_choice"=>"2","choice"=>"2","uncertain_choice"=>"2","fill"=>"2","determine"=>"2","essay"=>"2","material"=>"2"),"missScores"=>array("choice"=>0,"uncertain_choice"=>0),"percentages"=>array("simple"=>"","normal"=>"","difficulty"=>''),"target"=>'course-1',"pattern"=>"QuestionType","copyId"=>"1");
+        $testpaper = $this->getTestpaperService()->createTestpaper($testpaper);
+        $testpaper = $this->getTestpaperService()->findTestpapersByCopyIdAndLockedTarget(1,"('course-1')");
+        $this->assertEquals('Test',$testpaper[0]['name']);
+    }
+    
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
+
 }

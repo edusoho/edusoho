@@ -11,23 +11,29 @@ class NoteController extends BaseController
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
-        $classroom_courses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
-        $courseIds = ArrayToolkit::column($classroom_courses, 'id');
+        $classroomCourses = $this->getClassroomService()->findActiveCoursesByClassroomId($classroomId);
+        $courseIds = ArrayToolkit::column($classroomCourses, 'id');
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
-        if ($classroom['private'] && (!$member || ($member && $member['locked']))) {
-            return $this->createMessageResponse('error', '该班级是封闭班级,您无权查看');
+        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+    }
         return $this->render('ClassroomBundle:Classroom\Course:notes-list.html.twig', array(
             'layout' => $layout,
             'filters' => $this->getNoteSearchFilters($request),
@@ -36,6 +42,7 @@ class NoteController extends BaseController
             'courseIds' => $courseIds,
             'courses' => $courses,
             'member' => $member,
+            'classroomDescription' => $classroomDescription
         ));
     }
 

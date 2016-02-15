@@ -15,7 +15,14 @@
 
   <tr>
     <th>Email</th>
-    <td>{{ user.email }}</td>
+    <td>
+      {% set emailArr = user.email|split('@') %}
+      {% if emailArr[1] != 'edusoho.net' %}
+        {{ user.email }}
+      {% else %}
+        暂无
+      {% endif %}
+    </td>
   </tr>
 
   <tr>
@@ -100,7 +107,9 @@
     <th> {{'手机号码'|trans}}</th>
     <td>
       {% if user.verifiedMobile %}
-        {{user.verifiedMobile|default('')}}<span class="text-success">( {{'已绑定'|trans}})</span> 
+        {{ user.verifiedMobile|default('')}}<span class="text-success">({{'已绑定'|trans}})</span> 
+      {% elseif profile.mobile %}
+        {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
       {% else %}
         {{ profile.mobile|default(' {{'暂无'|trans}}') }}
       {% endif %}

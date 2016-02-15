@@ -38,6 +38,15 @@ define(function(require, exports, module) {
             '{{display}}请输入可见性字符'
         ],
         [
+            'chinese_limit',
+            function(options){
+                var element = options.element;
+                var l = strlen(element.val());
+                return l <= Number(options.max);
+            },
+            '{{display}}的长度必须小于等于{{max}}字符,一个中文为2个字符'
+        ],
+        [
             'chinese',
             /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3])*$/i,
             '{{display}}必须是中文字'
@@ -51,6 +60,11 @@ define(function(require, exports, module) {
             'chinese_alphanumeric',
             /^([\u4E00-\uFA29]|[a-zA-Z0-9_])*$/i,
             '{{display}}必须是中文字、英文字母、数字及下划线组成'
+        ],
+        [
+           'reg_inviteCode',
+            /^[a-z0-9A-Z]{5}$/,
+            '{{display}}必须是5位数字、英文字母组成'
         ],
         [
             'alphanumeric',
@@ -180,6 +194,11 @@ define(function(require, exports, module) {
             '{{display}}必须为正数'
         ],
         [
+            'percent_number',
+            /^(100|[1-9]\d|\d)$/,
+            '必须在0~100之间'
+        ],
+        [
             'maxsize_image',
             function (options) {
                 var element = options.element;
@@ -206,6 +225,17 @@ define(function(require, exports, module) {
         [
             'email_remote',
             function(options, commit) {
+                var element = options.element,
+                    url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
+                    value = element.val().replace(/\./g, "!");
+                $.get(url, {value:value}, function(response) {
+                    commit(response.success, response.message);
+                }, 'json');
+            }
+        ],
+        [
+            'invitecode_remote',
+            function(options,commit) {
                 var element = options.element,
                     url = options.url ? options.url : (element.data('url') ? element.data('url') : null);
                     value = element.val().replace(/\./g, "!");
@@ -329,6 +359,20 @@ define(function(require, exports, module) {
         ]        
 
     ];
+
+    function strlen(str){  
+        var len = 0;  
+        for (var i=0; i<str.length; i++) {   
+            var chars = str.charCodeAt(i);   
+            //单字节加1   
+            if ((chars >= 0x0001 && chars <= 0x007e) || (0xff60<=chars && chars<=0xff9f)) {   
+               len++;   
+            } else {   
+               len+=2;   
+            }   
+        }   
+        return len;  
+    }  
 
     exports.inject = function(Validator) {
         $.each(rules, function(index, rule){

@@ -117,7 +117,9 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         for ($row=3; $row <= $this->rowTotal; $row++) {
 
             $nickNameColData = $this->objWorksheet->getCellByColumnAndRow($nickNameCol, $row)->getValue();      
-            if ($nickNameColData."" == "") continue;
+            if ($nickNameColData."" == ""){
+                continue;
+            }
             $nicknameData[] = $nickNameColData.""; 
         }
 
@@ -296,7 +298,7 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
                     'classroomTitle' => $targetObject['title'],
                     'userId'=> $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'opration' => 'create');
+                    'type' => 'create');
 
                 $this->getNotificationService()->notify($member['userId'], 'classroom-student', $message);
 
@@ -307,7 +309,7 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         return array('existsUserCount' => $existsUserCount, 'successCount' => $successCount);
 	}
 
-	private function trim($data)
+	protected function trim($data)
     {       
         $data=trim($data);
         $data=str_replace(" ","",$data);
@@ -323,17 +325,17 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
-    private function getClassroomService() 
+    protected function getClassroomService() 
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return ServiceKernel::instance()->createService('Order.OrderService');
     }
 
-    private function getNotificationService()
+    protected function getNotificationService()
     {
         return ServiceKernel::instance()->createService('User.NotificationService');
     }

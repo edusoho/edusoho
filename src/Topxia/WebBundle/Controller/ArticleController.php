@@ -1,19 +1,18 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class ArticleController extends BaseController
 {
-
     public function indexAction(Request $request)
     {
         $categoryTree = $this->getCategoryService()->getCategoryTree();
 
         $conditions = array(
-            'status' => 'published',
+            'status' => 'published'
         );
 
         $paginator = new Paginator(
@@ -34,9 +33,8 @@ class ArticleController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         $featuredConditions = array(
-            'status' => 'published',
-            'featured' => 1,
-            'hasPicture' => 1,
+            'status'     => 'published',
+            'featured'   => 1
         );
 
         $featuredArticles = $this->getArticleService()->searchArticles(
@@ -45,9 +43,17 @@ class ArticleController extends BaseController
             0,
             5
         );
+
+        $featuredCategories = array();
+
+        foreach ($featuredArticles as $key => $value) {
+            $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
+        }
+
+
         $promotedConditions = array(
-            'status' => 'published',
-            'promoted' => 1,
+            'status'   => 'published',
+            'promoted' => 1
         );
 
         $promotedArticles = $this->getArticleService()->searchArticles(
@@ -58,30 +64,31 @@ class ArticleController extends BaseController
         );
 
         $promotedCategories = array();
+
         foreach ($promotedArticles as $key => $value) {
             $promotedCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
         }
 
         return $this->render('TopxiaWebBundle:Article:index.html.twig', array(
-            'categoryTree' => $categoryTree,
-            'latestArticles' => $latestArticles,
-            'featuredArticles' => $featuredArticles,
-            'promotedArticles' => $promotedArticles,
+            'categoryTree'       => $categoryTree,
+            'latestArticles'     => $latestArticles,
+            'featuredArticles'   => $featuredArticles,
+            'featuredCategories' => $featuredCategories,
+            'promotedArticles'   => $promotedArticles,
             'promotedCategories' => $promotedCategories,
-            'paginator' => $paginator,
-            'categories' => $categories,
+            'paginator'          => $paginator,
+            'categories'         => $categories
         ));
     }
 
     public function categoryNavAction(Request $request, $categoryCode)
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($categoryCode);
-
         return $this->render('TopxiaWebBundle:Article/Part:category.html.twig', array(
             'rootCategories' => $rootCategories,
-            'categories' => $categories,
-            'categoryCode' => $categoryCode,
-            'activeIds' => $activeIds,
+            'categories'     => $categories,
+            'categoryCode'   => $categoryCode,
+            'activeIds'      => $activeIds
         ));
     }
 
@@ -94,9 +101,9 @@ class ArticleController extends BaseController
         }
 
         $conditions = array(
-            'categoryId' => $category['id'],
+            'categoryId'      => $category['id'],
             'includeChildren' => true,
-            'status' => 'published',
+            'status'          => 'published'
         );
 
         $paginator = new Paginator(
@@ -115,13 +122,12 @@ class ArticleController extends BaseController
         $categoryIds = ArrayToolkit::column($articles, 'categoryId');
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
-
         return $this->render('TopxiaWebBundle:Article:list.html.twig', array(
             'categoryCode' => $categoryCode,
-            'category' => $category,
-            'articles' => $articles,
-            'paginator' => $paginator,
-            'categories' => $categories,
+            'category'     => $category,
+            'articles'     => $articles,
+            'paginator'    => $paginator,
+            'categories'   => $categories
         ));
     }
 
@@ -137,40 +143,43 @@ class ArticleController extends BaseController
             return $this->createMessageResponse('error', '文章不是发布状态，请查看！');
         }
 
+        $this->getArticleService()->viewArticle($id);
+
         $conditions = array(
-            'status' => 'published',
+            'status' => 'published'
         );
 
         $createdTime = $article['createdTime'];
 
         $currentArticleId = $article['id'];
-        $articlePrevious = $this->getArticleService()->getArticlePrevious($currentArticleId);
-        $articleNext = $this->getArticleService()->getArticleNext($currentArticleId);
+        $articlePrevious  = $this->getArticleService()->getArticlePrevious($currentArticleId);
+        $articleNext      = $this->getArticleService()->getArticleNext($currentArticleId);
 
         $articleSetting = $this->getSettingService()->get('article', array());
-        $categoryTree = $this->getCategoryService()->getCategoryTree();
+        $categoryTree   = $this->getCategoryService()->getCategoryTree();
 
         $category = $this->getCategoryService()->getCategory($article['categoryId']);
+
         if (empty($article['tagIds'])) {
             $article['tagIds'] = array();
         }
-        $tags = $this->getTagService()->findTagsByIds($article['tagIds']);
+
+        $tags     = $this->getTagService()->findTagsByIds($article['tagIds']);
         $tagNames = ArrayToolkit::column($tags, 'name');
 
         $seoKeyword = "";
+
         if ($tags) {
             $seoKeyword = ArrayToolkit::column($tags, 'name');
             $seoKeyword = implode(",", $seoKeyword);
         }
 
-        $this->getArticleService()->hitArticle($id);
-
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 
         $conditions = array(
-            'targetId' => $id,
+            'targetId'   => $id,
             'targetType' => 'article',
-            'parentId' => 0,
+            'parentId'   => 0
         );
 
         $paginator = new Paginator(
@@ -189,54 +198,62 @@ class ArticleController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         $conditions = array(
-            'targetType' => 'article',
+            'targetType' => 'article'
         );
 
-
         $conditions = array(
-            'targetId' => $id,
-            'targetType' => 'article',
+            'targetId'   => $id,
+            'targetType' => 'article'
         );
 
         $count = $this->getThreadService()->searchPostsCount($conditions);
 
         $conditions = array(
-            'type' => 'article',
-            'status' => 'published',
+            'type'   => 'article',
+            'status' => 'published'
         );
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 10);
 
         $sameTagArticles = array();
+
         foreach ($articles as $key => $value) {
-            if (array_intersect($value['tagIds'], $article['tagIds']) and $value['id'] != $article['id'] and !empty($value['thumb'])) {
+            if (array_intersect($value['tagIds'], $article['tagIds']) && $value['id'] != $article['id'] && !empty($value['thumb'])) {
                 $sameTagArticles[] = $this->getArticleService()->getArticle($value['id']);
             }
         }
 
         $user = $this->getCurrentUser();
+
         $userLike = $this->getArticleService()->getArticleLike($id, $user['id']);
 
+        $articleBody = $article['body'];
+
+        $articleBody = strip_tags($articleBody, '');
+
+        $articleBody = preg_replace("/ /", "", $articleBody);
+
         return $this->render('TopxiaWebBundle:Article:detail.html.twig', array(
-            'categoryTree' => $categoryTree,
-            'articleSetting' => $articleSetting,
+            'categoryTree'    => $categoryTree,
+            'articleSetting'  => $articleSetting,
             'articlePrevious' => $articlePrevious,
-            'article' => $article,
-            'articleNext' => $articleNext,
-            'tags' => $tags,
-            'seoKeyword' => $seoKeyword,
-            'seoDesc' => $article['body'],
-            'breadcrumbs' => $breadcrumbs,
-            'categoryName' => $category['name'],
-            'categoryCode' => $category['code'],
-            'posts' => $posts,
-            'users' => $users,
-            'paginator' => $paginator,
-            'service' => $this->getThreadService(),
-            'count' => $count,
-            'tagNames' => $tagNames,
+            'article'         => $article,
+            'articleNext'     => $articleNext,
+            'tags'            => $tags,
+            'seoKeyword'      => $seoKeyword,
+            'seoDesc'         => $articleBody,
+            'breadcrumbs'     => $breadcrumbs,
+            'categoryName'    => $category['name'],
+            'categoryCode'    => $category['code'],
+            'posts'           => $posts,
+            'users'           => $users,
+            'paginator'       => $paginator,
+            'service'         => $this->getThreadService(),
+            'count'           => $count,
+            'tagNames'        => $tagNames,
             'sameTagArticles' => $sameTagArticles,
-            'userLike' => $userLike
+            'userLike'        => $userLike,
+            'category'        => $category
         ));
     }
 
@@ -245,9 +262,9 @@ class ArticleController extends BaseController
         if ($request->getMethod() == "POST") {
             $fields = $request->request->all();
 
-            $post['content'] = $fields['content'];
+            $post['content']    = $fields['content'];
             $post['targetType'] = 'article';
-            $post['targetId'] = $id;
+            $post['targetId']   = $id;
 
             $user = $this->getCurrentUser();
 
@@ -257,46 +274,48 @@ class ArticleController extends BaseController
 
             $post = $this->getThreadService()->createPost($post);
             return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
-                'post' => $post,
-                'author' => $user,
-                'service' => $this->getThreadService(),
-                'postReplyUrl' => $this->generateUrl('article_post_reply', array('articleId' => $id, 'postId' => $post['id'])),
+                'post'         => $post,
+                'author'       => $user,
+                'service'      => $this->getThreadService(),
+                'postReplyUrl' => $this->generateUrl('article_post_reply', array('articleId' => $id, 'postId' => $post['id']))
             ));
         }
     }
 
     public function postReplyAction(Request $request, $articleId, $postId)
     {
-        $fields = $request->request->all();
-        $fields['content'] = $this->autoParagraph($fields['content']);
-        $fields['targetId'] = $articleId;
+        $fields               = $request->request->all();
+        $fields['content']    = $this->autoParagraph($fields['content']);
+        $fields['targetId']   = $articleId;
         $fields['targetType'] = 'article';
-        $fields['parentId'] = $postId;
+        $fields['parentId']   = $postId;
 
         $post = $this->getThreadService()->createPost($fields);
 
         return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(
-            'post' => $post,
-            'author' => $this->getCurrentUser(),
-            'service' => $this->getThreadService(),
+            'post'    => $post,
+            'author'  => $this->getCurrentUser(),
+            'service' => $this->getThreadService()
         ));
     }
 
     public function postJumpAction(Request $request, $articleId, $postId)
     {
         $article = $this->getArticleService()->getArticle($articleId);
+
         if (empty($article)) {
             throw $this->createNotFoundException();
         }
 
         $post = $this->getThreadService()->getPost($postId);
-        if ($post and $post['parentId']) {
+
+        if ($post && $post['parentId']) {
             $post = $this->getThreadService()->getPost($post['parentId']);
         }
 
         if (empty($post)) {
             return $this->redirect($this->generateUrl("article_detail", array(
-                "id" => $articleId,
+                "id" => $articleId
             )));
         }
 
@@ -305,8 +324,8 @@ class ArticleController extends BaseController
         $page = ceil($position / 10);
 
         return $this->redirect($this->generateUrl("article_detail", array(
-            'id' => $articleId,
-            'page' => $page,
+            'id'   => $articleId,
+            'page' => $page
         ))."#post-{$post['id']}");
     }
 
@@ -324,54 +343,56 @@ class ArticleController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
 
         return $this->render('TopxiaWebBundle:Thread:subposts.html.twig', array(
-            'parentId' => $postId,
-            'targetId' => $targetId,
-            'posts' => $posts,
-            'users' => $users,
+            'parentId'  => $postId,
+            'targetId'  => $targetId,
+            'posts'     => $posts,
+            'users'     => $users,
             'paginator' => $paginator,
-            'less' => $less,
-            'service' => $this->getThreadService(),
+            'less'      => $less,
+            'service'   => $this->getThreadService()
         ));
     }
 
     public function popularArticlesBlockAction()
     {
         $conditions = array(
-            'type' => 'article',
-            'status' => 'published',
+            'type'   => 'article',
+            'status' => 'published'
         );
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'popular', 0, 6);
 
         return $this->render('TopxiaWebBundle:Article:popular-articles-block.html.twig', array(
-            'articles' => $articles,
+            'articles' => $articles
         ));
     }
 
     public function recommendArticlesBlockAction()
     {
         $conditions = array(
-            'type' => 'article',
-            'status' => 'published',
-            'promoted' => 1,
+            'type'     => 'article',
+            'status'   => 'published',
+            'promoted' => 1
         );
 
         $articles = $this->getArticleService()->searchArticles($conditions, 'normal', 0, 6);
 
         return $this->render('TopxiaWebBundle:Article:recommend-articles-block.html.twig', array(
-            'articles' => $articles,
+            'articles' => $articles
         ));
     }
 
     public function tagAction(Request $request, $name)
     {
         $tag = $this->getTagService()->getTagByName($name);
+
         if (empty($tag)) {
             $this->createAccessDeniedException('标签不存在!');
         }
+
         $conditions = array(
             'status' => 'published',
-            'tagId' => $tag['id']
+            'tagId'  => $tag['id']
         );
 
         $paginator = new Paginator(
@@ -392,32 +413,35 @@ class ArticleController extends BaseController
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         return $this->render('TopxiaWebBundle:Article:list-articles-by-tag.html.twig', array(
-            'articles' => $articles,
-            'tag' => $tag,
+            'articles'   => $articles,
+            'tag'        => $tag,
             'categories' => $categories,
-            'paginator' => $paginator
+            'paginator'  => $paginator
         ));
     }
 
-    private function autoParagraph($text)
+    protected function autoParagraph($text)
     {
         if (trim($text) !== '') {
-            $text = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
-            $text = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $text  = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+            $text  = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
             $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
-            $text = '';
+            $text  = '';
+
             foreach ($texts as $txt) {
                 $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
             }
+
             $text = preg_replace('|<p>\s*</p>|', '', $text);
         }
 
         return $text;
     }
 
-    private function getRootCategory($categoryTree, $category)
+    protected function getRootCategory($categoryTree, $category)
     {
         $start = false;
+
         foreach (array_reverse($categoryTree) as $treeCategory) {
             if ($treeCategory['id'] == $category['id']) {
                 $start = true;
@@ -431,11 +455,12 @@ class ArticleController extends BaseController
         return;
     }
 
-    private function getSubCategories($categoryTree, $rootCategory)
+    protected function getSubCategories($categoryTree, $rootCategory)
     {
         $categories = array();
 
         $start = false;
+
         foreach ($categoryTree as $treeCategory) {
             if ($start && ($treeCategory['depth'] == 1) && ($treeCategory['id'] != $rootCategory['id'])) {
                 break;
@@ -457,40 +482,39 @@ class ArticleController extends BaseController
     {
         $this->getArticleService()->like($articleId);
         $article = $this->getArticleService()->getArticle($articleId);
-        
+
         return $this->createJsonResponse($article);
     }
 
     public function cancelLikeAction(Request $request, $articleId)
     {
-
         $this->getArticleService()->cancelLike($articleId);
         $article = $this->getArticleService()->getArticle($articleId);
-        
+
         return $this->createJsonResponse($article);
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    private function getThreadService()
+    protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
     }

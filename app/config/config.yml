@@ -16,11 +16,11 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.0.1
+        assets_version: 6.15.1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.pdo
+        handler_id:     session.handler.factory
     fragments:       ~
 
 # Twig Configuration
@@ -51,26 +51,33 @@ assetic:
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   %database_driver%
-        host:     %database_host%
-        port:     %database_port%
-        dbname:   %database_name%
-        user:     %database_user%
-        password: %database_password%
-        charset:  UTF8
-        mapping_types:
-            enum: string
+        default_connection: default
+        types:
+            enum: Topxia\Common\DoctrineEnumType
+        connections:
+            default:
+                wrapper_class: Topxia\Service\Common\Connection
+                driver:   %database_driver%
+                host:     %database_host%
+                port:     %database_port%
+                dbname:   %database_name%
+                user:     %database_user%
+                password: %database_password%
+                charset:  UTF8
+
+                mapping_types:
+                    enum: string
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
 
 # Swiftmailer Configuration
-swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
+# swiftmailer:
+#     transport: %mailer_transport%
+#     host:      %mailer_host%
+#     username:  %mailer_user%
+#     password:  %mailer_password%
     #spool:     { type: memory }
 
 #jms_security_extra:
@@ -79,10 +86,12 @@ swiftmailer:
 
 parameters:
     session.handler.pdo.options:
-        db_table:    session2
-        db_id_col:   session_id
-        db_data_col: session_value
-        db_time_col: session_time
+         db_table:    sessions
+         db_id_col:   sess_id
+         db_data_col: sess_data
+         db_time_col: sess_time
+         db_lifetime_col: sess_lifetime
+         db_user_id_col: sess_user_id
 
     topxia.disk.local_directory: "%kernel.root_dir%/data/udisk"
     topxia.disk.cloud_video_fop: "avthumb/mp4/r/30/vb/512k/vcodec/libx264/ar/22050/ab/64k/acodec/libfaac"
@@ -100,13 +109,31 @@ services:
             - [setAttribute, [3, 2]]
 
         arguments:
-            dsn:      "mysql:host=%database_host%;dbname=%database_name%"
+            dsn:      "mysql:host=%database_host%;port=%database_port%;dbname=%database_name%"
             user:     %database_user%
             password: %database_password%
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
+
+    session.handler.redis.factory:
+        class: Topxia\Service\Common\RedisFactory
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
+
+    session.handler.redis:
+        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        arguments: [@session.handler.redis.factory, @security.context]
+
+    session.handler.factory:
+        class: SessionHandlerInterface
+        factory_class: Topxia\Service\Common\SessionHandlerFactory
+        factory_method: getSessionHandler
+        arguments: 
+            - "@service_container"
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
@@ -119,6 +146,12 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
+    
+    kernel.listener.kernel_response_listener:
+        class: Topxia\WebBundle\Listener\KernelResponseListener
+        arguments:    [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     topxia.twig.web_extension:
         class: Topxia\WebBundle\Twig\Extension\WebExtension
@@ -147,7 +180,6 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: twig.extension }
-
 
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener

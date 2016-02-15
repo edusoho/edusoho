@@ -91,7 +91,7 @@ class MobileAlipayRequest
         
         //URLDECODE返回的信息
         $html_text = urldecode($html_text);
-
+        
         //解析远程模拟提交后返回的信息
         $para_html_text = $alipaySubmit->parseResponse($html_text);
 

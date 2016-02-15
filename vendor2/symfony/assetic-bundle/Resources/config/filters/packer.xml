@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="assetic.filter.packer.special_chars">false</parameter>
+        <parameter key="assetic.filter.packer.fast_decode">true</parameter>
+        <parameter key="assetic.filter.packer.encoding">None</parameter>
+    </parameters>
+
+    <services>
+        <service id="assetic.filter.packer" class="Assetic\Filter\PackerFilter">
+            <tag name="assetic.filter" alias="packer" />
+            <call method="setFastDecode"><argument>%assetic.filter.packer.fast_decode%</argument></call>
+            <call method="setSpecialChars"><argument>%assetic.filter.packer.special_chars%</argument></call>
+            <call method="setEncoding"><argument>%assetic.filter.packer.encoding%</argument></call>
+        </service>
+    </services>
+</container>

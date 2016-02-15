@@ -10,34 +10,59 @@ class TeacherController extends BaseController
     public function listAction(Request $request, $classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $headTheader = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
+        $headTeacher = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'headTeacher', 0, 1);
+
         $assisants = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'assistant', 0, PHP_INT_MAX);
-        $members = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
-        $members = array_merge($headTheader, $members, $assisants);
+        $teachers = $this->getClassroomService()->findClassroomMembersByRole($classroomId, 'teacher', 0, PHP_INT_MAX);
+        $members = array_merge($headTeacher, $teachers, $assisants);
+
         $members = ArrayToolkit::index($members, 'userId');
-        $teacherIds = ArrayToolkit::column($members, 'userId');
+
+        $headTeacherIds = ArrayToolkit::column($headTeacher,'userId');
+        $teacherIds = $this->getClassroomService()->findTeachers($classroomId);
+        $assisantIds = $this->getClassroomService()->findAssistants($classroomId);
+
+        $teacherIds = array_unique(array_merge($headTeacherIds, $teacherIds, $assisantIds));
+        $newteacherIds = array();
+        foreach ($teacherIds as $key => $value) {
+            $newteacherIds[] = $value;
+        }
+        $teacherIds = $newteacherIds;
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
-        $teachers = $this->sort($teachers, $members);
+        $users = array();
+        foreach ($teacherIds as $key => $teacherId) {
+            $users[$key] = $teachers[$teacherId];
+        }
         $profiles = $this->getUserService()->findUserProfilesByIds($teacherIds);
         $user = $this->getCurrentUser();
 
-        $Myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
+        $myfollowings = $this->getUserService()->filterFollowingIds($user['id'], $teacherIds);
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
+        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
+        }
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
         }
-
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+        $classroomDescription = $classroom['about'];
+        $classroomDescription = strip_tags($classroomDescription,'');
+        $classroomDescription = preg_replace("/ /","",$classroomDescription);
+        } 
         return $this->render('ClassroomBundle:Classroom\Teacher:list.html.twig', array(
             'layout' => $layout,
             'canLook' => $this->getClassroomService()->canLookClassroom($classroom['id']),
             'classroom' => $classroom,
-            'teachers' => $teachers,
+            'teachers' => $users,
             'profiles' => $profiles,
             'member' => $member,
             'members' => $members,
-            'Myfollowings' => $Myfollowings,
+            'Myfollowings' => $myfollowings,
+            'classroomDescription' => $classroomDescription
         ));
     }
     public function catchIdsAction(Request $request,$classroomId)

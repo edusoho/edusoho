@@ -103,8 +103,8 @@ class AuthenticationProvider extends UserAuthenticationProvider
                         $user = $this->syncEmailAndPassword($user, $partnerUser, $token);
                     } else {
                         $setting = $this->getSettingService()->get('user_partner', array());
-                        $email_filter = explode("\n", $setting['email_filter']);
-                        if (in_array($partnerUser['email'], $email_filter)) {
+                        $emailFilter = explode("\n", $setting['email_filter']);
+                        if (in_array($partnerUser['email'], $emailFilter)) {
                               $partnerUser['email'] = $partnerUser['id'].'_dz_'.$this->getRandomString(5).'@edusoho.net';
                         }
                         $registration = array();
@@ -189,6 +189,11 @@ class AuthenticationProvider extends UserAuthenticationProvider
     private function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
+    }
+
+    private function getLogService()
+    {
+        return ServiceKernel::instance()->createService('System.LogService');
     }
 
     private function getAuthService()

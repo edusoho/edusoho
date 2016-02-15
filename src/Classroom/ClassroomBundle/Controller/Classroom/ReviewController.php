@@ -19,9 +19,8 @@ class ReviewController extends BaseController
         $user = $this->getCurrentUser();
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
-
-        if ($classroom['private'] && (!$member || ($member && $member['locked']))) {
-            return $this->createMessageResponse('error', '该班级是封闭班级,您无权查看');
+        if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
+            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
         }
 
         $conditions = array(
@@ -48,10 +47,19 @@ class ReviewController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($id);
         $review = $this->getClassroomReviewService()->getUserClassroomReview($user['id'], $classroom['id']);
-
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
+
         if ($member && !$member['locked']) {
             $layout = 'ClassroomBundle:Classroom:join-layout.html.twig';
+        }
+
+        if(!$classroom){
+            $classroomDescription = array();
+        }
+        else{
+            $classroomDescription = $classroom['about'];
+            $classroomDescription = strip_tags($classroomDescription,'');
+            $classroomDescription = preg_replace("/ /","",$classroomDescription);
         }
 
         return $this->render("ClassroomBundle:Classroom\Review:list.html.twig", array(
@@ -65,6 +73,8 @@ class ReviewController extends BaseController
             'users' => $reviewUsers,
             'member' => $member,
             'layout' => $layout,
+            'classroomDescription' => $classroomDescription,
+            'canReview' => $this->isClassroomMember($classroom,$user['id']),
         ));
     }
 
@@ -78,6 +88,18 @@ class ReviewController extends BaseController
         $this->getClassroomReviewService()->saveReview($fields);
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function isClassroomMember($classroom, $userId)
+    {
+        if ($classroom['id']) {
+            $member = $this->getClassroomService()->getClassroomMember($classroom['id'], $userId);
+            if (!empty($member) && array_intersect(array('student', 'teacher', 'headTeacher', 'assistant'), $member['role'])) {
+                return 1;
+            }
+        }
+
+        return 0; 
     }
 
     private function getClassroomService()

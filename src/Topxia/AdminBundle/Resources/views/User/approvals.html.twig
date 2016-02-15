@@ -1,0 +1,84 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'user/approved' %}
+
+{% set menu = 'admin_approval_approvals' %}
+
+{% block main %}
+<div class="btn-group">
+  <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approving' %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approving'}) }}">审核中</a>
+  <a type="button" class="btn btn-default btn-sm {% if approvalStatus == 'approved' %}btn-primary{% endif %}" href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
+</div>
+<form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
+ 
+    <div class="form-group">
+      <select class="form-control" name="keywordType">
+        {{ select_options({'':'--查询条件--',nickname:'用户名',email:'邮箱',truename:'真实姓名',idcard:'身份证号码'}, app.request.get('keywordType')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
+    </div>
+    <div class="form-group">
+      申请时间:
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="起始时间">
+        -
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="结束时间">
+    </div>
+    <button class="btn btn-primary">搜索</button>
+</form>
+
+{% if users %}
+<table id="user-table" class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>用户名</th>
+      <th>真实姓名</th>
+      <th>身份证号码</th>
+      <th>邮件</th>
+      <th>申请时间</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for user in users %}
+    <tr id="user-table-tr-{{ user.id }}">
+        <td>{{user.id }}</td>
+        <td><strong>{{ admin_macro.user_link(user) }}</strong></td>
+        <td>{{userProfiles[user.id].truename}}</td>
+        <td>{{userProfiles[user.id].idcard}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.approvalTime | date('Y-m-d H:i')}}</td>
+        <td>
+            {% if approvalStatus == 'approved'%}
+              <div class="btn-group">
+                <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_info_view', {id:user.id}) }}" class="btn btn-default btn-sm">查看</a>
+
+                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </a>
+                
+                <ul class="dropdown-menu">
+                  <li><a data-url="{{ path('admin_approval_cancel', {id:user.id}) }}" class ="btn cancel-approval">撤销</a></li>
+                </ul>
+              </div>
+            {% elseif approvalStatus == 'approving' %}
+              <a href="#modal" data-toggle="modal" data-url="{{ path('admin_approval_approve', {id:user.id}) }}" class="btn btn-default btn-sm">审核</a>
+            {% endif %}
+        </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{{ web_macro.paginator(paginator) }}
+{% else %}
+  {% if approvalStatus == 'approved' %}
+    <div class="empty">暂无已经审核成功的实名认证用户</div>
+  {% elseif approvalStatus == 'approving' %}
+    <div class="empty">暂无需要审核中的实名认证用户</div>
+  {% endif %}
+{% endif %}
+
+{% endblock %}

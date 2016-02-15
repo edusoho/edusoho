@@ -233,8 +233,123 @@ class QuestionServiceTest extends BaseTestCase
         $this->assertEquals('none', $result[$question['id']]['status']);
     }
 
+    /*
+        问题数据同步
+    */
 
-    private function getQuestionService()
+    public function testFindQuestionsByCopyIdAndLockedTarget()
+    {
+        $question = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>0,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+
+        $question = $this->getQuestionService()->createQuestion($question);
+        $this->assertEquals('question.',$question['stem']);
+        $question = $this->getQuestionService()->findQuestionsByCopyIdAndLockedTarget(1,"('course-1')");
+        $this->assertEquals('question.',$question[0]['stem']);
+    }
+
+    public function testFindQuestionsCountByParentId()
+    {
+       $question = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>0,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+        $question1 = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>1,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+        $question = $this->getQuestionService()->createQuestion($question);
+        $question = $this->getQuestionService()->createQuestion($question1);
+        $this->assertEquals('question.',$question['stem']); 
+        $count = $this->getQuestionService()->findQuestionsCountByParentId(1);
+        $this->assertEquals(1,$count); 
+    }
+
+    public function testDeleteQuestionsByParentId()
+    {
+        $question = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>0,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+        $question1 = array(
+            'type' => 'single_choice',
+            'stem' => 'question.',
+            'difficulty'=>'normal',
+            'answer' => array('answer'),
+            'target' => 'course-1',
+            '"stem"'=>'测试',
+            "choices"=>array("爱","测","额","恶"),
+            'uncertain'=>0,
+            "analysis"=>'',
+            "score"=>'2',
+            "submission"=>'submit',
+            "type"=>"choice",
+            "parentId"=>1,
+            'copyId'=>1,
+            "answer"=>"2"
+        );
+        $question = $this->getQuestionService()->createQuestion($question);
+        $question = $this->getQuestionService()->createQuestion($question1);
+        $this->assertEquals('question.',$question['stem']);
+        $count = $this->getQuestionService()->deleteQuestionsByParentId(1);
+        $this->assertEquals(1,$count);
+    }
+
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }

@@ -4,7 +4,6 @@ namespace Topxia\Service\Announcement\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Announcement\AnnouncementService;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Common\ServiceEvent;
 
 class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 {
@@ -47,10 +46,14 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
             unset($announcement['notify']);
         }
 
+        $announcement['content'] = $this->purifyHtml(empty($announcement['content']) ? '' : $announcement['content']);
+
 		$announcement['userId'] = $this->getCurrentUser()->id;
 		$announcement['createdTime'] = time();
 
-		return $this->getAnnouncementDao()->addAnnouncement($announcement);
+        $announcement = $this->getAnnouncementDao()->addAnnouncement($announcement);
+        $this->dispatchEvent('announcement.create', $announcement);
+        return $announcement;
 	}
 
     public function updateAnnouncement($id, $announcement)
@@ -81,12 +84,12 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
 	}
 
-	private function getAnnouncementDao()
+	protected function getAnnouncementDao()
     {
         return $this->createDao('Announcement.AnnouncementDao');
     }
 
-    private function _prepareSearchConditions($conditions)
+    protected function _prepareSearchConditions($conditions)
     {
     	$targetType = array('course','classroom','global');
     	if(!in_array($conditions['targetType'], $targetType)){
@@ -96,7 +99,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     	return $conditions;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
     	return $this->createService('Course.CourseService');
     }

@@ -1,0 +1,20 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+       用户
+       <a href='{{path('user_show',{id:data.userId})}}' target='_blank'>{{data.userName}}</a>
+        {% if data.opration == 'follow' %}
+            已经关注了你！
+        {% elseif data.opration == 'unfollow'%}
+           对你已经取消了关注！
+        {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

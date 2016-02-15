@@ -4,8 +4,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     require('jquery.sortable');
-    require('ckeditor');
-	exports.run = function() {
+    require('es-ckeditor');
+    exports.run = function() {
        
          var sortList = function($list) {
             var data = $list.sortable("serialize").get();
@@ -38,13 +38,12 @@ define(function(require, exports, module) {
             element: '#live-lesson-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
-            	if (error) {
-            		return false;
-            	}
+                if (error) {
+                    return false;
+                }
                 $('#live-course-create-btn').button('submiting').addClass('disabled');
                 var $panel = $('.lesson-manage-panel');
-				$.post($form.attr('action'), $form.serialize(), function(html) {
-
+                $.post($form.attr('action'), $form.serialize(), function(html) {
                     var id = '#' + $(html).attr('id'),
                     $item = $(id);
                     var $parent = $('#'+$form.data('parentid'));
@@ -53,25 +52,22 @@ define(function(require, exports, module) {
                         Notify.success('课时已保存');
                     } else {
                         $panel.find('.empty').remove();
-
-                    if($parent.length){
-
-                        var add = 0;
-                        if($parent.hasClass('item-chapter  clearfix')){
-                            $parent.nextAll().each(function(){
-                            if($(this).hasClass('item-chapter  clearfix')){
-                                $(this).before(html);
-                                add = 1;
-                                return false;
-                             }
-                          });
-                            if(add !=1 ){
-                                $("#course-item-list").append(html);
-                                add = 1;
-                            }
-                            
-                        }else{
-                           
+                        if($parent.length){
+                            var add = 0;
+                            if($parent.hasClass('item-chapter  clearfix')){
+                                $parent.nextAll().each(function(){
+                                if($(this).hasClass('item-chapter  clearfix')){
+                                    $(this).before(html);
+                                    add = 1;
+                                    return false;
+                                 }
+                              });
+                                if(add !=1 ){
+                                    $("#course-item-list").append(html);
+                                    add = 1;
+                                }
+                                
+                            }else{                           
                              $parent.nextAll().each(function(){
                                 if($(this).hasClass('item-chapter  clearfix'))
                                     return false;
@@ -82,21 +78,25 @@ define(function(require, exports, module) {
                              }
                           });
                         }
-                     if(add != 1 )
-                        $parent.after(html);  
+                         if(add != 1 )
+                            $parent.after(html);  
                         var $list = $("#course-item-list");
                         sortList($list);
                      }else{
                       $("#course-item-list").append(html);
-                 }
-                       
+                    }                       
                     Notify.success('添加直播课时成功');
+                }
+                $modal.modal('hide');
+	}).error(function(event){
+                    var error = event.responseText;
+                    if (error && error.length > 0) {
+                        error = JSON.parse(error);
+                        Notify.danger(error.error.message);
+                    } else {
+                        Notify.danger('操作失败');
                     }
-                    $modal.modal('hide');
-
-				}).error(function(){
-					Notify.danger('操作失败');
-				});
+	});
             }
         });
 

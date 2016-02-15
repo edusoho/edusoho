@@ -20,11 +20,10 @@
           </a>
           所有
         {% endif %}
-          &nbsp;
-          {% if setting('site.icp') %}
-            <a href="http://www.miibeian.gov.cn/" target="_blank">
-              {{ setting('site.icp') }}
-            </a>
+        {% if setting('site.icp') %}
+          <a class="mlm" href="http://www.miibeian.gov.cn/" target="_blank">
+            {{ setting('site.icp') }}
+          </a>
         {% endif %}
       </div>
     </div>

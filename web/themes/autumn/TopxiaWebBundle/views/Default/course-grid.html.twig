@@ -1,5 +1,6 @@
 <li class="autumn-grid autumn-course-grid">
-  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture"><img src="{{ filepath(course.largePicture, 'course.png') }}">
+  <a href="{{ path('course_show', {id:course.id}) }}" class="course-picture">
+    {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', '') }}
     {% if course.status == 'draft' %}
       <span class="label  label-warning course-status">未发布</span>
     {% elseif course.status == 'closed' %}
@@ -34,7 +35,9 @@
     <span class="teachers">
        主讲:
       {% for teacher in course.teachers %}
-       {{ web_macro.user_link(teacher, 'text-muted') }}
+       {% if loop.index <= 1 %}
+        {{ web_macro.user_link(teacher, 'text-muted') }}
+       {% endif %}
       {% endfor %}
     </span>
   </div>

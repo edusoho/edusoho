@@ -1,0 +1,27 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">{{ titleType }}公告</h3>
+    </div>
+</div>
+
+<div class="top-header ui-course-notice" ng-init="loadMore()">
+  <ul class="ui-list ui-border-b">
+      <li class="ui-border-b" ng-repeat="notice in notices">
+          <div class="ui-avatar">
+              <span class="notice-icon">
+                <i class="iconfont icon-gonggao"></i>
+              </span>
+          </div>
+          <div class="ui-list-info">
+              <h4>公告</h4>
+              <p class="notice-content" ng-bind-html="notice.content"></p>
+          </div>
+      </li>
+  </ul>
+  <list-empty-view data="notices" title="暂时没有{{ titleType }}公告">
+  </list-empty-view>
+  <div class="ui-tips ui-tips-info" ng-click="loadMore()" ng-show="showLoadMore">
+      <p>查看更早公告...</p>
+  </div>
+</div>

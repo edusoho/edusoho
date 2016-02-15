@@ -7,7 +7,7 @@
 {% block main %}
 
 {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
-		{% block heading %}昵称修改{% endblock %}
+		{% block heading %}用户名修改{% endblock %}
     	{% block body %}
 
 	    	<form id="nickname-form" class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -16,7 +16,7 @@
 	        		
 		    <div class="form-group">
 		      <div class="col-md-2 control-label"> 
-		        <label for="nickname">昵称</label> 
+		        <label for="nickname">用户名</label> 
 		      </div>
 		      <div class="col-md-8 controls">
 		       <input data-url={{path ('update_nickname_check') }} type="text" id="nickname" name="nickname" class="form-control" value="{{app.user.nickname}}">

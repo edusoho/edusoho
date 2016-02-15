@@ -54,7 +54,10 @@
               <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
             </span>
           </div>
-     
+          
+          <p class="help-block">
+            <div>助教可在【{{setting("classroom.name")|default("班级")}}管理】中批改{{setting("classroom.name")|default("班级")}}作业和试卷，并且可以在{{setting("classroom.name")|default("班级")}}讨论区创建活动</div>
+          </p>
           <script type="text/plain" data-role="model">{{ assistants|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="item-template">
               {% verbatim %}

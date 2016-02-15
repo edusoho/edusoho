@@ -13,14 +13,20 @@ interface CourseMemberDao
 
     public function findMembersByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);
 
+    public function findMembersNotInClassroomByUserIdAndRole($userId, $role, $start, $limit, $onlyPublished = true);//
+
     public function findMemberCountByUserIdAndRole($userId, $role, $onlyPublished = true);
 
+    public function findMemberCountNotInClassroomByUserIdAndRole($userId, $role, $onlyPublished = true);//
+    
     public function findMemberCountByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned);
 
     public function findMembersByUserIdAndCourseTypeAndIsLearned($userId, $role, $type, $isLearned, $start, $limit);
 
     public function findMemberCountByUserIdAndRoleAndIsLearned($userId, $role, $isLearned);
-    
+   
+    public function findMobileVerifiedMemberCountByCourseId($courseId, $locked);
+
     public function findMembersByUserIdAndRoleAndIsLearned($userId, $role, $isLearned, $start, $limit);
     
     public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit);
@@ -43,14 +49,18 @@ interface CourseMemberDao
 
     public function deleteMember($id);
 
-    public function deleteMembersByCourseId($courseId);
-
     public function deleteMemberByCourseIdAndUserId($courseId, $userId);
 
+    public function deleteMemberByCourseIdAndRole($courseId,$role);
+
     public function findCourseMembersByUserId($userId);
+
+    public function deleteMembersByCourseId($courseId);
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId,$userId);
 
     public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds);
+
+    public function findMemberUserIdsByCourseId($courseId);
     
 }

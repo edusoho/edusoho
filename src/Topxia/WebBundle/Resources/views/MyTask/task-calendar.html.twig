@@ -1,0 +1,29 @@
+{% block stylesheets %}
+
+  <link href="{{ asset('assets/css/fullcalendar/fullcalendar.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/css/fullcalendar/fullcalendar.print.css') }}" rel="stylesheet" media='print' />
+{% endblock %}
+
+{% do load_script('topxiawebbundle/controller/mytask/fullcalendar') %}
+
+
+<style>
+
+  .panel-body {
+    margin: 20px 10px;
+    padding: 0;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+</style>
+
+<div class="panel-body" >
+  {% set url = path('my_task_calendar') %}
+  <input id='datajson' hidden='hidden' data-fullcalendarevents='{{taskjson}}' data-url='{{ url }}' data-today='{{today}}'></input>
+  <div id="calendar"></div>
+</div>

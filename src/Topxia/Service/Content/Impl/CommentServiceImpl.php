@@ -46,7 +46,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 			throw $this->createAccessDeniedException('无权限删除评论！');
 		}
 
-		if ($comment['userId'] != $user['id'] and ! $this->getContainer()->get('security.context')->isGranted('ROLE_ADMIN')) {
+		if ($comment['userId'] != $user['id'] && ! $this->getContainer()->get('security.context')->isGranted('ROLE_ADMIN')) {
 			throw $this->createAccessDeniedException('无权限删除评论！');
 		}
 
@@ -65,7 +65,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 		return $this->getCommentDao()->findCommentsCountByObjectType($objectType);
 	}
 
-	private function checkCommentObjectFields($objectType)
+	protected function checkCommentObjectFields($objectType)
 	{
 		$objectTypes = array('course');
 		if(!in_array($objectType, $objectTypes)){
@@ -74,7 +74,7 @@ class CommentServiceImpl extends BaseService implements CommentService
 	}
 	
 	//TODO 对于多种对象的评论应该实现检测评论的对象是否存在
-	private function checkCommentObjectValue($comment)
+	protected function checkCommentObjectValue($comment)
 	{
 		switch ($comment['objectType']) {
 			case self::COMMENT_OBJECTTYPE_COURSE:
@@ -89,12 +89,12 @@ class CommentServiceImpl extends BaseService implements CommentService
 		}
 	}
 
-	private function getCommentDao()
+	protected function getCommentDao()
 	{
         return $this->createDao('Content.CommentDao');
 	}
 
-	private function getCourseService()
+	protected function getCourseService()
     {
     	return $this->createService('Course.CourseService');
     }

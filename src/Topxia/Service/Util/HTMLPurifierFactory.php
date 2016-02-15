@@ -31,7 +31,7 @@ class HTMLPurifierFactory
         return new \HTMLPurifier($config);
     }
 
-    private function warmUp ($cacheDir)
+    protected function warmUp ($cacheDir)
     {
         if (! is_dir($cacheDir)) {
             mkdir($cacheDir, 0777, true);

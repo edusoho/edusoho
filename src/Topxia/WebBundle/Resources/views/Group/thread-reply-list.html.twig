@@ -4,7 +4,7 @@
       {% for post in postReply %}
         <li class="media li-reply-{{postMain.id}}">
           <a href="{{ path('user_show', {id:post.userId}) }}" class="pull-left">
-            <img src="{{ filepath(postReplyMembers[post.userId].smallAvatar, 'avatar.png') }}" class="media-object">
+            <img src="{{ filepath(postReplyMembers[post.userId].smallAvatar, 'avatar.png') }}" class="avatar-md">
           </a>
           <div class="media-body">
             <div class="metas">
@@ -23,22 +23,22 @@
     <div class="actions">
       <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{postMain.id}}" href="javascript:;">我也要说</a>
     </div>
-    <div class="clearfix">
+    <div class="text-center">
     {% if postReplyPaginator.lastPage > 1 %}
-      <ul  class="paginator-{{postMain.id}} pagination pagination-sm pull-left ">
+      <ul  class="paginator-{{postMain.id}} pagination pagination-sm">
         {% if postReplyPaginator.currentPage == postReplyPaginator.firstPage %}
           <li class="disabled "><span>上一页</span></li>
         {% else %}
-          <li class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.previousPage})}}"><a >上一页</a></li>
+          <li class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.previousPage})}}"><a  href="javascript:;">上一页</a></li>
         {% endif %}
         {% for page in postReplyPaginator.pages %}
-          <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %} class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a  >{{ page }}</a></li>
+          <li {% if page == postReplyPaginator.currentPage %}class="active"{% endif %} class="postReply-page"  postId="{{postMain.id}}"  data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:page})}}"><a href="javascript:;">{{ page }}</a></li>
         {% endfor %}
 
         {% if postReplyPaginator.currentPage == postReplyPaginator.lastPage %}
           <li class="disabled"><span>下一页</span></li>
         {% else %}
-          <li class="postReply-page"  postId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.nextPage})}}"><a>下一页</a></li>
+          <li class="postReply-page"  postId="{{postMain.id}}" data-url="{{path('group_thread_post_reply',{postId:postMain.id,page:postReplyPaginator.nextPage})}}"><a href="javascript:;">下一页</a></li>
         {% endif %}
       </ul>
     {% endif %}

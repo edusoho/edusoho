@@ -45,50 +45,50 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         
-        var cash_rate=$('#cash-rate').data('val');
-
-        $('#finish').on('click',function(){
-
-            if($('.rmbPrice').length>0){
-
-                if(checkPrice()){
-
-                    $('#coin-model-form').submit();
-                }else{
-                    $('#help-message').removeClass("hidden");
-                }
-            }
-
-            if($('.cashPrice').length>0){
-
-                if(checkRmbPrice()){
-
-                    $('#coin-model-form').submit();
-                }else{
-                    $('#help-message').removeClass("hidden");
-                }
-            } 
-
-            if ($('.cashPrice').length == 0 || $('.rmbPrice').length == 0) {
-                $('#coin-model-form').submit();
-            }   
-
+        var cash_rate = $('#cash-rate').data('val');
+        var validator = new Validator({
+            element: '#coin-model-form'
         });
 
-        $('#coin-model-form').on('input','.rmbPrice,.cashPrice',function(){
+        if ($('.cashPrice').length > 0) {
+            $('.cashPrice').each(function(){
+                validator.addItem({
+                    element: $(this),
+                    required: true,
+                    rule: 'float',
+                    errormessageRequired: '请输入虚拟币价格'
+                });
+            });
+        }
+
+        if ($('.rate').length > 0) {
+            $('.rate').each(function(){
+                validator.addItem({
+                    element: $(this),
+                    required: true,
+                    rule: 'percent_number',
+                    errormessageRequired: '请输入最大可抵扣比率'
+                });
+            });
+        }
+
+        $('#coin-model-form').on('input','.cashPrice',function(){
             
             rule=/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i;
  
             if(rule.test($(this).val())){ 
                 var val=$(this).val();
                 var id=$(this).data('id');
+                var rmb_price = $('#rmb'+id).html();
 
-                $('#cash'+id).html((cash_rate*val).toFixed(2));
+                $('#deRmb'+id).html((rmb_price*val/100).toFixed(2));
+                $('#cash'+id).html((rmb_price*val/100*cash_rate).toFixed(2))
+
             }
 
         })
 
-        $('#coin-model-form').on('change','.rmbPrice,.cashPrice',function(){
+        $('#coin-model-form').on('change','.cashPrice',function(){
             
             rule=/^(([1-9]{1}\d*)|([0]{1}))(\.(\d){1,2})?$/i;
  
@@ -96,6 +96,31 @@ define(function(require, exports, module) {
 
                 $(this).val("");
             }
+
+        })
+
+        $('#coin-model-form').on('change','.rate',function(){
+            
+            rule= /^(100|[1-9]\d|\d)$/;
+            var value = Number($(this).val());
+            value = parseInt(value);
+            if (value > 100) {
+                $(this).val(100);
+            }
+            else if(value > 0 && value < 100){
+                $(this).val(value);
+            }
+            if(!rule.test($(this).val())){ 
+
+                $(this).val(0);
+            }
+
+            var val=$(this).val();
+            var id=$(this).data('id');
+            var rmb_price = $('#rmb'+id).html();
+
+            $('#deRmb'+id).html((rmb_price*val/100).toFixed(2));
+            $('#cash'+id).html((rmb_price*val/100*cash_rate).toFixed(2))
 
         })
 
@@ -110,6 +135,14 @@ define(function(require, exports, module) {
                
             });
 
+        })
+
+        $("#typelist").on('click','.js-type-filter',function(){
+            var $btn = $(this);
+            $.get($btn.data('url'),function(html){
+            $('#typelist').html(html);
+            $("input[name='type']").val($btn.attr("id"));
+            })
         })
 
     };

@@ -10,17 +10,22 @@
           <span class="tag-discount"></span>
         {% endif %}
       {% endif %}
+      {% if course.serializeMode == 'serialize' %}
+        <span class="tags"><span class="tag-serialing"></span></span>
+      {% elseif course.serializeMode == 'finished' %}
+        <span class="tags"><span class="tag-finished"></span></span>
+      {% endif %}
       {% if course.type == 'live' %}
         <span class="tags">
           <span class="tag-live"></span>
         </span>
       {% endif %}
-      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive transform', '') }}
+      {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
     </a>
   </div>
   <div class="course-info">
     <div class="title">
-      <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+      <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
         {{ course.title }}
       </a>
     </div>

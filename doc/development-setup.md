@@ -7,54 +7,33 @@
 EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就不再叙述了。
 
 ## 下载EduSoho源码
+    git clone https://github.com/EduSoho/EduSoho.git /var/www/edusoho
 
-    git clone https://gitcafe.com/Topxia/EduSoho /var/www/edusoho-dev
-
-由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。
+由于众所周知的原因，国内访问github的网络慢，这一步应该需要些时间，请耐心等待。有权限访问公司内网，优先使用公司内网地址。
 
 ## 进入程序目录
+    cd /var/www/edusoho
 
-    cd /var/www/edusoho-dev
+## 创建配置文件
+    cp app/config/parameters.yml.dist app/config/parameters.yml
 
-## 安装Composer
-
-    curl -sS https://getcomposer.org/installer | php
-
-## 安装程序的依赖库(Vendor)
-
-    php composer.phar install
-
-由于众所周知的原因，这一步也会花点时间，如果中途由于网络超时，只要重新执行上面的命令就可以了，会继续install的。
-在最后一步会问你数据库的设置，如下：
-
-    Some parameters are missing. Please provide them.
-    database_driver (pdo_mysql):    
-    database_host (127.0.0.1): 
-    database_port (null): 
-    database_name (symfony): edusoho-dev
-    database_user (root): 
-    database_password (null): 
-    mailer_transport (smtp): 
-    mailer_host (127.0.0.1): 
-    mailer_user (null):  
-    mailer_password (null): 
-    locale (en): zh_CN
-    secret (ThisTokenIsNotSoSecretChangeIt): 
+并修改配置文件中的数据库配置
 
 ## 创建数据库
 
   * 进入MySQL命令行：
-
-        mysql -uroot -p
+    ````
+    mysql -uroot -p
+    ````
 
   * 在mysql命令行下，创建数据库：
-
-        mysql> CREATE DATABASE `edusoho-dev` DEFAULT CHARACTER SET utf8 ; 
-        mysql> exit;
+    ````
+    mysql> CREATE DATABASE `edusoho` DEFAULT CHARACTER SET utf8 ; 
+    mysql> exit;
+    ````
 
 
 ## 初始化程序基础数据
-
     app/console doctrine:migrations:migrate
     app/console topxia:init
 
@@ -67,10 +46,10 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
 
         server_name www.edusoho-dev.com;
 
-        root /var/www/edusoho-dev/web;
+        root /var/www/edusoho/web;
 
-        access_log /var/log/nginx/edusoho-dev.com.access.log;
-        error_log /var/log/nginx/edusoho-dev.com.error.log;
+        access_log /var/log/nginx/edusoho.access.log;
+        error_log /var/log/nginx/edusoho.error.log;
 
         location / {
             index app.php;
@@ -83,7 +62,7 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
 
         location ~ ^/udisk {
             internal;
-            root /var/www/edusoho-dev/app/data/;
+            root /var/www/edusoho/app/data/;
         }
 
         location ~ ^/(app|app_dev)\.php(/|$) {
@@ -94,7 +73,7 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
             fastcgi_param  SCRIPT_FILENAME    $document_root$fastcgi_script_name;
             fastcgi_param  HTTPS              off;
             fastcgi_param HTTP_X-Sendfile-Type X-Accel-Redirect;
-            fastcgi_param HTTP_X-Accel-Mapping /udisk=/var/www/edusoho-dev/app/data/udisk;
+            fastcgi_param HTTP_X-Accel-Mapping /udisk=/var/www/edusoho/app/data/udisk;
             fastcgi_buffer_size 128k;
             fastcgi_buffers 8 128k;
         }
@@ -128,7 +107,6 @@ EduSoho开发需要安装Git, Nginx, PHP, Mysql，这些软件包的安装我就
 
     127.0.0.1 www.edusoho-dev.com
 
-## 浏览器打开www.eduosho-dev.com
-
+## 浏览器打开 www.edusoho-dev.com
     默认账号为：test@edusoho.com
     密码为：kaifazhe

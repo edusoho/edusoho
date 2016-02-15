@@ -2,41 +2,35 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>阔知学堂移动客户端下载</title>
-  <script>
-    var urls = {
-      iphone: '{{iphoneUrl | raw}}',
-      android: 'http://mobcdn.qiniudn.com/{{code | raw}}-Android-v2.0.1.apk',
-      weixin : "http://a.app.qq.com/o/simple.jsp?pkgname=com.edusoho.kuozhi&g_f=991811"
-    };
-    var uagent = navigator.userAgent.toLowerCase();
-    if(uagent.match(/MicroMessenger/i)=="micromessenger") {
-      document.write("<div class='message'>正在跳转...</div>");
-      document.write("<a href='" + urls.weixin + "'>直接下载</a>");
-        window.location = urls.weixin;
-    }else if (uagent.search("iphone") > -1 || uagent.search("ipad") > -1 ) {
-        window.location = urls.iphone;
-    } else {
-      var href = window.location.href;
-      if (href.search("iphone") > -1 || href.search("ipad") > -1 ) {
-        if (urls.iphone == "#") {
-          document.write("<div class='message'>暂无iphone版本...</div>");
-        } else {
-          window.location = urls.iphone;
-        }
-      } else {
-        window.location = urls.android;
-      }
-    }
-  </script>
-
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>移动客户端下载</title>
   <style>
-    .message {font-style: 12px; color: #444;}
+    .weixin_bg {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #00c776;
+      background-repeat: no-repeat;
+      background-image: url("{{ asset('bundles/topxiamobilebundlev2/img/weixin_bg.png') }}");
+    }
+
+    .shard_bg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      background: rgba(0,0,0,0.6);
+    }
+
+    .shard_bg img {
+      float: right;
+    }
   </style>
 </head>
 
-<body>
-    <div class="message">正在载入应用...</div>
+<body class="weixin_bg">
+  <div class="shard_bg">
+    <img src="{{ asset('bundles/topxiamobilebundlev2/img/weixin_arrow.png') }}" />
+  </div>
 </body>
 </html>

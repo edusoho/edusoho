@@ -81,7 +81,7 @@ class CacheServiceTest extends BaseTestCase
       $this->assertEmpty($foundCacheNames);
     }
 
-    private function getCacheService()
+    protected function getCacheService()
     {
         return $this->getServiceKernel()->createService('System.CacheService');
     }

@@ -57,7 +57,7 @@ class LoginController extends BaseController
         ));
     }
 
-    private function getTargetPath($request)
+    protected function getTargetPath($request)
     {
         if ($request->query->get('goto')) {
             $targetPath = $request->query->get('goto');

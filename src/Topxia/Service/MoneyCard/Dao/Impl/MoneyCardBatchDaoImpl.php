@@ -37,6 +37,17 @@ class MoneyCardBatchDaoImpl extends BaseDao
         return $builder->execute()->fetchColumn(0);
     }
 
+    public function getBatchByToken ($token, $locked = false)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE token = ? LIMIT 1";
+        if($locked)
+        {
+            $sql =  $sql." for update";
+        }
+
+        return $this->getConnection()->fetchAssoc($sql, array($token)) ? : null;
+    }
+
     public function addBatch ($batch)
     {
         $affected = $this->getConnection()->insert($this->table, $batch);
@@ -59,7 +70,7 @@ class MoneyCardBatchDaoImpl extends BaseDao
         $this->getConnection()->delete($this->table,array('id' => $id));
     }
 
-    private function createBatchQueryBuilder($conditions)
+    protected function createBatchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'batch')

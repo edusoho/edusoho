@@ -96,10 +96,10 @@ class MemberController extends BaseController
         $objWriter->save('php://output');
     }
 
-    private function _makeInfo($user)
+    protected function _makeInfo($user)
     {
         $title = array(
-            'nickname' => '昵称',
+            'nickname' => '用户名',
             'truename' => '真实姓名',
             'mobile' => '手机号码',
             'createdTime' => '报名时间'
@@ -111,13 +111,13 @@ class MemberController extends BaseController
         return $info;
     }
 
-    private function _findMembersByThreadId($threadId)
+    protected function _findMembersByThreadId($threadId)
     {
         $members = $this->getThreadService()->findMembersByThreadId($threadId, 0, PHP_INT_MAX);
         return $members;
     }
 
-    private function _findPageMembers($request, $threadId)
+    protected function _findPageMembers($request, $threadId)
     {
         $page = $request->query->get('page', 1);
         $start = (intval($page) - 1) * 16;
@@ -133,7 +133,7 @@ class MemberController extends BaseController
         return $members;
     }
 
-    private function _findMyJoindedFriends($members)
+    protected function _findMyJoindedFriends($members)
     {
         $myFriends = $this->getUserService()->findAllUserFollowing($this->getCurrentUser()->id);
         $newFrinds = array();
@@ -146,7 +146,7 @@ class MemberController extends BaseController
         return $newFrinds;
     }
 
-    private function _setHeader($filename)
+    protected function _setHeader($filename)
     {
         header('Content-Type: application/vnd.ms-excel');
         header("Content-Disposition: attachment;filename={$filename}");

@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ article.title }} - {{ parent() }}{% endblock %}
+{% block title %}{{ article.title }} - {% if category.seoTitle %}{{ category.seoTitle }}{% else %}{{ category.name }}{% endif %} - {{ parent() }}{% endblock %}
 
 {% block keywords %}{{ seoKeyword }}{% endblock %}
 
@@ -21,6 +21,8 @@
         {% include 'TopxiaWebBundle:Article/Part:detail-metas.html.twig' %}
         
         {% include 'TopxiaWebBundle:Article/Part:detail-boy.html.twig' %}
+
+        {% include 'TopxiaWebBundle:Article/Part:detail-copyright.html.twig' %}
 
         {% include 'TopxiaWebBundle:Article/Part:detail-tags.html.twig' %}
 

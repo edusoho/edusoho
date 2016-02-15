@@ -1,0 +1,44 @@
+{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+
+{% block title %}{{title}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = type %}
+
+{% set script_controller = 'course-manage/sync' %}
+
+{% block main %}
+
+<style>
+  .panel-locked{
+    margin:80px 50px;
+  }
+  .panel-locked p{
+    text-align: center;
+    line-height:35px;
+  }
+  .panel-margin{
+    margin-top:30px;
+  }
+</style>
+
+<div class="panel panel-default panel-col">
+  <div class="panel-heading">{{title}}</div>
+  <div class="panel-body">
+    <div class="panel-locked">
+      <h5><p>本课程内容与原课程
+        <a href="{% if type == 'question' or type == 'testpaper' %}{{path(url,{courseId:parentCourse.id})}}{% elseif type == 'question_plumber' %}{{path(url,{courseId:parentCourse.id,type:'import'})}}{% else %}{{path(url,{id:parentCourse.id})}}{% endif %}" target="_blank">&nbsp;&nbsp;《{{parentCourse.title}}》&nbsp;&nbsp;</a>
+        实时同步中。如需更改内容可以选择对原课程进行更改。
+        </p>
+      </h5>
+      <h5>
+        <p class="panel-margin">如需解除同步单独编辑本课程，可点击下方按钮解除同步。<font color="#e83d2c">注意：本操作不可逆！</font>
+        </p>
+      </h5>
+      <p class="panel-margin"><a href="#modal" data-toggle="modal" data-url= "{{ path('course_manage_course_sync_edit',{courseId:course.id,type:type,url:url}) }}" class="btn btn-danger">解除同步</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+

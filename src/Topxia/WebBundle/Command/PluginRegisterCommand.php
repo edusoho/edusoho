@@ -85,7 +85,7 @@ class PluginRegisterCommand extends BaseCommand
             throw new \RuntimeException("插件元信息文件{$metaFile}格式不符合JSON规范，解析失败，请检查元信息文件格式");
         }
 
-        if (empty($meta['code']) or empty($meta['name']) or empty($meta['version'])) {
+        if (empty($meta['code']) || empty($meta['name']) || empty($meta['version'])) {
             throw new \RuntimeException("插件元信息必须包含code、name、version属性");
         }
 

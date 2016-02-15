@@ -8,7 +8,6 @@ use Topxia\Common\ArrayToolkit;
 
 class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 {
-
 	public function reDoTestpaper()
 	{
 		$testId = $this->getParam("testId");
@@ -85,52 +84,62 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	public function myTestpaper()	
 	{
 		$user = $this->controller->getUserByToken($this->request);
-                        if (!$user->isLogin()) {
-                            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
-                        }
+        if (!$user->isLogin()) {
+            return $this->createErrorResponse('not_login', '您尚未登录，不能查看该课时');
+        }
 
-                       	$start = (int) $this->getParam("start", 0);
+        $start = (int) $this->getParam("start", 0);
 		$limit = (int) $this->getParam("limit", 10);
-                        $total = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
+        $total = $this->getTestpaperService()->findTestpaperResultsCountByUserId($user['id']);
 
-                        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
-		            $user['id'],
-		            $start,
-		            $limit
+        $testpaperResults = $this->getTestpaperService()->findTestpaperResultsByUserId(
+	        $user['id'],
+	        $start,
+	        $limit
 		);
 
-                        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
+        $testpapersIds = ArrayToolkit::column($testpaperResults, 'testId');
 
-        		$testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
-        		$testpapers = ArrayToolkit::index($testpapers, 'id');
+		$testpapers = $this->getTestpaperService()->findTestpapersByIds($testpapersIds);
+		$testpapers = ArrayToolkit::index($testpapers, 'id');
 
-        		$targets = ArrayToolkit::column($testpapers, 'target');
-        		$courseIds = array_map(function($target){
-            		$course = explode('/', $target);
-            		$course = explode('-', $course[0]);
-            		return $course[1];
-        		}, $targets);
+		$targets = ArrayToolkit::column($testpapers, 'target');
+		$courseIds = array_map(function($target){
+    		$course = explode('/', $target);
+    		$course = explode('-', $course[0]);
+    		return $course[1];
+		}, $targets);
 
-        		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
-        		$data = array(
-        			'myTestpaperResults' => $this->filterMyTestpaperResults($testpaperResults),
-            		'myTestpapers' => $this->filterMyTestpaper($testpapers),
-            		'courses' => $this->filterMyTestpaperCourses($courses),
-        		);
-        		return array(
-        			"start"=>$start,
-        			"total"=>$total,
-        			"limit"=>$limit,
-        			"data"=>$data
-        			);
+		$courses = $this->getCourseService()->findCoursesByIds($courseIds);
+		$data = array(
+			'myTestpaperResults' => $this->filterMyTestpaperResults($testpaperResults, $testpapersIds),
+    		'myTestpapers' => $this->filterMyTestpaper($testpapers),
+    		'courses' => $this->filterMyTestpaperCourses($courses),
+		);
+		return array(
+			"start"=>$start,
+			"total"=>$total,
+			"limit"=>$limit,
+			"data"=>$data
+		);
 	}
 
-	private function filterMyTestpaperResults($testpaperResults)
+	private function filterMyTestpaperResults($testpaperResults, $testIds)
 	{
-		return array_map(function($testpaperResult){
-			$testpaperResult['beginTime'] = date('Y-m-d H:i:s', $testpaperResult['beginTime']);
-			return $testpaperResult;
-		}, $testpaperResults);
+		$results = $testpaperResults;
+		foreach ($testpaperResults as $key => $value) {
+			if(!in_array($value['testId'], $testIds)){
+				unset($results[$key]);
+			}else{
+				$results[$key]['beginTime'] = date('Y-m-d H:i:s', $value['beginTime']);
+				$results[$key]['endTime'] = date('Y-m-d H:i:s', $value['endTime']);
+				if($results[$key]['updateTime'] != 0){
+					$results[$key]['updateTime'] = date('Y-m-d H:i:s', $value['updateTime']);
+				}
+				$results[$key]['checkedTime'] = date('Y-m-d H:i:s', $value['checkedTime']);
+			}
+		}
+		return $results;
 	}
 
 	private function filterMyTestpaper($testpapers)
@@ -183,7 +192,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		$id = $this->getParam("id");
 		$testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 
-	        	if (!empty($testpaperResult) and !in_array($testpaperResult['status'], array('doing', 'paused'))) {
+	        	if (!empty($testpaperResult) && !in_array($testpaperResult['status'], array('doing', 'paused'))) {
 	            	return true;
 	        	}
 
@@ -209,22 +218,18 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	            $course = $this->controller->getCourseService()->getCourse($targets[$testpaper['target']]['id']);
 
 	            if ($this->getTestpaperService()->isExistsEssay($testResults)) {
-                	$message = array(
-                		'id'=>$testpaperResult['id'],
-            			'name' => $testpaperResult['paperName'],
-            			'userId' =>$user['id'],
-            			'userName' =>$user['nickname'],
-            			'type' => 'perusal'
-            		);	
+	            	$userUrl = $this->controller->generateUrl('user_show', array('id'=>$user['id']), true);
+                		$teacherCheckUrl = $this->controller->generateUrl('course_manage_test_teacher_check', array('id'=>$testpaperResult['id']), true);
+
 		            foreach ($course['teacherIds'] as $receiverId) {
-		                $result = $this->getNotificationService()->notify($receiverId, 'test-paper', $message);
+		                $result = $this->getNotificationService()->notify($receiverId, 'default', "【试卷已完成】 <a href='{$userUrl}' target='_blank'>{$user['nickname']}</a> 刚刚完成了 {$testpaperResult['paperName']} ，<a href='{$teacherCheckUrl}' target='_blank'>请点击批阅</a>");
 		            }
 	            }
 
 	            // @todo refactor. , wellming
 	            $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaperResult['target']));
 
-	            if ($targets[$testpaperResult['target']]['type'] == 'lesson' and !empty($targets[$testpaperResult['target']]['id'])) {
+	            if ($targets[$testpaperResult['target']]['type'] == 'lesson' && !empty($targets[$testpaperResult['target']]['id'])) {
 	                $lessons = $this->controller->getCourseService()->findLessonsByIds(array($targets[$testpaperResult['target']]['id']));
 	                if (!empty($lessons[$targets[$testpaperResult['target']]['id']])) {
 	                    $lesson = $lessons[$targets[$testpaperResult['target']]['id']];
@@ -321,12 +326,25 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 
 	public function getTestpaperResult()
 	{
+	        $answerShowMode = $this->controller->setting('questions.testpaper_answers_show_mode','submitted');
+
+	        // 不显示题目
+	        if ($answerShowMode == "hide" ) {
+	        	return $this->createErrorResponse('error', '网校已关闭交卷后答案解析的显示!');
+	        }
+
 	        $id = $this->getParam("id");
 	        $user = $this->controller->getUserByToken($this->request);
 	        $testpaperResult = $this->getTestpaperService()->getTestpaperResult($id);
 	        if (!$testpaperResult) {
 	            return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
 	        }
+
+	        //客观题自动批阅完后先显示答案解析
+	        if ($answerShowMode == "reviewed" && $testpaperResult["status"] != "finished") {
+	        	return $this->createErrorResponse('error', '试卷正在批阅，需要批阅完后才能显示答案解析!');
+	        }
+
 	        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperResult['testId']);
 
 	        $targets = $this->controller->get('topxia.target_helper')->getTargets(array($testpaper['target']));
@@ -335,7 +353,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	            $course = $this->controller->getCourseService()->tryManageCourse($targets[$testpaper['target']]['id']);
 	        }
 
-	        if (empty($course) and $testpaperResult['userId'] != $user['id']){
+	        if (empty($course) && $testpaperResult['userId'] != $user['id']){
 	                        return $this->createErrorResponse('error', '不可以访问其他学生的试卷哦!');
 	        }
 
@@ -346,29 +364,29 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 	        $favorites = $this->getQuestionService()->findAllFavoriteQuestionsByUserId($testpaperResult['userId']);
 	        return array(
 	        	"testpaper"=>$testpaper,
-	        	"items"=>$this->filterResultItems($items),
+	        	"items"=>$this->filterResultItems($items, true),
 	        	"accuracy"=>$accuracy,
             	'paperResult' => $testpaperResult,
 		'favorites' => ArrayToolkit::column($favorites, 'questionId')
 	        	);
 	}
 
-	private function filterResultItems($items)
+	private function filterResultItems($items, $isShowTestResult)
 	{
 		$controller = $this;
 		$newItems = array_map(function($item){
 			return array_values($item);
 		}, $items);
 
-		return $this->coverTestpaperItems($newItems);
+		return $this->coverTestpaperItems($newItems, $isShowTestResult);
 	}
 
-	private function getTestpaperItem($testpaperResult)
+	private function getTestpaperItem($testpaperResult, $isShowTestResult = false)
 	{
 		$result = $this->getTestpaperService()->showTestpaper($testpaperResult['id']);
         		$items = $result['formatItems'];
 
-        		return $this->coverTestpaperItems($items);
+        		return $this->coverTestpaperItems($items, $isShowTestResult);
 	}
 
 	public function filterQuestionStem($stem)
@@ -384,23 +402,24 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
         		return $stem;
 	}
 
-	private function coverTestpaperItems($items)
+	private function coverTestpaperItems($items, $isShowTestResult)
 	{
 		$controller = $this;
-		$result = array_map(function($item) use ($controller){
-			$item = array_map(function($itemValue) use ($controller){
+		$result = array_map(function($item) use ($controller, $isShowTestResult){
+			$item = array_map(function($itemValue) use ($controller, $isShowTestResult){
 				$question = $itemValue['question'];
+				
 				if (isset($question['isDeleted']) && $question['isDeleted'] == true) {
 					return null;
 				}
 				if (isset($itemValue['items'])) {
 					$filterItems = array_values($itemValue['items']);
-					$itemValue['items'] = array_map(function($filterItem)use ($controller){
-						return $controller->filterMetas($filterItem);
+					$itemValue['items'] = array_map(function($filterItem)use ($controller, $isShowTestResult){
+						return $controller->filterMetas($filterItem, $isShowTestResult);
 					}, $filterItems);
 				}
 
-				$itemValue = $controller->filterMetas($itemValue);
+				$itemValue = $controller->filterMetas($itemValue, $isShowTestResult);
 				return $itemValue;
 				
 			}, $item);
@@ -428,10 +447,13 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 		return true;
 	}
 
-	public function filterMetas($itemValue)
+	public function filterMetas($itemValue, $isShowTestResult)
 	{
 		$question = $itemValue['question'];
 		$question['stem'] = $this->filterQuestionStem($question['stem']);
+		if (!$isShowTestResult && isset($question['testResult'])) {
+			unset($question['testResult']);
+		}
 		$itemValue['question'] = $question;
 		if (isset($question['metas'])) {
 			$metas= $question['metas'];
@@ -451,7 +473,7 @@ class TestpaperProcessorImpl extends BaseProcessor implements TestpaperProcessor
 			}, $answer);
 			return $itemValue;
 		}
-
+		
 		return $itemValue;
 	}
 }

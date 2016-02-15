@@ -14,7 +14,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
         return $this->getMoneyRecordsDao()->searchMoneyRecordsCount($conditions);
     }
 
-    public function searchMoneyRecords($conditions, $sort = 'latest', $start, $limit)
+    public function searchMoneyRecords($conditions, $sort, $start, $limit)
     {
         $orderBy = array();
         if ($sort == 'latest') {
@@ -29,7 +29,7 @@ class MoneyServiceImpl extends BaseService implements MoneyService
         return ArrayToolkit::index($moneyRecords, 'id');
     }
 
-    private function getMoneyRecordsDao()
+    protected function getMoneyRecordsDao()
     {
         return $this->createDao('Order.MoneyRecordsDao');
     }

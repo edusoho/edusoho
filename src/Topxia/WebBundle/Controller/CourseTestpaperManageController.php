@@ -68,7 +68,6 @@ class CourseTestpaperManageController extends BaseController
         $conditions["courseId"] = $course["id"];
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, "type");
-
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
@@ -201,7 +200,7 @@ class CourseTestpaperManageController extends BaseController
         ));
     }
 
-    private function getTestpaperWithException($course, $testpaperId)
+    protected function getTestpaperWithException($course, $testpaperId)
     {
         $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
         if (empty($testpaper)) {
@@ -225,7 +224,7 @@ class CourseTestpaperManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            if (empty($data['questionId']) or empty($data['scores'])) {
+            if (empty($data['questionId']) || empty($data['scores'])) {
                 return $this->createMessageResponse('error', '试卷题目不能为空！');
             }
             if (count($data['questionId']) != count($data['scores'])) {
@@ -242,6 +241,10 @@ class CourseTestpaperManageController extends BaseController
 
             $this->getTestpaperService()->updateTestpaperItems($testpaper['id'], $items);
 
+            if (isset($data['passedScore'])) {
+                $this->getTestpaperService()->updateTestpaper($testpaperId, array('passedScore'=>$data['passedScore']));
+            }
+
             $this->setFlashMessage('success', '试卷题目保存成功！');
             return $this->redirect($this->generateUrl('course_manage_testpaper',array( 'courseId' => $courseId)));
         }
@@ -252,14 +255,21 @@ class CourseTestpaperManageController extends BaseController
         $targets = $this->get('topxia.target_helper')->getTargets(ArrayToolkit::column($questions, 'target'));
 
         $subItems = array();
+        $hasEssay = false;
+        $scoreTotal = 0;
         foreach ($items as $key => $item) {
+            if ($item['questionType'] == 'essay') {
+                $hasEssay = true;
+            }
+
+            $scoreTotal = $scoreTotal+$item['score'];
             if ($item['parentId'] > 0) {
                 $subItems[$item['parentId']][] = $item;
                 unset($items[$key]);
             }
         }
 
-
+        $passedScoreDefault = ceil($scoreTotal*0.6);
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items.html.twig', array(
             'course' => $course,
             'testpaper' => $testpaper,
@@ -267,6 +277,8 @@ class CourseTestpaperManageController extends BaseController
             'subItems' => $subItems,
             'questions' => $questions,
             'targets' => $targets,
+            'hasEssay' => $hasEssay,
+            'passedScoreDefault' => $passedScoreDefault
         ));
     }
 
@@ -298,12 +310,16 @@ class CourseTestpaperManageController extends BaseController
             );
         }
 
-
+        $conditions["types"] = ArrayToolkit::column($types,"key");
+        $conditions["courseId"] = $course["id"];
+        $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
+        $questionNums = ArrayToolkit::index($questionNums, "type");
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:items-reset.html.twig', array(
             'course'    => $course,
             'testpaper' => $testpaper,
             'ranges' => $this->getQuestionRanges($course),
             'types' => $types,
+            'questionNums' => $questionNums
         ));
     }
 
@@ -390,9 +406,47 @@ class CourseTestpaperManageController extends BaseController
 
     }
 
+    public function itemsGetAction(Request $request, $courseId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($courseId);
 
+        $testpaperId = $request->request->get('testpaperId');
+        
+        $testpaper = $this->getTestpaperService()->getTestpaper($testpaperId);
+        if (empty($testpaper)) {
+            throw $this->createNotFoundException();
+        }
 
-    private function getQuestionRanges($course, $includeCourse = false)
+        $items = $this->getTestpaperService()->getItemsCountByParams(array('testId'=>$testpaperId,'parentIdDefault'=>0),$gourpBy='questionType');
+        $subItems = $this->getTestpaperService()->getItemsCountByParams(array('testId'=>$testpaperId,'parentId'=>0));
+        
+        $items = ArrayToolkit::index($items,'questionType');
+        $objectiveQuestionsCount = 0;
+        $subjectiveQuestionsCount = 0;
+        foreach($items as $key => $item){
+            if ($key == 'essay' || $key == 'material') {
+                $subjectiveQuestionsCount = $subjectiveQuestionsCount + $item['num'];
+            } else {
+                $objectiveQuestionsCount = $objectiveQuestionsCount + $item['num'];
+            }
+        }
+        
+
+        $objectiveQuestionsCountHour = number_format(($objectiveQuestionsCount*5)/60,1);
+        $suggestHours = number_format(($objectiveQuestionsCount*5)/60,1) + $subjectiveQuestionsCount*0.5;  
+        $multiple = ceil($suggestHours / 0.5)*0.5;
+        $suggestHours = $suggestHours > $multiple ? ($multiple+0.5) : $multiple;
+        
+
+        $items['material'] = $subItems[0];
+        
+        return $this->render('TopxiaWebBundle:CourseTestpaperManage:item-get-table.html.twig', array(
+            'suggestHours' => $suggestHours,
+            'items' => $items
+        ));
+    }
+
+    protected function getQuestionRanges($course, $includeCourse = false)
     {
         $lessons = $this->getCourseService()->getCourseLessons($course['id']);
         $ranges = array();
@@ -411,17 +465,17 @@ class CourseTestpaperManageController extends BaseController
         return $ranges;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
     }

@@ -74,27 +74,11 @@
     </div>
   </div>
   {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div class="file-chooser-uploader-label">选择你要上传的视频文件：</div>
             <div class="file-chooser-uploader-control">
               <span id="video-choose-uploader-btn"
                 data-role="uploader-btn"
-                data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov{% else %}*.mp4{% endif %}"
+                data-filetypes="{% if storageSetting.upload_mode == 'cloud' %}*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v{% else %}*.mp4{% endif %}"
                 data-button-image="{{ asset('assets/img/common/swfupload-btn.png') }}"
                 data-callback="{% if storageSetting.upload_mode == 'cloud' %}{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId, lazyConvert:1}) }}{% endif %}" 
                 data-progressbar="#video-chooser-progress"
@@ -117,12 +101,14 @@
             <div class="alert alert-info">
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>支持<strong>mp4, avi, flv, wmv, mov</strong>格式的视频文件上传，文件大小不能超过<strong>1 GB</strong>。</li>
+                  <li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
                   <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
                   <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
                 {% else %}
                   <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-                  <li>视频将上传到<strong>网站服务器</strong>，如需使用云视频，请联系{{ 'EduSoho'|copyright_less }}官方购买。使用云视频，将获得更好的播放体验。</li>
+                  <li>
+                    视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+                  </li>
                 {% endif %}
               </ul>
             </div>
@@ -151,7 +137,7 @@
 
         <div class="tab-pane" id="video-chooser-import-pane">
           <div class="input-group">
-            <input class="form-control" type="text" placeholder="支持优酷、土豆、网易公开课的视频页面地址导入" data-role="import-url" >
+            <input class="form-control" type="text" placeholder="支持优酷、土豆、腾讯、网易公开课的视频页面地址导入" data-role="import-url" >
             <span class="input-group-btn">
               <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
             </span>
@@ -229,7 +215,9 @@
                   <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
                   <li>音频将上传到<strong>云服务器</strong></li>
                 {% else %}
-                  <li>音频将上传到<strong>网站服务器</strong></li>
+                  <li>
+                    音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+                  </li>
                 {% endif %}
               </ul>
             </div>

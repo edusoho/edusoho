@@ -2,23 +2,27 @@
 .es-poster {
   position: relative;
   background: #fff;
-  height: 570px;
   margin: 0 auto;
-  @media(max-width:@screen-md-max) {
-    height: 470px;
-  }
-  @media(max-width:@screen-sm-max) {
-    height: 360px;
-  }
-  @media(max-width:@screen-xs-max) {
-    height: 150px;
-  }
+  max-height: 600px;
+  // @media(max-width:@screen-md-max) {
+  //   max-height: 470px;
+  // }
+  // @media(max-width:@screen-sm-max) {
+  //   max-height: 360px;
+  // }
+  // @media(max-width:@screen-xs-max) {
+  //   max-height: 200px;
+  // }
   .swiper-slide {
     margin: 0 auto;
     width: 100%;
     height: 100%;
+    visibility: visible;
     .container {
       position: relative;
+    }
+    .img-responsive {
+      margin: 0 auto;
     }
     .mask {
       position: absolute;
@@ -39,10 +43,7 @@
       margin-bottom: 20px;
       font-size: 70px;
       color: #fff;
-      .webfont();
       opacity:0;
-      @opacity-ie: 100;
-      filter: ~"alpha(opacity=@{opacity-ie})";
       span {
         display: block;
       }
@@ -72,8 +73,6 @@
       color: @brand-primary;
       font-size: 22px;
       opacity:0;
-      @opacity-ie: 100;
-      filter: ~"alpha(opacity=@{opacity-ie})";
       span {
         margin-right: 20px;
       }
@@ -95,9 +94,8 @@
       position: absolute;
       bottom: 50px;
       right: 0;
+      max-width: 70%;
       opacity: 0;
-      @opacity-ie: 100;
-      filter: ~"alpha(opacity=@{opacity-ie})";
       @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
         width: 550px;
       }
@@ -127,7 +125,7 @@
     width: 100%;
     text-align: center;
     @media (max-width: @screen-xs-max) {
-      bottom: 20px;
+      display: none;
     }
     span {
       font-size: 0;
@@ -135,8 +133,8 @@
       width: 15px;
       height: 15px;
       display: inline-block;
-      background: #fff;
       .border-radius(50%);
+      border: 2px solid #fff;
       @media (max-width: @screen-xs-max) {
         width: 10px;
         height: 10px;
@@ -144,13 +142,11 @@
       }
       &:hover {
         cursor: pointer;
-        background: @brand-primary;
-        color: @brand-primary;
+        background: #fff;
         .opacity(1);
       }
       &.swiper-active-switch {
-        background: @brand-primary;
-        color: @brand-primary;
+        background: #fff;
         .opacity(1);
       }
     }
@@ -179,44 +175,23 @@
 //课程模块
 .course-list-section {
   position: relative;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   background: #fff;
-  .course-more {
-    position: absolute;
-    bottom: -29px;
-    left: 50%;
-    margin: -29px 0 0 -29px;
-    z-index: 1;
-    >a {
-      border-radius: 50%;
-      width: 58px;
-      height: 58px;
-      background: #fff;
-      color: #a6a6a6;
-      display: inline-block;
-      text-align: center;
-      .box-shadow(0 4px 12px -2px rgba(51, 51, 51, 0.5));
-      .es-transition;
-      &:hover {
-        color: #666;
-        .box-shadow(0 10px 15px 0px rgba(51, 51, 51, 0.5));
-        .es-transition;
-      }
-      >i {
-        line-height: 58px;
-        font-size: 30px;
-      }
-    }
-  }
+}
+
+// 直播
+.live-course-section {
+  padding-bottom: 20px;
+  background: #fafafa;
 }
 
 //学习介绍
 .introduction-section {
   position: relative;
-  background-image: linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
-  background-image: -webkit-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
-  background-image: -moz-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
-  background-image: -o-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: -webkit-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: -moz-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
+  // background-image: -o-linear-gradient(left, rgb(151, 224, 159) 10%, rgb(57, 186, 127) 70%, rgb(81, 201, 171));
   background-color: @brand-primary;
   h4, h5 {
     color: #fff;
@@ -226,8 +201,8 @@
     margin: 0 auto 30px auto;
   }
   .introduction-item {
-    margin: 90px 0 60px 0;
-    display: inline-block;
+    margin: 90px 0;
+    // display: inline-block;
     text-align: center;
     height: 220px;
     vertical-align: top;
@@ -239,54 +214,165 @@
 
 // 推荐班级
 .class-section {
-  padding-bottom: 50px;
+  padding-bottom: 20px;
   background-color: #fff;
 }
 
 .recommend-class-list {
   .class-item {
     position: relative;
-    margin: 10px auto;
-    border: 3px solid #fff;
-    overflow: hidden;
-    .border-radius;
-    .box-shadow( 0 2px 4px rgba(0,0,0,.08));
-    h3 {
-      position: absolute;
-      display: block;
-      bottom: 0;
-      left: 0;
-      right: 0;
+    margin: 0 auto 30px;
+    z-index: 1;
+    &:hover {
+      .class-bg-layer {
+        transform: translateY(-6px);
+        -webkit-transform: translateY(-6px);
+        -moz-transform: translateY(-6px);
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
+        -webkit-transition: all .4s .05s ease;
+        -moz-transition: all .4s .05s ease;
+        transition: all .4s .05s ease;
+      }
+      .class-item-bg {
+        transform: translateY(-8px);
+        -webkit-transform: translateY(-8px);
+        -moz-transform: translateY(-8px);
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
+        .es-transition;
+      }
+    }
+    .class-bg-layer {
+      .es-transition;
+    }
+    .class-item-bg {
+      background-color: #fff;
       padding: 10px;
-      font-size: 16px;
-      color: #fff;
-      z-index: 1;
-      .text-overflow;
+      .border-radius;
+      .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
+      .es-transition;
+    }
+    .class-img {
+      display: block;
     }
     .img-responsive {
       width: 100%;
     }
+    h3 {
+      margin: 15px 0 5px 0;
+      font-size: 14px;
+      .text-overflow;
+    }
   }
 }
 
+.lt-ie9 .recommend-class-list .class-item {
+  border: 1px solid @gray-light;
+}
+
 //小组动态
-.group-dynamic {
-  padding-bottom: 30px;
-  background: #fafafa;
+.dynamic-section-main .panel {
+  height: 300px;
+  @media(max-width:@screen-xs-max) {
+    height: auto;
+  }
+}
+
+.dynamic-section {
+  padding-bottom: 20px;
+  background: @bg-color;
 }
 
 .index-group {
-  padding-bottom: 23px;
-  margin-bottom: 20px;
+  padding-bottom: 3px;
 }
 
-.index-dynamic {
-  padding-bottom: 15px;
-  margin-bottom: 20px;
+.index-article {
+  .index-recommend-aricle {
+    float: left;
+    width: 35%;
+    padding-left: 0;
+    margin-bottom: 0;
+    @media(max-width: @screen-md-max) {
+      width: 43%;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 28%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+    }
+    li {
+      position: relative;
+      list-style-type: none;
+      margin-bottom: 10px;
+      overflow: hidden;
+      &.last {
+        margin-bottom: 0;
+        @media(max-width: @screen-xs-max) {
+          margin-bottom: 20px;
+        }
+      }
+      img {
+        width: 100%;
+        height: 106px;
+        @media(max-width: @screen-sm-max) {
+          height: auto;
+        }
+      }
+    }
+    .title {
+      position: absolute;
+      bottom: 5px;
+      left: 10px;
+      right: 10px;
+      color: #fff;
+      .text-overflow;
+    }
+  }
+  .index-new-article {
+    float: left;
+    width: 65%;
+    padding-left: 20px;
+    margin-bottom: 0;
+    // margin-top: 8px;
+    &.full {
+      width: 100% !important;
+      padding-left: 0;
+    }
+    @media(max-width: @screen-md-max) {
+      width: 57%;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 72%;
+    }
+    @media(max-width: @screen-xs-max) {
+      width: 100%;
+      padding-left: 0;
+    }
+    .date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: @gray-medium;
+    }
+    li {
+      position: relative;
+      .text-overflow;
+      margin-bottom: 30px;
+      padding-right: 80px;
+      &.last {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 // 推荐教师
 .recommend-teacher {
-  padding-bottom: 50px;
+  padding-bottom: 20px;
   background: #fff;
 }

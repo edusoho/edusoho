@@ -36,7 +36,7 @@ class LocationServiceImpl extends BaseService implements LocationService
 		return $this->getLocationDao()->findAllLocations();
 	}
 
-    private function getLocationDao()
+    protected function getLocationDao()
     {
         return $this->createDao('Taxonomy.LocationDao');
     }

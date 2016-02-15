@@ -13,7 +13,7 @@
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="student-nickname" name="queryfield" class="form-control" 
-        data-url="{{ path('classroom_manage_student_check',{id:classroom.id})}}" placeholder='邮箱/手机/昵称' >
+        data-url="{{ path('classroom_manage_student_check',{id:classroom.id})}}" placeholder='邮箱/手机/用户名' >
       	<div class="help-block">只能添加系统中已注册的用户</div>
     	</div>
     </div>
@@ -45,7 +45,7 @@
       </div>
     </div>
   {% else %}
-    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}班级不能添加学员，请班级发布后再添加。</div>
+    <div class="empty">{{dict_text('classroomStatus', classroom.status)}}{{setting("classroom.name")|default("班级")}}不能添加学员，请{{setting("classroom.name")|default("班级")}}发布后再添加。</div>
   {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

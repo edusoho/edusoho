@@ -1,0 +1,148 @@
+<div class="ui-bar" ui-bar>
+  <div class="ui-bar-bg">
+    <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+    <h3 class="title">问答详情</h3>
+  </div>
+</div>
+
+<div class="top-header ui-question">
+  <section class="ui-panel ui-panel-card ui-question-panel">
+    <h2 class="ui-arrowlink" ng-href="#/course/{{ thread.courseId }}">
+        {{ thread.courseTitle }}
+    </h2>
+    <ul class="ui-list ui-list-text ui-border-tb">
+        <li>
+            <h4>{{ thread.title }}</h4>
+        </li>
+        <li>
+            <div class="ui-avatar">
+                <img ng-src="{{ thread.user.mediumAvatar }}" img-error="avatar" />
+            </div>
+            <div class="ui-list-info">
+                <h4 class="ui-nowrap">{{ thread.user.nickname }}</h4>
+                <p class="ui-nowrap">{{ thread.latestPostTime | coverLearnTime }}</p>
+            </div>
+        </li>
+        <li>
+            <div class="ui-list-info">
+                <div class="ui-question-panel content" ng-bind-html="thread.content">
+                </div>
+                <div class="ui-question-panel tool-bar">
+                    <span>
+                          <i class="iconfont icon-visibility"></i>
+                          {{ thread.hitNum }}
+                    </span>
+                    <span>
+                          <i class="iconfont icon-modecomment"></i>
+                          {{ thread.postNum }}
+                    </span>
+                </div>
+            </div>
+        </li>
+    </ul>
+  </section>
+
+  <section class="ui-panel ui-panel-card ui-question-panel">
+    <h2>
+      <span>教师回答({{ teacherPosts.length }})</span>
+    </h2>
+    <ul class="ui-list ui-list-text" ng-repeat="teacherPost in teacherPosts">
+        <li>
+          <div class="ui-avatar-s">
+              <img ng-src="{{ teacherPost.user.mediumAvatar}}" img-error="avatar" />
+          </div>
+          <div class="ui-list-info">
+              <h4 class="ui-nowrap">{{ teacherPost.user.nickname }}</h4>
+              <p class="ui-nowrap">{{ teacherPost.latestPostTime | coverLearnTime }}</p>
+          </div>
+      </li>
+      <li class="ui-border-b">
+          <div class="ui-list-info ui-question-panel content" ng-bind-html="teacherPost.content">
+          </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="ui-panel ui-panel-card ui-question-panel ui-border-t" style="margin-top : -1px;">
+    <h2>
+      <span>所有回答({{ threadPosts.length }})</span>
+    </h2>
+    <ul class="ui-list ui-list-text" ng-repeat="threadPost in threadPosts">
+        <li>
+          <div class="ui-avatar-s">
+              <img ng-src="{{ threadPost.user.mediumAvatar}}" img-error="avatar" />
+          </div>
+          <div class="ui-list-info">
+              <h4 class="ui-nowrap">{{ threadPost.user.nickname }}</h4>
+              <p class="ui-nowrap">{{ threadPost.latestPostTime | coverLearnTime }}</p>
+          </div>
+      </li>
+      <li class="ui-border-b">
+          <div class="ui-list-info ui-question-panel content" ng-bind-html="threadPost.content">
+          </div>
+      </li>
+    </ul>
+  </section>
+</div>
+<!-- 
+<ion-header-bar class="bar-positive">
+<a class="button button-icon iconfont icon-fanhui" back="go">
+</a>
+
+<h1 class="title">问答详情</h1>
+</ion-header-bar>
+<ion-content class="question">
+    <div class="list">
+      <a class="item item-icon-left item-icon-right lessonlabel" href="#">
+        <i class="icon"></i>
+        {{ thread.title }}
+        <i class="icon iconfont icon-chevronright"></i>
+    </a>
+    <a class="item title">
+        {{ thread.courseTitle }}
+    </a>
+
+    <a class="item item-avatar question-content" href="#">
+      
+      <img ng-src="{{ thread.user.mediumAvatar }}">
+      <div class="userinfo">
+          <h2>{{ thread.user.nickname }}</h2>
+          <p>{{ thread.latestPostTime }}</p>
+      </div>
+      <div class="content" ng-bind-html="thread.content">
+      </div>
+
+      <p class="hit">
+        <span>
+              <i class="iconfont icon-visibility"></i>
+              {{ thread.hitNum }}
+        </span>
+        <span>
+              <i class="iconfont icon-modecomment"></i>
+              {{ thread.postNum }}
+        </span>
+      </p>
+    </a>
+    <div class="list theadpost">
+      <p class="postlabel">所有回答({{ threadPosts.length }})</p>
+      
+      <a class="item item-avatar" ng-repeat="threadPost in threadPosts">
+            <img ng-src="{{ threadPost.user.mediumAvatar}}">
+            <div class="userinfo">
+              <h2>{{ threadPost.user.nickname }}</h2>
+              <p>{{ threadPost.createdTime }}</p>
+            </div>
+            <div class="content" ng-bind-html="threadPost.content">
+            </div>
+      </a>
+      <ion-infinite-scroll
+          ng-if="!threadPosts"
+          on-infinite="loadTheadPost()"
+          distance="1%">
+      </ion-infinite-scroll>
+    </div>
+
+  </div>
+  </ion-content>
+
+</div> -->

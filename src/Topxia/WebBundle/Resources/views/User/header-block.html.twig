@@ -1,34 +1,46 @@
-<div class="es-section userpage-header">
-  <div class="media">
-    <div class="media-left">
-      <div class="avatar-bg">
+<div class="user-center-header" data-href="{{ filepath(user.largeAvatar, 'avatar.png') }}" data-sharpness="40">
+  <div class="container clearfix">
+    <div class="user-avatar">
+      <div class="avatar-wrap">
         <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
         {% if 'ROLE_TEACHER' in user.roles %}
-          <span class="icon-user-status"><i class="es-icon es-icon-school"></i></span
-        >
+          <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span>
         {% endif %}
       </div>
-    </div>
-    <div class="media-body">
+      <div class="name">
+        {{user.nickname}}
+      </div>
+      <div class="position">
+        <span class="mrm">{% if user.title %}{{ user.title }}{% else %}暂无头衔{% endif %}</span>
+        {% if user.weibo %}
+          <a  href="{{ user.weibo }}" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
+        {% endif %}
+        {% if user.site %}
+          <a href="{{ user.site }}" target="_blank"><i class="es-icon es-icon-link"></i></a>
+        {% endif %}
+        {% if user.qq %}
+          <a data-toggle="tooltip" data-placement="top" title="{{ user.qq }}"><i class="es-icon es-icon-qq"></i></a>
+        {% endif %}
+        {% if user.weixin %}
+          <a data-toggle="tooltip" data-placement="top" title="{{ user.weixin }}"><i class="es-icon es-icon-weixin"></i></a>
+        {% endif %}
+      </div>
+      <div class="mates">
+        <span class="mrm">{{follower|default(0)}}</span>粉丝<span class="mlm mrm">｜</span><span class="mrm">{{following|default(0)}}</span>关注
+      </div>
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
-          <a class="btn btn-primary btn-high btn-sm follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
-          <a class="btn btn-default btn-high btn-sm unfollow-btn" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
-          <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
-        </div>
-      {% endif %}
-      <h2>{{user.nickname}} <small>{{ user.title }}</small></h2>
-      <div class="about">{{ user.about|raw }}</div>
-      {% if user %}
-        <div class="links">
-          {% if user.weibo %}
-            <a href="{{ user.weibo }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-weibo.png') }}"> 微博</a>
-          {% endif %}
-          {% if user.site %}
-            <a href="{{ user.site }}" target="_blank" class="mrm"><img src="{{ asset('assets/img/user/link-site.png') }}"> 网站</a>
-          {% endif %}
+          <a class="btn btn-primary follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
+          <a class="btn btn-default unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+          <button class="btn btn-ghost-white" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
         </div>
       {% endif %}
     </div>
+    <div class="user-about hidden-sm hidden-xs">
+      <div class="user-about-content">
+        {% if user.signature %}{{ user.signature}}{% else %}暂无签名{% endif %}
+      </div>
+    </div>
   </div>
+  <div class="mask"></div>
 </div>

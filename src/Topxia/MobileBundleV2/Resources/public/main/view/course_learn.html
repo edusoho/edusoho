@@ -1,0 +1,144 @@
+<div class="ui-course top-header ui-scroller" style="padding-bottom: 58px;">
+    <div class="course-head-body">
+        <div class="course-head">
+            <img class="full-image" ng-src="{{ course.largePicture }}" img-error="course" />
+            <p class="mask">
+                <a class="learned">
+                已完成{{ learnProgress }}
+              </a>
+            </p>
+            <div class="course-progress">
+                <span ng-style="{ width : learnProgress }"></span>
+            </div>
+        </div>
+        <div class="item-body">
+            <p class="course-title">{{ course.title }}</p>
+            <p class="course-price ui-nowrap">
+                <span class="price-block" ng-if="course.priceType != 'Coin'">
+                    {{ course.price | formatPrice }}
+                </span>
+                <span class="price-block" ng-if="course.priceType == 'Coin'">
+                    {{ course.coinPrice | formatCoinPrice }}
+                    <small ng-if="course.coinPrice > 0">{{ course.coinName }}</small>
+                </span>
+                <span ng-if="discount">
+                    <s ng-if="course.priceType != 'Coin'">
+                        {{ course.originPrice | formatPrice }}
+                    </s>
+                    <s ng-if="course.priceType == 'Coin'">
+                        {{ course.originCoinPrice | formatPrice }}
+                    </s>
+                </span>
+            </p>
+            <div class="discount-block ui-border-t" ng-if="discount">
+                <p class="course-price ui-nowrap">
+                    <span ng-if="discount" class="discount-type discount">
+                        {{ discount.type | coverDiscount : course.discount }}
+                    </span>
+                    <span ng-if="discount" class="discount-type type">
+                        {{ discount.name }}
+                    </span>
+                </p>
+                <p ng-if="discount" class="discount-body">
+                    <span>倒计时:{{ discount.endTime | coverDiscountTime }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="ui-tab tab-top" ui-tab>
+        <ul class="ui-tab-nav ui-border-tb">
+            <li><span class="line">课程课时</span></li>
+            <li><span>课程详情</span></li>
+        </ul>
+        <ul class="ui-tab-content tab-display">
+            <li>
+                <div ng-include=" 'view/course_lesson.html' | coverIncludePath ">
+                </div>
+            </li>
+            <li>
+                <section class="ui-panel ui-panel-card ui-border-t">
+                    <h2 class="title-body">
+                    <span class="title">课程概览</span>
+
+                    <a class="title-tips" href="#/coursedetail/{{ course.id }}">
+                        <i class="iconfont icon-gengduo"></i>
+                    </a>
+                </h2>
+                    <div class="ui-panel-content" ng-bind-html="course.about" ng-img-show>
+                    </div>
+                </section>
+                <section class="ui-panel ui-panel-card ui-border-t">
+                    <h2 class="title-body">
+                    <span class="title">课程教师 ({{ course.teachers.length }})</span>
+
+                    <a class="title-tips" href="#/teacherlist/course/{{ course.id }}">
+                        <i class="iconfont icon-gengduo"></i>
+                    </a>
+                </h2>
+                    <div class="ui-panel-content">
+                        <ul class="ui-list">
+                            <li class="ui-border-t" ng-if="course.teachers[0]">
+                                <div class="ui-avatar-s" ui-sref="userInfo({ userId : course.teachers[0].id })">
+                                    <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
+                                </div>
+                                <div class="ui-list-info">
+                                    <h4 class="ui-nowrap">{{ course.teachers[0].nickname }}
+                                <label class="ui-label">教师</label>
+                            </h4>
+                                    <p class="ui-nowrap">{{ course.teachers[0].title }}</p>
+                                </div>
+                            </li>
+                            <li ng-if="! course.teachers[0]">
+                                <p>该课程暂无教师</p>
+                                </i>
+                        </ul>
+                    </div>
+                </section>
+                <section class="ui-panel ui-panel-card ui-border-t" ng-init="loadReviews()">
+                    <h2 class="title-body">
+                    <span class="title">课程评价 ({{ reviews.length }})</span>
+
+                    <a class="title-tips" href="#/coursereview/course/{{ course.id }}">
+                        <i class="iconfont icon-gengduo"></i>
+                    </a>
+                </h2>
+                    <div class="ui-panel-content ui-review">
+                        <ul class="ui-list">
+                            <li class="ui-border-t" ng-if="reviews[0]">
+                                <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
+                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" />
+                                </div>
+                                <div class="ui-list-info">
+                                    <h4 class="ui-nowrap ui-review-header">
+                                    {{ reviews[0].user.nickname }}
+                                    <span class="ui-review-rating">
+                                <i class="iconfont" ng-class="reviews[0].rating > i ? 'icon-favorfill' : 'icon-favor' " ng-repeat="i in ratingArray" ></i>
+                                </span>
+                                </h4>
+                                    <p class="ui-nowrap">{{ reviews[0].content }}</p>
+                                </div>
+                            </li>
+                            <li ng-if="! reviews[0]">
+                                <p>该课程暂无评价</p>
+                                </i>
+                        </ul>
+                    </div>
+                </section>
+
+                <div class="bottom-space"></div>
+                </li>
+        </ul>
+    </div>
+</div>
+<div ng-if="0 == course.parentId" ng-controller="CourseToolController">
+    <div class="ui-course-tool ui-course" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);">
+        <button class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardCourse()">
+        </button>
+        <button ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-heart">
+        </button>
+        <button class="ui-btn btn-green btn-col-60" ng-click="continueLearnCourse()" ng-init="initLearnStatus()">
+            继续学习
+        </button>
+    </div>
+
+</div>

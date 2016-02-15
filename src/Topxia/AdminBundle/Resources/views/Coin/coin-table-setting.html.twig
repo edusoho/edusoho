@@ -1,0 +1,17 @@
+{% if set.cash_model =="deduction" %}
+  <ul class="nav nav-pills mbl">
+    <li role="presentation" class = "js-type-filter {% if (type|default('course') == 'course') %}active {% endif %}" data-url="{{path('admin_coin_model_ajax',{type:'course'|default('course'), set:set})}}" id="course"><a href="javascript:;">课程</a></li>
+    <li role="presentation" class = "js-type-filter {% if (type|default('course') == 'classroom') %}active {% endif %}" data-url="{{path('admin_coin_model_ajax',{type:'classroom'|default('course'), set:set})}}" id="classroom"><a href="javascript:;">班级</a></li>
+    {% if is_plugin_installed('vip') %}
+      <li role="presentation" class = "js-type-filter {% if (type|default('course') == 'vip') %}active {% endif %}" data-url="{{path('admin_coin_model_ajax',{type:'vip'|default('course'), set:set})}}" id="vip"><a href="javascript:;">会员</a></li>
+    {% endif %}
+  </ul>
+{% endif %}
+<div id="help-message" class="alert alert-danger mtl hidden" >请设置正确的价格</div>
+{% if type|default('course') == 'course' %}
+  {% include 'TopxiaAdminBundle:Coin:coin-table-course.html.twig' %}
+{% elseif type == 'classroom' %}
+  {% include 'TopxiaAdminBundle:Coin:coin-table-classroom.html.twig' %}
+{% elseif type == 'vip' %}
+  {% include 'TopxiaAdminBundle:Coin:coin-table-vip.html.twig' %}
+{% endif %}

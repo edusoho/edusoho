@@ -43,7 +43,7 @@ class LessonNotePluginController extends BaseController
         return $this->createJsonResponse(false);
     }
 
-    private function createNoteForm($data = array())
+    protected function createNoteForm($data = array())
     {
         return $this->createNamedFormBuilder('note', $data)
             ->add('id', 'hidden', array('required' => false))

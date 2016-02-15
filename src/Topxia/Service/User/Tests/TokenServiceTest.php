@@ -52,7 +52,7 @@ class TokenServiceTest extends BaseTestCase
         $this->assertGreaterThan(time(), $token['expiredTime']);
     }
 
-    private function getTokenService()
+    protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
     }

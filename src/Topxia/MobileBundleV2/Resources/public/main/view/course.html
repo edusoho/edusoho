@@ -1,0 +1,32 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+        <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+        <h3 class="title">{{ course.title }}</h3>
+        <div class="bar-tool" ng-show="member">
+            <div class="ui-pop" ui-pop>
+                <button class="ui-btn btn-outline iconfont icon-gengduo ui-pop-btn">
+                </button>
+                <div class="ui-pop-bg" ng-show="isShowMenuPop"></div>
+                <ul class="ui-pop-content" ng-show="isShowMenuPop">
+                    <li class="ui-border-b">
+                        <a class="ui-btn btn-outline iconfont icon-xiazai" ng-click="showDownLesson()">下载</a></li>
+                    <li class="ui-border-b">
+                        <a class="ui-btn btn-outline iconfont icon-tixing" href="#/coursenotice/course/{{ course.id }}">公告</a>
+                        </li>
+                    <li ng-if="0 == course.parentId && member && member.role =='student' ">
+                        <a class="ui-btn btn-outline iconfont icon-tuichu" ng-click="$parent.showUnLearnDlg = true ">退出</a></li>
+                </ul>
+                <div class="ui-actionsheet" ng-class="showUnLearnDlg ? 'show' : '' ">  
+                  <div class="ui-actionsheet-cnt">
+                    <h4>退出课程原因</h4> 
+                    <button ng-click="exitLearnCourse('课程内容差')">课程内容差</button>  
+                    <button ng-click="exitLearnCourse('老师态度不好')">老师态度不好</button>
+                    <button ng-click="exitLearnCourse('其他')">其他</button>
+                    <button class="ui-actionsheet-del" ng-click="showUnLearnDlg = false ">取消</button> 
+                  </div>         
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-include="courseView"></div>

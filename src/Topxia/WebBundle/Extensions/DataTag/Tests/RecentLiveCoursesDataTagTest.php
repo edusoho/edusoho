@@ -54,7 +54,7 @@ class RecentLiveCoursesDataTagTest extends BaseTestCase
         );
 
         $lesson1 = $this->getCourseService()->createLesson($lesson1);
-        $lesson2 = $this->getCourseService()->createLesson($lesson2);        
+        $lesson2 = $this->getCourseService()->createLesson($lesson2);
         $lesson3 = $this->getCourseService()->createLesson($lesson3);
 
         $this->getCourseService()->publishLesson($course1['id'],$lesson1['id']);

@@ -4,6 +4,8 @@ namespace Topxia\Service\User\Impl;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\MessageService;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
+use Topxia\Service\Util\EdusohoTuiClient;
 
 class MessageServiceImpl extends BaseService implements MessageService
 {   
@@ -17,16 +19,26 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getMessageDao()->searchMessages($conditions, $sort, $start, $limit);
     }
     
-    public function sendMessage($fromId, $toId, $content)
+    public function sendMessage($fromId, $toId, $content, $type = 'text', $createdTime = null)
     {   
+        if (empty($fromId) || empty($toId)) {
+            throw $this->createServiceException("发件人或收件人未注册!"); 
+        }
+
         if($fromId == $toId){
             throw $this->createServiceException("抱歉,不允许给自己发送私信!"); 
         }
 
-        $message = $this->addMessage($fromId, $toId, $content);
-        $this->prepareConversationAndRelationForSender($message, $toId, $fromId);
-        $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId);
+        if(empty($content)){
+            throw $this->createServiceException("抱歉,不能发送空内容!"); 
+        }
+
+        $createdTime = empty($createdTime) ? time() : $createdTime;
+        $message = $this->addMessage($fromId, $toId, $content, $type, $createdTime);
+        $this->prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime);
+        $this->prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime);
         $this->getUserService()->waveUserCounter($toId, 'newMessageNum', 1);
+        // $this->getDispatcher()->dispatch('message.service.send', new ServiceEvent($message));
         return $message;
     }
 
@@ -136,19 +148,41 @@ class MessageServiceImpl extends BaseService implements MessageService
         return $this->getConversationDao()->getConversationByFromIdAndToId($fromId, $toId);
     }
 
-    private function addMessage($fromId, $toId, $content)
+    public function pullMessagesFromApi()
+    {
+        $user = $this->getCurrentUser();
+        $messageSetting = $this->getSettingService()->get('message');
+        if (empty($messageSetting)) {
+            $messageSetting = array('lastMaxId' => 0);
+            $this->getSettingService()->set('message', $messageSetting);
+        }
+        // $tuiClient = new EdusohoTuiClient();
+        // $messages = $tuiClient->findMessagesByUserIdAndlastMaxId($user['id'], $messageSetting['lastMaxId']);
+        // $lastMaxId = 0;
+        // if (isset($messages['error'])) {
+        //     throw $this->createServiceException('获取远程私信错误');
+        // }
+        // foreach ($messages as $message) {
+        //     $messageSetting['lastMaxId'] = $message['id'];
+        //     $this->sendMessage($message['userId'], $user['id'], $message['context'], $message['type'], $message['createdTime']);
+        // }
+        $this->getSettingService()->set('message', $messageSetting);
+    }
+
+    protected function addMessage($fromId, $toId, $content, $type, $createdTime)
     {
         $message = array(
             'fromId' => $fromId,
             'toId' => $toId,
+            'type' => $type,
             'content' => $this->purifyHtml($content),
-            'createdTime' => time(),
+            'createdTime' => $createdTime,
         );
         return $this->getMessageDao()->addMessage($message);
     }
 
 
-    private function prepareConversationAndRelationForSender($message, $toId, $fromId)
+    protected function prepareConversationAndRelationForSender($message, $toId, $fromId, $createdTime)
     {
         $conversation = $this->getConversationDao()->getConversationByFromIdAndToId($toId, $fromId);
         if ($conversation) {
@@ -157,6 +191,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
                 'latestMessageTime' => $message['createdTime'],
+                'latestMessageType' => $message['type']
             ));
         } else {
             $conversation = array(
@@ -166,10 +201,11 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'latestMessageUserId' => $message['fromId'],
                 'latestMessageContent' => $message['content'],
                 'latestMessageTime' => $message['createdTime'],
+                'latestMessageType' => $message['type'],
                 'unreadNum' => 0,
-                'createdTime' => time(),
+                'createdTime' => $createdTime,
             );
-        $conversation = $this->getConversationDao()->addConversation($conversation);
+            $conversation = $this->getConversationDao()->addConversation($conversation);
         }
 
         $relation = array(
@@ -181,7 +217,7 @@ class MessageServiceImpl extends BaseService implements MessageService
 
     }
 
-    private function prepareConversationAndRelationForReceiver($message, $fromId, $toId)
+    protected function prepareConversationAndRelationForReceiver($message, $fromId, $toId, $createdTime)
     {
         $conversation = $this->getConversationDao()->getConversationByFromIdAndToId($fromId, $toId);
         if ($conversation) {
@@ -201,7 +237,7 @@ class MessageServiceImpl extends BaseService implements MessageService
                 'latestMessageContent' => $message['content'],
                 'latestMessageTime' => $message['createdTime'],
                 'unreadNum' => 1,
-                'createdTime' => time(),
+                'createdTime' => $createdTime,
             );
         $conversation = $this->getConversationDao()->addConversation($conversation);
         }
@@ -213,7 +249,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         $relation = $this->getRelationDao()->addRelation($relation);
     }
 
-    private function safelyUpdateConversationMessageNum($conversation)
+    protected function safelyUpdateConversationMessageNum($conversation)
     {
         if ($conversation['messageNum'] <= 0) {
             $this->getConversationDao()->updateConversation($conversation['id'], 
@@ -224,7 +260,7 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
     }
 
-    private function safelyUpdateConversationunreadNum($conversation)
+    protected function safelyUpdateConversationunreadNum($conversation)
     {
         if ($conversation['unreadNum'] <= 0) {
             $this->getConversationDao()->updateConversation($conversation['id'], 
@@ -235,34 +271,43 @@ class MessageServiceImpl extends BaseService implements MessageService
         }
     }
 
-    private function sortMessages($messages)
+    protected function sortMessages($messages)
     {
         usort($messages ,function($a, $b){
-            if($a['createdTime'] > $b['createdTime']) return -1;
-            if($a['createdTime'] ==  $b['createdTime']) return 0;
-            if($a['createdTime'] < $b['createdTime']) return 1;
+            if($a['createdTime'] > $b['createdTime']){
+                return -1;
+            }elseif($a['createdTime'] ==  $b['createdTime']){
+                return 0;
+            }elseif($a['createdTime'] < $b['createdTime']){
+                return 1;
+            }
         });
         return $messages;
     }
 
-    private function getMessageDao()
+    protected function getMessageDao()
     {
         return $this->createDao('User.MessageDao');
     }
 
-    private function getConversationDao()
+    protected function getConversationDao()
     {
         return $this->createDao('User.MessageConversationDao');
     }
 
-    private function getRelationDao()
+    protected function getRelationDao()
     {
         return $this->createDao('User.MessageRelationDao');
     }
 
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
 

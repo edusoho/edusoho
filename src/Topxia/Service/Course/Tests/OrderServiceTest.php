@@ -13,12 +13,12 @@ class OrderServiceTest extends BaseTestCase
         $this->assertNull(null);
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getOrderService()
+    protected function getOrderService()
     {
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
     }

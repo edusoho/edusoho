@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="nickname"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} nickname_remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} nickname_remote'
         });
     };
 

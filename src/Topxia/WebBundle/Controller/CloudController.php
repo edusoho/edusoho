@@ -95,22 +95,7 @@ class CloudController extends BaseController
 
     public function videoFingerprintAction(Request $request)
     {
-        $userId = $request->query->get('userId');
-        $user = $this->getUserService()->getUser($userId);
-        if (empty($user)) {
-            return new Response('');
-        }
-
-        // @todo 如果配置用户的关键信息，这个方法存在信息泄漏风险，更换新播放器后解决这个问题。
-        $pattern = $this->setting('magic.video_fingerprint');
-        if ($pattern) {
-            $fingerprint = $this->parsePattern($pattern, $user);
-        } else {
-            $host = $request->getHttpHost();
-            $fingerprint = "{$host} {$user['nickname']}";
-        }
-
-        return new Response($fingerprint);
+        return new Response($this->get('topxia.twig.web_extension')->getFingerprint());
     }
 
     public function docWatermarkAction(Request $request)
@@ -164,7 +149,7 @@ class CloudController extends BaseController
         return $this->createJsonResponse($watermark);
     }
 
-    private function parsePattern($pattern, $user)
+    protected function parsePattern($pattern, $user)
     {
         $profile = $this->getUserService()->getUserProfile($user['id']);
 
@@ -175,7 +160,7 @@ class CloudController extends BaseController
         return $this->get('topxia.twig.web_extension')->simpleTemplateFilter($pattern, $values);
     }
 
-    private function checkSign($server, $sign, $secretKey)
+    protected function checkSign($server, $sign, $secretKey)
     {
         return md5($server . $secretKey) == $sign;
     }
@@ -185,7 +170,7 @@ class CloudController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }

@@ -1,0 +1,33 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-menu" ng-click="toggle()"></button>
+      <h3 class="title" ng-click="openModal()">发现</h3>
+      <button class="ui-btn bar-tool btn-outline iconfont icon-sousuo"></button>
+    </div>
+</div>
+
+<div class="ui-tab tab-top" ui-tab>
+    <ul class="ui-tab-nav ui-border-b">
+        <li><span class="line">课程</span></li>
+        <li><span>直播</span></li>
+    </ul>
+    <ul class="ui-tab-content tab-display">
+        <li>
+            <div ui-view="found-course"></div>
+        </li>
+        <li>
+            <div ui-view="found-live"></div>
+        </li>
+    </ul>
+</div>
+<div class="ui-dialog full">
+    <div class="ui-dialog-bg">
+        <div class="ui-dialog-bgcontent"></div>
+    </div>
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd category-card">
+            <category-tree data="categoryTree" listener="categorySelectedListener"></category-tree>
+        </div>
+        </div>
+    </div> 
+</div>

@@ -21,7 +21,7 @@ class TargetHelper
         $datas = $this->loadTargetDatas($targets);
 
         foreach ($targets as $key => $target) {
-            if (empty($datas[$target['type']]) or empty($datas[$target['type']][$target['id']])) {
+            if (empty($datas[$target['type']]) || empty($datas[$target['type']][$target['id']])) {
                 $targets[$key] = null;
             } else {
                 $targets[$key] = $datas[$target['type']][$target['id']];

@@ -59,7 +59,7 @@ class OrderRefundController extends BaseController
         ));
     }
 
-    private function prepareRefundSearchConditions($conditions)
+    protected function prepareRefundSearchConditions($conditions)
     {
         $conditions = array_filter($conditions);
 
@@ -94,14 +94,19 @@ class OrderRefundController extends BaseController
 
             $pass = $data['result'] == 'pass' ? true : false;
 
-            if ($pass == true) {
-                $this->getNotifiactionService()->notify($order['userId'],'default',"您的退款申请已通过管理员审核");
-            }else{
-                $this->getNotifiactionService()->notify($order['userId'],'default',"您的退款申请因{$data['note']}未通过审核");
-            }
-
             $this->getOrderService()->auditRefundOrder($order['id'], $pass, $data['amount'], $data['note']);
-            $this->getOrderRefundProcessor($order["targetType"])->auditRefundOrder($id, $pass, $data);
+            $orderRefundProcessor = $this->getOrderRefundProcessor($order["targetType"]);
+            $orderRefundProcessor->auditRefundOrder($id, $pass, $data);
+
+            if($order['targetType'] == 'course') {
+                $this->sendAuditRefundNotification($orderRefundProcessor,$order, $data);
+            } else {
+                if ($pass) {
+                    $this->getNotificationService()->notify($order['userId'],'default',"您的退款申请已通过管理员审核");
+                }else{
+                    $this->getNotificationService()->notify($order['userId'],'default',"您的退款申请因{$data['note']}未通过审核");
+                }
+            }
 
             return $this->createJsonResponse(true);
         }
@@ -110,6 +115,35 @@ class OrderRefundController extends BaseController
             'order' => $order,
         ));
 
+    }
+
+    protected function sendAuditRefundNotification($orderRefundProcessor, $order, $data)
+    {
+        $target = $orderRefundProcessor->getTarget($order['targetId']);
+        if (empty($target)) {
+            return false;
+        }
+
+        if ($data['result'] == 'pass') {
+            $message = $this->setting('refund.successNotification', '');
+        } else {
+            $message = $this->setting('refund.failedNotification', '');
+        }
+
+        if (empty($message)) {
+            return false;
+        }
+
+        $targetUrl = $this->generateUrl($order["targetType"].'_show', array('id' => $order['targetId']));
+        $variables = array(
+            "item" => "<a href='{$targetUrl}'>{$target['title']}</a>",
+            // "{$order['targetType']}" => "<a href='{$targetUrl}'>{$target['title']}</a>",
+            "amount" => $data["amount"],
+            "note" => $data["note"],
+        );
+
+        $message = StringToolkit::template($message, $variables);
+        $this->getNotificationService()->notify($order['userId'], 'default', $message);
     }
 
     protected function getOrderRefundProcessor($targetType)
@@ -122,7 +156,7 @@ class OrderRefundController extends BaseController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    protected function getNotifiactionService()
+    protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
     }

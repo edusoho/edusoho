@@ -2,28 +2,31 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}<span class="text-muted">免费课时预览:</span> {{lesson.title}}{% endblock %}
+{% block title %}<span class="text-muted">课时预览:</span> {{lesson.title}}{% endblock %}
 
 {% block body %}
+    <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+  
 	{% if lesson.status == 'published' %}
-
 	  {% if lesson.mediaSource == 'iframe' %}
       <div id="lesson-preview-iframe" data-url="{{ lesson.mediaUri }}" style="display:none;">
       </div>
-		{% elseif lesson.type == 'video' %}
+		{% elseif lesson.type == 'video' or lesson.type == 'audio' %}
 			{% if lesson.mediaSource == 'self' %}
-				<div id="lesson-preview-video-player" data-url="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" data-hls-url="{{ hlsUrl }}"
+				<div id="lesson-preview-player" 
+          style="height:300px;overflow:hidden"
+          data-balloon-player="1"
+          {% if not lesson.free %}
+            data-timelimit="{{ course.tryLookTime }}"
+          {% endif %}
+          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1})}}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
-            data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+            data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
             data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
           {% endif %}
-          {% if not lesson.free %}
-            data-timelimit="{{setting('magic.lesson_watch_time_limit')}}"
-          {% endif %}
-        >
-        </div>
+        ></div>
         <div class="js-time-limit-dev hidden">
           <div style="height:360px;background-color:black;" class="text-center">
             <br><br><br><br>
@@ -34,7 +37,7 @@
           </div>
           <div class="js-buy-text">
             <span class="text-success">
-              您可以免费试看前{{ setting('magic.lesson_watch_time_limit')|default(0)/60 }}分钟，购买后可完整观看。
+              您可以免费试看前{{ course.tryLookTime }}分钟，购买后可完整观看。
             </span>
           </div>
         </div>
@@ -42,10 +45,6 @@
       {% else %}
         <div id="lesson-preview-swf-player" data-url="{{ lesson.mediaUri }}"></div>
       {% endif %}
-    {% elseif lesson.type == 'audio' %}
-      <audio id="lesson-preview-audio-player" width="100%" height="100%">
-        <source src="{{ path('course_lesson_media', {courseId:lesson.courseId, lessonId:lesson.id}) }}" type='audio/mp3' />
-      </audio>
     {% elseif lesson.type == 'ppt' %}
       <div id="lesson-preview-ppt-player" data-url="{{ path('course_lesson_ppt', {courseId:lesson.courseId, lessonId:lesson.id}) }}" class="lesson-preview-ppt"></div>
     {% elseif lesson.type == 'document' %}
@@ -64,10 +63,19 @@
 {% endblock %}
 
 {% block footer %}
-  {% if lesson.status == 'published' %}
-    {% if course.price=='0.00'  %}
+  <span class="es-qrcode bottom mrl" data-url="{{path('course_lesson_qrcode',{lessonId: lesson.id,courseId: lesson.courseId})}}">
+    <i class="es-icon es-icon-qrcode"></i>
+    <span class="qrcode-popover">
+      <img src="" alt="">
+      扫二维码继续学习
+    </span>
+  </span>
+  {% if course.buyable %}
+   {% if lesson.status == 'published' and course.parentId == '0' %}
+
+    {% if course.price == '0.00'  %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if setting("course.buy_fill_userinfo")|default(false) %}
+        {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') %}
           href="#modal" 
           data-toggle="modal" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
@@ -83,7 +91,7 @@
       </a>
     {% else %}
       <a id="js-buy-btn" type="button" class="btn btn-primary js-buy-btn" 
-        {% if setting("course.buy_fill_userinfo")|default(false) %}
+        {% if (setting("course.buy_fill_userinfo")|default(false) or vipStatus == 'ok' or (course.approval and app.user and app.user.approvalStatus != 'approved')) %}
           href="javascript:;" 
           data-url="{{ path('course_buy', {id:course.id, targetType:'course'}) }}"
         {% else %}
@@ -91,11 +99,17 @@
         {% endif %}
       >
         {% if user.id %}
-          觉得不错？点击购买此课程（{{ course.price }}元）
+          {% if vipStatus == 'ok' %}
+            觉得不错？点击加入此课程
+          {% else %}
+            觉得不错？点击购买此课程（{{ course.price }}元）
+          {% endif %}
         {% else %}
           登录后购买学习完整的课程
         {% endif %}
       </a>
     {% endif %}
-  {% endif %}
+  {% endif %} 
+ {#  {% include 'TopxiaWebBundle:Course:Part/normal-header-buy-btn.html.twig' with {course:course,userVipStatus:vipStatus} %} #}
+{% endif %}
 {% endblock %}

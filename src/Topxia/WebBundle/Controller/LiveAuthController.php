@@ -23,7 +23,7 @@ class LiveAuthController extends BaseController
         $timestamp = $matches[3];
         $sign = $matches[4];
 
-        if (empty($courseId) or empty($userId) or empty($timestamp) or (empty($sign))) {
+        if (empty($courseId) || empty($userId) || empty($timestamp) || (empty($sign))) {
             return new Response('fail');
         }
 

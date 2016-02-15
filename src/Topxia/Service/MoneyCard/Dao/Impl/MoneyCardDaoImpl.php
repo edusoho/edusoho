@@ -5,61 +5,72 @@ use Topxia\Service\Common\BaseDao;
 
 class MoneyCardDaoImpl extends BaseDao
 {
-	protected $table = 'money_card';
+    protected $table = 'money_card';
 
-	public function getMoneyCard($id)
+    public function getMoneyCard($id, $lock = false)
     {
-		$sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-	}
+        $sql = $sql.($lock ? ' FOR UPDATE' : '');
 
-    public function getMoneyCardByCardId($cardId)
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+    }
+
+    public function getMoneyCardByIds($ids)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE cardId = ? LIMIT 1";
+        if (empty($ids)) {
+            return array();
+        }
 
-        return $this->getConnection()->fetchAssoc($sql, array($cardId)) ? : null;
-    }    
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function getMoneyCardByPassword($password)
     {
         $sql = "SELECT * FROM {$this->table} WHERE password = ? LIMIT 1";
 
-        return $this->getConnection()->fetchAssoc($sql, array($password)) ? : null;
-    }       
+        return $this->getConnection()->fetchAssoc($sql, array($password)) ?: null;
+    }
 
-	public function searchMoneyCards($conditions, $orderBy, $start, $limit)
+    public function searchMoneyCards($conditions, $orderBy, $start, $limit)
     {
-        $this->checkOrderBy($orderBy, array('id','createdTime'));
+        $this->checkOrderBy($orderBy, array('id', 'createdTime'));
 
         $this->filterStartLimit($start, $limit);
         $builder = $this->createMoneyCardQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
 
-        return $builder->execute()->fetchAll() ? : array();
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchMoneyCardsCount($conditions)
     {
         $builder = $this->createMoneyCardQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
-    public function addMoneyCard ($moneyCards)
+    public function addMoneyCard($moneyCards)
     {
-        if(empty($moneyCards)){ return array(); }
+        if (empty($moneyCards)) {
+            return array();
+        }
 
         $moneyCardsForSQL = array();
+
         foreach ($moneyCards as $value) {
             $moneyCardsForSQL = array_merge($moneyCardsForSQL, array_values($value));
         }
 
         $sql = "INSERT INTO $this->table (cardId, password, deadline, cardStatus, batchId )     VALUE ";
-        for ($i=0; $i < count($moneyCards); $i++) {
+
+        for ($i = 0; $i < count($moneyCards); $i++) {
             $sql .= "(?, ?, ?, ?, ?),";
         }
 
@@ -70,45 +81,55 @@ class MoneyCardDaoImpl extends BaseDao
 
     public function isCardIdAvaliable($moneyCardIds)
     {
-        $marks = str_repeat('?,', count($moneyCardIds) - 1) . '?';
-        $sql = "select COUNT(id) from ".$this->table." where cardId in (".$marks.")";
+        $marks  = str_repeat('?,', count($moneyCardIds) - 1).'?';
+        $sql    = "select COUNT(id) from ".$this->table." where cardId in (".$marks.")";
         $result = $this->getConnection()->fetchAll($sql, $moneyCardIds);
 
         return $result[0]["COUNT(id)"] == 0 ? true : false;
     }
 
-    public function updateMoneyCard ($id, $fields)
+    public function updateMoneyCard($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         return $this->getMoneyCard($id);
     }
 
-    public function deleteMoneyCard ($id)
+    public function deleteMoneyCard($id)
     {
         $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function updateBatchByCardStatus ($identifier, $fields)
+    public function updateBatchByCardStatus($identifier, $fields)
     {
         $this->getConnection()->update($this->table, $fields, $identifier);
     }
 
-    public function deleteBatchByCardStatus ($fields)
+    public function deleteMoneyCardsByBatchId($id)
+    {
+        return $this->getConnection()->delete($this->table, array('batchId' => $id));
+    }
+
+    public function deleteBatchByCardStatus($fields)
     {
         $sql = "DELETE FROM ".$this->table." WHERE batchId = ? AND cardStatus != ?";
         $this->getConnection()->executeUpdate($sql, $fields);
     }
 
-    private function createMoneyCardQueryBuilder($conditions)
+    protected function createMoneyCardQueryBuilder($conditions)
     {
-        $conditions = array_filter($conditions);
-        return $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'money_card')
-            ->andWhere('cardId = :cardId')
-            ->andWhere('deadline = :deadline')
-            ->andWhere('batchId = :batchId')
-            ->andWhere('deadline <= :deadlineSearchEnd')
-            ->andWhere('deadline >= :deadlineSearchBegin');
-    }
+        if (!isset($conditions['rechargeUserId'])) {
+            $conditions = array_filter($conditions);
+        }
 
+        return $this->createDynamicQueryBuilder($conditions)
+                    ->from($this->table, 'money_card')
+                    ->andWhere('id = :id')
+                    ->andWhere('rechargeUserId = :rechargeUserId')
+                    ->andWhere('cardId = :cardId')
+                    ->andWhere('cardStatus = :cardStatus')
+                    ->andWhere('deadline = :deadline')
+                    ->andWhere('batchId = :batchId')
+                    ->andWhere('deadline <= :deadlineSearchEnd')
+                    ->andWhere('deadline >= :deadlineSearchBegin');
+    }
 }

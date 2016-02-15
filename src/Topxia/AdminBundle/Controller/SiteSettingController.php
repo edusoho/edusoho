@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
 class SiteSettingController extends BaseController
@@ -57,7 +56,7 @@ class SiteSettingController extends BaseController
                 array('name' => '', 'number' => ''),
             ),
             'qqgroup' => array(
-                array('name' => '', 'number' => ''),
+                array('name' => '', 'number' => '' , 'url' => ''),
             ),
             'phone' => array(
                 array('name' => '', 'number' => ''),
@@ -70,33 +69,67 @@ class SiteSettingController extends BaseController
         $consult = array_merge($default, $consult);
         if ($request->getMethod() == 'POST') {
             $consult = $request->request->all();
+
             ksort($consult['qq']);
             ksort($consult['qqgroup']);
             ksort($consult['phone']);
+            if(!empty($consult['webchatURI'])){
+                $consult['webchatURI'] = $consult['webchatURI']."?time=".time();
+            }
             $this->getSettingService()->set('consult', $consult);
             $this->getLogService()->info('system', 'update_settings', "更新QQ客服设置", $consult);
-            $this->setFlashMessage('success', 'QQ客服设置已保存！');
+            $this->setFlashMessage('success', '客服设置已保存！');
         }
         return $this->render('TopxiaAdminBundle:System:consult-setting.html.twig', array(
             'consult' => $consult,
         ));
     }
 
+    public function esBarSettingAction(Request $request)
+    {
+        $esBar = $this->getSettingService()->get('esBar', array());
+
+        $default = array(
+            'enabled'=> 1
+        );
+
+        $esBar = array_merge($default,$esBar);
+
+        if($request->getMethod() == 'POST'){
+            $esBar = $request->request->all();
+            $this->getSettingService()->set('esBar', $esBar);
+            $this->getLogService()->info('system', 'update_settings', "更新侧边栏设置", $esBar);
+            $this->setFlashMessage('success', '侧边栏设置已保存！');
+        }
+        return $this->render('TopxiaAdminBundle:System:esbar-setting.html.twig',array(
+            'esBar' => $esBar
+        ));
+    }
+
+    public function deleteWebchatAction(Request $request)
+    {
+        $consult = $this->getSettingService()->get('consult', array());
+        if(isset($consult['webchatURI'])){
+            $consult['webchatURI'] = '';
+            $this->getSettingService()->set('consult', $consult);
+        }
+        return $this->createJsonResponse(true);
+    }
+
     public function consultUploadAction(Request $request)
     {
-        $file = $request->files->get('consult');
-        if (!FileToolkit::isImageFile($file)) {
+        $fileId = $request->request->get('id');
+        $objectFile = $this->getFileService()->getFileObject($fileId);
+        if (!FileToolkit::isImageFile($objectFile)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename = 'webchat.' . $file->getClientOriginalExtension();
-
-        $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
-        $file = $file->move($directory, $filename);
+        $file = $this->getFileService()->getFile($fileId);
+        $parsed = $this->getFileService()->parseFileUri($file["uri"]);
 
         $consult = $this->getSettingService()->get('consult', array());
 
-        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/system/{$filename}";
+        $consult['webchatURI'] = "{$this->container->getParameter('topxia.upload.public_url_path')}/".$parsed["path"];
         $consult['webchatURI'] = ltrim($consult['webchatURI'], '/');
 
         $this->getSettingService()->set('consult', $consult);
@@ -108,7 +141,7 @@ class SiteSettingController extends BaseController
             'url' => $this->container->get('templating.helper.assets')->getUrl($consult['webchatURI']),
         );
 
-        return new Response(json_encode($response));
+        return $this->createJsonResponse($response);
 
     }
 
@@ -134,7 +167,7 @@ class SiteSettingController extends BaseController
         ));
     }
 
-    private function getDefaultSet()
+    protected function getDefaultSet()
     {
         $default = array(
             'defaultAvatar' => 0,
@@ -153,7 +186,7 @@ class SiteSettingController extends BaseController
         return $default;
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
@@ -181,6 +214,11 @@ class SiteSettingController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
 }

@@ -2,6 +2,7 @@
           <thead>
             <tr>
               <th>用户名</th>
+              <th>手机号</th>
               <th>注册邮箱</th>
               <th>注册来源</th>
               <th>IP地址</th>
@@ -13,13 +14,34 @@
             {% for data in registerDetail %}
               <tr>
                 <td>{{data.nickname}}</td>
-                <td>{{data.email}}</td>
-                <td>{% if data.type=="default" %}网站注册
+                <td>
+                    {% if data.verifiedMobile %}
+                    {{ data.verifiedMobile }}<span class="text-success">(已绑定)</span>
+                    {% elseif registerProfiles[data.id].mobile %}
+                    {{ registerProfiles[data.id].mobile }}<span class="text-danger">(未绑定)</span>
+                    {% else %}
+                    -- 
+                    {% endif %}
+                  </td>
+                <td>
+                    {% set emailArr = data.email|split('@') %}
+                    {% if emailArr[1] != 'edusoho.net' %}
+                      {{ data.email }}
+                    {% else %}
+                      暂无
+                    {% endif %}
+                </td>
+                <td>
+                  {% if data.type=="default" %}网站注册
+                  {% elseif data.type=="web_mobile" %}网站手机注册
+                  {% elseif data.type=="web_email" %}网站邮箱注册
                   {% elseif data.type=="weibo" %}新浪微博
                   {% elseif data.type=="qq" %}QQ
                   {% elseif data.type=="renren" %}人人
                   {% elseif data.type=="discuz" %}discuz
                   {% elseif data.type=="phpwind" %}phpwind
+                  {% elseif data.type=="weixinweb" or data.type=="weixinmob" or data.type=="weixin" %}微信
+                  {% elseif data.type=="import" %}手动导入
                   {% else %}其他
                   {% endif %}</td>
                 <td>{{data.createdIp}}</td>

@@ -1,0 +1,53 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">开通会员</h3>
+    </div>
+</div>
+
+<div class="top-header ui-vip" ng-init="loadVipList()">
+	<ul class="ui-list ui-vip-header ui-border-tb">
+	    <li class="ui-border-t ui-vip-avatar">
+	        <div class="ui-avatar">
+	            <img ng-src="{{ user.mediumAvatar | coverAvatar }}" img-error="avatar" />
+	        </div>
+	        <div class="ui-list-info">
+	            <h4 class="ui-nowrap">{{ data.user.nickname }}</h4>
+	            <p class="ui-nowrap" ng-bind="getVipName()"></p>
+	        </div>
+	    </li>
+	    <li class="vip-price-line">
+	        	<span>会员介绍</span>
+	    </li>
+	</ul>
+
+	<div class="ui-panel" ng-repeat="vip in data.vips">
+		<ul class="ui-list">
+		    <li class="ui-border-b">
+		        <div class="ui-avatar">
+		            <img ng-src="{{ vip.picture }}" img-error="vip" />
+		        </div>
+		        <div class="ui-list-info">
+		            <h4 class="ui-nowrap">{{ vip.name }}</h4>
+		        </div>
+		        <div class="ui-list-action ui-vip-price">
+		        	<sup>¥</sup>
+		        	<span>{{ vip.monthPrice }}</span>
+		        	1个月
+		        </div>
+		    </li>
+		    <li class="ui-border-b">
+		        	<div class="ui-list-info">
+		        		<div class="ui-vip-content">{{ vip.description | blockStr }}</div>
+		        		<p ng-if="! vip.description || vip.description.length == 0">没有会员简介</p>
+		        	</div>
+		    </li>
+		</ul>
+		<div class="ui-btn-wrap ui-border-b">
+	            <a class="ui-btn-lg btn-green" href="#/vippay/{{ vip.id }}">
+	                立即开通
+	            </a>
+        	</div>
+	</div>
+	
+</div>

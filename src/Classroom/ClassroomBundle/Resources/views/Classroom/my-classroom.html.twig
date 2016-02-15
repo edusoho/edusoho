@@ -36,7 +36,7 @@
 
 
 
-                {% if members[classroom.id].role == "student"%}
+                {% if "student" in members[classroom.id].role %}
 
                 <div class="pull-right">
                 <span class="text-muted">已学了{{classroom.day}}天</span><br>
@@ -51,7 +51,7 @@
 
                 <div class="classroom-footer clearfix">
 
-                {% if members[classroom.id].role == "student"%}
+                {% if "student" in members[classroom.id].role %}
                 <div class="col-md-7">
                   <div class="progress" title="已学{{ progress.number }}课程">
                     <div class="progress-bar" style="width: {{ progress.percent }}">

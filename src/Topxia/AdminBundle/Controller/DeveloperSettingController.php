@@ -2,70 +2,94 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\JsonToolkit;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\FileToolkit;
-use Topxia\Component\OAuthClient\OAuthClientFactory;
-use Topxia\Service\Util\LiveClientFactory;
-use Topxia\Service\Util\CloudClientFactory;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DeveloperSettingController extends BaseController
 {
     public function indexAction(Request $request)
     {
         $developerSetting = $this->getSettingService()->get('developer', array());
-        $storageSetting = $this->getSettingService()->get('storage', array());
+        $storageSetting   = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'debug' => '0',
-            'app_api_url' => '',
-            'cloud_api_server' => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'hls_encrypted' => '1',
+            'debug'                => '0',
+            'app_api_url'          => '',
+            'cloud_api_server'     => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
+            'hls_encrypted'        => '1'
         );
 
         $developerSetting = array_merge($default, $developerSetting);
 
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
-            $storageSetting['cloud_api_server'] = $developerSetting['cloud_api_server'];
+
+            $storageSetting['cloud_api_server']     = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
             $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+
+            $this->dealServerConfigFile();
+            $this->dealNetworkLockFile($developerSetting);
+
             $this->setFlashMessage('success', '开发者已保存！');
         }
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:index.html.twig', array(
-            'developerSetting' => $developerSetting,
+            'developerSetting' => $developerSetting
         ));
+    }
 
+    protected function dealServerConfigFile()
+    {
+        $serverConfigFile = $this->getServiceKernel()->getParameter('kernel.root_dir').'/data/api_server.json';
+        $fileSystem       = new Filesystem();
+        $fileSystem->remove($serverConfigFile);
+    }
+
+    protected function dealNetworkLockFile($developerSetting)
+    {
+        $networkLock = $this->getServiceKernel()->getParameter('kernel.root_dir').'/data/network.lock';
+        $fileSystem  = new Filesystem();
+
+        if (isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
+            $fileSystem->touch($networkLock);
+        } else
+
+        if (!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0) {
+            $fileSystem->remove($networkLock);
+        }
     }
 
     public function versionAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $app = $this->getAppservice()->getAppByCode($data['code']);
+            $app  = $this->getAppservice()->getAppByCode($data['code']);
+
             if (empty($app)) {
                 throw $this->createNotFoundException();
             }
+
             $this->getAppservice()->updateAppVersion($app['id'], $data['version']);
             return $this->redirect($this->generateUrl('admin_app_upgrades'));
         }
 
         $appCount = $this->getAppservice()->findAppCount();
-        $apps = $this->getAppservice()->findApps(0, $appCount);
+        $apps     = $this->getAppservice()->findApps(0, $appCount);
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:version.html.twig', array(
-            'apps' => $apps,
+            'apps' => $apps
         ));
     }
 
     public function magicAction(Request $request)
     {
-
         if ($request->getMethod() == 'POST') {
             $setting = $request->request->get('setting', '{}');
             $setting = json_decode($setting, true);
@@ -75,70 +99,46 @@ class DeveloperSettingController extends BaseController
         }
 
         $setting = $this->getSettingService()->get('magic', array());
-        $setting = $this->prettyPrint(json_encode($setting));
+        $setting = JsonToolkit::prettyPrint(json_encode($setting));
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:magic.html.twig', array(
-            'setting' => $setting,
+            'setting' => $setting
         ));
     }
 
-    protected function prettyPrint( $json )
+    public function redisAction(Request $request)
     {
-        $result = '';
-        $level = 0;
-        $in_quotes = false;
-        $in_escape = false;
-        $ends_line_level = NULL;
-        $json_length = strlen( $json );
+        if ($request->getMethod() == 'POST') {
+            $redis            = $request->request->all();
+            $redis['setting'] = json_decode($redis['setting'], true);
+            $this->getSettingService()->set('redis', $redis);
 
-        for( $i = 0; $i < $json_length; $i++ ) {
-            $char = $json[$i];
-            $new_line_level = NULL;
-            $post = "";
-            if( $ends_line_level !== NULL ) {
-                $new_line_level = $ends_line_level;
-                $ends_line_level = NULL;
+            $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
+            if ($redis['opened'] == '1') {
+                $config          = "<?php \nreturn ".var_export($redis['setting'], true).';';
+                file_put_contents($redisConfigFile, $config);
             }
-            if ( $in_escape ) {
-                $in_escape = false;
-            } else if( $char === '"' ) {
-                $in_quotes = !$in_quotes;
-            } else if( ! $in_quotes ) {
-                switch( $char ) {
-                    case '}': case ']':
-                        $level--;
-                        $ends_line_level = NULL;
-                        $new_line_level = $level;
-                        break;
 
-                    case '{': case '[':
-                        $level++;
-                    case ',':
-                        $ends_line_level = $level;
-                        break;
-
-                    case ':':
-                        $post = " ";
-                        break;
-
-                    case " ": case "\t": case "\n": case "\r":
-                        $char = "";
-                        $ends_line_level = $new_line_level;
-                        $new_line_level = NULL;
-                        break;
-                }
-            } else if ( $char === '\\' ) {
-                $in_escape = true;
+            if ($redis['opened'] == '0') {
+                file_exists($redisConfigFile) && unlink($redisConfigFile);
             }
-            if( $new_line_level !== NULL ) {
-                $result .= "\n".str_repeat( "\t", $new_line_level );
-            }
-            $result .= $char.$post;
+
+            $this->getLogService()->info('system', 'update_redis', "更新redis设置", $redis);
+            $this->setFlashMessage('success', '设置已保存！');
         }
 
-        return $result;
-    }
+        $redis = $this->getSettingService()->get('redis', array());
 
+        if (isset($redis['setting']) && !empty($redis['setting'])) {
+            $redis['setting'] = JsonToolkit::prettyPrint(json_encode($redis['setting']));
+        } else {
+            $redis['setting'] = '{}';
+        }
+
+        return $this->render('TopxiaAdminBundle:DeveloperSetting:redis.html.twig', array(
+            'redis' => $redis
+        ));
+    }
 
     protected function getSettingService()
     {

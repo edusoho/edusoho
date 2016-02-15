@@ -22,7 +22,7 @@
 		  </div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-determine-inputs">
@@ -41,7 +41,7 @@
 			    正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">
 			</div>
 		  </div>
-		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}</div>
+		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw|nl2br }}</div>
 	  	{% endif %}
 
 	{% endif %}

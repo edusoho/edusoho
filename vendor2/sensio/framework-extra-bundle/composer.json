@@ -1,0 +1,35 @@
+{
+    "name": "sensio/framework-extra-bundle",
+    "description": "This bundle provides a way to configure your controllers with annotations",
+    "keywords": ["annotations","controllers"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.3",
+        "doctrine/common": "~2.2"
+    },
+    "require-dev": {
+        "symfony/expression-language": "~2.4",
+        "symfony/security-bundle": "~2.4"
+    },
+    "suggest": {
+        "symfony/psr-http-message-bridge": "To use the PSR-7 converters",
+        "symfony/expression-language": "",
+        "symfony/security-bundle": ""
+    },
+    "autoload": {
+        "psr-4": { "Sensio\\Bundle\\FrameworkExtraBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}

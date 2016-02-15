@@ -22,7 +22,7 @@ class BlockExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'block_show' => new \Twig_Function_Method($this, 'showBlock', array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('block_show', array($this, 'showBlock'), array('is_safe' => array('html')))
         );
     }
 

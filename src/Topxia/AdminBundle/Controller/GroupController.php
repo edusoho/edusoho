@@ -81,9 +81,16 @@ class GroupController extends BaseController
     public function batchDeleteThreadAction(Request $request)
     {
         $threadIds=$request->request->all();
+         $user = $this->getCurrentUser();
         foreach ($threadIds['ID'] as $threadId) {
             $thread=$this->getThreadService()->getThread($threadId);
-            $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<strong>“{$thread['title']}”</strong>被管理员删除。");
+            $message = array(
+                'title' => $thread['title'],
+                'type' =>'delete',
+                'userId' => $user['id'],
+                'userName' => $user['nickname']);
+            $this->getNotifiactionService()->notify($thread['userId'],'group-thread',
+                $message);
             $this->getThreadService()->deleteThread($threadId); 
         }
         return new Response('success');
@@ -126,7 +133,6 @@ class GroupController extends BaseController
     {
         $data=$request->request->all();
         $currentUser = $this->getCurrentUser();
-
         $user=$this->getUserService()->getUserByNickname($data['user']['nickname']);
 
         $group=$this->getGroupService()->getGroup($groupId);
@@ -138,16 +144,24 @@ class GroupController extends BaseController
         $this->getGroupService()->updateMember($member['id'],array('role'=>'member'));
 
         if ($currentUser['id'] != $group['ownerId'] ) {
-
-            $this->getNotifiactionService()->notify($group['ownerId'],'default',"您的小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a> 被管理员转移给了用户 <a href=\"/user/{$user['id']}\">'{$user['nickname']}'</a>");
+            $message = array(
+                'id' => $group['id'],
+                'title' => $group['title'],
+                'userId' => $user['id'],
+                'userName' => $user['nickname'],
+                'type' =>'chownout');
+            $this->getNotifiactionService()->notify($group['ownerId'],'group-profile',$message);
             
         }
 
         $this->getGroupService()->updateGroup($groupId,array('ownerId'=>$user['id']));
 
         if ($currentUser['id'] != $user['id']) {
-
-            $this->getNotifiactionService()->notify($user['id'],'default',"您获得了小组 <a href=\"/group/{$group['id']}\">'{$group['title']}'</a>的管理权限");
+            $message = array(
+                'id' => $group['id'],
+                'title' => $group['title'],
+                'type' =>'chownin');
+            $this->getNotifiactionService()->notify($user['id'],'group-profile',$message);
             
         }
 
@@ -197,38 +211,52 @@ class GroupController extends BaseController
         $thread=$this->getThreadService()->getThread($threadId);
         $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
         $this->getThreadService()->deleteThread($threadId);
-        $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被管理员删除。");
+
+        $message = array(
+            'title'=> $thread['title'],
+            'type' => 'delete'
+            );
+        $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
         return $this->createJsonResponse('success');
 
     }
-    private function postAction($threadId,$action)
+    protected function postAction($threadId,$action)
     {
         $thread=$this->getThreadService()->getThread($threadId);
-        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
-        
+        $message = array(
+            'title'=> $thread['title'],
+            'groupId' =>$thread['groupId'],
+            'threadId' => $thread['id'],
+            );
         if($action=='setElite'){
            $this->getThreadService()->setElite($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被设为精华。"); 
+            $message['type'] = 'elite';
+           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message); 
         }
         if($action=='removeElite'){
            $this->getThreadService()->removeElite($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消精华。"); 
+           $message['type'] = 'unelite';
+           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message); 
         }
         if($action=='setStick'){
            $this->getThreadService()->setStick($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被置顶。"); 
+            $message['type'] = 'top';
+           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message); 
         }
         if($action=='removeStick'){
            $this->getThreadService()->removeStick($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被取消置顶。");
+            $message['type'] = 'untop';
+           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
         }
         if($action=='closeThread'){
            $this->getThreadService()->closeThread($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被关闭。");
+            $message['type'] = 'close';
+           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
         }
         if($action=='openThread'){
            $this->getThreadService()->openThread($threadId); 
-           $this->getNotifiactionService()->notify($thread['userId'],'default',"您的话题<a href='{$threadUrl}' target='_blank'><strong>“{$thread['title']}”</strong></a>被打开。");
+             $message['type'] = 'open';
+           $this->getNotifiactionService()->notify($thread['userId'],'group-thread',$message);
         }
 
         $thread=$this->getThreadService()->getThread($threadId);
@@ -261,7 +289,7 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function filterSort($sort)
+    protected function filterSort($sort)
     {
         switch ($sort) {
             case 'byPostNum':
@@ -305,7 +333,7 @@ class GroupController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function prepareThreadConditions($conditions)
+    protected function prepareThreadConditions($conditions)
     {
 
         if (isset($conditions['threadType']) && !empty($conditions['threadType'])) {

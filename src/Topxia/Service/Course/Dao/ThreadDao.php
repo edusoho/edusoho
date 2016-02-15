@@ -31,5 +31,4 @@ interface ThreadDao
 	public function updateThread($id, $fields);
 
 	public function waveThread($id, $field, $diff);
-
 }

@@ -12,8 +12,8 @@ define(function(require, exports, module) {
 
     	attrs: {
     		uploaderSettings: {
-                file_types : "*.mp4;*.avi;*.flv",
-                file_size_limit : "1000 MB",
+                file_types : "*.mp4;*.avi;*.flv;*.m4v",
+                file_size_limit : "2048 MB",
                 file_types_description: "视频文件"
     		},
             preUpload: function(uploader, file) {
@@ -75,10 +75,10 @@ define(function(require, exports, module) {
     	onImport: function(e) {
             var self = this,
                 $btn = $(e.currentTarget),
-                $urlInput = this.$('[data-role=import-url]'),
+                $urlInput = $btn.parent().siblings('input'),
                 url = $urlInput.val();
 
-            if (url.length ==0) {
+            if (url.length == 0 ) {
                 Notify.danger('请输入视频页面地址');
                 return;
             }

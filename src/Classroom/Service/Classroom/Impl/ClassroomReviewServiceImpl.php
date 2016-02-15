@@ -2,10 +2,10 @@
 
 namespace Classroom\Service\Classroom\Impl;
 
-use Topxia\Service\Common\BaseService;
-use Classroom\Service\Classroom\ClassroomReviewService;
 use Topxia\Common\ArrayToolkit;
-
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\Common\ServiceEvent;
+use Classroom\Service\Classroom\ClassroomReviewService;
 
 class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewService
 {
@@ -24,7 +24,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
     public function searchReviewCount($conditions)
     {
         $conditions = $this->_prepareReviewSearchConditions($conditions);
-        $count = $this->getClassroomReviewDao()->searchReviewCount($conditions);
+        $count      = $this->getClassroomReviewDao()->searchReviewCount($conditions);
 
         return $count;
     }
@@ -34,6 +34,7 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $user = $this->getUserService()->getUser($userId);
 
         $classroom = $this->getClassroomDao()->getClassroom($classroomId);
+
         if (empty($classroom)) {
             throw $this->createServiceException("Classroom is not Exist!");
         }
@@ -51,10 +52,12 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
             }
 
             return !empty($value);
-        });
+        }
+
+        );
 
         if (isset($conditions['author'])) {
-            $author = $this->getUserService()->getUserByNickname($conditions['author']);
+            $author               = $this->getUserService()->getUserByNickname($conditions['author']);
             $conditions['userId'] = $author ? $author['id'] : -1;
         }
 
@@ -74,26 +77,30 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         if (empty($classroom)) {
             throw $this->createServiceException("班级(#{$fields['classroomId']})不存在，评价失败！");
         }
+
         $user = $this->getUserService()->getUser($fields['userId']);
+
         if (empty($user)) {
-            return $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
+            throw $this->createServiceException("用户(#{$fields['userId']})不存在,评价失败!");
         }
 
         $review = $this->getClassroomReviewDao()->getReviewByUserIdAndClassroomId($user['id'], $classroom['id']);
+
         if (empty($review)) {
             $review = $this->getClassroomReviewDao()->addReview(array(
-                'userId' => $fields['userId'],
+                'userId'      => $fields['userId'],
                 'classroomId' => $fields['classroomId'],
-                'rating' => $fields['rating'],
-                'content' => empty($fields['content']) ? '' : $fields['content'],
-                'title' => empty($fields['title']) ? '' : $fields['title'],
-                'createdTime' => time(),
+                'rating'      => $fields['rating'],
+                'content'     => empty($fields['content']) ? '' : $fields['content'],
+                'title'       => empty($fields['title']) ? '' : $fields['title'],
+                'createdTime' => time()
             ));
+            $this->dispatchEvent('classReview.add', new ServiceEvent($review));
         } else {
             $review = $this->getClassroomReviewDao()->updateReview($review['id'], array(
-                'rating' => $fields['rating'],
-                'title' => empty($fields['title']) ? '' : $fields['title'],
-                'content' => empty($fields['content']) ? '' : $fields['content'],
+                'rating'  => $fields['rating'],
+                'title'   => empty($fields['title']) ? '' : $fields['title'],
+                'content' => empty($fields['content']) ? '' : $fields['content']
             ));
         }
 
@@ -108,14 +115,15 @@ class ClassroomReviewServiceImpl extends BaseService implements ClassroomReviewS
         $ratingNum = $this->getClassroomReviewDao()->getReviewCountByClassroomId($classroomId);
 
         $this->getClassroomService()->updateClassroom($classroomId, array(
-            'rating' => $ratingNum ? $ratingSum / $ratingNum : 0,
-            'ratingNum' => $ratingNum,
+            'rating'    => $ratingNum ? $ratingSum / $ratingNum : 0,
+            'ratingNum' => $ratingNum
         ));
     }
 
     public function deleteReview($id)
     {
         $review = $this->getReview($id);
+
         if (empty($review)) {
             throw $this->createServiceException("评价(#{$id})不存在，删除失败！");
         }

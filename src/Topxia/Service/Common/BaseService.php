@@ -48,7 +48,7 @@ abstract class BaseService
             $event = new ServiceEvent($subject);
         }
 
-        $this->getDispatcher()->dispatch($eventName, $event);
+        return $this->getDispatcher()->dispatch($eventName, $event);
     }
 
     protected function purifyHtml($html, $trusted = false)

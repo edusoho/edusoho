@@ -27,7 +27,7 @@ class MediaParseServiceImpl extends BaseService implements MediaParseService
 		}
 	}
 
-	private function _parseMedia($type, $url, $refresh)
+	protected function _parseMedia($type, $url, $refresh)
 	{
 		$urlHash = md5($type . '|' . $url);
 

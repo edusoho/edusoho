@@ -12,11 +12,11 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
     {
         $goto = $request->query->get('goto');
 
-        if(!$goto){
+        if (!$goto) {
             $goto = "login";
         }
         $this->targetUrl = $this->httpUtils->generateUri($request, $goto);
-        if ($this->getAuthService()->hasPartnerAuth()) { 
+        if ($this->getAuthService()->hasPartnerAuth()) {
             $user = ServiceKernel::instance()->getCurrentUser();
             setcookie("REMEMBERME");
             if (!$user->isLogin()) {
@@ -28,7 +28,7 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
             $url = $url . '?' . http_build_query($queries);
             return $this->httpUtils->createRedirectResponse($request, $url);
         }
-     
+        //setcookie("U_LOGIN_TOKEN", '', -1);
         return parent::onLogoutSuccess($request);
     }
 

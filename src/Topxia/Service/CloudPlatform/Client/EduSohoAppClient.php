@@ -29,6 +29,18 @@ class EduSohoAppClient implements AppClient
         $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
 
+    public function getTokenLoginUrl($routingName, $params)
+    {
+        $loginToken = $this->getLoginToken();
+        
+        $url = str_replace('app_api','',$this->apiUrl).'token_login?token='.$loginToken["token"].'&goto='.$routingName;
+        if(!empty($params)){
+            $url .= '&param='.urldecode(json_encode($params));
+        }
+
+        return $url;
+    }
+
     public function getApps()
     {
         $args = array();
@@ -93,7 +105,7 @@ class EduSohoAppClient implements AppClient
         return $this->callRemoteApi('POST', 'GetLoginToken', $args);
     }
 
-    private function callRemoteApi($httpMethod, $action, array $args)
+    protected function callRemoteApi($httpMethod, $action, array $args)
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
         $result = $this->sendRequest($httpMethod, $url, $httpParams);
@@ -101,7 +113,7 @@ class EduSohoAppClient implements AppClient
         return json_decode($result, true);
     }
 
-    private function assembleCallRemoteApiUrlAndParams($action, array $args)
+    protected function assembleCallRemoteApiUrlAndParams($action, array $args)
     {
         $url = "{$this->apiUrl}?action={$action}";
         $edusoho = array(
@@ -120,7 +132,7 @@ class EduSohoAppClient implements AppClient
         return array($url, $httpParams);
     }
 
-    private function download($url)
+    protected function download($url)
     {
         $filename = md5($url) . '_' . time();
         $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
@@ -137,7 +149,7 @@ class EduSohoAppClient implements AppClient
         return $filepath;
     }
 
-    private function sendRequest($method, $url, $params = array())
+    protected function sendRequest($method, $url, $params = array())
     {
         $curl = curl_init();
 

@@ -1,0 +1,26 @@
+<div class="ui-dialog ui-coupon full">
+    <div class="ui-dialog-bg">
+        <div class="ui-dialog-bgcontent"></div>
+    </div>
+    <div class="ui-dialog-cnt">
+        <div class="ui-bar" ui-bar>
+            <div class="ui-bar-bg">
+                <button class="ui-btn btn-outline iconfont icon-fanhui" back="close"></button>
+                <h3 class="title">加入学习</h3>
+                <button class="ui-btn bar-tool btn-outline small" ng-click="updateModifyInfo()">确认</button>
+            </div>
+        </div>
+        <div class="ui-form ui-border-t">
+            <div class="ui-form-item ui-border-b ui-list-divider">
+                温情提示：请填写相关认证资料
+            </div>
+            <div class="ui-form-item ui-border-b" ng-repeat="modifyInfo in modifyInfos">
+                <label>
+                    {{ modifyInfo.title }}
+                </label>
+                <input type="text" ng-model="modifyInfo.content" placeholder="{{ modifyInfo.title }}">
+                <a class="ui-icon-close" ng-click="modifyInfo.content = '' ">
+                </a>
+            </div>
+        </div>
+    </div>

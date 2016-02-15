@@ -1,12 +1,14 @@
 .teacher-item {
-  margin: 10px auto;
+  position: relative;
+  margin-bottom: 20px;
   text-align: center;
-  border: 1px solid @gray-light;
-  .border-radius(4px);
-  .es-transition;
+  z-index: 1;
+  .border-radius;
+  .es-box-shadow;
+  @media (min-width: @screen-md-min) {
+    .es-transup;
+  }
   &:hover {
-    .box-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-    .es-transition;
     .metas {
       .opacity(1);
       .es-transition;
@@ -17,9 +19,11 @@
     }
   }
   .teacher-top {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    background-color: #fafafa;
+    position: relative;
+    z-index: 1;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    background-color: @bg-color;
     padding: 20px 10px;
   }
   .avatar-lg {
@@ -30,34 +34,46 @@
     .text-overflow;
   }
   .position {
-    color: @gray;
+    color: @gray-medium;
     .text-overflow;
   }
   .teacher-bottom {
     position: relative;
-    height: 50px;
-    margin: 20px;
+    height: 90px;
   }
   .about,
   .metas {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    right: 20px;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1;
     .es-transition;
   }
   .about {
+    top: 20px;
     line-height: 25px;
     overflow: hidden;
     color: @gray;
     .opacity(1);
   }
   .metas {
-    margin: 10px 0;
+    top: 30px;
+    bottom: 30px;
     .opacity(0);
     .btn {
       margin: 0 15px;
+      @media (min-width: @screen-md-min) and (max-width: @screen-md-max) {
+        margin: 0 10px;
+      }
     }
   }
+}
+
+.teacher-list.no-shadow .teacher-item {
+  .box-shadow(none);
+}
+
+.lt-ie9 .teacher-item {
+  border: 1px solid @gray-light;
 }

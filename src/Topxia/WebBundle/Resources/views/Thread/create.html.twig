@@ -1,3 +1,5 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+
 {% set thread = thread|default(null) %}
 {% set isUpdate = thread ? 1 : 0 %}
 
@@ -82,13 +84,13 @@
         <div class="controls col-md-2"></div>
         <div class="controls col-md-7">
           <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content"
-            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}</textarea>
         </div>
     {% else %}
         {# <div class="controls col-md-2"></div> #}
         <div class="controls col-md-12">
           <textarea id="thread-content-field" class="form-control" rows="15" data-display="内容" name="content"
-            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ thread.content|default('') }}</textarea>
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ thread.content|default('') }}</textarea>
         </div>
     {% endif %}
     

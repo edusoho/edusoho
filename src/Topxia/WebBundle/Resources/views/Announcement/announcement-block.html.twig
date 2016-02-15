@@ -5,8 +5,9 @@
       <div class="swiper-wrapper">
       {% for announcement in announcements %}
         <div class="swiper-slide">
-          <i class="es-icon es-icon-notifications"></i>
-          <a  href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >{{ announcement.content|sub_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
+          <a style="color:#ff5e06" class="alert-link" href="#modal" data-toggle="modal" data-url="{{ path('announcement_show', {id:announcement.id, targetType:targetType, targetId:targetObject.id}) }}" >
+          <i class="es-icon es-icon-infooutline"></i>
+          {{ announcement.content|sub_text(40)|default('<span class="text-warning">(请点击查看)</span>')|raw }}</a>
         </div>
       {% endfor %}
       </div>

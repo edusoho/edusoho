@@ -1,55 +1,83 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% block title %} 支付中心 - {{ parent() }}{% endblock %}
-
-
+{% set script_controller = 'pay/select' %}
+{% block esBar %}
+{% endblock %}
 {% block content %}
-<div class="container order-pay pay-center">
-  <div class="row">
-    <div class="col-md-10 col-md-offset-1 ptl">
-      <div class="panel panel-default panel-page">
-        <div class="panel-heading"><h4>收银台</h4></div>
-        <hr/>
-        <div class="panel-body">
-          <div class="alert alert-success">
-            <span class="pull-right"><span style="color:#f60; font-size: 24px;">{{order.amount}}</span> 元</span>
-            <p> 订单已提交，请在４８小时内完成支付！<small class="text-muted">逾期订单将被取消。</small></p>
-            <p class="">
-              <small>订单号：{{order.sn}}</small>
-              <small class="mll">订单名称：{{ order.title }}</small>
-            </p>
-          </div>
-          
-          <form method="post" action="{{path('pay_center_pay')}}">
-            <input type="hidden" name="orderId" value="{{order.id}}"/>
-            
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-            <div class="row">
-              
-            	<div class="form-group">
-                <div class="col-md-7">
-                  <div class="pay-type-lable">支付方式</div>
-                  {% for payment, options in payments %}
-                  <div class="check">
-                    <img src="{{ asset('assets/img/order/alipay.gif') }}" width="100px"/>
-                    <span class="icon"></span>
-                  </div>
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-            <hr/>
-            <div class="form-group pay pay-amount">
-    
-
-              <div>
-                <button class="pay-button btn btn-fat btn-primary btn-lg"  type="submit">去支付</button>
-
-              </div>
-            </div>
-          </form>
-        </div>
+<div class="order-pay">
+  
+  <div class="es-section">
+    <ul class="es-step es-step-3 clearfix">
+      <li class="done"><span class="number"><i class="es-icon es-icon-done"></i></span>订单确认</li>
+      <li class="doing"><span class="number">2</span>订单支付</li>
+      <li><span class="number">3</span>订单完成</li>
+    </ul>
+    <div class="order-pay-body">
+      <div class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        订单已提交，请在４８小时内完成支付！逾期订单将被取消。
       </div>
+      
+      {{ render(controller(template , {'sn':sn})) }}
+
+      <div class="es-piece" style="margin-bottom:20px;"><div class="piece-header">支付方式</div></div>
+      <form class="form-paytype" method="post" action="{{path('pay_center_pay')}}">
+        <input type="hidden" name="targetType" value="{{order.targetType}}"> 
+        <input type="hidden" name="orderId" value="{{order.id}}"/>
+        {% for payment,options in payments %}
+          {% if loop.index == 1 %}
+            <input type="hidden" name="payment" value={{payment}}>
+          {% endif %}
+        {% endfor %}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        <div class="form-group order-detail-bg">
+          {% for payment, options in payments %}
+            <div class="check {% if loop.index == 1 %} active {% endif %}" id="{{payment}}">
+              {% set picture = 'assets/img/order/'~payment~'.png' %}
+              <img src="{{ asset(picture) }}" />
+              <span class="icon"></span>
+            </div>
+          {% else %}
+            <div class="pay-type-label text-warning ">支付方式未开启，请联系管理员。</div>
+          {% endfor %}
+          {% if payAgreements is not empty %}
+          <div class="js-pay-agreement" style="display:none">
+            <ul class="pay-agreement-list row">
+              {% for payAgreement in payAgreements %}
+                <li id="unbind-bank-{{payAgreement.id}}" class="col-md-6 js-pay-bank {% if loop.index0 == 0 %}checked{% endif %}">
+                  <div class="pay-bank clearfix">
+                    <input class="hidden" type="radio" name='payAgreementId' value="{{payAgreement.id}}" {% if loop.index0 == 0 %}checked{% endif %} />
+                    <span class="name">{{payAgreement.bankName}}</span>
+                    <span class="number">***{{payAgreement.bankNumber}}</span>
+                    <span class="hidden-xs">{% if payAgreement.type == 0 %}储蓄卡{% else %}信用卡{% endif %}</span>
+                    <a href="javascript:;" class="closed visible-lg" data-url="{{ path('auth_unbind_mobile_show')}}"><i class="es-icon es-icon-icon_close_circle"></i></a>
+                  </div>
+                </li>
+              {% endfor %}
+              <li class="col-md-6 js-pay-bank">
+                <div class="pay-bank">
+                  <input class="hidden" type="radio" name='payAgreementId' value=""/>
+                  <span class="color-gray">使用新的银行卡</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <div class="total-price">
+            应付金额：
+            <span role="pay-rmb" class="pay-rmb">￥{{order.amount}}</span>
+          </div>
+        </div>
+        <div class="form-group text-right">
+          {% include 'TopxiaWebBundle:PayCenter:' ~ targetType ~ '-cancelled.html.twig' %}
+          <button class="pay-button btn btn-primary"  type="submit">确认支付</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

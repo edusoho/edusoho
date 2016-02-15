@@ -1,0 +1,40 @@
+{% if 'index' in actions %}
+{{ route_name_prefix }}:
+    path:     /
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:index" }
+{% endif %}
+
+{% if 'show' in actions %}
+{{ route_name_prefix }}_show:
+    path:     /{id}/show
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:show" }
+{% endif %}
+
+{% if 'new' in actions %}
+{{ route_name_prefix }}_new:
+    path:     /new
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:new" }
+
+{{ route_name_prefix }}_create:
+    path:     /create
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:create" }
+    requirements: { _method: post }
+{% endif %}
+
+{% if 'edit' in actions %}
+{{ route_name_prefix }}_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:edit" }
+
+{{ route_name_prefix }}_update:
+    path:     /{id}/update
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:update" }
+    requirements: { _method: post|put }
+{% endif %}
+
+{% if 'delete' in actions %}
+{{ route_name_prefix }}_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "{{ bundle }}:{{ entity }}:delete" }
+    requirements: { _method: post|delete }
+{% endif %}

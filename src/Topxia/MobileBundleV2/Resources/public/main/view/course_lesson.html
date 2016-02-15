@@ -1,0 +1,24 @@
+<ul class="ui-list ui-list-lesson ui-border-b" ng-controller="CourseLessonController">  
+    <li class="{{ lesson.type }}" ng-repeat="lesson in lessons" ng-class="lesson.id == lastLearnStatusIndex ? 'list-green' : '' " ng-click="learnLesson(lesson)" >
+          <div class="lesson-status" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
+                <i class="iconfont" ng-class="learnStatuses[lesson.id] == 'finished' ? 'icon-roundcheck' : 'icon-iconfontround' "></i>
+                <span></span>
+            </div>
+            <div class="ui-list-info" ng-class="lesson.type" ng-style="{ paddingRight : 1 == lesson.free ? '75px' : '45px' }">
+
+                <div class="box-line" ng-class="getLessonBoxStyle($index)"></div>
+                <div class="box"></div>
+                <h4 class="ui-nowrap"> {{ lesson | formatChapterNumber }} {{ lesson.title }}</h4>
+            </div>
+            <div class="ui-list-action lesson-time" ng-if="lesson.type !='chapter' && lesson.type !='unit' ">
+              <span ng-if="1 == lesson.free || lesson.type == 'live' " ng-bind-html="lesson | lessonType"></span>
+              {{ lesson.length }}
+            </div>
+    </li>
+    <list-empty-view class="lesson-empty" data="lessons" title="暂无课时">
+    </list-empty-view>
+    <div class="ui-loading-wrap" ng-show="loading">
+        <p>正在加载中...</p>
+        <i class="ui-loading"></i>
+    </div>
+  </ul>

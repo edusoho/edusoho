@@ -21,8 +21,8 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
 
     public function findTestpapersByIds(array $ids)
     {
-        if(empty($ids)){ 
-            return array(); 
+        if(empty($ids)){
+            return array();
         }
         $marks = str_repeat('?,', count($ids) - 1) . '?';
         $sql ="SELECT * FROM {$this->table} WHERE id IN ({$marks});";
@@ -71,7 +71,7 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
     }
 
     public function deleteTestpaper($id)
-    {
+    {  
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
@@ -81,12 +81,19 @@ class TestpaperDaoImpl extends BaseDao implements TestpaperDao
             return array(); 
         }
         $marks = str_repeat('?,', count($targets) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks});";
+        $sql ="SELECT * FROM {$this->table} WHERE target IN ({$marks})";
         $results = $this->getConnection()->fetchAll($sql, $targets) ? : array();
         return $this->createSerializer()->unserialize($results, $this->serializeFields);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+
+    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE copyId = ?  AND target IN {$lockedTarget}";
+        return $this->getConnection()->fetchAll($sql,array($copyId));
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions);
 

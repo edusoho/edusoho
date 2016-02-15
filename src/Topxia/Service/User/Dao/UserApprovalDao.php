@@ -12,4 +12,8 @@ interface UserApprovalDao
 	function getLastestApprovalByUserIdAndStatus($userId, $status);
 
 	function findApprovalsByUserIds($userIds);
+
+	function searchApprovals($conditions, $orderBy, $start, $limit);
+
+	function searchApprovalsCount($conditions);
 }

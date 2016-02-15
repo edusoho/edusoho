@@ -3,19 +3,7 @@ define(function(require, exports, module) {
     var SmsSender = require('../widget/sms-sender');
     require('common/validator-rules').inject(Validator);
     exports.run = function() {
-        var validator = new Validator({
-            element: '#password-reset-form',
-            onFormValidated: function(err, results, form) {
-                if (err == false) {
-            $('#password-reset-form').find("[type=submit]").button('loading');
-                }else{
-                    $('#alertxx').hide();                    
-                };
 
-            }
-        });
-        
-        
         var smsSender;
         
         var makeValidator = function(type) {
@@ -59,7 +47,15 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="mobile"]',
                     required: true,
-                    rule: 'phone'            
+                    rule: 'phone email_or_mobile_remote',
+                    onItemValidated: function(error, message, eleme) {
+                        if (error) {
+                            $('.js-sms-send').addClass('disabled');
+                            return;
+                        } else {
+                            $('.js-sms-send').removeClass('disabled');
+                        }
+                    }          
                 });
 
                 validator.addItem({
@@ -74,6 +70,19 @@ define(function(require, exports, module) {
                     smsSender.destroy();
                 }
             }
+        }
+
+        if($('.js-find-password li').length > 1){
+            $('.js-find-by-email').hover(function(){
+                if(!$('.js-find-by-email').hasClass('active')){
+                    $('#alertxx').hide();
+                }
+            });
+            $('.js-find-by-mobile').hover(function(){
+                if(!$('.js-find-by-mobile').hasClass('active')){
+                    $('#alertxx').hide();
+                }
+            });
         }
 
         makeValidator('email');
@@ -91,7 +100,7 @@ define(function(require, exports, module) {
             $('.js-find-by-mobile').addClass('active');
 
             makeValidator('mobile');
-            smsSender = new SmsSender({
+            /*smsSender = new SmsSender({
                 element: '.js-sms-send',
                 url: $('.js-sms-send').data('url'),
                 smsType:'sms_forget_password',
@@ -110,7 +119,7 @@ define(function(require, exports, module) {
                     return couldSender;
 
                 }
-            });
+            });*/
 
             $('#password-reset-form').hide();
             $('#password-reset-by-mobile-form').show();

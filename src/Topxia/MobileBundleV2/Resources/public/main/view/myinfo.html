@@ -1,0 +1,42 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">用户信息</h3>
+      <a class="ui-btn btn-outline bar-tool small" ng-click="updateUserProfile()" >更新</a>
+    </div>
+</div>
+<div class="top-header ui-userinfo" ng-init="loadUserInfo()">
+    <ul class="ui-list ui-list-text ui-list-active ui-list-cover">
+      <li class="ui-border-t">
+          <div class="ui-list-info">
+              <h4>头像</h4>
+          </div>
+          <div class="ui-avatar">
+              <img class="avatar" ng-src="{{ userinfo.mediumAvatar | coverAvatar }}" img-error="avatar"/>
+          </div>
+          <input type="hidden" ng-model="userinfo.fileId" />
+          <input ng-click="showSelectImage($event)" type="file" id="uploadFile" name="file" class="upload-file" accept="image/*" onchange="angular.element(this).scope().uploadChange(this)">
+      </li>
+    </ul>
+    <div class="ui-form ui-border-t">
+        <div class="ui-form-item ui-border-b">
+            <label>
+                昵称
+            </label>
+            <input type="text" placeholder="暂无昵称" ng-model="userinfo.nickname">
+        </div>
+        <div class="ui-form-item ui-border-b">
+            <label>性别</label>
+            <div class="ui-select">
+                <select ng-model="userinfo.gender" ng-options="gener | coverGender for gener in generArray">
+                </select>
+            </div>
+        </div>
+        <div class="ui-form-item ui-form-item-textarea ui-border-b">
+            <label>
+                个性签名
+            </label>
+            <textarea placeholder="暂无个性签名" ng-model="userinfo.signature"></textarea>
+        </div>
+    </div>
+</div>

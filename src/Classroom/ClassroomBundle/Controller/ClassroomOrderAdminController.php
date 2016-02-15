@@ -10,7 +10,7 @@ class ClassroomOrderAdminController extends BaseController
     {
         return $this->forward('TopxiaAdminBundle:Order:manage', array(
             'request' => $request,
-            'type' => 'classroom',
+            'targetType' => 'classroom',
         ));
     }
 }

@@ -12,12 +12,14 @@
       <span class="text-muted">{{post.createdTime|smart_time}} </span>
       {% if author.badgeTitle|default(null) %}<span class="mll text-danger">({{ dict_text('classroomRoles', author.badgeTitle) }}) </span>{% endif %}
     </div>
-    <p class="thread-post-content">{{ post.content|at(post.ats)|raw }}</p>
+    <div class="editor-text">{{ post.content|at(post.ats)|raw }}</div>
     <div class="comment-sns">
       {% include 'TopxiaWebBundle:Thread:post-interaction.html.twig' %}
     </div>
     <div class="thread-subpost-container subcomments clearfix {% if not post.subposts %}hide{% endif %}">
-      {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId|default(0), postId:post.id, less:true})) }}
+      <div class="thread-subpost-content">
+        {{ render(controller('TopxiaWebBundle:Thread:subposts', {threadId: post.threadId|default(0), postId:post.id, less:true})) }}
+      </div>
       <div class="thread-subpost-morebar clearfix {% if not post.subposts %}hide{% endif %}">
         {% if service.canAccess('post.create', post) %}
           <button class="btn btn-default btn-xs pull-right js-toggle-subpost-form">我也说一句</button>
@@ -25,7 +27,7 @@
         <span class="thread-subpost-moretext {% if post.subposts <= 5 %}hide{% endif %}"><span class="text-muted">还有{{ post.subposts - 5 }}条回复，</span><a href="javascript:;" class="js-post-more">点击查看</a></span>
       </div>
 
-      {% if service.canAccess('post.create', post) %}
+      {% if service.canAccess('post.create', post) and app.user %}
         {% if not postReplyUrl is defined %}
           {% set postReplyUrl =  path('thread_post_reply', {threadId:post.threadId, postId:post.id}) %}
         {% endif %}
@@ -40,6 +42,10 @@
             <button type="submit" data-loading-text="正在发表" class="btn btn-primary btn-sm pull-right">发表</button>
           </div>
         </form>
+      {% else %}
+        <div class="empty">
+          你还没有登录，请先<a href="{{ path('login') }}">登录</a>或<a href="{{ path('register') }}">注册</a>！
+        </div>
       {% endif %}
 
     </div>

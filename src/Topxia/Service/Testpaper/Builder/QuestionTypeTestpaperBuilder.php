@@ -54,7 +54,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $this->canBuildWithQuestions($options, $typedQuestions);
     }
 
-    private function fillQuestionsToNeedCount($selectedQuestions, $allQuestions, $needCount)
+    protected function fillQuestionsToNeedCount($selectedQuestions, $allQuestions, $needCount)
     {
         $indexedQuestions = ArrayToolkit::index($allQuestions, 'id');
         foreach ($selectedQuestions as $question) {
@@ -76,7 +76,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $selectedQuestions;
     }
 
-    private function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
+    protected function selectQuestionsWithDifficultlyPercentage($difficultiedQuestions, $needCount, $percentages)
     {
         $selectedQuestions = array();
         foreach ($percentages as $difficulty => $percentage) {
@@ -95,10 +95,10 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $selectedQuestions;
     }
 
-    private function canBuildWithQuestions($options, $questions)
+    protected function canBuildWithQuestions($options, $questions)
     {
         $missing = array();
-
+        
         foreach ($options['counts'] as $type => $needCount) {
             $needCount = intval($needCount);
             if ($needCount == 0) {
@@ -112,7 +112,9 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
             if ($type == "material"){
                 $validatedMaterialQuestionNum = 0;
                 foreach ($questions["material"] as $materialQuestion ){
-                    if ($materialQuestion['subCount'] > 0){$validatedMaterialQuestionNum += 1;}
+                    if ($materialQuestion['subCount'] > 0){
+                        $validatedMaterialQuestionNum += 1;
+                    }
                 }               
                 if ($validatedMaterialQuestionNum < $needCount){
                     $missing["material"] = $needCount - $validatedMaterialQuestionNum;
@@ -131,10 +133,10 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return array('status' => 'no', 'missing' => $missing);
     }
 
-    private function getQuestions($options)
+    protected function getQuestions($options)
     {
         $conditions = array();
-
+        $options['ranges']=array_filter($options['ranges']);
         if (!empty($options['ranges'])) {
             $conditions['targets'] = $options['ranges'];
         } else {
@@ -144,11 +146,11 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         $conditions['parentId'] = 0;
 
         $total = $this->getQuestionService()->searchQuestionsCount($conditions);
-
+        
         return $this->getQuestionService()->searchQuestions($conditions, array('createdTime', 'DESC'), 0, $total);
     }
 
-    private function convertQuestionsToItems($testpaper, $questions, $count, $options)
+    protected function convertQuestionsToItems($testpaper, $questions, $count, $options)
     {
         $items = array();
         for ($i=0; $i<$count; $i++) {
@@ -167,7 +169,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         return $items;
     }
 
-    private function makeItem($testpaper, $question, $score, $missScore)
+    protected function makeItem($testpaper, $question, $score, $missScore)
     {
         return array(
             'testId' => $testpaper['id'],
@@ -179,7 +181,7 @@ class QuestionTypeTestpaperBuilder extends BaseService implements TestpaperBuild
         );
     }
 
-    private function getQuestionService()
+    protected function getQuestionService()
     {
         return $this->createService('Question.QuestionService');
     }

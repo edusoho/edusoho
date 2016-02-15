@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
     var Uploader = require('upload');
-    require('ckeditor');
+    require('es-ckeditor');
 
     exports.run = function() {
 

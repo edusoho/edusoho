@@ -4,10 +4,11 @@ namespace Topxia\Service\Order\Dao;
 
 interface OrderDao
 {
-
     public function getOrder($id);
 
     public function getOrderBySn($sn);
+
+    public function getOrderByToken($token);
 
     public function findOrdersByIds(array $ids);
 
@@ -21,7 +22,7 @@ interface OrderDao
 
     public function countUserBillNum($conditions);
 
-    public function sumOrderAmounts($startTime,$endTime,array $courseId);
+    public function sumOrderAmounts($startTime, $endTime, array $courseId);
 
     public function searchOrderCount($conditions);
 
@@ -29,16 +30,24 @@ interface OrderDao
 
     public function sumCouponDiscountByOrderIds($orderIds);
 
-    public function analysisCourseOrderDataByTimeAndStatus($startTime,$endTime,$status);
+    public function analysisCourseOrderDataByTimeAndStatus($startTime, $endTime, $status);
 
-    public function analysisPaidCourseOrderDataByTime($startTime,$endTime);
+    public function analysisPaidCourseOrderDataByTime($startTime, $endTime);
+
+    public function analysisPaidClassroomOrderDataByTime($startTime, $endTime);
 
     public function analysisAmount($conditions);
 
-    public function analysisAmountDataByTime($startTime,$endTime);
+    public function analysisTotalPrice($conditions);
 
-    public function analysisCourseAmountDataByTime($startTime,$endTime);
+    public function analysisAmountDataByTime($startTime, $endTime);
 
-    public function analysisExitCourseOrderDataByTime($startTime,$endTime);
+    public function analysisCourseAmountDataByTime($startTime, $endTime);
+
+    public function analysisClassroomAmountDataByTime($startTime, $endTime);
+
+    public function analysisVipAmountDataByTime($startTime, $endTime);
+
+    public function analysisExitCourseOrderDataByTime($startTime, $endTime);
 
 }

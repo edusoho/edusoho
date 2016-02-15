@@ -85,10 +85,9 @@ class ThemeRegisterCommand extends BaseCommand
             throw new \RuntimeException("插件元信息文件{$metaFile}格式不符合JSON规范，解析失败，请检查元信息文件格式");
         }
 
-        if (empty($meta['code']) or empty($meta['name']) or empty($meta['version'])) {
+        if (empty($meta['code']) || empty($meta['name']) || empty($meta['version'])) {
             throw new \RuntimeException("插件元信息必须包含code、name、version属性");
         }
-
         if ($meta['code'] != $code) {
             throw new \RuntimeException("插件元信息code的值`{$meta['code']}`不正确，应为`{$code}`。");
         }

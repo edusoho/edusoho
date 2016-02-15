@@ -2,45 +2,61 @@
 
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
-{% block stylesheets %}
-   {{ parent() }}
-   <link rel="stylesheet" media="screen" href="{{ asset('assets/libs/jquery-plugin/perfect-scrollbar/0.4.8/perfect-scrollbar.css') }}" />
-{% endblock %}
-
 {% set hideSetupHint = true %}
 
 {% if is_plugin_installed('Homework') %}
-  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material', 'homework']}  %}
+  {% set script_arguments = {customChapter: setting('course.custom_chapter_enabled')|default(true), plugins: ['lesson', 'question', 'note', 'material', 'homework']}  %}
 {% else %}  
-  {% set script_arguments = {plugins: ['lesson', 'question', 'note', 'material']}  %}
+  {% set script_arguments = {customChapter: setting('course.custom_chapter_enabled')|default(true), plugins: ['lesson', 'question', 'note', 'material']}  %}
 {% endif %}
 
 {% set script_controller = 'course/learn' %}
 {% set bodyClass = 'lesson-dashboard-page' %}
 
+{% block stylesheets %}
+  {{ parent() }}
+{% endblock %}
+
 {% block header %}{% endblock %}
 {% block footer %}{% endblock %}
-
-{% block full_content %}       
+{% block esBar %}{% endblock %}
+{% block full_content %}
   <div class="lesson-dashboard" id="lesson-dashboard"
     data-course-id="{{ course.id }}"
     data-course-uri="{{ path('course_show', {id:course.id}) }}"
     data-dashboard-uri="{{ path('course_learn', {id:course.id}) }}"
     data-watch-limit="{{ setting('magic.lesson_watch_limit') }}"
+    data-starttime = "{{starttime|default('')}}"
     data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
     <div class="dashboard-content">
-       <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
+      {% set classroom = data('GetClassroomByCourseId',{courseId:course.id}) %}
+      {% if classroom %}
+        <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('classroom_show', {id:classroom.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回班级</a>
+      {% else %}
+        <a class="btn btn-primary  nav-btn back-course-btn" href="{{ path('course_show', {id:course.id}) }}"><span class="glyphicon glyphicon-chevron-left" ></span> 返回课程</a>
+      {% endif %}
+       
        <a class="btn btn-primary  nav-btn prev-lesson-btn" href="javascript:" data-role="prev-lesson" data-placement="right" title="上一课时"><span class="glyphicon glyphicon-chevron-up" title="上一课时"></span></a>
        <a class="btn btn-primary nav-btn next-lesson-btn" href="javascript:" data-role="next-lesson" data-placement="right" title="下一课时"><span class="glyphicon glyphicon-chevron-down"></span></a>
 
       <div class="dashboard-header">
         <div class="pull-left title-group">
-          <span class="chapter-label">第<span data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}</span>
+          <span class="chapter-label">
+            {% if not setting('course.custom_chapter_enabled')|default(true)%}
+              <span data-role="custom-chapter-number">第{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}</span></span>
+            {% else %}
+              第<span data-role="chapter-number"></span>{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}</span>
+            {% endif %}
           <span class="divider">&raquo;</span>
-          <span class="chapter-label">第<span data-role="unit-number"></span>{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}</span>
+          <span class="chapter-label">
+            {% if not setting('course.custom_chapter_enabled')|default(true)%}
+              <span data-role="custom-unit-number">第{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}</span></span>
+            {% else %}
+              第<span data-role="unit-number"></span>{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}</span>
+            {% endif %}
           <span class="divider">&raquo;</span>
-          <span class="item-label">课时<span data-role="lesson-number">正在加载...</span></span>
-          <span class="item-title" data-role="lesson-title"></span>
+          <span class="item-label">{% if  setting('course.custom_chapter_enabled')|default(true)%}课时<span data-role="lesson-number"></span>{% endif %}</span>
+          <span class="item-title" data-role="lesson-title">正在加载...</span>
         </div>
       </div>
 
@@ -50,9 +66,10 @@
             data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}
           {% if setting('storage.video_fingerprint') and app.user %}
-            data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+            data-fingerprint="{{ finger_print() }}"
           {% endif %}
             data-user-id="{{ app.user.id }}"
+            data-balloon-player="1"
         ></div>
         <div class="watermarkEmbedded" ></div>
 
@@ -99,6 +116,16 @@
       <div class="toolbar-nav">
 
         <ul class="toolbar-nav-stacked" id="lesson-toolbar-primary"></ul>
+        <ul class="list-unstyled">
+          <li class="es-qrcode toolbar-qrcode" data-url="{{path('course_show',{id: course.id})}}">
+            <i class="es-icon es-icon-qrcode"></i><br>
+            扫一扫
+            <span class="qrcode-popover">
+              <img src="" alt="">
+              扫二维码继续学习
+            </span>
+          </li>
+        </ul>
         <ul class="toolbar-nav-stacked" id="lesson-toolbar-secondary">
           <li class="hide-pane" style="display:none;">
             <a href="javascript:"><span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -157,4 +184,6 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
 
+
 {% endblock %}
+

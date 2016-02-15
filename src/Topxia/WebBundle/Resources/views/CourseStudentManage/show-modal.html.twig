@@ -15,7 +15,14 @@
 
 	<tr>
 		<th>Email</th>
-		<td>{{ user.email }}</td>
+		<td>
+		  {% set emailArr = user.email|split('@') %}
+	      {% if emailArr[1] != 'edusoho.net' %}
+	        {{ user.email }}
+	      {% else %}
+	        暂无
+	      {% endif %}
+		</td>
 	</tr>
 
 	<tr>
@@ -30,7 +37,7 @@
 	</tr>
 
 	<tr>
-		<th>姓别</th>
+		<th>性别</th>
 		<td>
 			{% if profile.gender == 'mail' %}
 				男

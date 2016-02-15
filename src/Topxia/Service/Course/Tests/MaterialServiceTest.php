@@ -31,7 +31,7 @@ class MaterialServiceTest extends BaseTestCase
 
     }
 
-    private function createUser()
+    protected function createUser()
     {
         $user = array();
         $user['email'] = "user@user.com";
@@ -40,7 +40,7 @@ class MaterialServiceTest extends BaseTestCase
         return $this->getUserService()->register($user);
     }
 
-    private function createCourse(){
+    protected function createCourse(){
         $course = array(
             'type'=>'offline',
             'price' => 1000,
@@ -54,17 +54,18 @@ class MaterialServiceTest extends BaseTestCase
         return $this->getCourseService()->createCourse($course);
     }
 
-    private function getUserService()
+
+    protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getCourseService()
+    protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getMaterialService()
+    protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
     }

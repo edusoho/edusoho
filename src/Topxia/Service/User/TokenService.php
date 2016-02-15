@@ -27,11 +27,14 @@ interface TokenService
      * @return boolean 该Token值是否OK
      */
     public function verifyToken($type, $value);
-
     /**
      * 作废一个Token
      * 
      * @param  [type] $value 要摧毁的Token的值
      */
     public function destoryToken($value);
+
+    public function deleteExpiredTokens($limit);
+
+    public function findTokensByUserIdAndType($userId, $type);
 }

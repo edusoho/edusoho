@@ -8,12 +8,12 @@
 
   <div class="course-detail-content">
 
-    {% if not member %}
+		{% if not member %}
       <div class="es-piece">
         <div class="piece-header">
           课程介绍
         </div>
-        <div class="piece-body p-lg">
+        <div class="piece-body p-lg clearfix">
           {% if course.about %}
             {{ course.about|raw }}
           {% else %}
@@ -55,15 +55,15 @@
           </div>
         </div>
       {% endif %}
-    {% endif %}
 
-    <div class="es-piece">
-      <div class="piece-header">课时列表</div>
-      <div class="piece-body">
-        {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
-        
-      </div>
-    </div>
+    {% else %}
+			<div class="es-piece">
+	      <div class="piece-body">
+	        {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
+	        
+	      </div>
+	    </div>
+    {% endif %}
     
   </div>
 

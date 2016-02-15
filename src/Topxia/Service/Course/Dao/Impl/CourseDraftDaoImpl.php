@@ -36,10 +36,41 @@ class CourseDraftDaoImpl extends BaseDao implements CourseDraftDao
         return $this->findCourseDraft($courseId,$lessonId, $userId);
     }
 
+    public function searchDraftCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchDrafts($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+        ->select('*')
+        ->orderBy($orderBy[0], $orderBy[1])
+        ->setFirstResult($start)
+        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
     public function deleteCourseDrafts($courseId,$lessonId, $userId)
     {
         $sql = "DELETE FROM {$this->draftTable} WHERE courseId = ? AND lessonId = ? AND userId = ?";
         return $this->getConnection()->executeUpdate($sql, array($courseId,$lessonId, $userId));
+    }
+
+    public function deleteDraft($id)
+    {
+        return $this->getConnection()->delete($this->draftTable, array('id' => $id));
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {   
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'course_draft')
+            ->andWhere('courseId = :courseId');
+        return $builder;
     }
 
 }

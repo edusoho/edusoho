@@ -1,98 +1,61 @@
-{#% extends 'TopxiaWebBundle:My:layout.html.twig' %#}
 {% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
-{# {% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %} #}
-{% block title %}我的{#虚拟币#}{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
+{% block title %}我的{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-coin' %}
 
 {% block main %}
-{# <div class="panel panel-default panel-col"> #}
-<div class="panel panel-default panel-col my-wallet-panel">
-
-  {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
-{#   <div class="panel-heading">
-    我的{{setting('coin.coin_name')}}
-  </div> #}
-  <div class="panel-heading" style="font-weight:normal;">
-    {# 账户余额: #}
-    <span class="label label-default">账户余额</span>
+  <div class="es-section h400">
+    {% include 'TopxiaWebBundle:Coin:bill-bar.html.twig' %}
+    <span class="label label-primary label-md">账户余额</span>
     {% if setting('coin.coin_content') %}
       <a href="/coin/show" target="_blank" class="pull-right">{{setting('coin.coin_name')}}说明</a>
     {% endif %}
     <br>
-    <div class="row">
-
-
-      
-{#         <div class="col-md-offset-2" style="font-weight:400;">
-         
-       {% if setting('coin.coin_picture') %}
-          <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="50px" >
+    <div class="coin-block clearfix">
+      <div class="coin-text">
+        {% if setting('coin.coin_picture') %}
+          <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="30px" >
         {% endif %}
+        <strong>{{account.cash|default(0)}}</strong>
+      </div>
 
-          <strong style="font-size:28px;">{{account.cash|default(0)}}</strong>
-            {{setting('coin.coin_name')}}
- #}
-        <div class="coin-block">
-            <div class="coin-text">
-              {% if setting('coin.coin_picture') %}
-                <img class="coin-picture" src="{{asset(setting('coin.coin_picture')) }}" alt="虚拟币图片" width="30px" >
-              {% endif %}
-              <strong>{{account.cash|default(0)}}</strong>
-              <!-- {{setting('coin.coin_name')}} -->
-            </div>
-
-
-             {% if setting('coin.coin_enabled') %}
-                <div class="coin-btn">
-                  {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') %}
-                    {# <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-default"  style="color: #428bca;" > &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a> #}
-                    <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-primary" {# style="color: #428bca;" #}> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
-
-                  {% endif %}
-                  {% if is_plugin_installed('MoneyCard') %}
-                    <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default" {# style="color: #428bca;" #}>使用学习卡</a>
-                  {% endif %}
-                </div>
-            {% endif %}
+      {% if setting('coin.coin_enabled') %}
+        <div class="coin-btn">
+          {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') %}
+            <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-primary"> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
+          {% endif %}
+          {% if is_plugin_installed('MoneyCard') %}
+            <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default">使用学习卡</a>
+          {% endif %}
         </div>
-
+      {% endif %}
     </div>
-
-  </div>
-  <div class="panel-body">
-   <ul class="nav nav-pills" role="tablist">
-     <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>
-
+    <hr>
+    <ul class="nav nav-pills" role="tablist">
+      <li role="presentation" {% if app.request.query.get('type') != "inflow" and app.request.query.get('type') != "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:''})}}">全部记录</a></li>
       <li role="presentation" {% if app.request.query.get('type') == "inflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'inflow'})}}">充值记录</a></li>
       <li role="presentation" {% if app.request.query.get('type') == "outflow" %}class="active"{% endif %}><a href="{{path('my_coin',{type:'outflow'})}}">消费记录</a></li>
     </ul>
-
-  {#  {% if not(app.request.query.get('type') == "inflow" or app.request.query.get('type') == "outflow")  %} #} 
     <br>
-      <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate> 
-        <div class="form-group"> 
-          <input type="hidden" name="type" value="{{ app.request.query.get('type')|default('') }}">
-                  
-          <select class="form-control" name="lastHowManyMonths" onchange="submit();"> 
-               {% set options = {'':'全部记录','oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月'} %}
-            {{ select_options(options, app.request.get('lastHowManyMonths')) }} 
-          </select> 
-        </div> 
+    <form id="user-search-form" class="form-inline well well-sm clearfix" action="" method="get" novalidate> 
+      <div class="form-group"> 
+        <input type="hidden" name="type" value="{{ app.request.query.get('type')|default('') }}">
+        <select class="form-control" name="lastHowManyMonths" onchange="submit();"> 
+          {% set options = {'':'全部记录','oneWeek':'最近一周','twoWeeks':'最近两周','oneMonth':'最近一个月','twoMonths':'最近两个月','threeMonths':'最近三个月'} %}
+          {{ select_options(options, app.request.get('lastHowManyMonths')) }} 
+        </select> 
+      </div> 
 
-       {# <button class="btn btn-primary">搜索</button>#}
-        <div class="control-label pull-right" style="padding-top: 8px;">
-           {% if app.request.query.get('type') != "outflow"  %}
-            收入：<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}
-           {% endif %}
-           {% if app.request.query.get('type') != "inflow"  %}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
-           {% endif %}
-        </div>
-      </form>
-  {#  {% endif %} #}
-
+      <div class="control-label pull-right" style="padding-top: 8px;">
+        {% if app.request.query.get('type') != "outflow"  %}
+          收入：<span style="color:#1bb974;">{{ amountInflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+        {% endif %}
+        {% if app.request.query.get('type') != "inflow"  %}
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          支出：<span style="color:#ff7b0e;">{{ amountOutflow }}</span>&nbsp;{{setting('coin.coin_name')}}
+        {% endif %}
+      </div>
+    </form>
     <br>
     <div class="table-responsive">
       <table class="table table-striped">
@@ -105,7 +68,7 @@
           <th><span class="text-sm">支付方式</span></th>
         </tr>
         {% for cash in cashes %}
-           <tr>
+          <tr>
             <td><span class="text-sm">{{cash.sn}}</span></td>
             <td><span class="text-sm">{{cash.name}}</span><br>
                 <span class="text-muted text-sm">订单号：{{cash.orderSn}}</span></td>            
@@ -124,31 +87,26 @@
 
             <td>
               <span class="text-sm">
-                {% if cash.cashType == "RMB" %}
-                支付宝支付
-                {% elseif cash.cashType == "Coin" and cash.category == "inflow" %}
+                {% if cash.cashType == "Coin" and cash.category == "inflow" %}
                 学习卡充值
                 {% elseif cash.cashType == "Coin" and cash.category == "change" %}
-                支付宝支付
+                  {{ dict_text('payment', cash.payment) }}
                 {% elseif cash.category == "moneyCardRecharge" %}
                 学习卡
                 {% else %}
-                余额支付                
+                余额支付             
                 {% endif %}
               </span>
             </td>
           </tr>
         {% endfor %}
         {% else %}
-        <div class="empty">暂无记录</div>
+          <div class="empty">暂无记录</div>
         {% endif %}
       </table>
     </div>
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}
     </nav>
-
   </div>
-</div>
-
 {% endblock %}

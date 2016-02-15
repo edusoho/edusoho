@@ -14,7 +14,7 @@ class UploadFileServiceTest extends BaseTestCase
        $this->assertNull(null);
     }
 
-	private function getUploadFileService()
+	protected function getUploadFileService()
 	{
 		return $this->getServiceKernel()->createService('File.UploadFileService');
 	}

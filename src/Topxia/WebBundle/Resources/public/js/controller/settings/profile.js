@@ -3,7 +3,7 @@
     var Validator = require('bootstrap.validator');
     require("jquery.bootstrap-datetimepicker");
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    require('es-ckeditor');
 
     exports.run = function() {
 
@@ -12,14 +12,14 @@
             filebrowserImageUploadUrl: $('#profile_about').data('imageUploadUrl')
         });
 
-        $('.text').each(function() {
-            var id = $(this).attr('id');
-            CKEDITOR.replace(id, {
-                toolbar: 'Simple',
-                filebrowserImageUploadUrl: $(this).data('imageUploadUrl'),
-                height: 100
-            });
-        });
+        // $('.text').each(function() {
+        //     var id = $(this).attr('id');
+        //     CKEDITOR.replace(id, {
+        //         toolbar: 'Simple',
+        //         filebrowserImageUploadUrl: $(this).data('imageUploadUrl'),
+        //         height: 100
+        //     });
+        // });
 
         $(".date").datetimepicker({
             language: 'zh-CN',
@@ -42,6 +42,12 @@
         validator.addItem({
             element: '[name="profile[truename]"]',
             rule: 'chinese minlength{min:2} maxlength{max:12}'
+        });
+
+        validator.addItem({
+            element: '[name="profile[title]"]',
+            rule: 'chinese_limit{max:24}',
+            display:'头衔'
         });
 
         validator.addItem({

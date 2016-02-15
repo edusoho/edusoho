@@ -37,11 +37,11 @@ class MobileOrderController extends MobileController
                 return $this->createJson($request, array('status' => 'error', 'message' => '支付宝支付未开启！'));
             }
 
-            if (empty($payment['alipay_key']) or empty($payment['alipay_secret']) or empty($payment['alipay_account'])) {
+            if (empty($payment['alipay_key']) || empty($payment['alipay_secret']) || empty($payment['alipay_account'])) {
                 return $this->createJson($request, array('status' => 'error', 'message' => '支付宝参数不正确！'));
             }
 
-            if (empty($payment['alipay_type']) or $payment['alipay_type'] != 'direct') {
+            if (empty($payment['alipay_type']) || $payment['alipay_type'] != 'direct') {
                 $result = array('status' => 'ok', 'paid' => false, 'payUrl' => $this->generateUrl('mapi_order_submit_pay_request', array('id' => $order['id'], 'token' => $token['token']), true));
             } else {
                 $result = array('status' => 'ok', 'paid' => false, 'payUrl' => MobileAlipayConfig::createAlipayOrderUrl($request, "edusoho", $order));
@@ -75,7 +75,7 @@ class MobileOrderController extends MobileController
             'notifyUrl' => $this->generateUrl('pay_notify', array('name' => $order['payment']), true),
             'showUrl' => $this->generateUrl('pay_success_show', array('id' => $order['targetId']), true),
         );
-var_dump($payRequestParams);
+        
         return $this->forward('TopxiaWebBundle:Order:submitPayRequest', array(
             'order' => $order,
             'requestParams' => $payRequestParams,
@@ -88,7 +88,7 @@ var_dump($payRequestParams);
         $user = $this->getCurrentUser();
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         
-        if (empty($member) or empty($member['orderId'])) {
+        if (empty($member) || empty($member['orderId'])) {
             return $this->createErrorResponse($request, 'not_member', '您不是课程的学员或尚未购买该课程，不能退学。');
         }
 

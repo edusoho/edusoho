@@ -7,28 +7,6 @@ mapi_mobile_teacher_app:
     pattern:  /teacherApp
     defaults: { _controller: TopxiaMobileBundleV2:TeacherApp:index }
 
-mapi_mobile_group_app:
-    pattern:  /groupApp
-    defaults: { _controller: TopxiaMobileBundleV2:GroupApp:index }
-
-mapi_mobile_article_app:
-    pattern:  /articleApp
-    defaults: { _controller: TopxiaMobileBundleV2:ArticleApp:index }
-
-mapi_mobile_article_app_list:
-    path:     /articleApp/list
-    defaults: { _controller: TopxiaMobileBundleV2:ArticleApp:list }
-    methods: [GET, POST]
-
-mapi_mobile_article_app_category:
-    path:     /articleApp/category
-    defaults: { _controller: TopxiaMobileBundleV2:ArticleApp:category }
-    methods: [GET, POST]
-
-mapi_mobile_article_detail_list:
-    path:     /articleApp/detail/{id}
-    defaults: { _controller: TopxiaMobileBundleV2:ArticleApp:detail }
-
 topxia_mobile_alipay_notify:
     pattern:  /pay/{name}/alipay_notify
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payNotify }
@@ -37,9 +15,25 @@ topxia_mobile_alipay_pay:
     pattern:  /alipay_pay
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:pay }
 
+topxia_mobile_alipay_merchant:
+    pattern:  /pay/{name}/alipay_merchant
+    defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payMerchant}
+
 topxia_mobile_alipay_callback:
     pattern:  /pay/{name}/alipay_callback
     defaults: { _controller: TopxiaMobileBundleV2:MobileAlipay:payCallBack }
+
+mapi_mobile_esmobile_app:
+    pattern:  /mobile/main
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:index }
+
+mapi_mobile_esmobile_app_version:
+    pattern:  /mobile/main/version
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:version }
+
+mapi_mobile_esmobile_app_resource:
+    pattern:  /mobile/{code}/resource
+    defaults: { _controller: TopxiaMobileBundleV2:MobileApp:resource }
 
 mapi_mobile_api:
     pattern:  /{service}/{method}

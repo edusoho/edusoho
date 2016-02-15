@@ -7,14 +7,14 @@ define(function(require, exports, module) {
         var imageCrop = new ImageCrop({
             element: "#default-avatar-crop",
             group: 'system',
-            cropedWidth: 200,
-            cropedHeight: 200
+            cropedWidth: 270,
+            cropedHeight: 270
         });
 
         imageCrop.on("afterCrop", function(response){
             var url = $("#upload-picture-btn").data("url");
             $.post(url, {images: response}, function(){
-                history.go(-1);
+                document.location.href=$("#upload-picture-btn").data("gotoUrl");
             });
         });
 
@@ -23,7 +23,7 @@ define(function(require, exports, module) {
 
             imageCrop.crop({
                 imgs: {
-                    'avatar.png': [200, 200]
+                    'avatar.png': [270, 270]
                 }
             });
 

@@ -49,19 +49,21 @@ define(function(require, exports, module) {
 		}
 
 		if (error.name == 'Unlogin') {
-			$('.modal').modal('hide');
+			var $loginModal = $("#login-modal");
 
-			$("#login-modal").modal('show');
-			$.get($('#login-modal').data('url'), function(html){
-				$("#login-modal").html(html);
-			});
+			$('.modal').modal('hide');
+        
+	        $loginModal.modal('show');
+	        $.get($loginModal.data('url'), function(html){
+	            $loginModal.html(html);
+	        });
 		}
 	});
 
 	if ($('html').hasClass('lt-ie8')) {
 		var message = '<div class="alert alert-warning" style="margin-bottom:0;text-align:center;">';
-		message += '您的浏览器版本太低，不能正常使用本站，请使用';
-		message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">IE8浏览器</a>、';
+		message += '由于您的浏览器版本太低，将无法正常使用本站点，请使用最新的';
+		message += '<a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie" target="_blank">IE浏览器</a>、';
 		message += '<a href="http://www.baidu.com/s?wd=%E8%B0%B7%E6%AD%8C%E6%B5%8F%E8%A7%88%E5%99%A8" target="_blank">谷歌浏览器</a><strong>(推荐)</strong>、';
 		message += '<a href="http://firefox.com.cn/download/" target="_blank">Firefox浏览器</a>，访问本站。';
 		message += '</div>';
@@ -79,42 +81,6 @@ define(function(require, exports, module) {
         $.post(app.scheduleCrontab);
     }
     
-    floatConsult();
-
-    function floatConsult()
-    {
-        var $element = $('#float-consult');
-        if ($element.length == 0) {
-            return ;
-        }
-
-        if ($element.data('display') == 'off') {
-            return ;
-        }
-
-        var marginTop = (0 - $element.height() / 2) + 'px' ;
-
-        var isIE10 = /MSIE\s+10.0/i.test(navigator.userAgent)
-	    && (function() {"use strict";return this === undefined;}());
-
-	    var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
-
-    	if (isIE10 || isIE11) {
-	        $element.css( {marginTop: marginTop, visibility: 'visible',marginRight:'16px'});
-    	} else {
-	        $element.css( {marginTop: marginTop, visibility: 'visible'});
-    	}
-
-        $element.find('.btn-group-vertical .btn').popover({
-            placement: 'left',
-            trigger: 'hover',
-            html: true,
-            content: function() {
-                return $($(this).data('contentElement')).html();
-            }
-        });
-    }
-
     $("i.hover-spin").mouseenter(function() {
     	$(this).addClass("md-spin");
     }).mouseleave(function() {
@@ -134,7 +100,8 @@ define(function(require, exports, module) {
                 speed: 300,
                 loop: true,
                 mode: 'vertical',
-                autoplay: 5000
+                autoplay: 5000,
+                calculateHeight: true
             });
         }
 
@@ -142,16 +109,36 @@ define(function(require, exports, module) {
     		Cookie.set("close_announcements_alert",'true',{path: '/'});
     	});
     }
-
-   
-    $("li.nav-hover").mouseenter(function(event) {
-        $(this).addClass("open");
-    }).mouseleave(function(event) {
-        $(this).removeClass("open");
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+        if($('.weixin-alert.hide'))
+            $('.weixin-alert.hide').removeClass('hide');
+    };
+    
+    $(".weixin-alert .close").click(function(){
+        Cookie.set("close_weixin_alert",'true',{path: '/'});
     });
 
-    if ($('[data-toggle="tooltip"]').length > 0) {
-        $('[data-toggle="tooltip"]').tooltip();
+   	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+	    $("li.nav-hover").mouseenter(function(event) {
+	        $(this).addClass("open");
+	    }).mouseleave(function(event) {
+	        $(this).removeClass("open");
+	    });
+	    
+	} else {
+		$("body").on("click","li.nav-hover",function(){
+			$(this).toggleClass("open");
+		})
+
+		if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
+			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
+		}
+	}
+	
+
+    if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
+        $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
     }
 
     $(".js-search").focus(function () {
@@ -159,5 +146,10 @@ define(function(require, exports, module) {
     }).blur(function () {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
+
+    if($(".nav.nav-tabs").length > 0) {
+        require('jquery.lavalamp');
+        $(".nav.nav-tabs").lavaLamp();
+    }
 
 });

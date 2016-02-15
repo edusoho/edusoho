@@ -31,6 +31,8 @@ class CourseController extends BaseController
 
         $previewLesson = $this->getCourseService()->searchLessons(array('courseId' => $course['id'], 'type' => 'video', 'free' => 1), array('seq', 'ASC'), 0, 1);
 
+        $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($course['categoryId']);
+
         return $this->render('TopxiaWebBundle:Course:Part/normal-header.html.twig', array(
             'course' => $course,
             'member' => $member,
@@ -40,17 +42,18 @@ class CourseController extends BaseController
             'nextLearnLesson' => $nextLearnLesson,
             'learnProgress' => $learnProgress,
             'previewLesson' => empty($previewLesson) ? null : $previewLesson[0],
+            'breadcrumbs' => $breadcrumbs
         ));
     }
 
     public function teachersAction($course)
     {
         $course = $this->getCourse($course);
-        $teachers_no_sort = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $teachersNoSort = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
         $teachers = array();
         foreach ($course['teacherIds'] as $key => $teacherId) {
-            $teachers[$teacherId] = $teachers_no_sort[$teacherId];
+            $teachers[$teacherId] = $teachersNoSort[$teacherId];
         }
         
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-teachers.html.twig', array(
@@ -68,12 +71,19 @@ class CourseController extends BaseController
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-students.html.twig', array(
             'course' => $course,
             'students' => $students,
+            'members' => $members
         ));
     }
 
     public function belongClassroomsAction($course)
     {
         $classrooms = $this->getClassroomService()->findClassroomsByCourseId($course['id']);
+
+        foreach ($classrooms as $key => $classroom) {
+            if($classroom["status"] != "published"){
+                unset($classrooms[$key]);
+            }
+        }
 
         return $this->render('TopxiaWebBundle:Course:Part/normal-sidebar-belong-classrooms.html.twig', array(
             'course' => $course,
@@ -95,13 +105,20 @@ class CourseController extends BaseController
         $classrooms = array();
         $classrooms = array_merge($classrooms, array_values($this->getClassroomService()->findClassroomsByCourseId($course['id'])));
         $belongCourseClassroomIds = ArrayToolkit::column($classrooms, 'id');
-
+        $conditions = array(
+            'categoryIds' => array($course['categoryId']),
+            'showable' => 1
+            );
         if ($course['categoryId'] > 0) {
-            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('categoryIds' => array($course['categoryId']),'private' => 0), array('recommendedSeq', 'ASC'), 0, 8));
+            $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 8));
         }
+        $conditions = array(
+            'recommended' => 1,
+            'showable' => 1, 
+            'status'=>'published'
+            );
 
-
-        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms(array('recommended' => 1,'private' => 0), array('recommendedSeq', 'ASC'), 0, 11));
+        $classrooms = array_merge($classrooms, $this->getClassroomService()->searchClassrooms($conditions, array('recommendedSeq', 'ASC'), 0, 11));
 
         $recommends = array();
         foreach ($classrooms as $key =>  $classroom) {
@@ -117,7 +134,9 @@ class CourseController extends BaseController
                 $classroom['belogCourse'] = true;
             }
 
-            $recommends[$classroom['id']] = $classroom;
+            if($classroom['status'] == 'published') {
+                $recommends[$classroom['id']] = $classroom;
+            }
         }
 
         return $this->render('TopxiaWebBundle:Course/Part:normal-header-recommend-classrooms.html.twig', array(
@@ -164,6 +183,11 @@ class CourseController extends BaseController
     protected function getVipService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.VipService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
     }
 
     protected function calculateUserLearnProgress($course, $member)

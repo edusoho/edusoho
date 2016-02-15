@@ -6,6 +6,6 @@ interface MoneyService {
 
 	public function searchMoneyRecordsCount($conditions);
 
-	public function searchMoneyRecords($conditions, $sort = 'latest', $start, $limit);
+	public function searchMoneyRecords($conditions, $sort, $start, $limit);
 
 }

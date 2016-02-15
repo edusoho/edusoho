@@ -3,7 +3,7 @@
 namespace Topxia\AdminBundle\Controller;
 
 use Topxia\WebBundle\Controller\BaseController as WebBaseController;
-use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class BaseController extends WebBaseController
 {
@@ -15,7 +15,7 @@ class BaseController extends WebBaseController
         }
 
         $disableds = $this->container->getParameter('disabled_features');
-        if (!is_array($disableds) or empty($disableds)) {
+        if (!is_array($disableds) || empty($disableds)) {
             return array();
         }
 
@@ -27,7 +27,7 @@ class BaseController extends WebBaseController
         $settingService = $this->getServiceKernel()->createService('System.SettingService');
 
         if (empty($info)) {
-            $api = $this->createAPIClient();
+            $api = CloudAPIFactory::create('leaf');
             $info = $api->get('/me');
         }
 
@@ -42,16 +42,6 @@ class BaseController extends WebBaseController
                 $settingService->delete('copyright');
             }
         }
-    }
-
-    protected function createAPIClient()
-    {
-        $settings = $this->getServiceKernel()->createService('System.SettingService')->get('storage', array());
-        return new CloudAPI(array(
-            'accessKey' => empty($settings['cloud_access_key']) ? '' : $settings['cloud_access_key'],
-            'secretKey' => empty($settings['cloud_secret_key']) ? '' : $settings['cloud_secret_key'],
-            'apiUrl' => empty($settings['cloud_api_server']) ? '' : $settings['cloud_api_server'],
-        ));
     }
 
 }

@@ -8,33 +8,41 @@
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
-
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label >云视频</label>
-    </div>
-    <div class="controls col-md-8 radios">
-
-      {{ radios('upload_mode', {'local':'关闭', 'cloud':'开启'}, storageSetting.upload_mode) }}
-
+  {% if is_trial() %}
+    <div class="row form-group">
       <div class="help-block">
-        云视频，提供更快的视频播放速度，以及更低廉的网络流量价格。<br />
-        <strong class="text-info">如需使用云视频，请联系<a href="http://www.edusoho.com/services/cloudvideo" target="_blank">{{ 'Edusoho官方'|copyright_less }}</a></strong>。
+        </br></br>
+        <p style = "text-align:center;font-size:16px">视频托管服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a></p>
+        </br>
       </div>
-
     </div>
-  </div>
+    <hr>
+  {% else %}
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label >云视频</label>
+      </div>
+      <div class="controls col-md-8 radios">
 
+        {{ radios('upload_mode', {'local':'关闭', 'cloud':'开启'}, storageSetting.upload_mode) }}
 
-  <div class="row form-group">
-    <div class="col-md-3 control-label">
-      <label for="cloud_bucket" >云视频Bucket</label>
+        <div class="help-block">
+          EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+        </div>
+
+      </div>
     </div>
-    <div class="controls col-md-8 radios">
-      <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
-    </div>
-  </div>
 
+
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="cloud_bucket" >云视频Bucket</label>
+      </div>
+      <div class="controls col-md-8 radios">
+        <input type="text" id="cloud_bucket" class="form-control" name="cloud_bucket" value="{{storageSetting.cloud_bucket}}">
+      </div>
+    </div>
+  {% endif %}
   <div class="row form-group">
     <div class="col-md-3 control-label">
       <label for="cloud_bucket" >云视频转码类型</label>
@@ -121,7 +129,7 @@
     </div>  
     <div class="controls col-md-8 radios">
       {{ radios('video_fingerprint', {'0':'关闭', '1':'开启'}, storageSetting.video_fingerprint) }}
-      <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的昵称。</div>
+      <div class="help-block">开启后，将在视频播放中随机时间、随机位置显示当前网站域名及{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的用户名。</div>
     </div>
   </div>
   {% if storageSetting.upload_mode == 'cloud' %}

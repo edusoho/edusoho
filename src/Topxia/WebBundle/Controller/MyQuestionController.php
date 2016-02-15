@@ -129,17 +129,17 @@ class MyQuestionController extends BaseController
         ));
     }
 
-	private function getQuestionService ()
+	protected function getQuestionService ()
 	{
 		return $this->getServiceKernel()->createService('Question.QuestionService');
 	}
 
-	private function getCourseService ()
+	protected function getCourseService ()
 	{
 		return $this->getServiceKernel()->createService('Course.CourseService');
 	}
 
-    private function getTestpaperService()
+    protected function getTestpaperService()
     {
         return $this->getServiceKernel()->createService('Testpaper.TestpaperService');
     }

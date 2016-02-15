@@ -2,22 +2,17 @@
   >li {
     margin-right: 5px;
     >a {
-      padding: 6px 24px;
-      .border-radius(20px);
-      border: 1px solid @gray;
-      color: @gray;
+      padding: 10px 15px;
+      color: @gray-dark;
       .es-transition;
       &:hover {
-        background: none;
-        color: @brand-primary;
-        border-color: @brand-primary;
+        background-color: @gray-lighter;
         .es-transition;
       }
     }
     &.active {
       >a {
         color: #fff;
-        border-color: @brand-primary;
         background: @brand-primary;
         .es-transition;
       }

@@ -1,20 +1,19 @@
 <?php
 namespace Classroom\ClassroomBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\BaseController;
 
 class ClassroomAdminController extends BaseController
 {
-
-    public function IndexAction(Request $request)
+    public function indexAction(Request $request)
     {
         $fields = $request->query->all();
 
         $conditions = array(
-            'title' => '',
+            'title' => ''
         );
 
         if (!empty($fields)) {
@@ -28,42 +27,44 @@ class ClassroomAdminController extends BaseController
         );
 
         $classroomInfo = $this->getClassroomService()->searchClassrooms(
-                $conditions,
-                array('createdTime', 'desc'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
+            $conditions,
+            array('createdTime', 'desc'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
         );
 
         $classroomIds = ArrayToolkit::column($classroomInfo, 'id');
 
-        $coinPriceAll = array();
-        $priceAll = array();
+        $coinPriceAll        = array();
+        $priceAll            = array();
         $classroomCoursesNum = array();
 
         foreach ($classroomIds as $key => $value) {
-            $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
+            $courses                     = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
             $classroomCoursesNum[$value] = count($courses);
 
             $coinPrice = 0;
-            $price = 0;
+            $price     = 0;
+
             foreach ($courses as $course) {
                 $coinPrice += $course['coinPrice'];
                 $price += $course['price'];
             }
+
             $coinPriceAll[$value] = $coinPrice;
-            $priceAll[$value] = $price;
+            $priceAll[$value]     = $price;
         }
 
         $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classroomInfo, 'categoryId'));
 
         return $this->render('ClassroomBundle:ClassroomAdmin:index.html.twig', array(
-            'classroomInfo' => $classroomInfo,
-            'paginator' => $paginator,
+            'classroomInfo'       => $classroomInfo,
+            'paginator'           => $paginator,
             'classroomCoursesNum' => $classroomCoursesNum,
-            'priceAll' => $priceAll,
-            'coinPriceAll' => $coinPriceAll,
-            'categories' => $categories,
-            ));
+            'priceAll'            => $priceAll,
+            'coinPriceAll'        => $coinPriceAll,
+            'categories'          => $categories
+        ));
     }
 
     public function setAction(Request $request)
@@ -82,10 +83,6 @@ class ClassroomAdminController extends BaseController
 
     public function addClassroomAction(Request $request)
     {
-        if (!$this->setting('classroom.enabled')) {
-            return $this->createMessageResponse('info', '班级功能未开启，请先在 系统-课程设置-班级 中设置开启');
-        }
-
         if ($this->get('security.context')->isGranted('ROLE_ADMIN') !== true) {
             return $this->createMessageResponse('info', '目前只允许管理员创建班级!');
         }
@@ -100,6 +97,7 @@ class ClassroomAdminController extends BaseController
             $myClassroom = $request->request->all();
 
             $title = trim($myClassroom['title']);
+
             if (empty($title)) {
                 $this->setFlashMessage('danger', "班级名称不能为空！");
 
@@ -114,9 +112,14 @@ class ClassroomAdminController extends BaseController
                 return $this->render("ClassroomBundle:ClassroomAdmin:classroomadd.html.twig");
             }
 
+            if (!array_key_exists('buyable', $myClassroom)) {
+                $myClassroom['buyable'] = 0;
+            }
+
             $classroom = array(
-                'title' => $myClassroom['title'],
-                'private' => $myClassroom['private'],
+                'title'    => $myClassroom['title'],
+                'showable' => $myClassroom['showable'],
+                'buyable'  => $myClassroom['buyable']
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);
@@ -157,7 +160,7 @@ class ClassroomAdminController extends BaseController
     public function recommendAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->getClassroom($id);
-        $ref = $request->query->get('ref');
+        $ref       = $request->query->get('ref');
 
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
@@ -166,7 +169,7 @@ class ClassroomAdminController extends BaseController
 
             if ($ref == 'recommendList') {
                 return $this->render('ClassroomBundle:ClassroomAdmin:recommend-tr.html.twig', array(
-                    'classroom' => $classroom,
+                    'classroom' => $classroom
                 ));
             }
 
@@ -175,18 +178,18 @@ class ClassroomAdminController extends BaseController
 
         return $this->render('ClassroomBundle:ClassroomAdmin:recommend-modal.html.twig', array(
             'classroom' => $classroom,
-            'ref' => $ref,
+            'ref'       => $ref
         ));
     }
 
     public function cancelRecommendAction(Request $request, $id)
     {
         $classroom = $this->getClassroomService()->cancelRecommendClassroom($id);
-        $ref = $request->query->get('ref');
+        $ref       = $request->query->get('ref');
 
         if ($ref == 'recommendList') {
             return $this->render('ClassroomBundle:ClassroomAdmin:recommend-tr.html.twig', array(
-                'classroom' => $classroom,
+                'classroom' => $classroom
             ));
         }
 
@@ -196,8 +199,8 @@ class ClassroomAdminController extends BaseController
     public function recommendListAction()
     {
         $conditions = array(
-            'status' => 'published',
-            'recommended' => 1,
+            'status'      => 'published',
+            'recommended' => 1
         );
 
         $paginator = new Paginator(
@@ -217,34 +220,35 @@ class ClassroomAdminController extends BaseController
 
         return $this->render('ClassroomBundle:ClassroomAdmin:recommend-list.html.twig', array(
             'classrooms' => $classrooms,
-            'users' => $users,
-            'paginator' => $paginator,
-            'ref' => 'recommendList',
+            'users'      => $users,
+            'paginator'  => $paginator,
+            'ref'        => 'recommendList'
         ));
     }
 
     private function renderClassroomTr($id, $classroom)
     {
-        $coinPrice = 0;
-        $price = 0;
-        $coinPriceAll = array();
-        $priceAll = array();
-        $classroomCoursesNum = array();
-        $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
+        $coinPrice                = 0;
+        $price                    = 0;
+        $coinPriceAll             = array();
+        $priceAll                 = array();
+        $classroomCoursesNum      = array();
+        $courses                  = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
         $classroomCoursesNum[$id] = count($courses);
 
         foreach ($courses as $course) {
             $coinPrice += $course['coinPrice'];
             $price += $course['price'];
         }
+
         $coinPriceAll[$id] = $coinPrice;
-        $priceAll[$id] = $price;
+        $priceAll[$id]     = $price;
 
         return $this->render('ClassroomBundle:ClassroomAdmin:table-tr.html.twig', array(
-            'classroom' => $classroom,
+            'classroom'           => $classroom,
             'classroomCoursesNum' => $classroomCoursesNum,
-            'coinPriceAll' => $coinPriceAll,
-            'priceAll' => $priceAll,
+            'coinPriceAll'        => $coinPriceAll,
+            'priceAll'            => $priceAll
         ));
     }
 

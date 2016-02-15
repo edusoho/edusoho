@@ -365,3 +365,6 @@
   width: 14px;
   height: 14px;
 }
+body.modal-open .datetimepicker {
+  z-index: 1200 !important;
+}

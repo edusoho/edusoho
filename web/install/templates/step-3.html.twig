@@ -23,7 +23,7 @@
     </div>
 
     <div class="form-group">
-      <label for="nickname-field" class="col-sm-4 control-label">管理员昵称</label>
+      <label for="nickname-field" class="col-sm-4 control-label">管理员用户名</label>
       <div class="controls col-sm-5">
         <input type="text" class="form-control" id="nickname-field" name="nickname" value="{{ request.nickname|default('') }}">
       </div>
@@ -95,7 +95,7 @@
     validator.addItem({
         element: '#nickname-field',
         required: true,
-        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14}'
+        rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18}'
     });
 
     validator.addItem({

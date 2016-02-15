@@ -42,5 +42,36 @@ class NotificationDaoImpl extends BaseDao implements NotificationDao
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  userId = ? ";
         return $this->getConnection()->fetchColumn($sql, array($userId));
     }
+
+    public function searchNotifications($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->createNotificationQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ? : array();
+    }
+
+    public function searchNotificationCount($conditions)
+    {
+        $builder = $this->createNotificationQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function deleteNotification($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
+
+    protected function createNotificationQueryBuilder($conditions)
+    {
+        return  $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'notification')
+            ->andWhere('userId = :userId')
+            ->andWhere('type = :type');
+    }
     
 }

@@ -14,7 +14,7 @@ class CashOrdersDaoImplTest extends BaseTestCase
        $result = $this->getCashOrdersDao()->closeOrders($time);
     }
 
-    private function getCashOrdersDao()
+    protected function getCashOrdersDao()
     {
         return $this->getServiceKernel()->createDao('Cash.CashOrdersDao');
     }

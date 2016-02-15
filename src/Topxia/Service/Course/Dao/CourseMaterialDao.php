@@ -15,6 +15,8 @@ interface CourseMaterialDao
 
     public function addMaterial($material);
 
+    public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds);
+
     public function deleteMaterial($id);
 
     public function deleteMaterialsByLessonId($lessonId);
@@ -24,5 +26,4 @@ interface CourseMaterialDao
     public function getLessonMaterialCount($courseId,$lessonId);
 
     public function getMaterialCountByFileId($fileId);
-
 }

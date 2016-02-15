@@ -19,10 +19,8 @@
       <a href="javascript:">{{ author.nickname }}</a>
       <span class="bullet">•</span>
       <span class="text-muted">{{ post.createdTime|smart_time }}</span>
-
-
     </div>
-    <div class="thread-post-content">{{ post.content|raw }}</div>
+    <div class="editor-text">{{ post.content|raw }}</div>
     {% if app.user.id != author.id %}
     <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >回复</a></div>
     {% endif %}

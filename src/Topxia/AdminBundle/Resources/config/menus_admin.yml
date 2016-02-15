@@ -35,6 +35,10 @@ admin_operation_group:
     name: 小组管理
     parent: admin_operation
     router_name: admin_group
+admin_operation_invite:
+    name: 邀请管理
+    parent: admin_operation
+    router_name: admin_invite
 admin_operation_mobile_banner_manage:
     name: 轮播图设置
     parent: admin_operation_mobile
@@ -107,6 +111,10 @@ admin_operation_group_manage:
     name: 小组管理
     parent: admin_operation_group
     router_name: admin_group
+admin_operation_invite_manage:
+    name: 邀请管理
+    parent: admin_operation_invite
+    router_name: admin_invite
 admin_operation_group_thread:
     name: 话题管理
     parent: admin_operation_group
@@ -131,7 +139,7 @@ admin_live_course_add:
 admin_live_course:
     name: 直播管理
     parent: admin_course
-    router_params: {'status': 'underway'}
+    router_params: {'status': 'coming'}
 admin_course_thread:
     name: 话题管理
     parent: admin_course
@@ -196,9 +204,10 @@ admin_login_record:
 admin_teacher:
     name: 教师管理
     parent: admin_user
-admin_approval_approving:
+admin_approval_approvals:
     name: 实名认证管理
     parent: admin_user
+    router_params: { approvalStatus: approving}
 admin_message:
     name: 私信管理
     parent: admin_user
@@ -285,6 +294,9 @@ admin_foot_navigation:
 admin_setting_consult_setting:
     name: 客服
     parent: admin_setting
+admin_setting_es_bar:
+    name: 侧边栏
+    parent: admin_setting
 admin_setting_share:
     name: 分享
     parent: admin_setting
@@ -303,7 +315,7 @@ admin_setting_user_center:
     name: 用户中心
     parent: admin_setting_user
 admin_setting_user_fields:
-    name: 字段自定义
+    name: 用户信息设置
     parent: admin_setting_user
 admin_user_avatar:
     name: 默认头像
@@ -336,6 +348,9 @@ admin_article_setting:
 admin_group_set:
     name: 小组
     parent: admin_setting_operation
+admin_invite_set:
+    name: 邀请码设置
+    parent: admin_setting_operation
 admin_setting_finance:
     name: 账务设置
     parent: admin_system
@@ -365,8 +380,20 @@ admin_optimize:
     name: 优化和备份
     parent: admin_system
     group: 2
+admin_jobs:
+    name: 定时任务
+    parent: admin_system
+    group: 2
 admin_setting_ip_blacklist:
     name: IP黑名单
+    parent: admin_system
+    group: 2
+admin_setting_post_num_rules:
+    name: 发帖限制设置
+    parent: admin_system
+    group: 2
+admin_report_status:
+    name: 系统自检
     parent: admin_system
     group: 2
 admin_logs:
@@ -421,10 +448,22 @@ admin_cloud_bill:
     name: 云视频账单
     parent: admin_my_cloud
     router_name: admin_cloud_bill
+#admin_edu_cloud_search:
+#   name: 云搜索设置
+#   parent: admin_setting_cloud_video
+admin_batch_notification:
+    name: 全站站内通知
+    parent: admin_operation
+    before: admin_operation_block
+    group: 2
+admin_batch_notification_create:
+    name: 创建站内通知
+    parent: admin_batch_notification
+    group: 2
 admin_announcement:
     name: 网站公告管理
     parent: admin_operation
-    before: admin_operation_block
+    before: admin_batch_notification
     group: 2
 admin_announcement_create:
     name: 新增公告

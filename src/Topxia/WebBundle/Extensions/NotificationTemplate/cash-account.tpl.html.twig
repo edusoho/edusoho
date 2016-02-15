@@ -1,0 +1,20 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+       {% if data.type == 'changeOk' %}
+          您已成功充值{{data.value}}{{setting('coin.coin_name')|default('虚拟币')}},前往 <a href="{{path('my_coin')}}">我的账户</a> 查看
+       {% elseif data.type == 'deduct' %}
+          您被扣除{{data.value}}{{setting('coin.coin_name')|default('虚拟币')}},前往 <a href="{{path('my_coin')}}">我的账户</a> 查看
+       {% elseif data.type == 'changing' %}
+          您已成功兑换{{data.value}}{{setting('coin.coin_name')|default('虚拟币')}}">我的账户</a> 查看
+       {% endif %}
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }} 
+    </div>
+  </div>
+</li>

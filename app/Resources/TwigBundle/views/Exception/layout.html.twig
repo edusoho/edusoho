@@ -1,57 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>{% block title %} {{ setting('site.name', 'EDUSOHO') }} - {% if setting('site.slogan') %}{{ setting('site.slogan') }} -{% endif %} Powered By EduSoho{% endblock %}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <title>
+    {%- block title -%}
+      {{ setting('site.name', 'EduSoho') }}{% if setting('site.slogan') %} - {{ setting('site.slogan') }}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {%- endblock -%}
+  </title>
+  <meta name="keywords" content="{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}" />
+  <meta name="description" content="{% block description %}{{ setting('site.seo_description') }}{% endblock %}" />
+  <meta content="{{ csrf_token('site') }}" name="csrf-token" />
+  {{ setting('login_bind.verify_code', '')|raw }}
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
 
-<style>
+  {% block stylesheets %}
+    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+  {% endblock %}
+  <!--[if lt IE 9]>
+    <script src="{{ asset('assets/libs/html5shiv.js') }}"></script>
+    <script src="{{ asset('assets/libs/respond.min.js') }}"></script>
+  <![endif]-->
 
-body {
-  background-color: #f9f9f9;
-  font-size: 14px;
-}
-
-h1 {
-	font-size: 20px;
-	font-weight: bold;
-	margin: 0 0 20px;
-	padding: 0;
-	color: #444;
-}
-
-a {
-	color: #428bca;
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-.container {
-  width: 500px;
-  margin: 60px auto;
-  background: #fff;
-  border: 1px solid #ddd;
-}
-
-.content {
-	padding: 40px;
-}
-
-.message {
-	margin-bottom: 20px;
-	color: #666;
-	line-height: 24px;
-}
-
-.actions a {
-	margin-right: 20px;
-}
-
-</style>
 </head>
-<body>
-	{% block body %}{% endblock %}
+<body {% if bodyClass|default('') %}class="{{ bodyClass }}"{% endif %}>
+  {% block body %}{% endblock %}
 </body>
 </html>

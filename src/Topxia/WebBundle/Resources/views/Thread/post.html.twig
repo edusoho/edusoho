@@ -6,7 +6,7 @@
           <textarea
             id="thread-{{ thread.id }}-post-form"
             name="content" value="" rows="10" id="post_content" class="form-control" data-display="回复内容"
-            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"
+            data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"
           ></textarea>
         </div>
       </div>

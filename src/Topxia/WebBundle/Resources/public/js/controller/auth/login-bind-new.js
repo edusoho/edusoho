@@ -16,7 +16,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="user_bind_new[nickname]"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:14} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
     };
 

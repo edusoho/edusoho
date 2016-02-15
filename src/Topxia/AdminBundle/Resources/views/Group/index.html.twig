@@ -62,7 +62,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title" id="myModalLabel">请输入用户昵称</h4>
+        <h4 class="modal-title" id="myModalLabel">请输入用户名</h4>
       </div>          
       <form  class="form-horizontal" method="post" id="transfer-group-form" >
         <div class="modal-body">
@@ -70,7 +70,7 @@
                 <label class="col-xs-2 control-label" for="user_nickname">转移给</label>
                 <div class="col-xs-7 controls">
                   <input type="text"  id="username" name="user[nickname]" class="form-control"
-                  data-url="{{path('group_thread_check_user')}}" data-display="用户昵称"  placeholder="请输入用户昵称">
+                  data-url="{{path('group_thread_check_user')}}" data-display="用户名"  placeholder="请输入用户名">
                   <div class="help-block" style="display:none;"></div>
                 </div>
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

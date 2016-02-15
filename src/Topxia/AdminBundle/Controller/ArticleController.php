@@ -115,7 +115,7 @@ class ArticleController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function thumbRemoveAction(Request $Request,$id)
+    public function thumbRemoveAction(Request $request,$id)
     {
         $this->getArticleService()->removeArticlethumb($id);
         return $this->createJsonResponse(true);
@@ -178,27 +178,27 @@ class ArticleController extends BaseController
         ));
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }
 
-    private function getTagService()
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function getSettingService()
+    protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }

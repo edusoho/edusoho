@@ -14,6 +14,8 @@ interface ClassroomService
 
     public function findAssistants($classroomId);
 
+    public function findTeachers($classroomId);
+
     public function canManageClassroom($id);
 
     public function tryManageClassroom($id);
@@ -88,13 +90,15 @@ interface ClassroomService
 
     public function isClassroomAuditor($classroomId, $studentId);
 
-    public function isClassroomAssistent($classroomId, $userId);
+    public function isClassroomAssistant($classroomId, $userId);
 
     public function isClassroomHeadTeacher($classroomId, $userId);
 
     public function searchMemberCount($conditions);
 
     public function searchMembers($conditions, $orderBy, $start, $limit);
+
+    public function findMemberUserIdsByClassroomId($classroomId);
 
     public function getClassroomMember($classroomId, $userId);
 
@@ -130,6 +134,8 @@ interface ClassroomService
     public function findActiveCoursesByClassroomId($classroomId);
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds);
+
+    public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked);
 
     public function findClassroomStudents($classroomId, $start, $limit);
 

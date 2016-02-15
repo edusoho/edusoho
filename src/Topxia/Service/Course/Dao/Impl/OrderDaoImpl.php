@@ -71,7 +71,7 @@ class OrderDaoImpl extends BaseDao implements OrderDao
         return $builder->execute()->fetchColumn(0);
     }
 
-    private function _createSearchQueryBuilder($conditions)
+    protected function _createSearchQueryBuilder($conditions)
     {
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_order')

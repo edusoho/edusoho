@@ -1,4 +1,4 @@
-{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+{% extends 'TopxiaAdminBundle::cloud-app-layout.html.twig' %}
 
 {% set script_controller = 'app/installed' %}
 
@@ -71,13 +71,7 @@
               </div>
               
               {% if app.installed|default(0) %}
-                  {% if app.code|lower != 'MAIN' %}
-                    {% set url = appMeta[app.code].manage_index|default('') %}
-                  {% endif %}
               <div class="right-info pull-right">
-                  {% if url != '' %}
-                  <a href="{{url(url)}}"  class="btn btn-primary">管理</a>
-                  {% endif %}
 
                   {% if setting('developer.debug') and app.code|lower != 'main' %}
                     <br>

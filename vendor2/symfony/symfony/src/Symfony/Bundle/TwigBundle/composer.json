@@ -1,0 +1,40 @@
+{
+    "name": "symfony/twig-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony TwigBundle",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/twig-bridge": "~2.3,>=2.3.10",
+        "symfony/http-kernel": "~2.3.24|~2.5.9|~2.6,>=2.6.2"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~2.7",
+        "symfony/stopwatch": "~2.2",
+        "symfony/dependency-injection": "~2.2",
+        "symfony/config": "~2.2",
+        "symfony/framework-bundle": "~2.1"
+    },
+    "autoload": {
+        "psr-0": { "Symfony\\Bundle\\TwigBundle\\": "" }
+    },
+    "target-dir": "Symfony/Bundle/TwigBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.3-dev"
+        }
+    }
+}

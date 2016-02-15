@@ -12,7 +12,7 @@
       {% include 'TopxiaWebBundle:Course/Note:note-mates.html.twig' %}
       <span class="metas-sns">
         <span class="icon-favour">
-          <a href="javascript:;" class="js-like {% if userLike %}color-primiay{% endif %}" data-like-url="{{ path('course_note_like', {noteId:note.id}) }}" data-cancel-like-url="{{ path('course_note_cancel_like', {noteId:note.id}) }}">
+          <a href="javascript:;" class="js-like {% if userLike %}color-primary{% endif %}" data-like-url="{{ path('course_note_like', {noteId:note.id}) }}" data-cancel-like-url="{{ path('course_note_cancel_like', {noteId:note.id}) }}">
             <i class="es-icon es-icon-thumbup"></i>
             <span class="js-like-num">{{ note.likeNum }}</span>
           </a>

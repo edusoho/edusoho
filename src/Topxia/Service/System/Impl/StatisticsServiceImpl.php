@@ -17,7 +17,7 @@ class StatisticsServiceImpl extends BaseService implements StatisticsService
 		return $this->getSessionDao()->getLoginCount($retentionTime);	
 	}
 
-	private function getSessionDao()
+	protected function getSessionDao()
 	{
 		return $this->createDao('System.SessionDao');
 	}

@@ -12,7 +12,6 @@
             {{ select_options(options, app.request.get('type')) }} 
           </select> 
         </div> 
-
         <div class="form-group"> 
           <select class="form-control" name="createdTime" onchange="submit();"> 
                {% set options = {'oneWeek':'最近一周','oneMonth':'最近一个月','threeMonths':'最近三个月','all':'全部记录',} %}
@@ -31,6 +30,13 @@
         </div>
 
       <button class="btn btn-primary">搜索</button>
+      <a class="btn btn-primary" href="{{ path('admin_bill_export_csv',{
+      cashType:cashType,
+      createdTime:app.request.get('createdTime'),
+      type:app.request.get('type'),      
+      keywordType:app.request.query.get('keywordType'),
+      keyword:app.request.query.get('keyword'),
+      })}}">导出结果</a>
     </form>
   
     <p class="text-muted">

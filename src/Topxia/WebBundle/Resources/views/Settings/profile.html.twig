@@ -19,7 +19,7 @@
 				{{ web_macro.flash_messages() }}
 
 					<div class="form-group">
-					<label class="col-md-2 control-label" >昵称</label>
+					<label class="col-md-2 control-label" >用户名</label>
 						<div class="col-md-7 controls">
 						<div class="control-text">
 							{{app.user.nickname}} {% if setting('user_partner.nickname_enabled') %} <a href="{{ path('setting_nickname') }}">修改</a> {% endif %}</div>
@@ -38,11 +38,15 @@
 					</div> #}
 
 					<div class="form-group">
-					<label class="col-md-2 control-label" for="profile_truename">姓名</label>
-						<div class="col-md-7 controls">
-							<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">              
-							<div class="help-block" style="display:none;"></div>
-						</div>
+						<label class="col-md-2 control-label" for="profile_truename">姓名</label>
+						{% if profile.truename and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
+              <div class="control-text">{{ profile.truename }}</div>
+            {% else %}
+            	<div class="col-md-7 controls radios">
+              	<input type="text" id="profile_truename" name="profile[truename]" class="form-control" data-widget-cid="widget-1" data-explain="" value="{{ profile.truename|default('') }}">              
+              	<div class="help-block" style="display:none;"></div>
+            	</div>
+            {% endif %}
 					</div>
 
 					<div class="help-block approval">
@@ -82,10 +86,16 @@
 
 					<div class="form-group">
 						<label class="col-md-2 control-label" for="profile_idcard">身份证号</label>
-						<div class="col-md-7 controls radios">
-							<input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
-							<div class="help-block" style="display:none;"></div>
-						</div>
+						{% if profile.idcard and (app.user.approvalStatus == 'approved' or app.user.approvalStatus == 'approving') %}
+              <div class="col-md-7 controls">
+                <div class="control-text">{{ blur_idcard_number(profile.idcard) }}</div>
+              </div>
+            {% else %}
+              <div class="col-md-7 controls radios">
+                <input type="text" id="profile_idcard" name="profile[idcard]" class="form-control" value="{{ profile.idcard|default('') }}">
+                <div class="help-block" style="display:none;"></div>
+              </div>
+            {% endif %}
 					</div>
 
 					{% if (user.verifiedMobile|length) > 0 %}
@@ -161,7 +171,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label">个人签名</label>
 						<div class="col-md-7 controls">
-							<input type="text" id="profile_signature" name="profile[signature]" class="form-control" value="{{ profile.signature|default('') }}">
+							<textarea type="text" rows="4" maxlength="80" id="profile_signature" name="profile[signature]" class="form-control">{{ profile.signature|default('') }}</textarea>
 							<div class="help-block" style="display:none;"></div>
 						</div>
 					</div>

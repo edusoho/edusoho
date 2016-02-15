@@ -1,262 +1,95 @@
 {
     "jianmo:home_top_banner":
     {
-        "title": "默认主题：首页顶部.轮播图 ",
+        "title": "简墨主题：首页顶部.轮播图 ",
         "category": "jianmo",
         "templateName": "@theme/jianmo/block/carousel.template.html.twig",
         "items": {
-            "carousel1background":{
-                "title":"轮播图１背景颜色",
-                "desc":"例如#FFFFFF",
+            "posters":{
+                "title":"海报",
+                "desc":"首页海报",
                 "count":1,
-                "type":"text",
+                "type":"poster",
                 "default":[
                     {
-                        "value": "#3F3F3F"
-                    }
-                ]
-            },
-            "carousel1ground":
-            {
-                "title": "背景图１",
-                "desc": "建议图片大小为1140*570",
-                "count": 1,
-                "type": "imglink",  
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报1",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
-                        "alt": "默认背景图１",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "carousel1title1": {
-                "title": "轮播图１标题１",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_app.jpg",
+                        "alt" : "海报2",
+                        "layout" : "tile",
+                        "background" : "#0984f7",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
                     {
-                        "value": "全新改版"
-                    }
-                ]
-            },
-            "carousel1title2": {
-                "title": "轮播图１标题２",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_eweek.jpg",
+                        "alt" : "海报3",
+                        "layout" : "tile",
+                        "background" : "#3b4250",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "1",
+                        "mode" : "img"
+                    },
                     {
-                        "value": "简约风格"
-                    }
-                ]
-            },
-            "carousel1subtitle1": {
-                "title": "轮播图１副标题１",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报4",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
                     {
-                        "value": "专注学习内容"
-                    }
-                ]
-            },
-            "carousel1subtitle2": {
-                "title": "轮播图１副标题２",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报5",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
                     {
-                        "value": "提升用户体验"
-                    }
-                ]
-            },
-            "carousel1banner":
-            {
-                "title": "轮播图1",
-                "desc": "建议图片大小为764*412",
-                "count": 1,
-                "type": "imglink",  
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报6",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
                     {
-                        "src": "\/themes\/jianmo\/img\/poster_mac.png",
-                        "alt": "默认轮播图1",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "carousel2background":{
-                "title":"轮播图２背景颜色",
-                "desc":"例如#FFFFFF",
-                "count":1,
-                "type":"text",
-                "default":[
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报7",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
+                    },
                     {
-                        "value": "#3F3F3F"
-                    }
-                ]
-            },
-            "carousel2ground":
-            {
-                "title": "背景图２",
-                "desc": "建议图片大小为1140*570",
-                "count": 1,
-                "type": "imglink",  
-                "default":[
-                    {
-                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
-                        "alt": "默认背景图２",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "carousel2title1": {
-                "title": "轮播图２标题１",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "全新改版"
-                    }
-                ]
-            },
-            "carousel2title2": {
-                "title": "轮播图２标题２",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "简约风格"
-                    }
-                ]
-            },
-            "carousel2subtitle1": {
-                "title": "轮播图２副标题１",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "专注学习内容"
-                    }
-                ]
-            },
-            "carousel2subtitle2": {
-                "title": "轮播图２副标题２",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "提升用户体验"
-                    }
-                ]
-            },
-            "carousel2banner":
-            {
-                "title": "轮播图1",
-                "desc": "建议图片大小为764*412",
-                "count": 1,
-                "type": "imglink",  
-                "default":[
-                    {
-                        "src": "\/themes\/jianmo\/img\/poster_mac.png",
-                        "alt": "默认轮播图２",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "carousel3background":{
-                "title":"轮播图３背景颜色",
-                "desc":"例如#FFFFFF",
-                "count":1,
-                "type":"text",
-                "default":[
-                    {
-                        "value": "#3F3F3F"
-                    }
-                ]
-            },
-            "carousel3ground":
-            {
-                "title": "背景图３",
-                "desc": "建议图片大小为1140*570",
-                "count": 1,
-                "type": "imglink",  
-                "default":[
-                    {
-                        "src": "\/themes\/jianmo\/img\/poster_bg.jpg",
-                        "alt": "默认背景图３",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
-                    }
-                ]
-            },
-            "carousel3title1": {
-                "title": "轮播图３标题１",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "全新改版"
-                    }
-                ]
-            },
-            "carousel3title2": {
-                "title": "轮播图３标题２",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "简约风格"
-                    }
-                ]
-            },
-            "carousel3subtitle1": {
-                "title": "轮播图３副标题１",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "专注学习内容"
-                    }
-                ]
-            },
-            "carousel3subtitle2": {
-                "title": "轮播图３副标题２",
-                "desc": "",
-                "count": 1,
-                "type": "text",
-                "default":[
-                    {
-                        "value": "提升用户体验"
-                    }
-                ]
-            },
-            "carousel3banner":
-            {
-                "title": "轮播图３",
-                "desc": "建议图片大小为764*412",
-                "count": 1,
-                "type": "imglink",  
-                "default":[
-                    {
-                        "src": "\/themes\/jianmo\/img\/poster_mac.png",
-                        "alt": "默认轮播图３",
-                        "href": "http:\/\/www.edusoho.com",
-                        "target": "_blank"
+                        "src" : "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt" : "海报8",
+                        "layout" : "tile",
+                        "background" : "#3ec768",
+                        "href" : "",
+                        "html" : "",
+                        "status" : "0",
+                        "mode" : "img"
                     }
                 ]
             }
@@ -264,7 +97,7 @@
     },
     "jianmo:middle_banner":
     {
-        "title": "默认主题：首页中部.横幅",
+        "title": "简墨主题：首页中部.横幅",
         "category": "jianmo",
         "templateName": "@theme/jianmo/block/middle_banner.template.html.twig",
         "items": {
@@ -288,7 +121,7 @@
                 "type": "text",
                 "default":[
                     {
-                        "value": "体系化学习"
+                        "value": "网校功能强大"
                     }
                 ]
             },
@@ -299,7 +132,7 @@
                 "type": "textarea",
                 "default":[
                     {
-                        "value": "体系化学习，掌握完整知识结构"
+                        "value": "一万多家网校共同选择，值得信赖"
                     }
                 ]
             },
@@ -323,7 +156,7 @@
                 "type": "text",
                 "default":[
                     {
-                        "value": "教与学结合"
+                        "value": "响应式页面技术"
                     }
                 ]
             },
@@ -334,7 +167,7 @@
                 "type": "textarea",
                 "default":[
                     {
-                        "value": "教学结合，提高学习质量"
+                        "value": "采用响应式技术，完美适配任意终端"
                     }
                 ]
             },
@@ -358,7 +191,7 @@
                 "type": "text",
                 "default":[
                     {
-                        "value": "与代码为伍"
+                        "value": "教育云服务支持"
                     }
                 ]
             },
@@ -369,7 +202,7 @@
                 "type": "textarea",
                 "default":[
                     {
-                        "value": "学得怎么样？考试结果告诉你"
+                        "value": "强力教育云支持，免除你的后顾之忧"
                     }
                 ]
             }
@@ -377,7 +210,7 @@
     },
     "jianmo:bottom_info":
     {
-        "title": "默认主题: 首页底部.链接区域",
+        "title": "简墨主题: 首页底部.链接区域",
         "category": "jianmo",
         "templateName": "@theme/jianmo/block/bottom_info.template.html.twig",
         "items": {

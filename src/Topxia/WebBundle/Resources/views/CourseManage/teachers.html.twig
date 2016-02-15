@@ -51,8 +51,11 @@
             {% set url = path('course_manage_teachers_match', {id:course.id}) ~ '?q={{query}}' %}
             <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
+              <button class="btn btn-default" type="button" data-role="item-add" id="teacher-add" >添加</button>
             </span>
+          </div>
+          <div>
+              只能添加有教师权限的用户
           </div>
      
           <script type="text/plain" data-role="model">{{ teachers|json_encode|raw }}</script>

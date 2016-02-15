@@ -13,7 +13,7 @@ class MobileAlipayConfig
 	{
 		if (! isset(self::$config[$name])) {
 			$alipay_config = self::initAlipayConfig($name);
-			self:$config[$name] = $alipay_config;
+			self::$config[$name] = $alipay_config;
 		}
 
 		return $alipay_config;

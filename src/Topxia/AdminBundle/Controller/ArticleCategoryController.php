@@ -115,7 +115,7 @@ class ArticleCategoryController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function renderTbody()
+    protected function renderTbody()
     {
         $categories = $this->getCategoryService()->getCategoryTree();
         return $this->render('TopxiaAdminBundle:ArticleCategory:tbody.html.twig', array(
@@ -124,12 +124,12 @@ class ArticleCategoryController extends BaseController
         ));
     }
 
-    private function getCategoryService()
+    protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
     }
 
-    private function getArticleService()
+    protected function getArticleService()
     {
         return $this->getServiceKernel()->createService('Article.ArticleService');
     }

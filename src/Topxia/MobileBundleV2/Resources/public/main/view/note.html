@@ -1,0 +1,27 @@
+<div class="ui-bar" ui-bar>
+  <div class="ui-bar-bg">
+    <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+    <h3 class="title">笔记详情</h3>
+  </div>
+</div>
+
+<div class="top-header ui-question">
+  <section class="ui-panel ui-panel-card ui-question-panel">
+    <h2 class="ui-arrowlink ui-nowrap" ng-href="#/lesson/{{ note.courseId }}/{{ note.lessonId }}">
+        {{ note.lessonTitle }}
+    </h2>
+    <ul class="ui-list ui-list-text ui-border-t">
+        <li>
+            <h4>{{ note.title }}</h4>
+        </li>
+        
+        <li>
+            <div class="ui-list-info">
+                <div class="ui-question-panel content" ng-bind-html="note.content">
+                </div>
+            </div>
+        </li>
+    </ul>
+  </section>
+
+</div>

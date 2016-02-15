@@ -47,7 +47,7 @@ class LatestCourseThreadsByTypeDataTagTest extends BaseTestCase
         $datatag = new LatestCourseThreadsByTypeDataTag();
         $threads = $datatag->getData(array('count' => 5,'type' => 'question'));
         $this->assertEquals(3,count($threads));
-        $threads = $datatag_>getData(array('count' => 5,));
+        $threads = $datatag->getData(array('count' => 5,));
         $this->assertEquals(0,count($threads));
 
     }

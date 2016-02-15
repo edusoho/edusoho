@@ -15,6 +15,8 @@ interface TestpaperService
 
     public function searchTestpaperResultsCount($conditions);
 
+    public function searchTestpaperResults($conditions, $sort, $start, $limit);
+
     public function searchTestpapersScore($conditions);
 
     public function createTestpaper($fields);
@@ -27,13 +29,15 @@ interface TestpaperService
 
     public function deleteTestpaper($id);
 
-    public function deleteTestpaperByIds(array $ids);
+    public function deleteTestpaperItemByTestId($testpaperId);
 
     public function buildTestpaper($id, $options);
 
     public function canBuildTestpaper($builder, $options);
 
     public function canLookTestpaper($resultId);
+
+    public function findTestpapersByCopyIdAndLockedTarget($copyId, $lockedTarget);
 
     public function findTestpaperResultsByUserId ($id, $start, $limit);
 
@@ -63,8 +67,6 @@ interface TestpaperService
      */
     public function startTestpaper($id, $target);
 
-    public function finishTestpaper($resultId);
-
     public function previewTestpaper($testpaperId);
 
     public function showTestpaper($testpaperResultId, $isAccuracy = null);
@@ -77,8 +79,6 @@ interface TestpaperService
      */
     public function submitTestpaperAnswer($resultId, $answers);
 
-    public function reviewTestpaper($resultId, $items, $remark = null);
-
     public function makeTestpaperResultFinish ($id);
 
     public function finishTest($id, $userId, $usedTime);
@@ -86,6 +86,8 @@ interface TestpaperService
     public function makeTeacherFinishTest ($id, $paperId, $teacherId, $field);
 
     public function updateTestpaperResult($id, $usedTime);
+
+    public function updateTestResultsByLessonId($lessonId, $fields);
 
     public function findTeacherTestpapersByTeacherId ($teacherId);
 
@@ -95,8 +97,11 @@ interface TestpaperService
      * @param  integer $id 试卷ID
      * @return array     试卷所有题目，包含item对应的question的信息
      */
+    
     public function getTestpaperItems($testpaperId);
 
     public function updateTestpaperItems($testpaperId, $items);
+
+    public function getItemsCountByParams($conditions, $groupBy='');
 
 }

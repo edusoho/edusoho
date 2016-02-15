@@ -62,17 +62,17 @@ class PartnerPhpwindController extends BaseController
         return $this->createWindidResponse('fail');
     }
 
-    private function doTest($request, $args)
+    protected function doTest($request, $args)
     {
         return empty($args['testdata']) ? false : true;
     }
 
-    private function doAddUser($request, $args)
+    protected function doAddUser($request, $args)
     {
         return true;
     }
 
-    private function doSynLogin($request, $args)
+    protected function doSynLogin($request, $args)
     {
         $api = \WindidApi::api('user');
         $partnerUser = $api->getUser($args['uid']);
@@ -109,7 +109,7 @@ class PartnerPhpwindController extends BaseController
         return true;
     }
 
-    private function doSynLogout($request, $args)
+    protected function doSynLogout($request, $args)
     {
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
@@ -120,7 +120,7 @@ class PartnerPhpwindController extends BaseController
      * 需要修改的字段有：email
      * @todo  如果修改密码，则置user_bind表的syncPassword
      */
-    private function doEditUser($request, $args)
+    protected function doEditUser($request, $args)
     {
         // file_put_contents('/tmp/phpwind', json_encode($args). "\n\n", FILE_APPEND);
 
@@ -141,42 +141,42 @@ class PartnerPhpwindController extends BaseController
         return true;
     }
 
-    private function doEditUserInfo($request, $args)
+    protected function doEditUserInfo($request, $args)
     {
         return true;
     }
 
-    private function doUploadAvatar($request, $args)
+    protected function doUploadAvatar($request, $args)
     {
         return true;
     }
 
-    private function doEditCredit($request, $args)
+    protected function doEditCredit($request, $args)
     {
         return true;
     }
 
-    private function doEditMessageNum($request, $args)
+    protected function doEditMessageNum($request, $args)
     {
         return true;
     }
 
-    private function doDeleteUser($request, $args)
+    protected function doDeleteUser($request, $args)
     {
         return true;
     }
 
-    private function doSetCredits($request, $args)
+    protected function doSetCredits($request, $args)
     {
         return true;
     }
 
-    private function doAlterAvatarUrl($request, $args)
+    protected function doAlterAvatarUrl($request, $args)
     {
         return true;
     }
 
-    private function getWindidMethod($operation)
+    protected function getWindidMethod($operation)
     {
         $config = include  __DIR__ . '/../../../../vendor_user/windid_client/src/windid/service/base/WindidNotifyConf.php';
         $method = isset($config[$operation]['method']) ? $config[$operation]['method'] : '';
@@ -184,7 +184,7 @@ class PartnerPhpwindController extends BaseController
         return array($method, $args);
     }
 
-    private function createWindidApi($name)
+    protected function createWindidApi($name)
     {
         if (!defined('WEKIT_TIMESTAMP')) {
             define('WEKIT_TIMESTAMP', time());
@@ -193,7 +193,7 @@ class PartnerPhpwindController extends BaseController
         return \WindidApi::api($name);
     }
 
-    private function createWindidResponse($content = 'success')
+    protected function createWindidResponse($content = 'success')
     {
         return new Response($content);
     }  

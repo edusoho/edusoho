@@ -8,7 +8,8 @@ define(function(require, exports, module) {
                 speed: 300,
                 loop: true,
                 mode: 'vertical',
-                autoplay: 5000
+                autoplay: 5000,
+                calculateHeight: true
             });
         }
 		

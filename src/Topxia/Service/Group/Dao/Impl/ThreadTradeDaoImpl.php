@@ -34,13 +34,13 @@ class ThreadTradeDaoImpl extends BaseDao implements ThreadTradeDao
 
     public function getTradeByUserIdAndThreadId($userId,$threadId)
     {
-        $sql = "SELECT * FROM {$this->table} where threadId=? and userId=? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} where threadId=? AND userId=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($threadId,$userId)) ? : null;
     }
 
     public function getTradeByUserIdAndGoodsId($userId,$goodsId)
     {
-        $sql = "SELECT * FROM {$this->table} where goodsId=? and userId=? LIMIT 1";
+        $sql = "SELECT * FROM {$this->table} where goodsId=? AND userId=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($goodsId,$userId)) ? : null; 
     }
 

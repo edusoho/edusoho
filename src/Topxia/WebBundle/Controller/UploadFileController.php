@@ -4,14 +4,11 @@ namespace Topxia\WebBundle\Controller;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Common\StringToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
 
 class UploadFileController extends BaseController
 {
-
     public function uploadAction(Request $request)
     {
         $token = $request->request->get('token');
@@ -34,7 +31,8 @@ class UploadFileController extends BaseController
         $originalFile = $this->get('request')->files->get('file');
 
         $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
-    	return $this->createJsonResponse($file);
+
+        return $this->createJsonResponse($file);
     }
 
     public function browserAction(Request $request)
@@ -48,16 +46,16 @@ class UploadFileController extends BaseController
 
         $materialLibApp = $this->getAppService()->findInstallApp('MaterialLib');
 
-        if(!empty($materialLibApp)){
+        if (!empty($materialLibApp)) {
             $conditions['currentUserId'] = $user['id'];
         }
-        
+
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
-        
+
         return $this->createFilesJsonResponse($files);
     }
 
-     public function browsersAction(Request $request)
+    public function browsersAction(Request $request)
     {
         $user = $this->getCurrentUser();
         if (!$user->isTeacher() && !$user->isAdmin()) {
@@ -65,12 +63,18 @@ class UploadFileController extends BaseController
         }
 
         $conditions = $request->query->all();
+        if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
+            $course = $this->getCourseService()->getCourse($conditions['targetId']);
+            if ($course['parentId']>0 && $course['locked'] == 1) {
+                $conditions['targetId'] = $course['parentId'];
+            }
+        }
 
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
-        
+
         return $this->createFilesJsonResponse($files);
     }
-    
+
     public function paramsAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -88,14 +92,13 @@ class UploadFileController extends BaseController
         } else {
             $params['convertCallback'] = null;
         }
-        
+
         $params = $this->getUploadFileService()->makeUploadParams($params);
-  
-    
+
         return $this->createJsonResponse($params);
     }
 
-    private function cloudCallBack(Request $request)
+    protected function cloudCallBack(Request $request)
     {
         $user = $this->getCurrentUser();
         if (!$user->isLogin()) {
@@ -103,28 +106,27 @@ class UploadFileController extends BaseController
         }
 
         $fileInfo = $request->request->all();
-      
+
         $targetType = $request->query->get('targetType');
         $targetId = $request->query->get('targetId');
         $lazyConvert = $request->query->get('lazyConvert') ? true : false;
         $fileInfo['lazyConvert'] = $lazyConvert;
 
-        if($targetType == 'headLeader'){
+        if ($targetType == 'headLeader') {
             $storage = $this->getSettingService()->get('storage');
             unset($storage['headLeader']);
             $this->getSettingService()->set('storage', $storage);
 
             $file = $this->getUploadFileService()->getFileByTargetType($targetType);
-            if(!empty($file) && array_key_exists('id', $file)){
+            if (!empty($file) && array_key_exists('id', $file)) {
                 $this->getUploadFileService()->deleteFile($file['id']);
             }
         }
 
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
 
-        if ($lazyConvert && $file['type']!="document") {
-        
-            $convertHash = $this->getUploadFileService()->reconvertFile(
+        if ($lazyConvert && $file['type'] != "document" && $targetType != 'coursematerial') {
+            $this->getUploadFileService()->reconvertFile(
                 $file['id'],
                 $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
             );
@@ -136,27 +138,30 @@ class UploadFileController extends BaseController
     public function cloudCallbackAction(Request $request)
     {
         $file = $this->cloudCallBack($request);
+
         return $this->createJsonResponse($file);
     }
 
     public function cloudConvertCallback2Action(Request $request)
     {
-        $file = $this->cloudConvertCallback2($request);    
-        if(empty($file)) {
+        $file = $this->cloudConvertCallback2($request);
+        if (empty($file)) {
             $result = array(
-                "error" => "文件不存在"
+                "error" => "文件不存在",
             );
+
             return $this->createJsonResponse($result);
         }
+
         return $this->createJsonResponse($file['metas2']);
     }
 
-    private function cloudConvertCallback2(Request $request)
+    protected function cloudConvertCallback2(Request $request)
     {
         $result = $request->getContent();
         $result = preg_replace_callback(
           "(\\\\x([0-9a-f]{2}))i",
-          function($a) {return chr(hexdec($a[1]));},
+          function ($a) {return chr(hexdec($a[1]));},
           $result
         );
 
@@ -177,7 +182,7 @@ class UploadFileController extends BaseController
         }
 
         if (empty($file)) {
-            return null;
+            return;
         }
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
 
@@ -186,6 +191,7 @@ class UploadFileController extends BaseController
                 'file' => $file,
             ));
         }
+
         return $file;
     }
 
@@ -195,7 +201,7 @@ class UploadFileController extends BaseController
 
         $result = preg_replace_callback(
           "(\\\\x([0-9a-f]{2}))i",
-          function($a) {return chr(hexdec($a[1]));},
+          function ($a) {return chr(hexdec($a[1]));},
           $result
         );
 
@@ -208,24 +214,25 @@ class UploadFileController extends BaseController
 
         if ($result['code'] != 0) {
             $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败", array('result' => $result));
+
             return $this->createJsonResponse(true);
         }
 
         $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
 
-        if(empty($file)) {
+        if (empty($file)) {
             $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
             $result = array(
-                "error" => "文件不存在"
+                "error" => "文件不存在",
             );
+
             return $this->createJsonResponse($result);
         }
-
 
         $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
 
         return $this->createJsonResponse($file['metas2']);
-    }    
+    }
 
     public function cloudConvertCallbackAction(Request $request)
     {
@@ -261,7 +268,7 @@ class UploadFileController extends BaseController
             throw new \RuntimeException('转换失败');
         }
 
-        $items = (empty($data['items']) or !is_array($data['items'])) ? array() : $data['items'];
+        $items = (empty($data['items']) || !is_array($data['items'])) ? array() : $data['items'];
 
         $status = $request->query->get('twoStep', false) ? 'doing' : 'success';
 
@@ -285,6 +292,7 @@ class UploadFileController extends BaseController
     {
         $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
         $convertParams = json_decode($file['convertParams'], true);
+
         return new Response($convertParams['hlsKey']);
     }
 
@@ -292,6 +300,7 @@ class UploadFileController extends BaseController
     {
         $key = $request->query->get('key');
         $info = $this->getUploadFileService()->getMediaInfo($key, $type);
+
         return $this->createJsonResponse($info['format']['duration']);
     }
 
@@ -300,7 +309,7 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    private function getUploadFileService()
+    protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
@@ -320,12 +329,12 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    private function getFileService()
+    protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    private function createFilesJsonResponse($files)
+    protected function createFilesJsonResponse($files)
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
@@ -339,7 +348,7 @@ class UploadFileController extends BaseController
 
             unset($file);
         }
+
         return $this->createJsonResponse($files);
     }
-
 }

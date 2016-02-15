@@ -35,7 +35,7 @@ class EdusohoCloudClient implements CloudClient
             $options['apiServer'] = 'http://api.edusoho.net';
         }
 
-    	if (empty($options['accessKey']) or empty($options['secretKey'])) {
+    	if (empty($options['accessKey']) || empty($options['secretKey'])) {
     		throw new \RuntimeException('云平台accessKey/secretKey不能为空，请更改云视频设置。');
     	}
     	
@@ -384,7 +384,7 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($this->callRemoteApi('GET', 'GetMediaInfo', $args),true);
     }
 
-    private function generateViewToken($bucket, $key)
+    protected function generateViewToken($bucket, $key)
     {
         $params = array('bucket' => $bucket, 'key' => $key);
         $encodedParams = base64_encode(json_encode($params));
@@ -397,37 +397,37 @@ class EdusohoCloudClient implements CloudClient
         return json_decode($content, true);
     }
 
-    private function getUploadTokenUrl()
+    protected function getUploadTokenUrl()
     {
     	return $this->apiServer . '/upload_token.php';
     }
 
-    private function getViewTokenUrl()
+    protected function getViewTokenUrl()
     {
         return $this->apiServer . '/view_token.php';
     }
 
-    private function getDownloadUrl()
+    protected function getDownloadUrl()
     {
     	return $this->apiServer . '/private_download.php';
     }
 
-    private function getBillUrl()
+    protected function getBillUrl()
     {
         return $this->apiServer . '/bill.php';
     }
 
-    private function getConvertUrl()
+    protected function getConvertUrl()
     {
         return $this->apiServer . '/convert.php';
     }
 
-    private function makeApiUrl($action)
+    protected function makeApiUrl($action)
     {
         return $this->apiServer . '/api.php?action=' . $action;
     }
 
-    private function sendRequest($method, $url, $params = array())
+    protected function sendRequest($method, $url, $params = array())
     {
         $curl = curl_init();
 
@@ -459,7 +459,7 @@ class EdusohoCloudClient implements CloudClient
     /**
      * @todo remove it.
      */
-    private function getRequest($url, $params = array(), $cookie = array())
+    protected function getRequest($url, $params = array(), $cookie = array())
     {
 
     	$curl = curl_init();

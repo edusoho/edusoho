@@ -1,0 +1,31 @@
+<div class="course-card" ng-controller="ClassRoomCoursesController">
+  <ul class="ui-list ui-border-tb">
+      <li class="ui-border-t" ng-repeat="course in courses" ng-href="#/course/{{ course.id }}">
+          <div class="ui-list-img">
+              <img img-src="{{ course.middlePicture }}" img-error="course" />
+          </div>
+          <div class="ui-list-info">
+              <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+              <p class="bottom price-body">
+                <span class="origin-price">
+                      {{ course.price | formatPrice }}
+                </span>
+
+                <span class="right">
+                      <i class="iconfont icon-person"></i>
+                      {{ course.studentNum }}人在学
+                </span>
+              </p>
+          </div>
+      </li>
+  </ul>
+
+  <list-empty-view data="courses" title="暂时没有课程">
+  </list-empty-view>
+
+  <div class="ui-loading-wrap" ng-show="loading">
+        <p>正在加载中...</p>
+        <i class="ui-loading"></i>
+  </div>
+
+</div>

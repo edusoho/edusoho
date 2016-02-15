@@ -9,20 +9,18 @@
     <div class="panel panel-default panel-page">
       <div class="panel-heading"><h2>重设密码</h2></div>
 
-          <ul class="nav nav-tabs mbl">
-
-            <li class="active js-find-by-email">
-              <a style="cursor: pointer;">邮箱地址
+        <ul class="nav nav-tabs mbl js-find-password">
+          <li class="active js-find-by-email">
+            <a style="cursor: pointer;">邮箱地址
+            </a>
+          </li>
+          {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
+            <li class="js-find-by-mobile">
+              <a style="cursor: pointer;">手机号码
               </a>
             </li>
-            {% if (setting('cloud_sms.sms_forget_password')|default('')) == 'on' %}
-              <li class="js-find-by-mobile">
-                <a style="cursor: pointer;">手机号码
-                </a>
-              </li>
-            {% endif %}
-
-          </ul>
+          {% endif %}
+        </ul>
 
       {% if error %} <div id="alertxx" class="alert alert-danger">{{ error }}</div> {% endif %}
 
@@ -58,7 +56,7 @@
         <div class="form-group">
           <label class="control-label required" for="mobile">手机号码</label>
           <div class="controls">
-            <input type="text" id="mobile" name="mobile"  class="form-control" data-role="mobile">
+            <input type="text" id="mobile" name="mobile" data-url="{{path('password_reset_check_mobile')}}" class="form-control" data-role="mobile">
           </div>
         </div>
 
@@ -70,29 +68,17 @@
             </div>
 
             <div class="col-md-4">
-              <span class="btn btn-default btn-sm pull-right js-sms-send" data-url="{{ path('edu_cloud_sms_send') }}">
+              <a href="#modal" data-toggle="modal" class="btn btn-default btn-sm js-sms-send disabled" data-url="{{ path('register_captcha_modal') }}" data-sms-url="{{ path('edu_cloud_sms_send') }}">
                 <span id="js-time-left"></span>
-                <span id="js-fetch-btn-text">获取短信验证码{# 秒后重新获取 #}</span>
-             </span> 
+                <span id="js-fetch-btn-text">获取短信验证码</span>
+             </a> 
             </div>
 
             <div class="col-md-12 help-block"></div>            
           </div>
         </div>
 
-        {# <div class="form-group">
-          <label class="control-label required" for="captcha_num">验证码</label>
-          <div class="controls row" >
-            <div class = "col-md-8" >
-              <input type="text" class="form-control" id="captcha_num" name="captcha_num" maxlength="5" data-explain="输入验证码" required="required"  data-url="{{path('register_captcha_check')}}" >
-            </div>
-            <div class="col-md-4">
-              <img class="pull-right" src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="看不清，点击换一张" style="cursor:pointer;" >
-            </div>
-            <div class="col-md-12 help-block">输入验证码</div>  
-          </div>
-          
-        </div> #}
+        
 
         <div class="form-group">
           <div class="controls">

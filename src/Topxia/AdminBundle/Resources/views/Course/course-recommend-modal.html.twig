@@ -5,7 +5,7 @@
 {% block title %}设置推荐课程{% endblock %}
 {% block body %}
 
-<form id="course-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_course_recommend', {id:course.id, ref:ref}) }}">
+<form id="course-recommend-form" class="form-horizontal" method="post" action="{{ path('admin_course_recommend', {id:course.id, ref:ref, filter:filter}) }}">
   
 
   <div class="row form-group">

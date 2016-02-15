@@ -1,10 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 {% set bodyClass = 'homepage' %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" media="screen" href="{{ asset('themes/default/css/default.css') }}" />
-{% endblock %}
+{% set script_controller = 'index' %}
 
 {% block content %}
 
@@ -19,7 +15,7 @@
 
     <div class="col-md-9">
 
-      {% if setting('classroom.enabled') %}
+
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           <div class="es-box">
               <div class="es-box-heading">
@@ -33,7 +29,7 @@
                 <ul class="home-class-list">
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                      <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                      {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                     </a>
                     <div class="class-body">
                       <h3 class="class-title">
@@ -78,7 +74,7 @@
                 </ul>
               </div>
             </div>
-            {% endif %}
+
 
 
       {% if courses %}
@@ -124,8 +120,8 @@
             {% for article in articles %}
               {% if article %}
                 <li class="col-md-6">
-                  <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
+                  <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                  <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
                 </li>
               {% endif %}
             {% endfor %}
@@ -183,30 +179,30 @@
           <div class="es-box hot-group">
             <div class="es-box-heading"><h2>最热小组</h2><a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
             <div class="es-box-body">
-               <ul class="list-unstyled">
+              <ul class="list-unstyled">
                 {% for group in groups %}
                   {% if group.status=='open' %} 
                     <li class="col-md-4"> 
                       <div class="panel">
-                         <div class="media">
-                            <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
-                              {% if group.logo %}
-                              <img src="{{filepath(group.logo)}}" alt="{{group.title}}">
-                              {%else%}
-                              <img src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
-                              {%endif%}
-                            </a>
-                            <div class="media-body">
-                              <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
-                              <div class="text-muted text-normal">
-                                {{group.memberNum}}个成员&nbsp;
-                                {{group.threadNum}}个话题
-                              </div>
-                            </div> 
-                          </div>
+                        <div class="media">
+                          <a href="{{path('group_show',{id:group.id})}}" title="{{group.title}}" class="pull-left">
+                            {% if group.logo %}
+                            <img class="avatar-square-sm" src="{{filepath(group.logo)}}" alt="{{group.title}}">
+                            {%else%}
+                            <img class="avatar-square-sm" src="{{asset('assets/img/default/group.png')}}" alt="{{group.title}}">
+                            {%endif%}
+                          </a>
+                          <div class="media-body">
+                            <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
+                            <div class="text-muted text-normal">
+                              {{group.memberNum}}个成员&nbsp;
+                              {{group.threadNum}}个话题
+                            </div>
+                          </div> 
                         </div>
-                      </li>
-                    {% endif %}
+                      </div>
+                    </li>
+                  {% endif %}
                 {% endfor %}
               </ul>
             </div>
@@ -219,7 +215,7 @@
       {{ render(controller('TopxiaWebBundle:Default:promotedTeacherBlock')) }}
 
       {# 学员动态 #}
-      {% set learns = data('LatestStatuses', {mode:'simple', count: 5}) %}
+      {% set learns = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
       {% if learns %}
         <div class="es-box status-side">
           <div class="es-box-heading">
@@ -279,7 +275,7 @@
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-        <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+        {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'course-picture', '') }}
       </a>
       <div class="course-body">
         <div class="course-price-info">

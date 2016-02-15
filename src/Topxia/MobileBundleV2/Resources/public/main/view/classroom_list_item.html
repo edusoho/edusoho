@@ -1,0 +1,22 @@
+<div class="ui-list-img">
+		<img img-src="{{ classRoom.middlePicture }}" img-error="classroom" />
+    	<span class="discount-label" ng-class="classRoom.discount == 0 ? 'free' : 'rebate' " ng-if="classRoom.discountId > 0">
+      		<span class="discount-label-bottom"></span>
+      		<span class="discount-label-content" ng-if="classRoom.discount == 0">限时<br>免费</span>
+      		<span class="discount-label-content" ng-if="classRoom.discount > 0">限时<br>打折</span>
+		</span>
+
+</div>
+<div class="ui-list-info">
+    <h2 class="ui-nowrap ui-list-title">{{ classRoom.title }}</h2>
+    <p class="bottom price-body">
+    	<span class="origin-price" ng-if="! classRoom.priceType || classRoom.priceType == 'RMB' ">
+		      {{ classRoom.price | formatPrice }}
+		  </span>
+      <span class="origin-price" ng-if="classRoom.priceType == 'Coin' ">
+          {{ classRoom.coinPrice | formatCoinPrice }}
+          <small ng-if="classRoom.coinPrice > 0">{{ classRoom.coinName }}</small>
+      </span>
+    </p>
+    <p class="price-body">{{ classRoom.studentNum }}人在学</p>
+</div>

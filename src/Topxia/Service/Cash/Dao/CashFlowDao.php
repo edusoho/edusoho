@@ -17,8 +17,6 @@ interface CashFlowDao
 
     public function addFlow($flow);
 
-    public function updateFlow($flow);
-
     public function analysisAmount($conditions);
 
     public function findUserIdsByFlows($type,$createdTime, $orderBy, $start, $limit);

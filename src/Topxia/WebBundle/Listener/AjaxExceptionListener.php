@@ -1,15 +1,14 @@
 <?php
- 
-namespace Topxia\WebBundle\Listener;
- 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Topxia\Service\Common\ServiceKernel;
+namespace Topxia\WebBundle\Listener;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Topxia\Service\Common\AccessDeniedException;
- 
+use Topxia\Service\Common\ServiceKernel;
+
 class AjaxExceptionListener
 {
     public function __construct($container)
@@ -22,8 +21,8 @@ class AjaxExceptionListener
         $problem = $this->container->get('Topxia.RepairProblem', ContainerInterface::NULL_ON_INVALID_REFERENCE);
         $exception = $event->getException();
         $request = $event->getRequest();
- 
-        if (! $request->isXmlHttpRequest()) {
+
+        if (!$request->isXmlHttpRequest()) {
             return;
         }
 
@@ -33,7 +32,7 @@ class AjaxExceptionListener
             $result = ob_get_contents();
             ob_end_clean();
             $event->setResponse(new JsonResponse(array('result' => $result)));
-            return ;
+            return;
         }
 
         if ($exception instanceof AccessDeniedException) {
@@ -44,10 +43,8 @@ class AjaxExceptionListener
                 $statusCode = 500;
             }
 
-            if ($this->container->get('kernel')->isDebug()) {
-                $error = array('name' => 'Error', 'message' => $exception->getMessage());
-            } else {
-                $error = array('name' => 'Error', 'message' => 'Error');
+            $error = array('name' => 'Error', 'message' => $exception->getMessage());
+            if (!$this->container->get('kernel')->isDebug()) {
                 $this->getServiceKernel()->createService('System.LogService')->error('ajax', 'exception', $exception->getMessage());
             }
         }
@@ -59,9 +56,9 @@ class AjaxExceptionListener
             } else {
                 $error = array('name' => 'Unlogin', 'message' => '当前操作，需要登录！');
             }
-        } 
+        }
 
-        $response = new JsonResponse(array('error' => $error) , $statusCode);
+        $response = new JsonResponse(array('error' => $error), $statusCode);
         $event->setResponse($response);
     }
 

@@ -10,10 +10,11 @@ class UtilityController extends BaseController
     public function headteacherMatchAction(Request $request, $classroomId)
     {
         $likeString = $request->query->get('q');
+        $classroom = $this->getClassroomService()->getClassroom($classroomId);
         $users = $this->getUserService()->searchUsers(array(
             'nickname' => $likeString,
             'roles' => 'ROLE_TEACHER',
-            'excludeIds' => $this->_getExcludeIds($classroomId),
+            'excludeIds' => array($classroom['headTeacherId']),
             ), array('createdTime', 'DESC'), 0, 10
         );
 
@@ -46,23 +47,14 @@ class UtilityController extends BaseController
                 'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
             );
         }
-
         return $this->createJsonResponse($newUsers);
     }
 
     private function _getExcludeIds($classroomId)
     {
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
-        $assistants = $this->getClassroomService()->findAssistants($classroomId);
-        $assistantIds = ArrayToolkit::column($assistants, 'userId');
-        if(empty($classroom['teacherIds'])){
-            $classroom['teacherIds'] = array();
-        }
-        if(empty($assistantIds)){
-            $assistantIds = array();
-        }
-        $excludeIds = array_merge($classroom['teacherIds'], $assistantIds);
-        $excludeIds[] = $classroom['headTeacherId'];
+        $assistantIds = $this->getClassroomService()->findAssistants($classroomId);
+        $excludeIds = $assistantIds;
 
         return $excludeIds;
     }

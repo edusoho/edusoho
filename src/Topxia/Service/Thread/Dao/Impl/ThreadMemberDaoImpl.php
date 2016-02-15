@@ -66,7 +66,7 @@ class ThreadMemberDaoImpl extends BaseDao implements ThreadMemberDao
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
 
         $sql = "SELECT * FROM {$this->table} WHERE threadId = ? AND userId IN ({$marks});";
 

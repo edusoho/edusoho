@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
-    require('ckeditor');
+    require('es-ckeditor');
 
     function getEditorContent(editor){
         editor.updateElement();
@@ -170,6 +170,7 @@ define(function(require, exports, module) {
         validator.removeItem('#lesson-media-field');
         validator.removeItem('#lesson-second-field');
         validator.removeItem('#lesson-minute-field');
+        validator.removeItem('#lesson-suggest-period-field');
 
         validator.addItem({
             element: '#lesson-title-field',
@@ -232,6 +233,12 @@ define(function(require, exports, module) {
                 break;
         }
 
+        validator.addItem({
+            element: '#lesson-suggest-period-field',
+            required: true,
+            rule: 'arithmetic_number',
+            display: '建议学习时长'
+        });
     }
 
     exports.run = function() {
@@ -276,9 +283,14 @@ define(function(require, exports, module) {
             }
             var minute = parseInt(length / 60);
             var second = length - minute * 60;
+            var hour = length / 3600;
+            var multiple = Math.ceil(hour / 0.5)*0.5;
+            var suggestHour = hour > multiple ? (multiple+0.5) : multiple;
 
             $("#lesson-minute-field").val(minute);
             $("#lesson-second-field").val(second);
+
+            $("#lesson-suggest-period-field").val(suggestHour);
         }
 
         var $content = $("#lesson-content-field");
@@ -313,13 +325,29 @@ define(function(require, exports, module) {
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+
             updateDuration(item.length);
+            var $title = $form.find('[id="lesson-title-field"]');
+            if($title.val()==""){
+                var ext = "." + item.name.replace(/.+\./, "");
+                var filenameNoExt = item.name.replace(ext, "");
+                $title.val(filenameNoExt);
+            }
+
         });
 
         audioChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+
             updateDuration(item.length);
+            var $title = $form.find('[id="lesson-title-field"]');
+            if($title.val()==""){
+                var ext = "." + item.name.replace(/.+\./, "");
+                var filenameNoExt = item.name.replace(ext, "");
+                $title.val(filenameNoExt);
+            }
+
         });
 
         pptChooser.on('change', function(item) {
@@ -447,5 +475,14 @@ define(function(require, exports, module) {
             $("#see-draft-btn").hide();
         });
         
+        $('#lesson-suggest-period-field').bind('blur',function(){
+            var val = $(this).val();
+            if (isNaN(val)) {
+                return false;
+            }
+            var multiple = Math.ceil(val / 0.5)*0.5;
+            var temp = val > multiple ? (multiple+0.5) : multiple;
+            $(this).val(temp.toFixed(1));
+        })
     };
 });

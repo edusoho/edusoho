@@ -1,27 +1,43 @@
+{% import _self as self_macro %}
+
 <div class="col-md-8 footer-main clearfix">
-  {{ _self.footer_div(firstColumnText|first, firstColumnLinks) }}
-  {{ _self.footer_div(secondColumnText|first, secondColumnLinks) }}
-  {{ _self.footer_div(thirdColumnText|first, thirdColumnLinks) }}
-  {{ _self.footer_div(fourthColumnText|first, fourthColumnLinks, 'hidden-xs') }}
-  {{ _self.footer_div(fifthColumnText|first, fifthColumnLinks, 'hidden-xs') }}
+  {{ self_macro.footer_div(firstColumnText|first, firstColumnLinks) }}
+  {{ self_macro.footer_div(secondColumnText|first, secondColumnLinks) }}
+  {{ self_macro.footer_div(thirdColumnText|first, thirdColumnLinks) }}
+  {{ self_macro.footer_div(fourthColumnText|first, fourthColumnLinks, 'hidden-xs') }}
+  {{ self_macro.footer_div(fifthColumnText|first, fifthColumnLinks, 'hidden-xs') }}
 </div>
 
 <div class="col-md-4 footer-logo hidden-sm hidden-xs">
   <a class="" href="{{ bottomLogo[0].href|default('') }}" target="{{ bottomLogo[0].target|default('') }}"><img src="{{ asset(bottomLogo[0].src|default('')) }}" alt="{{ bottomLogo[0].alt|default('') }}"></a>
   <div class="footer-sns">
-    <a class="sns-weibo" href="{{ weibo[0].href|default('#') }}" target="{{ weibo[0].target|default('') }}"><i class="es-icon es-icon-weibo"></i></a>
-    <a class="sns-weixin">
+    {% if (weibo[0].href) %}
+    <a href="{{ weibo[0].href|default('javascript:;') }}" target="{{ weibo[0].target|default('') }}"><i class="es-icon es-icon-weibo"></i></a>
+    {% endif %}
+    {% if (weixin[0].src) %}
+    <a class="qrcode-popover top">
       <i class="es-icon es-icon-weixin"></i>
-      <div class="weixin-popover" style="background:url({{ asset(weixin[0].src|default('')) }});"></div>
+      <div class="qrcode-content">
+        <img src="{{ asset(weixin[0].src|default('')) }}" alt="">  
+      </div>
     </a>
-    <a class="sns-apple">
+    {% endif %}
+    {% if (apple[0].src) %}
+    <a class="qrcode-popover top">
       <i class="es-icon es-icon-apple"></i>
-      <div class="apple-popover" style="background:url({{ asset(apple[0].src|default('')) }});"></div>
+      <div class="qrcode-content">
+        <img src="{{ asset(apple[0].src|default('')) }}" alt=""> 
+      </div>
     </a>
-    <a class="sns-android">
+    {% endif %}
+    {% if (android[0].src) %}
+    <a class="qrcode-popover top">
       <i class="es-icon es-icon-android"></i>
-      <div class="android-popover" style="background:url({{ asset(android[0].src|default('')) }});"></div>
+      <div class="qrcode-content">
+        <img src="{{ asset(android[0].src|default('')) }}" alt=""> 
+      </div>
     </a>
+    {% endif %}
   </div>
 </div>
 

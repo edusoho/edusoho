@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    require('es-ckeditor');
     var WebUploader = require('edusoho.webuploader');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
@@ -26,7 +26,7 @@ define(function(require, exports, module) {
             },
             _initValidator: function() {
                 var editor = CKEDITOR.replace('thread-content-field', {
-                    toolbar: 'Simple',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $('#thread-content-field').data('imageUploadUrl')
                 });
 
@@ -52,7 +52,7 @@ define(function(require, exports, module) {
                     });
                     validator.addItem({
                         element: '[name="location"]',
-                        required: true,
+                        required: false,
                         rule: 'visible_character'
                     });
                     validator.addItem({

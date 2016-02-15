@@ -1,32 +1,28 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set bodyClass = 'homepage' %}
+{% set script_controller = 'theme/index' %}
 
 {% block content %}
   {% set top_banner = block_show('autumn:home_top_banner')%}
 
   {% if top_banner %}
     <div id="autumn-carousel" class="carousel slide hidden-xs mbl" data-ride="carousel">
-      <ol class="carousel-indicators">
-          <li data-target="#autumn-carousel" data-slide-to="0" class="active"></li>
-          <li data-target="#autumn-carousel" data-slide-to="1" class=""></li>
-          <li data-target="#autumn-carousel" data-slide-to="2" class=""></li>
-      </ol>
+      <ol class="carousel-indicators"></ol>
       <div class="carousel-inner">{{ top_banner|raw }}</div>
       <a class="left carousel-control" href="#autumn-carousel" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="glyphicon glyphicon-chevron-left"></span>
       </a>
       <a class="right carousel-control" href="#autumn-carousel" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="glyphicon glyphicon-chevron-right"></span>
       </a>
-
     </div>      
   {% endif %}
   
   <div class="row">
     <div class="col-md-8">
 
-      {% if setting('classroom.enabled') %}
+      
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
@@ -40,7 +36,7 @@
                  {% if loop.index <= 5%}
                 <li class="class-item">
                   <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                    <img src="{{ filepath(classroom.largePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+                    {{ lazy_img(filepath(classroom.largePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
                   </a>
                   <div class="class-body">
                     <h3 class="class-title">
@@ -84,7 +80,7 @@
               </ul>
             </div>
           </div>
-          {% endif %}
+          
 
 
       {# 推荐课程 #}
@@ -124,6 +120,7 @@
       {% endif %}
 
       {% if setting('course.live_course_enabled') %}
+      {% set recentLiveCourses = data('RecentLiveCourses', {count:4}) %}
         {% if recentLiveCourses %}
           <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
@@ -143,8 +140,6 @@
                   {% endif %}
                 {% endfor %}
               </ul>
-
-
             </div>
           </div>
         {% endif %}
@@ -164,8 +159,8 @@
             {% for article in articles %}
               {% if article %}
                 <li class="col-md-6">
-                  <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
+                  <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                  <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
                 </li>
               {% endif %}
             {% endfor %}
@@ -174,45 +169,6 @@
         </div>
       {% endif %}
 
-
-      <!-- {# 课程讨论 #}
-      {% set threads = data('EliteCourseThreadsByType',{'count':4, 'type':'discussion'}) %}
-      {% if threads %}
-        <div class="panel panel-autumn panel-autumn-primary">
-          <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">课程讨论 / <small>Recommended Copics</small></h2>
-          </div>
-          <div class="panel-body topic">
-            <ul class="row">
-              {% for thread in threads %}
-                {% if thread %}
-                  <li class="col-md-6">
-                    <div class="topic-item">
-                      <h4>
-                        <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(28) }}</a>
-                      </h4>
-                      <div class="topic-body">
-                        {% set user = thread.user %}
-                        {% set latestPostUser = thread.latestPostUser %}
-                        <img src="{{ filepath(thread.user.mediumAvatar, 'avatar.png') }}" class="pull-left">
-                        <h3>{{ user.nickname }}</h3>
-                        <p><a href="{{ path('course_show', {id:thread.course.id}) }}">{{ thread.course.title }}</a></p>
-                      </div>
-
-                      <p class="topic-bottom">
-                        <span>{{ web_macro.user_link(latestPostUser) }}  </span>
-            {{ thread.latestPostTime|smart_time }}回复
-                        <span class="pull-right">共 {{ thread.postNum }} 个回复</span>
-                      </p>
-                    </div>
-                  </li>
-                {% endif %}
-              {% endfor %}
-            </ul>
-          </div>
-        </div>
-      {% endif %} -->
-      
       {# 讲师团 #}
       {% set teachers = data('RecommendTeachers',{'count':'3'}) %}
       {% if teachers %}
@@ -292,9 +248,9 @@
           <div class="panel panel-autumn panel-autumn-default hot-group">
             <div class="panel-heading panel-heading-important">
               <h2 class="panel-title">最热小组</h2>
-              <a href="{{path('group_search_group')}}" class="pull-right">更多&gt;</a></div>
+              <a href="{{path('group_search_group')}}" class="pull-right more-autumn-default">More&gt;</a></div>
             <div class="panel-body">
-               <ul class="list-unstyled">
+               <ul class="list-unstyled row">
                 {% for group in groups %}
                   {% if group.status=='open' %} 
                     <li class="col-md-6"> 
@@ -356,7 +312,7 @@
       {% set coursesRank = data('CourseRankByStudent',{'count':5}) %}
       {% if coursesRank %}
         <div class="panel panel-autumn panel-autumn-primary">
-          <div class="panel-heading side-autumn-primary">
+          <div class="panel-heading">
             <h2 class="panel-title">课程排行榜 / <small>Top10</small></h2>
           </div>
           <div class="panel-body">
@@ -365,10 +321,8 @@
                 {% if course %}
                   <li class="media">
                     <a href="{{ path('course_show', {id:course.id}) }}">
-                      <div class="course-item">
-                        <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive thumb pull-left">
-                        <div class="course-title">{{ course.title }}</div>
-                      </div>
+                      <img src="{{ filepath(course.largePicture, 'course.png') }}"  class="img-responsive pull-left">
+                      <h5 class="course-title">{{ course.title }}</h5>
                     </a>
                   </li>
                 {% endif %}
@@ -379,93 +333,25 @@
       {% endif %}
 
       {# 学员动态 #}
-      {% set learns = data('PersonDynamic', {'count':5}) %}
-      {% if learns %}
+      {% set statuses = data('LatestStatuses', {mode:'simple', count: 5,private:0}) %}
+      {% if statuses %}
         <div class="panel panel-autumn panel-autumn-default status-side">
           <div class="panel-heading side-autumn-default">
             <h2 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态 / <small>Students Dynamic</small></h2>
           </div>
           <div class="panel-body">
             <ul class="media-list">
-              {% for learn in learns %}
-                {% if learn.type == "finished_testpaper" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了考试 {{learn.properties.testpaper.name|plain_text(15)}}
-                  </div>
-                </li>
-
-                {% elseif learn.type == "finished_homework" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的作业
-                  </div>
-                </li>
-
-                {% elseif learn.type == "finished_exercise" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了 课程 {{learn.properties.course.title|default('')|plain_text(15)}} 课时 {{learn.properties.lesson.title|default('')|plain_text(15)}} 下的练习
-                  </div>
-                </li>
-                                  
-                {% elseif learn.objectType == "course" and learn.type == "become_student" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    加入了课程 {{learn.properties.course.title|plain_text(15)}}
-                  </div>
-                </li>
-                {% elseif learn.objectType == "classroom" and learn.type == "become_student" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的学员
-                  </div>
-                </li>
-                {% elseif learn.objectType == "classroom" and learn.type == "become_auditor" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    成为了{{ setting('classroom.name')|default("班级") }} {{learn.properties.classroom.title|plain_text(15)}} 的旁听生
-                  </div>
-                </li>
-
-                {% elseif learn.type == "learned_lesson" %}
-                <li class="media">
-                  {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                  <div class="media-body">
-                    <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                    完成了课时 {{learn.properties.lesson.title|plain_text(15)}}
-                  </div>
-                </li>
-                {% elseif learn.type == "favorite_course" %}
-                    <li class="media">
-                      {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        收藏了课程 {{learn.properties.course.title|plain_text(15)}}
-                      </div>
-                    </li>
-                    {% elseif learn.type == "start_learn_lesson" %}
-                    <li class="media">
-                      {{ web_macro.user_avatar(learn.user,'pull-left','media-objec',true) }}
-                      <div class="media-body">
-                        <a href="{{ path('user_show', {id:learn.user.id}) }}">{{learn.user.nickname}}</a>
-                        开始学习课时 {{learn.properties.lesson.title|plain_text(15)}}
-                      </div>
-                    </li>
-                {% endif %}
-              {% endfor %}
+            {% for status in statuses %}    
+              <li class="media">
+              <div class="media-left">
+                {{ web_macro.user_avatar(status.user, '','avatar-sm',true) }}
+              </div>
+              <div class="media-body media-middle">
+              {{ web_macro.user_link(status.user) }}
+              {{ status.message|raw }}
+              </div>
+            </li>
+            {% endfor %}
             </ul>
           </div>
         </div>

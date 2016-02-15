@@ -32,7 +32,7 @@ class SignServiceImpl extends BaseService implements SignService
             ->updateSignLog($sign['id'], array('rank' => $statistics['signedNum']));
         $this->refreshKeepDays($userId, $targetType, $targetId);
 
-        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent());
+        $this->getDispatcher()->dispatch('class.signed', new ServiceEvent($sign));
 
         return $sign;
     }
@@ -86,7 +86,7 @@ class SignServiceImpl extends BaseService implements SignService
         return $todaySign ? $todaySign['0']['rank'] : -1;
     }
 
-    private function refreshKeepDays($userId, $targetType, $targetId)
+    protected function refreshKeepDays($userId, $targetType, $targetId)
     {
         $statistics = $this->getSignUserStatisticsDao()
             ->getStatistics($userId, $targetType, $targetId);
@@ -108,7 +108,7 @@ class SignServiceImpl extends BaseService implements SignService
         return $statistics;
     }
 
-    private function targetSignedNumIncrease($targetType, $targetId, $date)
+    protected function targetSignedNumIncrease($targetType, $targetId, $date)
     {
         $statistics = $this->getSignTargetStatisticsDao()->getStatistics($targetType, $targetId, $date);
         if($statistics) {
@@ -127,22 +127,22 @@ class SignServiceImpl extends BaseService implements SignService
         return $statistics;
     }
 
-    private function getSignUserLogDao()
+    protected function getSignUserLogDao()
     {
         return $this->createDao('Sign.SignUserLogDao');
     }
 
-    private function getSignUserStatisticsDao()
+    protected function getSignUserStatisticsDao()
     {
         return $this->createDao('Sign.SignUserStatisticsDao');
     }
 
-    private function getSignTargetStatisticsDao()
+    protected function getSignTargetStatisticsDao()
     {
         return $this->createDao('Sign.SignTargetStatisticsDao');
     }
     
-    private function getUserService()
+    protected function getUserService()
     {
         return $this->createService('User.UserService');
     }

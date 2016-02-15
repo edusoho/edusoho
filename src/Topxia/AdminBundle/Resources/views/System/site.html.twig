@@ -36,7 +36,7 @@
       </div>
       <div class="col-md-8 controls">
        <input type="text" id="url" name="url" class="form-control" value="{{site.url}}">
-        <p class="help-block">以"http://"或"https://"开头</p>
+        <p class="help-block">以"http://"开头</p>
       </div>
     </div>
 
@@ -50,7 +50,7 @@
         data-upload-token="{{ upload_token('system', 'image') }}"
         data-goto-url="{{ path('admin_setting_logo_upload') }}">上传</a>
         <button class="btn btn-default" id="site-logo-remove" type="button" data-url="{{ path('admin_setting_logo_remove') }}" {% if not site.logo %}style="display:none;"{% endif %}>删除</button>
-        <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过50*250。</p>
+        <p class="help-block">请上传png, gif, jpg格式的图片文件。LOGO图片建议不要超过250*50。</p>
         <input type="hidden" name="logo" value="{{ site.logo }}">
       </div>
     </div>
@@ -68,7 +68,7 @@
         <button class="btn btn-default" 
         id="site-favicon-remove" 
         type="button" data-url="{{ path('admin_setting_favicon_remove') }}" {% if not site.favicon %}style="display:none;"{% endif %}>删除</button>
-        <p class="help-block">请上传ico格式的图标文件。</p>
+        <p class="help-block">请上传ico格式的图标文件, 建议大小16*16或者32*32。</p>
         <input type="hidden" name="favicon" value="{{ site.favicon }}">
       </div>
     </div>
@@ -79,6 +79,7 @@
       </div>
       <div class="col-md-8 controls">
         <input type="text" id="seo_keywords" name="seo_keywords" class="form-control" value="{{site.seo_keywords}}">
+        <p class="help-block">设置多个关键词请用半角逗号","隔开。</p>
       </div>
     </div>
 

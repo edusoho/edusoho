@@ -24,16 +24,31 @@
 
 .course-grid .series-mode-label {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -6px;
+  right: -6px;
   font-size: 12px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 50%;
+  background-color: #313131;
+  color: #fff;
+  opacity: 0;
+}
+
+.course-grid:hover .series-mode-label {
+  opacity: 0.8;
+}
+
+.course-grid .series-mode-label:hover {
+  opacity: 1;
 }
 
 .course-grid .grid-body {
   position: relative;
   width: 170px;
   display: block;
-  overflow: hidden;
+  /*overflow: hidden;*/
   border-radius: 4px;
   color: #353535;
 }
@@ -67,7 +82,6 @@
   <fieldset>
 
     <div class="help-block">所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。<br>
-    客户端【每周精选】栏目中默认显示的是网站中{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}数最多的课程，最多显示三门。
     </div>
     <div class="form-group">
       <input type='hidden' name="courseIds" value="{{mobile.courseIds}}"/>
@@ -83,9 +97,7 @@
           {% endif %}
           "
           data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('admin_course_search')}}">
-            <div class="add-course grid-body glyphicon glyphicon-plus">
-              
-            </div>
+            <i class="add-course grid-body glyphicon glyphicon-plus"></i>
           </li>
         </ul>
       </div>
@@ -93,13 +105,9 @@
   </fieldset>
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-  
-  <div class="row form-group">
-    <div class="controls col-md-offset-2 col-md-8">
-      <button type="submit" class="btn btn-primary">提交</button>
-    </div>
-  </div>
 
+  <button type="submit" class="btn btn-primary">提交</button>
+  
 </form>
 
 {% else %}
