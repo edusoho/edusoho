@@ -7,17 +7,17 @@
       <div class="popover-content">
         <div class="message-content">
           {% if messageFrom == 'me' %}
-            <strong>我：</strong> 
+            <strong>{{'我：'|trans}}</strong>
           {% else %}
-            <strong>{{ web_macro.user_link(message.createdUser) }}：</strong> 
+            <strong>{{ web_macro.user_link(message.createdUser) }}：</strong>
           {% endif %}
           {{ message.content|raw }}
         </div>
         <div class="message-footer">
           <span class="text-muted">{{ message.createdTime|smart_time }}</span>
           <div class="message-actions">
-            <a class="text-muted delete-message" href="javascript:" data-url="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}" 
-            >删除</a>
+            <a class="text-muted delete-message" href="javascript:" data-url="{{ path('message_delete',{conversationId:conversation.id, messageId:message.id })}}"
+            >{{'删除'|trans}}</a>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@
 {% set modal_class= "modal-lg" %}
 
 {% block title %}
-  {% if lesson %}编辑试卷课时{{ lesson.number }}{% else %}添加试卷课时{% endif %}
+  {% if lesson %}{{'编辑试卷课时'|trans}}{{ lesson.number }}{% else %}{{'添加试卷课时'|trans}}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -18,24 +18,24 @@
       >
 
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-mediaId-field">试卷</label></div>
+        <div class="col-md-2 control-label"><label for="lesson-mediaId-field">{{'试卷'|trans}}</label></div>
         <div class="col-md-9 controls">
           <select id="lesson-mediaId-field" class="form-control" name="mediaId" data-url="{{ path('course_manage_real_time_testpaper_check') }}" data-get-testpaper-items="{{ path('course_manage_testpaper_items_get',{courseId:course.id}) }}">
-            {{select_options(paperOptions, lesson.mediaId|default(0), '请选择试卷')}}
+            {{select_options(paperOptions, lesson.mediaId|default(0), '请选择试卷'|trans)}}
           </select>
-          <div class="help-block">如果找不到试卷，请先确定该试卷已经发布</div>
+          <div class="help-block">{{'如果找不到试卷，请先确定该试卷已经发布'|trans}}</div>
         </div>
       </div>
 
       <div class="form-group" id="questionItemShowDiv" style="display:none;">
         <div class="col-md-2 control-label"></div>
         <div class="col-md-9 controls" id="questionItemShowTable">
-          
+
         </div>
       </div>
 
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-title-field">标题</label></div>
+        <div class="col-md-2 control-label"><label for="lesson-title-field">{{'标题'|trans}}</label></div>
         <div class="col-md-9 controls">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ lesson.title|default('') }}">
         </div>
@@ -61,19 +61,19 @@
 
       {% if 'lesson_credit' in features %}
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-title-field">限制学分</label></div>
+        <div class="col-md-2 control-label"><label for="lesson-title-field">{{'限制学分'|trans}}</label></div>
         <div class="col-md-9 controls">
-          <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> 分
-          <div class="help-block">参加此次考试所需的学分，０分则不限制。</div>
+          <input class="form-control width-input width-input-small" type="text" name="requireCredit" value="{{ lesson.requireCredit|default(0) }}"> {{'分'|trans}}
+          <div class="help-block">{{'参加此次考试所需的学分，０分则不限制。'|trans}}</div>
         </div>
       </div>
       {% endif %}
 
       <div class="form-group">
-        <div class="col-md-2 control-label"><label for="lesson-suggest-hour-field">学习时长</label></div>
-        <div class="col-md-9 controls">建议 
-          <input id="lesson-suggest-hour-field" class="form-control width-input width-input-small" type="text" name="suggestHours" value="{{ lesson.suggestHours|default('0.0') }}"> 小时
-          <div class="help-block">（如未设置，则默认完成时长为：客观题每题5分钟、主观题每题30分钟。合计取整）
+        <div class="col-md-2 control-label"><label for="lesson-suggest-hour-field">{{'学习时长'|trans}}</label></div>
+        <div class="col-md-9 controls">{{'建议'|trans}}
+          <input id="lesson-suggest-hour-field" class="form-control width-input width-input-small" type="text" name="suggestHours" value="{{ lesson.suggestHours|default('0.0') }}"> {{'小时'|trans}}
+          <div class="help-block">{{'（如未设置，则默认完成时长为：客观题每题5分钟、主观题每题30分钟。合计取整）'|trans}}
           </div>
         </div>
       </div>
@@ -81,18 +81,22 @@
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
     <script>app.load('course-manage/lesson-testpaper-modal')</script>
-    
+
   {% else %}
-    <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+    {% if app.request.getLocale() == 'ug_CN' %}
+      <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+    {% else %}
+      <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
+    {% endif %}
   {% endif %}
 
 {% endblock %}
 
 {% block footer %}
   {% if paperOptions %}
-    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button id="course-testpaper-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">保存</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+    <button id="course-testpaper-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-lesson-form">{{'保存'|trans}}</button>
   {% else %}
-    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
     {% endif %}
 {% endblock %}

@@ -19,46 +19,46 @@
       height: 16px;
     }
   </style>
-  
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title">
         {{ threadMain.title }}
         {% if threadMain.isStick %}
-          <span class="label label-primary">置顶</span>
+          <span class="label label-primary">{{'置顶'|trans}}</span>
         {% endif %}
         {% if threadMain.isElite %}
-          <span class="label label-danger">精华</span>
+          <span class="label label-danger">{{'精华'|trans}}</span>
         {% endif %}
         {% if is_feature_enabled('group_reward') %}
           {% if threadMain.type == 'reward' and threadMain.rewardCoin > 0 %}
-            <span class="label label-danger">奖</span>
-            <span style="color:#d9534f;" class="mll"> 悬赏:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
+            <span class="label label-danger">{{'奖'|trans}}</span>
+            <span style="color:#d9534f;" class="mll"> {{'悬赏'|trans}}:{{threadMain.rewardCoin}}{{setting('coin').coin_name}}</span>
           {% endif %}
         {% endif %}
       </h3>
       <div class="metas text-sm color-gray clearfix">
         <div class="es-share dropdown pull-right">
           <span class="es-share top" style="font-size:14px;">
-            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share  prs"></i> 分享</a>
+            <a href="javascript:;" class="gray-dark" data-toggle="dropdown"><i class="es-icon es-icon-share  prs"></i> {{'分享'|trans}}</a>
             {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'group_thread', thread:threadMain, group:groupinfo} %}
           </span>
         </div>
         <div class="pull-right mrm" id="thread-list" style="margin-top:2px;">
           {% if threadMain.userId != user.id %}
-            <a href="javascript:;" class="uncollect-btn link-dark" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> 已收藏</a>
-            <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>收藏</a>
+            <a href="javascript:;" class="uncollect-btn link-dark" data-url="{{ path('group_thread_uncollect', {threadId:threadMain.id}) }}" {% if isCollected == false %} style="display:none;"{% endif %}><i class="es-icon es-icon-favorite mrs"></i> {{'已收藏'|trans}}</a>
+            <a href="javascript:;" class="collect-btn link-dark" data-url="{{ path('group_thread_collect', {threadId:threadMain.id}) }}" {% if isCollected == true %} style="display:none;"{% endif %}><i class="es-icon es-icon-favoriteoutline mrs"></i>{{'收藏'|trans}}</a>
           {% endif %}
         </div>
-        发表于 {{ threadMain.createdTime|smart_time }}
-        <span class="mll">{{ threadMain.hitNum }} 次查看</span>
+        {{'发表于'|trans}} {{ threadMain.createdTime|smart_time }}
+        <span class="mll">{{ threadMain.hitNum }} {{'次查看'|trans}}</span>
       </div>
     </div>
     <div class="panel-body clearfix" id="post-action">
       {{threadMain.content|raw}}
       {% if attachs %}
         <hr>
-        <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+        <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
         <div class="row clearfix mtm">
           {% for attach in attachs %}
             <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{files[attach.fileId].createdTime|smart_time}}">
@@ -79,14 +79,14 @@
                 <div class="content" style="color: #999;font-size:11px;">
                   {{files[attach.fileId].size|file_size}}
                   {% if attach.coin > 0 %}
-                    <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                    <span class="mls">{{'售价'|trans}}:{{attach.coin}}{{setting('coin').coin_name}}</span>
                     {% else %}
-                    <span class="mls">免费</span>
+                    <span class="mls">{{'免费'|trans}}</span>
                   {% endif %}
-                  <br>下载次数：{{attach.hitNum}}
+                  <br>{{'下载次数：'|trans}}{{attach.hitNum}}
                 </div>
               </div>
-            </div> 
+            </div>
           {% endfor %}
         </div>
       {% endif %}
@@ -95,59 +95,59 @@
           {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
           {% else %}
             {% if app.user %}
-            <a class="btn btn-default btn-sm mrm" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_hide',{threadId:threadMain.id})}}">查看隐藏内容</a>
+            <a class="btn btn-default btn-sm mrm" href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_hide',{threadId:threadMain.id})}}">{{'查看隐藏内容'|trans}}</a>
             {% endif %}
           {% endif %}
         {% endif %}
-        
+
         {% if user.id==owner.id or is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"> 编辑</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_update',{id:groupinfo.id,threadId:threadMain.id})}}"> {{'编辑'|trans}}</a>
         {% endif %}
 
         {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
           {% if threadMain.isElite==1 %}
-            <a id="elite"  title="取消加精" class="btn btn-default btn-sm mrm"
+            <a id="elite"  title="{{'取消加精'|trans}}" class="btn btn-default btn-sm mrm"
               href="javascript:"
-            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">取消加精</a>
+            data-url="{{path('group_thread_removeElite',{threadId:threadMain.id})}}">{{'取消加精'|trans}}</a>
           {% else %}
-            <a id="elite"  title="加精" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">加精</a>
+            <a id="elite"  title="{{'加精'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setElite',{threadId:threadMain.id})}}">{{'加精'|trans}}</a>
           {% endif %}
 
           {% if threadMain.isStick==1 %}
-             <a id="stick" title="取消置顶" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> 取消置顶</a>
+             <a id="stick" title="{{'取消置顶'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_removeStick',{threadId:threadMain.id})}}"> {{'取消置顶'|trans}}</a>
           {% else %}
-            <a id="stick"  title="置顶" class="btn btn-default btn-sm mrm"
-            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">置顶</a>
+            <a id="stick"  title="{{'置顶'|trans}}" class="btn btn-default btn-sm mrm"
+            href="javascript:" data-url="{{path('group_thread_setStick',{threadId:threadMain.id})}}">{{'置顶'|trans}}</a>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}
             {% if is_granted('ROLE_ADMIN') or user.id==groupinfo.ownerId or is_groupmember==3 %}
               {% if threadMain.type == 'reward' and  threadMain.rewardCoin > 0 %}
                 {% if not isAdopt %}
-                  <a id="cancelReward" title="取消悬赏" class="btn btn-default btn-sm mrm"
-                  href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> 取消悬赏</a>
+                  <a id="cancelReward" title="{{'取消悬赏'|trans}}" class="btn btn-default btn-sm mrm"
+                  href="javascript:" data-url="{{path('group_thread_cancel_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-ban-circle"></span> {{'取消悬赏'|trans}}</a>
                 {% endif %}
               {% else %}
                 {% if threadMain.type == 'default' %}
-                  <a id="rewardCoin"  title="悬赏" class="btn btn-default btn-sm mrm"
-                    href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  悬赏</a>
+                  <a id="rewardCoin"  title="{{'悬赏'|trans}}" class="btn btn-default btn-sm mrm"
+                    href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_reward',{threadId:threadMain.id})}}"><span class="glyphicon glyphicon-usd"></span>  {{'悬赏'|trans}}</a>
                 {% endif %}
               {% endif %}
             {% endif %}
           {% endif %}
         {% endif %}
         {% if filters.type=='onlyOwner' %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> 查看全部</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'all',sort:filters.sort})}}" %}><span class="glyphicon glyphicon-filter"></span> {{'查看全部'|trans}}</a>
         {% else %}
-          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">只看楼主</a>
+          <a class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:'onlyOwner',sort:filters.sort})}}">{{'只看楼主'|trans}}</a>
         {% endif %}
-        
+
         {% if filters.sort=='desc' %}
-          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}">顺序查看</a>
+          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'asc'})}}">{{'顺序查看'|trans}}</a>
         {% else %}
-          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}">倒序查看</a>
+          <a type="button" class="btn btn-default btn-sm mrm" href="{{path('group_thread_show',{id:groupinfo.id,threadId:threadMain.id,type:filters.type,sort:'desc'})}}">{{'倒序查看'|trans}}</a>
         {% endif %}
       </div>
     </div>
@@ -157,7 +157,7 @@
     {% if isAdopt %}
     <div class="panel panel-default group-post-list">
       <div class="panel-heading" style="color:#d9534f;">
-        最佳回答
+        {{'最佳回答'|trans}}
       </div>
       <div class="panel-body">
         <ul class="media-list">
@@ -182,7 +182,7 @@
   {% if threadMain.postNum %}
   <div class="panel panel-default group-post-list">
     <div class="panel-heading">
-      {{threadMain.postNum}}回复
+      {{threadMain.postNum}}{{'回复'|trans}}
     </div>
     <div class="panel-body">
       <ul class="media-list">
@@ -194,9 +194,9 @@
               <div class="metas">
                 <span class="floor">
                   {% if filters.sort=='desc' %}
-                    {{ (postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0 }}楼
+                    {{ (postCount+1)-paginator.getPerPageCount()*(paginator.currentPage-1)-loop.index0 }}{{'楼'|trans}}
                   {% else %}
-                    {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}楼
+                    {{ (loop.index+1)+paginator.getPerPageCount()*(paginator.currentPage-1) }}{{'楼'|trans}}
                   {% endif %}
                 </span>
                 <strong>{{ web_macro.user_link(postMember[post.userId]) }}</strong>
@@ -210,23 +210,23 @@
 
               <div class="actions">
                 {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                  <a title="确定删除这条回复" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">删除</a>
+                  <a title="{{'确定删除这条回复'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_deletePost',{postId:post.id})}}">{{'删除'|trans}}</a>
                 {% endif %}
-                
+
                 {% if is_feature_enabled('group_reward') %}
                   {% if not isAdopt and threadMain.type == "reward" %}
                     {% if is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="确定采纳这条回复" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">采纳</a>
+                      <a title="{{'确定采纳这条回复'|trans}}" class="mhm post-adopt-btn" href="javascript:" data-url="{{path('group_thread_adopt',{postId:post.id})}}">{{'采纳'|trans}}</a>
                     {% endif %}
                   {% endif %}
                 {% endif %}
 
                 {% if not subPosts %}
-                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">回复</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">收起</a>
+                  <a href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="{{postMember[post.userId].id}}">{{'回复'|trans}}</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" style="display:none;">{{'收起'|trans}}</a>
                 {% else %}
-                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">回复({{postReplyCount[post.id]}})</a>
-                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >收起</a>
+                  <a style="display:none;" href="javascript:" class="reply" id="reply-{{post.id}}"  postId="{{post.id}}" postName="{{postMember[post.userId].nickname}}" data-from-user-id-nosub="">{{'回复'|trans}}({{postReplyCount[post.id]}})</a>
+                  <a href="javascript:" class="unreply" id="unreply-{{post.id}}" postId="{{post.id}}" >{{'收起'|trans}}</a>
                 {% endif %}
               </div>
               <div class="reply-{{post.id}}">
@@ -236,14 +236,14 @@
                   <div class="reply-{{post.id}}" style="display:none;">
                     <form  class="thread-post-reply-form reply-{{post.id}}" method="post"  post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
                       <div class="form-group">
-                        <label class="control-label hide" for="reply-content-{{post.id}}">回复内容</label>
+                        <label class="control-label hide" for="reply-content-{{post.id}}">{{'回复内容'|trans}}</label>
                         <div class="controls">
                         <textarea id="reply-content-{{post.id}}" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}"></textarea>
                       </div>
                       </div>
                       <div id="fromUserIdNoSubDiv"></div>
                       <div class="form-group">
-                        <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="正在发表回复">发表</button>
+                        <button type="submit" postId="{{post.id}}" class="reply-btn btn btn-xs btn-primary pull-right" style="margin-top:-10px;"data-submiting-text="{{'正在发表回复'|trans}}">{{'发表'|trans}}</button>
                       </div>
                     </form>
                   </div>
@@ -252,11 +252,11 @@
             </div>
           {% if postAttachs[post.id] %}
             <hr>
-            <span class="glyphicon glyphicon-paperclip"></span> 附件下载 :
+            <span class="glyphicon glyphicon-paperclip"></span> {{'附件下载'|trans}} :
             <div class="row clearfix mtm">
               {% for attach in postAttachs[post.id] %}
                 {% set postFile = postFiles[post.id] %}
-                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}描述：{{attach.description}}{% endif %}  上传于 {{postFile[attach.fileId].createdTime|smart_time}}">
+                <div class="pull-left attach col-md-4 col-sm-6 col-lg-4"  data-toggle="tooltip" data-placement="top" title="{% if  attach.description %}{{'描述：'|trans}}{{attach.description}}{% endif %}  {{'上传于'|trans}} {{postFile[attach.fileId].createdTime|smart_time}}">
                   {% if attach.coin > 0  and app.user and  user.id != attach.userId %}
                     <a href="javascript:" data-toggle="modal" data-target="#modal" data-urL="{{path('group_thread_buy_attach',{attachId:attach.id})}}" class="pull-left mrm"><img src="{{ default_path(attach.title|file_type(".png")) }}" class="avatar-md"></a>
                   {% else %}
@@ -273,17 +273,17 @@
                     <div class="content" style="color: #999;font-size:11px;">
                       {{postFile[attach.fileId].size|file_size}}
                       {% if attach.coin > 0 %}
-                        <span class="mls">售价:{{attach.coin}}{{setting('coin').coin_name}}</span>
+                        <span class="mls">{{'售价'|trans}}:{{attach.coin}}{{setting('coin').coin_name}}</span>
                         {% else %}
-                        <span class="mls">免费</span>
+                        <span class="mls">{{'免费'|trans}}</span>
                       {% endif %}
-                      <br>下载次数：{{attach.hitNum}}
+                      <br>{{'下载次数：'|trans}}{{attach.hitNum}}
                     </div>
                     {% if user.id==post.userId or is_granted('ROLE_ADMIN')  or is_groupmember==3  or is_groupmember==2 %}
-                      <a title="确定删除此附件" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">删除</a>
+                      <a title="{{'确定删除此附件'|trans}}" class="mhm post-delete-btn" href="javascript:" data-url="{{path('group_thread_delete_attach',{goodsId:attach.id})}}">{{'删除'|trans}}</a>
                     {% endif %}
                   </div>
-                </div> 
+                </div>
               {% endfor %}
             </div>
           {% endif %}
@@ -295,23 +295,23 @@
     </div>
   </div>
   {% endif %}
-  
+
   <div class="panel panel-default">
-    <div class="panel-heading">发表回复</div>
+    <div class="panel-heading">{{'发表回复'|trans}}</div>
     <div class="panel-body">
 
       {% if app.user %}
         <form id="post-thread-form" class="post-thread-form thread-form" method="post" post-url="{{path('group_thread_post',{groupId:groupinfo.id,threadId:threadMain.id})}}">
 
           <div class="form-group">
-            <label class="control-label hide" for="post_content">回复内容</label>
+            <label class="control-label hide" for="post_content">{{'回复内容'|trans}}</label>
             <div class="controls">
               <textarea name="content" value="" rows="10" id="post_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}"></textarea>
             </div>
           </div>
           <div class="form-group">
             <div class="controls">
-            <button id="post-thread-btn" data-submiting-text="正在回复" type="submit" class="post-thread-btn btn btn-primary pull-right">发表</button>
+            <button id="post-thread-btn" data-submiting-text="{{'正在回复'|trans}}" type="submit" class="post-thread-btn btn btn-primary pull-right">{{'发表'|trans}}</button>
             </div>
           </div>
            {% if is_feature_enabled('group_reward') %}
@@ -321,7 +321,11 @@
         </form>
       {% else %}
         <div class="empty">
-          你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+          {% if app.request.getLocale() == 'ug_CN' %}
+            你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+          {% else %}
+            你还没有登录，请先<a href="{{ path('login', {goto:app.request.server.get('REQUEST_URI')}) }}">登录</a>或<a href="{{ path('register', {goto:app.request.server.get('REQUEST_URI')}) }}">注册</a>！
+          {% endif %}
         </div>
       {% endif %}
     </div>
@@ -331,7 +335,7 @@
 
 {% block group_side %}
   <div class="panel panel-default">
-    <div class="panel-heading">话题作者</div>
+    <div class="panel-heading">{{'话题作者'|trans}}</div>
     <div class="panel-body">
       <div class="media">
         <div class="media-left prm">
@@ -343,7 +347,7 @@
           <div>
             <a class="gray-darker">{{ web_macro.user_link(owner)}}</a>
           </div>
-          <span class="text-sm gray-medium">{{owner.title|default("无")}}</span>
+          <span class="text-sm gray-medium">{{owner.title|default("无"|trans)}}</span>
         </div>
       </div>
     </div>
@@ -354,7 +358,7 @@
   {% endif %}
 
   <div class="panel panel-default">
-    <div class="panel-heading">热门小组</div>
+    <div class="panel-heading">{{'热门小组'|trans}}</div>
     <div class="panel-body">
       {% set hotGroups = data('HotGroup',{'count':3}) %}
       {% for group in hotGroups %}
@@ -377,7 +381,7 @@
           </div>
         </div>
       {% else %}
-        <div class="empty">暂无小组信息！</div>
+        <div class="empty">{{'暂无小组信息！'|trans}}</div>
       {% endfor %}
     </div>
   </div>
