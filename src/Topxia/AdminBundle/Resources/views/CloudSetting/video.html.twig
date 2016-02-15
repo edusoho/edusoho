@@ -36,7 +36,7 @@
       {% if storageSetting.upload_mode|default('local') == "local" or info.level|default(null) is null %}
       <div><button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default(null) is null %} disabled="disabled"{% endif %} >启用云视频</button></div>
       {% elseif storageSetting.upload_mode|default('cloud') == "cloud" %}
-      <div><button type="submit" class="btn btn-primary" name="upload_mode"value="local" >关闭</button></div>
+      <div><span>已启用</span><button type="submit" class="btn btn-primary" name="upload_mode"value="local" >关闭</button></div>
       {% endif %}
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
