@@ -30,8 +30,9 @@
         {{ thread.hitNum}} {{'次浏览'|trans}}
         {% if lesson %}
           <span class="bullet mhs">•</span>
-          <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">{{'课时'|trans}}{{lesson.number}}</a>
+          <a class="link-muted" href="{{ path('course_learn', {id:thread.courseId}) }}#lesson/{{thread.lessonId}}" title="{{lesson.title}}">课时{{lesson.number}}</a>
         {% endif %}
+
       </div>
     </div>
     <div class="thread-body">{{ thread.content|raw }}</div>
@@ -77,14 +78,18 @@
         {% set author = users[post.userId] %}
         {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
       {% else %}
-        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+        {% else %}
+          <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
+        {% endif %}
       {% endfor %}
     </ul>
 
     {{ web_macro.paginator(paginator) }}
 
     {% if isMemberNonExpired %}
-      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> 添加{% if thread.type == 'question' %}答案{% else %}回复{% endif %}</h3>
+      <h3 class="thread-posts-heading"><span class="glyphicon glyphicon-plus"></span> {{'添加'|trans}}{% if thread.type == 'question' %}{{'答案'|trans}}{% else %}{{'回复'|trans}}{% endif %}</h3>
       {{ render(controller('TopxiaWebBundle:CourseThread:post', {courseId:course.id, id:thread.id})) }}
     {% endif %}
 

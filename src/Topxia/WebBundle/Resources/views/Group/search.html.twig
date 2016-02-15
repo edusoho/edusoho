@@ -1,41 +1,36 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% block title %}{{'搜索'|trans}} - {{ parent() }}{% endblock %}
 {% block content %}
+  <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
+    <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页'|trans) }}</a></li>
+    <li><a href="{{path('group')}}">{{setting('group.name', '小组主页'|trans)}}</a></li>
+    <li><a href="{{path('group_search_group')}}">{{setting('search.name', '搜索小组'|trans)}}</a></li>
+  </ol>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h2 class="panel-title">{{'小组搜索'|trans}}</h2>
-      <form class="form-inline more hidden-xs" style="top:7px" action="{{path('group_search_group')}}" method="get">
-        <div class="form-group">
-          <div class="input-group group-search">
-            <input type="text" class="form-control" placeholder="{{'小组搜索'|trans}}" name="keyWord" value="{{app.request.get('keyWord') }}">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="submit">
-                <span class="glyphicon glyphicon-search"></span>
-              </button>
-            </span>
-          </div>
+  <div class="row">
+    <div class="col-md-9 group-main">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">{{'所有小组'|trans}}</h3>
         </div>
-      </form>
-    </div>
 
-    <div class="panel-body">
-      {% if groups %}
-      <div class="row">
-        {% for group in groups %}
-          <div class="col-md-3 col-sm-4">
-            {% include 'TopxiaWebBundle:Group:group-media-small.html.twig'  %}
+        <div class="panel-body">
+          {% if groups %}
+          <div class="row">
+            {% for group in groups %}
+              {% include 'TopxiaWebBundle:Group:group-media-small.html.twig'  %}
+            {% endfor %}
           </div>
-        {% endfor %}
-      </div>
-      <div class="text-center">
-        {{ web_macro.paginator(paginator) }}
-      </div>
-      {% else %}
-      <div class="empty">{{'暂无小组信息'|trans}}</div>
-      {% endif %}
+          <div class="text-center">
+            {{ web_macro.paginator(paginator) }}
+          </div>
+          {% else %}
+          <div class="empty">{{'暂无小组信息'|trans}}</div>
+          {% endif %}
 
+        </div>
+      </div>
     </div>
+    {% include 'TopxiaWebBundle:Group:sidebar.html.twig' %}
   </div>
-
 {% endblock %}

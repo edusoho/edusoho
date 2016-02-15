@@ -16,7 +16,11 @@
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <input type="hidden" value="{{allUserData}}" name="data">
-        <div class="col-md-offset-2">{{'校验成功！一共包含'|trans}} <b>{{userCount}}</b>{{'个用户信息'|trans}}</div><br>
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
+        {% else %}
+          <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
+        {% endif %}
         <div class="col-md-offset-2"><button type="submit" class="btn btn-primary" id="start-import-btn" >{{'确定导入'|trans}}</button> <a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">{{'返回'|trans}}</a></div>
       {% endif %}
     </form>

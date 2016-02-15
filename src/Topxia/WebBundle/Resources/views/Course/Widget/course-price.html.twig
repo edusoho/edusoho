@@ -45,9 +45,9 @@
     {% if 'full' in shows or 'price' in shows %}
       <span class="price">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-          {% if course.coinPrice > 0 %} {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币'|trans)}} {% else %} <span class="text-primary">{{'免费'|trans}}</span> {% endif %}
+          {% if course.coinPrice > 0 %} {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币'|trans)}} {% else %} <span class="text-success">{{'免费'|trans}}</span> {% endif %}
         {% else %}
-          {% if course.price > 0 %}{{ course.price }} {{'元'|trans}}{% else %} <span class="text-primary">{{'免费'|trans}}</span> {% endif %}
+          {% if course.price > 0 %}{{ course.price }} {{'元'|trans}}{% else %} <span class="text-success">{{'免费'|trans}}</span> {% endif %}
         {% endif %}
       </span>
     {% endif %}

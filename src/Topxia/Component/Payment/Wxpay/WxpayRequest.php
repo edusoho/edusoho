@@ -2,18 +2,18 @@
 namespace Topxia\Component\Payment\Wxpay;
 
 use Topxia\Component\Payment\Request;
-use Symfony\Component\DependencyInjection\SimpleXMLElement;
 use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\DependencyInjection\SimpleXMLElement;
 
-class WxpayRequest extends Request {
-
+class WxpayRequest extends Request
+{
     protected $unifiedOrderUrl = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
-    protected $orderQueryUrl = 'https://api.mch.weixin.qq.com/pay/orderquery';
+    protected $orderQueryUrl   = 'https://api.mch.weixin.qq.com/pay/orderquery';
 
     public function form()
     {
-        $params = array();
-        $form['action'] = $this->unifiedOrderUrl . '?_input_charset=utf-8';
+        $params         = array();
+        $form['action'] = $this->unifiedOrderUrl.'?_input_charset=utf-8';
         $form['method'] = 'post';
         $form['params'] = $this->convertParams($this->params);
         return $form;
@@ -21,35 +21,35 @@ class WxpayRequest extends Request {
 
     public function unifiedOrder()
     {
-        $params = $this->convertParams($this->params);
-        $xml = $this->toXml($params);
-        $response = $this->postRequest($this->unifiedOrderUrl,$xml);
+        $params   = $this->convertParams($this->params);
+        $xml      = $this->toXml($params);
+        $response = $this->postRequest($this->unifiedOrderUrl, $xml);
         return $response;
     }
 
     public function orderQuery()
     {
-        $params = $this->params;
-        $converted = array();
-        $converted['appid'] = $this->options['key'];
-        $settings = $this->getSettingService()->get('payment');
-        $converted['mch_id'] = $settings["wxpay_account"];
-        $converted['nonce_str'] = $this->getNonceStr();
+        $params                    = $this->params;
+        $converted                 = array();
+        $converted['appid']        = $this->options['key'];
+        $settings                  = $this->getSettingService()->get('payment');
+        $converted['mch_id']       = $settings["wxpay_account"];
+        $converted['nonce_str']    = $this->getNonceStr();
         $converted['out_trade_no'] = $params['orderSn'];
-        $converted['sign'] = strtoupper($this->signParams($converted));
+        $converted['sign']         = strtoupper($this->signParams($converted));
 
-        $xml = $this->toXml($converted);
-        $response = $this->postRequest($this->orderQueryUrl,$xml);
+        $xml      = $this->toXml($converted);
+        $response = $this->postRequest($this->orderQueryUrl, $xml);
         return $response;
     }
 
     public function fromXml($xml)
     {
-        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);        
+        $array = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
         return $array;
     }
-    
-    public function signParams($params) 
+
+    public function signParams($params)
     {
         unset($params['sign_type']);
         unset($params['sign']);
@@ -57,78 +57,70 @@ class WxpayRequest extends Request {
         ksort($params);
 
         $sign = '';
+
         foreach ($params as $key => $value) {
             if (empty($value)) {
                 continue;
             }
-            $sign .= $key . '=' . $value . '&';
+
+            $sign .= $key.'='.$value.'&';
         }
-        $sign = substr($sign, 0, - 1);
-        $sign .='&key=' . $this->options['secret'];
+
+        $sign = substr($sign, 0, -1);
+        $sign .= '&key='.$this->options['secret'];
 
         return md5($sign);
     }
 
     protected function convertParams($params)
     {
-
         $converted = array();
 
-        $converted['appid'] = $this->options['key'];
-        $converted['attach'] = '支付';
-        $converted['body'] = mb_substr($this->filterText($params['title']),0,49,'utf-8');
-        $settings = $this->getSettingService()->get('payment');
-        $converted['mch_id'] = $settings["wxpay_account"];
-        $converted['nonce_str'] = $this->getNonceStr();
-        $converted['notify_url'] = $params['notifyUrl'];
-        $converted['out_trade_no'] = $params['orderSn'];
-        $converted['spbill_create_ip'] = $this->get_client_ip();
-        $converted['total_fee'] = intval($params['amount'] * 100);
-        $converted['trade_type'] = 'NATIVE';
-        $converted['product_id'] = $params['orderSn'];
-        $converted['sign'] = strtoupper($this->signParams($converted));
+        $converted['appid']            = $this->options['key'];
+        $converted['attach']           = '支付';
+        $converted['body']             = mb_substr($this->filterText($params['title']), 0, 49, 'utf-8');
+        $settings                      = $this->getSettingService()->get('payment');
+        $converted['mch_id']           = $settings["wxpay_account"];
+        $converted['nonce_str']        = $this->getNonceStr();
+        $converted['notify_url']       = $params['notifyUrl'];
+        $converted['out_trade_no']     = $params['orderSn'];
+        $converted['spbill_create_ip'] = $this->getClientIp();
+        $converted['total_fee']        = intval($params['amount'] * 100);
+        $converted['trade_type']       = 'NATIVE';
+        $converted['product_id']       = $params['orderSn'];
+        $converted['sign']             = strtoupper($this->signParams($converted));
 
         return $converted;
     }
 
-    private function toXml($array, $xml = false){ 
+    private function toXml($array, $xml = false)
+    {
         $simxml = new simpleXMLElement('<!--?xml version="1.0" encoding="utf-8"?--><root></root>');
- 
-        foreach($array as $k=>$v) {
-            $simxml->addChild($k,$v);
+
+        foreach ($array as $k => $v) {
+            $simxml->addChild($k, $v);
         }
-     
+
         return $simxml->saveXML();
     }
 
-    private function getNonceStr($length = 32) 
+    private function getNonceStr($length = 32)
     {
-        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";  
-        $str ="";
-        for ( $i = 0; $i < $length; $i++ )  {  
-            $str .= substr($chars, mt_rand(0, strlen($chars)-1), 1);  
-        } 
+        $chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        $str   = "";
+
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+
         return $str;
-    }
-    private function get_client_ip()
-    {
-        if ($_SERVER['REMOTE_ADDR']) {
-            $cip = $_SERVER['REMOTE_ADDR'];
-        } elseif (getenv("REMOTE_ADDR")) {
-            $cip = getenv("REMOTE_ADDR");
-        } elseif (getenv("HTTP_CLIENT_IP")) {
-            $cip = getenv("HTTP_CLIENT_IP");
-        } else {
-            $cip = "unknown";
-    }
-            return $cip;
     }
 
     private function postRequest($url, $params)
     {
         $curl = curl_init();
 
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_USERAGENT, 'Topxia Payment Client 1.0');
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
@@ -136,9 +128,9 @@ class WxpayRequest extends Request {
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($curl, CURLOPT_URL, $url );
+        curl_setopt($curl, CURLOPT_URL, $url);
 
-        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE );
+        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 
         $response = curl_exec($curl);
 

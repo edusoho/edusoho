@@ -1,0 +1,21 @@
+{% if member %}
+  {% set lessonUrl = path('course_learn', {id:course.id}) ~ '#lesson/' ~ item.id %}
+{% else %}
+  {% set lessonUrl = previewUrl ~ '?lessonId=' ~ item.id%}
+{% endif %}
+<li class="section period">
+    <i class="es-icon es-icon-check" data-toggle="tooltip" data-placement="top" title="{{'试卷'|trans}}" data-original-title="试卷"></i>
+    <span class="title">
+      {% if item.status == 'published' %}
+          <a {% if member %}href="{{ lessonUrl }}" {% endif %}
+          title="{{ item.title }}">
+          <span class="title">{{ item.title }}</span>
+          {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+          </a>
+        {% else %}
+          <span class="title">{{ item.title }}</span>
+          {% include 'TopxiaWebBundle:CourseLesson/Part:micro-tips.html.twig' %}
+        {% endif %}
+      </span>
+    </span>
+  </li>

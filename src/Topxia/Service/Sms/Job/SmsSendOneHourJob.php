@@ -8,9 +8,9 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class SmsSendOneHourJob implements Job
 {
-	public function execute($params)
+    public function execute($params)
     {
-    	$smsType = 'sms_live_play_one_hour';
+        $smsType = 'sms_live_play_one_hour';
         $dayIsOpen = $this->getSmsService()->isOpen($smsType);
         $parameters = array();
         if ($dayIsOpen) {

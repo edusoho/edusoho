@@ -1,13 +1,13 @@
 define(function(require, exports, module) {
 
 	var Validator = require('bootstrap.validator');
-    require('ckeditor');
+    require('es-ckeditor');
 
     exports.run = function() {
 
         // group: 'course'
         var editor = CKEDITOR.replace('post_content', {
-            toolbar: 'Simple',
+            toolbar: 'Thread',
             filebrowserImageUploadUrl: $('#post_content').data('imageUploadUrl'),
             height: 300
         });

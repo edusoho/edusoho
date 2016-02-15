@@ -4,7 +4,7 @@
   <a href="{{ path('course_show', {id:course.id}) }}">
     <img class="picture" src="{{ filepath(course.largePicture, 'course.png') }}" />
   </a>
-  <h1 class="title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+  <h1 class="title"><a class="link-dark" href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
     {% if course.status=='closed' %}
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif course.status=='draft' %}
@@ -23,7 +23,7 @@
       {{'教师：'|trans}}
       {% for id in course.teacherIds %}
         {% set user = users[id] %}
-        <a href="#modal" data-toggle="modal" data-url="{{ path('course_teacher_info',  {courseId:course.id, id:user.id}) }}">{{ user.nickname }}</a>
+        <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
       {% endfor %}
     {% endif  %}
   </div>
@@ -34,8 +34,13 @@
       <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_review_create', {id:course.id}) }}" data-role="tooltip" title="{{'评价'|trans}}" data-placement="top" href="#modal">
         <i class="esicon esicon-like"></i> {{ course.ratingNum }}</a>
       {% if setting('course.show_student_num_enabled', '1') == 1 or member.role|default('student') == 'teacher' or isAdmin %}
-        <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="{{'查看'|trans}}{{setting('default.user_name', '学员'|trans)}}{{'的学习进度, 还可以发私信进行联系!'|trans}}" data-placement="bottom"
-        href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{{setting('default.user_name', '学员'|trans)}}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+          href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
+        {% else %}
+          <a class="btn btn-default btn-sm" data-toggle="modal" data-url="{{ path('course_members', {id:course.id}) }}" data-role="tooltip" title="查看{{setting('default.user_name', '学员')}}的学习进度, 还可以发私信进行联系!" data-placement="bottom"
+          href="#modal"><i class="esicon esicon-user"></i> {{course.studentNum}}</a>
+        {% endif %}
       {% endif %}
 
       <div class="btn-group" data-role="tooltip" title="{{'分享到'|trans}}" data-placement="left" >
@@ -95,11 +100,11 @@
         {{'请重新'|trans}}<a class="alert-link" href="{{ path('vip') }}" target="_blank">{{'开通会员'|trans}}</a>
       {% else %}
         <a class="alert-link js-exit-course" href="javascript:;" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
-      {% endif %}！
+      {% endif %}{{'！'|trans}}
     {% elseif vipChecked == 'member_expired' %}
-      {{'您的会员已过期，不能学习此课程，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>。
+      {{'您的会员已过期，不能学习此课程，请先'|trans}}<a class="alert-link" href="{{ path('vip_renew') }}" target="_blank">{{'续费'|trans}}</a>{{'。'|trans}}
     {% elseif vipChecked == 'level_low' %}
-      {{'会员等级不够，不能学习此课程。请先'|trans}}<a class="alert-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>。
+      {{'会员等级不够，不能学习此课程。请先'|trans}}<a class="alert-link" href="{{ path('vip_upgrade') }}" target="_blank">{{'升级会员'|trans}}</a>{{'。'|trans}}
     {% else %}
       {{'此课程已不支持会员免费学，'|trans}}<a class="alert-link js-exit-course" href="javascript:;" data-url="{{ path('course_exit', { id:course.id }) }}" data-go="{{ path('course_show', { id:course.id }) }}">{{'返回课程首页'|trans}}</a>
     {% endif %}
@@ -109,12 +114,22 @@
 {% if not isNonExpired %}
   <div class="alert alert-danger alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {{'您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击'|trans}}
-    <a class="btn btn-primary btn-sm "  href="{{path('course_rebuy',{courseId:course.id})}}">
-    {% if course.price>0 %}
-      {{'重新购买'|trans}}
+    {% if app.request.getLocale() == 'ug_CN' %}
+      您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
+      <a class="btn btn-primary btn-sm "  href="{{path('course_rebuy',{courseId:course.id})}}">
+      {% if course.price>0 %}
+        重新购买
+      {% else %}
+        重新加入
+      {% endif %}
     {% else %}
-      {{'重新加入'|trans}}
+      您购买的课程已到期，无法学习课时、提问等。如有疑问，请联系老师，或点击
+      <a class="btn btn-primary btn-sm "  href="{{path('course_rebuy',{courseId:course.id})}}">
+      {% if course.price>0 %}
+        重新购买
+      {% else %}
+        重新加入
+      {% endif %}
     {% endif %}
     </a>
   </div>

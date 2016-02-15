@@ -2,7 +2,7 @@ define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
-    require('ckeditor');
+    require('es-ckeditor');
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
 
@@ -167,9 +167,14 @@ define(function(require, exports, module) {
                         var $subpostsNum = $form.parents('.thread-post').find('.subposts-num');
                         $subpostsNum.text(parseInt($subpostsNum.text()) +1);
                         $subpostsNum.parent().removeClass('hide');
-                    }).error(function(){
+                    }).error(function(data){
                         $btn.button('reset');
-                        Notify.danger('发表回复失败，请重试');
+                        data = $.parseJSON(data.responseText);
+                        if(data.error) {
+                            Notify.danger(data.error.message);
+                        } else {
+                            Notify.danger('发表回复失败，请重试');
+                        }
                     });
                 }
 
@@ -193,7 +198,7 @@ define(function(require, exports, module) {
             var $textarea = $form.find('textarea[name=content]');
             if($textarea.data('imageUploadUrl')) {
                 var editor = CKEDITOR.replace($textarea.attr('id'), {
-                    toolbar: 'Simple',
+                    toolbar: 'Thread',
                     filebrowserImageUploadUrl: $textarea.data('imageUploadUrl')
                 });
             }
@@ -222,9 +227,14 @@ define(function(require, exports, module) {
                         that.$('.thread-post-num').text(parseInt(that.$('.thread-post-num').text()) + 1);
                         $list.find('li.empty').remove();
                         $list.closest('.top-reply').removeClass('hidden');
-                    }).error(function(){
+                    }).error(function(data){
                         $btn.button('reset');
-                        Notify.danger('发表回复失败，请重试');
+                        data = $.parseJSON(data.responseText);
+                        if(data.error) {
+                            Notify.danger(data.error.message);
+                        } else {
+                            Notify.danger('发表回复失败，请重试');
+                        }
                     });
 
                 }

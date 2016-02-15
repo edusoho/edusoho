@@ -26,7 +26,11 @@
           <div class="notebook-note notebook-note-collapsed">
             <div class="notebook-note-heading">
               {% if lesson %}
-                <a href="{{ path('course_learn', {id:note.courseId}) }}#lesson/{{ lesson.id }}" target="_blank">{{'课时'|trans}}{{ lesson.number }}{{'：'|trans}}{{ lesson.title }}</a>
+                {% if app.request.getLocale() == 'ug_CN' %}
+                  <a href="{{ path('course_learn', {id:note.courseId}) }}#lesson/{{ lesson.id }}" target="_blank">课时{{ lesson.number }}：{{ lesson.title }}</a>
+                {% else %}
+                  <a href="{{ path('course_learn', {id:note.courseId}) }}#lesson/{{ lesson.id }}" target="_blank">课时{{ lesson.number }}：{{ lesson.title }}</a>
+                {% endif %}
               {% else %}
                 <span>{{'该课时已删除'|trans}}</span>
               {% endif %}

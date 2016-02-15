@@ -37,7 +37,7 @@
     {% endif %}
 
     {% if setting('developer.debug') and uploadFile.convertParams.convertor|default(null) %}
-      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">{{'重新转换'|trans}}({{'调试模式'|trans}})</a>
+      <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">{{'重新转换(调试模式)'|trans}}</a>
     {% endif %}
     {% if uploadFile.useNum == 0 %}
     <br>
@@ -55,11 +55,11 @@
 
     {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}
       {% if uploadFile.convertParams.videoQuality == "low" %}
-      {% set quality = "流畅画质"|trans %}
+      {% set quality = "流畅画质" %}
       {% elseif uploadFile.convertParams.videoQuality == "normal" %}
-      {% set quality = "标准画质"|trans %}
+      {% set quality = "标准画质" %}
       {% elseif uploadFile.convertParams.videoQuality == "high" %}
-      {% set quality = "精细画质"|trans %}
+      {% set quality = "精细画质" %}
       {% endif %}
       {% if uploadFile.metas2.shd|default(null) %}
       {% if uploadFile.useNum != 0 %}<br>{% endif %}

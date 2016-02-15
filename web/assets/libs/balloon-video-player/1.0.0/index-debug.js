@@ -5,6 +5,9 @@ require("balloon-video-player/1.0.0/src/video-js/lang/zh-CN-debug");
 require("balloon-video-player/1.0.0/src/plugins/fingerprint/fingerprint-debug");
 require("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-selector-debug");
 require("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug");
+require("balloon-video-player/1.0.0/src/plugins/markers/markers-debug");
+require("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug");
+
 
 });
 define("balloon-video-player/1.0.0/src/video-js/video.dev-debug", [], function(require, exports, module){
@@ -12011,418 +12014,418 @@ define("balloon-video-player/1.0.0/src/plugins/quality-selector/video-quality-se
  * to the toolbar. Usage:
  *
  * <video>
- * 	<source data-res="480" src="..." />
- * 	<source data-res="240" src="..." />
+ *  <source data-res="480" src="..." />
+ *  <source data-res="240" src="..." />
  * </video>
  */
 
 (function( _V_ ) {
-	
-	/***********************************************************************************
-	 * Define some helper functions
-	 ***********************************************************************************/
-	var methods = {
-		
-		/**
-		 * In a future version, this can be made more intelligent,
-		 * but for now, we'll just add a "p" at the end if we are passed
-		 * numbers.
-		 *
-		 * @param	(string)	res	The resolution to make a label for
-		 *
-		 * @returns	(string)	The label text string
-		 */
-		res_label : function( res ) {
-			
-			return ( /^\d+$/.test( res ) ) ? res + 'p' : res;
-		}
-	};
-	
-	/***********************************************************************************
-	 * Setup our resolution menu items
-	 ***********************************************************************************/
-	_V_.ResolutionMenuItem = _V_.MenuItem.extend({
-		
-		// Call variable to prevent the resolution change from being called twice
-		call_count : 0,
-		
-		/** @constructor */
-		init : function( player, options ){
-			
-			var touchstart = false;
-			
-			// Modify options for parent MenuItem class's init.
-			options.label = methods.res_label( options.res );
-			options.selected = ( options.res.toString() === player.getCurrentRes().toString() );
-			
-			// Call the parent constructor
-			_V_.MenuItem.call( this, player, options );
-			
-			// Store the resolution as a property
-			this.resolution = options.res;
-			
-			// Register our click and tap handlers
-			this.on( ['click', 'tap'], this.onClick );
-			
-			// Toggle the selected class whenever the resolution changes
-			player.on( 'changeRes', _V_.bind( this, function() {
-				
-				if ( this.resolution == player.getCurrentRes() ) {
-					
-					this.selected( true );
-					
-				} else {
-					
-					this.selected( false );
-				}
-				
-				// Reset the call count
-				this.call_count = 0;
-			}));
-		}
-	});
-	
-	// Handle clicks on the menu items
-	_V_.ResolutionMenuItem.prototype.onClick = function() {
-		
-		// Check if this has already been called
-		if ( this.call_count > 0 ) { return; }
-		
-		// Call the player.changeRes method
-		this.player().changeRes( this.resolution );
-		
-		// Increment the call counter
-		this.call_count++;
-	};
-	
-	/***********************************************************************************
-	 * Setup our resolution menu title item
-	 ***********************************************************************************/
-	_V_.ResolutionTitleMenuItem = _V_.MenuItem.extend({
-		
-		init : function( player, options ) {
-			
-			// Call the parent constructor
-			_V_.MenuItem.call( this, player, options );
-			
-			// No click handler for the menu title
-			this.off( 'click' );
-		}
-	});
-	
-	/***********************************************************************************
-	 * Define our resolution selector button
-	 ***********************************************************************************/
-	_V_.ResolutionSelector = _V_.MenuButton.extend({
-		
-		/** @constructor */
-		init : function( player, options ) {
-			
-			// Add our list of available resolutions to the player object
-			player.availableRes = options.available_res;
-			
-			// Call the parent constructor
-			_V_.MenuButton.call( this, player, options );
-			
-			// Set the button text based on the option provided
-			this.el().firstChild.firstChild.innerHTML = options.buttonText;
-		}
-	});
-	
-	// Set class for resolution selector button
-	_V_.ResolutionSelector.prototype.className = 'vjs-res-button';
-	
-	// Create a menu item for each available resolution
-	_V_.ResolutionSelector.prototype.createItems = function() {
-		
-		var player = this.player(),
-			items = [],
-			current_res;
-		
-		// Add the menu title item
-		// items.push( new _V_.ResolutionTitleMenuItem( player, {
-			
-		// 	el : _V_.Component.prototype.createEl( 'li', {
-				
-		// 		className	: 'vjs-menu-title vjs-res-menu-title',
-		// 		innerHTML	: player.localize( 'Quality' )
-		// 	})
-		// }));
-		
-		// Add an item for each available resolution
-		for ( current_res in player.availableRes ) {
-			
-			// Don't add an item for the length attribute
-			if ( 'length' == current_res ) { continue; }
-			
-			items.push( new _V_.ResolutionMenuItem( player, {
-				res : current_res
-			}));
-		}
-		
-		// Sort the available resolutions in descending order
-		items.sort(function( a, b ) {
-			
-			if ( typeof a.resolution == 'undefined' ) {
-				
-				return -1;
-				
-			} else {
-				
-				return parseInt( b.resolution ) - parseInt( a.resolution );
-			}
-		});
-		
-		return items;
-	};
-	
-	/***********************************************************************************
-	 * Register the plugin with videojs, main plugin function
-	 ***********************************************************************************/
-	_V_.plugin( 'resolutionSelector', function( options ) {
-		// Only enable the plugin on HTML5 videos
-		// if ( ! this.el().firstChild.canPlayType  ) { return; }	
-		
-		/*******************************************************************
-		 * Setup variables, parse settings
-		 *******************************************************************/
-		var player = this,
-			sources	= player.options().sources,
-			i = sources.length,
-			j,
-			found_type,
-			
-			// Override default options with those provided
-			settings = _V_.util.mergeOptions({
-				
-				default_res	: '',		// (string)	The resolution that should be selected by default ( '480' or  '480,1080,240' )
-				force_types	: false		// (array)	List of media types. If passed, we need to have source for each type in each resolution or that resolution will not be an option
-				
-			}, options || {} ),
-			
-			available_res = { length : 0 },
-			current_res,
-			resolutionSelector,
-			
-			// Split default resolutions if set and valid, otherwise default to an empty array
-			default_resolutions = ( settings.default_res && typeof settings.default_res == 'string' ) ? settings.default_res.split( ',' ) : [];
+  
+  /***********************************************************************************
+   * Define some helper functions
+   ***********************************************************************************/
+  var methods = {
+    
+    /**
+     * In a future version, this can be made more intelligent,
+     * but for now, we'll just add a "p" at the end if we are passed
+     * numbers.
+     *
+     * @param (string)  res The resolution to make a label for
+     *
+     * @returns (string)  The label text string
+     */
+    res_label : function( res ) {
+      
+      return ( /^\d+$/.test( res ) ) ? res + 'p' : res;
+    }
+  };
+  
+  /***********************************************************************************
+   * Setup our resolution menu items
+   ***********************************************************************************/
+  _V_.ResolutionMenuItem = _V_.MenuItem.extend({
+    
+    // Call variable to prevent the resolution change from being called twice
+    call_count : 0,
+    
+    /** @constructor */
+    init : function( player, options ){
+      
+      var touchstart = false;
+      
+      // Modify options for parent MenuItem class's init.
+      options.label = methods.res_label( options.res );
+      options.selected = ( options.res.toString() === player.getCurrentRes().toString() );
+      
+      // Call the parent constructor
+      _V_.MenuItem.call( this, player, options );
+      
+      // Store the resolution as a property
+      this.resolution = options.res;
+      
+      // Register our click and tap handlers
+      this.on( ['click', 'tap'], this.onClick );
+      
+      // Toggle the selected class whenever the resolution changes
+      player.on( 'changeRes', _V_.bind( this, function() {
+        
+        if ( this.resolution == player.getCurrentRes() ) {
+          
+          this.selected( true );
+          
+        } else {
+          
+          this.selected( false );
+        }
+        
+        // Reset the call count
+        this.call_count = 0;
+      }));
+    }
+  });
+  
+  // Handle clicks on the menu items
+  _V_.ResolutionMenuItem.prototype.onClick = function() {
+    
+    // Check if this has already been called
+    if ( this.call_count > 0 ) { return; }
+    
+    // Call the player.changeRes method
+    this.player().changeRes( this.resolution );
+    
+    // Increment the call counter
+    this.call_count++;
+  };
+  
+  /***********************************************************************************
+   * Setup our resolution menu title item
+   ***********************************************************************************/
+  _V_.ResolutionTitleMenuItem = _V_.MenuItem.extend({
+    
+    init : function( player, options ) {
+      
+      // Call the parent constructor
+      _V_.MenuItem.call( this, player, options );
+      
+      // No click handler for the menu title
+      this.off( 'click' );
+    }
+  });
+  
+  /***********************************************************************************
+   * Define our resolution selector button
+   ***********************************************************************************/
+  _V_.ResolutionSelector = _V_.MenuButton.extend({
+    
+    /** @constructor */
+    init : function( player, options ) {
+      
+      // Add our list of available resolutions to the player object
+      player.availableRes = options.available_res;
+      
+      // Call the parent constructor
+      _V_.MenuButton.call( this, player, options );
+      
+      // Set the button text based on the option provided
+      this.el().firstChild.firstChild.innerHTML = options.buttonText;
+    }
+  });
+  
+  // Set class for resolution selector button
+  _V_.ResolutionSelector.prototype.className = 'vjs-res-button';
+  
+  // Create a menu item for each available resolution
+  _V_.ResolutionSelector.prototype.createItems = function() {
+    
+    var player = this.player(),
+      items = [],
+      current_res;
+    
+    // Add the menu title item
+    // items.push( new _V_.ResolutionTitleMenuItem( player, {
+      
+    //  el : _V_.Component.prototype.createEl( 'li', {
+        
+    //    className : 'vjs-menu-title vjs-res-menu-title',
+    //    innerHTML : player.localize( 'Quality' )
+    //  })
+    // }));
+    
+    // Add an item for each available resolution
+    for ( current_res in player.availableRes ) {
+      
+      // Don't add an item for the length attribute
+      if ( 'length' == current_res ) { continue; }
+      
+      items.push( new _V_.ResolutionMenuItem( player, {
+        res : current_res
+      }));
+    }
+    
+    // Sort the available resolutions in descending order
+    items.sort(function( a, b ) {
+      
+      if ( typeof a.resolution == 'undefined' ) {
+        
+        return -1;
+        
+      } else {
+        
+        return parseInt( b.resolution ) - parseInt( a.resolution );
+      }
+    });
+    
+    return items;
+  };
+  
+  /***********************************************************************************
+   * Register the plugin with videojs, main plugin function
+   ***********************************************************************************/
+  _V_.plugin( 'resolutionSelector', function( options ) {
+    // Only enable the plugin on HTML5 videos
+    // if ( ! this.el().firstChild.canPlayType  ) { return; } 
+    
+    /*******************************************************************
+     * Setup variables, parse settings
+     *******************************************************************/
+    var player = this,
+      sources = player.options().sources,
+      i = sources.length,
+      j,
+      found_type,
+      
+      // Override default options with those provided
+      settings = _V_.util.mergeOptions({
+        
+        default_res : '',   // (string) The resolution that should be selected by default ( '480' or  '480,1080,240' )
+        force_types : false   // (array)  List of media types. If passed, we need to have source for each type in each resolution or that resolution will not be an option
+        
+      }, options || {} ),
+      
+      available_res = { length : 0 },
+      current_res,
+      resolutionSelector,
+      
+      // Split default resolutions if set and valid, otherwise default to an empty array
+      default_resolutions = ( settings.default_res && typeof settings.default_res == 'string' ) ? settings.default_res.split( ',' ) : [];
 
-		// Get all of the available resoloutions
-		while ( i > 0 ) {
-			
-			i--;
-			
-			// Skip sources that don't have data-res attributes
-			if ( ! sources[i]['data-res'] ) { continue; }
-			
-			current_res = sources[i]['data-res'];
-			
-			if ( typeof available_res[current_res] !== 'object' ) {
-				
-				available_res[current_res] = [];
-				available_res.length++;
-			}
-			
-			available_res[current_res].push( sources[i] );
-		}
+    // Get all of the available resoloutions
+    while ( i > 0 ) {
+      
+      i--;
+      
+      // Skip sources that don't have data-res attributes
+      if ( ! sources[i]['data-res'] ) { continue; }
+      
+      current_res = sources[i]['data-res'];
+      
+      if ( typeof available_res[current_res] !== 'object' ) {
+        
+        available_res[current_res] = [];
+        available_res.length++;
+      }
+      
+      available_res[current_res].push( sources[i] );
+    }
 
-		// Check for forced types
-		if ( settings.force_types ) {
-			
-			// Loop through all available resoultions
-			for ( current_res in available_res ) {
-				
-				// Don't count the length property as a resolution
-				if ( 'length' == current_res ) { continue; }
-				
-				i = settings.force_types.length;
-				found_types = 0;
-				
-				// Loop through all required types
-				while ( i > 0 ) {
-					
-					i--;
-					
-					j = available_res[current_res].length;
-					
-					// Loop through all available sources in current resolution
-					while ( j > 0 ) {
-						
-						j--;
-						
-						// Check if the current source matches the current type we're checking
-						if ( settings.force_types[i] === available_res[current_res][j].type ) {
-							
-							found_types++;
-							break;
-						}
-					}
-				}
-				
-				// If we didn't find sources for all of the required types in the current res, remove it
-				if ( found_types < settings.force_types.length ) {
-					
-					delete available_res[current_res];
-					available_res.length--;
-				}
-			}
-		}
+    // Check for forced types
+    if ( settings.force_types ) {
+      
+      // Loop through all available resoultions
+      for ( current_res in available_res ) {
+        
+        // Don't count the length property as a resolution
+        if ( 'length' == current_res ) { continue; }
+        
+        i = settings.force_types.length;
+        found_types = 0;
+        
+        // Loop through all required types
+        while ( i > 0 ) {
+          
+          i--;
+          
+          j = available_res[current_res].length;
+          
+          // Loop through all available sources in current resolution
+          while ( j > 0 ) {
+            
+            j--;
+            
+            // Check if the current source matches the current type we're checking
+            if ( settings.force_types[i] === available_res[current_res][j].type ) {
+              
+              found_types++;
+              break;
+            }
+          }
+        }
+        
+        // If we didn't find sources for all of the required types in the current res, remove it
+        if ( found_types < settings.force_types.length ) {
+          
+          delete available_res[current_res];
+          available_res.length--;
+        }
+      }
+    }
     
     // Make sure we have at least 2 available resolutions before we add the button
     if ( available_res.length < 1 ) { return; }
 
-		// Loop through the choosen default resolutions if there were any
-		for ( i = 0; i < default_resolutions.length; i++ ) {
-			
-			// Set the video to start out with the first available default res
-			if ( available_res[default_resolutions[i]] ) {
-				player.src( available_res[default_resolutions[i]] );
-				player.currentRes = default_resolutions[i];
-				break;
-			}
-		}
-		
-		/*******************************************************************
-		 * Add methods to player object
-		 *******************************************************************/
-		
-		// Make sure we have player.localize() if it's not defined by Video.js
-		if ( typeof player.localize !== 'function' ) {
-			
-			player.localize = function( string ) {
-				
-				return string;
-			};
-		}
-		
-		// Helper function to get the current resolution
-		player.getCurrentRes = function() {
+    // Loop through the choosen default resolutions if there were any
+    for ( i = 0; i < default_resolutions.length; i++ ) {
+      
+      // Set the video to start out with the first available default res
+      if ( available_res[default_resolutions[i]] ) {
+        player.src( available_res[default_resolutions[i]] );
+        player.currentRes = default_resolutions[i];
+        break;
+      }
+    }
+    
+    /*******************************************************************
+     * Add methods to player object
+     *******************************************************************/
+    
+    // Make sure we have player.localize() if it's not defined by Video.js
+    if ( typeof player.localize !== 'function' ) {
+      
+      player.localize = function( string ) {
+        
+        return string;
+      };
+    }
+    
+    // Helper function to get the current resolution
+    player.getCurrentRes = function() {
 
-			if ( typeof player.currentRes !== 'undefined' ) {
-				
-				return player.currentRes;
-				
-			} else {
-				
-				try {
-					
-					return res = player.options().sources[0]['data-res'];
-					
-				} catch(e) {
-					
-					return '';
-				}
-			}
-		};
-		
-		// Define the change res method
-		player.changeRes = function( target_resolution ) {
-			
-			var video_el = player.el().firstChild,
-				is_paused = player.paused(),
-				current_time = player.currentTime(),
-				button_nodes,
-				button_node_count;
-			
-			// Do nothing if we aren't changing resolutions or if the resolution isn't defined
-			if ( player.getCurrentRes() == target_resolution
-				|| ! player.availableRes
-				|| ! player.availableRes[target_resolution] ) { return; }
-			
-			// Make sure the loadedmetadata event will fire
-			if ( 'none' == video_el.preload ) { video_el.preload = 'metadata'; }
+      if ( typeof player.currentRes !== 'undefined' ) {
+        
+        return player.currentRes;
+        
+      } else {
+        
+        try {
+          
+          return res = player.options().sources[0]['data-res'];
+          
+        } catch(e) {
+          
+          return '';
+        }
+      }
+    };
+    
+    // Define the change res method
+    player.changeRes = function( target_resolution ) {
+      
+      var video_el = player.el().firstChild,
+        is_paused = player.paused(),
+        current_time = player.currentTime(),
+        button_nodes,
+        button_node_count;
+      
+      // Do nothing if we aren't changing resolutions or if the resolution isn't defined
+      if ( player.getCurrentRes() == target_resolution
+        || ! player.availableRes
+        || ! player.availableRes[target_resolution] ) { return; }
+      
+      // Make sure the loadedmetadata event will fire
+      if ( 'none' == video_el.preload ) { video_el.preload = 'metadata'; }
 
-			if (settings.dynamic_source) {
-				var url = settings.dynamic_source + '?level=' + target_resolution;
-				_V_.xhr(url, function(error, response, responseBody){
-					if (error) {
-						return ;
-					}
+      if (settings.dynamic_source) {
+        var url = settings.dynamic_source + '?level=' + target_resolution;
+        _V_.xhr(url, function(error, response, responseBody){
+          if (error) {
+            return ;
+          }
 
-					var i, playlist = {};
-					var response = JSON.parse(responseBody);
-					for (i in response) {
-						playlist[response[i].level] = response[i];
-					}
+          var i, playlist = {};
+          var response = JSON.parse(responseBody);
+          for (i in response) {
+            playlist[response[i].level] = response[i];
+          }
 
-					for ( i in player.availableRes) {
-						if ( 'length' == i ) { 
-							continue; 
-						}
+          for ( i in player.availableRes) {
+            if ( 'length' == i ) { 
+              continue; 
+            }
 
-						for (var j in player.availableRes[i]) {
-							if (playlist[player.availableRes[i][j]['data-level']]) {
-								player.availableRes[i][j].src = playlist[player.availableRes[i][j]['data-level']].src;
-							}
-						}
-					}
+            for (var j in player.availableRes[i]) {
+              if (playlist[player.availableRes[i][j]['data-level']]) {
+                player.availableRes[i][j].src = playlist[player.availableRes[i][j]['data-level']].src;
+              }
+            }
+          }
 
-					player.src( player.availableRes[target_resolution] ).one( 'loadedmetadata', function() {
-						player.currentTime( current_time );
-						player.addClass( 'vjs-has-started' );
-						if ( ! is_paused ) { player.play(); }
-					});
+          player.src( player.availableRes[target_resolution] ).one( 'loadedmetadata', function() {
+            player.currentTime( current_time );
+            player.addClass( 'vjs-has-started' );
+            if ( ! is_paused ) { player.play(); }
+          });
 
-				});
+        });
 
-			} else {
-				// Change the source and make sure we don't start the video over		
-				player.src( player.availableRes[target_resolution] ).one( 'loadedmetadata', function() {
-					
-					player.currentTime( current_time );
-					
-					// If the video was paused, don't show the poster image again
-					player.addClass( 'vjs-has-started' );
-					
-					if ( ! is_paused ) { player.play(); }
-				});
-			}
+      } else {
+        // Change the source and make sure we don't start the video over    
+        player.src( player.availableRes[target_resolution] ).one( 'loadedmetadata', function() {
+          
+          player.currentTime( current_time );
+          
+          // If the video was paused, don't show the poster image again
+          player.addClass( 'vjs-has-started' );
+          
+          if ( ! is_paused ) { player.play(); }
+        });
+      }
 
 
-			// Save the newly selected resolution in our player options property
-			player.currentRes = target_resolution;
-			
-			// Make sure the button has been added to the control bar
-			if ( player.controlBar.resolutionSelector ) {
-				
-				button_nodes = player.controlBar.resolutionSelector.el().firstChild.children;
-				button_node_count = button_nodes.length;
-				
-				// Update the button text
-				while ( button_node_count > 0 ) {
-					
-					button_node_count--;
-					
-					if ( 'vjs-control-text' == button_nodes[button_node_count].className ) {
-						
-						button_nodes[button_node_count].innerHTML = player.localize( target_resolution );
-						break;
-					}
-				}
-			}
-			
-			// Update the classes to reflect the currently selected resolution
-			player.trigger( 'changeRes' );
-		};
-		
-		/*******************************************************************
-		 * Add the resolution selector button
-		 *******************************************************************/
-		
-		// Get the starting resolution
-		current_res = player.getCurrentRes();
-		
-		if ( current_res ) { current_res = methods.res_label( current_res ); }
+      // Save the newly selected resolution in our player options property
+      player.currentRes = target_resolution;
+      
+      // Make sure the button has been added to the control bar
+      if ( player.controlBar.resolutionSelector ) {
+        
+        button_nodes = player.controlBar.resolutionSelector.el().firstChild.children;
+        button_node_count = button_nodes.length;
+        
+        // Update the button text
+        while ( button_node_count > 0 ) {
+          
+          button_node_count--;
+          
+          if ( 'vjs-control-text' == button_nodes[button_node_count].className ) {
+            
+            button_nodes[button_node_count].innerHTML = player.localize( target_resolution );
+            break;
+          }
+        }
+      }
+      
+      // Update the classes to reflect the currently selected resolution
+      player.trigger( 'changeRes' );
+    };
+    
+    /*******************************************************************
+     * Add the resolution selector button
+     *******************************************************************/
+    
+    // Get the starting resolution
+    current_res = player.getCurrentRes();
+    
+    if ( current_res ) { current_res = methods.res_label( current_res ); }
 
-		// Add the resolution selector button
-		resolutionSelector = new _V_.ResolutionSelector( player, {
-			buttonText		: player.localize( current_res || 'Quality' ),
-			available_res	: available_res
-		});
-		
-		// Add the button to the control bar object and the DOM
-		player.controlBar.resolutionSelector = player.controlBar.addChild( resolutionSelector );
-	});
+    // Add the resolution selector button
+    resolutionSelector = new _V_.ResolutionSelector( player, {
+      buttonText    : player.localize( current_res || 'Quality' ),
+      available_res : available_res
+    });
+    
+    // Add the button to the control bar object and the DOM
+    player.controlBar.resolutionSelector = player.controlBar.addChild( resolutionSelector );
+  });
 
 })( videojs );
 });
@@ -12512,5 +12515,465 @@ define("balloon-video-player/1.0.0/src/plugins/watermark/watermark-debug", [], f
     //video.oncontextmenu = function(){alert("Hello!");}
   });
 })();
+
+define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], function(require, exports, module){
+  (function() {
+     //default setting
+     var defaultSetting = {
+        markerStyle: {
+           'width':'8px',
+           'border-radius': '10%',
+        },
+        markerTip: {
+           display: true,
+           text: function(marker) {
+              return "Break: "+ marker.text;
+           },
+           time: function(marker) {
+              return marker.time;
+           }
+        },
+        breakOverlay:{
+           display: false,
+           displayTime: 3,
+           text: function(marker) {
+              return "Break overlay: " + marker.overlayText;
+           },
+           style: {
+              'width':'100%',
+              'bottom': '80px',
+              'background-color': 'rgba(0,0,0,0.7)',
+              'color': 'white',
+              'font-size': '17px'
+           }
+        },
+        onMarkerClick: function(marker) {},
+        onMarkerReached: function(marker) {},
+        markers: []
+     };
+     
+     // create a non-colliding random number
+     function generateUUID() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+           var r = (d + Math.random()*16)%16 | 0;
+           d = Math.floor(d/16);
+           return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+     };
+     
+     function registerVideoJsMarkersPlugin(options) {
+        /**
+         * register the markers plugin (dependent on jquery)
+         */
+     
+        var setting      = $.extend(true, {}, defaultSetting, options),
+            markersMap   = {},
+            markersList  = [], // list of markers sorted by time
+            videoWrapper = $(this.el()),
+            currentMarkerIndex  = -1, 
+            player       = this,
+            markerTip    = null,
+            breakOverlay = null,
+            overlayIndex = -1;
+            
+        function sortMarkersList() {
+           // sort the list by time in asc order
+           markersList.sort(function(a, b){
+              return setting.markerTip.time(a) - setting.markerTip.time(b);
+           });
+        }
+        
+        function addMarkers(newMarkers) {
+           // create the markers
+           $.each(newMarkers, function(index, marker) {
+              marker.key = generateUUID();
+              
+              videoWrapper.find('.vjs-progress-control').append(
+                 createMarkerDiv(marker));
+              
+              // store marker in an internal hash map
+              markersMap[marker.key] = marker;
+              markersList.push(marker);          
+           });
+           
+           sortMarkersList();
+        }
+        
+        function getPosition(marker){
+           return (setting.markerTip.time(marker) / player.duration()) * 100
+        }
+        
+        function createMarkerDiv(marker, duration) {
+           var markerDiv = $("<div class='vjs-marker'></div>");
+           markerDiv.css(setting.markerStyle)
+              .css({"left" : getPosition(marker) + '%'})
+              .attr("data-marker-key", marker.key)
+              .attr("data-marker-time", setting.markerTip.time(marker));
+              
+           if(marker.finished !=undefined && marker.finished==true){
+               markerDiv.css('background-color','red');
+           }
+           // add user-defined class to marker
+           if (marker.class) {
+              markerDiv.addClass(marker.class);
+           }
+           
+           // bind click event to seek to marker time
+           markerDiv.on('click', function(e) {
+              
+              var preventDefault = false;
+              if (typeof setting.onMarkerClick === "function") {
+                 // if return false, prevent default behavior
+                 preventDefault = setting.onMarkerClick(marker) == false;
+              }
+              
+              if (!preventDefault) {
+                 var key = $(this).data('marker-key');
+                 player.currentTime(setting.markerTip.time(markersMap[key]));
+              }
+           });
+           
+           if (setting.markerTip.display) {
+              registerMarkerTipHandler(markerDiv);
+           }
+           
+           return markerDiv;
+        }      
+        function updateMarkers() {
+           // update UI for markers whose time changed
+
+           for (var i = 0; i< markersList.length; i++) {
+              var marker = markersList[i];
+              var markerDiv = videoWrapper.find(".vjs-marker[data-marker-key='" + marker.key +"']"); 
+              var markerTime = setting.markerTip.time(marker);
+              
+              if (markerDiv.data('marker-time') != markerTime) {
+                 markerDiv.css({"left": getPosition(marker) + '%'})
+                    .attr("data-marker-time", markerTime);
+                 if(marker.finished !=undefined && marker.finished==true){
+                     markerDiv.css('background-color','red');
+                 }
+              }
+           }
+           sortMarkersList();
+        }
+
+        function removeMarkers(indexArray) {
+           // reset overlay
+           if (breakOverlay){
+               overlayIndex = -1;
+               breakOverlay.css("visibility", "hidden");
+           }
+           currentMarkerIndex = -1;
+
+           for (var i = 0; i < indexArray.length; i++) {
+              var index = indexArray[i];
+              var marker = markersList[index];
+              if (marker) {
+                 // delete from memory
+                 delete markersMap[marker.key];
+                 markersList[index] = null;
+                 
+                 // delete from dom
+                 videoWrapper.find(".vjs-marker[data-marker-key='" + marker.key +"']").remove();
+              }
+           }
+           
+           // clean up array
+           for (var i = markersList.length - 1; i >=0; i--) {
+              if (markersList[i] === null) {
+                 markersList.splice(i, 1);
+              }
+           }
+           
+           // sort again
+           sortMarkersList();
+        }
+        
+        
+        // attach hover event handler
+        function registerMarkerTipHandler(markerDiv) {
+           
+           markerDiv.on('mouseover', function(){
+              var marker = markersMap[$(this).data('marker-key')];
+              
+              markerTip.find('.vjs-tip-inner').text(setting.markerTip.text(marker));
+              
+              // margin-left needs to minus the padding length to align correctly with the marker
+              markerTip.css({"left" : getPosition(marker) + '%',
+                             "margin-left" : -parseFloat(markerTip.css("width"))/2 - 1 + 'px',
+                             "visibility"  : "visible"});
+              
+           }).on('mouseout',function(){
+              markerTip.css("visibility", "hidden");
+           });
+        }
+        
+        function initializeMarkerTip() {
+           markerTip = $("<div class='vjs-tip'><div class='vjs-tip-arrow'></div><div class='vjs-tip-inner'></div></div>");
+           videoWrapper.find('.vjs-progress-control').append(markerTip);
+        }
+        
+        // show or hide break overlays
+        function updateBreakOverlay(currentTime) {
+           if(currentMarkerIndex < 0){
+              return;
+           }
+           
+           var marker = markersList[currentMarkerIndex];
+           var markerTime = setting.markerTip.time(marker);
+        
+           if(marker.finished != undefined &&marker.finished ==true){
+             return ;
+           }
+           if (currentTime >= markerTime && 
+              currentTime <= (markerTime + setting.breakOverlay.displayTime)) {
+
+              if (overlayIndex != currentMarkerIndex){
+                 overlayIndex = currentMarkerIndex;
+                 breakOverlay.find('.vjs-break-overlay-text').text(setting.breakOverlay.text(marker));
+              }
+              
+              breakOverlay.css('visibility', "visible");
+              
+           } else {
+              overlayIndex = -1;
+              breakOverlay.css("visibility", "hidden");
+           }
+        }
+        
+        // problem when the next marker is within the overlay display time from the previous marker
+        function initializeOverlay() {
+           breakOverlay = $("<div class='vjs-break-overlay'><div class='vjs-break-overlay-text'></div></div>")
+              .css(setting.breakOverlay.style);
+           videoWrapper.append(breakOverlay);
+           overlayIndex = -1;
+        }
+        
+        function onTimeUpdate() {
+           /*
+               check marker reached in between markers
+               the logic here is that it triggers a new marker reached event only if the player 
+               enters a new marker range (e.g. from marker 1 to marker 2). Thus, if player is on marker 1 and user clicked on marker 1 again, no new reached event is triggered)
+           */
+           
+           var getNextMarkerTime = function(index) {
+              if (index < markersList.length - 1) {
+                 return setting.markerTip.time(markersList[index + 1]);
+              } 
+              // next marker time of last marker would be end of video time
+              return player.duration();
+           }
+
+           // get early unfinished marker time
+           var getFastMarkerTime = function(){
+             for (var i = 0; i < markersList.length; i++) {
+               var marker = markersList[i];
+               if(marker.finished ==undefined || marker.finished ==false){
+                return marker.time;
+               }
+             }
+             return -1;
+           }
+
+           var fastMarkerTime = getFastMarkerTime();
+           var currentTime = player.currentTime();
+           var newMarkerIndex;
+           
+           if(fastMarkerTime>0 && currentTime>fastMarkerTime){
+             // if(!player.paused()){
+             //   player.pause();
+             // }
+             player.currentTime(fastMarkerTime);
+           }
+
+           if (currentMarkerIndex != -1) {
+              // check if staying at same marker
+              var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
+              if(currentTime >= setting.markerTip.time(markersList[currentMarkerIndex]) &&
+                 currentTime < nextMarkerTime) {
+                 return;
+              }
+           }
+           
+           // check first marker, no marker is selected
+           if (markersList.length > 0 &&
+              currentTime < setting.markerTip.time(markersList[0])) {
+              newMarkerIndex = -1;
+           } else {
+              // look for new index
+              for (var i = 0; i < markersList.length; i++) {
+                 nextMarkerTime = getNextMarkerTime(i);
+                 
+                 if(currentTime >= setting.markerTip.time(markersList[i]) &&
+                    currentTime < nextMarkerTime) {
+                    
+                    newMarkerIndex = i;
+                    break;
+                 }
+              }
+           }
+           
+           // set new marker index
+           if (newMarkerIndex != currentMarkerIndex) {
+              // trigger event
+              if (newMarkerIndex != -1 && options.onMarkerReached) {
+                options.onMarkerReached(markersList[newMarkerIndex],player);
+              }
+              currentMarkerIndex = newMarkerIndex;
+           }
+           
+           // update overlay
+           if(setting.breakOverlay.display) {
+              updateBreakOverlay(currentTime);
+           }
+        }
+        
+        // setup the whole thing
+        function initialize() {
+           if (setting.markerTip.display) {
+              initializeMarkerTip();
+           }
+        
+           // remove existing markers if already initialized
+           player.markers.removeAll();
+           addMarkers(options.markers);
+                    
+           if (setting.breakOverlay.display) {
+              initializeOverlay();
+           }
+           onTimeUpdate();
+           player.on("timeupdate", onTimeUpdate);
+        }
+        
+        // setup the plugin after we loaded video's meta data
+        player.on("loadedmetadata", function() {
+           initialize();
+        });
+        
+        // exposed plugin API
+        player.markers = {
+           getMarkers: function() {
+             return markersList;
+           },
+           next : function() {
+              // go to the next marker from current timestamp
+              var currentTime = player.currentTime();
+              for (var i = 0; i < markersList.length; i++) {
+                 var markerTime = setting.markerTip.time(markersList[i]);
+                 if (markerTime > currentTime) {
+                    player.currentTime(markerTime);
+                    break;
+                 }
+              }
+           },
+           prev : function() {
+              // go to previous marker
+              var currentTime = player.currentTime();
+              for (var i = markersList.length - 1; i >=0 ; i--) {
+                 var markerTime = setting.markerTip.time(markersList[i]);
+                 // add a threshold
+                 if (markerTime + 0.5 < currentTime) {
+                    player.currentTime(markerTime);
+                    break;
+                 }
+              }
+           },
+           add : function(newMarkers) {
+              // add new markers given an array of index
+              addMarkers(newMarkers);
+           },
+           remove: function(indexArray) {
+              // remove markers given an array of index
+              removeMarkers(indexArray);
+           },
+           removeAll: function(){
+              var indexArray = [];
+              for (var i = 0; i < markersList.length; i++) {
+                 indexArray.push(i);
+              }
+              removeMarkers(indexArray);
+           },
+           updateTime: function(){
+              // notify the plugin to update the UI for changes in marker times 
+              updateMarkers();
+           },
+           reset: function(newMarkers){
+              // remove all the existing markers and add new ones
+              player.markers.removeAll();
+              addMarkers(newMarkers);
+           },
+           destroy: function(){
+              // unregister the plugins and clean up even handlers
+              player.markers.removeAll();
+              breakOverlay.remove();
+              markerTip.remove();
+              player.off("timeupdate", updateBreakOverlay);
+              delete player.markers;
+           },
+        };
+     }
+
+     videojs.plugin('markers', registerVideoJsMarkersPlugin);
+
+  })(videojs);
+});
+
+define("balloon-video-player/1.0.0/src/plugins/pluck/pluck-debug", [], function(require, exports, module){
+  (function() {
+    var defaults = {
+          text: 'Owned_Stamp.png',
+          opacity: 100,
+          display:true,
+      },
+      extend = function() {
+        var args, target, i, object, property;
+        args = Array.prototype.slice.call(arguments);
+        target = args.shift() || {};
+        for (i in args) {
+          object = args[i];
+          for (property in object) {
+            if (object.hasOwnProperty(property)) {
+              if (typeof object[property] === 'object') {
+                target[property] = extend(target[property], object[property]);
+              } else {
+                target[property] = object[property];
+              }
+            }
+          }
+        }
+        return target;
+      };
+      createDom = function(video,text){
+        div = document.createElement('div');
+        div.className = 'vjs-pluck';
+        span = document.createElement('span');
+        span.innerHTML = text;
+        span.className = 'vjs-pluck-text';
+        div.appendChild(span);
+        video.appendChild(div);
+        return div;
+      };
+
+    videojs.plugin('pluck', function(options) {
+      var settings, video, div, img;
+      settings = extend(defaults, options);
+
+      video = this.el();
+      div = document.getElementsByClassName('vjs-pluck')[0];
+
+      if(settings.display == false){
+        if(div != undefined){
+          div.style.visibility='hidden';
+        }
+      }else{
+        div = div == undefined?createDom(video,settings.text):div;
+        div.style.visibility='visible';
+      }
+    });
+  })(videojs);
+});
 
 });

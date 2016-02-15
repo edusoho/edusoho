@@ -16,10 +16,9 @@ appProvider.provider('applicationProvider', function() {
 		application.init = function(host) {
 			application.setHost(host);
 			cordovaUtil.getUserToken($q).then(function(data) {
-				
 				application.user = data.user;
 				application.token = data.token;
-      				application.updateScope($rootScope);
+      	application.updateScope($rootScope);
 			});
 		}
 
@@ -80,7 +79,7 @@ appProvider.provider('appRouter', function($stateProvider) {
        });
 
         $stateProvider.state('courseList', {
-          url: "/courselist/:categoryId",
+          url: "/courselist/:type/:categoryId",
           views: {
             'rootView': {
               templateUrl: app.viewFloder  + "view/course_list.html",

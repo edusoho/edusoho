@@ -70,12 +70,17 @@
     <div class="alert alert-info">
       <ul>
         {% if storageSetting.upload_mode == 'cloud' %}
-          <li>{{'资料库支持多种文件格式上传分享下载，单个文件大小上限'|trans}}<strong>2GB</strong>{{'。'|trans}}</li>
-          <li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
-          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+          {{'<li>资料库支持多种文件格式上传分享下载，单个文件大小上限<strong>2GB</strong>。</li>'|trans|raw}}
+          {{'<li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
+          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
         {% else %}
-          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-          <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+          {% if app.request.getLocale() == 'ug_CN' %}
+            <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+          {% else %}
+            <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+          {% endif %}
         {% endif %}
       </ul>
     </div>
@@ -88,7 +93,7 @@
       <div class="quality-switcher-control">
         <div class="video-quality radios">
           {{'画质：'|trans}}
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans|raw, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans|raw, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans|raw}, storageSetting.video_quality|default('low')) }}
         </div>
 
         <div class="audio-quality radios">
@@ -106,12 +111,20 @@
   {% elseif targetType == 'coursematerial' %}
     <div class="alert alert-info">
       <ul>
-        <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
-        {% if storageSetting.upload_mode == 'cloud' %}
-          <li>文件将上传到<strong>云服务器</strong>。</li>
-          <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
         {% else %}
-          <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+          <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
+        {% endif %}
+        {% if storageSetting.upload_mode == 'cloud' %}
+          {{'<li>文件将上传到<strong>云服务器</strong>。</li>'|trans}}
+          {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans}}
+        {% else %}
+          {% if app.request.getLocale() == 'ug_CN' %}
+            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+          {% else %}
+            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+          {% endif %}
         {% endif %}
       </ul>
     </div>

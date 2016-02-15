@@ -1,14 +1,14 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %} {{'个人详细信息'|trans}}{% endblock %}
+{% block title %}个人详细信息{% endblock %}
 
 {% block body %}
 
 <table class="table table-striped table-condenseda table-bordered">
   <tr>
-    <th width="25%"> {{'用户名'|trans}}</th>
+    <th width="25%">用户名</th>
     <td width="75%">
-      <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank"> {{'个人主页'|trans}}</a>
+      <a class="pull-right" href="{{ path('user_show', {id:user.id}) }}" target="_blank">个人主页</a>
       {{ user.nickname }}
     </td>
   </tr>
@@ -26,7 +26,7 @@
   </tr>
 
   <tr>
-    <th> {{'用户组'|trans}}</th>
+    <th>用户组</th>
     <td>
       {% for role in user.roles %}
         {{ dict_text('userRole', role) }}
@@ -35,7 +35,7 @@
   </tr>
 
   <tr>
-    <th> {{'注册时间'|trans}}/IP</th>
+    <th>注册时间/IP</th>
     <td>
       {{ user.createdTime|date('Y-n-d H:i:s') }}
       /
@@ -44,7 +44,7 @@
   </tr>
 
   <tr>
-    <th> {{'最近登录时间'|trans}}/IP</th>
+    <th>最近登录时间/IP</th>
     <td> 
       {% if user.loginTime == 0 %}
           --
@@ -58,171 +58,171 @@
   </tr>
 
   <tr>
-    <th> {{'姓名'|trans}}</th>
+    <th>姓名</th>
     <td>
       {% if profile.truename %}
         {{ profile.truename }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'性别'|trans}}</th>
+    <th>性别</th>
     <td>
       {% if profile.gender %}
-        {% if profile.gender == 'male' %} {{'男性'|trans}}{% endif %}
-        {% if profile.gender == 'female' %} {{'女性'|trans}}{% endif %}
-        {% if profile.gender == 'secret' %} {{'秘密'|trans}}{% endif %}
+        {% if profile.gender == 'male' %}男性{% endif %}
+        {% if profile.gender == 'female' %}女性{% endif %}
+        {% if profile.gender == 'secret' %}秘密{% endif %}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
 {#   <tr>
-    <th> 类型</th>
+    <th>类型</th>
     <td>
       {% if profile.iam %}
         {{ profile.iam }}
       {% else %}
-         暂无
+        暂无
       {% endif %}
     </td>
   </tr> #}
  
    <tr>
-    <th> {{'身份证号'|trans}}</th>
+    <th>身份证号</th>
     <td>
       {% if profile.idcard %}
         {{ profile.idcard }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'手机号码'|trans}}</th>
+    <th>手机号码</th>
     <td>
       {% if user.verifiedMobile %}
-        {{ user.verifiedMobile|default('')}}<span class="text-success">({{'已绑定'|trans}})</span> 
+        {{ user.verifiedMobile|default('')}}<span class="text-success">(已绑定)</span> 
       {% elseif profile.mobile %}
-        {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
+        {{ profile.mobile }}<span class="text-danger">(未绑定)</span>
       {% else %}
-        {{ profile.mobile|default('暂无'|trans) }}
+        {{ profile.mobile|default('暂无') }}
       {% endif %}
     </td>
   </tr>
 
 {#   <tr>
-    <th> 学校</th>
+    <th>学校</th>
     <td>
       {% if profile.school %}
         {{ profile.school }}
       {% else %}
-         暂无
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> 班级</th>
+    <th>班级</th>
     <td>
       {% if profile.class %}
         {{ profile.class }}
       {% else %}
-         暂无
+        暂无
       {% endif %}
     </td>
   </tr> #}
 
   <tr>
-    <th> {{'公司'|trans}}</th>
+    <th>公司</th>
     <td>
       {% if profile.company %}
         {{ profile.company }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'职业'|trans}}</th>
+    <th>职业</th>
     <td>
       {% if profile.job %}
         {{ profile.job }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
 
   <tr>
-    <th> {{'头衔'|trans}}</th>
+    <th>头衔</th>
     <td>
     {% if profile.title %}
         {{ profile.title }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'个人签名'|trans}}</th>
+    <th>个人签名</th>
     <td>
     {% if profile.signature %}
         {{ profile.signature }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'自我介绍'|trans}}</th>
+    <th>自我介绍</th>
     <td>
     {% if profile.about %}
         {{ profile.about | raw }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'个人网站'|trans}}</th>
+    <th>个人网站</th>
     <td>
       {% if profile.site %}
         {{ profile.site }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'微博'|trans}}</th>
+    <th>微博</th>
     <td>
       {% if profile.weibo %}
         {{ profile.weibo }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
 
   <tr>
-    <th> {{'微信'|trans}}</th>
+    <th>微信</th>
     <td>
       {% if profile.weixin %}
         {{ profile.weixin }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
@@ -233,7 +233,7 @@
       {% if profile.qq %}
         {{ profile.qq }}
       {% else %}
-         {{'暂无'|trans}}
+        暂无
       {% endif %}
     </td>
   </tr>
@@ -253,7 +253,7 @@
             {{ profile[field.fieldName] }}
             {% endif %}
           {% else %}
-             {{'暂无'|trans}}
+            暂无
           {% endif %}
         </td>
     </tr>
@@ -263,5 +263,5 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-primary" data-dismiss="modal"> {{'关闭'|trans}}</button>
+  <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
 {% endblock %}

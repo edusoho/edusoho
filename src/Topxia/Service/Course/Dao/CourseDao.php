@@ -8,15 +8,11 @@ interface CourseDao
 
     public function getCourse($id);
 
-    public function getCoursesCount();
-
     public function findCoursesByIds(array $ids);
 
     public function findCoursesByParentIdAndLocked($parentId, $locked);
-    
-    public function findCoursesByCourseIds(array $ids, $start, $limit);
 
-    public function findCoursesByTagIdsAndStatus(array $tagIds, $status, $start, $limit);
+    public function findCoursesByCourseIds(array $ids, $start, $limit);
 
     public function findNormalCoursesByAnyTagIdsAndStatus(array $tagIds, $status, $orderBy, $start, $limit);
 
@@ -29,12 +25,12 @@ interface CourseDao
     public function updateCourse($id, $fields);
 
     public function deleteCourse($id);
-    
-    public function waveCourse($id,$field,$diff);
+
+    public function waveCourse($id, $field, $diff);
 
     public function clearCourseDiscountPrice($discountId);
 
-    public function analysisCourseDataByTime($startTime,$endTime);
+    public function analysisCourseDataByTime($startTime, $endTime);
 
     public function findCoursesCountByLessThanCreatedTime($endTime);
 

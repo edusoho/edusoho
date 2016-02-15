@@ -21,6 +21,8 @@ interface MoneyCardService
 
 	public function getMoneyCard ($id);
 
+    public function getMoneyCardByIds($ids);
+
     public function getBatch ($id);
 
 	public function searchMoneyCards (array $conditions, array $oderBy, $start, $limit);

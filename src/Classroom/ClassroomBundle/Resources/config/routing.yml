@@ -111,6 +111,10 @@ classroom_show:
     pattern:  /classroom/{id}
     defaults: { _controller: ClassroomBundle:Classroom:show }
 
+classroom_qrcode:
+    pattern:  /classroom/{id}/qrcode
+    defaults: { _controller: ClassroomBundle:Classroom:qrcode }
+
 classroom_reviews:
     pattern:  /classroom/{id}/review
     defaults: { _controller: ClassroomBundle:Classroom/Review:list }

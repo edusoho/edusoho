@@ -1,0 +1,43 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+	     {% set data = notification.content %}
+	    
+	     {% if data.type == 'delete'%}
+	     	    您的话题 <strong>“{{data.title}}”</strong>被<a href ="{{path('user_show',{id:data.userId})}}">{{data.userName}}</a>删除。
+	     {% elseif data.type == 'elite' %}
+	     	    您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被设为精华。
+	     {% elseif data.type == 'unelite' %}
+	      	  您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被取消精华。
+	     {% elseif data.type == 'top' %}
+	     	    您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被置顶。
+        {% elseif data.type == 'untop' %}
+			      您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被取消置顶。
+        {% elseif data.type == 'close' %}
+         	  您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被关闭。
+        {% elseif data.type == 'open' %}
+         	  您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被打开。
+        {% elseif data.type == 'modify' %}
+            您的话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员编辑。<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'>点击查看</a>
+        {% elseif data.type == 'collect'%}
+            用户<a href="{{path('user_show', {id:data.userId})}}" target='_blank'>{{data.userName}}</a>已经收藏了你的话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>！
+        {% elseif data.type == 'uncollect'%}
+            用户<a href="{{path('user_show', {id:data.userId})}}" target='_blank'>{{data.userName}}</a>已经取消收藏你的话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>！
+        {% elseif data.type == 'reply' %}
+            <a href="{{path('user_show', {id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>在话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>中回复了您。<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}?page={{data.page}}#post-{{data.post}}" target='_blank'>点击查看</a>
+        {% elseif data.type == 'delete-post'%}
+            您在话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>的回复被删除。
+        {% elseif data.type == 'type-modify'%}
+            {% set url = data.targetType~'_thread_show' %}
+            {% set urlId = data.targetType~'Id'%}  
+            您的话题<a href="{{path(data.targetType~'_thread_show' ,{(data.targetType~'Id'):data.targetId,threadId:data.targetId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被<a href="{{path('user_show',{id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>编辑
+	 	 {% endif %}
+    </div>
+    <div class="notification-footer">
+     {{notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

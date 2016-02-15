@@ -6,7 +6,7 @@
 
 {% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ','}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {% block title %}{{ categoryArray.name|default('全部'|trans) }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
     {% endblock %}
 
 {% block top_content %}
@@ -16,10 +16,16 @@
         <i class="es-icon es-icon-viewcomfy"></i>
         {{'课程列表'|trans}}
       </div>
-      {% if setting("classroom.enabled") %}
-      <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
-        {{'查看'|trans}}{{ setting('classroom.name')|default('班级'|trans) }}
-      </a>
+
+      {% set classrooms = data('Classrooms',{count:1}) %}
+      {% if classrooms|default(null) %}
+        <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
+          {% if app.request.getLocale() == 'ug_CN' %}
+            查看{{ setting('classroom.name')|default('班级') }}
+          {% else %}
+            查看{{ setting('classroom.name')|default('班级') }}
+          {% endif %}
+        </a>
       {% endif %}
     </div>
   </div>

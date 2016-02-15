@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    require('ckeditor');
+    require('es-ckeditor');
 	var Validator = require('bootstrap.validator');
 
     exports.run = function() {

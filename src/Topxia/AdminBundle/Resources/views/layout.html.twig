@@ -24,9 +24,9 @@
     {% block title %}
       {% for m in menu_breadcrumb|reverse %}
         {% if loop.index == menu_breadcrumb|length %}
-          {{ m.name|trans }}
+          {{ m.name }}
         {% else %}
-          {{ m.name|trans }} -
+          {{ m.name }} -
         {% endif %}
       {% endfor %}
     {% endblock %}
@@ -34,9 +34,10 @@
   </title>
 
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+    <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
-
+  
   {% block stylesheets %}
   <link href="{{ asset('assets/libs/gallery2/bootstrap/3.1.1/css/bootstrap.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/css/common.css') }}" rel="stylesheet" />
@@ -60,7 +61,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %} {{'管理后台'|trans}}</a>
+        <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
@@ -78,8 +79,8 @@
               {{ self_macro.menu_link_html(_context, m) }}
               </li>
               {% endif %}
-            {% else %}
-              {% if not (m.code == 'admin_app' and setting('copyright.thirdCopyright') == 1) %}
+            {% else %}    
+              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
                 <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
@@ -91,17 +92,17 @@
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
-            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span>  {{'常用'|trans}}</a>
+            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" ><span class="glyphicon glyphicon-list admin-star"></span> 常用</a>
             <ul class="dropdown-menu shortcuts">
               {{ render(controller('TopxiaAdminBundle:CommonAdmin:commonAdmin')) }}
             </ul>
           </li>
-          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i>  {{'回首页'|trans}}</a></li>
+          <li><a href="{{ path('homepage') }}"><i class="glyphicon glyphicon-home"></i> 回首页</a></li>
 
           <li class="dropdown">
                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ app.user.nickname }} <span class="glyphicon glyphicon-chevron-down"></span></a>
                 <ul class="dropdown-menu main-list">
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i>  {{'退出'|trans}}</a></li>
+                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-off"></i> 退出</a></li>
                 </ul>
               </li>
         </ul>
@@ -109,7 +110,7 @@
       </div><!--/.navbar-collapse -->
     </div>
   </div>
-
+  
   <div class="container">
     <div class="row">
       {% block content %}
@@ -122,12 +123,12 @@
                 {% for m in groupedMenus %}
                 {% set array = {'0':'admin_my_cloud','1':'admin_setting_cloud_video','2':'admin_setting_cloud'} %}
                  {% if m.code not in  array or is_granted('ROLE_SUPER_ADMIN') %}
-
+                            
                   {% if not menu_hiddens[m.code]|default(false)  %}
                     {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
                     {{ self_macro.menu_link_html(_context, m, menuClass) }}
                   {% endif %}
-
+                      
                   {% endif %}
 
                 {% endfor %}
@@ -138,7 +139,7 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name)|trans }}{% endblock %}</h1>
+            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
             <div class="pull-right">
 
               {% block page_buttons %}
@@ -163,7 +164,7 @@
           {% endif %}
 
           {% block content_header %}{% endblock %}
-
+          
           {% if tabMenus|default(null) and menu_current.group == 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
@@ -195,15 +196,25 @@
     </div>
   </div>
 
-  {% block footer %}{% endblock %}
+  {% block footer %}
+    {{ setting('site.analytics')|raw }} 
+  {% endblock %}
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>
+  {% if setting('copyright.thirdCopyright') != 1 %}
+    <div class="fixed-bar">
+      <a href="{{path('admin_feedback')}}"  target='_blank' class="icon-question-text feedback">
+        <i class="es-icon es-icon-help"></i>
+        <span>产品<br/>反馈</span>
+      </a>
+    </div>
+  {% endif %}
 </body>
 </html>
 
 {% macro menu_link_html(_context, menu, class) %}
-  <a
+  <a 
   {% if class %}
     class="{{ class }}"
   {% endif %}
@@ -217,5 +228,5 @@
   {% if menu.blank|default(false) %}
     target="blank"
   {% endif %}
-  >{{ menu.name|trans }}</a>
+  >{{ menu.name }}</a>
 {% endmacro %}

@@ -150,14 +150,7 @@ class CloudSettingController extends BaseController
     {
         $api = CloudAPIFactory::create('leaf');
         $info = $api->get('/me');
-        $copyright = $this->getSettingService()->get('copyright',array());
-        if(isset($info['thirdCopyright']) and $info['thirdCopyright'] == '1'){
-            $copyright["thirdCopyright"] = 1;
-        } else {
-            $copyright["thirdCopyright"] = 0;
-        }
-        $this->getSettingService()->set('copyright',$copyright);
-    
+        
         if (empty($info['copyright'])) {
             throw $this->createAccessDeniedException('您无权操作!');
         }
@@ -167,6 +160,7 @@ class CloudSettingController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned' => 1,
             'name' => $request->request->get('name', ''),
+            'thirdCopyright' => isset($info['thirdCopyright']) and $info['thirdCopyright'] == '1' ? 1:0
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));

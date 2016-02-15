@@ -19,14 +19,14 @@
     </div>
   </div>
 
-    <div class="form-group">
-      <div class="col-md-3 control-label">
-        <label for="disabled_message">支付关闭时的提示信息</label>
-      </div>
-      <div class="controls col-md-8">
-        <textarea id="disabled_message" name="disabled_message" class="form-control">{{payment.disabled_message}}</textarea>
-      </div>
+  <div class="form-group">
+    <div class="col-md-3 control-label">
+      <label for="disabled_message">支付关闭时的提示信息</label>
     </div>
+    <div class="controls col-md-8">
+      <textarea id="disabled_message" name="disabled_message" class="form-control">{{payment.disabled_message}}</textarea>
+    </div>
+  </div>
 
 
   <fieldset>
@@ -47,12 +47,12 @@
       <div class="controls col-md-8 radios">
         {{ radios('alipay_type', {'direct':'立即到账接口', 'escow': '担保交易接口', 'dualfun':'标准双接口' }, payment.alipay_type)}}
         <div class="help-block">
-          支付宝规定，“立即到账接口”只能以企业名义申请，个人用户只能申请“担保交易接口”。
-          <a href="http://www.edusoho.com/intro/96#payment" target="_blank">如何申请？</a>
+          PID和Key可在申请支付宝接口后获取，
+          <a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218012942" target="_blank">如何申请？</a>
           <br>
-          "立即到账接口"如需在移动客户端使用，还需开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2014110308142133" target="blank">手机网站支付</a>
+          "立即到账接口"如需在移动客户端使用，请开通<a href="https://b.alipay.com/order/productDetail.htm?productId=2015110218008816" target="blank">手机网站支付</a>
           <br>
-          “标准双接口”在2014-12-29日已被支付宝下线，此时间前申请成功的用户还可以在签约期内使用，建议签约担保交易以免过期后影响正常支付。
+          “标准双接口”和“担保交易接口”分别在2014-12-29、2016-1-21停止签约，已生效合同继续有效至合同结束，使用这两个接口的用户请在合同到期前改签即时到账收款。
         </div>
       </div>
     </div>
@@ -94,10 +94,9 @@
         <div class="help-block">该配置用于取消订单后，同步关闭支付宝的交易订单。如需使用该配置，需向支付宝客服申请开通“交易关闭接口”，审核通过后，方可使用。</div>
       </div>
     </div>
-
   </fieldset>
 
-    <fieldset>
+  <fieldset>
     <legend>微信支付</legend>
     <div class="form-group">
       <div class="col-md-3 control-label">
@@ -123,15 +122,6 @@
 
     <div class="form-group">
       <div class="col-md-3 control-label">
-        <label for="wxpay_key">商户平台Key</label>
-      </div>
-      <div class="controls col-md-8">
-        <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
-      </div>
-    </div>
-
-    <div class="form-group">
-      <div class="col-md-3 control-label">
         <label for="wxpay_key">商户号</label>
       </div>
       <div class="controls col-md-8">
@@ -140,6 +130,89 @@
       </div>
     </div>
 
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="wxpay_key">商户平台Key</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="wxpay_secret" name="wxpay_secret" class="form-control" value="{{payment.wxpay_secret}}">
+      </div>
+    </div> 
+  </fieldset>
+
+  <fieldset>
+    <legend>网银支付</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>接口状态</label>
+      </div>
+      <div class="controls col-md-3 radios">
+        {{ radios('heepay_enabled', {1:'开启', 0:'关闭'}, payment.heepay_enabled) }}
+      </div>
+      <div class="controls col-md-4 radios">
+        <a href="http://www.edusoho.com/files/heepay.zip">下载接口申请说明文档</a>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="heepay_key">PID</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="heepay_key" name="heepay_key" class="form-control" value="{{payment.heepay_key}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="heepay_key">商户平台Key</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="heepay_secret" name="heepay_secret" class="form-control" value="{{payment.heepay_secret}}">
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>快捷支付</legend>
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label>接口状态</label>
+      </div>
+      <div class="controls col-md-3 radios">
+        {{ radios('quickpay_enabled', {1:'开启', 0:'关闭'}, payment.quickpay_enabled) }}
+      </div>
+      <div class="controls col-md-4 radios">
+        <a href="http://www.edusoho.com/files/heepay.zip">下载接口申请说明文档</a>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="quickpay_key">PID</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="quickpay_key" name="quickpay_key" class="form-control" value="{{payment.quickpay_key}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="quickpay_key">Key</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="quickpay_secret" name="quickpay_secret" class="form-control" value="{{payment.quickpay_secret}}">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-3 control-label">
+        <label for="quickpay_key">Aes</label>
+      </div>
+      <div class="controls col-md-8">
+        <input type="text" id="quickpay_aes" name="quickpay_aes" class="form-control" value="{{payment.quickpay_aes}}">
+      </div>
+    </div>   
   </fieldset>
 
   <div class="form-group">
@@ -148,7 +221,6 @@
       <button type="submit" class="btn btn-primary">提交</button>
     </div>
   </div>
-
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 </form>

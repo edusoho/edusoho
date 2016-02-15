@@ -16,16 +16,21 @@ define(function(require, exports, module) {
 
         setup: function() {
         	
+            var techOrder = ['flash','html5'];
+            if(this.get("agentInWhiteList")) {
+                techOrder = ['html5', 'flash'];
+            }
+
     		var that = this;
     		var player = VideoJS(this.element.attr("id"), {
-				techOrder: ['flash','html5'],
+				techOrder: techOrder,
 				autoplay: false
     		});
 			player.dimensions('100%', '100%');
 			player.src(this.get("url"));
 
 			player.on('error', function(error){
-			    this.set("hasPlayerError", true);
+			    that.set("hasPlayerError", true);
 			    var message = '您的浏览器不能播放当前视频。';
 			    Notify.danger(message, 60);
 			});
@@ -61,6 +66,14 @@ define(function(require, exports, module) {
 
 			LocalVideoPlayer.superclass.setup.call(this);
     	},
+
+        checkHtml5: function() {
+            if (window.applicationCache) {
+                return true;
+            } else {
+                return false;
+            }
+        },
     	
     	play: function(){
     		this.get("player").play();

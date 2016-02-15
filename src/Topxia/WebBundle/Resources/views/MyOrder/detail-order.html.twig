@@ -62,13 +62,6 @@
           <span class="money-text">{{ order.amount }}</span> {{'元'|trans}}
         </td>
       </tr>
-      <tr> <th width="25%">{{'是否为赠品'|trans}}</th>
-           <td width="75%">
-            {% if order.isGift == 0 %} {{'非赠品'|trans}}
-            {% elseif order.isGift == 1 %} {{'已赠送'|trans}}
-            {% endif %}
-           </td>
-      </tr>
       <tr> <th width="25%">{{'支付方式'|trans}}</th>
            <td width="75%">
             {# {% if order.payment == 'none' %} 暂无 #}
@@ -83,7 +76,12 @@
            </td>
       </tr>
       <tr> <th width="25%">{{'创建时间'|trans}}</th> <td width="75%">{{ order.createdTime | date('Y-n-d H:i:s') }}</td> </tr>
-      <tr> <th width="25%">{{'付款时间'|trans}}</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+      {% if order.status == 'paid' %}
+        <tr> <th width="25%">{{'付款时间'|trans}}</th> <td width="75%">{% if not order.paidTime == 0 %} {{ order.paidTime | date('Y-n-d H:i:s') }} {% endif %}</td> </tr>
+        {% if order.token %}
+          <tr> <th width="25%">{{'商户订单号'|trans}}</th> <td width="75%">{{order.token}}</td> </tr>
+        {% endif %}
+      {% endif %}
     </table>
   </div>
 

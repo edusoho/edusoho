@@ -9,6 +9,15 @@
 <div class="row row-3-9">
   <div class="col-md-3">
     <div class="sidenav">
+      {% if is_plugin_installed('Point') %}
+        <ul class="list-group">
+          <li class="list-group-heading">{{'我的网校'|trans}}</li>
+          <li class="list-group-item
+           {% if side_nav == 'growth' %} active {% endif %}">
+            <a href="{{path('my')}}">{{'我的成长'|trans}}</a>
+          </li>
+        </ul>
+      {% endif %}
       {% if app.user.isTeacher() %}
         <ul class="list-group">
           <li class="list-group-heading">{{'我的教学'|trans}}</li>
@@ -17,19 +26,19 @@
             <a href="{{path('my_teaching_courses')}}">{{'在教课程'|trans}}</a>
           </li>
 
-          {% if setting('classroom.enabled')|default(0) %}
+
             <li class="list-group-item {% if side_nav == 'my-teaching-classroom' %} active {% endif %}">
-              <a href="{{path('my_teaching_classrooms')}}">所在{{ setting('classroom.name')|default("班级") }}
+              <a href="{{path('my_teaching_classrooms')}}">{{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}
               </a>
            </li>
-          {% endif %}
+
 
           <li class="list-group-item {% if side_nav == 'my-teaching-questions' %}active {% endif %}">
-            <a href="{{path('my_teaching_threads', {type:'question'}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'问答'|trans}}
+            <a href="{{path('my_teaching_threads', {type:'question'}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'问答'|trans}}
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'my-teaching-discussions' %} active {% endif %}">
-            <a href="{{path('my_teaching_threads', {type:'discussion'}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'话题'|trans}}</a>
+            <a href="{{path('my_teaching_threads', {type:'discussion'}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'话题'|trans}}</a>
           </li>
 
           <li class="list-group-item {% if side_nav == 'my-teaching-check' %} active {% endif %}">
@@ -57,11 +66,15 @@
           <a href="{{path('my_courses_learning')}}">{{'我的课程'|trans}}</a>
         </li>
 
-        {% if setting('classroom.enabled')|default(0) %}
+
           <li class="list-group-item {% if side_nav == 'my-classroom' %} active {% endif %}">
-            <a href="{{path('my_classrooms')}}">{{'我的'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}</a>
+            {% if app.request.getLocale() == 'ug_CN' %}
+              <a href="{{path('my_classrooms')}}">我的{{ setting('classroom.name')|default("班级") }}</a>
+            {% else %}
+              <a href="{{path('my_classrooms')}}">我的{{ setting('classroom.name')|default("班级") }}</a>
+            {% endif %}
           </li>
-        {% endif %}
+
 
         {% if setting('course.live_course_enabled') %}
         <li class="list-group-item
@@ -100,7 +113,7 @@
         {% if is_plugin_installed('ClassroomPlan') %}
           <li class="list-group-item
           {% if side_nav == 'my-task' %} active {% endif %}" >
-            <a href="{{path('my_task_calendar')}}">我的任务</a>
+            <a href="{{path('my_task_calendar')}}">{{'我的任务'|trans}}</a>
           </li>
         {% endif %}
       </ul>

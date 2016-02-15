@@ -1,0 +1,40 @@
+<div class="toolbar toolbar-open toolbar-question-marker"
+	data-marker-metas-url="
+	{{path('course_lesson_marker_metas',{'mediaId':lesson.mediaId})}}"
+	data-queston-marker-add-url="{{path('course_lesson_question_marker_add',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-queston-marker-delete-url="{{path('course_lesson_question_marker_delete',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-marker-merge-url="{{path('course_lesson_marker_merge',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-marker-update-url="{{path('course_lesson_marker_update',{'courseId':course.id,'lessonId':lesson.id})}}"
+	data-queston-marker-sort-url="{{path('course_lesson_question_marker_sort',{'courseId':course.id,'lessonId':lesson.id})}}"
+	>
+	<div class="question-menu">
+		<form class="form-horizontal mark-from" action="{{path('course_lesson_question_marker_search',{courseId:course.id,lessonId:lesson.id})}}" method="post" novalidate>
+			<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+			<div class="form-group">
+				<div class="col-xs-5">
+					<select class="form-control" name="target" >
+						{{ select_options(targetChoices, app.request.request.get('target'))}}
+					</select>
+				</div>
+				<div class="col-xs-5">
+					<input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}"  >
+				</div>
+				<div class="col-xs-2">
+					<button class="btn btn-primary">{{'搜索'|trans}}</button>
+				</div>
+			</div>
+		</form>
+		<div class="list-title">
+			<div class="row ">
+				<div class="col-xs-6">{{'题干'|trans}}</div>
+				<div class="col-xs-3 content">{{'题型'|trans}}</div>
+				<div class="col-xs-1 content">{{'难度'|trans}}</div>
+				<div class="col-xs-2 content ">{{'操作'|trans}}</div>
+			</div>
+		</div>
+		<ul class="lesson-list gruop-lesson-list" id="subject-lesson-list">
+
+		</ul>
+	</div>
+</div>
+<script>app.load('marker/question')</script>

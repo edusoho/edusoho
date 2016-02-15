@@ -1,0 +1,21 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block keywords %}{{ setting('site.seo_keywords') }}{% endblock %}
+{% block description %}{{ setting('site.seo_description') }}{% endblock %}
+
+{% set bodyClass = 'homepage' %}
+{% set siteNav = '/' %}
+{% set script_controller = 'index' %}
+{% set _target_path = path('homepage') %}
+
+{% block full_content %}
+
+  {{ block_show('jianmo:home_top_banner') }}
+
+    {% for pendant in themeConfig.blocks.left|default([]) %}
+
+      {{ render(controller('TopxiaWebBundle:Theme:pendant', {config:pendant})) }}
+
+    {% endfor %}
+
+{% endblock %}

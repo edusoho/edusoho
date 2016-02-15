@@ -14,7 +14,7 @@ class BatchNotificationServiceImpl extends BaseService implements BatchNotificat
         if(!isset($fields['targetId'])){
             $fields['targetId'] = 0;
         }
-        if(empty($fields['type'])){
+        if(!isset($fields['type'])){
             $fields['type'] = 'text';
         }
         if(!isset($fields['published'])){

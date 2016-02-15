@@ -17,7 +17,7 @@
             <a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 
             {% if thread.lessonId %}
-              <span class="label" title="{{'课时'|trans}}{{ thread.lessonId }}">L{{ thread.lessonId }}</span>
+              <span class="label" title="课时{{ thread.lessonId }}">L{{ thread.lessonId }}</span>
             {% endif %}
 
             {% if thread.isElite %}

@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}{{'所在'|trans}}{{ setting('classroom.name')|default("班级"|trans) }} - {{ parent() }}{% endblock %}
+{% block title %}{{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-classroom' %}
 
@@ -8,7 +8,7 @@
 
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    {{'所在'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}
+    {{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}
   </div>
 
   <div class="panel-body">
@@ -46,7 +46,11 @@
             </li>
             {% endfor %}
             {% else %}
-            <div class="empty">{{'找不到所在'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}{{'！'|trans}}</div>
+              {% if app.request.getLocale() == 'ug_CN' %}
+                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              {% else %}
+                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              {% endif %}
             {% endif %}
           </ul>
   </div>

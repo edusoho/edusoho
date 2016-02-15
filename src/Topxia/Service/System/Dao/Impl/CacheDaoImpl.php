@@ -11,37 +11,58 @@ class CacheDaoImpl extends BaseDao implements CacheDao
 
     public function getCache($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id));
+        }
+
+        );
     }
 
     public function addCache($cache)
     {
         $affected = $this->getConnection()->insert($this->table, $cache);
+        $this->clearCached();
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert cache error.');
         }
+
         return $this->getCache($this->getConnection()->lastInsertId());
     }
 
     public function findCachesByNames(array $names)
     {
-        if(empty($names)){
+        if (empty($names)) {
             return array();
         }
-        $marks = str_repeat('?,', count($names) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE name IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $names);
+
+        $marks = str_repeat('?,', count($names) - 1).'?';
+
+        $that = $this;
+        $keys = implode(',', $names);
+        return $this->fetchCached("names:{$keys}", $marks, $names, function ($marks, $names) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE name IN ({$marks});";
+            return $that->getConnection()->fetchAll($sql, $names);
+        }
+
+        );
     }
 
     public function deleteCacheByName($name)
     {
-        return $this->getConnection()->delete($this->table, array('name' => $name));
+        $result = $this->getConnection()->delete($this->table, array('name' => $name));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteAllCache()
     {
-        $sql = "DELETE FROM {$this->table}";
-        return $this->getConnection()->executeUpdate($sql, array());
+        $sql    = "DELETE FROM {$this->table}";
+        $result = $this->getConnection()->executeUpdate($sql, array());
+        $this->clearCached();
+        return $result;
     }
 }

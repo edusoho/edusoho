@@ -25,7 +25,7 @@
           <div class="homework-question-actions text-right">
             {% include 'TopxiaWebBundle:Question:question-actions.html.twig' with { flags:['favorite', 'analysis'] } %}
           </div>
-          <div class="homework-question-analysis well" style="display:none;">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw }}
+          <div class="homework-question-analysis well editor-text" style="display:none;">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw }}
           </div>
         {% endif %}
 

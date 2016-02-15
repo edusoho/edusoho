@@ -3,8 +3,7 @@ define(function(require, exports, module) {
     var BaseQuestion = require('./question-base');
     var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
-    require('webuploader');
-
+    require('es-ckeditor');
     var ChoiceQuestion = BaseQuestion.extend({
         attrs: {
             globalId: 1
@@ -29,7 +28,7 @@ define(function(require, exports, module) {
             }
             var choiceCount = this.$('[data-role=choice]').length;
             var code = String.fromCharCode(choiceCount + 65);
-            var model = {code: code, id:this._generateNextGlobalId()}
+            var model = {code: code, id:this._generateNextGlobalId(), imageUploadUrl:$('#ckeditor-config').data('imageUploadUrl'), imageDownloadUrl:$('#ckeditor-config').data('imageDownloadUrl')}
             this.addChoice(model);
         },
 
@@ -52,103 +51,26 @@ define(function(require, exports, module) {
             }
 
             $html.appendTo(this.$('[data-role=choices]'));
+
+            var editor = CKEDITOR.replace('item-input-'+model.id, {
+                toolbar: 'Minimal',
+                filebrowserImageUploadUrl: $('#item-input-'+model.id).data('imageUploadUrl'),
+                height: 120
+            });
+
+            this.get('validator').on('formValidate', function(elemetn, event) {
+                editor.updateElement();
+            });
+
             this.get("validator").addItem({
                 element: '#item-input-'+model.id,
                 required: true
             });
-
-
-
-            var uploader = WebUploader.create({
-                swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                server: this.element.data('uploadUrl'),
-                pick: '#item-upload-' + model.id,
-                formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                accept: {
-                    title: 'Images',
-                    extensions: 'gif,jpg,jpeg,png',
-                    mimeTypes: 'image/*'
-                }
-            });
-
-            uploader.on( 'fileQueued', function( file ) {
-                Notify.info('正在上传，请稍等！', 0);
-                uploader.upload();
-            });
-
-            uploader.on( 'uploadSuccess', function( file, response ) {
-                var result = '[image]' + response.hashId + '[/image]';
-                var $input = $($('#item-upload-' + model.id).data('target'));
-                $input.val($input.val() + result);
-                Notify.success('上传成功！', 1);
-            });
-
-            uploader.on( 'uploadError', function( file, response ) {
-                Notify.danger('上传失败，请重试！');
-            });
-
-
-            if (this.get('enableAudioUpload')) {
-                /**
-                 * 音频上传
-                 */
-                var audioUploader = WebUploader.create({
-                    swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-                    pick: '#item-audio-upload-' + model.id,
-                    formData: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-                    accept: {
-                        title: 'Audio',
-                        extensions: 'mp3,wav',
-                        mimeTypes: 'audio/*'
-                    }
-                });
-
-                audioUploader.on( 'fileQueued', function( file, a, b ) {
-                    Notify.info('正在上传，请稍等！', 0);
-
-                    $.ajax({
-                        url: self.element.data('mediaUploadParamsUrl'),
-                        async: false,
-                        dataType: 'json',
-                        data: {convertor: 'audio'},
-                        cache: false,
-                        success: function(response, status, jqXHR) {
-                            audioUploader.option('server', response.url)
-                            audioUploader.option('formData', response.postParams);
-                        },
-                        error: function(jqXHR, status, error) {
-                            Notify.danger('请求上传授权码失败！');
-                        }
-                    });
-
-                    audioUploader.upload();
-                });
-
-                audioUploader.on( 'uploadSuccess', function( file, response ) {
-                    Notify.success('上传成功！', 1);
-
-                    $.post(self.element.data('mediaUploadCallbackUrl'), response, function(response) {
-                        var name = response.filename.match(/[^\.]*\./)[0].slice(0, -1);
-                        var result = '[audio id="' + response.id +'"]' + name + '[/audio]';
-
-                        var $input = $($('#item-upload-' + model.id).data('target'));
-                        $input.val($input.val() + result);
-                    });
-
-                });
-
-                audioUploader.on( 'uploadError', function( file, response ) {
-                    Notify.danger('上传失败，请重试！');
-                });
-            }
-            
-
         },
 
         deleteChoice: function(e){
             var $btn = $(e.currentTarget);
-            var id = '#' + $btn.parents('.form-group').find('input.item-input').attr('id');
-
+            var id = '#' + $btn.parents('.form-group').find('.item-input').attr('id');
             this.get('validator').removeItem(id);
             $btn.parents('[data-role=choice]').remove();
             this.$('[data-role=choice]').each(function(index, item){
@@ -210,14 +132,18 @@ define(function(require, exports, module) {
                         code: String.fromCharCode(index + 65),
                         id: self._generateNextGlobalId(),
                         content:choiceContent,
-                        isAnswer: $.inArray(index+'', answers) != -1
+                        isAnswer: $.inArray(index+'', answers) != -1,
+                        imageUploadUrl:$('#ckeditor-config').data('imageUploadUrl'), 
+                        imageDownloadUrl:$('#ckeditor-config').data('imageDownloadUrl')
                     });
                 });
             } else {
                 for (var i = 0; i < 4; i++) {
                     this.addChoice({
                         code: String.fromCharCode(i + 65),
-                        id: self._generateNextGlobalId()
+                        id: self._generateNextGlobalId(),
+                        imageUploadUrl:$('#ckeditor-config').data('imageUploadUrl'), 
+                        imageDownloadUrl:$('#ckeditor-config').data('imageDownloadUrl')
                     });
                 }
             }

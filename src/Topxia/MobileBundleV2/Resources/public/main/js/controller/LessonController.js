@@ -14,8 +14,20 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
 				return;
 			}
       
-			cordovaUtil.learnCourseLesson(data.courseId, data.id); 
-      window.history.back();
+			var lesson = data;
+      if (!lesson) {
+        alert("请先加入学习");
+        cordovaUtil.closeWebView();
+        return;
+      }
+
+      if (lesson.type == "flash" || "qqvideo" == lesson.mediaSource) {
+        alert("客户端暂不支持该课时类型，敬请期待新版");
+        cordovaUtil.closeWebView();
+        return;
+      }
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, []);  
+      cordovaUtil.closeWebView();
 		});
 	}
 

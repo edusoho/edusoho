@@ -21,7 +21,11 @@
 
       {% if not member.deadline|default(0) == 0 %}
         <br>
-        <span class="text-muted">{{'有效期：'|trans}} <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <span class="text-muted">有效期： <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
+        {% else %}
+          <span class="text-muted">有效期： <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
+        {% endif %}
       {% endif %}
 
     </div>

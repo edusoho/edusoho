@@ -26,9 +26,9 @@
               </div>
               {% if discount %}
                 <div class="alert alert-warning">
-                  <small>{{'当前课程正处于'|trans}}「{{ discount.name }}」{{'打折活动中。'|trans}}
-                  {{'折扣：'|trans}} <strong>{{ course.discount }} {{'折'|trans}}</strong>{{'，'|trans}}
-                  {{'折后价：'|trans}}<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>{{'。'|trans}}</small>
+                  <small>当前课程正处于「{{ discount.name }}」打折活动中。
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>
                 </div>
               {% endif %}
             </div>
@@ -51,15 +51,13 @@
               </div>
               {% if discount %}
                 <div class="alert alert-warning">
-                  {{'当前课程正处于'|trans}}「{{ discount.name }}」{{'打折活动中。'|trans}}<br>
-                  {{'折扣：'|trans}} <strong>{{ course.discount }} {{'折'|trans}}</strong>{{'，'|trans}}
-                  {{'折后价：'|trans}}<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> {{'元'|trans}}</strong>{{'。'|trans}}
+                  当前课程正处于「{{ discount.name }}」打折活动中。<br>
+                  折扣： <strong>{{ course.discount }} 折</strong>，
+                  折后价：<strong><span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price }}</span> 元</strong>。
                 </div>
               {% endif %}
             </div>
           </div>
-
-
         {% endif %}
 
         {% if is_plugin_installed('Vip') and setting('vip.enabled') %}
@@ -72,6 +70,28 @@
               <div class="help-block">{{'设置会员课程后，该会员及更高等级会员，可免费学习。'|trans}}</div>
             </div>
           </div>
+        {% endif %}
+
+        {% if setting('storage.upload_mode') == 'cloud' %}
+        <div class="form-group">
+            <label class="col-md-2 control-label">{{'开启视频试看'|trans}}</label>
+            <div class="col-md-8 controls radios">
+              {{ radios('tryLookable', {1:'是'|trans, 0:'否'|trans}, course.tryLookable|default(0)) }}
+              <div class="help-block">{{'视频试看功能仅云视频支持'|trans}}</div>
+            </div>
+        </div>
+
+        <div class="form-group {% if course.tryLookable|default(0) !=1 %}hide{% endif %}" id = "tryLookTimeGroup">
+            <label class="col-md-2 control-label">{{'试看时长'|trans}}</label>
+            <div class="col-md-8 controls">
+               <select name="tryLookTime" class='form-control width-input width-input-large'>
+                {% for minute in 1..10 %}
+                  <option value="{{ minute }}" {% if minute == course.tryLookTime %}selected{% endif %}>{{minute}}{{'分钟'|trans}}</option>
+                {% endfor %}
+               </select>
+              <div class="help-block"></div>
+            </div>
+        </div>
         {% endif %}
 
         <div class="form-group">

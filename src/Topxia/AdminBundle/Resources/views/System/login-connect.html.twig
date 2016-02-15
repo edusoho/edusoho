@@ -98,7 +98,7 @@
           {% if client.apply_url|default(null) %}
             <div class="help-block"><a href="{{ client.apply_url }}" target="_blank">申请{{ client.admin_name }}</a> 
               {% if type == "qq" %}
-              <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="接入帮助:" data-html="true" data-content="1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登陆；<br>2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登陆。<br>如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。">接入帮助</a>
+              <a class="pll" href="javascript:;" id="help" data-toggle="popover" data-trigger="click" data-placement="top" title="接入帮助:" data-html="true" data-content="1.你的QQ开放平台账号认证度（个人信息完善）要达到75%，才能创建应用在网站设置第三方登录；<br>2.需填写的回调地址为：<br><a><span class='text-danger'>XXX</span>/login/bind/qq/callback;<span class='text-danger'>XXX</span>/settings/bind/qq/callback</a><br>，<span class='text-danger'>XXX</span>为你的ES系统网址。例如，气球鱼学院的回调地址填写为：http://www.qiqiuyu.com/login/bind/qq/callback;http://www.qiqiuyu.com/settings<br>/bind/qq/callback；网址一定要有www哦；<br>3.QQ的按钮，在开放平台你的个人信息中，找到ID和key，填写到edusoho后台，开启ID上方的QQ登录。<br>如果QQ接入审核失败，提示“登录按钮位置不对”，请检查ES后台【系统】【用户设置】【登录】，开启第三方登录以及开启QQ登录。">接入帮助</a>
               {% endif %}
             </div>
           {% endif %}
@@ -122,17 +122,15 @@
           <input type="text" id="{{ type }}_secret" name="{{ type }}_secret" class="form-control" value="{{loginConnect[type ~ '_secret']}}">
         </div>
       </div>
-      {% if type != 'weixinmob'%}
         <div class="form-group">
           <div class="col-md-3 control-label">
-            <label for="">登录时必须设置帐号和邮箱</label>
+            <label for="">登录时必须设置邮箱</label>
           </div>
             <div class="controls col-md-8 radios">    
               {{ radios(type ~ '_set_fill_account' , {1:'开启', 0:'关闭'}, loginConnect[type ~ '_set_fill_account']) }}
                 <p class="help-block">在{{ client.admin_name }}官方审核通过您的接入申请以前，请不要开启此选项，否则可能审核将无法通过</p>
             </div>
         </div>
-      {% endif %}
       {% if type != 'weixinmob' and type != 'weixinweb' %}
         <div class="form-group">
           <div class="col-md-3 control-label">

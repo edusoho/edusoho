@@ -1,0 +1,10 @@
+<div class="card-pack-item card-item useless">
+  <h4>{{'学习卡'|trans}}</h4>
+  <p class="title">{{'学习卡可以用于账户充值'|trans}}</p>
+  <p class="price">
+    <strong>{{ cardDetail.coin }}</strong>{{setting('coin.coin_name')|default("虚拟币"|trans)}}
+  </p>
+  <p>{{'有效期截止：'|trans}}<span>{{ cardDetail.deadline|date('Y年n月d日') }}</span></p>
+  <!--学习卡已作废-->
+  <div class="stamp stamp-cancel"></div>
+</div>

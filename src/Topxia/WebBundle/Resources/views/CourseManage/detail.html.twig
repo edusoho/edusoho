@@ -16,7 +16,7 @@
       <div class="form-group">
         <div class="col-md-2 control-label"><label>{{'课程简介'|trans}}</label></div>
         <div class="col-md-8 controls">
-          <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" >{{ field_value(course, 'about') }}</textarea>
+          <textarea name="about" rows="10" id="course-about-field" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}">{{ field_value(course, 'about') }}</textarea>
         </div>
       </div>
 
@@ -38,7 +38,7 @@
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                 {{ this }}
                 <input type="hidden" name="goals[]" value="{{ this }}">
-                <button class="close delete-btn" data-role="item-delete" type="button" title="{{'删除'|trans}}">&times;</button>
+                <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
               </li>
             {% endverbatim %}
           </script>
@@ -65,7 +65,7 @@
                 <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>
                 {{ this }}
                 <input type="hidden" name="audiences[]" value="{{ this }}">
-                <button class="close delete-btn" data-role="item-delete" type="button" title="{{'删除'|trans}}">&times;</button>
+                <button class="close delete-btn" data-role="item-delete" type="button" title="删除">&times;</button>
               </li>
             {% endverbatim %}
           </script>

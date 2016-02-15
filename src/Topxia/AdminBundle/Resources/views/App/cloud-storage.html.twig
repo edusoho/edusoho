@@ -4,16 +4,16 @@
       {% set bill = storage.bill|default(null) %}
 
       <h4 class="eduyun-title">
-        {{'云视频'|trans}}
+        云视频
         {% if storage %}
-          <a href="{{path('admin_cloud_detail')}}" target="_blank" >{{'账单'|trans}}</a>
+          <a href="{{path('admin_cloud_detail')}}" target="_blank" >账单</a>
         {% endif %}
         {% if storage.ableRenew|default(0) %}
-          <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">{{'续费'|trans}}</a>
+          <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a> 
         {% endif %}
 
         {% if storage.isBuyVideo|default(0) %}
-          <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">{{'升级'|trans}}</a>
+          <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a> 
         {% endif %}
       </h4>
       <!--未购买-->
@@ -27,14 +27,14 @@
           <div class="alert alert-warning alert-sm" role="alert">
             <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_buy',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受优惠的视频服务
           </div>
-          <p class="text-muted">{{'空间用量暂无记录'|trans}}</p>
-          <p class="text-muted">{{'已用流量暂无记录'|trans}}</p>
+          <p class="text-muted">空间用量暂无记录</p>
+          <p class="text-muted">已用流量暂无记录</p>
         {% endif %}
 
         {% if storage.isBuyVideo|default(0) and not bill  %}
-          <p class="text-muted">{{'空间用量暂无记录'|trans}}</p>
-          <p class="text-muted">{{'已用流量暂无记录'|trans}}</p>
-          <p class="text-muted">{{'云视频包有效期：'|trans}}{{storageStart|default('')}}~{{storageEnd|default('')}}</p>
+          <p class="text-muted">空间用量暂无记录</p>
+          <p class="text-muted">已用流量暂无记录</p>
+          <p class="text-muted">云视频包有效期：{{storageStart|default('')}}~{{storageEnd|default('')}}</p>
         {% endif %}
 
         {% if not storage.isBuyVideo|default(0) and bill %}

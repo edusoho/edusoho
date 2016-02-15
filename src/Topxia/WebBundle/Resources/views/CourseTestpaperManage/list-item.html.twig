@@ -1,0 +1,37 @@
+<li class="item-chapter  clearfix" id="lesson-{{ lesson.id }}" style="word-break: break-all;" >
+	<div class="item-content">
+		{% if setting('course.custom_chapter_enabled')|default(true) %}
+          第 <span class="number">{{ lesson.number }}</span> {% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}：
+	    {% endif %}  {{ lesson.title }}
+    	{% if lesson.status == 'unpublished' %}
+	      <span class="unpublish-warning text-warning">({{'未发布'|trans}})</span>
+	    {% endif %}
+	</div>
+	<div class="item-actions prs">
+		<button class="btn btn-link" title="{{'编辑'|trans}}" data-toggle="modal" data-target="#modal" data-keyboard="false" data-url="{{ path('course_manage_lesson_edit_testpaper', {courseId:course.id, lessonId:lesson.id}) }}"><i class="glyphicon glyphicon-edit"></i></button>
+
+		  <a class="btn btn-link" href="{{ path('course_manage_preview_test', {testId:lesson.mediaId}) }}" target="_blank"><span class="es-icon es-icon-visibility prs"></span>{{'预览'|trans}}</a>
+
+   		 <span class="dropdown">
+	     		 <a class="dropdown-toggle dropdown-more" id="dropdown-more" data-toggle="dropdown" href="#"><i class="es-icon es-icon-keyboardarrowdown" style="margin-right:3px" aria-haspopup="true" aria-expanded="false"></i>{{'更多'|trans}}</a>
+	                 <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu">
+			     <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+			          <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
+			            <span class="glyphicon glyphicon-ok-circle prs"></span>{{'发布'|trans}}
+			          </a>
+			      </li>
+
+			        <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
+			          <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
+			            <span class="glyphicon glyphicon-remove-circle prs"></span>{{'取消发布'|trans}}
+			          </a>
+			        </li>
+			        <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
+			          <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
+			            <span class="glyphicon glyphicon-trash prs"></span>{{'删除'|trans}}
+			          </a>
+			        </li>
+			       </ul>
+		      </span>
+		</div>
+</li>

@@ -33,11 +33,63 @@ abstract class BaseResource
         return $res;
     }
 
-    protected function wrap($resources, $total)
+    protected function error($code, $message)
     {
-        return array('resources' => $resources, 'total' => $total);
+        return array('error' => array(
+                'code' => $code,
+                'message' => $message,
+            ));
     }
 
+    protected function wrap($resources, $total)
+    {
+        if (is_array($total)) {
+            return array('resources' => $resources, 'next' => $total);
+        } else {
+            return array('resources' => $resources, 'total' => $total);
+        }
+    }
+
+    protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
+    {
+        $end = end($currentRows);
+        if (empty($end)) {
+            return array(
+                'cursor' => $currentCursor + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+        if (count($currentRows) < $currentLimit) {
+            return array(
+                'cursor' => $end['updatedTime'] + 1,
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => true,
+            );
+        }
+
+
+        if ($end['updatedTime'] != $currentCursor) {
+            $next = array(
+                'cursor' => $end['updatedTime'],
+                'start' => 0,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        } else {
+            $next = array(
+                'cursor' => $currentCursor,
+                'start' => $currentStart + $currentLimit,
+                'limit' => $currentLimit,
+                'eof' => false,
+            );
+        }
+
+        return $next;
+    }
 
     protected function filterHtml($text)
     {
@@ -53,7 +105,7 @@ abstract class BaseResource
         return $text;
     }
 
-    protected function getFileUrl($path)
+    public function getFileUrl($path)
     {
         if (empty($path)) {
             return '';

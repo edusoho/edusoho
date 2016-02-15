@@ -38,8 +38,7 @@ define(function(require, exports, module) {
             format: 'yyyy-mm-dd',
             minView: 'month'
         });
-        var $form = $('#register-form');
-        
+        var $form = $('#register-form');        
         var validator = new Validator({
             element: $form,
             onFormValidated: function(error, results, $form) {
@@ -123,6 +122,15 @@ define(function(require, exports, module) {
             rule: 'minlength{min:5} maxlength{max:20}',
             display: '密码'
         });
+        if($('.invitecode').length>0){  
+        validator.addItem({
+            element: '[name="invite_code"]',
+            required: false,
+            rule: 'reg_inviteCode invitecode_remote',
+            display: '邀请码'
+        });
+        }
+
 
         validator.addItem({
             element: '#user_terms',
@@ -168,7 +176,7 @@ define(function(require, exports, module) {
             }else{
 
                 validator.addItem({
-                    element: '[name="captcha_num"]',
+                    element: '[name="captcha_code"]',
                     required: true,
                     rule: 'alphanumeric remote',
                     onItemValidated: function(error, message, eleme) {

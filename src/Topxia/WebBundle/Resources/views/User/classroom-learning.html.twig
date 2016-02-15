@@ -3,38 +3,29 @@
 {% set pageNav = 'learning' %}
 {% block main %}
   {% if classrooms %}
-    <ul class="course-wide-list class-wide-list">
+    <div class="recommend-class-list row">
       {% for classroom in classrooms if classroom.status|default('') != 'closed' %}
         {% set teachers = classroom['teachers']|default(null) %}
-        <li class="course-item clearfix">
-          <a class="course-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">
-            <img class="course-picture" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
-          </a>
-          <div class="course-body">
-            <div class="title"><a class="link-light" href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a></div>
-            <div class="class-student">
-              <i class="fa fa-user" title="{{'任课老师'|trans}}"></i>
-              {% for teacher in teachers %}
-                {% if loop.index <= 3%}
-                  {{ teacher.nickname }}
-                {% endif %}
-              {% endfor %}&nbsp;&nbsp;
-              <span class="hidden-xs hidden-sm">
-                <i class="fa fa-users" title="{{'学员数'|trans}}"></i>{{classroom.studentNum + classroom.auditorNum }} &nbsp;&nbsp;
-              </span>
-              <span class="hidden-xs hidden-sm stars-{{ classroom.rating|number_format }}">&nbsp;</span>
-              <span class="hidden-xs hidden-sm rating-num">{{ classroom.rating|number_format(1) }}{{'分'|trans}}</span>
-              <span class="hidden-xs hidden-sm hidden-md">({{classroom.ratingNum}}{{'评价'|trans}})</span>
-            </div>
-            <div class="class-metas">
-              <span class="course-num">{{'课程总数'|trans}}:{{classroom.courseNum}}</span>
-              <span class="period-num">{{'课时总数'|trans}}:{{classroom.lessonNum}}</span>
+        <div class="col-md-3 col-sm-6">
+          <div class="class-item">
+            <div class="class-bg-layer"></div>
+            <div class="class-item-bg">
+              <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                <img class="img-responsive" src="{{ filepath(classroom.middlePicture, 'classroom.png') }}" alt="{{ classroom.title }}">
+              </a>
+              <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
             </div>
           </div>
-        </li>
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   {% else %}
-    <div class="empty">{{'无在学的'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}{{'！'|trans}}</div>
+    {% if app.request.getLocale() == 'ug_CN' %}
+      <div class="empty">ئۆگۈنۈۋاتقان {{setting('classroom.name')|default("班级"|trans)}} يوق!</div>
+    {% else %}
+      <div class="empty">无在学的{{setting('classroom.name')|default("班级"|trans)}}！</div>
+    {% endif %}
   {% endif %}
+
+  {{ web_macro.paginator(paginator) }}
 {% endblock %}

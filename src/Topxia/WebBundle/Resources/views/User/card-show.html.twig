@@ -11,7 +11,7 @@
         {% elseif is_plugin_installed('vip') %}
           {% set userVip = get_user_vip_level(user.id) %}
             {% if userVip and levels and userVip.deadline|date('Y-m-d') > nowTime|date('Y-m-d')%}
-              <span class="icon-user-status icon-md"><img src="{{levels[userVip.levelId].icon|default(asset('assets/v2/img/vip/vip_bronze.jpg'))}}" alt=""></span>
+              <span class="icon-user-status"><img src="{{levels[userVip.levelId].icon|default(asset('assets/v2/img/vip/vip_bronze.jpg'))}}" alt=""></span>
             {% endif %}
           {% endif %}
       </div>
@@ -30,7 +30,7 @@
       <div class="metas">
         <a class="btn btn-primary btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'关注'|trans}}</a>
         <a class="btn btn-default btn-xs unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %}style="display:none;"{% endif %}>{{'已关注'|trans}}</a>
-        <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'私信'|trans}}</a>
+        <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'私信'|trans}}</a>
       </div>
     {% endif %}
   </div>

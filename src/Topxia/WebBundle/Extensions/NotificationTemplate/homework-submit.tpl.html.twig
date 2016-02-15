@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+       【作业通知】<a href="{{ path('user_show', {id:data.user.id}) }}" target='_blank'>{{data.user.nickname}}</a>提交了作业，请及时<a href="{{path('course_homework_check', {courseId:data.homeworkResult.courseId, homeworkResultId:data.homeworkResult.id, userId:data.homeworkResult.userId})}}">批阅</a>
+    </div>
+    <div class="notification-footer">
+      {{ notification.createdTime|date_format }} 
+    </div>
+  </div>
+</li>

@@ -1,6 +1,9 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
-
-{% block title %}{{'第'|trans}}{{ currentLesson.number }}{{'课时：'|trans}}{{ course.title }} -{{ parent() }}{% endblock %}
+{% if app.request.getLocale() == 'ug_CN' %}
+	{% block title %}第{{ currentLesson.number }}课时：{{ course.title }} -{{ parent() }}{% endblock %}
+{% else %}
+	{% block title %}第{{ currentLesson.number }}课时：{{ course.title }} -{{ parent() }}{% endblock %}
+{% endif %}
 {% block keywords %}{{ course.title }}{% endblock %}
 {% block description %}{{ course.about }}{% endblock %}
 
@@ -16,7 +19,11 @@
   	<div class="row article-row">
 	  	<div class="col-md-8 mbl">
 	  		{% if currentLesson %}
-		  		<div class="text-success"><h4>{{'第'|trans}}{{ currentLesson.number }}{{'课时：'|trans}} {{ currentLesson.title }}</h4></div>
+	  			{% if app.request.getLocale() == 'ug_CN' %}
+			  		<div class="text-success"><h4>第{{ currentLesson.number }}课时： {{ currentLesson.title }}</h4></div>
+	  			{% else %}
+			  		<div class="text-success"><h4>第{{ currentLesson.number }}课时： {{ currentLesson.title }}</h4></div>
+	  			{% endif %}
 		  		<div class="">{{ currentLesson.summary }}</div>
 	  		{% else %}
 	  			<div class="empty">{{'课程暂无课时'|trans}}</div>
@@ -33,7 +40,11 @@
 		        <ul class="media-list">
 		    	{% for lesson in lessons %}
 		            <li class="media">
-		              <div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">{{'第'|trans}}{{ lesson.number }}{{'课时：'|trans}} {{ lesson.title }}</a></div>
+		            	{% if app.request.getLocale() == 'ug_CN' %}
+										<div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">第{{ lesson.number }}课时： {{ lesson.title }}</a></div>
+		            	{% else %}
+										<div class="media-body"><a href="{{ path('course_archive_lesson',{ id:course.id,lessonId:lesson.id })}}">第{{ lesson.number }}课时： {{ lesson.title }}</a></div>
+		            	{% endif %}
 		            </li>
 		        {% endfor %}
 		        </ul>

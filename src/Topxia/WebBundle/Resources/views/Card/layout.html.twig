@@ -1,0 +1,14 @@
+{% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
+{% block title %}{{'我的卡包'|trans}} - {{ parent() }}{% endblock %}
+
+{% set side_nav = 'my-cards' %}
+
+{% block main %}
+<div class="es-section h400">
+  <div class="section-header"><h3>{{'我的卡包'|trans}}</h3></div>
+
+  {% set main_nav = main_nav|default(null) %}
+
+  {% block main_body %}{% endblock %}
+</div>
+{% endblock %}

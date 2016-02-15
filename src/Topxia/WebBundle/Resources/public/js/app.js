@@ -4,6 +4,7 @@ define(function(require, exports, module) {
 	require('common/bootstrap-modal-hack2');
     require("placeholder");
     require('./util/card');
+		require('uyghurinput');
     var Swiper=require('swiper');
 	var Cookie = require('cookie');
 
@@ -24,7 +25,7 @@ define(function(require, exports, module) {
 		for(var index in scripts) {
 			exports.load(scripts[index]);
 		}
-		
+
 	}
 
 	window.app.load = exports.load;
@@ -49,12 +50,14 @@ define(function(require, exports, module) {
 		}
 
 		if (error.name == 'Unlogin') {
+			var $loginModal = $("#login-modal");
+
 			$('.modal').modal('hide');
 
-			$("#login-modal").modal('show');
-			$.get($('#login-modal').data('url'), function(html){
-				$("#login-modal").html(html);
-			});
+	        $loginModal.modal('show');
+	        $.get($loginModal.data('url'), function(html){
+	            $loginModal.html(html);
+	        });
 		}
 	});
 
@@ -78,7 +81,7 @@ define(function(require, exports, module) {
     if (app.scheduleCrontab) {
         $.post(app.scheduleCrontab);
     }
-    
+
     $("i.hover-spin").mouseenter(function() {
     	$(this).addClass("md-spin");
     }).mouseleave(function() {
@@ -112,7 +115,7 @@ define(function(require, exports, module) {
         if($('.weixin-alert.hide'))
             $('.weixin-alert.hide').removeClass('hide');
     };
-    
+
     $(".weixin-alert .close").click(function(){
         Cookie.set("close_weixin_alert",'true',{path: '/'});
     });
@@ -123,7 +126,7 @@ define(function(require, exports, module) {
 	    }).mouseleave(function(event) {
 	        $(this).removeClass("open");
 	    });
-	    
+
 	} else {
 		$("body").on("click","li.nav-hover",function(){
 			$(this).toggleClass("open");
@@ -133,7 +136,7 @@ define(function(require, exports, module) {
 			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
 		}
 	}
-	
+
 
     if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
         $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
@@ -144,5 +147,10 @@ define(function(require, exports, module) {
     }).blur(function () {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
+
+    if($(".nav.nav-tabs").length > 0) {
+        require('jquery.lavalamp');
+        $(".nav.nav-tabs").lavaLamp();
+    }
 
 });

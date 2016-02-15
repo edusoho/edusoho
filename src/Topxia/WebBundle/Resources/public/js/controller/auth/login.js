@@ -19,6 +19,7 @@ define(function(require, exports, module) {
             element: '[name="_password"]',
             required: true
         });
+        $('.receive-modal').click();
 
     };
 

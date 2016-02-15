@@ -4605,7 +4605,8 @@ Grid.mixin({
 
 
 	sortSegs: function(segs) {
-		segs.sort(proxy(this, 'compareSegs'));
+		segs.sort(function(seg1,seg2){return seg1.eventStartMS<seg2.eventStartMS?1:-1});
+		//segs.sort(proxy(this, 'compareSegs'));//注释掉的为插件原生内容，上述为业务需求修改的排序，by翁哲青 2015.9.21
 	},
 
 

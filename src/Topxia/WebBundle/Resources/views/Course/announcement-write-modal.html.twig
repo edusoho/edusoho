@@ -19,7 +19,11 @@
     {% if not announcement.id %}
     <div class="checkbox">
       <label>
-        <input type="checkbox" name="notify" value="notify"> {{'发送系统通知给该课程的'|trans}}{{ setting('default.user_name', '学员'|trans) }}
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的{{ setting('default.user_name', '学员'|trans) }}
+        {% else %}
+          <input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的{{ setting('default.user_name', '学员') }}
+        {% endif %}
       </label>
     </div>
     {% endif %}

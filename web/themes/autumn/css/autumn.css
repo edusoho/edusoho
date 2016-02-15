@@ -5,8 +5,9 @@ a:focus {
 }
 .link-dark:hover,
 .link-light:hover,
-.link-white {
-  color: #7cb132;
+.link-white:hover,
+.link-lighter:hover {
+  color: #7cb132 !important;
 }
 .text-primary,
 .color-primary {
@@ -51,9 +52,6 @@ a:focus {
 .course-detail-header .course-data > li > a:hover {
   color: #7cb132;
 }
-.score i {
-  color: #7cb132;
-}
 .es-tabs .tab-header > ul > li > a:hover {
   color: #7cb132;
 }
@@ -65,10 +63,6 @@ a:focus {
 }
 .media.media-number .media-body > a:hover {
   color: #7cb132;
-}
-.btn-tag:hover {
-  color: #7cb132;
-  border-color: #7cb132;
 }
 .media-hot-comment .comments-info p a,
 .media-hot-comment .comments-info h5 a:hover {
@@ -101,6 +95,46 @@ a:focus {
 }
 .badge-primary {
   background-color: #7cb132;
+}
+.es-filter .nav-sort > li > a:hover,
+.es-filter .nav-sort > li > a.active {
+  background-color: #7cb132;
+}
+.es-filter .filter label:hover {
+  color: #7cb132;
+}
+.class-header.after .class-data > li > a:hover {
+  color: #7cb132;
+}
+.class-header .class-data > li .dropdown-toggle:hover {
+  color: #7cb132;
+}
+.progress-bar,
+.rank_num {
+  background-color: #7cb132;
+}
+.bar-task .bar-task-header,
+.bar-task .bar-time-line > li:before {
+  background-color: #7cb132;
+}
+.bar-task .bar-time-line > li .es-icon {
+  color: #7cb132;
+}
+.nav-filter .nav-pills > li.dropdown > a:hover {
+  color: #7cb132;
+}
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus,
+.dropdown-menu > li > a:hover {
+  background-color: #7cb132;
+}
+.page-header .badge {
+  background-color: #7cb132 !important;
+}
+.list-group-item.active > .badge,
+.nav-pills > .active > a > .badge {
+  color: #7cb132;
 }
 body {
   background-color: #f1f2f6;
@@ -445,7 +479,7 @@ a:hover {
   margin-bottom: 20px;
 }
 .vip-item h3,
-p {
+.vip-item p {
   color: #555;
 }
 .vip-item h4 {

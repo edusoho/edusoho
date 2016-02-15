@@ -8,12 +8,12 @@
 <form id="captcha-form" method="get" action="{{ path('register_captcha_check') }}">
 
   <div class="form-group">
-    <div class="controls col-md-7" >
-      <input type="text" class="form-control" id="captcha_num_modal" name="captcha_num" maxlength="5" placeholder="{{'验证码'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
+    <div class="controls col-xs-7" >
+      <input type="text" class="form-control input-lg" id="captcha_num_modal" name="captcha_num" maxlength="5" placeholder="{{'验证码'|trans}}" required="required"  data-url="{{path('register_captcha_check')}}" >
       <div class="help-block"></div>
     </div>
-    <div class="controls col-md-5">
-      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'看不清，点击换一张'|trans}}" style="cursor:pointer;" >
+    <div class="controls col-xs-5">
+      <img src="{{ path('register_captcha_num') }}" data-url="{{ path('register_captcha_num') }}" id="getcode_num" title="{{'看不清，点击换一张'|trans}}" style="cursor:pointer;height:40px;width:100%">
     </div>
 	</div>
 

@@ -1,27 +1,37 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Uploader = require('upload');
-
+    var WebUploader = require('edusoho.webuploader');
     exports.run = function() {
 
+        $("#qq-property-tips").popover({
+            html: true,
+            trigger: 'click',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#qq-property-tips-html").html()
+        });
+
+        $("#qq-group-property-tips").popover({
+            html: true,
+            trigger: 'click',//'hover','click'
+            placement: 'left',//'bottom',
+            content: $("#qq-group-property-tips-html").html()
+        });
+
         var $form = $("#consult-setting-form");
-        var uploader = new Uploader({
-            trigger: '#consult-upload',
-            name: 'consult',
-            action: $('#consult-upload').data('url'),
-            data: {'_csrf_token': $('meta[name=csrf-token]').attr('content') },
-            accept: 'image/*',
-            error: function(file) {
-                Notify.danger('上传微信二维码失败，请重试！')
-            },
-            success: function(response) {
-                response = $.parseJSON(response);
-                $("#consult-container").html('<img src="' + response.url + '?'+ (new Date()).getTime() + '">');
-                $form.find('[name=webchatURI]').val(response.path);
+        var uploader = new WebUploader({
+            element: '#consult-upload'
+        });
+
+        uploader.on('uploadSuccess', function(file, response ) {
+            var url = $("#consult-upload").data("gotoUrl");
+
+            $.post(url, response ,function(data){
+                $("#consult-container").html('<img src="' + data.url + '">');
+                $form.find('[name=webchatURI]').val(data.path);
                 $("#consult-webchat-del").show();
                 Notify.success('上传微信二维码成功！');
-            }
+            });    
         });
 
         $('[data-role=item-add]').on('click',function(){
@@ -36,20 +46,58 @@ define(function(require, exports, module) {
             var $template = $('[data-role=template]');
 
             var fisrtplaceholder = $first.find('input:first').attr('placeholder');
-            var lastplaceholder = $first.find('input:last').attr('placeholder');
+            var middleplaceholder = $first.find('input:eq(1)').attr('placeholder');
+            var thirdplaceholder = $first.find('input:eq(2)').attr('placeholder');
             var firstname = $first.find('input:first').attr('name');
-            var lastname = $first.find('input:last').attr('name');
+            var middlename = $first.find('input:eq(1)').attr('name');
+            var thirdname = $first.find('input:eq(2)').attr('name');
             firstname = firstname.replace(/\d/, nextIndex);
-            lastname = lastname.replace(/\d/, nextIndex);
+            middlename = middlename.replace(/\d/, nextIndex);
+            thirdname = thirdname.replace(/\d/, nextIndex);
             $template.find('input:first').attr('placeholder', fisrtplaceholder);
-            $template.find('input:last').attr('placeholder', lastplaceholder);
+            $template.find('input:eq(1)').attr('placeholder', middleplaceholder);
+            $template.find('input:eq(2)').attr('placeholder', thirdplaceholder);
             $template.find('input:first').attr('name', firstname);
-            $template.find('input:last').attr('name', lastname);
+            $template.find('input:eq(1)').attr('name', middlename);
+            $template.find('input:eq(2)').attr('name', thirdname);
 
             $parent.append($template.html());
 
             $('[data-role=item-delete]').on('click',function(){
                 $(this).parent().parent().remove();
+            });
+            
+            nextIndex = nextIndex + 1;
+            $(this).attr('data-length', nextIndex);
+        });
+        
+        $('[data-role=phone-item-delete]').on('click',function(){
+            $(this).closest('.has-feedback').remove();
+        });
+        $('[data-role=phone-item-add]').on('click',function(){
+            var nextIndex = $(this).attr('data-length');
+            nextIndex = parseInt(nextIndex); 
+            if( nextIndex > 9 ) {
+                Notify.danger('最多设置10个..');
+                return;
+            }
+            var $parent = $('#'+$(this).attr('data-parentId'));
+            var $first = $parent.children(':first');
+            var $template = $('[data-role=phone-template]');
+
+            var fisrtplaceholder = $first.find('input:first').attr('placeholder');
+            var middleplaceholder = $first.find('input:eq(1)').attr('placeholder');
+            var firstname = $first.find('input:first').attr('name');
+            var middlename = $first.find('input:eq(1)').attr('name');
+            firstname = firstname.replace(/\d/, nextIndex);
+            middlename = middlename.replace(/\d/, nextIndex);
+            $template.find('input:first').attr('placeholder', fisrtplaceholder);
+            $template.find('input:eq(1)').attr('placeholder', middleplaceholder);
+            $template.find('input:first').attr('name', firstname);
+            $template.find('input:eq(1)').attr('name', middlename);
+            $parent.append($template.html());
+            $('[data-role=phone-item-delete]').on('click',function(){
+                $(this).closest('.has-feedback').remove();
             });
             
             nextIndex = nextIndex + 1;

@@ -10,11 +10,19 @@
       {% if countQq > 0 %}
       <div class="row mtm">
         {% for qq in consult.qq if qq.name is not empty %}
-          <div class="col-xs-6 mbm text-overflow">
-            <a class="link-light" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
-              {{ qq.name }}
-            </a>
-          </div>
+          {% if qq.url|default(false) %}
+            <div class="col-xs-6 mbm text-overflow">
+              <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+                {{ qq.name }}
+              </a>
+            </div>
+          {% else %}
+            <div class="col-xs-6 mbm text-overflow">
+              <a class="link-light" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
+                {{ qq.name }}
+              </a>
+            </div>
+          {% endif %}
         {% endfor %}
       </div>
       <hr>

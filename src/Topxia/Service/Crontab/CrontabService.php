@@ -18,4 +18,8 @@ interface CrontabService
     public function setNextExcutedTime($nextExcutedTime);
 
     public function findJobByTargetTypeAndTargetId($targetType, $targetId);
+
+    public function findJobByNameAndTargetTypeAndTargetId($jobName, $targetType, $targetId);
+
+    public function updateJob($id, $fields);
 }

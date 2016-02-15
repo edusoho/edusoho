@@ -14,7 +14,7 @@
     
     <ul class="homepage-category-nav">
       {% for category in categories %}
-        <li><a href="{{ path('course_explore', {code:category.code,fliter:'all',orderBy:'latest'}) }}">{{ category.name }}</a></li>
+        <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
       <li><a href="{{ path('course_explore') }}">更多</a></li>
     </ul>
@@ -22,7 +22,7 @@
     <div class="row row-9-3">
       <div class="col-md-9">
 
-        {% if setting('classroom.enabled') %}
+       
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           <div class="es-box">
             <div class="es-box-heading">
@@ -78,7 +78,7 @@
               </ul>
             </div>
           </div>
-        {% endif %}
+
 
         {# 推荐课程 #}
         {% set recommendCourses = data('RecommendCourses', {count:3}) %}
@@ -137,8 +137,8 @@
               {% for article in articles %}
                 {% if article %}
                   <li class="col-md-6">
-                    <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                    <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
+                    <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                    <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
                   </li>
                 {% endif %}
               {% endfor %}

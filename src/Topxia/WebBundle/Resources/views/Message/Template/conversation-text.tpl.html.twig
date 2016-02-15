@@ -3,7 +3,7 @@
   <div class="media-body">
     <h4 class="media-heading">
       {% if conversation.latestMessageUserId == app.user.id %}
-        发给
+        {{'发给'|trans}}
       {% endif  %}
       {{ web_macro.user_link(fromUser) }}:
       {{conversation.latestMessageContent|plain_text(40)}}

@@ -1,0 +1,14 @@
+<li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+  	  【直播】您正在学习的《课程名称课程名称》即将于 {{data.noticeDay}}{{data.minStartTime}}开始直播，请安排好时间准时参加。
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

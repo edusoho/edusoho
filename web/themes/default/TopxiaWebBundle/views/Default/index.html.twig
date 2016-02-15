@@ -15,7 +15,7 @@
 
     <div class="col-md-9">
 
-      {% if setting('classroom.enabled') %}
+
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           <div class="es-box">
               <div class="es-box-heading">
@@ -74,7 +74,7 @@
                 </ul>
               </div>
             </div>
-            {% endif %}
+
 
 
       {% if courses %}
@@ -120,8 +120,8 @@
             {% for article in articles %}
               {% if article %}
                 <li class="col-md-6">
-                  <em>{{ article.updatedTime|date('m-d H:i') }} </em>
-                  <a href="{{ path('article_detail', {id:article.id}) }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
+                  <em>{{ article.publishedTime|date('m-d H:i') }} </em>
+                  <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name|default('未分类') }}]</span>{{ article.title }} </a>
                 </li>
               {% endif %}
             {% endfor %}

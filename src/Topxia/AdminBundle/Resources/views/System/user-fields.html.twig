@@ -32,6 +32,9 @@
   
   <fieldset>
     <legend>个人资料设置</legend>
+
+    {% set commonFields = dict('userInfoFields')|default(null) %}
+
     <div class="form-group">
       <div class="col-md-3 control-label">
         <label >购买课程或班级时填写个人资料</label>
@@ -69,42 +72,23 @@
         <div class="form-group">
           <ul class="register-list sortable-list list-unstyled col-md-12" data-role="list">
             {% set checkedFieldsKeys = courseSetting.userinfoFields|default([]) %}
+            {% for key,field in commonFields if commonFields %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="userinfoFields[]" value="{{ key }}" {% if key in checkedFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ key }}" /> 
+                {{ field }}
+                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
+              </li>
+            {% endfor %}
 
-            {% if courseSetting.userinfoFieldNameArray|default(null) %}
-              {% for field in courseSetting.userinfoFieldNameArray %}
-                {% set userCustomField = userFields[field]|default(null) %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
-                  <input type="checkbox" name="userinfoFields[]" value="{{ field }}" {% if field in checkedFieldsKeys %}checked=true{% endif %} />
-                  <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ field }}" /> 
-                  {% if userCustomField %}{{ userCustomField.title }}{% else %}{{ dict_text('userInfoFields', field) }}{% endif %}
-                  {% if field == 'email' or field == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
-                </li>
-              {% endfor %}
-            {% else %}
-                
-              {% set userInfoFields = dict('userInfoFields') %}
-              {% for key,field in userInfoFields %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
-                  <input type="checkbox" name="userinfoFields[]" value="{{ key }}" {% if key in checkedFieldsKeys %}checked=true{% endif %} />
-                  <input type="hidden"  name="userinfoFieldNameArray[]" value="{{ key }}" /> 
-                  {{ field }}
-                  {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
-                </li>
-              {% endfor %}
-
-              {% if  userFields %}
-                {% for field in userFields %}
-                  <li class="list-group-item clearfix" data-role="item" >
-                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
-                    <input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}" />
-                    <input type="hidden"  name="userinfoFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
-                  </li>
-                {% endfor %}
-              {% endif %}
-
-            {% endif %}
+            {% for field in userFields if userFields|default(null) %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="userinfoFields[]" value="{{field.fieldName}}" {% if field.fieldName in checkedFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="userinfoFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+              </li>
+            {% endfor %}
           </ul>
 
           <div class="help-block col-md-12"><span class="text-success">可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。</span></div>
@@ -157,42 +141,23 @@
           <ul class="fill-userinfo-list sortable-list list-unstyled col-md-12" data-role="list">
             {% set checkedUserFieldsKeys = authSetting.registerSort|default([]) %}
 
-            {% if authSetting.registerFieldNameArray|default(null) %}
-              {% for field in authSetting.registerFieldNameArray %}
-                {% if field == 'emailOrMobile' %}{% set field = 'email' %}{% endif %}
-                {% set userCustomField = userFields[field]|default(null) %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
-                  <input type="checkbox" name="registerSort[]" value="{{ field }}" {% if field in checkedUserFieldsKeys %}checked=true{% endif %} />
-                  <input type="hidden"  name="registerFieldNameArray[]" value="{{ field }}" /> 
-                  {% if userCustomField %}{{ userCustomField.title }}{% else %}{{ dict_text('userInfoFields', field) }}{% endif %}
-                  {% if field == 'email' or field == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
-                </li>
-              {% endfor %}
-            {% else %}
-                
-              {% set userInfoFields = dict('userInfoFields') %}
-              {% for key,field in userInfoFields %}
-                <li class="list-group-item clearfix" data-role="item" >
-                  <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
-                  <input type="checkbox" name="registerSort[]" value="{{ key }}" {% if key in checkedUserFieldsKeys %}checked=true{% endif %} />
-                  <input type="hidden"  name="registerFieldNameArray[]" value="{{ key }}" /> 
-                  {{ field }}
-                  {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
-                </li>
-              {% endfor %}
+            {% for key,field in commonFields if commonFields %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="registerSort[]" value="{{ key }}" {% if key in checkedUserFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="registerFieldNameArray[]" value="{{ key }}" /> 
+                {{ field }}
+                {% if key == 'email' or key == 'mobile' %}<span class="text-muted">  (带格式校检)</span>{% endif %}
+              </li>
+            {% endfor %}
 
-              {% if  userFields %}
-                {% for field in userFields %}
-                  <li class="list-group-item clearfix" data-role="item" >
-                    <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
-                    <input type="checkbox" name="registerSort[]" value="{{field.fieldName}}" />
-                    <input type="hidden"  name="registerFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
-                  </li>
-                {% endfor %}
-              {% endif %}
-
-            {% endif %}
+            {% for field in userFields if userFields|default(null) %}
+              <li class="list-group-item clearfix" data-role="item" >
+                <span class="glyphicon glyphicon-resize-vertical sort-handle"></span>&nbsp;
+                <input type="checkbox" name="registerSort[]" value="{{field.fieldName}}" {% if field.fieldName in checkedUserFieldsKeys %}checked=true{% endif %} />
+                <input type="hidden"  name="registerFieldNameArray[]" value="{{field.fieldName}}" /> {{field.title}}
+              </li>
+            {% endfor %}
           </ul>
 
           <div class="help-block col-md-12"><span class="text-success">可拖动调整次序。酌情勾选需要收集的字段，若需要新的字段，请在［自定义字段设置］中添加。</span></div>

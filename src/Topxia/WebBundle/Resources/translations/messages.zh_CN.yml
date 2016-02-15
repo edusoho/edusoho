@@ -1,0 +1,4 @@
+Bad credentials: 帐号或密码不正确
+User account is locked.: 帐号已经被封禁，无法登录。
+User account is temporay locked, you can reopen your account by resetting your password.: 帐号由于连续输错密码，已经被暂时封禁，无法登录，您可以通过找回并重置密码来解除封禁。
+Your session has timed out, or you have disabled cookies.: 您的会话已过期或者您的浏览器禁止了cookies。

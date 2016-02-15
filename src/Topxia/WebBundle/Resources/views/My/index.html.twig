@@ -13,7 +13,11 @@
               </div>
               <div class="panel-body">
                 {% if learningCourses is empty %}
-                <h3>{{'你还没有学习任何课程，'|trans}}<a href="{{ path('course_explore') }}">{{'来探索更多课程吧！'|trans}} </a>
+                  {% if app.request.getLocale() == 'ug_CN' %}
+                    <h3>你还没有学习任何课程，<a href="{{ path('course_explore') }}">来探索更多课程吧！ </a>
+                  {% else %}
+                    <h3>你还没有学习任何课程，<a href="{{ path('course_explore') }}">来探索更多课程吧！ </a>
+                  {% endif %}
             {% else %}
                 {% include 'TopxiaWebBundle:MyCourse:my-courses-list.html.twig' with { users: users, courses: learningCourses } %}
             {% endif %}

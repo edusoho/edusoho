@@ -1,9 +1,28 @@
 app.controller('CourseListController', ['$scope', '$stateParams', '$state', 'CourseUtil', 'CourseService', 'CategoryService', CourseListController]);
 function CourseListController($scope, $stateParams, $state, CourseUtil, CourseService, CategoryService)
 {
+    this.getTypeName = function(name, types) {
+
+      var defaultName = "全部分类";
+      if (!name || !types) {
+        return defaultName;
+      }
+
+      for (var i = types.length - 1; i >= 0; i--) {
+        if (name == types[i].type) {
+          defaultName = types[i].name;
+          break;
+        }
+      };
+
+      return defaultName;
+    }
+
+    $scope.courseListSorts = CourseUtil.getCourseListSorts();
+    $scope.courseListTypes = CourseUtil.getCourseListTypes();
     $scope.categoryTab = {
       category : "分类",
-      type : "全部分类",
+      type : this.getTypeName($stateParams.type, $scope.courseListTypes),
       sort : "综合排序",
     };
 
@@ -47,9 +66,6 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
               });
       }
 
-      $scope.courseListSorts = CourseUtil.getCourseListSorts();
-      $scope.courseListTypes = CourseUtil.getCourseListTypes();
-
       CategoryService.getCategorieTree(function(data) {
         $scope.categoryTree = data;
       });
@@ -89,7 +105,6 @@ function CourseListController($scope, $stateParams, $state, CourseUtil, CourseSe
              $scope.$emit("closeTab", {});
              $scope.categoryTab.category = category.name;
              clearData();
-             $stateParams.type = null;
              $stateParams.categoryId  =category.id;
              $scope.loadCourseList($scope.sort);
       }

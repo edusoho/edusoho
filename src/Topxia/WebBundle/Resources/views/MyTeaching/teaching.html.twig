@@ -30,8 +30,8 @@
         {% if filter == 'classroom' %}
         <th >{{'所属'|trans}}{{setting("classroom.name")|default("班级"|trans)}}</th>
         {% else %}
-        <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'数'|trans}}</th>
-        <th>{{'价格(元)'|trans}}</th>
+        <th>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'数'|trans}}</th>
+        <th>{{'价格'|trans}}({{'元'|trans}})</th>
         {% endif %}
         <th>{{'状态'|trans}}</th>
         <th width="20%">{{'操作'|trans}}</th>
@@ -84,7 +84,7 @@
                 <ul class="dropdown-menu pull-right">
                   <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">{{'课时管理'|trans}}</a></li>
                   <li><a href="{{ path('course_manage_files', {id:course.id}) }}">{{'文件管理'|trans}}</a></li>
-                  <li><a href="{{ path('course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
+                  <li><a href="{{ path('course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
                 </ul>
               </div>
 

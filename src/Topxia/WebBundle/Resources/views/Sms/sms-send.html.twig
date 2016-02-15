@@ -2,35 +2,39 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}短信推送{% endblock %}
+{% block title %}{{'短信推送'|trans}}{% endblock %}
 {% block body %}
 
 <lable id="smsSend-form" class="form-horizontal"  data-url = "{{ path('generate_short_link',{url:url})}}" style="display:none;">
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="title">发送对象:</label>
+      <label for="title">{{'发送对象'|trans}}:</label>
     </div>
     <div class="col-md-7 controls">
-      <p class="help-block">{% if targetType == 'course' and item.parentId %}班级内{% else %}所有{% endif %}用户</p>
+      {% if app.request.getLocale() == 'ug_CN' %}
+        <p class="help-block">{% if targetType == 'course' and item.parentId %}{{setting("classroom.name")|default("班级")}}内{% else %}所有{% endif %}用户</p>
+      {% else %}
+        <p class="help-block">{% if targetType == 'course' and item.parentId %}{{setting("classroom.name")|default("班级")}}内{% else %}所有{% endif %}用户</p>
+      {% endif %}
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="title">预计发送量:</label>
+      <label for="title">{{'预计发送量'|trans}}:</label>
     </div>
     <div class="col-md-7 controls">
-      <p class="help-block">{{count}}条</p>
+      <p class="help-block">{{count}}{{'条'|trans}}</p>
     </div>
   </div>
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="startTime">发送内容:</label>
+      <label for="startTime">{{'发送内容'|trans}}:</label>
     </div>
     <div style="z-index:2000;">
       <p class="help-block">
-        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}{{ setting('classroom.name')|default("班级") }}{% else %}课程{% endif %}：《{{item.title}}》现已开始报名!<a href ='{{url}}' target="_blank">链接地址</a>
+        [{{setting('cloud_sms.sms_school_name')}}]{% if targetType == 'classroom' %}{{ setting('classroom.name')|default("班级"|trans) }}{% else %}{{'课程'|trans}}{% endif %}{{'：'|trans}}{{'《'|trans}}{{item.title}}{{'》'|trans}}{{'现已开始报名'|trans}}!<a href ='{{url}}' target="_blank">{{'链接地址'|trans}}</a>
       </p>
     </div>
   </div>
@@ -40,8 +44,8 @@
   <input type="hidden" name="sms_open" value={{isOpen}}>
   <div class="row form-group">
     <div class="col-md-8 control-label">
-      <p>{% if isOpen %}短信发送准备中...{% else %}请联系超级管理员，开启云短信相关设置。{% endif %}</p>
-    </div> 
+      <p>{% if isOpen %}{{'短信发送准备中'|trans}}...{% else %}{{'请联系超级管理员，开启云短信相关设置。'|trans}}{% endif %}</p>
+    </div>
   </div>
 </form>
 <div id="smsSend-progress" class="package-update-progress" style="display:none;">
@@ -54,9 +58,9 @@
 {% endblock %}
 
 {% block footer %}
-  <button id = 'begin-smsSend' data-url="{{ path('publish_sms_send',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">发送</button>
-  <strong class="text text-danger" id="updating-hint" style="display:none;">正在发送，请不要关闭当前窗口...</strong>
-  <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">取消</button>
-  <button id="finish-smsSend" data-loading-text="正在发送, 请稍等..." class="btn btn-primary" style="display:none">发送完成</button>
+  <button id = 'begin-smsSend' data-url="{{ path('publish_sms_send',{targetType:targetType,id:item.id,count:count,index:0,url:url}) }}" data-submiting-text="{{'正在提交'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#smsSend-form" style="display:none;">{{'发送'|trans}}</button>
+  <strong class="text text-danger" id="updating-hint" style="display:none;">{{'正在发送，请不要关闭当前窗口'|trans}}...</strong>
+  <button id = 'cancle-smsSend'type="button" class="btn btn-link pull-right" data-dismiss="modal" style="display:none;">{{'取消'|trans}}</button>
+  <button id="finish-smsSend" data-loading-text="{{'正在发送, 请稍等'|trans}}..." class="btn btn-primary" style="display:none">{{'发送完成'|trans}}</button>
   <script>app.load('/../../../../topxiaweb/js/controller/sms/sms-send')</script>
 {% endblock %}

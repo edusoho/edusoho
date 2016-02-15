@@ -85,13 +85,13 @@
 
               <div class="form-group">
                 <div class="controls">
-                  <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="{{'请输入评语'|trans}}"></textarea>
+                  <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="请输入评语"></textarea>
                 </div>
               </div>
               <div class="form-group">
                 <div class="controls">
                   <select class="form-control" id="testpaper-teacherSay-select">
-                    <option value="">{{'---常用评语---'|trans}}</option>
+                    <option value="">---{{'常用评语'|trans}}---</option>
                     <option value="1">{{'继续努力，继续进步！'|trans}}</option>
                     <option value="2">{{'不错，有进步，再努力些就会更棒！'|trans}}</option>
                     <option value="3">{{'你真棒！我为你骄傲！'|trans}}</option>
@@ -100,7 +100,17 @@
                   </select>
                 </div>
               </div>
-
+              <div class="form-group">
+                <div class="col-md-4 controls">
+                  {% if paperResult|default(null) %}
+                    <input type="hidden" value="{{ paperResult.objectiveScore }}" name="objectiveScore" />
+                    {{'试卷得分'|trans}}:<span id="totalScore">{{ paperResult.objectiveScore }}</span>
+                  {% endif %}
+                </div>
+                <div class="col-md-8 controls radios">
+                  {{ radios('passedStatus', dict('passedStatus'), 'passed' ) }}
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <a href="javascript:;" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</a>
@@ -134,7 +144,7 @@
             </div>
             <div class="modal-footer">
               <a href="javascript:;" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</a>
-              <button class="btn btn-primary" id="testpaper-finish-btn" data-saving-text="{{'正在交卷, 请稍等...'|trans}}">{{'确认交卷'|trans}}</button>
+              <button class="btn btn-primary" id="testpaper-finish-btn" data-saving-text="{{'正在交卷, 请稍等'|trans}}...">{{'确认交卷'|trans}}</button>
             </div>
           </div>
         </div>

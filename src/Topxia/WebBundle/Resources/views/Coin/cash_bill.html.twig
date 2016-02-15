@@ -1,5 +1,7 @@
 {% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
 
+{% block title %}{{'我的现金账单'|trans}} - {{ parent() }}{% endblock %}
+
 {% set side_nav = 'my-bill' %}
 
 {% block main %}
@@ -52,11 +54,7 @@
             <td>
               <span class="text-sm">
                 {% if cash.type =="inflow" %}
-                  {% if cash.payment == 'wxpay'%}
-                    {{'微信支付'|trans}}
-                  {% elseif cash.payment == 'alipay' %}
-                    {{'支付宝'|trans}}
-                  {% endif %}
+                  {{ dict_text('payment', cash.payment) }}
                 {% else %}
                   {{'网校支付'|trans}}
                 {% endif %}

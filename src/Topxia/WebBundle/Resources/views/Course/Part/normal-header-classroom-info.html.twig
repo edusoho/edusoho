@@ -1,6 +1,13 @@
 {% if classroom %}
-{{'该课程属于'|trans}}
-<a href="{{path('classroom_show', {id:classroom.id})}}">{{classroom.title}}</a>
-</br>
-{{'请加入后再学习'|trans}}
+	{% if app.request.getLocale() == 'ug_CN' %}
+		该课程属于
+		<a href="{{path('classroom_show', {id:classroom.id})}}">{{classroom.title}}</a>
+		</br>
+		请加入后再学习
+	{% else %}
+		该课程属于
+		<a href="{{path('classroom_show', {id:classroom.id})}}">{{classroom.title}}</a>
+		</br>
+		请加入后再学习
+	{% endif %}
 {% endif %}

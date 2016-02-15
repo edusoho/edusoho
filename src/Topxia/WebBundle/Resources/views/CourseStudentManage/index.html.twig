@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'students' %}
 {% set script_controller = 'course-manage/students' %}
@@ -9,13 +9,13 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}
+    {% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}
     {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
-      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> {{'导出'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}</a>
+      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}</a>
     {% endif %}
     {% if app.user.isAdmin() or isTeacherAuthManageStudent == 1 %}
       <a class="btn btn-info pull-right btn-sm mhs" href="{{ path('course_manage_student_import', {id:course.id}) }}"><i class="glyphicon glyphicon-import"></i> {{'批量导入'|trans}}</a>
-      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}</button>
+      <button class="btn btn-info btn-sm pull-right mhs" id="student-add-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('course_manage_student_create', {id:course.id}) }}"><i class="glyphicon glyphicon-plus"></i> {{'添加'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</button>
     {% endif %}
   </div>
 
@@ -31,7 +31,7 @@
     <table class="table table-striped" id="course-student-list">
       <thead>
         <tr>
-          <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}</th>
+          <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
           <th width="30%">{{'学习进度'|trans}}</th>
           <th width="30%">{{'操作'|trans}}</th>
         </tr>
@@ -43,7 +43,11 @@
           {% set isFollowing = user.id in followingIds %}
           {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
         {% else %}
-          <tr class="empty"><td colspan="20">{{'无'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'记录'|trans}}</td></tr>
+          {% if app.request.getLocale() == 'ug_CN' %}
+            <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
+          {% else %}
+            <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
+          {% endif %}
         {% endfor %}
       </tbody>
     </table>

@@ -9,10 +9,10 @@
 <table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
-      <th>{{'用户名'|trans}}</th>
-      <th>{{'推荐教师'|trans}}</th>
-      <th>{{'最近登录'|trans}}</th>
-      <th>{{'操作'|trans}}</th>
+      <th>用户名</th>
+      <th>推荐教师</th>
+      <th>最近登录</th>
+      <th>操作</th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +21,7 @@
         {% include 'TopxiaAdminBundle:Teacher:tr.html.twig' with {user:user} %}
       {% endfor %}
     {% else %}
-       <tr><td colspan="20"><div class="empty">{{'暂无教师记录'|trans}}</div></td></tr>
+       <tr><td colspan="20"><div class="empty">暂无教师记录</div></td></tr>
     {% endif %}
   </tbody>
 </table>

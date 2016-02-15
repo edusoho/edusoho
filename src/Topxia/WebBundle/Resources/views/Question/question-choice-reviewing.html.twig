@@ -1,8 +1,8 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {% if question.type == 'single_choice' %}（{{'单选'|trans}}）
-  {% elseif question.type == 'choice' %}（{{'多选'|trans}}）
+  {% if question.type == 'single_choice' %}{{'（单选）'|trans}}
+  {% elseif question.type == 'choice' %}{{'（多选）'|trans}}
   {% endif %}
   {{ question.stem|bbCode2Html|raw }}
 {% endblock %}
@@ -20,7 +20,7 @@
     {% if itemResult.status == 'right' %}
      <span class="glyphicon glyphicon-ok question-text-success"></span>
     {% elseif itemResult.status == 'wrong' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> {{'选择了'|trans}}<strong class="question-text-danger">
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 选择了<strong class="question-text-danger">
         {% for key,choice in choiceIndex %}
           {% if choice != '-1' %}
           {{ (65+choice)|chr }}
@@ -28,7 +28,7 @@
         {% endfor %}
        </strong>
   {% elseif itemResult.status == 'partRight' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> {{'部分答对,选择了'|trans}}<strong class="question-text-danger">
+       <span class="glyphicon glyphicon-remove question-text-danger"></span> 部分答对,选择了<strong class="question-text-danger">
        {% for key,choice in choiceIndex %}
           {% if choice != '-1' %}
           {{ (65+choice)|chr }}

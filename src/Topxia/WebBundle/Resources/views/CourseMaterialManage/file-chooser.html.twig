@@ -42,9 +42,13 @@
             <ul>
               <li>{{'支持常见文档、图片、音视频、压缩包文件格式。'|trans}}</li>
               {% if storageSetting.upload_mode == 'cloud' %}
-                <li>文件将上传到<strong>云服务器</strong></li>
+                {{'<li>文件将上传到<strong>云服务器</strong></li>'|trans}}
               {% else %}
-                <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+                {% if app.request.getLocale() == 'ug_CN' %}
+                  <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+                {% else %}
+                  <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+                {% endif %}
               {% endif %}
             </ul>
           </div>

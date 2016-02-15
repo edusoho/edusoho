@@ -1,18 +1,21 @@
 <tr data-role='item'>
   <td><input value="{{question.id}}" type="checkbox"  autocomplete="off" data-role="batch-item" ></td>
   <td>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">{{ question.stem |fill_question_stem_text| plain_text(40) }}</a>
+    <a href="#modal" data-toggle="modal" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">
+      {% if question.includeImg %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+      {{ question.stem |fill_question_stem_text| plain_text(40) }}
+    </a>
     <div>
       {% set target = targets[question.target]|default(null) %}
       {% if target.type|default(null) != 'course' %}
-        <small class="text-muted">{{'从属于'|trans}} {{targets[question.target].simple_name|default('')}}</small>
+        <small class="text-muted">从属于 {{targets[question.target].simple_name|default('')}}</small>
       {% else %}
         <small class="text-muted">{{'从属于 本课程'|trans}}</small>
       {% endif %}
       {% if question.type == 'material'%}
-           {% if  question.subCount == 0  %}
-              <span class="label label-danger">{{'未完成'|trans}}</span>
-           {% endif %}
+        {% if  question.subCount == 0  %}
+          <span class="label label-danger">{{'未完成'trans}}</span>
+        {% endif %}
       {% endif %}
     </div>
 

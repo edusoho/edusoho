@@ -12,15 +12,19 @@
 		      {% for index, answer in item.question.answer %}
 		        {% set userAnswer = item.question.testResult.answer[index]|default(null) %}
 			    	<li>
-			    	  {{'填空'|trans}}({{index+1}}){{'：'|trans}} {{'正确答案'|trans}} <strong class="text-success">{{ answer|join(' 或 '|trans) }}</strong>
+			    		{% if app.request.getLocale() == 'ug_CN' %}
+			    			填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+			    		{% else %}
+			    			填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+			    		{% endif %}
 			    	  {% if userAnswer == '' %}
 			    	  {{'。你未回答'|trans}}
 			    	  {% elseif item.question.testResult.status == "right" %}
-			    	  {{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>{{'。'|trans}}
+			    	  {{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
 			    	  {% elseif item.question.testResult.status == "partRight" %}
-			    	  {{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>{{'。'|trans}}
+			    	  {{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
 			    	  {% else %}
-			    	  {{'，你的答案'|trans}}　<strong class="text-danger">{{ userAnswer }}</strong>{{'。'|trans}}
+			    	  {{'，你的答案'|trans}}　<strong class="text-danger">{{ userAnswer }}</strong>。
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}
@@ -40,13 +44,13 @@
 			</div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
 	{% else %}
 	  <div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-fill-inputs">
 				{% set input_index = 1 %}
 				{% for answer in item.question.answer %}
-					<input class="form-control " type="text" data-type="fill" name="{{ item.question.id }}" placeholder="{{'填空'|trans}}({{ input_index }}){{'答案，请填在这里'|trans}}" {% if item.question.testResult.answer[input_index - 1]|default(null) %}value="{{ item.question.testResult.answer[input_index - 1] }}"{% endif %} />
+					<input class="form-control " type="text" data-type="fill" name="{{ item.question.id }}" placeholder="{% if app.request.getLocale() == 'ug_CN' %}填空({{ input_index }})答案，请填在这里{% else %}填空({{ input_index }})答案，请填在这里{% endif %}" {% if item.question.testResult.answer[input_index - 1]|default(null) %}value="{{ item.question.testResult.answer[input_index - 1] }}"{% endif %} />
 					{% set input_index = input_index + 1 %}
 				{% endfor %}
 			</div>
@@ -62,13 +66,17 @@
 		    <ul>
 		      {% for index, answer in item.question.answer %}
 		    	<li>
-		    	  {{'填空'|trans}}({{index+1}}){{'：'|trans}} {{'正确答案'|trans}} <strong class="text-success">{{ answer|join(' 或 '|trans) }}</strong>
+		    		{% if app.request.getLocale() == 'ug_CN' %}
+		    			填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    		{% else %}
+		    			填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    		{% endif %}
 		    	</li>
 		      {% endfor %}
 		    </ul>
 		</div>
 	  </div>
-	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw }}</div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
 	  {% endif %}
 
 	{% endif %}

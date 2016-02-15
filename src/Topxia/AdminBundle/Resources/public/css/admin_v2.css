@@ -1,3 +1,4 @@
+
 body {
   padding-top: 70px;
   padding-bottom: 40px;
@@ -368,4 +369,77 @@ fieldset #checkboxChoices{
 
 .popover.help-popover {
   max-width: 500px;
+}
+
+/*问题反馈*/
+.fixed-bar{
+  position: fixed;
+  z-index: 999;
+  bottom: 10px;
+  right: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  text-align:center;
+}
+.fixed-bar i{
+  display: block;
+  height: 50px;
+  width: 50px;
+  font-size:20px;
+  line-height:52px;
+  color: #999;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+
+.fixed-bar span {
+  display: block;
+  height: 50px;
+  width: 50px;
+  padding: 5px 0;
+  color: #fff;
+  background: #15c288;
+}
+
+.fixed-bar a {
+  display: block;
+  height: 50px;
+  width: 50px;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.fixed-bar a:hover i {
+  margin-top: -100%;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  transition: all .3s ease;
+}
+
+.form-horizontal .col-md-10.form-group{
+  margin-left: 0;
+
+}
+.form-horizontal .form-group .control-cloud{
+  text-align: left;
+}
+.form-horizontal .form-group .control-cloud.success{
+margin-top: 14px;
+}
+.form-horizontal .form-group .cloud-warning{
+  padding-top: 14px;
+  margin-left: -45px;
+}
+.form-horizontal .form-group .cloud-warning .mhs{
+  margin-left: -27px;
+}
+.form-horizontal .item h5{
+  font-weight: bold;
+}
+.modal-open .modal-body{
+  max-height: 435px;
+  overflow: auto;
 }

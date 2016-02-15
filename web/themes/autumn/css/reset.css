@@ -1,0 +1,104 @@
+/* =========================== media =========================== */
+a:hover,
+a:focus {
+  color: #7cb132;
+}
+.link-dark:hover,
+.link-light:hover,
+.link-white {
+  color: #7cb132;
+}
+.text-primary,
+.color-primary {
+  color: #7cb132 !important;
+}
+.btn-link:hover,
+.btn-link:focus,
+.btn-link.focus {
+  color: #7cb132;
+}
+.btn-primary {
+  border-color: #608927;
+  background-color: #7cb132;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.focus,
+.btn-primary.active {
+  background-color: #669129;
+}
+.nav.nav-tabs > li.active > a,
+.nav.nav-tabs > li:hover > a {
+  border-color: #7cb132;
+  color: #7cb132;
+}
+.nav.nav-tabs > li.active > a .text-muted,
+.nav.nav-tabs > li:hover > a .text-muted {
+  color: #7cb132;
+}
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  background-color: #7cb132;
+}
+.es-piece .piece-header {
+  border-color: #7cb132;
+}
+.breadcrumb a:hover {
+  color: #7cb132;
+}
+.course-detail-header .course-data > li .dropdown-toggle:hover,
+.course-detail-header .course-data > li > a:hover {
+  color: #7cb132;
+}
+.score i {
+  color: #7cb132;
+}
+.es-tabs .tab-header > ul > li > a:hover {
+  color: #7cb132;
+}
+.class-serve > ul > li.active {
+  background-color: #7cb132;
+}
+.article-metas .metas-body .title a:hover {
+  color: #7cb132;
+}
+.media.media-number .media-body > a:hover {
+  color: #7cb132;
+}
+.btn-tag:hover {
+  color: #7cb132;
+  border-color: #7cb132;
+}
+.media-hot-comment .comments-info p a,
+.media-hot-comment .comments-info h5 a:hover {
+  color: #7cb132;
+}
+.class-signin .btn-signin {
+  background-color: #7cb132;
+}
+.sidenav .list-group .list-group-item.active {
+  border-color: #7cb132;
+}
+.sidenav .list-group .list-group-item.active > a {
+  color: #7cb132;
+}
+.dropdown-menu > li > a:hover {
+  background-color: #7cb132;
+}
+.es-bar-menu > ul > li.active,
+.es-bar-menu > ul > li:hover {
+  background-color: #7cb132;
+}
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > span:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:focus {
+  background-color: #7cb132;
+  border-color: #7cb132;
+}
+.badge-primary {
+  background-color: #7cb132;
+}

@@ -16,11 +16,11 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.7.1
+        assets_version: 6.15.1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.pdo
+        handler_id:     session.handler.factory
     fragments:       ~
 
 # Twig Configuration
@@ -56,6 +56,7 @@ doctrine:
             enum: Topxia\Common\DoctrineEnumType
         connections:
             default:
+                wrapper_class: Topxia\Service\Common\Connection
                 driver:   %database_driver%
                 host:     %database_host%
                 port:     %database_port%
@@ -114,7 +115,25 @@ services:
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context]
+        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
+
+    session.handler.redis.factory:
+        class: Topxia\Service\Common\RedisFactory
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
+
+    session.handler.redis:
+        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        arguments: [@session.handler.redis.factory, @security.context]
+
+    session.handler.factory:
+        class: SessionHandlerInterface
+        factory_class: Topxia\Service\Common\SessionHandlerFactory
+        factory_method: getSessionHandler
+        arguments: 
+            - "@service_container"
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
@@ -161,7 +180,6 @@ services:
         arguments:    [@service_container]
         tags:
             - { name: twig.extension }
-
 
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener

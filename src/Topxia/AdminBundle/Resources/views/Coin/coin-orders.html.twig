@@ -9,34 +9,34 @@
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
     <div class="form-group">
-      <label class="ptm" >{{'创建时间'|trans}}:</label>
-        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{request.get('startDateTime')}}" placeholder="{{'起始时间'|trans}}">
+      <label class="ptm" >创建时间:</label>
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{request.get('startDateTime')}}" placeholder="起始时间">
         -
-        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{request.get('endDateTime')}}" placeholder="{{'结束时间'|trans}}">
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{request.get('endDateTime')}}" placeholder="结束时间">
     </div>
     </div>
     <div class="mbm">
     <div class="form-group">
-     <label class="ptm" >{{'筛选条件'|trans}}:</label>
+     <label class="ptm" >筛选条件:</label>
       <select class="form-control" name="status">
-        {{ select_options({ paid: '已支付'|trans,created:'未付款'|trans,cancelled:'已取消'|trans}, request.get('status'), '订单状态'|trans) }}
+        {{ select_options({ paid: '已支付',created:'未付款',cancelled:'已关闭'}, request.get('status'), '订单状态') }}
       </select>
       <select class="form-control" name="payment">
-        {{ select_options(dict('payment'), app.request.get('payment'), '支付方式'|trans) }}
+        {{ select_options(dict('payment'), app.request.get('payment'), '支付方式') }}
       </select>
     </div>
-
+   
 
     <div class="form-group">
-     <label class="ptm" >{{'关键词'|trans}}:</label>
+     <label class="ptm" >关键词:</label>
         <select class="form-control" name="keywordType">
-        {{ select_options(dict('coinOrderType'), app.request.query.get('keywordType'), '--选择类型--'|trans) }}
+        {{ select_options(dict('coinOrderType'), app.request.query.get('keywordType'), '--选择类型--') }}
         </select>
-
+  
     <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
     </div>
 
-    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    <button class="btn btn-primary">搜索</button>
     <a class="btn btn-primary" href="{{ path('admin_order_manage_export_coin_csv',
     {startTime:request.get('startDateTime'),
     endTime:request.get('endDateTime'),
@@ -44,14 +44,14 @@
     payment:request.get('payment'),
     keywordType:request.get('keywordType'),
     keyword:request.get('keyword')
-    })}}">{{'导出结果'|trans}}</a>
+    })}}">导出结果</a>
      </div>
   </form>
 
   {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
 
   <div class="paginator">
-    {{ web_macro.paginator(paginator) }}
+    {{ web_macro.paginator(paginator) }} 
   </div>
 
 

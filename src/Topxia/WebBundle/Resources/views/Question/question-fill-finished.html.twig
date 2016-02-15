@@ -31,12 +31,16 @@
           {% for index,rightAnswer in question.answer %}
 
             <li>
-              {{'填空'|trans}}({{index+1}}){{'：'|trans}} {{'正确答案'|trans}}
+              {% if app.request.getLocale() == 'ug_CN' %}
+                填空({{index+1}})： 正确答案
+              {% else %}
+                填空({{index+1}})： 正确答案
+              {% endif %}
               <strong class="question-text-success">{{ rightAnswer|join(' 或 '|trans) }}</strong>
               {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
              {{'回答是'|trans}}
 
-              <strong class="question-text-danger">{{ itemResult.answer[index] }}</strong>{{'。'|trans}}
+              <strong class="question-text-danger">{{ itemResult.answer[index] }}</strong>。
               {% else %}
               {{'未回答'|trans}}
               {% endif %}

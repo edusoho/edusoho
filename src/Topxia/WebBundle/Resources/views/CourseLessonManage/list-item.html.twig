@@ -36,7 +36,10 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
-    {{'课时'|trans}} <span class="number">{{ lesson.number }}</span>{{'：'|trans}}{% if lesson.free == 1 %}<span class="label label-danger">{{'免费'|trans}}</span>{% endif %}
+    {% if setting('course.custom_chapter_enabled')|default(true) %}
+      课时 <span class="number">{{ lesson.number }}</span>：
+    {% endif %}
+    {% if lesson.free == 1 %}<span class="label label-danger">{{'免费'|trans}}</span>{% endif %}
 
     {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
       <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
@@ -56,7 +59,13 @@
     {% endif %}
 
     {% if lesson.requireCredit > 0 %}
-      <small class="text-muted">(需{{ lesson.requireCredit }}学分)</small>
+      <small class="text-muted">
+        {% if app.request.getLocale() == 'ug_CN' %}
+          (需{{ lesson.requireCredit }}学分)
+        {% else %}
+          (需{{ lesson.requireCredit }}学分)
+        {% endif %}
+      </small>
     {% endif %}
 
     {% if lesson.type != 'testpaper' %}
@@ -114,6 +123,18 @@
             <li><a href="{{ path('course_exercise_create', {courseId:course.id, lessonId:lesson.id}) }}" ><span class="glyphicon glyphicon-list-alt prs"></span>{{'新增练习'|trans}}</a></li>
           {% endif %}
           <li class="divider"></li>
+        {% endif %}
+
+        {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
+          {% if  file.convertStatus|default(null) == 'success' %}
+          <!-- file.createdUserId|default(null) == app.user.id and -->
+          <li>
+            <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
+            <span class="glyphicon glyphicon-list prs"></span>弹题管理
+            </a>
+          </li>
+          <li class="divider"></li>
+          {% endif %}
         {% endif %}
 
         {% if lesson.type != 'testpaper' %}

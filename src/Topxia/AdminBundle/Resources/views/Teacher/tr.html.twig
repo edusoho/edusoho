@@ -3,16 +3,16 @@
   <td>
     <strong>{{ admin_macro.user_link(user) }}</strong>
     {% if user.locked %}
-      <label class="label label-danger">{{'禁'|trans}}</label>
+      <label class="label label-danger">禁</label>
     {% endif %}
   </td>
   <td>
     {% if user.promoted %}
-      <span class="text-success">{{'是'|trans}}</span>
+      <span class="text-success">是</span>
       <br>
       <span class="text-muted text-sm">{{ user.promotedTime|date('Y-n-d H:i') }}</span>
     {% else %}
-      <span class="text-muted">{{'否'|trans}}</span>
+      <span class="text-muted">否</span>
     {% endif %}
   </td>
   <td>
@@ -22,17 +22,17 @@
   </td>
   <td>
     <div class="btn-group">
-      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">{{'查看'|trans}}</a>
+      <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
       <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
         {% if not user.promoted %}
-        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">{{'推荐教师'|trans}}</a></li>
+        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐教师</a></li>
         {% endif %}
         
         {% if user.promoted %}
-          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">{{'取消推荐教师'|trans}}</a></li>
+          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
         {% endif %}
       </ul>
     </div>

@@ -16,7 +16,7 @@
         </thead>
         <tbody>
           <tr>
-            <th>{{'答对'|trans}}</th>
+            <th>答对</th>
             {% for type in paper.metas.question_type_seq %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
@@ -34,43 +34,43 @@
             {% endfor %}
           </tr>
           <tr>
-            <th>答错</th>
+            <th>{{'答错'|trans}}</th>
             {% for type in paper.metas.question_type_seq %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>道</small></span></td>
+                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>道{% if type == 'choice' and accuracy[type].partRight != 0 or  type == 'uncertain_choice' and accuracy[type].partRight != 0 %}（其中有{{accuracy[type].partRight}}道漏选）{% endif %}</small></span></td>
+                  <td><span class="text-danger">{{ accuracy[type].wrong + accuracy[type].partRight }} <small>{{'道'|trans}}{% if type == 'choice' and accuracy[type].partRight != 0 or  type == 'uncertain_choice' and accuracy[type].partRight != 0 %}{% if app.request.getLocale() == 'ug_CN' %}（其中有{{accuracy[type].partRight}}道漏选）{% else %}（其中有{{accuracy[type].partRight}}道漏选）{% endif %}{% endif %}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}
           </tr>
           <tr>
-            <th>未答</th>
+            <th>{{'未答'|trans}}</th>
             {% for type in paper.metas.question_type_seq %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>道</small></span></td>
+                  <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>道</small></span></td>
+                  <td><span class="text-muted">{{ accuracy[type].noAnswer }} <small>{{'道'|trans}}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}
           </tr>
           <tr>
-            <th>得分</th>
+            <th>{{'得分'|trans}}</th>
             {% for type in paper.metas.question_type_seq %}
               {% if type == 'essay' %}
                 {% if paperResult.status == 'finished' %}
-                  <td><span class="text-score">{{ accuracy[type].score }} <small>分</small></span></td>
+                  <td><span class="text-score">{{ accuracy[type].score }} <small>{{'分'|trans}}</small></span></td>
                 {% endif %}
               {% else %}
                 {% if paperResult.status == 'finished' or not accuracy[type].hasEssay|default(false) %}
-                  <td><span class="text-score">{{ accuracy[type].score }} <small>分</small></span></td>
+                  <td><span class="text-score">{{ accuracy[type].score }} <small>{{'分'|trans}}</small></span></td>
                 {% endif %}
               {% endif %}
             {% endfor %}

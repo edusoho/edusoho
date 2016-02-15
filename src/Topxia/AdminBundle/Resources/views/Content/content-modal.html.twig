@@ -3,7 +3,7 @@
 {% set modal_class = 'modal-lg' %}
 
 
-{% block title %}{{ type.name|trans }}{% endblock %}
+{% block title %}{{ type.name }}{% endblock %}
 {% block body %}
 
 {% set content = content|default(null) %}
@@ -19,7 +19,7 @@
     <div class="col-md-8 two-col-main">
       {% if 'title' in type.basicFields %}
         <div class="form-group">
-          <label for="content-title-field" class="control-label">{{'标题'|trans}}</label>
+          <label for="content-title-field" class="control-label">标题</label>
           <div class="controls">
             <input class="form-control" id="content-title-field" type="text" name="title" value="{{ field_value(content, 'title') }}">
           </div>
@@ -27,7 +27,7 @@
       {% endif %}
 
       <div class="form-group">
-        <label for="editor-field" class="control-label">{{'编辑器类型'|trans}}</label>
+        <label for="editor-field" class="control-label">编辑器类型</label>
         <div class="controls radios">
           <label><input type="radio" name="editor" value="richeditor" 
             {% if content is empty %}
@@ -35,15 +35,15 @@
             {% elseif content.editor == 'richeditor'%}
              checked="checked"
             {% endif %}>
-            {{'可视化编辑器'|trans}}</label>
+            可视化编辑器</label>
         <label><input type="radio" name="editor" value="none"
           {% if content and content.editor == 'none' %} checked="checked" {% endif %}
-          >{{'HTML编辑器'|trans}}</label>
+          >HTML编辑器</label>
         </div>
       </div>
 
       {% if 'body' in type.basicFields %}
-        <label for="content-body-field" class="control-label">{{'正文'|trans}}</label>
+        <label for="content-body-field" class="control-label">正文</label>
 
         <div class="form-group" 
         {% if content and content.editor == 'none' %}
@@ -77,7 +77,7 @@
     <div class="col-md-4 two-col-side">
       {% if 'alias' in type.basicFields %}
         <div class="panel panel-default">
-          <div class="panel-heading">{{'URL路径'|trans}}</div>
+          <div class="panel-heading">URL路径</div>
           <div class="panel-body">
             <div class="form-group">
               <div class="controls">
@@ -90,16 +90,16 @@
 
       {% if 'categoryId' in type.basicFields %}
         <div class="panel">
-          <div class="panel-heading">{{'分类'|trans}}</div>
+          <div class="panel-heading">分类</div>
           <select name="categoryId">
-            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), '请选择分类'|trans) }}
+            {{ select_options(category_choices('default'), field_value(content, 'categoryId'), '请选择分类') }}
           </select>
         </div>
       {% endif %}
 
       {% if 'tagIds' in type.basicFields %}
         <div class="panel">
-          <div class="panel-heading">{{'标签'|trans}}</div>
+          <div class="panel-heading">标签</div>
           <div class="form-group">
             <div class="controls" style="width:100%;">
               <input class="width-full" id="content-tags-field" type="text" name="tags" value="{{ field_value(content, 'tagIds')|tags_join }}">
@@ -110,9 +110,9 @@
 
       {% if 'template' in type.basicFields %}
         <div class="panel panel-default" >
-          <div class="panel-heading">{{'模版'|trans}}</div>
+          <div class="panel-heading">模版</div>
           <div class="panel-body">
-            {% set templates = {'default': '默认模版'|trans,'blank':'无导航栏'|trans} %}
+            {% set templates = {'default': '默认模版','blank':'无导航栏'} %}
 
             <select class="form-control" name="template">
               {{ select_options(templates, field_value(content, 'template')) }}
@@ -135,8 +135,8 @@
 
 {% block footer %}
 
-    <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
-    <button id="content-save-btn" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#content-form" data-loading-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+    <button id="content-save-btn" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#content-form" data-loading-text="正在保存...">保存</button>
 {% endblock %}
 
 {% set hideFooter = true %}

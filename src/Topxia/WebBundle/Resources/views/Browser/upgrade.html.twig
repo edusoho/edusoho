@@ -13,7 +13,11 @@
 <body>
   <div class="container">
     <div class="title">{{ setting('site.name') }}</div>
-    <div class="message">{{'您的浏览器版本过低，请升级您的浏览器后，再访问'|trans}}{{ setting('site.name') }}{{'。'|trans}}</div>
+    {% if app.request.getLocale() == 'ug_CN' %}
+      <div class="message">您的浏览器版本过低，请升级您的浏览器后，再访问{{ setting('site.name') }}。</div>
+    {% else %}
+      <div class="message">您的浏览器版本过低，请升级您的浏览器后，再访问{{ setting('site.name') }}。</div>
+    {% endif %}
     <div class="browsers">
       <div class="head">{{'推荐使用以下浏览器：'|trans}}</div>
       <div>

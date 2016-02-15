@@ -54,13 +54,23 @@ define(function(require, exports, module) {
                 return ;
             }
             var $btn = $(e.currentTarget);
+            var _isTestPaper = function(){
+                return $btn.parents('.item-chapter')[0];
+            }
+            var _remove_item =function(){
+                if(_isTestPaper()){
+                    $btn.parents('.item-chapter').remove();
+                }else{
+                    $btn.parents('.item-lesson').remove();
+                }
+            }
             $.post($(this).data('url'), function(response) {
-                $btn.parents('.item-lesson').remove();
+                _remove_item();
                 sortList($list);
                 Notify.success('课时已删除！');
             }, 'json');
         });
-
+        
         $list.on('click', '.delete-chapter-btn', function(e) {
             var chapter_name = $(this).data('chapter') ;
             var part_name = $(this).data('part') ; 

@@ -54,7 +54,7 @@
 						{% endif %}
 					</a>
 					<div class="item-body">
-						<div class="item-seq-name">{{'课时'|trans}}{{ item.number }}:</div>
+						<div class="item-seq-name">课时{{ item.number }}:</div>
 						<div class="item-title">
 							<a href="#modal" data-toggle="modal" data-url="{{ path('course_lesson_preview', {courseId:item.courseId, lessonId:item.id}) }}" title="{{ item.title }}">{{ item.title }}</a>
 						</div>
@@ -67,9 +67,9 @@
 										<span>{{ item.startTime|date('m月d日') }}
 											{% for key,week in weeks %}
 												{% if key == item.startTime|date('w')  %}
-													{{'星期'|trans}}{{ week }}
+													星期{{ week }}
 												{% endif %}
-												{% endfor %}
+											{% endfor %}
 											{{ item.startTime|date('H：i') }}
 										</span>
 									{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}

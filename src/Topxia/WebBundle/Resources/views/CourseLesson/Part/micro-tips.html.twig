@@ -40,9 +40,24 @@
   {% endif %}
 
   {% if item.type == 'testpaper' %}
-    <span class="course-type">
-      <i class="es-icon es-icon-check" data-toggle="tooltip" data-placement="top" title="{{'试卷'|trans}}" data-original-title="{{'试卷'|trans}}"></i>
-    </span>
+    {% set endTime = (testpapers[item.mediaId].limitedTime * 60) + item.testStartTime %}
+    {% if item.testStartTime|default(null) and item.testMode == 'realTime' %}
+      <span class="color-gray course-type ">
+        {% if date().timestamp < item.testStartTime %}
+            {{'考试倒计时'|trans}}:<span class="color-primary pls">{{item.testStartTime|remain_time}}</span>
+        {% else %}
+          {% if date().timestamp < endTime %}
+              {{'考试已开始'|trans}}
+          {% else %}
+              {{'考试已结束'|trans}}
+          {% endif %}
+      {% endif %}
+      </span>
+    {% else %}
+      <span class="course-type">
+        <i class="es-icon es-icon-check" data-toggle="tooltip" data-placement="top" title="{{'试卷'|trans}}" data-original-title="{{'试卷'|trans}}"></i>
+      </span>
+    {% endif %}
   {% endif %}
 
   {% if item.type == 'ppt' %}
@@ -53,7 +68,7 @@
 
   {% if item.type == 'document' %}
     <span class="course-type">
-      <i class="es-icon es-icon-description" data-toggle="tooltip" data-placement="top" title="{{'文档课程'|trans}}" data-original-title="{{'文档'|trans}}"></i>
+      <i class="es-icon es-icon-description" data-toggle="tooltip" data-placement="top" title="{{'文档课程'|trans}}" data-original-title="文档"></i>
     </span>
   {% endif %}
 

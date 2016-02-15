@@ -2,15 +2,19 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'备注'|trans}}{% endblock %}
+{% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'备注'|trans}}{% endblock %}
 {% block body %}
 
-<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}" data-user="{{default.user_name|default('学员')|trans}}">
+<form id="student-remark-form" method="post" action="{{ path('course_manage_student_remark', {courseId:course.id, userId:user.id}) }}" data-user="{{default.user_name|default('学员'|trans)}}">
 
   <div class="form-group">
     <div class="controls">
     	<input class="form-control" id="student-remark" name="remark" value="{{member.remark}}" >
-      <div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
+    	{% if app.request.getLocale() == 'ug_CN' %}
+    		<div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
+    	{% else %}
+    		<div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
+    	{% endif %}
     </div>
   </div>
 

@@ -1,0 +1,24 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+  {% for question in questions %}
+  <li class="row item-lesson {% if question.exist|default(false) %}disdrag {% else %} drag {% endif %}" id="" question-id="{{question.id}}">
+    <div class="col-md-6 col-sm-10 title">
+      <div class="before">
+        <span class="icon-drag glyphicon glyphicon-move mrm "></span>
+        <span class="number"><span class="num">1</span>.</span>
+        {% if question.includeImg %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
+        {{question.stem|fill_question_stem_text|plain_text(12) }}
+      </div>
+      <i class="icon-close es-icon es-icon-icon_close_circle"></i>
+    </div>
+    <div class="col-md-3 content">{{ dict('questionType')[question.type] }}</div>
+    <div class="col-md-1 content">{{ dict('difficulty')[question.difficulty] }}</div>
+    <div class="col-xs-2 content not-add"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">{{'预览'|trans}}</a></div>
+    <div class="col-xs-2 content have-add">{{'已添加'|trans}}</div>
+  </li>
+
+  {% else %}
+    <div class="empty">{{'一道题都没有'|trans}}</div>
+  {% endfor %}
+  {{ web_macro.paginator(paginator) }}
+
+

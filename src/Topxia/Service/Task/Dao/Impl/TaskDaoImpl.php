@@ -7,14 +7,14 @@ use Topxia\Service\Task\Dao\TaskDao;
 
 class TaskDaoImpl extends BaseDao implements TaskDao
 {
-    protected $table = 'task';
+    protected $table         = 'task';
     private $serializeFields = array(
         'meta' => 'json'
     );
 
     public function getTask($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql  = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $task = $this->getConnection()->fetchAssoc($sql, array($id));
 
         return $task ? $this->createSerializer()->unserialize($task, $this->serializeFields) : null;
@@ -22,22 +22,23 @@ class TaskDaoImpl extends BaseDao implements TaskDao
 
     public function findUserTasksByBatchIdAndTaskType($userId, $batchId, $taskType)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `batchId`=?";
+        $sql   = "SELECT * FROM {$this->table} WHERE `userId`=? AND `taskType`=? AND `batchId`=?";
         $tasks = $this->getConnection()->fetchAll($sql, array($userId, $taskType, $batchId));
         return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
     }
 
     public function findUserCompletedTasks($userId, $batchId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE `userId`=? AND `batchId`=? AND `status`='completed' ORDER BY `completedTime` ASC";
+        $sql   = "SELECT * FROM {$this->table} WHERE `userId`=? AND `batchId`=? AND `status`='completed' ORDER BY `completedTime` ASC";
         $tasks = $this->getConnection()->fetchAll($sql, array($userId, $batchId));
         return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : null;
     }
 
     public function addTask(array $fields)
     {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $fields   = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $fields);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert task error.');
         }
@@ -60,52 +61,50 @@ class TaskDaoImpl extends BaseDao implements TaskDao
 
     public function deleteTasksByBatchIdAndTaskTypeAndUserId($batchId, $taskType, $userId)
     {
-        return $this->getConnection()->delete($this->table, array('batchId' => $batchId,'taskType'=>$taskType,'userId'=>$userId));
+        return $this->getConnection()->delete($this->table, array('batchId' => $batchId, 'taskType' => $taskType, 'userId' => $userId));
     }
 
     public function searchTasks($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy,array('id','createdTime','taskStartTime','taskEndTime'));
+
+        $orderBy = $this->checkOrderBy($orderBy, array('id', 'createdTime', 'taskStartTime', 'taskEndTime', 'completedTime', 'intervalDate'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
 
-        $tasks = $builder->execute()->fetchAll(); 
+        $tasks = $builder->execute()->fetchAll();
         return $tasks ? $this->createSerializer()->unserializes($tasks, $this->serializeFields) : array();
     }
 
     public function searchTaskCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('status = :status')
-            ->andWhere('batchId = :batchId')
-            ->andWhere('taskType = :taskType')
-            ->andWhere('targetId = :targetId')
-            ->andWhere('targetType = :targetType')
-            ->andWhere('title LIKE :titleLike')
-            ->andWhere('userId = :userId')
-            ->andWhere('taskStartTime >= :taskStartTimeGreaterThan')
-            ->andWhere('taskStartTime < :taskStartTimeLessThan')
-            ->andWhere('taskEndTime >= :taskEndTimeGreaterThan')
-            ->andWhere('taskEndTime <= :taskEndTimeLessThan')
-            ->andWhere('id < :taskIdLessThan')
-            ->andWhere('id > :taskIdGreaterThan')
-            ->andWhere('batchId IN ( :batchIds )');
+                        ->from($this->table, $this->table)
+                        ->andWhere('status = :status')
+                        ->andWhere('batchId = :batchId')
+                        ->andWhere('taskType = :taskType')
+                        ->andWhere('targetId = :targetId')
+                        ->andWhere('targetType = :targetType')
+                        ->andWhere('title LIKE :titleLike')
+                        ->andWhere('userId = :userId')
+                        ->andWhere('taskStartTime > :taskStartTimeGreaterThan')
+                        ->andWhere('taskStartTime < :taskStartTimeLessThan')
+                        ->andWhere('taskEndTime >= :taskEndTimeGreaterThan')
+                        ->andWhere('taskEndTime <= :taskEndTimeLessThan')
+                        ->andWhere('intervalDate > intervalDateGreaterThan')
+                        ->andWhere('batchId IN ( :batchIds )');
 
         return $builder;
     }
-
-    
 }

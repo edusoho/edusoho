@@ -351,6 +351,21 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 		},
 		redirect : function(body) {
 			alert("请在app内转发分享");
+		},
+		getThirdConfig : function($q) {
+			var deferred = $q.defer();
+			deferred.resolve([]);
+
+			return deferred.promise;
+		},
+		sendNativeMessage : function(type, data) {
+			if ("token_lose" == type) {
+				$rootScope.user = null;
+				$rootScope.token = null;
+				localStore.remove("user");
+				localStore.remove("token");
+				alert("登录信息失效，请重新登录");
+			}
 		}
 	};
 

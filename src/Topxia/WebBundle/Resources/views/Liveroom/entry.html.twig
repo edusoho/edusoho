@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{{'直播教室'|trans}}</title>
+  {% if setting('site.favicon') %}
+  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+  {% endif %}
+
+  <meta name="renderer" content="webkit">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+  <link href="{{ asset('assets/v2/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+  {% set script_controller = 'liveroom/entry' %}
+  <div id="entry" data-url="{{ path('liveroom_ticket', {id:roomId, ticket:ticket.no}) }}" class="well well-lg text-center text-success">{{'正在打开教室，请稍后'|trans}}...</div>
+  {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
+
+</body>
+</html>

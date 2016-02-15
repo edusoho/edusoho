@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}{{'核实银行预留手机'|trans}}{% endblock %}
+{% block body %}
+<style>
+.unbind{
+  height:100px;
+  overflow: hidden;
+}
+.unbind-frame{
+  padding:15px;
+}
+.unbind-down{
+  margin-bottom: 0px !important;
+}
+.form-horizontal{
+  margin:12px auto;
+}
+.modal-body{
+  padding:0px !important;
+}
+</style>
+
+    <div class="pannel pannel-default unbind">
+      <div class="unbind-frame">
+        <form id="unbind-form" class="form-horizontal" method="post" action="{{ path('pay_center_auth_unbind') }}">
+          <input type="hidden" name="payAgreementId" value="{{payAgreementId}}"/>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          <div class="form-group unbind-down">
+            <div class="col-md-3 control-label">
+              <label for="mobile">{{'银行预留手机号'|trans}}</label>
+            </div>
+            <div class="col-md-6 controls">
+              <input type="text" id="mobile" name="mobile" class="form-control" placeholder="{{'手机号码'|trans}}">
+              <div class="help-block"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+  <button id="unbind-btn" data-submiting-text="{{'正在提交'|trans}}" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#unbind-form">{{'确定'|trans}}</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+  <script>app.load('pay/show-mobile-modal')</script>
+{% endblock %}

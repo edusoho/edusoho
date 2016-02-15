@@ -62,7 +62,7 @@ class UserApprovalController extends BaseController
         if(!empty($userApprovingId)){
             $users = $this->getUserService()->searchUsers(
                 $userConditions,
-                array('id','DESC'),
+                array('approvalTime','DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );

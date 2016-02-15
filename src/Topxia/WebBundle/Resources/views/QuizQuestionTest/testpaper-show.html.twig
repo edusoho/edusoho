@@ -13,15 +13,22 @@
 {% block testpaper_heading_content %}
   <div class="testpaper-description">{{ paper.description|bbCode2Html|raw }}</div>
   <div class="testpaper-metas">
-    共 {{ paper.itemCount }} 题，总分 {{ paper.score }} 分
-    {% if paper.passedScore > 0 %}，及格为 {{ paper.passedScore }} 分{% endif %}
-    {% if paper.limitedTime >0 %}，请在 {{ paper.limitedTime }} 分钟内作答{% endif %}
-    。
+    {% if app.request.getLocale() == 'ug_CN' %}
+      共 {{ paper.itemCount }} 题，总分 {{ paper.score }} 分
+      {% if paper.passedScore > 0 %}，及格为 {{ paper.passedScore }} 分{% endif %}
+      {% if paper.limitedTime >0 %}，请在 {{ paper.limitedTime }} 分钟内作答{% endif %}
+      。
+    {% else %}
+      共 {{ paper.itemCount }} 题，总分 {{ paper.score }} 分
+      {% if paper.passedScore > 0 %}，及格为 {{ paper.passedScore }} 分{% endif %}
+      {% if paper.limitedTime >0 %}，请在 {{ paper.limitedTime }} 分钟内作答{% endif %}
+      。
+    {% endif %}
   </div>
 {% endblock %}
 
 {% block testpaper_body_sidebar %}
-  <div class="testpaper-card" data-spy="affix" data-offset-top="200">
+  <div class="testpaper-card" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
     {% include 'TopxiaWebBundle:QuizQuestionTest:test-paper-card.html.twig' %}
   </div>
 {% endblock %}

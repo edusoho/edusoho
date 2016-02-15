@@ -16,29 +16,30 @@
     </div>
 
     <div class="form-group">
-      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="{{'关键词'|trans}}">
-    </div>
-    <div class="form-group">
-        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="{{'起始时间'|trans}}">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{ app.request.query.get('keyword') }}" placeholder="关键词">
     </div>
 
     <div class="form-group">
-        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="{{'结束时间'|trans}}">
+        <input class="form-control" type="text" id="startDate" name="startDateTime" value="{{app.request.query.get('startDateTime')}}" placeholder="起始时间">
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" type="text" id="endDate" name="endDateTime" value="{{app.request.query.get('endDateTime')}}" placeholder="结束时间">
     </div>
     <span></span>
 
-    <button class="btn btn-primary">{{'搜索'|trans}}</button>
+    <button class="btn btn-primary">搜索</button>
   </form>
 </div>
 
 <table id="teacher-table" class="table table-striped table-hover" data-search-form="#user-search-form">
   <thead>
     <tr>
-      <th>{{'用户名'|trans}}</th>
-      <th>{{'用户邮箱'|trans}}</th>
-      <th>{{'登录时间'|trans}}IP</th>
-      <th>{{'登录地点'|trans}}</th>
-      <th width="12%">{{'查看记录'|trans}}</th>
+      <th>用户名</th>
+      <th>用户邮箱</th>
+      <th>登录时间IP</th>
+      <th>登录地点</th>
+      <th width="12%">查看记录</th>
     </tr>
   </thead>
   <tbody>

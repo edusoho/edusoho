@@ -8,10 +8,25 @@ $resources = array(
     'ClassroomMember',
     'ClassroomMembers',
     'Classrooms',
+    'CourseMember',
+    'CourseMembers',
+    'Exercise',
+    'ExerciseResult',
     'MeChatroomes',
     'User',
+    'Users',
+    'Course',
+    'Courses',
+    'Lesson',
+    'Lessons',
+    'Thread',
+    'Threads',
+    'ChaosThreads',
     'Apps',
-    'App'
+    'App',
+    'Homework',
+    'HomeworkResult',
+    'Upload'
 );
 
 foreach ($resources as $res) {

@@ -42,44 +42,40 @@
 }
 
 .vip-banner {
-  height: 350px;
-  background: url('@{img-src}vip/vip_banner.jpg')  center center no-repeat;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  @media(max-width: @screen-md-max) {
-    height: 300px;
-  }
-  @media(max-width: @screen-sm-max) {
-    height: 250px;
-    background-position-x: -200px;
-  }
-  @media(max-width: @screen-xs-max) {
-    height: 150px;
-    background-position-x: -150px;
-  }
-  .container {
-    position: relative;
-    height: 350px;
+  padding: 20px 0;
+  .vip-banner-thumb {
+    float: left;
+    width: 870px;
     @media(max-width: @screen-md-max) {
-      height: 300px;
+      width: 720px;
+    }
+    @media(max-width: @screen-sm-max) {
+      width: 100%;
+    }
+    img {
+      width: 100%;
+      border-top-left-radius: 2px;
+      border-bottom-left-radius: 2px;
+      @media(max-width: @screen-sm-max) {
+        .border-radius;
+      }
     }
   }
 }
 
 .vip-user {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 10px;
+  float: left;
   width: 270px;
-  padding: 40px 20px;
+  height: 350px;
+  padding: 30px 20px;
   background-color: #fff;
   text-align: center;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
   @media(max-width: @screen-md-max) {
-    padding: 20px;
-    width: 250px;
+    padding: 10px;
+    width: 220px;
+    height: 290px;
   }
   .user-avatar {
     position: relative;
@@ -103,159 +99,214 @@
 }
 
 .vip-cat {
-  background-color: #eee;
   text-align: center;
-  .cat-name {
-    display: block;
-    float: left;
-    padding: 15px 20px;
-    font-size: 16px;
-    color: @gray;
-    @media (max-width: @screen-sm-max) {
-      padding: 10px 15px;
-    }
-    @media (max-width: @screen-xs-max) {
-      font-size: 14px;
-      padding: 10px;
-    }
-    + .cat-name {
-      border-left: 1px solid @gray-light;
-    }
-    &.equal-1 {
-      width: 100%;
-    }
-    &.equal-2 {
-      width: 50%;
-    }
-    &.equal-3 {
-      width: 33.333333%;
-    }
-    &.equal-4 {
-      width: 25%;
-    }
-    &.equal-5 {
-      width: 20%;
-    }
-    &.equal-6 {
-      width: 16.666666%;
-    }
-    &.equal-7 {
-      width: 14.285714%;
-    }
-    &.equal-8 {
-      width: 12.25%;
-    }
-    &.equal-9 {
-      width: 11.1111%;
-    }
-    &.equal-10 {
-      width: 10%;
-    }
-    &.active,
-    &:hover {
-      background-color: #fff;
-      .es-transition;
-    }
-    &.active:hover {
-      cursor: default;
+  margin-bottom: 20px;
+  .nav-pills {
+    display: inline-block;
+    li {
+      margin: 0 20px;
     }
   }
 }
 
 .vip-wide-item {
-  padding: 20px;
-  .border-radius;
-  background-color: @gray-lighter;
-  margin-bottom: 40px;
+  width: 940px;
+  height: 200px;
+  padding: 30px 20px !important;
+  margin: 0 auto 30px !important;
   @media (max-width: @screen-sm-max) {
-    padding: 10px;
+    width: 100%;
+  }
+  @media (max-width: @screen-xs-max) {
+    height: auto;
   }
   .vip-thumb {
     float: left;
-    width: 32%;
-    img {
-      width: 100%;
-    }
+    width: 14%;
+    text-align: center;
+    margin-top: 15px;
+    padding-right: 20px;
     @media (max-width: @screen-sm-max) {
-      width: 25%;
+      width: 18%;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      margin-bottom: 10px;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+      .border-radius(50%);
     }
   }
   .vip-info {
     float: left;
-    width: 48%;
-    padding-left: 30px;
-    .title {
-      margin-top: 10px;
-      font-size: 24px;
-      margin-bottom: 20px;
-      color: @gray-darker;
-      @media (max-width: @screen-sm-max) {
-        margin-bottom: 10px;
-        font-size: 18px;
-      }
-    }
-    p {
-      @media (max-width: @screen-sm-max) {
-        font-size: 12px;
-      }
-    }
-    @media (max-width: @screen-sm-max) {
-      width: 55%;
-      padding-left: 10px;
-    }
-    @media (max-width: @screen-xs-max) {
-      width: 100%;
-    }
-  }
-  .vip-operation {
-    float: left;
-    width: 20%;
-    padding-top: 60px;
+    width: 29%;
+    height: 140px;
+    padding: 10px;
+    .border-radius;
     text-align: center;
+    background-color: @gray-lighter;
     @media (max-width: @screen-sm-max) {
-      padding-top: 30px;
+      width: 54%;
+      padding: 10px;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
-      // text-align: left;
-      padding-top: 0;
+      margin-bottom: 20px;
+    }
+    .name {
+      color: @gray-darker;
     }
     .price {
-      font-size: 18px;
-      @media (max-width: @screen-sm-max) {
-        font-size: 14px;
+      color: @gray;
+      font-size: 12px;
+      margin-bottom: 0;
+      span {
+        font-size: 18px;
+        margin-right: 5px;
+        color: @brand-danger;
       }
     }
-    .btn {
-      @media (max-width: @screen-sm-max) {
-        padding: 6px 12px;
+    .number {
+      font-size: 12px;
+      margin: 10px auto;
+    }
+  }
+  .vip-content {
+    float: left;
+    width: 45%;
+    margin: 10px 0;
+    height: 120px;
+    font-size: 12px;
+    line-height: 20px;
+    padding: 0 20px;
+    overflow: hidden;
+    color: @gray-darker;
+    @media(max-width:@screen-sm-max) {
+      display: none;
+    }
+    p {
+      margin: 0;
+    }
+  }
+  .vip-item-footer {
+    float: right;
+    width: 12%;
+    margin-top: 53px;
+    text-align: center;
+    
+    @media(max-width:@screen-sm-max) {
+      width: 25%;
+    }
+    @media (max-width: @screen-xs-max) {
+      margin-top: 0;
+      width: 100%;
+      .btn {
+        display: block;
       }
     }
   }
 }
 
+.vip-item-list {
+  background-color: @bg-color;
+  padding-bottom: 15px;
+}
+
+.vip-swiper-container {
+  position: relative;
+}
+
+.vip-swiper-item {
+  position: relative;
+  padding: 20px 50px !important;
+  margin-bottom: 30px;
+  background-color: #fff;
+  .border-radius;
+  @media (max-width: @screen-md-max) {
+    padding: 20px !important;
+  }
+  .vip-thumb {
+    text-align: center;
+    margin: 0 auto 15px;
+    img {
+      width: 100px;
+      height: 100px;
+      .border-radius(50%);
+    }
+  }
+  .vip-info {
+    text-align: center;
+    height: 140px;
+    padding: 15px;
+    margin-bottom: 15px;
+    .border-radius;
+    background-color: @gray-lighter;
+    .name {
+      font-size: 16px;
+      color: @gray-darker;
+    }
+    .price {
+      color: @gray;
+      font-size: 12px;
+      margin-bottom: 0;
+      span {
+        font-size: 18px;
+        margin-right: 5px;
+        color: @brand-danger;
+      }
+    }
+    .number {
+      font-size: 12px;
+      margin: 10px auto;
+    }
+  }
+  .vip-content {
+    font-size: 12px;
+    line-height: 18px;
+    height: 90px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    color: @gray-darker;
+    p {
+      margin: 0;
+    }
+  }
+}
+
+.vip-filer {
+  background-color: #fff;
+  padding-bottom: 40px;
+}
+
 .vip-new-member {
-  background: url('@{img-src}vip/vip_bg.jpg') center center no-repeat;
-  padding: 60px 0;
+  background-color: @bg-color;
+  // background: url('@{img-src}vip/vip_bg.jpg') center center no-repeat;
+  padding: 10px 0 30px 0;
   text-align: center;
+  .text-line {
+    padding-bottom: 30px;
+  }
   .title {
     font-size: 32px;
     color: #fff;
     margin-bottom: 50px; 
-    
   }
   .member-list {
     margin-bottom: 30px;
     img {
       display: inline-block;
       margin: 15px;
-      border: 2px solid #fff;
+      border: 4px solid #fff;
       height: 80px !important;
       width: 80px !important;
+      .es-transition;
+      &:hover {
+        border-color: @brand-primary;
+        .es-transition;
+      }
     }
   }
 }

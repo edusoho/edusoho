@@ -30,9 +30,9 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       {% if thread|default(null) %}
-      <strong>{{'编辑话题'|trans}}</strong>
+      <h3 class="panel-title">{{'编辑话题'|trans}}</h3>
       {% else %}
-      <strong>{{'发表话题'|trans}}</strong>
+      <h3 class="panel-title">{{'发表话题'|trans}}</h3>
       {% endif %}
     </div>
     <div class="panel-body">
@@ -40,7 +40,7 @@
 
         <div class="form-group">
           <label class="col-xs-2 control-label" for="thread_title">{{'标题'|trans}}</label>
-          <div class="col-xs-7 controls">
+          <div class="col-xs-7 col-xs-10 controls">
             <input type="text" id="thread_title" name="thread[title]" class="form-control" value="{{thread.title|default('')}}">
             <div class="help-block" style="display:none;"></div>
           </div>
@@ -48,17 +48,17 @@
 
         <div class="form-group">
           <label class="col-xs-2 control-label" for="{% if is_feature_enabled('group_reward') %}thread_content1{% else %}thread_content{% endif %}">{{'内容'|trans}}</label>
-          <div class="col-xs-7 controls">
+          <div class="col-sm-7 col-xs-10 controls">
             {% if is_feature_enabled('group_reward') %}
             <textarea name="thread[content]" rows="10" id="thread_content1" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% else %}
-            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
+            <textarea name="thread[content]" rows="10" id="thread_content" class="form-control" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('default')}) }}">{{thread.content|default('')}}</textarea>
             {% endif %}
           </div>
         </div>
 
         <div class="row">
-          <div class="col-xs-7 col-xs-offset-2">
+          <div class="col-sm-7 col-xs-10 col-xs-offset-2">
             {% if thread|default(null) %}
             <button id="groupthread-save-btn" data-submiting-text="{{'正在修改'|trans}}" type="submit" class="btn btn-primary">{{'修改'|trans}}</button>
             {% else %}
@@ -118,8 +118,13 @@
       </form>
       </div>
       <div class="modal-footer">
-          <div class="pull-left text-muted">{{'隐藏话题获得的'|trans}}{{setting('coin').coin_name|default('')}}{{'会在扣除50%之后添加到您的账户'|trans}}
+        {% if app.request.getLocale() == 'ug_CN' %}
+          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name|default('')}}会在扣除50%之后添加到您的账户
           </div>
+        {% else %}
+          <div class="pull-left text-muted">隐藏话题获得的{{setting('coin').coin_name|default('')}}会在扣除50%之后添加到您的账户
+          </div>
+        {% endif %}
         <button type="button" class="btn btn-default" data-dismiss="modal">{{'取消'|trans}}</button>
         <button type="button" class="btn btn-primary" id="insert">{{'插入'|trans}}</button>
       </div>

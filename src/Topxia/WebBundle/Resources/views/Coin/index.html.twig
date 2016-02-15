@@ -1,5 +1,11 @@
 {% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
-{% block title %}{{'我的'|trans}}{{setting('coin.coin_name')}} - {{ parent() }}{% endblock %}
+{% block title %}
+  {% if app.request.getLocale() == 'ug_CN' %}
+    我的{{setting('coin.coin_name')}} - {{ parent() }}
+  {% else %}
+    我的{{setting('coin.coin_name')}} - {{ parent() }}
+  {% endif %}
+{% endblock %}
 
 {% set side_nav = 'my-coin' %}
 
@@ -18,10 +24,11 @@
         {% endif %}
         <strong>{{account.cash|default(0)}}</strong>
       </div>
+
       {% if setting('coin.coin_enabled') %}
         <div class="coin-btn">
           {% if is_plugin_installed('ChargeCoin') and setting('coin.charge_coin_enabled') %}
-            <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-primary"> &nbsp;&nbsp;充&nbsp;值&nbsp;&nbsp; </a>
+            <a href="{{path('my_coin_buy')}}" target="_blank" class="mll btn btn-primary"> &nbsp;&nbsp;{{'充&nbsp;值'|trans|raw}}&nbsp;&nbsp; </a>
           {% endif %}
           {% if is_plugin_installed('MoneyCard') %}
             <a href="{{path('money_card_use')}}" target="_blank" class="mll btn btn-default">{{'使用学习卡'|trans}}</a>
@@ -89,11 +96,7 @@
                 {% if cash.cashType == "Coin" and cash.category == "inflow" %}
                 {{'学习卡充值'|trans}}
                 {% elseif cash.cashType == "Coin" and cash.category == "change" %}
-                  {% if cash.payment == 'wxpay' %}
-                  {{'微信支付'|trans}}
-                  {% elseif cash.payment == 'alipay' %}
-                  {{'支付宝支付'|trans}}
-                  {% endif %}
+                  {{ dict_text('payment', cash.payment) }}
                 {% elseif cash.category == "moneyCardRecharge" %}
                 {{'学习卡'|trans}}
                 {% else %}

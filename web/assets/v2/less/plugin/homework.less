@@ -200,7 +200,12 @@
 }
 
 .testpaper-question-choices li {
-  padding: 6px 0 6px 6px;
+  position: relative;
+  padding: 6px 0 6px 36px;
+}
+
+.testpaper-question-choices li p {
+  margin-bottom: 0;
 }
 
 .testpaper-question-choices li:hover {
@@ -209,8 +214,11 @@
 }
 
 .testpaper-question-choice-index {
+  position: absolute;
+  top: 6px;
+  left: 6px;
   color: #999;
-  margin-right: 20px;
+  // margin-right: 20px;
 }
 
 .testpaper-question-choice-right, 
@@ -331,6 +339,11 @@
   max-width: 100%;
 }
 
+.question-set-card .panel-body,
+.testpaper-card .panel-body {
+  overflow-y: auto;
+  max-height: 450px;
+}
 
 .testpaper-card .btn-index {
   font-size: 12px;

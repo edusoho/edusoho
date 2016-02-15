@@ -45,7 +45,11 @@
       <div class="col-md-9 controls">
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="notify" value="notify"> 给{{ setting('default.user_name', '学员') }}发送系统通知
+            {% if app.request.getLocale() == 'ug_CN' %}
+              <input type="checkbox" name="notify" value="notify"> 给{{ setting('default.user_name', '学员'|trans) }}发送系统通知
+            {% else %}
+              <input type="checkbox" name="notify" value="notify"> 给{{ setting('default.user_name', '学员') }}发送系统通知
+            {% endif %}
           </label>
         </div>
       </div>

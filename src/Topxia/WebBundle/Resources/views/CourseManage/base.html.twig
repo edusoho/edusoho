@@ -44,10 +44,18 @@
         </div>
       </div>
 
+        <div class="form-group">
+        <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>
+          <div class="col-md-8 controls radios">
+            {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
+           <div class="help-block">{{'关闭后课程将无法在线购买加入、由教师/管理员后台导入。'|trans}}</div>
+        </div>
+      </div>
+
       {% if course.type == 'live' %}
 
       <div class="form-group">
-        <label class="col-md-2 control-label" for="maxStudentNum-field">{{'直播最大'|trans}}{{setting('default.user_name')|default('学员')|trans}}{{'数'|trans}}</label>
+        <label class="col-md-2 control-label" for="maxStudentNum-field">直播最大{{setting('default.user_name')|default('学员')}}数</label>
         <div class="col-md-8 controls">
           <input type="text" id="maxStudentNum-field" name="maxStudentNum" class="form-control width-input width-input-large" value="{{ course.maxStudentNum|default(20) }}" data-live-capacity-url="{{path('live_capacity',{id:course.id})}}"> {{'人'|trans}}
           <div class="help-block" style="display:none;"></div>
@@ -57,10 +65,10 @@
       {% endif %}
 
       <div class="form-group">
-        <label class="col-md-2 control-label" for="course_expiryDay">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'有效期'|trans}}</label>
+        <label class="col-md-2 control-label" for="course_expiryDay">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'有效期'|trans}}</label>
         <div class="col-md-8 controls">
           <input type="text" id="course_expiryDay" name="expiryDay" required="required" class="form-control width-input width-input-large" value="{{ course.expiryDay }}" > {{'天'|trans}}
-          <div class="help-block">{{'设置该值后，'|trans}}{{setting('default.user_name', '学员'|trans)}}{{'只能在有效期内进行课程的相关操作，系统默认会在到期前10天提醒'|trans}}{{setting('default.user_name', '学员'|trans)}}{{'。该值为0，则不做此限制。'|trans}}</div>
+          <div class="help-block">设置该值后，{{setting('default.user_name', '学员')}}只能在有效期内进行课程的相关操作，系统默认会在到期前10天提醒{{setting('default.user_name', '学员')}}。该值为0，则不做此限制。</div>
         </div>
       </div>
 
@@ -77,7 +85,7 @@
         <div class="form-group">
           <label class="col-md-2 control-label">{{'视频观看时间限制'|trans}}</label>
           <div class="col-md-8 controls">
-            <input type="text" id="course_expiryDay" name="watchLimit" required="required" class="form-control width-input width-input-large" value="{{ course.watchLimit }}" > {{'倍单视频总时长'|trans}}
+            <input type="text" id="course_expiryDay" name="watchLimit" required="required" class="form-control width-input width-input-large" value="{{ course.watchLimit }}" > 倍单视频总时长
             <div class="help-block">{{'0表示不限制。'|trans}}</div>
           </div>
         </div>

@@ -11,7 +11,7 @@
 				{% if item.question.testResult.status == 'right' %}
 					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">{{'，你答对了'|trans}}
 				{% elseif item.question.testResult.status == 'wrong' %}
-					正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>， 你<strong class="text-danger">答错</strong>了
+					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>{{'， 你<strong class="text-danger">答错</strong>了'|trans|raw}}
 				{% elseif item.question.testResult.status == 'noAnswer' %}
 					{{'正确答案：'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>{{'，你未答题'|trans}}
 				{% endif %}
@@ -22,7 +22,7 @@
 		  </div>
 
 		</div>
-		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw }}</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-determine-inputs">
@@ -41,7 +41,7 @@
 			    {{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">
 			</div>
 		  </div>
-		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw }}</div>
+		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
 	  	{% endif %}
 
 	{% endif %}

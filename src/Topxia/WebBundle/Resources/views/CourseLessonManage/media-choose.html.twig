@@ -9,7 +9,7 @@
     <div class="file-chooser-bar" style="display:none;">
       <span data-role="placeholder"></span>
       <button class="btn btn-link btn-sm" type="button" data-role="trigger"><i class="glyphicon glyphicon-edit"></i> {{'编辑'|trans}}</button>
-      <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">{{'正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。'|trans}}<br />{{'转换完成后将以站内消息通知您。'|trans}}</div>
+      <div class="alert alert-warning" data-role="waiting-tip" style="display:none;">{{'正在转换视频格式，转换需要一定的时间，期间将不能播放该视频。<br />转换完成后将以站内消息通知您。'|trans|raw}}</div>
     </div>
 
     <div class="file-chooser-main">
@@ -28,7 +28,6 @@
             {{'从课程文件中选择'|trans}}
           </a>
         </li>
-
         <li><a href="#video-chooser-import-pane" data-toggle="tab">{{'导入网络视频'|trans}}</a></li>
       </ul>
       <div class="tab-content">
@@ -52,9 +51,9 @@
       <div class="video-quality radios">
         {{'画质：'|trans}}
         {% if file|default(null) %}
-          {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, file.convertParams.videoQuality|default('low')) }}
+          {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans|raw, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans|raw, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans|raw}, file.convertParams.videoQuality|default('low')) }}
         {% else %}
-          {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
+          {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans|raw, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans|raw, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans|raw}, storageSetting.video_quality|default('low')) }}
         {% endif %}
       </div>
 
@@ -74,22 +73,6 @@
     </div>
   </div>
   {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div class="file-chooser-uploader-label">{{'选择你要上传的视频文件：'|trans}}</div>
             <div class="file-chooser-uploader-control">
               <span id="video-choose-uploader-btn"
@@ -117,14 +100,21 @@
             <div class="alert alert-info">
               <ul>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>
-                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-                  <li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>
+                  {{'<li>支持<strong>mp4, avi, flv, wmv, mov, m4v</strong>格式的视频文件上传，文件大小不能超过<strong>2 GB</strong>。</li>'|trans|raw}}
+                  {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
+                  {{'<li>视频将上传到<strong>云视频服务器</strong>，上传之后会对视频进行格式转换，转换过程需要一定的时间，在这个过程中视频将无法播放。</li>'|trans|raw}}
                 {% else %}
-                  <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-                  <li>
-                    视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}{{'云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。'|trans}}
-                  </li>
+                  {% if app.request.getLocale() == 'ug_CN' %}
+                    <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+                    <li>
+                      视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+                    </li>
+                  {% else %}
+                    <li>支持<strong>mp4</strong>格式的视频文件上传，文件大小不能超过<strong>{{ upload_max_filesize() }} </strong>。MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+                    <li>
+                      视频将上传到<strong>网站服务器</strong>。如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情,{{ 'EduSoho'|copyright_less }}云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。
+                    </li>
+                  {% endif %}
                 {% endif %}
               </ul>
             </div>
@@ -220,20 +210,36 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
-                {% if storageSetting.upload_mode == 'cloud' %}
-                  500M
+                {% if app.request.getLocale() == 'ug_CN' %}
+                  <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
+                  {% if storageSetting.upload_mode == 'cloud' %}
+                    500M
+                  {% else %}
+                    {{ upload_max_filesize() }}
+                  {% endif %}
+                  </strong>。</li>
                 {% else %}
-                  {{ upload_max_filesize() }}
+                  <li>支持<strong>mp3</strong>格式的音频文件上传，且文件大小不能超过<strong>
+                  {% if storageSetting.upload_mode == 'cloud' %}
+                    500M
+                  {% else %}
+                    {{ upload_max_filesize() }}
+                  {% endif %}
+                  </strong>。</li>
                 {% endif %}
-                </strong>。</li>
                 {% if storageSetting.upload_mode == 'cloud' %}
-                  <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>
-                  <li>音频将上传到<strong>云服务器</strong></li>
+                  {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
+                  {{'<li>音频将上传到<strong>云服务器</strong></li>'|trans|raw}}
                 {% else %}
-                  <li>
-                    音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
-                  </li>
+                  {% if app.request.getLocale() == 'ug_CN' %}
+                    <li>
+                      音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+                    </li>
+                  {% else %}
+                    <li>
+                      音频将上传到<strong>网站服务器</strong>，{{ '如需使用EduSoho云视频,'|copyright_less}}点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
+                    </li>
+                  {% endif %}
                 {% endif %}
               </ul>
             </div>
@@ -318,8 +324,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>PPT将上传到<strong>云服务器</strong></li>
+                {{'<li>支持<strong>ppt, pptx</strong>格式的PPT文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>'|trans}}
+                {{'<li>PPT将上传到<strong>云服务器</strong></li>'|trans}}
               </ul>
             </div>
           </div>
@@ -402,8 +408,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>pdf,doc,docx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>文档将上传到<strong>云服务器</strong></li>
+                {{'<li>支持<strong>pdf,doc,docx</strong>格式的文档上传，且文件大小不能超过<strong>100 MB</strong>。</li>'|trans}}
+                {{'<li>文档将上传到<strong>云服务器</strong></li>'|trans}}
               </ul>
             </div>
           </div>
@@ -486,8 +492,8 @@
 
             <div class="alert alert-info">
               <ul>
-                <li>支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>
-                <li>Flash将上传到<strong>云服务器</strong></li>
+                {{'<li>支持<strong>swf</strong>格式的文件上传，且文件大小不能超过<strong>100 MB</strong>。</li>'|trans}}
+                {{'<li>Flash将上传到<strong>云服务器</strong></li>'|trans}}
               </ul>
             </div>
           </div>

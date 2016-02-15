@@ -13,7 +13,11 @@
   </div>
 </div>
 {% else %}
-  <p class="alert text-muted">{{'您尚未登录，不能评论，请先'|trans}} <a href="{{ path('login') }}">{{'登录'|trans}}</a> {{'或'|trans}} <a href="{{ path('register') }}">{{'注册'|trans}}</a> {{'。'|trans}}</p>
+  {% if app.request.getLocale() == 'ug_CN' %}
+    <p class="alert text-muted">您尚未登录，不能评论，请先 <a href="{{ path('login') }}">登录</a> 或 <a href="{{ path('register') }}">注册</a> 。</p>
+  {% else %}
+    <p class="alert text-muted">您尚未登录，不能评论，请先 <a href="{{ path('login') }}">登录</a> 或 <a href="{{ path('register') }}">注册</a> 。</p>
+  {% endif %}
 {% endif %}
 
 <ul class="media-list comment-list">

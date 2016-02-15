@@ -3,7 +3,7 @@ namespace Topxia\Service\Task\Impl;
 
 use Topxia\Service\Task\TaskService;
 use Topxia\Service\Common\BaseService;
-use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\ServiceEvent;
 
 class TaskServiceImpl extends BaseService implements TaskService
 {
@@ -14,7 +14,7 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function getTaskByParams(array $conditions)
     {
-        $tasks = $this->getTaskDao()->searchTasks($conditions, array('taskStartTime','ASC'), 0, 1);
+        $tasks = $this->getTaskDao()->searchTasks($conditions, array('taskStartTime', 'ASC'), 0, 1);
         return $tasks ? $tasks[0] : null;
     }
 
@@ -60,18 +60,19 @@ class TaskServiceImpl extends BaseService implements TaskService
 
     public function finishTask(array $targetObject, $taskType)
     {
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
         $userId = $user->id;
+
         if ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper') {
             $userId = $targetObject['userId'];
         }
 
         $conditions = array(
-            'userId' => $userId,
-            'taskType' => $taskType,
-            'targetId' => $targetObject['id'],
+            'userId'     => $userId,
+            'taskType'   => $taskType,
+            'targetId'   => $targetObject['id'],
             'targetType' => $targetObject['type'],
-            'status' => 'active'
+            'status'     => 'active'
         );
         $getTask = $this->getTaskByParams($conditions);
 
@@ -79,10 +80,28 @@ class TaskServiceImpl extends BaseService implements TaskService
             $canFinished = $this->_canFinished($getTask, $targetObject);
 
             if ($canFinished) {
-                $updateInfo = array('status'=>'completed', 'completedTime'=>time());
-                return $this->updateTask($getTask['id'], $updateInfo);
+                $completeConditions = array(
+                    'userId'   => $userId,
+                    'taskType' => $taskType,
+                    'batchId'  => $getTask['batchId'],
+                    'status'   => 'completed'
+                );
+                $updateInfo = array('status' => 'completed', 'completedTime' => time());
+
+                $recentCompletedTask = $this->searchTasks($completeConditions, array('completedTime', 'DESC'), 0, 1);
+
+                if ($recentCompletedTask) {
+                    $updateInfo['intervalDate'] = ceil((time() - $recentCompletedTask[0]['completedTime']) / (24 * 3600));
+                } else {
+                    $updateInfo['intervalDate'] = ceil((time() - $getTask['taskStartTime']) / (24 * 3600));
+                }
+
+                $task = $this->updateTask($getTask['id'], $updateInfo);
+
+                $this->dispatchEvent('task.finished', new ServiceEvent($task));
+
+                return $task;
             }
-            
         }
 
         return array();
@@ -91,12 +110,13 @@ class TaskServiceImpl extends BaseService implements TaskService
     private function _canFinished($task, $targetObject)
     {
         $canFinished = true;
+
         if ($task['required'] && ($targetObject['type'] == 'homework' || $targetObject['type'] == 'testpaper')) {
             if ($targetObject['passedStatus'] == 'unpassed' || $targetObject['passedStatus'] == 'none') {
                 $canFinished = false;
             }
         }
-        
+
         return $canFinished;
     }
 
@@ -104,5 +124,4 @@ class TaskServiceImpl extends BaseService implements TaskService
     {
         return $this->createDao('Task.TaskDao');
     }
-
-}  
+}

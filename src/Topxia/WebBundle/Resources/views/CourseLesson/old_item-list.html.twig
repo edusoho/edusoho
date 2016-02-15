@@ -46,9 +46,9 @@
 							<small class="type">{{ item.startTime|date('m月d日') }}
 								{% for key,week in weeks %}
 									{% if key == item.startTime|date('w')  %}
-										{{'星期'|trans}}{{ week }}
+										星期{{ week }}
 									{% endif %}
-							    {% endfor %}
+							  {% endfor %}
 								{{ item.startTime|date('H：i') }}
 							</small>
 						{% elseif item.startTime <= currentTime and item.endTime >= currentTime %}
@@ -71,7 +71,7 @@
 			      	<span class="status">{{'未发布'|trans}}</span>
 			    {% endif %}
 
-		    	<span class="name ">{{'课时'|trans}}{{ item.number }}</span>
+		    	<span class="name ">课时{{ item.number }}</span>
 		    	<span class="pie ">&nbsp;</span>
 		    	<a class=" title" href="{{ lessonUrl }}" title="{{ item.title }}" data-id="{{ item.id }}" data-experience="{{ experience }}" style="white-space:nowrap; overflow:hidden; text-overflow: ellipsis;">
 			    	{{ item.title }}
@@ -94,7 +94,13 @@
 				    {% endif %}
 
 				    {% if item.requireCredit > 0 %}
-				      <small class="text-muted">(需{{ item.requireCredit }}学分)</small>
+				      <small class="text-muted">
+				      	{% if app.request.getLocale() == 'ug_CN' %}
+				      		(需{{ item.requireCredit }}学分)
+				      	{% else %}
+				      		(需{{ item.requireCredit }}学分)
+				      	{% endif %}
+				      </small>
 				    {% endif %}
 
 						{% if setting('magic.lesson_watch_limit')
@@ -103,7 +109,13 @@
 								and showWatchLimit|default(false) %}
 							{% set limitNum = course.watchLimit - lessonLearns[item.id].watchNum|default(0) %}
 							{% if limitNum > 0 %}
-							  &nbsp;&nbsp;<span style="color:#E79022">(还可观看{{ limitNum }}次)</span>
+							  &nbsp;&nbsp;<span style="color:#E79022">
+							  	{% if app.request.getLocale() == 'ug_CN' %}
+							  		(还可观看{{ limitNum }}次)
+							  	{% else %}
+							  		(还可观看{{ limitNum }}次)
+							  	{% endif %}
+								</span>
 							{% else %}
 								&nbsp;&nbsp;<span class="text-danger">({{'已无观看次数'|trans}})</span>
 							{% endif %}

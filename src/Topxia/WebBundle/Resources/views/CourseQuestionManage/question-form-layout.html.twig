@@ -56,15 +56,9 @@
         <div class="form-group">
           <div class="col-md-2 control-label"><label for="question-stem-field">{{ question_stem_label|default('题干'|trans) }}</label></div>
           <div class="col-md-8 controls">
-            <textarea class="form-control" id="question-stem-field" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
+            <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
             {% set question_stem_help = question_stem_help|default('') %}
             {% if question_stem_help %}<div class="help-block">{{ question_stem_help|raw }}</div>{% endif %}
-          </div>
-          <div class="col-md-2 webuploader-for-glyphicon" style="padding-left:0;">
-            <div id="question-stem-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-picture"></i></div>
-            {% if enabledAudioQuestion|default(null) %}
-              <div id="question-stem-audio-uploader" class="btn btn-sm btn-default webuploader-container" type="button" data-target="#question-stem-field"><i class="glyphicon glyphicon-volume-up"></i></div>
-            {% endif %}
           </div>
         </div>
 
@@ -72,7 +66,7 @@
 
         <div class="form-group">
           <div class="col-md-8 col-md-offset-2 controls ">
-              <a data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; {{'显示/隐藏 高级选项 ...'|trans}}</a>
+              <a href="javascript:;" data-toggle="collapse" data-role="advanced-collapse" data-target="#advanced-collapse" class="text-success collapsed">&raquo; {{'显示/隐藏 高级选项'|trans}} ...</a>
           </div>
         </div>
 
@@ -80,10 +74,7 @@
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="question-analysis-field">{{'解析'|trans}}</label></div>
             <div class="col-md-8 controls">
-                <textarea class="form-control" id="question-analysis-field" name="analysis">{{ question.analysis|default('') }}</textarea>
-            </div>
-            <div class="col-md-2" style="padding-left:0;">
-              <div id="question-analysis-uploader" class="btn btn-sm btn-default  webuploader-container" data-role="analysis-uploader" data-target="#question-analysis-field"><i class="glyphicon glyphicon-picture"></i></div>
+                <textarea class="form-control" id="question-analysis-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}" name="analysis" data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}">{{ question.analysis|default('') }}</textarea>
             </div>
           </div>
 
@@ -93,16 +84,6 @@
               <input class="form-control" value="{{question.score|default(2)}}" type="text" id="question-score-field" name="score" />
             </div>
           </div>
-
-          <!-- <div class="form-group">
-            <div class="col-md-2 control-label"><label for="categoryId">类别</label></div>
-            <div class="col-md-8 controls">
-                <select class="form-control width-input width-input-large" name="categoryId" data-role="category">
-                  {{ select_options(categoryChoices, question.categoryId|default(0), '请选择类别') }}
-                </select>
-            </div>
-          </div> -->
-
         </div>
 
         <div class="form-group">
@@ -131,6 +112,3 @@
 
 
 {% endblock %}
-
-
-

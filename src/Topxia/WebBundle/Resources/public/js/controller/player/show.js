@@ -1,13 +1,11 @@
 define(function(require, exports, module) {
 
-	
-	var Store = require('store');
-	var Class = require('class');
+    var Store = require('store');
+    var Class = require('class');
     var Messenger = require('./messenger');
     var swfobject = require('swfobject');
 
-	exports.run = function() {
-
+    exports.run = function() {
 
         var videoHtml = $('#lesson-video-content');
 
@@ -16,20 +14,23 @@ define(function(require, exports, module) {
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
-        var watchLimit = videoHtml.data('watchLimit');
+        var timelimit = videoHtml.data('timelimit');
 
+        var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
         var url = videoHtml.data('url');
         var watermark = videoHtml.data('watermark');
         var fingerprint = videoHtml.data('fingerprint');
         var fingerprintSrc = videoHtml.data('fingerprintSrc');
-        var agentInWhiteList = videoHtml.data('agentInWhiteList');
         var balloonVideoPlayer = videoHtml.data('balloonVideoPlayer');
+        var markerUrl = videoHtml.data('markerurl');
+        var starttime = videoHtml.data('starttime');
+        var agentInWhiteList = videoHtml.data('agentInWhiteList');
 
+        var markers = [{'id':0,text:'',time:-1}];
         var html = "";
-
         if(fileType == 'video'){
-            if (videoHtml.data('player') == 'local-video-player'){
+            if (playerType == 'local-video-player'){
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin" controls preload="auto"></video>';
             } else {
                 html += '<video id="lesson-player" style="width: 100%;height: 100%;" class="video-js vjs-default-skin"></video>';
@@ -40,19 +41,19 @@ define(function(require, exports, module) {
             html += '</audio>';
         }
 
-        if (balloonVideoPlayer && fileType == 'video' && !swfobject.hasFlashPlayerVersion('11') && !agentInWhiteList) {
-            html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
-            html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-            html += '<span aria-hidden="true">×</span>';
-            html += '</button>';
-            html += '您的浏览器未安装Flash播放器或版本太低，请先安装Flash播放器，';
-            html += '或前往<a href="/mobile" target="parent">下载App</a>。';
-            html += '</div>';
-            videoHtml.html(html);
-            videoHtml.show();
+        // if (balloonVideoPlayer && fileType == 'video' && !swfobject.hasFlashPlayerVersion('11')) {
+        //     html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
+        //     html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
+        //     html += '<span aria-hidden="true">×</span>';
+        //     html += '</button>';
+        //     html += '您的浏览器未安装Flash播放器或版本太低，请先安装Flash播放器，';
+        //     html += '或前往<a href="/mobile" target="parent">下载App</a>。';
+        //     html += '</div>';
+        //     videoHtml.html(html);
+        //     videoHtml.show();
 
-            return;
-        }
+        //     return;
+        // }
 
         videoHtml.html(html);
         videoHtml.show();
@@ -60,13 +61,16 @@ define(function(require, exports, module) {
         var PlayerFactory = require('./player-factory');
         var playerFactory = new PlayerFactory();
         var player = playerFactory.create(
-            videoHtml.data('player'),
+            playerType,
             {
                 element: '#lesson-player',
                 url: url,
                 fingerprint: fingerprint,
                 fingerprintSrc: fingerprintSrc,
-                watermark: watermark
+                watermark: watermark,
+                starttime: starttime,
+                agentInWhiteList: agentInWhiteList,
+                timelimit:timelimit
             }
         );
 
@@ -81,13 +85,26 @@ define(function(require, exports, module) {
                 DurationStorage.set(userId, fileId, player.getCurrentTime());
             }
         });
-    
+
+        player.on("firstplay", function(){
+ 
+        });
+        
         player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
             var time = DurationStorage.get(userId, fileId);
             if(time>0){
                 player.setCurrentTime(DurationStorage.get(userId, fileId));
             }
             player.play();
+        });
+        player.on("onMarkerReached",function(markerId,questionId){
+            // $('.vjs-break-overlay-text').html("");
+            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
+        });
+
+        player.on("timechange", function(){
+            messenger.sendToParent("timechange", {pause: true});
         });
 
         player.on("paused", function(){
@@ -103,9 +120,9 @@ define(function(require, exports, module) {
             DurationStorage.del(userId, fileId);
         });
 
-	};
+    };
 
-	var DurationStorage = {
+    var DurationStorage = {
         set: function(userId,fileId,duration) {
             var durations = Store.get("durations");
             if(!durations || !(durations instanceof Array)){

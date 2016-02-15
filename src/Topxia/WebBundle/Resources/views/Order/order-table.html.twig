@@ -12,7 +12,7 @@
     <tr>
       <th>{{'名称'|trans}}</th>
       <th>{{'创建时间'|trans}}</th>
-      <th>{{'状态'|trans}}</th>
+      <th>状态</th>
       <th>{{'实付'|trans}}({{'元'|trans}})</th>
       {% if mode in ['course', 'admin'] %}
         <th>{{'购买者'|trans}}</th>
@@ -79,7 +79,7 @@
                     {% if order.status == 'created' %}
 
                       <li>
-                        <a href="{{path('pay_center_show', {sn:order.sn})}}"  style="display:block" >{{'去支付'|trans}}</a>
+                        <a href="{{path('pay_center_show', {sn:order.sn,targetType:order.targetType})}}"  style="display:block" >{{'去支付'|trans}}</a>
                       </li>
                       <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">{{'取消订单'|trans}}</a></li>
 

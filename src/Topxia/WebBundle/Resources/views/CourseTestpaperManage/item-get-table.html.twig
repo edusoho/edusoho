@@ -1,0 +1,33 @@
+<table class="table table-bordered">
+  <th>
+
+    <td>{{'单选题'|trans}}</td>
+    <td>{{'多选题'|trans}}</td>
+    <td>{{'不定向选择题'|trans}}</td>
+    <td>{{'填空题'|trans}}</td>
+    <td>{{'判断题'|trans}}</td>
+    <td>{{'问答题'|trans}}</td>
+    <td>{{'材料题'|trans}}</td>
+  </th>
+  <tr>
+    <td>{{'题数'|trans}}</td>
+    <td class="single_choice_num">{{ items.single_choice.num|default(0) }}</td>
+    <td class="choice_num">{{ items.choice.num|default(0) }}</td>
+    <td class="uncertain_choice_num">{{ items.uncertain_choice.num|default(0) }}</td>
+    <td class="fill_num">{{ items.fill.num|default(0) }}</td>
+    <td class="determine_num">{{ items.determine.num|default(0) }}</td>
+    <td class="essay_num">{{ items.essay.num|default(0) }}</td>
+    <td class="material_num">{{ items.material.num|default(0) }}</td>
+  </tr>
+  <tr>
+    <td>{{'分数'|trans}}</td>
+    <td>{{ items.single_choice.score|default(0) }}</td>
+    <td>{{ items.choice.score|default(0) }}</td>
+    <td>{{ items.uncertain_choice.score|default(0) }}</td>
+    <td>{{ items.fill.score|default(0) }}</td>
+    <td>{{ items.determine.score|default(0) }}</td>
+    <td>{{ items.essay.score|default(0) }}</td>
+    <td>{{ items.material.score|default(0) }}</td>
+  </tr>
+  <input type="hidden" value="{{ suggestHours }}" class="suggestHoursHidden"/>
+</table>

@@ -8,7 +8,7 @@
 
 <div class="question-eassy-form-control">
 	<div class="question-eassy-answer">
-		<strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')|trans}}{% else %}{{'学员'|trans}}{% endif %}{{'回答'|trans}}:
+		<strong>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'回答'|trans}}:
 		</strong>
 	</div>
 	<p>{% if itemResult.answer[0]|default(null) %}{{ itemResult.answer[0]|raw }}{% else %}{{'未回答'|trans}}{% endif %}</p>
