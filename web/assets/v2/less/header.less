@@ -5,6 +5,10 @@
   .border-radius(0);
 }
 
+.navbar-collapse {
+  border-top: none;
+}
+
 .es-header {
   background: #212121;
   height: 60px;
@@ -119,10 +123,10 @@
     -webkit-transform: translate3d(-100%, 0, 0);
     -moz-transform: translate3d(-100%, 0, 0);
     transform: translate3d(-100%, 0, 0);
-    // .es-transition;
-    // &.active {
-    //   .es-transition;
-    // }
+    .es-transition;
+    &.active {
+      .es-transition;
+    }
   }
   .nav { 
     float: none;
