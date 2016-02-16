@@ -1018,7 +1018,7 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
-    public function promoteUser($id)
+    public function promoteUser($id, $number)
     {
         $user = $this->getUser($id);
 
@@ -1026,9 +1026,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，推荐失败！');
         }
 
-        $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedTime' => time()));
+        $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedSeq' => $number, 'promotedTime' => time()));
 
         $this->getLogService()->info('user', 'recommend', "推荐用户{$user['nickname']}(#{$user['id']})");
+        return $user;
     }
 
     public function cancelPromoteUser($id)
@@ -1039,9 +1040,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，取消推荐失败！');
         }
 
-        $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedTime' => 0));
+        $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedSeq' => 0, 'promotedTime' => 0));
 
         $this->getLogService()->info('user', 'cancel_recommend', "取消推荐用户{$user['nickname']}(#{$user['id']})");
+        return $user;
     }
 
     public function findLatestPromotedTeacher($start, $limit)
