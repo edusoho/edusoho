@@ -6,14 +6,18 @@
   <div class="media-body">
     <form class="comment-widget-form" action="{{ path('comment_widget_create') }}" method="post">
       <div>{{ form_widget(form.content, {attr:{class:'mbm', style:'width:100%'}}) }}</div>
-      <button class="btn btn-primary mbl comment-widget-create-btn" type="submit">发表</button>
+      <button class="btn btn-primary mbl comment-widget-create-btn" type="submit">{{'发表'|trans}}</button>
       {{ form_rest(form) }}
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>
 </div>
 {% else %}
-  <p class="alert text-muted">您尚未登录，不能评论，请先 <a href="{{ path('login') }}">登录</a> 或 <a href="{{ path('register') }}">注册</a> 。</p>
+  {% if app.request.getLocale() == 'ug_CN' %}
+    <p class="alert text-muted">您尚未登录，不能评论，请先 <a href="{{ path('login') }}">登录</a> 或 <a href="{{ path('register') }}">注册</a> 。</p>
+  {% else %}
+    <p class="alert text-muted">您尚未登录，不能评论，请先 <a href="{{ path('login') }}">登录</a> 或 <a href="{{ path('register') }}">注册</a> 。</p>
+  {% endif %}
 {% endif %}
 
 <ul class="media-list comment-list">

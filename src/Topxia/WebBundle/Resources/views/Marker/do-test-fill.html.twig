@@ -1,6 +1,6 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
 	<div class="question-heading editor-text">
-		填空题
+		{{'填空题'|trans}}
 		<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a>
 	</div>
 	<div class="question-body clearfix">
@@ -10,7 +10,11 @@
 		{% endif %}
 		<div class="homework-question-fill question-fill-inputs">
 			{% for index,answer in question.answer %}
-			<input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里" value="" />
+				{% if app.request.getLocale() == 'ug_CN' %}
+					<input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里" value="" />
+				{% else %}
+					<input class="form-control " type="text" data-type="fill" name="answer[{{ question.id }}][]" placeholder="填空({{ loop.index }})答案，请填在这里" value="" />
+				{% endif %}
 			{% endfor %}
 		</div>
 	</div>
@@ -21,7 +25,7 @@
 				<div class="pvm text-danger"></div>
 			</div>
 			<div class="col-xs-2">
-				<button id="submitQuestion" class="btn btn-primary btn-lg pull-right">提 交</button>
+				<button id="submitQuestion" class="btn btn-primary btn-lg pull-right">{{'提 交'|trans}}</button>
 			</div>
 		</div>
 	</div>

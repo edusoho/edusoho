@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}登录 - {{ parent() }}{% endblock %}
+{% block title %}{{'登录'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/login-bind-choose' %}
 
 {% block content %}
@@ -11,15 +11,15 @@
     <form id="set-bind-new-form" class="form-vertical" method="post" action="{{ path('login_bind_newset', {type:type}) }}" data-goto="{% if hasPartnerAuth %}{{ path('partner_login') }}{% else %}{{ path('homepage') }}{% endif %}">
       <div class="alert alert-danger" id="bind-new-form-error" style="display:none;"></div>
       <div class="form-group mbl">
-        <label class="control-label" for="set-bind-nickname-field">用户名</label>
+        <label class="control-label" for="set-bind-nickname-field">{{'用户名'|trans}}</label>
         <div class="controls">
           <input id="set-bind-nickname-field" class="form-control input-lg" type="text" name="nickname" value="{{ oauthUser.name }}" data-url="{{ path('register_nickname_check') }}" />
-          <p class="help-block">用户名最长18个英文或者9个汉字</p>
+          <p class="help-block">{{'用户名最长18个英文或者9个汉字'|trans}}</p>
         </div>
       </div>
       {% if setting('login_bind.' ~ type ~ '_set_fill_account') %}
         <div class="form-group mbl">
-          <label class="control-label" for="set_bind_email">邮箱地址</label>
+          <label class="control-label" for="set_bind_email">{{'邮箱地址'|trans}}</label>
           <div class="controls">
             <input id="set_bind_email" class="form-control input-lg" type="email" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
           </div>
@@ -27,17 +27,21 @@
       {% endif %}
       <div class="form-group mbl">
         <label id="user_terms">
-          <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+          {% if app.request.getLocale() == 'ug_CN' %}
+            <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+          {% else %}
+            <input type="checkbox"  checked="checked">我已阅读并同意<a href="{{ path('user_terms') }}" target="_blank">《服务协议》</a>
+          {% endif %}
         </label>
       </div>
 
       <div class="form-group">
-        <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="正在登录...">确认登录</button>
+        <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="{{'正在登录'|trans}}...">{{'确认登录'|trans}}</button>
       </div>
 
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       <div class="form-group text-right">
-        <a href="{{ path('login_bind_change', {type: type}) }}">绑定已有帐号</a>
+        <a href="{{ path('login_bind_change', {type: type}) }}">{{'绑定已有帐号'|trans}}</a>
       </div>
     </form>
 </div>

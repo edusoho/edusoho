@@ -5,7 +5,11 @@
   <div class="modal-content">
     <div class="modal-body">
       <div class="modal-info">
-        您领取了一张{% if cardType is defined and cardType == "coupon" %}优惠券{% endif %}{% if cardType is defined and cardType == "moneyCard" %}学习卡{% endif %}，已添加至“我的卡包“
+        {% if app.request.getLocale() == 'ug_CN' %}
+          您领取了一张{% if cardType is defined and cardType == "coupon" %}优惠券{% endif %}{% if cardType is defined and cardType == "moneyCard" %}学习卡{% endif %}，已添加至“我的卡包“
+        {% else %}
+          您领取了一张{% if cardType is defined and cardType == "coupon" %}优惠券{% endif %}{% if cardType is defined and cardType == "moneyCard" %}学习卡{% endif %}，已添加至“我的卡包“
+        {% endif %}
       </div>
       {#卡券内容#}
       {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
@@ -15,7 +19,7 @@
         {% include 'TopxiaWebBundle:Card:moneycard-useable.html.twig' %}
       {% endif %}
       <div class="modal-action">
-        <a href="" class="btn btn-ghost-white btn-xlg" data-dismiss="modal">立即使用</a>
+        <a href="" class="btn btn-ghost-white btn-xlg" data-dismiss="modal">{{'立即使用'|trans}}</a>
       </div>
     </div>
   </div>
@@ -27,7 +31,7 @@
   <div class="modal-content">
     <div class="modal-body">
       <div class="modal-info">
-        您还没有登录，请在登录后领取。
+        {{'您还没有登录，请在登录后领取。'|trans}}
       </div>
       {% if cardId is not null and cardDetail is not null and cardType == "coupon" %}
         {% include 'TopxiaWebBundle:Card:coupon-useable.html.twig' %}
@@ -36,7 +40,7 @@
         {% include 'TopxiaWebBundle:Card:moneycard-useable.html.twig' %}
       {% endif %}
       <div class="modal-action">
-        <a href="" class="btn btn-ghost-white btn-xlg" data-dismiss="modal" >登录查看</a>
+        <a href="" class="btn btn-ghost-white btn-xlg" data-dismiss="modal" >{{'登录查看'|trans}}</a>
       </div>
     </div>
   </div>

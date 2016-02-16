@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}所教{{ setting('classroom.name')|default("班级") }} - {{ parent() }}{% endblock %}
+{% block title %}{{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-classroom' %}
 
@@ -8,7 +8,7 @@
 
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    所教{{ setting('classroom.name')|default("班级") }}
+    {{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}
   </div>
 
   <div class="panel-body">
@@ -22,31 +22,35 @@
               <div class="course-body">
                 {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
                   <div style="float:right;" class="text-muted mrm mls">
-                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">管理{{ setting('classroom.name')|default("班级") }}</a>
+                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'管理'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}</a>
                   </div>
                 {% endif %}
-                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>                
+                <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
                 {% if classroom.status == "draft" %}
-                <span class="label label-warning ">未发布</span>
+                <span class="label label-warning ">{{'未发布'|trans}}</span>
                 {% elseif classroom.status == "closed" %}
-                <span class="label label-danger ">已关闭</span>
+                <span class="label label-danger ">{{'已关闭'|trans}}</span>
                 {% endif %}
                 </h4>
-                
-                <span class="text-muted">共{{classroom.coursesCount}}课
+
+                <span class="text-muted">{{'共'|trans}}{{classroom.coursesCount}}{{'课'|trans}}
                 <i class="fa fa-users mll" ></i> {{classroom.studentNum + classroom.auditorNum}}</span>
                 <div class="course-footer clearfix mtl">
-                  <strong class="mrl">今日新增</strong>
-                   
-                   学员 {{classroom.allCount}} &nbsp;&nbsp;
+                  <strong class="mrl">{{'今日新增'|trans}}</strong>
 
-                   话题 {{classroom.threadCount}} &nbsp;&nbsp; 课时完成学习 {{classroom.todayFinishedLessonNum}}
+                   {{'学员'|trans}} {{classroom.allCount}} &nbsp;&nbsp;
+
+                   {{'话题'|trans}} {{classroom.threadCount}} &nbsp;&nbsp; {{'课时完成学习'|trans}} {{classroom.todayFinishedLessonNum}}
                 </div>
               </div>
             </li>
             {% endfor %}
             {% else %}
-            <div class="empty">找不到所教{{ setting('classroom.name')|default("班级") }}！</div>
+              {% if app.request.getLocale() == 'ug_CN' %}
+                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              {% else %}
+                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              {% endif %}
             {% endif %}
           </ul>
   </div>

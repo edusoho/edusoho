@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 {% set category = category | default(null)%}
-{% block title %}{% if category %}编辑题目类别{% else %}添加题目类别{% endif %}{% endblock %}
+{% block title %}{% if category %}{{'编辑题目类别'|trans}}{% else %}{{'添加题目类别'|trans}}{% endif %}{% endblock %}
 
 {% block body %}
   <form id="category-form" class="form-horizontal" action="
@@ -10,7 +10,7 @@
     {{ path('course_manage_question_category_create', {courseId:course.id}) }}
   {% endif %}" method="post">
     <div class="form-group">
-      <label class="col-md-2 control-label" for="category-name-field">名称</label>
+      <label class="col-md-2 control-label" for="category-name-field">{{'名称'|trans}}</label>
       <div class="col-md-8 controls">
         <input class="form-control" id="category-name-field" type="text" name="name" value="{{ category.name|default('') }}" tabindex="1">
       </div>
@@ -29,6 +29,6 @@
 
 {% block footer %}
 
-    <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
-  <button id="category-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">保存</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">{{'取消'|trans}}</button>
+  <button id="category-create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">{{'保存'|trans}}</button>
 {% endblock %}
