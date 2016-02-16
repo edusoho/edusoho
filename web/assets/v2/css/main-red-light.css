@@ -11669,6 +11669,10 @@ textarea {
   background: #ff842e;
   border-color: #ff842e;
 }
+.social-login .social-icon.social-more:hover {
+  background: #fd5f56;
+  border-color: #fd5f56;
+}
 .login-section {
   margin: 50px auto;
   width: 460px;
