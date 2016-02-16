@@ -181,7 +181,6 @@ class EduCloudController extends BaseController
         list($emailStatus, $sign) = $this->getSign($dataUserPosted);
 
         $emailStatus = array_merge($emailStatus, $sign);
-        var_dump($emailStatus);
         $this->getSettingService()->set('cloud_email', $emailStatus);
         return $emailStatus;
     }
@@ -229,7 +228,6 @@ class EduCloudController extends BaseController
 
     protected function getSign($operation)
     {
-        var_dump($operation);
         $api = CloudAPIFactory::create('root');
         $api->setApiUrl('http://124.160.104.74:8098/');
         $settings = $this->getSettingService()->get('cloud_email', array());
@@ -262,8 +260,9 @@ class EduCloudController extends BaseController
                 'sender' => $operation['sign']
             );
             $result = $api->post("/me/email_account", $params);
+            $this->setFlashMessage('success', '云邮件设置已保存！');
         } elseif (isset($operation['email-close'])) {
-            $result = $api->post("/me/delete_account");
+            $result = $api->delete("/me/email_account");
         } elseif (empty($operation)) {
             $emailStatus['status'] = !empty($settings) ? $settings['status'] : 'error';
             $sign                  = !empty($settings) ? array('sign' => $settings['sign']) : array('sign' => "");
