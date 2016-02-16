@@ -21,12 +21,10 @@ html.nav-active body {
 
 .es-wrap {
   // .es-transition;
-  // transform: translate3d(0, 0, 0);
-  // -webkit-transform: translate3d(0, 0, 0);
-  // -o-transform: translate3d(0, 0, 0);
-  // -moz-transform: translate3d(0, 0, 0);
+  .es-transition(transform .3s ease);
   &.nav-active {
     // .es-transition;
+    .es-transition(transform .3s ease);
     transform: translate3d(250px, 0, 0);
     -webkit-transform: translate3d(250px, 0, 0);
     -o-transform: translate3d(250px, 0, 0);
