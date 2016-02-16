@@ -24,10 +24,11 @@ define(function(require, exports, module) {
 
             }else {
                 var height = $(window).height();
+                var width  = $(window).width();
                 $nav.addClass("active").css("height",height);
 
-                $(".html-mask").addClass("active");
-                $("html,.es-wrap").addClass("nav-active");
+                $(".html-mask").addClass("active")
+                $("html,.es-wrap").addClass("nav-active").css("width",width);
             }
         });
 

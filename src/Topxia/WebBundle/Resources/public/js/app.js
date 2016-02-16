@@ -128,7 +128,9 @@ define(function(require, exports, module) {
         }
     }
 
-   	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i) & !isWeiXin() ){
+    console.log(isWeiXin());
+
+   	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)  ){
 	    
 	    $("body").on("click","li.nav-hover",function(){
             $(this).toggleClass("open");
@@ -137,9 +139,10 @@ define(function(require, exports, module) {
         if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
             $(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
         }
+        console.log(1);
 
 	} else {
-
+        console.log(2);
         $("li.nav-hover").mouseenter(function(event) {
             $(this).addClass("open");
         }).mouseleave(function(event) {
