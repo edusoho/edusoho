@@ -11,7 +11,10 @@
       {% for key,learn in learns %}
         {% if loop.index < 7 %}
           <div class="media media-number-o color-gray text-overflow">
-            {{ web_macro.user_link(learn.user) }}
+            {% if learn.type != 'reviewed_testpaper' %}
+              {{ web_macro.user_link(learn.user) }}
+            {% endif %}
+            
             {{ learn.message|raw }}
           </div> 
          {% endif %}
