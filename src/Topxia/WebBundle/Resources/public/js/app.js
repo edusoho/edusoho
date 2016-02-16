@@ -127,13 +127,15 @@ define(function(require, exports, module) {
 	    });
 	    
 	} else {
-		$("body").on("hover click","li.nav-hover",function(){
-			$(this).toggleClass("open");
-		})
+		// $("body").on("click","li.nav-hover",function(){
+		// 	$(this).toggleClass("open");
+		// })
+// console.log(1);
+        $("li.nav-hover >a").attr("data-toggle","dropdown");
 
-		if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
-			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
-		}
+		// if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
+		// 	$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
+		// }
 	}
 	
 
