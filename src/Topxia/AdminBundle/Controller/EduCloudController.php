@@ -181,6 +181,7 @@ class EduCloudController extends BaseController
         list($emailStatus, $sign) = $this->getSign($dataUserPosted);
 
         $emailStatus = array_merge($emailStatus, $sign);
+        var_dump($emailStatus);
         $this->getSettingService()->set('cloud_email', $emailStatus);
         return $emailStatus;
     }
@@ -228,18 +229,18 @@ class EduCloudController extends BaseController
 
     protected function getSign($operation)
     {
+        var_dump($operation);
         $api = CloudAPIFactory::create('root');
         $api->setApiUrl('http://124.160.104.74:8098/');
-        $settings    = $this->getSettingService()->get('cloud_email', array());
-        $emailStatus = array();
-        $sign        = array();
+        $settings = $this->getSettingService()->get('cloud_email', array());
+        $result   = array();
+        $sign     = array();
 
         if (isset($operation['email-open'])) {
             $result = $api->post("/me/email_account");
             $mailer = $this->getSettingService()->get('mailer', array());
-            // var_dump($result);
 
-            if (isset($result['account']['status']) && $result['account']['status'] == 'enable' && $mailer['enabled'] == "1") {
+            if (isset($result['status']) && $result['status'] == 'enable' && $mailer['enabled'] == "1") {
                 $default = array(
                     'enabled'  => 0,
                     'host'     => '',
@@ -252,12 +253,11 @@ class EduCloudController extends BaseController
                 $mailer            = array_merge($default, $mailer);
                 $mailer['enabled'] = 0;
                 $this->getSettingService()->set('mailer', $mailer);
-                var_dump($this->getSettingService()->get('mailer', $mailer));
                 $mailerWithoutPassword             = $mailer;
                 $mailerWithoutPassword['password'] = '******';
                 $this->getLogService()->info('system', 'update_settings', "开启云短信关闭第三方邮件服务器设置", $mailerWithoutPassword);
             }
-        } elseif (isset($operation['sign'])) {
+        } elseif (isset($operation['sign']) && !empty($operation['sign'])) {
             $params = array(
                 'sender' => $operation['sign']
             );
@@ -269,9 +269,9 @@ class EduCloudController extends BaseController
             $sign                  = !empty($settings) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
-        if (isset($result['success']) && $result['success'] == 1) {
-            $emailStatus = array('status' => $result['account']['status']);
-            $sign        = array('sign' => $result['account']['nickname']);
+        if (isset($result['id']) && $result['id'] == 1) {
+            $emailStatus = array('status' => $result['status']);
+            $sign        = array('sign' => $result['nickname']);
         }
 
         if (isset($result['error'])) {
@@ -279,11 +279,12 @@ class EduCloudController extends BaseController
             $emailStatus['msg']    = $result['error'];
         }
 
-        if (isset($operation['sign-update'])) {
-            $sign                  = array('sign' => "");
-            $emailStatus['status'] = 'update';
-        }
-
+        // if (isset($operation['sign-update'])) {
+        //     $sign                  = array('sign' => "");
+        //     $emailStatus['status'] = 'update';
+        // }
+        // var_dump($result);
+        // var_dump($sign);
         return array($emailStatus, $sign);
     }
 

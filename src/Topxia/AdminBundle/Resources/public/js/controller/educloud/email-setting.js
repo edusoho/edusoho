@@ -15,7 +15,10 @@ define(function(require, exports, module) {
             });
         };
         $("input[name='email-status']").data('status')=="used" ?$("[name='warning']").hide():"";
-        
+        $("[name='sign-update']").on('click',function(){
+        	$("[name='submit-sign']").show();
+        	$("[name='status']").hide();
+        });
 	}
 	
 });
