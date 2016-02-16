@@ -127,7 +127,7 @@ define(function(require, exports, module) {
 	    });
 	    
 	} else {
-		$("body").on("click","li.nav-hover",function(){
+		$("body").on("hover click","li.nav-hover",function(){
 			$(this).toggleClass("open");
 		})
 
