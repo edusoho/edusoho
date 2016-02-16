@@ -31,7 +31,7 @@
         {% elseif emailStatus.status|default(null) == 'error' %}
           <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云邮件</button>
           <div name = "warning">
-            <span class="alert-warning" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+            <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
           </div>
         {% endif %}
