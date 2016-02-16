@@ -1755,6 +1755,7 @@ html.nav-active body {
   height: 100%;
 }
 .es-wrap {
+  min-width: 320px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
