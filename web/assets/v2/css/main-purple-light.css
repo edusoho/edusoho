@@ -1755,16 +1755,16 @@ html.nav-active body {
   height: 100%;
 }
 .es-wrap {
-  -webkit-transition: transform 0.3s ease 0.3s ease;
-  -moz-transition: transform 0.3s ease 0.3s ease;
-  -o-transition: transform 0.3s ease 0.3s ease;
-  transition: transform 0.3s ease 0.3s ease;
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 .es-wrap.nav-active {
-  -webkit-transition: transform 0.3s ease 0.3s ease;
-  -moz-transition: transform 0.3s ease 0.3s ease;
-  -o-transition: transform 0.3s ease 0.3s ease;
-  transition: transform 0.3s ease 0.3s ease;
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
   transform: translate3d(250px, 0, 0);
   -webkit-transform: translate3d(250px, 0, 0);
   -o-transform: translate3d(250px, 0, 0);
