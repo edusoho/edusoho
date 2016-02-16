@@ -119,35 +119,21 @@ define(function(require, exports, module) {
         Cookie.set("close_weixin_alert",'true',{path: '/'});
     });
 
-    function isWeiXin(){
-        var ua = window.navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    console.log(isWeiXin());
-
-   	if(navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)  ){
+   	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+	    $("li.nav-hover").mouseenter(function(event) {
+	        $(this).addClass("open");
+	    }).mouseleave(function(event) {
+	        $(this).removeClass("open");
+	    });
 	    
-	    $("body").on("click","li.nav-hover",function(){
-            $(this).toggleClass("open");
-        })
-
-        if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
-            $(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
-        }
-        console.log(1);
-
 	} else {
-        console.log(2);
-        $("li.nav-hover").mouseenter(function(event) {
-            $(this).addClass("open");
-        }).mouseleave(function(event) {
-            $(this).removeClass("open");
-        });
+		$("body").on("click","li.nav-hover",function(){
+			$(this).toggleClass("open");
+		})
+
+		if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
+			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
+		}
 	}
 	
 
