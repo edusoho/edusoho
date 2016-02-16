@@ -1755,11 +1755,6 @@ html.nav-active body {
   height: 100%;
 }
 .es-wrap {
-  width: 100%;
-  transform: translate3d(0, 0, 0);
-  -webkit-transform: translate3d(0, 0, 0);
-  -o-transform: translate3d(0, 0, 0);
-  -moz-transform: translate3d(0, 0, 0);
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
