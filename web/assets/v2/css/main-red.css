@@ -1754,18 +1754,7 @@ html.nav-active body {
   overflow: hidden;
   height: 100%;
 }
-.es-wrap {
-  min-width: 320px;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
 .es-wrap.nav-active {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
   transform: translate3d(250px, 0, 0);
   -webkit-transform: translate3d(250px, 0, 0);
   -o-transform: translate3d(250px, 0, 0);
