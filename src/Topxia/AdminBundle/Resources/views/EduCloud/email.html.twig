@@ -17,10 +17,6 @@
         <form class="form-horizontal" method="post" id="email-form" novalidate="">
         {% if emailStatus.status|default('disable') in  ['disable'] %}
   				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
-          <div name = "warning">
-            <span class="alert-warning" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
-            <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
-          </div>
         {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" %}
           <div name="status">
             <span class="text-success">已启用</span>
@@ -30,8 +26,14 @@
           <div name="submit-sign" hidden="hidden">
             <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
           </div>
-        {% elseif emailStatus.status in ['created'] or emailStatus.sign == "" %}
+        {% elseif emailStatus.status in ['created'] %}
           <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
+        {% elseif emailStatus.status|default(null) == 'error' %}
+          <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云邮件</button>
+          <div name = "warning">
+            <span class="alert-warning" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+            <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
+          </div>
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>

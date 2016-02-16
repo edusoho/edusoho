@@ -181,7 +181,11 @@ class EduCloudController extends BaseController
         list($emailStatus, $sign) = $this->getSign($dataUserPosted);
 
         $emailStatus = array_merge($emailStatus, $sign);
-        $this->getSettingService()->set('cloud_email', $emailStatus);
+
+        if ($emailStatus['status'] != 'error') {
+            $this->getSettingService()->set('cloud_email', $emailStatus);
+        }
+
         return $emailStatus;
     }
 
@@ -236,6 +240,7 @@ class EduCloudController extends BaseController
 
         if (isset($operation['email-open'])) {
             $result = $api->post("/me/email_account");
+            $this->setFlashMessage('success', '云邮件设置已保存！');
             $mailer = $this->getSettingService()->get('mailer', array());
 
             if (isset($result['status']) && $result['status'] == 'enable' && $mailer['enabled'] == "1") {
@@ -263,9 +268,11 @@ class EduCloudController extends BaseController
             $this->setFlashMessage('success', '云邮件设置已保存！');
         } elseif (isset($operation['email-close'])) {
             $result = $api->delete("/me/email_account");
+            $this->setFlashMessage('success', '云邮件设置已保存！');
         } elseif (empty($operation)) {
-            $emailStatus['status'] = !empty($settings) ? $settings['status'] : 'error';
-            $sign                  = !empty($settings) ? array('sign' => $settings['sign']) : array('sign' => "");
+            $result                = $api->get("/me");
+            $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
+            $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
         if (isset($result['id']) && $result['id'] == 1) {

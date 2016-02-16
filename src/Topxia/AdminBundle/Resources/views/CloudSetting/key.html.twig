@@ -27,6 +27,35 @@
   {% else %}
     {{ web_macro.flash_messages() }}
     <div class="page-header clearfix">
+      <h1 class="pull-left">套餐信息</h1>
+    </div>
+    {% if info.level|default(null) %}
+    <form class="form-horizontal" id="cloud-edition-form" method="post" novalidate>
+      <div class="form-group">
+        <label class="col-md-3 control-label">套餐名称：</label>
+        <div class="col-md-6">
+          <p class="form-control-static">{{ info.level }}
+          </p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-md-3 control-label">服务期限：</label>
+        <div class="col-md-6">
+          <p class="form-control-static">
+            {{ info.startDate|date('Y.m.d') }} - {{ info.endDate|date('Y.m.d') }}
+          </p>
+        </div>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+    </form>
+    {% elseif info.error|default(null) == 'error' %}
+      网络问题，无法连接到EduSoho开放云平台，暂时无法获取信息
+    {% else %}
+      尚未购买套餐，点击<a href="http://www.edusoho.com/services/price?type=price" target="_blank">这里</a>了解详情
+    {% endif %}
+
+    <div class="page-header clearfix">
       <h1 class="pull-left">授权码</h1>
     </div>
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>

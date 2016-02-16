@@ -21,13 +21,28 @@ class CloudSettingController extends BaseController
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
+        $info = array();
+        try {
+            $api = CloudAPIFactory::create('root');
+            $api->setApiUrl('http://124.160.104.74:8098/');
+            $info = $api->get('/me');
+
+            if (isset($info['level'])) {
+                $info['level'] = $this->infoLevel($info['level']);
+            }
+        } catch (\RuntimeException $e) {
+            $info['error'] = 'error';
+        }
+
         return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
+            'info' => $info
         ));
     }
 
     public function keyInfoAction(Request $request)
     {
-        $api  = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
+        $api->setApiUrl('http://124.160.104.74:8098/');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
@@ -384,6 +399,36 @@ class CloudSettingController extends BaseController
         }
 
         return false;
+    }
+
+    protected function infoLevel($level)
+    {
+        switch ($level) {
+            case 'none':
+                return '免费版';
+                break;
+            case 'license':
+                return '商业授权版';
+                break;
+            case 'personal':
+                return '个人版';
+                break;
+            case 'basic':
+                return '企业初级版';
+                break;
+            case 'medium':
+                return '企业高级版';
+                break;
+            case 'advanced':
+                return '企业旗舰版';
+                break;
+            case 'gold':
+                return '白金版';
+                break;
+            case 'custom':
+                return '定制版';
+                break;
+        }
     }
 
     protected function getSettingService()
