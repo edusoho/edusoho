@@ -1754,12 +1754,6 @@ html.nav-active body {
   overflow: hidden;
   height: 100%;
 }
-.es-wrap {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
 .es-wrap.nav-active {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -1871,6 +1865,9 @@ select:-webkit-autofill {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+.navbar-collapse {
+  border-top: none;
 }
 .es-header {
   background: #212121;
@@ -6219,7 +6216,7 @@ textarea {
 .form-control:-ms-input-placeholder {
   color: #919191;
 }
-.avatar-ss {
+.avatar-xxs {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
@@ -6251,24 +6248,24 @@ textarea {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  width: 128px !important;
-  height: 128px !important;
+  width: 120px !important;
+  height: 120px !important;
 }
 .avatar-square-md,
 .group-avatar-md {
   width: 60px;
   height: 60px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .avatar-square-sm,
 .group-avatar-sm {
   width: 50px;
   height: 50px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .progress {
   -webkit-border-radius: 0;
@@ -11668,6 +11665,10 @@ textarea {
 .social-login .social-icon.social-yun:hover {
   background: #ff842e;
   border-color: #ff842e;
+}
+.social-login .social-icon.social-more:hover {
+  background: #9e9abd;
+  border-color: #9e9abd;
 }
 .login-section {
   margin: 50px auto;

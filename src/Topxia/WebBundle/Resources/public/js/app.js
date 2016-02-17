@@ -127,13 +127,7 @@ define(function(require, exports, module) {
 	    });
 	    
 	} else {
-		$("body").on("click","li.nav-hover",function(){
-			$(this).toggleClass("open");
-		})
-
-		if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
-			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
-		}
+        $("li.nav-hover >a").attr("data-toggle","dropdown");
 	}
 	
 

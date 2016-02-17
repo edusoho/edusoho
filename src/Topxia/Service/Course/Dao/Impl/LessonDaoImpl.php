@@ -88,7 +88,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:min:startTime", $courseId, function ($courseId) use ($that) {
-            $sql = "select min(`startTime`) as startTime from `course_lesson` where courseId =?;";
+            $sql = "select min(`startTime`) as startTime from {$that->getTable()} where courseId =?;";
             return $that->getConnection()->fetchAll($sql, array($courseId));
         }
 

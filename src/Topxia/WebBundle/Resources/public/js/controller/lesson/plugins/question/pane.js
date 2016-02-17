@@ -1,5 +1,5 @@
 define(function(require, exports, module) {
-
+    var Notify = require('common/bootstrap-notify');
     var Widget = require('widget'),
     Validator = require('bootstrap.validator'),
     ThreadShowWidget = require('../../../course-thread/show-widget');
@@ -85,6 +85,9 @@ define(function(require, exports, module) {
                     pane.$('[data-role=list]').prepend(html);
                     pane.$('.empty-item').remove();
                     pane.collapseForm();
+                }).error(function(response){
+                    var response = $.parseJSON(response.responseText);
+                    Notify.danger(response.error.message);
                 });
             });
 

@@ -44,6 +44,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         if (is_array($sort)) {
             return $sort;
         }
+
         switch ($sort) {
             case 'created':
                 $orderBys = array(
@@ -121,28 +122,13 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createThread($thread)
     {
-        $event = $this->dispatchEvent('thread.before_create', $thread);
-
-        if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
-        }
-
-        $this->tryAccess('thread.create', $thread);
-
         if (empty($thread['title'])) {
             throw $this->createServiceException("标题名称不能为空！");
         }
 
-        $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
-
-        $thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
-
         if (empty($thread['content'])) {
             throw $this->createServiceException("话题内容不能为空！");
         }
-
-        $thread['content'] = $this->filterSensitiveWord($this->purifyHtml(empty($thread['content'])) ? '' : $thread['content']);
-        $thread['ats']     = $this->getUserService()->parseAts($thread['content']);
 
         if (empty($thread['targetId'])) {
             throw $this->createServiceException(' Id不能为空！');
@@ -152,12 +138,32 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException(sprintf('Thread type(%s) is error.', $thread['type']));
         }
 
+        $this->tryAccess('thread.create', $thread);
+
+        $event = $this->dispatchEvent('thread.before_create', $thread);
+
+        if ($event->isPropagationStopped()) {
+            throw $this->createServiceException('发帖次数过多，请稍候尝试。');
+        }
+
+        $thread = ArrayToolkit::parts($thread, array('targetType', 'targetId', 'relationId', 'categoryId', 'title', 'content', 'ats', 'location', 'userId', 'type', 'maxUsers', 'actvityPicture', 'status', 'startTime', 'endTIme'));
+
+        $thread['title']   = $this->sensitiveFilter($thread['title'], $thread['targetType'].'-thread-create');
+        $thread['content'] = $this->sensitiveFilter($thread['content'], $thread['targetType'].'-thread-create');
+        $thread['title']   = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
+        $thread['content'] = $this->purifyHtml(empty($thread['content'])) ? '' : $thread['content'];
+        $thread['ats']     = $this->getUserService()->parseAts($thread['content']);
+
         $user             = $this->getCurrentUser();
         $thread['userId'] = $user['id'];
 
         if ($thread['type'] == 'event') {
             if ($this->tryAccess('thread.event.create', $thread)) {
                 throw $this->createAccessDeniedException('权限不够!');
+            }
+
+            if (!empty($thread['location'])) {
+                $thread['location'] = $this->sensitiveFilter($thread['location'], $thread['targetType'].'-thread-create');
             }
 
             $thread['startTime'] = strtotime($thread['startTime']);
@@ -204,15 +210,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('thread.update', $thread);
 
-        $thread['updateTime'] = time();
-
-        $user = $this->getCurrentUser();
-
         $fields = ArrayToolkit::parts($fields, array('title', 'content', 'startTime', 'maxUsers', 'location', 'actvityPicture'));
 
         if (empty($fields)) {
             throw $this->createServiceException('参数缺失，更新失败。');
         }
+
+        $fields['content'] = $this->sensitiveFilter($fields['content'], $thread['targetType'].'-thread-update');
+        $fields['title']   = $this->sensitiveFilter($fields['title'], $thread['targetType'].'-thread-update');
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
@@ -222,6 +227,11 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         }
 
         return $this->getThreadDao()->updateThread($id, $fields);
+    }
+
+    protected function sensitiveFilter($str, $type)
+    {
+        return $this->getSensitiveService()->sensitiveCheck($str, $type);
     }
 
     public function deleteThread($threadId)
@@ -396,13 +406,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function createPost($fields)
     {
-        $event = $this->dispatchEvent('thread.post.before_create', $fields);
-
-        if ($event->isPropagationStopped()) {
-            throw $this->createServiceException('回复次数过多，请稍候尝试。');
-        }
-
-        $user   = $this->getCurrentUser();
         $thread = null;
 
         if (!empty($fields['threadId'])) {
@@ -414,8 +417,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->tryAccess('post.create', $fields);
 
-        $fields['content']     = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+        $event = $this->dispatchEvent('thread.post.before_create', $fields);
+
+        if ($event->isPropagationStopped()) {
+            throw $this->createServiceException('回复次数过多，请稍候尝试。');
+        }
+
+        $fields['content'] = $this->sensitiveFilter($fields['content'], $fields['targetType'].'-thread-post-create');
+
+        $fields['content']     = $this->purifyHtml($fields['content']);
         $fields['ats']         = $this->getUserService()->parseAts($fields['content']);
+        $user                  = $this->getCurrentUser();
         $fields['userId']      = $user['id'];
         $fields['createdTime'] = time();
         $fields['parentId']    = empty($fields['parentId']) ? 0 : intval($fields['parentId']);
@@ -717,13 +729,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return new $class();
     }
 
-    protected function filterSensitiveWord($text)
+    protected function getSensitiveService()
     {
-        if (empty($text)) {
-            return $text;
-        }
-
-        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
+        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
     }
 
     protected function getThreadDao()

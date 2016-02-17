@@ -164,7 +164,7 @@ class CourseThreadController extends CourseBaseController
                         'threadId' => $thread['id']
                     )));
                 } catch (\Exception $e) {
-                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示');
+                    return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
                 }
             }
         }
@@ -202,27 +202,31 @@ class CourseThreadController extends CourseBaseController
         $form = $this->createThreadForm($thread);
 
         if ($request->getMethod() == 'POST') {
-            $form->bind($request);
+            try {
+                $form->bind($request);
 
-            if ($form->isValid()) {
-                $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
+                if ($form->isValid()) {
+                    $thread = $this->getThreadService()->updateThread($thread['courseId'], $thread['id'], $form->getData());
 
-                if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), true);
-                    $message   = array(
-                        'courseId' => $courseId,
-                        'id'       => $thread['id'],
-                        'title'    => $thread['title'],
-                        'type'     => 'modify'
-                    );
+                    if ($user->isAdmin()) {
+                        $threadUrl = $this->generateUrl('course_thread_show', array('courseId' => $courseId, 'threadId' => $thread['id']), true);
+                        $message   = array(
+                            'courseId' => $courseId,
+                            'id'       => $thread['id'],
+                            'title'    => $thread['title'],
+                            'type'     => 'modify'
+                        );
 
-                    $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
+                        $this->getNotifiactionService()->notify($thread['userId'], 'course-thread', $message);
+                    }
+
+                    return $this->redirect($this->generateUrl('course_thread_show', array(
+                        'courseId' => $thread['courseId'],
+                        'threadId' => $thread['id']
+                    )));
                 }
-
-                return $this->redirect($this->generateUrl('course_thread_show', array(
-                    'courseId' => $thread['courseId'],
-                    'threadId' => $thread['id']
-                )));
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage(), '错误提示', 1, $request->getPathInfo());
             }
         }
 

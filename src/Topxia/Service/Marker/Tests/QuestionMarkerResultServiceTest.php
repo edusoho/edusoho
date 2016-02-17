@@ -4,7 +4,7 @@ namespace Topxia\Service\Marker\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 
-class SensitiveWordServiceTest extends BaseTestCase
+class QuestionMarkerResultServiceTest extends BaseTestCase
 {
     public function testAddQuestionMarkerResult()
     {
