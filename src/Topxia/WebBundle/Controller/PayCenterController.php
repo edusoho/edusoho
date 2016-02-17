@@ -101,9 +101,11 @@ class PayCenterController extends BaseController
     public function redirectOrderTarget($order)
     {
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        // $router    = $processor->getRouter();
-        // $goto = $processor->callbackUrl($router, $order, $this->container);
-        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig');
+        $router    = $processor->getRouter();
+        $goto = $processor->callbackUrl($router, $order, $this->container);
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
+            'goto' => $goto
+        ));
           // return $this->redirect($processor->callbackUrl($router, $order, $this->container));
         // return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
     }
