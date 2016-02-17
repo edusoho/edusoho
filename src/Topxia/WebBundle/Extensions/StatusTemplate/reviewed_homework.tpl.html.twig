@@ -1,0 +1,8 @@
+{% set props = status.properties %}
+{% set user = data('User',{'userId':props.result.userId}) %}
+
+{% if mode == 'simple' %}
+  <a class="link-dark" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>的 "{{ props.lesson.title|sub_text(15) }}"下的作业已被批阅  
+{% elseif mode == 'full' %}
+
+{% endif %}

@@ -11,7 +11,7 @@
       {% for key,learn in learns %}
         {% if loop.index < 7 %}
           <div class="media media-number-o color-gray text-overflow">
-            {% if learn.type != 'reviewed_testpaper' %}
+            {% if learn.type not in ['reviewed_testpaper','reviewed_homework','teacher_thread_post'] %}
               {{ web_macro.user_link(learn.user) }}
             {% endif %}
             
