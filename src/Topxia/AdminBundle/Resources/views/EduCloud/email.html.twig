@@ -6,7 +6,12 @@
 {% set script_controller = 'educloud/email-setting' %}
 {% block main %}
 {{ web_macro.flash_messages() }}
-
+  {% if videoInfo.locked|default(0) == 1 %}
+    <div class="alert alert-warning" role="alert">您的云视频已被锁定，请联系客服人员：0571-86819929。</div>
+  {% endif %}
+  {% if videoInfo.enable|default(1) == 0 %}
+    <div class="alert alert-warning" role="alert">您的云视频已被禁用，请联系客服人员：0571-86819929。</div>
+  {% endif %}
 	<div class="page-header clearfix">
 	  <h1 class="pull-left">云邮件</h1>
 	</div>

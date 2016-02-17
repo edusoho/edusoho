@@ -90,6 +90,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             //$api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
+            var_dump($info);
 
             if (isset($info['licenseDomains'])) {
                 $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -97,7 +98,7 @@ class EduCloudController extends BaseController
 
             $isBinded = $this->getAppService()->getBinded();
 
-            $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
+            $isBinded['email'] = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
             $eduSohoOpenClient = new EduSohoOpenClient;
             $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
@@ -106,7 +107,7 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
-        //$content = $this->getContent($content);
+        //$content = $this->getContent();
         // var_dump($content);
         $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
         $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
@@ -274,7 +275,7 @@ class EduCloudController extends BaseController
         );
         $vlseInfo['smsInfo'] = array(
             'remainCount' => '2000',
-            'sttaus'      => 'used',
+            'status'      => 'used',
             'usedInfo'    => array(
                 '2015-12-22' => '47',
                 '2015-12-23' => '95',
@@ -762,12 +763,6 @@ class EduCloudController extends BaseController
             $emailStatus['msg']    = $result['error'];
         }
 
-        // if (isset($operation['sign-update'])) {
-        //     $sign                  = array('sign' => "");
-        //     $emailStatus['status'] = 'update';
-        // }
-        // var_dump($result);
-        // var_dump($sign);
         return array($emailStatus, $sign);
     }
 

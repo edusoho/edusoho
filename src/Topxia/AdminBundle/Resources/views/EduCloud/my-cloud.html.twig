@@ -6,7 +6,28 @@
 
 
 {% block main %}
+<style type="text/css">
+  .eduyun-main {
+    position: relative;
+  }
+  .eduyun-main .mask {
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #000;
+    background: rgba(0,0,0,.4);
+  }
+</style>
       <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
+        {% if videoInfo.locked|default(0) == 1 %}
+          <div class="alert alert-warning" role="alert">您的教育云服务已被锁定，请联系客服人员：0571-86819929。</div>
+        {% endif %}
+        {% if videoInfo.enable|default(1) == 0 %}
+          <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
+        {% endif %}
          <ul class="nav nav-tabs mbl">
           <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
             <a href="{{ url('admin_my_cloud') }}">产品简介
@@ -24,6 +45,9 @@
         {% endif %}
       {% else %}
         <div class="eduyun-main">
+        {% if videoInfo.enable|default(1) == 0 %}
+          <div class="mask"></div>
+        {% endif %}
 
           <!--个人资料-->
 <!--           <div class="panel panel-default">
