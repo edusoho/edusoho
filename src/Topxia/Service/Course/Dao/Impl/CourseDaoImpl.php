@@ -24,8 +24,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
-            $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
-            return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
+            $sql = "SELECT * FROM {$that->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $that->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
         }
 
         );
