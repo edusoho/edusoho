@@ -5,8 +5,6 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 
 class AppController extends BaseController
 {
@@ -17,40 +15,6 @@ class AppController extends BaseController
     public function oldUpgradeCheckAction()
     {
         return $this->redirect($this->generateUrl('admin_app_upgrades'));
-    }
-
-    public function myCloudAction(Request $request)
-    {
-        // @apitodo 需改成leaf
-        $api = CloudAPIFactory::create('root');
-
-        $content = $api->get("/users/{$api->getAccessKey()}/overview");
-
-        $info = $api->get('/me');
-
-        $eduSohoOpenClient = new EduSohoOpenClient();
-
-        if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])))) {
-            $articles = $eduSohoOpenClient->getArticles();
-            $articles = json_decode($articles, true);
-
-            if ($this->getWebExtension()->isTrial()) {
-                $trialHtml = $this->getCloudCenterExperiencePage();
-                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                    'articles' => $articles,
-                    'trial'    => $trialHtml['content']
-                ));
-            }
-
-            $unTrial     = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
-            $unTrialHtml = json_decode($unTrial, true);
-            return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
-                'articles' => $articles,
-                'untrial'  => $unTrialHtml['content']
-            ));
-        }
-
-        return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
     }
 
     // public function myCloudOverviewAction(Request $request)
@@ -133,79 +97,79 @@ class AppController extends BaseController
     //     ));
     // }
 
-    public function myCloudOverviewAction(Request $request)
-    {
-        try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
-            $info = $api->get('/me');
+    // public function myCloudOverviewAction(Request $request)
+    // {
+    //     try {
+    //         $api = CloudAPIFactory::create('root');
+    //         $api->setApiUrl('http://124.160.104.74:8098/');
+    //         $info = $api->get('/me');
 
-            if (isset($info['licenseDomains'])) {
-                $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
-            }
+    //         if (isset($info['licenseDomains'])) {
+    //             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
+    //         }
 
-            $isBinded = $this->getAppService()->getBinded();
+    //         $isBinded = $this->getAppService()->getBinded();
 
-            $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
+    //         $email = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
-            $eduSohoOpenClient = new EduSohoOpenClient;
-            $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
-        } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
-        }
+    //         $eduSohoOpenClient = new EduSohoOpenClient;
+    //         $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
+    //     } catch (\RuntimeException $e) {
+    //         return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
+    //     }
 
-        //$content = $this->getContent($content);
-        // var_dump($content);
-        $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
-        $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
-        $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
-        $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
-        $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
-        $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
+    //     //$content = $this->getContent($content);
+    //     // var_dump($content);
+    //     $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
+    //     $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
+    //     $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
+    //     $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
+    //     $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
+    //     $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
 
-        // videoUsedInfo测试数据
-        // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
-        $chartInfo = array(
-            'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
-            'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
-            'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),
-            'emailUsedInfo' => $this->generateChartData($emailInfo['usedInfo'])
-        );
+    //     // videoUsedInfo测试数据
+    //     // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
+    //     $chartInfo = array(
+    //         'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
+    //         'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
+    //         'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),
+    //         'emailUsedInfo' => $this->generateChartData($emailInfo['usedInfo'])
+    //     );
 
-        $notices = $eduSohoOpenClient->getNotices();
-        $notices = json_decode($notices, true);
+    //     $notices = $eduSohoOpenClient->getNotices();
+    //     $notices = json_decode($notices, true);
 
-        if ($this->getWebExtension()->isTrial()) {
-            $trialHtml = $this->getCloudCenterExperiencePage();
-        }
+    //     if ($this->getWebExtension()->isTrial()) {
+    //         $trialHtml = $this->getCloudCenterExperiencePage();
+    //     }
 
-        return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
-            "notices"    => $notices,
-            'isBinded'   => $isBinded,
-            'cashInfo'   => $cashInfo,
-            'couponInfo' => $couponInfo,
-            'videoInfo'  => $videoInfo,
-            'liveInfo'   => $liveInfo,
-            'smsInfo'    => $smsInfo,
-            'emailInfo'  => $emailInfo,
-            'chartInfo'  => $chartInfo
-        ));
-    }
+    //     return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
+    //         "notices"    => $notices,
+    //         'isBinded'   => $isBinded,
+    //         'cashInfo'   => $cashInfo,
+    //         'couponInfo' => $couponInfo,
+    //         'videoInfo'  => $videoInfo,
+    //         'liveInfo'   => $liveInfo,
+    //         'smsInfo'    => $smsInfo,
+    //         'emailInfo'  => $emailInfo,
+    //         'chartInfo'  => $chartInfo
+    //     ));
+    // }
 
-    public function generateChartData($info)
-    {
-        if (empty($info)) {
-            $info = array();
-        }
+    // protected function generateChartData($info)
+    // {
+    //     if (empty($info)) {
+    //         $info = array();
+    //     }
 
-        $chartInfo = array();
+    //     $chartInfo = array();
 
-        foreach ($info as $key => $value) {
-            $chartInfo[] = '{"date":"'.$key.'","count":'.$value.'}';
-        }
+    //     foreach ($info as $key => $value) {
+    //         $chartInfo[] = '{"date":"'.$key.'","count":'.$value.'}';
+    //     }
 
-        return '['.implode(',', $chartInfo).']';
-    }
+    //     return '['.implode(',', $chartInfo).']';
+    // }
 
     // public function getContent($content)
     // {
@@ -276,22 +240,22 @@ class AppController extends BaseController
     //     return $content;
     // }
 
-    protected function isLocalAddress($address)
-    {
-        if (in_array($address, array('localhost', '127.0.0.1'))) {
-            return true;
-        }
+    // protected function isLocalAddress($address)
+    // {
+    //     if (in_array($address, array('localhost', '127.0.0.1'))) {
+    //         return true;
+    //     }
 
-        if (strpos($address, '192.168.') === 0) {
-            return true;
-        }
+    //     if (strpos($address, '192.168.') === 0) {
+    //         return true;
+    //     }
 
-        if (strpos($address, '10.') === 0) {
-            return true;
-        }
+    //     if (strpos($address, '10.') === 0) {
+    //         return true;
+    //     }
 
-        return false;
-    }
+    //     return false;
+    // }
 
     public function centerAction(Request $request, $postStatus)
     {
@@ -474,18 +438,18 @@ class AppController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
+    // protected function getSettingService()
+    // {
+    //     return $this->getServiceKernel()->createService('System.SettingService');
+    // }
 
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    private function getWebExtension()
-    {
-        return $this->container->get('topxia.twig.web_extension');
-    }
+    // private function getWebExtension()
+    // {
+    //     return $this->container->get('topxia.twig.web_extension');
+    // }
 }
