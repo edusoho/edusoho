@@ -1,6 +1,8 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\User\CurrentUser;
 use Topxia\System;
 use Topxia\Common\BlockToolkit;
 use Symfony\Component\Finder\Finder;
@@ -46,6 +48,8 @@ class MoocBuildCommand extends BaseCommand
         $this->input  = $input;
         $this->output = $output;
 
+        $this->initServiceKernel();
+
         $this->rootDirectory  = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
         $this->buildDirectory = $this->rootDirectory.'/build';
 
@@ -57,6 +61,22 @@ class MoocBuildCommand extends BaseCommand
 
         $this->distDirectory = $this->buildDirectory.'/edusoho';
         $this->filesystem->mkdir($this->distDirectory);
+    }
+
+    private function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', false);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+
+        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
     }
 
     private function package()
