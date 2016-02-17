@@ -2280,6 +2280,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $member;
     }
 
+    public function updateCourseMemberJoinedType($id, $joinedType)
+    {
+        $fields = array('joinedType' => $joinedType);
+        $member = $this->getMemberDao()->updateMember($id, $fields);
+        return $member;
+    }
+
     public function createMemberByClassroomJoined($courseId, $userId, $classRoomId, array $info = array())
     {
         $fields = array(

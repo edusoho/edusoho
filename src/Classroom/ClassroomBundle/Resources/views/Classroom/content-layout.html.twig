@@ -4,10 +4,18 @@
 {% endblock %}
 {% block title %}{{ parent() }}{% endblock %}
 {% block content %}
+
+{% if is_plugin_installed('GroupSell') %}
+{% block  classroom_group %}
+  {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'classroom',targetId:classroom.id})) }}
+{% endblock %}
+{% endif %}
+
 <div class="class-detail row" id="detail-content">
   <div class="col-lg-9 col-md-8 class-detail-main">
 
     {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:classroom,targetType:'classroom'})) }}
+
 
     <section class="es-section">
       {% if nav is defined %}

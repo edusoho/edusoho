@@ -89,6 +89,8 @@ interface CourseService
 
     public function revertCoursesPriceWithDiscount($discountId);
 
+    public function updateCourseMemberJoinedType($id, $joinedType);
+
     /**
      * 删除课程
      */

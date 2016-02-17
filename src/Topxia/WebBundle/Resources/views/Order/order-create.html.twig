@@ -38,6 +38,9 @@
         {% if targetType == "classroom" %}
           {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
         {% endif %}
+        {% if targetType == "groupSell" %}
+          {% include 'GroupSellBundle:GroupSell:Order/group_sell.html.twig' %}
+        {% endif %}
         </div>
 
      

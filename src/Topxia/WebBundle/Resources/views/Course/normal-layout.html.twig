@@ -15,6 +15,12 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if is_plugin_installed('GroupSell') %}
+  {% block  classroom_group %}
+    {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'course',targetId:course.id})) }}  
+  {% endblock %}
+  {% endif %}
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
 
