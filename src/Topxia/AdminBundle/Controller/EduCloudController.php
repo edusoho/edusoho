@@ -66,7 +66,7 @@ class EduCloudController extends BaseController
 
             if ($this->getWebExtension()->isTrial()) {
                 $trialHtml = $this->getCloudCenterExperiencePage();
-                return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+                return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                     'articles' => $articles,
                     'trial'    => $trialHtml['content']
                 ));
@@ -74,7 +74,7 @@ class EduCloudController extends BaseController
 
             $unTrial     = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
             $unTrialHtml = json_decode($unTrial, true);
-            return $this->render('TopxiaAdminBundle:App:cloud.html.twig', array(
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                 'articles' => $articles,
                 'untrial'  => $unTrialHtml['content']
             ));
@@ -101,8 +101,9 @@ class EduCloudController extends BaseController
 
             $eduSohoOpenClient = new EduSohoOpenClient;
             $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            //var_dump($content);
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
         //$content = $this->getContent($content);
@@ -130,7 +131,7 @@ class EduCloudController extends BaseController
             $trialHtml = $this->getCloudCenterExperiencePage();
         }
 
-        return $this->render('TopxiaAdminBundle:App:my-cloud.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
             "notices"    => $notices,
             'isBinded'   => $isBinded,
             'cashInfo'   => $cashInfo,
@@ -180,7 +181,7 @@ class EduCloudController extends BaseController
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:App:api-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
 
         // $content = $api->get("/user/center/{$api->getAccessKey()}/overview");
@@ -376,7 +377,7 @@ class EduCloudController extends BaseController
                 'smsStatus' => $smsStatus
             ));
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
     }
 
@@ -400,7 +401,7 @@ class EduCloudController extends BaseController
                 'emailStatus' => $emailStatus
             ));
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
         }
     }
 
@@ -464,7 +465,7 @@ class EduCloudController extends BaseController
 
             $bills = $result['items'];
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+            return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:sms-bill.html.twig', array(
