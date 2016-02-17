@@ -5,6 +5,7 @@ namespace Topxia\Service\Common\Annotations\Loader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\FileCacheReader;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\Annotations\Annotation;
 
 class AnnotationsLoader
 {
@@ -33,6 +34,9 @@ class AnnotationsLoader
         $collection = array();
         foreach ($class->getMethods() as $method) {
             foreach (self::$reader->getMethodAnnotations($method) as $annot) {
+                if (!$annot instanceof Annotation) {
+                    throw new \InvalidArgumentException(sprintf('"%s" must be instance of Topxia\Service\Common\Annotations\Annotation.', get_class($annot)));
+                }
                 $collection[$method->getName()] = $annot;
             }
         }

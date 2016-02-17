@@ -56,7 +56,7 @@ class ProxyFramework
         if (array_key_exists($name, $this->annotations)) {
             $annot = $this->annotations[$name];
 
-            $aspect = empty($annot->get('aspect')) ? 'before' : $annot->get('aspect');
+            $aspect = $annot->getAspect();
 
             switch ($aspect) {
                 case 'before':

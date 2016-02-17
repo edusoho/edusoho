@@ -33,4 +33,14 @@ class Annotation
         }
         throw new \RuntimeException("{$name} is not exist in ".get_class($this));
     }
+
+    public function getAspect()
+    {
+        if (array_key_exists('aspect', $this->data)
+            && in_array($this->data['aspect'], array('before', 'after', 'around'))) {
+            return $this->data['aspect'];
+        }
+
+        return 'before';
+    }
 }
