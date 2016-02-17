@@ -193,7 +193,7 @@ class EduCloudController extends BaseController
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
-        return $this->render('TopxiaAdminBundle:CloudSetting:video.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
             'videoInfo'      => $videoInfo,
@@ -498,7 +498,7 @@ class EduCloudController extends BaseController
             $info['error'] = 'error';
         }
 
-        return $this->render('TopxiaAdminBundle:CloudSetting:key.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud:key.html.twig', array(
             'info' => $info
         ));
     }
@@ -530,7 +530,7 @@ class EduCloudController extends BaseController
             $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
         }
 
-        return $this->render('TopxiaAdminBundle:CloudSetting:key-license-info.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud:key-license-info.html.twig', array(
             'info'           => $info,
             'currentHost'    => $currentHost,
             'isLocalAddress' => $this->isLocalAddress($currentHost)
@@ -592,7 +592,7 @@ class EduCloudController extends BaseController
         }
 
         render:
-        return $this->render('TopxiaAdminBundle:CloudSetting:key-update.html.twig', array(
+        return $this->render('TopxiaAdminBundle:EduCloud:key-update.html.twig', array(
         ));
     }
 
