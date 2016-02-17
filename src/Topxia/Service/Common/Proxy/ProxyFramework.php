@@ -3,6 +3,7 @@
 namespace Topxia\Service\Common\Proxy;
 
 use Topxia\Service\Common\Annotations\Loader\AnnotationsLoader;
+
 /**
  * 代理框架.
  */
@@ -42,7 +43,10 @@ class ProxyFramework
     }
     /**
      * 调用类方法.
-     * 目前的注解只实现了方法前调用，后期可以通过注解传参的方式实现方法后调用
+     * 通过注解传入aspect参数控制注解的执行顺序，默认是before
+     * before:方法前执行
+     * around:将方法的执行交给注解类处理，用了该参数的方法只能使用一个注解
+     * after:方法后执行
      *
      * @param type $name
      * @param type $arguments
@@ -51,7 +55,26 @@ class ProxyFramework
     {
         if (array_key_exists($name, $this->annotations)) {
             $annot = $this->annotations[$name];
-            $annot->invoke($this->object, $name, $arguments);
+
+            $aspect = empty($annot->get('aspect')) ? 'before' : $annot->get('aspect');
+
+            switch ($aspect) {
+                case 'before':
+                    $annot->invoke($this->object, $name, $arguments);
+                    return call_user_func_array(array($this->object, $name), $arguments);
+                    break;
+                case 'around':
+                    return $annot->invoke($this->object, $name, $arguments);
+                    break;
+                case 'after':
+                    $result = call_user_func_array(array($this->object, $name), $arguments);
+                    $annot->invoke($this->object, $name, $arguments);
+                    return $result;
+                    break;
+                default:
+                    break;
+            }
+            
         }
 
         return call_user_func_array(array($this->object, $name), $arguments);
