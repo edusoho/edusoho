@@ -138,7 +138,7 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         $group = $this->getGroupSellService()->getGroupSell($order['targetId']);
         $targetType = $group['type'];
         if($targetType == 'course'){
-            $router = "my_course_learing";
+            $router = "my_courses_learning";
         }elseif($targetType == 'classroom'){
             $router = "my_classrooms";
         }else{
