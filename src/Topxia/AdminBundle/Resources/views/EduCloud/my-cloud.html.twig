@@ -22,10 +22,10 @@
   }
 </style>
       <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
-        {% if videoInfo.locked|default(0) == 1 %}
+        {% if locked|default(0) == 1 %}
           <div class="alert alert-warning" role="alert">您的教育云服务已被锁定，请联系客服人员：0571-86819929。</div>
         {% endif %}
-        {% if videoInfo.enable|default(1) == 0 %}
+        {% if enabled|default(1) == 0 %}
           <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
         {% endif %}
          <ul class="nav nav-tabs mbl">
@@ -45,7 +45,7 @@
         {% endif %}
       {% else %}
         <div class="eduyun-main">
-        {% if videoInfo.enable|default(1) == 0 %}
+        {% if enabled|default(1) == 0 %}
           <div class="mask"></div>
         {% endif %}
 
@@ -129,7 +129,7 @@
           </div>
 
           <!--账户余额-->
-          {% include 'TopxiaAdminBundle:App:cloud-account.html.twig'  %}
+          {% include 'TopxiaAdminBundle:EduCloud:cloud-account.html.twig'  %}
 
           
           {#
@@ -171,7 +171,7 @@
             <!-- </div> -->
           <div class="edu-service row">
             <!-- 云视频包状态 -->
-            {% include 'TopxiaAdminBundle:App:cloud-storage.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-storage.html.twig'  %}
             <!-- <div class="col-md-6">
               <div class="panel panel-default">
                 <div class="panel-heading">
@@ -182,22 +182,22 @@
             </div> -->
 
             <!-- 云视频使用情况（最近七个月） -->
-            {% include 'TopxiaAdminBundle:App:cloud-storage-chart.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-storage-chart.html.twig'  %}
 
             <!-- 云直播信息 -->
-            {% include 'TopxiaAdminBundle:App:cloud-live.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-live.html.twig'  %}
 
             <!-- 参与直播人数（最近七天） -->
-            {% include 'TopxiaAdminBundle:App:cloud-live-chart.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-live-chart.html.twig'  %}
 
             <!-- 云短信信息 -->
-            {% include 'TopxiaAdminBundle:App:cloud-sms.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-sms.html.twig'  %}
 
             <!-- 云短信使用情况（最近七天） -->
-            {% include 'TopxiaAdminBundle:App:cloud-sms-chart.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-sms-chart.html.twig'  %}
 
             <!-- 云邮件使用情况（最近七天） -->
-            {% include 'TopxiaAdminBundle:App:cloud-email-chart.html.twig'  %}
+            {% include 'TopxiaAdminBundle:EduCloud:cloud-email-chart.html.twig'  %}
           </div>
           
         </div>

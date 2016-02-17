@@ -133,7 +133,9 @@ class EduCloudController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
-            "notices"    => $notices,
+            'locked'     => isset($info['locked']) ? $info['locked'] : 0,
+            'enabled'    => isset($info['enabled']) ? $info['enabled'] : 1,
+            'notices'    => $notices,
             'isBinded'   => $isBinded,
             'cashInfo'   => $cashInfo,
             'couponInfo' => $couponInfo,
@@ -397,8 +399,13 @@ class EduCloudController extends BaseController
         }
 
         try {
+            $api = CloudAPIFactory::create('root');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $info        = $api->get('/me');
             $emailStatus = $this->handleEmailSetting($request);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
+                'locked'      => isset($info['locked']) ? isset($info['locked']) : 0,
+                'enabled'     => isset($info['enabled']) ? isset($info['enabled']) : 1,
                 'emailStatus' => $emailStatus
             ));
         } catch (\RuntimeException $e) {
