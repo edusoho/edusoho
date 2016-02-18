@@ -1,8 +1,9 @@
 <?php
 
 namespace Topxia\Api;
-use Topxia\Service\Common\ServiceKernel;
+
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiAuth
@@ -17,6 +18,7 @@ class ApiAuth
     public function auth(Request $request)
     {
         $token = $request->headers->get('X-Auth-Token');
+
         if (empty($token)) {
             // 兼容老的协议，即将去除
             $token = $request->headers->get('Auth-Token', '');
@@ -25,23 +27,21 @@ class ApiAuth
         $method = strtolower($request->headers->get('X-Auth-Method'));
 
         if ($method == 'keysign') {
-
             $decoded = $this->decodeKeysign($token);
 
             $this->setCurrentUser(array(
-                'id' => 0,
-                'nickname' => '游客',
-                'currentIp' =>  $request->getClientIp(),
-                'roles' => array(),
+                'id'        => 0,
+                'nickname'  => '游客',
+                'currentIp' => $request->getClientIp(),
+                'roles'     => array()
             ));
-
         } else {
-
             $whilelist = isset($this->whilelist[$request->getMethod()]) ? $this->whilelist[$request->getMethod()] : array();
 
             $path = rtrim($request->getPathInfo(), '/');
 
             $inWhiteList = 0;
+
             foreach ($whilelist as $pattern) {
                 if (preg_match($pattern, $path)) {
                     $inWhiteList = 1;
@@ -60,6 +60,7 @@ class ApiAuth
             }
 
             $user = $this->getUserService()->getUser($token['userId']);
+
             if (!$inWhiteList && empty($user)) {
                 throw new \RuntimeException('登录用户不存在！');
             }
@@ -70,22 +71,24 @@ class ApiAuth
 
             $this->setCurrentUser($user);
         }
-
     }
 
     public function decodeKeysign($token)
     {
         $token = explode(':', $token);
+
         if (count($token) != 3) {
             throw new \RuntimeException('API Token格式不正确！');
         }
 
         list($accessKey, $policy, $sign) = $token;
+
         if (empty($accessKey) || empty($policy) || empty($sign)) {
             throw new \RuntimeException('API Token不正确！');
         }
 
         $settings = $this->getSettingService()->get('storage', array());
+
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
             throw new \RuntimeException("系统尚未配置AccessKey/SecretKey");
         }
@@ -95,11 +98,13 @@ class ApiAuth
         }
 
         $expectedSign = $this->encodeBase64(hash_hmac('sha1', $policy, $settings['cloud_secret_key'], true));
+
         if ($sign != $expectedSign) {
             throw new \RuntimeException("API Token 签名不正确！");
         }
 
         $policy = json_decode($this->decodeBase64($policy), true);
+
         if (empty($policy)) {
             throw new \RuntimeException("API Token 解析失败！");
         }
@@ -116,17 +121,17 @@ class ApiAuth
         $settings = $this->getSettingService()->get('storage', array());
 
         $policy = array(
-            'method' => $request->getMethod(),
-            'uri' => $request->getRequestUri(),
-            'role' => $role,
-            'deadline' => time() + $lifetime,
+            'method'   => $request->getMethod(),
+            'uri'      => $request->getRequestUri(),
+            'role'     => $role,
+            'deadline' => time() + $lifetime
         );
 
         $encoded = $this->encodeBase64(json_encode($policy));
 
         $sign = hash_hmac('sha1', $encoded, $settings['cloud_secret_key'], true);
 
-        return $settings['cloud_access_key'] .':' . $encoded . ':' . $this->encodeBase64($sign);
+        return $settings['cloud_access_key'].':'.$encoded.':'.$this->encodeBase64($sign);
     }
 
     private function getSettingService()
@@ -141,7 +146,7 @@ class ApiAuth
 
     private function encodeBase64($string)
     {
-        $find = array('+', '/');
+        $find    = array('+', '/');
         $replace = array('-', '_');
 
         return str_replace($find, $replace, base64_encode($string));
@@ -149,7 +154,7 @@ class ApiAuth
 
     private function decodeBase64($string)
     {
-        $find = array('-', '_');
+        $find    = array('-', '_');
         $replace = array('+', '/');
 
         return base64_decode(str_replace($find, $replace, $string));
@@ -158,17 +163,17 @@ class ApiAuth
     private function setCurrentUser($user)
     {
         $currentUser = new CurrentUser();
+
         if (empty($user)) {
             $user = array(
-                'id' => 0,
-                'nickname' => '游客',
-                'currentIp' =>  '',
-                'roles' => array(),
+                'id'        => 0,
+                'nickname'  => '游客',
+                'currentIp' => '',
+                'roles'     => array()
             );
         }
+
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
     }
-
-
 }
