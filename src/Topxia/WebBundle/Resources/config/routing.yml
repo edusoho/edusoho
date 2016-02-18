@@ -84,6 +84,10 @@ register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
 
+register_success:
+    pattern:  /register/success
+    defaults: { _controller: TopxiaWebBundle:Register:success }
+
 register_submited:
     pattern:  /register/submited/{id}/{hash}
     defaults: { _controller: TopxiaWebBundle:Register:submited }
