@@ -375,7 +375,14 @@ class EduCloudController extends BaseController
         }
 
         try {
-            $smsStatus = $this->handleSmsSetting($request);
+            // $info    = $api->get('/sms/account');
+            // $allInfo = $api->get('/me');
+            // var_dump($info);
+            //var_dump($allInfo);
+            $smsStatus = $this->newHandleSmsSetting($request);
+
+            //$smsStatus = $this->handleSmsSetting($request);
+            //var_dump($smsStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'smsStatus' => $smsStatus
             ));
@@ -404,8 +411,8 @@ class EduCloudController extends BaseController
             $info        = $api->get('/me');
             $emailStatus = $this->handleEmailSetting($request);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
-                'locked'      => isset($info['locked']) ? isset($info['locked']) : 0,
-                'enabled'     => isset($info['enabled']) ? isset($info['enabled']) : 1,
+                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
+                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
                 'emailStatus' => $emailStatus
             ));
         } catch (\RuntimeException $e) {
@@ -573,7 +580,7 @@ class EduCloudController extends BaseController
             $options = $request->request->all();
 
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://115.29.78.158:10001/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
@@ -645,9 +652,81 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
+    protected function newHandleSmsSetting(Request $request)
+    {
+        $api = CloudAPIFactory::create('root');
+        $api->setApiUrl('http://115.29.78.158:10001/');
+        $defaultSetting = array(
+            'sms_enabled'               => '0',
+            'sms_registration'          => 'off',
+            'sms_forget_password'       => 'off',
+            'sms_user_pay'              => 'off',
+            'sms_forget_pay_password'   => 'off',
+            'sms_bind'                  => 'off',
+            'sms_classroom_publish'     => 'off',
+            'sms_course_publish'        => 'off',
+            'sms_normal_lesson_publish' => 'off',
+            'sms_live_lesson_publish'   => 'off',
+            'sms_live_play_one_day'     => 'off',
+            'sms_live_play_one_hour'    => 'off',
+            'sms_homework_check'        => 'off',
+            'sms_testpaper_check'       => 'off',
+            'sms_order_pay_success'     => 'off',
+            'sms_course_buy_notify'     => 'off',
+            'sms_classroom_buy_notify'  => 'off',
+            'sms_vip_buy_notify'        => 'off',
+            'sms_coin_buy_notify'       => 'off'
+        );
+        $dataUserPosted = $request->request->all();
+        $settings       = $this->getSettingService()->get('cloud_sms', array());
+        $smsStatus      = array();
+
+        if (isset($dataUserPosted['sms-open'])) {
+            $info = $api->post('/sms/account', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
+
+            if ($info['status'] == 'ok') {
+                $status = $api->get('/sms/account');
+                // var_dump($status);
+                $smsStatus['sms_enabled']     = '1';
+                $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
+                $smsStatus                    = array_merge($settings, $smsStatus);
+                $smsStatus['sms_school_name'] = $status['name'];
+                $smsStatus['status']          = 'enabled';
+                $this->getSettingService()->set('cloud_sms', $smsStatus);
+                return $smsStatus;
+            }
+        }
+
+        if (isset($dataUserPosted['sms-close'])) {
+            $info = $api->post('/sms/account_disable');
+
+            if ($info['status'] == 'ok') {
+                $smsStatus['sms_enabled'] = '0';
+                $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
+                $smsStatus                = array_merge($settings, $smsStatus);
+                $smsStatus['status']      = 'disable';
+                $this->getSettingService()->set('cloud_sms', $smsStatus);
+                return $smsStatus;
+            }
+        }
+
+        var_dump($dataUserPosted);
+
+        if (isset($dataUserPosted['sign'])) {
+            $info = $api->post('/sms/account/me', array('name' => $dataUserPosted['sign']));
+
+            if ($info['status'] == 'ok') {
+            }
+        }
+
+        var_dump($settings);
+        return $settings;
+    }
+
     protected function handleSmsSetting(Request $request)
     {
         list($smsStatus, $schoolNames) = $this->getSchoolName();
+        $smsInfo                       = $this->getSettingService()->get('cloud_sms', array());
 
         if ($request->getMethod() == 'POST') {
             $dataUserPosted = $request->request->all();
@@ -686,9 +765,8 @@ class EduCloudController extends BaseController
             }
 
             $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
-
             $dataUserPosted = array_merge($dataUserPosted, $schoolNames);
-
+            var_dump($dataUserPosted);
             $this->getSettingService()->set('cloud_sms', $dataUserPosted);
 
             if ('1' == $dataUserPosted['sms_enabled']) {
@@ -777,11 +855,12 @@ class EduCloudController extends BaseController
     {
         $schoolName          = $this->setting('cloud_sms.sms_school_name');
         $schoolCandidateName = $this->setting('cloud_sms.sms_school_candidate_name');
-
+        // var_dump($schoolName);
+        // var_dump($schoolCandidateName);
         $api = CloudAPIFactory::create('root');
-        $api->setApiUrl('http://124.160.104.74:8098/');
+        $api->setApiUrl('http://115.29.78.158:10001/');
         $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
-        var_dump($result);
+        // var_dump($result);
         $smsStatus = array();
 
         if (isset($result['apply']) && isset($result['apply']['status'])) {

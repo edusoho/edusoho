@@ -37,6 +37,11 @@ define(function(require, exports, module) {
 			});
 			
 		}
+        $("[name='sign-update']").on('click',function(){
+        	$("[name='submit-sign']").show();
+        	$("[name='status']").hide();
+        });
+
 	}
 	
 });
