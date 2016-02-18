@@ -16,16 +16,21 @@ class StatusEventSubscriber implements EventSubscriberInterface
 
     public function onThreadPostCreate(ServiceEvent $event)
     {
-        $post = $event->getSubject();
-
+        $post   = $event->getSubject();
         $thread = $this->getThreadService()->getThread($post['courseId'], $post['threadId']);
-
-        $isTeacher = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']);
 
         $course = $this->getCourseService()->getCourse($post['courseId']);
 
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->findClassroomIdsByCourseId($course['id']);
+            $isTeacher = $this->getClassroomService()->isClassroomTeacher($classroom['id'], $post['userId']);
+        } else {
+            $isTeacher = $this->getCourseService()->isCourseTeacher($post['courseId'], $post['userId']);
+        }
+
         if ($isTeacher && $thread['type'] == 'question') {
             $this->getStatusService()->publishStatus(array(
+                'userId'     => $thread['userId'],
                 'courseId'   => $post['courseId'],
                 'type'       => 'teacher_thread_post',
                 'objectType' => 'thread_post',
@@ -52,5 +57,10 @@ class StatusEventSubscriber implements EventSubscriberInterface
     protected function getThreadService()
     {
         return ServiceKernel::instance()->createService('Course.ThreadService');
+    }
+
+    protected function getClassroomService()
+    {
+        return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
     }
 }

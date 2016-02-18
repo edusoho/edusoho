@@ -224,6 +224,7 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
         }
 
         $this->getStatusService()->publishStatus(array(
+            'userId'      => $testpaperResult['userId'],
             'courseId'    => $course['id'],
             'classroomId' => $classroom ? $classroom['id'] : 0,
             'type'        => $type,

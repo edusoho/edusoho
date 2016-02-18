@@ -33,7 +33,6 @@ $app->get(_u('/articles/{id}'), 'res.Article:get');
 $app->get(_u('/article_categories'), 'res.ArticleCategories:get');
 
 $app->get(_u('/courses/{courseId}/members'), 'res.CourseMembers:get');
-$app->get(_u('/courses/{courseId}/status'), 'res.Status:get');
 
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
@@ -59,3 +58,5 @@ $app->post(_u('/homework_results/{homeworkId}'), 'res.HomeworkResult:post');
 $app->get(_u('/homework_results/{lessonId}'), 'res.HomeworkResult:get');
 
 $app->post(_u('/upload/{group}'), 'res.Upload:post');
+
+$app->get(_u('/user/{userId}/status/{courseId}'), 'res.Status:get');

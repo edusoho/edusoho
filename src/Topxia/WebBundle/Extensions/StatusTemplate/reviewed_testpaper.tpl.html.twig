@@ -1,8 +1,7 @@
 {% set props = status.properties %}
-{% set user = data('User',{'userId':props.result.userId}) %}
 
 {% if mode == 'simple' %}
-  <a class="link-dark" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>的试卷 "{{ props.testpaper.name|sub_text(15)}}"已被批阅  
+  的试卷 "{{ props.testpaper.name|sub_text(15)}}"已被批阅  
 {% elseif mode == 'full' %}
 
 {% endif %}

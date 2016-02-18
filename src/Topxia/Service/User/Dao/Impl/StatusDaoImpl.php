@@ -9,12 +9,12 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     protected $table = 'status';
 
     private $serializeFields = array(
-        'properties' => 'json',
+        'properties' => 'json'
     );
 
     public function getStatus($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $sql    = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
         $status = $this->getConnection()->fetchAssoc($sql, array($id));
         return $status ? $this->createSerializer()->unserialize($status, $this->serializeFields) : null;
     }
@@ -22,29 +22,31 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     public function searchStatusesCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-             ->select('COUNT(id)');
+                        ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
 
     public function findStatusesByUserIds($userIds, $start, $limit)
     {
-        if(empty($userIds)){
+        if (empty($userIds)) {
             return array();
         }
-        $marks = str_repeat('?,', count($userIds) - 1) . '?';
-        $sql ="SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
+
+        $marks    = str_repeat('?,', count($userIds) - 1).'?';
+        $sql      = "SELECT * FROM {$this->table} WHERE userId IN ({$marks});";
         $statuses = $this->getConnection()->fetchAll($sql, $userIds);
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
 
     public function findStatusesByUserIdsCount($userIds)
     {
-        if(empty($userIds)){
+        if (empty($userIds)) {
             return array();
         }
-        $marks = str_repeat('?,', count($userIds) - 1) . '?';
-        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE userId IN ({$marks});";
+
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $sql   = "SELECT COUNT(*) FROM {$this->table} WHERE userId IN ({$marks});";
 
         $this->getConnection()->fetchColumn($sql, $userIds);
     }
@@ -55,36 +57,39 @@ class StatusDaoImpl extends BaseDao implements StatusDao
         $this->checkOrderBy($orderBy, array('createdTime'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy($orderBy[0], $orderBy[1]);
+                        ->select('*')
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit)
+                        ->orderBy($orderBy[0], $orderBy[1]);
 
-        $statuses = $builder->execute()->fetchAll() ? : array();
+        $statuses = $builder->execute()->fetchAll() ?: array();
 
         return $this->createSerializer()->unserializes($statuses, $this->serializeFields);
     }
 
     protected function _createSearchQueryBuilder($conditions)
     {
-        return  $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, $this->table)
-            ->andWhere('courseId = :courseId')
-            ->andWhere('courseId IN ( :courseIds )')
-            ->andWhere('courseId IN ( :classroomCourseIds ) OR classroomId = :classroomId')
-            ->andWhere('classroomId = :onlyClassroomId')
-            ->andWhere('objectType = :objectType')
-            ->andWhere('objectId = :objectId')
-            ->andWhere('private = :private');
+        return $this->createDynamicQueryBuilder($conditions)
+                    ->from($this->table, $this->table)
+                    ->andWhere('courseId = :courseId')
+                    ->andWhere('courseId IN ( :courseIds )')
+                    ->andWhere('courseId IN ( :classroomCourseIds ) OR classroomId = :classroomId')
+                    ->andWhere('classroomId = :onlyClassroomId')
+                    ->andWhere('objectType = :objectType')
+                    ->andWhere('objectId = :objectId')
+                    ->andWhere('userId = :userId')
+                    ->andWhere('private = :private');
     }
 
     public function addStatus($fields)
     {
-        $fields = $this->createSerializer()->serialize($fields, $this->serializeFields);
+        $fields   = $this->createSerializer()->serialize($fields, $this->serializeFields);
         $affected = $this->getConnection()->insert($this->table, $fields);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert status error.');
         }
+
         return $this->getStatus($this->getConnection()->lastInsertId());
     }
 
@@ -99,25 +104,25 @@ class StatusDaoImpl extends BaseDao implements StatusDao
     {
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
-    
+
     public function deleteStatusesByUserIdAndTypeAndObject($userId, $type, $objectType, $objectId)
     {
         return $this->getConnection()->delete($this->table, array(
-            'userId' => $userId,
-            'type' =>$type,
-            'objectType'=>$objectType,
-            'objectId'=>$objectId
-            ));
+            'userId'     => $userId,
+            'type'       => $type,
+            'objectType' => $objectType,
+            'objectId'   => $objectId
+        ));
     }
 
     public function deleteStatusesByCourseIdAndTypeAndObject($courseId, $type, $objectType, $objectId)
     {
         return $this->getConnection()->delete($this->table, array(
-            'courseId' => $courseId,
-            'type' =>$type,
-            'objectType'=>$objectType,
-            'objectId'=>$objectId
-            ));
+            'courseId'   => $courseId,
+            'type'       => $type,
+            'objectType' => $objectType,
+            'objectId'   => $objectId
+        ));
     }
 
     public function findStatusesByCourseId($courseId)
