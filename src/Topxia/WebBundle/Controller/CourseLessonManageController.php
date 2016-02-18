@@ -311,20 +311,16 @@ class CourseLessonManageController extends BaseController
     {
         $lesson = $this->getCourseService()->getLesson($lessonId);
         $course = $this->getCourseService()->getCourse($courseId);
-        $media  = array();
-
-        $files = $request->request->get('files');
-        $file = $files['$lesson.mediaId'];
+        $file   = array();
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
-            $media = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
         }
 
         return $this->Render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-            'lesson'   => $lesson,
+            'lesson' => $lesson,
             'course' => $course,
-            'media'  => $media,
-            'file' => $file
+            'file'   => $file
         ));
     }
 
@@ -358,26 +354,11 @@ class CourseLessonManageController extends BaseController
             $mediaMap[$item['mediaId']][] = $item['id'];
         }
 
-        $mediaIds = array_keys($mediaMap);
-
-        $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
-
-        foreach ($files as $file) {
-            $lessonIds = $mediaMap[$file['id']];
-
-            foreach ($lessonIds as $lessonId) {
-                $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
-            }
-        }
-
-        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
             'course'    => $course,
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
-            'homeworks' => empty($homeworks) ? array() : $homeworks,
-            'files'     => ArrayToolkit::index($files, 'id'),
-            'default'   => $default
+            'homeworks' => empty($homeworks) ? array() : $homeworks
         ));
     }
 
