@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class MobileAppController extends MobileBaseController
 {
-	const API_VERSIN = '1.3.7';
+	const API_VERSIN = '1.4.5';
 
 	public function indexAction(Request $request)
 	{
