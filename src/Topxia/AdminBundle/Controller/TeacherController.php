@@ -52,7 +52,6 @@ class TeacherController extends BaseController
         $type = $request->query->get('type');
 
         if ($request->getMethod() == 'POST') {
-            $type   = $request->request->get('type');
             $number = $request->request->get('number');
             $user   = $this->getUserService()->promoteUser($id, $number);
 
