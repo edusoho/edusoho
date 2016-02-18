@@ -307,6 +307,27 @@ class CourseLessonManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function statusLabelAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $media  = array();
+
+        $files = $request->request->get('files');
+        $file = $files['$lesson.mediaId'];
+
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
+            $media = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return $this->Render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+            'lesson'   => $lesson,
+            'course' => $course,
+            'media'  => $media,
+            'file' => $file
+        ));
+    }
+
     public function indexAction(Request $request, $id)
     {
         $course      = $this->getCourseService()->tryManageCourse($id);
