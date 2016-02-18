@@ -44,7 +44,7 @@
             </list-empty-view>
             <ul class="ui-list ui-list-pure ui-border-t">
                 <li ng-repeat="homeworkResult in teachingResult.homeworkResults">
-                    <div class="ui-list-info ui-border-t">
+                    <div class="ui-list-info ui-border-t" ng-click="showHomeWorkResult(homeworkResult)">
                         <h2 class="ui-nowrap">{{ homeworkResult.lessonTitle }}</h2>
 
                         <div class="bottom">

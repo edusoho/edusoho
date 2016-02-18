@@ -410,6 +410,10 @@ function HomeworkTeachingController($scope, $stateParams, HomeworkManagerService
 		return data;
 	};
 
+	$scope.showHomeWorkResult = function(homeworkResult) {
+		alert("暂不支持在客户端批改作业");
+	};
+
 	$scope.initTeachingResult = function() {
 		HomeworkManagerService.teachingResult({
 			start : 3,
