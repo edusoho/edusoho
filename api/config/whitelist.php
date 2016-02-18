@@ -6,6 +6,7 @@ return array(
         '/^\/api\/users\/pages$/',
         '/^\/api\/users\/\d+$/',
         '/^\/api\/mobileschools\/.+$/',
+        '/^\/api\/classrooms\/\w+\/members$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',

@@ -656,11 +656,12 @@ class ClassRoomProcessorImpl extends BaseProcessor implements ClassRoomProcessor
             $conditions['categoryIds'] = $categoryIds;
         }
 
+        $conditions['recommended'] = ($sort == 'recommendedSeq') ? 1 : null;
         $total = $this->getClassroomService()->searchClassroomsCount($conditions);
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
                 $conditions,
-                array($sort,'desc'),
+                array($sort, 'desc'),
                 $start,
                 $limit
         );
