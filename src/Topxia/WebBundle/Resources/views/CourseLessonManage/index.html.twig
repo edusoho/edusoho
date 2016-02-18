@@ -47,7 +47,8 @@
 			  {% if 'chapter' in id %}
 			    {% include 'TopxiaWebBundle:CourseChapterManage:list-item.html.twig' with {chapter: item} %}
 			  {% elseif 'lesson' in id  %}
-			    {% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
+			  	{{ render(controller('TopxiaWebBundle:CourseLessonManage:statusLabel', {courseId:course.id,lessonId:item.id})) }}
+			    
 			  {#
 			  {% elseif  item.type == 'testpaper'  %}
 			      {% include 'TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
