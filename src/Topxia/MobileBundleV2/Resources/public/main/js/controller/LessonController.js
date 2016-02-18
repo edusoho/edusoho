@@ -102,8 +102,8 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
       if (!$scope.user) {
         var dia = $.dialog({
                 title : '课程提醒' ,
-                content : '你还未登陆网校',
-                button : [ "登陆网校" ]
+                content : '你还未登录网校',
+                button : [ "登录网校" ]
         });
 
         dia.on("dialog:action",function(e){
