@@ -1,0 +1,35 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %} 
+添加敏感词
+{% endblock %}
+{% block body %}
+  <form class="form-horizontal" id="keyword-form" action="{{ path('admin_keyword_create') }}" method="post">
+    <div class="row form-group">
+      <label class="col-md-3 control-label" for="keyword-name-field">敏感词</label>
+      <div class="col-md-6 controls">
+        <textarea style="resize:vertical;height:250px;" class="form-control" id="keyword-name-field"  name="name" onfocus="if(value=='换行可一次添加多个敏感词'){value=''}"  
+        onblur="if (value ==''){value='换行可一次添加多个敏感词'}">换行可一次添加多个敏感词</textarea> 
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3 control-label">
+        <label for="keyword-name-field">敏感词类型</label>
+      </div>
+      <div class="col-md-7 controls radios">
+        <input type="radio" id="replaced" name="state" class="state" value="replaced" checked="checked" data-text="选择屏蔽，会将指定敏感词替换为'*'。">
+        <label for="replaced">屏蔽</label>
+        <input type="radio" id="banned" name="state" calss="state" value="banned" data-text="选择禁用，将无法保存。">
+        <label for="banned">禁用</label>
+        <p class="help-block">选择屏蔽，会将指定敏感词替换为"*"。</p>
+      </div>
+
+    </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+  </form>
+{% endblock %}
+
+{% block footer %}
+  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+  <button id="keyword-add-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#keyword-form">添加</button>
+{% endblock %}

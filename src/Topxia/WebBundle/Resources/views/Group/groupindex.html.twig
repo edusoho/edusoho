@@ -7,7 +7,7 @@
 
 {% block group_main %}
   <div class="panel panel-default">
-    <div class="panel-heading">小组介绍</div>
+    <div class="panel-heading"><h3 class="panel-title">小组介绍</h3></div>
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
         <div class="well editor-text">
@@ -85,25 +85,25 @@
     <div class="panel panel-default">
       <div class="panel-body group-user-info">
         <div class="media group-item">
-          <div class="media-left prl">
+          <div class="media-left">
             {{ web_macro.user_avatar(user, '' ,'avatar-md') }}
           </div>
           <div class="media-body">
             <p>{{ web_macro.user_link(user , '') }}
 
               {% if is_groupmember==1%}
-              <span class="label label-default">组员</span>
+              <span class="label label-primary">组员</span>
               {% endif %} 
 
               {% if is_groupmember==2%} 
-              <span class="label label-danger">组长</span>  
+              <span class="label label-primary">组长</span>  
               {% endif %}
 
               {% if is_groupmember==3%} 
-              <span class="label label-info">副组长</span>  
+              <span class="label label-primary">副组长</span>  
               {% endif %}  
             </p>
-            <a href="{{ path ('group_member_center') }}" class="btn btn-info btn-sm" role="button">我的小组</a>
+            <a href="{{ path ('group_member_center') }}" class="btn btn-default btn-sm" role="button">我的小组</a>
           </div>
           <hr>
            <p class="group-message clearfix">
@@ -115,7 +115,7 @@
     </div>
   {% endif %}
   <div class="panel panel-default">
-    <div class="panel-heading">小组组长</div>
+    <div class="panel-heading"><h3 class="panel-title">小组组长</h3></div>
     <div class="panel-body">
       <div class="media group-item">
         <div class="media-left">
@@ -131,7 +131,7 @@
 
 
   <div class="panel panel-default">
-    <div class="panel-heading">新加组员</div>
+    <div class="panel-heading"><h3 class="panel-title">新加组员</h3></div>
     <div class="panel-body">
       {% if recentlyJoinMember %}
         <ul class="user-avatar-list clearfix">
@@ -148,9 +148,9 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading">热门小组</div>
+    <div class="panel-heading"><h3 class="panel-title">热门小组</h3></div>
     <div class="panel-body">
-      <div class="group-grids">
+      <div class="media-group-list">
       {% set hotGroups = data('HotGroup',{'count':3}) %}
       {% for group in hotGroups %}
         <div class="media media-group">

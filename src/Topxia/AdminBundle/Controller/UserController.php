@@ -31,6 +31,7 @@ class UserController extends BaseController
             $userCount,
             20
         );
+
         $users = $this->getUserService()->searchUsers(
             $conditions,
             array('createdTime', 'DESC'),
@@ -50,27 +51,25 @@ class UserController extends BaseController
             );
             $userIds = ArrayToolkit::column($userProfiles, 'id');
 
+            if (!empty($userIds)) {
+                unset($conditions['keywordType']);
+                unset($conditions['keyword']);
+                $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
+            }
+
+            $userCount = $this->getUserService()->searchUserCount($conditions);
+            $paginator = new Paginator(
+                $this->get('request'),
+                $userCount,
+                20
+            );
+
             $users = $this->getUserService()->searchUsers(
                 $conditions,
                 array('createdTime', 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
-
-            if (!empty($userIds)) {
-                unset($conditions['keywordType']);
-                unset($conditions['keyword']);
-                $conditions['userIds'] = $userIds;
-            }
-
-            $usersTemp = $this->getUserService()->searchUsers(
-                $conditions,
-                array('createdTime', 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-            $users = array_merge($users,$usersTemp);
-            
         }
 
         $app = $this->getAppService()->findInstallApp("UserImporter");

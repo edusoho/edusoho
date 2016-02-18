@@ -69,6 +69,7 @@ payment:
     wxpay: 微信支付
     heepay: 网银支付
     quickpay: 快捷支付
+    iosiap: 苹果应用内支付
 
 moneyRecordType:
     income: 充值
@@ -263,6 +264,7 @@ coinRecordType:
 
 coinOrderType:
     userName: 用户名
+    sn: 订单号
 
 discountType:
     discount: 限时打折
@@ -328,3 +330,15 @@ passedStatus:
     good: 良好
     passed: 合格
     unpassed: 不合格
+
+state:
+    banned: 禁用
+    replaced: 屏蔽
+
+searchKeyWord:
+    name: 敏感词
+    id: 编号
+
+searchBanlog:
+    name: 敏感词
+    userName: 用户名

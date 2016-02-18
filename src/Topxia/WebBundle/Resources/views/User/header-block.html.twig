@@ -11,7 +11,7 @@
         {{user.nickname}}
       </div>
       <div class="position">
-        <span class="mrm">{% if user.title %}{{ user.title|sub_text(12) }}{% else %}暂无头衔{% endif %}</span>
+        <span class="mrm">{% if user.title %}{{ user.title }}{% else %}暂无头衔{% endif %}</span>
         {% if user.weibo %}
           <a  href="{{ user.weibo }}" target="_blank"><i class="es-icon es-icon-weibo"></i></a>
         {% endif %}
@@ -30,15 +30,15 @@
       </div>
       {% if (not app.user) or (app.user.id != user.id) %}
         <div class="actions">
-          <a class="btn btn-primary btn-xlg follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
-          <a class="btn btn-default btn-xlg unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
-          <button class="btn btn-ghost-white btn-xlg " data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
+          <a class="btn btn-primary follow-btn mrl" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %}>关注</a>
+          <a class="btn btn-default unfollow-btn mrl" href="javascript:;" data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %} style="display:none;" {% endif %}>已关注</a>
+          <button class="btn btn-ghost-white" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</button>
         </div>
       {% endif %}
     </div>
     <div class="user-about hidden-sm hidden-xs">
       <div class="user-about-content">
-        {% if user.signature %}{{ user.signature|sub_text(130) }}{% else %}暂无签名{% endif %}
+        {% if user.signature %}{{ user.signature}}{% else %}暂无签名{% endif %}
       </div>
     </div>
   </div>

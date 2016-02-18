@@ -12523,7 +12523,6 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
         markerStyle: {
            'width':'8px',
            'border-radius': '10%',
-           'background-color': 'red'
         },
         markerTip: {
            display: true,
@@ -12542,7 +12541,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            },
            style: {
               'width':'100%',
-              'height': '20%',
+              'bottom': '80px',
               'background-color': 'rgba(0,0,0,0.7)',
               'color': 'white',
               'font-size': '17px'
@@ -12607,13 +12606,15 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
         }
         
         function createMarkerDiv(marker, duration) {
-           var markerDiv = $("<div class='vjs-marker'></div>")
+           var markerDiv = $("<div class='vjs-marker'></div>");
            markerDiv.css(setting.markerStyle)
-              .css({"margin-left" : -parseFloat(markerDiv.css("width"))/2 + 'px', 
-                 "left" : getPosition(marker) + '%'})
+              .css({"left" : getPosition(marker) + '%'})
               .attr("data-marker-key", marker.key)
               .attr("data-marker-time", setting.markerTip.time(marker));
               
+           if(marker.finished !=undefined && marker.finished==true){
+               markerDiv.css('background-color','red');
+           }
            // add user-defined class to marker
            if (marker.class) {
               markerDiv.addClass(marker.class);
@@ -12651,6 +12652,9 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               if (markerDiv.data('marker-time') != markerTime) {
                  markerDiv.css({"left": getPosition(marker) + '%'})
                     .attr("data-marker-time", markerTime);
+                 if(marker.finished !=undefined && marker.finished==true){
+                     markerDiv.css('background-color','red');
+                 }
               }
            }
            sortMarkersList();
@@ -12721,6 +12725,9 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            var marker = markersList[currentMarkerIndex];
            var markerTime = setting.markerTip.time(marker);
         
+           if(marker.finished != undefined &&marker.finished ==true){
+             return ;
+           }
            if (currentTime >= markerTime && 
               currentTime <= (markerTime + setting.breakOverlay.displayTime)) {
 
@@ -12759,9 +12766,29 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
               // next marker time of last marker would be end of video time
               return player.duration();
            }
+
+           // get early unfinished marker time
+           var getFastMarkerTime = function(){
+             for (var i = 0; i < markersList.length; i++) {
+               var marker = markersList[i];
+               if(marker.finished ==undefined || marker.finished ==false){
+                return marker.time;
+               }
+             }
+             return -1;
+           }
+
+           var fastMarkerTime = getFastMarkerTime();
            var currentTime = player.currentTime();
            var newMarkerIndex;
            
+           if(fastMarkerTime>0 && currentTime>fastMarkerTime){
+             // if(!player.paused()){
+             //   player.pause();
+             // }
+             player.currentTime(fastMarkerTime);
+           }
+
            if (currentMarkerIndex != -1) {
               // check if staying at same marker
               var nextMarkerTime = getNextMarkerTime(currentMarkerIndex);
@@ -12793,7 +12820,7 @@ define("balloon-video-player/1.0.0/src/plugins/markers/markers-debug", [], funct
            if (newMarkerIndex != currentMarkerIndex) {
               // trigger event
               if (newMarkerIndex != -1 && options.onMarkerReached) {
-                options.onMarkerReached(markersList[newMarkerIndex]);
+                options.onMarkerReached(markersList[newMarkerIndex],player);
               }
               currentMarkerIndex = newMarkerIndex;
            }

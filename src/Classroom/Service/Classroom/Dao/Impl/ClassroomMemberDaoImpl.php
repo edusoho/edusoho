@@ -8,16 +8,27 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 {
     protected $table = 'classroom_member';
 
+    public function getTable()
+    {
+        return $this->table;
+    }
+
     public function getMember($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
     public function addMember($member)
     {
         $affected = $this->getConnection()->insert($this->table, $member);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert classroom member error.');
@@ -28,37 +39,57 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function getClassroomStudentCount($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->fetchCached("classroomId:{$classroomId}:role:student:count", $classroomId, function ($classroomId) use ($that) {
+            $sql = "SELECT count(*) FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE '%|student|%' LIMIT 1";
+            return $that->getConnection()->fetchColumn($sql, array($classroomId));
+        }
+
+        );
     }
 
     public function getClassroomAuditorCount($classroomId)
     {
-        $sql = "SELECT count(*) FROM {$this->table} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchColumn($sql, array($classroomId));
+        return $this->fetchCached("classroomId:{$classroomId}:role:auditor:count", $classroomId, function ($classroomId) use ($that) {
+            $sql = "SELECT count(*) FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE '%|auditor|%' LIMIT 1";
+            return $that->getConnection()->fetchColumn($sql, array($classroomId));
+        }
+
+        );
     }
 
     public function updateMember($id, $member)
     {
         $this->getConnection()->update($this->table, $member, array('id' => $id));
-
+        $this->clearCached();
         return $this->getMember($id);
     }
 
     public function findAssistants($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        return $this->fetchCached("classroomId:{$classroomId}:role:auditor", $classroomId, function ($classroomId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE ('%|assistant|%')";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        }
+
+        );
     }
 
     public function findTeachers($classroomId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
+        $that = $this;
 
-        return $this->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        return $this->fetchCached("classroomId:{$classroomId}:role:teacher", $classroomId, function ($classroomId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE classroomId = ? AND role LIKE ('%|teacher|%')";
+            return $that->getConnection()->fetchAll($sql, array($classroomId)) ?: array();
+        }
+
+        );
     }
 
     public function findMembersByUserIdAndClassroomIds($userId, array $classroomIds)
@@ -89,15 +120,19 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
                         ->orderBy($orderBy[0], $orderBy[1])
                         ->setFirstResult($start)
                         ->setMaxResults($limit);
-
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function getMemberByClassroomIdAndUserId($classroomId, $userId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND classroomId = ? LIMIT 1";
+        $that = $this;
 
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $classroomId)) ?: null;
+        return $this->fetchCached("classroomId:{$classroomId}:userId:{$userId}", $classroomId, $userId, function ($classroomId, $userId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND classroomId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $classroomId)) ?: null;
+        }
+
+        );
     }
 
     public function findMembersByClassroomIdAndUserIds($classroomId, $userIds)
@@ -117,12 +152,16 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
     public function deleteMember($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteMemberByClassroomIdAndUserId($classroomId, $userId)
     {
-        return $this->getConnection()->delete($this->table, array('classroomId' => $classroomId, 'userId' => $userId));
+        $result = $this->getConnection()->delete($this->table, array('classroomId' => $classroomId, 'userId' => $userId));
+        $this->clearCached();
+        return $result;
     }
 
     public function findMobileVerifiedMemberCountByClassroomId($classroomId, $locked = 0)
@@ -161,7 +200,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         }
 
         if (isset($conditions['roles'])) {
-            $roles = '';
+            $roles = "";
 
             foreach ($conditions['roles'] as $role) {
                 $roles .= "|".$role;
@@ -169,11 +208,11 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
 
             $roles = $roles."|";
 
-            foreach ($conditions['roles'] as $role) {
-                $roles .= ",|".$role."|";
+            foreach ($conditions['roles'] as $key => $role) {
+                $conditions['roles'][$key] = "|".$role."|";
             }
 
-            $conditions['roles'] = $roles;
+            $conditions['roles'][] = $roles;
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
@@ -182,7 +221,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
                         ->andWhere('classroomId = :classroomId')
                         ->andWhere('noteNum > :noteNumGreaterThan')
                         ->andWhere('role LIKE :role')
-                        ->andWhere('role IN ( :roles )')
+                        ->andWhere('role IN (:roles)')
                         ->andWhere('createdTime >= :startTimeGreaterThan')
                         ->andWhere('createdTime < :startTimeLessThan');
 

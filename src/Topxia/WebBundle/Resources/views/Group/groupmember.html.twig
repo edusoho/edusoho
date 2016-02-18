@@ -4,7 +4,7 @@
 {% set groupNav = 'member' %}
 {% block group_main %}
   <div class="panel panel-default">
-    <div class="panel-heading">小组介绍</div>
+    <div class="panel-heading"><h3 class="panel-title">小组介绍</h3></div>
     <div class="panel-body">
       {% if paginator.currentPage == paginator.firstPage %}
         <div class="well editor-text">
@@ -13,65 +13,71 @@
       {% endif %}
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <ul class="nav nav-tabs">
-        <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
-        <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
-        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
-          <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">小组设置</a></li>
-        {% endif %}
-      </ul>
-      <div class="group-member-wrapper">
-        {{ web_macro.flash_messages() }}
-        <h4 class="group-user-title">组长</h4>
-        <div class="clearfix">
-          <div class="grouplist"  style="width: 82px;">
-            <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
-              <img src="{{ filepath(owner_info.largeAvatar, 'avatar.png') }}" alt="{{owner_info.nickname}}" class="avatar-md">
-            </a>
-          </div>
+  <div class="es-section">
+    <ul class="nav nav-tabs">
+      <li {% if groupNav=="index" %}class="active"{% endif %}><a href="{{path('group_show',{id:groupinfo.id})}}">小组首页</a></li>
+      <li {% if groupNav=="member" %}class="active"{% endif %}><a href="{{path('group_member',{id:groupinfo.id})}}">小组成员</a></li>
+      {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
+        <li {% if groupNav=="setting" %}class="active" {% endif %}><a  href="{{path('group_set',{id:groupinfo.id})}}">小组设置</a></li>
+      {% endif %}
+    </ul>
+
+    {{ web_macro.flash_messages() }}
+    <div class="es-piece">
+      <div class="piece-header">组长</div>
+      <div class="piece-body clearfix">
+        <div class="grouplist">
+          <a href="{{path('user_show',{id:owner_info.id})}}" title="{{owner_info.nickname}}"  >
+            <img src="{{ filepath(owner_info.largeAvatar, 'avatar.png') }}" alt="{{owner_info.nickname}}" class="avatar-md">
+          </a>
         </div>
-        <h4 class="group-user-title">副组长</h4>
-        <div class="clearfix">
-          <form action="{{path('group_remove_admin',{id:groupinfo.id})}}" method="post" id="admin-form">
-            {% if groupAdmin %}
-              {% if is_groupmember==2 or is_granted('ROLE_ADMIN')  %}
-                <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">撤消副组长</button>
-              {% endif %}
-              {% for member in groupAdmin %}
-                <div class="grouplist"  style="width: 82px;">
-                  <p>{{ web_macro.user_avatar(usersLikeAdmin[member.userId] , '','avatar-md') }}</p>
-                 
-                  {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
-                    <input type="checkbox" value="{{member.userId}}" name="adminId[]"class="checkboxs">
-                  {% endif %}
-                  <br>
-                </div>
-                
-              {% endfor %}
-            {% else %}
-              <p><sapn class="text-muted">还没有副组长！</span></p>
+      </div>
+    </div>
+
+    <div class="es-piece">
+      <div class="piece-header">副组长</div>
+      <div class="piece-body clearfix">
+        <form action="{{path('group_remove_admin',{id:groupinfo.id})}}" method="post" id="admin-form">
+          {% if groupAdmin %}
+            {% if is_groupmember==2 or is_granted('ROLE_ADMIN')  %}
+              <button id="remove-admin-btn" type="button" class="btn btn-default btn-sm pull-right">撤消副组长</button>
             {% endif %}
-          </form>
-        </div>
-        <div class="btn-group pull-right">
-          {% if groupmember_info %}
-            {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
-              <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">踢出成员</button>
-            {% endif %}
-            {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
-              <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">设置副组长</button>
-              <input id="set-admin-url" type="hidden" value="{{path('group_set_admin',{id:groupinfo.id})}}">
-            {% endif %}
+            {% for member in groupAdmin %}
+              <div class="grouplist"  style="width: 82px;">
+                <p>{{ web_macro.user_avatar(usersLikeAdmin[member.userId] , '','avatar-md') }}</p>
+               
+                {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
+                  <input type="checkbox" value="{{member.userId}}" name="adminId[]"class="checkboxs">
+                {% endif %}
+                <br>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p><span class="text-muted">还没有副组长！</span></p>
           {% endif %}
-        </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="btn-group pull-right">
+      {% if groupmember_info %}
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3 %}
+          <button  id="delete-btn" type="button" class="btn btn-default btn-sm ">踢出成员</button>
+        {% endif %}
+        {% if is_groupmember==2 or is_granted('ROLE_ADMIN') %}
+          <button  id="set-admin-btn" type="button" class="btn btn-default btn-sm ">设置副组长</button>
+          <input id="set-admin-url" type="hidden" value="{{path('group_set_admin',{id:groupinfo.id})}}">
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="es-piece">
+      <div class="piece-header">组员</div>
+      <div class="piece-body">
         <form action="{{path('group_member_delete',{id:groupinfo.id})}}" method="post" id="member-form" class="clearfix">
-          <h4 class="group-user-title">组员</h4>
           {% if groupmember_info %}
-            
             {% for member in groupmember_info %}
-              <div class="grouplist" style="width: 82px;">
+              <div class="grouplist">
                 <p>{{ web_macro.user_avatar(members[member.userId] , '','avatar-md') }}</p>
                 
                 {% if is_groupmember==2 or is_granted('ROLE_ADMIN') or is_groupmember==3%}
@@ -85,52 +91,53 @@
             {% endif %}
             
           {% else %}
-            <p><sapn class="text-muted">还没有小组成员！</span></p>
+            <p><span class="text-muted">还没有小组成员！</span></p>
           {% endif %}
         </form>
-        <nav class="text-center">
-          {{ web_macro.paginator(paginator) }}
-        </nav>
       </div>
     </div>
+    
+    <nav class="text-center">
+      {{ web_macro.paginator(paginator) }}
+    </nav>
   </div>
 {% endblock %}
 {% block group_side %}
 
-  {% if is_groupmember !=0 %}
+  {% if is_groupmember != 0 %}
     <div class="mbm"><a href="{{path('group_thread_add',{id:groupinfo.id})}}" class="btn btn-success btn-xlg btn-block" role="button"><i class="es-icon es-icon-comment mrs text-xlg"></i>发表话题</a>
     </div>
   {% endif %}
   <form class="mbl" action="{{path('group_search',{id:groupinfo.id})}}" method="get">
-  <div class="search-with-btn">
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-    <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
-    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-  </div>
+    <div class="search-with-btn">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+      <input type="text" class="form-control" placeholder="组内搜索" name="keyWord">
+      <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+    </div>
   </form>
   {% if is_groupmember in [1, 2, 3] %}
     <div class="panel panel-default">
       <div class="panel-body group-user-info">
         <div class="media group-item">
-          <div class="media-left prl">
+          <div class="media-left">
             {{ web_macro.user_avatar(user, '' ,'avatar-md') }}
           </div>
           <div class="media-body">
             <p>{{ web_macro.user_link(user , '') }}
 
               {% if is_groupmember==1%}
-              <span class="label label-default">组员</span>
+              <span class="label label-primary">组员</span>
               {% endif %} 
 
               {% if is_groupmember==2%} 
-              <span class="label label-danger">组长</span>  
+              <span class="label label-primary">组长</span>
               {% endif %}
 
               {% if is_groupmember==3%} 
-              <span class="label label-info">副组长</span>  
+              <span class="label label-primary">副组长</span>  
               {% endif %}  
             </p>
-            <a href="{{ path ('group_member_center') }}" class="btn btn-info btn-sm" role="button">我的小组</a>
+            <a href="{{ path ('group_member_center') }}" class="btn btn-default btn-sm" role="button">我的小组</a>
           </div>
           <hr>
            <p class="group-message clearfix">
@@ -142,7 +149,7 @@
     </div>
   {% endif %}
   <div class="panel panel-default">
-    <div class="panel-heading">小组组长</div>
+    <div class="panel-heading"><h3 class="panel-title">小组组长</h3></div>
     <div class="panel-body">
       <div class="media group-item">
         <div class="media-left">
@@ -158,7 +165,7 @@
 
 
   <div class="panel panel-default">
-    <div class="panel-heading">新加组员</div>
+    <div class="panel-heading"><h3 class="panel-title">新加组员</h3></div>
     <div class="panel-body">
       {% if recentlyJoinMember %}
         <ul class="user-avatar-list clearfix">
@@ -175,9 +182,9 @@
   </div>
 
   <div class="panel panel-default">
-    <div class="panel-heading">热门小组</div>
+    <div class="panel-heading"><h3 class="panel-title">热门小组</h3></div>
     <div class="panel-body">
-      <div class="group-grids">
+      <div class="media-group-list">
       {% set hotGroups = data('HotGroup',{'count':3}) %}
       {% for group in hotGroups %}
         <div class="media media-group">

@@ -115,24 +115,31 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->getPost($id);
     }
 
+    protected function sensitiveFilter($str, $type)
+    {
+        return $this->getSensitiveService()->sensitiveCheck($str, $type);
+    }
+
     public function addThread($thread)
     {
+        if (empty($thread['title'])) {
+            throw $this->createServiceException("标题名称不能为空！");
+        }
+
+        if (empty($thread['content'])) {
+            throw $this->createServiceException("话题内容不能为空！");
+        }
+
         $event = $this->dispatchEvent('group.thread.before_create', $thread);
 
         if ($event->isPropagationStopped()) {
             throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
 
-        if (empty($thread['title'])) {
-            throw $this->createServiceException("标题名称不能为空！");
-        }
+        $thread['title']   = $this->sensitiveFilter($thread['title'], 'group-thread-create');
+        $thread['content'] = $this->sensitiveFilter($thread['content'], 'group-thread-create');
 
-        $thread['title'] = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
-
-        if (empty($thread['content'])) {
-            throw $this->createServiceException("话题内容不能为空！");
-        }
-
+        $thread['title']   = $this->purifyHtml(empty($thread['title']) ? '' : $thread['title']);
         $thread['content'] = $this->purifyHtml(empty($thread['content']) ? '' : $thread['content']);
 
         if (empty($thread['groupId'])) {
@@ -324,11 +331,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             throw $this->createServiceException("话题内容不能为空！");
         }
 
+        $fields['title']   = $this->sensitiveFilter($fields['title'], 'group-thread-update');
+        $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-update');
+
         $this->getThreadGoodsDao()->deleteGoodsByThreadId($id, 'content');
         $this->hideThings($fields['content'], $id);
 
-        $fields['title']   = $this->filterSensitiveWord($this->purifyHtml($fields['title']));
-        $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+        $fields['title']   = $this->purifyHtml($fields['title']);
+        $fields['content'] = $this->purifyHtml($fields['content']);
 
         return $this->getThreadDao()->updateThread($id, $fields);
     }
@@ -350,16 +360,17 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function postThread($threadContent, $groupId, $memberId, $threadId, $postId = 0)
     {
+        if (empty($threadContent['content'])) {
+            throw $this->createServiceException("回复内容不能为空！");
+        }
+
         $event = $this->dispatchEvent('group.thread.post.before_create', $threadContent);
 
         if ($event->isPropagationStopped()) {
             throw $this->createServiceException('发帖次数过多，请稍候尝试。');
         }
 
-        if (empty($threadContent['content'])) {
-            throw $this->createServiceException("回复内容不能为空！");
-        }
-
+        $threadContent['content']     = $this->sensitiveFilter($threadContent['content'], 'group-thread-post-create');
         $threadContent['content']     = $this->purifyHtml($threadContent['content']);
         $threadContent['userId']      = $memberId;
         $threadContent['fromUserId']  = $threadContent['fromUserId'];
@@ -427,7 +438,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     public function updatePost($id, $fields)
     {
         if (!empty($fields['content'])) {
-            $fields['content'] = $this->filterSensitiveWord($this->purifyHtml($fields['content']));
+            $fields['content'] = $this->sensitiveFilter($fields['content'], 'group-thread-post-update');
+            $fields['content'] = $this->purifyHtml($fields['content']);
         }
 
         return $this->getThreadPostDao()->updatePost($id, $fields);
@@ -500,15 +512,6 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->createService('Content.FileService');
     }
 
-    protected function filterSensitiveWord($text)
-    {
-        if (empty($text)) {
-            return $text;
-        }
-
-        return $this->createService("PostFilter.SensitiveWordService")->filter($text);
-    }
-
     protected function getThreadPostDao()
     {
         return $this->createDao('Group.ThreadPostDao');
@@ -517,5 +520,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     protected function getThreadCollectDao()
     {
         return $this->createDao('Group.ThreadCollectDao');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->createService("SensitiveWord:Sensitive.SensitiveService");
     }
 }

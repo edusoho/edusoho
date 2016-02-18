@@ -561,10 +561,6 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
-admin_setting_sensitive_word:
-    pattern:  /setting/sensitive_word
-    defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
-
 admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
@@ -667,6 +663,10 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
+
+admin_setting_redis:
+    pattern:  /setting/redis
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
 
 admin_optimize:
     pattern:  /setting/optimize

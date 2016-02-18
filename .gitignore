@@ -28,6 +28,7 @@ package.json
 /app/data/backup/*
 /app/data/upgrade/*
 /app/config/routing_plugins.yml
+/app/data/redis.php
 /plugins/*
 /build/
 /vendor/

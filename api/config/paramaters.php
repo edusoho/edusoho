@@ -2,9 +2,9 @@
 
 use Symfony\Component\Yaml\Yaml;
 
-$parameters  = Yaml::parse(file_get_contents(__DIR__.'/../../app/config/parameters.yml'));
+$parameters = Yaml::parse(file_get_contents(__DIR__.'/../../app/config/parameters.yml'));
 
-if (file_exists(__DIR__.'/../app/config/parameters_service.yml')) {
+if (file_exists(__DIR__.'/../../app/config/parameters_service.yml')) {
     $serviceParameters        = Yaml::parse(file_get_contents(__DIR__.'/../../app/config/parameters_service.yml'));
     $parameters['parameters'] = array_merge($parameters['parameters'], $serviceParameters['parameters']);
 }
@@ -12,5 +12,5 @@ if (file_exists(__DIR__.'/../app/config/parameters_service.yml')) {
 $parameters['parameters']['topxia.upload.public_directory'] = __DIR__.'/../../web/files';
 $parameters['parameters']['kernel.logs_dir']                = __DIR__.'/../../app/logs';
 $parameters['parameters']['environment']                    = API_ENV;
-$parameters['parameters']['kernel.cache_dir']               = __DIR__.'/../../app/cache/' . API_ENV;
+$parameters['parameters']['kernel.cache_dir']               = __DIR__.'/../../app/cache/'.API_ENV;
 return $parameters['parameters'];

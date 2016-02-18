@@ -278,6 +278,7 @@ class CourseLessonManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
         if ($course['type'] == 'live') {
             $client = new EdusohoLiveClient();
 
@@ -287,7 +288,8 @@ class CourseLessonManageController extends BaseController
 
             $this->getCourseService()->deleteCourseLessonReplayByLessonId($lessonId);
         }
-        $this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
+
+        //$this->getCourseDeleteService()->deleteLessonResult($lesson['mediaId']);
         $this->getCourseService()->deleteLesson($course['id'], $lessonId);
         $this->getCourseMaterialService()->deleteMaterialsByLessonId($lessonId);
 

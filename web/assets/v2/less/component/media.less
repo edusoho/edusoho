@@ -22,6 +22,10 @@
   word-break: break-all;
 }
 
+.media-left {
+  padding-right: 15px;
+}
+
 // 即将弃用
 .media .media-object-small img {
   width: 48px;
@@ -51,8 +55,8 @@
   }
   &.media-number,
   &.media-number-o {
-    border-bottom: 1px solid @gray-lighter;
-    padding-bottom: 15px;
+    // border-bottom: 1px solid @gray-lighter;
+    padding-bottom: 5px;
     .media-left {
       position: relative;
       color: @gray;
@@ -82,13 +86,12 @@
     min-height: 34px;
   }
   .comments-content {
-    padding: 10px 10px 0 10px;
+    padding: 10px;
+    margin: 10px 0;
     background: @gray-lighter;
     color: @gray;
     line-height: 25px;
     border: 1px solid #f1f1f1;
-    margin-top: 15px;
-    margin-bottom: 10px;
   }
 }
 
@@ -196,10 +199,13 @@
 }
 
 // 小组
+.media-group-list {
+  margin-top: -20px;
+}
 .media-group {
-  margin-top: 15px;
+  margin-top: 20px;
   &:first-child {
-    margin-top: 15px;
+    margin-top: 20px;
   }
   .title {
     height: 20px;
@@ -227,8 +233,12 @@
     position: relative;
     padding-right: 80px;
     padding-bottom: 8px;
-    border-bottom: 1px solid @gray-lighter;
+    // border-bottom: 1px solid @gray-lighter;
+    @media(max-width:@screen-xs-max) {
+      padding-right: 0;
+    }
     .title {
+      .text-overflow;
       font-size: 12px;
     }
     .content { 
@@ -242,8 +252,11 @@
     position: absolute;
     right: 0px;
     top: 9px;
-    font-size: 16px;
+    // font-size: 16px;
     color: @gray-medium;
+    @media(max-width:@screen-xs-max) {
+      display: none;
+    }
   }
 }
 

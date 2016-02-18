@@ -5,7 +5,7 @@
 {% set script_controller='classroombundle/controller/classroom-admin/classroom' %}
 {% block main %}
 
-{% if setting("classroom.enabled") %}
+
 
   <form id="message-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
 
@@ -20,6 +20,7 @@
   <table class="table table-striped table-hover" id="classroom-table">
     <thead>
     <tr>
+      <th>班级编号</th>
       <th width="40%">{{setting("classroom.name")|default("班级")}}名称</th>
       <th>课程数</th>
       <th>学员数</th>
@@ -46,13 +47,5 @@
  {{ web_macro.paginator(paginator) }}
 </div>
 
-{% else %}
-<div class="well">
-
-
-班级功能未开启，请先在<a href="{{ path('admin_classroom_setting') }}"> 系统-课程设置-班级 </a>中设置开启
-
-</div>
-{% endif %}
 
 {% endblock %}

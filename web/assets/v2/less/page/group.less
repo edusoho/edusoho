@@ -2,14 +2,13 @@
 .group-header {
   margin-bottom: 20px;
   .border-radius;
-  height: 190px;
+  height: 150px;
   position: relative;
   .media {
     position: absolute;
-    bottom: 40px;
-    left: 50px;
+    bottom: 20px;
+    left: 20px;
     border-radius: 3px;
-    padding: 10px;
     min-width: 20%;
     z-index: 1;
   }
@@ -42,6 +41,7 @@
   // }
 }
 
+// 侧边栏用户信息模块
 .group-user-info {
   hr {
     margin: 15px 0;
@@ -66,18 +66,18 @@
 }
 
 // 最新话题
-.thread-list{
-  .media-left{
+.thread-list {
+  .media-left {
     padding-right: 18px;
   }
-  .media-heading{
+  .media-heading {
     margin-bottom: 10px;
   }
   .reply-num {
     display: inline-block;
     width: 60px;
     height: 60px;
-    .border-radius(2px);
+    .border-radius();
     background: #f1f1f1;
     color: @gray;
     text-align: center;
@@ -88,5 +88,23 @@
       font-weight: normal;
       padding: 7px 0 0;
     }
+  }
+}
+
+// 小组成员
+.group-page .grouplist {
+  height: 120px;
+  width: 82px; 
+  float: left;
+  text-align: center;
+}
+
+// 显示隐藏
+.group-page {
+  .post-delete-btn {
+    visibility: hidden;
+  }
+  .media:hover .post-delete-btn {
+    visibility: visible;
   }
 }

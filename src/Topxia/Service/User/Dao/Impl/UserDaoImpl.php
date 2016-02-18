@@ -11,31 +11,59 @@ class UserDaoImpl extends BaseDao implements UserDao
 
     public function getUser($id, $lock = false)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-
         if ($lock) {
-            $sql .= " FOR UPDATE";
+            $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
+
+            if ($lock) {
+                $sql .= " FOR UPDATE";
+            }
+
+            return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         }
 
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
     public function findUserByEmail($email)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE email = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($email));
+        $that = $this;
+
+        return $this->fetchCached("email:{$email}", $email, function ($email) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE email = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($email));
+        }
+
+        );
     }
 
     public function findUserByNickname($nickname)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE nickname = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($nickname));
+        $that = $this;
+
+        return $this->fetchCached("nickname:{$nickname}", $nickname, function ($nickname) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE nickname = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($nickname));
+        }
+
+        );
     }
 
     public function findUserByVerifiedMobile($mobile)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE verifiedMobile = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($mobile));
+        $that = $this;
+
+        return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE verifiedMobile = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($mobile));
+        }
+
+        );
     }
 
     public function findUsersByNicknames(array $nicknames)
@@ -57,26 +85,28 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
 
-        return $this->getConnection()->fetchAll($sql, $ids);
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
     }
 
     public function getUserByInviteCode($inviteCode)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE inviteCode = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($inviteCode)) ?: null;
-    }
+        $that = $this;
 
-    public function createInviteCode($code)
-    {
-        $affected = $this->getConnection()->insert($this->table, $code);
-
-        if ($affected <= 0) {
-            throw $this->createDaoException('Insert InviteCode error.');
+        return $this->fetchCached("inviteCode:{$inviteCode}", $inviteCode, function ($inviteCode) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE inviteCode = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($inviteCode)) ?: null;
         }
 
-        return $this->getUser($this->getConnection()->lastInsertId());
+        );
     }
 
     public function searchUsers($conditions, $orderBy, $start, $limit)
@@ -122,7 +152,12 @@ class UserDaoImpl extends BaseDao implements UserDao
         }
 
         if (isset($conditions['keywordType']) && isset($conditions['keyword'])) {
-            $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
+            if ($conditions['keywordType'] == 'loginIp') {
+                $conditions[$conditions['keywordType']] = "{$conditions['keyword']}";
+            } else {
+                $conditions[$conditions['keywordType']] = "%{$conditions['keyword']}%";
+            }
+
             unset($conditions['keywordType']);
             unset($conditions['keyword']);
         }
@@ -198,6 +233,7 @@ class UserDaoImpl extends BaseDao implements UserDao
         $user['createdTime'] = time();
         $user['updatedTime'] = $user['createdTime'];
         $affected            = $this->getConnection()->insert($this->table, $user);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert user error.');
@@ -210,6 +246,7 @@ class UserDaoImpl extends BaseDao implements UserDao
     {
         $fields['updatedTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
         return $this->getUser($id);
     }
 
@@ -223,7 +260,9 @@ class UserDaoImpl extends BaseDao implements UserDao
 
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$name} = {$name} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($number, $id));
+        $result      = $this->getConnection()->executeQuery($sql, array($number, $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function clearCounterById($id, $name)
@@ -236,24 +275,44 @@ class UserDaoImpl extends BaseDao implements UserDao
 
         $currentTime = time();
         $sql         = "UPDATE {$this->table} SET {$name} = 0, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
-        return $this->getConnection()->executeQuery($sql, array($id));
+        $result      = $this->getConnection()->executeQuery($sql, array($id));
+        $this->clearCached();
+        return $result;
     }
 
     public function analysisRegisterDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->table}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
-        return $this->getConnection()->fetchAll($sql, array($startTime, $endTime));
+        $that = $this;
+
+        return $this->fetchCached("startTime:{$startTime}:endTime:{$endTime}:count", $startTime, $endTime, function ($startTime, $endTime) use ($that) {
+            $sql = "SELECT count(id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$that->getTable()}` WHERE`createdTime`>=? AND `createdTime`<=? group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+            return $that->getConnection()->fetchAll($sql, array($startTime, $endTime));
+        }
+
+        );
     }
 
     public function analysisUserSumByTime($endTime)
     {
-        $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
-        return $this->getConnection()->fetchAll($sql, array($endTime));
+        $that = $this;
+
+        return $this->fetchCached("endTime:{$endTime}:date:count", $endTime, function ($endTime) use ($that) {
+            $sql = "select date, count(*) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date from user o where o.createdTime<=? ) dates group by dates.date order by date desc";
+            return $that->getConnection()->fetchAll($sql, array($endTime));
+        }
+
+        );
     }
 
     public function findUsersCountByLessThanCreatedTime($endTime)
     {
-        $sql = "SELECT count(id) as count FROM `{$this->table}` WHERE  `createdTime`<=?  ";
-        return $this->getConnection()->fetchColumn($sql, array($endTime));
+        $that = $this;
+
+        return $this->fetchCached("endTime:{$endTime}:count", $endTime, function ($endTime) use ($that) {
+            $sql = "SELECT count(id) as count FROM `{$that->getTable()}` WHERE  `createdTime`<=?  ";
+            return $that->getConnection()->fetchColumn($sql, array($endTime));
+        }
+
+        );
     }
 }
