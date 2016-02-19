@@ -755,9 +755,10 @@ class EduCloudController extends BaseController
             }
         }
 
+        $smsStatus           = array_merge($settings, $dataUserPosted);
         $status              = $api->get('/sms/account');
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
-        $smsStatus           = array_merge($settings, $dataUserPosted);
+
         $this->getSettingService()->set('cloud_sms', $smsStatus);
         var_dump($smsStatus);
         return $smsStatus;
