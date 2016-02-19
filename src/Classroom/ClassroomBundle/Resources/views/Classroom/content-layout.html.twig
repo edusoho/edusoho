@@ -6,9 +6,7 @@
 {% block content %}
 
 {% if is_plugin_installed('GroupSell') and not member %}
-{% block  classroom_group %}
   {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'classroom',targetId:classroom.id})) }}
-{% endblock %}
 {% endif %}
 
 <div class="class-detail row" id="detail-content">
