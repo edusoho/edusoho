@@ -763,6 +763,7 @@ class EduCloudController extends BaseController
         return $smsStatus;
     }
 
+    //已替换，不再使用
     protected function handleSmsSetting(Request $request)
     {
         list($smsStatus, $schoolNames) = $this->getSchoolName();
@@ -891,6 +892,7 @@ class EduCloudController extends BaseController
         return array($emailStatus, $sign);
     }
 
+    //已不用
     protected function getSchoolName()
     {
         $schoolName          = $this->setting('cloud_sms.sms_school_name');
