@@ -313,7 +313,9 @@ class CourseLessonManageController extends BaseController
         $course = $this->getCourseService()->getCourse($courseId);
         $file   = array();
 
-        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
+        if (in_array($lesson['type'], array('ppt', 'video', 'audio', 'flash', 'document'))
+            && $lesson['mediaSource'] == 'self'
+            && !empty($lesson['mediaId'])) {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
         }
 
