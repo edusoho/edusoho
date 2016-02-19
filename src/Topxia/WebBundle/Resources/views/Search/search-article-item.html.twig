@@ -8,13 +8,13 @@
     </div>
     <div class="metas-body">
       <p>{{ category.name|default('') }} </p>
-      <h2 class="title"><a href="{{ path('article_detail', {id:article.id}) }}">{{ article.title|raw }}</a></h2>
+      <h2 class="title"><a href="{{ path('article_detail', {id:article.id}) }}" target="_blank">{{ article.title|raw }}</a></h2>
     </div>
   </div>
   {% if article.thumb|default(false) %}
     <div class="media">
       <div class="media-left">
-        <a href="{{ path('article_detail', { id:article.id }) }}">
+        <a href="{{ path('article_detail', { id:article.id }) }}" target="_blank">
           <img class="media-object" src="{{ filepath(article.thumb, '') }}" alt="{{ article.title }}">
         </a>
       </div>
