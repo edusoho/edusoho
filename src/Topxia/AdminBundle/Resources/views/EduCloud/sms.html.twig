@@ -45,11 +45,11 @@
       <div class="alert alert-warning" role="alert">云邮件服务免费公测中，将于2015年3月31日结束</div>
       <div class="controls col-md-8 radios">
         <form class="form-horizontal" method="post" id="sms-controller-form" novalidate="">
-        {% if smsStatus.status|default('disable') in  ['disable'] %}
+        {% if smsStatus.sms_enabled|default('0') == '0' %}
           <span>短信签名：{% if not smsStatus.sms_school_name|default(null) %}<input type="text" name="sign">{% else %}{{smsStatus.sms_school_name}}{% endif %}
           </span>
           <button name="sms-open" class="btn btn-primary" >启用云短信</button>
-        {% elseif smsStatus.status == 'enabled' and smsStatus.sms_school_name|default(null) != "" %}
+        {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" %}
           <div name="status">
             <span class="text-success">已启用</span>
             <button  class="btn btn-default btn-sm" name="sms-close"><span class="text-muted">关闭</span></button>
@@ -58,9 +58,7 @@
           <div name="submit-sign" hidden="hidden">
             <span>短信签名：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
           </div>
-        {% elseif smsStatus.status in ['created'] %}
-          <span>短信签名：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
-        {% elseif smsStatus.status|default(null) == 'error' %}
+        {% elseif smsStatus.sms_enabled|default(null) == 'error' %}
           <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云短信</button>
           <div name = "warning">
             <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云短信服务！</span>
@@ -84,32 +82,7 @@
 
       <form class="form-horizontal" method="post" id="sms-form" novalidate="">
         <fieldset>
-          {% if hasSchoolName %}
-            <legend>短信设置</legend>
-            <div class="form-group">
-              <div class="col-md-3 control-label">
-                <label class="pull-right">短信功能</label>
-              </div>
-
-              <div class="controls col-md-8 radios">
-                <label>
-                  <input type="radio" name="sms_enabled" value="1"
-                  {% if (setting('cloud_sms.sms_enabled')|default('')) == '1' %}
-                    checked="checked"
-                  {% endif %}> 开启
-                </label>
-                <label>
-                  <input type="radio" name="sms_enabled" value="0" 
-                  {% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}
-                    checked="checked"
-                  {% endif %}> 关闭
-                </label>
-                <p class="help-block">短信最低￥0.055/条，点击<a href="http://open.edusoho.com/quotation/cloud/sms" target="_blank">这里</a>了解详情。</p>
-              </div>
-            </div>
-
-          {% endif %}
-          {% if smsStatus.status in ['passed','failed'] %}
+        {#  {% if smsStatus.status in ['passed','failed'] %}
             {% if ( not hasSchoolName ) and (smsStatus.status == 'failed') %}
               <div class="alert alert-danger">
                 您的网校名称“{{setting('cloud_sms.sms_school_candidate_name')|default('')}}”未通过审核，原因是：{{ smsStatus.message|default('网校名称不符合规范') }}
@@ -147,7 +120,7 @@
               <span>网校名称【{{setting('cloud_sms.sms_school_candidate_name')|default('')}}】正在审核中 <a href="#js-apply-details" class="btn btn-default btn-sm" data-toggle="modal">详情</a></span>
             </div>
                 
-            <div class = "modal{#  fade #}" id="js-apply-details" role = "dialog">
+            <div class = "modal" id="js-apply-details" role = "dialog">
               <div class = "modal-dialog">
                 <div class = "modal-content">
                   <div class = "modal-header">
@@ -182,11 +155,13 @@
                 </div>
               </div>
             </div>
-          {% endif %}
-
-          {% if hasSchoolName %}
-            <div class="js-usage" {% if (setting('cloud_sms.sms_enabled')|default('')) != '1' %}style="display:none;" {% endif %}>
-              <legend>短信验证</legend>
+          {% endif %} 
+          #}
+          <div class="page-header clearfix">
+            <h1 class="pull-left">短信应用场景</h1>
+          </div>
+          {% if hasSchoolName and smsStatus.sms_enabled|default('0') == '1' %}
+            <div class="js-usage" >
               <table class="table table-bordered">
                 <thead>
                   <tr>
@@ -684,7 +659,7 @@
           {% endif %}
         </fieldset>
 
-        {% if hasSchoolName %}
+        {% if hasSchoolName and smsStatus.sms_enabled|default('0') == '1' %}
           <div class="form-group">
             <div class="controls col-md-offset-3 col-md-8">
               <button type="submit" class="btn btn-primary">提交</button>

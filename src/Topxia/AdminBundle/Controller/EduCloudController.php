@@ -678,11 +678,58 @@ class EduCloudController extends BaseController
             'sms_coin_buy_notify'       => 'off'
         );
         $dataUserPosted = $request->request->all();
-        $settings       = $this->getSettingService()->get('cloud_sms', array());
-        $smsStatus      = array();
+
+        if (isset($dataUserPosted['sms_order_pay_success']) && $dataUserPosted['sms_order_pay_success'] == 'on') {
+            $dataUserPosted['sms_course_buy_notify']    = 'on';
+            $dataUserPosted['sms_classroom_buy_notify'] = 'on';
+            $dataUserPosted['sms_vip_buy_notify']       = 'on';
+            $dataUserPosted['sms_coin_buy_notify']      = 'on';
+        } else {
+            $dataUserPosted['sms_course_buy_notify']    = 'off';
+            $dataUserPosted['sms_classroom_buy_notify'] = 'off';
+            $dataUserPosted['sms_vip_buy_notify']       = 'off';
+            $dataUserPosted['sms_coin_buy_notify']      = 'off';
+        }
+
+        $settings  = $this->getSettingService()->get('cloud_sms', array());
+        $smsStatus = array();
+        //启用云短信，没有则创建云平台短信服务帐号
 
         if (isset($dataUserPosted['sms-open'])) {
-            $info = $api->post('/sms/account', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
+            if (isset($settings['sms_school_name'])) {
+                $smsStatus['sms_enabled'] = '1';
+                $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
+                $smsStatus                = array_merge($settings, $smsStatus);
+                $this->getSettingService()->set('cloud_sms', $smsStatus);
+                return $smsStatus;
+            } else {
+                $info = $api->post('/sms/account', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
+
+                if ($info['status'] == 'ok') {
+                    $status = $api->get('/sms/account');
+                    // var_dump($status);
+                    $smsStatus['sms_enabled']     = '1';
+                    $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
+                    $smsStatus                    = array_merge($settings, $smsStatus);
+                    $smsStatus['sms_school_name'] = $status['name'];
+                    $this->getSettingService()->set('cloud_sms', $smsStatus);
+                    return $smsStatus;
+                }
+            }
+        }
+
+        if (isset($dataUserPosted['sms-close'])) {
+            $smsStatus['sms_enabled'] = '0';
+            $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
+            $smsStatus                = array_merge($settings, $smsStatus);
+            $this->getSettingService()->set('cloud_sms', $smsStatus);
+            return $smsStatus;
+        }
+
+        //var_dump($dataUserPosted);
+
+        if (isset($dataUserPosted['sign'])) {
+            $info = $api->post('/sms/account/me', array('name' => $dataUserPosted['sign']));
 
             if ($info['status'] == 'ok') {
                 $status = $api->get('/sms/account');
@@ -691,36 +738,15 @@ class EduCloudController extends BaseController
                 $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
                 $smsStatus                    = array_merge($settings, $smsStatus);
                 $smsStatus['sms_school_name'] = $status['name'];
-                $smsStatus['status']          = 'enabled';
                 $this->getSettingService()->set('cloud_sms', $smsStatus);
                 return $smsStatus;
             }
         }
 
-        if (isset($dataUserPosted['sms-close'])) {
-            $info = $api->post('/sms/account_disable');
-
-            if ($info['status'] == 'ok') {
-                $smsStatus['sms_enabled'] = '0';
-                $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                $smsStatus                = array_merge($settings, $smsStatus);
-                $smsStatus['status']      = 'disable';
-                $this->getSettingService()->set('cloud_sms', $smsStatus);
-                return $smsStatus;
-            }
-        }
-
-        var_dump($dataUserPosted);
-
-        if (isset($dataUserPosted['sign'])) {
-            $info = $api->post('/sms/account/me', array('name' => $dataUserPosted['sign']));
-
-            if ($info['status'] == 'ok') {
-            }
-        }
-
-        var_dump($settings);
-        return $settings;
+        $smsStatus = array_merge($settings, $dataUserPosted);
+        $this->getSettingService()->set('cloud_sms', $smsStatus);
+        var_dump($smsStatus);
+        return $smsStatus;
     }
 
     protected function handleSmsSetting(Request $request)
