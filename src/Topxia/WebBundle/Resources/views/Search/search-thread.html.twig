@@ -29,13 +29,13 @@
 				<div class="text-sm color-gray">来自
 					{% if thread.targetType == 'group'%}
 						{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
-						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">{{group.title|default('')}}</a>
+						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
 					{% elseif thread.targetType == 'classroom'%}
 						{% set classroom = data('Classroom',{'classroomId':thread.targetId|default(0)}) %}
-						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">{{classroom.title|default('')}}</a>
+						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}" target="_blank">{{classroom.title|default('')}}</a>
 					{% elseif thread.targetType == 'course'%}
 						{% set course = data('Course',{'courseId':thread.targetId|default(0)}) %}
-						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
+						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}" target="_blank">{{course.title|default('')}}</a>
 					{% endif %}
 					<span class="mlm">{{thread.createdTime|smart_time}}</span>
 				</div>
