@@ -5,7 +5,7 @@
 {% block title %}{{ parent() }}{% endblock %}
 {% block content %}
 
-{% if is_plugin_installed('GroupSell') %}
+{% if is_plugin_installed('GroupSell') and not member %}
 {% block  classroom_group %}
   {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'classroom',targetId:classroom.id})) }}
 {% endblock %}
