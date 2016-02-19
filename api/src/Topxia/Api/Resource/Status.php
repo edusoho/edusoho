@@ -3,6 +3,7 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
 class Status extends BaseResource
@@ -20,11 +21,24 @@ class Status extends BaseResource
 
         $statuses = $this->getStatusService()->searchStatuses(array('userId' => $userId, 'courseId' => $courseId), array('createdTime', 'DESC'), $start, $limit);
 
-        return $this->filter($statuses);
+        return $this->_filterStatus($statuses);
     }
 
     public function filter(&$res)
     {
+        $res = ArrayToolkit::parts($res, array('id', 'userId', 'courseId', 'classroomId', 'type', 'objectType', 'objectId', 'properties', 'createdTime'));
+
+        return $res;
+    }
+
+    private function _filterStatus(&$res)
+    {
+        foreach ($res as $key => &$item) {
+            unset($item['private']);
+            unset($item['commentNum']);
+            unset($item['likeNum']);
+        }
+
         return $res;
     }
 
