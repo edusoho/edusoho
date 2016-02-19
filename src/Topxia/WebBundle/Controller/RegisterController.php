@@ -110,10 +110,10 @@ class RegisterController extends BaseController
 
         if ($this->getAuthService()->hasPartnerAuth()) {
             $this->authenticateUser($user);
-            return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+            $goto = $this->generateUrl('partner_login', array('goto' => $goto));
         }
 
-        return $this->redirect($goto);
+        return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
     }
 
     protected function isMobileRegister($registration)
