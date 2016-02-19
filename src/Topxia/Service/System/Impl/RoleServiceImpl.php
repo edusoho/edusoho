@@ -28,12 +28,18 @@ class RoleServiceImpl extends BaseService implements RoleService
         $user                  = $this->getCurrentUser();
         $role['createdUserId'] = $user['id'];
         $role                  = ArrayToolkit::parts($role, array('name', 'code', 'data', 'createdTime', 'createdUserId'));
+        $this->getLogService()->info('role', 'create_role', '新增权限用户组"'.$role['name'].'"', $role);
         return $this->getRoleDao()->createRole($role);
     }
 
-    public function updateRole($id, array $fiedls)
+    public function updateRole($id, array $fields)
     {
-        return $this->getRoleDao()->updateRole($id, $fiedls);
+        $user                  = $this->getCurrentUser();
+        $fields                = ArrayToolkit::parts($fields, array('name', 'code', 'data'));
+        $fields['updatedTime'] = time();
+        $role                  = $this->getRoleDao()->updateRole($id, $fields);
+        $this->getLogService()->info('role', 'update_role', '更新权限用户组"'.$role['name'].'"', $role);
+        return $role;
     }
 
     public function searchRoles($conditions, $sort, $start, $limit)
@@ -104,7 +110,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     public function isRoleCodeAvalieable($code, $exclude = null)
     {
-        if (empty($code)) {
+        if (empty($code) || in_array($code, array('ROLE_USER', 'ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) {
             return false;
         }
 
@@ -120,5 +126,10 @@ class RoleServiceImpl extends BaseService implements RoleService
     protected function getRoleDao()
     {
         return $this->createDao('System.RoleDao');
+    }
+
+    protected function getLogService()
+    {
+        return $this->createService('System.LogService');
     }
 }

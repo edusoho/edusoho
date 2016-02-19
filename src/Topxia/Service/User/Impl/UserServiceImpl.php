@@ -695,6 +695,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array(), 'created', 0, 9999), 'code'));
 
         $notAllowedRoles = array_diff($roles, $allowedRoles);
 
@@ -1403,6 +1404,11 @@ class UserServiceImpl extends BaseService implements UserService
     public function deleteUserPayAgreements($id)
     {
         return $this->getUserPayAgreementDao()->deleteUserPayAgreements($id);
+    }
+
+    protected function getRoleService()
+    {
+        return $this->createService('System.RoleService');
     }
 
     protected function getFriendDao()

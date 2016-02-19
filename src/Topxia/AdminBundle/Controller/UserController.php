@@ -241,8 +241,14 @@ class UserController extends BaseController
 
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
-            $dataDict     = new UserRoleDict();
-            $roleDict     = $dataDict->getDict();
+            $dataDict = new UserRoleDict();
+            $roleDict = $dataDict->getDict();
+            $setRoles = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+
+            foreach ($setRoles as $serRole) {
+                $roleDict[$serRole['code']] = $serRole['name'];
+            }
+
             $role         = "";
             $roleCount    = count($roles);
             $deletedRoles = array_diff($user['roles'], $roles);
@@ -467,6 +473,11 @@ class UserController extends BaseController
         return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
             'user' => $user
         ));
+    }
+
+    protected function getRoleService()
+    {
+        return $this->getServiceKernel()->createService('System.RoleService');
     }
 
     protected function getNotificationService()

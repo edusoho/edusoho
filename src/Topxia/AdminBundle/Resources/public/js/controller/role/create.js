@@ -10,12 +10,10 @@ define(function(require, exports, module) {
         var $form = $('#role-form');
 
         $('#role-submit').on('click', function(event) {
-            var $checkedNodes = getCheckedNodes();
+            var checkedNodes = getCheckedNodes();
             var checkedNodesArray = [];
-            for (var i = 0; i < $checkedNodes.length; i++) {
-                var obj = {};
-                obj.code = $checkedNodes[i].code;
-                checkedNodesArray.push(obj);
+            for (var i = 0; i < checkedNodes.length; i++) {
+                checkedNodesArray.push(checkedNodes[i].code);
             };
             $('#menus').val(JSON.stringify(checkedNodesArray));
         });
@@ -27,7 +25,13 @@ define(function(require, exports, module) {
                     return;
                 }
                 $.post($form.attr('action'), $form.serialize(), function(html) {
-                    Notify.success('权限添加成功!');
+                    var string = $form.attr('action');
+                    
+                    if (string.indexOf('edit') >= 0) {
+                        Notify.success('权限修改成功!');
+                    } else{
+                        Notify.success('权限添加成功!');
+                    }
                     window.location.reload();
                 });
 
@@ -66,29 +70,6 @@ define(function(require, exports, module) {
         }
 
         $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-
-        /*function arrayToJson(o) {
-            var r = [];
-            if (typeof o == "string") return "\"" + o.replace(/([\'\"\\])/g, "\\$1").replace(/(\n)/g, "\\n").replace(/(\r)/g, "\\r").replace(/(\t)/g, "\\t") + "\"";
-            if (typeof o == "object") {
-                if (!o.sort) {
-                    for (var i in o)
-                        r.push(i + ":" + arrayToJson(o[i]));
-                    if (!!document.all && !/^\n?function\s*toString\(\)\s*\{\n?\s*\[native code\]\n?\s*\}\n?\s*$/.test(o.toString)) {
-                        r.push("toString:" + o.toString.toString());
-                    }
-                    r = "{" + r.join() + "}";
-                } else {
-                    for (var i = 0; i < o.length; i++) {
-                        r.push(arrayToJson(o[i]));
-                    }
-                    r = "[" + r.join() + "]";
-                }
-                return r;
-            }
-            return o.toString();
-        }*/
-
     };
 
 });

@@ -55,14 +55,15 @@ define(function(require, exports, module) {
 
             return false;
         });
-
+        /*var $checkbox = $('#new-checkboxs');
         $('#old-checkboxs').change(function(){
-            if ($('#admin').prop('checked')) {
-                $('#admin-checkboxs').show();
+            if ($('#admin').prop('checked') === true) {
+                $checkbox.show();
             } else {
-                $('#admin-checkboxs').hide();
+                $('#new-checkboxs').find('[type=checkbox]:checked').attr('checked', false);
+                $checkbox.hide();
             }
-        });
+        });*/
 
 	};
 

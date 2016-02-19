@@ -23,6 +23,7 @@ class Version20151218141923 extends AbstractMigration
             `data` text COMMENT '权限配置',
             `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
             `createdUserId` int(10) unsigned NOT NULL COMMENT '创建用户ID',
+            `updatedTime`int(10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
             PRIMARY KEY (`id`)
           ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1");
     }

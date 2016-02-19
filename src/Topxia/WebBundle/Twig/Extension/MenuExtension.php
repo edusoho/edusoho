@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Common\MenuBuilder;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 
 class MenuExtension extends \Twig_Extension
@@ -11,6 +12,12 @@ class MenuExtension extends \Twig_Extension
     protected $menuUtil = null;
 
     protected $builders = array();
+
+    protected $levelOneMenus = array();
+
+    protected $levelTwoMenus = array();
+
+    protected $levelThreeMenus = array();
 
     public function __construct($container)
     {
@@ -34,6 +41,34 @@ class MenuExtension extends \Twig_Extension
 
     public function getMenuPath($env, $context, $menu)
     {
+        if (empty($this->levelOneMenus)) {
+            $this->levelOneMenus = ArrayToolkit::index($this->getMenuChildren('admin', 'admin', '1'), 'code');
+
+            foreach ($this->levelOneMenus as $levelOneMenu) {
+                $this->levelTwoMenus = array_merge($this->levelTwoMenus, $this->getMenuChildren('admin', $levelOneMenu['code'], '1'));
+
+                foreach ($this->levelTwoMenus as $levelTwoMenu) {
+                    $this->levelThreeMenus = array_merge($this->levelThreeMenus, $this->getMenuChildren('admin', $levelTwoMenu['code'], '1'));
+                }
+            }
+        }
+
+        if (in_array($menu['code'], ArrayToolkit::column($this->levelOneMenus, 'code'))) {
+            $thisTwoMenu = $this->getMenuChildren('admin', $menu['code'], '1');
+
+            if ($thisTwoMenu) {
+                $menu = $thisTwoMenu[0];
+            }
+        }
+
+        if (in_array($menu['code'], ArrayToolkit::column($this->levelTwoMenus, 'code'))) {
+            $thisThreeMenu = $this->getMenuChildren('admin', $menu['code'], '1');
+
+            if ($thisThreeMenu) {
+                $menu = $thisThreeMenu[0];
+            }
+        }
+
         $route  = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 

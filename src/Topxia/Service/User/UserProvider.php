@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\Service\User;
 
-use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
@@ -26,9 +25,8 @@ class UserProvider implements UserProviderInterface
         }
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
-
-        $currentUser = new CurrentUser();
-        $user        = $this->setPermissions($user);
+        $currentUser       = new CurrentUser();
+        $user              = $this->setPermissions($user);
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
@@ -57,6 +55,12 @@ class UserProvider implements UserProviderInterface
 
         $menus = array();
         $codes = array();
+        $path  = realpath(__DIR__.'/../..')."/AdminBundle/Resources/config/menus_admin.yml";
+        $res   = Yaml::parse($path);
+
+        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+            $menus = $res;
+        }
 
         foreach ($user['roles'] as $code) {
             $role = $this->getRoleService()->getRoleByCode($code);
@@ -68,10 +72,6 @@ class UserProvider implements UserProviderInterface
             $codes = array_merge($codes, $role['data']);
         }
 
-        $codes = ArrayToolkit::column($codes, 'code');
-        $path  = realpath(__DIR__.'/../..')."/AdminBundle/Resources/config/menus_admin.yml";
-        $res   = Yaml::parse($path);
-
         foreach ($res as $key => $value) {
             if (in_array($key, $codes)) {
                 $menus[$key] = $res[$key];
@@ -79,7 +79,6 @@ class UserProvider implements UserProviderInterface
         }
 
         $user['menus'] = $menus;
-
         return $user;
     }
 

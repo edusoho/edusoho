@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\Common;
 
-use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
 class MenuBuilder
@@ -42,7 +41,6 @@ class MenuBuilder
 
         array_pop($paths);
         $paths = array_reverse($paths);
-
         return $paths;
     }
 
@@ -167,7 +165,7 @@ class MenuBuilder
 
     public function loadMenus()
     {
-        $position    = $this->position;
+        /*$position    = $this->position;
         $configPaths = array();
 
         $rootDir = realpath(__DIR__.'/../../../');
@@ -181,12 +179,12 @@ class MenuBuilder
         $apps  = $this->getAppService()->findApps(0, $count);
 
         foreach ($apps as $app) {
-            if ($app['type'] != 'plugin') {
-                continue;
-            }
+        if ($app['type'] != 'plugin') {
+        continue;
+        }
 
-            $code          = ucfirst($app['code']);
-            $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
+        $code          = ucfirst($app['code']);
+        $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
         }
 
         $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
@@ -195,19 +193,18 @@ class MenuBuilder
         $menus = array();
 
         foreach ($configPaths as $path) {
-            if (!file_exists($path)) {
-                continue;
-            }
-
-            $menu = Yaml::parse($path);
-
-            if (empty($menu)) {
-                continue;
-            }
-
-            $menus = array_merge($menus, $menu);
+        if (!file_exists($path)) {
+        continue;
         }
 
+        $menu = Yaml::parse($path);
+
+        if (empty($menu)) {
+        continue;
+        }
+
+        $menus = array_merge($menus, $menu);
+        }*/
         $user = $this->getServiceKernel()->getCurrentUser();
 
         return $user['menus'];

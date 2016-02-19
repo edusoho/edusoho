@@ -16,14 +16,20 @@ class RoleController extends BaseController
             'keyword'     => '',
             'keywordType' => ''
         ));
+        $conditons = array();
+
+        if (isset($fields['keywordType']) && !empty($fields['keywordType'])) {
+            $conditons[$fields['keywordType']] = $fields['keyword'];
+        }
+
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getRoleService()->searchRolesCount($fields),
+            $this->getRoleService()->searchRolesCount($conditons),
             30
         );
 
         $roles = $this->getRoleService()->searchRoles(
-            $fields,
+            $conditons,
             'created',
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -44,6 +50,50 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
+        $res = $this->dataPrepare();
+
+        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
+    }
+
+    public function editAction(Request $request, $id)
+    {
+        $role = $this->getRoleService()->getRole($id);
+        $res  = $this->dataPrepare();
+
+        foreach ($res as &$re) {
+            if (in_array($re['code'], $role['data'])) {
+                $re['checked'] = 'true';
+            }
+        }
+
+        if ('POST' == $request->getMethod()) {
+            $params         = $request->request->all();
+            $params['data'] = json_decode($params['data'], true);
+            $role           = $this->getRoleService()->updateRole($id, $params);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'edit', 'role' => $role));
+    }
+
+    public function showAction(Request $request, $id)
+    {
+        $role = $this->getRoleService()->getRole($id);
+        $res  = $this->dataPrepare();
+
+        foreach ($res as &$re) {
+            if (in_array($re['code'], $role['data'])) {
+                $re['checked'] = 'true';
+            }
+
+            $re['chkDisabled'] = 'true';
+        }
+
+        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'show', 'role' => $role));
+    }
+
+    protected function dataPrepare()
+    {
         $path = realpath(__DIR__.'/..')."/Resources/config/menus_admin.yml";
         $res  = Yaml::parse($path);
         $i    = 0;
@@ -61,7 +111,8 @@ class RoleController extends BaseController
         }
 
         $res = ArrayToolkit::index($res, 'id');
-        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res)));
+
+        return $res;
     }
 
     public function checkNameAction(Request $request)

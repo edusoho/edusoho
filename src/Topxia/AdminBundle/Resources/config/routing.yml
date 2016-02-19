@@ -1,6 +1,7 @@
 admin:
     pattern:  /
     defaults: { _controller: TopxiaAdminBundle:Default:index }
+    permissions: [admin]
 
 admin_inspect:
     pattern:  /inspect
@@ -146,56 +147,69 @@ admin_tag_delete:
 admin_user:
     pattern:  /user
     defaults: { _controller: TopxiaAdminBundle:User:index }
+    permissions: [admin_user_manage]
 
 admin_user_create:
     pattern:  /user/create
     defaults: { _controller: TopxiaAdminBundle:User:create }
+    permissions: [admin_user_create]
 
 admin_user_create_email_check:
     pattern:  /user/create/email/check
     defaults: { _controller: TopxiaAdminBundle:User:emailCheck }
+    permissions: [admin_user_create]
 
 admin_user_create_mobile_check:
     pattern:  /user/create/mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:mobileCheck }
+    permissions: [admin_user_create]
 
 admin_user_create_email_or_mobile_check:
     pattern:  /user/create/email_or_mobile/check
     defaults: { _controller: TopxiaAdminBundle:User:emailOrMobileCheck }
+    permissions: [admin_user_create]
 
 admin_user_create_nickname_check:
     pattern:  /user/create/nickname/check
     defaults: { _controller: TopxiaAdminBundle:User:nicknameCheck }
+    permissions: [admin_user_create]
 
 admin_user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaAdminBundle:User:show }
+    permissions: [admin_user_create,admin_teacher]
 
 admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:User:edit }
+    permissions: [admin_user_manage]
 
 admin_user_lock:
     pattern:  /user/{id}/lock
     defaults: { _controller: TopxiaAdminBundle:User:lock }
     methods:  [POST]
+    permissions: [admin_user_manage]
 
 admin_user_unlock:
     pattern:  /user/{id}/unlock
     defaults: { _controller: TopxiaAdminBundle:User:unlock }
     methods:  [POST]
+    permissions: [admin_user_manage]
 
 admin_user_roles:
     pattern:  /user/{id}/roles
     defaults: { _controller: TopxiaAdminBundle:User:roles }
+    permissions: [admin_user_manage]
 
 admin_user_avatar:
     pattern:  /user/{id}/avatar
     defaults: { _controller: TopxiaAdminBundle:User:avatar }
+    permissions: [admin_user_manage]
 
 admin_user_avatar_crop:
     pattern:  /user/{id}/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
+    permissions: [admin_user_manage]
 
 admin_teacher:
     pattern:  /teacher
@@ -713,16 +727,24 @@ admin_roles:
     pattern:  /setting/roles
     defaults: { _controller: TopxiaAdminBundle:Role:index }
 
-admin_roles_create:
-    pattern:  /setting/roles/create
+admin_role_create:
+    pattern:  /setting/role/create
     defaults: { _controller: TopxiaAdminBundle:Role:create }
 
-admin_roles_check_name:
-    pattern:  /setting/roles/checkName
+admin_role_edit:
+    pattern:  /setting/role/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Role:edit }
+
+admin_role_show:
+    pattern:  /setting/role/{id}/show
+    defaults: { _controller: TopxiaAdminBundle:Role:show }
+
+admin_role_check_name:
+    pattern:  /setting/role/checkName
     defaults: { _controller: TopxiaAdminBundle:Role:checkName }
 
-admin_roles_check_code:
-    pattern:  /setting/roles/checkCode
+admin_role_check_code:
+    pattern:  /setting/role/checkCode
     defaults: { _controller: TopxiaAdminBundle:Role:checkCode }
 
 admin_logs_prod:

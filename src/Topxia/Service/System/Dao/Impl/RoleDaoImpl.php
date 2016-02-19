@@ -44,7 +44,7 @@ class RoleDaoImpl extends BaseDao implements RoleDao
         return $this->getRole($this->getConnection()->lastInsertId());
     }
 
-    public function updateRole($id, array $fiedls)
+    public function updateRole($id, array $fields)
     {
         $this->createSerializer()->serialize($fields, $this->serializeFields);
         $this->getConnection()->update($this->table, $fields, array('id' => $id));

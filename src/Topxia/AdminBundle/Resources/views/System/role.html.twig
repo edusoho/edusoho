@@ -26,8 +26,9 @@
     <tr>
       <th width="25%">权限名称</th>
       <th width="25%">权限CODE</th>
-      <th width="25%">创建时间</th>
-      <th width="25%">创建者ID</th>
+      <th width="20%">创建时间</th>
+      <th width="20%">创建者ID</th>
+      <th>操作</th>
     </tr>   
     {% for role in roles %}
       <tr>
@@ -40,6 +41,17 @@
           {{ role.createdTime|date('Y-m-d H:i:s') }}        </td>
         <td>
           {{ role.createdUserId }}
+        </td>
+        <td>
+          <div class="btn-group">
+            <a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_show', {id:role.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
+            <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_role_edit', {id:role.id}) }}">编辑</a></li>
+            </ul>
+          </div>
         </td>
       </tr>
     {% else %}

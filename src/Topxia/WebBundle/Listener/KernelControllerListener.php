@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Listener;
 
 use Topxia\Common\ArrayToolkit;
-use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -23,16 +22,12 @@ class KernelControllerListener
 
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
+        $permissions = $this->container->get('router')->getRouteCollection()->get($route)->getPermissions();
+
         $currentUser = $this->getUserService()->getCurrentUser();
-        $path        = realpath(__DIR__.'/../..')."/AdminBundle/Resources/config/menus_admin.yml";
-        $menus       = Yaml::parse($path);
 
-        if (empty($menus[$route]) && !in_array($route, ArrayToolkit::column($menus, 'router_name'))) {
-            return;
-        }
-
-        if (preg_match('/admin/s', $route)) {
-            if (empty($currentUser['menus'][$route]) && !in_array($route, ArrayToolkit::column($currentUser['menus'], 'router_name'))) {
+        if (preg_match('/admin/s', $route) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+            if (array_intersect($permissions, ArrayToolkit::column($currentUser['menus'], 'router_name'))) {
                 throw new AccessDeniedException('无权限访问！');
             }
         }
