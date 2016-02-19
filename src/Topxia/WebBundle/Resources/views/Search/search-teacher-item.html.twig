@@ -16,7 +16,7 @@
   </div>
   <div class="teacher-bottom">
     <div class="about">
-      {% if profile.about %}
+      {% if profile.about|default(false) %}
         {{ profile.about|plain_text(30) }}
       {% else %}
         暂无简介

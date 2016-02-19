@@ -28,8 +28,15 @@ class CourseSearchAdapter extends AbstractSearchAdapter
                 $course['middlePicture'] = $courseLocal['middlePicture'];
                 $course['learning']      = in_array($course['courseId'], $learningCourseIds);
                 $course['id']            = $courseLocal['id'];
-                array_push($adaptResult, $course);
+            }else{
+                $course['rating']        = 0;
+                $course['ratingNum']     = 0;
+                $course['studentNum']    = 0;
+                $course['middlePicture'] = '';
+                $course['learning']      = false;
+                $course['id']            = $course['courseId'];
             }
+            array_push($adaptResult, $course);
         }
 
         return $adaptResult;
