@@ -26,7 +26,7 @@
         </div>
       {% else %}
       <div class="alert alert-info" role="alert">
-        {% if videoInfo.tlp %}
+        {% if tlpInfo|default(0) %}
           已开通TLP安全加固服务
         {% else %}
         TLP安全加固服务，防盗播、防恶意下载，<a href="{{ path('admin_cloud_tlp') }}" target="_blank">了解详情</a>
@@ -40,8 +40,8 @@
       <p>已续费（将于{{ videoInfo.renewVideo.effectiveDate|date("Y年n月j日") }}生效)</p>
       {% endif %}
       <p class="text-muted">流量: {{ videoInfo.freeTransfer }}GB</p>
-      {% if videoInfo.firstday and videoInfo.lastday %}
-        <p class="text-muted">服务期限: {{ videoInfo.firstday|date('Y.n.d') }} ~ {{ videoInfo.lastday|date('Y.n.d') }}
+      {% if videoInfo.startMonth and videoInfo.endMonth %}
+        <p class="text-muted">服务期限: {{ videoInfo.startMonth|date('Y.n.d') }} ~ {{ videoInfo.endMonth|date('Y.n.d') }}
       {% endif %}
       {% if videoInfo.remaining > 0 and videoInfo.remaining < 30 %}
         <p class="text-danger text-sm">您的云视频包将于{{ 30 - videoInfo.remaining }}天后到期，请尽快续费</p>

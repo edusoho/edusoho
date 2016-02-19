@@ -88,9 +88,9 @@ class EduCloudController extends BaseController
     {
         try {
             $api = CloudAPIFactory::create('root');
-            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
-            var_dump($info);
+            // var_dump($info);
 
             if (isset($info['licenseDomains'])) {
                 $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -102,20 +102,20 @@ class EduCloudController extends BaseController
 
             $eduSohoOpenClient = new EduSohoOpenClient;
             $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
-            //var_dump($content);
+            var_dump($content);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
         //$content = $this->getContent();
         // var_dump($content);
-        $cashInfo   = isset($content['cashInfo']) ? $content['cashInfo'] : null;
-        $couponInfo = isset($content['couponInfo']) ? $content['couponInfo'] : null;
-        $videoInfo  = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
-        $liveInfo   = isset($content['vlseInfo']['liveInfo']) ? $content['vlseInfo']['liveInfo'] : null;
-        $smsInfo    = isset($content['vlseInfo']['smsInfo']) ? $content['vlseInfo']['smsInfo'] : null;
-        $emailInfo  = isset($content['vlseInfo']['emailInfo']) ? $content['vlseInfo']['emailInfo'] : null;
-
+        $cashInfo   = isset($content['account']) ? $content['account'] : null;
+        $couponInfo = isset($content['coupon']) ? $content['coupon'] : null;
+        $videoInfo  = isset($content['service']['storage']) ? $content['service']['storage'] : null;
+        $liveInfo   = isset($content['service']['live']) ? $content['service']['live'] : null;
+        $smsInfo    = isset($content['service']['sms']) ? $content['service']['sms'] : null;
+        $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
+        $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
         // videoUsedInfo测试数据
         // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
         $chartInfo = array(
@@ -124,9 +124,10 @@ class EduCloudController extends BaseController
             'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),
             'emailUsedInfo' => $this->generateChartData($emailInfo['usedInfo'])
         );
-
-        $notices = $eduSohoOpenClient->getNotices();
-        $notices = json_decode($notices, true);
+        $videoInfo['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
+        $videoInfo['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
+        $notices                 = $eduSohoOpenClient->getNotices();
+        $notices                 = json_decode($notices, true);
 
         if ($this->getWebExtension()->isTrial()) {
             $trialHtml = $this->getCloudCenterExperiencePage();
@@ -143,7 +144,8 @@ class EduCloudController extends BaseController
             'liveInfo'   => $liveInfo,
             'smsInfo'    => $smsInfo,
             'emailInfo'  => $emailInfo,
-            'chartInfo'  => $chartInfo
+            'chartInfo'  => $chartInfo,
+            'tlpInfo'    => $tlpInfo
         ));
     }
 
@@ -580,7 +582,8 @@ class EduCloudController extends BaseController
             $options = $request->request->all();
 
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://115.29.78.158:10001/');
+            //$api->setApiUrl('http://115.29.78.158:10001/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
