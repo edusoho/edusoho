@@ -39,7 +39,7 @@
     {% if setting('course.custom_chapter_enabled')|default(true) %} 
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
-    {% if lesson.free == 1 %}<span class="label label-danger">免费</span>{% endif %}
+    {% if lesson.free == 1 %}<span class="label label-success">免费</span>{% endif %}
     
     {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
       <span class="label label-danger fileDeletedLesson" title="课时文件已删除">无效课时</span>
