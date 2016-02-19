@@ -500,7 +500,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 				$rootScope.token = null;
 				localStore.remove("user");
 				localStore.remove("token");
-				alert("登陆信息失效，请重新登陆");
+				alert("登录信息失效，请重新登录");
 			}
 		}
 	};
@@ -1538,6 +1538,19 @@ filter('coverUserRole', function(AppUtil){
 		};
 		return "学生";
 	}
+}).
+filter('isTeacherRole', function(AppUtil){
+
+	return function(roles) {
+		if (AppUtil.inArray("ROLE_TEACHER", roles) != -1) {
+			return true;
+		}
+
+		if (AppUtil.inArray("teacher", roles) != -1) {
+			return true;
+		}
+		return false;
+	}
 });;
 app.directive('onElementReadey', function ($parse, $timeout) {
     return {
@@ -1628,7 +1641,7 @@ directive('uiTab', function ($parse) {
           var scroller = element[0].querySelector('.ui-tab-content');
           var nav = element[0].querySelector('.ui-tab-nav');
 
-          function itmOnLoadListener(currentItem) {
+          function itemOnLoadListener(currentItem) {
             var isFirstRun = currentItem.attr("isFirstRun");
             var itemOnLoad = currentItem.attr("ng-onload");
             if ("true" != isFirstRun) {
@@ -1652,7 +1665,7 @@ directive('uiTab', function ($parse) {
 
             angular.element(scroller.children[childrenIndex]).addClass('current');
             angular.element(nav.children[childrenIndex]).addClass('current');
-            itmOnLoadListener(angular.element(scroller.children[childrenIndex]));
+            itemOnLoadListener(angular.element(scroller.children[childrenIndex]));
           }
 
           this.currentPage = 0;
@@ -1679,6 +1692,10 @@ directive('uiTab', function ($parse) {
 
                 if (tempCurrentPage == self.currentPage && "empty"  == attrs.select && tagetHasCurrent) {
                   changeTabContentHeight(0);
+                  scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : false
+                  });
                   return;
                 }
 
@@ -1686,8 +1703,12 @@ directive('uiTab', function ($parse) {
                 currentItem.addClass('current');
                 currentScrooler.addClass("current");
 
-                itmOnLoadListener(currentScrooler);
+                itemOnLoadListener(currentScrooler);
                 changeTabContentHeight("100%");
+                scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : true
+                });
             });
           });
 
@@ -1696,6 +1717,10 @@ directive('uiTab', function ($parse) {
                 angular.element(scroller.children[self.currentPage]).removeClass('current');
                 angular.element(nav.children[self.currentPage]).removeClass('current');
                 changeTabContentHeight(0);
+                scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : false
+                });
               });
           }
     }
@@ -1903,6 +1928,10 @@ directive('uiSliderBox', function($parse) {
             }
           });
 
+          if ("true" != attrs.auto && element[0].clientWidth) {
+            element.css('height', (element[0].clientWidth / 1.9) + "px");
+          }
+          
           function initSlider () {
               var slider = new fz.Scroll('.' + attrs.slider, {
                   role: 'slider',
@@ -2000,10 +2029,15 @@ directive('modal', function () {
         $(".ui-scroller").css("overflow","scroll");
       });
 
-      element.on('touchmove', function(event) {
-        
+      scope.$on("tabClick", function(event, data) {
+        if (!data.isShow) {
+          $(".ui-scroller").css("overflow","scroll");
+          return;
+        }
+
+        $(".ui-scroller").css("overflow","hidden");
       });
-      $(".ui-scroller").css("overflow","hidden");
+
     }
   }
 }).
@@ -2586,17 +2620,17 @@ function ClassRoomListController($scope, $stateParams, $state, CourseUtil, Class
     $scope.start = $scope.start || 0;
 
     console.log("ClassRoomListController");
-      $scope.loadMore = function(){
+      $scope.loadMore = function(successCallback){
             if (! $scope.canLoad) {
               return;
             }
            setTimeout(function() {
-              $scope.loadClassRoomList($stateParams.sort);
+              $scope.loadClassRoomList($stateParams.sort, successCallback);
            }, 200);
          
       };
 
-      $scope.loadClassRoomList = function(sort) {
+      $scope.loadClassRoomList = function(sort, successCallback) {
              $scope.showLoad();
               ClassRoomService.searchClassRoom({
                 limit : 10,
@@ -2605,18 +2639,21 @@ function ClassRoomListController($scope, $stateParams, $state, CourseUtil, Class
                 sort : sort,
                 type : $stateParams.type
               }, function(data) {
-                        $scope.hideLoad();
-                        var length  = data ? data.data.length : 0;
-                        if (!data || length == 0 || length < 10) {
-                            $scope.canLoad = false;
-                        }
+                $scope.hideLoad();
+                if (successCallback) {
+                  successCallback();
+                }
+                var length  = data ? data.data.length : 0;
+                if (!data || length == 0 || length < 10) {
+                    $scope.canLoad = false;
+                }
 
-                        $scope.classRooms = $scope.classRooms || [];
-                        for (var i = 0; i < length; i++) {
-                          $scope.classRooms.push(ClassRoomUtil.filterClassRoom(data.data[i]));
-                        };
+                $scope.classRooms = $scope.classRooms || [];
+                for (var i = 0; i < length; i++) {
+                  $scope.classRooms.push(ClassRoomUtil.filterClassRoom(data.data[i]));
+                };
 
-                        $scope.start += data.limit;
+                $scope.start += data.limit;
               });
       }
 
@@ -2816,12 +2853,12 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       });
     }
 
-  this.vipLeand = function(callback) {
+  this.vipLeand = function(vipLevelId, callback) {
     if ($scope.user == null) {
       cordovaUtil.openWebView(app.rootPath + "#/login/course");
       return;
     }
-    if ($scope.user.vip == null || $scope.user.vip.levelId < $scope.course.vipLevelId) {
+    if ($scope.user.vip == null || $scope.user.vip.levelId < vipLevelId) {
       cordovaUtil.openWebView(app.rootPath + "#/viplist");
       return;
     }
@@ -2867,6 +2904,13 @@ function BaseToolController($scope, OrderService, cordovaUtil)
       }
       
       return content;
+  }
+
+  $scope.isCanShowVip = function(vipLevelId) {
+    if (vipLevelId <= 0) {
+      return false;
+    }
+    return $scope.vipLevels.length <= 0;
   }
 }
 
@@ -2941,7 +2985,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
     };
 
     $scope.vipLeand = function() {
-      self.vipLeand(function() {
+      self.vipLeand($scope.course.vipLevelId, function() {
         CourseService.vipLearn({
           courseId : $stateParams.courseId
         }, function(data){
@@ -3161,7 +3205,7 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
     };
 
     $scope.learnByVip = function() {
-      self.vipLeand(function() {
+      self.vipLeand($scope.classRoom.vipLevelId, function() {
         ClassRoomService.learnByVip({
           classRoomId : $stateParams.classRoomId
         }, function(data){
@@ -3240,7 +3284,22 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
       classRoomId : $stateParams.classRoomId,
       limit : 3
     }, function(data) {
-      $scope.students = data.data;
+      $scope.students = data.resources;
+    });
+  };
+
+  $scope.loadTeachers = function() {
+    ClassRoomService.getTeachers({
+      classRoomId : $stateParams.classRoomId,
+    }, function(data) {
+      if (data && data.length > 1) {
+        var length = data.length;
+        for (var i = 2; i < length; i++) {
+          data.pop();
+        };
+      }
+
+      $scope.classRoom.teachers = data;
     });
   };
 
@@ -3381,7 +3440,7 @@ function CourseNoticeController($scope, CourseService, ClassRoomService, $stateP
 {
 	var limit = 10;
 	$scope.start = 0;
-	$scope.showLoadMore = true;
+	$scope.showLoadMore = false;
 	
 	this.loadCourseNotices = function(callback) {
 	    CourseService.getCourseNotices({
@@ -3411,18 +3470,20 @@ function CourseNoticeController($scope, CourseService, ClassRoomService, $stateP
 
 
 	function loadNotices(start, limit) {
+		$scope.showLoad();
 		self.targetService(function(data) {
+			$scope.hideLoad();
 			$scope.notices = $scope.notices || [];
 			
-			if (! data || data.length == 0) {
+			if (! data || data.length < 10) {
 				$scope.showLoadMore = false;
-				$scope.toast("没有更多消息");
 				return;
 			}
-			
+
+			$scope.showLoadMore = true;
 			for (var i = 0; i < data.length; i++) {
-		                  $scope.notices.push(data[i]);
-		           };
+                $scope.notices.push(data[i]);
+           	};
 			$scope.start += limit;
 		});
 	}
@@ -3765,6 +3826,18 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
 
     //lesson.free=1 is free
     $scope.learnLesson = function(lesson) {
+      if (!$scope.user) {
+        var dia = $.dialog({
+                title : '课程提醒' ,
+                content : '你还未登录网校',
+                button : [ "登录网校" ]
+        });
+
+        dia.on("dialog:action",function(e){
+            cordovaUtil.openWebView(app.rootPath + "#/login/course");
+        });
+        return;
+      }
       if (! $scope.member && 1 != lesson.free) {
         alert("请先加入学习");
         return;
@@ -3875,6 +3948,10 @@ function LoginController($scope, UserService, $stateParams, platformUtil, cordov
 	$scope.loginWithOpen = function(type) {
 		cordovaUtil.openPlatformLogin(type);
 	}
+
+	$scope.jumpToSetting = function() {
+		cordovaUtil.startAppView("setting", {});
+	}
 };
 function MainTabController($scope, sideDelegate, $state) {
     console.log("MainTabController");
@@ -3889,9 +3966,11 @@ function FoundTabController($scope, CategoryService, AppUtil, cordovaUtil, $stat
     };
 
     $scope.toggle = function() {
+        
         if ($scope.platform.native) {
             return;
         }
+
         cordovaUtil.openDrawer("open");
     };
 
@@ -4114,26 +4193,31 @@ function MyLearnController($scope, CourseService, ClassRoomService)
 	$scope.live = self.content.live;
   $scope.classroom = self.content.classroom
 
-  	self.loadDataList = function(content, serviceCallback) {
+  	self.loadDataList = function(content, serviceCallback, successCallback) {
+      $scope.showLoad();
   		serviceCallback({
   			limit : 10,
 			start: content.start
   		}, function(data) {
 
+        $scope.hideLoad();
+        if (successCallback) {
+          successCallback();
+        }
   			if (!data || data.data.length == 0) {
-	    			content.canLoad = false;
-	    		}
+    			content.canLoad = false;
+    		}
 
-	    		content.data = content.data || [];
-	    		content.data = content.data.concat(data.data);
-	    		content.start += data.limit;
+    		content.data = content.data || [];
+    		content.data = content.data.concat(data.data);
+    		content.start += data.limit;
 
-	    		if (data.limit > data.data.length) {
-	    			content.canLoad = false;
-	    		}
-	    		if (data.total && content.start >= data.total) {
-	    			content.canLoad = false;
-	    		}
+    		if (data.limit > data.data.length) {
+    			content.canLoad = false;
+    		}
+    		if (data.total && content.start >= data.total) {
+    			content.canLoad = false;
+    		}
   		});
   	}
 
@@ -4141,16 +4225,16 @@ function MyLearnController($scope, CourseService, ClassRoomService)
   		return self.content[type].canLoad;
   	};
 
-  	$scope.loadMore = function(type){
+  	$scope.loadMore = function(type, successCallback){
   		switch (type) {
   			case "course": 
-  				self.loadDataList(self.content.course, CourseService.getLearningCourse);
+  				self.loadDataList(self.content.course, CourseService.getLearningCourse, successCallback);
   				break;
   			case "live": 
-  				self.loadDataList(self.content.live, CourseService.getLiveCourses);
+  				self.loadDataList(self.content.live, CourseService.getLiveCourses, successCallback);
   				break;
         case "classroom":
-          self.loadDataList(self.content.classroom, ClassRoomService.getLearnClassRooms);
+          self.loadDataList(self.content.classroom, ClassRoomService.getLearnClassRooms, successCallback);
           break;
   		}
   	};
@@ -4571,6 +4655,16 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 		self.dialog.dialog("hide");
 	}
 
+	$scope.isShowCoupon = function() {
+		if (platformUtil.native && (platformUtil.iPhone || platformUtil.iPad)) {
+			return false;
+		}
+		if ($scope.data && $scope.data.isInstalledCoupon) {
+			return true;
+		}
+		return false;
+	};
+
 	self.loadOrder();
 }
 ;
@@ -4870,6 +4964,18 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 		self.targetService();
 	}
 
+	$scope.getUserAvatar = function(user) {
+		if (user.avatar) {
+			return user.avatar;
+		}
+
+		if (user.mediumAvatar) {
+			return user.mediumAvatar;
+		}
+
+		return "";
+	}
+
 	this.initService();
 }
 
@@ -4927,6 +5033,18 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 		service($stateParams.targetId, function(data) {
 			$scope.users = getStudentArray(data.resources);
 		});
+	}
+
+	$scope.getUserAvatar = function(user) {
+		if (user.avatar) {
+			return user.avatar;
+		}
+
+		if (user.mediumAvatar) {
+			return user.mediumAvatar;
+		}
+
+		return "";
 	}
 }
 
@@ -5045,31 +5163,44 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil, cordovaU
 		});
 	}
 
-	UserService.getUserInfo({
-		userId : $stateParams.userId
-	}, function(data) {
-		if (! data) {
-			$scope.toast("获取用户信息失败！");
-			return;
-		}
-		$scope.userinfo = data;
-		$scope.isTeacher = self.isTeacher(data.roles);
-		if ($scope.isTeacher) {
-			self.getUserTeachCourse();
-		} else {
-			self.getUserLearnCourse();
+	$scope.isUnOwner = function() {
+
+		if ($scope.user && $scope.user.id == $stateParams.userId) {
+			return false;
 		}
 
-		if ($scope.user) {
-			UserService.searchUserIsFollowed({
-				userId : $scope.user.id,
-				toId : $stateParams.userId
-			}, function(data) {
-				$scope.isFollower = (true == data || "true" == data) ? true : false;
-				console.log($scope.isFollower);
-			});
-		}
-	});
+		return true;
+	};
+
+	$scope.loadUserInfo = function() {
+		$scope.showLoad();
+		UserService.getUserInfo({
+			userId : $stateParams.userId
+		}, function(data) {
+			$scope.hideLoad();
+			if (! data) {
+				$scope.toast("获取用户信息失败！");
+				return;
+			}
+			$scope.userinfo = data;
+			$scope.isTeacher = self.isTeacher(data.roles);
+			if ($scope.isTeacher) {
+				self.getUserTeachCourse();
+			} else {
+				self.getUserLearnCourse();
+			}
+
+			if ($scope.user) {
+				UserService.searchUserIsFollowed({
+					userId : $scope.user.id,
+					toId : $stateParams.userId
+				}, function(data) {
+					$scope.isFollower = (true == data || "true" == data) ? true : false;
+					console.log($scope.isFollower);
+				});
+			}
+		});
+	};
 
 	this.follow = function() {
 		UserService.follow({
@@ -5203,6 +5334,10 @@ function HomeworkTeachingController($scope, $stateParams, HomeworkManagerService
 		data.homeworkResults = homeworkResults;
 		console.log(data);
 		return data;
+	};
+
+	$scope.showHomeWorkResult = function(homeworkResult) {
+		alert("暂不支持在客户端批改作业");
 	};
 
 	$scope.initTeachingResult = function() {
