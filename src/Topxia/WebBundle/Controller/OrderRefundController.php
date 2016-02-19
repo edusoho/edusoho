@@ -30,7 +30,7 @@ class OrderRefundController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($order['targetType'] == 'GroupSell') {
+        if ($order['targetType'] == 'groupSell') {
                 throw $this->createAccessDeniedException('组合购买课程不能退出。');
             }
 

@@ -620,7 +620,7 @@ class ClassroomController extends BaseController
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
-        if ($order['targetType'] == 'GroupSell') {
+        if ($order['targetType'] == 'groupSell') {
             throw $this->createAccessDeniedException('组合购买课程不能退出。');
         }
         
