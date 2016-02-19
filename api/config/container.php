@@ -10,9 +10,13 @@ $resources = array(
     'Classrooms',
     'CourseMember',
     'CourseMembers',
+    'CourseMembership',
+    'LessonLiveTickets',
+    'LessonLiveTicket',
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
+    'MeCourses',
     'User',
     'Users',
     'Course',
@@ -24,8 +28,12 @@ $resources = array(
     'ChaosThreads',
     'Apps',
     'App',
+    'Analysis',
     'Homework',
     'HomeworkResult',
+    'HomeworkManager',
+    'ThreadManager',
+    'Thread',
     'Upload',
     'Status'
 );
@@ -35,5 +43,6 @@ foreach ($resources as $res) {
         $class = "Topxia\\Api\\Resource\\{$res}";
         return new $class();
     }
+
     );
 }

@@ -32,7 +32,11 @@ $app->get(_u('/articles'), 'res.Articles:get');
 $app->get(_u('/articles/{id}'), 'res.Article:get');
 $app->get(_u('/article_categories'), 'res.ArticleCategories:get');
 
+$app->post(_u('/lessons/{id}/live_tickets'), 'res.LessonLiveTickets:post');
+$app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get');
+
 $app->get(_u('/courses/{courseId}/members'), 'res.CourseMembers:get');
+$app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:get');
 
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
@@ -48,6 +52,7 @@ $app->post(_u('/exercise_results/{exerciseId}'), 'res.ExerciseResult:post');
 $app->get(_u('/exercise_results/{lessonId}'), 'res.ExerciseResult:get');
 
 $app->get(_u('/me/chatrooms'), 'res.MeChatroomes:get');
+$app->get(_u('/me/courses'), 'res.MeCourses:get');
 
 $app->get(_u('/mobileschools/apps'), 'res.Apps:get');
 $app->get(_u('/mobileschools/app/{id}'), 'res.App:get');
@@ -60,3 +65,11 @@ $app->get(_u('/homework_results/{lessonId}'), 'res.HomeworkResult:get');
 $app->post(_u('/upload/{group}'), 'res.Upload:post');
 
 $app->get(_u('/user/{userId}/status/{courseId}'), 'res.Status:get');
+
+$app->get(_u('/analysis/{type}/{tab}'), 'res.Analysis:get');
+
+$app->get(_u('/homework/manager/teaching'), 'res.HomeworkManager:teaching');
+$app->get(_u('/thread/manager/question'), 'res.ThreadManager:question');
+$app->get(_u('/homework/manager/check/{homeworkResultId}'), 'res.HomeworkManager:check');
+
+$app->post(_u('/thread/create'), 'res.Thread:create');

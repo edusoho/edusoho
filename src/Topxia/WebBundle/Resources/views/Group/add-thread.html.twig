@@ -1,29 +1,7 @@
 {% extends 'TopxiaWebBundle:Group:layout.html.twig' %}
 {% set script_controller = 'group/group' %}
 {% block group_body %}
-<style>
-.ke-icon-hidden {
-        background-image: url('{{default_path("iconfont-hide.png")}}');
-        background-position:center;
-        width: 16px;
-        height: 16px;
-}  
-.ke-icon-accessory {
 
-        background-image: url('/assets/img/default/iconfont-accessory.png');
-        background-position:center;
-        width: 16px;
-        height: 16px;
-}
-.ke-icon-accessory-red {
-
-        background-image: url('/assets/img/default/iconfont-accessory-red.png');
-        background-position:center;
-        width: 16px;
-        height: 16px;
-}
-
-</style>
 {% if thread|default(null) and attachs %}
   <div id="hasAttach"></div>
 {% endif %}

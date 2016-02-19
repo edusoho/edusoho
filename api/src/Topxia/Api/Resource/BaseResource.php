@@ -50,6 +50,29 @@ abstract class BaseResource
         }
     }
 
+    protected function simpleUsers($users)
+    {
+        $newArray = array();
+        foreach ($users as $key => $user) {
+            $newArray[$key] = $this->simpleUser($user);
+        }
+
+        return $newArray;
+    }
+
+    protected function simpleUser($user)
+    {
+        $simple = array();
+
+        $simple['id'] = $user['id'];
+        $simple['nickname'] = $user['nickname'];
+        $simple['title'] = $user['title'];
+        $simple['roles'] = $user['roles'];
+        $simple['avatar'] = $this->getFileUrl($user['smallAvatar']);
+
+        return $simple;
+    }
+
     protected function nextCursorPaging($currentCursor, $currentStart, $currentLimit, $currentRows)
     {
         $end = end($currentRows);

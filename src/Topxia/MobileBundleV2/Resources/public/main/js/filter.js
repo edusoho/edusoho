@@ -251,8 +251,73 @@ filter('coverAvatar', ['$rootScope', function($rootScope){
 
 	return function(src) {
 		if (src) {
+			if (src.indexOf("http://") == -1) {
+				src = app.host + src;
+			}
 			return src;
 		}
 		return app.viewFloder  + "img/avatar.png";
 	}
-}]);
+}]).
+filter('questionResultStatusColor', function() {
+
+	return function(status) {
+		if ("noAnswer" == status) {
+
+		}
+
+		return "wrong";
+	}
+}).
+filter('questionResultStatusIcon', function() {
+
+	return function(status) {
+		if ("noAnswer" == status) {
+
+		}
+
+		return "icon-wrong";
+	}
+}).
+filter('fillAnswer', function() {
+
+	return function(answer, index) {
+		if (!answer) {
+			return "";
+		}
+
+		if (answer[index]) {
+			return "selected";
+		}
+	}
+}).
+filter('coverUserRole', function(AppUtil){
+
+	return function(roles) {
+		if (AppUtil.inArray("ROLE_SUPER_ADMIN", roles) != -1) {
+			return "超管";
+		};
+
+		if (AppUtil.inArray("ROLE_ADMIN", roles) != -1) {
+			return "管理员";
+		};
+
+		if (AppUtil.inArray("ROLE_TEACHER", roles) != -1) {
+			return "教师";
+		};
+		return "学生";
+	}
+}).
+filter('isTeacherRole', function(AppUtil){
+
+	return function(roles) {
+		if (AppUtil.inArray("ROLE_TEACHER", roles) != -1) {
+			return true;
+		}
+
+		if (AppUtil.inArray("teacher", roles) != -1) {
+			return true;
+		}
+		return false;
+	}
+});
