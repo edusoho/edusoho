@@ -307,23 +307,6 @@ class CourseLessonManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function statusLabelAction(Request $request, $courseId, $lessonId)
-    {
-        $lesson = $this->getCourseService()->getLesson($lessonId);
-        $course = $this->getCourseService()->getCourse($courseId);
-        $file   = array();
-
-        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-        }
-
-        return $this->Render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
-            'lesson' => $lesson,
-            'course' => $course,
-            'file'   => $file
-        ));
-    }
-
     public function indexAction(Request $request, $id)
     {
         $course      = $this->getCourseService()->tryManageCourse($id);
@@ -354,11 +337,23 @@ class CourseLessonManageController extends BaseController
             $mediaMap[$item['mediaId']][] = $item['id'];
         }
 
+        $mediaIds = array_keys($mediaMap);
+        $files    = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
+        foreach ($files as $file) {
+            $lessonIds = $mediaMap[$file['id']];
+
+            foreach ($lessonIds as $lessonId) {
+                $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
             'course'    => $course,
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
-            'homeworks' => empty($homeworks) ? array() : $homeworks
+            'homeworks' => empty($homeworks) ? array() : $homeworks,
+            'files'     => ArrayToolkit::index($files, 'id')
         ));
     }
 
