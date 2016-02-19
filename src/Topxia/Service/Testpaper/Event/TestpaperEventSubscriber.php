@@ -207,8 +207,13 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
     protected function sendStatus($testpaper, $testpaperResult, $type)
     {
         //TODO need to use targetHelper class for consistency
-        $target    = explode('-', $testpaper['target']);
-        $course    = $this->getCourseService()->getCourse($target[1]);
+        $target       = explode('/', $testpaperResult['target']);
+        $courseTarget = explode('-', $target[0]);
+        $lessonTarget = explode('-', $target[1]);
+
+        $course = $this->getCourseService()->getCourse($courseTarget[1]);
+        $lesson = $this->getCourseService()->getLesson($lessonTarget[1]);
+
         $private   = $course['status'] == 'published' ? 0 : 1;
         $classroom = array();
 
@@ -233,9 +238,21 @@ class TestpaperEventSubscriber implements EventSubscriberInterface
             'private'     => $private,
             'properties'  => array(
                 'testpaper' => $this->simplifyTestpaper($testpaper),
-                'result'    => $this->simplifyTestpaperResult($testpaperResult)
+                'result'    => $this->simplifyTestpaperResult($testpaperResult),
+                'lesson'    => $this->simplifyLesson($lesson)
             )
         ));
+    }
+
+    protected function simplifyLesson($lesson)
+    {
+        return array(
+            'id'      => $lesson['id'],
+            'number'  => $lesson['number'],
+            'type'    => $lesson['type'],
+            'title'   => $lesson['title'],
+            'summary' => StringToolkit::plain($lesson['summary'], 100)
+        );
     }
 
     protected function getCourseService()
