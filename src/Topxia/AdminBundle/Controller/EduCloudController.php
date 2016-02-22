@@ -17,35 +17,35 @@ class EduCloudController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        // try {
-        //     $api = CloudAPIFactory::create('root');
+        try {
+            $api = CloudAPIFactory::create('root');
 
-        //     $account = $api->get('/accounts');
+            $account = $api->get('/accounts');
 
-        //     if (!empty($account)) {
-        //         $money = isset($account['cash']) ? $account['cash'] : '--';
+            if (!empty($account)) {
+                $money = isset($account['cash']) ? $account['cash'] : '--';
 
-        //         $loginToken = $this->getAppService()->getLoginToken();
+                $loginToken = $this->getAppService()->getLoginToken();
 
-        //         $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
+                $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
 
-        //         if (isset($result['apply']) && isset($result['apply']['status'])) {
-        //             $smsStatus['status']  = $result['apply']['status'];
-        //             $smsStatus['message'] = $result['apply']['message'];
-        //         } elseif (isset($result['error'])) {
-        //             $smsStatus['status']  = 'error';
-        //             $smsStatus['message'] = $result['error'];
-        //         }
-        //     }
-        // } catch (\RuntimeException $e) {
-        //     return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
-        // }
+                if (isset($result['apply']) && isset($result['apply']['status'])) {
+                    $smsStatus['status']  = $result['apply']['status'];
+                    $smsStatus['message'] = $result['apply']['message'];
+                } elseif (isset($result['error'])) {
+                    $smsStatus['status']  = 'error';
+                    $smsStatus['message'] = $result['error'];
+                }
+            }
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+        }
 
-        // return $this->render('TopxiaAdminBundle:EduCloud:edu-cloud.html.twig', array(
-        //     'account'   => $account,
-        //     'token'     => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
-        //     'smsStatus' => isset($smsStatus) ? $smsStatus : null
-        // ));
+        return $this->render('TopxiaAdminBundle:EduCloud:edu-cloud.html.twig', array(
+            'account'   => $account,
+            'token'     => isset($loginToken) && isset($loginToken["token"]) ? $loginToken["token"] : '',
+            'smsStatus' => isset($smsStatus) ? $smsStatus : null
+        ));
     }
 
     //概览页，产品简介页
@@ -90,7 +90,6 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
-            // var_dump($info);
 
             if (isset($info['licenseDomains'])) {
                 $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -107,8 +106,6 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
-        //$content = $this->getContent();
-        // var_dump($content);
         $cashInfo   = isset($content['account']) ? $content['account'] : null;
         $couponInfo = isset($content['coupon']) ? $content['coupon'] : null;
         $videoInfo  = isset($content['service']['storage']) ? $content['service']['storage'] : null;
@@ -116,9 +113,7 @@ class EduCloudController extends BaseController
         $smsInfo    = isset($content['service']['sms']) ? $content['service']['sms'] : null;
         $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
         $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
-        // var_dump($liveInfo);
-        // videoUsedInfo测试数据
-        // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
+
         $chartInfo = array(
             'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
             'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
@@ -190,8 +185,7 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
 
-        // $content = $api->get("/user/center/{$api->getAccessKey()}/overview");
-        // $content   = $this->getContent();
+        $content   = $api->get("/user/center/{$api->getAccessKey()}/overview");
         $videoInfo = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
 
         $headLeader = array();
@@ -219,80 +213,6 @@ class EduCloudController extends BaseController
         }
 
         return $this->createJsonResponse(false);
-    }
-
-    //此方法做测试用，离线数据
-    public function getContent()
-    {
-        $content             = array();
-        $content['cashInfo'] = array(
-            'cash'          => '13737',
-            'arrearageDays' => '230'
-        );
-        $content['couponInfo'] = array(
-            'availableMoney' => '99.00'
-        );
-        $vlseInfo              = array();
-        $vlseInfo['videoInfo'] = array(
-            'userId'         => '13737',
-            'startMouth'     => '201512',
-            'endMouth'       => '201611',
-            'freeTransfer'   => '100.00',
-            'freeSpace'      => '100.00',
-            'amount'         => '24.00',
-            'enableBuyVideo' => 1,
-            'renewVideo'     => array(
-                'userId'        => '13737',
-                'effectiveDate' => '1480521600'
-            ),
-            'videoBill'      => null,
-            'firstday'       => '1448899200',
-            'lastday'        => '1480435200',
-            'remaining'      => 337,
-            'tlp'            => '0',
-            'usedInfo'       => array(
-                '2015-12-22' => '7',
-                '2015-12-23' => '9',
-                '2015-12-24' => '75',
-                '2015-12-25' => '89',
-                '2015-12-26' => '13',
-                '2015-12-27' => '8',
-                '2015-12-28' => '9'
-            )
-
-        );
-        $vlseInfo['liveInfo'] = array(
-            'userId'      => '13737',
-            'capacity'    => '100',
-            'expire'      => '1453478400',
-            'renewInfo'   => array('effectiveDate' => '1453564800'),
-            'upgradeInfo' => array(),
-            'usedInfo'    => array(
-                '2015-12-22' => '37',
-                '2015-12-23' => '9',
-                '2015-12-24' => '55',
-                '2015-12-25' => '69',
-                '2015-12-26' => '19',
-                '2015-12-27' => '86',
-                '2015-12-28' => '84'
-            )
-
-        );
-        $vlseInfo['smsInfo'] = array(
-            'remainCount' => '2000',
-            'status'      => 'used',
-            'usedInfo'    => array(
-                '2015-12-22' => '47',
-                '2015-12-23' => '95',
-                '2015-12-24' => '65',
-                '2015-12-25' => '9',
-                '2015-12-26' => '18',
-                '2015-12-27' => '89',
-                '2015-12-28' => '86'
-            )
-        );
-        $content['vlseInfo'] = $vlseInfo;
-        return $content;
     }
 
     public function videoWatermarkUploadAction(Request $request)
@@ -378,14 +298,8 @@ class EduCloudController extends BaseController
         }
 
         try {
-            // $info    = $api->get('/sms/account');
-            // $allInfo = $api->get('/me');
-            // var_dump($info);
-            //var_dump($allInfo);
             $smsStatus = $this->newHandleSmsSetting($request);
 
-            //$smsStatus = $this->handleSmsSetting($request);
-            //var_dump($smsStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'smsStatus' => $smsStatus
             ));
@@ -410,7 +324,7 @@ class EduCloudController extends BaseController
 
         try {
             $api = CloudAPIFactory::create('root');
-            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $info        = $api->get('/me');
             $emailStatus = $this->handleEmailSetting($request);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
@@ -508,11 +422,6 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
-            var_dump($info);
-
-            // if (isset($info['levelName'])) {
-            //     $info['level'] = $this->infoLevel($info['level']);
-            // }
         } catch (\RuntimeException $e) {
             $info['error'] = 'error';
         }
@@ -584,7 +493,7 @@ class EduCloudController extends BaseController
 
             $api = CloudAPIFactory::create('root');
             //$api->setApiUrl('http://115.29.78.158:10001/');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
@@ -767,63 +676,6 @@ class EduCloudController extends BaseController
         return $smsStatus;
     }
 
-    //已替换，不再使用
-    protected function handleSmsSetting(Request $request)
-    {
-        list($smsStatus, $schoolNames) = $this->getSchoolName();
-        $smsInfo                       = $this->getSettingService()->get('cloud_sms', array());
-
-        if ($request->getMethod() == 'POST') {
-            $dataUserPosted = $request->request->all();
-            $defaultSetting = array(
-                'sms_enabled'               => '0',
-                'sms_registration'          => 'off',
-                'sms_forget_password'       => 'off',
-                'sms_user_pay'              => 'off',
-                'sms_forget_pay_password'   => 'off',
-                'sms_bind'                  => 'off',
-                'sms_classroom_publish'     => 'off',
-                'sms_course_publish'        => 'off',
-                'sms_normal_lesson_publish' => 'off',
-                'sms_live_lesson_publish'   => 'off',
-                'sms_live_play_one_day'     => 'off',
-                'sms_live_play_one_hour'    => 'off',
-                'sms_homework_check'        => 'off',
-                'sms_testpaper_check'       => 'off',
-                'sms_order_pay_success'     => 'off',
-                'sms_course_buy_notify'     => 'off',
-                'sms_classroom_buy_notify'  => 'off',
-                'sms_vip_buy_notify'        => 'off',
-                'sms_coin_buy_notify'       => 'off'
-            );
-
-            if ($dataUserPosted['sms_order_pay_success'] == 'on') {
-                $dataUserPosted['sms_course_buy_notify']    = 'on';
-                $dataUserPosted['sms_classroom_buy_notify'] = 'on';
-                $dataUserPosted['sms_vip_buy_notify']       = 'on';
-                $dataUserPosted['sms_coin_buy_notify']      = 'on';
-            } else {
-                $dataUserPosted['sms_course_buy_notify']    = 'off';
-                $dataUserPosted['sms_classroom_buy_notify'] = 'off';
-                $dataUserPosted['sms_vip_buy_notify']       = 'off';
-                $dataUserPosted['sms_coin_buy_notify']      = 'off';
-            }
-
-            $dataUserPosted = ArrayToolKit::filter($dataUserPosted, $defaultSetting);
-            $dataUserPosted = array_merge($dataUserPosted, $schoolNames);
-            var_dump($dataUserPosted);
-            $this->getSettingService()->set('cloud_sms', $dataUserPosted);
-
-            if ('1' == $dataUserPosted['sms_enabled']) {
-                $this->setFlashMessage('success', '短信功能开启成功，短信最低￥0.055/条。');
-            } else {
-                $this->setFlashMessage('success', '设置成功。');
-            }
-        }
-
-        return $smsStatus;
-    }
-
     protected function handleEmailSetting(Request $request)
     {
         $dataUserPosted           = $request->request->all();
@@ -923,62 +775,6 @@ class EduCloudController extends BaseController
         }
 
         return array($emailStatus, $sign);
-    }
-
-    //已不用
-    protected function getSchoolName()
-    {
-        $schoolName          = $this->setting('cloud_sms.sms_school_name');
-        $schoolCandidateName = $this->setting('cloud_sms.sms_school_candidate_name');
-        // var_dump($schoolName);
-        // var_dump($schoolCandidateName);
-        $api = CloudAPIFactory::create('root');
-        $api->setApiUrl('http://115.29.78.158:10001/');
-        $result = $api->post("/sms/{$api->getAccessKey()}/applyResult");
-        // var_dump($result);
-        $smsStatus = array();
-
-        if (isset($result['apply']) && isset($result['apply']['status'])) {
-            $smsStatus['status'] = $result['apply']['status'];
-
-            if (($smsStatus['status'] == 'passed') && (strlen($schoolCandidateName) > 0)) {
-                $schoolName          = $schoolCandidateName;
-                $schoolCandidateName = '';
-                $this->setCloudSmsKey('sms_school_name', $schoolName);
-                $this->setCloudSmsKey('sms_school_candidate_name', '');
-            }
-
-            if (isset($result['apply']['message'])) {
-                $smsStatus['message'] = $result['apply']['message'];
-
-                if (strlen($smsStatus['message']) > 0) {
-                    $smsStatus['message'] = $smsStatus['message'];
-                }
-            }
-
-            if ($smsStatus['status'] == 'failed') {
-                $info = '您新申请的网校名称“'.$schoolCandidateName.'”未通过审核，原因是：';
-
-                if (isset($smsStatus['message']) && $smsStatus['message']) {
-                    $info .= $smsStatus['message'];
-                } else {
-                    $info .= '网校名称不符合规范';
-                }
-
-                $smsStatus['schoolNameError'] = $info;
-            }
-        } elseif (isset($result['error'])) {
-            $smsStatus['status']  = 'error';
-            $smsStatus['message'] = $result['error'];
-        }
-
-        return array(
-            $smsStatus,
-            array(
-                'sms_school_name'           => $schoolName,
-                'sms_school_candidate_name' => $schoolCandidateName
-            )
-        );
     }
 
     protected function calStrlen($str)
