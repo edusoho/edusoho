@@ -301,9 +301,14 @@ class EduCloudController extends BaseController
         }
 
         try {
+            $api = CloudAPIFactory::create('root');
+            $api->setApiUrl('http://115.29.78.158:10001/');
+            $info      = $api->get('/me');
             $smsStatus = $this->newHandleSmsSetting($request);
 
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
+                'locked'    => isset($info['locked']) ? $info['locked'] : 0,
+                'enabled'   => isset($info['enabled']) ? $info['enabled'] : 1,
                 'smsStatus' => $smsStatus
             ));
         } catch (\RuntimeException $e) {
