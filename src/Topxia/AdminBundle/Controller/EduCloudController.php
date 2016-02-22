@@ -101,7 +101,6 @@ class EduCloudController extends BaseController
 
             $eduSohoOpenClient = new EduSohoOpenClient;
             $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
-            var_dump($content);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
