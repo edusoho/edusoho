@@ -119,10 +119,14 @@ class EduCloudController extends BaseController
             'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),
             'emailUsedInfo' => $this->generateChartData($emailInfo['usedInfo'])
         );
-        $videoInfo['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
-        $videoInfo['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
-        $notices                 = $eduSohoOpenClient->getNotices();
-        $notices                 = json_decode($notices, true);
+
+        if (isset($videoInfo['startMonth']) && isset($videoInfo['endMonth'])) {
+            $videoInfo['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
+            $videoInfo['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
+        }
+
+        $notices = $eduSohoOpenClient->getNotices();
+        $notices = json_decode($notices, true);
 
         if ($this->getWebExtension()->isTrial()) {
             $trialHtml = $this->getCloudCenterExperiencePage();
