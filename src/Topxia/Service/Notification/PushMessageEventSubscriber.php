@@ -415,7 +415,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         foreach ($course['teacherIds'] as $teacherId) {
             if ($thread['type'] == 'question') {
-                $target = $this->getTarget('course', $post['courseId']);
+                $target = $this->getTarget('course', $thread['courseId']);
                 $from   = array(
                     'type'  => 'course',
                     'id'    => $thread['courseId'],
