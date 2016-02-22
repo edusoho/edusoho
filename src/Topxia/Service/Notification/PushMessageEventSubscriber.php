@@ -30,7 +30,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.thread.post.create' => 'onCourseThreadPostCreate',
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
-            'course.lesson_start'       => 'onCourseLessonStart'
+            'course.lesson_start'       => 'onCourseLessonStart',
+            'course.thread.create'      => 'onCourseThreadCreate'
         );
     }
 
@@ -405,6 +406,33 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'learnStartTime' => $learn['startTime']
         );
         $this->push($course['title'], $lesson['title'], $from, $to, $body);
+    }
+
+    public function onCourseThreadCreate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $course = $this->getCourseService()->getCourse($thread['courseId']);
+
+        foreach ($course['teacherIds'] as $teacherId) {
+            if ($thread['type'] == 'question') {
+                $target = $this->getTarget('course', $post['courseId']);
+                $from   = array(
+                    'type'  => 'course',
+                    'id'    => $thread['courseId'],
+                    'image' => $target['image']
+                );
+                $to   = array('type' => 'user', 'id' => $thread['userId']);
+                $body = array(
+                    'type'                => 'question.answered',
+                    'questionId'          => $thread['id'],
+                    'courseId'            => $thread['courseId'],
+                    'lessonId'            => $thread['lessonId'],
+                    'questionCreatedTime' => $thread['createdTime'],
+                    'questionTitle'       => $thread['title']
+                );
+                $this->push($course['title'], $thread['title'], $from, $to, $body);
+            }
+        }
     }
 
     protected function push($title, $content, $from, $to, $body)
