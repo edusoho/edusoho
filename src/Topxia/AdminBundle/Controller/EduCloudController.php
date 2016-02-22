@@ -624,9 +624,8 @@ class EduCloudController extends BaseController
                 $info = $api->post('/sms/account', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
 
                 if ($info['status'] == 'ok') {
-                    $status              = $api->get('/sms/account');
-                    $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
-                    var_dump($status);
+                    $status                       = $api->get('/sms/account');
+                    $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
                     $smsStatus['sms_enabled']     = '1';
                     $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
                     $smsStatus                    = array_merge($settings, $smsStatus);
@@ -675,7 +674,6 @@ class EduCloudController extends BaseController
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
 
         $this->getSettingService()->set('cloud_sms', $smsStatus);
-        var_dump($smsStatus);
         return $smsStatus;
     }
 
@@ -742,7 +740,6 @@ class EduCloudController extends BaseController
                 'sender' => $operation['sign']
             );
             $result = $api->post("/me/email_account_update", $params);
-            var_dump($result);
 
             if ($result['success'] == 1) {
                 $this->setFlashMessage('success', '云邮件设置已保存！');
