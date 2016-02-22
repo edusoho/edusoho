@@ -20,9 +20,9 @@
         {% endif %}
       </h4> #}
       <!--未购买-->
-      {% if  videoInfo.enableBuyVideo|default(0) != 1 %}
-        <div style="">
-          <p class="text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</p> 
+      {% if videoInfo.enableBuyVideo|default(0) != 1 %}
+        <div class="edu-verticalmiddle">
+          <div class="edu-verticalmiddle-content"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</div> 
         </div>
       {% else %}
       <div class="alert alert-info" role="alert">
@@ -32,13 +32,17 @@
         TLP安全加固服务，防盗播、防恶意下载，<a href="{{ path('admin_cloud_tlp') }}" target="_blank">了解详情</a>
         {% endif %}
       </div>
-      <p class="text-muted">存储空间: {{ videoInfo.freeSpace }}GB</p>
-      {% if not videoInfo.renewVideo.effectiveDate|default(0) %}
+      <p>
+        <span class="text-muted mrm">存储空间: {{ videoInfo.freeSpace }}GB</span>
+        {% if not videoInfo.renewVideo.effectiveDate|default(0) %}
         <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
-        <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a> 
-      {% else %}
-      <p>已续费（将于{{ videoInfo.renewVideo.effectiveDate|date("Y年n月j日") }}生效)</p>
-      {% endif %}
+        <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a>
+        {% else %}
+        <span>
+          已续费（将于{{ videoInfo.renewVideo.effectiveDate|date("Y年n月j日") }}生效)
+        </span>
+        {% endif %}
+      </p>
       <p class="text-muted">流量: {{ videoInfo.freeTransfer }}GB</p>
       {% if videoInfo.startMonth and videoInfo.endMonth %}
         <p class="text-muted">服务期限: {{ videoInfo.startMonth|date('Y.n.d') }} ~ {{ videoInfo.endMonth|date('Y.n.d') }}

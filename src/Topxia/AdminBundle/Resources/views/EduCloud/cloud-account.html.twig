@@ -8,8 +8,8 @@
               {% else %}
                 <span class="text-danger balance">{{ cashinfo.cash|default(0) }}</span>元
               {% endif %}
-              <a href="{{path('admin_cloud_recharge')}}" class="btn-recharge btn btn-warning" target="_blank">充值</a>
-              <a href="{{path('admin_cloud_detail')}}" class="btn btn-link" target="_blank">查看账单</a>  
+              <a href="{{path('admin_cloud_recharge')}}" class="btn-recharge btn btn-warning" target="_blank" style="vertical-align:top">充值</a>
+              <a href="{{path('admin_cloud_detail')}}" class="btn btn-link" target="_blank" style="vertical-align:top">查看账单</a>  
             </p> 
             {% if  cashInfo.cash|default(0) < 50 and cashInfo.cash|default(0) >= 0 %}
               <p class="text-danger text-sm">你的余额不足50元，请尽快充值，以免影响正常使用。</p>
@@ -21,10 +21,8 @@
               {% endif %}
             {% endif %}
             <hr>
-            <div class="col-md-2">
-            代金券余额: <span class="" >{{ couponInfo.balance|default("0.00") }}</span> 
-            </div> 
-            <div class=""><a href="">激活代金券</a></div>
+            代金券余额：<span class="" >{{ couponInfo.balance|default("0.00") }}</span>
+            <a href="" style="margin-left:50px">激活代金券</a>
            {# {% if account %}
            <!--不足50元-->
            {% if 0 < content.account.cash|default(0) and content.account.cash|default(0) < 50 %}

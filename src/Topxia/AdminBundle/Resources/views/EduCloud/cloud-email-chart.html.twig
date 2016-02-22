@@ -8,7 +8,12 @@
     </div>
     <div class="panel-body" id="email-data-tab" style="height: 250px;">
       {% if  setting('cloud_email.status')|default('disable') == 'disable' %}
-      <span>尚未启用云邮件服务，<a href="{{path('admin_edu_cloud_email')}}">立即启用</a></span>
+        <div class="edu-verticalmiddle">
+          <div class="edu-verticalmiddle-content">
+            尚未启用云邮件服务，
+            <a href="{{path('admin_edu_cloud_email')}}">立即启用</a>
+          </div>
+        </div>
       {% endif %}
     </div>
   </div>

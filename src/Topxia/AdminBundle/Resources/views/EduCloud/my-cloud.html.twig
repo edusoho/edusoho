@@ -6,21 +6,6 @@
 
 
 {% block main %}
-<style type="text/css">
-  .eduyun-main {
-    position: relative;
-  }
-  .eduyun-main .mask {
-    position: absolute;
-    z-index: 1000;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: #000;
-    background: rgba(0,0,0,.4);
-  }
-</style>
       <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
         {% if locked|default(0) == 1 %}
           <div class="alert alert-warning" role="alert">您的教育云服务已被锁定，请联系客服人员：0571-86819929。</div>
@@ -107,23 +92,21 @@
 
           <div class="panel panel-default">
             <div class="panel-body">
-              <div class="row">
-
-                <div class="media edu-user col-md-8">
-                  <div class="pull-left">
-                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.png') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
-                  </div>
-                  <div class="media-body">
+              <div class="edu-user">
+                <div class="pull-left">
+                  <img class="edu-user-img" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}>
+                </div>
+                <div class="edu-user-info">
+                  <div class="detail">
                     {% if isBinded.name|default("")  == "" %}
-                    <br>
-                    <p>您尚未绑定EduSoho开放云平台&nbsp;<a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"><i class="glyphicon glyphicon-question-sign"></i></a></p>
+                      您尚未绑定EduSoho开放云平台&nbsp;
+                      <a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i>
                     {% else %}
-                    <p>Hi,<span class="name">{{ isBinded.name|default("")}}</span></p>
-                    <p>ES云平台账户名: {{isBinded.email|default('') }}</p>
+                      Hi,<span class="name">{{ isBinded.name|default("")}}</span>
+                      <div style="margin-top:10px">ES云平台账户名: {{isBinded.email|default('') }}</div>
                     {% endif %}
                   </div>
                 </div>
-
               </div>
             </div>
           </div>

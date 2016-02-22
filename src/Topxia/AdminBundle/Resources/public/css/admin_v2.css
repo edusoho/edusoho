@@ -417,3 +417,45 @@ fieldset #checkboxChoices{
   -o-transition: all .3s ease;
   transition: all .3s ease;
 }
+
+/*edu-cloud*/
+.eduyun-main {
+  position: relative;
+}
+.eduyun-main .mask {
+  position: absolute;
+  z-index: 1001;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #000;
+  background: rgba(0,0,0,.4);
+}
+.edu-user .edu-user-img {
+  width: 100px;
+  height: 100px;
+}
+.edu-user .edu-user-info{
+  margin-left: 120px;
+}
+.edu-user .edu-user-info {
+  display: table;
+  height: 100px;
+}
+.edu-user .edu-user-info .detail {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.edu-verticalmiddle {
+  display:table;height:100%;width:100%
+}
+.edu-verticalmiddle-content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+
+

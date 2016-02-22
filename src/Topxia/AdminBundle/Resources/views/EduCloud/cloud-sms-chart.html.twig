@@ -8,7 +8,12 @@
     </div>
     <div class="panel-body" id="sms-data-tab" style="height: 250px;">
     {% if setting('cloud_sms.sms_enabled')|default('0') == '0' %}
-    <span>尚未启用云短信服务，<a href="{{path('admin_edu_cloud_sms')}}">立即启用</a></span>
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content">
+          尚未启用云短信服务，
+          <a href="{{path('admin_edu_cloud_sms')}}">立即启用</a>
+        </div>
+      </div>
     {% endif %}
     </div>
   </div>

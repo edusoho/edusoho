@@ -6,7 +6,6 @@
       <p class="pull-right"><a href="{{path('admin_cloud_detail')}}">明细</a></p>	
       <h3 class="panel-title">云视频使用情况（最近七个月）</h3>
     </div>
-    
     <div class="panel-body" id="storage-data-tab" style="height: 250px;">
     {% if  setting('storage.upload_mode')|default('local') == 'local' %}
     <span>尚未启用云视频服务，<a href="{{path('admin_setting_cloud_video')}}">立即启用</a></span>
