@@ -1,0 +1,24 @@
+admin_operation_keyword:
+    name: 敏感词管理
+    parent: admin_operation
+    router_name: admin_keyword
+    group: 4
+
+admin_operation_keyword_set:
+    name: 敏感词列表
+    parent: admin_operation_keyword
+    router_name: admin_keyword
+
+admin_operation_keyword_banlogs:
+    name: 屏蔽记录
+    parent: admin_operation_keyword
+    router_name: admin_keyword_banlogs
+
+admin_operation_keyword_create:
+    name: 添加敏感词
+    parent: admin_operation_keyword_set
+    router_name: admin_keyword_create
+    mode: modal
+    group: 2
+    blank: 1
+

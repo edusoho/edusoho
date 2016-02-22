@@ -11,13 +11,19 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
 
     public function getProfile($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        $that = $this;
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
     public function addProfile($profile)
     {
         $affected = $this->getConnection()->insert($this->table, $profile);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert profile error.');
@@ -29,6 +35,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
     public function updateProfile($id, $profile)
     {
         $this->getConnection()->update($this->table, $profile, array('id' => $id));
+        $this->clearCached();
         return $this->getProfile($id);
     }
 
@@ -39,8 +46,15 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
     }
 
     public function dropFieldData($fieldName)
@@ -86,8 +100,10 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             throw $this->createDaoException('fieldName error');
         }
 
-        $sql = "UPDATE {$this->table} set {$fieldName} =null ";
-        return $this->getConnection()->exec($sql);
+        $sql    = "UPDATE {$this->table} set {$fieldName} =null ";
+        $result = $this->getConnection()->exec($sql);
+        $this->clearCached();
+        return $result;
     }
 
     public function searchProfiles($conditions, $orderBy, $start, $limit)

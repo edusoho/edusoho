@@ -27,7 +27,7 @@
             <a class="link-dark" href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
           </div>
           <div class="comments-content">
-           {{ post.content|at(post.ats)|raw }}
+           {{ post.content|at(post.ats)|sub_text(60) }}
           </div>
         </div>
       </div>

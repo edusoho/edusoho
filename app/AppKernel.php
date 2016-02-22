@@ -1,8 +1,9 @@
 <?php
 
-use Topxia\Common\ExtensionManager;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ExtensionManager;
 
 class AppKernel extends Kernel
 {
@@ -17,7 +18,7 @@ class AppKernel extends Kernel
         $this->extensionManger = ExtensionManager::init($this);
     }
 
-    public function registerBundles()
+    public function registerBundles ()
     {
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
@@ -36,38 +37,38 @@ class AppKernel extends Kernel
             new Mooc\AdminBundle\MoocAdminBundle(),
             new Mooc\WebBundle\MoocWebBundle(),
             new Custom\WebBundle\CustomWebBundle(),
-            new Custom\AdminBundle\CustomAdminBundle()
+            new Custom\AdminBundle\CustomAdminBundle(),
+            new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle()
         );
 
-        $pluginMetaFilepath = $this->getRootDir().'/data/plugin_installed.php';
-        $pluginRootDir      = $this->getRootDir().'/../plugins';
+        $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';
+        $pluginRootDir = $this->getRootDir() . '/../plugins';
 
         if (file_exists($pluginMetaFilepath)) {
-            $pluginMeta    = include_once $pluginMetaFilepath;
+            $pluginMeta = include_once($pluginMetaFilepath);
             $this->plugins = $pluginMeta['installed'];
 
             if (is_array($pluginMeta)) {
                 foreach ($pluginMeta['installed'] as $c) {
                     if ($pluginMeta['protocol'] == '1.0') {
-                        $c         = ucfirst($c);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $c = ucfirst($c);
+                        $p = base64_decode('QnVuZGxl');
+                        $cl = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     } elseif ($pluginMeta['protocol'] == '2.0') {
                         if ($c['type'] != 'plugin') {
                             continue;
                         }
-
-                        $c         = ucfirst($c['code']);
-                        $p         = base64_decode('QnVuZGxl');
-                        $cl        = "{$c}\\".substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
+                        $c = ucfirst($c['code']);
+                        $p = base64_decode('QnVuZGxl');
+                        $cl = "{$c}\\" . substr(str_repeat("{$c}{$p}\\", 2), 0, -1);
                         $bundles[] = new $cl();
                     }
                 }
             }
         }
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev' , 'test'))) {
             $bundles[] = new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();

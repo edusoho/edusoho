@@ -22,7 +22,13 @@ class QuestionMarkerServiceTest extends BaseTestCase
             "parentId"   => 0,
             'copyId'     => 1
         );
-        $question       = $this->getQuestionService()->createQuestion($question);
+        $fields = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
+
+        $question = $this->getQuestionService()->createQuestion($question);
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
 
         $result = $this->getQuestionMarkerService()->getQuestionMarker($questionMarker['id']);
@@ -64,7 +70,12 @@ class QuestionMarkerServiceTest extends BaseTestCase
         );
         $question  = $this->getQuestionService()->createQuestion($question);
         $question1 = $this->getQuestionService()->createQuestion($question1);
+        $fields    = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
 
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
         $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
 
@@ -105,11 +116,16 @@ class QuestionMarkerServiceTest extends BaseTestCase
         );
         $question  = $this->getQuestionService()->createQuestion($question);
         $question1 = $this->getQuestionService()->createQuestion($question1);
+        $fields    = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
 
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
         $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
         $results         = $this->getQuestionMarkerService()->findQuestionMarkersByMarkerId(1);
-        $this->assertCount(2, $results);
+        $this->assertCount(3, $results);
     }
 
     public function testFindQuestionMarkersByQuestionId()
@@ -144,11 +160,16 @@ class QuestionMarkerServiceTest extends BaseTestCase
         );
         $question  = $this->getQuestionService()->createQuestion($question);
         $question1 = $this->getQuestionService()->createQuestion($question1);
+        $fields    = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
 
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
         $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
         $results         = $this->getQuestionMarkerService()->findQuestionMarkersByQuestionId($question['id']);
-        $this->assertCount(1, $results);
+        $this->assertCount(2, $results);
     }
 
     public function testAddQuestionMarker()
@@ -184,7 +205,12 @@ class QuestionMarkerServiceTest extends BaseTestCase
         );
         $question  = $this->getQuestionService()->createQuestion($question);
         $question1 = $this->getQuestionService()->createQuestion($question1);
+        $fields    = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
 
+        $this->getMarkerService()->addMarker(1, $fields);
         $question        = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
         $question1       = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
         $questionMarker  = $this->getQuestionMarkerService()->getQuestionMarker($question['id']);
@@ -211,7 +237,13 @@ class QuestionMarkerServiceTest extends BaseTestCase
             "parentId"   => 0,
             'copyId'     => 1
         );
-        $question       = $this->getQuestionService()->createQuestion($question);
+        $question = $this->getQuestionService()->createQuestion($question);
+        $fields   = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
+
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
 
         $updateQuestionMarker = array(
@@ -239,7 +271,13 @@ class QuestionMarkerServiceTest extends BaseTestCase
             "parentId"   => 0,
             'copyId'     => 1
         );
-        $question       = $this->getQuestionService()->createQuestion($question);
+        $question = $this->getQuestionService()->createQuestion($question);
+        $fields   = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
+
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
         $resultStart    = $this->getQuestionMarkerService()->getQuestionMarker($questionMarker['id']);
         $this->getQuestionMarkerService()->deleteQuestionMarker($questionMarker['id']);
@@ -281,7 +319,12 @@ class QuestionMarkerServiceTest extends BaseTestCase
         );
         $question  = $this->getQuestionService()->createQuestion($question);
         $question1 = $this->getQuestionService()->createQuestion($question1);
+        $fields    = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
 
+        $this->getMarkerService()->addMarker(1, $fields);
         $question  = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 1);
         $question1 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
 
@@ -289,7 +332,7 @@ class QuestionMarkerServiceTest extends BaseTestCase
             'difficulty' => 'hard'
         );
         $results = $this->getQuestionMarkerService()->searchQuestionMarkers($conditions, array('createdTime', 'DESC'), 0, 10);
-        $this->assertCount(2, $results);
+        $this->assertCount(3, $results);
     }
 
     public function testSortQuestionMarker()
@@ -341,7 +384,12 @@ class QuestionMarkerServiceTest extends BaseTestCase
         $question  = $this->getQuestionService()->createQuestion($question);
         $question1 = $this->getQuestionService()->createQuestion($question1);
         $question2 = $this->getQuestionService()->createQuestion($question2);
+        $fields    = array(
+            'second'     => 30,
+            'questionId' => 1
+        );
 
+        $this->getMarkerService()->addMarker(1, $fields);
         $questionMarker1 = $this->getQuestionMarkerService()->addQuestionMarker($question['id'], 1, 3);
         $questionMarker2 = $this->getQuestionMarkerService()->addQuestionMarker($question1['id'], 1, 1);
         $questionMarker3 = $this->getQuestionMarkerService()->addQuestionMarker($question2['id'], 1, 2);
@@ -363,5 +411,10 @@ class QuestionMarkerServiceTest extends BaseTestCase
     protected function getQuestionService()
     {
         return $this->getServiceKernel()->createService('Question.QuestionService');
+    }
+
+    protected function getMarkerService()
+    {
+        return $this->getServiceKernel()->createService('Marker.MarkerService');
     }
 }

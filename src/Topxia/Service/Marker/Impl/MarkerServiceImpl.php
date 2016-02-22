@@ -75,8 +75,13 @@ class MarkerServiceImpl extends BaseService implements MarkerService
     {
         $media = $this->getUploadFileService()->getFile($mediaId);
 
-        if (empty($mediaId) || empty($media)) {
-            throw $this->createServiceException("视频文件不存在！");
+        // if (empty($mediaId) || empty($media)) {
+        //     throw $this->createServiceException("视频文件不存在！");
+        // }
+
+        if (empty($media)) {
+            $media['id'] = 0;
+            $this->getLogService()->error('mediaId', 'isNotExist', "视频文件不存在！");
         }
 
         if (!isset($fields['second']) || $fields['second'] == "") {
@@ -84,7 +89,7 @@ class MarkerServiceImpl extends BaseService implements MarkerService
         }
 
         $marker = array(
-            'mediaId'     => $mediaId,
+            'mediaId'     => $media['id'],
             'createdTime' => time(),
             'updatedTime' => time(),
             'second'      => $fields['second']

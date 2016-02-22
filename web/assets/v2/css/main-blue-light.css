@@ -1754,12 +1754,6 @@ html.nav-active body {
   overflow: hidden;
   height: 100%;
 }
-.es-wrap {
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
-  -o-transition: all 0.3s ease;
-  transition: all 0.3s ease;
-}
 .es-wrap.nav-active {
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -1871,6 +1865,9 @@ select:-webkit-autofill {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+}
+.navbar-collapse {
+  border-top: none;
 }
 .es-header {
   background: #212121;
@@ -5465,7 +5462,6 @@ a.homework-essay-textarea-pack-up {
   position: absolute;
   right: 0px;
   top: 9px;
-  font-size: 16px;
   color: #c1c1c1;
 }
 @media (max-width: 767px) {
@@ -6220,7 +6216,7 @@ textarea {
 .form-control:-ms-input-placeholder {
   color: #919191;
 }
-.avatar-ss {
+.avatar-xxs {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
@@ -6252,24 +6248,24 @@ textarea {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
-  width: 128px !important;
-  height: 128px !important;
+  width: 120px !important;
+  height: 120px !important;
 }
 .avatar-square-md,
 .group-avatar-md {
   width: 60px;
   height: 60px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .avatar-square-sm,
 .group-avatar-sm {
   width: 50px;
   height: 50px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }
 .progress {
   -webkit-border-radius: 0;
@@ -8475,7 +8471,7 @@ textarea {
   white-space: nowrap;
   word-wrap: normal;
   margin-bottom: 30px;
-  padding-right: 60px;
+  padding-right: 80px;
 }
 .index-article .index-new-article li.last {
   margin-bottom: 0;
@@ -8592,7 +8588,7 @@ textarea {
   color: #fff;
 }
 .topic-post-small + .topic-post-small {
-  margin-top: 14px;
+  margin-top: 12px;
 }
 .topic-post-small:hover {
   color: #fff;
@@ -11670,6 +11666,10 @@ textarea {
   background: #ff842e;
   border-color: #ff842e;
 }
+.social-login .social-icon.social-more:hover {
+  background: #4bbbfa;
+  border-color: #4bbbfa;
+}
 .login-section {
   margin: 50px auto;
   width: 460px;
@@ -12825,8 +12825,8 @@ textarea {
 }
 .user-center-header {
   position: relative;
-  height: 300px;
-  padding: 60px 0;
+  height: 220px;
+  padding: 40px 0;
   background-color: #313131;
   z-index: 1;
 }
@@ -12865,7 +12865,6 @@ textarea {
   float: left;
   width: 66.67%;
   padding-left: 200px;
-  margin-top: 20px;
 }
 @media (max-width: 991px) {
   .user-center-header .user-avatar {
@@ -12955,7 +12954,7 @@ textarea {
   border-radius: 2px;
 }
 .user-center-header .user-about-content {
-  height: 150px;
+  height: 100px;
   overflow: hidden;
   line-height: 25px;
 }
@@ -12964,7 +12963,7 @@ textarea {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  height: 190px;
+  height: 150px;
   position: relative;
 }
 .group-header .media {

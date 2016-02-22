@@ -10,19 +10,33 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function getNavigationsCountByType($type)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  type = ?";
-        return $this->getConnection()->fetchColumn($sql, array($type));
+        $that = $this;
+
+        return $this->fetchCached("type:{$type}", $type, function ($type) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  type = ?";
+            return $that->getConnection()->fetchColumn($sql, array($type));
+        }
+
+        );
     }
 
     public function getNavigation($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
     public function addNavigation($navigation)
     {
         $affected = $this->getConnection()->insert($this->table, $navigation);
+        $this->clearCached();
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert navigation error.');
         }
@@ -32,30 +46,49 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
 
     public function updateNavigation($id, $fields)
     {
-        return $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $result = $this->getConnection()->update($this->table, $fields, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteNavigation($id)
     {
-        return ($this->getConnection()->delete($this->table, array('id' => $id))); 
+        $result = ($this->getConnection()->delete($this->table, array('id' => $id)));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteNavigationByParentId($parentId)
     {
-        return ($this->getConnection()->delete($this->table, array('parentId' => $parentId))); 
+        $result = ($this->getConnection()->delete($this->table, array('parentId' => $parentId)));
+        $this->clearCached();
+        return $result;
     }
-    
+
     public function getNavigationsCount()
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table}";
-        return $this->getConnection()->fetchColumn($sql, array());
+        $that = $this;
+
+        return $this->fetchCached("count", function () use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()}";
+            return $that->getConnection()->fetchColumn($sql, array());
+        }
+
+        );
     }
 
     public function findNavigationsByType($type, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $sql = "SELECT * FROM {$this->table} WHERE type = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($type));
+
+        $that = $this;
+
+        return $this->fetchCached("type:{$type}:start:{$start}:limit:{$limit}", $type, $start, $limit, function ($type, $start, $limit) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE type = ? ORDER BY sequence ASC LIMIT {$start}, {$limit}";
+            return $that->getConnection()->fetchAll($sql, array($type));
+        }
+
+        );
     }
 
     public function findNavigations($start, $limit)
@@ -64,5 +97,4 @@ class NavigationDaoImpl extends BaseDao implements NavigationDao
         $sql = "SELECT * FROM {$this->table} ORDER BY sequence ASC LIMIT {$start}, {$limit}";
         return $this->getConnection()->fetchAll($sql, array());
     }
-
 }
