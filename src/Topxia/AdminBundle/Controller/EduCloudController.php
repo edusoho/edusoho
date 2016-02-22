@@ -116,6 +116,7 @@ class EduCloudController extends BaseController
         $smsInfo    = isset($content['service']['sms']) ? $content['service']['sms'] : null;
         $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
         $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
+        // var_dump($liveInfo);
         // videoUsedInfo测试数据
         // $videoUsedInfo = '[{"date":"2015-03","count":99},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]';
         $chartInfo = array(
@@ -736,7 +737,6 @@ class EduCloudController extends BaseController
             return $smsStatus;
         }
 
-        //var_dump($dataUserPosted);
         //更新云短信签名
 
         if (isset($dataUserPosted['sign'])) {
@@ -842,12 +842,24 @@ class EduCloudController extends BaseController
     {
         $api = CloudAPIFactory::create('root');
         $api->setApiUrl('http://124.160.104.74:8098/');
-        $settings = $this->getSettingService()->get('cloud_email', array());
-        $result   = array();
-        $sign     = array();
+        $settings    = $this->getSettingService()->get('cloud_email', array());
+        $result      = array();
+        $sign        = array();
+        $emailStatus = array();
+
+        // var_dump($result);
 
         if (isset($operation['email-open'])) {
-            $result = $api->post("/me/email_account");
+            if (isset($settings['sign'])) {
+                $emailStatus['status'] = 'enable';
+                $emailStatus           = array_merge($settings, $emailStatus);
+            } else {
+                $status = $api->post("/me/email_account");
+                // $result = $api->get("/me/email_account");
+                // var_dump($result);
+            }
+
+            $result = $api->get("/me/email_account");
             $this->setFlashMessage('success', '云邮件设置已保存！');
             $mailer = $this->getSettingService()->get('mailer', array());
 
@@ -866,24 +878,41 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('mailer', $mailer);
                 $mailerWithoutPassword             = $mailer;
                 $mailerWithoutPassword['password'] = '******';
-                $this->getLogService()->info('system', 'update_settings', "开启云短信关闭第三方邮件服务器设置", $mailerWithoutPassword);
+                $this->getLogService()->info('system', 'update_settings', "开启云邮件关闭第三方邮件服务器设置", $mailerWithoutPassword);
             }
-        } elseif (isset($operation['sign']) && !empty($operation['sign'])) {
+        }
+
+        if (isset($operation['sign']) && !empty($operation['sign'])) {
             $params = array(
                 'sender' => $operation['sign']
             );
-            $result = $api->post("/me/email_account", $params);
+            $result = $api->post("/me/email_account_update", $params);
+            var_dump($result);
+
+            if ($result['success'] == 1) {
+                $this->setFlashMessage('success', '云邮件设置已保存！');
+            } else {
+                $this->setFlashMessage('danger', '云邮件设置保存失败！');
+            }
+        }
+
+        if (isset($operation['email-close'])) {
+            // $result = $api->get("/me/email_account");
+            // var_dump($result);
+            $emailStatus['status'] = 'disable';
+            $emailStatus           = array_merge($settings, $emailStatus);
             $this->setFlashMessage('success', '云邮件设置已保存！');
-        } elseif (isset($operation['email-close'])) {
-            $result = $api->delete("/me/email_account");
-            $this->setFlashMessage('success', '云邮件设置已保存！');
-        } elseif (empty($operation)) {
-            $result                = $api->get("/me");
+        }
+
+        if (empty($operation)) {
             $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
             $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
-        if (isset($result['id']) && $result['id'] == 1) {
+        $result = $api->get("/me/email_account");
+
+        if (isset($result['success']) && $result['success'] == '1') {
+            // $result      = $api->get("/me/email_account");
             $emailStatus = array('status' => $result['status']);
             $sign        = array('sign' => $result['nickname']);
         }

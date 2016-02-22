@@ -14,7 +14,8 @@ define(function(require, exports, module) {
         var smsData = eval ("(" + $('#smsUsedInfo').attr("value") + ")");
         var liveData = eval ("(" + $('#liveUsedInfo').attr("value") + ")");
         var emailData = eval ("(" + $('#emailUsedInfo').attr("value") + ")");
-        // console.log(emailData);
+         console.log(videoData);
+         // console.log(smsData);
         //console.log(videoData==""?[{"date":"2015-03","count":5},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]:"");
         if(videoData!=""){
           Morris.Bar({
