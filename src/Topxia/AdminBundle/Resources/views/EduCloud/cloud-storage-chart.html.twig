@@ -8,7 +8,12 @@
     </div>
     <div class="panel-body" id="storage-data-tab" style="height: 250px;">
     {% if  setting('storage.upload_mode')|default('local') == 'local' %}
-    <span>尚未启用云视频服务，<a href="{{path('admin_setting_cloud_video')}}">立即启用</a></span>
+    <div class="edu-verticalmiddle">
+      <div class="edu-verticalmiddle-content">
+        尚未启用云视频服务，
+        <a href="{{path('admin_setting_cloud_video')}}">立即启用</a>
+      </div>
+    </div>
     {% endif %}
     </div>
     
