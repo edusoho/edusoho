@@ -31,11 +31,7 @@
           {% for index,rightAnswer in question.answer %}
 
             <li>
-              {% if app.request.getLocale() == 'ug_CN' %}
-                填空({{index+1}})： 正确答案
-              {% else %}
-                填空({{index+1}})： 正确答案
-              {% endif %}
+              填空({{index+1}})： 正确答案
               <strong class="question-text-success">{{ rightAnswer|join(' 或 '|trans) }}</strong>
               {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
              {{'回答是'|trans}}

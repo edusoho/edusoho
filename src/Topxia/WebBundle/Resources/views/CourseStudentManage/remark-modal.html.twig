@@ -10,11 +10,7 @@
   <div class="form-group">
     <div class="controls">
     	<input class="form-control" id="student-remark" name="remark" value="{{member.remark}}" >
-    	{% if app.request.getLocale() == 'ug_CN' %}
-    		<div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
-    	{% else %}
-    		<div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
-    	{% endif %}
+    	<div class="help-block">请填写{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}的备注信息</div>
     </div>
   </div>
 

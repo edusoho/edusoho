@@ -22,11 +22,7 @@
       <a class="replyToo btn btn-default btn-xs pull-right" data-status="hidden" postId="{{post.id}}" href="javascript:;">{{'我也要说'|trans}}</a>
       {% if posts|length > 5 %}
       <div class="lookOver-{{postMain.id}}">
-        {% if app.request.getLocale() == 'ug_CN' %}
-          <span class="text-muted ">还有{{postReplyCount[post.id]-5}}条回复，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">点击查看</a>
-        {% else %}
-          <span class="text-muted ">还有{{postReplyCount[post.id]-5}}条回复，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">点击查看</a>
-        {% endif %}
+        <span class="text-muted ">还有{{postReplyCount[post.id]-5}}条回复，</span><a href="javascript:" postId="{{postMain.id}}" class="lookOver">点击查看</a>
       </div>
       {% endif %}
       <span class="text-muted">&nbsp;</sapn>

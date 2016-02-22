@@ -2,13 +2,7 @@
 {% if setting('coin.coin_enabled') %}
     {% if setting('coin.coin_enabled') %}
     <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
-      {% if app.request.getLocale() == 'ug_CN' %}
-        <a href="{{ url('my_coin') }}" >我的{{setting('coin.coin_name')|default('虚拟币')}}
-        </a>
-      {% else %}
-        <a href="{{ url('my_coin') }}" >我的{{setting('coin.coin_name')|default('虚拟币')}}
-        </a>
-      {% endif %}
+      <a href="{{ url('my_coin') }}" >我的{{setting('coin.coin_name')|default('虚拟币')}}
     </li>
     {% endif %}
 {% endif %}

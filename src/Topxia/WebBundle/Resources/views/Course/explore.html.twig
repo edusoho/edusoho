@@ -20,11 +20,7 @@
       {% set classrooms = data('Classrooms',{count:1}) %}
       {% if classrooms|default(null) %}
         <a class="btn btn-primary btn-lg more" href="{{path('classroom_explore')}}">
-          {% if app.request.getLocale() == 'ug_CN' %}
-            查看{{ setting('classroom.name')|default('班级') }}
-          {% else %}
-            查看{{ setting('classroom.name')|default('班级') }}
-          {% endif %}
+          查看{{ setting('classroom.name')|default('班级') }}
         </a>
       {% endif %}
     </div>

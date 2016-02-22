@@ -1,10 +1,6 @@
 {% extends 'TopxiaWebBundle:Coin:layout.html.twig' %}
 {% block title %}
-  {% if app.request.getLocale() == 'ug_CN' %}
-    我的{{setting('coin.coin_name')}} - {{ parent() }}
-  {% else %}
-    我的{{setting('coin.coin_name')}} - {{ parent() }}
-  {% endif %}
+  我的{{setting('coin.coin_name')}} - {{ parent() }}
 {% endblock %}
 
 {% set side_nav = 'my-coin' %}

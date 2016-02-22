@@ -83,11 +83,7 @@
     <script>app.load('course-manage/lesson-testpaper-modal')</script>
 
   {% else %}
-    {% if app.request.getLocale() == 'ug_CN' %}
-      <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
-    {% else %}
-      <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
-    {% endif %}
+    <div class="empty">尚未创建试卷，请先<a href="{{ path('course_manage_testpaper', {courseId:course.id}) }}">创建试卷</a>。</div>
   {% endif %}
 
 {% endblock %}

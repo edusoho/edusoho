@@ -57,16 +57,11 @@
       {% if member and member.deadline > 0 %}
         {% if member.deadline > 'now'|date('U') %}
           <p class="expiry-date hidden-sm">
-            {% if app.request.getLocale() == 'ug_CN' %}
-              <label for="">有效期</label><span>还有{{ member.deadline|remain_time }}</span>
-            {% else %}
-              <label for="">有效期</label><span>还有{{ member.deadline|remain_time }}</span>
-            {% endif %}
+            <label for="">有效期</label><span>还有{{ member.deadline|remain_time }}</span>
           </p>
         {% else %}
          <div class="alert alert-danger alert-dismissable">
-            {% if app.request.getLocale() == 'ug_CN' %}
-              您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击
+            您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击
               <a class=" "  href="{{path('course_rebuy',{courseId:course.id})}}">
               {% if course.price>0 %}
               重新购买
@@ -74,16 +69,6 @@
               重新加入
               {% endif %}
               </a>。
-            {% else %}
-              您购买的课程已到期，无法学习课时、提问等。如有疑问请联系老师，或点击
-              <a class=" "  href="{{path('course_rebuy',{courseId:course.id})}}">
-              {% if course.price>0 %}
-              重新购买
-              {% else %}
-              重新加入
-              {% endif %}
-              </a>。
-            {% endif %}
           </div>
         {% endif %}
       {% endif %}

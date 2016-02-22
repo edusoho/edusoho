@@ -68,11 +68,7 @@
         {% if lesson %}
           <div class="live-course-lesson mbm">
             <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            {% if app.request.getLocale() == 'ug_CN' %}
-              <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
-            {% else %}
-              <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
-            {% endif %}
+            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
           </div>
         {% endif %}
       {% else %}

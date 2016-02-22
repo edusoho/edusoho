@@ -18,18 +18,10 @@
     {{'给TA分享您的邀请码或者邀请链接'|trans}}
     {% if inviteSetting %}
       {% if inviteSetting.promoted_user_value  %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          ，TA注册后将获得{{inviteSetting.promoted_user_value}}元优惠券
-        {% else %}
-          ，TA注册后将获得{{inviteSetting.promoted_user_value}}元优惠券
-        {% endif %}
+        ，TA注册后将获得{{inviteSetting.promoted_user_value}}元优惠券
       {% endif %}
       {% if inviteSetting.promote_user_value %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          ，TA在消费后您将获得{{inviteSetting.promote_user_value}}元优惠券
-        {% else %}
-          ，TA在消费后您将获得{{inviteSetting.promote_user_value}}元优惠券
-        {% endif %}
+        ，TA在消费后您将获得{{inviteSetting.promote_user_value}}元优惠券
       {% endif %}
     {{'。'|trans}}
     {% else %}

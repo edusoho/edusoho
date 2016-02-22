@@ -3,11 +3,7 @@
 {% block title %}{{'提示'|trans}}{% endblock %}
 
 {% block body %}
-  {% if app.request.getLocale() == 'ug_CN' %}
-    <h4>您尚未成为{{ targetObject.title|default('课程'|trans) }}学员，请先成为{{ targetObject.title|default('课程'|trans) }}学员。</h4>
-  {% else %}
-    <h4>您尚未成为{{ targetObject.title|default('课程') }}学员，请先成为{{ targetObject.title|default('课程') }}学员。</h4>
-  {% endif %}
+  <h4>您尚未成为{{ targetObject.title|default('课程') }}学员，请先成为{{ targetObject.title|default('课程') }}学员。</h4>
 {% endblock %}
 
 {% block footer %}

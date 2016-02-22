@@ -1,10 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% if app.request.getLocale() == 'ug_CN' %}
-  {% block title %}增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}课程有效期{% endblock %}
-{% else %}
-  {% block title %}增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}课程有效期{% endblock %}
-{% endif %}
+{% block title %}增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}课程有效期{% endblock %}
 {% block body %}
 
 <form id="expiryday-set-form" class="form-horizontal" method="post" action="{{ path('course_set_expiryday', { courseId:course.id, userId:user.id }) }}">
@@ -40,11 +36,7 @@
       </div>
     </div>
   {% else %}
-    {% if app.request.getLocale() == 'ug_CN' %}
-      <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}有效期，请课程发布后再增加。</div>
-    {% else %}
-      <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}有效期，请课程发布后再增加。</div>
-    {% endif %}
+    <div class="empty">{{dict_text('courseStatus', course.status)}}课程不能增加{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}有效期，请课程发布后再增加。</div>
   {% endif %}
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

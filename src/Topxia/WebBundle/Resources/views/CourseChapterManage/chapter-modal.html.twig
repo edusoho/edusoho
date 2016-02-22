@@ -17,17 +17,9 @@
   <div class="row form-group">
     <div class="col-md-3 control-label">
       {% if type == 'unit' %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          <label for="chapter-title-field">{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}标题</label>
-        {% else %}
-          <label for="chapter-title-field">{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}标题</label>
-        {% endif %}
+        <label for="chapter-title-field">{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}标题</label>
       {% else %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}标题</label>
-        {% else %}
-          <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}标题</label>
-        {% endif %}
+        <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}标题</label>
       {% endif %}
     </div>
     <div class="col-md-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control"></div>

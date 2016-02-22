@@ -27,11 +27,7 @@
           <p class="text-muted text-sm" title="{{student.remark}}">({{ student.remark|plain_text(8) }})</p>
         {% endif %}
         {% if canManage %}
-          {% if app.request.getLocale() == 'ug_CN' %}
-            <div class="progress" title="已学{{ progress.number }}课时">
-          {% else %}
-            <div class="progress" title="已学{{ progress.number }}课时">
-          {% endif %}
+          <div class="progress" title="已学{{ progress.number }}课时">
             <div class="progress-bar" style="width: {{ progress.percent }}">
             </div>
           </div>

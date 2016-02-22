@@ -47,11 +47,7 @@
 
       {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
     {% else %}
-      {% if app.request.getLocale() == 'ug_CN' %}
-        <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="{{path('mobile')}}" target="parent">下载App</a>。</div>
-      {% else %}
-        <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="{{path('mobile')}}" target="parent">下载App</a>。</div>
-      {% endif %}
+      <div class=""><br>&nbsp;&nbsp;&nbsp;&nbsp;该浏览器不支持云视频播放，请前往<a href="{{path('mobile')}}" target="parent">下载App</a>。</div>
     {% endif %}
   </body>
 </html>

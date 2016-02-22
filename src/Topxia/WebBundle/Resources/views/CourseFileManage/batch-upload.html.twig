@@ -74,13 +74,8 @@
           {{'<li>视频将上传到<strong>云视频服务器</strong>，并转换为云视频为创建ES视频课时备用，如需修改云视频转码类型，请先设置下方转码类型后再进行上传视频。转换过程需要等待，转换过程中视频将无法播放。</li>
           <li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
         {% else %}
-          {% if app.request.getLocale() == 'ug_CN' %}
-            <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
+          <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
             <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-          {% else %}
-            <li>支持<strong>mp4, mp3</strong>格式的文件上传，且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。<br>MP4文件的视频编码格式，请使用AVC(H264)编码，否则浏览器无法播放。</li>
-            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-          {% endif %}
         {% endif %}
       </ul>
     </div>
@@ -111,20 +106,12 @@
   {% elseif targetType == 'coursematerial' %}
     <div class="alert alert-info">
       <ul>
-        {% if app.request.getLocale() == 'ug_CN' %}
-          <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
-        {% else %}
-          <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
-        {% endif %}
+        <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
         {% if storageSetting.upload_mode == 'cloud' %}
           {{'<li>文件将上传到<strong>云服务器</strong>。</li>'|trans}}
           {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans}}
         {% else %}
-          {% if app.request.getLocale() == 'ug_CN' %}
-            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-          {% else %}
-            <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-          {% endif %}
+          <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
         {% endif %}
       </ul>
     </div>

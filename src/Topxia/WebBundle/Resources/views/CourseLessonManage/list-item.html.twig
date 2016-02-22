@@ -60,11 +60,7 @@
 
     {% if lesson.requireCredit > 0 %}
       <small class="text-muted">
-        {% if app.request.getLocale() == 'ug_CN' %}
-          (需{{ lesson.requireCredit }}学分)
-        {% else %}
-          (需{{ lesson.requireCredit }}学分)
-        {% endif %}
+        (需{{ lesson.requireCredit }}学分)
       </small>
     {% endif %}
 

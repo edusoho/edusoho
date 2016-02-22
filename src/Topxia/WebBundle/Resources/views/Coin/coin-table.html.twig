@@ -49,10 +49,6 @@
 </table>
 {% else %}
 <div class="well" style="text-align:center;">
-{% if app.request.getLocale() == 'ug_CN' %}
-  虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
-{% else %}
-  虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
-{% endif %}
+虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
 </div>
 {% endif %}

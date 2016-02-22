@@ -29,11 +29,7 @@
           {{ form_label(form.email, '邮箱地址'|trans, {label_attr:{class:'control-label'}}) }}
           <div class="controls">
             {{ form_widget(form.email, {attr:{class:'form-control'}}) }}
-            {% if app.request.getLocale() == 'ug_CN' %}
-              <p class="help-block">请输入你在{{ setting('site.name') }}注册时填写的邮箱地址</p>
-            {% else %}
-              <p class="help-block">请输入你在{{ setting('site.name') }}注册时填写的邮箱地址</p>
-            {% endif %}
+            <p class="help-block">请输入你在{{ setting('site.name') }}注册时填写的邮箱地址</p>
           </div>
         </div>
 

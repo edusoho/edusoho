@@ -22,11 +22,7 @@
           <li>
             <i class="es-icon es-icon-arrowdropleft"></i>
             <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
-              {% if app.request.getLocale() == 'ug_CN' %}
-                课时 {{lesson.number}}: {{lesson.title|raw}}
-              {% else %}
-                课时 {{lesson.number}}: {{lesson.title|raw}}
-              {% endif %}
+              课时 {{lesson.number}}: {{lesson.title|raw}}
             </a>
           </li>
         {% endfor %}

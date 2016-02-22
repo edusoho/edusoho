@@ -43,11 +43,7 @@
           {% set isFollowing = user.id in followingIds %}
           {% include 'TopxiaWebBundle:CourseStudentManage:tr.html.twig' %}
         {% else %}
-          {% if app.request.getLocale() == 'ug_CN' %}
-            <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
-          {% else %}
-            <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
-          {% endif %}
+          <tr class="empty"><td colspan="20">无{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}记录</td></tr>
         {% endfor %}
       </tbody>
     </table>

@@ -29,11 +29,7 @@
             <label><input type="checkbox" name="applyRefund" value="1"{% if maxRefundDays > 0 and refundOverdue %}disabled{% endif %}> {{'申请退款'|trans}} <span class="text-muted text-sm">{{'（'|trans}}{{'购买时的价格：'|trans}}{{ order.amount }}{{'元'|trans}}{{'）'|trans}}</span></label>
           </div>
           {% if maxRefundDays > 0 and refundOverdue %}
-            {% if app.request.getLocale() == 'ug_CN' %}
-              <div class="alert alert-warning">已经超出了退款期限{{ maxRefundDays }}天，不能申请退款。</div>
-            {% else %}
-              <div class="alert alert-warning">已经超出了退款期限{{ maxRefundDays }}天，不能申请退款。</div>
-            {% endif %}
+            <div class="alert alert-warning">已经超出了退款期限{{ maxRefundDays }}天，不能申请退款。</div>
           {% endif %}
         </div>
       </div>

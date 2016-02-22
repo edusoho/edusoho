@@ -78,11 +78,7 @@
         {% set author = users[post.userId] %}
         {% include 'TopxiaWebBundle:CourseThread:post-list-item.html.twig' %}
       {% else %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
-        {% else %}
-          <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
-        {% endif %}
+        <li class="empty">还没有{% if thread.type == 'question' %}答案{% else %}回复{% endif %}，赶快添加一个吧！</li>
       {% endfor %}
     </ul>
 

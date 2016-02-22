@@ -13,18 +13,10 @@
       {% if buyType == "upgrade" %}
       {{'会员升级为：'|trans}}{{level.name}}
       {% elseif buyType == "renew" %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          {{ level.name}} 会员续费 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
-        {% else %}
-          {{ level.name}} 会员续费 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
-        {% endif %}
+        {{ level.name}} 会员续费 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
       {% endif %}
       {% else %}
-        {% if app.request.getLocale() == 'ug_CN' %}
-          购买 {{ level.name}}会员 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
-        {% else %}
-          购买 {{ level.name}}会员 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
-        {% endif %}
+        购买 {{ level.name}}会员 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
       {% endif %}
       {% endif %}
     {% endif %}

@@ -46,11 +46,7 @@
             </li>
             {% endfor %}
             {% else %}
-              {% if app.request.getLocale() == 'ug_CN' %}
-                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
-              {% else %}
-                <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
-              {% endif %}
+              <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
             {% endif %}
           </ul>
   </div>
