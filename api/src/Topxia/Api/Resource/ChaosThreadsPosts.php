@@ -24,7 +24,7 @@ class ChaosThreadsPosts extends BaseResource
                 }
 
                 $fields = ArrayToolkit::parts($fields, array('threadId', 'parentId', 'content'));
-                $thread = $this->getThreadService()->createPost($fields);
+                $post   = $this->getThreadService()->createPost($fields);
                 break;
 
             case 'course':
@@ -34,7 +34,7 @@ class ChaosThreadsPosts extends BaseResource
                 }
 
                 $fields = ArrayToolkit::parts($fields, array('threadId', 'content', 'courseId'));
-                $thread = $this->getCourseThreadService()->createPost($fields);
+                $post   = $this->getCourseThreadService()->createPost($fields);
                 break;
 
             case 'group':
@@ -52,7 +52,7 @@ class ChaosThreadsPosts extends BaseResource
                     'fromUserId' => 0
                 );
 
-                $thread = $this->getGroupThreadService()->postThread($postContent, $fields['groupId'], $fields['userId'], $fields['threadId'], $fields['postId']);
+                $post = $this->getGroupThreadService()->postThread($postContent, $fields['groupId'], $fields['userId'], $fields['threadId'], $fields['postId']);
                 break;
 
             default:
@@ -60,11 +60,12 @@ class ChaosThreadsPosts extends BaseResource
                 break;
         }
 
-        return $this->callFilter('Thread', $thread);
+        return $this->filter($post);
     }
 
     public function filter(&$res)
     {
+        $res['createdTime'] = date('c', $res['createdTime']);
         return $res;
     }
 
