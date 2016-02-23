@@ -618,7 +618,7 @@ class EduCloudController extends BaseController
 
         if (isset($dataUserPosted['sms-open'])) {
             if (isset($settings['sms_school_name'])) {
-                $status                   = $api->get('/sms/account');
+                $status                   = $api->get('/me/sms_account');
                 $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
                 $smsStatus['sms_enabled'] = '1';
                 $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
@@ -626,10 +626,10 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('cloud_sms', $smsStatus);
                 return $smsStatus;
             } else {
-                $info = $api->post('/sms/account', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
+                $info = $api->post('/sms_accounts', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
 
                 if ($info['status'] == 'ok') {
-                    $status                       = $api->get('/sms/account');
+                    $status                       = $api->get('/me/sms_account');
                     $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
                     $smsStatus['sms_enabled']     = '1';
                     $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
@@ -644,7 +644,7 @@ class EduCloudController extends BaseController
         //关闭云短信
 
         if (isset($dataUserPosted['sms-close'])) {
-            $status                   = $api->get('/sms/account');
+            $status                   = $api->get('/me/sms_account');
             $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
             $smsStatus['sms_enabled'] = '0';
             $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
@@ -660,10 +660,10 @@ class EduCloudController extends BaseController
                 $dataUserPosted['sign'] = $settings['sms_school_name'];
             }
 
-            $info = $api->post('/sms/account/me', array('name' => $dataUserPosted['sign']));
+            $info = $api->post('/me/sms_account', array('name' => $dataUserPosted['sign']));
 
             if ($info['status'] == 'ok') {
-                $status                       = $api->get('/sms/account');
+                $status                       = $api->get('/me/sms_account');
                 $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
                 $smsStatus['sms_enabled']     = '1';
                 $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
@@ -675,7 +675,7 @@ class EduCloudController extends BaseController
         }
 
         $smsStatus           = array_merge($settings, $dataUserPosted);
-        $status              = $api->get('/sms/account');
+        $status              = $api->get('/me/sms_account');
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
 
         $this->getSettingService()->set('cloud_sms', $smsStatus);
@@ -740,16 +740,21 @@ class EduCloudController extends BaseController
             }
         }
 
-        if (isset($operation['sign']) && !empty($operation['sign'])) {
-            $params = array(
-                'sender' => $operation['sign']
-            );
-            $result = $api->post("/me/email_account_update", $params);
+        if (isset($operation['sign'])) {
+            if (!empty($operation['sign'])) {
+                $params = array(
+                    'sender' => $operation['sign']
+                );
+                $result = $api->post("/me/email_account_update", $params);
 
-            if ($result['success'] == 1) {
-                $this->setFlashMessage('success', '云邮件设置已保存！');
+                if ($result['success'] == 1) {
+                    $this->setFlashMessage('success', '云邮件设置已保存！');
+                } else {
+                    $this->setFlashMessage('danger', '云邮件设置保存失败！');
+                }
             } else {
-                $this->setFlashMessage('danger', '云邮件设置保存失败！');
+                $emailStatus['status'] = $settings['status'];
+                $sign['sign']          = $settings['sign'];
             }
         }
 
@@ -766,10 +771,10 @@ class EduCloudController extends BaseController
             $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
-        $result = $api->get("/me/email_account");
+        //$result = $api->get("/me/email_account");
 
         if (isset($result['success']) && $result['success'] == '1') {
-            // $result      = $api->get("/me/email_account");
+            $result      = $api->get("/me/email_account");
             $emailStatus = array('status' => $result['status']);
             $sign        = array('sign' => $result['nickname']);
         }
