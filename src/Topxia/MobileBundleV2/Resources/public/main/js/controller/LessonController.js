@@ -21,6 +21,8 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
         });
         return;
       }
+
+      self.getLiveInfoFromTicket();
     });
   };
 
