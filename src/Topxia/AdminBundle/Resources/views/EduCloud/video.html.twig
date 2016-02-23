@@ -68,7 +68,7 @@
     <div class="page-header clearfix">
       <h1 class="pull-left">云视频功能设置</h1>
     </div>
-    {% if storageSetting.upload_mode|default('local') == 'cloud' or info.level|default(null) is null  %}
+    {% if storageSetting.upload_mode|default('local') == 'cloud' and info.level|default(null) is not null  %}
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
       

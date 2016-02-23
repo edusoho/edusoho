@@ -342,6 +342,7 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
+                'level'       => isset($info['level']) ? $info['level'] : 'error',
                 'emailStatus' => $emailStatus
             ));
         } catch (\RuntimeException $e) {
