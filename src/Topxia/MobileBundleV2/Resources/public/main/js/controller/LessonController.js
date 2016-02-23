@@ -1,14 +1,75 @@
-app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'cordovaUtil', LessonController]);
+app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'LessonLiveService', 'cordovaUtil', LessonController]);
 
-function LessonController($scope, $stateParams, LessonService, cordovaUtil)
+function LessonController($scope, $stateParams, LessonService, LessonLiveService, cordovaUtil)
 {	
 	var self = this;
+  this.timeoutNum = 0;
+
+  self.loadLiveTicket = function() {
+    LessonLiveService.createLiveTickets({
+      lessonId : $stateParams.lessonId,
+      device : 'android'
+    }, function(data) {
+      if (data.error) {
+        self.showError(data.error);
+        return;
+      }
+
+      if (! data.no) {
+        self.showError({
+          message : "获取直播服务失败!"
+        });
+        return;
+      }
+    });
+  };
+
+  self.getLiveInfoFromTicket = function(lessonId, ticket) {
+    LessonLiveService.getLiveInfoByTicket({
+      lessonId : lessonId,
+      ticket : ticket
+    }, function(data) {
+      if (data.error) {
+        self.showError(data.error);
+        return;
+      }
+      self.timeoutNum ++;
+
+      if (! data.roomUrl || "" == data.roomUrl) {
+        if (self.timeoutNum >= 10) {
+          self.showError({
+              message : "获取直播服务失败!"
+          });
+          return;
+        }
+        self.getLiveInfoFromTicket(lessonId, ticket);
+        return;
+      }
+
+      cordovaUtil.openWebView(data.roomUrl);
+      cordovaUtil.closeWebView();
+    });
+  };
+
+  self.showError = function(error) {
+    var dia = $.dialog({
+            title : '直播提醒' ,
+            content : error.message,
+            button : [ "确定" ]
+    });
+
+    dia.on("dialog:action",function(e){
+      cordovaUtil.closeWebView();
+    });
+  }
 
 	self.loadLesson = function() {
+    $scope.showLoad();
 		LessonService.getLesson({
 			courseId : $stateParams.courseId,
 			lessonId : $stateParams.lessonId
 		},function(data) {
+      $scope.hideLoad();
 			if (data.error) {
 				$scope.toast(data.error.message);
 				return;
@@ -26,6 +87,12 @@ function LessonController($scope, $stateParams, LessonService, cordovaUtil)
         cordovaUtil.closeWebView();
         return;
       }
+
+      if ("live" == lesson.type) {
+        self.loadLiveTicket();
+        return;
+      }
+
       cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, []);  
       cordovaUtil.closeWebView();
 		});
@@ -122,6 +189,11 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
 
       if (lesson.type == "flash" || "qqvideo" == lesson.mediaSource) {
         alert("客户端暂不支持该课时类型，敬请期待新版");
+        return;
+      }
+
+      if ("live" == lesson.type) {
+        cordovaUtil.openWebView(app.rootPath + "#/lesson/" + lesson.courseId + "/" + lesson.id);
         return;
       }
       cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, self.createLessonIds());     
