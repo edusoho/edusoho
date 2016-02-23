@@ -164,9 +164,11 @@ class EduCloudController extends BaseController
             'video_fingerprint'           => 0,
             'video_header'                => null
         );
+        // var_dump(111);
 
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
+            // var_dump($set);
 
             if (isset($set['cloud_bucket'])) {
                 $set['cloud_bucket'] = trim($set['cloud_bucket']);
@@ -197,6 +199,7 @@ class EduCloudController extends BaseController
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
+        // var_dump($storageSetting);
         return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
