@@ -413,23 +413,25 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $thread = $event->getSubject();
         $course = $this->getCourseService()->getCourse($thread['courseId']);
 
-        foreach ($course['teacherIds'] as $teacherId) {
-            if ($thread['type'] == 'question') {
-                $target = $this->getTarget('course', $thread['courseId']);
-                $from   = array(
-                    'type'  => 'course',
-                    'id'    => $thread['courseId'],
-                    'image' => $target['image']
-                );
-                $to   = array('type' => 'user', 'id' => $thread['userId']);
-                $body = array(
-                    'type'                => 'question.answered',
-                    'questionId'          => $thread['id'],
-                    'courseId'            => $thread['courseId'],
-                    'lessonId'            => $thread['lessonId'],
-                    'questionCreatedTime' => $thread['createdTime'],
-                    'questionTitle'       => $thread['title']
-                );
+        if ($thread['type'] == 'question') {
+            $target = $this->getTarget('course', $thread['courseId']);
+            $from   = array(
+                'type'  => 'course',
+                'id'    => $thread['courseId'],
+                'image' => $target['image']
+            );
+            $to   = array('type' => 'user');
+            $body = array(
+                'type'                => 'question.answered',
+                'questionId'          => $thread['id'],
+                'courseId'            => $thread['courseId'],
+                'lessonId'            => $thread['lessonId'],
+                'questionCreatedTime' => $thread['createdTime'],
+                'questionTitle'       => $thread['title']
+            );
+
+            foreach ($course['teacherIds'] as $teacherId) {
+                $to['id'] = $teacherId;
                 $this->push($course['title'], $thread['title'], $from, $to, $body);
             }
         }
