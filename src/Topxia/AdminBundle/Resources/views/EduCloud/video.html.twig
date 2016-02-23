@@ -40,8 +40,16 @@
     <div class="controls col-md-12 radios"> 
       <form class="form-horizontal" id="cloud-video-form" method="post" novalidate>
         {% if storageSetting.upload_mode|default('local') == "local" or info.level|default(null) is null %}
-        <div>
-          <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default(null) is null %} disabled="disabled"{% endif %} >启用云视频</button>
+        <div class="row">
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default(null) is null %} disabled="disabled"{% endif %} >启用云视频</button>
+          </div>
+          {% if info.level|default(null) is null %}
+          <div class="col-md-10">
+            <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云视频服务！</span>
+            <a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a>
+          </div>
+          {% endif %}
         </div>
         {% elseif storageSetting.upload_mode|default('cloud') == "cloud" %}
         <div>
@@ -50,7 +58,6 @@
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-      {% if info.level|default(null) is null %}<p class="text-danger text-sm">抱歉，您尚未接入教育云，不能启用云视频服务</p><p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>{% endif %}
 
       <div class="help-block">
         EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
@@ -61,7 +68,7 @@
     <div class="page-header clearfix">
       <h1 class="pull-left">云视频功能设置</h1>
     </div>
-    {% if storageSetting.upload_mode|default('local') == 'cloud' %}
+    {% if storageSetting.upload_mode|default('local') == 'cloud' or info.level|default(null) is null  %}
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
       
