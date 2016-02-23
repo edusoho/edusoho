@@ -34,10 +34,14 @@
         {% elseif emailStatus.status in ['created'] %}
           <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
         {% elseif emailStatus.status|default(null) == 'error' %}
-          <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云邮件</button>
-          <div name = "warning">
-            <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
-            <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
+          <div class="row">
+            <div class="col-md-2">
+              <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云邮件</button>
+            </div>
+            <div class="col-md-10">
+              <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云邮件服务！</span>
+              <a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a>
+            </div>
           </div>
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
