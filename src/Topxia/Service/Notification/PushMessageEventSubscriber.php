@@ -422,7 +422,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             );
             $to   = array('type' => 'user');
             $body = array(
-                'type'                => 'question.answered',
+                'type'                => 'question.created',
                 'questionId'          => $thread['id'],
                 'courseId'            => $thread['courseId'],
                 'lessonId'            => $thread['lessonId'],
