@@ -854,7 +854,7 @@ class ClassroomManageController extends BaseController
         $paginator              = new Paginator(
             $this->get('request'),
             $homeworksResultsCounts,
-            20
+            10
         );
 
         if ($status == 'reviewing') {

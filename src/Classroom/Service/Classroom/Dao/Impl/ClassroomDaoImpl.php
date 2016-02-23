@@ -18,7 +18,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
     {
         $that = $this;
 
-        return $this->fetchCached('id', $id, function ($id) use ($that) {
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} where id=? LIMIT 1";
             $classroom = $that->getConnection()->fetchAssoc($sql, array($id));
 
@@ -104,6 +104,7 @@ class ClassroomDaoImpl extends BaseDao implements ClassroomDao
         $classroom = $this->createSerializer()->serialize($classroom, $this->serializeFields);
 
         $affected = $this->getConnection()->insert($this->table, $classroom);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert Classroom error.');

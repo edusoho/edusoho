@@ -99,6 +99,18 @@ function CourseLessonController($scope, $stateParams, LessonService, $state, cor
 
     //lesson.free=1 is free
     $scope.learnLesson = function(lesson) {
+      if (!$scope.user) {
+        var dia = $.dialog({
+                title : '课程提醒' ,
+                content : '你还未登录网校',
+                button : [ "登录网校" ]
+        });
+
+        dia.on("dialog:action",function(e){
+            cordovaUtil.openWebView(app.rootPath + "#/login/course");
+        });
+        return;
+      }
       if (! $scope.member && 1 != lesson.free) {
         alert("请先加入学习");
         return;

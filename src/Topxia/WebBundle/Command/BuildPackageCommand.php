@@ -1,10 +1,10 @@
 <?php
 namespace Topxia\WebBundle\Command;
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Filesystem\Filesystem;
 
 class BuildPackageCommand extends BaseCommand
 {
@@ -18,19 +18,18 @@ class BuildPackageCommand extends BaseCommand
             ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('version', InputArgument::REQUIRED, 'which version to update')
             ->addArgument('diff_file', InputArgument::REQUIRED, 'Where is Diff file of both versions');
-        
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('<question>开始编制升级包</question>');
 
-        $name = $input->getArgument('name');
-        $version = $input->getArgument('version');
+        $name     = $input->getArgument('name');
+        $version  = $input->getArgument('version');
         $diffFile = $input->getArgument('diff_file');
 
         $this->filesystem = new Filesystem();
-        
+
         $packageDirectory = $this->createDirectory($name, $version);
 
         $this->generateFiles($diffFile, $packageDirectory, $output);
@@ -42,17 +41,19 @@ class BuildPackageCommand extends BaseCommand
 
     private function generateFiles($diffFile, $packageDirectory, $output)
     {
-        $file = @fopen($diffFile, "r") ;  
-        while (!feof($file))
-        {
+        $file = @fopen($diffFile, "r");
+
+        while (!feof($file)) {
             $line = fgets($file);
-            $op = $line[0];
+            $op   = $line[0];
+
             if (!in_array($line[0], array('M', 'A', 'D'))) {
                 echo "无法处理该文件：{$line}";
                 continue;
             }
 
-            $opFile = trim(substr($line,1));
+            $opFile = trim(substr($line, 1));
+
             if (empty($opFile)) {
                 echo "无法处理该文件：{$line}";
                 continue;
@@ -73,7 +74,7 @@ class BuildPackageCommand extends BaseCommand
                 continue;
             }
 
-            if (strpos($opFile, 'doc') === 0 ) {
+            if (strpos($opFile, 'doc') === 0) {
                 $output->writeln("<comment>忽略文件：{$opFile}</comment>");
                 continue;
             }
@@ -83,6 +84,7 @@ class BuildPackageCommand extends BaseCommand
             if ($op == 'M' || $op == 'A') {
                 $output->writeln("<info>增加更新文件：{$opFile}</info>");
                 $this->copyFileAndDir($opFile, $packageDirectory);
+
                 if ($opBundleFile) {
                     $output->writeln("<info>增加更新文件：[BUNDLE]        {$opBundleFile}</info>");
                     $this->copyFileAndDir($opBundleFile, $packageDirectory);
@@ -92,13 +94,12 @@ class BuildPackageCommand extends BaseCommand
             if ($op == 'D') {
                 $output->writeln("<comment>增加删除文件：{$opFile}</comment>");
                 $this->insertDelete($opFile, $packageDirectory);
+
                 if ($opBundleFile) {
                     $output->writeln("<comment>增加删除文件：[BUNDLE]        {$opBundleFile}</comment>");
                     $this->insertDelete($opBundleFile, $packageDirectory);
                 }
-
             }
-
         }
     }
 
@@ -109,19 +110,20 @@ class BuildPackageCommand extends BaseCommand
 
     private function copyFileAndDir($opFile, $packageDirectory)
     {
-        $destPath = $packageDirectory . '/source/'. $opFile;
+        $destPath = $packageDirectory.'/source/'.$opFile;
+
         if (!file_exists(dirname($destPath))) {
             mkdir(dirname($destPath), 0777, true);
         }
 
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
 
         $this->filesystem->copy("{$root}/{$opFile}", $destPath, true);
     }
 
     private function createDirectory($name, $version)
     {
-        $root = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../');
+        $root = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../');
         $path = "{$root}/build/{$name}_{$version}/";
 
         if ($this->filesystem->exists($path)) {
@@ -137,19 +139,23 @@ class BuildPackageCommand extends BaseCommand
     private function getBundleFile($file)
     {
         if (stripos($file, 'src/Topxia/WebBundle/Resources/public') === 0) {
-             return str_ireplace('src/Topxia/WebBundle/Resources/public', 'web/bundles/topxiaweb', $file);
+            return str_ireplace('src/Topxia/WebBundle/Resources/public', 'web/bundles/topxiaweb', $file);
         }
 
         if (stripos($file, 'src/Topxia/AdminBundle/Resources/public') === 0) {
-             return str_ireplace('src/Topxia/AdminBundle/Resources/public', 'web/bundles/topxiaadmin', $file);
+            return str_ireplace('src/Topxia/AdminBundle/Resources/public', 'web/bundles/topxiaadmin', $file);
         }
 
         if (stripos($file, 'src/Topxia/MobileBundleV2/Resources/public') === 0) {
-             return str_ireplace('src/Topxia/MobileBundleV2/Resources/public', 'web/bundles/topxiamobilebundlev2', $file);
+            return str_ireplace('src/Topxia/MobileBundleV2/Resources/public', 'web/bundles/topxiamobilebundlev2', $file);
         }
 
         if (stripos($file, 'src/Classroom/ClassroomBundle/Resources/public') === 0) {
-             return str_ireplace('src/Classroom/ClassroomBundle/Resources/public', 'web/bundles/classroom', $file);
+            return str_ireplace('src/Classroom/ClassroomBundle/Resources/public', 'web/bundles/classroom', $file);
+        }
+
+        if (stripos($file, 'src/SensitiveWord/SensitiveWordBundle/Resources/public') === 0) {
+            return str_ireplace('src/SensitiveWord/SensitiveWordBundle/Resources/public', 'web/bundles/sensitiveword', $file);
         }
 
         if (stripos($file, 'src/Custom/AdminBundle/Resources/public') === 0) {
@@ -176,15 +182,14 @@ class BuildPackageCommand extends BaseCommand
         $output->writeln("\n\n");
         $output->write("<info>拷贝升级脚本：</info>");
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../') . '/scripts/upgrade-' . $version . '.php';
+        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$version.'.php';
+
         if (!file_exists($path)) {
             $output->writeln("无升级脚本");
         } else {
-            $targetPath = realpath($dir) . '/Upgrade.php';
-            $output->writeln($path . " -> {$targetPath}" );
+            $targetPath = realpath($dir).'/Upgrade.php';
+            $output->writeln($path." -> {$targetPath}");
             $this->filesystem->copy($path, $targetPath, true);
         }
-
     }
-
 }

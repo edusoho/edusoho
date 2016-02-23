@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             });
         });
 
-        $(".user-center-header").blurr();
+        $(".user-center-header").blurr({height:220});
 
     }
 

@@ -81,7 +81,7 @@ define(function(require, exports, module) {
 
             $.get(url,function(html){
                 $this.closest('.es-bar-main').html(html);
-                $this.closest('.bar-main-body').perfectScrollbar({wheelSpeed:50});
+                $(".es-bar .bar-main-body").perfectScrollbar({wheelSpeed:50});
             })
         },
         isNotLogin: function() {

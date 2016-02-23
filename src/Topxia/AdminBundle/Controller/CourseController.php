@@ -106,9 +106,10 @@ class CourseController extends BaseController
     {
         $key = $request->request->get("key");
 
-        $conditions           = array("title" => $key);
-        $conditions['status'] = 'published';
-        $conditions['type']   = 'normal';
+        $conditions             = array("title" => $key);
+        $conditions['status']   = 'published';
+        $conditions['type']     = 'normal';
+        $conditions['parentId'] = 0;
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
 

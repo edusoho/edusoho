@@ -11,29 +11,44 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
 
     public function getChapter($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
     }
 
     public function addChapter(array $chapter)
     {
         $affected = $this->getConnection()->insert($this->table, $chapter);
+        $this->clearCached();
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert course chapter error.');
         }
+
         return $this->getChapter($this->getConnection()->lastInsertId());
     }
 
     public function findChaptersByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? ORDER BY createdTime ASC";
-        return $this->getConnection()->fetchAll($sql, array($courseId));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? ORDER BY createdTime ASC";
+            return $that->getConnection()->fetchAll($sql, array($courseId));
+        }
+
+        );
     }
 
     public function searchChapterCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -41,81 +56,115 @@ class CourseChapterDaoImpl extends BaseDao implements CourseChapterDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-        ->select('*')
-        ->orderBy($orderBy[0], $orderBy[1])
-        ->setFirstResult($start)
-        ->setMaxResults($limit);
-        return $builder->execute()->fetchAll() ? : array(); 
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
     }
 
     public function getChapterCountByCourseIdAndType($courseId, $type)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId, $type));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:type:{$type}:count", $courseId, $type, function ($courseId, $type) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  courseId = ? AND type = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId, $type));
+        }
+
+        );
     }
 
     public function getChapterCountByCourseIdAndTypeAndParentId($courseId, $type, $parentId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND type = ? AND parentId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId, $type, $parentId));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:type:{$type}:parentId:{$parentId}:count", $courseId, $type, $parentId, function ($courseId, $type, $parentId) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  courseId = ? AND type = ? AND parentId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId, $type, $parentId));
+        }
+
+        );
     }
 
     public function getLastChapterByCourseIdAndType($courseId, $type)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId, $type)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:type:{$type}", $courseId, $type, function ($courseId, $type) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE  courseId = ? AND type = ? ORDER BY seq DESC LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId, $type)) ?: null;
+        }
+
+        );
     }
 
     public function getLastChapterByCourseId($courseId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE  courseId = ? ORDER BY seq DESC LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($courseId)) ? : null;
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:last", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE  courseId = ? ORDER BY seq DESC LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($courseId)) ?: null;
+        }
+
+        );
     }
 
     public function getChapterMaxSeqByCourseId($courseId)
     {
-        $sql = "SELECT MAX(seq) FROM {$this->table} WHERE  courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:maxseq", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT MAX(seq) FROM {$that->getTable()} WHERE  courseId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId));
+        }
+
+        );
     }
 
     public function updateChapter($id, array $chapter)
     {
         $this->getConnection()->update($this->table, $chapter, array('id' => $id));
+        $this->clearCached();
         return $this->getChapter($id);
     }
 
     public function deleteChapter($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function deleteChaptersByCourseId($courseId)
     {
-        $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($courseId));
+        $sql    = "DELETE FROM {$this->table} WHERE courseId = ?";
+        $result = $this->getConnection()->executeUpdate($sql, array($courseId));
+        $this->clearCached();
+        return $result;
     }
 
     public function findChaptersByCopyIdAndLockedCourseIds($copyId, $courseIds)
     {
-       if(empty($courseIds)){
+        if (empty($courseIds)) {
             return array();
         }
-       
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
-       
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
         $parmaters = array_merge(array($copyId), $courseIds);
 
-        $sql ="SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
-        
-        return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
+        $sql = "SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
+
+        return $this->getConnection()->fetchAll($sql, $parmaters) ?: array();
     }
 
     protected function _createSearchQueryBuilder($conditions)
-    {   
+    {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course_chapter')
-            ->andWhere('courseId = :courseId');
+                        ->from($this->table, 'course_chapter')
+                        ->andWhere('courseId = :courseId');
         return $builder;
     }
-
 }

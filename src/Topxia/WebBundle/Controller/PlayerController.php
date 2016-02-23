@@ -21,11 +21,7 @@ class PlayerController extends BaseController
                 $file['videoWatermarkEmbedded'] = 1;
             }
 
-            if ($this->setting('developer.balloon_player', 0)) {
-                $player = "balloon-cloud-video-player";
-            } else {
-                $player = "cloud-video-player";
-            }
+            $player = "balloon-cloud-video-player";
         } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
             $player = "local-video-player";
         } elseif ($file["type"] == 'audio') {
@@ -67,6 +63,7 @@ class PlayerController extends BaseController
                         'id'    => $file['id'],
                         'token' => $token['token']
                     );
+
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
                     $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
