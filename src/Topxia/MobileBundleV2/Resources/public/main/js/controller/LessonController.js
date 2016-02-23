@@ -22,7 +22,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
         return;
       }
 
-      self.getLiveInfoFromTicket();
+      self.getLiveInfoFromTicket($stateParams.lessonId, data.no);
     });
   };
 
