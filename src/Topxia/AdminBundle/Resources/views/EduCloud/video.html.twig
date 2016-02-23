@@ -37,7 +37,7 @@
       <h1 class="pull-left">云视频</h1>
     </div>
 
-    <div class="controls col-md-12 radios"> 
+    <div class="controls radios"> 
       <form class="form-horizontal" id="cloud-video-form" method="post" novalidate>
         {% if storageSetting.upload_mode|default('local') == "local" or info.level|default(null) is null %}
         <div class="row">
