@@ -297,13 +297,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $content;
 
         switch ($discount['type']) {
-            case 'free':
+            case 'free':;
                 $content = "【限时免费】";
                 break;
-            case 'discount':
+            case 'discount':;
                 $content = "【限时打折】";
                 break;
-            default:
+            default:;
                 $content = "【全站打折】";
                 break;
         }
@@ -423,7 +423,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 );
                 $to   = array('type' => 'user', 'id' => $thread['userId']);
                 $body = array(
-                    'type'                => 'question.answered',
+                    'type'                => 'question.create',
                     'questionId'          => $thread['id'],
                     'courseId'            => $thread['courseId'],
                     'lessonId'            => $thread['lessonId'],
@@ -469,16 +469,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = array('type' => $type, 'id' => $id);
 
         switch ($type) {
-            case 'course':
+            case 'course':;
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
                 break;
-            case 'classroom':
+            case 'classroom':;
                 $classroom       = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
-            case 'global':
+            case 'global':;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
                 $target['title'] = '网校公告';
