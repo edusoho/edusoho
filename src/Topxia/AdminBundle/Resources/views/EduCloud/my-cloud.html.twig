@@ -100,7 +100,7 @@
                   <div class="detail">
                     {% if isBinded.name|default("")  == "" %}
                       您尚未绑定EduSoho开放云平台&nbsp;
-                      <a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i>
+                      <a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i></a>
                     {% else %}
                       Hi,<span class="name">{{ isBinded.name|default("")}}</span>
                       <div style="margin-top:10px">ES云平台账户名: {{isBinded.email|default('') }}</div>
