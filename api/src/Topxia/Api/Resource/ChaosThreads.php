@@ -84,7 +84,7 @@ class ChaosThreads extends BaseResource
                     return array('message' => '缺少必填字段');
                 }
 
-                $fields = ArrayToolkit::parts($fields, array('title', 'content', 'courseId', 'type'));
+                $fields = ArrayToolkit::parts($fields, array('title', 'content', 'courseId', 'type', 'lessonId'));
                 $thread = $this->getCourseThreadService()->createThread($fields);
                 break;
 

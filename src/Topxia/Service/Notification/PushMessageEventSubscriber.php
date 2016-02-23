@@ -297,13 +297,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $content;
 
         switch ($discount['type']) {
-            case 'free':
+            case 'free':;
                 $content = "【限时免费】";
                 break;
-            case 'discount':
+            case 'discount':;
                 $content = "【限时打折】";
                 break;
-            default:
+            default:;
                 $content = "【全站打折】";
                 break;
         }
@@ -413,23 +413,25 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $thread = $event->getSubject();
         $course = $this->getCourseService()->getCourse($thread['courseId']);
 
-        foreach ($course['teacherIds'] as $teacherId) {
-            if ($thread['type'] == 'question') {
-                $target = $this->getTarget('course', $thread['courseId']);
-                $from   = array(
-                    'type'  => 'course',
-                    'id'    => $thread['courseId'],
-                    'image' => $target['image']
-                );
-                $to   = array('type' => 'user', 'id' => $thread['userId']);
-                $body = array(
-                    'type'                => 'question.answered',
-                    'questionId'          => $thread['id'],
-                    'courseId'            => $thread['courseId'],
-                    'lessonId'            => $thread['lessonId'],
-                    'questionCreatedTime' => $thread['createdTime'],
-                    'questionTitle'       => $thread['title']
-                );
+        if ($thread['type'] == 'question') {
+            $target = $this->getTarget('course', $thread['courseId']);
+            $from   = array(
+                'type'  => 'course',
+                'id'    => $thread['courseId'],
+                'image' => $target['image']
+            );
+            $to   = array('type' => 'user');
+            $body = array(
+                'type'                => 'question.created',
+                'threadId'            => $thread['id'],
+                'courseId'            => $thread['courseId'],
+                'lessonId'            => $thread['lessonId'],
+                'questionCreatedTime' => $thread['createdTime'],
+                'questionTitle'       => $thread['title']
+            );
+
+            foreach ($course['teacherIds'] as $teacherId) {
+                $to['id'] = $teacherId;
                 $this->push($course['title'], $thread['title'], $from, $to, $body);
             }
         }
@@ -469,16 +471,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = array('type' => $type, 'id' => $id);
 
         switch ($type) {
-            case 'course':
+            case 'course':;
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
                 break;
-            case 'classroom':
+            case 'classroom':;
                 $classroom       = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
-            case 'global':
+            case 'global':;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
                 $target['title'] = '网校公告';
