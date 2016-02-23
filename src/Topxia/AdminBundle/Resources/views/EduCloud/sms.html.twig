@@ -9,26 +9,26 @@
 
 	{% if is_trial() %}
 		<div class="row form-group">
-      		<div class="help-block">
-        		</br></br>
-        		<script>
-		          	var _hmt = _hmt || [];
-		        </script>
-		        <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
+  		<div class="help-block">
+    		</br></br>
+    		<script>
+          	var _hmt = _hmt || [];
+        </script>
+        <script charset="utf-8" src="http://wpa.b.qq.com/cgi/wpa.php"></script>
 
-        		<p style = "text-align: center;font-size:16px">短信发送服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a></p>
+    		<p style = "text-align: center;font-size:16px">短信发送服务由EduSoho教育云提供 <a href="http://open.edusoho.com/educloud" target="_blank">了解详情</a></p>
 
-        		<p style = "text-align:center;font-size:16px">当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 
-		        电话：0571-86819929 或 
-                <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
-		        </p>
+    		<p style = "text-align:center;font-size:16px">当前版本为试⽤版, 不能进行短信服务设置。如需购买授权版,请联系销售人员。 
+        电话：0571-86819929 或 
+            <span id="BizQQWPA" onclick="_hmt.push(['_trackEvent', 'advisory', 'click', 'qq'])"><a id="BizQQWPA" href="javascript:" style='text-decoration:none;'>QQ：800023860 </a>。</span>
+        </p>
 
-        		<script type="text/javascript">
-            		BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
-        		</script>
-        		</br></br>
-      		</div>
-    	</div>
+    		<script type="text/javascript">
+        		BizQQWPA.addCustom({aty: '0', a: '0', nameAccount: 800023860, selector: 'BizQQWPA'}); 
+    		</script>
+    		</br></br>
+  		</div>
+    </div>
 	{% else %}	
     {{ web_macro.flash_messages() }}
     {% if locked|default(0) == 1 %}
@@ -40,42 +40,41 @@
     <div class="page-header clearfix">
       <h1 class="pull-left">云短信</h1>
     </div>
-    <div class="edu-service row">
-    <div class="edu-balance">
+    <div class="edu-service">
+      <div class="edu-balance">
       <!-- <div class="alert alert-warning" role="alert">云短信服务免费公测中，将于2015年3月31日结束</div> -->
-      <div class="controls col-md-8 radios">
-        <form class="form-horizontal" method="post" id="sms-controller-form" novalidate="">
-        {% if smsStatus.sms_enabled|default('0') == '0' and smsStatus.status != 'error' %}
-          <span>短信签名：{% if not smsStatus.sms_school_name|default(null) %}<input type="text" name="sign">{% else %}{{smsStatus.sms_school_name}}{% endif %}
-          </span>
-          <button name="sms-open" class="btn btn-primary" >启用云短信</button>
-        {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}
-          <div name="status">
-            <span class="text-success">已启用</span>
-            <button  class="btn btn-default btn-sm mlm" name="sms-close"><span class="text-muted">关闭</span></button>
-            <p><span>发件人名称：{{ smsStatus.sms_school_name }}</span> <a href="#" name="sign-update">修改</a></p>
-          </div>
-          <div name="submit-sign" hidden="hidden">
-            <span>短信签名：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
-          </div>
-        {% elseif smsStatus.status|default(null) == 'error' %}
-          <div class="row">
-            <div class="col-md-2">
-              <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云短信</button>
+        <div class="controls radios">
+          <form class="form-horizontal" method="post" id="sms-controller-form" novalidate="">
+          {% if smsStatus.sms_enabled|default('0') == '0' and smsStatus.status != 'error' %}
+            <span>短信签名：{% if not smsStatus.sms_school_name|default(null) %}<input type="text" name="sign">{% else %}{{smsStatus.sms_school_name}}{% endif %}
+            </span>
+            <button name="sms-open" class="btn btn-primary" >启用云短信</button>
+          {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}
+            <div name="status">
+              <span class="text-success">已启用</span>
+              <button  class="btn btn-default btn-sm mlm" name="sms-close"><span class="text-muted">关闭</span></button>
+              <p><span>发件人名称：{{ smsStatus.sms_school_name }}</span> <a href="#" name="sign-update">修改</a></p>
             </div>
-            <div class="col-md-10">
-              <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云短信服务！</span>
-              <a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a>
+            <div name="submit-sign" hidden="hidden">
+              <span>短信签名：<input type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
             </div>
-          </div>
-        {% endif %}
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-        </form>
-        <div class="help-block">云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情</div>
+          {% elseif smsStatus.status|default(null) == 'error' %}
+            <div class="row">
+              <div class="col-md-2">
+                <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云短信</button>
+              </div>
+              <div class="col-md-10">
+                <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云短信服务！</span>
+                <a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a>
+              </div>
+            </div>
+          {% endif %}
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+          </form>
+          <div class="help-block">云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情</div>
+        </div>
       </div>
-
     </div>
-  </div>
       {% set hasSchoolName = ('' != setting('cloud_sms.sms_school_name')|default('')) %}
       {% if smsStatus.status == "failed" and hasSchoolName and ('on' == setting('cloud_sms.show_message')|default('off')) or level|default(null) is null %}
         <div class="alert alert-danger">
