@@ -332,7 +332,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                     'courseId'            => $question['courseId'],
                     'lessonId'            => $question['lessonId'],
                     'questionCreatedTime' => $question['createdTime'],
-                    'questionTitle'       => $question['title']
+                    'questionTitle'       => $question['title'],
+                    'content'             => $question['content']
                 );
                 $this->push($course['title'], $question['title'], $from, $to, $body);
             }
