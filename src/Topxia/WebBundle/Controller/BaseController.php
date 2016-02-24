@@ -115,12 +115,50 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmail($to, $title, $body, $verifyurl, $nickname, $format = 'text')
+    protected function sendEmailService($to, $params)
     {
-        $format = $format == 'html' ? 'text/html' : 'text/plain';
-
         $config      = $this->setting('mailer', array());
         $cloudConfig = $this->setting('cloud_email', array());
+
+        if (!isset($config['enabled']) && $config['enabled'] == 1) {
+            $this->sendEmail($to, $params);
+        } elseif (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+            $this->sendCloudEmail($to, $params);
+        }
+
+        return false;
+    }
+
+    private function sendCloudEmail($to, $params)
+    {
+        $cloudConfig = $this->setting('cloud_email', array());
+
+        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+            $api    = CloudAPIFactory::create('root');
+            $site   = $this->setting('site', array());
+            $params = array(
+                'to'       => $to,
+                'template' => $params['template'],
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'nickname'  => $params['nickname'],
+                    'verifyurl' => $params['verifyurl'],
+                    'siteurl'   => $site['url']
+                )
+            );
+            $api->setApiUrl('http://124.160.104.74:8098/');
+            $result = $api->post("/me/emails", $params);
+            return true;
+        }
+
+        return false;
+    }
+
+    private function sendEmail($to, $params)
+    {
+        $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
+
+        $config = $this->setting('mailer', array());
 
         if (!isset($config['enabled']) && $config['enabled'] == 1) {
             $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
@@ -130,35 +168,17 @@ abstract class BaseController extends Controller
             $mailer = \Swift_Mailer::newInstance($transport);
 
             $email = \Swift_Message::newInstance();
-            $email->setSubject($title);
+            $email->setSubject($params['title']);
             $email->setFrom(array($config['from'] => $config['name']));
             $email->setTo($to);
 
             if ($format == 'text/html') {
-                $email->setBody($body, 'text/html');
+                $email->setBody($params['body'], 'text/html');
             } else {
-                $email->setBody($body);
+                $email->setBody($params['body']);
             }
 
             $mailer->send($email);
-            return true;
-        }
-
-        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $api    = CloudAPIFactory::create('root');
-            $site   = $this->setting('site', array());
-            $params = array(
-                'to'       => $to,
-                'template' => "sms_registration",
-                'params'   => array(
-                    'sitename'  => $site['name'],
-                    'nickname'  => $nickname,
-                    'verifyurl' => $verifyurl,
-                    'siteurl'   => $site['url']
-                )
-            );
-            $api->setApiUrl('http://124.160.104.74:8098/');
-            $result = $api->post("/me/emails", $params);
             return true;
         }
 

@@ -435,6 +435,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
+            var_dump($info);
         } catch (\RuntimeException $e) {
             $info['error'] = 'error';
         }

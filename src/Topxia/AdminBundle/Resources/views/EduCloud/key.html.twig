@@ -43,7 +43,7 @@
         <label class="col-md-3 control-label">服务期限：</label>
         <div class="col-md-6">
           <p class="form-control-static">
-            {{ info.startDate|date('Y.m.d') }} - {{ info.endDate|date('Y.m.d') }}
+            {{ info.startDate|default(null)|date('Y.m.d') }} - {{ info.endDate|default(null)|date('Y.m.d') }}
           </p>
         </div>
       </div>
