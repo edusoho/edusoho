@@ -30,7 +30,7 @@
     <hr>
   {% else %}
   <div class="eduyun-main">
-    {% if info.enabled|default(1) == 0 %}
+    {% if info.enabled|default(1) == 0 or info.level|default(null) == null %}
       <div class="mask"></div>
     {% endif %}
     <div class="page-header clearfix">
