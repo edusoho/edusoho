@@ -604,7 +604,6 @@ class EduCloudController extends BaseController
             'sms_coin_buy_notify'       => 'off'
         );
         $dataUserPosted = $request->request->all();
-        var_dump($dataUserPosted);
 
         if (isset($dataUserPosted['sms_order_pay_success']) && $dataUserPosted['sms_order_pay_success'] == 'on') {
             $dataUserPosted['sms_course_buy_notify']    = 'on';
@@ -624,7 +623,6 @@ class EduCloudController extends BaseController
 
         if (isset($dataUserPosted['sms-open'])) {
             if (isset($settings['sms_school_name'])) {
-                var_dump(111);
                 $status                   = $api->get('/me/sms_account');
                 $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
                 $smsStatus['sms_enabled'] = '1';
@@ -634,7 +632,6 @@ class EduCloudController extends BaseController
                 return $smsStatus;
             } else {
                 $info = $api->post('/sms_accounts', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
-                var_dump(222);
 
                 if ($info['status'] == 'ok') {
                     $status                       = $api->get('/me/sms_account');
@@ -685,7 +682,7 @@ class EduCloudController extends BaseController
         $smsStatus           = array_merge($settings, $dataUserPosted);
         $status              = $api->get('/me/sms_account');
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
-        var_dump($smsStatus);
+
         $this->getSettingService()->set('cloud_sms', $smsStatus);
         return $smsStatus;
     }
