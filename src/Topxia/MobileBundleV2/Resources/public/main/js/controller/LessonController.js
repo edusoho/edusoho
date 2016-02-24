@@ -3,19 +3,23 @@ app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', '
 function LessonController($scope, $stateParams, LessonService, LessonLiveService, cordovaUtil)
 {	
 	var self = this;
+  this.lesson = {};
   this.timeoutNum = 0;
 
   self.loadLiveTicket = function() {
+    $scope.showLoad();
     LessonLiveService.createLiveTickets({
       lessonId : $stateParams.lessonId,
       device : 'android'
     }, function(data) {
       if (data.error) {
+        $scope.hideLoad();
         self.showError(data.error);
         return;
       }
 
       if (! data.no) {
+        $scope.hideLoad();
         self.showError({
           message : "获取直播服务失败!"
         });
@@ -25,6 +29,22 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       self.getLiveInfoFromTicket($stateParams.lessonId, data.no);
     });
   };
+
+  self.showLiveBySdk = function(sdk) {
+    switch(sdk.provider) {
+      case "soooner":
+        cordovaUtil.startAppView("livePlayer", {
+          liveClassroomId : sdk.liveClassroomId, 
+          exStr : sdk.exStr,
+          replayState : sdk.replayState,
+        });
+        break;
+      default:
+        self.showError({
+          message : "暂不支持该直播类型在客户端上播放!"
+        });
+    }
+  }
 
   self.getLiveInfoFromTicket = function(lessonId, ticket) {
     LessonLiveService.getLiveInfoByTicket({
@@ -37,6 +57,12 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       }
       self.timeoutNum ++;
 
+      if (data.sdk) {
+        $scope.hideLoad();
+        self.showLiveBySdk(data.sdk);
+        return;
+      }
+
       if (! data.roomUrl || "" == data.roomUrl) {
         if (self.timeoutNum >= 10) {
           self.showError({
@@ -48,6 +74,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
         return;
       }
 
+      $scope.hideLoad();
       cordovaUtil.openWebView(data.roomUrl);
       cordovaUtil.closeWebView();
     });
@@ -77,6 +104,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
 				return;
 			}
       
+      self.lesson = data;
 			var lesson = data;
       if (!lesson) {
         alert("请先加入学习");
