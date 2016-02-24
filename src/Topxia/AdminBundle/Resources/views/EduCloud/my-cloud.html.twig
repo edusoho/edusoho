@@ -13,17 +13,6 @@
         {% if enabled|default(1) == 0 %}
           <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
         {% endif %}
-         <ul class="nav nav-tabs mbl">
-          <li class="{% if submenu == 'cloud-introduction' %}active{% endif %}">
-            <a href="{{ url('admin_my_cloud') }}">产品简介
-            </a>
-          </li>
-
-          <li class="{% if submenu == 'service-information' %}active{% endif %}">
-            <a href="{{ url('admin_my_cloud_overview') }}">服务概况
-            </a>
-          </li>
-        </ul> 
       {% if is_trial() %}
         {% if trialhtml is not null %}
           {{ trialhtml|raw }}

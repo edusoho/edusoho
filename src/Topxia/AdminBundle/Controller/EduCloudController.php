@@ -61,26 +61,26 @@ class EduCloudController extends BaseController
         $eduSohoOpenClient = new EduSohoOpenClient();
 
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])))) {
-            $articles = $eduSohoOpenClient->getArticles();
-            $articles = json_decode($articles, true);
+            return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
+        }
 
-            if ($this->getWebExtension()->isTrial()) {
-                $trialHtml = $this->getCloudCenterExperiencePage();
-                return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
-                    'articles' => $articles,
-                    'trial'    => $trialHtml['content']
-                ));
-            }
+        $articles = $eduSohoOpenClient->getArticles();
+        $articles = json_decode($articles, true);
 
-            $unTrial     = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
-            $unTrialHtml = json_decode($unTrial, true);
+        if ($this->getWebExtension()->isTrial()) {
+            $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                 'articles' => $articles,
-                'untrial'  => $unTrialHtml['content']
+                'trial'    => $trialHtml['content']
             ));
         }
 
-        return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
+        $unTrial     = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
+        $unTrialHtml = json_decode($unTrial, true);
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
+            'articles' => $articles,
+            'untrial'  => $unTrialHtml['content']
+        ));
     }
 
     //概览页，服务概况页
