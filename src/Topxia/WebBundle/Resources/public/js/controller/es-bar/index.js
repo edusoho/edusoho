@@ -14,7 +14,8 @@ define(function(require, exports, module) {
             var isIE10 = /MSIE\s+10.0/i.test(navigator.userAgent)
                 && (function() {"use strict";return this === undefined;}());
             var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
-            if (isIE10 || isIE11) {
+            var isEdge = /Edge\/13./i.test(navigator.userAgent);
+            if (isIE10 || isIE11 || isEdge) {
                 $(".es-bar").css( "margin-right",'16px');
             }
 
