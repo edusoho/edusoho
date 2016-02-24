@@ -13,4 +13,5 @@ $parameters['parameters']['topxia.upload.public_directory'] = __DIR__.'/../../we
 $parameters['parameters']['kernel.logs_dir']                = __DIR__.'/../../app/logs';
 $parameters['parameters']['environment']                    = API_ENV;
 $parameters['parameters']['kernel.cache_dir']               = __DIR__.'/../../app/cache/'.API_ENV;
+$parameters['parameters']['kernel.root_dir']               = __DIR__.'/../../app/';
 return $parameters['parameters'];
