@@ -417,10 +417,6 @@ admin_operation_mobile_class:
     pattern:  /operation/mobile/class
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileClass }
 
-admin_operation_create:
-    pattern:  /operation/mobile/create
-    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileCreate }
-
 admin_setting_mobile:
     pattern:  /setting/mobile
     defaults: { _controller: TopxiaAdminBundle:Setting:mobile }

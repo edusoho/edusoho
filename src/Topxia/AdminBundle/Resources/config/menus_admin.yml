@@ -53,9 +53,10 @@ admin_operation_mobile_class_category:
     router_name: admin_operation_mobile_class
 admin_operation_mobile_create:
     name: 添加分类展示
-    parent: admin_operation_mobile_class_category
-    router_name: admin_operation_create
+    parent: admin_operation_mobile_class_category:
+    router_params_context: 1
     group: 2
+    mode: modal
 admin_operation_block:
     name: 编辑区管理
     parent: admin_operation
