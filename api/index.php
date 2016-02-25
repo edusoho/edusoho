@@ -33,6 +33,7 @@ $connection = DriverManager::getConnection(array(
     'charset'      => 'utf8'
 ));
 
+
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($paramaters));
 $serviceKernel->setConnection($connection);

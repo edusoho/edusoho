@@ -80,7 +80,7 @@
                         <ul class="ui-list">
                             <li class="ui-border-t" ng-if="course.teachers[0]">
                                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : course.teachers[0].id })">
-                                    <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" />
+                                    <img ng-src="{{ course.teachers[0].avatar | coverAvatar }}" img-error="avatar" />
                                 </div>
                                 <div class="ui-list-info">
                                     <h4 class="ui-nowrap">{{ course.teachers[0].nickname }}
@@ -107,7 +107,7 @@
                         <ul class="ui-list">
                             <li class="ui-border-t" ng-if="reviews[0]">
                                 <div class="ui-avatar-s" ui-sref="userInfo({ userId : reviews[0].user.id })">
-                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" />
+                                    <img ng-src="{{ reviews[0].user.mediumAvatar | coverAvatar }}" img-error="avatar" />
                                 </div>
                                 <div class="ui-list-info">
                                     <h4 class="ui-nowrap ui-review-header">
@@ -130,6 +130,8 @@
                 </li>
         </ul>
     </div>
+
+    <div ng-if="isCanShowConsultBtn()" ng-click="consultCourseTeacher()" class="ui-btn btn-consult">咨询</div>
 </div>
 <div ng-if="0 == course.parentId" ng-controller="CourseToolController">
     <div class="ui-course-tool" style="box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);">
@@ -137,10 +139,10 @@
         </button>
         <button ng-click="favoriteCourse()" ng-class="isFavorited ? 'course-favorited' : '' " class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-heart">
         </button>
-        <button class="ui-btn btn-green" ng-class="course.vipLevelId <= 0 ? 'btn-col-60' : 'btn-col-25' " ng-click="joinCourse()">
+        <button class="ui-btn btn-green" ng-class="!isCanShowVip(course.vipLevelId) ? 'btn-col-60' : 'btn-col-25' " ng-click="joinCourse()">
             立即加入
         </button>
-        <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-click="vipLeand()" ng-if="course.vipLevelId > 0 ">
+        <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-if="isCanShowVip(course.vipLevelId)" ng-click="vipLeand()" ng-if="course.vipLevelId > 0 ">
             {{ getVipTitle(course.vipLevelId) }}免费学
         </button>
     </div>

@@ -16,7 +16,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label for="note">备注</label>
+      <label for="note">驳回原因</label>
     </div>
     <div class="col-md-8">
     <textarea id="note" name="note" class="form-control" rows="3"></textarea>
@@ -35,8 +35,8 @@
   <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
 
 
-  <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">审核失败</button>
-  <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">审核成功</button>
+  <button type="submit" class="btn btn-danger user-approve-btn" data-toggle="form-submit" data-status='fail' data-target="#approve-form">审核驳回</button>
+  <button type="submit" class="btn btn-success user-approve-btn" data-toggle="form-submit" data-status='success' data-target="#approve-form">审核通过</button>
 
 
   <script>app.load('user/approve')</script>

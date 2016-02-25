@@ -1,10 +1,10 @@
 <div class="teacher-item">
   <div class="teacher-top">
-    <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}">
+    <a class="teacher-img" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">
       <img class="avatar-lg" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt="">
     </a>
     <h3 class="title">
-      <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname|raw }}</a>
+      <a class="link-dark" href="{{ path('user_show', {id:teacher.id}) }}" target="_blank">{{ teacher.nickname|raw }}</a>
     </h3>
     <div class="position">
       {% if teacher.title %}
@@ -16,7 +16,7 @@
   </div>
   <div class="teacher-bottom">
     <div class="about">
-      {% if profile.about %}
+      {% if profile.about|default(false) %}
         {{ profile.about|plain_text(30) }}
       {% else %}
         暂无简介

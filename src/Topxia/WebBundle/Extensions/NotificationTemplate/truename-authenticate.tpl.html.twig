@@ -8,7 +8,7 @@
       	{% if data.type == 'through'%}
       	 	您的个人实名认证，审核已经通过！
       	{% elseif data.type == 'reject'%}
-     		  您的个人实名认证，审核未通过！
+     		  您的个人实名认证，审核未通过！驳回原因：
       {% endif %}
       {{data.note}}
     </div>
