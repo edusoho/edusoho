@@ -112,12 +112,32 @@ class MobileController extends BaseController
 
     public function mobileClassAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig');
+        $mobileShows = array();
+        $mobileShows = $this->getMobileShowService()->getAllMobileShows();
+
+        return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig',array('mobileShows' => $mobileShows));
     }
 
     public function createAction(Request $request)
     {
-        return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig');
+        $categoryId = array();
+        if ($request->getMethod() == 'POST') {
+            $conditions = $request->request->all();
+            $conditions['createTime'] = time();
+            
+            $mobileShow = $this->getMobileShowService()->findMobileShowByTitle($conditions['title']);
+            if (empty($mobileShow)) {
+                $mobileShow = $this->getMobileShowService()->addMobileShow($conditions);
+            }
+            $mobileShows = array();
+            $mobileShows = $this->getMobileShowService()->getAllMobileShows();
+            return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig',array('mobileShows' => $mobileShows));
+        }
+        if (empty($categoryId)) {
+            $categoryId = 0;
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig',array('categoryId' => $categoryId));
     }
 
     public function mobilePictureUploadAction(Request $request, $type)
@@ -182,6 +202,11 @@ class MobileController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getMobileShowService()
+    {
+        return $this->getServiceKernel()->createService('MobileShow.MobileShowService');
     }
 
     protected function getAuthService()
