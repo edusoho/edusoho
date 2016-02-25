@@ -7,9 +7,11 @@ use Topxia\Service\Course\Dao\CourseLessonReplayDao;
 
 class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 {
+    protected $table = 'course_lesson_replay';
+
     public function addCourseLessonReplay($courseLessonReplay)
     {
-        $affected = $this->getConnection()->insert(self::TABLENAME, $courseLessonReplay);
+        $affected = $this->getConnection()->insert($this->table, $courseLessonReplay);
         $this->clearCached();
 
         if ($affected <= 0) {
@@ -33,7 +35,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function deleteLessonReplayByLessonId($lessonId)
     {
-        $result = $this->getConnection()->delete(self::TABLENAME, array('lessonId' => $lessonId));
+        $result = $this->getConnection()->delete($this->table, array('lessonId' => $lessonId));
         $this->clearCached();
         return $result;
     }
@@ -52,7 +54,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function deleteLessonReplayByCourseId($courseId)
     {
-        $result = $this->getConnection()->delete(self::TABLENAME, array('courseId' => $courseId));
+        $result = $this->getConnection()->delete($this->table, array('courseId' => $courseId));
         $this->clearCached();
         return $result;
     }
@@ -96,14 +98,14 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function updateCourseLessonReplay($id, $fields)
     {
-        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getCourseLessonReplay($id);
     }
 
     public function updateCourseLessonReplayByLessonId($lessonId, $fields)
     {
-        $this->getConnection()->update(self::TABLENAME, $fields, array('lessonId' => $lessonId));
+        $this->getConnection()->update($this->table, $fields, array('lessonId' => $lessonId));
         $this->clearCached();
         return $this->getCourseLessonReplayByLessonId($lessonId);
     }
