@@ -31,6 +31,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
             return array('error' => '不能加入未发布班级!');
         }
 
+        if (!$classroom['buyable']) {
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            return array('error' => "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
+        }
+
         return array();
     }
 
