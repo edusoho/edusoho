@@ -3,6 +3,7 @@ namespace Topxia\Service\Common;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Topxia\Service\Common\Proxy\ProxyManager;
 
 class ServiceKernel
 {
@@ -190,12 +191,13 @@ class ServiceKernel
         return $this;
     }
 
+    //思考:createService的逻辑是否应该放到ProxyManager里？单一职责还是最少知道原则？
     public function createService($name)
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('service', $name);
 
-            $this->pool[$name] = new $class();
+            $this->pool[$name] = ProxyManager::create($class);
         }
 
         return $this->pool[$name];
@@ -205,7 +207,7 @@ class ServiceKernel
     {
         if (empty($this->pool[$name])) {
             $class = $this->getClassName('dao', $name);
-            $dao   = new $class();
+            $dao   = ProxyManager::create($class);
             $dao->setConnection($this->getConnection());
             $dao->setRedis($this->getRedis());
             $this->pool[$name] = $dao;

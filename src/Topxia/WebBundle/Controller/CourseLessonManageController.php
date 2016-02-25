@@ -338,8 +338,7 @@ class CourseLessonManageController extends BaseController
         }
 
         $mediaIds = array_keys($mediaMap);
-
-        $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+        $files    = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
         foreach ($files as $file) {
             $lessonIds = $mediaMap[$file['id']];
@@ -349,14 +348,12 @@ class CourseLessonManageController extends BaseController
             }
         }
 
-        $default = $this->getSettingService()->get('default', array());
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
             'course'    => $course,
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
             'homeworks' => empty($homeworks) ? array() : $homeworks,
-            'files'     => ArrayToolkit::index($files, 'id'),
-            'default'   => $default
+            'files'     => ArrayToolkit::index($files, 'id')
         ));
     }
 

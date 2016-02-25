@@ -7,9 +7,11 @@ use Topxia\Service\Course\Dao\CourseLessonReplayDao;
 
 class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 {
+    protected $table = 'course_lesson_replay';
+
     public function addCourseLessonReplay($courseLessonReplay)
     {
-        $affected = $this->getConnection()->insert(self::TABLENAME, $courseLessonReplay);
+        $affected = $this->getConnection()->insert($this->table, $courseLessonReplay);
         $this->clearCached();
 
         if ($affected <= 0) {
@@ -24,7 +26,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE id = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         }
 
@@ -33,7 +35,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function deleteLessonReplayByLessonId($lessonId)
     {
-        $result = $this->getConnection()->delete(self::TABLENAME, array('lessonId' => $lessonId));
+        $result = $this->getConnection()->delete($this->table, array('lessonId' => $lessonId));
         $this->clearCached();
         return $result;
     }
@@ -43,7 +45,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("lessonId:{$lessonId}", $lessonId, function ($lessonId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE lessonId = ? ORDER BY replayId ASC";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE lessonId = ? ORDER BY replayId ASC";
             return $that->getConnection()->fetchAll($sql, array($lessonId));
         }
 
@@ -52,7 +54,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function deleteLessonReplayByCourseId($courseId)
     {
-        $result = $this->getConnection()->delete(self::TABLENAME, array('courseId' => $courseId));
+        $result = $this->getConnection()->delete($this->table, array('courseId' => $courseId));
         $this->clearCached();
         return $result;
     }
@@ -62,7 +64,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}", $courseId, $lessonId, function ($courseId, $lessonId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE courseId=? AND lessonId = ? ";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId=? AND lessonId = ? ";
             return $that->getConnection()->fetchAssoc($sql, array($courseId, $lessonId));
         }
 
@@ -89,28 +91,23 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function deleteCourseLessonReplay($id)
     {
-        $result = $this->getConnection()->delete($this->getTablename(), array('id' => $id));
+        $result = $this->getConnection()->delete($this->getTable(), array('id' => $id));
         $this->clearCached();
         return $result;
     }
 
     public function updateCourseLessonReplay($id, $fields)
     {
-        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getCourseLessonReplay($id);
     }
 
     public function updateCourseLessonReplayByLessonId($lessonId, $fields)
     {
-        $this->getConnection()->update(self::TABLENAME, $fields, array('lessonId' => $lessonId));
+        $this->getConnection()->update($this->table, $fields, array('lessonId' => $lessonId));
         $this->clearCached();
         return $this->getCourseLessonReplayByLessonId($lessonId);
-    }
-
-    protected function getTablename()
-    {
-        return self::TABLENAME;
     }
 
     protected function _createSearchQueryBuilder($conditions)

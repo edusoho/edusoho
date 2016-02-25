@@ -7,12 +7,14 @@ use Topxia\Service\Course\Dao\CourseDao;
 
 class CourseDaoImpl extends BaseDao implements CourseDao
 {
+    protected $table = 'course';
+
     public function getCourse($id)
     {
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE id = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         }
 
@@ -24,8 +26,8 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:number:{$number}", $courseId, $number, function ($courseId, $number) use ($that) {
-            $sql = "SELECT * FROM {$this->getTablename()} WHERE courseId = ? AND number = ? LIMIT 1";
-            return $this->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId = ? AND number = ? LIMIT 1";
+            return $that->getConnection()->fetchAll($sql, array($courseId, $number)) ?: null;
         }
 
         );
@@ -38,7 +40,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks});";
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks});";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
@@ -51,7 +53,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                 return array();
             }
 
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE parentId = ? AND locked = ?";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? AND locked = ?";
             return $that->getConnection()->fetchAll($sql, array($parentId, $locked));
         }
 
@@ -65,7 +67,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->getTablename()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
@@ -75,7 +77,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return array();
         }
 
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE `title` LIKE ?; ";
+        $sql = "SELECT * FROM {$this->getTable()} WHERE `title` LIKE ?; ";
         return $this->getConnection()->fetchAll($sql, array('%'.$title.'%'));
     }
 
@@ -85,7 +87,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             return array();
         }
 
-        $sql = "SELECT * FROM {$this->getTablename()} WHERE parentId = 0 AND status = ? AND (";
+        $sql = "SELECT * FROM {$this->getTable()} WHERE parentId = 0 AND status = ? AND (";
 
         foreach ($tagIds as $key => $tagId) {
             if ($key > 0) {
@@ -127,7 +129,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $course['createdTime'] = time();
         $course['updatedTime'] = $course['createdTime'];
-        $affected              = $this->getConnection()->insert(self::TABLENAME, $course);
+        $affected              = $this->getConnection()->insert($this->table, $course);
         $this->clearCached();
 
         if ($affected <= 0) {
@@ -140,14 +142,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function updateCourse($id, $fields)
     {
         $fields['updatedTime'] = time();
-        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getCourse($id);
     }
 
     public function deleteCourse($id)
     {
-        $result = $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
         return $result;
     }
@@ -162,7 +164,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
         $currentTime = time();
 
-        $sql = "UPDATE {$this->getTablename()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
         $this->clearCached();
@@ -200,7 +202,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from(self::TABLENAME, 'course')
+                        ->from($this->table, 'course')
                         ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('status = :status')
                         ->andWhere('type = :type')
@@ -250,26 +252,21 @@ class CourseDaoImpl extends BaseDao implements CourseDao
 
     public function analysisCourseDataByTime($startTime, $endTime)
     {
-        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTablename()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
+        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `createdTime`>={$startTime} AND `createdTime`<={$endTime} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC ";
 
         return $this->getConnection()->fetchAll($sql);
     }
 
     public function findCoursesCountByLessThanCreatedTime($endTime)
     {
-        $sql = "SELECT count(id) as count FROM `{$this->getTablename()}` WHERE `createdTime`<={$endTime} ";
+        $sql = "SELECT count(id) as count FROM `{$this->getTable()}` WHERE `createdTime`<={$endTime} ";
 
         return $this->getConnection()->fetchColumn($sql);
     }
 
     public function analysisCourseSumByTime($endTime)
     {
-        $sql = "SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTablename()}`   i   WHERE   i.createdTime<=o.createdTime and i.parentId = 0)  as Count from `{$this->getTablename()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
+        $sql = "SELECT date , max(a.Count) as count from (SELECT from_unixtime(o.createdTime,'%Y-%m-%d') as date,( SELECT count(id) as count FROM  `{$this->getTable()}`   i   WHERE   i.createdTime<=o.createdTime and i.parentId = 0)  as Count from `{$this->getTable()}`  o  where o.createdTime<={$endTime} order by 1,2) as a group by date ";
         return $this->getConnection()->fetchAll($sql);
-    }
-
-    public function getTablename()
-    {
-        return self::TABLENAME;
     }
 }
