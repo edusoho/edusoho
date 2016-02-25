@@ -467,4 +467,12 @@ fieldset #checkboxChoices{
   top: 38px;
 }
 
+.email-status {
+  padding-left: 20%;
+  margin-top: 100px;
+}
+.email-status p {
+  margin-bottom: 30px;
+}
+
 
