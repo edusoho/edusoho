@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'GET' => array(
+    'GET'  => array(
         '/^\/api\/users$/',
         '/^\/api\/users\/pages$/',
         '/^\/api\/users\/\d+$/',
@@ -11,6 +11,6 @@ return array(
     'POST' => array(
         '/^\/api\/users$/',
         '/^\/api\/users\/login$/',
-        '/^\/api\/users\/bind_login$/',
+        '/^\/api\/users\/bind_login$/'
     )
 );

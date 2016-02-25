@@ -34,7 +34,8 @@ $resources = array(
     'HomeworkManager',
     'ThreadManager',
     'Thread',
-    'Upload'
+    'Upload',
+    'Status'
 );
 
 foreach ($resources as $res) {

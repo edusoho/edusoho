@@ -37,6 +37,7 @@ $app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get')
 
 $app->get(_u('/courses/{courseId}/members'), 'res.CourseMembers:get');
 $app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:get');
+$app->get(_u('/course/{courseId}/status'), 'res.Status:get');
 
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
