@@ -9,7 +9,7 @@
   <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="form-group">
     <select id="keywordType" name="keywordType" class="form-control">
-      {{ select_options(dict('teacherKeywordType'), app.request.query.get('keywordType'), '--关键词类型--') }}
+      {{ select_options(dict('teacherKeywordType'), app.request.query.get('keywordType')) }}
     </select>
   </div>
 
@@ -34,7 +34,7 @@
       {% for user in users %}
             {% include 'TopxiaAdminBundle:Teacher:teacher-promote-tr.html.twig' %}
       {% else %}
-        <tr><td colspan="20"><div class="empty">暂无推荐课程</div></td></tr>
+        <tr><td colspan="20"><div class="empty">暂无推荐老师</div></td></tr>
       {% endfor %}
     </tbody>
   </table>

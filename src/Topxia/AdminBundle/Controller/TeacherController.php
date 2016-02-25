@@ -20,13 +20,13 @@ class TeacherController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        if (!empty($fields)) {
-            if (isset($conditions['keyWordType']) && isset($conditions['keyWord'])) {
-                $conditions[$conditions['keywordType']] = $conditions['keyword'];
-                unset($conditions['keywordType']);
-                unset($conditions['keyword']);
-            }
+        if (!empty($fields) && isset($conditions['keyWordType']) && isset($conditions['keyWord'])) {
+            $conditions[$conditions['keywordType']] = $conditions['keyword'];
+            unset($conditions['keywordType']);
+            unset($conditions['keyword']);
         }
+
+        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'keywordType', 'keyword'));
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -55,6 +55,7 @@ class TeacherController extends BaseController
         if ($request->getMethod() == 'POST') {
             $number = $request->request->get('number');
             $user   = $this->getUserService()->promoteUser($id, $number);
+            $type   = $request->request->get('type');
 
             if ($type == 'promoteList') {
                 return $this->render('TopxiaAdminBundle:Teacher:teacher-promote-tr.html.twig', array('user' => $user));
@@ -91,7 +92,7 @@ class TeacherController extends BaseController
             unset($conditions['keyword']);
         }
 
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'nickname'));
+        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'keywordType', 'keyword'));
 
         $paginator = new Paginator(
             $this->get('request'),
