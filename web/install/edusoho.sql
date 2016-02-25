@@ -259,7 +259,7 @@ ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
 DROP TABLE IF EXISTS `announcement`;
 CREATE TABLE `announcement` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '课程公告ID',
-  `userId` int(10) NOT NULL COMMENT '公告发布人ID',
+  `userId` int(10) unsigned NOT NULL COMMENT '公告发布人ID',
   `targetType` varchar(64) NOT NULL DEFAULT 'course' COMMENT '公告类型',
   `url` varchar(255) NOT NULL,
   `startTime` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1611,7 +1611,7 @@ CREATE TABLE `coupon` (
   `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单号',
   `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
   `createdTime` int(10) unsigned NOT NULL,
-  `receiveTime` INT(10) unsigned NULL DEFAULT '0'  COMMENT '接收时间',
+  `receiveTime` INT(10) unsigned NOT NULL DEFAULT '0'  COMMENT '接收时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='优惠码表';
 

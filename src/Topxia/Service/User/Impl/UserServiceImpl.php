@@ -1420,6 +1420,30 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserDao()->updateUser($userId, $code);
     }
 
+    public function findUnlockedUserMobilesByUserIds($userIds)
+    {
+        $users = $this->findUsersByIds($userIds);
+
+        foreach ($users as $key => $value) {
+            if ($value['locked']) {
+                unset($users[$key]);
+            }
+        }
+
+        if (empty($users)) {
+            return array();
+        }
+
+        $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
+
+        $userIds        = ArrayToolkit::column($users, 'id');
+        $userProfiles   = $this->findUserProfilesByIds($userIds);
+        $profileMobiles = ArrayToolkit::column($userProfiles, 'mobile');
+
+        $mobiles = array_merge($verifiedMobiles, $profileMobiles);
+        return array_unique($mobile);
+    }
+
     public function getUserPayAgreement($id)
     {
         return $this->getUserPayAgreementDao()->getUserPayAgreement($id);
