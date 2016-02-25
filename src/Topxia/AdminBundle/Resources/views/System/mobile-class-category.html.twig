@@ -6,7 +6,27 @@
 
 
 {% block main %}
+{% if setting("mobile.enabled") == 1 %}
+<table class="table table-hover" id="category-table">
+  <thead>
+    <tr>
+      <th>自定义名称</th>
+      <th>类型</th>
+      <th>排序方式</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  {% include 'TopxiaAdminBundle:System:mobile-category-tr.html.twig' %}
+</table>
 
+{% else %}
+<div class="well" style="text-align:center;">
+
+
+移动端未开启，请先在<a href="{{ path('admin_setting_mobile') }}"> 系统-课程设置-移动端设置 </a>中设置开启
+
+</div>
+{% endif %}
 
 
 {% endblock %}
