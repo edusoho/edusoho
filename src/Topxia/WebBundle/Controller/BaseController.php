@@ -134,7 +134,7 @@ abstract class BaseController extends Controller
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $api    = CloudAPIFactory::create('root');
+            $api    = CloudAPIFactory::create('leaf');
             $site   = $this->setting('site', array());
             $params = array(
                 'to'       => $to,
@@ -147,7 +147,7 @@ abstract class BaseController extends Controller
                 )
             );
             $api->setApiUrl('http://124.160.104.74:8098/');
-            $result = $api->post("/me/emails", $params);
+            $result = $api->post("/emails", $params);
             return true;
         }
 

@@ -184,7 +184,7 @@ class EduCloudController extends BaseController
         //云端视频判断
         try {
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
@@ -305,10 +305,11 @@ class EduCloudController extends BaseController
 
         try {
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
             $info      = $api->get('/me');
             $smsStatus = $this->newHandleSmsSetting($request);
-
+            $status    = $api->get('/me/sms_account');
+            var_dump($status);
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'    => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'   => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -337,13 +338,16 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
-            $info        = $api->get('/me');
+            $info   = $api->get('/me');
+            $status = $api->get('/me/email_account');
+            // var_dump($info);
             $emailStatus = $this->handleEmailSetting($request);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
-                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-                'level'       => isset($info['level']) ? $info['level'] : 'error',
-                'emailStatus' => $emailStatus
+                'locked'       => isset($info['locked']) ? $info['locked'] : 0,
+                'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
+                'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
+                'level'        => isset($info['level']) ? $info['level'] : 'error',
+                'emailStatus'  => $emailStatus
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
@@ -710,16 +714,31 @@ class EduCloudController extends BaseController
         $sign        = array();
         $emailStatus = array();
 
-        // var_dump($result);
+        // var_dump($settings);
+        // exit();
 
         if (isset($operation['email-open'])) {
-            if (isset($settings['sign'])) {
-                $emailStatus['status'] = 'enable';
-                $emailStatus           = array_merge($settings, $emailStatus);
-            } else {
-                $status = $api->post("/me/email_account");
+            $status = $api->get('/me/email_account');
+
+            if (isset($status['code']) && $status['code'] == 101) {
+                $site   = $this->getSettingService()->get('site', array());
+                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : "我的网校"));
+                var_dump($result);
+
+                if (isset($result['status']) && $result['status'] == 'enable') {
+                    $emailStatus['status'] = 'enable';
+                    $emailStatus           = array_merge($settings, $emailStatus);
+                    $sign                  = array('sign' => $result['nickname']);
+                }
+
+                // var_dump($status);
+                //exit();
                 // $result = $api->get("/me/email_account");
                 // var_dump($result);
+            } else {
+                $emailStatus['status'] = 'enable';
+                $emailStatus           = array_merge($settings, $emailStatus);
+                $sign                  = array('sign' => $settings['sign']);
             }
 
             $result = $api->get("/me/email_account");
@@ -750,16 +769,18 @@ class EduCloudController extends BaseController
                 $params = array(
                     'sender' => $operation['sign']
                 );
-                $result = $api->post("/me/email_account_update", $params);
+                $result = $api->post("/me/email_account", $params);
 
-                if ($result['success'] == 1) {
+                if (isset($result['nickname'])) {
                     $this->setFlashMessage('success', '云邮件设置已保存！');
+                    $emailStatus['status'] = $settings['status'];
+                    $sign                  = array('sign' => $result['nickname']);
                 } else {
                     $this->setFlashMessage('danger', '云邮件设置保存失败！');
                 }
             } else {
                 $emailStatus['status'] = $settings['status'];
-                $sign['sign']          = $settings['sign'];
+                $sign                  = array('sign' => $settings['sign']);
             }
         }
 
@@ -776,19 +797,24 @@ class EduCloudController extends BaseController
             $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
-        //$result = $api->get("/me/email_account");
-
-        if (isset($result['success']) && $result['success'] == '1') {
-            $result      = $api->get("/me/email_account");
-            $emailStatus = array('status' => $result['status']);
-            $sign        = array('sign' => $result['nickname']);
-        }
+        // if (isset($result['success']) && $result['success'] == 1) {
+        //     $result = $api->get("/me/email_account");
+        //     var_dump($result);
+        //     $emailStatus = array('status' => $result['status']);
+        //     $sign        = array('sign' => $result['nickname']);
+        // }
 
         if (isset($result['error'])) {
             $emailStatus['status'] = 'error';
             $emailStatus['msg']    = $result['error'];
         }
 
+        // $sign                  = array();
+        // $status                = $api->get('/me/email_account');
+        // $emailStatus['status'] = 'enable';
+        // $sign                  = array('sign' => $status['nickname']);
+        // $result = $api->get("/me/email_account");
+        // var_dump($result);
         return array($emailStatus, $sign);
     }
 

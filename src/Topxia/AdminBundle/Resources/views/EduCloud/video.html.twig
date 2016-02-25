@@ -30,7 +30,7 @@
     <hr>
   {% else %}
   <div class="eduyun-main">
-    {% if info.enabled|default(1) == 0 or info.level|default(null) == null %}
+    {% if info.enabled|default(1) == 0 %}
       <div class="mask"></div>
     {% endif %}
     <div class="page-header clearfix">
@@ -68,7 +68,7 @@
     <div class="page-header clearfix">
       <h1 class="pull-left">云视频功能设置</h1>
     </div>
-    {% if storageSetting.upload_mode|default('local') == 'cloud' and info.level|default(null) is not null  %}
+    {% if  info.level|default(null) is not null  %}
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
       

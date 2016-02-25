@@ -482,7 +482,7 @@ class RegisterController extends BaseController
                 'verifyurl' => $verifyurl,
                 'nickname'  => $user['nickname']
             );
-            $this->sendEmail($user['email'], $params);
+            $this->sendEmailService($user['email'], $params);
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }
