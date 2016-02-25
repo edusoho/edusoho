@@ -43,19 +43,17 @@
         {% endif %}
         </div>
 
-     
+        {% if targetType in ['course','vip','classroom'] %}
         <div class="order-detail-bg">
-          {% if targetType in ['course','vip','classroom'] %}
 
-            {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
-
-          {% endif %}
+          {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
 
           {% if setting('coin.coin_enabled') %}
           	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
           {% endif %}
-        </div>
 
+        </div>
+        {% endif %}
 
         <div class="form-group">
           <div class="total-price">
