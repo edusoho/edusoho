@@ -1,7 +1,7 @@
 {% set props = status.properties %}
 
 {% if mode == 'simple' %}
-  的试卷 "{{ props.testpaper.name|sub_text(15)}}"已被批阅  
+  试卷 "{{ props.testpaper.name|sub_text(15)}}"已被批阅  
 {% elseif mode == 'full' %}
 
 {% endif %}
