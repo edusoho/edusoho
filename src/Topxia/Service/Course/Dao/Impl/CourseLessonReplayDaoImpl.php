@@ -24,7 +24,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE id = ? LIMIT 1";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
         }
 
@@ -43,7 +43,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("lessonId:{$lessonId}", $lessonId, function ($lessonId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE lessonId = ? ORDER BY replayId ASC";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE lessonId = ? ORDER BY replayId ASC";
             return $that->getConnection()->fetchAll($sql, array($lessonId));
         }
 
@@ -62,7 +62,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}", $courseId, $lessonId, function ($courseId, $lessonId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTablename()} WHERE courseId=? AND lessonId = ? ";
+            $sql = "SELECT * FROM {$that->getTable()} WHERE courseId=? AND lessonId = ? ";
             return $that->getConnection()->fetchAssoc($sql, array($courseId, $lessonId));
         }
 
@@ -89,7 +89,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
 
     public function deleteCourseLessonReplay($id)
     {
-        $result = $this->getConnection()->delete($this->getTablename(), array('id' => $id));
+        $result = $this->getConnection()->delete($this->getTable(), array('id' => $id));
         $this->clearCached();
         return $result;
     }
@@ -106,11 +106,6 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         $this->getConnection()->update(self::TABLENAME, $fields, array('lessonId' => $lessonId));
         $this->clearCached();
         return $this->getCourseLessonReplayByLessonId($lessonId);
-    }
-
-    protected function getTablename()
-    {
-        return self::TABLENAME;
     }
 
     protected function _createSearchQueryBuilder($conditions)
