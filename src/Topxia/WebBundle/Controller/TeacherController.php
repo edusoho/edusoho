@@ -19,43 +19,17 @@ class TeacherController extends BaseController
             $this->getUserService()->searchUserCount($conditions),
             20
         );
-        $conditions['promoted'] = 1;
-        $promotedCount          = $this->getUserService()->searchUserCount($conditions);
-        $currentPage            = $request->query->get('page') ? $request->query->get('page') : 1;
-        $promotedPage           = intval($promotedCount / 20);
-        $promotedLeft           = $promotedCount % 20;
-
-        if ($currentPage <= $promotedPage) {
-            $teachers = $this->getUserService()->searchUsers(
-                $conditions,
-                array('promotedSeq', 'ASC'),
-                ($currentPage - 1) * 20,
-                20
-            );
-        } elseif (($promotedPage + 1) == $currentPage) {
-            $teachers = $this->getUserService()->searchUsers(
-                $conditions,
-                array('promotedSeq', 'ASC'),
-                ($currentPage - 1) * 20,
-                20
-            );
-            $conditions['promoted'] = 0;
-            $teachersTemp           = $this->getUserService()->searchUsers(
-                $conditions,
-                array('createdTime', 'DESC'),
-                0,
-                20 - $promotedLeft
-            );
-            $teachers = array_merge($teachers, $teachersTemp);
-        } else {
-            $conditions['promoted'] = 0;
-            $teachers               = $this->getUserService()->searchUsers(
-                $conditions,
-                array('createdTime', 'DESC'),
-                (20 - $promotedLeft) + ($currentPage - $promotedPage - 2) * 20,
-                20
-            );
-        }
+        $teachersCount = $this->getUserService()->searchUserCount($conditions);
+        $teachers      = $this->getUserService()->searchUsers(
+            $conditions,
+            array(
+                'promoted', 'DESC',
+                'promotedSeq', 'ASC',
+                'createdTime', 'DESC'
+            ),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $user         = $this->getCurrentUser();
         $teacherIds   = ArrayToolkit::column($teachers, 'id');
