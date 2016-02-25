@@ -6,6 +6,9 @@
     用户认证审核
 {% endblock %}
 {% block body %}
+<style type="text/css">
+  .modal-body {max-height: 10000px !important;}
+</style>
 
 <form id="approve-form" class="form-horizontal" method="post" action="{{ path('admin_approval_approve', {id:user.id}) }}">
 
