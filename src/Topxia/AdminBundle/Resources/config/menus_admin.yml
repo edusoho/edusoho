@@ -47,6 +47,15 @@ admin_operation_mobile_select_manage:
     name: 每周精选设置
     parent: admin_operation_mobile
     router_name: admin_operation_mobile_select
+admin_operation_mobile_class_category:
+    name: 课程分类展示
+    parent: admin_operation_mobile
+    router_name: admin_operation_mobile_class
+admin_operation_mobile_create:
+    name: 添加分类展示
+    parent: admin_operation_mobile_class_category
+    router_name: admin_operation_create
+    group: 2
 admin_operation_block:
     name: 编辑区管理
     parent: admin_operation
