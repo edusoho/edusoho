@@ -8,6 +8,43 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
 {
+    public function getPaymentMode()
+    {
+        $coinSetting = $this->controller->setting("coin");
+
+        $coinEnabled = true;
+        if (empty($coinSetting)) {
+            $coinEnabled = false;
+        }
+
+        $coinEnabled = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"];
+
+        $payment = $this->controller->setting('payment', array());
+
+        $apipayEnabled = true;
+        if (empty($payment['enabled'])) {
+            $apipayEnabled = false;
+        }
+
+        if (empty($payment['alipay_enabled'])) {
+            $apipayEnabled = false;
+        }
+
+        if (empty($payment['alipay_key']) || empty($payment['alipay_secret']) || empty($payment['alipay_account'])) {
+            $apipayEnabled = false;
+        }
+
+        //0 can buy
+        $magicSetting = $this->getSettingService()->get('magic', array());
+        $iosBuyDisable = isset($magicSetting['ios_buy_disable']) ? $magicSetting['ios_buy_disable'] : 0;
+        return array(
+            "coin"=>$coinEnabled,
+            "alipay"=>$apipayEnabled,
+            "ios_buy_disable"=>$iosBuyDisable == 0
+        );
+
+    }
+
     public function validateIAPReceipt()
     {
         $user = $this->controller->getUserByToken($this->request);
