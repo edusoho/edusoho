@@ -714,9 +714,6 @@ class EduCloudController extends BaseController
         $sign        = array();
         $emailStatus = array();
 
-        // var_dump($settings);
-        // exit();
-
         if (isset($operation['email-open'])) {
             $status = $api->get('/me/email_account');
 
@@ -730,11 +727,6 @@ class EduCloudController extends BaseController
                     $emailStatus           = array_merge($settings, $emailStatus);
                     $sign                  = array('sign' => $result['nickname']);
                 }
-
-                // var_dump($status);
-                //exit();
-                // $result = $api->get("/me/email_account");
-                // var_dump($result);
             } else {
                 $emailStatus['status'] = 'enable';
                 $emailStatus           = array_merge($settings, $emailStatus);
@@ -797,24 +789,11 @@ class EduCloudController extends BaseController
             $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
-        // if (isset($result['success']) && $result['success'] == 1) {
-        //     $result = $api->get("/me/email_account");
-        //     var_dump($result);
-        //     $emailStatus = array('status' => $result['status']);
-        //     $sign        = array('sign' => $result['nickname']);
-        // }
-
         if (isset($result['error'])) {
             $emailStatus['status'] = 'error';
             $emailStatus['msg']    = $result['error'];
         }
 
-        // $sign                  = array();
-        // $status                = $api->get('/me/email_account');
-        // $emailStatus['status'] = 'enable';
-        // $sign                  = array('sign' => $status['nickname']);
-        // $result = $api->get("/me/email_account");
-        // var_dump($result);
         return array($emailStatus, $sign);
     }
 

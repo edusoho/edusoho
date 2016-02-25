@@ -10,7 +10,7 @@
   {% embed "TopxiaWebBundle:Bootstrap:panel.html.twig" with {class:'panel-col'} %}
     {% block heading %}邮箱设置{% endblock %}
     {% block body %}
-    {% if mailer.enabled == 1 %}
+    {% if mailer.enabled == 1 or cloudEmail.status == 'enable' %}
       <form id="setting-email-form" class="form-horizontal" method="post" >
         {{ web_macro.flash_messages() }}
 

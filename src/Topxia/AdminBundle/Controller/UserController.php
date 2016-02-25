@@ -389,14 +389,18 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
 
         try {
-            $this->sendEmail(
-                $user['email'],
-                "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+            $params = array(
+                'title'     => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                'body'      => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
                     'user'  => $user,
                     'token' => $token
-                )), 'html'
+                )),
+                'template'  => 'email_reset_password',
+                'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                'nickname'  => $user['nickname'],
+                'format'    => 'html'
             );
+            $this->sendEmailService($user['email'], $params);
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
@@ -435,11 +439,14 @@ class UserController extends BaseController
         }
 
         try {
-            $this->sendEmail(
-                $user['email'],
-                '请激活你的帐号 完成注册',
-                $emailBody
+            $params = array(
+                'title'     => '请激活你的帐号 完成注册',
+                'body'      => $emailBody,
+                'template'  => 'email_reset_password',
+                'verifyurl' => $verifyurl,
+                'nickname'  => $user['nickname']
             );
+            $this->sendEmailService($user['email'], $params);
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
