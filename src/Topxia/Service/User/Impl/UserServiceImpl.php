@@ -787,6 +787,14 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserBindDao()->findBindsByToId($userId);
     }
 
+    protected function typeInOAuthClient($type)
+    {
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, array('discuz', 'phpwind'));
+
+        return in_array($type, $types);
+    }
+
     public function unBindUserByTypeAndToId($type, $toId)
     {
         $user = $this->getUserDao()->getUser($toId);
@@ -795,9 +803,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('解除第三方绑定失败，该用户不存在');
         }
 
-        $types = array_keys(OAuthClientFactory::clients());
-
-        if (!in_array($type, $types)) {
+        if (!$this->typeInOAuthClient($type)) {
             throw $this->createServiceException("{$type}类型不正确，解除第三方绑定失败。");
         }
 
@@ -834,10 +840,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
         }
 
-        $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind'));
-
-        if (!in_array($type, $types)) {
+        if (!$this->typeInOAuthClient($type)) {
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
 
@@ -856,10 +859,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，第三方绑定失败');
         }
 
-        $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind'));
-
-        if (!in_array($type, $types)) {
+        if (!$this->typeInOAuthClient($type)) {
             throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
         }
 

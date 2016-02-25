@@ -1,5 +1,5 @@
 app.controller('CourseCouponController', ['$scope', 'CouponService', '$stateParams', '$window', CourseCouponController]);
-app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', VipListController]);
+app.controller('VipListController', ['$scope', '$stateParams', 'SchoolService', 'cordovaUtil', VipListController]);
 app.controller('VipPayController', ['$scope', '$stateParams', 'SchoolService', 'VipUtil', 'OrderService', 'cordovaUtil', 'platformUtil', VipPayController]);
 
 function BasePayController($scope, $stateParams, OrderService, cordovaUtil, platformUtil)
@@ -32,7 +32,7 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 	}
 
 	$scope.checkIsCoinMode = function() {
-		return platformUtil.ios || platformUtil.iPhone || platformUtil.iPad
+		return false;
 	}
 
 	$scope.changePayMode = function() {
@@ -98,7 +98,10 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 
 		OrderService.createOrder(defaultParams, function(data) {
 			if (data.status != "ok") {
-				self.showErrorResultDlg(data.error);
+				self.showErrorResultDlg({
+					name : "error",
+					message : data.message
+				});
 				return;
 			}
 
@@ -239,7 +242,7 @@ function VipPayController($scope, $stateParams, SchoolService, VipUtil, OrderSer
 
 }
 
-function VipListController($scope, $stateParams, SchoolService)
+function VipListController($scope, $stateParams, SchoolService, cordovaUtil)
 {
 	var user = null;
 	
@@ -249,6 +252,17 @@ function VipListController($scope, $stateParams, SchoolService)
 			userId : $scope.user.id
 		}, function(data) {
 			$scope.hideLoad();
+			if (! data || !data.vips || data.vips.length == 0) {
+				var dia = $.dialog({
+			        title : '会员提醒' ,
+			        content : '网校尚未开启Vip服务!' ,
+			        button : [ "退出" ]
+				});
+
+				dia.on("dialog:action",function(e){
+					cordovaUtil.closeWebView();
+				});
+			}
 			$scope.data = data;
 			user = data.user;
 		});
@@ -385,6 +399,16 @@ function CoursePayController($scope, $stateParams, OrderService, CouponService, 
 	$scope.close = function() {
 		self.dialog.dialog("hide");
 	}
+
+	$scope.isShowCoupon = function() {
+		if (platformUtil.native && (platformUtil.iPhone || platformUtil.iPad)) {
+			return false;
+		}
+		if ($scope.data && $scope.data.isInstalledCoupon) {
+			return true;
+		}
+		return false;
+	};
 
 	self.loadOrder();
 }
