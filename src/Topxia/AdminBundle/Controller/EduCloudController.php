@@ -341,6 +341,7 @@ class EduCloudController extends BaseController
             $status = $api->get('/me/email_account');
             // var_dump($info);
             $emailStatus = $this->handleEmailSetting($request);
+            var_dump($emailStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
