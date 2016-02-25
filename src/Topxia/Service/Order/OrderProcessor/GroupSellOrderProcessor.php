@@ -7,28 +7,26 @@ use Topxia\Service\Common\ServiceKernel;
 
 class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "";
+    protected $router    = "";
     protected $orderType = "groupSell";
-
-    public function getRouter()
-    {
-        return "";
-    }
 
     public function preCheck($targetId, $userId)
     {
         $group = $this->getGroupSellService()->getGroupSell($targetId);
-        if (empty($group)) {
-            return array("error"=>"找不到要购买的组合!");
-        }
-        if($group['startTime'] > time()){
-            return array("error"=>"活动还没有开始");
-        }
-        if($group['endTime'] < time()){
-            return array("error"=>"活动已经结束");
-        }
-        return array();
 
+        if (empty($group)) {
+            return array("error" => "找不到要购买的组合!");
+        }
+
+        if ($group['startTime'] > time()) {
+            return array("error" => "活动还没有开始");
+        }
+
+        if ($group['endTime'] < time()) {
+            return array("error" => "活动已经结束");
+        }
+
+        return array();
     }
 
     public function getOrderInfo($targetId, $fields)
@@ -38,16 +36,15 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         if (empty($group)) {
             throw new Exception("找不到要购买的组合!");
         }
+
         //组合购买不支持使用虚拟币等其他形式
-            return array(
-                'totalPrice' => $group["groupPrice"],
-                'targetId'   => $targetId,
-                'targetType' => $this->orderType,
-                'showCoupon' => false,
-                "group" => $group,
-            );
-       
-       
+        return array(
+            'totalPrice' => $group["groupPrice"],
+            'targetId'   => $targetId,
+            'targetType' => $this->orderType,
+            'showCoupon' => false,
+            "group"      => $group
+        );
     }
 
     public function shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields)
@@ -74,7 +71,7 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
-        $group = $this->getGroupSellService()->getGroupSell($targetId);
+        $group      = $this->getGroupSellService()->getGroupSell($targetId);
 
         $totalPrice = (float) $group['groupPrice'];
         return $totalPrice;
@@ -100,17 +97,19 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return $this->getOrderService()->updateOrder($id, $fileds);
     }
+
     public function getNote($targetId)
     {
-         $group = $this->getGroupSellService()->getGroupSell($targetId);
-         return $group['about'];
+        $group = $this->getGroupSellService()->getGroupSell($targetId);
+        return $group['about'];
     }
 
     public function getTitle($targetId)
     {
-         $group = $this->getGroupSellService()->getGroupSell($targetId);
-         return $group['title'];
+        $group = $this->getGroupSellService()->getGroupSell($targetId);
+        return $group['title'];
     }
+
     public function isTargetExist($targetId)
     {
         $group = $this->getGroupSellService()->getGroupSell($targetId);
@@ -122,28 +121,29 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
         return true;
     }
 
- 
-    protected function getGroupSellService(){
+    protected function getGroupSellService()
+    {
         return ServiceKernel::instance()->createService('GroupSell:GroupSell.GroupSellService');
-    }  
+    }
 
     public function pay($payData)
     {
         return $this->getPayCenterService()->pay($payData);
     }
 
-    public function callbackUrl($router, $order, $container)
+    public function callbackUrl($order, $container)
     {
-       
-        $group = $this->getGroupSellService()->getGroupSell($order['targetId']);
+        $group      = $this->getGroupSellService()->getGroupSell($order['targetId']);
         $targetType = $group['type'];
-        if($targetType == 'course'){
+
+        if ($targetType == 'course') {
             $router = "my_courses_learning";
-        }elseif($targetType == 'classroom'){
+        } elseif ($targetType == 'classroom') {
             $router = "my_classrooms";
-        }else{
+        } else {
             $router = "homepage";
         }
+
         $goto = $container->get('router')->generate($router, array(), true);
         return $goto;
     }
@@ -167,9 +167,11 @@ class GroupSellOrderProcessor extends BaseProcessor implements OrderProcessor
     {
         return "GroupSellBundle:GroupSell:orderInfo";
     }
-    protected function getGroupSellOrderService(){
+
+    protected function getGroupSellOrderService()
+    {
         return ServiceKernel::instance()->createService('GroupSell:GroupSell.GroupSellOrderService');
-    }  
+    }
 
     protected function getOrderService()
     {

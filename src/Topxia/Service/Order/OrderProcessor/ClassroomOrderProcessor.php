@@ -8,13 +8,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "classroom_show";
-
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
         if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
@@ -338,9 +331,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getPayCenterService()->pay($payData);
     }
 
-    public function callbackUrl($router, $order, $container)
+    public function callbackUrl($order, $container)
     {
-        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        $goto = $container->get('router')->generate('classroom_show', array('id' => $order["targetId"]), true);
         return $goto;
     }
 
