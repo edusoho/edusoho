@@ -39,6 +39,7 @@
     {% if setting('course.custom_chapter_enabled')|default(true) %} 
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
+    
     {% if lesson.free == 1 %}
       <span class="label label-danger">免费</span>
     {% elseif course.tryLookable and lesson.type == 'video' and file.storage|default('') == 'cloud' %}

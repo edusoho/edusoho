@@ -105,7 +105,7 @@ class SearchController extends BaseController
 
         $type       = $request->query->get('type', 'course');
         $page       = $request->query->get('page', '1');
-        $targetType = $request->query->get('targetType', '');
+        $targetType = $request->query->get('targetType', 'group');
 
         $conditions = array(
             'type'  => $type,
