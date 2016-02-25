@@ -785,8 +785,15 @@ class EduCloudController extends BaseController
         }
 
         if (empty($operation)) {
-            $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
-            $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
+            $result = $api->get("/me/email_account");
+
+            if (isset($result['status']) && $result['status'] == 'enable') {
+                $emailStatus['status'] = $result['status'];
+                $sign                  = array('sign' => $result['nickname']);
+            } else {
+                $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
+                $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
+            }
         }
 
         if (isset($result['error'])) {
