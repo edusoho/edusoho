@@ -184,7 +184,7 @@ class EduCloudController extends BaseController
         //云端视频判断
         try {
             $api = CloudAPIFactory::create('root');
-            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
@@ -309,7 +309,6 @@ class EduCloudController extends BaseController
             $info      = $api->get('/me');
             $smsStatus = $this->newHandleSmsSetting($request);
             $status    = $api->get('/me/sms_account');
-            var_dump($status);
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'    => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'   => isset($info['enabled']) ? $info['enabled'] : 1,
