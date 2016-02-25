@@ -4,8 +4,6 @@ namespace Topxia\Service\Course\Dao;
 
 interface CourseDao
 {
-    const TABLENAME = 'course';
-
     public function getCourse($id);
 
     public function findCoursesByIds(array $ids);
