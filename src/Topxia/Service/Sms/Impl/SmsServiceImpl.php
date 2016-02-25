@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Sms\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Sms\SmsService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -28,6 +29,7 @@ class SmsServiceImpl extends BaseService implements SmsService
         $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
         $to      = implode(',', $mobiles);
 
+        var_dump($mobiles);exit();
         try {
             $api    = CloudAPIFactory::create('leaf');
             $result = $api->post("/sms/send", array('mobile' => $to, 'category' => $smsType, 'description' => $description, 'parameters' => $parameters));
