@@ -20,13 +20,7 @@ class TeacherController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        if (!empty($fields) && isset($conditions['keyWordType']) && isset($conditions['keyWord'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-        }
-
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'keywordType', 'keyword'));
+        $conditions = ArrayToolkit::parts($conditions, array('roles', 'nickname'));
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -86,13 +80,7 @@ class TeacherController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        if (!empty($fields) && isset($conditions['keyWordType']) && isset($conditions['keyWord'])) {
-            $conditions[$conditions['keywordType']] = $conditions['keyword'];
-            unset($conditions['keywordType']);
-            unset($conditions['keyword']);
-        }
-
-        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'keywordType', 'keyword'));
+        $conditions = ArrayToolkit::parts($conditions, array('roles', 'promoted', 'nickname'));
 
         $paginator = new Paginator(
             $this->get('request'),

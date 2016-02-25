@@ -173,9 +173,6 @@ userKeyWordType:
     email: 邮件地址
     loginIp: 登录IP
 
-teacherKeywordType:
-    nickname: 用户名
-    
 jobCycle:
     once: 一次
     everyhour: 每小时
