@@ -3,16 +3,21 @@
 {% set menu = 'admin_my_cloud' %}
 {% set submenu = 'service-information' %}
 {% set script_controller = 'app/my-cloud' %}
-
+{% block stylesheets %}
+  {{ parent() }}
+  <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
+{% endblock %}
 
 {% block main %}
-      <link href="{{ asset('assets/libs/gallery/morris/0.5.0/morris.css') }}" rel="stylesheet" />
-        {% if locked|default(0) == 1 %}
-          <div class="alert alert-warning" role="alert">您的教育云服务已被锁定，请联系客服人员：0571-86819929。</div>
-        {% endif %}
-        {% if enabled|default(1) == 0 %}
-          <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
-        {% endif %}
+  
+      {% if locked|default(0) == 1 %}
+        <div class="alert alert-warning" role="alert">您的教育云服务已被锁定，请联系客服人员：0571-86819929。</div>
+      {% endif %}
+
+      {% if enabled|default(1) == 0 %}
+        <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
+      {% endif %}
+
       {% if is_trial() %}
         {% if trialhtml is not null %}
           {{ trialhtml|raw }}
@@ -23,82 +28,31 @@
           <div class="mask"></div>
         {% endif %}
 
-          <!--个人资料-->
-<!--           <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="row">
+        <div class="page-header clearfix">
+          <h1 class="pull-left">账户概览</h1>
+        </div>
 
-                <div class="media edu-user col-md-8">
-                  <div class="pull-left">
-                    <a href="javascript:;">{% if isBinded.avatar|default("") == "" %}<img src="{{ default_path('user_avatar.png') }}" alt="" style="width:100px;height:100px;">{% else %}<img src="{{ isBinded.avatar }}" alt="" style="width:100px;height:100px;">{% endif %}</a>
-                  </div>
-                  <div class="media-body">
-                    {% if isBinded.name|default("")  == "" %}
-                    <br>
-                    <p>您尚未绑定EduSoho开放云平台&nbsp;<a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"><i class="glyphicon glyphicon-question-sign"></i></a></p>
-                    {% else %}
-                    <p><span class="name">{{ isBinded.name|default("")}}</span>，您好</p>
-                    <p>ES云平台账户名: {{email|default('') }}</p>
-                    {% endif %}
-                  </div>
-                </div>
-
-                <div class="edu-notice col-md-4 hidden-sm hidden-xs">
-                  <h4 class="title">云平台公告</h4>
-                  {% if notices %}
-                  <ul>
-                  {% for notice in notices %}
-                    {% if loop.index <= 3 %}
-                    <li><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a></li>
-                    {% endif %}
-                  {% endfor %}
-                  </ul>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="edu-user">
+              <div class="pull-left">
+                <img class="edu-user-img" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}>
+              </div>
+              <div class="edu-user-info">
+                <div class="detail">
+                  {% if isBinded.name|default("")  == "" %}
+                    您尚未绑定EduSoho开放云平台&nbsp;
+                    <a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i></a>
                   {% else %}
-                  <span class="empty">暂无公告</span>
+                    <div>Hi,<span class="name">{{ isBinded.name|default("")}}</span></div>
+                    <hr style="margin: 10px 0">
+                    <div>ES云平台账户名: {{isBinded.email|default('') }}</div>
                   {% endif %}
                 </div>
               </div>
             </div>
-          </div> -->
-          <!-- <div class=" hidden-sm hidden-xs">
-            {% if notices %}
-            <ul>
-            {% for notice in notices %}
-              {% if loop.index <= 3 %}
-              <li><span class="date hidden-md">{{notice.createdTime|date("Y-m-d")}}</span><a href="{{notice.detailUrl}}" target="_blank">{{notice.content}}</a></li>
-              {% endif %}
-            {% endfor %}
-            </ul>
-            {% else %}
-            <span class="empty">暂无公告</span>
-            {% endif %}
-          </div> -->
-
-
-          <div class="page-header clearfix">
-            <h1 class="pull-left">账户概览</h1>
           </div>
-
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="edu-user">
-                <div class="pull-left">
-                  <img class="edu-user-img" {% if  isBinded.avatar|default("") == "" %} src="{{ default_path('user_avatar.png') }}" {% else %} src="{{ isBinded.avatar }}" {% endif %}>
-                </div>
-                <div class="edu-user-info">
-                  <div class="detail">
-                    {% if isBinded.name|default("")  == "" %}
-                      您尚未绑定EduSoho开放云平台&nbsp;
-                      <a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i></a>
-                    {% else %}
-                      Hi,<span class="name">{{ isBinded.name|default("")}}</span>
-                      <div style="margin-top:10px">ES云平台账户名: {{isBinded.email|default('') }}</div>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        </div>
 
           <!--账户余额-->
           {% include 'TopxiaAdminBundle:EduCloud:cloud-account.html.twig'  %}

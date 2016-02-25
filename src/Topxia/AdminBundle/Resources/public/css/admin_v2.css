@@ -433,15 +433,15 @@ fieldset #checkboxChoices{
   background: rgba(0,0,0,.4);
 }
 .edu-user .edu-user-img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: auto;
 }
 .edu-user .edu-user-info{
-  margin-left: 120px;
+  margin-left: 100px;
 }
 .edu-user .edu-user-info {
   display: table;
-  height: 100px;
+  height: 80px;
 }
 .edu-user .edu-user-info .detail {
   display: table-cell;
@@ -457,5 +457,14 @@ fieldset #checkboxChoices{
   text-align: center;
 }
 
+.edu-alert {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  left: -1px;
+  right: -1px;
+  top: 38px;
+}
 
 
