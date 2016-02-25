@@ -26,6 +26,7 @@ $resources = array(
     'Thread',
     'Threads',
     'ChaosThreads',
+    'ChaosThreadsPosts',
     'Apps',
     'App',
     'Analysis',
