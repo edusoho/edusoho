@@ -115,6 +115,11 @@ class MobileController extends BaseController
         return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig');
     }
 
+    public function createAction(Request $request)
+    {
+        return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig');
+    }
+
     public function mobilePictureUploadAction(Request $request, $type)
     {
         $file = $request->files->get($type);
