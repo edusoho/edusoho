@@ -305,7 +305,7 @@ class EduCloudController extends BaseController
 
         try {
             $api = CloudAPIFactory::create('root');
-            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $info      = $api->get('/me');
             $smsStatus = $this->newHandleSmsSetting($request);
             $status    = $api->get('/me/sms_account');
