@@ -33,7 +33,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
   self.showLiveBySdk = function(sdk) {
     switch(sdk.provider) {
       case "soooner":
-        cordovaUtil.startAppView("livePlayer", {
+        cordovaUtil.startAppView("sooonerLivePlayer", {
           liveClassroomId : sdk.liveClassroomId, 
           exStr : sdk.exStr,
           replayState : sdk.replayState,
@@ -60,6 +60,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       if (data.sdk) {
         $scope.hideLoad();
         self.showLiveBySdk(data.sdk);
+        cordovaUtil.closeWebView();
         return;
       }
 
