@@ -10,16 +10,9 @@ class Status extends BaseResource
 {
     public function get(Application $app, Request $request, $courseId)
     {
-        $user = $this->getCurrentUser();
-
-        if (empty($user)) {
-            return $this->error(404, "用户不存在");
-        }
-
-        $courseMembers = $this->getCourseService()->findCourseStudentsByCourseIds(array($courseId));
-        $courseMembers = ArrayToolkit::index($courseMembers, 'userId');
-
-        if (!$courseMembers[$user['id']]) {
+        try {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        } catch (\Exception $e) {
             return $this->error(404, "课程(#{$courseId})不是用户(#{$user['id']})的所学课程");
         }
 
