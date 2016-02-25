@@ -404,7 +404,7 @@ admin_logs_prod:
     name: 程序运行日志
     parent: admin_logs
 admin_my_cloud:
-    name: 概览
+    name: 账户概览
     parent: admin_app
 admin_cloud_video_setting:
     name: 云视频设置
@@ -425,7 +425,7 @@ admin_app_center_show:
     router_name: admin_app_center
     router_params: { postStatus : all }
 admin_setting_cloud:
-    name: 授权码
+    name: 授权信息
     parent: admin_app
 admin_app_center:
     name: 应用中心

@@ -24,7 +24,7 @@
   			<div class="alert alert-warning" role="alert">云邮件服务免费公测中，将于2015年3月31日结束</div>
   			<div class="controls  radios">
           <form class="form-horizontal" method="post" id="email-form" novalidate="">
-          {% if emailStatus.status|default('disable') in  ['disable'] %}
+          {% if emailStatus.status|default('disable') in  ['disable']  %}
     				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
           {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" %}
             <div name="status">
