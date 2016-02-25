@@ -13,13 +13,21 @@ class BaseProcessor {
             $users = $this->getUserService()->findUsersByIds($userIds);
             $to = '';
             foreach ($users as $key => $value ) {
-                if (strlen($value['verifiedMobile']) == 0 || $value['locked']) {
+                if ($value['locked']) {
                     unset($users[$key]);
                 }
             }
             if ($users) {
                 $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
-                $to = implode(',', $verifiedMobiles);
+
+                $userIds = ArrayToolkit::column($users,'id');
+                $userProfile = $this->getUserService()->findUserProfilesByIds($userIds);
+                $profileMobile = ArrayToolkit::column($userProfile,'mobile');
+
+                $mobile = array_merge($verifiedMobiles,$profileMobile);
+
+                $mobile = array_unique($mobile);
+                $to = implode(',', $mobile);
             }
         }
         return $to;
