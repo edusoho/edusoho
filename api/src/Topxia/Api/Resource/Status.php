@@ -11,15 +11,15 @@ class Status extends BaseResource
     public function get(Application $app, Request $request, $courseId)
     {
         try {
-            $this->getCourseService()->tryTakeCourse($courseId);
+            list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
         } catch (\Exception $e) {
-            return $this->error(404, "课程(#{$courseId})不是用户(#{$user['id']})的所学课程");
+            return $this->error(404, "用户尚未登录或不是课程学员");
         }
 
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $user['id'], 'courseId' => $courseId), array('createdTime', 'DESC'), $start, $limit);
+        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $member['userId'], 'courseId' => $courseId), array('createdTime', 'DESC'), $start, $limit);
 
         return $this->_filterStatus($statuses);
     }
