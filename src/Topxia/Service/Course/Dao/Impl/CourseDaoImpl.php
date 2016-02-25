@@ -7,6 +7,8 @@ use Topxia\Service\Course\Dao\CourseDao;
 
 class CourseDaoImpl extends BaseDao implements CourseDao
 {
+    protected $table = 'course';
+
     public function getCourse($id)
     {
         $that = $this;
@@ -127,7 +129,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     {
         $course['createdTime'] = time();
         $course['updatedTime'] = $course['createdTime'];
-        $affected              = $this->getConnection()->insert(self::TABLENAME, $course);
+        $affected              = $this->getConnection()->insert($this->table, $course);
         $this->clearCached();
 
         if ($affected <= 0) {
@@ -140,14 +142,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function updateCourse($id, $fields)
     {
         $fields['updatedTime'] = time();
-        $this->getConnection()->update(self::TABLENAME, $fields, array('id' => $id));
+        $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getCourse($id);
     }
 
     public function deleteCourse($id)
     {
-        $result = $this->getConnection()->delete(self::TABLENAME, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
         return $result;
     }
@@ -200,7 +202,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from(self::TABLENAME, 'course')
+                        ->from($this->table, 'course')
                         ->andWhere('updatedTime >= :updatedTime_GE')
                         ->andWhere('status = :status')
                         ->andWhere('type = :type')
