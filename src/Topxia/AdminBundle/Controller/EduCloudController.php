@@ -341,7 +341,7 @@ class EduCloudController extends BaseController
             $status = $api->get('/me/email_account');
             // var_dump($info);
             $emailStatus = $this->handleEmailSetting($request);
-            var_dump($emailStatus);
+            //var_dump($emailStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -720,7 +720,6 @@ class EduCloudController extends BaseController
             if (isset($status['code']) && $status['code'] == 101) {
                 $site   = $this->getSettingService()->get('site', array());
                 $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : "我的网校"));
-                var_dump($result);
 
                 if (isset($result['status']) && $result['status'] == 'enable') {
                     $emailStatus['status'] = 'enable';
@@ -785,15 +784,8 @@ class EduCloudController extends BaseController
         }
 
         if (empty($operation)) {
-            $result = $api->get("/me/email_account");
-
-            if (isset($result['status']) && $result['status'] == 'enable') {
-                $emailStatus['status'] = $result['status'];
-                $sign                  = array('sign' => $result['nickname']);
-            } else {
-                $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
-                $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
-            }
+            $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
+            $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
         }
 
         if (isset($result['error'])) {
