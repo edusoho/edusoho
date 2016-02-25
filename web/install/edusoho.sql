@@ -1042,6 +1042,7 @@ CREATE TABLE `user` (
   `setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否初始化设置的，未初始化的可以设置邮箱、用户名。',
   `roles` varchar(255) NOT NULL COMMENT '用户角色',
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐',
+  `promotedSeq` INT(10) UNSIGNED NOT NULL DEFAULT 0,
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁止',
   `lockDeadline` int(10) not null default '0' COMMENT '帐号锁定期限', 
