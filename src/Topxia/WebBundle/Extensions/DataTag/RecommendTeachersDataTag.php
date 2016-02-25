@@ -25,11 +25,7 @@ class RecommendTeachersDataTag extends CourseBaseDataTag implements DataTag
             'locked'   => 0
         );
 
-        $users = $this->getUserService()->searchUsers($conditions, array('promotedSeq', 'ASC'), 0, $arguments['count']);
-
-        $promotedSeq  = ArrayToolkit::column($users, 'promotedSeq');
-        $promotedTime = ArrayToolkit::column($users, 'promotedTime');
-        array_multisort($promotedSeq, SORT_ASC, $promotedTime, SORT_DESC, $users);
+        $users = $this->getUserService()->searchUsers($conditions, array('promotedSeq', 'ASC', 'promotedTime', 'DESC'), 0, $arguments['count']);
 
         $profiles = $this->getUserService()->findUserProfilesByIds(ArrayToolkit::column($users, 'id'));
         $user     = $this->getUserService()->getCurrentUser();

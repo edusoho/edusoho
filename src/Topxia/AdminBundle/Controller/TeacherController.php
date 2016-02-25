@@ -90,13 +90,10 @@ class TeacherController extends BaseController
 
         $users = $this->getUserService()->searchUsers(
             $conditions,
-            array('promotedSeq', 'ASC'),
+            array('promotedSeq', 'ASC', 'promotedTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        $promotedSeq  = ArrayToolkit::column($users, 'promotedSeq');
-        $promotedTime = ArrayToolkit::column($users, 'promotedTime');
-        array_multisort($promotedSeq, SORT_ASC, $promotedTime, SORT_DESC, $users);
 
         return $this->render('TopxiaAdminBundle:Teacher:teacher-promote-list.html.twig', array(
             'users'     => $users,
