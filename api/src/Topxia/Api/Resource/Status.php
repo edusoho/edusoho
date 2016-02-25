@@ -8,18 +8,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Status extends BaseResource
 {
-    public function get(Application $app, Request $request, $userId, $courseId)
+    public function get(Application $app, Request $request, $courseId)
     {
-        $user = $this->getUserService()->getUser($userId);
+        $user = $this->getCurrentUser();
 
         if (empty($user)) {
-            return $this->error(404, "用户(#{$userId})不存在");
+            return $this->error(404, "用户不存在");
+        }
+
+        $courseMembers = $this->getCourseService()->findCourseStudentsByCourseIds(array($courseId));
+        $courseMembers = ArrayToolkit::index($courseMembers, 'userId');
+
+        if (!$courseMembers[$user['id']]) {
+            return $this->error(404, "课程(#{$courseId})不是用户(#{$user['id']})的所学课程");
         }
 
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $userId, 'courseId' => $courseId), array('createdTime', 'DESC'), $start, $limit);
+        $statuses = $this->getStatusService()->searchStatuses(array('userId' => $user['id'], 'courseId' => $courseId), array('createdTime', 'DESC'), $start, $limit);
 
         return $this->_filterStatus($statuses);
     }
@@ -50,5 +57,10 @@ class Status extends BaseResource
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

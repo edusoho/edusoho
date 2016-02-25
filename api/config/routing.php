@@ -37,6 +37,7 @@ $app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get')
 
 $app->get(_u('/courses/{courseId}/members'), 'res.CourseMembers:get');
 $app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:get');
+$app->get(_u('/course/{courseId}/status'), 'res.Status:get');
 
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
@@ -63,8 +64,6 @@ $app->post(_u('/homework_results/{homeworkId}'), 'res.HomeworkResult:post');
 $app->get(_u('/homework_results/{lessonId}'), 'res.HomeworkResult:get');
 
 $app->post(_u('/upload/{group}'), 'res.Upload:post');
-
-$app->get(_u('/user/{userId}/status/{courseId}'), 'res.Status:get');
 
 $app->get(_u('/analysis/{type}/{tab}'), 'res.Analysis:get');
 
