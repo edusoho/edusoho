@@ -204,13 +204,33 @@
 }
 .media-group {
   margin-top: 20px;
+  @media(max-width:@screen-xs-max) {
+    margin-top: 15px;
+  }
   &:first-child {
     margin-top: 20px;
+    @media(max-width:@screen-xs-max) {
+      margin-top: 15px;
+    }
+  }
+  .avatar-square-md {
+    @media(max-width:@screen-xs-max) {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }
+  .media-left {
+    @media(max-width:@screen-xs-max) {
+      padding-left: 10px;
+    }
   }
   .title {
     height: 20px;
     overflow: hidden;
     margin: 5px 0;
+    @media(max-width:@screen-xs-max) {
+      margin: 0;
+    }
   }
   .metas {
     color: @gray-medium;

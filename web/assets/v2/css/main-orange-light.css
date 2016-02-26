@@ -5450,13 +5450,39 @@ a.homework-essay-textarea-pack-up {
 .media-group {
   margin-top: 20px;
 }
+@media (max-width: 767px) {
+  .media-group {
+    margin-top: 15px;
+  }
+}
 .media-group:first-child {
   margin-top: 20px;
+}
+@media (max-width: 767px) {
+  .media-group:first-child {
+    margin-top: 15px;
+  }
+}
+@media (max-width: 767px) {
+  .media-group .avatar-square-md {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
+@media (max-width: 767px) {
+  .media-group .media-left {
+    padding-left: 10px;
+  }
 }
 .media-group .title {
   height: 20px;
   overflow: hidden;
   margin: 5px 0;
+}
+@media (max-width: 767px) {
+  .media-group .title {
+    margin: 0;
+  }
 }
 .media-group .metas {
   color: #c1c1c1;
