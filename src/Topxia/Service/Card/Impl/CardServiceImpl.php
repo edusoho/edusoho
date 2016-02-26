@@ -24,6 +24,16 @@ class CardServiceImpl extends BaseService implements CardService
         return $this->getCardDao()->getCard($id);
     }
 
+    public function getCardByCardId($cardId)
+    {
+        return $this->getCardDao()->getCardByCardId($cardId);
+    }
+
+    public function getCardByUserId($userId)
+    {
+        return $this->getCardDao()->getCardByUserId($userId);
+    }
+
     public function getCardByCardIdAndCardType($cardId, $cardType)
     {
         return $this->getCardDao()->getCardByCardIdAndCardType($cardId, $cardType);
@@ -59,7 +69,6 @@ class CardServiceImpl extends BaseService implements CardService
         $processor   = $this->getDetailProcessor($cardType);
         $limit       = count($ids);
         $cardsDetail = $processor->getCardDetailsByCardIds($ids);
-
         return $cardsDetail;
     }
 

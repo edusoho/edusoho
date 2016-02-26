@@ -39,10 +39,10 @@ class Payment
         return new $class($options);
     }
 
-    public static function createCloseAuthRequest($name, $options = array())
+    public static function createUnbindAuthRequest($name, $options = array())
     {
         $name  = ucfirst(strtolower($name));
-        $class = __NAMESPACE__."\\{$name}\\{$name}CloseAuthRequest";
+        $class = __NAMESPACE__."\\{$name}\\{$name}UnbindAuthRequest";
 
         if (!class_exists($class)) {
             throw new \Exception("Payment close trade request {$name} is not exist!");

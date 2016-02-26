@@ -2,26 +2,14 @@
 namespace Topxia\Service\Sms\SmsProcessor;
 
 use Topxia\Service\Common\ServiceKernel;
-use Topxia\Common\ArrayToolkit;
 
-class BaseProcessor {
-
-	protected function getUsersMobile($userIds)
+class BaseProcessor
+{
+    protected function getUsersMobile($userIds)
     {
-        $to = '';
-        if (!empty($userIds)) {
-            $users = $this->getUserService()->findUsersByIds($userIds);
-            $to = '';
-            foreach ($users as $key => $value ) {
-                if (strlen($value['verifiedMobile']) == 0 || $value['locked']) {
-                    unset($users[$key]);
-                }
-            }
-            if ($users) {
-                $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
-                $to = implode(',', $verifiedMobiles);
-            }
-        }
+        $mobiles = $this->getUserService()->findUnlockedUserMobilesByUserIds($userIds);
+        $to      = implode(',', $mobiles);
+
         return $to;
     }
 
@@ -34,5 +22,4 @@ class BaseProcessor {
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
-
 }

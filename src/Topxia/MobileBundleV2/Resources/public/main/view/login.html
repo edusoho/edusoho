@@ -28,18 +28,23 @@
         <div class="shard-label">
           <span>| 其他方式登录 |</span>
         </div>
-        <ul class="ui-grid-trisect">
-          <li>
+        <ul class="{{getThirdStyle()}}" ng-if="thirdConfig.length > 0">
+          <li ng-if="hasThirdType('QQ')">
               <i class="iconfont icon-qq shard-login qq-login" ng-click="loginWithOpen('QQ')"></i>
           </li>
-          <li>
+          <li ng-if="hasThirdType('SinaWeibo')">
               <i class="iconfont icon-icon shard-login weibo-login" ng-click="loginWithOpen('SinaWeibo')"></i>
           </li>
-          <li>
+          <li ng-if="hasThirdType('Wechat')">
               <i class="iconfont icon-weixin shard-login weixin-login" ng-click="loginWithOpen('Wechat')"></i>
           </li>
         </ul>
-      </div>
+    </div>
+    <div class="ui-btn-group" ng-if="!platform.android">
+        <button class="ui-btn more-btn btn-outline" ng-click="jumpToSetting()">
+            更 多
+        </button>
+    </div>
   </div>
 
 </div>

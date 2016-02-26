@@ -39,15 +39,15 @@
 	    	</li>
 	</ul>
 
-	<ul class="ui-list ui-list-link ui-list-text ui-border-b" ng-if="data.isInstalledCoupon">
+	<ul class="ui-list ui-list-link ui-list-text ui-border-b">
 		<li class="ui-border-t ui-list-divider">
 			优惠信息
 		</li>
-	    	<li class="ui-border-t" ng-click="selectCoupon()">
-	        <h4 class="ui-nowrap">
-	            	优惠<span class="pay-price">{{ coupon.decreaseAmount }}</span>
-	        </h4>
-	    	</li>
+    	<li class="ui-border-t" ng-click="selectCoupon()" ng-if="isShowCoupon()">
+        <h4 class="ui-nowrap">
+            	优惠<span class="pay-price">{{ coupon.decreaseAmount }}</span>
+        </h4>
+    	</li>
 	</ul>
 	<ul class="ui-list ui-list-text ui-border-b" ng-if="coin">
 		<li class="ui-border-t">
@@ -57,7 +57,7 @@
             				<span class="subtitle">汇率{{ coin.cashRate }}</span>
             			</h4>
         			</div>
-        			<label class="ui-switch">
+        			<label class="ui-switch" ng-if="!checkIsCoinMode()">
 	            		<input type="checkbox" ng-model="payMode" ng-change="changePayMode()" ng-checked="payMode == 'coin' " ng-if="priceType != 'Coin'" >
 	        		</label>
 		</li>

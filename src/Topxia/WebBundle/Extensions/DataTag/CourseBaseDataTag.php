@@ -3,11 +3,9 @@
 namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
-use Topxia\Service\Common\ServiceKernel;
 
-abstract class CourseBaseDataTag extends BaseDataTag implements DataTag  
+abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 {
-
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -36,14 +34,14 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function checkUserId(array $arguments)
     {
         if (empty($arguments['userId'])) {
-            throw new \InvalidArgumentException("userId参数缺失");            
+            throw new \InvalidArgumentException("userId参数缺失");
         }
     }
 
     protected function checkCategoryId(array $arguments)
     {
         if (empty($arguments['categoryId'])) {
-            throw new \InvalidArgumentException("categoryId参数缺失");            
+            throw new \InvalidArgumentException("categoryId参数缺失");
         }
     }
 
@@ -52,6 +50,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
         if (empty($arguments['count'])) {
             throw new \InvalidArgumentException("count参数缺失");
         }
+
         if ($arguments['count'] > 100) {
             throw new \InvalidArgumentException("count参数超出最大取值范围");
         }
@@ -66,11 +65,12 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
 
     protected function checkCourseArguments(array $arguments)
     {
-        if (empty($arguments['courseId'])){
+        if (empty($arguments['courseId'])) {
             $conditions = array();
         } else {
             $conditions = array('courseId' => $arguments['courseId']);
         }
+
         return $conditions;
     }
 
@@ -94,66 +94,79 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             throw new \InvalidArgumentException("group参数缺失");
         }
     }
-    
- 	protected function getCourseTeachersAndCategories($courses)
+
+    protected function checkLessonId(array $arguments)
     {
-        $userIds = array();
+        if (empty($arguments['lessonId'])) {
+            throw new \InvalidArgumentException("lessonId参数缺失");
+        }
+    }
+
+    protected function getCourseTeachersAndCategories($courses)
+    {
+        $userIds     = array();
         $categoryIds = array();
-	    foreach ($courses as $course) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
+
+        foreach ($courses as $course) {
+            $userIds       = array_merge($userIds, $course['teacherIds']);
             $categoryIds[] = $course['categoryId'];
         }
 
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users    = $this->getUserService()->findUsersByIds($userIds);
         $profiles = $this->getUserService()->findUserProfilesByIds($userIds);
+
         foreach ($users as $key => $user) {
             if ($user['id'] == $profiles[$user['id']]['id']) {
-                 $users[$key]['profile'] = $profiles[$user['id']];
-             } 
+                $users[$key]['profile'] = $profiles[$user['id']];
+            }
         }
 
         $categories = $this->getCategoryService()->findCategoriesByIds($categoryIds);
 
         foreach ($courses as &$course) {
             $teachers = array();
+
             foreach ($course['teacherIds'] as $teacherId) {
                 $user = $users[$teacherId];
                 unset($user['password']);
                 unset($user['salt']);
                 $teachers[] = $user;
             }
+
             $course['teachers'] = $teachers;
 
             $categoryId = $course['categoryId'];
-            if($categoryId!=0 && array_key_exists($categoryId, $categories)) {
+
+            if ($categoryId != 0 && array_key_exists($categoryId, $categories)) {
                 $course['category'] = $categories[$categoryId];
             }
         }
-   
-		return $courses;
-	}
+
+        return $courses;
+    }
 
     protected function getCoursesAndUsers($courseRelations)
     {
-        $userIds = array();
+        $userIds   = array();
         $courseIds = array();
+
         foreach ($courseRelations as &$courseRelation) {
-            $userIds[] = $courseRelation['userId'];
+            $userIds[]   = $courseRelation['userId'];
             $courseIds[] = $courseRelation['courseId'];
         }
 
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->getUserService()->findUsersByIds($userIds);
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         foreach ($courseRelations as &$courseRelation) {
             $userId = $courseRelation['userId'];
-            $user = $users[$userId];
+            $user   = $users[$userId];
             unset($user['password']);
             unset($user['salt']);
             $courseRelation['User'] = $user;
 
-            $courseId = $courseRelation['courseId'];
-            $course = $courses[$courseId];
+            $courseId                 = $courseRelation['courseId'];
+            $course                   = $courses[$courseId];
             $courseRelation['course'] = $course;
         }
 
@@ -166,7 +179,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
             unset($user['password']);
             unset($user['salt']);
         }
+
         return $users;
     }
-
 }

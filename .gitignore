@@ -2,8 +2,8 @@
 Gruntfile.js
 package.json
 **/node_modules/
+**/node_modules/*
 **/release/
-**/release/*
 /.idea
 /web/bundles/
 /app/cache/*
@@ -28,6 +28,7 @@ package.json
 /app/data/backup/*
 /app/data/upgrade/*
 /app/config/routing_plugins.yml
+/app/data/redis.php
 /plugins/*
 /build/
 /vendor/

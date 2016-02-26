@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+
+{% block title %}详情{% endblock %}
+
+{% block body %}
+
+  <table class="table table-hover table-striped" >
+  <thead>
+  	<tr>
+  	<th>用户</th>
+  	<th>消费订单总额</th>
+    <th>订单虚拟币总额</th>
+    <th>订单现金总额</th>
+  	</tr>
+  </thead>
+  <tbody>
+  	{% for detail in details %}
+		  <tr>
+  		<td>{{detail.nickname}}</td>
+  		<td>{{detail.totalPrice|default('0')}}</td>
+      <td>{{detail.coinAmountTotalPrice|default('0')}}</td>
+      <td>{{detail.amountTotalPrice|default('0')}}</td>
+  		</tr>
+  	{% endfor %}	
+  </tbody>
+  </table>
+    
+
+{% endblock %}

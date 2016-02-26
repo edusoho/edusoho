@@ -71,18 +71,17 @@
               </div>
               
               {% if app.installed|default(0) %}
-                  {% if app.code|lower != 'MAIN' %}
-                    {% set url = appMeta[app.code].manage_index|default('') %}
-                  {% endif %}
               <div class="right-info pull-right">
-                  {% if url != '' %}
-                  <a href="{{url(url)}}"  class="btn btn-primary">管理</a>
-                  {% endif %}
 
                   {% if setting('developer.debug') and app.code|lower != 'main' %}
                     <br>
                     <a href="javascript:;" data-url="{{ path('admin_app_uninstall', {code:app.code}) }}" class="btn btn-danger uninstall-btn mtm">卸载</a>
                   {% endif %}
+
+                  {% if route_exsit(app.code|lower ~ '_manage_index') %}
+                    <a href="{{ path(app.code|lower ~ '_manage_index') }}"  class="btn btn-primary mtm">管理</a>
+                  {% endif %}
+
               </div>
               {% else %}
               <div class="right-info pull-right">

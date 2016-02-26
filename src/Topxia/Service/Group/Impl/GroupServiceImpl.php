@@ -10,7 +10,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Point;
 use Imagine\Image\ImageInterface;
 use Symfony\Component\HttpFoundation\File\File;
-
+use Topxia\Service\Common\ServiceEvent;
 
 class GroupServiceImpl extends BaseService implements GroupService {
 
@@ -160,6 +160,8 @@ class GroupServiceImpl extends BaseService implements GroupService {
         $member=$this->getGroupMemberDao()->addMember($member);
 
         $this->reCountGroupMember($groupId);
+
+        $this->dispatchEvent('group.join',new ServiceEvent($group));
 
         return $member;
     }

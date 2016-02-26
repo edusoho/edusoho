@@ -101,19 +101,13 @@ class AbstractCloudAPI
         if ($method == 'POST') {
             curl_setopt($curl, CURLOPT_POST, 1);
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } else
-
-        if ($method == 'PUT') {
+        } elseif ($method == 'PUT') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } else
-
-        if ($method == 'DELETE') {
+        } elseif ($method == 'DELETE') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
-        } else
-
-        if ($method == 'PATCH') {
+        } elseif ($method == 'PATCH') {
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($params));
         } else {

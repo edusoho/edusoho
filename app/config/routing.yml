@@ -25,6 +25,14 @@ materiallib_web:
     resource: "@MaterialLibBundle/Resources/config/routing.yml"
     prefix:   /
 
+sensitive_web:
+    resource: "@SensitiveWordBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sensitive_admin:
+    resource: "@SensitiveWordBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
     prefix:   /
