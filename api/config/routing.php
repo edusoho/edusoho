@@ -71,3 +71,5 @@ $app->get(_u('/thread/manager/question'), 'res.ThreadManager:question');
 $app->get(_u('/homework/manager/check/{homeworkResultId}'), 'res.HomeworkManager:check');
 
 $app->post(_u('/thread/create'), 'res.Thread:create');
+
+$app->get(_u('/category_show'), 'res.CategoryShow:get');
