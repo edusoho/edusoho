@@ -315,11 +315,11 @@ class EduCloudController extends BaseController
 
             $smsStatus = $this->newHandleSmsSetting($request);
             $status    = $api->get('/me/sms_account');
-            var_dump($info['level']);
+
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'    => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'   => isset($info['enabled']) ? $info['enabled'] : 1,
-                'level'     => isset($info['level']) ? $info['level'] : 'error',
+                'level'     => isset($info['level']) ? $info['level'] : 'none',
                 'smsStatus' => $smsStatus
             ));
         } catch (\RuntimeException $e) {
