@@ -44,7 +44,7 @@
           <div class="col-md-2">
             <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default(null) is null %} disabled="disabled"{% endif %} >启用云视频</button>
           </div>
-          {% if info.level|default('none') is 'none'%}
+          {% if info.level|default('none') == 'none'%}
           <div class="col-md-10">
             <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云视频服务！</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
