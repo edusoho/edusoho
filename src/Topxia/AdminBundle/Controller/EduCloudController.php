@@ -75,6 +75,7 @@ class EduCloudController extends BaseController
         if ($this->getWebExtension()->isTrial() || !isset($info['level']) || $info['level'] == 'none') {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
+                'level'    => $info['level'],
                 'articles' => $articles,
                 'trial'    => $trialHtml['content']
             ));
