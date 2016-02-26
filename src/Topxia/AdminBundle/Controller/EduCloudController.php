@@ -65,19 +65,19 @@ class EduCloudController extends BaseController
 
         //exit();
 
-        if (isset($info['level']) && $info['level'] != 'none') {
+        if (isset($info['accessCloud']) && $info['accessCloud'] != 'none') {
             return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
         }
 
         $articles = $eduSohoOpenClient->getArticles();
         $articles = json_decode($articles, true);
 
-        if ($this->getWebExtension()->isTrial() || !isset($info['level']) || $info['level'] == 'none') {
+        if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 'none') {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
-                'level'    => isset($info['level']) ? $info['level'] : null,
-                'articles' => $articles,
-                'trial'    => $trialHtml['content']
+                'accessCloud' => isset($info['accessCloud']) ? $info['accessCloud'] : null,
+                'articles'    => $articles,
+                'trial'       => $trialHtml['content']
             ));
         }
 
@@ -317,10 +317,10 @@ class EduCloudController extends BaseController
             $status    = $api->get('/me/sms_account');
 
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
-                'locked'    => isset($info['locked']) ? $info['locked'] : 0,
-                'enabled'   => isset($info['enabled']) ? $info['enabled'] : 1,
-                'level'     => isset($info['level']) ? $info['level'] : 'none',
-                'smsStatus' => $smsStatus
+                'locked'      => isset($info['locked']) ? $info['locked'] : 0,
+                'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
+                'accessCloud' => isset($info['accessCloud']) ? $info['accessCloud'] : 0,
+                'smsStatus'   => $smsStatus
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:sms-error.html.twig', array());
@@ -351,7 +351,7 @@ class EduCloudController extends BaseController
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
                 'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
-                'level'        => isset($info['level']) ? $info['level'] : 'error',
+                'accessCloud'  => isset($info['accessCloud']) ? $info['accessCloud'] : 0,
                 'emailStatus'  => $emailStatus
             ));
         } catch (\RuntimeException $e) {

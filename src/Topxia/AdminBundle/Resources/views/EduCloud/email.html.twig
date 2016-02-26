@@ -24,7 +24,7 @@
   			<div class="alert alert-warning" role="alert">云邮件服务免费公测中，将于2015年3月31日结束</div>
   			<div class="controls  radios">
           <form class="form-horizontal" method="post" id="email-form" novalidate="">
-          {% if emailStatus.status|default('disable') in  ['disable'] and level|default('none') != 'none' %}
+          {% if emailStatus.status|default('disable') in  ['disable'] and accessCloud|default(0) != 0 %}
     				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
           {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" %}
             <div name="status">
@@ -35,7 +35,7 @@
             <div name="submit-sign" hidden="hidden">
               <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary mlm mrm" >提交</button><a href="">取消</a>
             </div>
-          {% elseif emailStatus.status|default(null) == 'error' or level|default('none') == 'none' %}
+          {% elseif emailStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
             <div class="row">
               <div class="col-md-2">
                 <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云邮件</button>
@@ -57,7 +57,7 @@
   	<div class="page-header clearfix">
   	  <h1 class="pull-left">邮件使用场景</h1>
   	</div>
-    {% if emailStatus.status|default(0) != 'error' and level|default('none') != 'none' and enabled|default(1) != 0  %}
+    {% if emailStatus.status|default(0) != 'error' and accessCloud|default(0) != 0 and enabled|default(1) != 0  %}
   	<table class="table table-bordered">
 
       <thead>

@@ -5,7 +5,7 @@
 {% set script_controller = 'cloud/index' %}
 {% block main %}
 
-    {% if is_trial() or level|default('none') == 'none' %}
+    {% if is_trial() or accessCloud|default(0) == 0 %}
       {{ trial|raw}}
     {% else %}
       {{ untrial|raw }}
