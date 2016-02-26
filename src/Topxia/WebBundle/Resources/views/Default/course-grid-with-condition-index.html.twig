@@ -56,13 +56,13 @@
     <div class="course-list">
       <div class="row">
         {% for course in courses %}
-          <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="col-lg-3 col-md-4 col-xs-6">
             {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
           </div>
         {% endfor %}
       </div>
     </div>
-    <div class="text-center mvl">
+    <div class="section-more-btn">
       <a href="{{ path('course_explore') }}" class="btn btn-default btn-lg">
         更多课程 <i class="mrs-o es-icon es-icon-chevronright"></i>
       </a>

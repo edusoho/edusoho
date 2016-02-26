@@ -9,7 +9,7 @@
       <div class="course-list"> 
         <div class="row"> 
           {% for course in RecentLiveCourses %} 
-            <div class="col-lg-3 col-md-4 col-sm-6"> 
+            <div class="col-lg-3 col-md-4 col-xs-6">
               {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course} %} 
 
               {% set lesson = course['lesson']|default(null) %} 
@@ -55,7 +55,7 @@
           {% endif %} 
         </div> 
       </div> 
-      <div class="text-center mvl"> 
+      <div class="section-more-btn"> 
         <a href="{{ path('live_course_explore') }}" class="btn btn-default btn-lg"> 
           更多直播 <i class="mrs-o es-icon es-icon-chevronright"></i> 
         </a> 

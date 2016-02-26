@@ -11,7 +11,7 @@
         {% for course in courses %}
           {% if key < 3 and currentCourse.id != course.id %}
           {% set key = key + 1 %}
-          <div class="col-lg-4 col-md-6 col-sm-6">
+          <div class="col-lg-4 col-md-6 col-xs-6">
             {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
           </div>
           {% endif %}
