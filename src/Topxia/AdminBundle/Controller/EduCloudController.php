@@ -120,10 +120,10 @@ class EduCloudController extends BaseController
         $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
         $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
         $chartInfo  = array(
-            'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
-            'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
-            'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),
-            'emailUsedInfo' => $this->generateChartData($emailInfo['usedInfo'])
+            'videoUsedInfo' => $this->generateChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
+            'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
+            'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
+            'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
 
         if (isset($videoInfo['startMonth']) && isset($videoInfo['endMonth'])) {
