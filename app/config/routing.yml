@@ -25,6 +25,10 @@ materiallib_web:
     resource: "@MaterialLibBundle/Resources/config/routing.yml"
     prefix:   /
 
+materiallib_admin:
+    resource: "@MaterialLibBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
 custom_web:
     resource: "@CustomWebBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,7 @@
+admin_material_lib:
+    pattern:  /materiallib
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:index }
+
+admin_material_lib_manage:
+    pattern:  /materiallib/manage
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:manage }

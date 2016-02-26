@@ -1,0 +1,7 @@
+admin_material_lib:
+    name: 资源
+    parent: admin
+    after: admin_course
+admin_mateial_lib_manage:
+    name: 资源管理
+    parent: admin_material_lib

@@ -156,6 +156,7 @@ class MenuBuilder
         return $menus;
     }
 
+    //TO-DO应该查询注册的bundles
     public function loadMenus()
     {
         $position = $this->position;
@@ -167,6 +168,7 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
 
         $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/MaterialLib/MaterialLibBundle/Resources/config/menus_{$position}.yml";
 
         $count = $this->getAppService()->findAppCount();
         $apps = $this->getAppService()->findApps(0, $count);
