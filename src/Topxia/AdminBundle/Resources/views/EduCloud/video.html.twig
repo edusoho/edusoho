@@ -39,7 +39,7 @@
 
     <div class="controls radios"> 
       <form class="form-horizontal" id="cloud-video-form" method="post" novalidate>
-        {% if storageSetting.upload_mode|default('local') == "local" or info.level|default(null) is null %}
+        {% if storageSetting.upload_mode|default('local') == "local" or info.level|default('none') == 'none' %}
         <div class="row">
           <div class="col-md-2">
             <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default(null) is null %} disabled="disabled"{% endif %} >启用云视频</button>
