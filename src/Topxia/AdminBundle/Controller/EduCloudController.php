@@ -71,7 +71,7 @@ class EduCloudController extends BaseController
         $articles = $eduSohoOpenClient->getArticles();
         $articles = json_decode($articles, true);
 
-        if ($this->getWebExtension()->isTrial()) {
+        if ($this->getWebExtension()->isTrial() || empty($info['level'])) {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                 'articles' => $articles,
