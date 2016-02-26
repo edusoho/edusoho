@@ -845,6 +845,13 @@ class EduCloudController extends BaseController
         return false;
     }
 
+    protected function getCloudCenterExperiencePage()
+    {
+        $trial     = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
+        $trialHtml = json_decode($trial, true);
+        return $trialHtml;
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
