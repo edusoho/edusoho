@@ -3,7 +3,7 @@
 namespace Topxia\Service\Common\Annotations\Loader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\FileCacheReader;
+use Topxia\Service\Common\Annotations\Reader\FileCacheReader;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\Annotations\Annotation;
 
