@@ -35,7 +35,7 @@
             <div name="submit-sign" hidden="hidden">
               <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary mlm mrm" >提交</button><a href="">取消</a>
             </div>
-          {% elseif emailStatus.status|default(null) == 'error' %}
+          {% elseif emailStatus.status|default(null) == 'error' or level|default('none') == 'none' %}
             <div class="row">
               <div class="col-md-2">
                 <button name="email-open" class="btn btn-primary" disabled="disabled" >启用云邮件</button>
@@ -57,7 +57,7 @@
   	<div class="page-header clearfix">
   	  <h1 class="pull-left">邮件使用场景</h1>
   	</div>
-    {% if emailStatus.status|default(0) != 'error' and level|default('error') != 'error' and enabled|default(1) != 0  %}
+    {% if emailStatus.status|default(0) != 'error' and level|default('none') != 'none' and enabled|default(1) != 0  %}
   	<table class="table table-bordered">
 
       <thead>
