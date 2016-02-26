@@ -52,13 +52,17 @@ class EduCloudController extends BaseController
     public function myCloudAction(Request $request)
     {
         // @apitodo 需改成leaf
-        $api = CloudAPIFactory::create('root');
+        try {
+            $api = CloudAPIFactory::create('root');
 
-        $content = $api->get("/users/{$api->getAccessKey()}/overview");
+            $content = $api->get("/users/{$api->getAccessKey()}/overview");
 
-        $info = $api->get('/me');
+            $info = $api->get('/me');
 
-        $eduSohoOpenClient = new EduSohoOpenClient();
+            $eduSohoOpenClient = new EduSohoOpenClient();
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
+        }
 
         if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])))) {
             return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
@@ -67,7 +71,7 @@ class EduCloudController extends BaseController
         $articles = $eduSohoOpenClient->getArticles();
         $articles = json_decode($articles, true);
 
-        if ($this->getWebExtension()->isTrial()) {
+        if ($this->getWebExtension()->isTrial() || empty($info['level'])) {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                 'articles' => $articles,

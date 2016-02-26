@@ -4,7 +4,6 @@
     <div class="edu-balance">
       <h4 style="color:#555; margin-bottom:20px">
         账户余额
-        <small><a href="http://open.edusoho.com/article/1#recharge" target="_blank" style="color:#333"><i class="glyphicon glyphicon-question-sign"></i></a></small>
       </h4>
       <p>
         {% if cashInfo.cash|default('0') > 0 %}
@@ -25,7 +24,7 @@
       {% endif %}
       <hr style="margin: 10px 0">
       <div>代金券余额：<span class="" >{{ couponInfo.balance|default("0.00") }}</span>
-      <a href="" style="margin-left:30px">激活代金券</a></div>
+      <a href="http://open.edusoho.com/coupon/activate" target="_blank" style="margin-left:30px">激活代金券</a></div>
     </div>
   </div>
 </div>
