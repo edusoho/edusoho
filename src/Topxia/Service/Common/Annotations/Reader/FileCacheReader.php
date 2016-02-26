@@ -183,7 +183,7 @@ class FileCacheReader implements Reader
     private function saveCacheFile($path, $data)
     {
         if (!file_exists($this->dir)) {
-            mkdir($this->dir);
+            mkdir($this->dir, 0755, true);
         }
 
         if (!is_writable($this->dir)) {
