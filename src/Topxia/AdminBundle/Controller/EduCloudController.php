@@ -54,9 +54,9 @@ class EduCloudController extends BaseController
         // @apitodo 需改成leaf
         try {
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
-            $content = $api->get("/users/{$api->getAccessKey()}/overview");
 
+            $content = $api->get("/users/{$api->getAccessKey()}/overview");
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $info              = $api->get('/me');
             $eduSohoOpenClient = new EduSohoOpenClient();
         } catch (\RuntimeException $e) {
