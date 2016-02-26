@@ -126,7 +126,7 @@ class EduCloudController extends BaseController
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
 
-        if (isset($videoInfo['startMonth']) && isset($videoInfo['endMonth'])) {
+        if (isset($videoInfo['startMonth']) && isset($videoInfo['endMonth']) && $videoInfo['startMonth'] && $videoInfo['endMonth']) {
             $videoInfo['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
             $videoInfo['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
         }
