@@ -342,12 +342,9 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
-            $info = $api->get('/me');
-            //var_dump($info);
-            $status = $api->get('/me/email_account');
-            // var_dump($info);
+            $info        = $api->get('/me');
+            $status      = $api->get('/me/email_account');
             $emailStatus = $this->handleEmailSetting($request);
-            //var_dump($emailStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
