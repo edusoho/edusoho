@@ -54,7 +54,7 @@ class EduCloudController extends BaseController
         // @apitodo 需改成leaf
         try {
             $api = CloudAPIFactory::create('root');
-
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $content = $api->get("/users/{$api->getAccessKey()}/overview");
 
             $info = $api->get('/me');
@@ -71,7 +71,7 @@ class EduCloudController extends BaseController
         $articles = $eduSohoOpenClient->getArticles();
         $articles = json_decode($articles, true);
 
-        if ($this->getWebExtension()->isTrial() || empty($info['level'])) {
+        if ($this->getWebExtension()->isTrial()) {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                 'articles' => $articles,
