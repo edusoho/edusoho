@@ -110,6 +110,12 @@ class MobileController extends BaseController
         ));
     }
 
+    public function mobileDeleteAction(Request $request, $id)
+    {
+        $this->getMobileShowService()->deleteMobileShow($id);
+        return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
+    }
+
     public function mobileClassAction(Request $request)
     {
         $mobileShows = array();
@@ -129,15 +135,38 @@ class MobileController extends BaseController
             if (empty($mobileShow)) {
                 $mobileShow = $this->getMobileShowService()->addMobileShow($conditions);
             }
-            $mobileShows = array();
-            $mobileShows = $this->getMobileShowService()->getAllMobileShows();
-            return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig',array('mobileShows' => $mobileShows));
+            return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
         }
         if (empty($categoryId)) {
             $categoryId = 0;
         }
 
-        return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig',array('categoryId' => $categoryId));
+        if (empty($mobileShow)) {
+            $mobileShow = array();
+        }
+        return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig',array(
+                'mobileShow' => $mobileShow,
+                'categoryId' => $categoryId
+            ));
+    }
+
+    public function mobileEditAction(Request $request, $id)
+    {
+        $mobileShow = $this->getMobileShowService()->getMobileShow($id);
+        if (empty($mobileShow)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $conditions = $request->request->all();
+            $mobileShow = $this->getMobileShowService()->updateMobileShow($id, $conditions);
+            return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
+        }
+
+        return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig', array(
+            'mobileShow' => $mobileShow,
+            'categoryId' => $mobileShow['categoryId']
+        ));
     }
 
     public function mobilePictureUploadAction(Request $request, $type)

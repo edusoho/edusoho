@@ -1,15 +1,15 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}教学内容分类添加{% endblock %}
+{% block title %}{% if mobileShow %}教学内容分类修改{% else %}教学内容分类添加{% endif %}{% endblock %}
 
 {% block body %}
 <div id="category-creater-widget" data-upload-url="#">
 
-	<form id="category-form" class="form-horizontal" action="{{ path('admin_operation_mobile_create') }}" method="post">
+	<form id="category-form" class="form-horizontal" {% if mobileShow %}action="{{ path('admin_operation_mobile_edit',{id:mobileShow.id}) }}"{% else %}action="{{ path('admin_operation_mobile_create') }}"{% endif %} method="post">
 		<div class="form-group">
 			<label class="col-md-3 control-label" for="category-name-field">自定义名称</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="category-name-field" type="text" name="title" value="" tabindex="1">
+				<input class="form-control" id="category-name-field" type="text" name="title" value="{{ mobileShow.title|default() }}" tabindex="1">
 				<p class="help-block">提示：请将题目控制在十个字符之内。</p>
 			</div>
 		</div>
@@ -67,6 +67,8 @@
 		
 	</form>
 </div>
+
+
 {% endblock %}
 
 {% block footer %}

@@ -413,6 +413,14 @@ admin_operation_mobile_select:
     pattern:  /operation/mobile/select
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
 
+admin_operation_mobile_delete:
+    pattern:  /operation/mobile/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileDelete }
+
+admin_operation_mobile_edit:
+    pattern:  /operation/mobile/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileEdit }
+
 admin_operation_mobile_class:
     pattern:  /operation/mobile/class
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileClass }
