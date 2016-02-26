@@ -112,8 +112,7 @@ class EduCloudController extends BaseController
         $smsInfo    = isset($content['service']['sms']) ? $content['service']['sms'] : null;
         $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
         $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
-        var_dump($liveInfo);
-        $chartInfo = array(
+        $chartInfo  = array(
             'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
             'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
             'liveUsedInfo'  => $this->generateChartData($liveInfo['usedInfo']),

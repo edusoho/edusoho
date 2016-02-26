@@ -26,8 +26,10 @@
                       </p>
                       {% if liveInfo.expire|default(0) and liveInfo.expire > 0  %}
                         <p class="text-muted">有效期至：{{liveInfo.expire|date("Y-m-d")}}</p>
-                        {% if not videoInfo.renewVideo.effectiveDate|default(0) %}
-                        {% else %}
+                        {% if videoInfo.remaining > 0 and videoInfo.remaining < 30 %}
+                          <p class="text-warning text-sm">您的云直播服务将于{{ 30 - videoInfo.remaining }}天后到期，请尽快续费</p>
+                        {% elseif videoInfo.remaining <= 0 %}
+                          <p class="text-danger text-sm">您的云直播服务已到期，请尽快续费</p>
                         {% endif %}
                       {% endif %}
                     {% endif %}
