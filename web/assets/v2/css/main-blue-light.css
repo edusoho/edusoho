@@ -5469,11 +5469,6 @@ a.homework-essay-textarea-pack-up {
     height: 40px !important;
   }
 }
-@media (max-width: 767px) {
-  .media-group .media-left {
-    padding-left: 10px;
-  }
-}
 .media-group .title {
   height: 20px;
   overflow: hidden;
