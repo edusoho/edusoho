@@ -57,13 +57,14 @@ class EduCloudController extends BaseController
 
             $content = $api->get("/users/{$api->getAccessKey()}/overview");
             $api->setApiUrl('http://124.160.104.74:8098/');
-            $info              = $api->get('/me');
+            $info = $api->get('/me');
+            var_dump($info);
             $eduSohoOpenClient = new EduSohoOpenClient();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
-        // exit();
+        exit();
 
         if (isset($info['level']) && $info['level'] != 'none') {
             return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
