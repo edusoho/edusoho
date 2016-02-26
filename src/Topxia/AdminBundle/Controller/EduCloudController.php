@@ -112,7 +112,7 @@ class EduCloudController extends BaseController
         $smsInfo    = isset($content['service']['sms']) ? $content['service']['sms'] : null;
         $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
         $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
-
+        var_dump($liveInfo);
         $chartInfo = array(
             'videoUsedInfo' => $this->generateChartData($videoInfo['usedInfo']),
             'smsUsedInfo'   => $this->generateChartData($smsInfo['usedInfo']),
@@ -337,7 +337,8 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
-            $info   = $api->get('/me');
+            $info = $api->get('/me');
+            //var_dump($info);
             $status = $api->get('/me/email_account');
             // var_dump($info);
             $emailStatus = $this->handleEmailSetting($request);

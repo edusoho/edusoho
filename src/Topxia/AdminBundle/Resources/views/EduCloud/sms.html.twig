@@ -167,7 +167,7 @@
             <div class="page-header clearfix">
               <h1 class="pull-left">短信应用场景</h1>
             </div>
-            {% if hasSchoolName and level|default('error') != 'error' %}
+            {% if hasSchoolName and level|default('error') != 'error' and enabled|default(1) != 0  %}
               <div class="js-usage" >
                 <table class="table table-bordered">
                   <thead>
