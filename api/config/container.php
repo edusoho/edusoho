@@ -34,6 +34,7 @@ $resources = array(
     'HomeworkManager',
     'ThreadManager',
     'Thread',
+    'CategoryShow',
     'Upload'
 );
 
