@@ -68,7 +68,7 @@
     <div class="page-header clearfix">
       <h1 class="pull-left">云视频功能设置</h1>
     </div>
-    {% if  info.level|default(null) is not null  %}
+    {% if  info.level|default('none') != 'none'  %}
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
       
