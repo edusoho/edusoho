@@ -36,7 +36,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
         cordovaUtil.startAppView("sooonerLivePlayer", {
           liveClassroomId : sdk.liveClassroomId, 
           exStr : sdk.exStr,
-          replayState : sdk.replayState,
+          replayState : sdk.replayState
         });
         break;
       default:
@@ -59,8 +59,8 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
 
       if (data.sdk) {
         $scope.hideLoad();
-        self.showLiveBySdk(data.sdk);
         cordovaUtil.closeWebView();
+        self.showLiveBySdk(data.sdk);
         return;
       }
 
@@ -76,8 +76,8 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       }
 
       $scope.hideLoad();
-      cordovaUtil.openWebView(data.roomUrl);
       cordovaUtil.closeWebView();
+      cordovaUtil.openWebView(data.roomUrl);
     });
   };
 
@@ -124,8 +124,8 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
         return;
       }
 
-      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, []);  
       cordovaUtil.closeWebView();
+      cordovaUtil.learnCourseLesson(lesson.courseId, lesson.id, []);  
 		});
 	}
 
