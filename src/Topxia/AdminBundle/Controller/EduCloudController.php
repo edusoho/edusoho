@@ -97,6 +97,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
+            // var_dump($info);
 
             if (isset($info['licenseDomains'])) {
                 $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -139,18 +140,19 @@ class EduCloudController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:my-cloud.html.twig', array(
-            'locked'     => isset($info['locked']) ? $info['locked'] : 0,
-            'enabled'    => isset($info['enabled']) ? $info['enabled'] : 1,
-            'notices'    => $notices,
-            'isBinded'   => $isBinded,
-            'cashInfo'   => $cashInfo,
-            'couponInfo' => $couponInfo,
-            'videoInfo'  => $videoInfo,
-            'liveInfo'   => $liveInfo,
-            'smsInfo'    => $smsInfo,
-            'emailInfo'  => $emailInfo,
-            'chartInfo'  => $chartInfo,
-            'tlpInfo'    => $tlpInfo
+            'locked'      => isset($info['locked']) ? $info['locked'] : 0,
+            'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
+            'notices'     => $notices,
+            'isBinded'    => $isBinded,
+            'cashInfo'    => $cashInfo,
+            'couponInfo'  => $couponInfo,
+            'videoInfo'   => $videoInfo,
+            'liveInfo'    => $liveInfo,
+            'smsInfo'     => $smsInfo,
+            'emailInfo'   => $emailInfo,
+            'chartInfo'   => $chartInfo,
+            'tlpInfo'     => $tlpInfo,
+            'accessCloud' => $this->isAccessEduCloud()
         ));
     }
 
@@ -320,7 +322,7 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
-                'accessCloud' => isset($info['accessCloud']) ? $info['accessCloud'] : 0,
+                'accessCloud' => $this->isAccessEduCloud(),
                 'smsStatus'   => $smsStatus
             ));
         } catch (\RuntimeException $e) {
@@ -352,7 +354,7 @@ class EduCloudController extends BaseController
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
                 'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
-                'accessCloud'  => isset($info['accessCloud']) ? $info['accessCloud'] : 0,
+                'accessCloud'  => $this->isAccessEduCloud(),
                 'emailStatus'  => $emailStatus
             ));
         } catch (\RuntimeException $e) {
@@ -851,6 +853,18 @@ class EduCloudController extends BaseController
         $trial     = file_get_contents('http://open.edusoho.com/api/v1/block/experience');
         $trialHtml = json_decode($trial, true);
         return $trialHtml;
+    }
+
+    protected function isAccessEduCloud()
+    {
+        try {
+            $api = CloudAPIFactory::create('root');
+            $api->setApiUrl('http://124.160.104.74:8098/');
+            $info = $api->get('/me');
+            return isset($info['accessCloud']) ? $info['accessCloud'] : 0;
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
+        }
     }
 
     protected function getAppService()
