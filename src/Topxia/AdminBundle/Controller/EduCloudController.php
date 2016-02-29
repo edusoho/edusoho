@@ -121,7 +121,7 @@ class EduCloudController extends BaseController
         $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
         $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
         $chartInfo  = array(
-            'videoUsedInfo' => $this->generateChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
+            'videoUsedInfo' => $this->generateVideoChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
             'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
             'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
@@ -820,6 +820,26 @@ class EduCloudController extends BaseController
         $setting       = $this->getSettingService()->get('cloud_sms', array());
         $setting[$key] = $val;
         $this->getSettingService()->set('cloud_sms', $setting);
+    }
+
+    protected function generateVideoChartData($info)
+    {
+        if (empty($info)) {
+            $info = array();
+        }
+
+        $chartSpaceInfo    = array();
+        $chartTransferInfo = array();
+
+        foreach ($info as $key => $value) {
+            $chartInfo[] = '{"date":"'.$value['date'].'","spacecount":"'.$value['space'].'","transfercount":"'."1".'"}';
+        }
+
+        // foreach ($info as $key => $value) {
+        //     $chartTransferInfo[] = '{"date":"'.$value['date'].'","transfercount":'.$value['transfer'].'}';
+        // }
+
+        return '['.implode(',', $chartInfo).']';
     }
 
     protected function generateChartData($info)

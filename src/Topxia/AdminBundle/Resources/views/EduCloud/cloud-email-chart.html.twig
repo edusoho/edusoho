@@ -10,8 +10,8 @@
       {% if  setting('cloud_email.status')|default('disable') == 'disable' %}
         <div class="edu-verticalmiddle">
           <div class="edu-verticalmiddle-content text-muted">
-            尚未启用云邮件服务，
-            <a href="{{path('admin_edu_cloud_email')}}">立即启用</a>
+            <a href="{{path('admin_edu_cloud_email')}}">开启</a>
+            云邮件，享受优质的邮件发送服务
           </div>
         </div>
       {% endif %}

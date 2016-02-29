@@ -464,7 +464,7 @@ fieldset #checkboxChoices{
   padding: 5px 10px;
   left: -1px;
   right: -1px;
-  top: 38px;
+  top: -2px;
 }
 
 .email-status {
@@ -473,6 +473,14 @@ fieldset #checkboxChoices{
 }
 .email-status p {
   margin-bottom: 30px;
+}
+
+.icon-security {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: url('../img/iconsecurity.png') no-repeat;
+  background-size: 100%;
 }
 
 

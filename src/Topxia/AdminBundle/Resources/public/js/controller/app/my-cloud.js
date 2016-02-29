@@ -9,22 +9,29 @@ define(function(require, exports, module) {
             placement: 'right',
             content: $("#sms-reason-tips-html").html(),
         });
+        // var a = new Object();
+        // a = eval((eval("("+$('#videoUsedSpaceInfo').attr("value")+")")));
+        // // a.push(eval("("+$('#videoUsedTransferInfo').attr("value")+")"));
+        // console.log(a);
+        // console.log(eval ("(" +eval ("(["+$('#videoUsedSpaceInfo').attr("value")+")") + "],["+eval ("("+$('#videoUsedSpaceInfo').attr("value")+")")+"])"));
+        // var sss=$('#videoUsedSpaceInfo').attr("value") + ","+$('#videoUsedTransferInfo').attr("value");
 
-        var videoData = eval ("(" + $('#videoUsedInfo').attr("value") + ")");
-        var smsData = eval ("(" + $('#smsUsedInfo').attr("value") + ")");
-        var liveData = eval ("(" + $('#liveUsedInfo').attr("value") + ")");
-        var emailData = eval ("(" + $('#emailUsedInfo').attr("value") + ")");
-         console.log(videoData);
+        var videoData = eval("(" + $('#videoUsedInfo').attr("value") +")");
+        var smsData = eval("(" + $('#smsUsedInfo').attr("value") + ")");
+        var liveData = eval("(" + $('#liveUsedInfo').attr("value") + ")");
+        var emailData = eval("(" + $('#emailUsedInfo').attr("value") + ")");
+        console.log(videoData);
          // console.log(smsData);
-        //console.log(videoData==""?[{"date":"2015-03","count":5},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}]:"");
+        //var videosData =[{"date":"2015-03","count":5},{"date":"2015-04","count":9},{"date":"2015-05","count":77},{"date":"2015-06","count":10},{"date":"2015-07","count":40},{"date":"2015-08","count":30},{"date":"2015-09","count":20}];
         if(videoData!=""){
-          Morris.Bar({
+          Morris.Line({
             element: 'storage-data-tab',
             data: videoData,
             xkey: 'date',
-            ykeys: ['count'],
-            labels: ['使用量']
+            ykeys: ['spacecount','transfercount'],
+            labels: ['空间使用量','流量使用量']
           });
+          // Morris.Line.setdata(videosData);
         }
         if(liveData!=""){
           Morris.Bar({
