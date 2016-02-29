@@ -26,7 +26,7 @@
           <form class="form-horizontal" method="post" id="email-form" novalidate="">
           {% if emailStatus.status|default('disable') in  ['disable'] and accessCloud|default(0) != 0 %}
     				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
-          {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" %}
+          {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
             <div name="status">
               <span class="text-success">已启用</span>
               <button  class="btn btn-default btn-sm mlm" name="email-close"><span class="text-muted">关闭</span></button>
