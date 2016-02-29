@@ -1,8 +1,16 @@
 {% extends 'MaterialLibBundle:Admin:layout.html.twig' %}
 
 {% set menu = 'admin_material_lib_manage' %}
+{% do load_script('materiallibbundle/controller/admin/manage') %}
 
 {% block main %}
-  {% include 'MaterialLibBundle:Admin:course-user-search.html.twig' %}
+<form class="form-inline ">
+  {% include 'MaterialLibBundle:Admin/Form:course-user-search.html.twig' %}
+  {% include 'MaterialLibBundle:Admin/Form:nav.html.twig' %}
+  {% include 'MaterialLibBundle:Admin/Form:filter.html.twig' %}
+  {% include 'MaterialLibBundle:Admin/Form:sort.html.twig' %}
+</form>
+
+{% include 'MaterialLibBundle:Admin:table.html.twig' %}
   
 {% endblock %}

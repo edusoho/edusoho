@@ -1,0 +1,17 @@
+<table class="table table-striped table-hover" id="classroom-table">
+  <thead>
+    <tr>
+      <th width="40%">资源名</th>
+      <th>热度</th>
+      <th>类型</th>
+      <th>大小</th>
+      <th>状态</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  
+  {% include 'MaterialLibBundle:Admin:tbody.html.twig' %}
+
+</table>
+
+{#{{ web_macro.paginator(paginator) }}#}
