@@ -308,4 +308,18 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
         );
     }
+
+    public function findLiveLessonsByDate($courseIds, $limit)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $time = time();
+
+        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC limit 0, {$limit}";
+        return $this->getConnection()->fetchAll($sql, $courseIds);
+    }
 }
