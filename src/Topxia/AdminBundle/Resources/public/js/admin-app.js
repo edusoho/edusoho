@@ -58,6 +58,10 @@ define(function(require, exports, module) {
 		exports.load(app.controller);
 	}
 
+	if (app.scripts) {
+		exports.loadScript(app.scripts);
+	}
+
 	$(document).ajaxSend(function(a, b, c) {
 		if (c.type == 'POST') {
 			b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
