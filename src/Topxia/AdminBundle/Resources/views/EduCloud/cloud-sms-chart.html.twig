@@ -10,8 +10,8 @@
     {% if setting('cloud_sms.sms_enabled')|default('0') == '0' %}
       <div class="edu-verticalmiddle">
         <div class="edu-verticalmiddle-content text-muted">
-          尚未启用云短信服务，
-          <a href="{{path('admin_edu_cloud_sms')}}">立即启用</a>
+          <a href="{{path('admin_edu_cloud_sms')}}">开启</a>
+          云短信，享受优质的短信发送服务
         </div>
       </div>
     {% endif %}

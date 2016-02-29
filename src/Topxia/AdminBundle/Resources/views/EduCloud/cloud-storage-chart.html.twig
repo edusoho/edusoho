@@ -8,9 +8,7 @@
     </div>
     <div class="panel-body" id="storage-data-tab" style="height: 250px;">
       <div class="edu-alert" role="alert">
-        {% if tlpInfo|default(0) %}
-          已开通TLP安全加固服务
-        {% else %}
+        {% if not tlpInfo|default(1) %}
         TLP安全加固服务，防盗播、防恶意下载，<a href="{{ path('admin_cloud_tlp') }}" target="_blank">了解详情</a>
         {% endif %}
       </div>
