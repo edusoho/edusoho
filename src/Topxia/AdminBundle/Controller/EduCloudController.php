@@ -520,7 +520,7 @@ class EduCloudController extends BaseController
 
             $api = CloudAPIFactory::create('root');
             //$api->setApiUrl('http://115.29.78.158:10001/');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
