@@ -66,14 +66,14 @@ class EduCloudController extends BaseController
 
         //exit();
 
-        // if (isset($info['accessCloud']) && $info['accessCloud'] != 'none') {
-        //     return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
+        // if (isset($info['accessCloud']) && $info['accessCloud'] != 0) {
+        return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
         // }
 
         $articles = $eduSohoOpenClient->getArticles();
         $articles = json_decode($articles, true);
 
-        if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 'none') {
+        if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 0) {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
                 'accessCloud' => isset($info['accessCloud']) ? $info['accessCloud'] : null,
