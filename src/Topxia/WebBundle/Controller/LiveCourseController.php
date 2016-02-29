@@ -131,9 +131,8 @@ class LiveCourseController extends BaseController
             }
         }
 
-        print_r($liveTab);
         return $this->render('TopxiaWebBundle:LiveCourse:live-tab.html.twig', array(
-            //'liveTab' => $liveTab
+            'liveTab' => $liveTab
         ));
     }
 

@@ -319,7 +319,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
 
         $time = time();
 
-        $sql = "SELECT count( id) as count, from_unixtime(createdTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by from_unixtime(`createdTime`,'%Y-%m-%d') order by date ASC limit 0, {$limit}";
+        $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 }
