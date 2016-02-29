@@ -99,7 +99,7 @@ class LiveCourseController extends BaseController
             'type'               => 'live',
             'courseIds'          => $courseIds,
             'status'             => 'published'
-        ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+        ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
         $futureLiveLessons = $this->getCourseService()->searchLessons(array(
             'startTimeGreaterThan' => time(),
@@ -107,7 +107,7 @@ class LiveCourseController extends BaseController
             'type'                 => 'live',
             'courseIds'            => $courseIds,
             'status'               => 'published'
-        ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+        ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
         $liveTab['today']['current'] = $currentLiveLessons;
         $liveTab['today']['future']  = $futureLiveLessons;
@@ -124,7 +124,7 @@ class LiveCourseController extends BaseController
                     'type'                 => 'live',
                     'courseIds'            => $courseIds,
                     'status'               => 'published'
-                ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+                ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
                 $date           = date('m-d', strtotime($value['date']));
                 $liveTab[$date] = $dayLessons;
@@ -133,6 +133,20 @@ class LiveCourseController extends BaseController
 
         return $this->render('TopxiaWebBundle:LiveCourse:live-tab.html.twig', array(
             'liveTab' => $liveTab
+        ));
+    }
+
+    public function replayListAction()
+    {
+        $liveReplayList = $this->getCourseService()->searchLessons(array(
+            'endTimeLessThan' => time(),
+            'type'            => 'live',
+            'copyId'          => 0,
+            'status'          => 'published'
+        ), array('startTime', 'DESC'), 0, 10);
+
+        return $this->render('TopxiaWebBundle:LiveCourse:live-replay-list.html.twig', array(
+            'liveReplayList' => $liveReplayList
         ));
     }
 
