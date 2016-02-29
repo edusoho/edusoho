@@ -56,7 +56,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
 
             $content = $api->get("/users/{$api->getAccessKey()}/overview");
-            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
             //var_dump($info);
             $eduSohoOpenClient = new EduSohoOpenClient();
@@ -66,9 +66,9 @@ class EduCloudController extends BaseController
 
         //exit();
 
-        // if (isset($info['accessCloud']) && $info['accessCloud'] != 0) {
-        return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
-        // }
+        if (isset($info['accessCloud']) && $info['accessCloud'] != 0) {
+            return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
+        }
 
         $articles = $eduSohoOpenClient->getArticles();
         $articles = json_decode($articles, true);
@@ -318,9 +318,7 @@ class EduCloudController extends BaseController
 
             $smsStatus = $this->newHandleSmsSetting($request);
             $status    = $api->get('/me/sms_account');
-            // var_dump($this->isAccessEduCloud());
-            // var_dump('---------------------');
-            // var_dump($smsStatus);
+
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -520,7 +518,7 @@ class EduCloudController extends BaseController
 
             $api = CloudAPIFactory::create('root');
             //$api->setApiUrl('http://115.29.78.158:10001/');
-            //$api->setApiUrl('http://124.160.104.74:8098/');
+            $api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
