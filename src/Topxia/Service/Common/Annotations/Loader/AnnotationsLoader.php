@@ -25,7 +25,7 @@ class AnnotationsLoader
 
         if (!self::$reader) {
             $env = ServiceKernel::instance()->getEnvironment();
-            $cacheDir = ServiceKernel::instance()->getParameter('kernel.cache_dir').'/annotations/topxia';
+            $cacheDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/'.$env.'/annotations/topxia';
             $debug = $env !== 'prod';
             self::$reader = new FileCacheReader(new AnnotationReader(), $cacheDir, $debug);
         }

@@ -34,6 +34,7 @@ use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
+
 function check_installed()
 {
     if (array_key_exists('nokey', $_GET)) {
@@ -164,9 +165,7 @@ function install_step3($init_data = 0)
 
     $serviceKernel = ServiceKernel::create('prod', true);
     $serviceKernel->setParameterBag(new ParameterBag(array(
-        'kernel' => array(
-            'root_dir' => realpath(__DIR__.'/../../app')
-        )
+        'kernel.root_dir' => realpath(__DIR__.'/../../app')
     )));
     $serviceKernel->setConnection($connection);
 
@@ -269,9 +268,7 @@ function install_step999($init_data = 0)
         $connection    = _create_connection();
         $serviceKernel = ServiceKernel::create('prod', true);
         $serviceKernel->setParameterBag(new ParameterBag(array(
-            'kernel' => array(
-                'root_dir' => realpath(__DIR__.'/../../app')
-            )
+            'kernel.root_dir' => realpath(__DIR__.'/../../app')
         )));
 
         $serviceKernel->setConnection($connection);
