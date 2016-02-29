@@ -16,9 +16,9 @@
                     {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
                   </h4> -->
                    <!--未购买-->
-                    {% if not liveInfo.enableBuy|default(0) %}
-                      <div class="alert alert-warning alert-sm" role="alert">
-                        <i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂
+                    {% if liveInfo.enableBuy|default(0) != 1 %}
+                      <div class="edu-verticalmiddle">
+                        <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂</div> 
                       </div>
                     {% else %}
                       <p class="text-muted">教室容量：{{liveInfo.capacity|default(0)}}人/月    
