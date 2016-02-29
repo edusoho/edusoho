@@ -56,7 +56,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
 
             $content = $api->get("/users/{$api->getAccessKey()}/overview");
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
             //var_dump($info);
             $eduSohoOpenClient = new EduSohoOpenClient();
@@ -95,7 +95,7 @@ class EduCloudController extends BaseController
     {
         try {
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            //$api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
             // var_dump($info);
 
