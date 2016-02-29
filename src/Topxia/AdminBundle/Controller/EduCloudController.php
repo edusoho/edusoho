@@ -318,9 +318,9 @@ class EduCloudController extends BaseController
 
             $smsStatus = $this->newHandleSmsSetting($request);
             $status    = $api->get('/me/sms_account');
-            var_dump($this->isAccessEduCloud());
-            var_dump('---------------------');
-            var_dump($smsStatus);
+            // var_dump($this->isAccessEduCloud());
+            // var_dump('---------------------');
+            // var_dump($smsStatus);
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
