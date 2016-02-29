@@ -39,12 +39,12 @@
 
     <div class="controls radios"> 
       <form class="form-horizontal" id="cloud-video-form" method="post" novalidate>
-        {% if storageSetting.upload_mode|default('local') == "local" or info.level|default('none') == 'none' %}
+        {% if storageSetting.upload_mode|default('local') == "local" or info.accessCloud|default(0) == 0 %}
         <div class="row">
           <div class="col-md-2">
-            <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.level|default('none') == 'none' %} disabled="disabled"{% endif %} >启用云视频</button>
+            <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" {% if info.accessCloud|default(0) == 0 %} disabled="disabled"{% endif %} >启用云视频</button>
           </div>
-          {% if info.level|default('none') == 'none'%}
+          {% if info.accessCloud|default(0) == 0%}
           <div class="col-md-10">
             <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云视频服务！</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
@@ -68,7 +68,7 @@
     <div class="page-header clearfix">
       <h1 class="pull-left">云视频功能设置</h1>
     </div>
-    {% if  info.level|default('none') != 'none'  %}
+    {% if  info.accessCloud|default(0) != 0  %}
     <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
       
