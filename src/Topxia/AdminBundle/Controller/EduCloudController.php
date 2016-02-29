@@ -832,7 +832,7 @@ class EduCloudController extends BaseController
         $chartTransferInfo = array();
 
         foreach ($info as $key => $value) {
-            $chartInfo[] = '{"date":"'.$value['date'].'","spacecount":"'.$value['space'].'","transfercount":"'."1".'"}';
+            $chartInfo[] = '{"date":"'.$value['date'].'","spacecount":"'.$value['space'].'","transfercount":"'.$value['transfer'].'"}';
         }
 
         // foreach ($info as $key => $value) {
