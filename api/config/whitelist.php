@@ -7,12 +7,11 @@ return array(
         '/^\/api\/users\/\d+$/',
         '/^\/api\/mobileschools\/.+$/',
         '/^\/api\/classrooms\/\w+\/members$/',
-        '/^\api\/category_show$/'
+        '/^\/api\/mobile\/category\/show$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',
         '/^\/api\/users\/login$/',
-        '/^\/api\/users\/bind_login$/',
-        '/^\api\/category_show$/'
+        '/^\/api\/users\/bind_login$/'
     )
 );
