@@ -126,7 +126,6 @@ class EduCloudController extends BaseController
             'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
-        var_dump($liveInfo);
 
         if (isset($videoInfo['startMonth']) && isset($videoInfo['endMonth']) && $videoInfo['startMonth'] && $videoInfo['endMonth']) {
             $videoInfo['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
@@ -173,7 +172,6 @@ class EduCloudController extends BaseController
             'video_fingerprint'           => 0,
             'video_header'                => null
         );
-        // var_dump(111);
 
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
