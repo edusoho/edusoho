@@ -146,9 +146,7 @@ abstract class BaseController extends Controller
                     'siteurl'   => $site['url']
                 )
             );
-            $api->setApiUrl('http://124.160.104.74:8098/');
             $result = $api->post("/emails", $params);
-            var_dump($result);
             return true;
         }
 

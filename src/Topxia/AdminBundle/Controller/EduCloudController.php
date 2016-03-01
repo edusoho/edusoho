@@ -56,9 +56,7 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
 
             $content = $api->get("/users/{$api->getAccessKey()}/overview");
-            $api->setApiUrl('http://124.160.104.74:8098/');
-            $info              = $api->get('/me');
-            $eduSohoOpenClient = new EduSohoOpenClient();
+            $info    = $api->get('/me');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
@@ -67,8 +65,9 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
         }
 
-        $articles = $eduSohoOpenClient->getArticles();
-        $articles = json_decode($articles, true);
+        $eduSohoOpenClient = new EduSohoOpenClient();
+        $articles          = $eduSohoOpenClient->getArticles();
+        $articles          = json_decode($articles, true);
 
         if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 0) {
             $trialHtml = $this->getCloudCenterExperiencePage();
@@ -91,8 +90,7 @@ class EduCloudController extends BaseController
     public function myCloudOverviewAction(Request $request)
     {
         try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
 
             if (isset($info['licenseDomains'])) {
@@ -185,8 +183,7 @@ class EduCloudController extends BaseController
 
         //云端视频判断
         try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
@@ -305,8 +302,7 @@ class EduCloudController extends BaseController
         }
 
         try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
 
             $smsStatus = $this->newHandleSmsSetting($request);
@@ -338,8 +334,7 @@ class EduCloudController extends BaseController
         }
 
         try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api         = CloudAPIFactory::create('root');
             $info        = $api->get('/me');
             $status      = $api->get('/me/email_account');
             $emailStatus = $this->handleEmailSetting($request);
@@ -440,8 +435,7 @@ class EduCloudController extends BaseController
 
         $info = array();
         try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
         } catch (\RuntimeException $e) {
             $info['error'] = 'error';
@@ -454,8 +448,7 @@ class EduCloudController extends BaseController
 
     public function keyInfoAction(Request $request)
     {
-        $api = CloudAPIFactory::create('root');
-        $api->setApiUrl('http://124.160.104.74:8098/');
+        $api  = CloudAPIFactory::create('root');
         $info = $api->get('/me');
 
         if (!empty($info['accessKey'])) {
@@ -513,7 +506,6 @@ class EduCloudController extends BaseController
             $options = $request->request->all();
 
             $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
@@ -677,8 +669,7 @@ class EduCloudController extends BaseController
 
     protected function newHandleSmsSetting(Request $request)
     {
-        $api = CloudAPIFactory::create('root');
-        $api->setApiUrl('http://124.160.104.74:8098/');
+        $api            = CloudAPIFactory::create('root');
         $defaultSetting = array(
             'sms_enabled'               => '0',
             'sms_registration'          => 'off',
@@ -806,8 +797,7 @@ class EduCloudController extends BaseController
 
     protected function getSign($operation)
     {
-        $api = CloudAPIFactory::create('root');
-        $api->setApiUrl('http://124.160.104.74:8098/');
+        $api         = CloudAPIFactory::create('root');
         $settings    = $this->getSettingService()->get('cloud_email', array());
         $result      = array();
         $sign        = array();
@@ -963,8 +953,7 @@ class EduCloudController extends BaseController
     protected function isAccessEduCloud()
     {
         try {
-            $api = CloudAPIFactory::create('root');
-            $api->setApiUrl('http://124.160.104.74:8098/');
+            $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
             return isset($info['accessCloud']) ? $info['accessCloud'] : 0;
         } catch (\RuntimeException $e) {
