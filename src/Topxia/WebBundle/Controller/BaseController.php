@@ -120,10 +120,10 @@ abstract class BaseController extends Controller
         $config      = $this->setting('mailer', array());
         $cloudConfig = $this->setting('cloud_email', array());
 
-        if (!isset($config['enabled']) && $config['enabled'] == 1) {
-            $this->sendEmail($to, $params);
-        } elseif (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $this->sendCloudEmail($to, $params);
+        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+            return $this->sendCloudEmail($to, $params);
+        } elseif (!isset($config['enabled']) && $config['enabled'] == 1) {
+            return $this->sendEmail($to, $params);
         }
 
         return false;
