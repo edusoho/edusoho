@@ -72,4 +72,4 @@ $app->get(_u('/homework/manager/check/{homeworkResultId}'), 'res.HomeworkManager
 
 $app->post(_u('/thread/create'), 'res.Thread:create');
 
-$app->get(_u('/mobile/category/show'), 'res.MobileCategoryShow:get');
+$app->get(_u('/category/show'), 'res.MobileCategoryShow:get');
