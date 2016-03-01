@@ -11,7 +11,14 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         $conditions['start'] = $start;
         $conditions['limit'] = $limit;
+        $conditions = $this->filterConditions($conditions);
         return $this->getUploadFileService()->search($conditions, 'cloud');
+    }
+
+    protected function filterConditions($conditions)
+    {
+        $filterConditions = array_filter($conditions);
+        return $filterConditions;
     }
 
     protected function getUploadFileService()

@@ -9,17 +9,31 @@ define(function(require, exports, module) {
                 renderUrl: ''
             },
             events: {
-
+                'submit': 'submitForm',
+                'click .nav-tabs li': 'onClickNav'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
                 this.renderTable();
                 this._initHeader();
             },
+            onClickNav: function(event)
+            {
+                var $target = $(event.currentTarget);
+                $target.closest('.nav').find('.active').removeClass('active');
+                $target.addClass('active');
+                $target.closest('.nav').find('[name=type]').val($target.data('value'));
+                event.preventDefault();
+            },
+            submitForm: function(event)
+            {
+                this.renderTable();
+                event.preventDefault();
+            },
             renderTable: function()
             {
                 var $table = this.element.find('#materials-table');
-                $.get(this.get('renderUrl'), function(resp){
+                $.get(this.get('renderUrl'), this.element.serialize(), function(resp){
                     $table.find('tbody').html(resp);
                 });
             },

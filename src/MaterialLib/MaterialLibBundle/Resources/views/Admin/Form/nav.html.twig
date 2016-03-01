@@ -1,11 +1,12 @@
 <ul class="nav nav-tabs" style="margin-bottom:20px">
-  <li class="{{ type == 'all' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'all'}) }}">全部</a></li>
-  <li class="{{ type == 'video' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'video'}) }}">视频</a></li>
-  <li class="{{ type == 'audio' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'audio'}) }}">音频</a></li>
-  <li class="{{ type == 'image' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'image'}) }}">图片</a></li>
-  <li class="{{ type == 'document' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'document'}) }}">文档</a></li>
-  <li class="{{ type == 'ppt' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'ppt'}) }}">PPT</a></li>
-  <li class="{{ type == 'other' ? 'active' : '' }}"><a href="{{ path('admin_material_lib_manage', {type:'other'}) }}">其它</a></li>
+  <li class="active" data-value=""><a href="javascript:;">全部</a></li>
+  <li class="" data-value="video"><a href="javascript:;">视频</a></li>
+  <li class="" data-value="audio"><a href="javascript:;">音频</a></li>
+  <li class="" data-value="image"><a href="javascript:;">图片</a></li>
+  <li class="" data-value="document"><a href="javascript:;">文档</a></li>
+  <li class="" data-value="ppt"><a href="javascript:;">PPT</a></li>
+  <li class="" data-value="other"><a href="javascript:;">其它</a></li>
+  <input type="hidden" name="type" value="{{ type|default('') }}">
   <div class="form-group">
     <input class="form-control" name="keyword" placeholder="搜索">
   </div>
