@@ -1,26 +1,27 @@
-<tbody>
+{% for material in materials %}
   <tr>
     <td>
       <div>
-        <div style="display:inline">
+        <div class="pull-left" style="width:50%">
           <a href="">
-            <img src="http://demo.edusoho.com/files/user/2015/03-17/172533d6fbf5121921.png?6.15.4">
+            <img style="width:90%" src="http://demo.edusoho.com/files/user/2015/03-17/172533d6fbf5121921.png?6.15.4">
           </a>
         </div>
-        <div style="display:inline">
-          sdfdsfsdfs
+        <div class="pull-right" style="width:50%">
+          <p>{{ material.filename }}</p>
+          <p>{{ material.createdTime|smart_time }}</p>
         </div>
       </div>
     </td>
 
     <td>
-      10
+      {{ material.views }}
     </td>
     <td>
-      视频
+      {{ material.type }}
     </td>    
     <td>
-      1.2G
+      {{ material.fileSize|file_size }}
     </td>
     <td>
       <span class="label label-success">转码成功</span>
@@ -42,4 +43,6 @@
         </ul>
     </td>
   </tr>
-</tbody>
+{% else %}
+{% endfor %}
+

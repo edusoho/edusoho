@@ -5,3 +5,7 @@ admin_material_lib:
 admin_material_lib_manage:
     pattern:  /materiallib/manage
     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:manage }
+
+admin_material_lib_render_table:
+    pattern:  /materiallib/table/render
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:render }

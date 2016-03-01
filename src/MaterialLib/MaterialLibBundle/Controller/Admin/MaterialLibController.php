@@ -15,21 +15,28 @@ class MaterialLibController extends BaseController
 
     public function manageAction(Request $request)
     {
+        return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
+            'type' => $request->query->get('type', 'all'),
+        ));
+    }
+
+    public function renderAction(Request $request)
+    {
         $conditions = $request->query->all();
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getMaterialLibService()->searchCount($conditions),
+        $results = $this->getMaterialLibService()->search(
+            $conditions,
+            ($request->query->get('page', 1) -1) * 20,
             20
         );
-        $materials = $this->getMaterialLibService()->search(
-            $conditions,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
+        $paginator = new Paginator(
+            $this->get('request'),
+            $results['count'],
+            20
         );
 
-        return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
+        return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type' => empty($conditions['type'])?'all':$conditions['type'],
-            'materials' => $materials,
+            'materials' => $results['data'],
             'paginator' => $paginator
         ));
     }

@@ -101,6 +101,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getUploadFileDao()->searchFileCount($conditions);
     }
 
+    public function search($conditions, $storage)
+    {
+        return $this->getFileImplementorByStorage($storage)->search($conditions);
+    }
+
     public function getDownloadFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);

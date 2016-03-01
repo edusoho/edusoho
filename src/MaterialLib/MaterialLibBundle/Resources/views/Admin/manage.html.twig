@@ -4,13 +4,14 @@
 {% do load_script('materiallibbundle/controller/admin/manage') %}
 
 {% block main %}
-<form class="form-inline ">
+<form class="form-inline" id="materials-form">
   {% include 'MaterialLibBundle:Admin/Form:course-user-search.html.twig' %}
   {% include 'MaterialLibBundle:Admin/Form:nav.html.twig' %}
   {% include 'MaterialLibBundle:Admin/Form:filter.html.twig' %}
   {% include 'MaterialLibBundle:Admin/Form:sort.html.twig' %}
+
+  {% include 'MaterialLibBundle:Admin:table.html.twig' %}
 </form>
 
-{% include 'MaterialLibBundle:Admin:table.html.twig' %}
   
 {% endblock %}

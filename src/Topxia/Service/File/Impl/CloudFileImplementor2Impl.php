@@ -237,10 +237,38 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $result;
     }
 
+    public function search($conditions)
+    {
+        $api       = CloudAPIFactory::create();
+        $url = '/resources?'.http_build_query($conditions);
+        $result    = $api->get($url);
+
+        if (empty($result['data'])) {
+            return array();
+        }
+
+        $cloudFiles = $result['data'];
+        $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
+        $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
+
+        $localFiles = $this->getUploadFileDao()->findFilesByIds($localFileIds);
+        $mergedFiles = array();
+        foreach ($localFiles as $i => $file) {
+            if (empty($cloudFiles[$file['globalId']])) {
+                continue;
+            }
+
+            $mergedFiles[$i] = $this->mergeCloudFile($file, $cloudFiles[$file['globalId']]);
+        }
+
+        return array('data' => $mergedFiles, 'count' => $result['count']);
+    }
+
     private function mergeCloudFile($file, $cloudFile)
     {
         $file['hashId']   = $cloudFile['reskey'];
         $file['fileSize'] = $cloudFile['size'];
+        $file['views'] = $cloudFile['views'];
 
         $statusMap = array(
             'none'       => 'none',
@@ -318,5 +346,10 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         }
 
         return $file;
+    }
+
+    protected function getUploadFileDao()
+    {
+        return $this->createDao('File.UploadFileDao');
     }
 }
