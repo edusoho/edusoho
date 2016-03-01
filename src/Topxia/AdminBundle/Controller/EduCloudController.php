@@ -65,28 +65,22 @@ class EduCloudController extends BaseController
             return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
         }
 
-        $eduSohoOpenClient = new EduSohoOpenClient();
-        $articles          = $eduSohoOpenClient->getArticles();
-        $articles          = json_decode($articles, true);
-
         if ($this->getWebExtension()->isTrial() || !isset($info['accessCloud']) || $info['accessCloud'] == 0) {
             $trialHtml = $this->getCloudCenterExperiencePage();
             return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
-                'accessCloud' => isset($info['accessCloud']) ? $info['accessCloud'] : null,
-                'articles'    => $articles,
-                'trial'       => $trialHtml['content']
+                'content' => $trialHtml['content']
             ));
         }
 
         $unTrial     = file_get_contents('http://open.edusoho.com/api/v1/block/cloud_guide');
         $unTrialHtml = json_decode($unTrial, true);
         return $this->render('TopxiaAdminBundle:EduCloud:cloud.html.twig', array(
-            'articles' => $articles,
-            'untrial'  => $unTrialHtml['content']
+            'content' => $unTrialHtml['content']
         ));
     }
 
     //概览页，服务概况页
+    // refactor
     public function myCloudOverviewAction(Request $request)
     {
         try {
@@ -102,18 +96,18 @@ class EduCloudController extends BaseController
             $isBinded['email'] = isset($isBinded['email']) ? str_replace(substr(substr($isBinded['email'], 0, stripos($isBinded['email'], '@')), -4), '****', $isBinded['email']) : null;
 
             $eduSohoOpenClient = new EduSohoOpenClient;
-            $content           = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            $overview          = $api->get("/user/center/{$api->getAccessKey()}/overview");
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
-        $cashInfo   = isset($content['account']) ? $content['account'] : null;
-        $couponInfo = isset($content['coupon']) ? $content['coupon'] : null;
-        $videoInfo  = isset($content['service']['storage']) ? $content['service']['storage'] : null;
-        $liveInfo   = isset($content['service']['live']) ? $content['service']['live'] : null;
-        $smsInfo    = isset($content['service']['sms']) ? $content['service']['sms'] : null;
-        $emailInfo  = isset($content['service']['email']) ? $content['service']['email'] : null;
-        $tlpInfo    = isset($content['tlp']) ? $content['tlp'] : 0;
+        $cashInfo   = isset($overview['account']) ? $overview['account'] : null;
+        $couponInfo = isset($overview['coupon']) ? $overview['coupon'] : null;
+        $videoInfo  = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
+        $liveInfo   = isset($overview['service']['live']) ? $overview['service']['live'] : null;
+        $smsInfo    = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
+        $emailInfo  = isset($overview['service']['email']) ? $overview['service']['email'] : null;
+        $tlpInfo    = isset($overview['tlp']) ? $overview['tlp'] : 0;
         $chartInfo  = array(
             'videoUsedInfo' => $this->generateVideoChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
             'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
