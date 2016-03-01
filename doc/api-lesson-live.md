@@ -10,10 +10,7 @@ POST /lessons/{id}/live_tickets
 
 | 名称 | 类型 | 必需 | 描述 |
 | ---- | ---- | ---- | ---- |
-| id   | string | Y | 用户ID |
-| nickname | string | Y | 用户昵称 |
-| role | string | Y | 角色（teacher,student,speaker) |
-| device | string | Y | 设备(desktop, mobile, android, ios) |
+| device | string | Y | 设备(desktop, mobile, android, iphone) |
 
 ### 响应
 
@@ -88,3 +85,37 @@ SDK:
     }
 }
 ```
+
+
+## 获取回放地址
+
+```
+GET /lessons/{id}/replay
+```
+
+### 参数
+
+| 名称 | 类型 | 必需 | 描述 |
+| ---- | ---- | ---- | ---- |
+| replayId | string | Y | 回放ID |
+| device | string | Y | 设备(desktop, mobile, android, iphone) |
+
+```json
+{
+    "device": "",
+    "url": "",
+    "sdk": {
+        "provider": "soooner",
+        "liveClassroomId": "",
+        "exStr": "",
+    }
+}
+```
+
+目前sdk，只会出现在光慧直播，且请求参数`device`为`android`或`iphone`) 存在。
+```
+
+
+
+
+
