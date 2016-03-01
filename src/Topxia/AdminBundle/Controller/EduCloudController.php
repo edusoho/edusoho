@@ -57,14 +57,11 @@ class EduCloudController extends BaseController
 
             $content = $api->get("/users/{$api->getAccessKey()}/overview");
             $api->setApiUrl('http://124.160.104.74:8098/');
-            $info = $api->get('/me');
-            //var_dump($info);
+            $info              = $api->get('/me');
             $eduSohoOpenClient = new EduSohoOpenClient();
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
-
-        //exit();
 
         if (isset($info['accessCloud']) && $info['accessCloud'] != 0) {
             return $this->redirect($this->generateUrl("admin_my_cloud_overview"));
@@ -97,7 +94,6 @@ class EduCloudController extends BaseController
             $api = CloudAPIFactory::create('root');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $info = $api->get('/me');
-            // var_dump($info);
 
             if (isset($info['licenseDomains'])) {
                 $info['licenseDomainCount'] = count(explode(';', $info['licenseDomains']));
@@ -175,7 +171,6 @@ class EduCloudController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $set = $request->request->all();
-            // var_dump($set);
 
             if (isset($set['cloud_bucket'])) {
                 $set['cloud_bucket'] = trim($set['cloud_bucket']);
@@ -206,7 +201,6 @@ class EduCloudController extends BaseController
             $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
         }
 
-        // var_dump($storageSetting);
         return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
             'storageSetting' => $storageSetting,
             'headLeader'     => $headLeader,
@@ -349,12 +343,15 @@ class EduCloudController extends BaseController
             $info        = $api->get('/me');
             $status      = $api->get('/me/email_account');
             $emailStatus = $this->handleEmailSetting($request);
+            $content     = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            $emailInfo   = $emailInfo   = isset($content['service']['email']) ? $content['service']['email'] : null;
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
                 'email_enable' => isset($status['status']) ? $status['status'] : 'enable',
                 'accessCloud'  => $this->isAccessEduCloud(),
-                'emailStatus'  => $emailStatus
+                'emailStatus'  => $emailStatus,
+                'emailInfo'    => $emailInfo
             ));
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:email-error.html.twig', array());
@@ -516,7 +513,6 @@ class EduCloudController extends BaseController
             $options = $request->request->all();
 
             $api = CloudAPIFactory::create('root');
-            //$api->setApiUrl('http://115.29.78.158:10001/');
             $api->setApiUrl('http://124.160.104.74:8098/');
             $api->setKey($options['accessKey'], $options['secretKey']);
 
@@ -789,8 +785,6 @@ class EduCloudController extends BaseController
         }
 
         if (isset($operation['email-close'])) {
-            // $result = $api->get("/me/email_account");
-            // var_dump($result);
             $emailStatus['status'] = 'disable';
             $emailStatus           = array_merge($settings, $emailStatus);
             $this->setFlashMessage('success', '云邮件设置已保存！');
@@ -833,10 +827,6 @@ class EduCloudController extends BaseController
         foreach ($info as $key => $value) {
             $chartInfo[] = '{"date":"'.$value['date'].'","spacecount":"'.$value['space'].'","transfercount":"'.$value['transfer'].'"}';
         }
-
-        // foreach ($info as $key => $value) {
-        //     $chartTransferInfo[] = '{"date":"'.$value['date'].'","transfercount":'.$value['transfer'].'}';
-        // }
 
         return '['.implode(',', $chartInfo).']';
     }
