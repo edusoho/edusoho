@@ -47,11 +47,30 @@ define(function(require, exports, module) {
                 isPaginator || this._resetPage();
                 var self = this;
                 var $table = this.element.find('#materials-table');
-                $.get(this.get('renderUrl'), this.element.serialize(), function(resp){
+                this._loading();
+                $.ajax({
+                    type:'GET',
+                    url:this.get('renderUrl'),
+                    data:this.element.serialize()
+                }).done(function(resp){
                     $table.find('tbody').html(resp);
                     var $temp = $table.find('.js-paginator');
                     self.element.find('[data-role=paginator]').html($temp.html());
+                }).fail(function(){
+                    self._loaded_error();
                 });
+            },
+            _loading: function()
+            {
+                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</td></tr>';
+                var $table = this.element.find('#materials-table');
+                $table.find('tbody').html(loading);
+            },
+            _loaded_error: function()
+            {
+                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</td></tr>';
+                var $table = this.element.find('#materials-table');
+                $table.find('tbody').html(loading);
             },
             _resetPage: function()
             {
