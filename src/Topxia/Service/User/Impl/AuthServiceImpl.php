@@ -132,7 +132,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkUsername($username, $randomName = '')
     {
-        //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
+//如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
 
         if (empty($randomName) || $username != $randomName) {
             try {
@@ -143,6 +143,10 @@ class AuthServiceImpl extends BaseService implements AuthService
 
             if ($result[0] != 'success') {
                 return $result;
+            }
+
+            if (preg_match('/^1\d{10}$/', $username)) {
+                return array('error_match', '用户名不允许以1开头的11位纯数字!');
             }
 
             $avaliable = $this->getUserService()->isNicknameAvaliable($username);
