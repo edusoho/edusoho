@@ -94,7 +94,7 @@ define(function(require, exports, module) {
                     formatResult: function(item) {
                         return item.name;
                     },
-                    width: 'off',
+                    width: 600,
                     multiple: true,
                     placeholder: "请输入标签",
                     multiple: true,
@@ -154,6 +154,7 @@ define(function(require, exports, module) {
                     formatResult: function(item) {
                         return item.name;
                     },
+                    width:300,
                     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
                     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
                 });
@@ -207,6 +208,7 @@ define(function(require, exports, module) {
                     formatResult: function(item) {
                         return item.name;
                     },
+                    width:300,
                     dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
                     escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
                 });
