@@ -41,6 +41,15 @@ define(function(require, exports, module) {
         	$("[name='submit-sign']").show();
         	$("[name='status']").hide();
         });
+        var validator = new Validator({
+            element: '#sms-controller-form'
+        });
+        validator.addItem({
+            element: '[name="sign"]',
+            required: true,
+            rule:'chinese minlength{min:2} maxlength{max:5}',
+            errormessageRequired: '请输入2～5个中文'
+        });
 
 	}
 	
