@@ -13,7 +13,7 @@ class MobileCategoryShow extends BaseResource
     {
     	$result = $this->getMobileShowService()->getAllMobileShows();
     	if (empty($result)) {
-
+    		return $this->error('error', '暂无分类内容!'); 
     	}
 
     	return $result;
