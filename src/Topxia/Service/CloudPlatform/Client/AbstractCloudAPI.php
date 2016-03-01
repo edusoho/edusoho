@@ -32,7 +32,7 @@ class AbstractCloudAPI
 
     public function setApiUrl($url)
     {
-        // $url          = 'http://124.160.104.74:8098/';
+        $url          = 'http://124.160.104.74:8098/';
         $this->apiUrl = rtrim($url, '/');
         return $this;
     }
