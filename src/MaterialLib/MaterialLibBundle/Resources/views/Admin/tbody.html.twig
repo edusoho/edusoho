@@ -9,7 +9,7 @@
         </div>
         <div class="pull-right" style="width:50%">
           <p>{{ material.name }}</p>
-          <p>{{ material.createdTime|smart_time }}</p>
+          <p>{{ material.createdTime|date('Y-m-d H:i:s') }}</p>
         </div>
       </div>
     </td>
