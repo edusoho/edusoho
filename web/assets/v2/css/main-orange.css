@@ -4237,6 +4237,14 @@ Pagination Styles
 }
 .testpaper-card.affix {
   position: static;
+  top: 0;
+}
+@media (max-width: 767px) {
+  .testpaper-card.affix,
+  .testpaper-card.affix-bottom {
+    position: relative !important;
+    top: 0 !important;
+  }
 }
 @media (min-width: 992px) {
   .testpaper-card.affix,
