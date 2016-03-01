@@ -2,6 +2,7 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var Handlebars = require('handlebars');
+     require('webuploader');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
@@ -23,6 +24,7 @@ define(function(require, exports, module) {
             this._initForm();
             this._initStemField();
             this._initAnalysisField();
+            
         },
 
         onSubmit: function(e){
@@ -54,6 +56,8 @@ define(function(require, exports, module) {
                 filebrowserImageUploadUrl: $('#question-stem-field').data('imageUploadUrl'),
                 height: height
             });
+
+            self._uploadAttachment(editor);
 
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.updateElement();
@@ -98,6 +102,36 @@ define(function(require, exports, module) {
             });
 
             return validator;
+        },
+
+        _uploadAttachment: function(editor){
+            var $annexbtn = $('#question-attachment-upload');
+            var formData = $.extend({}, {token:$annexbtn.data('uploadToken')});
+            var uploadUrl = $annexbtn.data('url');
+            var uploader = WebUploader.create({
+               swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
+               server: uploadUrl,
+               pick: $annexbtn,
+               formData: $.extend(formData , {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
+               accept: {
+                       title: 'Attachment',
+                       extensions: 'txt,docx,doc,xls,xlsx,pptx,ppsx,rar,zip',
+                }
+            });
+
+            uploader.on( 'fileQueued', function( file ) {
+                Notify.info('正在上传，请稍等！', 0);
+                uploader.upload();
+            });
+
+            uploader.on( 'uploadSuccess', function( file, response ) {
+                    editor.insertHtml(response._raw);
+                    Notify.success('附件上传成功！');
+            });
+
+            uploader.on( 'uploadError', function( file, response ) {
+                Notify.danger('上传失败，请重试！');
+            });
         }
 
     });

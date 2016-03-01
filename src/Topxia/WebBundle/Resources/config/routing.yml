@@ -205,10 +205,20 @@ editor_upload:
     defaults: { _controller: TopxiaWebBundle:Editor:upload }
     methods: [POST]
 
+editor_file_upload:
+    pattern:  /editor/file/upload
+    defaults: { _controller: TopxiaWebBundle:Editor:fileUpload }
+    methods: [POST]
+
 editor_download:
     pattern:  /editor/download
     defaults: { _controller: TopxiaWebBundle:Editor:download }
     methods: [POST]
+
+editor_file_download:
+    pattern:  /editor/file/{fileId}/download
+    defaults: { _controller: TopxiaWebBundle:Editor:fileDownload }
+
 
 liveroom_entry_waiting:
     pattern:  /liveroom/{id}/entry_waiting
