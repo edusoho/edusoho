@@ -34,7 +34,7 @@ define(function(require, exports, module) {
             {
                 var $target = $(event.currentTarget);
                 this.element.find('.js-page').val($target.data('page'));
-                this.renderTable();
+                this.renderTable(true);
                 event.preventDefault();
             },
             submitForm: function(event)
@@ -42,8 +42,9 @@ define(function(require, exports, module) {
                 this.renderTable();
                 event.preventDefault();
             },
-            renderTable: function()
+            renderTable: function(isPaginator)
             {
+                isPaginator || this._resetPage();
                 var self = this;
                 var $table = this.element.find('#materials-table');
                 $.get(this.get('renderUrl'), this.element.serialize(), function(resp){
@@ -51,6 +52,10 @@ define(function(require, exports, module) {
                     var $temp = $table.find('.js-paginator');
                     self.element.find('[data-role=paginator]').html($temp.html());
                 });
+            },
+            _resetPage: function()
+            {
+                this.element.find('.js-page').val(1);
             },
             _initSelect2: function()
             {
