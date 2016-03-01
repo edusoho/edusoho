@@ -18,6 +18,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function filterConditions($conditions)
     {
         $filterConditions = array_filter($conditions);
+
+        if (!empty($filterConditions['createdUserId'])) {
+            $filterConditions['endUser'] = $filterConditions['createdUserId'];
+            unset($filterConditions['createdUserId']);
+        }
         return $filterConditions;
     }
 
