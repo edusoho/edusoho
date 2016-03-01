@@ -19,19 +19,19 @@
   >i {
     font-size: 14px;
   }
-  // &.active {
-  //   .box-shadow(none);
-  // }
 }
 
 .btn-ghost-white {
   color: #fff;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
+  background-color: @gray-medium;
+  background-color: rgba(255, 255, 255, 0.3);
   &:hover, 
   &:focus,
   &.focus {
     color: #fff;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: @gray;
+    background-color: rgba(255, 255, 255, 0.5);
   }
 }
 
@@ -44,7 +44,15 @@
     text-decoration: none;
   }
 }
-
+.btn-gray {
+  color: @gray-dark;
+  &:hover, 
+  &:focus,
+  &.focus {
+    color: @brand-primary;
+    text-decoration: none;
+  }
+}
 .btn-default {
   color: @gray-dark;
   background-color: #f5f5f5;

@@ -2,11 +2,13 @@
 
 namespace Topxia\WebBundle\Command;
 
+use Topxia\Common\BlockToolkit;
+use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
 
 class BuildPluginAppCommand extends BaseCommand
 {
@@ -15,14 +17,16 @@ class BuildPluginAppCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('build:plugin-app')
-            ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
+             ->addArgument('name', InputArgument::REQUIRED, 'plugin name');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
+        $this->initServiceKernel();
+
+        $this->output     = $output;
         $this->filesystem = new Filesystem();
-        $name = $input->getArgument('name');
+        $name             = $input->getArgument('name');
 
         $this->output->writeln("<info>开始制作插件应用包 {$name}</info>");
 
@@ -32,9 +36,9 @@ class BuildPluginAppCommand extends BaseCommand
     private function _buildDistPackage($name)
     {
         $pluginDir = $this->getPluginDirectory($name);
-        $version = $this->getPluginVersion($name, $pluginDir);
+        $version   = $this->getPluginVersion($name, $pluginDir);
 
-        $distDir = $this->_makeDistDirectory($name, $version);
+        $distDir       = $this->_makeDistDirectory($name, $version);
         $sourceDistDir = $this->_copySource($name, $pluginDir, $distDir);
         $this->_copyScript($pluginDir, $distDir);
         $this->_generateBlocks($pluginDir, $distDir, $this->getContainer());
@@ -68,8 +72,9 @@ class BuildPluginAppCommand extends BaseCommand
 
     private function _copyScript($pluginDir, $distDir)
     {
-        $scriptDir = "{$pluginDir}/Scripts";
+        $scriptDir     = "{$pluginDir}/Scripts";
         $distScriptDir = "{$distDir}/Scripts";
+
         if ($this->filesystem->exists($scriptDir)) {
             $this->filesystem->mirror($scriptDir, $distScriptDir);
             $this->output->writeln("<info>    * 拷贝脚本：{$scriptDir} -> {$distScriptDir}</info>");
@@ -116,6 +121,7 @@ class BuildPluginAppCommand extends BaseCommand
             $this->output->writeln("<info>    清理目录：{$distDir}</info>");
             $this->filesystem->remove($distDir);
         }
+
         $this->output->writeln("<info>    创建目录：{$distDir}</info>");
         $this->filesystem->mkdir($distDir);
 
@@ -133,6 +139,7 @@ class BuildPluginAppCommand extends BaseCommand
     private function getPluginVersion($name, $pluginDir)
     {
         $meta = json_decode(file_get_contents($pluginDir.'/plugin.json'), true);
+
         if (empty($meta) || empty($meta['version'])) {
             throw new \RuntimeException('获取插件版本号失败！');
         }
@@ -149,5 +156,22 @@ class BuildPluginAppCommand extends BaseCommand
         }
 
         return $pluginDir;
+    }
+
+    protected function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', true);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+        $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
+
+        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
     }
 }

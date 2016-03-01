@@ -1,6 +1,12 @@
 var appFactory = angular.module('AppFactory', []);
-appFactory.factory('AppUtil', ['$rootScope', '$timeout', function($rootScope, $timeout) {
+appFactory.factory('AppUtil', ['$timeout', function($timeout) {
 	var utils = {
+		formatString : function(str) {
+			var args = arguments, re = new RegExp("%([1-" + args.length + "])", "g");
+			return String(str).replace(re, function($1, $2) {
+				return args[$2];
+			});
+		},
 		createArray : function(count) {
 			var arr = [];
 			for (var i = count- 1; i >= 0; i--) {
@@ -364,7 +370,7 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 				$rootScope.token = null;
 				localStore.remove("user");
 				localStore.remove("token");
-				alert("登陆信息失效，请重新登陆");
+				alert("登录信息失效，请重新登录");
 			}
 		}
 	};

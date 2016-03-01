@@ -131,7 +131,7 @@ interface UserService
 
     public function unlockUser($id);
 
-    public function promoteUser($id);
+    public function promoteUser($id, $number);
 
     public function cancelPromoteUser($id);
 

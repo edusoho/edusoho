@@ -12,52 +12,87 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
     public function addCategory($category)
     {
         $affected = $this->getConnection()->insert($this->table, $category);
+        $this->clearCached();
 
         if ($affected <= 0) {
             throw $this->createDaoException('Insert category error.');
         }
 
+        $this->clearCached();
         return $this->getCategory($this->getConnection()->lastInsertId());
     }
 
     public function deleteCategory($id)
     {
-        return $this->getConnection()->delete($this->table, array('id' => $id));
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
     }
 
     public function getCategory($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id));
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id));
+        }
+
+        );
     }
 
     public function getCategoryByParentId($parentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($parentId));
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}:limit:1", $parentId, function ($parentId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($parentId));
+        }
+
+        );
     }
 
     public function findAllCategoriesByParentId($parentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? order by weight";
-        return $this->getConnection()->fetchAll($sql, array($parentId));
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}", $parentId, function ($parentId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? order by weight";
+            return $that->getConnection()->fetchAll($sql, array($parentId));
+        }
+
+        );
     }
 
     public function findAllPublishedCategoriesByParentId($parentId)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE parentId = ? AND published = ? order by weight";
-        return $this->getConnection()->fetchAll($sql, array($parentId, 1));
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}:published:1", $parentId, function ($parentId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? AND published = ? order by weight";
+            return $that->getConnection()->fetchAll($sql, array($parentId, 1));
+        }
+
+        );
     }
 
     public function findCategoryByCode($code)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE code = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($code));
+        $that = $this;
+
+        return $this->fetchCached("code:{$code}", $code, function ($code) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE code = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($code));
+        }
+
+        );
     }
 
     public function updateCategory($id, $category)
     {
         $this->getConnection()->update($this->table, $category, array('id' => $id));
+        $this->clearCached();
         return $this->getCategory($id);
     }
 
@@ -70,8 +105,14 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
     public function findCategoriesCountByParentId($parentId)
     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  parentId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($parentId));
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}:count", $parentId, function ($parentId) use ($that) {
+            $sql = "SELECT COUNT(*) FROM {$that->getTable()} WHERE  parentId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($parentId));
+        }
+
+        );
     }
 
     public function findCategoriesByIds(array $ids)
@@ -87,7 +128,13 @@ class CategoryDaoImpl extends BaseDao implements CategoryDao
 
     public function findAllCategories()
     {
-        $sql = "SELECT * FROM {$this->table} ORDER BY weight ASC";
-        return $this->getConnection()->fetchAll($sql) ?: array();
+        $that = $this;
+
+        return $this->fetchCached("all", function () use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} ORDER BY weight ASC";
+            return $that->getConnection()->fetchAll($sql) ?: array();
+        }
+
+        );
     }
 }

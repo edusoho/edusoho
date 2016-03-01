@@ -793,7 +793,7 @@ class ClassroomManageController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getTestpaperService()->findTestpaperResultCountByStatusAndTestIds($testpaperIds, 'reviewing'),
-            10
+            20
         );
 
         $paperResults = $this->getTestpaperService()->findTestpaperResultsByStatusAndTestIds(
@@ -853,8 +853,8 @@ class ClassroomManageController extends BaseController
         $homeworksResultsCounts = $this->getHomeworkService()->findResultsCountsByCourseIdsAndStatus($courseIds, $status);
         $paginator              = new Paginator(
             $this->get('request'),
-            $homeworksResultsCounts
-            , 5
+            $homeworksResultsCounts,
+            10
         );
 
         if ($status == 'reviewing') {

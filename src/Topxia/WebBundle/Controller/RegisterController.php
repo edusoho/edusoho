@@ -32,6 +32,10 @@ class RegisterController extends BaseController
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
             }
 
+            if ($this->getSensitiveService()->scanText($registration['nickname'])) {
+                return $this->createMessageResponse('error', '用户名中含有敏感词！');
+            }
+
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
             $registration['createdIp'] = $request->getClientIp();
             $authSettings              = $this->getSettingService()->get('auth', array());
@@ -62,30 +66,11 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
-            $authSettings = $this->getSettingService()->get('auth', array());
-
-            if (($authSettings
-                && isset($authSettings['email_enabled'])
-                && $authSettings['email_enabled'] == 'closed')
-                || !$this->isEmptyVeryfyMobile($user)) {
-                $this->authenticateUser($user);
-            }
-
-            $goto = $this->generateUrl('register_submited', array(
-                'id'   => $user['id'],
-                'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request)
-            ));
-
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                $this->authenticateUser($user);
-                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-            }
-
-            return $this->redirect($goto);
+            return $this->redirect($this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request))));
         }
 
         $inviteCode = '';
+        $inviteUser = array();
 
         if (!empty($fields['inviteCode'])) {
             $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
@@ -99,8 +84,36 @@ class RegisterController extends BaseController
             'inviteCode'        => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort'      => array(),
+            'inviteUser'        => $inviteUser,
             '_target_path'      => $this->getTargetPath($request)
         ));
+    }
+
+    public function successAction(Request $request)
+    {
+        $user = $this->getUserService()->getUser($request->query->get('userId'));
+        
+        $authSettings = $this->getSettingService()->get('auth', array());
+
+        if (($authSettings
+            && isset($authSettings['email_enabled'])
+            && $authSettings['email_enabled'] == 'closed')
+            || !$this->isEmptyVeryfyMobile($user)) {
+            $this->authenticateUser($user);
+        }
+
+        $goto = $this->generateUrl('register_submited', array(
+            'id'   => $user['id'],
+            'hash' => $this->makeHash($user),
+            'goto' => $request->query->get('goto')
+        ));
+
+        if ($this->getAuthService()->hasPartnerAuth()) {
+            $this->authenticateUser($user);
+            $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+        }
+
+        return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
     }
 
     protected function isMobileRegister($registration)
@@ -519,6 +532,11 @@ class RegisterController extends BaseController
         ) {
             return true;
         }
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function registerLimitValidator($registration, $authSettings, $request)

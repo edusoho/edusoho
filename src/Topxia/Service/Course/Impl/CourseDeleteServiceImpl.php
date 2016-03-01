@@ -28,6 +28,14 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
         }
     }
 
+    public function deleteLessonResult($lessonId)
+    {
+        $testpaper = $this->getTestpaperDao()->getTestpaper($lessonId);
+        $status = 'reviewing';
+        $this->getTestpaperResultDao()->deleteTestpaperResultByTestpaperIdAndStatus($testpaper['id'],$status);
+        return true;
+    }
+    
     protected function deleteQuestions($course)
     {
         $questionCount = $this->getQuestionDao()->searchQuestionsCount(array('targetPrefix' => "course-{$course['id']}"));

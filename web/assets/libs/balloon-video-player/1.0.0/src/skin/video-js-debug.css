@@ -1167,11 +1167,11 @@ are just basic styles to make it look ok with plain text.
   transition: all .3s ease;
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-control.vjs-time-controls {
-  width: 36px;
+  width: 60px;
 }
 @media (max-width: 767px) {
   .ballon-video-player .video-js.vjs-default-skin .vjs-control.vjs-time-controls {
-    width: 30px;
+    width: 50px;
   }
 }
 .ballon-video-player .video-js.vjs-default-skin .vjs-time-controls {
@@ -1446,7 +1446,7 @@ are just basic styles to make it look ok with plain text.
   bottom: 0;
   opacity: 1;
   height: 100%;
-  background: #fff !important;
+  background: #fff;
   -webkit-transition: all .3s ease;
   -moz-transition: all .3s ease;
   -o-transition: all .3s ease;

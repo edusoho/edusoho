@@ -23,6 +23,12 @@ service('ArticleService', ['httpService', function(httpService) {
 		httpService.apiGet("/api/articles/" + arguments[0]['id'], arguments);
 	}
 }]).
+service('AnalysisService', ['httpService', function(httpService) {
+
+	this.getCourseChartData = function(callback) {
+		httpService.apiGet("/api/analysis/Course/learnDataByDay?courseId" + arguments[0]['courseId'], arguments);
+	}
+}]).
 service('CategoryService', ['httpService', function(httpService) {
 
 	this.getCategorieTree = function(callback) {
@@ -90,6 +96,22 @@ service('CouponService', ['httpService', function(httpService) {
 
 	this.checkCoupon = function() {
 		httpService.simplePost('/mapi_v2/Course/coupon', arguments);
+	}
+}]).
+service('HomeworkManagerService', ['httpService', function(httpService) {
+
+	this.teachingResult = function() {
+		httpService.apiGet("/api/homework/manager/teaching", arguments);
+	};
+
+	this.showCheck = function() {
+		httpService.apiGet("/api/homework/manager/check/" + arguments[0]['homeworkResultId'], arguments);
+	}
+}]).
+service('ThreadManagerService', ['httpService', function(httpService) {
+
+	this.questionResult = function() {
+		httpService.apiGet("/api/thread/manager/question", arguments);
 	}
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
@@ -566,11 +588,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', 'cordovaUti
 	this.nativePost = function(options) {
 		esNativeCore.post($q, options.url,  options.headers , options.data )
 		.then(function(data) {
-			console.log(data);
-			options.success(angular.fromJson(data));
+			self.filterCallback(angular.fromJson(data), options.success);
 		}, function(error) {
-			console.log(error);
-			options.error(angular.fromJson(error));
+			self.filterCallback(angular.fromJson(error), options.error);
 		});
 	};
 

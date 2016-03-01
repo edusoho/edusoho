@@ -10,11 +10,9 @@
     
       {% for key,learn in learns %}
         {% if loop.index < 7 %}
-          <div class="media media-number-o">
-            <div class="media-body">
-              {{ web_macro.user_link(learn.user) }}
-              {{ learn.message|raw }}
-            </div>
+          <div class="media media-number-o color-gray text-overflow">
+            {{ web_macro.user_link(learn.user) }}
+            {{ learn.message|raw }}
           </div> 
          {% endif %}
       {% endfor %}

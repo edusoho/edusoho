@@ -204,7 +204,10 @@ admin_teacher:
 admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
-    methods:  [POST]
+
+admin_teacher_promote_list:
+    pattern: /teacher/promote/list
+    defaults: { _controller: TopxiaAdminBundle:Teacher:promoteList }
 
 admin_teacher_promote_cancel:
     pattern:  /teacher/{id}/promote/cancel
@@ -561,10 +564,6 @@ admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
 
-admin_setting_sensitive_word:
-    pattern:  /setting/sensitive_word
-    defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
-
 admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
@@ -667,6 +666,10 @@ admin_setting_post_num_rules:
 admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
+
+admin_setting_redis:
+    pattern:  /setting/redis
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
 
 admin_optimize:
     pattern:  /setting/optimize
@@ -1336,6 +1339,18 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
 
+admin_edu_cloud_search:
+    pattern: /setting/edu_cloud/search
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
+
+admin_edu_cloud_search_clause:
+    pattern: /setting/edu_cloud/search/clause
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
+
+admin_edu_cloud_search_close:
+    pattern: /setting/edu_cloud/search/close
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
@@ -1378,3 +1393,23 @@ admin_batch_notification_send:
 admin_feedback:
     pattern: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
+
+admin_report_status_ucenter:
+    pattern: /reports/status/ucenter
+    defaults: { _controller: TopxiaAdminBundle:System:ucenter }
+
+admin_report_status_email_send:
+    pattern: /reports/status/email/send
+    defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }

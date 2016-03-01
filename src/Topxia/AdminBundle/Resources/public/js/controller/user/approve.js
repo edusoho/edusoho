@@ -25,7 +25,7 @@ define(function(require, exports, module) {
 			}
 
 			if (status == 'fail' && $('#note').val() == '') {
-				Notify.danger('请输入审核失败理由！');
+				Notify.danger('请输入驳回原因！');
 				return false;
 			}
 

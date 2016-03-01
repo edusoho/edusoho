@@ -1,0 +1,118 @@
+<div class="ui-todolist" ng-init="initChartData()">
+    <section class="ui-panel ui-panel-card ui-border-t">
+        <h2 class="title-body ui-border-b">
+            <span class="title">
+                数据浏览
+            </span>
+        </h2>
+        <div class="ui-slider todo-slider" slider="todo-slider" ui-slider-box="charts" on-load="loadCharts()" auto="true">
+            <ul class="ui-slider-content ui-border-b">
+                <li ng-repeat="chart in charts">
+                    <ul class="ui-grid-halve todo-header ui-border-b">
+                        <li class="ui-border-r">
+                            <span class="label red">{{ chart.header[0].value }}</span>
+                            {{ chart.header[0].title }}
+                        </li>
+                        <li>
+                            <span class="label blue">{{ chart.header[1].value }}</span>
+                            {{ chart.header[1].title }}
+                        </li>
+                    </ul>
+                    <div class="chart-container">
+                        <h4>{{ chart.chartLabel }}</h4>
+                        <canvas class="list-chart" id="chart_{{ $index }}"></canvas>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="ui-panel ui-panel-card ui-border-t" ng-controller="HomeworkTeachingController" ng-init="initTeachingResult()">
+        <h2 class="title-body">
+            <span class="title">
+                <span class="circle-label"></span>
+                作业批改
+            </span>
+
+            <a class="title-tips">
+                待批作业:
+                <label>{{ teachingResult.homeworksResultsCounts }}</label>
+            </a>
+        </h2>
+        <div class="todo-card">
+            <list-empty-view data="teachingResult.homeworkResults" title="暂时没有待批作业">
+            </list-empty-view>
+            <ul class="ui-list ui-list-pure ui-border-t">
+                <li ng-repeat="homeworkResult in teachingResult.homeworkResults">
+                    <div class="ui-list-info ui-border-t" ng-click="showHomeWorkResult(homeworkResult)">
+                        <h2 class="ui-nowrap">{{ homeworkResult.lessonTitle }}</h2>
+
+                        <div class="bottom">
+                            <div class="ui-avatar-s rr">
+                                    <img ng-src="{{ homeworkResult.user.avatar | coverAvatar }}" />
+                            </div>
+                                
+                            <span class="bottom-label">
+                                {{ homeworkResult.user.nickname }}
+                                <span class="bottom-label-bg">
+                                    {{ homeworkResult.user.roles | coverUserRole }}
+                                </span>
+                            </span>
+                            <span class="bottom-label right">{{ homeworkResult.createdTime | coverLearnTime }}</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="ui-btn-group" ng-if="teachingResult.homeworkResults.length < teachingResult.homeworksResultsCounts                                                  ">
+                <button type="button" class="btn-green">更多</button>
+            </div>
+        </div>
+        
+    </section>
+
+    <section class="ui-panel ui-panel-card ui-border-t" ng-controller="ThreadTeachingController" ng-init="initQuestionResult(3)">
+        <h2 class="title-body">
+            <span class="title">
+                <span class="circle-label"></span>
+                提问回答
+            </span>
+
+            <a class="title-tips">
+                待回答问题:
+                <label>{{ teachingResult.threadCount }}</label>
+            </a>
+        </h2>
+        <div class="todo-card">
+            <list-empty-view data="teachingResult.threads" title="暂时没有待回答问题">
+            </list-empty-view>
+            <ul class="ui-list ui-list-pure ui-border-t">
+                <li ng-repeat="thread in teachingResult.threads">
+                    <div class="ui-list-info ui-border-t" ng-click="showThreadChatView(thread)">
+                        <h2 class="ui-nowrap">{{ thread.title }}</h2>
+                        <p>{{ thread.lessonTitle }}</p>
+
+                        <div class="bottom">
+                            <div class="ui-avatar-s rr">
+                                <img ng-src="{{ thread.user.avatar | coverAvatar }}" />
+                            </div>
+                                
+                            <span class="bottom-label">
+                                {{ thread.user.nickname }}
+                                <span class="bottom-label-bg">
+                                    {{ thread.user.roles | coverUserRole }}
+                                </span>
+                            </span>
+                            <span class="bottom-label right">
+                                {{ thread.createdTime | coverLearnTime }}
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="ui-btn-group" ng-if="teachingResult.threads.length < teachingResult.threadCount">
+                <button type="button" class="btn-green" ng-href="#/teaching/threadlist/{{ courseId }}">更多</button>
+            </div>
+        </div>
+        
+    </section>
+</div>

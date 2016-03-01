@@ -10,8 +10,8 @@ define(function(require, exports, module) {
         var imageCrop = new ImageCrop({
             element: "#article-pic-crop",
             group: 'article',
-            cropedWidth: 216,
-            cropedHeight: 120
+            cropedWidth: 754,
+            cropedHeight: 424
         });
 
         imageCrop.on("afterCrop", function(response){
@@ -23,7 +23,7 @@ define(function(require, exports, module) {
                 $("#article-thumb").val(data.large.file.uri);
                 $("#article-originalThumb").val(data.origin.file.uri);
                 $('#article-thumb-preview').attr('src',data.large.file.url);
-                $("#article-thumb-container").html("<img src='"+data.large.file.url+"'>")
+                $("#article-thumb-container").html("<img class='img-responsive' src='"+data.large.file.url+"'>")
             });
 
         });
@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 
             var postData = {
                 imgs: {
-                    large: [216, 120]
+                    large: [754, 424]
                 },
                 deleteOriginFile: 0
             };

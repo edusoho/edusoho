@@ -45,6 +45,12 @@
         });
 
         validator.addItem({
+            element: '[name="profile[title]"]',
+            rule: 'chinese_limit{max:24}',
+            display:'头衔'
+        });
+
+        validator.addItem({
             element: '[name="profile[qq]"]',
             rule: 'qq'
         });

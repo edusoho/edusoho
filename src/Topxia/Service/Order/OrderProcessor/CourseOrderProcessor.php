@@ -9,11 +9,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = "course_show";
 
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
@@ -201,12 +196,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function pay($payData)
     {
         return $this->getPayCenterService()->pay($payData);
-    }
-
-    public function callbackUrl($router, $order, $container)
-    {
-        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
-        return $goto;
     }
 
     public function cancelOrder($id, $message, $data)

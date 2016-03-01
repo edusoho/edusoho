@@ -62,4 +62,8 @@ function LoginController($scope, UserService, $stateParams, platformUtil, cordov
 	$scope.loginWithOpen = function(type) {
 		cordovaUtil.openPlatformLogin(type);
 	}
+
+	$scope.jumpToSetting = function() {
+		cordovaUtil.startAppView("setting", {});
+	}
 }

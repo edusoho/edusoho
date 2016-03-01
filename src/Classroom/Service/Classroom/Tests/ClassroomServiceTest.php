@@ -102,6 +102,8 @@ class ClassroomServiceTest extends BaseTestCase
         $conditions = array('status' => 'draft', 'showable' => 1, 'buyable' => 1);
         $result     = $this->getClassroomService()->searchClassroomsCount($conditions);
         $this->assertEquals(3, $result);
+        $result = $this->getClassroomService()->searchClassroomsCount(array('classroomIds' => array()));
+        $this->assertEquals(0, $result);
     }
 
     public function testRecommendClassroom()
