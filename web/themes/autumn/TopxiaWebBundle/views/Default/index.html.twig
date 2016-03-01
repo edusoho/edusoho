@@ -24,13 +24,12 @@
 
       
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
+        {% if classrooms %}
         <div class="panel panel-autumn panel-autumn-primary">
-            {% if classrooms %}
             <div class="panel-heading panel-heading-important">
               <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>LatestClasses</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
-            {% endif %}
             <div class="panel-body">
               <ul class="home-class-list">
                 {% for classroom in classrooms %}
@@ -82,6 +81,7 @@
               </ul>
             </div>
           </div>
+          {% endif %}
           
 
 
