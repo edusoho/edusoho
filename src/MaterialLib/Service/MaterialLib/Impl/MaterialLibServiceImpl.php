@@ -4,6 +4,7 @@ namespace MaterialLib\Service\MaterialLib\Impl;
 
 use MaterialLib\Service\MaterialLib\MaterialLibService;
 use MaterialLib\Service\BaseService;
+use Topxia\Common\ArrayToolkit;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
@@ -23,6 +24,13 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             $filterConditions['endUser'] = $filterConditions['createdUserId'];
             unset($filterConditions['createdUserId']);
         }
+
+        if (!empty($filterConditions['courseId'])) {
+            $localFiles = $this->getUploadFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
+            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
+            $filterConditions['nos'] = implode(',', $globalIds);
+        }
+
         return $filterConditions;
     }
 

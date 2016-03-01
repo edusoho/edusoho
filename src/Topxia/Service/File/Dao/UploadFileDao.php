@@ -14,6 +14,8 @@ interface UploadFileDao
 
     public function findFilesByIds($ids);
 
+    public function findFilesByTypeAndId($targetType, $targetId);
+
     public function findCloudFilesByIds($ids);
 
     public function findFilesCountByEtag($etag);
