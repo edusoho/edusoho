@@ -17,6 +17,8 @@ class MaterialLibController extends BaseController
     {
         return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
             'type' => $request->query->get('type', 'all'),
+            'courseId' => $request->query->get('courseId', ''),
+            'createdUserId' => $request->query->get('createdUserId', '')
         ));
     }
 

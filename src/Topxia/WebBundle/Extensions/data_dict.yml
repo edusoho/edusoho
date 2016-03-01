@@ -328,3 +328,10 @@ passedStatus:
     good: 良好
     passed: 合格
     unpassed: 不合格
+
+processStatus:
+    none: 未知状态
+    waiting: 等待转码
+    processing: 正在转码
+    ok: 转码成功
+    error: 转码失败

@@ -4,11 +4,11 @@
       <div>
         <div class="pull-left" style="width:50%">
           <a href="">
-            <img style="width:90%" src="http://demo.edusoho.com/files/user/2015/03-17/172533d6fbf5121921.png?6.15.4">
+            <img style="width:90%" src="{{ asset(material.thumbnail) }}">
           </a>
         </div>
         <div class="pull-right" style="width:50%">
-          <p>{{ material.filename }}</p>
+          <p>{{ material.name }}</p>
           <p>{{ material.createdTime|smart_time }}</p>
         </div>
       </div>
@@ -18,28 +18,43 @@
       {{ material.views }}
     </td>
     <td>
-      {{ material.type }}
+      {{ dict_text('fileType', material.type) }}
     </td>    
     <td>
-      {{ material.fileSize|file_size }}
+      {{ material.size|file_size }}
     </td>
     <td>
-      <span class="label label-success">转码成功</span>
+      <span class="label 
+        {% if material.processStatus == 'ok' %}
+          label-success
+        {% elseif material.processStatus == 'waiting' %}
+          label-info
+        {% elseif material.processStatus == 'processing' %}
+          label-primary
+        {% elseif material.processStatus == 'error' %}
+          label-danger
+        {% else %}
+          label-warning
+        {% endif %}
+      ">
+        {{ dict_text('processStatus', material.processStatus) }}
+      </span>
+      
     </td>
 
     <td>
       <div class="btn-group">
-        <button type="button" class="btn btn-default">Action</button>
+        <button type="button" class="btn btn-default">详情</button>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
+          <li><a href="#">下载</a></li>
+          <li><a href="#">删除</a></li>
+          <li><a href="#">编辑</a></li>
           <li role="separator" class="divider"></li>
-          <li><a href="#">Separated link</a></li>
+          <li><a href="#">查看引用</a></li>
         </ul>
     </td>
   </tr>

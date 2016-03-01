@@ -261,7 +261,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $mergedFiles[$i] = $this->mergeCloudFile($file, $cloudFiles[$file['globalId']]);
         }
 
-        return array('data' => $mergedFiles, 'count' => $result['count']);
+        return $result;
     }
 
     private function mergeCloudFile($file, $cloudFile)

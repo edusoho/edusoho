@@ -2,10 +2,10 @@
 
 <div style="margin-bottom:20px;">
   <div class="form-group">
-    <input type="hidden" id="js-course-search" style="width: 300px; display: none;" data-url="{{ path('json_query_by_nickname') }}">
+    <input type="hidden" name="courseId" id="js-course-search" style="width: 300px; display: none;" data-url="{{ path('json_query_courses') }}" value="{{ courseId }}">
   </div>
   <div class="form-group">
-    <input type="hidden" id="js-user-search" style="width: 300px; display: none;" data-url="{{ path('json_query_by_coursetitle') }}">
+    <input type="hidden" name="createdUserId" id="js-user-search" style="width: 300px; display: none;" data-url="{{ path('json_query_users') }}"  value="{{ createdUserId }}">
   </div>
 </div>
 

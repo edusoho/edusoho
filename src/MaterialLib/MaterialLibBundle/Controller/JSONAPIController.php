@@ -9,15 +9,39 @@ class JSONAPIController extends BaseController
     public function coursesAction(Request $request)
     {
         $keyword = $request->query->get('q');
-        $courses = $this->getCourseService()->findCoursesByLikeTitle($keyword);
-        return $this->createJsonResponse($courses);
+        if ($keyword) {
+            $courses = $this->getCourseService()->findCoursesByLikeTitle($keyword);
+
+            return $this->createJsonResponse($courses);
+        }
+
+        $courseId = $request->query->get('courseId');
+        if ($courseId) {
+            $course = $this->getCourseService()->getCourse($courseId);
+
+            return $this->createJsonResponse($course);
+        }
+
+        return $this->createJsonResponse(null);
     }
 
     public function usersAction(Request $request)
     {
         $keyword = $request->query->get('q');
-        $users = $this->getUserService()->searchUsers(array('nickname' => $keyword), array('createdTime', 'DESC'), 0, 100);
-        return $this->createJsonResponse($users);
+        if ($keyword) {
+            $users = $this->getUserService()->searchUsers(array('nickname' => $keyword), array('createdTime', 'DESC'), 0, 100);
+
+            return $this->createJsonResponse($users);
+        }
+
+        $userId = $request->query->get('userId');
+        if ($userId) {
+            $user = $this->getUserService()->getUser($userId);
+
+            return $this->createJsonResponse($user);
+        }
+
+        return $this->createJsonResponse(null);
     }
 
     protected function getCourseService()

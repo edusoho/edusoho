@@ -37,9 +37,16 @@ define(function(require, exports, module) {
             initSelection: function(element, callback) {
                 var id = $(element).val();
                 if (id !== "") {
-                    $.ajax("https://api.github.com/repositories/" + id, {
+                    $.ajax($("#js-course-search").data('url')+'?courseId=' + id, {
                         dataType: "json"
-                    }).done(function(data) { callback(data); });
+                    }).success(function(resp) {
+                        var data = ({
+                            id: resp.id,
+                            name: resp.title
+                        });
+
+                        callback(data); 
+                    });
                 }
             },
              formatSelection: function(item) {
@@ -84,9 +91,15 @@ define(function(require, exports, module) {
             initSelection: function(element, callback) {
                 var id = $(element).val();
                 if (id !== "") {
-                    $.ajax("https://api.github.com/repositories/" + id, {
+                    $.ajax($("#js-user-search").data('url')+'?userId=' + id, {
                         dataType: "json"
-                    }).done(function(data) { callback(data); });
+                    }).success(function(resp) {
+                        var data = ({
+                            id: resp.id,
+                            name: resp.nickname
+                        });
+                        callback(data); 
+                    });
                 }
             },
              formatSelection: function(item) {
