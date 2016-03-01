@@ -16,19 +16,19 @@
                     {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
                   </h4> -->
                    <!--未购买-->
-                    {% if liveInfo.enableBuy|default(0) != 1 %}
+                    {% if overview.service.live.enableBuy|default(0) != 1 %}
                       <div class="edu-verticalmiddle">
                         <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂</div> 
                       </div>
                     {% else %}
-                      <p class="text-muted">教室容量：{{liveInfo.capacity|default(0)}}人/月    
+                      <p class="text-muted">教室容量：{{overview.service.live.capacity|default(0)}}人/月    
                         <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank" style="margin-left:20px;">续费</a>
                       </p>
-                      {% if liveInfo.expire|default(0) and liveInfo.expire > 0  %}
-                        <p class="text-muted">有效期至：{{liveInfo.expire|date("Y-m-d")}}</p>
-                        {% if videoInfo.remaining > 0 and videoInfo.remaining < 30 %}
-                          <p class="text-warning text-sm">您的云直播服务将于{{ 30 - videoInfo.remaining }}天后到期，请尽快续费</p>
-                        {% elseif videoInfo.remaining <= 0 %}
+                      {% if overview.service.live.expire|default(0) and overview.service.live.expire > 0  %}
+                        <p class="text-muted">有效期至：{{overview.service.live.expire|date("Y-m-d")}}</p>
+                        {% if overview.service.live.remaining > 0 and overview.service.live.remaining < 30 %}
+                          <p class="text-warning text-sm">您的云直播服务将于{{ overview.service.live.remaining }}天后到期，请尽快续费</p>
+                        {% elseif overview.service.live.remaining <= 0 %}
                           <p class="text-danger text-sm">您的云直播服务已到期，请尽快续费</p>
                         {% endif %}
                       {% endif %}

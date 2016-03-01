@@ -7,29 +7,29 @@
       {% set bill = storage.bill|default(null) %}
 
       <!--未购买-->
-      {% if videoInfo.enableBuyVideo|default(0) != 1 %}
+      {% if overview.service.storage.enableBuyVideo|default(0) != 1 %}
         <div class="edu-verticalmiddle">
           <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</div> 
         </div>
       {% else %}
       <p>
-        <span class="text-muted mrm">存储空间: {{ videoInfo.freeSpace }}GB</span>
-        {% if not videoInfo.renewVideo.effectiveDate|default(0) %}
+        <span class="text-muted mrm">存储空间: {{ overview.service.storage.freeSpace }}GB</span>
+        {% if not overview.service.storage.renewVideo.effectiveDate|default(0) %}
         <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
         <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a>
         {% else %}
         <span>
-          已续费（将于{{ videoInfo.renewVideo.effectiveDate|date("Y年n月j日") }}生效)
+          已续费（将于{{ overview.service.storage.renewVideo.effectiveDate|date("Y年n月j日") }}生效)
         </span>
         {% endif %}
       </p>
-      <p class="text-muted">流量: {{ videoInfo.freeTransfer }}GB</p>
-      {% if videoInfo.startMonth and videoInfo.endMonth %}
-        <p class="text-muted">服务期限: {{ videoInfo.startMonth|date('Y.n.d') }} ~ {{ videoInfo.endMonth|date('Y.n.d') }}
+      <p class="text-muted">流量: {{ overview.service.storage.freeTransfer }}GB</p>
+      {% if overview.service.storage.startMonth and overview.service.storage.endMonth %}
+        <p class="text-muted">服务期限: {{ overview.service.storage.startMonth|date('Y.n.d') }} ~ {{ overview.service.storage.endMonth|date('Y.n.d') }}
       {% endif %}
-      {% if videoInfo.remaining > 0 and videoInfo.remaining < 30 %}
-        <p class="text-danger text-sm">您的云视频包将于{{ 30 - videoInfo.remaining }}天后到期，请尽快续费</p>
-      {% elseif videoInfo.remaining <= 0 %}
+      {% if overview.service.storage.remaining > 0 and overview.service.storage.remaining < 30 %}
+        <p class="text-danger text-sm">您的云视频包将于{{ 30 - overview.service.storage.remaining }}天后到期，请尽快续费</p>
+      {% elseif overview.service.storage.remaining <= 0 %}
         <p class="text-danger text-sm">您的云视频包已到期，请尽快续费</p>
       {% endif %}
 

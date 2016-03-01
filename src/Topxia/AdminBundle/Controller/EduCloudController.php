@@ -99,23 +99,20 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
 
-        $cashInfo   = isset($overview['account']) ? $overview['account'] : null;
-        $couponInfo = isset($overview['coupon']) ? $overview['coupon'] : null;
-        $videoInfo  = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
-        $liveInfo   = isset($overview['service']['live']) ? $overview['service']['live'] : null;
-        $smsInfo    = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
-        $emailInfo  = isset($overview['service']['email']) ? $overview['service']['email'] : null;
-        $tlpInfo    = isset($overview['tlp']) ? $overview['tlp'] : 0;
-        $chartInfo  = array(
+        $videoInfo = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
+        $liveInfo  = isset($overview['service']['live']) ? $overview['service']['live'] : null;
+        $smsInfo   = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
+        $emailInfo = isset($overview['service']['email']) ? $overview['service']['email'] : null;
+        $chartInfo = array(
             'videoUsedInfo' => $this->generateVideoChartData(isset($videoInfo['usedInfo']) ? $videoInfo['usedInfo'] : null),
             'smsUsedInfo'   => $this->generateChartData(isset($smsInfo['usedInfo']) ? $smsInfo['usedInfo'] : null),
             'liveUsedInfo'  => $this->generateChartData(isset($liveInfo['usedInfo']) ? $liveInfo['usedInfo'] : null),
             'emailUsedInfo' => $this->generateChartData(isset($emailInfo['usedInfo']) ? $emailInfo['usedInfo'] : null)
         );
 
-        if (isset($videoInfo['startMonth']) && isset($videoInfo['endMonth']) && $videoInfo['startMonth'] && $videoInfo['endMonth']) {
-            $videoInfo['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
-            $videoInfo['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
+        if (isset($overview['service']['storage']['startMonth']) && isset($overview['service']['storage']['endMonth']) && $overview['service']['storage']['startMonth'] && $overview['service']['storage']['endMonth']) {
+            $overview['service']['storage']['startMonth'] = strtotime(substr($videoInfo['startMonth'], 0, 4).'-'.substr($videoInfo['startMonth'], 4, 2).'-'.'01');
+            $overview['service']['storage']['endMonth']   = strtotime(substr($videoInfo['endMonth'], 0, 4).'-'.substr($videoInfo['endMonth'], 4, 2).'-'.cal_days_in_month(CAL_GREGORIAN, substr($videoInfo['endMonth'], 4, 2), substr($videoInfo['endMonth'], 0, 4)));
         }
 
         $notices = $eduSohoOpenClient->getNotices();
@@ -130,15 +127,9 @@ class EduCloudController extends BaseController
             'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
             'notices'     => $notices,
             'isBinded'    => $isBinded,
-            'cashInfo'    => $cashInfo,
-            'couponInfo'  => $couponInfo,
-            'videoInfo'   => $videoInfo,
-            'liveInfo'    => $liveInfo,
-            'smsInfo'     => $smsInfo,
-            'emailInfo'   => $emailInfo,
             'chartInfo'   => $chartInfo,
-            'tlpInfo'     => $tlpInfo,
-            'accessCloud' => $this->isAccessEduCloud()
+            'accessCloud' => $this->isAccessEduCloud(),
+            'overview'    => $overview
         ));
     }
 
