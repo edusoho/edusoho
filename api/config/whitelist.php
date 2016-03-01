@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'GET' => array(
+    'GET'  => array(
         '/^\/api\/users$/',
         '/^\/api\/users\/pages$/',
         '/^\/api\/users\/\d+$/',
