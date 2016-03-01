@@ -787,6 +787,14 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUserBindDao()->findBindsByToId($userId);
     }
 
+    protected function typeInOAuthClient($type)
+    {
+        $types = array_keys(OAuthClientFactory::clients());
+        $types = array_merge($types, array('discuz', 'phpwind'));
+
+        return in_array($type, $types);
+    }
+
     public function unBindUserByTypeAndToId($type, $toId)
     {
         $user = $this->getUserDao()->getUser($toId);
@@ -795,9 +803,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('解除第三方绑定失败，该用户不存在');
         }
 
-        $types = array_keys(OAuthClientFactory::clients());
-
-        if (!in_array($type, $types)) {
+        if (!$this->typeInOAuthClient($type)) {
             throw $this->createServiceException("{$type}类型不正确，解除第三方绑定失败。");
         }
 
@@ -834,10 +840,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('获取用户绑定信息失败，该用户不存在');
         }
 
-        $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind'));
-
-        if (!in_array($type, $types)) {
+        if (!$this->typeInOAuthClient($type)) {
             throw $this->createServiceException("{$type}类型不正确，获取第三方登录信息失败。");
         }
 
@@ -856,10 +859,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，第三方绑定失败');
         }
 
-        $types = array_keys(OAuthClientFactory::clients());
-        $types = array_merge($types, array('discuz', 'phpwind'));
-
-        if (!in_array($type, $types)) {
+        if (!$this->typeInOAuthClient($type)) {
             throw $this->createServiceException("{$type}类型不正确，第三方绑定失败。");
         }
 
@@ -1018,7 +1018,7 @@ class UserServiceImpl extends BaseService implements UserService
         return true;
     }
 
-    public function promoteUser($id)
+    public function promoteUser($id, $number)
     {
         $user = $this->getUser($id);
 
@@ -1026,9 +1026,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，推荐失败！');
         }
 
-        $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedTime' => time()));
+        $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedSeq' => $number, 'promotedTime' => time()));
 
         $this->getLogService()->info('user', 'recommend', "推荐用户{$user['nickname']}(#{$user['id']})");
+        return $user;
     }
 
     public function cancelPromoteUser($id)
@@ -1039,9 +1040,10 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户不存在，取消推荐失败！');
         }
 
-        $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedTime' => 0));
+        $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedSeq' => 0, 'promotedTime' => 0));
 
         $this->getLogService()->info('user', 'cancel_recommend', "取消推荐用户{$user['nickname']}(#{$user['id']})");
+        return $user;
     }
 
     public function findLatestPromotedTeacher($start, $limit)
@@ -1416,6 +1418,30 @@ class UserServiceImpl extends BaseService implements UserService
             'inviteCode' => $inviteCode
         );
         return $this->getUserDao()->updateUser($userId, $code);
+    }
+
+    public function findUnlockedUserMobilesByUserIds($userIds)
+    {
+        $users = $this->findUsersByIds($userIds);
+
+        foreach ($users as $key => $value) {
+            if ($value['locked']) {
+                unset($users[$key]);
+            }
+        }
+
+        if (empty($users)) {
+            return array();
+        }
+
+        $verifiedMobiles = ArrayToolkit::column($users, 'verifiedMobile');
+
+        $userIds        = ArrayToolkit::column($users, 'id');
+        $userProfiles   = $this->findUserProfilesByIds($userIds);
+        $profileMobiles = ArrayToolkit::column($userProfiles, 'mobile');
+
+        $mobiles = array_merge($verifiedMobiles, $profileMobiles);
+        return array_unique($mobiles);
     }
 
     public function getUserPayAgreement($id)

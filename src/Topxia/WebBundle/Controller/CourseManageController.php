@@ -1,123 +1,120 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Topxia\WebBundle\Form\ReviewType;
-use Topxia\Service\Course\CourseService;
-use Topxia\Common\ArrayToolkit;
-use Topxia\Common\NumberToolkit;
-use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
-
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
-use Imagine\Image\Point;
-use Imagine\Image\ImageInterface;
 
 class CourseManageController extends BaseController
 {
-	public function indexAction(Request $request, $id)
-	{      
+    public function indexAction(Request $request, $id)
+    {
         $course = $this->getCourseService()->tryManageCourse($id);
-        if ($course['locked'] == '1') {
-            return $this->redirect($this->generateUrl('course_manage_course_sync',array('id' => $id,'type'=>'base')));
-        }
-        return $this->forward('TopxiaWebBundle:CourseManage:base',  array('id' => $id));
-	}
 
-	public function baseAction(Request $request, $id)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
+        if ($course['locked'] == '1') {
+            return $this->redirect($this->generateUrl('course_manage_course_sync', array('id' => $id, 'type' => 'base')));
+        }
+
+        return $this->forward('TopxiaWebBundle:CourseManage:base', array('id' => $id));
+    }
+
+    public function baseAction(Request $request, $id)
+    {
+        $course        = $this->getCourseService()->tryManageCourse($id);
         $courseSetting = $this->getSettingService()->get('course', array());
-	    if($request->getMethod() == 'POST'){
+
+        if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
-            return $this->redirect($this->generateUrl('course_manage_base',array('id' => $id))); 
+            return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
-        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
         $default = $this->getSettingService()->get('default', array());
 
-		return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
-			'course' => $course,
-            'tags' => ArrayToolkit::column($tags, 'name'),
-            'default'=> $default
-		));
-	}
+        return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
+            'course'  => $course,
+            'tags'    => ArrayToolkit::column($tags, 'name'),
+            'default' => $default
+        ));
+    }
 
     public function nicknameCheckAction(Request $request, $courseId)
     {
         $nickname = $request->query->get('value');
-        $result = $this->getUserService()->isNicknameAvaliable($nickname);
+        $result   = $this->getUserService()->isNicknameAvaliable($nickname);
+
         if ($result) {
             $response = array('success' => false, 'message' => '该用户还不存在！');
         } else {
-            $user = $this->getUserService()->getUserByNickname($nickname);
+            $user            = $this->getUserService()->getUserByNickname($nickname);
             $isCourseStudent = $this->getCourseService()->isCourseStudent($courseId, $user['id']);
-            if($isCourseStudent){
+
+            if ($isCourseStudent) {
                 $response = array('success' => false, 'message' => '该用户已是本课程的学员了！');
             } else {
                 $response = array('success' => true, 'message' => '');
             }
-            
+
             $isCourseTeacher = $this->getCourseService()->isCourseTeacher($courseId, $user['id']);
-            if($isCourseTeacher){
+
+            if ($isCourseTeacher) {
                 $response = array('success' => false, 'message' => '该用户是本课程的教师，不能添加!');
             }
         }
+
         return $this->createJsonResponse($response);
     }
 
-	public function detailAction(Request $request, $id)
-	{
-        
-		$course = $this->getCourseService()->tryManageCourse($id);
+    public function detailAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
 
-	    if($request->getMethod() == 'POST'){
-            $detail = $request->request->all();
-            $detail['goals'] = (empty($detail['goals']) || !is_array($detail['goals'])) ? array() : $detail['goals'];
+        if ($request->getMethod() == 'POST') {
+            $detail              = $request->request->all();
+            $detail['goals']     = (empty($detail['goals']) || !is_array($detail['goals'])) ? array() : $detail['goals'];
             $detail['audiences'] = (empty($detail['audiences']) || !is_array($detail['audiences'])) ? array() : $detail['audiences'];
 
             $this->getCourseService()->updateCourse($id, $detail);
             $this->setFlashMessage('success', '课程详细信息已保存！');
 
-            return $this->redirect($this->generateUrl('course_manage_detail',array('id' => $id))); 
+            return $this->redirect($this->generateUrl('course_manage_detail', array('id' => $id)));
         }
 
-		return $this->render('TopxiaWebBundle:CourseManage:detail.html.twig', array(
-			'course' => $course
-		));
-	}
+        return $this->render('TopxiaWebBundle:CourseManage:detail.html.twig', array(
+            'course' => $course
+        ));
+    }
 
-	public function pictureAction(Request $request, $id)
-	{
-		$course = $this->getCourseService()->tryManageCourse($id);
+    public function pictureAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
 
-		return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
-			'course' => $course,
-		));
-	}
+        return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
+            'course' => $course
+        ));
+    }
 
     public function pictureCropAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        if($request->getMethod() == 'POST') {
+        if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
             $this->getCourseService()->changeCoursePicture($course['id'], $data["images"]);
             return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
         }
 
-        $fileId = $request->getSession()->get("fileId");
+        $fileId                                      = $request->getSession()->get("fileId");
         list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
-            'course' => $course,
-            'pictureUrl' => $pictureUrl,
+            'course'      => $course,
+            'pictureUrl'  => $pictureUrl,
             'naturalSize' => $naturalSize,
-            'scaledSize' => $scaledSize,
+            'scaledSize'  => $scaledSize
         ));
     }
 
@@ -125,8 +122,9 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $canModifyPrice = true;
+        $canModifyPrice     = true;
         $teacherModifyPrice = $this->setting('course.teacher_modify_price', true);
+
         if (empty($teacherModifyPrice)) {
             if (!$this->getCurrentUser()->isAdmin()) {
                 $canModifyPrice = false;
@@ -164,17 +162,17 @@ class CourseManageController extends BaseController
             $levels = array();
         }
 
-        if (($course['discountId'] > 0)&&($this->isPluginInstalled("Discount"))) {
+        if (($course['discountId'] > 0) && ($this->isPluginInstalled("Discount"))) {
             $discount = $this->getDiscountService()->getDiscount($course['discountId']);
         } else {
             $discount = null;
         }
 
         return $this->render('TopxiaWebBundle:CourseManage:price.html.twig', array(
-            'course' => $course,
+            'course'         => $course,
             'canModifyPrice' => $canModifyPrice,
-            'levels' => $this->makeLevelChoices($levels),
-            'discount' => $discount,
+            'levels'         => $this->makeLevelChoices($levels),
+            'discount'       => $discount
         ));
     }
 
@@ -182,50 +180,50 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $isLearnedNum=$this->getCourseService()->searchMemberCount(array('isLearned'=>1,'courseId'=>$id));
+        $isLearnedNum = $this->getCourseService()->searchMemberCount(array('isLearned' => 1, 'courseId' => $id));
 
-        $learnTime=$this->getCourseService()->searchLearnTime(array('courseId'=>$id));
-        $learnTime=$course["studentNum"]==0 ? 0 : intval($learnTime/$course["studentNum"]);
+        $learnTime = $this->getCourseService()->searchLearnTime(array('courseId' => $id));
+        $learnTime = $course["studentNum"] == 0 ? 0 : intval($learnTime / $course["studentNum"]);
 
-        $noteCount=$this->getNoteService()->searchNoteCount(array('courseId'=>$id));
+        $noteCount = $this->getNoteService()->searchNoteCount(array('courseId' => $id));
 
-        $questionCount=$this->getThreadService()->searchThreadCount(array('courseId'=>$id,'type'=>'question'));
+        $questionCount = $this->getThreadService()->searchThreadCount(array('courseId' => $id, 'type' => 'question'));
 
-        $lessons=$this->getCourseService()->searchLessons(array('courseId'=>$id),array('createdTime', 'ASC'),0,1000);
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
 
         foreach ($lessons as $key => $value) {
-            $lessonLearnedNum=$this->getCourseService()->findLearnsCountByLessonId($value['id']);
+            $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);
 
-            $finishedNum=$this->getCourseService()->searchLearnCount(array('status'=>'finished','lessonId'=>$value['id']));
-            
-            $lessonLearnTime=$this->getCourseService()->searchLearnTime(array('lessonId'=>$value['id']));
-            $lessonLearnTime=$lessonLearnedNum==0 ? 0 : intval($lessonLearnTime/$lessonLearnedNum);
+            $finishedNum = $this->getCourseService()->searchLearnCount(array('status' => 'finished', 'lessonId' => $value['id']));
 
-            $lessonWatchTime=$this->getCourseService()->searchWatchTime(array('lessonId'=>$value['id']));
-            $lessonWatchTime=$lessonWatchTime==0 ? 0 : intval($lessonWatchTime/$lessonLearnedNum);
+            $lessonLearnTime = $this->getCourseService()->searchLearnTime(array('lessonId' => $value['id']));
+            $lessonLearnTime = $lessonLearnedNum == 0 ? 0 : intval($lessonLearnTime / $lessonLearnedNum);
 
-            $lessons[$key]['LearnedNum']=$lessonLearnedNum;
-            $lessons[$key]['length']=intval($lessons[$key]['length']/60);
-            $lessons[$key]['finishedNum']=$finishedNum;
-            $lessons[$key]['learnTime']=$lessonLearnTime;
-            $lessons[$key]['watchTime']=$lessonWatchTime;
+            $lessonWatchTime = $this->getCourseService()->searchWatchTime(array('lessonId' => $value['id']));
+            $lessonWatchTime = $lessonWatchTime == 0 ? 0 : intval($lessonWatchTime / $lessonLearnedNum);
 
-            if($value['type']=='testpaper'){
-                $paperId=$value['mediaId'];
-                $score=$this->getTestpaperService()->searchTestpapersScore(array('testId'=>$paperId));
-                $paperNum=$this->getTestpaperService()->searchTestpaperResultsCount(array('testId'=>$paperId));
-                
-                $lessons[$key]['score']=$finishedNum==0 ? 0 : intval($score/$paperNum);
+            $lessons[$key]['LearnedNum']  = $lessonLearnedNum;
+            $lessons[$key]['length']      = intval($lessons[$key]['length'] / 60);
+            $lessons[$key]['finishedNum'] = $finishedNum;
+            $lessons[$key]['learnTime']   = $lessonLearnTime;
+            $lessons[$key]['watchTime']   = $lessonWatchTime;
+
+            if ($value['type'] == 'testpaper') {
+                $paperId  = $value['mediaId'];
+                $score    = $this->getTestpaperService()->searchTestpapersScore(array('testId' => $paperId));
+                $paperNum = $this->getTestpaperService()->searchTestpaperResultsCount(array('testId' => $paperId));
+
+                $lessons[$key]['score'] = $finishedNum == 0 ? 0 : intval($score / $paperNum);
             }
         }
 
         return $this->render('TopxiaWebBundle:CourseManage:learning-data.html.twig', array(
-            'course' => $course,
-            'isLearnedNum'=>$isLearnedNum,
-            'learnTime'=>$learnTime,
-            'noteCount'=>$noteCount,
-            'questionCount'=>$questionCount,
-            'lessons'=>$lessons,
+            'course'        => $course,
+            'isLearnedNum'  => $isLearnedNum,
+            'learnTime'     => $learnTime,
+            'noteCount'     => $noteCount,
+            'questionCount' => $questionCount,
+            'lessons'       => $lessons
         ));
     }
 
@@ -234,22 +232,25 @@ class CourseManageController extends BaseController
         $this->getCourseService()->tryManageCourse($id);
 
         $courseSetting = $this->setting("course");
-        if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
+
+        if (!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) || $courseSetting["teacher_search_order"] != 1)) {
             throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
-        $conditions = $request->query->all();
-        $type = 'course';
+        $conditions               = $request->query->all();
+        $type                     = 'course';
         $conditions['targetType'] = $type;
+
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
+
         $conditions['targetId'] = $id;
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course                 = $this->getCourseService()->tryManageCourse($id);
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+            $conditions['endTime']   = strtotime($conditions['endDateTime']);
         }
 
         $paginator = new Paginator(
@@ -267,19 +268,19 @@ class CourseManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($orders, 'userId'));
 
-        foreach ($orders as $index => $expiredOrderToBeUpdated ){
-            if ((($expiredOrderToBeUpdated["createdTime"] + 48*60*60) < time()) && ($expiredOrderToBeUpdated["status"]=='created')){
-               $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
-               $orders[$index]['status'] = 'cancelled';
+        foreach ($orders as $index => $expiredOrderToBeUpdated) {
+            if ((($expiredOrderToBeUpdated["createdTime"] + 48 * 60 * 60) < time()) && ($expiredOrderToBeUpdated["status"] == 'created')) {
+                $this->getOrderService()->cancelOrder($expiredOrderToBeUpdated['id']);
+                $orders[$index]['status'] = 'cancelled';
             }
         }
 
         return $this->render('TopxiaWebBundle:CourseManage:course-order.html.twig', array(
-            'course' =>$course,
-            'request' =>$request,
-            'orders' => $orders,
-            'users' => $users,
-            'paginator' => $paginator,
+            'course'    => $course,
+            'request'   => $request,
+            'orders'    => $orders,
+            'users'     => $users,
+            'paginator' => $paginator
         ));
     }
 
@@ -288,25 +289,28 @@ class CourseManageController extends BaseController
         $this->getCourseService()->tryManageCourse($id);
 
         $courseSetting = $this->setting("course");
-        if(!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) ||  $courseSetting["teacher_search_order"] != 1)){
+
+        if (!$this->getCurrentUser()->isAdmin() && (empty($courseSetting["teacher_search_order"]) || $courseSetting["teacher_search_order"] != 1)) {
             throw $this->createAccessDeniedException("查询订单已关闭，请联系管理员");
         }
 
-        $status = array('created'=>'未付款','paid'=>'已付款','refunding'=>'退款中','refunded'=>'已退款','cancelled'=>'已关闭');
-        $payment = array('alipay'=>'支付宝','wxpay'=>'微信支付','cion'=>'虚拟币支付','none'=>'--');
+        $status  = array('created' => '未付款', 'paid' => '已付款', 'refunding' => '退款中', 'refunded' => '已退款', 'cancelled' => '已关闭');
+        $payment = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'cion' => '虚拟币支付', 'none' => '--');
 
         $conditions = $request->query->all();
 
-        $type = 'course';
+        $type                     = 'course';
         $conditions['targetType'] = $type;
+
         if (isset($conditions['keywordType'])) {
             $conditions[$conditions['keywordType']] = trim($conditions['keyword']);
         }
+
         $conditions['targetId'] = $id;
 
         if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
             $conditions['startTime'] = strtotime($conditions['startDateTime']);
-            $conditions['endTime'] = strtotime($conditions['endDateTime']); 
+            $conditions['endTime']   = strtotime($conditions['endDateTime']);
         }
 
         $orders = $this->getOrderService()->searchOrders(
@@ -316,20 +320,21 @@ class CourseManageController extends BaseController
             PHP_INT_MAX
         );
 
-        $userinfoFields = array('sn','createdTime','status','targetType','amount','payment','paidTime');
+        $userinfoFields = array('sn', 'createdTime', 'status', 'targetType', 'amount', 'payment', 'paidTime');
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
 
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
-        $users = ArrayToolkit::index($users, 'id');    
+        $users = ArrayToolkit::index($users, 'id');
 
         $course = $this->getCourseService()->getCourse($id);
 
         $str = "订单号,名称,创建时间,状态,实际付款,购买者,支付方式,支付时间";
 
-        $str.="\r\n";
+        $str .= "\r\n";
 
         $results = array();
+
         foreach ($orders as $key => $orders) {
             $column = "";
             $column .= $orders['sn'].",";
@@ -340,18 +345,18 @@ class CourseManageController extends BaseController
             $column .= $users[$orders['userId']]['nickname'].",";
             $column .= $payment[$orders['payment']].",";
 
-            if ($orders['paidTime'] == 0 ) {
+            if ($orders['paidTime'] == 0) {
                 $column .= "-".",";
-            }else{
+            } else {
                 $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
             }
 
             $results[] = $column;
         }
 
-        $str .= implode("\r\n",$results);
-        $str = chr(239) . chr(187) . chr(191) . $str;
-        
+        $str .= implode("\r\n", $results);
+        $str = chr(239).chr(187).chr(191).$str;
+
         $filename = sprintf("course-%s-orders-(%s).csv", $course['title'], date('Y-n-d'));
 
         $response = new Response();
@@ -366,9 +371,11 @@ class CourseManageController extends BaseController
     protected function makeLevelChoices($levels)
     {
         $choices = array();
+
         foreach ($levels as $level) {
             $choices[$level['id']] = $level['name'];
         }
+
         return $choices;
     }
 
@@ -376,29 +383,30 @@ class CourseManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        if($request->getMethod() == 'POST'){
-        	
-            $data = $request->request->all();
+        if ($request->getMethod() == 'POST') {
+            $data        = $request->request->all();
             $data['ids'] = empty($data['ids']) ? array() : array_values($data['ids']);
 
             $teachers = array();
+
             foreach ($data['ids'] as $teacherId) {
-            	$teachers[] = array(
-            		'id' => $teacherId,
-            		'isVisible' => empty($data['visible_' . $teacherId]) ? 0 : 1
-        		);
+                $teachers[] = array(
+                    'id'        => $teacherId,
+                    'isVisible' => empty($data['visible_'.$teacherId]) ? 0 : 1
+                );
             }
 
             $this->getCourseService()->setCourseTeachers($id, $teachers);
 
             $classroomIds = $this->getClassroomService()->findClassroomIdsByCourseId($id);
+
             if ($classroomIds) {
                 $this->getClassroomService()->updateClassroomTeachers($classroomIds[0]);
             }
 
             $this->setFlashMessage('success', '教师设置成功！');
 
-            return $this->redirect($this->generateUrl('course_manage_teachers',array('id' => $id))); 
+            return $this->redirect($this->generateUrl('course_manage_teachers', array('id' => $id)));
         }
 
         $teacherMembers = $this->getCourseService()->findCourseTeachers($id);
@@ -406,40 +414,44 @@ class CourseManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
 
         $teachers = array();
+
         foreach ($teacherMembers as $member) {
-        	if (empty($users[$member['userId']])) {
-        		continue;
-        	}
-        	$teachers[] = array(
-                'id' => $member['userId'],
-        		'nickname' => $users[$member['userId']]['nickname'],
-                'avatar'  => $this->getWebExtension()->getFilePath($users[$member['userId']]['smallAvatar'], 'avatar.png'),
-        		'isVisible' => $member['isVisible'] ? true : false,
-    		);
+            if (empty($users[$member['userId']])) {
+                continue;
+            }
+
+            $teachers[] = array(
+                'id'        => $member['userId'],
+                'nickname'  => $users[$member['userId']]['nickname'],
+                'avatar'    => $this->getWebExtension()->getFilePath($users[$member['userId']]['smallAvatar'], 'avatar.png'),
+                'isVisible' => $member['isVisible'] ? true : false
+            );
         }
+
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
-            'course' => $course,
+            'course'   => $course,
             'teachers' => $teachers
         ));
     }
 
     public function publishAction(Request $request, $id)
     {
-    	$this->getCourseService()->publishCourse($id);
-    	return $this->createJsonResponse(true);
+        $this->getCourseService()->publishCourse($id);
+        return $this->createJsonResponse(true);
     }
 
     public function teachersMatchAction(Request $request)
     {
         $likeString = $request->query->get('q');
-        $users = $this->getUserService()->searchUsers(array('nickname'=>$likeString, 'roles'=> 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
+        $users      = $this->getUserService()->searchUsers(array('nickname' => $likeString, 'roles' => 'ROLE_TEACHER'), array('createdTime', 'DESC'), 0, 10);
 
         $teachers = array();
+
         foreach ($users as $user) {
             $teachers[] = array(
-                'id' => $user['id'],
-                'nickname' => $user['nickname'],
-                'avatar' => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
+                'id'        => $user['id'],
+                'nickname'  => $user['nickname'],
+                'avatar'    => $this->getWebExtension()->getFilePath($user['smallAvatar'], 'avatar.png'),
                 'isVisible' => 1
             );
         }
@@ -448,94 +460,99 @@ class CourseManageController extends BaseController
     }
 
     #课程同步
-    public function courseSyncAction(Request $request,$id,$type)
+    public function courseSyncAction(Request $request, $id, $type)
     {
-        $courseId = $id;
-        $course = $this->getCourseService()->getCourse($courseId);
+        $courseId     = $id;
+        $course       = $this->getCourseService()->getCourse($courseId);
         $parentCourse = $this->getCourseService()->getCourse($course['parentId']);
-        $type = $type;
-        $title = '';
-        $url = '';
+        $type         = $type;
+        $title        = '';
+        $url          = '';
+
         switch ($type) {
             case 'base':
                 $title = '基本信息';
-                $url= 'course_manage_base';
+                $url   = 'course_manage_base';
                 break;
             case 'detail':
                 $title = '详细信息';
-                $url= 'course_manage_detail';
+                $url   = 'course_manage_detail';
                 break;
             case 'picture':
                 $title = '课程图片';
-                $url= 'course_manage_picture';
+                $url   = 'course_manage_picture';
                 break;
             case 'lesson':
                 $title = '课时管理';
-                $url= 'course_manage_lesson';
+                $url   = 'course_manage_lesson';
                 break;
             case 'files':
                 $title = '文件管理';
-                $url = 'course_manage_files';
+                $url   = 'course_manage_files';
                 break;
             case 'replay':
                 $title = '录播管理';
-                $url = 'live_course_manage_replay';
+                $url   = 'live_course_manage_replay';
                 break;
             case 'price':
                 $title = '价格设置';
-                $url= 'course_manage_price';
+                $url   = 'course_manage_price';
                 break;
             case 'teachers':
                 $title = '教师设置';
-                $url= 'course_manage_teachers';
+                $url   = 'course_manage_teachers';
                 break;
             case 'question':
                 $title = '题目管理';
-                $url= 'course_manage_question';
+                $url   = 'course_manage_question';
                 break;
             case 'question_plumber':
                 $title = '题目导入/导出';
-                $url = 'course_question_plumber';
+                $url   = 'course_question_plumber';
                 break;
             case 'testpaper':
                 $title = '试卷管理';
-                $url= 'course_manage_testpaper';
+                $url   = 'course_manage_testpaper';
                 break;
             default:
                 $title = '未知页面';
-                $url= '';
+                $url   = '';
                 break;
         }
 
         $course = $this->getCourseService()->tryManageCourse($courseId);
-        return $this->render('TopxiaWebBundle:CourseManage:courseSync.html.twig',array(
-        'course'=>$course,
-        'type'=>$type,
-        'title'=>$title,
-        'url'=>$url,
-        'parentCourse' =>$parentCourse
+        return $this->render('TopxiaWebBundle:CourseManage:courseSync.html.twig', array(
+            'course'       => $course,
+            'type'         => $type,
+            'title'        => $title,
+            'url'          => $url,
+            'parentCourse' => $parentCourse
         ));
     }
 
     public function courseSyncEditAction(Request $request)
     {
         $courseId = $request->query->get('courseId');
-        $course = $this->getCourseService()->getCourse($courseId);
-        $type = $request->query->get('type');
-        $url = $request->query->get('url');
-        if ($request->getMethod() == 'POST'){
+        $course   = $this->getCourseService()->getCourse($courseId);
+        $type     = $request->query->get('type');
+        $url      = $request->query->get('url');
+
+        if ($request->getMethod() == 'POST') {
             $courseId = $request->request->get('courseId');
-            $url = $request->request->get('url');
-            $course = $this->getCourseService()->getCourse($courseId);
-            if($course['locked'] == 1) {
-              $this->getCourseService()->updateCourse($courseId,array('locked'=>0));
+            $url      = $request->request->get('url');
+            $course   = $this->getCourseService()->getCourse($courseId);
+
+            if ($course['locked'] == 1) {
+                $this->getCourseService()->updateCourse($courseId, array('locked' => 0));
             }
-          return $this->createJsonResponse($url);
+
+            return $this->createJsonResponse($url);
         }
-        return $this->render('TopxiaWebBundle:CourseManage:courseSyncEdit.html.twig',array(
-        'course'=>$course,
-        'type'=>$type,
-        'url'=>$url
+
+        return $this->render('TopxiaWebBundle:CourseManage:courseSyncEdit.html.twig', array(
+            'course' => $course,
+            'type'   => $type,
+            'url'    => $url
         ));
     }
 
@@ -558,7 +575,7 @@ class CourseManageController extends BaseController
     {
         return $this->container->get('topxia.twig.web_extension');
     }
-    
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
@@ -582,7 +599,7 @@ class CourseManageController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    } 
+    }
 
     protected function getClassroomService()
     {

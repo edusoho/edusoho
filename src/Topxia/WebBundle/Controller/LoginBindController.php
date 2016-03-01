@@ -201,7 +201,8 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
-        $response = array('success' => true, '_target_path' => $this->getTargetPath($request));
+        $redirectUrl = $this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request)));
+        $response = array('success' => true, '_target_path' => $redirectUrl);
 
         response:
         return $this->createJsonResponse($response);
@@ -257,6 +258,10 @@ class LoginBindController extends BaseController
             }
 
             $registration['email'] = 'u_'.substr($randString, 0, 12).'@edusoho.net';
+        }
+
+        if ($this->getSensitiveService()->scanText($registration['nickname'])) {
+            return $this->createMessageResponse('error', '用户名中含有敏感词！');
         }
 
         $registration['password']  = substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), 0, 8);
@@ -425,6 +430,11 @@ class LoginBindController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function getAuthService()

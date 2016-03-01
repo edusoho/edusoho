@@ -86,13 +86,14 @@ class SettingController extends BaseController
 
     public function mobilePictureUploadAction(Request $request, $type)
     {
-        $file = $request->files->get($type);
+        $fileId = $request->request->get('id');
+        $file   = $this->getFileService()->getFileObject($fileId);
 
         if (!FileToolkit::isImageFile($file)) {
             throw $this->createAccessDeniedException('图片格式不正确！');
         }
 
-        $filename  = 'mobile_picture'.time().'.'.$file->getClientOriginalExtension();
+        $filename  = 'mobile_picture'.time().'.'.$file->getExtension();
         $directory = "{$this->container->getParameter('topxia.upload.public_directory')}/system";
         $file      = $file->move($directory, $filename);
 

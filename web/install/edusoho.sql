@@ -53,7 +53,7 @@ CREATE TABLE `block` (
   `templateName` varchar(255) DEFAULT NULL COMMENT '编辑区模板名字',
   `templateData` text COMMENT '模板数据',
   `content` text COMMENT '编辑区的内容',
-  `code` varchar(255) NOT NULL DEFAULT '',
+  `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
   `meta` text COMMENT '编辑区元信息',
   `data` text COMMENT '编辑区内容',
   `tips` text,
@@ -250,6 +250,8 @@ CREATE TABLE `course` (
   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
   `maxRate` TINYINT(3) UNSIGNED NOT NULL DEFAULT '100' COMMENT '最大抵扣百分比',
   `buyable` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否开放购买',
+  `tryLookable` TINYINT NOT NULL DEFAULT '0',
+  `tryLookTime` INT NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
@@ -257,12 +259,12 @@ ALTER TABLE `course` ADD INDEX `updatedTime` (`updatedTime`);
 DROP TABLE IF EXISTS `announcement`;
 CREATE TABLE `announcement` (
   `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '课程公告ID',
-  `userId` int(10) NOT NULL COMMENT '公告发布人ID',
+  `userId` int(10) unsigned NOT NULL COMMENT '公告发布人ID',
   `targetType` varchar(64) NOT NULL DEFAULT 'course' COMMENT '公告类型',
   `url` varchar(255) NOT NULL,
   `startTime` int(10) unsigned NOT NULL DEFAULT '0',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `targetId` int(10) NOT NULL COMMENT '所属ID',
+  `targetId` INT(10) UNSIGNED NOT NULL COMMENT '所属ID',
   `content` text NOT NULL COMMENT '公告内容',
   `createdTime` int(10) NOT NULL COMMENT '公告创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告最后更新时间',
@@ -731,7 +733,7 @@ CREATE TABLE `orders` (
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
-  `payment` enum('none','alipay','tenpay','coin','wxpay','heepay','quickpay') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
   `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
   `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
   `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',
@@ -1003,7 +1005,7 @@ CREATE TABLE `upload_files` (
   `convertParams` text COMMENT '文件转换参数',
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',
-  `type` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other' COMMENT '文件类型',
+  `type` enum('document','video','audio','image','ppt','other','flash') NOT NULL DEFAULT 'other' COMMENT '文件类型',
   `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
@@ -1040,6 +1042,7 @@ CREATE TABLE `user` (
   `setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否初始化设置的，未初始化的可以设置邮箱、用户名。',
   `roles` varchar(255) NOT NULL COMMENT '用户角色',
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐',
+  `promotedSeq` INT(10) UNSIGNED NOT NULL DEFAULT 0,
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁止',
   `lockDeadline` int(10) not null default '0' COMMENT '帐号锁定期限', 
@@ -1208,7 +1211,7 @@ CREATE TABLE `cash_orders` (
   `status` enum('created','paid','cancelled') NOT NULL,
   `title` varchar(255) NOT NULL,
   `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `payment` enum('none','alipay','wxpay','heepay','quickpay') NOT NULL DEFAULT 'none',
+  `payment` ENUM('none','alipay','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
   `note` varchar(255) NOT NULL DEFAULT '',
   `targetType` VARCHAR(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
@@ -1241,7 +1244,7 @@ CREATE TABLE `cash_flow` (
   `name` varchar(1024) NOT NULL DEFAULT '' COMMENT '帐目名称',
   `orderSn` varchar(40) NOT NULL COMMENT '订单号',
   `category` varchar(128) NOT NULL DEFAULT '' COMMENT '帐目类目',
-  `payment` ENUM( 'alipay','wxpay','heepay','quickpay' ),
+  `payment` ENUM( 'alipay','wxpay','heepay','quickpay','iosiap' ),
   `note` text COMMENT '备注',
   `createdTime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -1434,7 +1437,7 @@ CREATE TABLE `thread_member` (
   `nickname` varchar(255) DEFAULT NULL COMMENT '用户名',
   `truename` varchar(255) DEFAULT NULL COMMENT '真实姓名',
   `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
-  `createdTIme` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `createdTIme` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
 
@@ -1558,6 +1561,7 @@ CREATE TABLE `task` (
 `targetType` varchar(100) DEFAULT NULL COMMENT '类型,可以是课时,作业等',
 `taskStartTime` int(10) NOT NULL DEFAULT '0' COMMENT '任务开始时间',
 `taskEndTime` int(10) NOT NULL DEFAULT '0' COMMENT '任务结束时间',
+`intervalDate` SMALLINT(5) UNSIGNED NOT NULL DEFAULT 0 COMMENT '历时天数',
 `status` enum('active','completed') NOT NULL DEFAULT 'active',
 `required` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为必做任务,0否,1是',
 `completedTime` int(10) NOT NULL DEFAULT '0' COMMENT '任务完成时间',
@@ -1608,7 +1612,7 @@ CREATE TABLE `coupon` (
   `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单号',
   `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
   `createdTime` int(10) unsigned NOT NULL,
-  `receiveTime` INT(10) unsigned NULL DEFAULT '0'  COMMENT '接收时间',
+  `receiveTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '接收时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='优惠码表';
 
@@ -1651,10 +1655,77 @@ CREATE TABLE IF NOT EXISTS `user_pay_agreement` (
   `bankNumber` int(8) NOT NULL COMMENT '银行卡号',
   `userAuth` varchar(225) DEFAULT NULL COMMENT '用户授权',
   `bankAuth` varchar(225) NOT NULL COMMENT '银行授权码',
-  `otherId` int(8) NOT NULL COMMENT '对应的银行Id',
+  `bankId` int(8) NOT NULL COMMENT '对应的银行Id',
   `updatedTime` int(10) NOT NULL DEFAULT '0' COMMENT '最后更新时间',
   `createdTime` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户授权银行';
+
+DROP TABLE IF EXISTS `marker`;
+CREATE TABLE IF NOT EXISTS `marker` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `second` int(10) unsigned NOT NULL COMMENT '驻点时间',
+  `mediaId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '媒体文件ID',
+  `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+  `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='驻点';
+
+DROP TABLE IF EXISTS `question_marker`;
+CREATE TABLE IF NOT EXISTS `question_marker` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
+    `questionId` int(10) unsigned NOT NULL COMMENT '问题Id',
+    `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
+    `type` varchar(64) NOT NULL DEFAULT '' COMMENT '题目类型',
+    `stem` text COMMENT '题干',
+    `answer` text COMMENT '参考答案',
+    `analysis` text COMMENT '解析',
+    `metas` text COMMENT '题目元信息',
+    `difficulty` varchar(64) NOT NULL DEFAULT 'normal' COMMENT '难度',
+    `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+    `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='弹题';
+
+DROP TABLE IF EXISTS `question_marker_result`;
+CREATE TABLE IF NOT EXISTS `question_marker_result` (
+    `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `markerId` int(10) unsigned NOT NULL COMMENT '驻点Id',
+    `questionMarkerId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '弹题ID',
+    `lessonId` INT(10) UNSIGNED NOT NULL DEFAULT '0',
+    `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '做题人ID',
+    `status` enum('none','right','partRight','wrong','noAnswer') NOT NULL DEFAULT 'none' COMMENT '结果状态',
+    `answer` text  DEFAULT NULL ,
+    `createdTime` int(10) unsigned NOT NULL DEFAULT '0',
+    `updatedTime` int(10) unsigned NOT NULL DEFAULT '0',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `keyword`;
+CREATE TABLE IF NOT EXISTS `keyword` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `state` ENUM('replaced','banned') NOT NULL DEFAULT 'replaced',
+  `bannedNum` int(10) unsigned NOT NULL DEFAULT '0',
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `keyword_banlog`;
+CREATE TABLE IF NOT EXISTS `keyword_banlog` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `keywordId` int(10) unsigned NOT NULL,
+  `keywordName` varchar(64) NOT NULL DEFAULT '',
+  `state` ENUM('replaced','banned') NOT NULL DEFAULT 'replaced',
+  `text` text NOT NULL,
+  `userId` int(10) unsigned NOT NULL DEFAULT '0',
+  `ip` varchar(64) NOT NULL DEFAULT '',
+  `createdTime` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `keywordId` (`keywordId`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
 
 

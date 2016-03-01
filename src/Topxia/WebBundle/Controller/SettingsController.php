@@ -81,6 +81,12 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $nickname = $request->request->get('nickname');
+
+            if ($this->getSensitiveService()->scanText($nickname)) {
+                $this->setFlashMessage('danger', '用户名中含有敏感词，更新失败！');
+                return $this->redirect($this->generateUrl('settings'));
+            }
+
             $this->getAuthService()->changeNickname($user['id'], $nickname);
             $this->setFlashMessage('success', '用户名修改成功！');
             return $this->redirect($this->generateUrl('settings'));
@@ -965,6 +971,11 @@ class SettingsController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function downloadImg($url)

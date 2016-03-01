@@ -4,6 +4,8 @@ namespace Topxia\WebBundle\Command;
 use Topxia\System;
 use Topxia\Common\BlockToolkit;
 use Symfony\Component\Finder\Finder;
+use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,6 +19,7 @@ class BuildCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->initServiceKernel();
         $output->writeln('<info>Start build.</info>');
         $this->initBuild($input, $output);
         $this->buildRootDirectory();
@@ -341,7 +344,7 @@ class BuildCommand extends BaseCommand
 
         $finder = new Finder();
         $finder->directories()->in("{$this->rootDirectory}/web/bundles")->depth('== 0');
-        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom');
+        $needs = array('sensiodistribution', 'topxiaadmin', 'framework', 'topxiaweb', 'customweb', 'customadmin', 'topxiamobilebundlev2', 'classroom', 'sensitiveword');
 
         foreach ($finder as $dir) {
             if (!in_array($dir->getFilename(), $needs)) {
@@ -415,5 +418,22 @@ class BuildCommand extends BaseCommand
                 $this->filesystem->remove($dir->getRealpath());
             }
         }
+    }
+
+    protected function initServiceKernel()
+    {
+        $serviceKernel = ServiceKernel::create('dev', true);
+        $serviceKernel->setParameterBag($this->getContainer()->getParameterBag());
+        $serviceKernel->registerModuleDirectory(dirname(__DIR__).'/plugins');
+
+        $serviceKernel->setConnection($this->getContainer()->get('database_connection'));
+        $currentUser = new CurrentUser();
+        $currentUser->fromArray(array(
+            'id'        => 0,
+            'nickname'  => '游客',
+            'currentIp' => '127.0.0.1',
+            'roles'     => array()
+        ));
+        $serviceKernel->setCurrentUser($currentUser);
     }
 }

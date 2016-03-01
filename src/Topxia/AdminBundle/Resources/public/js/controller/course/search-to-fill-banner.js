@@ -12,6 +12,12 @@ define(function(require, exports, module) {
             })
 		});
 
+		$form.keydown(function(e){
+			if(e.keyCode==13){
+			   $form.find(".btn").trigger('click');
+			}
+		});
+
 		$('[role="course-list"]').find("li[role='course-item']").on('click', function(){
 			var element = $('[data-status="active"]').parent();
 			$(element.find('input')[0]).val($(this).data("courseId"));

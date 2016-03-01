@@ -33,6 +33,12 @@ class PayCenterController extends BaseController
         $processor               = OrderProcessorFactory::create($fields['targetType']);
         $orderInfo['template']   = $processor->getOrderInfoTemplate();
         $order                   = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist           = $processor->isTargetExist($targetId);
+
+        if (!$isTargetExist) {
+            return $this->createMessageResponse('error', '该订单已失效');
+        }
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -95,8 +101,10 @@ class PayCenterController extends BaseController
     public function redirectOrderTarget($order)
     {
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        $router    = $processor->getRouter();
-        return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+        $goto      = $processor->callbackUrl($order, $this->container);
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
+            'goto' => $goto
+        ));
     }
 
     public function payAction(Request $request)
@@ -240,9 +248,8 @@ class PayCenterController extends BaseController
         }
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        $router    = $processor->getRouter();
 
-        $goto = $processor->callbackUrl($router, $order, $this->container);
+        $goto = $processor->callbackUrl($order, $this->container);
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $goto
         ));
@@ -315,8 +322,7 @@ class PayCenterController extends BaseController
         $order   = $this->getOrderService()->getOrder($orderId);
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        $router    = $processor->getRouter();
-        $router    = $this->generateUrl($router, array('id' => $order['targetId']));
+        $router    = $processor->callbackUrl($order, $this->container);
 
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $router

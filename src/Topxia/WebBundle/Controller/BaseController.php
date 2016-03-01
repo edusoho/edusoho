@@ -255,6 +255,19 @@ abstract class BaseController extends Controller
         }
     }
 
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+
+        foreach ($whiteList as $value) {
+            if (strpos($userAgent, $value) > -1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     protected function getServiceKernel()
     {
         return ServiceKernel::instance();

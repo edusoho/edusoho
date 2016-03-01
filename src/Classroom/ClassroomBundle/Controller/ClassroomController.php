@@ -56,11 +56,10 @@ class ClassroomController extends BaseController
                 $priceType = $coinSetting["price_type"];
             }
 
-            if ($priceType == 'RMB') {
-                $conditions['price'] = '0.00';
-            } else {
+            if ($priceType == 'Coin') {
                 $conditions['coinPrice'] = '0.00';
             }
+            $conditions['price'] = '0.00';
         }
 
         unset($conditions['fliter']);
@@ -620,6 +619,11 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
+        $order = $this->getOrderService()->getOrder($member['orderId']);
+        if ($order['targetType'] == 'groupSell') {
+            throw $this->createAccessDeniedException('组合购买课程不能退出。');
+        }
+        
         $this->getClassroomService()->exitClassroom($id, $user["id"]);
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
@@ -804,6 +808,7 @@ class ClassroomController extends BaseController
             $formData['priceType']  = empty($coinSetting["priceType"]) ? 'RMB' : $coinSetting["priceType"];
             $formData['coinRate']   = empty($coinSetting["coinRate"]) ? 1 : $coinSetting["coinRate"];
             $formData['coinAmount'] = 0;
+            $formData['vipStatus']  = 'ok';
 
             $order = $this->getClassroomOrderService()->createOrder($formData);
 

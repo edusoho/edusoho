@@ -1,0 +1,49 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_operation_keyword_set' %}
+
+
+{% set script_controller = 'sensitivewordbundle/keyword/list' %}
+
+{% block main %}
+  <form id="keyword-search-form" class="form-inline well well-sm" action="" method="get">
+    <div class="form-group">
+      <select class="form-control" name="state">
+        {{ select_options(dict('state'), app.request.query.get('state'), '所有类型') }}
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" name="searchKeyWord">
+        {{ select_options(dict('searchKeyWord'), app.request.query.get('searchKeyWord')) }}
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" id="keyword" name="keyword" class="form-control" value="{{  app.request.query.get('keyword')  }}" placeholder="搜索关键字">
+    </div>
+    <button class="btn btn-primary">搜索</button>
+
+  </form>
+  {% if keywords %}
+    <table class="table table-striped table-hover" id="keyword-table" data-search-form="#keyword-search-form">
+      <thead>
+      <tr>
+        <th>编号</th>
+        <th width="30%">敏感词</th>
+        <th>类型</th>
+        <th>屏蔽次数</th>
+        <th>添加时间</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for keyword in keywords %}
+        {% include 'SensitiveWordBundle:SensitiveAdmin:table-tr.html.twig' %}
+      {% endfor %}
+      </tbody>
+
+    </table>
+  {% else %}
+    <div class="empty">暂无敏感词信息!</div>
+  {% endif %}
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

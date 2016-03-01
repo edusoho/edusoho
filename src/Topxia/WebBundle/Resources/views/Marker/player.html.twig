@@ -1,0 +1,20 @@
+{% block stylesheets %}
+  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+<div class="dashboard-content">
+  <div class="dashboard-body">
+    <div class="lesson-content" id="lesson-video-content" data-role="lesson-content" {% if setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+        data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
+      {% endif %}
+      {% if setting('storage.video_fingerprint') and app.user %}
+        data-fingerprint="{{ finger_print() }}"
+      {% endif %}
+        data-user-id="{{ app.user.id }}"
+    ></div>
+    <div class="watermarkEmbedded" ></div>
+  </div>
+  <div class="mask">
+  </div>
+  {% include 'TopxiaWebBundle:Marker:coord.html.twig' %}
+</div>

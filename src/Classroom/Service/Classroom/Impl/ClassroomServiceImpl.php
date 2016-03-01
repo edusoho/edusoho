@@ -980,7 +980,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             return false;
         }
 
-        if (array_intersect($member['role'], array('teacher', 'headTeacher'))) {
+        if (array_intersect($member['role'], array('headTeacher'))) {
             return true;
         }
 
@@ -1019,11 +1019,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         if ($isStudentOrAuditor) {
-            if (array_intersect($member['role'], array('student', 'auditor', 'teacher', 'headTeacher'))) {
+            if (array_intersect($member['role'], array('student', 'assistant', 'auditor', 'teacher', 'headTeacher'))) {
                 return true;
             }
         } else {
-            if (array_intersect($member['role'], array('student', 'teacher', 'headTeacher'))) {
+            if (array_intersect($member['role'], array('student', 'assistant', 'teacher', 'headTeacher'))) {
                 return true;
             }
         }

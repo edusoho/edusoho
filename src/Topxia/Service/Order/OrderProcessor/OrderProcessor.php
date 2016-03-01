@@ -23,7 +23,7 @@ interface OrderProcessor
 
     public function pay($payData);
 
-    public function callbackUrl($router, $order, $container);
+    public function callbackUrl($order, $container);
 
     public function cancelOrder($id, $message, $data);
 
@@ -32,4 +32,6 @@ interface OrderProcessor
     public function generateOrderToken();
 
     public function getOrderInfoTemplate();
+
+    public function isTargetExist($targetId);
 }

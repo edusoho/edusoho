@@ -545,6 +545,96 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function searchSettingAction()
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        if (!$cloud_search_settting) {
+            $cloud_search_settting = array(
+                'search_enabled' => 0,
+                'status'         => 'closed' //'closed':未开启；'waiting':'索引中';'ok':'索引完成'
+            );
+            $this->getSettingService()->set('cloud_search', $cloud_search_settting);
+        }
+
+        $data = array('status' => 'success');
+
+        try {
+            $api = CloudAPIFactory::create('root');
+
+            $content = $api->get("/users/{$api->getAccessKey()}/overview");
+            $info    = $api->get('/me');
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+                'data' => array('status' => 'unlink')
+            ));
+        }
+
+        //是否接入教育云
+
+        if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])))) {
+            $data['status'] = 'unconnect';
+            goto response;
+        }
+
+        response:
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            'data' => $data
+        ));
+    }
+
+    public function searchClauseAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $searchSetting = $this->getSettingService()->get('cloud_search');
+
+            $siteSetting        = $this->getSettingService()->get('site');
+            $siteSetting['url'] = rtrim($siteSetting['url']);
+            $siteSetting['url'] = rtrim($siteSetting['url'], '/');
+
+            $api  = CloudAPIFactory::create('root');
+            $urls = array(
+                array('category' => 'course', 'url' => $siteSetting['url'].'/api/courses?cursor=0&start=0&limit=100'),
+                array('category' => 'lesson', 'url' => $siteSetting['url'].'/api/lessons?cursor=0&start=0&limit=100'),
+                array('category' => 'user', 'url' => $siteSetting['url'].'/api/users?cursor=0&start=0&limit=100'),
+                array('category' => 'thread', 'url' => $siteSetting['url'].'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
+                array('category' => 'article', 'url' => $siteSetting['url'].'/api/articles?cursor=0&start=0&limit=100')
+            );
+            $urls = urlencode(json_encode($urls));
+
+            $callbackUrl = $siteSetting['url'];
+            $callbackUrl .= $this->generateUrl('edu_cloud_search_callback');
+            $sign = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
+            $sign = rawurlencode($sign);
+            $callbackUrl .= '?sign='.$sign;
+
+            $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
+
+            if ($result['success']) {
+                $searchSetting['search_enabled'] = 1;
+                $searchSetting['status']         = 'waiting';
+                $this->getSettingService()->set('cloud_search', $searchSetting);
+            }
+
+            return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-clause-modal.html.twig');
+    }
+
+    public function searchCloseAction()
+    {
+        $searchSetting['search_enabled'] = 0;
+        $searchSetting['status']         = 'closed';
+        $this->getSettingService()->set('cloud_search', $searchSetting);
+
+        $data = array('status' => 'success');
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            'data' => $data
+        ));
+    }
+
     public function keyApplyAction(Request $request)
     {
         $applier = new KeyApplier();
@@ -900,5 +990,10 @@ class EduCloudController extends BaseController
     private function getWebExtension()
     {
         return $this->container->get('topxia.twig.web_extension');
+    }
+
+    protected function getSignEncoder()
+    {
+        return new MessageDigestPasswordEncoder('sha256');
     }
 }

@@ -10,11 +10,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = "vip";
 
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
         $member      = $this->getVipService()->getMemberByUserId($userId);
@@ -301,12 +296,6 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getPayCenterService()->pay($payData);
     }
 
-    public function callbackUrl($router, $order, $container)
-    {
-        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
-        return $goto;
-    }
-
     public function cancelOrder($id, $message, $data)
     {
         return $this->getOrderService()->cancelOrder($id, $message, $data);
@@ -330,6 +319,17 @@ class VipOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getOrderInfoTemplate()
     {
         return "VipBundle:Vip:orderInfo";
+    }
+
+    public function isTargetExist($targetId)
+    {
+        $level = $this->getLevelService()->getLevel($targetId);
+
+        if (empty($level) || $level['enabled'] == 0) {
+            return false;
+        }
+
+        return true;
     }
 
     protected function getUserService()

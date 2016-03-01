@@ -1,0 +1,32 @@
+<div class="course-item clearfix">
+    <div class="course-img">
+      <a href="{{path('course_show',{id : course.courseId}) }}" target="_blank"><img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt=""></a>
+    </div>
+    <div class="course-info">
+      <h3 class="title">
+        <a href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
+          {{course.title|raw}}
+          {% if course.learning %}
+            <small class="label label-primary label-xs">正在学</small>
+          {% endif %}
+        </a>
+      </h3>
+      <div class="score">
+        {{ web_macro.star(course.rating|default(0)) }}
+        <span>{{ course.ratingNum|default(0) }}人评价({{ course.studentNum|default(0)}}人学习)</span>
+      </div>
+      <div class="content">{{course.about|raw}}</div>
+      {% if course.lessons|default(null) %}
+        <ul class="ul-lesson">
+        {% for lesson in course.lessons|slice(0, 3)%}
+          <li>
+            <i class="es-icon es-icon-arrowdropleft"></i>
+            <a class="link-light" href="{{path('course_show',{id : course.courseId}) }}" target="_blank">
+              课时 {{lesson.number}}: {{lesson.title|raw}}
+            </a>
+          </li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
