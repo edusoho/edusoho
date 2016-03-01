@@ -10,7 +10,8 @@ define(function(require, exports, module) {
             },
             events: {
                 'submit': 'submitForm',
-                'click .nav-tabs li': 'onClickNav'
+                'click .nav-tabs li': 'onClickNav',
+                'click .pagination li': 'onClickPagination'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -23,6 +24,14 @@ define(function(require, exports, module) {
                 $target.closest('.nav').find('.active').removeClass('active');
                 $target.addClass('active');
                 $target.closest('.nav').find('[name=type]').val($target.data('value'));
+                this.renderTable();
+                event.preventDefault();
+            },
+            onClickPagination: function(event)
+            {
+                var $target = $(event.currentTarget);
+                this.element.find('.js-page').val($target.data('page'));
+                this.renderTable();
                 event.preventDefault();
             },
             submitForm: function(event)
@@ -32,9 +41,12 @@ define(function(require, exports, module) {
             },
             renderTable: function()
             {
+                var self = this;
                 var $table = this.element.find('#materials-table');
                 $.get(this.get('renderUrl'), this.element.serialize(), function(resp){
                     $table.find('tbody').html(resp);
+                    var $temp = $table.find('.js-paginator');
+                    self.element.find('[data-role=paginator]').html($temp.html());
                 });
             },
             _initHeader: function()
