@@ -243,23 +243,19 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $url = '/resources?'.http_build_query($conditions);
         $result    = $api->get($url);
 
-        if (empty($result['data'])) {
-            return array();
-        }
+        // $cloudFiles = $result['data'];
+        // $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
+        // $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
 
-        $cloudFiles = $result['data'];
-        $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
-        $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
+        // $localFiles = $this->getUploadFileDao()->findFilesByIds($localFileIds);
+        // $mergedFiles = array();
+        // foreach ($localFiles as $i => $file) {
+        //     if (empty($cloudFiles[$file['globalId']])) {
+        //         continue;
+        //     }
 
-        $localFiles = $this->getUploadFileDao()->findFilesByIds($localFileIds);
-        $mergedFiles = array();
-        foreach ($localFiles as $i => $file) {
-            if (empty($cloudFiles[$file['globalId']])) {
-                continue;
-            }
-
-            $mergedFiles[$i] = $this->mergeCloudFile($file, $cloudFiles[$file['globalId']]);
-        }
+        //     $mergedFiles[$i] = $this->mergeCloudFile($file, $cloudFiles[$file['globalId']]);
+        // }
 
         return $result;
     }
