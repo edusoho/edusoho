@@ -53,10 +53,8 @@ class EduCloudController extends BaseController
     {
         // @apitodo 需改成leaf
         try {
-            $api = CloudAPIFactory::create('root');
-
-            $content = $api->get("/users/{$api->getAccessKey()}/overview");
-            $info    = $api->get('/me');
+            $api  = CloudAPIFactory::create('root');
+            $info = $api->get('/me');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
@@ -183,8 +181,8 @@ class EduCloudController extends BaseController
             return $this->render('TopxiaAdminBundle:EduCloud:video-error.html.twig', array());
         }
 
-        $content   = $api->get("/user/center/{$api->getAccessKey()}/overview");
-        $videoInfo = isset($content['vlseInfo']['videoInfo']) ? $content['vlseInfo']['videoInfo'] : null;
+        $overview  = $api->get("/user/center/{$api->getAccessKey()}/overview");
+        $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
 
         $headLeader = array();
 
@@ -332,8 +330,8 @@ class EduCloudController extends BaseController
             $info        = $api->get('/me');
             $status      = $api->get('/me/email_account');
             $emailStatus = $this->handleEmailSetting($request);
-            $content     = $api->get("/user/center/{$api->getAccessKey()}/overview");
-            $emailInfo   = $emailInfo   = isset($content['service']['email']) ? $content['service']['email'] : null;
+            $overview    = $api->get("/user/center/{$api->getAccessKey()}/overview");
+            $emailInfo   = $emailInfo   = isset($overview['service']['email']) ? $overview['service']['email'] : null;
             return $this->render('TopxiaAdminBundle:EduCloud:email.html.twig', array(
                 'locked'       => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'      => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -548,8 +546,8 @@ class EduCloudController extends BaseController
         try {
             $api = CloudAPIFactory::create('root');
 
-            $content = $api->get("/users/{$api->getAccessKey()}/overview");
-            $info    = $api->get('/me');
+            $overview = $api->get("/users/{$api->getAccessKey()}/overview");
+            $info     = $api->get('/me');
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
                 'data' => array('status' => 'unlink')
@@ -558,7 +556,7 @@ class EduCloudController extends BaseController
 
         //是否接入教育云
 
-        if (empty($info['level']) || (!(isset($content['service']['storage'])) && !(isset($content['service']['live'])) && !(isset($content['service']['sms'])))) {
+        if (empty($info['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
             goto response;
         }
