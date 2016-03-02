@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
+    var BatchAttachmentsUploader = require('../../quiz-question/batch-upload-attachments');
 
     var QuestionCreator = Widget.extend({
         attrs: {
@@ -16,7 +17,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            'click [data-role=submit]': 'onSubmit'
+            'click [data-role=submit]': 'onSubmit',
         },
 
         setup: function() {
@@ -26,6 +27,28 @@ define(function(require, exports, module) {
             this._initAnalysisField();
             
         },
+
+        _initBatchAttachmentUploader: function(editor){
+
+                    
+                $("#cloud-btn", "#question-attachment").on('click',function(){
+                    var url="";
+                    url = $(this).data("html5Url");
+                    
+                    $("#modal").html('');
+                    $("#modal").modal('show');
+                    $.get(url, function(html){
+                        $("#modal").html(html);
+                        var batchAttachmentsUploader = new BatchAttachmentsUploader({
+                            editor:editor
+                        });
+                        
+
+                    });
+                })
+              
+        },
+
 
         onSubmit: function(e){
             var submitType = $(e.currentTarget).data('submission');
@@ -58,6 +81,7 @@ define(function(require, exports, module) {
             });
 
             self._uploadAttachment(editor);
+            self._initBatchAttachmentUploader(editor);
 
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.updateElement();
@@ -115,7 +139,7 @@ define(function(require, exports, module) {
                formData: $.extend(formData , {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
                accept: {
                        title: 'Attachment',
-                       extensions: 'txt,docx,doc,xls,xlsx,pptx,ppsx,rar,zip',
+                       extensions: 'mp4,avi,flv,wmv,mov,m4v,mp3,doc,docx,pdf,ppt,pptx,swf',
                 }
             });
 

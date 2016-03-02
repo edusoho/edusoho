@@ -86,12 +86,8 @@ class EditorController extends BaseController
 
             $settings = $this->getSettingService()->get('storage', array());
 
-            if ($settings['upload_mode'] == 'local') {
-                $file        = $this->getUploadFileService()->addFile('attachment', 0, array('isPublic' => 0), 'local', $originalFile);
-                $downloadUrl = $this->generateUrl('editor_file_download', array('fileId' => $file['id']));
-            } else {
-                #TODO 上传到云平台
-            }
+            $file        = $this->getUploadFileService()->addFile('attachment', 0, array('isPublic' => 0), 'local', $originalFile);
+            $downloadUrl = $this->generateUrl('editor_file_download', array('fileId' => $file['id']));
 
             $response = "附件：<a color=\"red\" href=\"{$downloadUrl}\">".$fileName."</a>";
             return new Response($response);

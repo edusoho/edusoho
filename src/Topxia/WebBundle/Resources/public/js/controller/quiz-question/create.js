@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     var Determine = require('./creator/question-determine');
     var Essay = require('./creator/question-essay');
     var Fill = require('./creator/question-fill');
+    var ChunkUpload = require('edusoho.chunkupload');
 
     exports.run = function() {
         var type = $('#question-creator-widget').find('[name=type]').val().replace(/\_/g, "-");
@@ -31,6 +32,13 @@ define(function(require, exports, module) {
         var creator = new QuestionCreator({
             element: '#question-creator-widget'
         });
+
+
+
+
+
+        
+           
 
     };
 

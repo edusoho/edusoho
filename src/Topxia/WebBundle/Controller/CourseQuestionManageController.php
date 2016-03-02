@@ -273,6 +273,30 @@ class CourseQuestionManageController extends BaseController
         return $choices;
     }
 
+    public function batchUploadAttachmentsAction(Request $request, $id, $targetType)
+    {
+        if ("materiallib" != $targetType) {
+            $course = $this->getCourseService()->tryManageCourse($id);
+        } else {
+            $course = null;
+        }
+
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $fileExts       = "";
+
+        if ("courselesson" == $targetType) {
+            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
+        }
+
+        return $this->render('TopxiaWebBundle:CourseQuestionManage:batch-upload.html.twig', array(
+            'course'         => $course,
+            'storageSetting' => $storageSetting,
+            'targetType'     => $targetType,
+            'targetId'       => $id,
+            'fileExts'       => $fileExts
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -286,5 +310,10 @@ class CourseQuestionManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }
