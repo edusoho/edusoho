@@ -20,4 +20,6 @@ interface OrderProcessor
 	public function payClassRoom();
 
 	public function checkCoupon();
+
+	public function getPaymentMode();
 }

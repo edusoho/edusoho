@@ -619,6 +619,11 @@ class ClassroomController extends BaseController
             throw $this->createAccessDeniedException('有关联的订单，不能直接退出学习。');
         }
 
+        $order = $this->getOrderService()->getOrder($member['orderId']);
+        if ($order['targetType'] == 'groupSell') {
+            throw $this->createAccessDeniedException('组合购买课程不能退出。');
+        }
+        
         $this->getClassroomService()->exitClassroom($id, $user["id"]);
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));

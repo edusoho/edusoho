@@ -120,24 +120,17 @@ define(function(require, exports, module) {
         Cookie.set("close_weixin_alert",'true',{path: '/'});
     });
 
-    if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
-        $("li.nav-hover").mouseenter(function(event) {
-            $(this).addClass("open");
-        }).mouseleave(function(event) {
-            $(this).removeClass("open");
-        });
-        
-    } else {
-        $("body").on("click","li.nav-hover",function(){
-            $(this).toggleClass("open");
-        })
-
-        if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
-            $(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
-        }
-    }
-    
-
+   	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
+	    $("li.nav-hover").mouseenter(function(event) {
+	        $(this).addClass("open");
+	    }).mouseleave(function(event) {
+	        $(this).removeClass("open");
+	    });
+	    
+	} else {
+        $("li.nav-hover >a").attr("data-toggle","dropdown");
+	}
+	
     if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
         $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
     }

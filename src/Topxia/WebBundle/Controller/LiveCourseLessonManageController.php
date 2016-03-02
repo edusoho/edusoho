@@ -95,12 +95,12 @@ class LiveCourseLessonManageController extends BaseController
                 'jumpUrl'  => $this->generateUrl('live_jump', array('id' => $liveLesson['courseId']), true)
             );
 
-            if (array_key_exists('startTime', $editLiveLesson)) {
-                $liveParams['startTime'] = strtotime($editLiveLesson['startTime']);
+           if (array_key_exists('startTime', $liveLesson)) {
+                  $liveParams['startTime'] = $liveLesson['startTime'];
             }
 
-            if (array_key_exists('startTime', $editLiveLesson) && array_key_exists('timeLength', $editLiveLesson)) {
-                $liveParams['endTime'] = (strtotime($editLiveLesson['startTime']) + $editLiveLesson['timeLength'] * 60).'';
+            if (array_key_exists('startTime', $liveLesson) && array_key_exists('length', $liveLesson)) {
+                $liveParams['endTime'] = ($liveLesson['startTime'] + $liveLesson['length'] * 60).'';
             }
 
             $client = new EdusohoLiveClient();

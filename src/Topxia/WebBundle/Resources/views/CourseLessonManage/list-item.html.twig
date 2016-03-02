@@ -39,8 +39,11 @@
     {% if setting('course.custom_chapter_enabled')|default(true) %}
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
-    {% if lesson.free == 1 %}<span class="label label-danger">{{'免费'|trans}}</span>{% endif %}
-
+    
+    {% if lesson.free == 1 %}
+      <span class="label label-success">{{'免费'|trans}}</span>
+    {% elseif course.tryLookable and lesson.type == 'video' and file.storage|default('') == 'cloud' %}
+      <span class="label label-warning mrm">{{'试看'|trans}}</span>{% endif %}
     {% if lesson.type != 'text' and lesson.type != 'live' and lesson.type != 'testpaper' and lesson.mediaId != 0 and not file|default(false) %}
       <span class="label label-danger fileDeletedLesson" title="{{'课时文件已删除'|trans}}">{{'无效课时'|trans}}</span>
     {% endif %}

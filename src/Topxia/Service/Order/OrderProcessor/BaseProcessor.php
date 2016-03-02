@@ -7,6 +7,14 @@ use Topxia\Service\Common\ServiceKernel;
 
 class BaseProcessor
 {
+    protected $router = 'homepage';
+
+    public function callbackUrl($order, $container)
+    {
+        $goto = $container->get('router')->generate($this->router, array('id' => $order["targetId"]), true);
+        return $goto;
+    }
+
     protected function afterCoinPay($coinEnabled, $priceType, $cashRate, $amount, $coinPayAmount, $payPassword)
     {
         if (!empty($coinPayAmount) && $coinPayAmount > 0 && $coinEnabled) {
@@ -23,6 +31,7 @@ class BaseProcessor
         if ($priceType == "RMB") {
             $coinPreferentialPrice = $coinPayAmount / $cashRate;
         } else
+
         if ($priceType == "Coin") {
             $coinPreferentialPrice = $coinPayAmount;
         }
@@ -76,6 +85,7 @@ class BaseProcessor
                     $coinPayAmount = $totalPrice;
                 }
             } else
+
             if ($priceType == "RMB") {
                 if ($totalPrice * 100 > $accountCash / $cashRate * 100) {
                     $coinPayAmount = $accountCash;

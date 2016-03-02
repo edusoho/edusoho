@@ -204,7 +204,10 @@ admin_teacher:
 admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
-    methods:  [POST]
+
+admin_teacher_promote_list:
+    pattern: /teacher/promote/list
+    defaults: { _controller: TopxiaAdminBundle:Teacher:promoteList }
 
 admin_teacher_promote_cancel:
     pattern:  /teacher/{id}/promote/cancel
