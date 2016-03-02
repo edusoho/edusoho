@@ -9,11 +9,11 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 				{% if item.question.testResult.status == 'right' %}
-					正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">，你答对了
+					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">{{'，你答对了'|trans}}
 				{% elseif item.question.testResult.status == 'wrong' %}
-					正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>， 你<strong class="text-danger">答错</strong>了
+					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>{{'， 你<strong class="text-danger">答错</strong>了'|trans|raw}}
 				{% elseif item.question.testResult.status == 'noAnswer' %}
-					正确答案： <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong>，你未答题
+					{{'正确答案：'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>{{'，你未答题'|trans}}
 				{% endif %}
 		  </div>
 
@@ -26,8 +26,8 @@
 	{% else %}
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-determine-inputs">
-				<label class="radio-inline {% if item.question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ item.question.id }}" value="1" {% if item.question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> 正确</label>
-		 		<label class="radio-inline {% if item.question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ item.question.id }}" value="0" {% if item.question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>错误</label>
+				<label class="radio-inline {% if item.question.testResult.answer[0]|default(0) == 1 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ item.question.id }}" value="1" {% if item.question.testResult.answer[0]|default(0) == 1 %}checked{% endif %}> {{'正确'|trans}}</label>
+		 		<label class="radio-inline {% if item.question.testResult.answer[0]|default(1) == 0 %} active{% endif %}"><input type="radio" data-type="determine" name="{{ item.question.id }}" value="0" {% if item.question.testResult.answer[0]|default(1) == 0 %}checked{% endif %}>{{'错误'|trans}}</label>
 	 		</div>
 
 	 		<div class="testpaper-question-actions pull-right">
@@ -38,10 +38,10 @@
 		{% if questionPreview|default(false) %}
 		  <div class="testpaper-preview-answer clearfix mtl mbl">
 		  	<div class="testpaper-question-result">
-			    正确答案是 <strong class="text-success">{% if item.question.answer[0] == 1 %} 正确 {% else %} 错误 {% endif %}</strong class="text-success">
+			    {{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">
 			</div>
 		  </div>
-		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw|nl2br }}</div>
+		  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
 	  	{% endif %}
 
 	{% endif %}

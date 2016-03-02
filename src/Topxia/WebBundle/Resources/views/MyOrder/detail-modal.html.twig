@@ -2,9 +2,9 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 {% set modalSize = 'large' %}
 
-{% block title %}订单详情{% endblock %}
+{% block title %}{{'订单详情'|trans}}{% endblock %}
 {% block body %}
-    
+
 
 {# <ul class="nav nav-tabs mbl">
   <li class="active"><a href="#detail" data-toggle="tab">详情</a></li>
@@ -16,7 +16,7 @@
 
 {% block footer %}
   <div>
-    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
   </div>
 
 {% endblock %}

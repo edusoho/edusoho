@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}搜索：{% if keywords %}{{ keywords }}{% else %}全部课程{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{{'搜索：'|trans}}{% if keywords %}{{ keywords }}{% else %}{{'全部课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
 {% do load_script('search/cloud-search') %}
 {% block top_content %}
@@ -10,11 +10,11 @@
         <div class="input-wrap">
           <input type="hidden" name="type" value="{{type|default('')}}" >
           <input type="hidden" name="targetType" value="{{targetType|default('')}}" >
-          <input type="text" name="q" class="form-control" placeholder="搜索" value="{{keywords}}">
+          <input type="text" name="q" class="form-control" placeholder="{{'搜索'|trans}}" value="{{keywords}}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>
         <span class="input-group-btn">
-          <button class="btn btn-primary" type="submit">搜索</button>
+          <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
         </span>
       </form>
     </div>
@@ -26,10 +26,10 @@
     <div class="col-md-8">
       <div class="es-section">
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
-          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >课程</a></li>
-          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >教师</a></li>
-          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >话题</a></li>
-          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >资讯</a></li>
+          <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'课程'|trans}}</a></li>
+          <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'教师'|trans}}</a></li>
+          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'话题'|trans}}</a></li>
+          <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'资讯'|trans}}</a></li>
         </ul>
         <div class="search-result" id="search-result">
         {% if type %}
@@ -44,7 +44,7 @@
     <div class="col-md-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title">常用关键词</h3>
+          <h3 class="panel-title">{{'常用关键词'|trans}}</h3>
         </div>
         <div class="panel-body">
 
@@ -52,5 +52,5 @@
       </div>
     </div>
   </div>
-  
+
 {% endblock %}
