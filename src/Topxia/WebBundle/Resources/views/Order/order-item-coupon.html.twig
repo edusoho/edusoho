@@ -3,17 +3,17 @@
     <i class="es-icon es-icon-localplay">
     </i>
     <span class="title">优惠码</span> 
-    {% if version_compare(plugin_version('Coupon'),'1.3.3','<=') or (coupons is defined and coupons is null) %}
+    
       <span role="no-use-coupon-code">
       （没有使用优惠码）</span>
-    {% endif %}
+    
   </div>
 
 
 
   <div class="order-item-detail  coupon-detail">
-  {% if version_compare(plugin_version('Coupon'),'1.3.3','>') %}
-    
+{#}  {% if version_compare(plugin_version('Coupon'),'1.3.3','>') %}#}
+  {% if true %}
       <div role="null-coupon-code">
         {% if coupons is not null %}
           <select class="form-control width-input width-input-large" id="coupon-select" name="couponCode">

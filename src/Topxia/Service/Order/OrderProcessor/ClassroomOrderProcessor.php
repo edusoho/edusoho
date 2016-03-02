@@ -8,13 +8,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "classroom_show";
-
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
         if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
@@ -29,6 +22,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if ($classroom['status'] != 'published') {
             return array('error' => '不能加入未发布班级!');
+        }
+
+        if (!$classroom['buyable']) {
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            return array('error' => "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
         }
 
         return array();
@@ -209,10 +207,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         //优惠码优惠价格
-        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if (!empty($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'classroom',
@@ -269,18 +265,6 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getClassroomOrderService()->createOrder($orderInfo);
     }
 
-    public function getNote($targetId)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($targetId);
-        return str_replace(' ', '', strip_tags($classroom['about']));
-    }
-
-    public function getTitle($targetId)
-    {
-        $classroom = $this->getClassroomService()->getClassroom($targetId);
-        return str_replace(' ', '', strip_tags($classroom['title']));
-    }
-
     public function doPaySuccess($success, $order)
     {
         if (!$success) {
@@ -320,6 +304,70 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $coursesTotalPrice;
     }
 
+    public function getOrderBySn($sn)
+    {
+        return $this->getOrderService()->getOrderBySn($sn);
+    }
+
+    public function updateOrder($id, $fileds)
+    {
+        return $this->getOrderService()->updateOrder($id, $fileds);
+    }
+
+    public function getNote($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        return str_replace(' ', '', strip_tags($classroom['about']));
+    }
+
+    public function getTitle($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+        return str_replace(' ', '', strip_tags($classroom['title']));
+    }
+
+    public function pay($payData)
+    {
+        return $this->getPayCenterService()->pay($payData);
+    }
+
+    public function callbackUrl($order, $container)
+    {
+        $goto = $container->get('router')->generate('classroom_show', array('id' => $order["targetId"]), true);
+        return $goto;
+    }
+
+    public function cancelOrder($id, $message, $data)
+    {
+        return $this->getOrderService()->cancelOrder($id, $message, $data);
+    }
+
+    public function createPayRecord($id, $payData)
+    {
+        return $this->getOrderService()->createPayRecord($id, $payData);
+    }
+
+    public function generateOrderToken()
+    {
+        return 'c'.date('YmdHis', time()).mt_rand(10000, 99999);
+    }
+
+    public function getOrderInfoTemplate()
+    {
+        return "ClassroomBundle:Classroom:orderInfo";
+    }
+
+    public function isTargetExist($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        if (empty($classroom) || $classroom['status'] == 'closed') {
+            return false;
+        }
+
+        return true;
+    }
+
     protected function getClassroomService()
     {
         return ServiceKernel::instance()->createService('Classroom:Classroom.ClassroomService');
@@ -348,5 +396,15 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getClassroomOrderService()
     {
         return ServiceKernel::instance()->createService("Classroom:Classroom.ClassroomOrderService");
+    }
+
+    protected function getOrderService()
+    {
+        return ServiceKernel::instance()->createService('Order.OrderService');
+    }
+
+    protected function getPayCenterService()
+    {
+        return ServiceKernel::instance()->createService('PayCenter.PayCenterService');
     }
 }

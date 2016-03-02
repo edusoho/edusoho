@@ -13,6 +13,10 @@ a {
   background-image : none ! important;
 }
 
+.ui-avatar-s.rr {
+  -webkit-border-radius: 8px;
+}
+
 .rootView , .side-content{
   height: 100%;
   background: #f0f0f0;
@@ -243,11 +247,20 @@ a {
 }
 
 .ui-tab.tab-top .ui-tab-nav .line{
-  display: inline-block;
-  height: 25px;
   width: 100%;
+  height: 25px;
   line-height: 25px;
+  display: inline-block;
   border-right: solid 1px #ddd;
+}
+
+.ui-tab.tab-top .ui-tab-nav .line label{
+    width: auto;
+    max-width: 70%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
 }
 
 .ui-tab.tab-bottom .ui-tab-content {
@@ -520,6 +533,30 @@ a {
 
 .ui-btn.btn-col-25 {
   width: 30%;
+}
+
+.ui-btn.btn-consult {
+  bottom: 15%;
+  right: 32px;
+  position: fixed;
+  width: 64px;
+  height: 64px;
+  box-shadow: 2px 2px 2px #539E7F;
+  background-color: #37b97d;
+  border-width: 0;
+  background-image : none;
+  z-index: 13;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 64px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.ui-btn.btn-consult:not(.disabled):not(:disabled):active, .active.ui-btn.btn-consult{
+  color: #fff;
+  background: #27A86C;
+  border: solid 0px #27A86C;
 }
 
 /* ui-button */
@@ -839,8 +876,10 @@ a {
 /* sign */
 
 .sign {
+  top: 0;
   height: 100%;
   margin-bottom: 0;
+  padding-top: 44px;
   background: #fff;
 }
 
@@ -906,6 +945,12 @@ a {
   line-height: 26px;
   height: 26px;
   width: 20px;
+}
+
+.sign .ui-btn.more-btn {
+  color: #333;
+  bottom: 10px;
+  position: fixed;
 }
 
 /** login **/
@@ -1201,7 +1246,6 @@ a {
 .ui-course .course-title {
   overflow: hidden;
   display: inline-block;
-  max-height: 40px;
   font-size: 18px;
   line-height: 24px;
   width: 100%
@@ -1573,7 +1617,7 @@ a {
 .ui-course-review .ui-scroller {
   top: 0;
   background: #fff;
-  padding-top: 214px;
+  padding-top: 240px;
 }
 
 .ui-course-review .top-header {
@@ -1971,6 +2015,22 @@ a {
 
 /** ui-list **/
 
+/** ui-courselist **/
+
+.ui-courselist .ui-tab-nav li {
+  width: 33%;
+}
+
+.ui-courselist .ui-tab-nav .line {
+  margin-top: 10px;
+}
+
+.ui-courselist .ui-tab-nav .line i {
+  position: absolute;
+}
+
+/** ui-courselist **/
+
 /** ui-pop **/
 .ui-pop {
   display: -webkit-box;
@@ -2214,4 +2274,288 @@ a {
     -webkit-background-size: 100% 1px
   }
 }
+
 /* ui-actionsheet */
+
+/* todo list */
+
+.ui-todolist {
+  background: #f0f0f0;
+}
+
+.ui-todolist .list-chart {
+  width: 100%;
+  padding: 8px;
+  height: 200px;
+}
+
+.ui-todolist .chart-container h4 {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 16px;
+  background: #f0f0f0;
+}
+
+.ui-todolist .todo-header {
+  padding: 0;
+  text-align: center;
+}
+
+.ui-todolist .todo-header li {
+  padding: 0;
+  color: #bbb;
+  margin: 10px 0 10px 0;
+}
+
+.ui-todolist .todo-header .label {
+  display: block;
+  font-size: 2rem;
+}
+
+.label.red {
+  color : #f95949;
+}
+
+.label.blue {
+  color : #666;
+}
+
+.ui-todolist .ui-slider-content {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.ui-todolist .ui-panel {
+  background: #ffffff;
+  margin-bottom: 16px;
+}
+
+.ui-todolist .ui-panel .title-body {
+  height: 44px;
+  color: #999;
+  line-height: 44px;
+}
+
+.ui-todolist .title-body .title-tips {
+  color: #999;
+  display: inline-block;
+  position: absolute;
+  right: 16px;
+  width: auto;
+}
+
+.ui-todolist .title-body .title-tips label {
+  color: #f95949;
+}
+
+.ui-todolist .title-body .title {
+  margin-left: 16px;
+}
+.ui-todolist .ui-list .ui-avatar-s {
+  margin: 0 10px 0 0;
+  display: inline-block;
+}
+
+.ui-todolist .ui-list .bottom-label {
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+}
+
+.ui-todolist .ui-list .bottom-label .bottom-label-bg {
+  font-size: 8px;
+  border-radius: 5px;
+  background-color: #ddd;
+  padding: 3px 5px 3px 5px;
+}
+
+.ui-todolist .bottom-label.right {
+  right: 16px;
+}
+
+.ui-todolist .ui-list .ui-list-info {
+  padding: 8px;
+}
+
+.ui-todolist .ui-list .ui-list-info p {
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.todo-card .ui-list li .bottom {
+  position: relative;
+}
+
+.ui-todolist .ui-slider-indicators {
+  -webkit-box-pack: center;
+}
+
+.ui-todolist .ui-slider-indicators li {
+  background-color: #ddd;
+}
+
+.ui-todolist .ui-slider-indicators li.current, .ui-todolist .ui-slider-indicators li.current:before {
+  background-color: #37b97d;
+}
+
+.todo-card .ui-list-info h2 {
+  height: 44px;
+  line-height: 44px;
+}
+/* todo list */
+
+/* ui-homework */
+.ui-homework {
+  background: #f7f7f7;
+}
+
+.ui-homework .ui-slider-content  {
+  position: relative;
+}
+
+.ui-choice {
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+}
+
+.ui-choice .item {
+  width: 32px;
+  display: inline-block;
+  border: solid 1px #bbb;
+  border-radius: 50%;
+  height: 32px;
+  color: #bbb;
+  text-align: center;
+  font-size: 16px;
+  line-height: 32px;
+}
+
+.ui-choice .body {
+  height: 32px;
+  color: #333;
+  font-weight: 400;
+  line-height: 32px;
+  padding-left: 16px;
+  display: inline-block;
+}
+
+.ui-choice li {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.ui-homework .ui-header {
+  height: 48px;
+  line-height: 48px;
+  padding-left: 16px;
+  background-color: #fff;
+  position: relative;
+}
+
+.ui-homework .question-container .header {
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+}
+
+.ui-homework .ui-header .label {
+  right: 16px;
+  position: absolute;
+}
+
+.ui-homework .ui-header .label label {
+  color: #37b97d;
+  font-size: x-large;
+}
+
+.ui-homework .ui-answer .wrong {
+  color: #DB8F6D;
+  border-color: #DB8F6D;
+}
+
+.ui-homework .ui-answer .primary {
+  color: #37b97d;
+  border-color: #37b97d;
+}
+
+.ui-homework .ui-answer .half-success {
+  color: #EA6A6B;
+  border-color: #EA6A6B;
+}
+
+.ui-homework .ui-answer .answer-status-label {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  line-height: 48px;
+  border: solid 1px;
+  text-align: center;
+}
+
+.ui-homework .ui-essay .success-result {
+  background: #FAFAFA;
+  border-top: solid 1px #e0e0e0;
+}
+
+.ui-homework .ui-essay .success-result h4 {
+
+}
+
+.ui-essay .body {
+  padding: 8px;
+  margin-top: 8px;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+}
+
+.ui-essay .success-result {
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+}
+
+.ui-homework .ui-title {
+  padding: 16px;
+}
+
+.ui-choice .selected .item {
+  color: #fff;
+  background: #4B8FE0;
+  border: solid 1px #4B8FE0;
+}
+
+.ui-determine .ui-answer li {
+  width: 40%;
+  padding: 0;
+  margin: 8px;
+  height: 40px;
+  line-height: 40px;
+  border: solid 1px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.ui-determine {
+  position: relative;
+}
+
+.ui-determine .ui-grid-halve {
+  width: 60%;
+  right: 16px;
+  position: absolute;
+}
+
+.ui-fill .body {
+  padding: 8px;
+  border: solid 1px #ddd;
+  background-color: #fff;
+  margin: 16px;
+  width: auto;
+}
+/* ui-homework */

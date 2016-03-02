@@ -404,6 +404,7 @@ function _create_connection()
 
     $connection = $factory->createConnection(
         array(
+            'wrapperClass'  => 'Topxia\Service\Common\Connection',
             'dbname'        => $parameters['database_name'],
             'host'          => $parameters['database_host'],
             'port'          => $parameters['database_port'],

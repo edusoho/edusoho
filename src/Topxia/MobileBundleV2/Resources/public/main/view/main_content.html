@@ -1,6 +1,6 @@
 <div class="ui-bar" ui-bar>
     <div class="ui-bar-bg">
-      <button class="ui-btn btn-outline iconfont icon-menu" ng-click="toggle()"></button>
+      <button ng-if="!platform.native" class="ui-btn btn-outline iconfont icon-menu" ng-click="toggle()"></button>
       <h3 class="title">发现</h3>
       <button class="ui-btn bar-tool btn-outline iconfont icon-sousuo" ng-href="#/search"></button>
     </div>

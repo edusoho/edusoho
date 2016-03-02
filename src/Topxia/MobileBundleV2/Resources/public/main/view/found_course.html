@@ -1,6 +1,6 @@
 <div class="top-tab-header ui-found-course" ng-controller="FoundCourseController">
     
-    	<div class="ui-slider course-slider" slider="course-slider" ui-slider-box="banners">
+    <div class="ui-slider course-slider" slider="course-slider" ui-slider-box="banners">
 	    <ul class="ui-slider-content">
 	        <li ng-repeat="banner in banners" ng-click="bannerClick(banner)">
 	        	<span style="background-image:url({{ banner.url }})"></span>
@@ -15,7 +15,7 @@
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="recommedCourses.length > 0">
-		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		    <button type="button" class="btn-green" ng-href="#/courselist/normal/">更多</button>
 		</div>
 	</div>
 
@@ -28,7 +28,7 @@
 		    </li>
 		</ul>
 		<div class="ui-btn-group" ng-if="latestCourses.length > 0">
-		    <button type="button" class="btn-green" ng-href="#/courselist/">更多</button>
+		    <button type="button" class="btn-green" ng-href="#/courselist/normal/">更多</button>
 		</div>
 	</div>
 </div>

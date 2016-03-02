@@ -79,7 +79,7 @@
                     {% if order.status == 'created' %}
 
                       <li>
-                        <a href="{{path('pay_center_show', {sn:order.sn})}}"  style="display:block" >去支付</a>
+                        <a href="{{path('pay_center_show', {sn:order.sn,targetType:order.targetType})}}"  style="display:block" >去支付</a>
                       </li>
                       <li><a href="javascript:;" class=" cancel" style="display:block" data-url="{{ path('my_order_cancel', {id:order.id}) }}">取消订单</a></li>
 

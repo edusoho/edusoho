@@ -238,12 +238,13 @@ define(function(require, exports, module) {
 			//totalPrice = afterDiscountCourses(totalPrice);
 			
 			data.amount = totalPrice;
-			
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
 				$('[role="code-notify"]').css("display","inline-block");
 				if(data.useable == "no") {
+					$('[role=no-use-coupon-code]').show();
 					$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").text(data.message);
 				} else if(data.useable == "yes"){
+					$('[role=no-use-coupon-code]').hide();
 					$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
 					$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
 					$('[role="coupon-code-verified"]').val(couponCode.val());
@@ -264,33 +265,27 @@ define(function(require, exports, module) {
 			var coupon = $(this).children('option:selected');
 			if(coupon.data('code') == "")
 			{
+				$('[role=no-use-coupon-code]').show();
+				var coinNum = $('[role="total-price"]').text();
+				coinNum = parseFloat(coinNum);
+				var currentCash = parseFloat($('[role="accountCash"]').text());
 
+				if(currentCash < coinNum){
+					coinNum = currentCash;
+				}
+
+				$('[role="coinNum"]').val(coinNum);
+				$('[role="password-input"]').show();
+				$('#payPassword').focus();
 				$('[role="cancel-coupon"]').trigger('click');
 				return;
+			}else{
+				$('[role=no-use-coupon-code]').hide();
 			}
-
 			couponCode = $('[role="coupon-code-input"]');
 			couponCode.val(coupon.data('code'));
 			$('button[role="coupon-use"]').trigger('click');
 			$('[role="code-notify"]').removeClass('alert-success');
-
-
-			// data.targetType = coupon.data('targetType');
-			// data.targetId = coupon.data('targetId');
-			// data.amount = coupon.data('amount');
-			// data.code = coupon.data('code');
-			// $.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
-			// 	$('[role="code-notify"]').css("display","inline-block");
-			// 	if(data.useable == "no") {
-			// 		$('[role="code-notify"]').removeClass('alert-success').addClass("alert-danger").text(data.message);
-			// 	} else if(data.useable == "yes"){
-			// 		$('[role="code-notify"]').removeClass('alert-danger').addClass("alert-success").text("优惠码可用，您当前使用的是"+((data['type']=='discount')? ('打'+data['rate']+'折') : ('抵价'+data['rate']+'元'))+'的优惠码');
-			// 		$('[role="coupon-price"]').find("[role='price']").text(moneyFormatFloor(data.decreaseAmount));
-			// 		$('[role="coupon-code-verified"]').val(coupon.val());
-			// 	}
-			// 	conculatePrice();
-			// })
-
 		})
 
  		var totalPrice = parseFloat($('[role="total-price"]').text());

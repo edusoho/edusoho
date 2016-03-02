@@ -463,47 +463,6 @@ class CoinController extends BaseController
         return $this->render('TopxiaAdminBundle:Coin:order-create-modal.html.twig', array());
     }
 
-    // public function adminAction(Request $request)
-    // {
-    //     $fields = $request->query->all();
-    //     $nickname="";
-    //     $conditions=array();
-
-    //     if(isset($fields['nickName']) && $fields['nickName']!= ""){
-    //         $nickname =$fields['nickName'];
-    //         $user = $this->getUserService()->getUserByNickname($nickname);
-
-    //         if($user){
-    //             $conditions=array('userId'=>$user['id']);
-    //         }else{
-    //             $conditions=array('userId'=>-1);
-    //         }
-
-    //     }
-
-    //     $paginator = new Paginator(
-    //         $this->get('request'),
-    //         $this->getCashAccountService()->searchAccountCount($conditions),
-    //         20
-    //       );
-
-    //     $cashes=$this->getCashAccountService()->searchAccount(
-    //         $conditions,
-    //         array(),
-    //         $paginator->getOffsetCount(),
-    //         $paginator->getPerPageCount()
-    //       );
-
-    //     $userIds =  ArrayToolkit::column($cashes, 'userId');
-    //     $users = $this->getUserService()->findUsersByIds($userIds);
-
-    //     return $this->render('TopxiaAdminBundle:Coin:coin-admin.html.twig', array(
-    //         'cashes'=>$cashes,
-    //         'users'=>$users,
-    //         'paginator'=>$paginator,
-    //     ));
-    // }
-
     public function editAction(Request $request, $id)
     {
         if ($request->getMethod() == "POST") {

@@ -19,16 +19,10 @@ class OrderController extends BaseController
         $targetType = $request->query->get('targetType');
         $targetId   = $request->query->get('targetId');
 
-        if (empty($targetType) || empty($targetId) || !in_array($targetType, array("course", "vip", "classroom"))) {
+        if (empty($targetType)
+            || empty($targetId)
+            || !in_array($targetType, array("course", "vip", "classroom", "groupSell"))) {
             return $this->createMessageResponse('error', '参数不正确');
-        }
-
-        if ($targetType == 'classroom') {
-            $classroom = $this->getClassroomService()->getClassroom($targetId);
-
-            if (!$classroom['buyable']) {
-                return $this->createMessageResponse('error', "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
-            }
         }
 
         $processor = OrderProcessorFactory::create($targetType);
@@ -56,15 +50,15 @@ class OrderController extends BaseController
             $order                  = $processor->createOrder($formData, $fields);
 
             if ($order['status'] == 'paid') {
-                return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order['targetId'])));
+                return $this->redirect($processor->callbackUrl($order, $this->container));
             }
         }
 
-        $couponApp = $this->getAppService()->findInstallApp("Coupon");
+        // $couponApp = $this->getAppService()->findInstallApp("Coupon");
 
-        if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
-            $orderInfo["showCoupon"] = true;
-        }
+        // // if (isset($couponApp["version"]) && version_compare("1.0.5", $couponApp["version"], "<=")) {
+        // $orderInfo["showCoupon"] = true;
+        // // }
 
         $verifiedMobile = '';
 
@@ -73,7 +67,6 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
-
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
@@ -144,7 +137,6 @@ class OrderController extends BaseController
             list($amount, $totalPrice, $couponResult) = $processor->shouldPayAmount($targetId, $priceType, $cashRate, $coinEnabled, $fields);
             $amount                                   = (string) ((float) $amount);
             $shouldPayMoney                           = (string) ((float) $fields["shouldPayMoney"]);
-
             //价格比较
 
             if (intval($totalPrice * 100) != intval($fields["totalPrice"] * 100)) {
@@ -184,11 +176,12 @@ class OrderController extends BaseController
             $order = $processor->createOrder($orderFileds, $fields);
 
             if ($order["status"] == "paid") {
-                return $this->redirect($this->generateUrl($processor->getRouter(), array('id' => $order["targetId"])));
+                return $this->redirect($processor->callbackUrl($order, $this->container));
             }
 
             return $this->redirect($this->generateUrl('pay_center_show', array(
-                'sn' => $order['sn']
+                'sn'         => $order['sn'],
+                'targetType' => $order['targetType']
             )));
         } catch (\Exception $e) {
             return $this->createMessageResponse('error', $e->getMessage());
@@ -246,7 +239,7 @@ class OrderController extends BaseController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 
     protected function getVipService()

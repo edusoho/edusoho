@@ -8,20 +8,42 @@ $resources = array(
     'ClassroomMember',
     'ClassroomMembers',
     'Classrooms',
+    'CourseMember',
+    'CourseMembers',
+    'CourseMembership',
+    'LessonLiveTickets',
+    'LessonLiveTicket',
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
+    'MeCourses',
     'User',
+    'Users',
+    'Course',
+    'Courses',
+    'Lesson',
+    'Lessons',
+    'Thread',
+    'Threads',
+    'ChaosThreads',
+    'ChaosThreadsPosts',
     'Apps',
     'App',
+    'Analysis',
     'Homework',
     'HomeworkResult',
-    'Upload'
+    'HomeworkManager',
+    'ThreadManager',
+    'Thread',
+    'Upload',
+    'Status'
 );
 
 foreach ($resources as $res) {
-    $app["res.{$res}"] = $app->share(function() use ($res) {
+    $app["res.{$res}"] = $app->share(function () use ($res) {
         $class = "Topxia\\Api\\Resource\\{$res}";
         return new $class();
-    });
+    }
+
+    );
 }

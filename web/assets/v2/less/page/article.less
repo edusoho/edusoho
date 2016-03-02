@@ -1,41 +1,16 @@
-.article-list-header {
-  .row {
-    margin: 0 -5px;
-  }
-}
-
 // 轮播
 .aricle-carousel {
-  padding: 0 5px;
   overflow: hidden;
-  height: 410px;
-  @media (max-width: @screen-md-max) {
-    height: 338px;
-  }
-  @media (max-width: @screen-sm-max) {
-    height: 387px;
-  }
-  @media (max-width: @screen-xs-max) {
-    height: 150px;
-  }
   .swiper-container {
     position: relative;
     width: 100%;
     height: 100%;
+    .border-radius;
   }
   .swiper-slide {
     position: relative;
     width: 100%;
-    height: 410px;
-    @media (max-width: @screen-md-max) {
-      height: 338px;
-    }
-    @media (max-width: @screen-sm-max) {
-      height: 387px;
-    }
-    @media (max-width: @screen-xs-max) {
-      height: 150px;
-    }
+    height: 100%;
     img {
       width: 100%;
       .border-radius;
@@ -44,16 +19,24 @@
       .border-radius;
     }
   }
+  .swiper-cat {
+    position: absolute;
+    bottom: 80px;
+    left: 20px;
+    right: 20px;
+    .opacity(0.7);
+    color: #fff;
+    z-index: 1;
+  }
   .swiper-caption {
     position: absolute;
     font-size: 24px;
-    width: 100%;
-    left: 0;
+    left: 20px;
+    right: 20px;
     bottom: 40px;
-    text-align: left;
-    padding: 0 20px;
     color: #ffffff;
     z-index: 1;
+    .text-overflow;
     @media (max-width: @screen-md-max) {
       font-size: 20px;
     }
@@ -96,75 +79,63 @@
   }
 }
 
-.article-header-right {
-  padding: 0 5px;
-}
-
 .topic-post-small {
-  width: 100%;
-  margin-bottom: 10px;
-  height: 200px;
+  position: relative;
   color: #fff;
   border-collapse: collapse; 
-  display: table;
+  display: block;
   color: #fff;
+  + .topic-post-small {
+    margin-top: 12px;
+  }
   &:hover {
     color: #fff;
-  }
-  @media (max-width: @screen-md-max) {
-    height: 165px;
-  }
-  .border-radius; 
-  &.one {
     .es-transition;
-    background-color: @brand-primary;
-    
-    &:hover {
+    .image-overlay {
       .es-transition;
-      .opacity(0.8);
+      .opacity(0.2);
     }
   }
-  &.two {
-    margin-bottom: 0;
-    .es-transition;
-    background-color: #702adb;
-    &:hover {
-      .es-transition;
-      .opacity(0.8);
-    }  
+  img {
+    .border-radius;
   }
   .content {
-    padding-right: 30%;
-    padding-left: 20px;
-    display: table-cell;
-    vertical-align: middle;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
+    z-index: 1;
     .title {
       margin: 0;
       line-height: 25px;
+      .text-overflow;
     }
     p {
       margin-bottom: 5px;
       font-size: 12px;
+      .opacity(0.7);
     }
   }
 }
 
-.article-list-mian {
+.article-list {
   .article-item {
     margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #efefef;
+    padding-bottom: 20px;
+    border-bottom: 1px solid @gray-lighter;
     @media (max-width: @screen-xs-max) {
       .media-left {
         width: 100%;
         display: block;
+        padding-right: 0;
         margin-bottom: 10px;
-        img {
-          width: 100%;
-        }
+      }
+      .media .thumb-img {
+        width: 100%;
       }
     }
-     .content {
+    .content {
       margin-top: 15px;
       color: @gray;
     }
@@ -175,8 +146,9 @@
       padding-left: 10px;
       line-height: 25px;
     }
-    img {
-      border-radius: 6px;
+    .thumb-img {
+      width: 260px;
+      .border-radius;
     }
   }
   .pager {
@@ -189,13 +161,13 @@
   .date {
     height: 45px;
     width: 45px;
-    margin-top: 10px;
+    // margin-top: 10px;
     text-align: center;
-    color: @gray-light;
-    border: 1px solid @gray-light;
+    color: @gray;
+    background-color: @gray-lighter;
     border-radius: 50%;
     .day {
-      margin-top: 2px;
+      padding-top: 5px;
       font-size: 16px;
       line-height: 1.2;
     }
@@ -207,12 +179,12 @@
     padding-left: 60px;
     p {
       margin-bottom: 0;
-      margin-top: 10px;
+      // margin-top: 10px;
       font-size: 12px;
     }
     .title {
       margin: 0;
-      line-height: 36px;
+      line-height: 32px;
       @media (max-width: @screen-md-max) {
         font-size: 20px;
         line-height: 30px;
