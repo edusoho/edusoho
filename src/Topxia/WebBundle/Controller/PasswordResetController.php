@@ -48,18 +48,23 @@ class PasswordResetController extends BaseController
                 if ($user) {
                     $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
                     try {
-                        $params = array(
-                            'title'     => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                            'body'      => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+                        $normalMail = array(
+                            'to'     => $user['email'],
+                            'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                            'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
                                 'user'  => $user,
                                 'token' => $token
                             )),
+                            'format' => 'html'
+                        );
+                        $cloudMail = array(
+                            'to'        => $user['email'],
                             'template'  => 'email_reset_password',
                             'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                            'nickname'  => $user['nickname'],
-                            'format'    => 'html'
+                            'nickname'  => $user['nickname']
                         );
-                        $this->sendEmailService($user['email'], $params);
+                        $mail = new Mail($normalMail, $cloudMail);
+                        $this->sendEmailService($mail);
                     } catch (\Exception $e) {
                         $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
                         return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');

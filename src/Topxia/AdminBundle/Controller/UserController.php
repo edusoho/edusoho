@@ -453,14 +453,19 @@ class UserController extends BaseController
         }
 
         try {
-            $params = array(
-                'title'     => '请激活你的帐号 完成注册',
-                'body'      => $emailBody,
+            $normalMail = array(
+                'to'    => $user['email'],
+                'title' => '请激活你的帐号 完成注册',
+                'body'  => $emailBody
+            );
+            $cloudMail = array(
+                'to'        => $user['email'],
                 'template'  => 'email_reset_password',
                 'verifyurl' => $verifyurl,
                 'nickname'  => $user['nickname']
             );
-            $this->sendEmailService($user['email'], $params);
+            $mail = new Mail($normalMail, $cloudMail);
+            $this->sendEmailService($mail);
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());

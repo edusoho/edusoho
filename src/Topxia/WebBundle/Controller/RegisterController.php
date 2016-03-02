@@ -489,18 +489,20 @@ class RegisterController extends BaseController
         $emailTitle        = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
         try {
-            $mail = array(
+            $normalMail = array(
+                'to'    => $user['email'],
                 'title' => $emailTitle,
                 'body'  => $emailBody
             );
             $cloudMail = array(
+                'to'        => $user['email'],
                 'verifyurl' => $verifyurl,
                 'template'  => 'email_registration',
                 'nickname'  => $user['nickname']
             );
-            $mail = new Mail($mail, $cloudMail);
+            $mail = new Mail($normalMail, $cloudMail);
 
-            $this->sendEmailService($user['email'], $mail);
+            $this->sendEmailService($mail);
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }

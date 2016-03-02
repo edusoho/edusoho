@@ -116,21 +116,21 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmailService($to, Mail $mail)
+    protected function sendEmailService(Mail $mail)
     {
         $config      = $this->setting('mailer', array());
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            return $this->sendCloudEmail($to, $mail);
+            return $this->sendCloudEmail($mail);
         } elseif (!isset($config['enabled']) && $config['enabled'] == 1) {
-            return $this->sendEmail($to, $mail);
+            return $this->sendEmail($mail);
         }
 
         return false;
     }
 
-    private function sendCloudEmail($to, Mail $mail)
+    private function sendCloudEmail(Mail $mail)
     {
         $cloudConfig = $this->setting('cloud_email', array());
 
@@ -139,7 +139,7 @@ abstract class BaseController extends Controller
             $site      = $this->setting('site', array());
             $cloudMail = $mail->getCloudMail();
             $params    = array(
-                'to'       => $to,
+                'to'       => $cloudMail['to'],
                 'template' => $cloudMail['template'],
                 'params'   => array(
                     'sitename'  => $site['name'],
@@ -157,7 +157,7 @@ abstract class BaseController extends Controller
         return false;
     }
 
-    private function sendEmail($to, Mail $mail)
+    private function sendEmail(Mail $mail)
     {
         $params = $mail->getMail();
         $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
@@ -174,7 +174,7 @@ abstract class BaseController extends Controller
             $email = \Swift_Message::newInstance();
             $email->setSubject($params['title']);
             $email->setFrom(array($config['from'] => $config['name']));
-            $email->setTo($to);
+            $email->setTo($params['to']);
 
             if ($format == 'text/html') {
                 $email->setBody($params['body'], 'text/html');

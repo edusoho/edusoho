@@ -745,17 +745,22 @@ class SettingsController extends BaseController
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $params = array(
-                        'title'     => "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
-                        'body'      => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
+                    $normalMail = array(
+                        'to'    => $user['email'],
+                        'title' => "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
+                        'body'  => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
                             'user'  => $user,
                             'token' => $token
-                        )),
+                        ))
+                    );
+                    $cloudMail = array(
+                        'to'        => $user['email'],
                         'template'  => 'email_reset_password',
                         'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
                         'nickname'  => $user['nickname']
                     );
-                    $this->sendEmailService($data['email'], $params);
+                    $mail = new Mail($normalMail, $cloudMail);
+                    $this->sendEmailService($mail);
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
