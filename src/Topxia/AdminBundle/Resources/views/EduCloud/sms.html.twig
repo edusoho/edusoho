@@ -50,7 +50,7 @@
           <div class="controls radios">
             <form class="form-inline" method="post" id="sms-controller-form" novalidate="">
             {% if (smsStatus.sms_enabled|default('0') == '0' or smsStatus.status|default('error') == 'error') and accessCloud|default(0) != 0 %}
-              <span>短信签名：{% if not smsStatus.sms_school_name|default(null) %}<input class="form-control" type="text" name="sign">{% else %}{{smsStatus.sms_school_name}}{% endif %}
+              <span>短信签名：{% if not smsStatus.sms_school_name|default(null) %}<input class="form-control" type="text" name="sign" placeholder="签名3-8字，建议使用汉字">{% else %}{{smsStatus.sms_school_name}}{% endif %}
               </span>
               <button name="sms-open" class="btn btn-primary" >启用云短信</button>
             {% elseif smsStatus.sms_enabled|default('0') == '1' and smsStatus.sms_school_name|default(null) != "" and  smsStatus.status != 'error' %}

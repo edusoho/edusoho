@@ -48,7 +48,7 @@ define(function(require, exports, module) {
             element: '[name="sign"]',
             required: true,
             rule:'chinese minlength{min:2} maxlength{max:5}',
-            errormessageRequired: '请输入2～5个中文'
+            errormessageRequired: '请输入3～8个中文'
         });
 
 	}

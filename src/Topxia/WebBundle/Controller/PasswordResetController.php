@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
+use Topxia\Service\System\Mail;
 use Symfony\Component\HttpFoundation\Request;
 
 class PasswordResetController extends BaseController
