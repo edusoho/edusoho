@@ -23,10 +23,10 @@ class Version20160225145518 extends AbstractMigration
                          `categoryId` int(10) NOT NULL,
                          `orderType` varchar(32) NOT NULL,
                          `showCount` int(10) NOT NULL,
-                         `createTime` int(10) unsigned NOT NULL,
+                         `createdTime` int(10) unsigned NOT NULL,
                          `updateTime` int(10) unsigned NOT NULL,
                          PRIMARY KEY (`id`)
-                        ) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
                         ");
     }
 

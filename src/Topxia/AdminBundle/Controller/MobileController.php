@@ -129,7 +129,7 @@ class MobileController extends BaseController
         $categoryId = array();
         if ($request->getMethod() == 'POST') {
             $conditions = $request->request->all();
-            $conditions['createTime'] = time();
+            $conditions['createdTime'] = time();
             
             $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($conditions['title']);
             if (empty($discoveryColumn)) {
