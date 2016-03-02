@@ -58,17 +58,18 @@
           <div class="col-md-8 controls">
             <textarea class="form-control" id="question-stem-field" data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"  data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}" name="stem" style="height:180px;">{{question.stem | default('')}}</textarea>
             <span id="question-attachment" >
-              <a class="btn btn-default" id="question-attachment-upload"
+              
+              <a class="btn btn-default {% if setting('storage.upload_mode') == 'cloud' %}hidden{% endif %}" id="question-attachment-upload"
              data-upload-token="{{ upload_token('question','attachment') }}"
              data-url="{{ path('editor_file_upload',{token:upload_token('course','file')}) }}">上传附件</a>
-
-               <a id="cloud-btn" class="btn btn-info btn-sm pull-right"
+              
+               <a id="cloud-btn" class="btn btn-info btn-sm pull-right {% if setting('storage.upload_mode') == 'local' %}hidden{% endif %}"
               data-html5-url="{{ path('course_manage_question_batch_upload_attachment', {id:course.id, targetType:'attachment'}) }}"
               data-storage="{{'cloud'}}"
               >
               <i class="glyphicon glyphicon-cloud-upload"></i>上传附件
               </a>
-
+             
            </span>
 
             {% set question_stem_help = question_stem_help|default('') %}
