@@ -416,18 +416,28 @@ admin_logs_prod:
     name: 程序运行日志
     parent: admin_logs
 admin_my_cloud:
-    name: 我的教育云
+    name: 账户概览
     parent: admin_app
-admin_setting_cloud_video:
-    name: 设置
+admin_cloud_video_setting:
+    name: 云视频设置
     parent: admin_app
+    router_name: admin_setting_cloud_video
+admin_edu_cloud_sms:
+    name: 云短信设置
+    parent: admin_app
+admin_edu_cloud_email:
+    name: 云邮件设置
+    parent: admin_app
+# admin_setting_cloud_video:
+#     name: 设置
+#     parent: admin_app
 admin_app_center_show:
     name: ES应用
     parent: admin_app
     router_name: admin_app_center
     router_params: { postStatus : all }
 admin_setting_cloud:
-    name: 授权码
+    name: 授权信息
     parent: admin_app
 admin_app_center:
     name: 应用中心
@@ -445,13 +455,13 @@ admin_app_upgrades:
 admin_app_logs:
     name: 更新日志
     parent: admin_app_center_show
-admin_cloud_video_setting:
-    name: 云视频设置
-    parent: admin_setting_cloud_video
-    router_name: admin_setting_cloud_video
-admin_edu_cloud_sms:
-    name: 云短信设置
-    parent: admin_setting_cloud_video
+# admin_cloud_video_setting:
+#     name: 云视频设置
+#     parent: admin_setting_cloud_video
+#     router_name: admin_setting_cloud_video
+# admin_edu_cloud_sms:
+#     name: 云短信设置
+#     parent: admin_setting_cloud_video
 admin_cloud_bill:
     name: 云视频账单
     parent: admin_my_cloud
