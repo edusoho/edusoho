@@ -694,7 +694,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('用户角色必须包含ROLE_USER');
         }
 
-        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        $allowedRoles = array('ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER', 'ROLE_BACKEND');
         $allowedRoles = array_merge($allowedRoles, ArrayToolkit::column($this->getRoleService()->searchRoles(array(), 'created', 0, 9999), 'code'));
 
         $notAllowedRoles = array_diff($roles, $allowedRoles);

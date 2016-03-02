@@ -1,7 +1,6 @@
 <?php
 namespace Topxia\WebBundle\Listener;
 
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -27,9 +26,13 @@ class KernelControllerListener
         $currentUser = $this->getUserService()->getCurrentUser();
 
         if (preg_match('/admin/s', $route) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-            if (array_intersect($permissions, ArrayToolkit::column($currentUser['menus'], 'router_name'))) {
-                throw new AccessDeniedException('无权限访问！');
+            foreach ($permissions as $permission) {
+                if (isset($currentUser['roles'], $permission)) {
+                    return;
+                }
             }
+
+            throw new AccessDeniedException('无权限访问！');
         }
     }
 

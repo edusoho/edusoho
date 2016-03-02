@@ -42,7 +42,7 @@ class MenuExtension extends \Twig_Extension
     public function getMenuPath($env, $context, $menu)
     {
         if (empty($this->levelOneMenus)) {
-            $this->levelOneMenus = ArrayToolkit::index($this->getMenuChildren('admin', 'admin', '1'), 'code');
+            $this->levelOneMenus = $this->getMenuChildren('admin', 'admin', '1');
 
             foreach ($this->levelOneMenus as $levelOneMenu) {
                 $this->levelTwoMenus = array_merge($this->levelTwoMenus, $this->getMenuChildren('admin', $levelOneMenu['code'], '1'));

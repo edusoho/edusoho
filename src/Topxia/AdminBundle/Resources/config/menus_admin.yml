@@ -148,11 +148,9 @@ admin_course_question:
 admin_course_note:
     name: 笔记管理
     parent: admin_course
-    router_name: admin_note
 admin_course_review:
     name: 评价管理
     parent: admin_course
-    router_name: admin_review
 admin_course_category:
     name: 分类管理
     parent: admin_course
@@ -166,7 +164,6 @@ admin_category_create:
 admin_course_tag:
     name: 标签管理
     parent: admin_course
-    router_name: admin_tag
 admin_course_tag_manage:
     name: 管理
     parent: admin_course_tag
@@ -256,15 +253,13 @@ admin_course_refunds_manage:
 admin_setting:
     name: 站点设置
     parent: admin_system
-    router_name: admin_setting_site
-admin_setting_massage:
+admin_setting_message:
     name: 基础信息
     parent: admin_setting
     router_name: admin_setting_site
 admin_setting_theme:
     name: 主题
     parent: admin_setting
-    router_name: admin_setting_theme
 admin_setting_mailer:
     name: 邮件服务器设置
     parent: admin_setting
@@ -290,7 +285,6 @@ admin_setting_share:
 admin_setting_user:
     name: 用户设置
     parent: admin_system
-    router_name: admin_setting_auth
 admin_user_auth:
     name: 注册
     parent: admin_setting_user
@@ -328,7 +322,6 @@ admin_setting_course_avatar:
 admin_setting_operation:
     name: 运营设置
     parent: admin_system
-    router_name: admin_article_setting
 admin_article_setting:
     name: 资讯
     parent: admin_setting_operation
@@ -338,7 +331,6 @@ admin_group_set:
 admin_setting_finance:
     name: 账务设置
     parent: admin_system
-    router_name: admin_setting_payment
 admin_payment:
     name: 支付
     parent: admin_setting_finance

@@ -239,11 +239,17 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
 
+            $setRoles = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+            $setCodes = ArrayToolkit::column($setRoles, 'code');
+
+            if (array_intersect($setCodes, $roles)) {
+                $roles[] = 'ROLE_BACKEND';
+            }
+
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
             $dataDict = new UserRoleDict();
             $roleDict = $dataDict->getDict();
-            $setRoles = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
 
             foreach ($setRoles as $serRole) {
                 $roleDict[$serRole['code']] = $serRole['name'];

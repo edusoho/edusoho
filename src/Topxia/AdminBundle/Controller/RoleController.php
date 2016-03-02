@@ -50,7 +50,7 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $res = $this->dataPrepare();
+        $res = $this->dataPrepare('admin');
 
         return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
     }
@@ -58,7 +58,7 @@ class RoleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $res  = $this->dataPrepare();
+        $res  = $this->dataPrepare('admin');
 
         foreach ($res as &$re) {
             if (in_array($re['code'], $role['data'])) {
@@ -79,7 +79,7 @@ class RoleController extends BaseController
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $res  = $this->dataPrepare();
+        $res  = $this->dataPrepare('admin');
 
         foreach ($res as &$re) {
             if (in_array($re['code'], $role['data'])) {
@@ -92,17 +92,54 @@ class RoleController extends BaseController
         return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'show', 'role' => $role));
     }
 
-    protected function dataPrepare()
+    protected function dataPrepare($position)
     {
-        $path = realpath(__DIR__.'/..')."/Resources/config/menus_admin.yml";
-        $res  = Yaml::parse($path);
-        $i    = 0;
+        $configPaths = array();
+        $rootDir     = realpath(__DIR__.'/../../../../');
 
-        foreach ($res as $key => &$menu) {
+        $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
+
+        $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
+
+        $count = $this->getAppService()->findAppCount();
+        $apps  = $this->getAppService()->findApps(0, $count);
+
+        foreach ($apps as $app) {
+            if ($app['type'] != 'plugin') {
+                continue;
+            }
+
+            $code          = ucfirst($app['code']);
+            $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
+        }
+
+        $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Custom/AdminBundle/Resources/config/menus_{$position}.yml";
+
+        $menus = array();
+
+        foreach ($configPaths as $path) {
+            if (!file_exists($path)) {
+                continue;
+            }
+
+            $menu = Yaml::parse($path);
+
+            if (empty($menu)) {
+                continue;
+            }
+
+            $menus = array_merge($menus, $menu);
+        }
+
+        $i = 0;
+
+        foreach ($menus as $key => &$menu) {
             $menu['id'] = $i++;
 
             if (!empty($menu['parent'])) {
-                $menu['pId'] = $res[$menu['parent']]['id'];
+                $menu['pId'] = $menus[$menu['parent']]['id'];
             } else {
                 $menu['pId'] = 0;
             }
@@ -110,9 +147,9 @@ class RoleController extends BaseController
             $menu['code'] = $key;
         }
 
-        $res = ArrayToolkit::index($res, 'id');
+        $menus = ArrayToolkit::index($menus, 'id');
 
-        return $res;
+        return $menus;
     }
 
     public function checkNameAction(Request $request)
