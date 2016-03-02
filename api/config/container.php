@@ -37,7 +37,7 @@ $resources = array(
     'Thread',
     'Upload',
     'Status',
-    'MobileCategoryShow'
+    'DiscoveryColumn'
 );
 
 foreach ($resources as $res) {

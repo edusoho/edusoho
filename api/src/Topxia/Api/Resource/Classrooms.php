@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Classrooms extends BaseResource
 {
-	public function categoryShow(Application $app, Request $request)
+	public function discoveryColumn(Application $app, Request $request)
     {
     	$result = $request->query->all();
 

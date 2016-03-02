@@ -1,31 +1,31 @@
 <tbody>
-	{% for mobileShow in mobileShows %}
+	{% for discoveryColumn in discoveryColumns %}
 		<tr>
 			<td>
-				{{ mobileShow.title }}
+				{{ discoveryColumn.title }}
 			</td>
 		
 			<td>
-				{% if mobileShow.type == 'classroom' %}班级
-				{% elseif mobileShow.type == 'course' %}课程
+				{% if discoveryColumn.type == 'classroom' %}班级
+				{% elseif discoveryColumn.type == 'course' %}课程
 				{% else %}直播
 				{% endif %}
 			</td>
 
 			<td>
-				{% if mobileShow.orderType == 'recommend' %}推荐
-				{% elseif mobileShow.orderType == 'hot' %}最热
+				{% if discoveryColumn.orderType == 'recommend' %}推荐
+				{% elseif discoveryColumn.orderType == 'hot' %}最热
 				{% else %}最新
 				{% endif %}
 			</td>
 
 			<td>
-				{{ mobileShow.showCount }}
+				{{ discoveryColumn.showCount }}
 			</td>
 
 			<td>
-				<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_operation_mobile_edit', {id:mobileShow.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
-		    <a href="javascript:;" class="btn btn-default btn-sm delete-btn" data-url="{{ path('admin_operation_mobile_delete', {id:mobileShow.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 删除</a>
+				<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_operation_mobile_edit', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+		    <a href="javascript:;" class="btn btn-default btn-sm delete-btn" data-url="{{ path('admin_operation_mobile_delete', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 删除</a>
 			</td>
 		</tr>
 	{% else %}

@@ -8,7 +8,6 @@ $api = $app['controllers_factory'];
 
 //根据id获取一个课程信息
 $api->get('/{id}', function ($id) {
-    echo 'id='.$id;
     $course = convert($id,'course');
     return filter($course, 'course');
 });

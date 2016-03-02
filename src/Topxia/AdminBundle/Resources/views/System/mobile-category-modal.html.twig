@@ -5,11 +5,11 @@
 {% block body %}
 <div id="category-creater-widget" data-upload-url="#">
 
-	<form id="category-form" class="form-horizontal" {% if mobileShow %}action="{{ path('admin_operation_mobile_edit',{id:mobileShow.id}) }}"{% else %}action="{{ path('admin_operation_mobile_create') }}"{% endif %} method="post">
+	<form id="category-form" class="form-horizontal" {% if discoveryColumn %}action="{{ path('admin_operation_mobile_edit',{id:discoveryColumn.id}) }}"{% else %}action="{{ path('admin_operation_mobile_create') }}"{% endif %} method="post">
 		<div class="form-group">
 			<label class="col-md-3 control-label" for="category-name-field">自定义名称</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="category-name-field" type="text" name="title" value="{{ mobileShow.title|default() }}" tabindex="1">
+				<input class="form-control" id="category-name-field" type="text" name="title" value="{{ discoveryColumn.title|default() }}" tabindex="1">
 				<p class="help-block">提示：请将题目控制在十个字符之内。</p>
 			</div>
 		</div>
@@ -21,9 +21,9 @@
 			<div class="col-md-7 controls radios">
         <input type="radio" id="course" name="type" checked="checked" value="course">
         <label for="class">课程</label>
-        <input type="radio" id="live" name="type"{% if mobileShow and mobileShow.type == 'live' %} checked="checked" {% endif %}value="live">
+        <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live">
         <label for="live">直播</label>
-        <input type="radio" id="classroom" name="type" {% if mobileShow and mobileShow.type == 'classroom' %} checked="checked" {% endif %}value="classroom">
+        <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom">
         <label for="classroom">班级</label>
     	</div>
     </div>
@@ -45,9 +45,9 @@
 			<div class="col-md-7 controls radios">
         <input type="radio" id="new" name="orderType" checked="checked" value="new">
         <label for="new">最新</label>
-        <input type="radio" id="hot" name="orderType" {% if mobileShow and mobileShow.orderType == 'hot' %}checked="checked" {% endif %}value="hot">
+        <input type="radio" id="hot" name="orderType" {% if discoveryColumn and discoveryColumn.orderType == 'hot' %}checked="checked" {% endif %}value="hot">
         <label for="hot">最热</label>
-        <input type="radio" id="recommend" name="orderType" {% if mobileShow and mobileShow.orderType == 'recommend' %}checked="checked" {% endif %}value="recommend">
+        <input type="radio" id="recommend" name="orderType" {% if discoveryColumn and discoveryColumn.orderType == 'recommend' %}checked="checked" {% endif %}value="recommend">
         <label for="recommend">推荐</label>
     	</div>
     </div>

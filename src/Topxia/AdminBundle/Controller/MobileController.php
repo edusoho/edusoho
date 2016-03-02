@@ -112,16 +112,16 @@ class MobileController extends BaseController
 
     public function mobileDeleteAction(Request $request, $id)
     {
-        $this->getMobileShowService()->deleteMobileShow($id);
+        $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
         return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
     }
 
     public function mobileClassAction(Request $request)
     {
-        $mobileShows = array();
-        $mobileShows = $this->getMobileShowService()->getAllMobileShows();
+        $discoveryColumns = array();
+        $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
 
-        return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig',array('mobileShows' => $mobileShows));
+        return $this->render('TopxiaAdminBundle:System:mobile-class-category.html.twig',array('discoveryColumns' => $discoveryColumns));
     }
 
     public function createAction(Request $request)
@@ -131,9 +131,9 @@ class MobileController extends BaseController
             $conditions = $request->request->all();
             $conditions['createTime'] = time();
             
-            $mobileShow = $this->getMobileShowService()->findMobileShowByTitle($conditions['title']);
-            if (empty($mobileShow)) {
-                $mobileShow = $this->getMobileShowService()->addMobileShow($conditions);
+            $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($conditions['title']);
+            if (empty($discoveryColumn)) {
+                $discoveryColumn = $this->getDiscoveryColumnService()->addDiscoveryColumn($conditions);
             }
             return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
         }
@@ -141,31 +141,31 @@ class MobileController extends BaseController
             $categoryId = 0;
         }
 
-        if (empty($mobileShow)) {
-            $mobileShow = array();
+        if (empty($discoveryColumn)) {
+            $discoveryColumn = array();
         }
         return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig',array(
-                'mobileShow' => $mobileShow,
+                'discoveryColumn' => $discoveryColumn,
                 'categoryId' => $categoryId
             ));
     }
 
     public function mobileEditAction(Request $request, $id)
     {
-        $mobileShow = $this->getMobileShowService()->getMobileShow($id);
-        if (empty($mobileShow)) {
+        $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
+        if (empty($discoveryColumn)) {
             throw $this->createNotFoundException();
         }
 
         if ($request->getMethod() == 'POST') {
             $conditions = $request->request->all();
-            $mobileShow = $this->getMobileShowService()->updateMobileShow($id, $conditions);
+            $discoveryColumn = $this->getDiscoveryColumnService()->updateDiscoveryColumn($id, $conditions);
             return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
         }
 
         return $this->render('TopxiaAdminBundle:System:mobile-category-modal.html.twig', array(
-            'mobileShow' => $mobileShow,
-            'categoryId' => $mobileShow['categoryId']
+            'discoveryColumn' => $discoveryColumn,
+            'categoryId' => $discoveryColumn['categoryId']
         ));
     }
 
@@ -233,9 +233,9 @@ class MobileController extends BaseController
         return $this->getServiceKernel()->createService('User.UserFieldService');
     }
 
-    protected function getMobileShowService()
+    protected function getDiscoveryColumnService()
     {
-        return $this->getServiceKernel()->createService('MobileShow.MobileShowService');
+        return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
     }
 
     protected function getAuthService()

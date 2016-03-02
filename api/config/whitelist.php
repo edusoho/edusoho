@@ -7,9 +7,9 @@ return array(
         '/^\/api\/users\/\d+$/',
         '/^\/api\/mobileschools\/.+$/',
         '/^\/api\/classrooms\/\w+\/members$/',
-        '/^\/api\/category\/show$/',
-        '/^\/api\/courses\/category\/show$/',
-        '/^\/api\/classrooms\/category\/show$/'
+        '/^\/api\/discovery\/column$/',
+        '/^\/api\/courses\/discovery\/column$/',
+        '/^\/api\/classrooms\/discovery\/column$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',
