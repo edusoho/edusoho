@@ -4,63 +4,393 @@
 
 {% set script_controller = 'live-course/index' %}
 
-{% block live_main %}
+  {% block top_content %}
+    {% if paginator.currentPage == 1 %}
+        <section class="es-live-poster swiper-container">
+          <div class="swiper-wrapper">
+            {{ block_show('live_top_banner') }}
+          </div> 
+          <div class="swiper-pager"></div> 
+        </section>
+    {% endif  %}
+  {% endblock %}
+  {% block live_main %}
 
-  {% if paginator.currentPage == 1 %}
-    <div class="homepage-feature homepage-feature-slides mbl">
-      <div class="cycle-pager"></div>
-      	{{ block_show('live_top_banner') }}
-    </div>
-  {% endif  %}
+{# <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">近期直播</h3>
+      </div>
+      <div class="panel-body">
+        {% if recentCourses %}
+          {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:recentCourses, view: 'list'})) }}
+        {% else %}
+          <div class="empty">近期还没有直播</div>
+        {% endif %}
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title">近期直播</h3>
-    </div>
+        {{ web_macro.paginator(paginator) }}
+      </div>
+   </div> #}
+  <div class="panel panel-default es-live-list">
     <div class="panel-body">
-      {% if recentCourses %}
-        {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:recentCourses, view: 'list'})) }}
-      {% else %}
-        <div class="empty">近期还没有直播</div>
-      {% endif %}
-
-      {{ web_macro.paginator(paginator) }}
+      <ul class="clearfix">
+        <li class="active">
+          <a href="#live-1" data-toggle="tab">今日直播</a>
+        </li>
+        <li>
+          <a href="#live-2" data-toggle="tab">02-23</a>
+        </li>
+        <li>
+          <a href="#live-3" data-toggle="tab">02-26</a>
+        </li>
+        <li>
+          <a href="#live-4" data-toggle="tab">02-27</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="live-1">
+          <div class="es-live-item">
+           <div class="live-content living mbl">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-success label-md">正在直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>直播列表的字数最多18个字超过就截取掉...</a></li>
+              </ul>
+            </div>
+            <div class="live-content live">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-info label-md">即将直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置基础教程</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+                <li><a href=""><span>10:30</span>快速入门EduSoho服务器</a></li>
+                <li><a href=""><span>11:20</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+         <div class="tab-pane" id="live-2">
+           <div class="es-live-item">
+           <div class="live-content living mbl">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-success label-md">正在直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>直播列表的字数最多18个字超过就截取掉...</a></li>
+              </ul>
+            </div>
+            <div class="live-content live">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-info label-md">即将直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置基础教程</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+                <li><a href=""><span>10:30</span>快速入门EduSoho服务器</a></li>
+                <li><a href=""><span>11:20</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="live-3">
+          <div class="es-live-item">
+           <div class="live-content living mbl">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-success label-md">正在直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>直播列表的字数最多18个字超过就截取掉...</a></li>
+              </ul>
+            </div>
+            <div class="live-content live">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-info label-md">即将直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置基础教程</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+                <li><a href=""><span>10:30</span>快速入门EduSoho服务器</a></li>
+                <li><a href=""><span>11:20</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="live-4">
+           <div class="es-live-item">
+           <div class="live-content living mbl">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-success label-md">正在直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>直播列表的字数最多18个字超过就截取掉...</a></li>
+              </ul>
+            </div>
+            <div class="live-content live">
+              <div class="timeline">
+               <span class="time-icon"><em></em></span>
+               <span class="label label-info label-md">即将直播</span>
+              </div>
+              <ul class="live-courses">
+                <li><a href=""><span>08:30</span>EduSoho安装实战</a></li>
+                <li><a href=""><span>09:45</span>快速入门EduSoho服务器设置基础教程</a></li>
+                <li><a href=""><span>10:30</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+                <li><a href=""><span>10:30</span>快速入门EduSoho服务器</a></li>
+                <li><a href=""><span>11:20</span>如何使用主题配置</a></li>
+                <li><a href=""><span>11:20</span>快速进行主题开发</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-{% endblock %}
-
-{% block live_side %}
-
-  <div class="panel panel-default">
+  <div class="panel panel-default es-live-recommend">
     <div class="panel-heading">
-      <h3 class="panel-title">最新上线</h3>
+      <a href="" class="more">
+        <i class="es-icon es-icon-morehoriz"></i>
+      </a> 
+      <h3 class="panel-title">推荐课程</h3>
     </div>
     <div class="panel-body">
-      <ul class="media-list media-list-rank">
-        {% for course in liveCourses %}
-        <li class="media">
-          <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left">
-            <img src="{{ filepath(course.smallPicture, 'course.png') }}" class="media-object" width="96" height="54">
+      <div class="media">
+        <div class="media-left">
+          <a href="">
+            <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
           </a>
-          <div class="media-body">
-            <h5 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h5>
-            {% set teacher = users[course.teacherIds|first]|default(null) %}
-            {% if teacher %}
-              <p>
-              <span class="glyphicon glyphicon-user text-muted"></span>
-                <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-              </p>
-            {% endif %}
+        </div>
+        <div class="media-body">
+          <div class="title">
+            <a href=""  class="gray-darker">EduSoho购买功能体验</a>
           </div>
-        </li>
-        {% else %}
-          <li class="empty">还没有发布的直播课程</li>
-        {% endfor %}
+           <span class="label label-success label-md">正在直播</span>
+          <div class="metas">
+            <span class="text-success">免费</span>
+          </div>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-left">
+          <a href="">
+            <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="title">
+            <a href=""  class="gray-darker">EduSoho购买功能体验</a>
+          </div>
+          <div class="metas">
+            <span class="price">¥199</span>
+          </div>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-left">
+          <a href="">
+            <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="title">
+            <a href=""  class="gray-darker">账户充值</a>
+          </div>
+          <div class="metas">
+            <span class="text-success">免费</span>
+          </div>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-left">
+          <a href="">
+            <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="title">
+            <a href=""  class="gray-darker">EduSoho优惠码</a>
+          </div>
+          <div class="metas">
+            <span class="price">¥199</span>
+          </div>
+        </div>
+      </div>
+      <div class="media">
+        <div class="media-left">
+          <a href="">
+            <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="title">
+            <a href=""  class="gray-darker">EduSoho优惠码</a>
+          </div>
+          <div class="metas">
+            <span class="price">¥199</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default es-live-back">
+    <div class="panel-heading">
+      <h3 class="panel-title">直播回放</h3>
+    </div>
+    <div class="panel-body">
+      <ul>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>EduSoho安装实战</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">01-28 18:00</span>直播回放列表文字最多16个多了就截...</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>如何使用主题配置</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速进行主题开发</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>EduSoho安装实战</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速入门EduSoho服务器配置</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>如何使用主题配置</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速进行主题开发</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速入门EduSoho服务器配置</a></li>
+        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>3步教你摄影入门</a></li>
       </ul>
     </div>
-  </div>
+  </div> 
+  {% endblock %}
 
-  {{ render(controller('TopxiaWebBundle:LiveCourse:ratingCoursesBlock')) }}
+  {% block live_side %}
 
-{% endblock %}
+   {#  <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">最新上线</h3>
+      </div>
+      <div class="panel-body">
+        <ul class="media-list media-list-rank">
+          {% for course in liveCourses %}
+          <li class="media">
+            <a href="{{ path('course_show', {id:course.id}) }}" class="pull-left">
+              <img src="{{ filepath(course.smallPicture, 'course.png') }}" class="media-object" width="96" height="54">
+            </a>
+            <div class="media-body">
+              <h5 class="media-heading"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a></h5>
+              {% set teacher = users[course.teacherIds|first]|default(null) %}
+              {% if teacher %}
+                <p>
+                <span class="glyphicon glyphicon-user text-muted"></span>
+                  <a class="text-muted" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                </p>
+              {% endif %}
+            </div>
+          </li>
+          {% else %}
+            <li class="empty">还没有发布的直播课程</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div> #}
+    <div class="panel panel-default es-live-all">
+      <div class="panel-heading">
+        <form id="" class="form-inline" action="" method="get" novalidate="">
+          <div class="form-group mrl">
+            <select class="form-control" name="">
+            <option value="" selected="selected">所有分类</option>
+            <option value="">分分类一类一分一</option>
+            <option value="">分类二</option>
+            <option value="">分类三</option>
+            <option value="">分类四</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="">
+            <option value="" selected="selected"> 会员课程</option>
+            <option value="">分分类一类一分</option>
+            <option value="">分类二</option>
+            <option value="">分类三</option>
+            <option value="">分类四</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="panel-body">
+        <div class="media">
+          <div class="media-left">
+            <a href="" class="text-overflow">
+              <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title  mbm">
+              <a href=""  class="gray-darker">EduSoho购买功能体验</a>
+            </div>
+            <span class="label label-success label-md">正在直播 今天 10：00</span>
+            <div class="metas">
+              <span class="num prl"><i class="es-icon es-icon-people prm"></i>6375</span>
+              <span class="comment"><i class="es-icon es-icon-textsms prm"></i>14</span>
+            </div>
+            <div class="user">
+                <a href="">
+                <img class="avatar-sm" src="{{asset('assets/img/default/course.png') }}" >
+                <span class="plm">李小康</span>
+                </a>
+            </div>
+            <div class="other">
+              <span class="price">￥1100</span>
+              <a class="btn btn-primary">进入直播</a>
+            </div>
+          </div>
+        </div>
+        <div class="media">
+          <div class="media-left">
+            <a href="" class="text-overflow">
+              <img src="{{asset('assets/img/default/course.png') }}" class="img-responsive">
+            </a>
+          </div>
+          <div class="media-body">
+            <div class="title  mbm">
+              <a href=""  class="gray-darker">EduSoho购买功能体验</a>
+            </div>
+            <span class="label label-success label-md">正在直播 今天 10：00</span>
+            <div class="metas">
+              <span class="num prl"><i class="es-icon es-icon-people prm"></i>6375</span>
+              <span class="comment"><i class="es-icon es-icon-textsms prm"></i>14</span>
+            </div>
+            <div class="user">
+                <a href="">
+                <img class="avatar-sm" src="{{asset('assets/img/default/course.png') }}" >
+                <span class="plm">李小康</span>
+                </a>
+            </div>
+            <div class="other">
+              <span>免费</span>
+              <a class="btn btn-primary">进入直播</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{ render(controller('TopxiaWebBundle:LiveCourse:ratingCoursesBlock')) }}
+
+  {% endblock %}
