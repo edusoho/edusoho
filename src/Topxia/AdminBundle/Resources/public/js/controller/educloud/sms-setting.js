@@ -37,6 +37,21 @@ define(function(require, exports, module) {
 			});
 			
 		}
+        $("[name='sign-update']").on('click',function(){
+        	$("[name='submit-sign']").show();
+        	$("[name='status']").hide();
+        	var validator = new Validator({
+	            element: '#sms-controller-form'
+	        });
+	        validator.addItem({
+	            element: '[name="sign"]',
+	            required: true,
+	            rule:'chinese_alphanumeric minlength{min:3} maxlength{max:8}',
+	            errormessageRequired: '请输入3～8个中文,数字,下划线'
+	        });
+        });
+        
+
 	}
 	
 });

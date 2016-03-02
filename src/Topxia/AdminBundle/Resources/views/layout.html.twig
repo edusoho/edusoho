@@ -116,6 +116,7 @@
         </div>
 
         <div class="col-md-10">
+        {% if menu_nav.code != 'admin_app' %}
           <div class="page-header clearfix">
             <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
             <div class="pull-right">
@@ -130,6 +131,7 @@
 
             </div>
           </div>
+          {% endif %}
 
           {% set menu_breadcrumb_length = menu_breadcrumb|length %}
 

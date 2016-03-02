@@ -584,62 +584,62 @@ admin_setting_cloud_video:
 
 admin_setting_cloud:
     pattern:  /setting/cloud
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_key:
     pattern:  /setting/cloud/key
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_key_info:
     pattern:  /setting/cloud/key/info
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyInfo }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyInfo }
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_key_bind:
     pattern:  /setting/cloud/key/bind
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyBind }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyBind }
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_key_update:
     pattern:  /setting/cloud/key/update
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyUpdate }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyUpdate }
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_key_apply:
     pattern:  /setting/cloud/key/apply
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyApply }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyApply }
     methods: [POST]
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_key_copyright:
     pattern:  /setting/cloud/key/copyright
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyCopyright }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyCopyright }
     methods: [POST]
     permissions: [admin_setting_cloud]
 
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkUpload }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkUpload }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud_video_watermark_remove:
     pattern: /setting/cloud/video_watermark/remove
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud_video_embed_watermark_upload:
     pattern: /setting/cloud/video_embed_watermark/upload
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoEmbedWatermarkUpload }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoEmbedWatermarkUpload }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud_video_embed_watermark_remove:
     pattern: /setting/cloud/video_embed_watermark/remove
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
     permissions: [admin_setting_cloud_video]
 
@@ -960,12 +960,12 @@ admin_app_center:
 
 admin_my_cloud:
     pattern:  /setting/my/cloud
-    defaults: { _controller: TopxiaAdminBundle:App:myCloud }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloud }
     permissions: [admin_my_cloud]
 
 admin_my_cloud_overview:
     pattern:  /setting/my/cloud/overview
-    defaults: { _controller: TopxiaAdminBundle:App:myCloudOverview }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloudOverview }
     permissions: [admin_my_cloud]
 
 # admin_app_cloud:
@@ -1663,6 +1663,11 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
     permissions: [admin_edu_cloud_sms]
+
+admin_edu_cloud_email:
+    pattern: /setting/edu_cloud/email
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
+    permissions: [admin_edu_cloud_email]
 
 admin_edu_cloud_search:
     pattern: /setting/edu_cloud/search

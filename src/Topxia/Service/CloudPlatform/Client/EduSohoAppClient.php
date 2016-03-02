@@ -1,23 +1,22 @@
 <?php
 namespace Topxia\Service\CloudPlatform\Client;
 
-use Topxia\Service\CloudPlatform\Client\AppClient;
 use Topxia\System;
+use Topxia\Service\CloudPlatform\Client\AppClient;
 
 class EduSohoAppClient implements AppClient
 {
-
     protected $userAgent = 'Open EduSoho App Client 1.0';
 
     protected $connectTimeout = 5;
 
     protected $timeout = 5;
 
-    private $apiUrl = 'http://open.edusoho.com/app_api';
+    private $apiUrl = 'http://124.160.104.74:8888/app_api';
 
     private $debug = false;
 
-    public function __construct (array $options)
+    public function __construct(array $options)
     {
         $this->accessKey = empty($options['accessKey']) ? 'Anonymous' : $options['accessKey'];
         $this->secretKey = empty($options['secretKey']) ? '' : $options['secretKey'];
@@ -25,16 +24,18 @@ class EduSohoAppClient implements AppClient
         if (!empty($options['apiUrl'])) {
             $this->apiUrl = $options['apiUrl'];
         }
-        $this->debug = empty($options['debug']) ? false : true;
+
+        $this->debug  = empty($options['debug']) ? false : true;
         $this->tmpDir = empty($options['tmpDir']) ? sys_get_temp_dir() : $options['tmpDir'];
     }
 
     public function getTokenLoginUrl($routingName, $params)
     {
         $loginToken = $this->getLoginToken();
-        
-        $url = str_replace('app_api','',$this->apiUrl).'token_login?token='.$loginToken["token"].'&goto='.$routingName;
-        if(!empty($params)){
+
+        $url = str_replace('app_api', '', $this->apiUrl).'token_login?token='.$loginToken["token"].'&goto='.$routingName;
+
+        if (!empty($params)) {
             $url .= '&param='.urldecode(json_encode($params));
         }
 
@@ -74,21 +75,21 @@ class EduSohoAppClient implements AppClient
 
     public function downloadPackage($packageId)
     {
-        $args = array('packageId' => (string)$packageId);
+        $args                   = array('packageId' => (string) $packageId);
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams('DownloadPackage', $args);
-        $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($httpParams);
+        $url                    = $url.(strpos($url, '?') ? '&' : '?').http_build_query($httpParams);
         return $this->download($url);
     }
 
     public function checkDownloadPackage($packageId)
     {
-        $args = array('packageId' => (string)$packageId);
+        $args = array('packageId' => (string) $packageId);
         return $this->callRemoteApi('GET', 'CheckDownloadPackage', $args);
     }
 
     public function getPackage($id)
     {
-        $args = array('packageId' => (string)$id);
+        $args = array('packageId' => (string) $id);
         return $this->callRemoteApi('GET', 'GetPackage', $args);
     }
 
@@ -96,7 +97,6 @@ class EduSohoAppClient implements AppClient
     {
         $args = array('token' => $token);
         return $this->callRemoteApi('POST', 'RepairProblem', $args);
-
     }
 
     public function getLoginToken()
@@ -108,34 +108,34 @@ class EduSohoAppClient implements AppClient
     protected function callRemoteApi($httpMethod, $action, array $args)
     {
         list($url, $httpParams) = $this->assembleCallRemoteApiUrlAndParams($action, $args);
-        $result = $this->sendRequest($httpMethod, $url, $httpParams);
+        $result                 = $this->sendRequest($httpMethod, $url, $httpParams);
 
         return json_decode($result, true);
     }
 
     protected function assembleCallRemoteApiUrlAndParams($action, array $args)
     {
-        $url = "{$this->apiUrl}?action={$action}";
+        $url     = "{$this->apiUrl}?action={$action}";
         $edusoho = array(
-            'edition' => 'opensource', 
-            'host' => $_SERVER['HTTP_HOST'],
-            'version' => System::VERSION, 
-            'debug' => $this->debug ? '1' : '0',
+            'edition' => 'opensource',
+            'host'    => $_SERVER['HTTP_HOST'],
+            'version' => System::VERSION,
+            'debug'   => $this->debug ? '1' : '0'
         );
         $args['_edusoho'] = $edusoho;
 
-        $httpParams = array();
+        $httpParams              = array();
         $httpParams['accessKey'] = $this->accessKey;
-        $httpParams['args'] = $args;
-        $httpParams['sign'] = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
+        $httpParams['args']      = $args;
+        $httpParams['sign']      = hash_hmac('sha1', base64_encode(json_encode($args)), $this->secretKey);
 
         return array($url, $httpParams);
     }
 
     protected function download($url)
     {
-        $filename = md5($url) . '_' . time();
-        $filepath = $this->tmpDir . DIRECTORY_SEPARATOR . $filename;
+        $filename = md5($url).'_'.time();
+        $filepath = $this->tmpDir.DIRECTORY_SEPARATOR.$filename;
 
         $fp = fopen($filepath, 'w');
 
@@ -166,15 +166,15 @@ class EduSohoAppClient implements AppClient
             curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         } else {
             if (!empty($params)) {
-                $url = $url . (strpos($url, '?') ? '&' : '?') . http_build_query($params);
+                $url = $url.(strpos($url, '?') ? '&' : '?').http_build_query($params);
             }
         }
-        curl_setopt($curl, CURLOPT_URL, $url );
+
+        curl_setopt($curl, CURLOPT_URL, $url);
 
         $response = curl_exec($curl);
         curl_close($curl);
 
         return $response;
     }
-
 }
