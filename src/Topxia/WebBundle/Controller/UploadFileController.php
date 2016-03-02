@@ -1,11 +1,10 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class UploadFileController extends BaseController
 {
@@ -13,11 +12,13 @@ class UploadFileController extends BaseController
     {
         $token = $request->request->get('token');
         $token = $this->getUserService()->getToken('fileupload', $token);
+
         if (empty($token)) {
             throw $this->createAccessDeniedException('上传TOKEN已过期或不存在。');
         }
 
         $user = $this->getUserService()->getUser($token['userId']);
+
         if (empty($user)) {
             throw $this->createAccessDeniedException('上传TOKEN非法。');
         }
@@ -26,7 +27,7 @@ class UploadFileController extends BaseController
         $this->getServiceKernel()->setCurrentUser($currentUser->fromArray($user));
 
         $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
+        $targetId   = $request->query->get('targetId');
 
         $originalFile = $this->get('request')->files->get('file');
 
@@ -35,9 +36,70 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file);
     }
 
+    public function downloadAction(Request $request, $fileId, $isDownload = false)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            if ($isDownload) {
+                $key = $file['hashId'];
+            } else {
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+            }
+
+            if (empty($key)) {
+                throw $this->createNotFoundException();
+            }
+
+            $factory = new CloudClientFactory();
+            $client  = $factory->createClient();
+
+            if ($isDownload) {
+                $client->download($client->getBucket(), $key, 3600, $file['filename']);
+            } else {
+                $client->download($client->getBucket(), $key);
+            }
+        }
+
+        return $this->createLocalMediaResponse($request, $file, $isDownload);
+    }
+
+    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
+    {
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        if ($isDownload) {
+            $file['filename'] = urlencode($file['filename']);
+
+            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+            } else {
+                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+            }
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
+    }
+
     public function browserAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isTeacher() && !$user->isAdmin()) {
             throw $this->createAccessDeniedException('您无权查看此页面！');
         }
@@ -58,14 +120,17 @@ class UploadFileController extends BaseController
     public function browsersAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isTeacher() && !$user->isAdmin()) {
             throw $this->createAccessDeniedException('您无权查看此页面！');
         }
 
         $conditions = $request->query->all();
+
         if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
             $course = $this->getCourseService()->getCourse($conditions['targetId']);
-            if ($course['parentId']>0 && $course['locked'] == 1) {
+
+            if ($course['parentId'] > 0 && $course['locked'] == 1) {
                 $conditions['targetId'] = $course['parentId'];
             }
         }
@@ -78,14 +143,15 @@ class UploadFileController extends BaseController
     public function paramsAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
 
         $params = $request->query->all();
 
-        $params['user'] = $user->id;
-        $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId'] ?: '0' ));
+        $params['user']             = $user->id;
+        $params['defaultUploadUrl'] = $this->generateUrl('uploadfile_upload', array('targetType' => $params['targetType'], 'targetId' => $params['targetId'] ?: '0'));
 
         if (empty($params['lazyConvert'])) {
             $params['convertCallback'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true);
@@ -101,15 +167,16 @@ class UploadFileController extends BaseController
     protected function cloudCallBack(Request $request)
     {
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             throw $this->createAccessDeniedException();
         }
 
         $fileInfo = $request->request->all();
 
-        $targetType = $request->query->get('targetType');
-        $targetId = $request->query->get('targetId');
-        $lazyConvert = $request->query->get('lazyConvert') ? true : false;
+        $targetType              = $request->query->get('targetType');
+        $targetId                = $request->query->get('targetId');
+        $lazyConvert             = $request->query->get('lazyConvert') ? true : false;
         $fileInfo['lazyConvert'] = $lazyConvert;
 
         if ($targetType == 'headLeader') {
@@ -118,6 +185,7 @@ class UploadFileController extends BaseController
             $this->getSettingService()->set('storage', $storage);
 
             $file = $this->getUploadFileService()->getFileByTargetType($targetType);
+
             if (!empty($file) && array_key_exists('id', $file)) {
                 $this->getUploadFileService()->deleteFile($file['id']);
             }
@@ -145,9 +213,10 @@ class UploadFileController extends BaseController
     public function cloudConvertCallback2Action(Request $request)
     {
         $file = $this->cloudConvertCallback2($request);
+
         if (empty($file)) {
             $result = array(
-                "error" => "文件不存在",
+                "error" => "文件不存在"
             );
 
             return $this->createJsonResponse($result);
@@ -160,14 +229,15 @@ class UploadFileController extends BaseController
     {
         $result = $request->getContent();
         $result = preg_replace_callback(
-          "(\\\\x([0-9a-f]{2}))i",
-          function ($a) {return chr(hexdec($a[1]));},
-          $result
+            "(\\\\x([0-9a-f]{2}))i",
+            function ($a) {return chr(hexdec($a[1]));},
+            $result
         );
 
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
+
         if (empty($result['id'])) {
             throw new \RuntimeException('数据中id不能为空');
         }
@@ -176,6 +246,7 @@ class UploadFileController extends BaseController
             $file = $this->getUploadFileService()->getFileByConvertHash($result['convertHash']);
         } else {
             $file = $this->getUploadFileService()->getFileByConvertHash($result['id']);
+
             if ($file && $file['type'] == 'ppt') {
                 $result['nextConvertCallbackUrl'] = $this->generateUrl('uploadfile_cloud_convert_callback2', array('convertHash' => $result['id']), true);
             }
@@ -184,11 +255,12 @@ class UploadFileController extends BaseController
         if (empty($file)) {
             return;
         }
+
         $file = $this->getUploadFileService()->saveConvertResult($file['id'], $result);
 
         if (in_array($file['convertStatus'], array('success', 'error'))) {
             $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
-                'file' => $file,
+                'file' => $file
             ));
         }
 
@@ -200,14 +272,15 @@ class UploadFileController extends BaseController
         $result = $request->getContent();
 
         $result = preg_replace_callback(
-          "(\\\\x([0-9a-f]{2}))i",
-          function ($a) {return chr(hexdec($a[1]));},
-          $result
+            "(\\\\x([0-9a-f]{2}))i",
+            function ($a) {return chr(hexdec($a[1]));},
+            $result
         );
 
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback3', "文件云处理回调", array('result' => $result));
         $result = json_decode($result, true);
         $result = array_merge($request->query->all(), $result);
+
         if (empty($result['id'])) {
             throw new \RuntimeException('数据中id不能为空');
         }
@@ -223,7 +296,7 @@ class UploadFileController extends BaseController
         if (empty($file)) {
             $this->getLogService()->error('uploadfile', 'cloud_convert_error', "文件云处理失败，文件记录不存在", array('result' => $result));
             $result = array(
-                "error" => "文件不存在",
+                "error" => "文件不存在"
             );
 
             return $this->createJsonResponse($result);
@@ -240,8 +313,9 @@ class UploadFileController extends BaseController
 
         $this->getLogService()->info('uploadfile', 'cloud_convert_callback', "文件云处理回调", array('content' => $data));
 
-        $key = $request->query->get('key');
+        $key     = $request->query->get('key');
         $fullKey = $request->query->get('fullKey');
+
         if (empty($key)) {
             throw new \RuntimeException('key不能为空');
         }
@@ -259,6 +333,7 @@ class UploadFileController extends BaseController
         }
 
         $file = $this->getUploadFileService()->getFileByConvertHash($hash);
+
         if (empty($file)) {
             throw new \RuntimeException('文件不存在');
         }
@@ -274,14 +349,14 @@ class UploadFileController extends BaseController
 
         if ($status == 'doing') {
             $callback = $this->generateUrl('uploadfile_cloud_convert_callback', array('key' => $key, 'fullKey' => $hash), true);
-            $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items'], $callback);
+            $file     = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items'], $callback);
         } else {
             $file = $this->getUploadFileService()->convertFile($file['id'], $status, $data['items']);
         }
 
         if (in_array($file['convertStatus'], array('success', 'error'))) {
             $this->getNotificationService()->notify($file['createdUserId'], 'cloud-file-converted', array(
-                'file' => $file,
+                'file' => $file
             ));
         }
 
@@ -290,7 +365,7 @@ class UploadFileController extends BaseController
 
     public function getHeadLeaderHlsKeyAction(Request $request)
     {
-        $file = $this->getUploadFileService()->getFileByTargetType('headLeader');
+        $file          = $this->getUploadFileService()->getFileByTargetType('headLeader');
         $convertParams = json_decode($file['convertParams'], true);
 
         return new Response($convertParams['hlsKey']);
@@ -298,7 +373,7 @@ class UploadFileController extends BaseController
 
     public function getMediaInfoAction(Request $request, $type)
     {
-        $key = $request->query->get('key');
+        $key  = $request->query->get('key');
         $info = $this->getUploadFileService()->getMediaInfo($key, $type);
 
         return $this->createJsonResponse($info['format']['duration']);
@@ -338,7 +413,7 @@ class UploadFileController extends BaseController
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
-            $file['size'] = FileToolkit::formatFileSize($file['size']);
+            $file['size']        = FileToolkit::formatFileSize($file['size']);
 
             // Delete some file attributes to redunce the json response size
             unset($file['hashId']);
