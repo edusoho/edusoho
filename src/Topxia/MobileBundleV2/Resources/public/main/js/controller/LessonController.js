@@ -1,16 +1,53 @@
-app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'LessonLiveService', 'cordovaUtil', LessonController]);
+app.controller('LessonController', ['$scope', '$stateParams', 'LessonService', 'LessonLiveService', 'cordovaUtil', 'platformUtil', LessonController]);
 
-function LessonController($scope, $stateParams, LessonService, LessonLiveService, cordovaUtil)
+function LessonController($scope, $stateParams, LessonService, LessonLiveService, cordovaUtil, platformUtil)
 {	
 	var self = this;
   this.lesson = {};
   this.timeoutNum = 0;
 
+  self.getDevice = function() {
+    if (platformUtil.ios || platformUtil.iPhone) {
+      return "iphone";
+    }
+
+    if (platformUtil.android) {
+      return "android";
+    }
+
+    return "mobile";
+  };
+
+  self.loadLiveReplay = function() {
+    LessonLiveService.getLiveReplay({
+      id : $stateParams.lessonId,
+      device : self.getDevice()
+    }, function(data) {
+      if (data.sdk) {
+        $scope.hideLoad();
+        cordovaUtil.closeWebView();
+        self.showLiveBySdk(data.sdk, true);
+        return;
+      }
+
+      if (! data.url || "" == data.url) {
+        self.showError({
+            message : "获取直播回看服务失败!"
+        });
+        return;
+      }
+
+      $scope.hideLoad();
+      cordovaUtil.closeWebView();
+      cordovaUtil.openWebView(data.url);
+    });
+  };
+
   self.loadLiveTicket = function() {
     $scope.showLoad();
     LessonLiveService.createLiveTickets({
       lessonId : $stateParams.lessonId,
-      device : 'android'
+      device : self.getDevice()
     }, function(data) {
       if (data.error) {
         $scope.hideLoad();
@@ -30,13 +67,13 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
     });
   };
 
-  self.showLiveBySdk = function(sdk) {
+  self.showLiveBySdk = function(sdk, isReplay) {
     switch(sdk.provider) {
       case "soooner":
         cordovaUtil.startAppView("sooonerLivePlayer", {
           liveClassroomId : sdk.liveClassroomId, 
           exStr : sdk.exStr,
-          replayState : sdk.replayState
+          replayState : isReplay
         });
         break;
       default:
@@ -60,7 +97,7 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       if (data.sdk) {
         $scope.hideLoad();
         cordovaUtil.closeWebView();
-        self.showLiveBySdk(data.sdk);
+        self.showLiveBySdk(data.sdk, false);
         return;
       }
 
@@ -120,6 +157,20 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       }
 
       if ("live" == lesson.type) {
+        var endTime = lesson.endTime * 1000;
+        var currentTime = new Date().getTime();
+        if (currentTime > endTime) {
+          if (lesson.replayStatus == 'generated') {
+            self.loadLiveReplay();
+            return;
+          }
+          self.showError({
+              message : "直播已结束!"
+          });
+
+          return;
+        }
+        
         self.loadLiveTicket();
         return;
       }

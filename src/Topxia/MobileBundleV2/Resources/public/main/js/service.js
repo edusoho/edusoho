@@ -32,6 +32,11 @@ service('LessonLiveService', ['httpService', function(httpService) {
 	this.getLiveInfoByTicket = function(callback) {
 		httpService.apiGet("/api/lessons/" + arguments[0]['lessonId'] + "/live_tickets/" + arguments[0]['ticket'], arguments);
 	}
+
+	this.getLiveReplay = function() {
+		httpService.apiGet("/api/lessons/" + arguments[0]['id'] + "/replay", arguments);
+	}
+
 }]).
 service('AnalysisService', ['httpService', function(httpService) {
 
