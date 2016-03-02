@@ -15,6 +15,10 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if is_plugin_installed('GroupSell') and not member%}
+    {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'course',targetId:course.id})) }}  
+  {% endif %}
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
 

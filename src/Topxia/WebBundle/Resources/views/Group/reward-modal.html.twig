@@ -1,14 +1,14 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set modalSize = 'large' %}
-{% block title %}悬赏{% endblock %}
+{% block title %}{{'悬赏'|trans}}{% endblock %}
 {% block body %}
 
 <form id="reward-form" class="form-horizontal" method="post" action="{{path('group_thread_reward',{threadId:threadId})}}">
 
   <div class="row form-group">
     <div class="col-md-3 col-md-offset-2 control">
-      <label class="control-label"> 账户余额:</label>
+      <label class="control-label"> {{'账户余额'|trans}}:</label>
     </div>
     <div class="col-md-3 controls">
        <label class="control-label" id="canUse" data-val="{{account.cash|default(0)}}">{{account.cash|default(0)}}</label>
@@ -18,7 +18,7 @@
 
   <div class="row form-group">
     <div class="col-md-3 col-md-offset-2 control">
-      <label for="amount" class="control-label"> 悬赏额:</label>
+      <label for="amount" class="control-label"> {{'悬赏额'|trans}}:</label>
     </div>
     <div class="col-md-3 controls">
        <input name="amount" class="form-control" tyoe="text" id="amount"/>
@@ -35,6 +35,6 @@
   <script>
     app.load('group/reward-modal');
   </script>
-  <button id="create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#reward-form">提交</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button id="create-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#reward-form">{{'提交'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
 {% endblock %}

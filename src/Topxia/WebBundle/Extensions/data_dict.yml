@@ -243,6 +243,7 @@ targetName:
     course: 课程
     vip: 会员
     classroom: 班级
+    groupSell: 组合
 
 groupstatus:
     open: 开启
