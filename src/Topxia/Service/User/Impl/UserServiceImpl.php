@@ -53,6 +53,12 @@ class UserServiceImpl extends BaseService implements UserService
         return !$user ? null : UserSerialize::unserialize($user);
     }
 
+    public function getUserByMobile($mobile)
+    {
+        $user = $this->getProfileDao()->getUserByMobile($mobile);
+        return !$user ? null : UserSerialize::unserialize($user);
+    }
+
     public function getUserByEmail($email)
     {
         if (empty($email)) {

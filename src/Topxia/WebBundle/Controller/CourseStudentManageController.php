@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,8 +16,25 @@ class CourseStudentManageController extends BaseController
         $fields    = $request->query->all();
         $condition = array();
 
-        if (isset($fields['nickname'])) {
-            $condition['nickname'] = $fields['nickname'];
+        if (isset($fields['keyword'])) {
+            if (SimpleValidator::email($fields['keyword'])) {
+                $condition['email'] = $fields['keyword'];
+                $user               = $this->getUserService()->getUserByEmail($condition['email']);
+
+                $condition['userId'] = $user ? $user['id'] : -1;
+                unset($condition['email']);
+            } elseif (SimpleValidator::mobile($fields['keyword'])) {
+                $condition['mobile']  = $fields['keyword'];
+                $verifiedUser         = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
+                $user                 = $this->getUserService()->getUserByMobile($condition['mobile']);
+                $user                 = $user ? array($user['id']) : array();
+                $verifiedUser         = $user ? array($verifiedUser['id']) : array();
+                $userIds              = array_unique(array_merge($user, $verifiedUser));
+                $condition['userIds'] = $userIds ? $userIds : -1;
+                unset($condition['mobile']);
+            } else {
+                $condition['userId'] = -1;
+            }
         }
 
         $condition = array_merge($condition, array('courseId' => $course['id'], 'role' => 'student'));
@@ -421,5 +439,10 @@ class CourseStudentManageController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }

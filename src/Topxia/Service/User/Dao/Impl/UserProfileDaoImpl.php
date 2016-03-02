@@ -20,6 +20,17 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         );
     }
 
+    public function getUserByMobile($mobile)
+    {
+        $that = $this;
+        return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE mobile = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($mobile)) ?: null;
+        }
+
+        );
+    }
+
     public function addProfile($profile)
     {
         $affected = $this->getConnection()->insert($this->table, $profile);
@@ -110,17 +121,17 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createProfileQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchProfileCount($conditions)
     {
         $builder = $this->createProfileQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -157,11 +168,11 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         }
 
         return $this->createDynamicQueryBuilder($conditions)
-                    ->from($this->table, 'user_profile')
-                    ->andWhere('mobile LIKE :mobile')
-                    ->andWhere('truename LIKE :truename')
-                    ->andWhere('idcard LIKE :idcard')
-                    ->andWhere('id IN (:ids)')
-                    ->andWhere('qq LIKE :qq');
+            ->from($this->table, 'user_profile')
+            ->andWhere('mobile LIKE :mobile')
+            ->andWhere('truename LIKE :truename')
+            ->andWhere('idcard LIKE :idcard')
+            ->andWhere('id IN (:ids)')
+            ->andWhere('qq LIKE :qq');
     }
 }
