@@ -60,7 +60,7 @@
                 <p><span>短信签名：{{ smsStatus.sms_school_name }}</span> <a href="#" name="sign-update">修改</a></p>
               </div>
               <div name="submit-sign" hidden="hidden">
-                <span>短信签名：<input class="form-control" type="text" name="sign"></span><button class="btn btn-primary" >提交</button><span><a href="">取消</a></span>
+                <span>短信签名：<input class="form-control" type="text" name="sign" placeholder="签名3-8字，建议使用汉字"></span><button class="btn btn-primary mlm mrm" >提交</button><span><a href="">取消</a></span>
               </div>
             {% elseif smsStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
               <div class="row">
@@ -75,7 +75,9 @@
             {% endif %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             </form>
+            {% if accessCloud|default(0) == 0 %}
             <div class="help-block">云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情</div>
+            {% endif %}
           </div>
         </div>
       </div>
