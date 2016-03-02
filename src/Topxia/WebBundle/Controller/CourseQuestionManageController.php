@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -275,16 +276,12 @@ class CourseQuestionManageController extends BaseController
 
     public function batchUploadAttachmentsAction(Request $request, $id, $targetType)
     {
-        if ("materiallib" != $targetType) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
         $fileExts       = "";
 
-        if ("courselesson" == $targetType) {
+        if ("attachment" == $targetType) {
             $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
         }
 
@@ -295,6 +292,29 @@ class CourseQuestionManageController extends BaseController
             'targetId'       => $id,
             'fileExts'       => $fileExts
         ));
+    }
+
+    public function attachmentDownloadAction(Request $request, $id, $fileId)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($id != $file["targetId"]) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['targetType'] == 'attachment' && $file['storage'] == 'cloud') {
+            $factory = new CloudClientFactory();
+            $client  = $factory->createClient();
+            $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
+        }
+
+        throw $this->createNotFoundException();
     }
 
     protected function getCourseService()

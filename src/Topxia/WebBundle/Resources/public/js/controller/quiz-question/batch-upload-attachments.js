@@ -89,12 +89,9 @@ define(function(require, exports, module) {
                         }
                         var that = this;
                         $.post(url, serverData, function(response) {
-                            console.log(serverData);
-                            console.log(response);
                             $("div[role='progressbar']", "#fileProgressBar"+fileIndex).text("完成");
                             var targetId = that.element.data('targetId');
-                            console.log(targetId);
-                            self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/file/"+response.id+"'>" + file.name + "</a>");
+                            self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/question/attachment/"+response.id+"/download'>" + file.name + "</a>");
                         }, 'json');
                     }
                 });
