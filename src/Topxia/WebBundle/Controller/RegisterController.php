@@ -2,7 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
-use Topxia\Service\System\Mail;
+use Topxia\Service\Common\Mail;
 use Topxia\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -502,7 +502,7 @@ class RegisterController extends BaseController
             );
             $mail = new Mail($normalMail, $cloudMail);
 
-            $this->sendEmailService($mail);
+            $this->sendEmail($mail);
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }

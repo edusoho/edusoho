@@ -3,7 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\System\Mail;
+use Topxia\Service\Common\Mail;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -404,18 +404,21 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
 
         try {
-            $params = array(
-                'title'     => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                'body'      => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+            $mail = new Email(array(
+                'to'     => $user['email'],
+                'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                'format' => 'html',
+                'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
                     'user'  => $user,
                     'token' => $token
-                )),
-                'template'  => 'email_reset_password',
-                'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
-                'nickname'  => $user['nickname'],
-                'format'    => 'html'
-            );
-            $this->sendEmailService($user['email'], $params);
+                ))),
+                array(
+                    'to'        => $user['email'],
+                    'template'  => 'email_reset_password',
+                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                    'nickname'  => $user['nickname']
+                ));
+            $this->sendEmail($mail);
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
@@ -466,7 +469,7 @@ class UserController extends BaseController
                 'nickname'  => $user['nickname']
             );
             $mail = new Mail($normalMail, $cloudMail);
-            $this->sendEmailService($mail);
+            $this->sendEmail($mail);
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());

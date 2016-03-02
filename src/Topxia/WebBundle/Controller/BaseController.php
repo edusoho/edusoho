@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
-use Topxia\Service\System\Mail;
+use Topxia\Service\Common\Mail;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
@@ -116,29 +116,28 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmailService(Mail $mail)
+    protected function sendEmail(Mail $mail)
     {
         $config      = $this->setting('mailer', array());
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            return $this->sendCloudEmail($mail);
+            return $this->sendCloudEmail($mail->getCloudMail());
         } elseif (!isset($config['enabled']) && $config['enabled'] == 1) {
-            return $this->sendEmail($mail);
+            return $this->sendNormalEmail($mail->getMail());
         }
 
         return false;
     }
 
-    private function sendCloudEmail(Mail $mail)
+    private function sendCloudEmail($cloudMail)
     {
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $api       = CloudAPIFactory::create('leaf');
-            $site      = $this->setting('site', array());
-            $cloudMail = $mail->getCloudMail();
-            $params    = array(
+            $api    = CloudAPIFactory::create('leaf');
+            $site   = $this->setting('site', array());
+            $params = array(
                 'to'       => $cloudMail['to'],
                 'template' => $cloudMail['template'],
                 'params'   => array(
@@ -157,9 +156,8 @@ abstract class BaseController extends Controller
         return false;
     }
 
-    private function sendEmail(Mail $mail)
+    private function sendNormalEmail($params)
     {
-        $params = $mail->getMail();
         $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());

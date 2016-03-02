@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\System;
+namespace Topxia\Service\Common;
 
 class Mail
 {

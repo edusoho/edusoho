@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
-use Topxia\Service\System\Mail;
+use Topxia\Service\Common\Mail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
@@ -761,7 +761,7 @@ class SettingsController extends BaseController
                         'nickname'  => $user['nickname']
                     );
                     $mail = new Mail($normalMail, $cloudMail);
-                    $this->sendEmailService($mail);
+                    $this->sendEmail($mail);
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
