@@ -392,7 +392,7 @@ class UserController extends BaseController
             $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
         }
 
-        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCount($userId);
+        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum']  = $this->getUserService()->findUserFollowerCount($userId);
         $levels               = array();
@@ -520,11 +520,11 @@ class UserController extends BaseController
     {
         $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->findUserLeaningCourseCount($user['id']),
+            $this->getCourseService()->findUserLearnCourseCountNotInClassroom($user['id']),
             20
         );
 
-        $courses = $this->getCourseService()->findUserLeaningCourses(
+        $courses = $this->getCourseService()->findUserLearnCoursesNotInClassroom(
             $user['id'],
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
