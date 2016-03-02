@@ -24,7 +24,7 @@ class DiscoveryColumn extends BaseResource
         
     }
 
-    protected function getMobileShowService()
+    protected function getDiscoveryColumnService()
     {
     	return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
     }
