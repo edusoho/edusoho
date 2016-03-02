@@ -30,6 +30,36 @@ class Courses extends BaseResource
 
     }
 
+    public function categoryShow(Application $app, Request $request)
+    {
+        $result = $request->query->all();
+        $conditions['categoryId'] = $result['categoryId'];
+
+        if ($result['orderType'] == 'hot') {
+            $orderBy = 'hitNum';
+        }
+        elseif ($result['orderType'] == 'new') {
+            $orderBy = 'createdTime';
+        }
+        else {
+            $orderBy = 'recommendedSeq';
+        }
+
+        if ($result['type'] == 'live') {
+            $conditions['type'] = 'live';
+        }
+        else {
+            $conditions['type'] = 'normal';
+        }
+
+        $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
+        return $courses;
+    }
+    public function post(Application $app, Request $request)
+    {
+        
+    }
+
     protected function assemblyCourses(&$courses)
     {
         $tagIds = array();
