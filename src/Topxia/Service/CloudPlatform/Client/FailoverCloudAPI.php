@@ -16,7 +16,6 @@ class FailoverCloudAPI extends AbstractCloudAPI
     public function __construct(array $options)
     {
         parent::__construct($options);
-        //$this->rootApiUrl = 'http://124.160.104.74:8098/';
         $this->rootApiUrl = $this->apiUrl;
     }
 
