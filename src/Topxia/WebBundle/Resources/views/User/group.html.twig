@@ -8,7 +8,7 @@
   {% if adminGroups %}
     <div class="es-piece">
       <div class="piece-header">
-        管理小组
+        {{'管理小组'|trans}}
       </div>
       {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':adminGroups,}%}
     </div>
@@ -16,7 +16,7 @@
   {% endif %}
   <div class="es-piece">
     <div class="piece-header">
-      加入小组
+      {{'加入小组'|trans}}
     </div>
     {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':groups} %}
   </div>

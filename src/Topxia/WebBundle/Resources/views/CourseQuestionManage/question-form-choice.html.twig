@@ -7,13 +7,13 @@
   <div class="form-group">
     <div class="col-md-2 control-label"></div>
     <div class="col-md-8 controls">
-       <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">新增选项</button>
+       <button class="btn btn-success btn-sm pull-right" data-role="add-choice" type="button">{{'新增选项'|trans}}</button>
     </div>
   </div>
   <div class="form-group">
-    <div class="col-md-2 control-label"><label>不定项选择题</label></div>
+    <div class="col-md-2 control-label"><label>{{'不定项选择题'|trans}}</label></div>
       <div class="col-md-8 controls radios">
-        {{ radios('uncertain', {'0':'否', '1':'是'}, question.type|default('choice') == 'uncertain_choice' ? 1 : 0) }}
+        {{ radios('uncertain', {'0':'否'|trans, '1':'是'|trans}, question.type|default('choice') == 'uncertain_choice' ? 1 : 0) }}
       </div>
   </div>
 
@@ -24,11 +24,11 @@
   <script type="text/x-handlebars-template" data-role="choice-template">
     {% verbatim %}
       <div class="form-group" data-role="choice">
-        <div class="col-sm-2 control-label"><label class="choice-label" for="item-input-{{ id }}">选项{{ code }}</label></div>
+        <div class="col-sm-2 control-label"><label class="choice-label" for="item-input-{{ id }}">{{'选项'|trans}}{{ code }}</label></div>
         <div class="col-sm-8 controls">
-          <textarea class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" data-display="选项内容" data-image-upload-url="{{ imageUploadUrl }}" data-image-download-url="{{ imageDownloadUrl }}">{{ content }}</textarea>
+          <textarea class="form-control item-input col-md-8" id="item-input-{{ id }}" name="choices[]" data-display="{{'选项内容'|trans}}" data-image-upload-url="{{ imageUploadUrl }}" data-image-download-url="{{ imageDownloadUrl }}">{{ content }}</textarea>
           <p class="mtm">
-            <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> 正确答案</label>
+            <label><input type="checkbox" class="answer-checkbox" {{#if isAnswer }}checked="checked"{{/if}}> {{'正确答案'|trans}}</label>
           </p>
         </div>
         <div class="col-sm-2" style="padding-left:0;">

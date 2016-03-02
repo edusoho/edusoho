@@ -1,18 +1,18 @@
 {% set modal_class= "modal-lg" %}
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{{course.title}}课程的数据{% endblock %}
+{% block title %}{{course.title}}{{'课程的数据'|trans}}{% endblock %}
 {% block body %}
   <div class="table-responsive">
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
-            <td>用户名</td>
-            <td>加入课程时间</td>
-            <td>完成课程时间</td>
-            <td>课程学习天数</td>
-            <td>课程学习时长（分）</td>
-            <td>提问数</td>
-            <td>笔记数</td>
+            <td>{{'用户名'|trans}}</td>
+            <td>{{'加入课程时间'|trans}}</td>
+            <td>{{'完成课程时间'|trans}}</td>
+            <td>{{'课程学习天数'|trans}}</td>
+            <td>{{'课程学习时长（分）'|trans}}</td>
+            <td>{{'提问数'|trans}}</td>
+            <td>{{'笔记数'|trans}}</td>
           </tr>
 
           {% if students %}
@@ -28,8 +28,8 @@
             </tr>
             {% endfor %}
           {% endif %}
-         
-         
+
+
         </table>
      {{ web_macro.paginator(paginator) }}
   </div>
