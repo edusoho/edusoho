@@ -47,8 +47,8 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="sign"]',
             required: true,
-            rule:'chinese minlength{min:2} maxlength{max:5}',
-            errormessageRequired: '请输入3～8个中文'
+            rule:'chinese_alphanumeric minlength{min:3} maxlength{max:8}',
+            errormessageRequired: '请输入3～8个中文,数字,下划线'
         });
 
 	}
