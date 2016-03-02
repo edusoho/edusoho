@@ -2,8 +2,8 @@
 
 namespace Application\Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -26,7 +26,7 @@ class Version20160225145518 extends AbstractMigration
                          `createTime` int(10) unsigned NOT NULL,
                          `updateTime` int(10) unsigned NOT NULL,
                          PRIMARY KEY (`id`)
-                        ) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8
+                        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
                         ");
     }
 
