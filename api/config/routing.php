@@ -77,4 +77,4 @@ $app->get(_u('/homework/manager/check/{homeworkResultId}'), 'res.HomeworkManager
 
 $app->post(_u('/thread/create'), 'res.Thread:create');
 
-$app->get(_u('/discovery/column'), 'res.DiscoveryColumn:get');
+$app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
