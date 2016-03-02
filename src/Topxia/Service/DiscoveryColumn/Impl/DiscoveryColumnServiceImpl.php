@@ -2,41 +2,30 @@
 
 namespace Topxia\Service\DiscoveryColumn\Impl;
 
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\DiscoveryColumn\DiscoveryColumnService;
 
 class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnService
 {
-	public function getDiscoveryColumn($id)
+    public function getDiscoveryColumn($id)
     {
         return $this->getDiscoveryColumnDao()->getDiscoveryColumn($id);
     }
 
     public function updateDiscoveryColumn($id, $fields)
     {
-        $DiscoveryColumn = $this->getDiscoveryColumn($id);
-        $showFields = array(
-            'id' => $id,
-            'categoryId' => $fields['categoryId'],
-            'orderType' => $fields['orderType'],
-            'type' => $fields['type'],
-            'showCount' => $fields['showCount'],
-            'title' => $fields['title'],
-            'updateTime' => time()
-            ); 
+        $fields = ArrayToolkit::parts($fields, array('categoryId', 'orderType', 'type', 'showCount', 'title'));
         return $this->getDiscoveryColumnDao()->updateDiscoveryColumn($id, $showFields);
     }
 
     public function deleteDiscoveryColumn($id)
     {
-        $this->getDiscoveryColumnDao()->deleteDiscoveryColumn($id);
-        return true;
+        return $this->getDiscoveryColumnDao()->deleteDiscoveryColumn($id);
     }
 
     public function addDiscoveryColumn($fields)
     {
-    	return $this->getDiscoveryColumnDao()->addDiscoveryColumn($fields);
+        return $this->getDiscoveryColumnDao()->addDiscoveryColumn($fields);
     }
 
     public function findDiscoveryColumnByTitle($title)
@@ -49,7 +38,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
         return $this->getDiscoveryColumnDao()->getAllDiscoveryColumns();
     }
 
-	protected function getDiscoveryColumnDao()
+    protected function getDiscoveryColumnDao()
     {
         return $this->createDao('DiscoveryColumn.DiscoveryColumnDao');
     }

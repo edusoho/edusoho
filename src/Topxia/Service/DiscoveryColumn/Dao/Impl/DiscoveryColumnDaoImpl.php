@@ -6,9 +6,9 @@ use Topxia\Service\DiscoveryColumn\Dao\DiscoveryColumnDao;
 
 class DiscoveryColumnDaoImpl extends BaseDao implements DiscoveryColumnDao
 {
-	protected $table = 'discovery_column';
+    protected $table = 'discovery_column';
 
-	public function getDiscoveryColumn($id)
+    public function getDiscoveryColumn($id)
     {
         $sql = "SELECT * FROM {$this->table} where id=? LIMIT 1";
         return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
@@ -16,6 +16,7 @@ class DiscoveryColumnDaoImpl extends BaseDao implements DiscoveryColumnDao
 
     public function updateDiscoveryColumn($id, $fields)
     {
+        $fields['updateTime'] = time();
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
 
         return $this->getDiscoveryColumn($id);
@@ -34,7 +35,7 @@ class DiscoveryColumnDaoImpl extends BaseDao implements DiscoveryColumnDao
 
     public function findDiscoveryColumnByTitle($title)
     {
-        $sql     = "SELECT * FROM {$this->table} where title = ?";
+        $sql             = "SELECT * FROM {$this->table} where title = ?";
         $DiscoveryColumn = $this->getConnection()->fetchAll($sql, array($title));
         return $DiscoveryColumn;
     }
