@@ -77,15 +77,12 @@
       {% if not member %}
         {% if course.expiryDay %}
           <p class="expiry-date hidden-sm">
-            <label for="">有效期</label><span>{{ course.expiryDay }}天</span>
+            <label for="">有效期</label>
+            <span>{{ course.expiryDay }}天</span>
           </p>
         {% endif %}
         <p class="discount-price">
-          {% if course.discountId == 0 %}
-            <label>价格</label>
-          {% else %}
-            <label>折后价</label>
-          {% endif %}
+          <label>价格</label>
           {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows: ['price', 'discount']} %}
         </p>
         {% if course.discountId > 0 %}
@@ -97,9 +94,11 @@
             <p class="activity">
               <label>活动</label>
               <span class="name">{{ course.discountObj.name }}</span>
-              <span><i class="es-icon es-icon-accesstime"></i> <span id="discount-endtime-countdown" class="text-muted"
-        data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
-          ></span></span>
+              <span>
+                <i class="es-icon es-icon-accesstime"></i>
+                <span id="discount-endtime-countdown" class="text-muted" data-remaintime="{{ course.discountObj.endTime - 'now'|date('U') }}"
+                ></span>
+              </span>
             </p>
           {% endif %}
         {% endif %}

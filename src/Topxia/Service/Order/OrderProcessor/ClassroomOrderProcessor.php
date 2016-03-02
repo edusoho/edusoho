@@ -8,13 +8,6 @@ use Topxia\Service\Common\ServiceKernel;
 
 class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 {
-    protected $router = "classroom_show";
-
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
         if ($this->getClassroomService()->isClassroomStudent($targetId, $userId)) {
@@ -29,6 +22,11 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
 
         if ($classroom['status'] != 'published') {
             return array('error' => '不能加入未发布班级!');
+        }
+
+        if (!$classroom['buyable']) {
+            $classroomSetting = $this->getSettingService()->get('classroom');
+            return array('error' => "该{$classroomSetting['name']}不可购买，如有需要，请联系客服");
         }
 
         return array();
@@ -209,10 +207,8 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         //优惠码优惠价格
-        $couponApp     = $this->getAppService()->findInstallApp("Coupon");
-        $couponSetting = $this->getSettingService()->get("coupon");
 
-        if (!empty($couponApp) && isset($couponSetting["enabled"]) && $couponSetting["enabled"] == 1 && $fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if (!empty($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'classroom',
@@ -335,9 +331,9 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
         return $this->getPayCenterService()->pay($payData);
     }
 
-    public function callbackUrl($router, $order, $container)
+    public function callbackUrl($order, $container)
     {
-        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
+        $goto = $container->get('router')->generate('classroom_show', array('id' => $order["targetId"]), true);
         return $goto;
     }
 
@@ -359,6 +355,17 @@ class ClassroomOrderProcessor extends BaseProcessor implements OrderProcessor
     public function getOrderInfoTemplate()
     {
         return "ClassroomBundle:Classroom:orderInfo";
+    }
+
+    public function isTargetExist($targetId)
+    {
+        $classroom = $this->getClassroomService()->getClassroom($targetId);
+
+        if (empty($classroom) || $classroom['status'] == 'closed') {
+            return false;
+        }
+
+        return true;
     }
 
     protected function getClassroomService()

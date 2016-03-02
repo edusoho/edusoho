@@ -6,6 +6,7 @@
 @import "mixins/loader-inner.less";         //css3效果
 @import "mixins/shake.less";                //css3效果-上下抖动
 @import "mixins/transup.less";              //css3效果-向上推动
+@import "mixins/spin.less";                 //css3效果-旋转
 @import "mixins/color.less";                //颜色
 @import "mixins/input.less";                //输入框
 @import "mixins/spacing.less";              //间距
@@ -24,18 +25,22 @@
   .border-radius;
 }
 
+a.btn.disabled, fieldset[disabled] a.btn {
+  pointer-events: none;
+}
+
 // 富文本编辑器样式统一处理
 .editor-text {
   img {
-    max-width: 100%;
-    height: auto;
+    max-width: 100% !important;
+    height: auto !important;
   }
 }
 
 .section-gray {
-  background-color: #fafafa !important;
+  background-color: @bg-color !important;
   .text-line h5 > span {
-    background-color: #fafafa !important;
+    background-color: @bg-color !important;
   }
 }
 
@@ -56,13 +61,13 @@
   min-height: 400px;
 }
 
-// table-cell引起的兼容问题
-.media-body .editor-text img {
-  width: 100% \9;
-  @media screen and (min--moz-device-pixel-ratio:0) {
-    width: 100%;
-  }
-}
+// table-cell引起的兼容问题 小图标发引起问题
+// .media-body .editor-text img {
+//   width: 100% \9;
+//   @media screen and (min--moz-device-pixel-ratio:0) {
+//     width: 100%;
+//   }
+// }
 
 .inline-block {
   display: inline-block;
@@ -97,6 +102,14 @@
   .es-transition;
   &:hover {
     color: @brand-primary !important;
+    .es-transition;
+  }
+}
+.link-primary {
+  color: @brand-primary;
+  .es-transition;
+  &:hover {
+    color: @brand-primary;
     .es-transition;
   }
 }
@@ -152,6 +165,8 @@ a.transition {
   @opacity-ie: (@opacity * 100);
   filter: ~"alpha(opacity=@{opacity-ie})";
 }
+
+
 
 // 图片响应式
 .img-responsive(@display: block) {

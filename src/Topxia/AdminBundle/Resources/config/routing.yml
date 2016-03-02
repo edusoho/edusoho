@@ -255,13 +255,18 @@ admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
     methods:  [POST]
-    permissions: [admin_teacher]
+    permissions: [admin_teacher_promote,admin_teacher]
+
+admin_teacher_promote_list:
+    pattern: /teacher/promote/list
+    defaults: { _controller: TopxiaAdminBundle:Teacher:promoteList }
+    permissions: [admin_teacher_promote]
 
 admin_teacher_promote_cancel:
     pattern:  /teacher/{id}/promote/cancel
     defaults: { _controller: TopxiaAdminBundle:Teacher:promoteCancel }
     methods:  [POST]
-    permissions: [admin_teacher]
+    permissions: [admin_teacher,admin_teacher_promote]
 
 admin_user_change_password:
     pattern:  /user/{userId}/change/password
@@ -667,10 +672,6 @@ admin_setting_ip_blacklist:
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
     permissions: [admin_setting_ip_blacklist]
 
-# admin_setting_sensitive_word:
-#     pattern:  /setting/sensitive_word
-#     defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
-
 admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: TopxiaAdminBundle:Theme:index }
@@ -798,6 +799,11 @@ admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
     permissions: [admin_setting_message]
+
+admin_setting_redis:
+    pattern:  /setting/redis
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
+    permissions: [admin]
 
 admin_optimize:
     pattern:  /setting/optimize
@@ -1311,6 +1317,21 @@ admin_article_delete:
     methods:  [POST]
     permissions: [admin_operation_article_manage]
 
+admin_invite:
+    pattern:  /invite
+    defaults: { _controller: TopxiaAdminBundle:Invite:index }
+    permissions: [admin_operation_invite]
+
+admin_invite_detail:
+    pattern:  /invite/detail
+    defaults: { _controller: TopxiaAdminBundle:Invite:inviteDetail }
+    permissions: [admin_operation_invite]
+
+admin_invite_set:
+    pattern:  /setting/invite
+    defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
+    permissions: [admin_invite_set]
+
 admin_group:
     pattern:  /group/
     defaults: { _controller: TopxiaAdminBundle:Group:index }
@@ -1643,6 +1664,21 @@ admin_edu_cloud_sms_no_message:
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
     permissions: [admin_edu_cloud_sms]
 
+admin_edu_cloud_search:
+    pattern: /setting/edu_cloud/search
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
+    permissions: [admin_edu_cloud_search]
+
+admin_edu_cloud_search_clause:
+    pattern: /setting/edu_cloud/search/clause
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
+    permissions: [admin_edu_cloud_search]
+
+admin_edu_cloud_search_close:
+    pattern: /setting/edu_cloud/search/close
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
+    permissions: [admin_edu_cloud_search]
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
@@ -1695,3 +1731,28 @@ admin_feedback:
     pattern: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
     permissions: [admin]
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+    permissions: [admin_report_status]
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
+    permissions: [admin_report_status]
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
+    permissions: [admin_report_status]
+
+admin_report_status_ucenter:
+    pattern: /reports/status/ucenter
+    defaults: { _controller: TopxiaAdminBundle:System:ucenter }
+    permissions: [admin_report_status]
+
+admin_report_status_email_send:
+    pattern: /reports/status/email/send
+    defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }
+    permissions: [admin_report_status]

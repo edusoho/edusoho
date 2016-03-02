@@ -24,17 +24,17 @@ function ClassRoomListController($scope, $stateParams, $state, CourseUtil, Class
     $scope.start = $scope.start || 0;
 
     console.log("ClassRoomListController");
-      $scope.loadMore = function(){
+      $scope.loadMore = function(successCallback){
             if (! $scope.canLoad) {
               return;
             }
            setTimeout(function() {
-              $scope.loadClassRoomList($stateParams.sort);
+              $scope.loadClassRoomList($stateParams.sort, successCallback);
            }, 200);
          
       };
 
-      $scope.loadClassRoomList = function(sort) {
+      $scope.loadClassRoomList = function(sort, successCallback) {
              $scope.showLoad();
               ClassRoomService.searchClassRoom({
                 limit : 10,
@@ -43,18 +43,21 @@ function ClassRoomListController($scope, $stateParams, $state, CourseUtil, Class
                 sort : sort,
                 type : $stateParams.type
               }, function(data) {
-                        $scope.hideLoad();
-                        var length  = data ? data.data.length : 0;
-                        if (!data || length == 0 || length < 10) {
-                            $scope.canLoad = false;
-                        }
+                $scope.hideLoad();
+                if (successCallback) {
+                  successCallback();
+                }
+                var length  = data ? data.data.length : 0;
+                if (!data || length == 0 || length < 10) {
+                    $scope.canLoad = false;
+                }
 
-                        $scope.classRooms = $scope.classRooms || [];
-                        for (var i = 0; i < length; i++) {
-                          $scope.classRooms.push(ClassRoomUtil.filterClassRoom(data.data[i]));
-                        };
+                $scope.classRooms = $scope.classRooms || [];
+                for (var i = 0; i < length; i++) {
+                  $scope.classRooms.push(ClassRoomUtil.filterClassRoom(data.data[i]));
+                };
 
-                        $scope.start += data.limit;
+                $scope.start += data.limit;
               });
       }
 

@@ -2,30 +2,29 @@
 
 namespace Topxia\Service\Article\Dao;
 
-interface CategoryDao 
+interface CategoryDao
 {
+    public function addCategory($category);
 
-	public function addCategory($category);
+    public function deleteCategory($id);
 
-	public function deleteCategory($id);
+    public function getCategory($id);
 
-	public function getCategory($id);
+    public function findCategoryByCode($code);
 
-	public function findCategoryByCode($code);
-	
-	public function getCategoryByParentId($parentId);
+    public function getCategoryByParentId($parentId);
 
-	public function findAllCategoriesByParentId($parentId);
+    public function findAllCategoriesByParentId($parentId);
 
-	public function findAllCategories();
+    public function findAllCategories();
 
-	public function updateCategory($id, $category);
+    public function updateCategory($id, $category);
 
-	public function findCategoriesByParentId($parentId, $orderBy, $start, $limit);
+    public function findCategoriesByParentId($parentId, $orderBy, $start, $limit);
 
-	public function findCategoriesCountByParentId($parentId);
+    public function findCategoriesCountByParentId($parentId);
 
-	public function findCategoriesByIds(array $ids);
+    public function findCategoriesByIds(array $ids);
 
+    public function findAllPublishedCategoriesByParentId($parentId);
 }
-	

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $courses    = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
@@ -212,37 +212,30 @@ class DefaultController extends BaseController
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
         $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
+        $orderBy                = $conditions['orderBy'];
 
-        if (isset($conditions['config'])) {
-            $config = $conditions['config'];
-            unset($conditions['config']);
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+
+        if (!empty($config['confirmConfig'])) {
+            $config = $config['confirmConfig']['blocks']['left'];
+
+            foreach ($config as $template) {
+                if ($template['code'] == "course-grid-with-condition-index") {
+                    $config = $template;
+                }
+            }
+
+            $config['orderBy']    = $orderBy;
+            $config['categoryId'] = $categoryId;
+            return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+                'config' => $config
+            ));
         } else {
-            $config = array();
-            unset($conditions['config']);
+            return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+                'categoryId' => $categoryId,
+                'orderBy'    => $orderBy
+            ));
         }
-
-        //var_dump($conditions);
-
-        if (!empty($conditions['categoryId'])) {
-            $conditions['categoryId'] = intval($conditions['categoryId']);
-        } else {
-            unset($conditions['categoryId']);
-        }
-
-        $orderBy = $conditions['orderBy'];
-
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-        }
-
-        unset($conditions['orderBy']);
-        $config               = $this->getThemeService()->getCurrentThemeConfig();
-        $config               = $config['confirmConfig']['blocks']['left'][0];
-        $config['orderBy']    = $orderBy;
-        $config['categoryId'] = $categoryId;
-        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
-            'config' => $config
-        ));
     }
 
     protected function calculateUserLearnProgress($course, $member)

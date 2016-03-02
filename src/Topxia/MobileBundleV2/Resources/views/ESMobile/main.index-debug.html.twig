@@ -13,16 +13,11 @@
 <link href="{{ asset('bundles/topxiamobilebundlev2/main/css/iconfont.css') }}" rel="stylesheet" />
 
 {% endblock %}
-{% if clientType == 'Android' %}
-    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
-{%  elseif clientType == 'iOS' %} 
-    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOScordova.js') }}"></script>
-{% endif %}
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular.min.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-ui-router.min.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular/1.3.0/angular-sanitize.min.js') }}"></script>
-
+<script src="{{ asset('bundles/topxiamobilebundlev2/libs/chat/chart.min.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/fastclick.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.3.0/js/lib/zepto.min.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/frozen/1.2.1/js/frozen.js') }}"></script>
@@ -54,8 +49,15 @@
 <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/SearchController.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/ClassRoomListController.js') }}"></script>
 <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/ArticleController.js') }}"></script>
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/controller/HomeWorkController.js') }}"></script>
 
 <script src="{{ asset('bundles/topxiamobilebundlev2/libs/angular-sideview.js') }}"></script>
+{% if clientType == 'Android' %}
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
+{%  elseif clientType == 'iOS' %} 
+    <script src="{{ asset('bundles/topxiamobilebundlev2/main/js/iOScordova.js') }}"></script>
+{% endif %}
+<script src="{{ asset('bundles/topxiamobilebundlev2/main/js/Androidcordova.js') }}"></script>
 
 {% block head_scripts %}
 

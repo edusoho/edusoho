@@ -30,10 +30,6 @@
         </li>
 
         <li><a href="#video-chooser-import-pane" data-toggle="tab">导入网络视频</a></li>
-        {% set magic = setting('magic')%}
-        {% if magic.letv|default('') %}
-            <li><a href="#video-chooser-letv-import" data-toggle="tab">导入乐视视频</a></li>
-        {% endif %}
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="video-chooser-upload-pane">
@@ -147,17 +143,6 @@
             </span>
           </div>
         </div>
-        {% set magic = setting('magic') %}
-        {% if magic.letv|default('') %}
-          <div class="tab-pane" id="video-chooser-letv-import">
-            <div class="input-group">
-              <input class="form-control" type="text" placeholder="支持乐视视频源地址" data-role="import-url-letv" >
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" data-role="import" data-url="{{ path('course_manage_media_import', {id:course.id}) }}" data-loading-text="正在导入，请稍等">导入</button>
-              </span>
-            </div>
-          </div>
-        {% endif %}
       </div>
     </div>
 

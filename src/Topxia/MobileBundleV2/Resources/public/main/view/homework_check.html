@@ -1,0 +1,30 @@
+<div class="ui-bar" ui-bar>
+    <div class="ui-bar-bg">
+      <button class="ui-btn btn-outline iconfont icon-fanhui" back="go"></button>
+      <h3 class="title">作业批改</h3>
+    </div>
+</div>
+<div class="top-header ui-homework" ng-init="loadHomeworkResult()">
+	<section class="ui-panel">
+        <div class="ui-header">
+            作业题目
+            <span class="label">
+                <label ng-bind="currentQuestionIndex"></label>/{{ items.length }}
+            </span>
+        </div>
+		<div class="ui-slider homework-slider" slider="homework-slider" ui-slider-box="items" scroll-change="questionItemChange()">
+            <ul class="ui-slider-content">
+                <li ng-repeat="item in items">
+                    <div class="question-container">
+                        <h4 class="header">
+                            <span ng-bind="getItemStem($index, item.type)"></span>
+                            <span ng-bind-html="item.stem"></span>
+                        </h4>
+                        <div ng-include=" getItemView(item) | coverIncludePath "></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+	</section>
+	
+</div>

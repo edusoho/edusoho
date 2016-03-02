@@ -21,7 +21,7 @@
         <div class="form-group mbl">
           <label class="control-label" for="set_bind_email">邮箱地址</label>
           <div class="controls">
-            <input id="set_bind_email" class="form-control input-lg" type="text" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
+            <input id="set_bind_email" class="form-control input-lg" type="email" name="set_bind_emailOrMobile" data-url="{{path('register_email_check')}}">
           </div>
         </div>
       {% endif %}
@@ -35,7 +35,6 @@
         <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="正在登录...">确认登录</button>
       </div>
 
-      
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       <div class="form-group text-right">
         <a href="{{ path('login_bind_change', {type: type}) }}">绑定已有帐号</a>

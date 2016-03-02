@@ -11,7 +11,8 @@ class RegisterController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $fields = $request->query->all();
+        $user   = $this->getCurrentUser();
 
         if ($user->isLogin()) {
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
@@ -25,15 +26,19 @@ class RegisterController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $registration = $request->request->all();
+            // $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
             }
 
+            if ($this->getSensitiveService()->scanText($registration['nickname'])) {
+                return $this->createMessageResponse('error', '用户名中含有敏感词！');
+            }
+
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
             $registration['createdIp'] = $request->getClientIp();
-
-            $authSettings = $this->getSettingService()->get('auth', array());
+            $authSettings              = $this->getSettingService()->get('auth', array());
 
             //验证码校验
             $this->captchaEnabledValidator($authSettings, $registration, $request);
@@ -61,82 +66,54 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
-            if (!isset($registration['nickname'])) {
-                return $this->render("TopxiaWebBundle:Register:nickname-update.html.twig", array('user' => $user));
-            } else {
-                $authSettings = $this->getSettingService()->get('auth', array());
+            return $this->redirect($this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request))));
+        }
 
-                if (($authSettings && array_key_exists('email_enabled', $authSettings) && ($authSettings['email_enabled'] == 'closed')) || !$this->isEmptyVeryfyMobile($user)) {
-                    $this->authenticateUser($user);
-                }
+        $inviteCode = '';
+        $inviteUser = array();
 
-                $goto = $this->generateUrl('register_submited', array(
-                    'id'   => $user['id'],
-                    'hash' => $this->makeHash($user),
-                    'goto' => $this->getTargetPath($request)
-                ));
+        if (!empty($fields['inviteCode'])) {
+            $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
+        }
 
-                if ($this->getAuthService()->hasPartnerAuth()) {
-                    $this->authenticateUser($user);
-                    return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-                }
-
-                $mailerSetting = $this->getSettingService()->get('mailer');
-
-                if (!$mailerSetting['enabled'] && $this->isEmptyVeryfyMobile($user)) {
-                    return $this->redirect($this->getTargetPath($request));
-                }
-
-                return $this->redirect($goto);
-            }
+        if (!empty($inviteUser)) {
+            $inviteCode = $fields['inviteCode'];
         }
 
         return $this->render("TopxiaWebBundle:Register:index.html.twig", array(
+            'inviteCode'        => $inviteCode,
             'isRegisterEnabled' => $registerEnable,
             'registerSort'      => array(),
+            'inviteUser'        => $inviteUser,
             '_target_path'      => $this->getTargetPath($request)
         ));
     }
 
-    public function nicknameUpdateAction(Request $request)
+    public function successAction(Request $request)
     {
-        if ($request->getMethod() == 'POST') {
-            $registration = $request->request->all();
-            $this->getAuthService()->changeNickname($registration['id'], $registration['nickname']);
-            $user = $this->getUserService()->getUser($registration['id']);
+        $user = $this->getUserService()->getUser($request->query->get('userId'));
+        
+        $authSettings = $this->getSettingService()->get('auth', array());
 
-            $authSettings = $this->getSettingService()->get('auth', array());
-
-            if (($authSettings && array_key_exists('email_enabled', $authSettings) && ($authSettings['email_enabled'] == 'closed')) || !$this->isEmptyVeryfyMobile($user)) {
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
-            }
-
-            $goto = $this->generateUrl('register_submited', array(
-                'id'   => $user['id'],
-                'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request)
-            ));
-
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                $this->authenticateUser($user);
-                $this->sendRegisterMessage($user);
-                return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
-            }
-
-            $mailerSetting = $this->getSettingService()->get('mailer');
-
-            if (!$mailerSetting['enabled'] && $this->isEmptyVeryfyMobile($user)) {
-                return $this->redirect($this->getTargetPath($request));
-            }
-
-            return $this->redirect($goto);
+        if (($authSettings
+            && isset($authSettings['email_enabled'])
+            && $authSettings['email_enabled'] == 'closed')
+            || !$this->isEmptyVeryfyMobile($user)) {
+            $this->authenticateUser($user);
         }
 
-        return $this->render("TopxiaWebBundle:Register:nickname-update.html.twig", array(
-            'user'         => $user,
-            'registration' => $registration
+        $goto = $this->generateUrl('register_submited', array(
+            'id'   => $user['id'],
+            'hash' => $this->makeHash($user),
+            'goto' => $request->query->get('goto')
         ));
+
+        if ($this->getAuthService()->hasPartnerAuth()) {
+            $this->authenticateUser($user);
+            $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+        }
+
+        return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
     }
 
     protected function isMobileRegister($registration)
@@ -238,7 +215,7 @@ class RegisterController extends BaseController
         $auth = $this->getSettingService()->get('auth');
 
         if (!empty($user['verifiedMobile'])) {
-            return $this->redirect($this->generateUrl('homepage'));
+            return $this->redirect($this->getTargetPath($request));
         }
 
         if ($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled', $auth) && ($auth['email_enabled'] == 'opened')) {
@@ -249,45 +226,9 @@ class RegisterController extends BaseController
                 '_target_path'  => $this->getTargetPath($request)
             ));
         } else {
-            /*return $this->render("TopxiaWebBundle:Register:submited.html.twig", array(
-            'user' => $user,
-            'hash' => $hash,
-            'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
-            '_target_path' => $this->getTargetPath($request),
-            ));*/
-
             $this->authenticateUser($user);
             return $this->redirect($this->getTargetPath($request));
         }
-    }
-
-    protected function getTargetPath($request)
-    {
-        if ($request->query->get('goto')) {
-            $targetPath = $request->query->get('goto');
-        } else
-
-        if ($request->getSession()->has('_target_path')) {
-            $targetPath = $request->getSession()->get('_target_path');
-        } else {
-            $targetPath = $request->headers->get('Referer');
-        }
-
-        if ($targetPath == $this->generateUrl('login', array(), true)) {
-            return $this->generateUrl('homepage');
-        }
-
-        $url = explode('?', $targetPath);
-
-        if ($url[0] == $this->generateUrl('partner_logout', array(), true)) {
-            return $this->generateUrl('homepage');
-        }
-
-        if ($url[0] == $this->generateUrl('password_reset_update', array(), true)) {
-            $targetPath = $this->generateUrl('homepage', array(), true);
-        }
-
-        return $targetPath;
     }
 
     public function emailVerifyAction(Request $request, $token)
@@ -387,6 +328,18 @@ class RegisterController extends BaseController
         return $this->validateResult($result, $message);
     }
 
+    public function invitecodeCheckAction(Request $request)
+    {
+        $inviteCode = $request->query->get('value');
+        $user       = $this->getUserService()->getUserByInviteCode($inviteCode);
+
+        if (empty($user)) {
+            return $this->validateResult('false', '邀请码不正确');
+        } else {
+            return $this->validateResult('success', '');
+        }
+    }
+
     public function captchaModalAction()
     {
         return $this->render('TopxiaWebBundle:Register:captcha-modal.html.twig', array());
@@ -462,6 +415,11 @@ class RegisterController extends BaseController
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');
+    }
+
+    private function getCardService()
+    {
+        return $this->getServiceKernel()->createService('Card.CardService');
     }
 
     protected function getAuthService()
@@ -574,6 +532,11 @@ class RegisterController extends BaseController
         ) {
             return true;
         }
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function registerLimitValidator($registration, $authSettings, $request)

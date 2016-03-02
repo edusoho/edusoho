@@ -2,7 +2,7 @@
 
 	<div class="course-card">
 		<h4><span class="circle-label"></span>推荐</h4>
-		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐课程">
+		<list-empty-view data="liveRecommedCourses" title="暂时没有推荐直播课程">
           		</list-empty-view>
 		<ul class="ui-list ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="course in liveRecommedCourses" ng-href="#/course/{{ course.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">
@@ -16,7 +16,7 @@
 	<div class="course-card">
 		<h4><span class="circle-label"></span>最新</h4>
 
-		<list-empty-view data="liveLatestCourses" title="暂时没有最新课程">
+		<list-empty-view data="liveLatestCourses" title="暂时没有最新直播课程">
           		</list-empty-view>
 		<ul class="ui-list ui-border-tb">
 		    <li class="ui-border-t" ng-repeat="course in liveLatestCourses" ng-href="#/course/{{ course.id  }}"  ng-include=" 'view/course_list_item.html' | coverIncludePath ">

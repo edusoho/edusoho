@@ -17,7 +17,6 @@ class MenuBuilder
     public function getMenuBreadcrumb($code)
     {
         $menus = $this->buildMenus();
-
         if (empty($menus[$code]) || empty($menus[$code]['parent'])) {
             return array();
         }
@@ -174,7 +173,7 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
 
         $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
-
+        $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
         $count = $this->getAppService()->findAppCount();
         $apps  = $this->getAppService()->findApps(0, $count);
 

@@ -23,6 +23,7 @@ seajs.config({
         "jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
         "jquery.waypoints": "jquery-plugin/waypoints/2.0.5/waypoints.min",
         "jquery.easy-pie-chart": "jquery-plugin/jquery.easy-pie-chart/jquery.easypiechart.min",
+        "jquery.blurr": "jquery-plugin/jquery.blurr/jquery.blurr",
         "mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
         'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
         'echo.js': 'echo.js/1.7.0/index',
@@ -64,9 +65,12 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
-        'video-player': 'balloon-video-player/1.0.0/index',
         'z_tree': 'jquery-plugin/z_tree/js/jquery.ztree.all-3.5.min',
         'z_tree_css': 'jquery-plugin/z_tree/css/zTreeStyle/zTreeStyle.css',
+        'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
+        'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
+        'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
+        'video-player': 'balloon-video-player/1.3.0/index'
     },
 
 	// 预加载项

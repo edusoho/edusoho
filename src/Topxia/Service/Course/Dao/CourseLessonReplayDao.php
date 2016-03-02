@@ -4,8 +4,6 @@ namespace Topxia\Service\Course\Dao;
 
 interface CourseLessonReplayDao
 {
-    const TABLENAME = 'course_lesson_replay';
-
     public function addCourseLessonReplay($courseLessonReplay);
 
     public function getCourseLessonReplay($id);

@@ -34,8 +34,7 @@ class ArticleController extends BaseController
 
         $featuredConditions = array(
             'status'     => 'published',
-            'featured'   => 1,
-            'hasPicture' => 1
+            'featured'   => 1
         );
 
         $featuredArticles = $this->getArticleService()->searchArticles(
@@ -44,6 +43,14 @@ class ArticleController extends BaseController
             0,
             5
         );
+
+        $featuredCategories = array();
+
+        foreach ($featuredArticles as $key => $value) {
+            $featuredCategories[$value['id']] = $this->getCategoryService()->getCategory($value['categoryId']);
+        }
+
+
         $promotedConditions = array(
             'status'   => 'published',
             'promoted' => 1
@@ -66,6 +73,7 @@ class ArticleController extends BaseController
             'categoryTree'       => $categoryTree,
             'latestArticles'     => $latestArticles,
             'featuredArticles'   => $featuredArticles,
+            'featuredCategories' => $featuredCategories,
             'promotedArticles'   => $promotedArticles,
             'promotedCategories' => $promotedCategories,
             'paginator'          => $paginator,
@@ -76,7 +84,6 @@ class ArticleController extends BaseController
     public function categoryNavAction(Request $request, $categoryCode)
     {
         list($rootCategories, $categories, $activeIds) = $this->getCategoryService()->makeNavCategories($categoryCode);
-
         return $this->render('TopxiaWebBundle:Article/Part:category.html.twig', array(
             'rootCategories' => $rootCategories,
             'categories'     => $categories,
@@ -136,6 +143,8 @@ class ArticleController extends BaseController
             return $this->createMessageResponse('error', '文章不是发布状态，请查看！');
         }
 
+        $this->getArticleService()->viewArticle($id);
+
         $conditions = array(
             'status' => 'published'
         );
@@ -164,8 +173,6 @@ class ArticleController extends BaseController
             $seoKeyword = ArrayToolkit::column($tags, 'name');
             $seoKeyword = implode(",", $seoKeyword);
         }
-
-        $this->getArticleService()->hitArticle($id);
 
         $breadcrumbs = $this->getCategoryService()->findCategoryBreadcrumbs($category['id']);
 

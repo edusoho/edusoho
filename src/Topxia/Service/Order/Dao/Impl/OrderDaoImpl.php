@@ -29,7 +29,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
             $forUpdate = "FOR UPDATE";
         }
 
-        $sql   = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1 {$forUpdate}";
+        $sql = "SELECT * FROM {$this->table} WHERE sn = ? LIMIT 1 {$forUpdate}";
+
         $order = $this->getConnection()->fetchAssoc($sql, array($sn));
         return $order ? $this->createSerializer()->unserialize($order, $this->serializeFields) : null;
     }
@@ -148,6 +149,8 @@ class OrderDaoImpl extends BaseDao implements OrderDao
                     ->andWhere('targetId = :targetId')
                     ->andWhere('userId = :userId')
                     ->andWhere('amount > :amount')
+                    ->andWhere('totalPrice >= totalPrice')
+                    ->andWhere('coinAmount > :coinAmount')
                     ->andWhere('status = :status')
                     ->andWhere('status <> :statusPaid')
                     ->andWhere('status <> :statusCreated')
@@ -206,6 +209,20 @@ class OrderDaoImpl extends BaseDao implements OrderDao
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('sum(amount)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function analysisCoinAmount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('sum(coinAmount)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function analysisTotalPrice($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('sum(totalPrice)');
         return $builder->execute()->fetchColumn(0);
     }
 

@@ -84,9 +84,9 @@ register:
     pattern:  /register
     defaults: { _controller: TopxiaWebBundle:Register:index }
 
-register_nickname_update:
-    pattern:  /register/nickname/update
-    defaults: { _controller: TopxiaWebBundle:Register:nicknameUpdate }
+register_success:
+    pattern:  /register/success
+    defaults: { _controller: TopxiaWebBundle:Register:success }
 
 register_submited:
     pattern:  /register/submited/{id}/{hash}
@@ -116,6 +116,10 @@ register_email_or_mobile_check:
 register_nickname_check:
     pattern:  /register/nickname/check
     defaults: { _controller: TopxiaWebBundle:Register:nicknameCheck }
+
+invitecode_check:
+    pattern:  /register/invitecode/check
+    defaults: { _controller: TopxiaWebBundle:Register:invitecodeCheck }
 
 register_captcha_check:
     pattern:  /register/captcha/check
@@ -286,10 +290,6 @@ course_select:
     pattern:  /course/select
     defaults: { _controller: TopxiaWebBundle:Course:select }
 
-course_search:
-    pattern:  /course/search
-    defaults: { _controller: TopxiaWebBundle:Course:search }
-
 course_show:
     pattern:  /course/{id}
     defaults: { _controller: TopxiaWebBundle:Course:show }
@@ -301,6 +301,10 @@ course_qrcode:
 course_info:
     pattern:  /course/{id}/info
     defaults: { _controller: TopxiaWebBundle:Course:info }
+
+course_lesson_list:
+    pattern:  /course/{id}/lesson/list
+    defaults: { _controller: TopxiaWebBundle:Course:lessonList }
 
 course_notes:
     pattern:  /course/{courseId}/notes
@@ -960,6 +964,63 @@ course_manage_publish:
     defaults: { _controller: TopxiaWebBundle:CourseManage:publish }
     methods: [POST]
 
+course_lesson_marker_manage:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/manage
+    defaults: { _controller: TopxiaWebBundle:Marker:manage }
+
+course_lesson_marker_show:
+    pattern:  /course/lesson/{lessonId}/marker/show
+    defaults: { _controller: TopxiaWebBundle:Marker:showMarkers }
+
+course_lesson_marker_metas:
+    pattern:  /course/lesson/{mediaId}/marker/metas
+    defaults: { _controller: TopxiaWebBundle:Marker:markerMetas }
+
+course_lesson_marker_merge:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/merge
+    defaults: { _controller: TopxiaWebBundle:Marker:merge }
+    methods: [POST]
+
+course_lesson_marker_update:
+    pattern:  /course/{courseId}/lesson/{lessonId}/marker/update
+    defaults: { _controller: TopxiaWebBundle:Marker:updateMarker }
+    methods: [POST]
+
+course_lesson_question_marker_show:
+    pattern:  /course/lesson/{markerId}/questionmarker/show
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showMarkerQuestion }
+
+course_lesson_question_marker_answer_show:
+    pattern:  /course/lesson/questionmarker/{questionId}/show
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:showQuestionAnswer }
+
+course_lesson_question_marker_next:
+    pattern:  /course/lesson/{markerId}/questionmarker/next
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:doNextTest }
+
+course_lesson_question_marker_add:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/add
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:addQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_delete:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/delete
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:deleteQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_sort:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/sort
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:sortQuestionMarker }
+    methods: [POST]
+
+course_lesson_question_marker_list:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/list
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:question }
+
+course_lesson_question_marker_search:
+    pattern:  /course/{courseId}/lesson/{lessonId}/question_marker/search
+    defaults: { _controller: TopxiaWebBundle:QuestionMarker:search }
+
 announcement_list:
     pattern: /announcement/{targetType}/{targetId}/list
     defaults: {_controller:TopxiaWebBundle:Announcement:list }
@@ -996,6 +1057,10 @@ testpaper_user_result_json:
 search:
     pattern:  /search
     defaults: { _controller: TopxiaWebBundle:Search:index }
+
+cloud_search:
+    pattern:  /cloud/search
+    defaults: { _controller: TopxiaWebBundle:Search:cloudSearch }
 
 note_show:
     pattern:  /note/{id}
@@ -1270,6 +1335,14 @@ my_favorite_question_preview:
 user_show: 
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
+
+my_page_show: 
+    pattern:  /my/page/show
+    defaults: { _controller: TopxiaWebBundle:User:pageShow }
+
+user_about: 
+    pattern:  /user/{id}/about
+    defaults: { _controller: TopxiaWebBundle:User:about }
 
 user_teach: 
     pattern:  /user/{id}/teach
@@ -1570,6 +1643,9 @@ group_backgroundlogo_set:
 group_search:
     pattern:  /group/{id}/serach
     defaults: { _controller: TopxiaWebBundle:GroupThread:searchResult }
+group_cloud_search:
+    pattern:  /group/{id}/cloudserach
+    defaults: { _controller: TopxiaWebBundle:GroupThread:cloudSearchResult }
 group_thread_post:
     pattern:  /group/thread/{groupId}/{threadId}/post
     defaults: { _controller: TopxiaWebBundle:GroupThread:postThread }
@@ -1647,6 +1723,20 @@ my_bill:
 my_coin:
     path:     /my/coin
     defaults: { _controller: TopxiaWebBundle:Coin:index }
+my_invite_code:
+    path:     /my/invitecode
+    defaults: { _controller: TopxiaWebBundle:Coin:inviteCode }
+invite_promote_link:
+    path:     /my/invitecode/promotelink
+    defaults: { _controller: TopxiaWebBundle:Coin:promoteLink }
+
+write_invitecode:
+    path:     /my/invitecode/writeinvitecode
+    defaults: { _controller: TopxiaWebBundle:Coin:writeInvitecode }
+receive_coupon:
+    path:     /my/invitecode/receivecoupon
+    defaults: { _controller: TopxiaWebBundle:Coin:receiveCoupon }
+
 coin_pay:
     path:     /coin/pay
     defaults: { _controller: TopxiaWebBundle:Coin:pay }
@@ -1825,6 +1915,10 @@ edu_cloud_sms_send_callback:
     pattern:  /edu_cloud/sms/callback/{targetType}/{targetId}
     defaults: { _controller: TopxiaWebBundle:EduCloud:smsCallBack }
 
+edu_cloud_search_callback:
+    pattern:  /edu_cloud/search/callback
+    defaults: { _controller: TopxiaWebBundle:EduCloud:searchCallBack }
+
 settings_bind_mobile:
     pattern:  /settings/bind_mobile
     defaults: { _controller: TopxiaWebBundle:Settings:bindMobile }
@@ -1918,5 +2012,6 @@ live_course_manage_lesson_replay_title_update:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+
 
 

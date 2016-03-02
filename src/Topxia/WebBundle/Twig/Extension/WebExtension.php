@@ -107,13 +107,31 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
-            new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles'))
+            new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles')),
+            new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
+            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists'))
         );
     }
 
     public function getAdminRoles()
     {
         return ServiceKernel::instance()->createService('System.RoleService')->searchRoles(array(), 'created', 0, 1000);
+    }
+
+    public function renderNotification($notification)
+    {
+        if ($notification) {
+            $manager                 = ExtensionManager::instance();
+            $notification['message'] = $manager->renderNotification($notification);
+        }
+
+        return $notification;
+    }
+
+    public function routeExists($name)
+    {
+        $router = $this->container->get('router');
+        return (null === $router->getRouteCollection()->get($name)) ? false : true;
     }
 
     public function isWithoutNetwork()
@@ -352,6 +370,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
+        $names[] = 'sensitiveword';
 
         $paths = array(
             'common' => 'common',

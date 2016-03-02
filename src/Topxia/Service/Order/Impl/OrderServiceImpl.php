@@ -187,6 +187,18 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->getOrderDao()->analysisAmount($conditions);
     }
 
+    public function analysisCoinAmount($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisCoinAmount($conditions);
+    }
+
+    public function analysisTotalPrice($conditions)
+    {
+        $conditions = $this->_prepareSearchConditions($conditions);
+        return $this->getOrderDao()->analysisTotalPrice($conditions);
+    }
+
     public function analysisAmountDataByTime($startTime, $endTime)
     {
         return $this->getOrderDao()->analysisAmountDataByTime($startTime, $endTime);
@@ -556,7 +568,18 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function _prepareSearchConditions($conditions)
     {
+        $tmpConditions = array();
+
+        if (isset($conditions['coinAmount'])) {
+            $tmpConditions['coinAmount'] = $conditions['coinAmount'];
+        }
+
+        if (isset($conditions['amount'])) {
+            $tmpConditions['amount'] = $conditions['amount'];
+        }
+
         $conditions = array_filter($conditions);
+        $conditions = array_merge($conditions, $tmpConditions);
 
         if (isset($conditions['date'])) {
             $dates = array(
@@ -646,6 +669,11 @@ class OrderServiceImpl extends BaseService implements OrderService
         return $this->createService('System.SettingService');
     }
 
+    protected function getCardService()
+    {
+        return $this->createService('Card.CardService');
+    }
+
     protected function getUserService()
     {
         return $this->createService('User.UserService');
@@ -668,7 +696,12 @@ class OrderServiceImpl extends BaseService implements OrderService
 
     protected function getCouponService()
     {
-        return $this->createService('Coupon:Coupon.CouponService');
+        return $this->createService('Coupon.CouponService');
+    }
+
+    protected function getInviteRecordService()
+    {
+        return $this->createService('User.InviteRecordService');
     }
 
     protected function getPayCenterService()

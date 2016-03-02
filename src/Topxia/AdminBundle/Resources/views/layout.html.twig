@@ -34,7 +34,8 @@
   </title>
 
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
+    <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+    <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" />
   {% endif %}
   
   {% block stylesheets %}
@@ -173,7 +174,9 @@
     </div>
   </div>
 
-  {% block footer %}{% endblock %}
+  {% block footer %}
+    {{ setting('site.analytics')|raw }} 
+  {% endblock %}
 
   {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaadmin/js/admin-app.js')} %}
   <div id="modal" class="modal" ></div>

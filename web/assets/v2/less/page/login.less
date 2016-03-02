@@ -55,6 +55,10 @@
       background: #ff842e;
       border-color: #ff842e;
     }
+    &.social-more:hover {
+      background: @brand-primary;
+      border-color: @brand-primary;
+    }
   }
 }
 
@@ -62,6 +66,7 @@
   margin: 50px auto;
   width: 460px;
   min-height: 400px;
+  .border-radius(0);
   @media(max-width: @screen-xs-max) {
     width: 100%;
     margin: 20px auto;
@@ -85,9 +90,6 @@
       &.active {
         background-color: #fff;
         .es-transition;
-      }
-      + a {
-        border-left: 1px solid @gray-lighter;
       }
     }
   }

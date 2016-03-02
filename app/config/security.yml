@@ -1,11 +1,11 @@
 services:
     topxia.user_provider:
         class: Topxia\Service\User\UserProvider
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
 
     security.access.blacklist_voter:
         class:      Topxia\WebBundle\Security\Voter\ClientIpVoter
-        arguments:  [@service_container]
+        arguments:  ['@service_container']
         public:     false
         tags:
             - { name: security.voter }

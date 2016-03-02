@@ -21,11 +21,7 @@ class PlayerController extends BaseController
                 $file['videoWatermarkEmbedded'] = 1;
             }
 
-            if ($this->setting("developer.balloon_player", 0)) {
-                $player = "balloon-cloud-video-player";
-            } else {
-                $player = "cloud-video-player";
-            }
+            $player = "balloon-cloud-video-player";
         } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
             $player = "local-video-player";
         } elseif ($file["type"] == 'audio') {
@@ -41,19 +37,6 @@ class PlayerController extends BaseController
             'player'           => $player,
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos($userAgent, $value) > -1) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function getPlayUrl($id, $context)
@@ -121,6 +104,10 @@ class PlayerController extends BaseController
 
         if (isset($context['watchTimeLimit'])) {
             $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fileds['data']['hideBeginning'] = $context['hideBeginning'];
         }
 
         $token = $this->getTokenService()->makeToken($type, $fileds);
