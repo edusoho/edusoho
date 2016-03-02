@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Service\System\Mail;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
@@ -115,34 +116,35 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmailService($to, $params)
+    protected function sendEmailService($to, Mail $mail)
     {
         $config      = $this->setting('mailer', array());
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            return $this->sendCloudEmail($to, $params);
+            return $this->sendCloudEmail($to, $mail);
         } elseif (!isset($config['enabled']) && $config['enabled'] == 1) {
-            return $this->sendEmail($to, $params);
+            return $this->sendEmail($to, $mail);
         }
 
         return false;
     }
 
-    private function sendCloudEmail($to, $params)
+    private function sendCloudEmail($to, Mail $mail)
     {
         $cloudConfig = $this->setting('cloud_email', array());
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
-            $api    = CloudAPIFactory::create('leaf');
-            $site   = $this->setting('site', array());
-            $params = array(
+            $api       = CloudAPIFactory::create('leaf');
+            $site      = $this->setting('site', array());
+            $cloudMail = $mail->getCloudMail();
+            $params    = array(
                 'to'       => $to,
-                'template' => $params['template'],
+                'template' => $cloudMail['template'],
                 'params'   => array(
                     'sitename'  => $site['name'],
-                    'nickname'  => $params['nickname'],
-                    'verifyurl' => $params['verifyurl'],
+                    'nickname'  => $cloudMail['nickname'],
+                    'verifyurl' => $cloudMail['verifyurl'],
                     'siteurl'   => $site['url']
                 )
             );
@@ -155,8 +157,9 @@ abstract class BaseController extends Controller
         return false;
     }
 
-    private function sendEmail($to, $params)
+    private function sendEmail($to, Mail $mail)
     {
+        $params = $mail->getMail();
         $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());

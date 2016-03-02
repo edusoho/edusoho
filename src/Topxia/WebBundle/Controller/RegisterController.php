@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
+use Topxia\Service\System\Mail;
 use Topxia\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,7 +93,7 @@ class RegisterController extends BaseController
     public function successAction(Request $request)
     {
         $user = $this->getUserService()->getUser($request->query->get('userId'));
-        
+
         $authSettings = $this->getSettingService()->get('auth', array());
 
         if (($authSettings
@@ -488,14 +489,18 @@ class RegisterController extends BaseController
         $emailTitle        = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
         try {
-            $params = array(
-                'title'     => $emailTitle,
-                'body'      => $emailBody,
-                'template'  => 'email_registration',
+            $mail = array(
+                'title' => $emailTitle,
+                'body'  => $emailBody
+            );
+            $cloudMail = array(
                 'verifyurl' => $verifyurl,
+                'template'  => 'email_registration',
                 'nickname'  => $user['nickname']
             );
-            $this->sendEmailService($user['email'], $params);
+            $mail = new Mail($mail, $cloudMail);
+
+            $this->sendEmailService($user['email'], $mail);
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }
