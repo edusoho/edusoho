@@ -3,10 +3,6 @@ define(function(require, exports, module) {
     var Widget = require('widget');
 
     exports.run = function() {
-
-        //$('#modal').on('hidden.bs.modal', function (e) {
-        //    window.location.reload();
-        //})
         
         var progressBar = new ProgressBar({
             element: '#user-import-progress'
@@ -14,19 +10,23 @@ define(function(require, exports, module) {
 
         var $updateBtn = $("#begin-update");
         var importUrl = $("#user-import").data('import-url');
+        var finishedUrl = $("#user-import").data('finished-url');
         var checkType = $("#user-import").data('check-type');
 
         var datas = $("input[name='data']").val();
+        var progress = $.parseJSON($("input[name='progress']").val());
 
         var steps = new Array();
+        var progressNum =0;
 
         $.each($.parseJSON(datas), function(i, item) {
             steps.push({
-                 title: '正在导入：',
+                 title: '已经导入：'+progressNum,
                  url: importUrl,
                  data:{'data': JSON.stringify(item),'checkType':checkType},
-                 progressRange: [i*10, (i+1)*10]
+                 progressRange: [i*100/progress.length, (i+1)*100/progress.length]
             });
+            progressNum += progress[i];
         });
 
         $.each(steps, function(i, step) {
@@ -50,13 +50,13 @@ define(function(require, exports, module) {
         $("#finish-import-btn").click(function() {
             $(this).button('loading').addClass('disabled');
             setTimeout(function(){
-                window.location.reload();
+                window.location.href = finishedUrl;
             }, 1000);
         });
     };
 
     function exec(title, url, data, progressBar, startProgress, endProgress) {
-        progressBar.setProgress(startProgress, '正在' + title);
+        progressBar.setProgress(startProgress, title);
         $.ajax(url, {
             async: true,
             dataType: 'json',
