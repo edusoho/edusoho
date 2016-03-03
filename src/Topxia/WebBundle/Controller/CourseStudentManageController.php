@@ -24,12 +24,16 @@ class CourseStudentManageController extends BaseController
                 $condition['userId'] = $user ? $user['id'] : -1;
                 unset($condition['email']);
             } elseif (SimpleValidator::mobile($fields['keyword'])) {
-                $condition['mobile']  = $fields['keyword'];
-                $verifiedUser         = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
-                $user                 = $this->getUserService()->getUserByMobile($condition['mobile']);
-                $user                 = $user ? array($user['id']) : array();
-                $verifiedUser         = $user ? array($verifiedUser['id']) : array();
-                $userIds              = array_unique(array_merge($user, $verifiedUser));
+                $condition['mobile'] = $fields['keyword'];
+                $userIds             = array();
+                $mobileVerifiedUser  = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
+                $profileUser         = $this->getUserService()->getUserByMobile($condition['mobile']);
+                $userIds[]           = $profileUser ? $profileUser['id'] : null;
+
+                $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+
+                $userIds = array_unique($userIds);
+
                 $condition['userIds'] = $userIds ? $userIds : -1;
                 unset($condition['mobile']);
             } else {
