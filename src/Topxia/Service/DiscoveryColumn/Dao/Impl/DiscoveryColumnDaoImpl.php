@@ -47,7 +47,7 @@ class DiscoveryColumnDaoImpl extends BaseDao implements DiscoveryColumnDao
 
     public function getAllDiscoveryColumns()
     {
-        $sql = "SELECT * FROM {$this->table}";
+        $sql = "SELECT * FROM {$this->table} ORDER BY seq";
         return $this->getConnection()->fetchAll($sql);
     }
 }

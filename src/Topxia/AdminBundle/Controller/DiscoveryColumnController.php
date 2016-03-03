@@ -4,6 +4,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\ArrayToolkit;
 
 class DiscoveryColumnController extends BaseController
 {
@@ -70,6 +71,18 @@ class DiscoveryColumnController extends BaseController
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $discoveryColumn['categoryId']
         ));
+    }
+
+    public function sortAction(Request $request)
+    {
+        $data = $request->request->get('data');
+        $ids = ArrayToolkit::column($data, 'id');
+        if (!empty($ids)) {
+            // $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+            $this->getDiscoveryColumnService()->sortDiscoveryColumns($ids);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getDiscoveryColumnService()

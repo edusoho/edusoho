@@ -1,6 +1,6 @@
-<tbody>
+<tbody data-update-seqs-url="{{ path('admin_discovery_column_sort') }}">
 	{% for discoveryColumn in discoveryColumns %}
-		<tr>
+		<tr class="sort" data-id="{{ discoveryColumn.id }}">
 			<td>
 				{{ discoveryColumn.title }}
 			</td>
