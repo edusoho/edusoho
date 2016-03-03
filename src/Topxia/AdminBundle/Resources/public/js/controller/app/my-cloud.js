@@ -18,6 +18,7 @@ define(function(require, exports, module) {
             element: 'storage-data-tab',
             data: videoData,
             xkey: 'date',
+            units: "GB",
             ykeys: ['spacecount','transfercount'],
             labels: ['空间使用量','流量使用量']
           });
@@ -26,6 +27,7 @@ define(function(require, exports, module) {
           Morris.Bar({
             element: 'live-data-tab',
             data: liveData,
+            units: "人",
             xkey: 'date',
             ykeys: ['count'],
             labels: ['使用量']
@@ -35,6 +37,7 @@ define(function(require, exports, module) {
           Morris.Bar({
             element: 'sms-data-tab',
             data: smsData,
+            units: "条",
             xkey: 'date',
             ykeys: ['count'],
             labels: ['使用量']
@@ -44,6 +47,7 @@ define(function(require, exports, module) {
           Morris.Bar({
             element: 'email-data-tab',
             data: emailData,
+            units: "封",
             xkey: 'date',
             ykeys: ['count'],
             labels: ['使用量']
