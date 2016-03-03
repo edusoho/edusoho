@@ -268,6 +268,12 @@ define(function(require, exports, module) {
                     return;
                 }
 
+                if(lesson.sequence == 1){
+                    $("#lesson-sequence-content").show();
+                    $("[data-role=finish-lesson]").attr("disabled", true);
+                    return;
+                }
+
                 var number = lesson.number - 1;
 
                 if (lesson.canLearn.status != 'yes') {

@@ -434,6 +434,22 @@ class CourseManageController extends BaseController
         ));
     }
 
+    public function studyAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        if ($request->getMethod() == 'POST') {
+            $sequence = $request->request->all();
+            $course   = $this->getCourseService()->setCourseSequence($course['id'], $sequence);
+            $this->setFlashMessage('success', '课程学习设置成功!');
+            return $this->redirect($this->generateUrl('course_manage_study', array('id' => $course['id'])));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseManage:study.html.twig', array(
+            'course' => $course
+        ));
+    }
+
     public function publishAction(Request $request, $id)
     {
         $this->getCourseService()->publishCourse($id);
