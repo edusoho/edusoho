@@ -1,0 +1,42 @@
+{% extends 'MaterialLibBundle:MaterialLib:layout.browse.html.twig' %}
+
+{% set side_nav = 'material-lib' %}
+
+{% block list %}
+
+<div id="aticle-table-container">
+    <table class="table table-hover courses-table" id="material-item-list">
+        <thead>
+            <tr>
+                <th width="2%"><input type="checkbox"  data-role="batch-select"></th>
+                <th width="38%" class="first-col">文件名</th>
+                <th width="15%">大小</th>
+                {% if type in ['all', 'video', 'audio'] %}
+                <th width="15%">时长</th>
+                {% endif %}
+                <th width="15%">上传时间</th>
+                <th width="15%">
+                    <div class="pull-right">
+                        <div class="btn-group sorting-way" role="group">
+                            <a class="btn btn-default btn-xs {% if viewMode == "thumb" %} active {% endif %}" href="{{path('material_lib_browsing', {type: type, viewMode:'thumb', source: source}) }}" title="缩略图">
+                                 <span class="glyphicon glyphicon-th-large"></span>
+                            </a>
+                            <a class="btn btn-default btn-xs {% if viewMode == "list" %} active {% endif %}" href="{{path('material_lib_browsing', {type: type, viewMode:'list', source: source}) }}" title="列表">
+                                <span class="glyphicon glyphicon-th-list"></span>
+                            </a>
+                        </div>  
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uploadFile in files %}
+                {% include 'MaterialLibBundle:MaterialLib:material-list-view-item.html.twig' %}
+            {% else %}
+                <tr class="empty"><td colspan="20">无文件记录</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
