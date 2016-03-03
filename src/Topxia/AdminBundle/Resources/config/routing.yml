@@ -415,19 +415,19 @@ admin_operation_mobile_select:
 
 admin_operation_mobile_delete:
     pattern:  /operation/mobile/{id}/delete
-    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileDelete }
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
 
 admin_operation_mobile_edit:
     pattern:  /operation/mobile/{id}/edit
-    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileEdit }
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:edit }
 
 admin_operation_mobile_class:
     pattern:  /operation/mobile/class
-    defaults: { _controller: TopxiaAdminBundle:Mobile:mobileClass }
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:class }
 
 admin_operation_mobile_create:
     pattern:  /operation/mobile/create
-    defaults: { _controller: TopxiaAdminBundle:Mobile:create }
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:create }
 
 admin_setting_mobile:
     pattern:  /setting/mobile

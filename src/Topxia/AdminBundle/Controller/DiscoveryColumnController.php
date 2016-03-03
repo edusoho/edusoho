@@ -12,13 +12,13 @@ use Topxia\Service\Util\CloudClientFactory;
 
 class DiscoveryColumnController extends BaseController
 {
-	public function mobileDeleteAction(Request $request, $id)
+	public function deleteAction(Request $request, $id)
     {
         $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
         return $this->redirect($this->generateUrl('admin_operation_mobile_class'));
     }
 
-    public function mobileClassAction(Request $request)
+    public function classAction(Request $request)
     {
         $discoveryColumns = array();
         $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
@@ -52,7 +52,7 @@ class DiscoveryColumnController extends BaseController
             ));
     }
 
-    public function mobileEditAction(Request $request, $id)
+    public function editAction(Request $request, $id)
     {
         $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
         if (empty($discoveryColumn)) {

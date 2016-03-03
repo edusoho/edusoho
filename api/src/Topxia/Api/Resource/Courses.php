@@ -52,8 +52,9 @@ class Courses extends BaseResource
             $conditions['type'] = 'normal';
         }
         
+        $total = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
-        return $this->wrap($this->filter($courses), $result['showCount']);
+        return $this->wrap($this->filter($courses), min($result['showCount'], $total));
     }
     public function post(Application $app, Request $request)
     {

@@ -25,7 +25,7 @@ $app->get(_u('/users/{id}'), 'res.User:get');
 $app->get(_u('/users'), 'res.Users:get');
 $app->post(_u('/users'), 'res.Users:post');
 $app->get(_u('/courses'), 'res.Courses:get');
-$app->get(_u('/courses/discovery/column'), 'res.Courses:discoveryColumn');
+$app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');
 $app->get(_u('/lessons'), 'res.Lessons:get');
 $app->get(_u('/threads'), 'res.Threads:get');
 $app->get(_u('/chaos_threads'), 'res.ChaosThreads:get');
@@ -44,7 +44,7 @@ $app->get(_u('/course/{courseId}/status'), 'res.Status:get');
 
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
-$app->get(_u('/classrooms/discovery/column'), 'res.Classrooms:discoveryColumn');
+$app->get(_u('/classrooms/discovery/columns'), 'res.Classrooms:discoveryColumn');
 $app->get(_u('/classrooms/{id}'), 'res.Classroom:get');
 $app->post(_u('/classrooms/{id}'), 'res.Classroom:post');
 

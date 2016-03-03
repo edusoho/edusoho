@@ -4,6 +4,7 @@ namespace Topxia\Service\DiscoveryColumn\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\DiscoveryColumn\DiscoveryColumnService;
+use Topxia\Common\ArrayToolkit;
 
 class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnService
 {
@@ -15,7 +16,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
     public function updateDiscoveryColumn($id, $fields)
     {
         $fields = ArrayToolkit::parts($fields, array('categoryId', 'orderType', 'type', 'showCount', 'title'));
-        return $this->getDiscoveryColumnDao()->updateDiscoveryColumn($id, $showFields);
+        return $this->getDiscoveryColumnDao()->updateDiscoveryColumn($id, $fields);
     }
 
     public function deleteDiscoveryColumn($id)
