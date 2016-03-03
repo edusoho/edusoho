@@ -10,7 +10,7 @@ use Topxia\Common\FileToolkit;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
 use Topxia\Service\Util\CloudClientFactory;
 
-class MobileDiscoveryColumnController extends BaseController
+class DiscoveryColumnController extends BaseController
 {
 	public function mobileDeleteAction(Request $request, $id)
     {
@@ -70,7 +70,7 @@ class MobileDiscoveryColumnController extends BaseController
             'categoryId' => $discoveryColumn['categoryId']
         ));
     }
-    
+
     protected function getDiscoveryColumnService()
     {
         return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
