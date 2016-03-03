@@ -37,7 +37,9 @@ class ThreadManager extends BaseResource
 
         $conditions = array(
             'courseIds' => array($courseId),
-            'type'      => "question");
+            'type'      => "question"
+        );
+
         $threadCount = $this->getCourseThreadService()->searchThreadCountInCourseIds($conditions);
         $threads = $this->getCourseThreadService()->searchThreadInCourseIds(
             $conditions,
@@ -51,6 +53,7 @@ class ThreadManager extends BaseResource
         foreach ($threads as $key => &$thread) {
         	$lesson = $lessons[$thread["lessonId"]];
         	$thread["lessonTitle"] = '课时:' . $lesson['number'] . $lesson["title"];
+            $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);
         }
         return array(
         	"threadCount" => $threadCount,
