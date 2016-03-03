@@ -345,7 +345,7 @@ class CourseStudentManageController extends BaseController
         ));
     }
 
-    public function excelDataImportAction($id)
+    public function excelDataImportAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -353,8 +353,10 @@ class CourseStudentManageController extends BaseController
             throw $this->createNotFoundException("未发布课程不能导入学员!");
         }
 
-        return $this->render('TopxiaWebBundle:CourseStudentManage:import.step3.html.twig', array(
-            'course' => $course
+        return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
+            'request'      => $request,
+            'targetId'      => $id,
+            'targetType' => 'course'
         ));
     }
 
