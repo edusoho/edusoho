@@ -958,7 +958,7 @@ class ClassroomManageController extends BaseController
         if (SimpleValidator::email($keyword)) {
             $user = $this->getUserService()->getUserByEmail($keyword);
 
-            $userIds = $user ? $user['id'] : null;
+            $userIds[] = $user ? $user['id'] : null;
             return $userIds;
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
