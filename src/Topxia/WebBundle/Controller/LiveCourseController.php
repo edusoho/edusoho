@@ -153,6 +153,21 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    public function liveCourseListAction(Request $request)
+    {
+        if ($request->query->get('categoryId') || $request->query->get('vipCategoryId')) {
+            list($liveCourses, $paginator) = $this->_searchLiveCourseByConditions();
+        } else {
+            list($liveCourses, $paginator) = $this->_searchLiveCourseNormal($request);
+        }
+
+        print_r($liveCourses);
+        return $this->render('TopxiaWebBundle:LiveCourse:live-course-all-list.html.twig', array(
+            'liveCourses' => $liveCourses,
+            'paginator'   => $paginator
+        ));
+    }
+
     public function ratingCoursesBlockAction()
     {
         $conditions = array(
@@ -446,6 +461,35 @@ class LiveCourseController extends BaseController
         }
 
         return $categories;
+    }
+
+    private function _searchLiveCourseNormal(Request $request)
+    {
+        $conditions = array(
+            'status' => 'published',
+            'type'   => 'live'
+        );
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getCourseService()->searchLessonCount($conditions)
+            , 10
+        );
+
+        $liveLessons = $this->getCourseService()->findRecentLiveLessons($paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        $liveCourses = $this->getCourseService()->searchCourses(array(
+            'status'    => 'published',
+            'type'      => 'live',
+            'parentId'  => '0',
+            'courseIds' => ArrayToolkit::column($liveLessons, 'courseId')
+        ), 'lastest', 0, 10);
+
+        return array($liveCourses, $paginator);
+    }
+
+    private function _searchLiveCourseByConditions(Request $request)
+    {
     }
 
     protected function getCourseService()

@@ -323,4 +323,15 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
+
+    public function findRecentLiveLessons($start, $limit)
+    {
+        $time = time();
+        $sql  = "SELECT id, recentTime,courseId,startTime,endTime,status FROM
+               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time}
+                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time})
+                recent ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql);
+    }
 }
