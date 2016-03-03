@@ -16,6 +16,9 @@
                                 教师
                               </span>
                         </span>
+                        <span class="title" ng-if="!course.teachers || course.teachers.length <= 0">
+                              暂无教师
+                        </span>
                     </p>
                 </div>
           </li>

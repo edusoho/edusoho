@@ -829,19 +829,21 @@ a {
 }
 
 .course-card .course-card-item .right-content {
-  height: 40px;
-  line-height: 40px;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .course-card .course-card-item .right-content .avatar {
-  height: 40px;
+  height: 30px;
   width: auto;
 }
 
 .course-card .course-card-item .right-content .title {
-  height: 40px;
+  height: 30px;
   font-size: 15px;
-  line-height: 50px;
+  line-height: 30px;
   padding-left: 8px;
   padding-right: 8px;
 }
@@ -2378,7 +2380,10 @@ a {
 .ui-todolist .title-body .title {
   margin-left: 16px;
 }
+
 .ui-todolist .ui-list .ui-avatar-s {
+  width: 30px;
+  height: 30px;
   margin: 0 10px 0 0;
   display: inline-block;
 }
