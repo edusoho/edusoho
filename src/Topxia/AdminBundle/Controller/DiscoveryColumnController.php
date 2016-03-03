@@ -10,8 +10,12 @@ class DiscoveryColumnController extends BaseController
 {
     public function deleteAction(Request $request, $id)
     {
-        $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
-        return $this->redirect($this->generateUrl('admin_discovery_column_index'));
+        $result = $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
+        if($result > 0){
+            return $this->createJsonResponse(array('status' => 'ok'));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error'));
+        }
     }
 
     public function indexAction(Request $request)
@@ -78,7 +82,7 @@ class DiscoveryColumnController extends BaseController
         $data = $request->request->get('data');
         $ids = ArrayToolkit::column($data, 'id');
         if (!empty($ids)) {
-            // $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+
             $this->getDiscoveryColumnService()->sortDiscoveryColumns($ids);
         }
 
