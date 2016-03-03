@@ -6,8 +6,6 @@ interface UserProfileDao
 {
     public function getProfile($id);
 
-    public function getUserByMobile($mobile);
-
     public function addProfile($profile);
 
     public function updateProfile($id, $profile);

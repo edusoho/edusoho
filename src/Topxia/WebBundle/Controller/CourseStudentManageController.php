@@ -27,8 +27,8 @@ class CourseStudentManageController extends BaseController
                 $condition['mobile'] = $fields['keyword'];
                 $userIds             = array();
                 $mobileVerifiedUser  = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
-                $profileUser         = $this->getUserService()->getUserByMobile($condition['mobile']);
-                $userIds[]           = $profileUser ? $profileUser['id'] : null;
+                $profileUsers        = $this->getUserService()->searchUserProfiles($condition['mobile'], array('id', 'DESC'), 0, PHP_INT_MAX);
+                $userIds             = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 
                 $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
 

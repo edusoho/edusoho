@@ -20,17 +20,6 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
         );
     }
 
-    public function getUserByMobile($mobile)
-    {
-        $that = $this;
-        return $this->fetchCached("mobile:{$mobile}", $mobile, function ($mobile) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} WHERE mobile = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($mobile)) ?: null;
-        }
-
-        );
-    }
-
     public function addProfile($profile)
     {
         $affected = $this->getConnection()->insert($this->table, $profile);
@@ -173,6 +162,7 @@ class UserProfileDaoImpl extends BaseDao implements UserProfileDao
             ->andWhere('truename LIKE :truename')
             ->andWhere('idcard LIKE :idcard')
             ->andWhere('id IN (:ids)')
+            ->andWhere('mobile = :tel')
             ->andWhere('qq LIKE :qq');
     }
 }
