@@ -48,10 +48,10 @@ admin_operation_mobile_select_manage:
     parent: admin_operation_mobile
     router_name: admin_operation_mobile_select
 admin_discovery_column_index:
-    name: 发现页栏目定义
+    name: 栏目管理
     parent: admin_operation_mobile
 admin_discovery_column_create:
-    name: 添加分类展示
+    name: 添加栏目
     parent: admin_discovery_column_index
     router_params_context: 1
     group: 2
