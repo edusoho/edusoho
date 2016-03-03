@@ -18,8 +18,9 @@ class UserController extends BaseController
             $isFollowed = false;
         }
         if ($this->isPluginInstalled('Vip')) {
-            $vipMember = $this->getVipService()->getMemberByUserId($user['id']);
-            $level     = $this->getLevelService()->getLevel($user['id']);
+            $vipMember            = $this->getVipService()->getMemberByUserId($user['id']);
+            $vipMember['nowTime'] = time();
+            $level                = $this->getLevelService()->getLevel($user['id']);
         }
         // 关注数
         $following = $this->getUserService()->findUserFollowingCount($user['id']);
