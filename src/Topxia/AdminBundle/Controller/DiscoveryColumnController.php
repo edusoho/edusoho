@@ -4,13 +4,18 @@ namespace Topxia\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\Common\ArrayToolkit;
 
 class DiscoveryColumnController extends BaseController
 {
     public function deleteAction(Request $request, $id)
     {
-        $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
-        return $this->redirect($this->generateUrl('admin_discovery_column_index'));
+        $result = $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
+        if($result > 0){
+            return $this->createJsonResponse(array('status' => 'ok'));
+        } else {
+            return $this->createJsonResponse(array('status' => 'error'));
+        }
     }
 
     public function indexAction(Request $request)
@@ -70,6 +75,18 @@ class DiscoveryColumnController extends BaseController
             'discoveryColumn' => $discoveryColumn,
             'categoryId'      => $discoveryColumn['categoryId']
         ));
+    }
+
+    public function sortAction(Request $request)
+    {
+        $data = $request->request->get('data');
+        $ids = ArrayToolkit::column($data, 'id');
+        if (!empty($ids)) {
+
+            $this->getDiscoveryColumnService()->sortDiscoveryColumns($ids);
+        }
+
+        return $this->createJsonResponse(true);
     }
 
     protected function getDiscoveryColumnService()

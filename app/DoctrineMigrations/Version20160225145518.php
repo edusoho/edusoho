@@ -23,6 +23,7 @@ class Version20160225145518 extends AbstractMigration
                          `categoryId` INT(10) NOT NULL DEFAULT '0',
                          `orderType` varchar(32) NOT NULL,
                          `showCount` int(10) NOT NULL,
+                         `seq` int(10) unsigned NOT NULL,
                          `createdTime` int(10) unsigned NOT NULL,
                          `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
                          PRIMARY KEY (`id`)

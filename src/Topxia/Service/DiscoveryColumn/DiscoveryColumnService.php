@@ -15,4 +15,6 @@ interface DiscoveryColumnService
 	public function findDiscoveryColumnByTitle($title);
 
 	public function getAllDiscoveryColumns();
+
+	public function sortDiscoveryColumns(array $columnIds);
 }
