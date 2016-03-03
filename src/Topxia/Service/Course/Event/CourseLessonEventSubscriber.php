@@ -128,8 +128,8 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $lesson   = $context['lesson'];
 
-        if (!empty($lesson) && $lesson['type'] == 'testpape') {
-            unset($lesson['mediaId']);
+        if (!empty($lesson) && $lesson['type'] == 'testpaper') {
+            unset($argument['mediaId']);
         }
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
