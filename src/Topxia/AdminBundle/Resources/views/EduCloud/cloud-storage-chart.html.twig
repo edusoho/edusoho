@@ -4,16 +4,15 @@
   <div class="panel panel-default" style="position: relative;">
     <div class="panel-heading">
       <p class="pull-right"><a href="{{path('admin_cloud_video')}}" target="_blank" >明细</a></p>	
-      <h3 class="panel-title">云视频使用情况（最近七个月）{% if overview.tlp|default(0) %}<div class="icon-security"></div> {% endif %}</h3>
+      <h3 class="panel-title">云视频使用情况（最近七个月）{% if overview.service.tlp|default(0) %}<div class="icon-security" data-toggle="tooltip" data-placement="top" title="已开通tlp加固服务"></div> {% endif %}</h3>
     </div>
     <div class="panel-body" id="storage-data-tab" style="height: 250px;">
+      {% if not overview.service.tlp|default(1) %}
       <div class="edu-alert" role="alert">
-        {% if not overview.tlp|default(1) %}
         <div class="icon-security"></div> 
         TLP安全加固服务，防盗播、防恶意下载，<a href="{{ path('admin_cloud_tlp') }}" target="_blank">了解详情</a>
-        {% endif %}
       </div>
-
+      {% endif %}
       {% if  setting('storage.upload_mode')|default('local') == 'local' %}
       <div class="edu-verticalmiddle">
         <div class="edu-verticalmiddle-content text-muted">
