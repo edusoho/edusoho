@@ -823,6 +823,33 @@ a {
   background: #ccc;
 }
 
+.course-card .course-card-item .ui-list-img {
+  width: 160px;
+  height: 90px;
+}
+
+.course-card .course-card-item .right-content {
+  height: 40px;
+  line-height: 40px;
+}
+
+.course-card .course-card-item .right-content .avatar {
+  height: 40px;
+  width: auto;
+}
+
+.course-card .course-card-item .right-content .title {
+  height: 40px;
+  font-size: 15px;
+  line-height: 50px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.course-card .course-card-item .right-content .subtitle {
+  font-size: 14px;
+}
+
 /* course-card*/ 
 
 /** .category-card */
@@ -2402,6 +2429,8 @@ a {
   height: 44px;
   line-height: 44px;
 }
+
+
 /* todo list */
 
 /* ui-homework */

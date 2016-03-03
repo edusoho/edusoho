@@ -1,4 +1,32 @@
 <div class="ui-todolist" ng-init="initChartData()">
+
+    <section class="ui-panel ui-panel-card course-card ui-border-t" ng-controller="CourseCardController">
+        <ul class="ui-list ui-border-tb course-card-item">
+          <li class="ui-border-t">
+                <div class="ui-list-img">
+                    <img ng-src="{{ course.middlePicture }}" img-error="course" />
+                </div>
+                <div class="ui-list-info">
+                    <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+                    <p class="bottom right-content">
+                        <img class="avatar" align="left" ng-src="{{ course.teachers[0].avatar }}" img-error="avatar" />
+                        <span class="title" ng-if="course.teachers.length > 0">
+                              {{ course.teachers[0].nickname }}
+                              <span class="subtitle">
+                                教师
+                              </span>
+                        </span>
+                    </p>
+                </div>
+          </li>
+          <li class="ui-border-t">
+            <span>课程简介：</span>
+            <p style="width:80%;"> {{ course.about | blockStr :100 }}</p>
+          </li>
+        </ul>
+        
+    </section>
+
     <section class="ui-panel ui-panel-card ui-border-t">
         <h2 class="title-body ui-border-b">
             <span class="title">
