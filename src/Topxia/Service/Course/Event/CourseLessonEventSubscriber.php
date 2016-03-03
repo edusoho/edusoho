@@ -124,9 +124,14 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $lesson    = $context['lesson'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $lesson   = $context['lesson'];
+
+        if (!empty($lesson) && $lesson['type'] == 'testpape') {
+            unset($lesson['mediaId']);
+        }
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
 
         if ($courseIds) {
