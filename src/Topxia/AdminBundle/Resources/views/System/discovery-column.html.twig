@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_operation_mobile_class_category' %}
+{% set menu = 'admin_operation_mobile_find_category' %}
 
 {% set script_controller = 'topxiaadminbundle/controller/mobileShow/save-modal' %}
 
@@ -17,7 +17,7 @@
       <th>操作</th>
     </tr>
   </thead>
-  {% include 'TopxiaAdminBundle:System:mobile-category-tr.html.twig' %}
+  {% include 'TopxiaAdminBundle:System:discovery-column-tr.html.twig' %}
 </table>
 
 {% else %}
