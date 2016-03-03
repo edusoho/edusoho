@@ -7,7 +7,7 @@ define(function(require, exports, module) {
             if($(this).val()==""){$(this).parents(".uploader").find(".filename").val("");}
         });
 
-        if($("input[name='data']").val().length<3){
+        if($("input[name='data']").val()&&$("input[name='data']").val().length<3){
         	$('#start-import-btn').addClass('disabled');
         }
 

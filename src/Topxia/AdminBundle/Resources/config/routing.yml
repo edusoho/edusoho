@@ -197,10 +197,6 @@ admin_user_avatar_crop:
     pattern:  /user/{id}/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
 
-admin_user_import_modal:
-    pattern:  /user/import/modal
-    defaults: { _controller: TopxiaAdminBundle:User:importModal }
-
 admin_teacher:
     pattern:  /teacher
     defaults: { _controller: TopxiaAdminBundle:Teacher:index }

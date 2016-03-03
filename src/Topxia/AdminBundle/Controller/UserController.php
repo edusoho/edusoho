@@ -483,12 +483,6 @@ class UserController extends BaseController
         ));
     }
 
-    public function importModalAction(Request $request)
-    {
-
-        return $this->render('TopxiaAdminBundle:user:userimport.modal.html.twig');
-    }
-
     protected function getNotificationService()
     {
         return $this->getServiceKernel()->createService('User.NotificationService');

@@ -1,7 +1,8 @@
 <div class="panel panel-default panel-col">
   <div class="panel-heading">学员批量导入</div>
   <div class="panel-body">
-    <form method="post" enctype="multipart/form-data" action="{{ path(data.excel_import_url, {id:targetObject.id}) }}">
+
+    <div id="user-import" data-import-url="{{ path(data.excel_import_url, {id:targetObject.id}) }}" data-check-type="" data-finished-url='{{path("course_manage_students",{id:targetObject.id})}}'>
       {% if errorInfo %}
         {% for errorInfo in errorInfo%}
          <div class="col-md-offset-2">{{errorInfo|raw}}</div><br>
@@ -14,11 +15,11 @@
             <div class="col-md-offset-2">{{checkInfo}}</div><br>
           {% endfor %}
         {% endif %}
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         <input type="hidden" value="{{allUserData}}" name="data">
+        <input type="hidden" value="{{progress}}" name="progress" >
         <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
-        <div class="col-md-offset-2"><button type="submit" class="btn btn-primary" id="start-import-btn" >确定导入</button> <a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">返回</a></div>
+        <div class="col-md-offset-2"><button type="button" class="btn btn-primary" id="start-import-btn" data-target="#modal"  data-toggle="modal" data-url="{{ path('import_modal') }}" data-keyboard="false" data-backdrop="static">确定导入</button> <a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">返回</a></div>
       {% endif %}
-    </form>
+    </div>
   </div>
 </div>

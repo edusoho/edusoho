@@ -763,7 +763,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function excelDataImportAction($id)
+    public function excelDataImportAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
@@ -773,8 +773,10 @@ class ClassroomManageController extends BaseController
             throw $this->createNotFoundException("未发布班级不能导入学员!");
         }
 
-        return $this->render('ClassroomBundle:ClassroomManage:import.step3.html.twig', array(
-            'classroom' => $classroom
+        return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
+            'request'      => $request,
+            'targetId'      => $id,
+            'targetType' => 'classroom'
         ));
     }
 
