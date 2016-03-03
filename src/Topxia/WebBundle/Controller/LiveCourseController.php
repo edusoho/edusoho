@@ -109,10 +109,11 @@ class LiveCourseController extends BaseController
             'status'               => 'published'
         ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
-        $liveTab['today']['current'] = $currentLiveLessons;
-        $liveTab['today']['future']  = $futureLiveLessons;
+        $liveTabs['today']['current'] = $currentLiveLessons;
+        $liveTabs['today']['future']  = $futureLiveLessons;
 
-        $today = date("Y-m-d");
+        $dateTabs = array('today');
+        $today    = date("Y-m-d");
 
         foreach ($lessonsDate as $key => &$value) {
             if ($today == $value['date']) {
@@ -126,13 +127,15 @@ class LiveCourseController extends BaseController
                     'status'               => 'published'
                 ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
-                $date           = date('m-d', strtotime($value['date']));
-                $liveTab[$date] = $dayLessons;
+                $date                      = date('m-d', strtotime($value['date']));
+                $liveTabs[$date]['future'] = $dayLessons;
+                $dateTabs[]                = $date;
             }
         }
 
         return $this->render('TopxiaWebBundle:LiveCourse:live-tab.html.twig', array(
-            'liveTab' => $liveTab
+            'liveTabs' => $liveTabs,
+            'dateTabs' => $dateTabs
         ));
     }
 
