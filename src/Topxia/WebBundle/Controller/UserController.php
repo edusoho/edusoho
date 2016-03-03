@@ -17,7 +17,9 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-
+        if ($this->isPluginInstalled('Vip')) {
+            $level = $this->getLevelService()->getLevel($user['id']);
+        }
         // 关注数
         $following = $this->getUserService()->findUserFollowingCount($user['id']);
         // 粉丝数
@@ -27,7 +29,8 @@ class UserController extends BaseController
             'user'       => $user,
             'isFollowed' => $isFollowed,
             'following'  => $following,
-            'follower'   => $follower
+            'follower'   => $follower,
+            'level'      => $level
         ));
     }
 
