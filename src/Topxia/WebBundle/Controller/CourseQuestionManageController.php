@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Service\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -282,7 +281,7 @@ class CourseQuestionManageController extends BaseController
         $fileExts       = "";
 
         if ("attachment" == $targetType) {
-            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
+            $fileExts = "*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.zip";
         }
 
         return $this->render('TopxiaWebBundle:CourseQuestionManage:batch-upload.html.twig', array(
@@ -308,13 +307,10 @@ class CourseQuestionManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['targetType'] == 'attachment' && $file['storage'] == 'cloud') {
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-            $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-        }
-
-        throw $this->createNotFoundException();
+        return $this->forward("TopxiaWebBundle:UploadFile:download", array(
+            'request'    => $request,
+            'fileId'     => $fileId,
+            'isDownload' => true));
     }
 
     protected function getCourseService()

@@ -7,7 +7,6 @@ use Topxia\WebBundle\Util\UploadToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class EditorController extends BaseController
 {
@@ -100,27 +99,11 @@ class EditorController extends BaseController
 
     public function fileDownloadAction(Request $request, $fileId, $isDownload = true)
     {
-        $file     = $this->getUploadFileService()->getFile($fileId);
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        if ($isDownload) {
-            $file['filename'] = urlencode($file['filename']);
-
-            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-            } else {
-                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-            }
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
+        return $this->forward("TopxiaWebBundle:UploadFile:download", array(
+            'request'    => $request,
+            'fileId'     => $fileId,
+            'isDownload' => $isDownload
+        ));
     }
 
     public function downloadAction(Request $request)

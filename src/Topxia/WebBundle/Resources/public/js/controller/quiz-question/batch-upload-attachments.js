@@ -50,7 +50,6 @@ define(function(require, exports, module) {
 
                 chunkUpload.on("upload_success_handler", function(file, serverData, fileIndex) {
                     serverData = $.parseJSON(serverData);
-
                     var videoInfoUrl = this.element.data("getVideoInfo");
                     var audioInfoUrl = this.element.data("getAudioInfo");
                     var videoFileExts = "*.mp4;*.avi;*.flv;*.wmv;*.mov;*.m4v";
@@ -143,8 +142,9 @@ define(function(require, exports, module) {
                 chunkUpload.stopUpload();
                 uploadButton.unbind("click");
                 $("#selectFiles").prop("disabled",false);
+                var that = this;
                 uploadButton.on("click", function(){
-                    continueUpload(chunkUpload);
+                    that.continueUpload(chunkUpload);
                 });
             },
 
@@ -154,8 +154,9 @@ define(function(require, exports, module) {
                 chunkUpload.continueUpload();
                 uploadButton.unbind("click");
                 $("#selectFiles").prop("disabled",true);
+                var that = this;
                 uploadButton.on("click", function(){
-                    self.stopUpload(chunkUpload);
+                    that.stopUpload(chunkUpload);
                 });
             },
 
@@ -165,7 +166,8 @@ define(function(require, exports, module) {
                     "audio": "*.mp3",
                     "document": "*.doc;*.docx;*.pdf",
                     "ppt": "*.ppt;*.pptx",
-                    "flash": "*.swf"
+                    "flash": "*.swf",
+                    "rar":"*.rar"
                 };
 
                 for(var key in fileSuffixs){
@@ -181,10 +183,9 @@ define(function(require, exports, module) {
                 var targetType = self.element.data('targetType');
                 var uploadMode = self.element.data('uploadMode');
                 var hlsEncrypted = self.element.data('hlsEncrypted');
-                var that = this;
                 var fileSuffix = file.name.substr(file.name.lastIndexOf(".")+1).toLowerCase();
                 var fileType = this.getFileType(fileSuffix);
-                if ((targetType == 'courselesson' || targetType == 'materiallib') && uploadMode == 'cloud') {
+                if ((targetType == 'attachment') && uploadMode == 'cloud') {
                     if ($.inArray(fileType, ['audio','flash']) >= 0) {
                         data.convertor = '';
                     } else if ($.inArray(fileType, ['ppt','document']) >= 0) {
