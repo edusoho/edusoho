@@ -1,0 +1,38 @@
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading" >
+                    <h3 class="panel-title">云直播状态</h3>
+                  </div>
+                  <div class="panel-body" style="height: 250px;padding:40px">
+                  <!-- {% if liveInfo|default(0) %}
+
+                  {% else %}
+                  <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂
+                  {% endif %} -->
+                    {#{% set capacity = live.capacity|default(null) %}
+                    {% set expire = live.expire|default(null) %}#}
+
+                  <!-- <h4 class="eduyun-title">云直播
+                    {# {% if live %}<a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank">去购买</a>{% endif %} #}
+                  </h4> -->
+                   <!--未购买-->
+                    {% if overview.service.live.enableBuy|default(0) != 1 %}
+                      <div class="edu-verticalmiddle">
+                        <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_live',{type:'live'}) }}" target="_blank">购买</a>云直播服务，轻松创建直播课堂</div> 
+                      </div>
+                    {% else %}
+                      <p class="text-muted">教室容量：{{overview.service.live.capacity|default(0)}}人/月    
+                        <a href="{{ path('admin_cloud_buy',{type:'live'}) }}" target="_blank" style="margin-left:20px;">续费</a>
+                      </p>
+                      {% if overview.service.live.expire|default(0) and overview.service.live.expire > 0  %}
+                        <p class="text-muted">有效期至：{{overview.service.live.expire|date("Y-m-d")}}</p>
+                        {% if overview.service.live.remaining > 0 and overview.service.live.remaining < 30 %}
+                          <p class="text-warning text-sm">您的云直播服务将于{{ overview.service.live.remaining }}天后到期，请尽快续费</p>
+                        {% elseif overview.service.live.remaining <= 0 %}
+                          <p class="text-danger text-sm">您的云直播服务已到期，请尽快续费</p>
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>

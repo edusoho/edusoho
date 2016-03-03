@@ -1,5 +1,5 @@
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">学员批量导入</div>
+  <div class="panel-heading">{{'学员批量导入'|trans}}</div>
   <div class="panel-body">
 
     <div id="user-import" data-import-url="{{ path(data.excel_import_url, {id:targetObject.id}) }}" data-check-type="" data-finished-url='{{path(data.excel_validate_url,{id:targetObject.id})}}'>
@@ -7,8 +7,8 @@
         {% for errorInfo in errorInfo%}
          <div class="col-md-offset-2">{{errorInfo|raw}}</div><br>
         {% endfor %}
-        <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">重新导入</a>
-        </div> 
+        <div class="col-md-offset-2"><a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">{{'重新导入'|trans}}</a>
+        </div>
       {% else %}
         {% if checkInfo %}
           {% for checkInfo in checkInfo%}
