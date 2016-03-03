@@ -19,7 +19,7 @@ class UserController extends BaseController
         }
         if ($this->isPluginInstalled('Vip')) {
             $vipMember = $this->getVipService()->getMemberByUserId($user['id']);
-            $level  = $this->getLevelService()->getLevel($user['id']);
+            $level     = $this->getLevelService()->getLevel($user['id']);
         }
         // 关注数
         $following = $this->getUserService()->findUserFollowingCount($user['id']);
@@ -33,7 +33,7 @@ class UserController extends BaseController
             'follower'   => $follower,
             'level'      => $level,
             'userVip'    => $vipMember
-        ))
+        ));
     }
 
     public function showAction(Request $request, $id)
