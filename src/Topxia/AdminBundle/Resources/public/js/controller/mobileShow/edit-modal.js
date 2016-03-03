@@ -11,7 +11,20 @@ define(function(require, exports, module) {
         var validator = new Validator({
                 element: $form,
                 autoSubmit: false,
-                
+                onFormValidated: function(error, results, $form) {
+                if (error) {
+                    return ;
+                }
+
+                $.post($form.attr('action'), $form.serialize(), function(html){
+                    $modal.modal('hide');
+                    location.reload();
+                    Notify.success('添加栏目成功！');
+                }).fail(function() {
+                    Notify.danger("添加栏目成功失败，请重试！");
+                });
+
+            }
         });
 
         validator.addItem({
