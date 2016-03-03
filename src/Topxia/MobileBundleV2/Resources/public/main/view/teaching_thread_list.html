@@ -25,7 +25,7 @@
                 <li ng-repeat="thread in teachingResult.threads">
                     <div class="ui-list-info ui-border-t" ng-click="showThreadChatView(thread)">
                         <h2 class="ui-nowrap">
-                            <span class="radius-label" ng-class="thread.isTeacherAnswer ? 'blue' : 'red'">{{ thread.isTeacherAnswer ? "已回答" : "未回答" }}</span>
+                            <span class="radius-label" ng-class="thread.isTeacherAnswer > 0 ? 'blue' : 'red'">{{ thread.isTeacherAnswer > 0 ? "已回答" : "未回答" }}</span>
                             {{ thread.title }}
                         </h2>
                         <p>{{ thread.lessonTitle }}</p>
