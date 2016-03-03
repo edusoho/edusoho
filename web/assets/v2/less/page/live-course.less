@@ -1,0 +1,217 @@
+.es-live-poster{
+  position: relative;
+  .swiper-pager{
+    position: absolute;
+    bottom: 20px;
+    z-index: 100;
+    width: 100%;
+    text-align: center;
+      span{
+        cursor: pointer;
+        font-size: 0;
+        margin: 0 7px;
+        width: 14px;
+        height: 14px;
+        display: inline-block;
+        .border-radius(50%);
+        background: rgba(255, 255, 255, 0.5);
+      }
+    span.swiper-active-switch{
+       background: rgba(255, 255, 255, 1)
+    }
+  }
+}
+
+.live-course-body{
+  .es-live-list{
+    padding: 0;
+    .panel-body{
+      padding: 0;
+      >ul{
+        margin:0;
+        padding: 0;
+        li{
+          float: left;
+          margin-bottom: -1px;
+          list-style-type: none;
+          padding: 12px 0;
+          width: 25%;
+          text-align: center;
+          color: @gray-darker;
+          background-color:@gray-lighter;
+          border-bottom: 1px solid @gray-lighter;
+          border-right: 1px solid #e9e9e9;
+          &:last-child{
+            border-right: none;
+          }
+          a{
+            color: @gray-darker;
+          }
+        }
+        li.active{
+          background-color: #fff;
+          border-bottom: none;
+        }
+      }
+    }
+    .es-live-item{
+      position: relative;
+      margin: 20px 15px;
+      &:before{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 5px;
+        height: 100%;
+        width: 2px;
+        background:@gray-light;
+      }
+      .live-content.living,.live-content.live{
+        .time-icon{
+          display: inline-block;
+          width: 14px;
+          height: 14px;
+          background: #a8eb8b;
+          .border-radius(50%);
+          position: absolute;
+          left: -1px;
+          em{
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #70d445;
+            .border-radius(50%);
+            position: absolute;
+            top: 3px;
+            left: 3px; 
+          }
+        }
+        .label{
+          margin-left: 24px;
+          padding: 0.3em 0.5em;
+        }
+      }
+      .live-content.live{
+        .time-icon{
+          background: #6dcbf5;
+           em{
+              background: #2db7f5;
+           }
+        }
+      }
+      ul,li{list-style-type: none;padding:0;}
+      li{
+        margin-top: 15px;
+        padding-left: 24px;
+        a{
+          color: @gray-darker;
+          .text-overflow ;
+          span{
+           color: @gray;
+           padding-right: 15px;
+
+          }
+
+        }
+      }
+    }
+  }
+  .es-live-recommend{
+    img{
+      max-width: 110px;
+    }
+    .title{
+      margin-bottom: 15px;
+      height: 20px;
+      overflow: hidden;
+    }
+    .price{
+      color: #e83d2c;
+    }
+  }
+  .es-live-back{
+    ul{
+      padding: 0;
+      margin:0;
+      li{
+        list-style-type: none;
+        margin-top: 20px;
+        &:first-child{
+          margin-top: 5px;
+        }
+         &:last-child{
+          margin-bottom: 5px;
+        }
+        .dat{
+          width: 4px;
+          height: 4px;
+          background: @brand-primary;
+          .border-radius(50%);
+          display: inline-block;
+          vertical-align: middle;
+        }
+        a{
+          color: @gray-darker;
+          .text-overflow;
+          &:hover{
+            color: @brand-primary;
+          }
+          span{
+            padding: 0 14px 0 8px;
+
+          }
+        }
+      }
+    }
+  }
+  .es-live-all{
+    .media{
+      padding-bottom: 15px;
+      border-bottom: 1px solid @gray-lighter !important;
+    }
+    .media-left{
+        @media(max-width:@screen-xs-max){
+          display: block;
+          padding:0;
+        }
+      img{
+        max-width: 302px;
+        @media(max-width:@screen-xs-max){
+          max-width:@screen-xs-max;
+          width: 100%;
+        }
+
+      }
+    }
+    .media-body{
+      position: relative;
+      .metas{
+        margin: 15px 0 25px;
+        color: @gray-medium;
+      }
+      .user a{
+        color: @gray-medium;
+        &:hover{
+           color: @brand-primary;
+        }
+      }
+      .other{
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -45px;
+        text-align: center;
+        span{
+          display: block;
+          margin-bottom: 8px;
+          color:  @brand-primary;
+        }
+        span.price{
+          color: #e83d2c;
+        }
+      }
+    }
+  }
+}
+
+
