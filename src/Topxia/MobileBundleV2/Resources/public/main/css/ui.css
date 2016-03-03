@@ -2414,6 +2414,23 @@ a {
   margin-bottom: 10px;
 }
 
+.todo-card .radius-label {
+  font-size: 12px;
+  border-radius: 5px;
+  background-color: #ddd;
+  padding: 3px 5px 3px 5px;
+}
+
+.todo-card .radius-label.blue {
+  color: #fff;
+  background-color: #37b97d;
+}
+
+.todo-card .radius-label.red {
+  color: #fff;
+  background-color: #EF4242;
+}
+
 .todo-card .ui-list li .bottom {
   position: relative;
 }

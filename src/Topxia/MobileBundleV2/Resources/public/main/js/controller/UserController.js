@@ -434,9 +434,26 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 	this.filter = function(data) {
 		var users = data.users;
 		var threads = data.threads;
+
 		for (var i = 0; i < threads.length; i++) {
 			threads[i]["user"] = users[threads[i]["userId"]];
 		};
+		threads = threads.sort(function(thread1, thread2) {
+			var lasterTime1 = thread1.latestPostTime ? thread1.latestPostTime : thread1.createdTime;					
+			var lasterTime2 = thread2.latestPostTime ? thread2.latestPostTime : thread2.createdTime;
+
+			if (thread1.isTeacherAnswer) {
+				if (thread2.isTeacherAnswer) {
+					return lasterTime1 - lasterTime2;
+				}
+				return 1;
+			}
+			if (thread2.isTeacherAnswer) {
+				return 1;
+			}
+
+			return lasterTime1 - lasterTime2;
+		});
 		data.threads = threads;
 		return data;
 	};
