@@ -118,25 +118,9 @@
       </div>
     </div>
   </div>
-  <div class="panel panel-default es-live-back">
-    <div class="panel-heading">
-      <h3 class="panel-title">直播回放</h3>
-    </div>
-    <div class="panel-body">
-      <ul>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>EduSoho安装实战</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">01-28 18:00</span>直播回放列表文字最多16个多了就截...</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>如何使用主题配置</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速进行主题开发</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>EduSoho安装实战</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速入门EduSoho服务器配置</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>如何使用主题配置</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速进行主题开发</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>快速入门EduSoho服务器配置</a></li>
-        <li><a href=""><i class="dat"></i><span class="color-gray">02-01 18:00</span>3步教你摄影入门</a></li>
-      </ul>
-    </div>
-  </div> 
+
+  {{ render(controller('TopxiaWebBundle:LiveCourse:replayList')) }}
+  
   {% endblock %}
 
   {% block live_side %}
