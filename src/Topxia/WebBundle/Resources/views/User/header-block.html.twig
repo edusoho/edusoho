@@ -3,7 +3,9 @@
     <div class="user-avatar">
       <div class="avatar-wrap">
         <img class="avatar-lg" src="{{ filepath(user.largeAvatar, 'avatar.png') }}">
-        {% if 'ROLE_TEACHER' in user.roles %}
+        {% if is_plugin_installed('Vip') and userVip|default(false) and userVip.deadline|date('Y-m-d') > nowTime|date('Y-m-d') %}
+          <span class="icon-user-status icon-md"><img src="{{level.icon|default(asset('assets/v2/img/vip/vip_icon_bronze.png'))}}" alt="" title="{{level.name|default('')}}"></span>
+        {% elseif 'ROLE_TEACHER' in user.roles %}
           <span class="icon-user-status icon-md"><i class="es-icon es-icon-school"></i></span>
         {% endif %}
       </div>
