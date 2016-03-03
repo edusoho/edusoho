@@ -24,7 +24,7 @@ class Version20160225145518 extends AbstractMigration
                          `orderType` varchar(32) NOT NULL,
                          `showCount` int(10) NOT NULL,
                          `createdTime` int(10) unsigned NOT NULL,
-                         `updateTime` int(10) unsigned NOT NULL,
+                         `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
                          PRIMARY KEY (`id`)
                         ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
                         ");
