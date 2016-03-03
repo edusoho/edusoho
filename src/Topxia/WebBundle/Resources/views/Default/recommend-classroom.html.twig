@@ -1,6 +1,6 @@
 <!-- 推荐班级 -->
-{% set RecommendClassrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%}
-{% if RecommendClassrooms %}
+{% set classrooms = data('RecommendClassrooms',{'count':config.count|default(4)})%}
+{% if classrooms %}
   <section class="class-section {{config.background|default("")}}">
     <div class="container">
       <div class="text-line">
@@ -11,7 +11,7 @@
         <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
       </div>
       <div class="recommend-class-list row">
-        {% for classroom in RecommendClassrooms %}
+        {% for classroom in classrooms %}
           <div class="col-md-3 col-sm-6">
              {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %}
           </div>
