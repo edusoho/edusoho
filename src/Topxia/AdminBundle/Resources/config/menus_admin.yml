@@ -10,30 +10,24 @@ admin_course:
 admin_operation:
     name: 运营
     parent: admin
-    router_name: admin_article
 admin_order:
     name: 订单
     parent: admin
-    router_name: admin_course_order_manage
 admin_finance:
     name: 账务
     parent: admin
-    router_name: admin_bill
 admin_app:
     name: 教育云
     parent: admin
 admin_system:
     name: 系统
     parent: admin
-    router_name: admin_setting_site
 admin_operation_article:
     name: 资讯管理
     parent: admin_operation
-    router_name: admin_article
 admin_operation_group:
     name: 小组管理
     parent: admin_operation
-    router_name: admin_group
 admin_operation_mobile:
     name: 移动端内容管理
     parent: admin_operation
@@ -41,7 +35,6 @@ admin_operation_mobile:
 admin_operation_invite:
     name: 邀请管理
     parent: admin_operation
-    router_name: admin_invite
 admin_operation_mobile_banner_manage:
     name: 轮播图设置
     parent: admin_operation_mobile
@@ -53,25 +46,30 @@ admin_operation_mobile_select_manage:
 admin_operation_block:
     name: 编辑区管理
     parent: admin_operation
+    group: 2
+admin_block_manage:
+    name: 编辑区管理
+    parent: admin_operation_block
     router_name: admin_block
     router_params: { 'category': 'all'}
-    group: 2
 admin_block_visual_edit:
     name: 编辑
-    parent: admin_operation_block
+    parent: admin_block_manage
     router_params: {'blockId': 'block.id'}
     router_params_context: 1
 admin_block_visual_edit_history:
     name: 历史记录
-    parent: admin_operation_block
+    parent: admin_block_manage
     router_params: {'blockId': 'block.id'}
     router_params_context: 1
 admin_operation_content:
     name: 自定义页面管理
     parent: admin_operation
+admin_content_manage:
+    name: 自定义页面管理
+    parent: admin_operation_content
     router_name: admin_content
     router_params: { type: page }
-    group: 2
 admin_operation_analysis_register:
     name: 数据统计
     parent: admin_operation
@@ -107,10 +105,6 @@ admin_operation_group_create:
     router_name: group_add
     group: 2
     blank: 1
-admin_operation_group_manage:
-    name: 小组管理
-    parent: admin_operation_group
-    router_name: admin_group
 admin_operation_invite_manage:
     name: 邀请管理
     parent: admin_operation_invite
@@ -122,7 +116,6 @@ admin_operation_group_thread:
 admin_course_show:
     name: 课程管理
     parent: admin_course
-    router_name: admin_course
 admin_course_manage:
     name: 课程管理
     parent: admin_course_show
@@ -147,7 +140,6 @@ admin_live_course:
 admin_course_thread:
     name: 话题管理
     parent: admin_course
-    router_name: admin_thread
 admin_course_thread_manage:
     name: 课程话题
     parent: admin_course_thread
@@ -155,6 +147,9 @@ admin_course_thread_manage:
 admin_course_question:
     name: 问答管理
     parent: admin_course
+admin_course_question_manage:
+    name: 问答管理
+    parent: admin_course_question
     router_name: admin_question
     router_params: {'postStatus': 'unPosted'}
 admin_course_note:
@@ -177,12 +172,12 @@ admin_course_tag:
     name: 标签管理
     parent: admin_course
 admin_course_tag_manage:
-    name: 管理
+    name: 标签管理
     parent: admin_course_tag
     router_name: admin_tag
 admin_course_tag_add:
     name: 新增标签
-    parent: admin_course_tag
+    parent: admin_course_tag_manage
     router_name: admin_tag_create
     mode: modal
     group: 2
@@ -219,6 +214,10 @@ admin_approval_approvals:
 admin_message:
     name: 私信管理
     parent: admin_user
+admin_message_manage:
+    name: 私信管理
+    parent: admin_message
+    router_name: admin_message
 admin_course_recommend:
     name: 课程推荐
     parent: admin_course_show
@@ -229,7 +228,6 @@ admin_course_data:
 admin_course_order:
     name: 课程订单
     parent: admin_order
-    router_name: admin_course_order_manage
 admin_coin_orders:
     name: 虚拟币订单
     parent: admin_order
@@ -244,7 +242,6 @@ admin_course_order_query:
 admin_bills:
     name: 账单管理
     parent: admin_finance
-    router_name: admin_bill
 admin_cash_bill:
     name: 现金账单
     parent: admin_bills
@@ -255,7 +252,6 @@ admin_coin_records:
 admin_coin_user:
     name: 虚拟币管理
     parent: admin_finance
-    router_name: admin_coin_user_records
 admin_coin_user_records:
     name: 记录
     parent: admin_coin_user
@@ -263,10 +259,8 @@ admin_coin_user_records:
 admin_course_refunds:
     name: 课程退款管理
     parent: admin_finance
-    router_name: admin_order_refunds
-    router_params: {targetType:course,status:created}
 admin_course_refunds_manage:
-    name: 管理
+    name: 课程退款管理
     parent: admin_course_refunds
     router_name: admin_order_refunds
     router_params: {targetType:course,status:created}
@@ -358,7 +352,7 @@ admin_payment:
     name: 支付
     parent: admin_setting_finance
     router_name: admin_setting_payment
-_admin_coin_settings:
+admin_coin_settings:
     name: 虚拟币
     parent: admin_setting_finance
     router_name: admin_coin_settings
@@ -418,16 +412,30 @@ admin_logs_prod:
 admin_my_cloud:
     name: 账户概览
     parent: admin_app
+admin_my_cloud_overview:
+    name: 账户概览
+    parent: admin_my_cloud
 admin_cloud_video_setting:
     name: 云视频设置
     parent: admin_app
     router_name: admin_setting_cloud_video
+admin_setting_cloud_video:
+    name: 云视频设置
+    parent: admin_cloud_video_setting
 admin_edu_cloud_sms:
     name: 云短信设置
     parent: admin_app
+admin_edu_cloud_sms_setting:
+    name: 云短信设置
+    parent: admin_edu_cloud_sms
+    router_name: admin_edu_cloud_sms
 admin_edu_cloud_email:
     name: 云邮件设置
     parent: admin_app
+admin_edu_cloud_email_seeting:
+    name: 云邮件设置
+    parent: admin_edu_cloud_email
+    router_name: admin_edu_cloud_email
 # admin_setting_cloud_video:
 #     name: 设置
 #     parent: admin_app
@@ -439,6 +447,10 @@ admin_app_center_show:
 admin_setting_cloud:
     name: 授权信息
     parent: admin_app
+admin_setting_my_cloud:
+    name: 授权信息
+    parent: admin_setting_cloud
+    router_name: admin_setting_cloud
 admin_app_center:
     name: 应用中心
     parent: admin_app_center_show
@@ -455,25 +467,14 @@ admin_app_upgrades:
 admin_app_logs:
     name: 更新日志
     parent: admin_app_center_show
-# admin_cloud_video_setting:
-#     name: 云视频设置
-#     parent: admin_setting_cloud_video
-#     router_name: admin_setting_cloud_video
-# admin_edu_cloud_sms:
-#     name: 云短信设置
-#     parent: admin_setting_cloud_video
-admin_cloud_bill:
-    name: 云视频账单
-    parent: admin_my_cloud
-    router_name: admin_cloud_bill
-#admin_edu_cloud_search:
-#   name: 云搜索设置
-#   parent: admin_setting_cloud_video
-admin_batch_notification:
+admin_operation_notification:
     name: 全站站内通知
     parent: admin_operation
     before: admin_operation_block
     group: 2
+admin_batch_notification:
+    name: 全站站内通知
+    parent: admin_operation_notification
 admin_batch_notification_create:
     name: 创建站内通知
     parent: admin_batch_notification
@@ -483,9 +484,13 @@ admin_announcement:
     parent: admin_operation
     before: admin_batch_notification
     group: 2
+admin_announcement_manage:
+    name: 网站公告管理
+    parent: admin_announcement
+    router_name: admin_announcement
 admin_announcement_create:
     name: 新增公告
-    parent: admin_announcement
+    parent: admin_announcement_manage
     mode: modal
     group: 2
 admin_course_review_tab:

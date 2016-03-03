@@ -17,6 +17,7 @@ class MenuBuilder
     public function getMenuBreadcrumb($code)
     {
         $menus = $this->buildMenus();
+
         if (empty($menus[$code]) || empty($menus[$code]['parent'])) {
             return array();
         }
@@ -205,7 +206,6 @@ class MenuBuilder
         $menus = array_merge($menus, $menu);
         }*/
         $user = $this->getServiceKernel()->getCurrentUser();
-
         return $user['menus'];
     }
 

@@ -42,81 +42,81 @@ admin_dashboard:
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_content_create:
     pattern:  /content/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Content:create }
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_content_edit:
     pattern:  /content/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:Content:edit }
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_content_publish:
     pattern:  /content/{id}/publish
     defaults: { _controller: TopxiaAdminBundle:Content:publish }
     methods:  [POST]
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_content_trash:
     pattern:  /content/{id}/trash
     defaults: { _controller: TopxiaAdminBundle:Content:trash }
     methods:  [POST]
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_content_delete:
     pattern:  /content/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Content:delete }
     methods:  [POST]
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_content_alias_check:
     pattern:  /content/alias/check
     defaults: { _controller: TopxiaAdminBundle:Content:aliasCheck }
-    permissions: [admin_operation_content]
+    permissions: [admin_content_manage]
 
 admin_block:
     pattern:  /block/list-{category}
     defaults: { _controller: TopxiaAdminBundle:Block:index }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_match:
     pattern:  /block/list/quikSearch
     defaults: { _controller: TopxiaAdminBundle:Block:blockMatch }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_create:
     pattern:  /block/create
     defaults: { _controller: TopxiaAdminBundle:Block:create }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_delete:
     pattern:  /block/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Block:delete }
     methods:  [POST]
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_code_check_forcreate:
     pattern:  /block/code/check/forcreate
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForCreate }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_code_check_foredit:
     pattern:  /block/code/{id}/check/foredit
     defaults: { _controller: TopxiaAdminBundle:Block:checkBlockCodeForEdit }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_update:
     pattern:  /block/{block}/update
     defaults: { _controller: TopxiaAdminBundle:Block:update }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_edit:
     pattern:  /block/{block}/edit
     defaults: { _controller: TopxiaAdminBundle:Block:edit }
-    permissions: [admin_operation_block]
+    permissions: [admin_block_manage]
 
 admin_block_visual_edit:
     pattern:  /block/{blockId}/visual/edit
@@ -464,18 +464,18 @@ admin_order_detail:
 admin_order_refunds:
     pattern: /order/refunds/{targetType}
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:refunds }
-    permissions: [admin_course_refunds]
+    permissions: [admin_course_refunds_manage]
 
 admin_order_cancel_refund:
     pattern: /order/{id}/cancel_refund
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:cancelRefund }
     methods: [POST]
-    permissions: [admin_course_refunds]
+    permissions: [admin_course_refunds_manage]
 
 admin_order_audit_refund:
     pattern: /order/{id}/audit_refund
     defaults: { _controller: TopxiaAdminBundle:OrderRefund:auditRefund }
-    permissions: [admin_course_refunds]
+    permissions: [admin_course_refunds_manage]
 
 admin_setting_site:
     pattern:  /setting/site
@@ -579,45 +579,45 @@ admin_setting_payment:
 
 admin_setting_cloud_video:
     pattern:  /setting/cloud/video
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:video }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
     permissions: [admin_setting_cloud_video]
 
 admin_setting_cloud:
     pattern:  /setting/cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key:
     pattern:  /setting/cloud/key
     defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_info:
     pattern:  /setting/cloud/key/info
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyInfo }
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_bind:
     pattern:  /setting/cloud/key/bind
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyBind }
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_update:
     pattern:  /setting/cloud/key/update
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyUpdate }
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_apply:
     pattern:  /setting/cloud/key/apply
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyApply }
     methods: [POST]
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_key_copyright:
     pattern:  /setting/cloud/key/copyright
     defaults: { _controller: TopxiaAdminBundle:EduCloud:keyCopyright }
     methods: [POST]
-    permissions: [admin_setting_cloud]
+    permissions: [admin_setting_my_cloud]
 
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
@@ -892,62 +892,62 @@ admin_logs_prod:
 admin_cloud_access:
     pattern:  /cloud/access
     defaults: { _controller: TopxiaAdminBundle:Cloud:access }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_bill:
     pattern:  /cloud/bill
     defaults: { _controller: TopxiaAdminBundle:Cloud:bill }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_recharge:
     pattern:  /cloud/recharge
     defaults: { _controller: TopxiaAdminBundle:Cloud:recharge }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_detail:
     pattern:  /cloud/detail
     defaults: { _controller: TopxiaAdminBundle:Cloud:detail }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_buy:
     pattern:  /cloud/{type}/buy
     defaults: { _controller: TopxiaAdminBundle:Cloud:buy }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_tlp:
     pattern:  /cloud/tlp
     defaults: { _controller: TopxiaAdminBundle:Cloud:tlp }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_video:
     pattern:  /cloud/video
     defaults: { _controller: TopxiaAdminBundle:Cloud:video }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_doc:
     pattern:  /cloud/doc
     defaults: { _controller: TopxiaAdminBundle:Cloud:doc }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_live:
     pattern:  /cloud/live
     defaults: { _controller: TopxiaAdminBundle:Cloud:live }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_video_upgrade:
     pattern:  /cloud/video/upgrade
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_cloud_video_renew:
     pattern:  /cloud/video/renew
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoRenew }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 # admin_customer_service:
 #     pattern: /customer/service
@@ -961,12 +961,12 @@ admin_app_center:
 admin_my_cloud:
     pattern:  /setting/my/cloud
     defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloud }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 admin_my_cloud_overview:
     pattern:  /setting/my/cloud/overview
     defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloudOverview }
-    permissions: [admin_my_cloud]
+    permissions: [admin_my_cloud_overview]
 
 # admin_app_cloud:
 #     pattern:  /app/center/cloud
@@ -1099,13 +1099,13 @@ admin_category_upload:
 admin_message:
     pattern: /message
     defaults: { _controller: TopxiaAdminBundle:Message:index }
-    permissions: [admin_message]
+    permissions: [admin_message_manage]
 
 admin_message_delete_messages:
     pattern: /delete/choosed/messages
     defaults: {_controller: TopxiaAdminBundle:Message:deleteChoosedMessages }
     methods: [POST]
-    permissions: [admin_message]
+    permissions: [admin_message_manage]
 
 admin_login_record:
     pattern: /login_record
@@ -1185,7 +1185,7 @@ admin_thread_batch_delete:
 admin_question:
     pattern:  /question/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:CourseQuestion:index }
-    permissions: [admin_course_question]
+    permissions: [admin_course_question_manage]
 
 admin_approval_approvals:
     pattern:  approvals/{approvalStatus}
@@ -1530,7 +1530,7 @@ admin_official_messages:
 admin_uploadfile_head_leader_params:
     pattern: /uploadfile/video/head/leader/params
     defaults: { _controller: TopxiaAdminBundle:UploadFile:headLeaderParams }
-    permissions: [admin_cloud_video_setting]
+    permissions: [admin_setting_cloud_video]
 
 admin_coin_picture:
     pattern: /coin/picture
@@ -1647,27 +1647,27 @@ admin_common_remove:
 admin_edu_cloud_sms:
     pattern:  /setting/edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
-    permissions: [admin_edu_cloud_sms]
+    permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_apply_for_sms:
     pattern:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
-    permissions: [admin_edu_cloud_sms]
+    permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_sms_bill:
     pattern:  /edu_cloud/sms_bill
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsBill }
-    permissions: [admin_edu_cloud_sms]
+    permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
-    permissions: [admin_edu_cloud_sms]
+    permissions: [admin_edu_cloud_sms_setting]
 
 admin_edu_cloud_email:
     pattern: /setting/edu_cloud/email
     defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
-    permissions: [admin_edu_cloud_email]
+    permissions: [admin_edu_cloud_email_seeting]
 
 admin_edu_cloud_search:
     pattern: /setting/edu_cloud/search

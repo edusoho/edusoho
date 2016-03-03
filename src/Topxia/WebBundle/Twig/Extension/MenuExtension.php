@@ -17,8 +17,6 @@ class MenuExtension extends \Twig_Extension
 
     protected $levelTwoMenus = array();
 
-    protected $levelThreeMenus = array();
-
     public function __construct($container)
     {
         $this->container = $container;
@@ -46,10 +44,7 @@ class MenuExtension extends \Twig_Extension
 
             foreach ($this->levelOneMenus as $levelOneMenu) {
                 $this->levelTwoMenus = array_merge($this->levelTwoMenus, $this->getMenuChildren('admin', $levelOneMenu['code'], '1'));
-
-                foreach ($this->levelTwoMenus as $levelTwoMenu) {
-                    $this->levelThreeMenus = array_merge($this->levelThreeMenus, $this->getMenuChildren('admin', $levelTwoMenu['code'], '1'));
-                }
+                $this->levelTwoMenus = array_merge($this->levelTwoMenus, $this->getMenuChildren('admin', $levelOneMenu['code'], '2'));
             }
         }
 
