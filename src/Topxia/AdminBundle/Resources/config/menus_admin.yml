@@ -47,13 +47,12 @@ admin_operation_mobile_select_manage:
     name: 每周精选设置
     parent: admin_operation_mobile
     router_name: admin_operation_mobile_select
-admin_operation_mobile_find_category:
+admin_discovery_column_index:
     name: 发现页栏目定义
     parent: admin_operation_mobile
-    router_name: admin_operation_mobile_find
-admin_operation_mobile_create:
+admin_discovery_column_create:
     name: 添加分类展示
-    parent: admin_operation_mobile_find_category
+    parent: admin_discovery_column_index
     router_params_context: 1
     group: 2
     mode: modal

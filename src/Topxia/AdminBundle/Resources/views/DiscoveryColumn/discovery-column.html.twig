@@ -1,8 +1,8 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_operation_mobile_find_category' %}
+{% set menu = 'admin_discovery_column_index' %}
 
-{% set script_controller = 'topxiaadminbundle/controller/mobileShow/save-modal' %}
+{% set script_controller = 'topxiaadminbundle/controller/discovery-column/save-modal' %}
 
 
 {% block main %}
@@ -17,7 +17,7 @@
       <th>操作</th>
     </tr>
   </thead>
-  {% include 'TopxiaAdminBundle:System:discovery-column-tr.html.twig' %}
+  {% include 'TopxiaAdminBundle:DiscoveryColumn:discovery-column-tr.html.twig' %}
 </table>
 
 {% else %}
