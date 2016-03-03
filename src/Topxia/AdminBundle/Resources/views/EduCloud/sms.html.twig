@@ -75,7 +75,7 @@
             {% endif %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             </form>
-            {% if accessCloud|default(0) == 0 %}
+            {% if smsStatus.sms_enabled|default('0') != '1' %}
             <div class="help-block">云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情</div>
             {% endif %}
           </div>

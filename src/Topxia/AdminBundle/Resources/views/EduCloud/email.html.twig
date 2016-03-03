@@ -30,7 +30,7 @@
           <form class="form-horizontal" method="post" id="email-form" novalidate="">
           {% if emailStatus.status|default('disable') in  ['disable'] and accessCloud|default(0) != 0 %}
     				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
-          {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
+          {% elseif emailStatus.status|default('disable') == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
             <div name="status">
               <span class="text-success">已启用</span>
               <button  class="btn btn-default btn-sm mlm" name="email-close"><span class="text-muted">关闭</span></button>
@@ -52,7 +52,9 @@
           {% endif %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           </form>
+          {% if emailStatus.status|default('disable') == 'disable' %}
   				<div class="help-block">提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。</div>
+          {% endif %}
   			</div>
 
   		</div>
