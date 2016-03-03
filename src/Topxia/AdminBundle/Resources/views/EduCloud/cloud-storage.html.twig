@@ -9,7 +9,7 @@
       <!--未购买-->
       {% if overview.service.storage.enableBuyVideo|default(0) != 1 %}
         <div class="edu-verticalmiddle">
-          <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_video',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</div> 
+          <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_buy',{type:'video'}) }}" target="_blank">购买</a>云视频包，享受更优惠的视频托管服务</div> 
         </div>
       {% else %}
       <p>
