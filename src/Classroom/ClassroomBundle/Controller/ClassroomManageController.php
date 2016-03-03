@@ -3,6 +3,7 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
@@ -96,21 +97,40 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields   = $request->query->all();
-        $nickname = "";
+        $fields    = $request->query->all();
+        $condition = array();
 
-        if (isset($fields['nickName'])) {
-            $nickname = $fields['nickName'];
+        if (isset($fields['keyword'])) {
+            if (SimpleValidator::email($fields['keyword'])) {
+                $condition['email'] = $fields['keyword'];
+                $user               = $this->getUserService()->getUserByEmail($condition['email']);
+
+                $condition['userId'] = $user ? $user['id'] : -1;
+                unset($condition['email']);
+            } elseif (SimpleValidator::mobile($fields['keyword'])) {
+                $condition['mobile']  = $fields['keyword'];
+                $verifiedUser         = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
+                $user                 = $this->getUserService()->getUserByMobile($condition['mobile']);
+                $user                 = $user ? array($user['id']) : array();
+                $verifiedUser         = $user ? array($verifiedUser['id']) : array();
+                $userIds              = array_unique(array_merge($user, $verifiedUser));
+                $condition['userIds'] = $userIds ? $userIds : -1;
+                unset($condition['mobile']);
+            } else {
+                $condition['userId'] = -1;
+            }
         }
+
+        $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'student'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('classroomId' => $id, 'role' => 'student', 'nickname' => $nickname)),
+            $this->getClassroomService()->searchMemberCount($condition),
             20
         );
 
         $students = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $id, 'role' => 'student', 'nickname' => $nickname),
+            $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -140,21 +160,40 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields   = $request->query->all();
-        $nickname = "";
+        $fields    = $request->query->all();
+        $condition = array();
 
-        if (isset($fields['nickName'])) {
-            $nickname = $fields['nickName'];
+        if (isset($fields['keyword'])) {
+            if (SimpleValidator::email($fields['keyword'])) {
+                $condition['email'] = $fields['keyword'];
+                $user               = $this->getUserService()->getUserByEmail($condition['email']);
+
+                $condition['userId'] = $user ? $user['id'] : -1;
+                unset($condition['email']);
+            } elseif (SimpleValidator::mobile($fields['keyword'])) {
+                $condition['mobile']  = $fields['keyword'];
+                $verifiedUser         = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
+                $user                 = $this->getUserService()->getUserByMobile($condition['mobile']);
+                $user                 = $user ? array($user['id']) : array();
+                $verifiedUser         = $user ? array($verifiedUser['id']) : array();
+                $userIds              = array_unique(array_merge($user, $verifiedUser));
+                $condition['userIds'] = $userIds ? $userIds : -1;
+                unset($condition['mobile']);
+            } else {
+                $condition['userId'] = -1;
+            }
         }
+
+        $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'auditor'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('classroomId' => $id, 'role' => 'auditor', 'nickname' => $nickname)),
+            $this->getClassroomService()->searchMemberCount($condition),
             20
         );
 
         $students = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $id, 'role' => 'auditor', 'nickname' => $nickname),
+            $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -235,7 +274,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        // $currentUser = $this->getCurrentUser();
+// $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -823,8 +862,8 @@ class ClassroomManageController extends BaseController
         $teachers   = $this->getUserService()->findUsersByIds($teacherIds);
 
         return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig', array(
-            'classroom'    => $classroom,
-            'status'       => $status,
+            'classroom' => $classroom,
+            'status'    => $status,
 
             'users'        => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
