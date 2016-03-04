@@ -72,7 +72,6 @@ define(function(require, exports, module) {
         initBuildFields: function() {
             this.initDifficultyPercentageSlider();
             //@todo, refact it, wellming.
-            // this.initRangeField();
             this.initQuestionTypeSortable();
 
             var validator = this.get('validator'),
@@ -264,72 +263,6 @@ define(function(require, exports, module) {
             });
         },
 
-        // initRangeField: function() {
-
-        // },
-
-        // _resetRangeEndOptions: function(startIndex) {
-        //     if (startIndex > 0) {
-        //         startIndex--;
-        //         var $options = $("#testpaper-range-start option:gt(" + startIndex + ")");
-        //     } else {
-        //         var $options = $("#testpaper-range-start option");
-        //     }
-
-        //     var selected = $("#testpaper-range-end option:selected").val();
-
-        //     $("#testpaper-range-end option").remove();
-        //     $("#testpaper-range-end").html($options.clone());
-        //     $("#testpaper-range-end option").each(function() {
-        //         if ($(this).val() == selected) {
-        //             $("#testpaper-range-end").val(selected);
-        //         }
-        //     });
-        // },
-
-        // _refreshRangesValue: function() {
-        //     var $ranges = $('input[name=ranges]');
-        //     if ($('input[name=range]:checked').val() != 'lesson') {
-        //         $ranges.val('');
-        //         return;
-        //     }
-
-        //     var startIndex = this._getRangeStartIndex();
-        //     var endIndex = this._getRangeEndIndex();
-
-        //     if (startIndex < 0 || endIndex < 0) {
-        //         $ranges.val('');
-        //         return;
-        //     }
-
-        //     var values = [];
-        //     for (var i = startIndex; i <= endIndex; i++) {
-        //         values.push($("#testpaper-range-start option:eq(" + i + ")").val());
-        //     }
-
-        //     $ranges.val(values.join(','));
-        // },
-
-        // _getRangeStartIndex: function() {
-        //     var $startOption = $("#testpaper-range-start option:selected");
-        //     return parseInt($("#testpaper-range-start option").index($startOption));
-        // },
-
-        // _getRangeEndIndex: function() {
-        //     var selected = $("#testpaper-range-end option:selected").val();
-        //     if (selected == '') {
-        //         return -1;
-        //     }
-
-        //     var index = -1;
-        //     $("#testpaper-range-start option").each(function(i, item) {
-        //         if ($(this).val() == selected) {
-        //             index = i;
-        //         }
-        //     });
-
-        //     return index;
-        // }
     });
 
     exports.run = function() {
