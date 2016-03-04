@@ -17,7 +17,6 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-
         // 关注数
         $following = $this->getUserService()->findUserFollowingCount($user['id']);
         // 粉丝数
@@ -601,5 +600,10 @@ class UserController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 }

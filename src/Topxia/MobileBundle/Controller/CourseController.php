@@ -197,8 +197,7 @@ class CourseController extends MobileController
             } else {
                 $json['mediaUri'] = '';
             }
-        } else
-        if ($json['mediaSource'] == 'youku') {
+        } elseif ($json['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -206,8 +205,7 @@ class CourseController extends MobileController
             } else {
                 $json['mediaUri'] = '';
             }
-        } else
-        if ($json['mediaSource'] == 'tudou') {
+        } elseif ($json['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -242,17 +240,7 @@ class CourseController extends MobileController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['storage'] == 'cloud') {
-            throw $this->createNotFoundException();
-        }
-
-        return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $lesson['mediaId'], 'isDownload' => false));
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     /**

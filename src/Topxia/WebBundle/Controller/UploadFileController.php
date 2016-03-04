@@ -3,8 +3,10 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UploadFileController extends BaseController
 {
@@ -34,6 +36,63 @@ class UploadFileController extends BaseController
         $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
 
         return $this->createJsonResponse($file);
+    }
+
+    public function downloadAction(Request $request, $fileId)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
+
+        if ($file['storage'] == 'cloud') {
+            $this->downloadCloudFile($file);
+        } else {
+            return $this->downloadLocalFile($request, $file);
+        }
+    }
+
+    protected function downloadCloudFile($file)
+    {
+        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+            $key = $file['metas']['hd']['key'];
+        } else {
+            $key = $file['hashId'];
+        }
+
+        if (empty($key)) {
+            throw $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client  = $factory->createClient();
+
+        $client->download($client->getBucket(), $key, 3600, $file['filename']);
+    }
+
+    protected function downloadLocalFile(Request $request, $file)
+    {
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $file['filename'] = urlencode($file['filename']);
+
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
     }
 
     public function browserAction(Request $request)
