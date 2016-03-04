@@ -121,7 +121,8 @@ class CourseTestpaperManageController extends BaseController
         $data           = $request->request->all();
         $data['target'] = "course-{$course['id']}";
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
-        $result         = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
+        var_dump($data);
+        $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);
     }
 
@@ -130,19 +131,20 @@ class CourseTestpaperManageController extends BaseController
         $items = $this->getCourseService()->getCourseItems($courseId);
 
         $ranges = array();
+        $id     = 'course-'.$courseId.'/';
 
         foreach ($items as $key => $item) {
             if ($item['type'] == 'chapter') {
-                $ranges['chapter-'.$item['id']] = array('id' => $item['id'], 'name' => $item['title'], 'nocheck' => true);
+                $ranges['chapter-'.$item['id']] = array('id' => $id.'chapter-'.$item['id'], 'name' => $item['title'], 'nocheck' => true);
             } elseif ($item['type'] == 'unit') {
-                $ranges['chapter-'.$item['parentId']]['children']['unit-'.$item['id']] = array('id' => $item['id'], 'name' => $item['title'], 'nocheck' => true);
+                $ranges['chapter-'.$item['parentId']]['children']['unit-'.$item['id']] = array('id' => $id.'unit-'.$item['id'], 'name' => $item['title'], 'nocheck' => true);
             } else {
                 if ($item['chapterId'] != 0) {
                     $chapter = $this->getCourseService()->getChapter($courseId, $item['chapterId']);
 
-                    $ranges['chapter-'.$chapter['parentId']]['children']['unit-'.$item['chapterId']]['children'][] = array('id' => $item['id'], 'name' => $item['title']);
+                    $ranges['chapter-'.$chapter['parentId']]['children']['unit-'.$item['chapterId']]['children'][] = array('id' => $id.'lesson-'.$item['id'], 'name' => $item['title']);
                 } else {
-                    $ranges[] = array('id' => $item['id'], 'name' => $item['title']);
+                    $ranges[] = array('id' => $id.'lesson-'.$item['id'], 'name' => $item['title']);
                 }
             }
         }

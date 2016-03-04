@@ -252,29 +252,10 @@ define(function(require, exports, module) {
         },
 
         getQuestionNums: function(){
-            var rangeValue = $('input[name=range]:checked').val();
-            var startLessonId = $("#testpaper-range-start").val();
-            var endLessonId = $("#testpaper-range-end").val();
+            var rangeValue = 'lesson';
+            var targets = $('#ranges').val();
 
-            var options = $("#testpaper-range-start").children();
-            var status = false;
-            var targets = "";
-            $.each(options,function(i,n){
-                var option = $(n);
-                var value = option.attr("value");
-                if(value == startLessonId){
-                    status = true;
-                    targets += value+",";
-                    if(value == endLessonId){
-                        status = false;
-                    }
-                } else if(value == endLessonId){
-                    status = false;
-                    targets += value+",";
-                } else if(status){
-                    targets += value+",";
-                }
-            });
+            console.log(targets);
             var courseId = $("#testpaper-form").data("courseId");
             $.get('../../../../../course/'+courseId+'/manage/testpaper/get_question_num', {range: rangeValue, targets:targets}, function(data){
                 $('[role="questionNum"]').text(0);
@@ -285,31 +266,6 @@ define(function(require, exports, module) {
         },
 
         initRangeField: function() {
-            var self = this;
-            $('input[name=range]').on('click', function() {
-                if ($(this).val() == 'lesson') {
-                    $("#testpaper-range-selects").show();
-                } else {
-                    $("#testpaper-range-selects").hide();
-                }
-
-                self._refreshRangesValue();
-                self.getQuestionNums();
-            });
-
-            $("#testpaper-range-start").change(function() {
-                var startIndex = self._getRangeStartIndex();
-
-                self._resetRangeEndOptions(startIndex);
-
-                self._refreshRangesValue();
-                self.getQuestionNums();
-            });
-
-            $("#testpaper-range-end").change(function() {
-                self._refreshRangesValue();
-                self.getQuestionNums();
-            });
 
         },
 
@@ -378,7 +334,7 @@ define(function(require, exports, module) {
     });
 
     exports.run = function() {
-        new TestpaperForm({
+        var testpaperForm = new TestpaperForm({
             element: '#testpaper-form'
         });
 
@@ -387,6 +343,7 @@ define(function(require, exports, module) {
             selectInputValue: 'ranges',
             zTreeRoot: 'range-tree',
             checkEnable: true,
+            func:testpaperForm.getQuestionNums
         });
 
 

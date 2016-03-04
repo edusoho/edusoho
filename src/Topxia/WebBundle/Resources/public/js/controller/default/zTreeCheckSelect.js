@@ -16,6 +16,8 @@ define(function(require, exports, module) {
             _self.zTreeRoot = options.zTreeRoot; //zTree的DOM 容器
             _self.checkEnable = options.checkEnable;
             _self.validator = options.validator; //form表单的校验组件
+            _self.func = options.func;
+
             _self.init();
             $("#" + _self.selectInput).on('click', function() {
                 _self.showMenu();
@@ -77,6 +79,9 @@ define(function(require, exports, module) {
                         }
                     })
                 }
+
+                this.func();
+
             },
             onBodyDown: function(event) {
                 var _self = this;
