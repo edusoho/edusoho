@@ -63,7 +63,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'name'   => $initParams['fileName'],
             'hash'   => $initParams['hash']
         );
-
+        #TODO... 暂时直传
+        $params['uploadType'] = 'direct';
+        
         $api       = CloudAPIFactory::create();
         $apiResult = $api->post("/resources/{$file['globalId']}/upload_resume", $params);
 
@@ -130,6 +132,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         if (isset($file['directives'])) {
             $params['directives'] = $file['directives'];
         }
+
+        #TODO... 暂时直传
+        $params['uploadType'] = 'direct';
 
         $api       = CloudAPIFactory::create();
         $apiResult = $api->post('/resources/upload_init', $params);
