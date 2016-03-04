@@ -90,6 +90,7 @@ class CourseFileManageController extends BaseController
         if ($file['targetType'] == 'courselesson') {
             return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
         } else
+
         if ($file['targetType'] == 'coursematerial' || $file['targetType'] == 'materiallib') {
             if ($file['storage'] == 'cloud') {
                 $factory = new CloudClientFactory();
