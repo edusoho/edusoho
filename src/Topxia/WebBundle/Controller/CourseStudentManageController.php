@@ -28,14 +28,21 @@ class CourseStudentManageController extends BaseController
                 $userIds             = array();
                 $mobileVerifiedUser  = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
                 $profileUsers        = $this->getUserService()->searchUserProfiles(array('tel' => $condition['mobile']), array('id', 'DESC'), 0, PHP_INT_MAX);
+                $mobileNameUser      = $this->getUserService()->getUserByNickname($condition['mobile']);
                 $userIds             = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 
                 $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+                $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
 
                 $userIds = array_unique($userIds);
 
                 $condition['userIds'] = $userIds ? $userIds : -1;
                 unset($condition['mobile']);
+            } elseif (SimpleValidator::nickname($fields['keyword'])) {
+                $condition['nickname'] = $fields['keyword'];
+                $user                  = $this->getUserService()->getUserByNickname($condition['nickname']);
+                $condition['userId']   = $user ? $user['id'] : -1;
+                unset($condition['nickname']);
             } else {
                 $condition['userId'] = -1;
             }

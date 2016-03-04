@@ -963,13 +963,22 @@ class ClassroomManageController extends BaseController
         } elseif (SimpleValidator::mobile($keyword)) {
             $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
             $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id', 'DESC'), 0, PHP_INT_MAX);
+            $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
             $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
 
             $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
 
             $userIds = array_unique($userIds);
 
             $userIds = $userIds ? $userIds : null;
+            return $userIds;
+        } elseif (SimpleValidator::nickname($keyword)) {
+            $user      = $this->getUserService()->getUserByNickname($keyword);
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        } else {
+            $userIds[] = null;
             return $userIds;
         }
     }
