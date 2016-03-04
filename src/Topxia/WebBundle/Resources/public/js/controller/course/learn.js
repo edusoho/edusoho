@@ -268,8 +268,8 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                if(lesson.sequence == 1){
-                    $("#lesson-sequence-content").show();
+                if(lesson.studyModel == 'ordered'){
+                    $("#lesson-study-model-content").show();
                     $("[data-role=finish-lesson]").attr("disabled", true);
                     return;
                 }

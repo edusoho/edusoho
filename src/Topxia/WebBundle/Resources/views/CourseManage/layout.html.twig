@@ -95,11 +95,6 @@
               <span></span>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% endif %}管理
             </a>
           </li>
-          <li class="list-group-item {% if side_nav == 'study' %}active{% endif %}">
-            <a href="{{ path('course_manage_study', {id:course.id}) }}">
-              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>学习设置
-            </a>
-          </li>
         </ul>
 
         <ul class="list-group">

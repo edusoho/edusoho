@@ -229,10 +229,10 @@ class CourseLessonController extends BaseController
         $json['testMode']               = $lesson['testMode'];
         $json['testStartTime']          = $lesson['testStartTime'];
         $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
-        $json['sequence']               = 0;
+        $json['studyModel']             = 'normal';
 
-        if ($course['sequence'] == 0) {
-            $json['sequence'] = 0;
+        if ($course['studyModel'] == 'normal') {
+            $json['studyModel'] = 'normal';
         } else {
             $user     = $this->getCurrentUser();
             $statuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
@@ -240,7 +240,7 @@ class CourseLessonController extends BaseController
             foreach ($statuses as $key => $status) {
                 if ($key < $lessonId) {
                     if ($status == 'learning') {
-                        $json['sequence'] = 1;
+                        $json['studyModel'] = 'ordered';
                     }
                 }
             }

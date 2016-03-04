@@ -85,8 +85,6 @@ interface CourseService
 
     public function setCoursePrice($courseId, $currency, $price);
 
-    public function setCourseSequence($courseId, $sequence);
-
     public function setCoursesPriceWithDiscount($discountId);
 
     public function revertCoursesPriceWithDiscount($discountId);

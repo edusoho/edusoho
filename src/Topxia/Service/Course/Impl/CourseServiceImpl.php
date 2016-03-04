@@ -481,7 +481,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'locked'        => 0,
             'tryLookable'   => 0,
             'tryLookTime'   => 0,
-            'buyable'       => 0
+            'buyable'       => 0,
+            'studyModel'    => 'normal'
         ));
 
         if (!empty($fields['about'])) {
@@ -862,12 +863,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($course['id'], $fields);
         $this->dispatchEvent("course.price.update", array('currency' => $currency, 'course' => $course));
-        return $course;
-    }
-
-    public function setCourseSequence($courseId, $sequence)
-    {
-        $course = $this->getCourseDao()->updateCourse($courseId, $sequence);
         return $course;
     }
 

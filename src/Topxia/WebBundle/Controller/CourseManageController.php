@@ -24,8 +24,21 @@ class CourseManageController extends BaseController
         $course        = $this->getCourseService()->tryManageCourse($id);
         $courseSetting = $this->getSettingService()->get('course', array());
 
+        if ($course['studyModel'] == 'normal') {
+            $course['studyModel'] = 0;
+        } else {
+            $course['studyModel'] = 1;
+        }
+
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+
+            if ($data['studyModel'] == 0) {
+                $data['studyModel'] = 'normal';
+            } else {
+                $data['studyModel'] = 'ordered';
+            }
+
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
