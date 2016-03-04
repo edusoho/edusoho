@@ -72,7 +72,7 @@ define(function(require, exports, module) {
         initBuildFields: function() {
             this.initDifficultyPercentageSlider();
             //@todo, refact it, wellming.
-            this.initRangeField();
+            // this.initRangeField();
             this.initQuestionTypeSortable();
 
             var validator = this.get('validator'),
@@ -255,11 +255,6 @@ define(function(require, exports, module) {
         getQuestionNums: function(){
             var rangeValue = 'lesson';
             var targets = $('#ranges').val();
-
-            // if($('#range-input').val() == '本课程'){
-            //     rangeValue = 'course';
-            // }
-
             var courseId = $("#testpaper-form").data("courseId");
             $.get('../../../../../course/'+courseId+'/manage/testpaper/get_question_num', {range: rangeValue, targets:targets}, function(data){
                 $('[role="questionNum"]').text(0);
@@ -269,72 +264,72 @@ define(function(require, exports, module) {
             });
         },
 
-        initRangeField: function() {
+        // initRangeField: function() {
 
-        },
+        // },
 
-        _resetRangeEndOptions: function(startIndex) {
-            if (startIndex > 0) {
-                startIndex--;
-                var $options = $("#testpaper-range-start option:gt(" + startIndex + ")");
-            } else {
-                var $options = $("#testpaper-range-start option");
-            }
+        // _resetRangeEndOptions: function(startIndex) {
+        //     if (startIndex > 0) {
+        //         startIndex--;
+        //         var $options = $("#testpaper-range-start option:gt(" + startIndex + ")");
+        //     } else {
+        //         var $options = $("#testpaper-range-start option");
+        //     }
 
-            var selected = $("#testpaper-range-end option:selected").val();
+        //     var selected = $("#testpaper-range-end option:selected").val();
 
-            $("#testpaper-range-end option").remove();
-            $("#testpaper-range-end").html($options.clone());
-            $("#testpaper-range-end option").each(function() {
-                if ($(this).val() == selected) {
-                    $("#testpaper-range-end").val(selected);
-                }
-            });
-        },
+        //     $("#testpaper-range-end option").remove();
+        //     $("#testpaper-range-end").html($options.clone());
+        //     $("#testpaper-range-end option").each(function() {
+        //         if ($(this).val() == selected) {
+        //             $("#testpaper-range-end").val(selected);
+        //         }
+        //     });
+        // },
 
-        _refreshRangesValue: function() {
-            var $ranges = $('input[name=ranges]');
-            if ($('input[name=range]:checked').val() != 'lesson') {
-                $ranges.val('');
-                return;
-            }
+        // _refreshRangesValue: function() {
+        //     var $ranges = $('input[name=ranges]');
+        //     if ($('input[name=range]:checked').val() != 'lesson') {
+        //         $ranges.val('');
+        //         return;
+        //     }
 
-            var startIndex = this._getRangeStartIndex();
-            var endIndex = this._getRangeEndIndex();
+        //     var startIndex = this._getRangeStartIndex();
+        //     var endIndex = this._getRangeEndIndex();
 
-            if (startIndex < 0 || endIndex < 0) {
-                $ranges.val('');
-                return;
-            }
+        //     if (startIndex < 0 || endIndex < 0) {
+        //         $ranges.val('');
+        //         return;
+        //     }
 
-            var values = [];
-            for (var i = startIndex; i <= endIndex; i++) {
-                values.push($("#testpaper-range-start option:eq(" + i + ")").val());
-            }
+        //     var values = [];
+        //     for (var i = startIndex; i <= endIndex; i++) {
+        //         values.push($("#testpaper-range-start option:eq(" + i + ")").val());
+        //     }
 
-            $ranges.val(values.join(','));
-        },
+        //     $ranges.val(values.join(','));
+        // },
 
-        _getRangeStartIndex: function() {
-            var $startOption = $("#testpaper-range-start option:selected");
-            return parseInt($("#testpaper-range-start option").index($startOption));
-        },
+        // _getRangeStartIndex: function() {
+        //     var $startOption = $("#testpaper-range-start option:selected");
+        //     return parseInt($("#testpaper-range-start option").index($startOption));
+        // },
 
-        _getRangeEndIndex: function() {
-            var selected = $("#testpaper-range-end option:selected").val();
-            if (selected == '') {
-                return -1;
-            }
+        // _getRangeEndIndex: function() {
+        //     var selected = $("#testpaper-range-end option:selected").val();
+        //     if (selected == '') {
+        //         return -1;
+        //     }
 
-            var index = -1;
-            $("#testpaper-range-start option").each(function(i, item) {
-                if ($(this).val() == selected) {
-                    index = i;
-                }
-            });
+        //     var index = -1;
+        //     $("#testpaper-range-start option").each(function(i, item) {
+        //         if ($(this).val() == selected) {
+        //             index = i;
+        //         }
+        //     });
 
-            return index;
-        }
+        //     return index;
+        // }
     });
 
     exports.run = function() {

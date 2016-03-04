@@ -21,11 +21,7 @@
 <div class="form-group">
   <div class="col-md-2 control-label"><label for="testpaper-range-field">出题范围</label></div>
   <div class="col-md-8 controls radios">
-      {#  {{ radios('range', {'course':'整个课程', 'lesson':'按课时范围'}, 'course') }} #}
        <div id="testpaper-range-selects" style="margin-top:8px;">
-         {#<select class="form-control width-input width-input-large" id="testpaper-range-start" >#}
-           {#{{ select_options(ranges) }}#}
-         {#</select>#}
            <input id="range-input" type="text" readonly value="" class="form-control" data-url="{{ path('course_manage_testpaper_build_range',{courseId:course.id}) }}" placeholder = "请选择出题范围" />
 
            <div id="range-input-menu"  class="menuContent" style="display:none;position: absolute; position: absolute; width:94%;left:10px;top:34px; z-index:2;">
