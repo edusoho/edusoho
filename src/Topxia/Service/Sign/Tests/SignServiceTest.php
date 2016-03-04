@@ -48,13 +48,30 @@ class SignServiceTest extends BaseTestCase
         $this->assertEquals('1', $getSign2[0]['targetId']);
     }
 
-    // public function testgetSignUserStatistics()
-    // {
-    // }
+    public function testgetSignUserStatistics()
+    {
+        $user1 = $this->createUser('user1');
+        $user2 = $this->createUser('user2');
+        $this->getSignService()->userSign($user2['id'], 'classroom_sign', 1);
+        $sign1 = $this->getSignService()->getSignUserStatistics($user1['id'], 'classroom_sign', 1);
+        $sign2 = $this->getSignService()->getSignUserStatistics($user2['id'], 'classroom_sign', 1);
+        $this->assertNull($sign1);
+        $this->assertEquals($user2['id'], $sign2['userId']);
+        $this->assertEquals('classroom_sign', $sign2['targetType']);
+        $this->assertEquals('1', $sign2['targetId']);
+    }
 
-    // public function testgetSignTargetStatistics()
-    // {
-    // }
+    public function testgetSignTargetStatistics()
+    {
+        $user       = $this->createUser('user');
+        $sign       = $this->getSignService()->userSign($user['id'], 'classroom_sign', 1);
+        $time       = date('Ymd', $sign['createdTime']);
+        $signTarget = $this->getSignService()->getSignTargetStatistics('classroom_sign', 1, $time);
+        $this->assertEquals($time, $signTarget['date']);
+        $this->assertEquals('classroom_sign', $signTarget['targetType']);
+        $this->assertEquals('1', $signTarget['targetId']);
+        $this->assertEquals('1', $signTarget['signedNum']);
+    }
 
     public function testgetTodayRank()
     {
