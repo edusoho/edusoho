@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     var Widget     = require('widget');
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
+    var zTreeCheckSelect = require('topxiawebbundle/controller/default/zTreeCheckSelect');
+    var zTreeSelect = require('topxiawebbundle/controller/default/zTreeSelect');
     require('common/validator-rules').inject(Validator);
     require('jquery.nouislider');
     require('jquery.nouislider-css');
@@ -379,6 +381,14 @@ define(function(require, exports, module) {
         new TestpaperForm({
             element: '#testpaper-form'
         });
+
+        zTreeCheckSelect = new zTreeCheckSelect({
+            selectInput: 'range-input',
+            selectInputValue: 'ranges',
+            zTreeRoot: 'range-tree',
+            checkEnable: true,
+        });
+
 
 
     }
