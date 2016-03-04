@@ -26,7 +26,11 @@
 
   {% block live_side %}
 
+<<<<<<< Updated upstream
     <div class="panel panel-default es-live-all">
+=======
+    {# <div class="panel panel-default es-live-all">
+>>>>>>> Stashed changes
       <div class="panel-heading">
         <form id="" class="form-inline" action="" method="get" novalidate="">
           <div class="form-group mrl">
@@ -105,7 +109,7 @@
           </div>
         </div>
       </div>
-    </div>
-    {{ render(controller('TopxiaWebBundle:LiveCourse:ratingCoursesBlock')) }}
+    </div> #}
+    {{ render(controller('TopxiaWebBundle:LiveCourse:liveCourseList')) }}
 
   {% endblock %}
