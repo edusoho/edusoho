@@ -48,11 +48,20 @@ class ImporterController extends BaseController
 
             $userData = $processor->getUserData();
 
+            $allUserData = json_decode($userData['allUserData'], true);
+            $allUserData = array_chunk($allUserData, count($allUserData)/20+1);
+            $progress = array();
+
+            foreach ($allUserData as $index => $userDataInfo) {
+                $progress[] =count($userDataInfo);
+            }
+
             return $this->render('TopxiaWebBundle:Importer:import.step2.html.twig', array(
                 'userCount' => $userData['userCount'],
                 'errorInfo' => $userData['errorInfo'],
                 'checkInfo' => $userData['checkInfo'],
-                'allUserData' => $userData['allUserData'],
+                'allUserData' => json_encode($allUserData),
+                'progress'      => json_encode($progress),
                 'data' => $data,
                 'targetObject' => $targetObject,
             ));
@@ -65,10 +74,10 @@ class ImporterController extends BaseController
         ));
     }
 
-    public function importExcelDataAction(Request $request, $target)
+    public function importExcelDataAction(Request $request, $targetId, $targetType)
     {   
-        $processor = $this->getImporterProcessor($target['type']);
-        $targetObject = $processor->tryManage($target['id']);
+        $processor = $this->getImporterProcessor($targetType);
+        $targetObject = $processor->tryManage($targetId);
 
         $userData = $request->request->get("data");
         $userData = json_decode($userData,true);
@@ -79,13 +88,17 @@ class ImporterController extends BaseController
         $validateRout = $processor->getExcelInfoValidateUrl();
         $count = $processor->excelDataImporting($targetObject, $userData, $userUrl);
         
-        return $this->render('TopxiaWebBundle:Importer:import.step3.html.twig', 
-            array(
-                'targetObject' => $targetObject,
+
+        return $this->createJsonResponse(array(
                 'count' => $count,
                 'validateRout' => $validateRout,
-            )
-        );
+            ));
+    }
+
+    public function importModalAction(Request $request)
+    {
+
+        return $this->render('TopxiaWebBundle:Importer:userimport.modal.html.twig');
     }
 
 

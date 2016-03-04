@@ -61,6 +61,14 @@
               </div>
               <div name="submit-sign" hidden="hidden">
                 <span>短信签名：<input class="form-control" type="text" name="sign" placeholder="签名3-8字，建议使用汉字"></span><button class="btn btn-primary mlm mrm" >提交</button><span><a href="">取消</a></span>
+                <span class="glyphicon glyphicon-question-sign text-muted" id="article-property-tips17" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
+                <div id="article-property-tips17-html" style="display:none;">
+                  <div style="width:250px;font-size:14px;">
+                      <span style="color:blue;"> 哪些签名不允许：</span><br>
+                      1.含有特殊字符（如$@^等）的签名 <br>
+                      2.与公司，商标和网站名无关的签名
+                  </div>
+                </div>
               </div>
             {% elseif smsStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
               <div class="row">
@@ -75,7 +83,7 @@
             {% endif %}
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
             </form>
-            {% if accessCloud|default(0) == 0 %}
+            {% if smsStatus.sms_enabled|default('0') != '1' %}
             <div class="help-block">云短信提供高效、可靠的短信发送服务，低至0.055元/条，点击<a href="http://open.edusoho.com/show/cloud/sms" target="_blank">这里</a>了解详情</div>
             {% endif %}
           </div>

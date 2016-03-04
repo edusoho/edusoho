@@ -58,10 +58,11 @@
         {% endif %}
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
       </form>
-
+      {% if storageSetting.upload_mode|default('cloud') == "local" %}
       <div class="help-block">
         EduSoho云视频将为您提供稳定、安全、经济、便捷的视频托管服务以及优质的视频播放体验。点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。
       </div>
+      {% endif %}
     </div>
     
     {% if  info.accessCloud|default(0) != 0  %}

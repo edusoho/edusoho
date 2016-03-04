@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
-		for (var i = 16; i >= 1; i--) {
+		for (var i = 17; i >= 1; i--) {
             var id = '#article-property-tips'+i;
             var htmlId = id + '-html';
             $(id).popover({
