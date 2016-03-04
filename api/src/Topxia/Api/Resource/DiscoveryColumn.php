@@ -4,28 +4,26 @@ namespace Topxia\Api\Resource;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
 
 class DiscoveryColumn extends BaseResource
 {
-
     public function get(Application $app, Request $request)
     {
-    	$result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-    	if (empty($result)) {
-    		return $this->error('error', '暂无分类内容!'); 
-    	}
+        $result = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
 
-    	return $result;
+        if (empty($result)) {
+            return $this->error('error', '暂无分类内容!');
+        }
+
+        return $this->wrap($result, sizeof($result));
     }
 
-	public function filter(&$res)
+    public function filter(&$res)
     {
-        
     }
 
     protected function getDiscoveryColumnService()
     {
-    	return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
+        return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
     }
 }

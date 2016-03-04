@@ -7,25 +7,23 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Classrooms extends BaseResource
 {
-	public function discoveryColumn(Application $app, Request $request)
+    public function discoveryColumn(Application $app, Request $request)
     {
-    	$result = $request->query->all();
+        $result = $request->query->all();
 
-        $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
+        $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
         $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         unset($conditions['categoryId']);
 
         if ($result['orderType'] == 'hot') {
-        	$orderBy = 'studentNum';
-        }
-        elseif ($result['orderType'] == 'new') {
-        	$orderBy = 'createdTime';
-        }
-        else {
-        	$orderBy = 'recommendedSeq';
+            $orderBy = 'studentNum';
+        } elseif ($result['orderType'] == 'new') {
+            $orderBy = 'createdTime';
+        } else {
+            $orderBy = 'recommendedSeq';
         }
 
-        $classrooms = $this->getClassroomService()->searchClassrooms($conditions,array($orderBy, 'desc'),0,$result['showCount']);
+        $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
 
         $total = count($classrooms);
         return $this->wrap($classrooms, min($result['showCount'], $total));
@@ -33,12 +31,10 @@ class Classrooms extends BaseResource
 
     public function get(Application $app, Request $request)
     {
-    	
     }
 
     public function post(Application $app, Request $request)
     {
-    	
     }
 
     public function filter(&$res)
@@ -63,5 +59,4 @@ class Classrooms extends BaseResource
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
-
 }
