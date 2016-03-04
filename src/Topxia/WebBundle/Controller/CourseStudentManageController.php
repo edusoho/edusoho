@@ -38,13 +38,11 @@ class CourseStudentManageController extends BaseController
 
                 $condition['userIds'] = $userIds ? $userIds : -1;
                 unset($condition['mobile']);
-            } elseif (SimpleValidator::nickname($fields['keyword'])) {
+            } else {
                 $condition['nickname'] = $fields['keyword'];
                 $user                  = $this->getUserService()->getUserByNickname($condition['nickname']);
                 $condition['userId']   = $user ? $user['id'] : -1;
                 unset($condition['nickname']);
-            } else {
-                $condition['userId'] = -1;
             }
         }
 
