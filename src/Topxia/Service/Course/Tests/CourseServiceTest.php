@@ -685,7 +685,7 @@ class CourseServiceTest extends BaseTestCase
 
         $createCourse = $this->getCourseService()->createCourse($course);
         $updateCourse = $this->getCourseService()->updateCourse($createCourse['id'], $studyModel);
-        $result       = $this->getCourseService()->getCourse($createCourse);
+        $result       = $this->getCourseService()->getCourse($createCourse['id']);
         $this->assertEquals('ordered', $result['studyModel']);
     }
 
