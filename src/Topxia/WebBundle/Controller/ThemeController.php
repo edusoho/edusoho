@@ -9,8 +9,6 @@ class ThemeController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        var_dump(111);
-        exit();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('TopxiaWebBundle:Default:show.html.twig', array(
