@@ -156,12 +156,13 @@ class LiveCourseController extends BaseController
     public function liveCourseListAction(Request $request)
     {
         if ($request->query->get('categoryId') || $request->query->get('vipCategoryId')) {
-            list($liveCourses, $paginator) = $this->_searchLiveCourseByConditions();
+            list($liveCourses, $paginator) = $this->_searchLiveCourseByConditions($request);
         } else {
             list($liveCourses, $paginator) = $this->_searchLiveCourseNormal($request);
         }
 
         print_r($liveCourses);
+
         return $this->render('TopxiaWebBundle:LiveCourse:live-course-all-list.html.twig', array(
             'liveCourses' => $liveCourses,
             'paginator'   => $paginator
@@ -463,11 +464,20 @@ class LiveCourseController extends BaseController
         return $categories;
     }
 
-    private function _searchLiveCourseNormal(Request $request)
+    private function _searchLiveCourseNormal($request)
     {
+        $courses = $this->getCourseService()->searchCourses(array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => 0
+        ), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
         $conditions = array(
-            'status' => 'published',
-            'type'   => 'live'
+            'status'    => 'published',
+            'type'      => 'live',
+            'courseIds' => $courseIds
         );
 
         $paginator = new Paginator(
@@ -476,7 +486,8 @@ class LiveCourseController extends BaseController
             , 10
         );
 
-        $liveLessons = $this->getCourseService()->findRecentLiveLessons($paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $liveLessons = $this->getCourseService()->findRecentLiveLessons($courseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        print_r($liveLessons);exit;
 
         $liveCourses = $this->getCourseService()->searchCourses(array(
             'status'    => 'published',
@@ -485,11 +496,29 @@ class LiveCourseController extends BaseController
             'courseIds' => ArrayToolkit::column($liveLessons, 'courseId')
         ), 'lastest', 0, 10);
 
+        print_r($liveLessons);
+
+        // foreach ($liveCourses as $key => $val) {
+        // }
+
         return array($liveCourses, $paginator);
     }
 
     private function _searchLiveCourseByConditions(Request $request)
     {
+        $conditions = array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => 0
+        );
+
+        if (!empty($request->query->get('categoryId'))) {
+            $conditions['categoryId'] = $request->query->get('categoryId');
+        }
+
+        if (!empty($request->query->get('vipCategoryId'))) {
+            $conditions['vipLevelIdGreaterThan'] = 0;
+        }
     }
 
     protected function getCourseService()

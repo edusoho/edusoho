@@ -324,14 +324,20 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 
-    public function findRecentLiveLessons($start, $limit)
+    public function findRecentLiveLessons($courseIds, $start, $limit)
     {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
         $time = time();
         $sql  = "SELECT id, recentTime,courseId,startTime,endTime,status FROM
-               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time}
-                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time})
+               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
+                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
                 recent ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
 
-        return $this->getConnection()->fetchAll($sql);
+        return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 }
