@@ -3,6 +3,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     require('jquery.select2-css');
     require('jquery.select2');
+    var DetailWidget = require('materiallibbundle/controller/web/detail');
 
     exports.run = function() {
 
@@ -13,7 +14,8 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav-tabs li': 'onClickNav',
-                'click .pagination li': 'onClickPagination'
+                'click .pagination li': 'onClickPagination',
+                'click .js-detail-btn': 'onClickDetailBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -36,6 +38,24 @@ define(function(require, exports, module) {
                 this.element.find('.js-page').val($target.data('page'));
                 this.renderTable(true);
                 event.preventDefault();
+            },
+            onClickDetailBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $.get($target.data('url'), function(resp){
+                    self.element.hide();
+                    self.element.prev().hide();
+                    self.element.parent().append(resp);
+                    new DetailWidget({
+                        element:'#material-detail',
+                        callback: function() {
+                            var $form = $('#materials-form');
+                            $form.show();
+                            $form.prev().show();
+                        }
+                    });
+                });
             },
             submitForm: function(event)
             {

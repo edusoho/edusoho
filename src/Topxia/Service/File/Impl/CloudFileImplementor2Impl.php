@@ -17,6 +17,22 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $this->mergeCloudFile($file, $cloudFile);
     }
 
+    public function get($globalId)
+    {
+        $api = CloudAPIFactory::create();
+        $cloudFile = $api->get("/resources/".$globalId);
+        $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
+        return $this->mergeCloudFile2($localFile, $cloudFile);
+    }
+
+    public function edit($globalId, $fields)
+    {
+        $api = CloudAPIFactory::create();
+        $cloudFile = $api->post("/resources/".$globalId, $fields);
+        $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
+        return $this->mergeCloudFile2($localFile, $cloudFile);
+    }
+
     public function findFiles($files)
     {
         if (empty($files)) {
@@ -342,6 +358,23 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         }
 
         return $file;
+    }
+
+    //以云端数据为主，字段也一样，以云端为主，只需要合并某些业务字段
+    //未来需要替换掉以前的merge方法
+    public function mergeCloudFile2($localFile, $cloudFile)
+    {
+        if ($localFile) {
+            $cloudFile['hasLocal'] = true;
+            $cloudFile['targetType'] = $localFile['targetType'];
+            $cloudFile['targetId'] = $localFile['targetId'];
+            $cloudFile['createdUserId'] = $localFile['createdUserId'];
+            $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
+        } else {
+            $cloudFile['hasLocal'] = false;
+        }
+         
+        return $cloudFile;
     }
 
     protected function getUploadFileDao()

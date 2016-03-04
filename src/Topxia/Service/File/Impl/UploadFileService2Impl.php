@@ -110,6 +110,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementorByStorage($storage)->search($conditions);
     }
 
+    public function edit($globalId, $fields)
+    {
+        return $this->getFileImplementorByStorage('cloud')->edit($globalId, $fields);
+    }
+
+    public function getByGlobalId($globalId)
+    {
+        return $this->getFileImplementorByStorage('cloud')->get($globalId);
+    }
+
     public function getDownloadFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
