@@ -1,8 +1,8 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {% if question.type == 'single_choice' %}（单选）
-  {% elseif question.type == 'choice' %}（多选）
+  {% if question.type == 'single_choice' %}{{'（单选）'|trans}}
+  {% elseif question.type == 'choice' %}{{'（多选）'|trans}}
   {% endif %}
   {{ question.stem|bbCode2Html|raw }}
 {% endblock %}
@@ -17,7 +17,7 @@
   <div class="homework-question-result">
 
     {% if itemResult.status == 'right' %}
-     <span class="glyphicon glyphicon-ok question-text-success"></span> 你答对了!
+     <span class="glyphicon glyphicon-ok question-text-success"></span> {{'你答对了'|trans}}!
     {% elseif itemResult.status == 'wrong' %}
        <span class="glyphicon glyphicon-remove question-text-danger"></span> 你答错了,你选择了<strong class="question-text-danger">
        {% for key,choice in choiceIndex %}
@@ -35,7 +35,7 @@
         {% endfor %}
        </strong>
     {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove question-text-danger pull-left">你未答题</span>
+　　　  <span class="glyphicon glyphicon-remove question-text-danger pull-left">{{'你未答题'|trans}}</span>
     {% endif %}
 </div>
 

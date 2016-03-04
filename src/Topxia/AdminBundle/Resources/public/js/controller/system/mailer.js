@@ -4,10 +4,12 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-
+        if($("input[name='email-setting-status']").val()=="email"){
+            $('#mailer-form').show();
+        }
         var validator = new Validator({
-                element: '#mailer-form'
-            });
+            element: '#mailer-form'
+        });
 
         $('[name=enabled]').change(function(e) {
             var radio = e.target.value;
@@ -58,6 +60,10 @@ define(function(require, exports, module) {
         });
         
         $('input[name="enabled"]:checked').change();
+        $("#email").click(function(){
+            $('#email-status').hide();
+            $('#mailer-form').show();
+        });
     };
 
 });

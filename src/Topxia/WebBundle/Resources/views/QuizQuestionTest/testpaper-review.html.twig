@@ -6,9 +6,9 @@
 
 {% block testpaper_heading_status %}
   {% if paperResult.status == 'finished' %}
-    <div class="label label-success">批阅完成</div>
+    <div class="label label-success">{{'批阅完成'|trans}}</div>
   {% elseif paperResult.status == 'reviewing' %}
-    <div class="label label-info">批阅中</div>
+    <div class="label label-info">{{'批阅中'|trans}}</div>
   {% endif %}
 {% endblock %}
 
@@ -16,7 +16,7 @@
 
 {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-result-objective.html.twig' %}
 
-<div class="text-info mbl">请完成以下题目的批阅：</div>
+<div class="text-info mbl">{{'请完成以下题目的批阅：'|trans}}</div>
 
 {% endblock %}
 
@@ -38,7 +38,7 @@
                   {% endif %}
                 {% endfor %}
               {% endif %}
-              
+
             {% endfor %}
 
             <div class="clearfix mtm mbm"></div>
@@ -47,7 +47,7 @@
 
         </div>
         <div class="panel-footer">
-          <button class="btn btn-success btn-block" id="finishCheck">完成批阅</button>
+          <button class="btn btn-success btn-block" id="finishCheck">{{'完成批阅'|trans}}</button>
         </div>
     </div>
   </div>

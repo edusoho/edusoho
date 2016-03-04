@@ -2,11 +2,11 @@
 
 {% set modal_class = 'modal-sm' %}
 
-{% block title %}暂停{% endblock %}
+{% block title %}{{'暂停'|trans}}{% endblock %}
 {% block body %}
 
 <div class="well well-lg">
-  <div class="empty">考试已暂停，请尽快回来哦~
+  <div class="empty">{{'考试已暂停，请尽快回来哦~'|trans}}
   </div>
 </div>
 
@@ -14,6 +14,6 @@
 {% endblock %}
 
 {% block footer %}
-  <button type="button" class="btn btn-info" data-dismiss="modal">继续</button>
+  <button type="button" class="btn btn-info" data-dismiss="modal">{{'继续'|trans}}</button>
 
 {% endblock %}

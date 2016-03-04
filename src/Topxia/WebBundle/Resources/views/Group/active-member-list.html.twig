@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-  <div class="panel-heading"><h3 class="panel-title">新加组员</h3></div>
+  <div class="panel-heading"><h3 class="panel-title">{{'新加组员'|trans}}</h3></div>
   <div class="panel-body">
     {% if activeMembers %}
       <ul class="user-grids">
@@ -10,7 +10,7 @@
         {% endfor %}
       </ul>
     {% else %}
-      还没有小组成员！
+      {{'还没有小组成员！'|trans}}
     {% endif %}
     <br>
   </div>
