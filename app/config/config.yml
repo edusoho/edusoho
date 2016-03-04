@@ -34,7 +34,6 @@ twig:
         "%kernel.root_dir%/../" : root
     globals:
         disabled_features: %disabled_features%
-        powered_by_now: 2016
 
 # Assetic Configuration
 assetic:
