@@ -153,12 +153,30 @@
   }
 }
 
+// 更多按钮
+.section-more-btn {
+  text-align: center;
+  margin: 20px auto;
+  @media(max-width:@screen-xs-max) {
+    margin: 10px auto;
+    .btn {
+      padding: 6px 12px;
+    }
+  }
+}
+
 // 课程筛选
 .course-filter {
   position: relative;
   min-height: 48px;
   margin: 0 0 20px 0;
   padding-right: 150px;
+  @media(max-width:@screen-xs-max) {
+    min-height: 30px;
+    .btn {
+      padding: 3px 6px;
+    }
+  }
   .nav-pills> li {
     margin: 0 30px 10px 0;
   }
@@ -177,6 +195,9 @@
   position: relative;
   padding-bottom: 20px;
   background: #fff;
+  @media(max-width:@screen-xs-max) {
+    padding-bottom: 0;
+  }
 }
 
 // 直播
@@ -216,6 +237,7 @@
 .class-section {
   padding-bottom: 20px;
   background-color: #fff;
+
 }
 
 .recommend-class-list {
@@ -223,6 +245,9 @@
     position: relative;
     margin: 0 auto 30px;
     z-index: 1;
+    @media(max-width:@screen-xs-max) {
+      margin: 0 -5px 20px -5px;
+    }
     &:hover {
       .class-bg-layer {
         transform: translateY(-6px);
@@ -254,6 +279,9 @@
       .border-radius;
       .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
       .es-transition;
+      @media(max-width:@screen-xs-max) {
+        padding: 5px;
+      }
     }
     .class-img {
       display: block;
@@ -265,6 +293,9 @@
       margin: 15px 0 5px 0;
       font-size: 14px;
       .text-overflow;
+      @media(max-width:@screen-xs-max) {
+        margin-top: 10px;
+      }
     }
   }
 }
@@ -310,11 +341,12 @@
       list-style-type: none;
       margin-bottom: 10px;
       overflow: hidden;
+      @media(max-width: @screen-xs-max) {
+        float: left;
+        width: 50%;
+      }
       &.last {
         margin-bottom: 0;
-        @media(max-width: @screen-xs-max) {
-          margin-bottom: 20px;
-        }
       }
       img {
         width: 100%;
@@ -364,6 +396,9 @@
       .text-overflow;
       margin-bottom: 30px;
       padding-right: 80px;
+      @media(max-width: @screen-xs-max) {
+        margin-bottom: 20px;
+      }
       &.last {
         margin-bottom: 0;
       }
