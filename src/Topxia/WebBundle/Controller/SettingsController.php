@@ -723,7 +723,7 @@ class SettingsController extends BaseController
 
             if ($form->isValid()) {
                 $data = $form->getData();
-
+                var_dump($data);
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
@@ -747,7 +747,7 @@ class SettingsController extends BaseController
 
                 try {
                     $normalMail = array(
-                        'to'    => $user['email'],
+                        'to'    => $data['email'],
                         'title' => "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
                         'body'  => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
                             'user'  => $user,
@@ -755,8 +755,8 @@ class SettingsController extends BaseController
                         ))
                     );
                     $cloudMail = array(
-                        'to'        => $user['email'],
-                        'template'  => 'email_reset_password',
+                        'to'        => $data['email'],
+                        'template'  => 'email_reset_email',
                         'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
                         'nickname'  => $user['nickname']
                     );
