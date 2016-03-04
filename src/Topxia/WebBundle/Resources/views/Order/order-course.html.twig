@@ -8,7 +8,7 @@
     {% if priceType|default('RMB') == "RMB" %}
       <span class="pay-rmb">￥</span>
     {% endif %}
-    <span role="total-price" class="pay-rmb">{{totalPrice * course.price}}</span>
+    <span role="total-price" class="pay-rmb">{{totalPrice}}</span>
     {% if priceType|default('RMB') == "RMB" %}
     {% elseif priceType|default('RMB') == "Coin" %}
       {{setting("coin.coin_name")}}

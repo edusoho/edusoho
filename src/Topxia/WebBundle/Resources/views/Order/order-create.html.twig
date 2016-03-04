@@ -23,7 +23,7 @@
         <input type="hidden" name="targetType" value="{{targetType}}"/>
         <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
         <input type="hidden" name="targetId" value="{{targetId}}"/>
-        <input type="hidden" name="totalPrice" value="{{totalPrice * course.price}}"/>
+        <input type="hidden" name="totalPrice" value="{{totalPrice}}"/>
         <input type="hidden" name="shouldPayMoney" value=""/>
         <input type="hidden" name="sms_code" value=""/>
         <input type="hidden" name="mobile" data-role="mobile" value="{{ verifiedMobile }}"/>
@@ -46,7 +46,7 @@
         {% if targetType in ['course','vip','classroom'] %}
         <div class="order-detail-bg">
 
-          {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice * course.price,priceType:priceType|default('RMB') })) }}
+          {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
 
           {% if setting('coin.coin_enabled') %}
           	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
