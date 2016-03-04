@@ -14,7 +14,7 @@ define(function(require, exports, module) {
 
         var courseId = videoHtml.data("courseId");
         var lessonId = videoHtml.data("lessonId");
-        var watchLimit = videoHtml.data('watchLimit');
+        var timelimit = videoHtml.data('timelimit');
 
         var playerType = videoHtml.data('player');
         var fileType = videoHtml.data('fileType');
@@ -41,20 +41,6 @@ define(function(require, exports, module) {
             html += '</audio>';
         }
 
-        // if (balloonVideoPlayer && fileType == 'video' && !swfobject.hasFlashPlayerVersion('11')) {
-        //     html = '<div class="alert alert-warning alert-dismissible fade in" role="alert">';
-        //     html += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';
-        //     html += '<span aria-hidden="true">×</span>';
-        //     html += '</button>';
-        //     html += '您的浏览器未安装Flash播放器或版本太低，请先安装Flash播放器，';
-        //     html += '或前往<a href="/mobile" target="parent">下载App</a>。';
-        //     html += '</div>';
-        //     videoHtml.html(html);
-        //     videoHtml.show();
-
-        //     return;
-        // }
-
         videoHtml.html(html);
         videoHtml.show();
 
@@ -69,7 +55,8 @@ define(function(require, exports, module) {
                 fingerprintSrc: fingerprintSrc,
                 watermark: watermark,
                 starttime: starttime,
-                agentInWhiteList: agentInWhiteList
+                agentInWhiteList: agentInWhiteList,
+                timelimit:timelimit
             }
         );
 
@@ -84,22 +71,26 @@ define(function(require, exports, module) {
                 DurationStorage.set(userId, fileId, player.getCurrentTime());
             }
         });
-    
+
+        player.on("firstplay", function(){
+ 
+        });
+        
         player.on("ready", function(){
+            messenger.sendToParent("ready", {pause: true});
             var time = DurationStorage.get(userId, fileId);
             if(time>0){
                 player.setCurrentTime(DurationStorage.get(userId, fileId));
             }
             player.play();
         });
-
-        player.on("firstplay", function(){
- 
+        player.on("onMarkerReached",function(markerId,questionId){
+            // $('.vjs-break-overlay-text').html("");
+            messenger.sendToParent("onMarkerReached", {pause: true,markerId:markerId,questionId:questionId});
         });
-        
 
-        player.on("ready", function(){
-            messenger.sendToParent("ready", {pause: true});
+        player.on("timechange", function(){
+            messenger.sendToParent("timechange", {pause: true});
         });
 
         player.on("paused", function(){

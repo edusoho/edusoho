@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     require('jquery.sortable');
-    require('ckeditor');
+    require('es-ckeditor');
     exports.run = function() {
        
          var sortList = function($list) {

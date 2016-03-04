@@ -27,10 +27,18 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', $paymentSetting['disabled_message']);
         }
 
-        $fields = $request->query->all();
+        $fields                  = $request->query->all();
+        $orderInfo['sn']         = $fields['sn'];
+        $orderInfo['targetType'] = $fields['targetType'];
+        $processor               = OrderProcessorFactory::create($fields['targetType']);
+        $orderInfo['template']   = $processor->getOrderInfoTemplate();
+        $order                   = $processor->getOrderBySn($orderInfo['sn']);
+        $targetId                = isset($order['targetId']) ? $order['targetId'] : '';
+        $isTargetExist           = $processor->isTargetExist($targetId);
 
-        $order     = $this->getOrderService()->getOrderBySn($fields["sn"]);
-        $orderInfo = $this->getOrderInfo($order);
+        if (!$isTargetExist) {
+            return $this->createMessageResponse('error', '该订单已失效');
+        }
 
         if (empty($order)) {
             return $this->createMessageResponse('error', '订单不存在!');
@@ -48,7 +56,9 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
 
-        if ($this->isPluginInstalled('Coupon') && !empty($order['coupon'])) {
+        // $this->isPluginInstalled('Coupon') &&
+
+        if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
 
             if ($result['useable'] == 'no') {
@@ -91,8 +101,10 @@ class PayCenterController extends BaseController
     public function redirectOrderTarget($order)
     {
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        $router    = $processor->getRouter();
-        return $this->redirect($this->generateUrl($router, array('id' => $order['targetId'])));
+        $goto      = $processor->callbackUrl($order, $this->container);
+        return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
+            'goto' => $goto
+        ));
     }
 
     public function payAction(Request $request)
@@ -112,7 +124,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '支付方式未开启，请先开启');
         }
 
-        $order = $this->getOrderService()->updateOrder($fields["orderId"], array('payment' => $fields['payment']));
+        $order = OrderProcessorFactory::create($fields['targetType'])->updateOrder($fields["orderId"], array('payment' => $fields['payment']));
 
         if ($user["id"] != $order["userId"]) {
             return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
@@ -182,44 +194,35 @@ class PayCenterController extends BaseController
         ));
     }
 
-    public function closeAuthAction(Request $request)
+    public function unbindAuthAction(Request $request)
     {
-        $field = $request->request->all();
-        $user  = $this->getCurrentUser();
+        $this->getLogService()->info('order', 'unbind-back', '银行卡解绑');
+        $fields   = $request->request->all();
+        $response = $this->verification($fields);
 
-        if (!$user->isLogin()) {
-            return $this->createMessageResponse('error', '用户未登录，支付失败。');
+        if ($response) {
+            return $this->createJsonResponse($response);
         }
 
-        if (!array_key_exists('orderId', $field)) {
-            return $this->createMessageResponse('error', '缺少订单，支付失败');
+        $authBank              = $this->getUserService()->getUserPayAgreement($fields['payAgreementId']);
+        $requestParams         = array('authBank' => $authBank, 'payment' => 'quickpay', 'mobile' => $fields['mobile']);
+        $unbindAuthBankRequest = $this->createUnbindAuthBankRequest($requestParams);
+        $formRequest           = $unbindAuthBankRequest->form();
+        return $this->createJsonResponse($formRequest);
+    }
+
+    public function showMobileAction(Request $request)
+    {
+        $fields   = $request->request->all();
+        $response = $this->verification($fields);
+
+        if ($response) {
+            return $this->createJsonResponse($response);
         }
 
-        if (!isset($field['payment'])) {
-            return $this->createMessageResponse('error', '支付方式未开启，请先开启');
-        }
-
-        $order = $this->getOrderService()->getOrder($field["orderId"]);
-
-        if ($user["id"] != $order["userId"]) {
-            return $this->createMessageResponse('error', '不是您创建的订单，支付失败');
-        }
-
-        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
-        $authBanks = ArrayToolkit::column($authBanks, 'id');
-
-        if (!in_array($field['payAgreementId'], $authBanks)) {
-            return $this->createMessageResponse('error', '不是您绑定的银行卡，取消绑定失败');
-        }
-
-        try {
-            $this->getUserService()->deleteUserPayAgreements($field['payAgreementId']);
-        } catch (Exception $e) {
-            throw $this->createAccessDeniedException('抱歉，解绑银行卡失败！');
-        }
-
-        $message = array("success" => true, 'message' => '解绑银行卡成功');
-        return $this->createJsonResponse($message);
+        return $this->render('TopxiaWebBundle:PayCenter:show-mobile.html.twig', array(
+            'payAgreementId' => $fields['payAgreementId']
+        ));
     }
 
     public function payReturnAction(Request $request, $name, $successCallback = null)
@@ -232,17 +235,21 @@ class PayCenterController extends BaseController
             return $this->forward("TopxiaWebBundle:PayCenter:resultNotice");
         }
 
-        list($success, $order) = $this->getPayCenterService()->pay($payData);
+        if (stripos($payData['sn'], 'o') !== false) {
+            $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
+        }
+
+        list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
         if (!$success) {
             return $this->redirect("pay_error");
         }
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        $router    = $processor->getRouter();
 
-        $goto = !empty($router) ? $this->generateUrl($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
-
+        $goto = $processor->callbackUrl($order, $this->container);
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $goto
         ));
@@ -262,7 +269,7 @@ class PayCenterController extends BaseController
         }
 
         if ($name == 'wxpay') {
-            $returnXml   = $GLOBALS['HTTP_RAW_POST_DATA'];
+            $returnXml   = $request->getContent();
             $returnArray = $this->fromXml($returnXml);
         } elseif ($name == 'heepay' || $name == 'quickpay') {
             $returnArray = $request->query->all();
@@ -278,9 +285,16 @@ class PayCenterController extends BaseController
             return new Response('success');
         }
 
+        if (stripos($payData['sn'], 'o') !== false) {
+            $order = $this->getCashOrdersService()->getOrderBySn($payData['sn']);
+        } else {
+            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
+        }
+
+        $processor = OrderProcessorFactory::create($order['targetType']);
+
         if ($payData['status'] == "success") {
-            list($success, $order) = $this->getPayCenterService()->pay($payData);
-            $processor             = OrderProcessorFactory::create($order["targetType"]);
+            list($success, $order) = $processor->pay($payData);
 
             if ($success) {
                 return new Response('success');
@@ -288,14 +302,14 @@ class PayCenterController extends BaseController
         }
 
         if ($payData['status'] == "closed") {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->cancelOrder($order["id"], '{$name}交易订单已关闭', $payData);
+            $order = $processor->getOrderBySn($payData['sn']);
+            $processor->cancelOrder($order["id"], '{$name}交易订单已关闭', $payData);
             return new Response('success');
         }
 
         if ($payData['status'] == "created") {
-            $order = $this->getOrderService()->getOrderBySn($payData['sn']);
-            $this->getOrderService()->createPayRecord($order["id"], $payData);
+            $order = $processor->getOrderBySn($payData['sn']);
+            $processor->createPayRecord($order["id"], $payData);
             return new Response('success');
         }
 
@@ -308,8 +322,7 @@ class PayCenterController extends BaseController
         $order   = $this->getOrderService()->getOrder($orderId);
 
         $processor = OrderProcessorFactory::create($order["targetType"]);
-        $router    = $processor->getRouter();
-        $router    = $this->generateUrl($router, array('id' => $order['targetId']));
+        $router    = $processor->callbackUrl($order, $this->container);
 
         return $this->render('TopxiaWebBundle:PayCenter:pay-return.html.twig', array(
             'goto' => $router
@@ -360,11 +373,7 @@ class PayCenterController extends BaseController
                 $payData['paidTime'] = time();
                 $payData['sn']       = $returnArray['out_trade_no'];
 
-                if (isset($order['targetType'])) {
-                    list($success, $order) = $this->getPayCenterService()->pay($payData);
-                } else {
-                    list($success, $order) = $this->getCashOrdersService()->payOrder($payData);
-                }
+                list($success, $order) = OrderProcessorFactory::create($order['targetType'])->pay($payData);
 
                 if ($success) {
                     return $this->createJsonResponse(true);
@@ -417,46 +426,47 @@ class PayCenterController extends BaseController
         $options       = $this->getPaymentOptions($order['payment']);
         $request       = Payment::createRequest($order['payment'], $options);
         $processor     = OrderProcessorFactory::create($order["targetType"]);
+        $targetId      = isset($order["targetId"]) ? $order['targetId'] : $order['id'];
         $requestParams = array_merge($requestParams, array(
             'orderSn'     => $order['sn'],
             'userId'      => $order['userId'],
             'title'       => $order['title'],
-            'targetTitle' => $processor->getTitle($order['targetId']),
+            'targetTitle' => $processor->getTitle($targetId),
             'summary'     => '',
-            'note'        => $processor->getNote($order['targetId']),
-            'amount'      => $order['amount']
+            'note'        => $processor->getNote($targetId),
+            'amount'      => $order['amount'],
+            'targetType'  => $order['targetType']
         ));
         return $request->setParams($requestParams);
     }
 
-    protected function createCloseAuthBankRequest($order, $params)
+    protected function createUnbindAuthBankRequest($params)
     {
         $options = $this->getPaymentOptions($params['payment']);
-        $request = Payment::createCloseAuthRequest($params['payment'], $options);
-        return $request->setParams(array('order' => $order, 'authBank' => $params['authBank'], 'userProfile' => $params['userProfile']));
-    }
-
-    protected function getOrderInfo($order)
-    {
-        $fields = array('targetType' => $order['targetType'], 'targetId' => $order['targetId']);
-
-        if ($order['targetType'] == 'vip') {
-            $defaultBuyMonth           = $this->setting('vip.default_buy_months');
-            $fields['unit']            = $order['data']['unitType'];
-            $fields['duration']        = $order['data']['duration'];
-            $fields['defaultBuyMonth'] = $defaultBuyMonth;
-            $fields['buyType']         = $order['data']['buyType'];
-        }
-
-        $processor = OrderProcessorFactory::create($order['targetType']);
-        $orderInfo = $processor->getOrderInfo($order['targetId'], $fields);
-
-        return $orderInfo;
+        $request = Payment::createUnbindAuthRequest($params['payment'], $options);
+        return $request->setParams(array('authBank' => $params['authBank'], 'mobile' => $params['mobile']));
     }
 
     public function generateOrderToken($order, $params)
     {
-        return $this->getOrderService()->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
+        $processor = OrderProcessorFactory::create($order["targetType"]);
+        return $processor->updateOrder($order['id'], array('token' => $params['agent_bill_id']));
+    }
+
+    public function verification($fields)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            return array('success' => false, 'message' => '用户未登录');
+        }
+
+        $authBanks = $this->getUserService()->findUserPayAgreementsByUserId($user["id"]);
+        $authBanks = ArrayToolkit::column($authBanks, 'id');
+
+        if (!in_array($fields['payAgreementId'], $authBanks)) {
+            return array('success' => false, 'message' => '不是您绑定的银行卡');
+        }
     }
 
     protected function getPaymentOptions($payment)
@@ -539,7 +549,7 @@ class PayCenterController extends BaseController
 
     protected function getCouponService()
     {
-        return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 
     protected function getAuthService()

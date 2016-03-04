@@ -8,7 +8,7 @@ define(function(require, exports, module) {
     var FlashChooser = require('../widget/media-chooser/flash-chooser');
     var Notify = require('common/bootstrap-notify');
     require('jquery.sortable');
-    require('ckeditor');
+    require('es-ckeditor');
 
     function getEditorContent(editor){
         editor.updateElement();

@@ -1,4 +1,4 @@
-{% if course.buyable|default(true) == false %}
+{% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
   该课程为限制课程，请联系客服
 {% else %}
   <a class="btn btn-primary btn-lg" 

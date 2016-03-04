@@ -127,13 +127,7 @@ define(function(require, exports, module) {
 	    });
 	    
 	} else {
-		$("body").on("click","li.nav-hover",function(){
-			$(this).toggleClass("open");
-		})
-
-		if ($(".nav-mobile li.nav-hover").is(":has(ul)")) {
-			$(".nav-mobile li.nav-hover>a").attr("href","javascript:;");
-		}
+        $("li.nav-hover >a").attr("data-toggle","dropdown");
 	}
 	
 
@@ -146,5 +140,10 @@ define(function(require, exports, module) {
     }).blur(function () {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
+
+    if($(".nav.nav-tabs").length > 0) {
+        require('jquery.lavalamp');
+        $(".nav.nav-tabs").lavaLamp();
+    }
 
 });

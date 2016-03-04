@@ -4,7 +4,7 @@ namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
 
-class ArticleCategoryDataTag extends BaseDataTag implements DataTag  
+class ArticleCategoryDataTag extends BaseDataTag implements DataTag
 {
     /**
      * 获取资讯栏目
@@ -15,7 +15,11 @@ class ArticleCategoryDataTag extends BaseDataTag implements DataTag
      * @return array 栏目
      */
     public function getData(array $arguments)
-    {   
+    {
+        if (isset($arguments['code'])) {
+            return $this->getCategoryService()->getCategoryByCode($arguments['code']);
+        }
+
         return $this->getCategoryService()->getCategoryTree();
     }
 
@@ -23,5 +27,4 @@ class ArticleCategoryDataTag extends BaseDataTag implements DataTag
     {
         return $this->getServiceKernel()->createService('Article.CategoryService');
     }
-
 }

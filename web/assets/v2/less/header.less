@@ -1,7 +1,12 @@
+
 .navbar {
   margin-bottom: 0;
   z-index: 99;
   .border-radius(0);
+}
+
+.navbar-collapse {
+  border-top: none;
 }
 
 .es-header {
@@ -160,11 +165,9 @@
     line-height: 28px;
     padding: 0 24px 0 12px;
     .es-transition;
+    border-color: #fff;
     &.active {
       width: 150px;
-    }
-    &:focus {
-      border-color: #fff;
     }
   }
   .button {

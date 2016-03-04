@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="top-header ui-vippay ui-course-pay">
+<div class="top-header ui-vippay ui-course-pay" ng-init="loadPayOrder()">
 	<div class="ui-form">
 	        <div class="ui-form-item ui-list-divider ui-border-b">
 	             选择开通时长
@@ -35,12 +35,29 @@
 				   </ul>
 	        </div>
 
+	        <ul class="ui-list ui-list-link ui-list-text ui-border-b">
+				<li class="ui-border-t ui-list-divider">
+					优惠信息
+				</li>
+			    <li class="ui-border-t">
+					<div class="ui-list-info">
+		            			<h4>
+		            				使用{{ coin.name }}
+		            				<span class="subtitle">汇率{{ coin.cashRate }}</span>
+		            			</h4>
+		        			</div>
+		        			<label class="ui-switch" ng-if="!checkIsCoinMode()">
+			            		<input type="checkbox" ng-model="payMode" ng-change="changePayMode()" ng-checked="payMode == 'coin' " ng-if="priceType != 'Coin'" >
+			        		</label>
+				</li>
+			</ul>
+
 	        <div class="ui-btn-wrap">
 			<div class="pay-body">
 		  		需支付:<span class="pay-price">{{ totalPayPrice | formatPrice}}</span>
 		  	</div>
 		    
-			<button class="ui-btn-lg btn-yellow" ng-click="payVip()">
+			<button class="ui-btn-lg btn-yellow" ng-click="pay()">
 	                去支付
 	           </button>
 		   </div>

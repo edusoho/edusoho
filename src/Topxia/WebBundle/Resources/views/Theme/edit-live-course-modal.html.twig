@@ -1,0 +1,52 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}编辑{% endblock %}
+{% block body %}
+    <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
+       <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="name">自定义名称</label>
+          </div>
+          <div class="col-md-7 controls">
+            <input type="text"  class="form-control" name="title">
+          </div>
+       </div>
+
+       <div class="row form-group">
+          <div class="col-md-3 control-label">
+            <label for="subname">副标题名称</label>
+          </div>
+          <div class="col-md-7 controls">
+            <input type="text"  class="form-control" name="subTitle">
+          </div>
+       </div>
+
+
+      <div class="form-group"> 
+        <label class="col-sm-3 control-label">背景颜色设置</label> 
+        <div class="col-sm-9 check-box">
+        <input type="hidden"  name="background" value={{config.background|default("")}}>
+          <label class="radio-inline"> 
+            <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}> 
+            灰色 
+          </label> 
+          <label class="radio-inline" > 
+            <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} > 
+            白色 
+          </label>
+          <label class="radio-inline" > 
+            <input type="radio"  value=""{% if config.background|default("") == ""%} checked="checked"{% endif %} > 
+            默认 
+          </label>  
+        </div> 
+      </div>
+    </form>
+
+{% endblock %}
+{% block footer %}
+  <button data-submiting-text="正在保存" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">确定</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('topxiawebbundle/controller/theme/left-edit-modal')</script>
+{% endblock %}

@@ -87,7 +87,7 @@ directive('uiTab', function ($parse) {
           var scroller = element[0].querySelector('.ui-tab-content');
           var nav = element[0].querySelector('.ui-tab-nav');
 
-          function itmOnLoadListener(currentItem) {
+          function itemOnLoadListener(currentItem) {
             var isFirstRun = currentItem.attr("isFirstRun");
             var itemOnLoad = currentItem.attr("ng-onload");
             if ("true" != isFirstRun) {
@@ -111,7 +111,7 @@ directive('uiTab', function ($parse) {
 
             angular.element(scroller.children[childrenIndex]).addClass('current');
             angular.element(nav.children[childrenIndex]).addClass('current');
-            itmOnLoadListener(angular.element(scroller.children[childrenIndex]));
+            itemOnLoadListener(angular.element(scroller.children[childrenIndex]));
           }
 
           this.currentPage = 0;
@@ -138,6 +138,10 @@ directive('uiTab', function ($parse) {
 
                 if (tempCurrentPage == self.currentPage && "empty"  == attrs.select && tagetHasCurrent) {
                   changeTabContentHeight(0);
+                  scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : false
+                  });
                   return;
                 }
 
@@ -145,8 +149,12 @@ directive('uiTab', function ($parse) {
                 currentItem.addClass('current');
                 currentScrooler.addClass("current");
 
-                itmOnLoadListener(currentScrooler);
+                itemOnLoadListener(currentScrooler);
                 changeTabContentHeight("100%");
+                scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : true
+                });
             });
           });
 
@@ -155,6 +163,10 @@ directive('uiTab', function ($parse) {
                 angular.element(scroller.children[self.currentPage]).removeClass('current');
                 angular.element(nav.children[self.currentPage]).removeClass('current');
                 changeTabContentHeight(0);
+                scope.$emit("tabClick", {
+                    index : self.currentPage,
+                    isShow : false
+                });
               });
           }
     }
@@ -181,15 +193,19 @@ directive('imgError', function($timeout) {
                       errorSrc = app.viewFloder  + "img/default_class.jpg";
                       break;
                   }
-                  
+
                   element.attr('src', errorSrc);
                   element.on("error", function(e) {
                     element.attr("src", errorSrc);
                     element.on("error", null);
                   });
 
+                  if ("classroom" == attributes.imgError
+                     && attributes.imgSrc.indexOf("course-large.png") != -1) {
+                    return;
+                  }
                   $timeout(function() {
-                    element.attr('src', attributes.ngSrc);
+                    element.attr('src', attributes.imgSrc);
                   }, 100);
                 }
             };
@@ -345,16 +361,23 @@ directive('uiScroll', function($parse) {
     }
   }
 }).
-directive('uiSliderBox', function() {
+directive('uiSliderBox', function($parse) {
   return {
     restrict: 'A',
     link : function(scope, element, attrs) {
           scope.$watch(attrs.uiSliderBox, function(newValue) {
             if (newValue && newValue.length > 0) {
                 initSlider();
+                if (attrs.onLoad) {
+                  $parse(attrs.onLoad)(scope, element);
+                }
             }
           });
 
+          if ("true" != attrs.auto && element[0].clientWidth) {
+            element.css('height', (element[0].clientWidth / 1.9) + "px");
+          }
+          
           function initSlider () {
               var slider = new fz.Scroll('.' + attrs.slider, {
                   role: 'slider',
@@ -364,7 +387,10 @@ directive('uiSliderBox', function() {
               });
 
               slider.on('beforeScrollStart', function(fromIndex, toIndex) {
-
+                if (attrs.scrollChange) {
+                  scope.scrollIndex = toIndex;
+                  $parse(attrs.scrollChange)(scope);
+                }
               });
 
               slider.on('scrollEnd', function() {
@@ -443,23 +469,30 @@ directive('modal', function () {
     },
     link : function(scope, element, attrs) {
       element.addClass("ui-modal");
+      element.addClass("item");
       element.on('click', function(event) {
         scope.$emit("closeTab", {});
+        $(".ui-scroller").css("overflow","scroll");
       });
 
-      element.on('touchmove', function(event) {
-        event.preventDefault();
+      scope.$on("tabClick", function(event, data) {
+        if (!data.isShow) {
+          $(".ui-scroller").css("overflow","scroll");
+          return;
+        }
+
+        $(".ui-scroller").css("overflow","hidden");
       });
+
     }
   }
 }).
-directive('listEmptyView', function () {
+directive('listEmptyView', function (AppUtil) {
   return {
     restrict: 'EA',
     link : function(scope, element, attrs) {
-      var html = '<div class="list-empty">' + 
-      '<a> <i class="icon iconfont icon-ebook"></i> <span>' + attrs.title + '</span> </a>' +
-      '</div>';
+      var html = '<div class="list-empty"><a> <i class="icon iconfont icon-%1"></i> <span>%2</span> </a></div>';
+      html = AppUtil.formatString(html, attrs.icon || "ebook", attrs.title);
       scope.$watch(attrs.data, function(newValue) {
         if (newValue && newValue.length == 0) {
           element.html(html);

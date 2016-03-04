@@ -8,7 +8,9 @@ interface CashOrdersDao
 
     public function addOrder($fields);
 
-    public function getOrderBySn($sn,$lock=false);
+    public function getOrderBySn($sn, $lock = false);
+
+    public function getOrderByToken($token);
 
     public function updateOrder($id, $fields);
 

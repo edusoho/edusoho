@@ -35,14 +35,14 @@
         {% if not qq.url|default(false) %}
         <p>
           <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
-            <img border="0" src="http://wpa.qq.com/pa?p=2:{{ qq.number }}:52" alt="" title="点击这里给我发消息"/>
+            <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
             {{ qq.name }}
           </a>
         </p>
         {% else %}
           <p>
             <a href="{{ qq.url|raw }}" target="_blank">
-            <img border="0" src="http://wpa.qq.com/pa?p=2:{{ qq.number }}:52" alt="" title="点击这里给我发消息"/>
+            <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
               {{ qq.name }}
             </a>
           </p>

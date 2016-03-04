@@ -1,8 +1,7 @@
 <?php
 namespace Topxia\Service\Common;
 
-use PDO,
-    Topxia\Common\DaoException;
+use Topxia\Common\DaoException;
 
 abstract class BaseDao
 {
@@ -16,13 +15,17 @@ abstract class BaseDao
 
     protected $dataCache = array();
 
-    protected function wave ($id, $fields) 
+    protected $redis;
+
+    protected function wave($id, $fields)
     {
-        $sql = "UPDATE {$this->getTable()} SET ";
+        $sql        = "UPDATE {$this->getTable()} SET ";
         $fieldStmts = array();
+
         foreach (array_keys($fields) as $field) {
             $fieldStmts[] = "{$field} = {$field} + ? ";
         }
+
         $sql .= join(',', $fieldStmts);
         $sql .= "WHERE id = ?";
 
@@ -32,14 +35,14 @@ abstract class BaseDao
 
     public function getTable()
     {
-        if($this->table){
+        if ($this->table) {
             return $this->table;
-        }else{
+        } else {
             return self::TABLENAME;
         }
     }
 
-    public function getConnection ()
+    public function getConnection()
     {
         return $this->connection;
     }
@@ -49,28 +52,87 @@ abstract class BaseDao
         $this->connection = $connection;
     }
 
+    public function getRedis()
+    {
+        return $this->redis;
+    }
+
+    public function setRedis($redis)
+    {
+        $this->redis = $redis;
+    }
+
     protected function fetchCached()
     {
-        $args = func_get_args();
+        $args     = func_get_args();
         $callback = array_pop($args);
 
-        $key = implode(':', $args);
+        $key = "{$this->table}:v{$this->getTableVersion()}:".array_shift($args);
+
         if (isset($this->dataCached[$key])) {
             return $this->dataCached[$key];
         }
 
-        array_shift($args);
+        $redis = $this->getRedis();
+
+        if ($redis) {
+            $data = $redis->get($key);
+
+            if ($data) {
+                $this->dataCached[$key] = $data;
+                return $data;
+            }
+        }
+
         $this->dataCached[$key] = call_user_func_array($callback, $args);
 
+        if ($redis) {
+            $redis->setex($key, 2 * 60 * 60, $this->dataCached[$key]);
+        }
+
         return $this->dataCached[$key];
+    }
+
+    protected function getTableVersion()
+    {
+        $redis = $this->getRedis();
+
+        if (!$redis) {
+            return 0;
+        }
+
+        $version = 0;
+
+        if (isset($this->dataCached['version'])) {
+            $version = $this->dataCached['version'];
+        }
+
+        if ($version == 0) {
+            $version = $redis->get("{$this->table}:version");
+
+            if (!$version) {
+                $version = 1;
+                $redis->incrBy("{$this->table}:version", $version);
+            }
+
+            $this->dataCached["version"] = $version;
+        }
+
+        return $version;
     }
 
     protected function clearCached()
     {
         $this->dataCached = array();
+
+        $redis = $this->getRedis();
+
+        if ($redis) {
+            $redis->incr("{$this->table}:version");
+        }
     }
 
-    protected function createDaoException($message = null, $code = 0) 
+    protected function createDaoException($message = null, $code = 0)
     {
         return new DaoException($message, $code);
     }
@@ -85,13 +147,14 @@ abstract class BaseDao
         if (!isset(self::$cachedSerializer['field_serializer'])) {
             self::$cachedSerializer['field_serializer'] = new FieldSerializer();
         }
+
         return self::$cachedSerializer['field_serializer'];
     }
 
     protected function filterStartLimit(&$start, &$limit)
     {
-       $start = (int) $start;
-       $limit = (int) $limit; 
+        $start = (int) $start;
+        $limit = (int) $limit;
     }
 
     protected function addOrderBy($builder, $orderBy)
@@ -108,31 +171,32 @@ abstract class BaseDao
     protected function validateOrderBy(array $orderBy, $allowedOrderByFields)
     {
         $keys = array_keys($orderBy);
+
         foreach ($orderBy as $field => $order) {
             if (!in_array($field, $allowedOrderByFields)) {
                 throw new \RuntimeException("不允许对{$field}字段进行排序", 1);
             }
-            
-            if (!in_array($order, array('ASC','DESC'))){
+
+            if (!in_array($order, array('ASC', 'DESC'))) {
                 throw new \RuntimeException("orderBy排序方式错误", 1);
             }
         }
     }
 
-    protected function checkOrderBy (array $orderBy, array $allowedOrderByFields)
+    protected function checkOrderBy(array $orderBy, array $allowedOrderByFields)
     {
         if (empty($orderBy[0]) || empty($orderBy[1])) {
             throw new \RuntimeException('orderBy参数不正确');
         }
-        
-        if (!in_array($orderBy[0], $allowedOrderByFields)){
+
+        if (!in_array($orderBy[0], $allowedOrderByFields)) {
             throw new \RuntimeException("不允许对{$orderBy[0]}字段进行排序", 1);
         }
-        if (!in_array(strtoupper($orderBy[1]), array('ASC','DESC'))){
+
+        if (!in_array(strtoupper($orderBy[1]), array('ASC', 'DESC'))) {
             throw new \RuntimeException("orderBy排序方式错误", 1);
         }
 
         return $orderBy;
     }
-
 }

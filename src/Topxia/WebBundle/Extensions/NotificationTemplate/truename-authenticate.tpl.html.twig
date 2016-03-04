@@ -1,0 +1,19 @@
+ <li class="media">
+  <div class="pull-left">
+    <span class="glyphicon glyphicon-volume-down media-object"></span>
+  </div>
+  <div class="media-body">
+    <div class="notification-body">
+      {% set data = notification.content %}
+      	{% if data.type == 'through'%}
+      	 	您的个人实名认证，审核已经通过！
+      	{% elseif data.type == 'reject'%}
+     		  您的个人实名认证，审核未通过！驳回原因：
+      {% endif %}
+      {{data.note}}
+    </div>
+    <div class="notification-footer">
+     {{ notification.createdTime|date_format }}  
+    </div>
+  </div>
+</li>

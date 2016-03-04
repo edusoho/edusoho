@@ -76,7 +76,6 @@ class CourseController extends CourseBaseController
         $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
         unset($conditions['orderBy']);
 
-        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
 
         $conditions['parentId'] = 0;
         $conditions['status']   = 'published';
@@ -85,13 +84,58 @@ class CourseController extends CourseBaseController
             $this->getCourseService()->searchCourseCount($conditions),
             20
         );
+        if ($orderBy != 'recommendedSeq') {
+            $courses = $this->getCourseService()->searchCourses(
+                $conditions,
+                $orderBy,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+        if ($orderBy == 'recommendedSeq') {
 
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions,
-            $orderBy,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $conditions['recommended'] = 1;
+            $recommendCount = $this->getCourseService()->searchCourseCount($conditions);
+            $currentPage = $request->query->get('page') ? $request->query->get('page') : 1 ;
+            $recommendPage = intval($recommendCount/20);
+            $recommendLeft = $recommendCount%20;
+
+            if($currentPage<=$recommendPage) {
+                $courses = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    $orderBy,
+                    ($currentPage-1)*20,
+                    20
+                );
+            }
+            elseif(($recommendPage+1) == $currentPage)  {
+
+                $courses = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    $orderBy,
+                    ($currentPage-1)*20,
+                    20
+                );
+                $conditions['recommended'] = 0;
+                $coursesTemp               = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    'createdTime',
+                    0,
+                    20-$recommendLeft
+                );
+                $courses = array_merge($courses, $coursesTemp);
+            }
+            else {
+                $conditions['recommended'] = 0;
+                $courses               = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    'createdTime',
+                    (20-$recommendLeft)+($currentPage-$recommendPage-2)*20,
+                    20
+                );
+            }
+        }
+
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         if (empty($group)) {
@@ -240,6 +284,24 @@ class CourseController extends CourseBaseController
         ));
     }
 
+    public function LessonListAction(Request $request, $id)
+    {
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+            if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Course:lesson-list.html.twig', array(
+            'course' => $course,
+            'member' => $member
+        ));
+    }
+
     public function membersAction(Request $request, $id)
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
@@ -306,7 +368,6 @@ class CourseController extends CourseBaseController
 
         $courseAbout = preg_replace("/ /", "", $courseAbout);
         $courseAbout = substr($courseAbout, 0, 100);
-
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course'      => $course,
             'member'      => $member,
@@ -783,43 +844,6 @@ class CourseController extends CourseBaseController
         return $unEnabledCourseIds;
     }
 
-    public function searchAction(Request $request)
-    {
-        $key         = $request->request->get("key");
-        $classroomId = 0;
-
-        $conditions           = array("title" => $key);
-        $conditions['status'] = 'published';
-
-        if ($request->query->get('classroomId')) {
-            $classroomId = $request->query->get('classroomId');
-        }
-
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions, 'latest',
-            0,
-            5
-        );
-
-        $courseIds          = ArrayToolkit::column($courses, 'id');
-        $unEnabledCourseIds = $this->getClassroomCourseIds($request, $courseIds);
-
-        $userIds = array();
-
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
-
-        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
-            'users'              => $users,
-            'courses'            => $courses,
-            'unEnabledCourseIds' => $unEnabledCourseIds
-        ));
-    }
-
     public function relatedCoursesBlockAction($course)
     {
         $courses = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus($course['tags'], 'published', array('rating desc,recommendedTime desc ,createdTime desc', ''), 0, 4);
@@ -872,6 +896,23 @@ class CourseController extends CourseBaseController
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
         );
         return $this->createJsonResponse($response);
+    }
+
+    public function orderInfoAction(Request $request, $sn)
+    {
+        $order = $this->getOrderService()->getOrderBySn($sn);
+
+        if (empty($order)) {
+            throw $this->createNotFoundException('订单不存在!');
+        }
+
+        $course = $this->getCourseService()->getCourse($order['targetId']);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException("课程不存在，或已删除。");
+        }
+
+        return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
     protected function getTokenService()
@@ -932,5 +973,10 @@ class CourseController extends CourseBaseController
     public function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 }

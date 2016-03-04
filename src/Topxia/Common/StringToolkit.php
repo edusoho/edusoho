@@ -64,6 +64,17 @@ class StringToolkit
         return $text;
     }
 
+    public static function createRandomString($length)
+    {
+        $start = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $code = null;
+        for ($i = 0; $i < $length; $i++) {
+        $rand = rand(0,61);
+        $code = $code.$start[$rand];
+        }
+        return $code;
+    }
+
     public static function jsonPettry($json)
     {
         $result = '';

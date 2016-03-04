@@ -3,6 +3,7 @@
 {% block title %}注册 - {{ parent() }}{% endblock %}
 {% set script_controller = 'auth/register' %}
 
+{% set parameter = get_parameters_from_url(app.request.uri) %}
 {% block content %}
 
 <div class="es-section login-section">
@@ -14,12 +15,16 @@
     {% if isRegisterEnabled %}
       <form id="register-form" method="post" action="">
         {{ web_macro.flash_messages() }}
+
+        {% if inviteCode != null  %}
+          <div class="alert alert-info alert-sm">您正在通过<span class="color-gray mhs">{{ inviteUser['nickname'] }}</span>的邀请注册。</div>
+        {% endif %}
       
         {% if setting('auth.register_mode') == 'email' %}
           <div class="form-group mbl">
             <label class="control-label required" for="register_email">邮箱地址</label>
             <div class="controls">
-              <input type="text" id="register_email" name="email" required="required" class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="填写你常用的邮箱作为登录帐号">
+              <input type="email" id="register_email" name="email" required="required" class="form-control input-lg" data-url="{{path('register_email_check')}}" placeholder="填写你常用的邮箱作为登录帐号">
               <p class="help-block"></p>
             </div>
           </div>
@@ -27,7 +32,7 @@
           <div class="form-group mbl">
             <label class="control-label required" for="register_mobile">手机号码</label>
             <div class="controls">
-              <input type="text" id="register_mobile" name="verifiedMobile" required="required" class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="填写你常用的手机号码作为登录帐号">
+              <input type="number" id="register_mobile" name="verifiedMobile" required="required" class="form-control input-lg" data-url="{{path('register_mobile_check')}}" placeholder="填写你常用的手机号码作为登录帐号">
               <p class="help-block"></p>
             </div>
           </div>
@@ -55,7 +60,6 @@
             <p class="help-block"></p>
           </div>
         </div>
-
         {% if (setting('auth.captcha_enabled')|default(0)) == 1 and setting('auth.register_mode') != 'mobile' %}
           <div class="form-group mbl js-captcha">
             <label class="control-label required" for="captcha_code">验证码</label>
@@ -70,13 +74,12 @@
             </div>
           </div>    
         {% endif %}
-
         {% if setting('auth.register_mode') == 'email_or_mobile' or setting('auth.register_mode') == 'mobile' %}
           <div class="form-group mbl {% if setting('auth.register_mode') != 'mobile' %}hidden{% endif %} email_mobile_msg">
             <label class="control-label required" for="sms_code">短信验证码</label>
             <div class="controls row" >
               <div class = "col-xs-7" >
-                <input type="text" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
+                <input type="number" class="form-control input-lg" id="sms_code" name="sms_code" placeholder="填写你的短信验证码" required="required" data-url="{{path('edu_cloud_sms_check',{type:'sms_registration'})}}">
                 <p class="help-block"> </p> 
               </div>
               <div class="col-xs-5">
@@ -88,6 +91,14 @@
             </div>
           </div>
         {% endif %}
+        {% if (setting('invite.invite_code_setting')|default(0) == 1) and  inviteCode == null  %}
+        <div class="form-group mbl">
+          <label class="control-label required" for="invite_code">邀请码<span class="text-success">（选填）</span></label>
+          <div class="controls">
+            <input type="text" name="invite_code" required="required" class="form-control input-lg invitecode" data-url="{{path('invitecode_check')}}" placeholder="如果您有邀请码，请填写您的邀请码">
+          </div>
+        </div>
+        {% endif %}
 
         {% if setting('auth.user_terms') == 'opened' %}
           <div class="form-group mbl">
@@ -98,7 +109,7 @@
             </div>
           </div>
         {% endif %}
-
+        
         <div class="form-group mbl">
           <div class="controls">
             <button type="submit" id="register-btn" data-submiting-text="正在提交" class="btn btn-primary btn-lg btn-block">注册</button>
@@ -107,6 +118,9 @@
 
         <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        {% if app.request.get('inviteCode', '') %} 
+        <input type="hidden" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
+        {% endif %}
 
       </form>
 

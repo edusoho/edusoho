@@ -1,7 +1,7 @@
 app.controller('MyInfoController', ['$scope', 'UserService', 'cordovaUtil', 'platformUtil', '$stateParams', '$q', MyInfoController]);
 app.controller('TeacherListController', ['$scope', 'UserService', 'ClassRoomService', '$stateParams', TeacherListController]);
-app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', UserInfoController]);
-app.controller('StudentListController', ['$scope', 'ClassRoomService', '$stateParams', StudentListController]);
+app.controller('UserInfoController', ['$scope', 'UserService', '$stateParams', 'AppUtil', 'cordovaUtil', UserInfoController]);
+app.controller('StudentListController', ['$scope', 'ClassRoomService', 'CourseService', '$stateParams', StudentListController]);
 
 function TeacherListController($scope, UserService, ClassRoomService, $stateParams)
 {
@@ -38,19 +38,88 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 		self.targetService();
 	}
 
+	$scope.getUserAvatar = function(user) {
+		if (user.avatar) {
+			return user.avatar;
+		}
+
+		if (user.mediumAvatar) {
+			return user.mediumAvatar;
+		}
+
+		return "";
+	}
+
 	this.initService();
 }
 
-function StudentListController($scope, ClassRoomService, $stateParams)
+function StudentListController($scope, ClassRoomService, CourseService, $stateParams)
 {
-	$scope.title = "班级学员";
-	$scope.emptyStr = "该班级暂无学员";
-	ClassRoomService.getStudents({
-		classRoomId : $stateParams.targetId,
-		limit : -1
-	}, function(data) {
-		$scope.users = data.data;
-	});
+	$scope.title = getTitle($stateParams.targetType);
+
+	function getTitle(targetType) {
+		if ("classroom" == $stateParams.targetType) {
+			return "班级学员";
+		}
+
+		return "课程学员";
+	}
+
+	function getEmptyStr(targetType) {
+		if ("classroom" == $stateParams.targetType) {
+			return "该班级暂无学员";
+		}
+
+		return "该课程暂无学员";
+	}
+
+	$scope.title = getTitle($stateParams.targetType);
+	$scope.emptyStr = getEmptyStr($stateParams.targetType);
+
+	function getClassRoomStudents(targetId, callback) {
+		ClassRoomService.getStudents({
+			classRoomId : $stateParams.targetId
+		}, callback);
+	}
+
+	function getCourseStudents(targetId, callback) {
+		CourseService.getStudents({
+			courseId : $stateParams.targetId,
+		}, callback);
+	}
+
+	function getStudentArray(resources) {
+		var users = [];
+		for (var i = 0; i < resources.length; i++) {
+			users[i] = resources[i].user;
+		};
+
+		return users;
+	}
+
+	$scope.loadUsers = function() {
+		var service;
+		if ("classroom" == $stateParams.targetType) {
+			service = getClassRoomStudents;
+		} else {
+			service = getCourseStudents;
+		}
+		service($stateParams.targetId, function(data) {
+			$scope.users = getStudentArray(data.resources);
+		});
+	}
+
+	$scope.getUserAvatar = function(user) {
+		if (user.avatar) {
+			return user.avatar;
+		}
+
+		if (user.mediumAvatar) {
+			return user.mediumAvatar;
+		}
+
+		return "";
+	}
 }
 
 function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $stateParams, $q) 
@@ -130,7 +199,7 @@ function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $state
 	}
 }
 
-function UserInfoController($scope, UserService, $stateParams, AppUtil) 
+function UserInfoController($scope, UserService, $stateParams, AppUtil, cordovaUtil) 
 {
 	var self = this;
 
@@ -168,31 +237,44 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		});
 	}
 
-	UserService.getUserInfo({
-		userId : $stateParams.userId
-	}, function(data) {
-		if (! data) {
-			$scope.toast("获取用户信息失败！");
-			return;
-		}
-		$scope.userinfo = data;
-		$scope.isTeacher = self.isTeacher(data.roles);
-		if ($scope.isTeacher) {
-			self.getUserTeachCourse();
-		} else {
-			self.getUserLearnCourse();
+	$scope.isUnOwner = function() {
+
+		if ($scope.user && $scope.user.id == $stateParams.userId) {
+			return false;
 		}
 
-		if ($scope.user) {
-			UserService.searchUserIsFollowed({
-				userId : $scope.user.id,
-				toId : $stateParams.userId
-			}, function(data) {
-				$scope.isFollower = (true == data || "true" == data) ? true : false;
-				console.log($scope.isFollower);
-			});
-		}
-	});
+		return true;
+	};
+
+	$scope.loadUserInfo = function() {
+		$scope.showLoad();
+		UserService.getUserInfo({
+			userId : $stateParams.userId
+		}, function(data) {
+			$scope.hideLoad();
+			if (! data) {
+				$scope.toast("获取用户信息失败！");
+				return;
+			}
+			$scope.userinfo = data;
+			$scope.isTeacher = self.isTeacher(data.roles);
+			if ($scope.isTeacher) {
+				self.getUserTeachCourse();
+			} else {
+				self.getUserLearnCourse();
+			}
+
+			if ($scope.user) {
+				UserService.searchUserIsFollowed({
+					userId : $scope.user.id,
+					toId : $stateParams.userId
+				}, function(data) {
+					$scope.isFollower = (true == data || "true" == data) ? true : false;
+					console.log($scope.isFollower);
+				});
+			}
+		});
+	};
 
 	this.follow = function() {
 		UserService.follow({
@@ -200,6 +282,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}, function(data) {
 			if (data && data.toId == $stateParams.userId) {
 				$scope.isFollower = true;
+				cordovaUtil.sendNativeMessage("refresh_friend_list", {});
 			}
 		});
 	}
@@ -210,6 +293,7 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}, function(data) {
 			if (data) {
 				$scope.isFollower = false;
+				cordovaUtil.sendNativeMessage("refresh_friend_list", {});
 			}
 		});
 	}
@@ -222,7 +306,156 @@ function UserInfoController($scope, UserService, $stateParams, AppUtil)
 		}
 		
 	}
+}
 
+app.controller('TeacherTodoListController', ['$scope', '$stateParams', 'AnalysisService', TeacherTodoListController]);
+function TeacherTodoListController($scope, $stateParams, AnalysisService) {
+
+	Chart.defaults.global.tooltipTemplate = "<%= value %>";
+	Chart.defaults.global.tooltipEvents = [""];
+	Chart.defaults.global.animation = false;
+	Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0)";
+	Chart.defaults.global.tooltipFontColor = "#000";
+	Chart.defaults.global.scaleLineColor = "rgba(0,0,0,0)";
+
+	var self = this;
+
+	$scope.initChartData = function() {
+		$scope.showLoad();
+		AnalysisService.getCourseChartData({
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.hideLoad();
+			if (data.error) {
+				$scope.toast(data.error.message);
+				return;
+			}
+			$scope.charts = data;
+		});
+	}
+
+	$scope.loadCharts = function() {
+		setTimeout(function(){
+			for (var i = 0; i < $scope.charts.length; i++) {
+				initChart($scope.charts[i], i);
+			};
+		}, 10);	
+	};
 	
+	function initChart(chartData, id) {
+		var ctx = document.getElementById("chart_" + id).getContext("2d");
+		var chartLineColor = chartData.chartLineColor || "#37b97d";
+		var data = {
+		    labels: chartData.labelData,
+		    datasets: [
+		        {
+		            label: "My First dataset",
+		            fillColor: "rgba(0, 0, 0, 0)",
+		            strokeColor: chartLineColor,
+		            pointColor: chartLineColor,
+		            pointStrokeColor: "#fff",
+		            pointHighlightFill: chartLineColor,
+		            pointHighlightStroke: chartLineColor,
+		            data: chartData.pointData
+		        }
+		    ]
+		};
 
+		var defaults = {
+			scaleShowGridLines : true,
+			bezierCurve  : false,
+			pointDot : true,
+			pointDotRadius : 2
+		};
+
+		function showToolTips(lineChart) {
+			var activePoints = lineChart.datasets[0].points;
+			lineChart.eachPoints(function(point){
+				point.restore(['fillColor', 'strokeColor']);
+			});
+			Chart.helpers.each(activePoints, function(activePoint){
+				activePoint.fillColor = activePoint.highlightFill;
+				activePoint.strokeColor = activePoint.highlightStroke;
+			});
+			lineChart.showTooltip(activePoints);
+		}
+		var myLineChart, chart = new Chart(ctx);
+		var render = Chart.types.Line.prototype.render;
+
+		Chart.types.Line.prototype.render = function(reflow) {
+			var self = this;
+			render.call(this, reflow);
+			setTimeout(function() {
+				showToolTips(self);
+			}, 10);
+		};
+
+		myLineChart = chart.Line(data, defaults);
+	}
+}
+
+app.controller('HomeworkTeachingController', ['$scope', '$stateParams', 'HomeworkManagerService', HomeworkTeachingController]);
+function HomeworkTeachingController($scope, $stateParams, HomeworkManagerService) {
+
+	var self = this;
+
+	this.filter = function(data) {
+		var users = data.users;
+		var homeworkResults = data.homeworkResults;
+		for (var i = 0; i < homeworkResults.length; i++) {
+			homeworkResults[i]["user"] = users[homeworkResults[i]["userId"]];
+		};
+		data.homeworkResults = homeworkResults;
+		console.log(data);
+		return data;
+	};
+
+	$scope.showHomeWorkResult = function(homeworkResult) {
+		alert("暂不支持在客户端批改作业");
+	};
+
+	$scope.initTeachingResult = function() {
+		HomeworkManagerService.teachingResult({
+			start : 3,
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.teachingResult = self.filter(data);
+		});
+	};
+}
+
+app.controller('ThreadTeachingController', ['$scope', '$stateParams', 'ThreadManagerService', 'cordovaUtil', ThreadTeachingController]);
+function ThreadTeachingController($scope, $stateParams, ThreadManagerService, cordovaUtil) {
+
+	var self = this;
+
+	$scope.courseId  =$stateParams.courseId;
+
+	this.filter = function(data) {
+		var users = data.users;
+		var threads = data.threads;
+		for (var i = 0; i < threads.length; i++) {
+			threads[i]["user"] = users[threads[i]["userId"]];
+		};
+		data.threads = threads;
+		return data;
+	};
+
+	$scope.showThreadChatView = function(thread) {
+		cordovaUtil.startAppView("threadDiscuss", {
+			type : "thread.post",
+			courseId : thread.courseId,
+			lessonId : thread.lessonId,
+			threadId : thread.id
+		});
+	};
+
+	$scope.initQuestionResult = function(limit) {
+		ThreadManagerService.questionResult({
+			start : limit,
+			courseId : $stateParams.courseId
+		}, function(data) {
+			$scope.teachingResult = self.filter(data);
+		});
+	};
 }
