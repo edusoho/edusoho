@@ -255,6 +255,10 @@ define(function(require, exports, module) {
             var rangeValue = 'lesson';
             var targets = $('#ranges').val();
 
+            if(targets.indexOf('/') == -1){
+                rangeValue = 'course';
+            }
+
             var courseId = $("#testpaper-form").data("courseId");
             $.get('../../../../../course/'+courseId+'/manage/testpaper/get_question_num', {range: rangeValue, targets:targets}, function(data){
                 $('[role="questionNum"]').text(0);
