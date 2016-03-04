@@ -100,10 +100,8 @@ class ClassroomManageController extends BaseController
         $fields    = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword'])) {
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
-        } else {
-            $condition['userIds'] = null;
         }
 
         $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'student'));
@@ -148,10 +146,8 @@ class ClassroomManageController extends BaseController
         $fields    = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword'])) {
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
-        } else {
-            $condition['userIds'] = null;
         }
 
         $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'auditor'));

@@ -16,7 +16,7 @@ class CourseStudentManageController extends BaseController
         $fields    = $request->query->all();
         $condition = array();
 
-        if (isset($fields['keyword'])) {
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
             if (SimpleValidator::email($fields['keyword'])) {
                 $condition['email'] = $fields['keyword'];
                 $user               = $this->getUserService()->getUserByEmail($condition['email']);
