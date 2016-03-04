@@ -9,6 +9,8 @@ class ThemeController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        var_dump(111);
+        exit();
         $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
 
         return $this->render('TopxiaWebBundle:Default:show.html.twig', array(
@@ -21,6 +23,8 @@ class ThemeController extends BaseController
 
     public function pendantAction($config = null)
     {
+        var_dump($config['code']);
+        exit();
         if (isset($config['code'])) {
             if (!empty($config['sortName']) && $config['code'] == 'category-course') {
                 if ($config['sortName'] == 'recommended') {

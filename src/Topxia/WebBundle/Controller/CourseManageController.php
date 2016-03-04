@@ -135,11 +135,6 @@ class CourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
 
-            if (isset($fields['coinPrice'])) {
-                $this->getCourseService()->setCoursePrice($course['id'], 'coin', $fields['coinPrice']);
-                unset($fields['coinPrice']);
-            }
-
             if (isset($fields['price'])) {
                 $this->getCourseService()->setCoursePrice($course['id'], 'default', $fields['price']);
                 unset($fields['price']);
