@@ -28,9 +28,9 @@
     </div>
     {% if not app.user or (app.user.id != user.id) %}
       <div class="metas">
-        <a class="btn btn-primary btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>关注</a> 
-        <a class="btn btn-default btn-xs unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %}style="display:none;"{% endif %}>已关注</a>
-        <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">私信</a>
+        <a class="btn btn-primary btn-xs follow-btn" href="javascript:;" data-url="{{ path('user_follow', {id:user.id}) }}" {% if isFollowed %} style="display:none;"{% endif %} data-loggedin={% if app.user and app.user.isLogin() %}"1"{% else %}"0"{% endif %}>{{'关注'|trans}}</a>
+        <a class="btn btn-default btn-xs unfollow-btn" href="javascript:;"  data-url="{{ path('user_unfollow', {id:user.id}) }}" {% if not isFollowed %}style="display:none;"{% endif %}>{{'已关注'|trans}}</a>
+        <a class="btn btn-default btn-xs direct-message-btn" herf="javascript:;" data-toggle="modal" data-backdrop="static" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'私信'|trans}}</a>
       </div>
     {% endif %}
   </div>
@@ -38,14 +38,14 @@
     {% if profile.signature %}
       {{ profile.signature }}
     {% else %}
-      还没有签名
+      {{'还没有签名'|trans}}
     {% endif %}
   </div>
   <div class="card-footer clearfix">
-    <span><a class="link-light" href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>在学</a></span>
-    <span><a class="link-light" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>关注</a></span>
-    <span><a class="link-light" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>粉丝</a></span>
+    <span><a class="link-light" href="{{ path('user_learn',{id:user.id}) }}">{{ user.learningNum }}<br>{{'在学'|trans}}</a></span>
+    <span><a class="link-light" href="{{ path('user_following',{id:user.id}) }}">{{ user.followingNum }}<br>{{'关注'|trans}}</a></span>
+    <span><a class="link-light" href="{{ path('user_follower',{id:user.id}) }}">{{ user.followerNum }}<br>{{'粉丝'|trans}}</a></span>
   </div>
-    
+
 </div>
 

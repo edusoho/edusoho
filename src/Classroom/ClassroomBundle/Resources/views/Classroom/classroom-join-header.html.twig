@@ -81,7 +81,8 @@
               </span>
             </li>
             {% if classroom_permit(classroom.id, 'Take', true) and not isclassroomteacher|default(false) %}
-            {% if 'headTeacher' not in member.role %}
+
+            {% if 'headTeacher' not in member.role %}  
               <li>
                 <a type="button" 
                 {% if  'student' in member.role and member.orderId > 0 %}

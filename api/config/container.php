@@ -26,6 +26,7 @@ $resources = array(
     'Thread',
     'Threads',
     'ChaosThreads',
+    'ChaosThreadsPosts',
     'Apps',
     'App',
     'Analysis',
@@ -34,7 +35,8 @@ $resources = array(
     'HomeworkManager',
     'ThreadManager',
     'Thread',
-    'Upload'
+    'Upload',
+    'Status'
 );
 
 foreach ($resources as $res) {

@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的问答 - {{ parent() }}{% endblock %}
+{% block title %}{{'我的问答'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-questions' %}
 
@@ -8,17 +8,17 @@
 
 
 <div class="panel panel-default panel-col">
-	
 
-  <div class="panel-heading">我的问答
+
+  <div class="panel-heading">{{'我的问答'|trans}}
   </div>
 
   <div class="panel-body">
-  	
+
     {% if threads %}
 	    {% include 'TopxiaWebBundle:MyThread:thread-list.html.twig'  with {type: 'question'} %}
     {% else %}
-      <div class="empty">暂无提问的记录</div>
+      <div class="empty">{{'暂无提问的记录'|trans}}</div>
     {% endif %}
 
   </div>

@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:LiveCourse:layout.html.twig' %}
 
-{% block title %}直播 - {{ parent() }}{% endblock %}
+{% block title %}{{'直播'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'live-course/index' %}
 
@@ -15,13 +15,13 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">近期直播</h3>
+      <h3 class="panel-title">{{'近期直播'|trans}}</h3>
     </div>
     <div class="panel-body">
       {% if recentCourses %}
         {{ render(controller('TopxiaWebBundle:LiveCourse:coursesBlock', {courses:recentCourses, view: 'list'})) }}
       {% else %}
-        <div class="empty">近期还没有直播</div>
+        <div class="empty">{{'近期还没有直播'|trans}}</div>
       {% endif %}
 
       {{ web_macro.paginator(paginator) }}
@@ -34,7 +34,7 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">最新上线</h3>
+      <h3 class="panel-title">{{'最新上线'|trans}}</h3>
     </div>
     <div class="panel-body">
       <ul class="media-list media-list-rank">
@@ -55,7 +55,7 @@
           </div>
         </li>
         {% else %}
-          <li class="empty">还没有发布的直播课程</li>
+          <li class="empty">{{'还没有发布的直播课程'|trans}}</li>
         {% endfor %}
       </ul>
     </div>

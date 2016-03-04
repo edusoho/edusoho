@@ -204,6 +204,14 @@ admin_login_record:
 admin_teacher:
     name: 教师管理
     parent: admin_user
+admin_teacher_manage:
+    name: 教师管理 
+    parent: admin_teacher
+    router_name: admin_teacher
+admin_teacher_promote:
+    name: 教师推荐
+    parent: admin_teacher
+    router_name: admin_teacher_promote_list
 admin_approval_approvals:
     name: 实名认证管理
     parent: admin_user

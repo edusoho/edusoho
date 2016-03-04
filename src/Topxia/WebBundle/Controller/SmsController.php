@@ -96,18 +96,7 @@ class SmsController extends BaseController
                 $studentIds = ArrayToolkit::column($students, 'id');
             }
 
-            $users = $this->getUserService()->findUsersByIds($studentIds);
-
-            foreach ($users as $key => $value) {
-                if (strlen($value['verifiedMobile']) == 0 || $value['locked']) {
-                    unset($users[$key]);
-                }
-            }
-
-            if (!empty($users)) {
-                $userIds = ArrayToolkit::column($users, 'id');
-                $result  = $this->getSmsService()->smsSend($smsType, $userIds, $description, $parameters);
-            }
+            $result = $this->getSmsService()->smsSend($smsType, $studentIds, $description, $parameters);
         }
 
         if ($count > $index + $onceSendNum) {
