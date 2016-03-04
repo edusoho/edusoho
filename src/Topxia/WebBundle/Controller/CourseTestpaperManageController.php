@@ -48,8 +48,7 @@ class CourseTestpaperManageController extends BaseController
             $fields['target']        = "course-{$course['id']}";
             $fields['pattern']       = 'QuestionType';
             list($testpaper, $items) = $this->getTestpaperService()->createTestpaper($fields);
-            exit;
-            //  return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
+            return $this->redirect($this->generateUrl('course_manage_testpaper_items', array('courseId' => $course['id'], 'testpaperId' => $testpaper['id'])));
         }
 
         $typeNames = $this->get('topxia.twig.web_extension')->getDict('questionType');
@@ -121,8 +120,7 @@ class CourseTestpaperManageController extends BaseController
         $data           = $request->request->all();
         $data['target'] = "course-{$course['id']}";
         $data['ranges'] = empty($data['ranges']) ? array() : explode(',', $data['ranges']);
-        var_dump($data);
-        $result = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
+        $result         = $this->getTestpaperService()->canBuildTestpaper('QuestionType', $data);
         return $this->createJsonResponse($result);
     }
 
