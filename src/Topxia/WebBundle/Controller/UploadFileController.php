@@ -47,22 +47,18 @@ class UploadFileController extends BaseController
         }
 
         if ($file['storage'] == 'cloud') {
-            $this->downloadCloudFile($file, $isDownload);
+            $this->downloadCloudFile($file);
         } else {
-            return $this->downloadLocalFile($request, $file, $isDownload);
+            return $this->downloadLocalFile($request, $file);
         }
     }
 
     protected function downloadCloudFile($file)
     {
-        if ($isDownload) {
-            $key = $file['hashId'];
+        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+            $key = $file['metas']['hd']['key'];
         } else {
-            if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                $key = $file['metas']['hd']['key'];
-            } else {
-                $key = $file['hashId'];
-            }
+            $key = $file['hashId'];
         }
 
         if (empty($key)) {
