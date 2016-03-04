@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\Sms\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Sms\SmsService;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;

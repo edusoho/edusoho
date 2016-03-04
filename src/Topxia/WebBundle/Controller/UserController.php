@@ -391,7 +391,7 @@ class UserController extends BaseController
             $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
         }
 
-        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCount($userId);
+        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum']  = $this->getUserService()->findUserFollowerCount($userId);
         $levels               = array();

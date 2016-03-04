@@ -15,7 +15,7 @@
         <div class="panel panel-default index-group">
           <div class="panel-heading">
             <a href="{{ path('group') }}" class="more"><i class="es-icon es-icon-morehoriz"></i></a>
-            <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>热门小组</h3>
+            <h3 class="panel-title"><i class="es-icon es-icon-whatshot pull-left"></i>{{'热门小组'|trans}}</h3>
           </div>
           <div class="panel-body row">
             <div class="media-group-list">
@@ -37,8 +37,8 @@
                       </a>
                     </div>
                     <div class="metas">
-                      <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
-                      <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
+                      <span>{{ group.memberNum }}<i class="es-icon es-icon-people"></i></span>
+                      <span>{{ group.threadNum }}<i class="es-icon es-icon-textsms"></i></span>
                     </div>
                   </div>
                 </div>
@@ -53,7 +53,7 @@
         <div class="panel panel-default index-article">
           <div class="panel-heading">
             <h3 class="panel-title">
-              最新资讯
+              {{'最新资讯'|trans}}
               <a class="more" href="{{ path('article_show') }}"><i class="es-icon es-icon-morehoriz"></i></a>
             </h3>
           </div>
@@ -68,7 +68,7 @@
                     {% if article.thumb %}
                       {{ lazy_img(filepath(article.thumb|default(null) , ''), 'img-responsive', article.title, 'lazyload_class.png') }}
                     {% else %}
-                      <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}"> 
+                      <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}">
                     {% endif %}
                     <div class="image-overlay"></div>
                     <div class="title">{{ article.title }}</div>
@@ -87,14 +87,14 @@
             </ul>
           </div>
         </div>
-      </div> 
+      </div>
       {% endif %}
       {% if config.select3 =='checked'%}
       <div class="col-md-6">
         <div class="panel panel-default index-evaluate">
           <div class="panel-heading">
             <h3 class="panel-title">
-              学员评价
+              {{'学员评价'|trans}}
             </h3>
           </div>
           <div class="panel-body">
@@ -111,7 +111,7 @@
                 <div class="title text-sm">
                   {{ web_macro.user_link(author,'link-light') }}
                   <span class="score">{{web_macro.star(review.rating) }}</span>
-                  发布于 <a class="link-light" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title|plain_text(10) }}》</a>
+                  {{'发布于'|trans}} <a class="link-light" href="{{ path('course_show', {id:course.id}) }}">《{{ course.title|plain_text(10) }}》</a>
                 </div>
                 <div class="content gray-darker">
                   {{ review.content|plain_text(30) }}
@@ -122,7 +122,7 @@
             {% endif %}
             {% endfor %}
             {% else %}
-              <div class="empty">还没有评价</div>
+              <div class="empty">{{'还没有评价'|trans}}</div>
             {% endif %}
           </div>
         </div>
@@ -133,7 +133,7 @@
         <div class="panel panel-default index-dynamic">
           <div class="panel-heading">
             <h3 class="panel-title">
-              学员动态
+              {{'学员动态'|trans}}
             </h3>
           </div>
           <div class="panel-body">

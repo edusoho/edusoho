@@ -8,9 +8,9 @@
   <div class="form-group note-actions">
     <div class="controls clearfix">
       <span class="text-muted" data-role="saved-message"></span>
-      <button id="save" class="btn btn-primary btn-xs pull-right" type="submit">保存笔记</button>
+      <button id="save" class="btn btn-primary btn-xs pull-right" type="submit">{{'保存笔记'|trans}}</button>
       {{ form_rest(form) }}
-      <label class="text-muted"><input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}> 分享笔记</label>
+      <label class="text-muted"><input type="checkbox" name="status" {% if note.status|default(1) %}checked {% endif %}> {{'分享笔记'|trans}}</label>
     </div>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

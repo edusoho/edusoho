@@ -1,4 +1,4 @@
-  {% extends 'TopxiaAdminBundle:CloudSetting:layout.html.twig' %}
+  {% extends 'TopxiaAdminBundle:EduCloud:layout.html.twig' %}
 
 {% block title %}云平台设置 - {{ parent() }}{% endblock %}
 
@@ -6,7 +6,9 @@
 {% set script_controller = 'setting/cloud-key-update' %}
 
 {% block maincontent %}
-
+ <div class="page-header clearfix">
+      <h1 class="pull-left">授权码</h1>
+</div>
 {{ web_macro.flash_messages() }}
 
 <form class="form-horizontal" id="key-update-form" method="post" novalidate>

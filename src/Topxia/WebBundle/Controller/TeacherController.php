@@ -25,6 +25,7 @@ class TeacherController extends BaseController
             array(
                 'promoted', 'DESC',
                 'promotedSeq', 'ASC',
+                'promotedTime', 'DESC',
                 'createdTime', 'DESC'
             ),
             $paginator->getOffsetCount(),

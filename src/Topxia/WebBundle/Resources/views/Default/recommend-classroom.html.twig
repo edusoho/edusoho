@@ -5,7 +5,7 @@
     <div class="container"> 
       <div class="text-line"> 
         <h5> 
-          <span>{{config.title|default("推荐班级")}}</span> 
+          <span>{{config.title|default("推荐班级"|trans)}}</span> 
           <div class="line"></div> 
         </h5> 
         <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div> 
@@ -25,3 +25,4 @@
     </div> 
   </section> 
 {% endif %} 
+

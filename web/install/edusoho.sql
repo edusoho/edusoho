@@ -53,7 +53,7 @@ CREATE TABLE `block` (
   `templateName` varchar(255) DEFAULT NULL COMMENT '编辑区模板名字',
   `templateData` text COMMENT '模板数据',
   `content` text COMMENT '编辑区的内容',
-  `code` varchar(255) NOT NULL DEFAULT '',
+  `code` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '编辑区编码',
   `meta` text COMMENT '编辑区元信息',
   `data` text COMMENT '编辑区内容',
   `tips` text,
@@ -264,7 +264,7 @@ CREATE TABLE `announcement` (
   `url` varchar(255) NOT NULL,
   `startTime` int(10) unsigned NOT NULL DEFAULT '0',
   `endTime` int(10) unsigned NOT NULL DEFAULT '0',
-  `targetId` int(10) NOT NULL COMMENT '所属ID',
+  `targetId` INT(10) UNSIGNED NOT NULL COMMENT '所属ID',
   `content` text NOT NULL COMMENT '公告内容',
   `createdTime` int(10) NOT NULL COMMENT '公告创建时间',
   `updatedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '公告最后更新时间',
@@ -733,7 +733,7 @@ CREATE TABLE `orders` (
   `userId` int(10) unsigned NOT NULL COMMENT '订单创建人',
   `coupon` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠码',
   `couponDiscount` float(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠码扣减金额',
-  `payment` enum('none','alipay','tenpay','coin','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
+  `payment` ENUM('none','alipay','tenpay','coin','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none' COMMENT '订单支付方式',
   `coinAmount` FLOAT(10,2) NOT NULL DEFAULT '0' COMMENT '虚拟币支付额',
   `coinRate` FLOAT(10,2) NOT NULL DEFAULT '1' COMMENT '虚拟币汇率',
   `priceType` enum('RMB','Coin') NOT NULL DEFAULT 'RMB' COMMENT '创建订单时的标价类型',
@@ -1005,7 +1005,7 @@ CREATE TABLE `upload_files` (
   `convertParams` text COMMENT '文件转换参数',
   `metas` text COMMENT '元信息',
   `metas2` text COMMENT '元信息',
-  `type` enum('document','video','audio','image','ppt','other') NOT NULL DEFAULT 'other' COMMENT '文件类型',
+  `type` enum('document','video','audio','image','ppt','other','flash') NOT NULL DEFAULT 'other' COMMENT '文件类型',
   `storage` enum('local','cloud') NOT NULL COMMENT '文件存储方式',
   `isPublic` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否公开文件',
   `canDownload` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否可下载',
@@ -1042,6 +1042,7 @@ CREATE TABLE `user` (
   `setup` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否初始化设置的，未初始化的可以设置邮箱、用户名。',
   `roles` varchar(255) NOT NULL COMMENT '用户角色',
   `promoted` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐',
+  `promotedSeq` INT(10) UNSIGNED NOT NULL DEFAULT 0,
   `promotedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
   `locked` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁止',
   `lockDeadline` int(10) not null default '0' COMMENT '帐号锁定期限', 
@@ -1210,7 +1211,7 @@ CREATE TABLE `cash_orders` (
   `status` enum('created','paid','cancelled') NOT NULL,
   `title` varchar(255) NOT NULL,
   `amount` float(10,2) unsigned NOT NULL DEFAULT '0.00',
-  `payment` enum('none','alipay','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none',
+  `payment` ENUM('none','alipay','wxpay','heepay','quickpay','iosiap') NOT NULL DEFAULT 'none',
   `paidTime` int(10) unsigned NOT NULL DEFAULT '0',
   `note` varchar(255) NOT NULL DEFAULT '',
   `targetType` VARCHAR(64) NOT NULL DEFAULT 'coin' COMMENT '订单类型',
@@ -1436,7 +1437,7 @@ CREATE TABLE `thread_member` (
   `nickname` varchar(255) DEFAULT NULL COMMENT '用户名',
   `truename` varchar(255) DEFAULT NULL COMMENT '真实姓名',
   `mobile` varchar(32) DEFAULT NULL COMMENT '手机号码',
-  `createdTIme` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `createdTIme` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='话题成员表';
 
@@ -1611,7 +1612,7 @@ CREATE TABLE `coupon` (
   `orderId` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单号',
   `orderTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
   `createdTime` int(10) unsigned NOT NULL,
-  `receiveTime` INT(10) unsigned NOT NULL DEFAULT '0'  COMMENT '接收时间',
+  `receiveTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '接收时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='优惠码表';
 

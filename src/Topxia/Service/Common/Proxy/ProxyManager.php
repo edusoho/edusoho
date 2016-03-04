@@ -4,7 +4,6 @@ namespace Topxia\Service\Common\Proxy;
 
 /**
  * 代理管理.
- * 思考:单例OR静态？
  */
 class ProxyManager
 {
@@ -15,11 +14,6 @@ class ProxyManager
      */
     public static function create($className)
     {
-        static $objectPools = array();
-        if (!isset($objectPools[$className])) {
-            $objectPools[$className] = new ProxyFramework(new $className());
-        }
-
-        return $objectPools[$className];
+        return new ProxyFramework(new $className());
     }
 }

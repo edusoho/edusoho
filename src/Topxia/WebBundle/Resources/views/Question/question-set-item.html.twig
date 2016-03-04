@@ -3,7 +3,7 @@
     <div class="question-set-item-side">
       <span class="question-set-item-seq">
       {% if item.parentId %}
-        {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}  
+        {{ itemSet.items[item.parentId].seq ~ '.' ~ item.seq }}
       {% else %}
         {{ item.seq }}
       {% endif %}
@@ -25,12 +25,12 @@
           <div class="homework-question-actions text-right">
             {% include 'TopxiaWebBundle:Question:question-actions.html.twig' with { flags:['favorite', 'analysis'] } %}
           </div>
-          <div class="homework-question-analysis well editor-text" style="display:none;">{{ item.question.analysis|default('无解析')|bbCode2Html|raw }}
+          <div class="homework-question-analysis well editor-text" style="display:none;">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw }}
           </div>
         {% endif %}
 
       {% else %}
-      此题已删除。
+      {{'此题已删除。'|trans}}
       {% endif %}
     </div>
 
