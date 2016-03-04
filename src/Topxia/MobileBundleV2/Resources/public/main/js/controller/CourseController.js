@@ -380,6 +380,7 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
         courseId : $stateParams.courseId,
         limit : 1
       }, function(data) {
+        $scope.reviewCount = data.total;
         $scope.reviews = data.data;
       });
     }
