@@ -32,5 +32,5 @@
     {% else %}<a href="{{ path('course_explore') }}">{{'去消费'|trans}} ></a>
     {% endif %}
   </p>
-  <p>{{'有效期截止：'|trans}}<span>{{ (cardDetail.deadline)|date('Y年n月d日') }}</span></p>
+  <p>{{'有效期截止：'|trans}}<span>{{ (cardDetail.deadline)|date('Y') }}{{'年'|trans}}{{ (cardDetail.deadline)|date('n') }}{{'月'|trans}}{{ (cardDetail.deadline)|date('d') }}{{'日'|trans}}</span></p>
 </div>
