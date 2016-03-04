@@ -27,7 +27,8 @@ class Classrooms extends BaseResource
 
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions,array($orderBy, 'desc'),0,$result['showCount']);
 
-        return $classrooms;
+        $total = count($classrooms);
+        return $this->wrap($classrooms, min($result['showCount'], $total));
     }
 
     public function get(Application $app, Request $request)
@@ -42,7 +43,15 @@ class Classrooms extends BaseResource
 
     public function filter(&$res)
     {
-        
+        return $this->multicallFilter('Classroom', $res);
+    }
+
+    protected function multicallFilter($name, &$res)
+    {
+        foreach ($res as &$one) {
+            $this->callFilter($name, $one);
+        }
+        return $res;
     }
 
     protected function getCategoryService()
