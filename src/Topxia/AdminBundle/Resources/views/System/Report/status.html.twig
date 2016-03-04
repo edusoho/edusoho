@@ -182,10 +182,12 @@
         <td>与Discuz Ucenter的连接</td>
         <td><span class="text-muted js-ucenter-check" data-url="{{ path('admin_report_status_ucenter') }}">正在检测.....</span></td>
       </tr>
+      {% if setting("cloud_email.status")|default("") == "disable" %}
       <tr>
         <td>邮件发送 <i class="glyphicon glyphicon-info-sign text-info" data-toggle="tooltip" data-placement="top" title="每次检测，都会向当前用户发一封测试邮件，请保证当前用户的邮箱正确,邮件异常请到系统日志查看"></i></td>
         <td><span class="text-muted js-email-send-check" data-url="{{ path('admin_report_status_email_send') }}">正在检测.....</span></td>
       </tr>
+      {% endif %}
     </tbody>
   </table>
 
