@@ -971,12 +971,9 @@ class ClassroomManageController extends BaseController
 
             $userIds = $userIds ? $userIds : null;
             return $userIds;
-        } elseif (SimpleValidator::nickname($keyword)) {
+        } else {
             $user      = $this->getUserService()->getUserByNickname($keyword);
             $userIds[] = $user ? $user['id'] : null;
-            return $userIds;
-        } else {
-            $userIds[] = null;
             return $userIds;
         }
     }
