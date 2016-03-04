@@ -462,7 +462,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        return $this->fileAction($request, $lesson['mediaId'], true);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function pptAction(Request $request, $courseId, $lessonId)
