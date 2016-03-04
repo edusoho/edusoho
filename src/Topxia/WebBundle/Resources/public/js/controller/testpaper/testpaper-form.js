@@ -116,6 +116,7 @@ define(function(require, exports, module) {
                 data: $form.serialize(),
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response);
                     if (response.status != 'yes') {
                         var missingTexts = [];
                         var types = {
@@ -255,9 +256,9 @@ define(function(require, exports, module) {
             var rangeValue = 'lesson';
             var targets = $('#ranges').val();
 
-            if(targets.indexOf('/') == -1){
-                rangeValue = 'course';
-            }
+            // if($('#range-input').val() == '本课程'){
+            //     rangeValue = 'course';
+            // }
 
             var courseId = $("#testpaper-form").data("courseId");
             $.get('../../../../../course/'+courseId+'/manage/testpaper/get_question_num', {range: rangeValue, targets:targets}, function(data){

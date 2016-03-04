@@ -126,9 +126,10 @@ class CourseTestpaperManageController extends BaseController
 
     public function buildRangeAction(Request $request, $courseId)
     {
-        $items  = $this->getCourseService()->getCourseItems($courseId);
-        $id     = 'course-'.$courseId.'/';
-        $ranges = array(array('id' => $courseId, 'name' => '本课程'));
+        $items = $this->getCourseService()->getCourseItems($courseId);
+        $id    = 'course-'.$courseId.'/';
+
+        $ranges = array(array('id' => 'course-'.$courseId, 'name' => '本课程'));
 
         foreach ($items as $key => $item) {
             if ($item['type'] == 'chapter') {
