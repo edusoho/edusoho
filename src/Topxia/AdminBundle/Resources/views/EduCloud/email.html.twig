@@ -37,7 +37,7 @@
               <p><span>发件人名称：{{ emailStatus.sign }}</span> <a href="#" name="sign-update">修改</a></p>
             </div>
             <div name="submit-sign" hidden="hidden">
-              <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary mlm mrm" >提交</button><a href="">取消</a>
+              <span>发件人名称：<input type="text" name="sign" placeholder="签名3-8字，建议使用汉字"></span><button class="btn btn-primary mlm mrm" >提交</button><a href="">取消</a>
             </div>
           {% elseif emailStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
             <div class="row">
