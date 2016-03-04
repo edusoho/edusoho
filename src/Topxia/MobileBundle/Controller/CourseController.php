@@ -197,9 +197,7 @@ class CourseController extends MobileController
             } else {
                 $json['mediaUri'] = '';
             }
-        } else
-
-        if ($json['mediaSource'] == 'youku') {
+        } elseif ($json['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -207,9 +205,7 @@ class CourseController extends MobileController
             } else {
                 $json['mediaUri'] = '';
             }
-        } else
-
-        if ($json['mediaSource'] == 'tudou') {
+        } elseif ($json['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
