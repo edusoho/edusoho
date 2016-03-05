@@ -21,11 +21,12 @@
   <meta content="{{ setting('login_bind.weixinmob_enabled')|default(0) }}" name="is-open" />
   {{ setting('login_bind.verify_code', '')|raw }}
   {% if setting('site.favicon') %}
-  <link href="{{ asset(setting('site.favicon')) }}" rel="shortcut icon" type="image/x-icon" media="screen"/>
+  <link rel="icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" />
+  <link rel="shortcut icon" href="{{ asset(setting('site.favicon')) }}" type="image/x-icon" media="screen"/>
   {% endif %}
 
   {% block stylesheets %}
-    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' %}
+    {{ render(controller('TopxiaWebBundle:Theme:getCurrentConfigColor', {isEditColor:isEditColor|default(false)})) }}
   {% endblock %}
   
   <!--[if lt IE 9]>

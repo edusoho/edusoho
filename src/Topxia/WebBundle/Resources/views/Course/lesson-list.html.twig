@@ -1,0 +1,20 @@
+{% extends 'TopxiaWebBundle:Course:normal-layout.html.twig' %}
+
+{% set tab = 'lesson-list' %}
+
+{% do load_script('course/show') %}
+
+{% block course_main %}
+
+  <div class="course-detail-content">
+
+    <div class="es-piece">
+      <div class="piece-body">
+        {{ render(controller('TopxiaWebBundle:CourseLesson:list',{courseId: course.id, member: member, previewUrl: path('course_lessons_preview', {courseId:course.id})} )) }}
+        
+      </div>
+    </div>
+    
+  </div>
+
+{% endblock %}

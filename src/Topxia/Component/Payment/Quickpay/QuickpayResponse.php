@@ -21,11 +21,13 @@ class QuickpayResponse extends Response
             throw new \RuntimeException('快捷支付失败');
         }
 
-        $this->createUserAuth('quickpay', $result);
+        $order = $this->getOrder($result["agent_bill_id"]);
+        $this->createUserAuth('quickpay', $result, $order);
 
         $data            = array();
         $data['payment'] = 'quickpay';
-        $data['sn']      = $this->getOrderSn($result["agent_bill_id"]);
+
+        $data['sn'] = $order['sn'];
 
         if (in_array($result['status'], array('SUCCESS'))) {
             $data['status'] = 'success';
@@ -107,10 +109,9 @@ class QuickpayResponse extends Response
         return $sign;
     }
 
-    public function createUserAuth($name, $params)
+    public function createUserAuth($name, $params, $order)
     {
-        $order           = $this->getOrderService()->getOrderByToken($params['agent_bill_id']);
-        $authBankRequest = $this->createAuthBankRequest($name, $params);
+        $authBankRequest = $this->createAuthBankRequest($name, $params, $order);
         $authBanks       = $authBankRequest->form();
 
         foreach ($authBanks as $authBank) {
@@ -131,11 +132,10 @@ class QuickpayResponse extends Response
         }
     }
 
-    protected function createAuthBankRequest($name, $params)
+    protected function createAuthBankRequest($name, $params, $order)
     {
         $options = $this->getPaymentOptions($name);
         $request = Payment::createAuthBankRequest($name, $options);
-        $order   = $this->getOrderService()->getOrderByToken($params['agent_bill_id']);
         return $request->setParams(array('userId' => $order['userId']));
     }
 
@@ -151,10 +151,17 @@ class QuickpayResponse extends Response
         return $options;
     }
 
-    public function getOrderSn($token)
+    public function getOrder($token)
     {
-        $order = $this->getOrderService()->getOrderByToken($token);
-        return $order['sn'];
+        if (stripos($token, 'c') !== false) {
+            $order = $this->getOrderService()->getOrderByToken($token);
+        }
+
+        if (stripos($token, 'o') !== false) {
+            $order = $this->getCashOrdersService()->getOrderByToken($token);
+        }
+
+        return $order;
     }
 
     private function encrypt($data, $key)
@@ -209,5 +216,10 @@ class QuickpayResponse extends Response
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getCashOrdersService()
+    {
+        return $this->getServiceKernel()->createService('Cash.CashOrdersService');
     }
 }

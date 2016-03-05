@@ -586,7 +586,7 @@ class OrderServiceTest extends BaseTestCase
         );
         $this->getOrderService()->createOrder($order1);
         $this->getOrderService()->createOrder($order2);
-        $conditions = array("userId" => $user['id'], "amount" => 0.00);
+        $conditions = array("userId" => $user['id']);
         $result     = $this->getOrderService()->searchOrders($conditions, "early", 0, 5);
         $this->assertCount(2, $result);
         $result = $this->getOrderService()->searchOrders($conditions, 'latest', 0, 5);
@@ -879,7 +879,7 @@ class OrderServiceTest extends BaseTestCase
         );
         $this->getOrderService()->createOrder($order1);
         $this->getOrderService()->createOrder($order2);
-        $conditions = array("userId" => $user['id'], "amount" => 0.00);
+        $conditions = array("userId" => $user['id']);
         $result     = $this->getOrderService()->searchOrderCount($conditions);
         $this->assertEquals(2, $result);
     }

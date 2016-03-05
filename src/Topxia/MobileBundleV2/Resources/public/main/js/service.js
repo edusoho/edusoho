@@ -23,6 +23,12 @@ service('ArticleService', ['httpService', function(httpService) {
 		httpService.apiGet("/api/articles/" + arguments[0]['id'], arguments);
 	}
 }]).
+service('AnalysisService', ['httpService', function(httpService) {
+
+	this.getCourseChartData = function(callback) {
+		httpService.apiGet("/api/analysis/Course/learnDataByDay?courseId" + arguments[0]['courseId'], arguments);
+	}
+}]).
 service('CategoryService', ['httpService', function(httpService) {
 
 	this.getCategorieTree = function(callback) {
@@ -90,6 +96,22 @@ service('CouponService', ['httpService', function(httpService) {
 
 	this.checkCoupon = function() {
 		httpService.simplePost('/mapi_v2/Course/coupon', arguments);
+	}
+}]).
+service('HomeworkManagerService', ['httpService', function(httpService) {
+
+	this.teachingResult = function() {
+		httpService.apiGet("/api/homework/manager/teaching", arguments);
+	};
+
+	this.showCheck = function() {
+		httpService.apiGet("/api/homework/manager/check/" + arguments[0]['homeworkResultId'], arguments);
+	}
+}]).
+service('ThreadManagerService', ['httpService', function(httpService) {
+
+	this.questionResult = function() {
+		httpService.apiGet("/api/thread/manager/question", arguments);
 	}
 }]).
 service('UserService', ['httpService', 'applicationProvider', function(httpService, applicationProvider) {
@@ -233,7 +255,8 @@ service('ClassRoomService', ['httpService', function(httpService) {
 	}
 
 	this.getStudents = function(params, callback) {
-		httpService.simpleGet("/mapi_v2/ClassRoom/getStudents", arguments);
+		httpService.apiGet("/api/classrooms/" + arguments[0]['classRoomId'] + "/members", arguments);
+		//httpService.simpleGet("/mapi_v2/ClassRoom/getStudents", arguments);
 	}
 
 	this.getReviewInfo = function(params, callback) {
@@ -329,6 +352,10 @@ service('QuestionService', ['httpService', function(httpService) {
 }]).
 service('CourseService', ['httpService', function(httpService) {
 	
+	this.getStudents = function(params, callback) {
+		httpService.apiGet("/api/courses/" + arguments[0]['courseId'] + "/members", arguments);
+	}
+
 	this.updateModifyInfo = function(params, callback) {
 		httpService.simplePost("/mapi_v2/Course/updateModifyInfo", arguments);
 	}
@@ -505,16 +532,29 @@ service('SchoolService', ['httpService', function(httpService) {
 		});
 	}
 }]).
-service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($http, $rootScope, platformUtil, $q) {
+service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', 'cordovaUtil', function($http, $rootScope, platformUtil, $q, cordovaUtil) {
 	
 	var self = this;
+	this.filterCallback = function(data, callback) {
+		if ("AuthToken is not exist." == data.message) {
+			cordovaUtil.sendNativeMessage("token_lose", {});
+			return;
+		}
+
+		if (data.error && "not_login" == data.error.name) {
+			cordovaUtil.sendNativeMessage("token_lose", {});
+			return;
+		}
+		callback(data);
+	};
+
 	this.getOptions = function(method, url, params, callback, errorCallback) {
 		var options = {
 			method : method,
 			url : app.host + url,
 			headers : { "token" : $rootScope.token },
 			success : function(data, status, headers, config) {
-				callback(data);
+				self.filterCallback(data, callback);
 			},
 			error : function(data) {
 				if (errorCallback) {
@@ -548,11 +588,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 	this.nativePost = function(options) {
 		esNativeCore.post($q, options.url,  options.headers , options.data )
 		.then(function(data) {
-			console.log(data);
-			options.success(angular.fromJson(data));
+			self.filterCallback(angular.fromJson(data), options.success);
 		}, function(error) {
-			console.log(error);
-			options.error(angular.fromJson(error));
+			self.filterCallback(angular.fromJson(error), options.error);
 		});
 	};
 
@@ -588,7 +626,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		options.headers = options.headers || {};
 		options.headers["token"] = $rootScope.token;
 
-		var http = $http(options).success(options.success);
+		var http = $http(options).success(function(data) {
+			self.filterCallback(data, options.success);
+		});
 
 		if (options.error) {
 			http.error(options.error);
@@ -626,7 +666,9 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', function($h
 		options.headers["token"] = $rootScope.token;
 
 		var angularPost = function(options) {
-			var http = $http(options).success(options.success);
+			var http = $http(options).success(function(data) {
+				self.filterCallback(data, options.success);
+			});
 			if (options.error) {
 				http.error(options.error);
 			} else {

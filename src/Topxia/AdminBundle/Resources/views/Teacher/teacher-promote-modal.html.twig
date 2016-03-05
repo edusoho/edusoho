@@ -1,0 +1,29 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}设置推荐教师{% endblock %}
+{% block body %}
+
+<form id="teacher-promote-form" class="form-horizontal" method="post" action="{{ path('admin_teacher_promote', {id:user.id}) }}">
+  
+
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="number">序号</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input type="text" id="number" name="number" class="form-control" value="" data-widget-cid="widget-1" data-explain="请输入0-10000的整数">
+    <div class="help-block">请输入0-10000的整数</div></div>
+    <input type="hidden" name="type" value="{{type}}">
+  </div>
+
+</form>
+{% endblock %}
+
+
+{% block footer %}
+  <button id = "teacher-promote-btn" data-submiting-text="正在提交" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#teacher-promote-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('teacher/promote-modal')</script>
+{% endblock %}

@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends BaseController
 {
-    public function indexAction()
+
+    public function indexAction(Request $request)
     {
         $conditions = array('status' => 'published', 'parentId' => 0, 'recommended' => 1);
         $courses    = $this->getCourseService()->searchCourses($conditions, 'recommendedSeq', 0, 12);
@@ -206,11 +207,12 @@ class DefaultController extends BaseController
         return new Response($jumpScript);
     }
 
-    public function CoursesCategoryAction(Request $request)
+    public function coursesCategoryAction(Request $request)
     {
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
+<<<<<<< HEAD
         $categoryId             = $conditions['categoryId'];
 
         if ($conditions['categoryId'] != 'all') {
@@ -236,6 +238,35 @@ class DefaultController extends BaseController
         ));
     }
 
+=======
+        $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
+        $orderBy                = $conditions['orderBy'];
+
+        $config = $this->getThemeService()->getCurrentThemeConfig();
+
+        if (!empty($config['confirmConfig'])) {
+            $config = $config['confirmConfig']['blocks']['left'];
+
+            foreach ($config as $template) {
+                if ($template['code'] == "course-grid-with-condition-index") {
+                    $config = $template;
+                }
+            }
+
+            $config['orderBy']    = $orderBy;
+            $config['categoryId'] = $categoryId;
+            return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+                'config' => $config
+            ));
+        } else {
+            return $this->render('TopxiaWebBundle:Default:course-grid-with-condition-index.html.twig', array(
+                'categoryId' => $categoryId,
+                'orderBy'    => $orderBy
+            ));
+        }
+    }
+
+>>>>>>> master
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
@@ -296,6 +327,14 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('User.BatchNotificationService');
     }
 
+<<<<<<< HEAD
+=======
+    protected function getThemeService()
+    {
+        return $this->getServiceKernel()->createService('Theme.ThemeService');
+    }
+
+>>>>>>> master
     private function getBlacklistService()
     {
         return $this->getServiceKernel()->createService('User.BlacklistService');

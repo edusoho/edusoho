@@ -35,6 +35,7 @@ class AppKernel extends Kernel
             new Topxia\MobileBundleV2\TopxiaMobileBundleV2(),
             new Classroom\ClassroomBundle\ClassroomBundle(),
             new MaterialLib\MaterialLibBundle\MaterialLibBundle(),
+            new SensitiveWord\SensitiveWordBundle\SensitiveWordBundle()
         );
 
         $pluginMetaFilepath = $this->getRootDir() . '/data/plugin_installed.php';

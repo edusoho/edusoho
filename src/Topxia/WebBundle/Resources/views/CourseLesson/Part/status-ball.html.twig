@@ -7,7 +7,8 @@
 {% else %}
   <i class="es-icon es-icon-undone status-icon"></i>
 {% endif %}
-
-{% if item.free %}
-  <span class="label label-warning mrm">免费</span>
+{% if not member %}
+{% if fromPlugin|default(false) == false %}
+	{{ render(controller('TopxiaWebBundle:CourseLesson:statusLabel', {courseId:course.id,lessonId:item.id})) }}
+{% endif %}
 {% endif %}

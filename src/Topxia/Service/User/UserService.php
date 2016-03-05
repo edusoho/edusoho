@@ -131,7 +131,7 @@ interface UserService
 
     public function unlockUser($id);
 
-    public function promoteUser($id);
+    public function promoteUser($id, $number);
 
     public function cancelPromoteUser($id);
 
@@ -233,7 +233,15 @@ interface UserService
     public function parseAts($text);
 
     /**
-     *
+     *  邀请码相关
+     */
+    public function getUserByInviteCode($inviteCode);
+
+    public function findUserIdsByInviteCode($inviteCode);
+
+    public function createInviteCode($userId);
+
+    /**
      * 用户授权
      */
 

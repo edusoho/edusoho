@@ -12,7 +12,7 @@ define(function(require, exports, module) {
             if (!confirm('确定要撤销这条认证成功的实名认证吗？')) {  return ; }
 
             $.post($(this).data('url'),function(response){
-               window.location.reload();
+                window.location.reload();
             }).error(function(){
                 window.location.reload();
             });

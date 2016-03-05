@@ -16,10 +16,9 @@ appProvider.provider('applicationProvider', function() {
 		application.init = function(host) {
 			application.setHost(host);
 			cordovaUtil.getUserToken($q).then(function(data) {
-				
 				application.user = data.user;
 				application.token = data.token;
-      				application.updateScope($rootScope);
+      	application.updateScope($rootScope);
 			});
 		}
 
@@ -61,6 +60,16 @@ appProvider.provider('appRouter', function($stateProvider) {
 	};
 
 	this.init = function() {
+    var routingConfig = app.routingConfig || {};
+
+    var state = $stateProvider.state;
+    $stateProvider.state = function(name, args) {
+      if (routingConfig.hasOwnProperty(name)) {
+        args = routingConfig[name];
+      }
+      return state.call($stateProvider, name, args);
+    };
+    
 		$stateProvider.state("slideView",{
             abstract: true,
             views : {
@@ -80,7 +89,7 @@ appProvider.provider('appRouter', function($stateProvider) {
        });
 
         $stateProvider.state('courseList', {
-          url: "/courselist/:categoryId",
+          url: "/courselist/:type/:categoryId",
           views: {
             'rootView': {
               templateUrl: app.viewFloder  + "view/course_list.html",
@@ -334,6 +343,36 @@ appProvider.provider('appRouter', function($stateProvider) {
             'rootView': {
               templateUrl: app.viewFloder  + "view/search.html",
               controller : SearchController
+            }
+          }
+        });
+
+        $stateProvider.state('todolist', {
+          url: "/todolist/:courseId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/todolist.html",
+              controller : TeacherTodoListController
+            }
+          }
+        });
+
+        $stateProvider.state('homeworkCheck', {
+          url: "/homeworkcheck/:homeworkResultId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/homework_check.html",
+              controller : HomeworkCheckController
+            }
+          }
+        });
+
+        $stateProvider.state('teachingThreadList', {
+          url: "/teaching/threadlist/:courseId",
+          views: {
+            'rootView': {
+              templateUrl: app.viewFloder  + "view/teaching_thread_list.html",
+              controller : ThreadTeachingController
             }
           }
         });
