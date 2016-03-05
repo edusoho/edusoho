@@ -37,6 +37,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->getCloudFileService()->download($globalId);
     }
 
+    public function getDefaultHumbnails($globalId)
+    {
+        return $this->getCloudFileService()->getDefaultHumbnails($globalId);
+    }
+
     protected function filterConditions($conditions)
     {
         $filterConditions = array_filter($conditions);

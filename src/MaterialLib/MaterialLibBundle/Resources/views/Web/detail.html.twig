@@ -33,8 +33,8 @@
   </div>
   <div class="content">
     <ul class="nav nav-pills">
-      <li role="presentation" class="active js-info"><a href="javascript:;">基本信息</a></li>
-      <li role="presentation" class="js-cover"><a href="javascript:;">封面图片</a></li>
+      <li role="presentation" class="active js-info" data-target="#info-tab"><a href="#info-tab">基本信息</a></li>
+      <li role="presentation" class="js-cover" data-target="#cover-tab"><a href="#cover-tab">封面图片</a></li>
     </ul>
 
     <div class="tab-content">
@@ -64,7 +64,37 @@
         </div>
         </form>
       </div>
-      <div class="tab-pane" id="conver-tab"></div>
+
+
+      <div class="tab-pane" id="cover-tab">
+        <form class="form-horizontal" id="cover-form" action="{{ path('admin_material_edit', {globalId:material.no}) }}">
+          <div class="form-group">
+            <label for="name" class="col-md-2 control-label">封面</label>
+            <div class="col-md-4">
+              <img class="js-cover-img" src="{{ asset(material.thumbnail) }}">
+            </div>
+            
+            {% if material.type == 'video' %}
+              <div class="col-md-6">
+                <div>设置封面</div>
+                {% for thumbnail in thumbnails %}
+                  <div class="col-md-4" style="padding-bottom:10px">
+                    <img class="js-img-set" style="width:100%; cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}">
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <input type="hidden" name="thumbNo" id="thumbNo">
+          <input type="hidden" id="orignalThumb" value="{{ asset(material.thumbnail) }}">
+          {% if material.type == 'video' %}
+            <div class="col-md-offset-2 col-md-8 controls">
+              <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="正在保存..." type="submit">保存</button>
+            </div>
+          {% endif %}
+        </form>
+      </div>
     </div>
   </div>
 

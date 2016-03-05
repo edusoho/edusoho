@@ -46,8 +46,10 @@ class MaterialLibController extends BaseController
     public function detailAction(Request $reqeust, $globalId)
     {
         $material = $this->getMaterialLibService()->get($globalId);
+        $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material' => $material,
+            'thumbnails' => $thumbnails,
             'params' => $reqeust->query->all()
         ));
     }

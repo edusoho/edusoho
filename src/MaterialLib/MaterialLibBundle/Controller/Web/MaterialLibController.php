@@ -40,9 +40,4 @@ class MaterialLibController extends BaseController
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
-
-    protected function getCloudFileService()
-    {
-        return $this->createService('MaterialLib:MaterialLib.CloudFileService');
-    }
 }
