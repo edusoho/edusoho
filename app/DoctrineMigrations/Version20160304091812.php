@@ -16,7 +16,7 @@ class Version20160304091812 extends AbstractMigration
     public function up(Schema $schema)
     {
         if (!$this->isFieldExist('course', 'studyModel')) {
-            $this->addSql("ALTER TABLE `course` ADD `studyModel` ENUM( 'normal', 'ordered' ) NOT NULL DEFAULT 'normal' COMMENT '学习模式';");
+            $this->addSql("ALTER TABLE `course` ADD `studyModel` ENUM( 'normal', 'ordered' ) NOT NULL DEFAULT 'normal' COMMENT '课程学习模式';");
         }
     }
 

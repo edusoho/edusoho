@@ -13,7 +13,7 @@
 %}
 {% block main %}
 
-<style type="text/css">
+<style>
   
   input[type=radio] {
   margin-left: 17px;
@@ -122,10 +122,10 @@
 
       <div class="form-group">
         <div class="col-md-2 control-label">
-          <label>是否依次学习课程</label>
+          <label>课程学习模式</label>
         </div>
         <div class="col-md-7 controls">
-          {{ radios('studyModel', {1:'开启', 0:'关闭'}, course.studyModel|default(0)) }}
+          {{ radios('studyModel', {1:'顺序模式', 0:'普通模式'}, course.studyModel|default(0)) }}
         <div class="help-block">开启后，学员必须学完当前课程才能继续学习下一节课程</div>
         </div>
       </div>

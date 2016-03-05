@@ -236,11 +236,15 @@ class CourseLessonController extends BaseController
         } else {
             $user     = $this->getCurrentUser();
             $statuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
+            $lessons  = $this->getCourseService()->getCourseLessons($courseId);
 
-            foreach ($statuses as $key => $status) {
-                if ($key < $lessonId) {
-                    if ($status == 'learning') {
+            foreach ($lessons as $lesson) {
+                if ($lesson['id'] < $lessonId) {
+                    $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lesson['id']);
+
+                    if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
                         $json['studyModel'] = 'ordered';
+                        break;
                     }
                 }
             }
