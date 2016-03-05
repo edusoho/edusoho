@@ -4,7 +4,6 @@ namespace Topxia\Service\File\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor2;
->>>>>>> feature/cloud-file-upload
 
 class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 {

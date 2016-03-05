@@ -32,14 +32,6 @@ interface UploadFileService2
 
     public function decreaseFileUsedCount($id);
 
-    //云接口
-    //查询文件接口
-    public function search($conditions, $storage);
-
-    public function getByGlobalId($globalId);
-
-    public function edit($globalId, $fields);
-
     /**
      * share file
      */

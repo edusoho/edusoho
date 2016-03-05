@@ -39,7 +39,7 @@
 
     <div class="tab-content">
       <div class="tab-pane active" id="info-tab">
-        <form class="form-horizontal" id="info-form" action="{{ path('material_edit', {globalId:material.no}) }}">
+        <form class="form-horizontal" id="info-form" action="{{ path('admin_material_edit', {globalId:material.no}) }}">
           <div class="form-group">
             <label for="name" class="col-md-2 control-label">标题</label>
             <div class="col-md-6">
@@ -55,9 +55,7 @@
           <div class="form-group">
             <label class="col-md-2 control-label">简介</label>
             <div class="col-md-6 controls">
-              <textarea id="description" name="description" class="form-control" rows="6">
-                {{ material.description }}
-              </textarea>
+              <textarea id="description" name="description" class="form-control" rows="6">{{ material.description }}</textarea>
             </div>
           </div>
 

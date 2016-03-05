@@ -44,17 +44,14 @@
 
     <td>
       <div class="btn-group">
-        <a type="button" class="btn btn-default js-detail-btn" href="javascript:;" data-url="{{ path('material_detail', {globalId:material.no}) }}">详情</a>
+        <a type="button" class="btn btn-default js-detail-btn" href="javascript:;" data-url="{{ path('admin_material_detail', {globalId:material.no}) }}">详情</a>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu">
-          <li><a href="#">下载</a></li>
-          <li><a href="#">删除</a></li>
-          <li><a href="#">编辑</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">查看引用</a></li>
+          <li class="js-download-btn"><a href="{{ path('admin_material_download', {globalId:material.no}) }}" target="__blank">下载</a></li>
+          <li class="js-delete-btn" data-url="{{ path('admin_material_delete', {globalId:material.no}) }}"><a href="javascript:;">删除</a></li>
         </ul>
     </td>
   </tr>

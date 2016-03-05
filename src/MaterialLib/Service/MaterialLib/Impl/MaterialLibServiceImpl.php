@@ -13,17 +13,28 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $conditions['start'] = $start;
         $conditions['limit'] = $limit;
         $conditions = $this->filterConditions($conditions);
-        return $this->getUploadFileService()->search($conditions, 'cloud');
+        return $this->getCloudFileService()->search($conditions);
     }
 
     public function get($globalId)
     {
-        return $this->getUploadFileService()->getByGlobalId($globalId);
+        return $this->getCloudFileService()->get($globalId);
     }
 
     public function edit($globalId, $fields)
     {
-        return $this->getUploadFileService()->edit($globalId, $fields);
+        return $this->getCloudFileService()->edit($globalId, $fields);
+    }
+
+    public function delete($globalId)
+    {
+        $this->getUploadFileService()->deleteByGlobalId($globalId);
+        $this->getCloudFileService()->delete($globalId);
+    }
+
+    public function download($globalId)
+    {
+        return $this->getCloudFileService()->download($globalId);
     }
 
     protected function filterConditions($conditions)
@@ -36,7 +47,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         }
 
         if (!empty($filterConditions['courseId'])) {
-            $localFiles = $this->getUploadFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
+            $localFiles = $this->getCloudFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
             $globalIds = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
         }
@@ -47,5 +58,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService2');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->createService('MaterialLib:MaterialLib.CloudFileService');
     }
 }

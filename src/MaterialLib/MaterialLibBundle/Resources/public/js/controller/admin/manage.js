@@ -4,6 +4,7 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     var DetailWidget = require('materiallibbundle/controller/web/detail');
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
 
@@ -15,7 +16,8 @@ define(function(require, exports, module) {
                 'submit': 'submitForm',
                 'click .nav-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
-                'click .js-detail-btn': 'onClickDetailBtn'
+                'click .js-detail-btn': 'onClickDetailBtn',
+                'click .js-delete-btn': 'onClickDeleteBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -43,7 +45,10 @@ define(function(require, exports, module) {
             {
                 var self = this;
                 var $target = $(event.currentTarget);
-                $.get($target.data('url'), function(resp){
+                $.ajax({
+                    type:'GET',
+                    url:$target.data('url'),
+                }).done(function(resp){
                     self.element.hide();
                     self.element.prev().hide();
                     self.element.parent().append(resp);
@@ -53,8 +58,26 @@ define(function(require, exports, module) {
                             var $form = $('#materials-form');
                             $form.show();
                             $form.prev().show();
+                            window.materialWidget.renderTable();
                         }
                     });
+                }).fail(function(){
+                    Notify.danger('Opps,出错了!');
+                });
+            },
+            onClickDeleteBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                this._loading();
+                $.ajax({
+                    type:'POST',
+                    url:$target.data('url'),
+                }).done(function(){
+                    Notify.success('删除成功!');
+                    self.renderTable();
+                }).fail(function(){
+                    Notify.danger('删除失败!');
                 });
             },
             submitForm: function(event)
@@ -279,7 +302,7 @@ define(function(require, exports, module) {
             }
         });
 
-        new MaterialWidget({
+        window.materialWidget = new MaterialWidget({
             element: '#materials-form'
         });
         

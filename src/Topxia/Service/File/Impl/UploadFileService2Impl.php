@@ -105,21 +105,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getUploadFileDao()->searchFileCount($conditions);
     }
 
-    public function search($conditions, $storage)
-    {
-        return $this->getFileImplementorByStorage($storage)->search($conditions);
-    }
-
-    public function edit($globalId, $fields)
-    {
-        return $this->getFileImplementorByStorage('cloud')->edit($globalId, $fields);
-    }
-
-    public function getByGlobalId($globalId)
-    {
-        return $this->getFileImplementorByStorage('cloud')->get($globalId);
-    }
-
     public function getDownloadFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
@@ -249,6 +234,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         foreach ($ids as $id) {
             $this->getUploadFileDao()->deleteFile($id);
         }
+    }
+
+    public function deleteByGlobalId($globalId)
+    {
+        $this->getUploadFileDao()->deleteByGlobalId($globalId);
     }
 
     public function increaseFileUsedCount($id)
