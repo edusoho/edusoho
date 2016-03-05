@@ -212,33 +212,6 @@ class DefaultController extends BaseController
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
-<<<<<<< HEAD
-        $categoryId             = $conditions['categoryId'];
-
-        if ($conditions['categoryId'] != 'all') {
-            $conditions['categoryId'] = intval($conditions['categoryId']);
-        } else {
-            unset($conditions['categoryId']);
-        }
-
-        $orderBy = $conditions['orderBy'];
-
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-        }
-
-        unset($conditions['orderBy']);
-
-        $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, 12);
-
-        return $this->render('TopxiaWebBundle:Default:course-grid-with-condition.html.twig', array(
-            'orderBy'    => $orderBy,
-            'categoryId' => $categoryId,
-            'courses'    => $courses
-        ));
-    }
-
-=======
         $categoryId             = isset($conditions['categoryId']) ? $conditions['categoryId'] : 0;
         $orderBy                = $conditions['orderBy'];
 
@@ -266,7 +239,6 @@ class DefaultController extends BaseController
         }
     }
 
->>>>>>> master
     protected function calculateUserLearnProgress($course, $member)
     {
         if ($course['lessonNum'] == 0) {
@@ -327,14 +299,11 @@ class DefaultController extends BaseController
         return $this->getServiceKernel()->createService('User.BatchNotificationService');
     }
 
-<<<<<<< HEAD
-=======
     protected function getThemeService()
     {
         return $this->getServiceKernel()->createService('Theme.ThemeService');
     }
 
->>>>>>> master
     private function getBlacklistService()
     {
         return $this->getServiceKernel()->createService('User.BlacklistService');
