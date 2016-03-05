@@ -9,6 +9,8 @@ define(function(require, exports, module) {
         events: {
             'click .js-img-set': 'onClickChangePic',
             'click .js-reset-btn': 'onClickReset',
+            'click .js-set-default': 'onClickDefault',
+            'click .js-set-select': 'onClickSelect',
             'submit #cover-form': 'onSubmitCoverForm',
         },
         setup: function() {
@@ -16,6 +18,19 @@ define(function(require, exports, module) {
         onClickReset: function(event) {
             this.$('#thumbNo').val('');
             this.$('.js-cover-img').attr('src', this.$('#orignalThumb').val());
+        },
+        onClickDefault: function(event) {
+            this._changePane($(event.currentTarget));
+        },
+        onClickSelect: function(event) {
+            this._changePane($(event.currentTarget));
+        },
+        _changePane: function($target) {
+            $target.parent().find('a.disabled').removeClass('disabled');
+            $target.addClass('disabled');
+            var $container = $target.closest('#thumbnail-set');
+            $container.find('.thumbnail-pane.active').removeClass('active');
+            $container.find($target.attr('href')).addClass('active');
         },
         onSubmitCoverForm: function(event) {
             var $target = $(event.currentTarget);
