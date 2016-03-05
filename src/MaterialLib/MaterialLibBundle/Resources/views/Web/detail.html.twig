@@ -24,6 +24,10 @@
   .material-detail-widget .content .nav {
     margin-bottom: 20px;
   }
+
+  .material-detail-widget .content #cover-tab img {
+    width: 100%;
+  }
 </style>
 
 <div id="material-detail" class="material-detail-widget">
@@ -73,13 +77,13 @@
             <div class="col-md-4">
               <img class="js-cover-img" src="{{ asset(material.thumbnail) }}">
             </div>
-            
+
             {% if material.type == 'video' %}
               <div class="col-md-6">
                 <div>设置封面</div>
                 {% for thumbnail in thumbnails %}
                   <div class="col-md-4" style="padding-bottom:10px">
-                    <img class="js-img-set" style="width:100%; cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}">
+                    <img class="js-img-set" style="cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}">
                   </div>
                 {% endfor %}
               </div>
@@ -90,6 +94,7 @@
           <input type="hidden" id="orignalThumb" value="{{ asset(material.thumbnail) }}">
           {% if material.type == 'video' %}
             <div class="col-md-offset-2 col-md-8 controls">
+              <a class="btn btn-fat btn-info js-reset-btn" href="javascript:;">还原</a>
               <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="正在保存..." type="submit">保存</button>
             </div>
           {% endif %}
