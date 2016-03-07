@@ -3345,7 +3345,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3365,7 +3365,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -7087,20 +7087,22 @@ textarea {
     padding: 5px;
   }
 }
-.course-list .course-item .metas .num {
-  margin-right: 10px;
-}
 .course-list .course-item .metas i {
   margin-right: 5px;
 }
-.course-list .course-item .metas .price {
+.course-list .course-item .metas .course-price-widget {
   float: right;
+}
+.course-list .course-item .metas .price {
   color: #e83d2c;
   font-size: 14px;
   margin-right: 0;
 }
 .course-list .course-item .metas .free {
   color: #238312;
+}
+.course-list .course-item .metas .comment {
+  margin-left: 10px;
 }
 @media (max-width: 767px) {
   .course-list .course-item .metas .comment {
@@ -7787,10 +7789,13 @@ textarea {
 .es-card .avatar-md {
   border: 2px solid #fff;
 }
+.es-card .user-avatar {
+  position: relative;
+}
 .es-card .icon-user-status {
   position: absolute;
   bottom: 0;
-  right: 5px;
+  right: 0;
 }
 .es-card .content {
   font-size: 12px;
@@ -10826,7 +10831,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -13256,5 +13261,3 @@ textarea {
 .group-page .media:hover .post-delete-btn {
   visibility: visible;
 }
-
-/*# sourceMappingURL=main-red.css.map */
