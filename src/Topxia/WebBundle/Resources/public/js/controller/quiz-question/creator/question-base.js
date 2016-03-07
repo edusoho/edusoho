@@ -90,7 +90,6 @@ define(function(require, exports, module) {
                 height: height
             });
 
-            //self._uploadAttachment(editor);
             self._initBatchAttachmentUploader(editor);
 
             this.get('validator').on('formValidate', function(elemetn, event) {
@@ -137,36 +136,6 @@ define(function(require, exports, module) {
 
             return validator;
         },
-
-        _uploadAttachment: function(editor){
-            var $annexbtn = $('#question-attachment-upload');
-            var formData = $.extend({}, {token:$annexbtn.data('uploadToken')});
-            var uploadUrl = $annexbtn.data('url');
-            var uploader = WebUploader.create({
-               swf: require.resolve("webuploader").match(/[^?#]*\//)[0] + "Uploader.swf",
-               server: uploadUrl,
-               pick: $annexbtn,
-               formData: $.extend(formData , {'_csrf_token': $('meta[name=csrf-token]').attr('content') }),
-               accept: {
-                       title: 'Attachment',
-                       extensions: 'mp4,avi,flv,wmv,mov,m4v,mp3,doc,docx,pdf,ppt,pptx,swf',
-                }
-            });
-
-            uploader.on( 'fileQueued', function( file ) {
-                Notify.info('正在上传，请稍等！', 0);
-                uploader.upload();
-            });
-
-            uploader.on( 'uploadSuccess', function( file, response ) {
-                    editor.insertHtml(response._raw);
-                    Notify.success('附件上传成功！');
-            });
-
-            uploader.on( 'uploadError', function( file, response ) {
-                Notify.danger('上传失败，请重试！');
-            });
-        }
 
     });
 
