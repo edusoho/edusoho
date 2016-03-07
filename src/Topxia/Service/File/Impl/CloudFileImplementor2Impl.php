@@ -384,13 +384,14 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function mergeCloudFile2($localFile, $cloudFile)
     {
         if ($localFile) {
-            $cloudFile['hasLocal'] = true;
+            $cloudFile['id'] = $localFile['id'];
             $cloudFile['targetType'] = $localFile['targetType'];
             $cloudFile['targetId'] = $localFile['targetId'];
             $cloudFile['createdUserId'] = $localFile['createdUserId'];
             $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
         } else {
-            $cloudFile['hasLocal'] = false;
+            //没有本地文件
+            $cloudFile['id'] = 0;
         }
          
         return $cloudFile;

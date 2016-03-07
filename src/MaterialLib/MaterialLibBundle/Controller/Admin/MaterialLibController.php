@@ -4,6 +4,7 @@ namespace MaterialLib\MaterialLibBundle\Controller\Admin;
 
 use Symfony\Component\HttpFoundation\Request;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
+use Topxia\Service\Util\CloudClientFactory;
 use Topxia\Common\Paginator;
 
 class MaterialLibController extends BaseController
@@ -72,6 +73,80 @@ class MaterialLibController extends BaseController
     {
         $download = $this->getMaterialLibService()->download($globalId);
         return $this->redirect($download['url']);
+    }
+
+    public function playAction(Request $request, $globalId)
+    {
+        $file = $this->getMaterialLibService()->get($globalId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['type'] == 'video') {
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $file['videoWatermarkEmbedded'] = 1;
+            }
+
+            $player = "balloon-cloud-video-player";
+        } elseif ($file['type'] == 'audio') {
+            $player = "audio-player";
+        } else {
+            throw new Exception("Error File Type.");
+        }
+
+        $url = $this->getPlayUrl($globalId, array());
+
+        return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
+            'file'             => $file,
+            'url'              => $url,
+            'context'          => array(),
+            'player'           => $player,
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+        ));
+    }
+
+    protected function getPlayUrl($globalId, $context)
+    {
+        $file = $this->getMaterialLibService()->get($globalId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!in_array($file["type"], array("audio", "video"))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client  = $factory->createClient();
+
+        if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+            if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                $token = $this->makeToken('hls.playlist', $file['id'], $context);
+
+                $params = array(
+                    'id'    => $file['id'],
+                    'token' => $token['token']
+                );
+
+                return $this->generateUrl('hls_playlist', $params, true);
+            } else {
+                $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+            }
+        } else {
+            if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                $key = $file['metas']['hd']['key'];
+            } else {
+                $key = $file['reskey'];
+            }
+
+            if ($key) {
+                $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
+            }
+        }
+
+        return $result['url'];
     }
 
     protected function getMaterialLibService()

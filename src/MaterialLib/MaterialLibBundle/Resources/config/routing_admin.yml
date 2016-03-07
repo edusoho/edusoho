@@ -27,3 +27,7 @@ admin_material_delete:
 admin_material_download:
     pattern:  /materiallib/{globalId}/download
     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:download }
+
+admin_material_play:
+    pattern:  /materiallib/{globalId}/play
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:play }

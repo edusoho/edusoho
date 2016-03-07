@@ -14,6 +14,7 @@ define(function(require, exports, module) {
             'submit #cover-form': 'onSubmitCoverForm',
         },
         setup: function() {
+            this._initPlayer();
         },
         onClickReset: function(event) {
             this.$('#thumbNo').val('');
@@ -24,6 +25,35 @@ define(function(require, exports, module) {
         },
         onClickSelect: function(event) {
             this._changePane($(event.currentTarget));
+        },
+        _initPlayer: function() {
+            this.$('#viewerIframe');
+            var messenger = new Messenger({
+                name: 'parent',
+                project: 'PlayerProject',
+                children: [document.getElementById('viewerIframe')],
+                type: 'parent'
+            });
+
+            messenger.on("ready", function() {
+                console.log('i am ready');
+            });
+
+            messenger.on("ended", function() {
+                console.log('i am ended');
+            });
+
+            messenger.on("playing", function() {
+                console.log('i am playing');
+            });
+
+            messenger.on("paused", function() {
+                console.log('i am paused');
+            });
+
+            messenger.on("onMarkerReached", function(marker,questionId){
+                console.log('MarkerReached');                
+            });
         },
         _changePane: function($target) {
             $target.parent().find('a.disabled').removeClass('disabled');
