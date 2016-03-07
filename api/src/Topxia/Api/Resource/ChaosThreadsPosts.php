@@ -63,6 +63,44 @@ class ChaosThreadsPosts extends BaseResource
         return $this->filter($post);
     }
 
+    public function getThreadPosts(Application $app,Request $request){
+        $currentUser = $this->getCurrentUser();
+        $start       = $request->query->get('start', 0);
+        $limit       = $request->query->get('limit', 10);
+
+        $conditions  = array(
+            'userId'=>$user['id']
+        );
+        $total       = $this->getCourseThreadService()->searchThreadPostsCount($conditions);
+        $start       = $start == -1 ? rand(0, $total - 1) : $start;  
+
+        $posts       = $this->getCourseThreadService()->searchThreadPosts($conditions,null,$start,$limit);
+
+        $threadPosts = array();
+
+        foreach ($posts as $post) {            
+            $course                          = $this->getCourseService()->getCourse($post['courseId']);
+            if(isset($course['userId']) && $course == $user['id']){
+                continue;
+            }
+            if(!empty($course)){
+                $threadPosts['courseId']     = $post['courseId'];
+                $threadPosts['courseTitle']  = $course['title'];
+                $threadPosts['smallPicture'] = $course['smallPicture'];
+                $threadPosts['middlePicture']= $course['middlePicture'];
+                $threadPosts['lagerPicture'] = $course['lagerPicture'];
+            }
+            $thread                          = $this->getCourseThreadService()->getThread(null,$post['threadId']);
+            if(!empty($thread)){
+                $threadPosts['title']        = $thread['title'];
+            }
+            $threadPosts['id']               = $post['id'];            
+            $threadPosts['content']          = $post['content'];
+            $threadPosts['createdTime']      = $post['createdTime'];
+        }
+        return $threadPosts;
+    }
+
     public function filter(&$res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
@@ -82,5 +120,9 @@ class ChaosThreadsPosts extends BaseResource
     protected function getGroupThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
+    }
+
+    protected function getCourseService(){
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

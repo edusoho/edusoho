@@ -189,6 +189,41 @@ class ChaosThreads extends BaseResource
         return $threads;
     }
 
+    public function getThreads(Application $app,Request $request)
+    {
+        $currentUser   = $this->getCurrentUser();
+        $start         = $request->query->get('start', 0);
+        $limit         = $request->query->get('limit', 10);
+
+        $conditions    = array(
+            'userId'      => $currentUser['id']
+        );
+
+        $total         = $this->getCourseThreadService()->searchThreadCount($conditions);
+
+        $start         = $start == -1 ? rand(0, $total - 1) : $start;
+        
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'createdNotStick' , $start, $limit);
+
+        $threads       = array();
+
+        foreach ($courseThreads as $thread) {
+            $course                          =$this->getCourseService()->getCourse($thread['courseId']);
+            if(!empty($course)){
+                $threadPosts['courseId']     = $course['courseId'];
+                $threadPosts['courseTitle']  = $course['title'];
+                $threadPosts['smallPicture'] = $course['smallPicture'];
+                $threadPosts['middlePicture']= $course['middlePicture'];
+                $threadPosts['lagerPicture'] = $course['lagerPicture'];
+            }
+            $threadPosts['id']               = $thread['id'];   
+            $threadPosts['title']            = $thread['title'];
+            $threadPosts['content']          = $thread['content'];
+            $threadPosts['createdTime']      = $thread['createdTime'];
+        }
+        return $threadPosts;
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
@@ -202,5 +237,10 @@ class ChaosThreads extends BaseResource
     protected function getGroupThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }

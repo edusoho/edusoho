@@ -31,6 +31,26 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->fetchColumn($sql, array($threadId));
 	}
 
+	public function searchThreadPosts($conditions,$orderBy, $start, $limit)
+	{
+		$this->filterStartLimit($start, $limit);
+        $builder = $this->createThreadPostSearchQueryBuilder($conditions)
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();              
+	}
+
+	public function searchThreadPostsCount($conditions)
+    {
+        $builder = $this->createThreadPostSearchQueryBuilder($conditions)
+                        ->select('COUNT(id)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
 	public function getPostCountByuserIdAndThreadId($userId,$threadId)
 	{
         $sql = "SELECT COUNT(*) FROM {$this->table} WHERE userId = ? AND threadId = ?";
@@ -70,4 +90,22 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->executeUpdate($sql, array($threadId));
 	}
 
+	protected function createThreadPostSearchQueryBuilder($conditions)
+	{
+        if (isset($conditions['content'])) {
+            $conditions['content'] = "%{$conditions['content']}%";
+        }
+
+        $builder = $this->createDynamicQueryBuilder($conditions)
+                    ->from($this->table, $this->table)
+                    ->andWhere('updatedTime >= :updatedTime_GE')
+                    ->andWhere('courseId = :courseId')
+                    ->andWhere('lessonId = :lessonId')
+                    ->andWhere('threadId = :threadId')
+                    ->andWhere('userId = :userId')
+                    ->andWhere('isElite = :isElite')
+                    ->andWhere('content LIKE :content');
+
+        return $builder;
+    }
 }
