@@ -270,7 +270,6 @@ define(function(require, exports, module) {
 
                 if(lesson.studyModel == 'ordered'){
                     $("#lesson-study-model-content").show();
-                    $("[data-role=finish-lesson]").addClass('disabled');
                     return;
                 }
 

@@ -234,12 +234,12 @@ class CourseLessonController extends BaseController
         if ($course['studyModel'] == 'normal') {
             $json['studyModel'] = 'normal';
         } else {
-            $user     = $this->getCurrentUser();
-            $statuses = $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $courseId);
-            $lessons  = $this->getCourseService()->getCourseLessons($courseId);
+            $user    = $this->getCurrentUser();
+            $lessons = $this->getCourseService()->getCourseLessons($courseId);
+            $seq     = $lesson['seq'];
 
             foreach ($lessons as $lesson) {
-                if ($lesson['id'] < $lessonId) {
+                if ($lesson['seq'] < $seq) {
                     $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lesson['id']);
 
                     if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {

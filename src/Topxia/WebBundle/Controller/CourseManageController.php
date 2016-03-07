@@ -24,21 +24,8 @@ class CourseManageController extends BaseController
         $course        = $this->getCourseService()->tryManageCourse($id);
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        if ($course['studyModel'] == 'normal') {
-            $course['studyModel'] = 0;
-        } else {
-            $course['studyModel'] = 1;
-        }
-
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-
-            if ($data['studyModel'] == 0) {
-                $data['studyModel'] = 'normal';
-            } else {
-                $data['studyModel'] = 'ordered';
-            }
-
             $this->getCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
@@ -444,22 +431,6 @@ class CourseManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
             'course'   => $course,
             'teachers' => $teachers
-        ));
-    }
-
-    public function studyAction(Request $request, $id)
-    {
-        $course = $this->getCourseService()->tryManageCourse($id);
-
-        if ($request->getMethod() == 'POST') {
-            $sequence = $request->request->all();
-            $course   = $this->getCourseService()->setCourseSequence($course['id'], $sequence);
-            $this->setFlashMessage('success', '课程学习设置成功!');
-            return $this->redirect($this->generateUrl('course_manage_study', array('id' => $course['id'])));
-        }
-
-        return $this->render('TopxiaWebBundle:CourseManage:study.html.twig', array(
-            'course' => $course
         ));
     }
 
