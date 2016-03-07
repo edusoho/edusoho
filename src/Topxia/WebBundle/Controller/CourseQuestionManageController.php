@@ -275,11 +275,7 @@ class CourseQuestionManageController extends BaseController
 
     public function uploadAttachmentsAction(Request $request, $id, $targetType)
     {
-        if (!empty($id)) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $storageSetting = $this->getSettingService()->get('storage', array());
         return $this->render('TopxiaWebBundle:CourseQuestionManage:modal-upload-question-attachment.html.twig', array(
