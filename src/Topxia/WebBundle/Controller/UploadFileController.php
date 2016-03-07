@@ -38,7 +38,7 @@ class UploadFileController extends BaseController
         return $this->createJsonResponse($file);
     }
 
-    public function downloadAction(Request $request, $fileId, $isDownload = false)
+    public function downloadAction(Request $request, $fileId)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
 
@@ -46,47 +46,44 @@ class UploadFileController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
+
         if ($file['storage'] == 'cloud') {
-            if ($isDownload) {
-                $key = $file['hashId'];
-            } else {
-                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                    $key = $file['metas']['hd']['key'];
-                } else {
-                    $key = $file['hashId'];
-                }
-            }
-
-            if (empty($key)) {
-                throw $this->createNotFoundException();
-            }
-
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
-            if ($isDownload) {
-                $client->download($client->getBucket(), $key, 3600, $file['filename']);
-            } else {
-                $client->download($client->getBucket(), $key);
-            }
+            $this->downloadCloudFile($file);
+        } else {
+            return $this->downloadLocalFile($request, $file);
         }
-
-        return $this->createLocalMediaResponse($request, $file, $isDownload);
     }
 
-    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
+    protected function downloadCloudFile($file)
+    {
+        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+            $key = $file['metas']['hd']['key'];
+        } else {
+            $key = $file['hashId'];
+        }
+
+        if (empty($key)) {
+            throw $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client  = $factory->createClient();
+
+        $client->download($client->getBucket(), $key, 3600, $file['filename']);
+    }
+
+    protected function downloadLocalFile(Request $request, $file)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
 
-        if ($isDownload) {
-            $file['filename'] = urlencode($file['filename']);
+        $file['filename'] = urlencode($file['filename']);
 
-            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-            } else {
-                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-            }
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
         }
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
