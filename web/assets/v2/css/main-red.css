@@ -7964,6 +7964,11 @@ textarea {
 .es-filter .nav-sort > li {
   float: left;
 }
+@media (max-width: 767px) {
+  .es-filter .nav-sort > li {
+    width: 80px;
+  }
+}
 .es-filter .nav-sort > li > a {
   padding: 10px 15px;
   color: #616161;
