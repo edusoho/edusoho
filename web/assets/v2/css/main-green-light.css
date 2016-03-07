@@ -7962,14 +7962,10 @@ textarea {
   margin-bottom: 30px;
 }
 .es-filter .nav-sort > li {
-  float: left;
-}
-@media (max-width: 767px) {
-  .es-filter .nav-sort > li {
-    width: 80px;
-  }
+  display: inline;
 }
 .es-filter .nav-sort > li > a {
+  float: left;
   padding: 10px 15px;
   color: #616161;
   -webkit-transition: all 0.3s ease;
