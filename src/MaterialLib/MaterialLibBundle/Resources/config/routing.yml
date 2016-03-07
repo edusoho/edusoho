@@ -84,6 +84,10 @@ global_file_hls_clef:
     pattern:  /global_file/{globalId}/clef/{token}
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:clef }
 
+global_file_ppt:
+    pattern:  /global_file/{globalId}/ppt
+    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:ppt }
+
 json_query_courses:
     pattern:  /json/courses
     defaults: { _controller: MaterialLibBundle:JSONAPI:courses }

@@ -2,6 +2,7 @@
 
 namespace MaterialLib\MaterialLibBundle\Controller;
 
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -18,7 +19,26 @@ class GlobalFilePlayerController extends BaseController
 
         if ($file['type'] == 'video') {
             return $this->videoPlayer($request, $file);
+        } elseif ($file['type'] == 'ppt') {
+            return $this->render('MaterialLibBundle:Player:ppt-player.html.twig', array(
+                'file' => $file
+            ));
         }
+    }
+
+    public function pptAction(Request $request, $globalId)
+    {
+        $file = $this->getMaterialLibService()->get($globalId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $factory = new CloudClientFactory();
+        $client  = $factory->createClient();
+
+        $result = $client->pptImages($file['metas']['imagePrefix'], $file['metas']['length'].'');
+        return $this->createJsonResponse($result);
     }
 
     protected function videoPlayer($request, $file)
