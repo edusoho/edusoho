@@ -142,7 +142,7 @@
         <button class="ui-btn btn-green" ng-class="!isCanShowVip(course.vipLevelId) ? 'btn-col-60' : 'btn-col-25' " ng-click="joinCourse()">
             立即加入
         </button>
-        <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-if="isCanShowVip(course.vipLevelId)" ng-click="vipLeand()" ng-if="course.vipLevelId > 0 ">
+        <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-if="isCanShowVip(course.vipLevelId)" ng-click="vipLeand()">
             {{ getVipTitle(course.vipLevelId) }}免费学
         </button>
     </div>
