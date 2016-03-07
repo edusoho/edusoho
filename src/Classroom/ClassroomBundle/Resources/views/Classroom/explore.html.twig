@@ -27,15 +27,9 @@
   {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, path:'classroom_explore',fliter:{price: price,currentLevelId: currentLevelId},orderBy:orderBy})) }}
   <div class="es-filter">
     <ul class="nav nav-sort clearfix">
-      <li>
-        <a href="" class="">最新</a>
-      </li>
-      <li>
-        <a href="" class="">最热</a>
-      </li>
-      <li>
-        <a href="" class="">推荐</a>
-      </li>
+      <li><a href="" class="">最新</a></li>
+      <li><a href="" class="">最热</a></li>
+      <li><a href="" class="">推荐</a></li>
     </ul>
     <div class="filter hidden-xs">
       {% if is_plugin_installed('vip')%}
