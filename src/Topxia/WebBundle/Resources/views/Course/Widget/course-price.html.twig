@@ -16,15 +16,15 @@
       {% if priceType == 'coin' %}
         <span class="price">{{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
       {% else %}
-        <span class="price">{{ course.price }} {{'元'|trans}}</span>
+        <span class="price">{{ course.price }}{{'元'|trans}}</span>
       {% endif %}
     {% endif %}
 
     {% if 'full' in shows or 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price"><del>{{course.originCoinPrice}} {{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
+        <span class="origin-price"><del>{{course.originCoinPrice}}{{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
       {% else %}
-        <span class="origin-price"><del>{{course.originPrice}} {{'元'|trans}}</del></span>
+        <span class="origin-price"><del>{{course.originPrice}}{{'元'|trans}}</del></span>
       {% endif %}
     {% endif %}
 
@@ -34,7 +34,7 @@
         {% if (course.discount == 0) or (priceType == 'coin' and course.originCoinPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
           {{'限免'|trans}}
         {% else  %}
-          {{ course.discount|round(2, 'common') }} {{'折'|trans}}
+          {{ course.discount|round(2, 'common') }}{{'折'|trans}}
         {% endif %}
       </span>
 
@@ -45,16 +45,16 @@
     {% if 'full' in shows or 'price' in shows %}
       <span class="price">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-          {% if course.coinPrice > 0 %} {{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币'|trans)}} {% else %} <span class="text-success">{{'免费'|trans}}</span> {% endif %}
+          {% if course.coinPrice > 0 %} {{ course.coinPrice }}{{setting('coin.coin_name', '虚拟币'|trans)}} {% else %} <span class="text-success">{{'免费'|trans}}</span> {% endif %}
         {% else %}
-          {% if course.price > 0 %}{{ course.price }} {{'元'|trans}}{% else %} <span class="text-success">{{'免费'|trans}}</span> {% endif %}
+          {% if course.price > 0 %}{{ course.price }}{{'元'|trans}}{% else %} <span class="text-success">{{'免费'|trans}}</span> {% endif %} 
         {% endif %}
       </span>
     {% endif %}
 
     {% if 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price">{{course.originCoinPrice}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span class="origin-price">{{course.originCoinPrice}}{{setting('coin.coin_name', '虚拟币'|trans)}}</span>
       {% else %}
         ¥<span class="origin-price">{{course.originPrice}}</span>
       {% endif %}
