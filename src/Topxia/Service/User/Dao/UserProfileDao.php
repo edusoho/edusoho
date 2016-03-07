@@ -4,11 +4,11 @@ namespace Topxia\Service\User\Dao;
 
 interface UserProfileDao
 {
-	public function getProfile($id);
+    public function getProfile($id);
 
-	public function addProfile($profile);
+    public function addProfile($profile);
 
-	public function updateProfile($id, $profile);
+    public function updateProfile($id, $profile);
 
     public function findProfilesByIds(array $ids);
 
@@ -16,5 +16,5 @@ interface UserProfileDao
 
     public function searchProfiles($conditions, $orderBy, $start, $limit);
 
-	public function searchProfileCount($conditions);
+    public function searchProfileCount($conditions);
 }

@@ -3,6 +3,7 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
@@ -96,21 +97,23 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields   = $request->query->all();
-        $nickname = "";
+        $fields    = $request->query->all();
+        $condition = array();
 
-        if (isset($fields['nickName'])) {
-            $nickname = $fields['nickName'];
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
+
+        $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'student'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('classroomId' => $id, 'role' => 'student', 'nickname' => $nickname)),
+            $this->getClassroomService()->searchMemberCount($condition),
             20
         );
 
         $students = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $id, 'role' => 'student', 'nickname' => $nickname),
+            $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -140,21 +143,23 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields   = $request->query->all();
-        $nickname = "";
+        $fields    = $request->query->all();
+        $condition = array();
 
-        if (isset($fields['nickName'])) {
-            $nickname = $fields['nickName'];
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
+
+        $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'auditor'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('classroomId' => $id, 'role' => 'auditor', 'nickname' => $nickname)),
+            $this->getClassroomService()->searchMemberCount($condition),
             20
         );
 
         $students = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $id, 'role' => 'auditor', 'nickname' => $nickname),
+            $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -235,7 +240,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        // $currentUser = $this->getCurrentUser();
+// $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -763,7 +768,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function excelDataImportAction($id)
+    public function excelDataImportAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
@@ -773,8 +778,10 @@ class ClassroomManageController extends BaseController
             throw $this->createNotFoundException("未发布班级不能导入学员!");
         }
 
-        return $this->render('ClassroomBundle:ClassroomManage:import.step3.html.twig', array(
-            'classroom' => $classroom
+        return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
+            'request'      => $request,
+            'targetId'      => $id,
+            'targetType' => 'classroom'
         ));
     }
 
@@ -823,8 +830,8 @@ class ClassroomManageController extends BaseController
         $teachers   = $this->getUserService()->findUsersByIds($teacherIds);
 
         return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig', array(
-            'classroom'    => $classroom,
-            'status'       => $status,
+            'classroom' => $classroom,
+            'status'    => $status,
 
             'users'        => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
@@ -940,6 +947,38 @@ class ClassroomManageController extends BaseController
         }
 
         return $choices;
+    }
+
+    private function getUserIds($keyword)
+    {
+        $userIds = array();
+
+        if (SimpleValidator::email($keyword)) {
+            $user = $this->getUserService()->getUserByEmail($keyword);
+
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        } elseif (SimpleValidator::mobile($keyword)) {
+            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id', 'DESC'), 0, PHP_INT_MAX);
+            $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
+            $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
+
+            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
+
+            $userIds = array_unique($userIds);
+
+            $userIds = $userIds ? $userIds : null;
+            return $userIds;
+        } elseif (SimpleValidator::nickname($keyword)) {
+            $user      = $this->getUserService()->getUserByNickname($keyword);
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        } else {
+            $userIds[] = null;
+            return $userIds;
+        }
     }
 
     protected function getClassroomService()

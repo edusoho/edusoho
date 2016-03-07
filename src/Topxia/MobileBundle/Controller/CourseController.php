@@ -2,31 +2,29 @@
 
 namespace Topxia\MobileBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\WebBundle\Controller\BaseController;
 use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends MobileController
 {
-
     public function coursesAction(Request $request)
     {
-        $conditions = $request->query->all();
+        $conditions           = $request->query->all();
         $conditions['status'] = 'published';
-        $conditions['type'] = 'normal';
-        
+        $conditions['type']   = 'normal';
+
         $search = $request->query->get('search', '');
+
         if ($search != '') {
             $conditions['title'] = $search;
         }
 
-        $result = array();
+        $result          = array();
         $result['total'] = $this->getCourseService()->searchCourseCount($conditions);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        
-        $sort = $request->query->get('sort', 'latest');
+
+        $sort    = $request->query->get('sort', 'latest');
         $courses = $this->getCourseService()->searchCourses($conditions, $sort, $result['start'], $result['limit']);
 
         $result['data'] = $courses = $this->filterCourses($courses);
@@ -36,13 +34,12 @@ class CourseController extends MobileController
 
     public function searchCourses(Request $request)
     {
-
     }
-    
+
     public function courseAction(Request $request, $courseId)
     {
         $this->getUserToken($request);
-        $user = $this->getCurrentUser();
+        $user   = $this->getCurrentUser();
         $course = $this->getCourseService()->getCourse($courseId);
 
         if (empty($course)) {
@@ -54,30 +51,34 @@ class CourseController extends MobileController
             $error = array('error' => 'course_not_published', 'message' => "课程#{$courseId}未发布或已关闭。");
         }
 
-        $items = $this->getCourseService()->getCourseItems($courseId);
-        $reviews = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
+        $items         = $this->getCourseService()->getCourseItems($courseId);
+        $reviews       = $this->getReviewService()->findCourseReviews($courseId, 0, 100);
         $learnStatuses = $user->isLogin() ? $this->getCourseService()->getUserLearnLessonStatuses($user['id'], $course['id']) : array();
-        $member = $user->isLogin() ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+        $member        = $user->isLogin() ? $this->getCourseService()->getCourseMember($course['id'], $user['id']) : null;
+
         if ($member) {
             $member['createdTime'] = date('c', $member['createdTime']);
         }
 
-        $result = array();
-        $result['course'] = $this->filterCourse($course);
-        $result['reviews'] = $this->filterReviews($reviews);
-        $result['member'] = $member;
+        $result                  = array();
+        $result['course']        = $this->filterCourse($course);
+        $result['reviews']       = $this->filterReviews($reviews);
+        $result['member']        = $member;
         $result['userIsStudent'] = $user->isLogin() ? $this->getCourseService()->isCourseStudent($courseId, $user['id']) : false;
-        if (!$result['userIsStudent']){
-                $learnStatuses = array();
+
+        if (!$result['userIsStudent']) {
+            $learnStatuses = array();
         }
 
         $result['userLearns'] = $learnStatuses;
-        $result['items'] = $this->filterItems($items);
+        $result['items']      = $this->filterItems($items);
+
         foreach ($result['userLearns'] as $lessonId => $status) {
-            if (empty($result['items']['lesson-' . $lessonId])) {
+            if (empty($result['items']['lesson-'.$lessonId])) {
                 continue;
             }
-            $result['items']['lesson-' . $lessonId]['userLearnStatus'] = $status;
+
+            $result['items']['lesson-'.$lessonId]['userLearnStatus'] = $status;
         }
 
         $result['items2'] = array_values($result['items']);
@@ -85,12 +86,13 @@ class CourseController extends MobileController
         $result['userFavorited'] = $user->isLogin() ? $this->getCourseService()->hasFavoritedCourse($courseId) : false;
 
         if ($course) {
-            $this->getLogService()->info(MobileController::MOBILE_MODULE, "view_course", "浏览课程",  array(
+            $this->getLogService()->info(MobileController::MOBILE_MODULE, "view_course", "浏览课程", array(
                 "courseId" => $course["id"],
-                "title" => $course["title"]
-                )
+                "title"    => $course["title"]
+            )
             );
         }
+
         return $this->createJson($request, $result);
     }
 
@@ -103,9 +105,8 @@ class CourseController extends MobileController
 
     public function lessonAction(Request $request, $courseId, $lessonId)
     {
-
         $token = $this->getUserToken($request);
-        $user = $this->getCurrentUser();
+        $user  = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', '您尚未登录，不能查看课时！');
@@ -114,35 +115,37 @@ class CourseController extends MobileController
         $course = $this->getCourseService()->getCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
 
-        $json = array();
+        $json           = array();
         $json['number'] = $lesson['number'];
 
         $chapter = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
+
         if ($chapter['type'] == 'unit') {
-            $unit = $chapter;
+            $unit               = $chapter;
             $json['unitNumber'] = $unit['number'];
 
-            $chapter = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
+            $chapter               = $this->getCourseService()->getChapter($course['id'], $unit['parentId']);
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
-
         } else {
             $json['chapterNumber'] = empty($chapter) ? 0 : $chapter['number'];
-            $json['unitNumber'] = 0;
+            $json['unitNumber']    = 0;
         }
 
-        $json['title'] = $lesson['title'];
+        $json['title']   = $lesson['title'];
         $json['summary'] = $lesson['summary'];
-        $json['type'] = $lesson['type'];
+        $json['type']    = $lesson['type'];
         $json['content'] = $this->convertAbsoluteUrl($this->container->get('request'), $lesson['content']);
-        $json['status'] = $lesson['status'];
+        $json['status']  = $lesson['status'];
+
         if ($lesson['length'] > 0 && in_array($lesson['type'], array('audio', 'video'))) {
-            $json['length'] =  $this->container->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
+            $json['length'] = $this->container->get('topxia.twig.web_extension')->durationFilter($lesson['length']);
         } else {
             $json['length'] = 0;
         }
-        $json['quizNum'] = $lesson['quizNum'];
+
+        $json['quizNum']     = $lesson['quizNum'];
         $json['materialNum'] = $lesson['materialNum'];
-        $json['mediaId'] = $lesson['mediaId'];
+        $json['mediaId']     = $lesson['mediaId'];
         $json['mediaSource'] = $lesson['mediaSource'];
 
         if ($json['mediaSource'] == 'self') {
@@ -151,24 +154,24 @@ class CourseController extends MobileController
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
                     $factory = new CloudClientFactory();
-                    $client = $factory->createClient();
+                    $client  = $factory->createClient();
 
                     $json['mediaConvertStatus'] = $file['convertStatus'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['hd']['key'])) {
-
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                             $token = $this->getTokenService()->makeToken('hls.playlist', array('data' => $file['id'], 'times' => 2, 'duration' => 3600));
-                            $url = array(
+                            $url   = array(
                                 'url' => $this->generateUrl('hls_playlist', array(
-                                    'id' => $file['id'], 
+                                    'id'    => $file['id'],
                                     'token' => $token['token'],
-                                    'line' => $request->query->get('line')
+                                    'line'  => $request->query->get('line')
                                 ), true)
                             );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                         }
+
                         $json['mediaUri'] = $url['url'];
                     } else {
                         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -182,28 +185,31 @@ class CourseController extends MobileController
                         }
 
                         if ($key) {
-                            $url = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                            $url              = $client->generateFileUrl($client->getBucket(), $key, 3600);
                             $json['mediaUri'] = $url['url'];
                         } else {
                             $json['mediaUri'] = '';
                         }
-
                     }
                 } else {
-                    $json['mediaUri'] = $this->generateUrl('mapi_course_lesson_media', array('courseId'=>$course['id'], 'lessonId' => $lesson['id'], 'token' => empty($token) ? '' : $token['token']), true);
+                    $json['mediaUri'] = $this->generateUrl('mapi_course_lesson_media', array('courseId' => $course['id'], 'lessonId' => $lesson['id'], 'token' => empty($token) ? '' : $token['token']), true);
                 }
             } else {
                 $json['mediaUri'] = '';
             }
-        } else if ($json['mediaSource'] == 'youku') {
+        } else
+        if ($json['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+
             if ($matched) {
                 $json['mediaUri'] = "http://player.youku.com/embed/{$matches[1]}";
             } else {
                 $json['mediaUri'] = '';
             }
-        } else if ($json['mediaSource'] == 'tudou') {
+        } else
+        if ($json['mediaSource'] == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+
             if ($matched) {
                 $json['mediaUri'] = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
             } else {
@@ -221,12 +227,14 @@ class CourseController extends MobileController
     {
         $this->getUserToken($request);
         $user = $this->getCurrentUser();
+
         if (!$user->isLogin()) {
             return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能查看课时！");
         }
 
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);  
-        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self') ) {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson) || empty($lesson['mediaId']) || ($lesson['mediaSource'] != 'self')) {
             throw $this->createNotFoundException();
         }
 
@@ -235,6 +243,7 @@ class CourseController extends MobileController
         }
 
         $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
@@ -319,12 +328,12 @@ class CourseController extends MobileController
             return $this->createErrorResponse($request, 'not_login', "您尚未登录，不能收藏课程！");
         }
 
-        $result = array();
+        $result          = array();
         $result['total'] = $this->getCourseService()->findUserFavoritedCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
 
-        $courses = $this->getCourseService()->findUserFavoritedCourses($user['id'], $result['start'], $result['limit']);
+        $courses        = $this->getCourseService()->findUserFavoritedCourses($user['id'], $result['start'], $result['limit']);
         $result['data'] = $this->filterCourses($courses);
 
         return $this->createJson($request, $result);
@@ -342,12 +351,12 @@ class CourseController extends MobileController
             return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
-        $result = array();
+        $result          = array();
         $result['total'] = $this->getCourseService()->findUserLeaningCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses = $this->getCourseService()->findUserLeaningCourses($user['id'], $result['start'], $result['limit']);
-        $result['data'] = $this->array2Map($this->filterCourses($courses));
+        $courses         = $this->getCourseService()->findUserLeaningCourses($user['id'], $result['start'], $result['limit']);
+        $result['data']  = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
     }
@@ -355,9 +364,11 @@ class CourseController extends MobileController
     private function array2Map($learnCourses)
     {
         $mapCourses = array();
+
         if (empty($learnCourses)) {
             return $mapCourses;
-        }        
+        }
+
         foreach ($learnCourses as $key => $learnCourse) {
             $mapCourses[$learnCourse['id']] = $learnCourse;
         }
@@ -377,12 +388,12 @@ class CourseController extends MobileController
             return $this->createErrorResponse($request, 'not_login', "您尚未登录！");
         }
 
-        $result = array();
+        $result          = array();
         $result['total'] = $this->getCourseService()->findUserLeanedCourseCount($user['id']);
         $result['start'] = (int) $request->query->get('start', 0);
         $result['limit'] = (int) $request->query->get('limit', 10);
-        $courses = $this->getCourseService()->findUserLeanedCourses($user['id'], $result['start'], $result['limit']);
-        $result['data'] = $this->array2Map($this->filterCourses($courses));
+        $courses         = $this->getCourseService()->findUserLeanedCourses($user['id'], $result['start'], $result['limit']);
+        $result['data']  = $this->array2Map($this->filterCourses($courses));
 
         return $this->createJson($request, $result);
     }
@@ -426,7 +437,7 @@ class CourseController extends MobileController
 
         $status = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lessonId);
 
-        return $this->createJson($request, $status ? : 'unstart');
+        return $this->createJson($request, $status ?: 'unstart');
     }
 
     protected function filterCourse($course)
@@ -447,24 +458,28 @@ class CourseController extends MobileController
         }
 
         $teacherIds = array();
+
         foreach ($courses as $course) {
             $teacherIds = array_merge($teacherIds, $course['teacherIds']);
         }
+
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);
         $teachers = $this->simplifyUsers($teachers);
 
-        $self = $this;
+        $self      = $this;
         $container = $this->container;
-        return array_map(function($course) use ($self, $container, $teachers) {
+        return array_map(function ($course) use ($self, $container, $teachers) {
             $course['smallPicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['smallPicture'], 'course-large.png', true);
             $course['middlePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['middlePicture'], 'course-large.png', true);
             $course['largePicture'] = $container->get('topxia.twig.web_extension')->getFilePath($course['largePicture'], 'course-large.png', true);
             $course['about'] = $self->convertAbsoluteUrl($container->get('request'), $course['about']);
 
             $course['teachers'] = array();
+
             foreach ($course['teacherIds'] as $teacherId) {
                 $course['teachers'][] = $teachers[$teacherId];
             }
+
             unset($course['teacherIds']);
 
             return $course;
@@ -477,13 +492,14 @@ class CourseController extends MobileController
             return array();
         }
 
-        $self = $this;
+        $self      = $this;
         $container = $this->container;
 
-        return array_map(function($item) use ($self, $container) {
+        return array_map(function ($item) use ($self, $container) {
             $item['createdTime'] = date('c', $item['createdTime']);
+
             if (!empty($item['length']) && in_array($item['type'], array('audio', 'video'))) {
-                $item['length'] =  $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
+                $item['length'] = $container->get('topxia.twig.web_extension')->durationFilter($item['length']);
             } else {
                 $item['length'] = 0;
             }
@@ -491,22 +507,21 @@ class CourseController extends MobileController
             if (empty($item['content'])) {
                 $item['content'] = "";
             }
+
             $item['content'] = $self->convertAbsoluteUrl($container->get('request'), $item['content']);
 
             return $item;
         }, $items);
-
     }
 
     public function convertAbsoluteUrl($request, $html)
     {
         $baseUrl = $request->getSchemeAndHttpHost();
-        $html = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function($matches) use ($baseUrl) {
+        $html    = preg_replace_callback('/src=[\'\"]\/(.*?)[\'\"]/', function ($matches) use ($baseUrl) {
             return "src=\"{$baseUrl}/{$matches[1]}\"";
         }, $html);
 
         return $html;
-
     }
 
     private function getSettingService()
@@ -534,7 +549,7 @@ class CourseController extends MobileController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    private function getMemberDao ()
+    private function getMemberDao()
     {
         return $this->getServiceKernel()->createDao('Course.CourseMemberDao');
     }
