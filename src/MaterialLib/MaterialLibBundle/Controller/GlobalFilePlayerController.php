@@ -3,11 +3,12 @@
 namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
+use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class GlobalFilePlayerController extends BaseController
 {
-    public function playerAction(Request $reqeust, $globalId)
+    public function playerAction(Request $request, $globalId)
     {
         $file = $this->getMaterialLibService()->get($globalId);
 
@@ -16,69 +17,209 @@ class GlobalFilePlayerController extends BaseController
         }
 
         if ($file['type'] == 'video') {
-            return $this->videoPlayer($file);
+            return $this->videoPlayer($request, $file);
         }
     }
 
-    protected function videoPlayer($file)
+    protected function videoPlayer($request, $file)
     {
-        $player = "balloon-cloud-video-player";
-        $url    = $this->getPlayUrl($globalId, array());
+        $url = $this->getPlayUrl($file);
 
-        return $this->render('TopxiaWebBundle:Player:video-player.html.twig', array(
+        return $this->render('MaterialLibBundle:Player:global-video-player.html.twig', array(
             'file'             => $file,
             'url'              => $url,
-            'context'          => array(),
-            'player'           => $player,
+            'player'           => 'balloon-cloud-video-player',
             'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
         ));
     }
 
-    protected function getPlayUrl($globalId, $context)
+    protected function getPlayUrl($file)
     {
+        if (!in_array($file["type"], array("audio", "video"))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $token = $this->makeToken('hls.playlist', $file['no']);
+
+        $params = array(
+            'globalId' => $file['no'],
+            'token'    => $token['token']
+        );
+
+        return $this->generateUrl('global_file_hls_playlist', $params, true);
+    }
+
+    public function playlistAction(Request $request, $globalId, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('hls.playlist', $token);
+
+        if (empty($token)) {
+            throw $this->createNotFoundException();
+        }
+
+        $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
+
+        if ($dataId != $globalId) {
+            throw $this->createNotFoundException();
+        }
+
         $file = $this->getMaterialLibService()->get($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
 
-        if (!in_array($file["type"], array("audio", "video"))) {
-            throw $this->createAccessDeniedException();
-        }
+        $streams = array();
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+        foreach (array('sd', 'hd', 'shd') as $level) {
+            if (empty($file['metas']['levels'][$level])) {
+                continue;
+            }
 
-        if (!empty($file['metas']) && !empty($file['metas']['levels']['sd']['key'])) {
-            // if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-            $token = $this->makeToken('hls.playlist', $file['id'], $context);
-
-            $params = array(
-                'id'    => $file['id'],
-                'token' => $token['token']
+            $tokenFields = array(
+                'data'     => array(
+                    'globalId' => $file['no'].$level
+                ),
+                'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
+                'duration' => 3600
             );
 
-            return $this->generateUrl('hls_playlist', $params, true);
-            // } else {
-            //     $result = $client->generateHLSQualitiyListUrl($file['metas'], 3600);
-            // }
-        } else {
-            if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                $key = $file['metas']['hd']['key'];
-            } else {
-                $key = $file['reskey'];
+            if (!empty($token['userId'])) {
+                $tokenFields['userId'] = $token['userId'];
             }
 
-            if ($key) {
-                $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
-            }
+            $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
+
+            $params = array(
+                'globalId' => $file['no'],
+                'level'    => $level,
+                'token'    => $token['token']
+            );
+
+            $streams[$level] = $this->generateUrl('global_file_hls_stream', $params, true);
         }
 
-        return $result['url'];
+        $api = CloudAPIFactory::create('leaf');
+
+        $qualities = array(
+            'video' => $file['directives']['videoQuality'],
+            'audio' => $file['directives']['audioQuality']
+        );
+
+        $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+        return $this->createJsonResponse($playlist);
+    }
+
+    public function streamAction(Request $request, $globalId, $level, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+
+        if (empty($token)) {
+            throw $this->createNotFoundException();
+        }
+
+        $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
+
+        if ($dataId != ($globalId.$level)) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getMaterialLibService()->get($globalId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (empty($file['metas']['levels'][$level]['key'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $tokenFields = array(
+            'data'     => array(
+                'globalId'      => $file['no'],
+                'level'         => $level,
+                'keyencryption' => 0
+            ),
+            'times'    => 1,
+            'duration' => 3600
+        );
+
+        if (!empty($token['userId'])) {
+            $tokenFields['userId'] = $token['userId'];
+        }
+
+        $token = $this->getTokenService()->makeToken('hls.clef', $tokenFields);
+
+        $params           = array();
+        $params['keyUrl'] = $this->generateUrl('global_file_hls_clef', array(
+            'globalId' => $file['no'],
+            'token'    => $token['token']
+        ), true);
+        $params['key'] = $file['metas']['levels'][$level]['key'];
+
+        $api = CloudAPIFactory::create('leaf');
+
+        $stream = $api->get('/hls/stream', $params);
+
+        if (empty($stream['stream'])) {
+            return $this->createMessageResponse('error', '生成视频播放地址失败！');
+        }
+
+        return new Response($stream['stream'], 200, array(
+            'Content-Type'        => 'application/vnd.apple.mpegurl',
+            'Content-Disposition' => 'inline; filename="stream.m3u8"'
+        ));
+    }
+
+    public function clefAction(Request $request, $globalId, $token)
+    {
+        $token = $this->getTokenService()->verifyToken('hls.clef', $token);
+
+        if (empty($token)) {
+            return $this->makeFakeTokenString();
+        }
+
+        $dataId = is_array($token['data']) ? $token['data']['globalId'] : $token['data'];
+
+        if ($dataId != $globalId) {
+            return $this->makeFakeTokenString();
+        }
+
+        $file = $this->getMaterialLibService()->get($globalId);
+
+        if (empty($file)) {
+            return $this->makeFakeTokenString();
+        }
+
+        if (empty($file['metas']['levels'][$token['data']['level']]['hlsKey'])) {
+            return $this->makeFakeTokenString();
+        }
+
+        return new Response($file['metas']['levels'][$token['data']['level']]['hlsKey']);
+    }
+
+    protected function makeToken($type, $globalId)
+    {
+        $fileds = array(
+            'data'     => array(
+                'globalId' => $globalId
+            ),
+            'times'    => 3,
+            'duration' => 3600,
+            'userId'   => $this->getCurrentUser()->getId()
+        );
+
+        $token = $this->getTokenService()->makeToken($type, $fileds);
+        return $token;
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }

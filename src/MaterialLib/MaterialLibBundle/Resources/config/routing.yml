@@ -72,6 +72,18 @@ global_file_player:
     pattern:  /global_file/{globalId}/player
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }
 
+global_file_hls_playlist:
+    pattern:  /global_file/{globalId}/playlist/{token}.m3u8
+    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:playlist }
+
+global_file_hls_stream:
+    pattern:  /global_file/{globalId}/stream/{level}/{token}.m3u8
+    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:stream }
+
+global_file_hls_clef:
+    pattern:  /global_file/{globalId}/clef/{token}
+    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:clef }
+
 json_query_courses:
     pattern:  /json/courses
     defaults: { _controller: MaterialLibBundle:JSONAPI:courses }
