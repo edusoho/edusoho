@@ -14,10 +14,7 @@ class DiscoveryColumn extends BaseResource
         if (empty($result)) {
             return $this->error('error', '暂无分类内容!');
         }
-        foreach ($result as $key => $value) {
-            $result[$key]['createdTime'] = date('c', $value['createdTime']);
-            $result[$key]['updateTime'] = date('c', $value['updateTime']);
-        }        
+      
         return $this->wrap($result, sizeof($result));
     }
 
