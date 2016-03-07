@@ -120,7 +120,7 @@
                 </div>
                 
                 <div class="thumbnail-pane" id="self-select">
-                  <div id="video-player" 
+                  {#<div id="video-player" 
                       data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
                       data-player-url="{{path('material_lib_file_player', {fileId: file.id})}}"
                     {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
@@ -129,7 +129,7 @@
                     {% if setting('storage.video_fingerprint') and app.user %}
                       data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
                     {% endif %}
-                  ></div>
+                  ></div>#}
                 </div>
 
               </div>

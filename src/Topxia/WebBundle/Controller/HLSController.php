@@ -159,6 +159,7 @@ class HLSController extends BaseController
         $tokenFields = array(
             'data'     => array(
                 'id'            => $file['id'],
+                'level'         => $level,
                 'keyencryption' => $token['data']['fromApi'] || $inWhiteList ? 0 : 1
             ),
             'times'    => $inWhiteList ? 0 : 1,
