@@ -15,7 +15,7 @@
       {% endif %}
 
       {% if enabled|default(1) == 0 %}
-        <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
+        <div class="alert alert-danger" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
       {% endif %}
 
       {% if is_trial() %}
