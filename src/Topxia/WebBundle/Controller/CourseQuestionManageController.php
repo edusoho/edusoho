@@ -321,9 +321,9 @@ class CourseQuestionManageController extends BaseController
         }
 
         return $this->forward("TopxiaWebBundle:UploadFile:download", array(
-            'request'    => $request,
-            'fileId'     => $fileId,
-            'isDownload' => true));
+            'request' => $request,
+            'fileId'  => $fileId
+        ));
     }
 
     protected function getCourseService()
