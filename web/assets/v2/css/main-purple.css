@@ -7964,11 +7964,9 @@ textarea {
 }
 .es-filter .nav-sort {
   float: left;
-  padding-right: 300px;
 }
 @media (max-width: 767px) {
   .es-filter .nav-sort {
-    padding-right: 0;
     width: 100%;
   }
 }
