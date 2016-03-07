@@ -1,7 +1,7 @@
 <?php
 namespace Topxia\Service\Importer;
 
-interface ImporterProcessor 
+interface ImporterProcessor
 {
     public function validateExcelFile($file);
 
@@ -11,24 +11,26 @@ interface ImporterProcessor
 
     public function getFieldSort();
 
-    public function validExcelFieldValue($userData,$row,$fieldCol);
+    public function validExcelFieldValue($userData, $row, $fieldCol);
 
-	public function checkRepeatData();
+    public function checkPassedRepeatData();
 
-	public function arrayRepeat($array);
-	
-	public function checkNecessaryFields($excelFields);
+    public function checkRepeatData($array);
 
-	public function getUserData();
+    public function arrayRepeat($array, $fieldCol);
 
-	public function tryManage($targetId);
+    public function checkNecessaryFields($excelFields);
 
-	public function getExcelExample();
+    public function getUserData();
 
-	public function getExcelInfoValidateUrl();
+    public function tryManage($targetId);
 
-	public function getExcelInfoImportUrl();
+    public function getExcelExample();
 
-	public function excelDataImporting($targetObject, $userData, $userUrl);
+    public function getExcelInfoValidateUrl();
+
+    public function getExcelInfoImportUrl();
+
+    public function excelDataImporting($targetObject, $userData, $userUrl);
 
 }
