@@ -7096,6 +7096,12 @@ textarea {
   top: 10px;
   right: 10px;
 }
+@media (max-width: 767px) {
+  .course-list .course-item .metas .course-price-widget {
+    top: 5px;
+    right: 5px;
+  }
+}
 .course-list .course-item .metas .price {
   color: #e83d2c;
   font-size: 14px;
@@ -7975,7 +7981,7 @@ textarea {
   }
 }
 .es-filter .nav-sort > li {
-  display: inline-block;
+  float: left;
 }
 .es-filter .nav-sort > li > a {
   display: block;
