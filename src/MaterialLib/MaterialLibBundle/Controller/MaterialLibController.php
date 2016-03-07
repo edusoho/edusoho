@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class MaterialLibController extends BaseController
 {
@@ -282,9 +283,16 @@ class MaterialLibController extends BaseController
     //加载播放器的地址
     public function playerAction(Request $request, $fileId)
     {
-        $globalId = "03734c9acbe949d19ce18f69a112f1d8";
-        $api      = CloudAPIFactory::create('root');
-
+        $file = $this->getUploadFileService()->getFile($fileId);
+        if (!empty($file)) {
+            try {
+                $api = CloudAPIFactory::create('leaf');
+                $api->setApiUrl("http://andytest.edusoho.net:8081");
+                $result = $api->get("/resources/{$file['globalId']}");
+            } catch (\RuntimeException $e) {
+                return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
+            }
+        }
         $file = $this->tryAccessFile($fileId);
         $url  = $this->generateUrl("material_lib_file_play_url", array(
             'fileId' => $fileId
