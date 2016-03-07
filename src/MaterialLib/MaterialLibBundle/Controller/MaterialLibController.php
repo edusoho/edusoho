@@ -282,11 +282,13 @@ class MaterialLibController extends BaseController
     //加载播放器的地址
     public function playerAction(Request $request, $fileId)
     {
+        $globalId = "03734c9acbe949d19ce18f69a112f1d8";
+        $api      = CloudAPIFactory::create('root');
+
         $file = $this->tryAccessFile($fileId);
         $url  = $this->generateUrl("material_lib_file_play_url", array(
             'fileId' => $fileId
         ), true);
-
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'  => $fileId,
             'url' => $url
