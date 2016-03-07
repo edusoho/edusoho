@@ -7966,6 +7966,7 @@ textarea {
 }
 .es-filter .nav-sort > li > a {
   float: left;
+  height: 40px;
   padding: 10px 15px;
   color: #616161;
   -webkit-transition: all 0.3s ease;
