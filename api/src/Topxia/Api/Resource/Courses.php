@@ -56,9 +56,9 @@ class Courses extends BaseResource
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
         $courses = $this->filter($courses);
         foreach ($courses as $key => $value) {
-            $courses[$key]['createdTime'] =strtotime($value['createdTime']);
-            $courses[$key]['updatedTime'] =strtotime($value['updatedTime']);
-        }
+            $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
+            $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
+        }   
         return $this->wrap($courses, min($result['showCount'], $total));
     }
     public function post(Application $app, Request $request)
