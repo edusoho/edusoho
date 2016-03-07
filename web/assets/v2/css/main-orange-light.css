@@ -3345,7 +3345,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3365,7 +3365,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -7963,6 +7963,7 @@ textarea {
 @media (max-width: 767px) {
   .es-filter .nav-sort {
     padding-right: 0;
+    float: none;
   }
 }
 .es-filter .nav-sort > li {
@@ -10825,7 +10826,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -13255,3 +13256,5 @@ textarea {
 .group-page .media:hover .post-delete-btn {
   visibility: visible;
 }
+
+/*# sourceMappingURL=main-orange-light.css.map */
