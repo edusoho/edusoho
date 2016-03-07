@@ -15,8 +15,8 @@
       <p>
         <span class="text-muted mrm">存储空间: {{ overview.service.storage.freeSpace }}GB</span>
         {% if not overview.service.storage.renewVideo.effectiveDate|default(0) %}
-        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
         <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a>
+        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
         {% else %}
         <span>
           已续费（将于{{ overview.service.storage.renewVideo.effectiveDate|date("Y年n月j日") }}生效)
