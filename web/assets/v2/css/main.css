@@ -7962,19 +7962,10 @@ textarea {
   height: 40px;
   margin-bottom: 30px;
 }
-.es-filter .nav-sort {
-  float: left;
-}
-@media (max-width: 767px) {
-  .es-filter .nav-sort {
-    width: 100%;
-  }
-}
 .es-filter .nav-sort > li {
   float: left;
 }
 .es-filter .nav-sort > li > a {
-  display: block;
   padding: 10px 15px;
   color: #616161;
   -webkit-transition: all 0.3s ease;
