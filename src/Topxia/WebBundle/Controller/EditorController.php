@@ -89,14 +89,4 @@ class EditorController extends BaseController
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
-
-    protected function getUploadFileService()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
 }
