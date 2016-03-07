@@ -722,8 +722,7 @@ class SettingsController extends BaseController
             $form->bind($request);
 
             if ($form->isValid()) {
-                $data = $form->getData();
-                var_dump($data);
+                $data         = $form->getData();
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
