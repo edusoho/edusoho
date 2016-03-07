@@ -316,7 +316,7 @@ class CourseQuestionManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($id != $file["targetId"]) {
+        if ($id != $file["targetId"] || $file['targetType'] != 'attachment') {
             throw $this->createNotFoundException();
         }
 
