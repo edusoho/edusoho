@@ -1,0 +1,152 @@
+<style type="text/css">
+  .material-detail-widget .header {
+    padding-bottom: 12px;
+    margin: 0 0 20px 0;
+    padding: 0;
+    border-bottom-width: 2px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .material-detail-widget .header h1 {
+    display: inline;
+    font-size: 18px;
+    line-height: 32px;
+    margin: 0 0;
+  }
+  .material-detail-widget .content .tab-panne {
+    display: none;
+  }
+
+  .material-detail-widget .content .tab-panne.active {
+    display: block;
+  }
+
+  .material-detail-widget .content .nav {
+    margin-bottom: 20px;
+  }
+
+  .material-detail-widget .content #cover-tab img {
+    width: 100%;
+  }
+
+  .material-detail-widget .content #cover-tab .links {
+    padding-left: 15px;
+  }
+
+  .material-detail-widget .content #cover-tab .thumbnail-pane {
+    display: none;
+  }
+
+  .material-detail-widget .content #cover-tab .thumbnail-pane.active {
+    display: block;
+  }
+  
+  .material-detail-widget .content #cover-tab .links a.disabled {
+    color: #777;
+  }
+
+  .material-detail-widget .content #cover-tab .links a.disabled:hover,
+  .material-detail-widget .content #cover-tab .links a.disabled:focus {
+    color: #777;
+    text-decoration: none;
+    cursor: not-allowed;
+    background-color: transparent;
+  }
+      
+</style>
+
+<div id="material-detail" class="material-detail-widget">
+  <div class="header clearfix">
+    <h1>资源详情</h1>
+    <a href="javascript:;" class="js-back">返回列表</a>
+  </div>
+  <div class="content">
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active js-info" data-target="#info-tab"><a href="#info-tab">基本信息</a></li>
+      <li role="presentation" class="js-cover" data-target="#cover-tab"><a href="#cover-tab">封面图片</a></li>
+    </ul>
+
+    <div class="tab-content">
+
+      <div class="tab-pane active" id="info-tab">
+        <form class="form-horizontal" id="info-form" action="{{ path('admin_material_edit', {globalId:material.no}) }}">
+          <div class="form-group">
+            <label for="name" class="col-md-2 control-label">标题</label>
+            <div class="col-md-6">
+              <input type="text" class="form-control" id="name" name="name" required="true" placeholder="标题" value="{{ material.name }}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tags" class="col-md-2 control-label">标签</label>
+            <div class="col-md-6">
+              <input type="text" class="width-full select2-offscreen" id="tags" name="tags" value="{{ material.tags|join(',') }}" placeholder="标签" data-url="{{ path('tag_match') }}">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">简介</label>
+            <div class="col-md-6 controls">
+              <textarea id="description" name="description" class="form-control" rows="6">{{ material.description }}</textarea>
+            </div>
+          </div>
+
+          <div class="col-md-offset-2 col-md-8 controls">
+            <button class="btn btn-fat btn-primary" id="info-save-btn" data-loading-text="正在保存..." type="submit">保存</button>
+        </div>
+        </form>
+      </div>
+
+
+      <div class="tab-pane" id="cover-tab">
+        <form class="form-horizontal" id="cover-form" action="{{ path('admin_material_edit', {globalId:material.no}) }}">
+          <div class="form-group">
+            <label for="name" class="col-md-2 control-label">封面</label>
+            <div class="col-md-4">
+              <img class="js-cover-img" src="{{ asset(material.thumbnail) }}">
+            </div>
+
+            {% if material.type == 'video' %}
+              <div class="col-md-6" id="thumbnail-set">
+                <div class="links" style="padding-left:15px;">
+                  <a class="js-set-default disabled" href="#default-thumbnails">默认</a>
+                  <a class="js-set-select" href="#self-select">自选</a>
+                </div>
+
+                <div class="thumbnail-pane active" id="default-thumbnails">
+                  {% for thumbnail in thumbnails %}
+                    <div class="col-md-4" style="padding-bottom:10px">
+                      <img class="js-img-set" style="cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}">
+                    </div>
+                  {% endfor %}
+                </div>
+                
+                <div class="thumbnail-pane" id="self-select">
+                  {#<div id="video-player" 
+                      data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
+                      data-player-url="{{path('material_lib_file_player', {fileId: file.id})}}"
+                    {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+                      data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+                    {% endif %}
+                    {% if setting('storage.video_fingerprint') and app.user %}
+                      data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+                    {% endif %}
+                  ></div>#}
+                </div>
+
+              </div>
+            {% endif %}
+          </div>
+
+          <input type="hidden" name="thumbNo" id="thumbNo">
+          <input type="hidden" id="orignalThumb" value="{{ asset(material.thumbnail) }}">
+          {% if material.type == 'video' %}
+            <div class="col-md-offset-2 col-md-8 controls">
+              <a class="btn btn-fat btn-info js-reset-btn" href="javascript:;">还原</a>
+              <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="正在保存..." type="submit">保存</button>
+            </div>
+          {% endif %}
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

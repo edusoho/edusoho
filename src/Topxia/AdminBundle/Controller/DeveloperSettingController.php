@@ -60,9 +60,7 @@ class DeveloperSettingController extends BaseController
 
         if (isset($developerSetting['without_network']) && $developerSetting['without_network'] == 1 && !$fileSystem->exists($networkLock)) {
             $fileSystem->touch($networkLock);
-        } else
-
-        if (!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0) {
+        } elseif (!isset($developerSetting['without_network']) || $developerSetting['without_network'] == 0) {
             $fileSystem->remove($networkLock);
         }
     }
@@ -116,7 +114,7 @@ class DeveloperSettingController extends BaseController
 
             $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
             if ($redis['opened'] == '1') {
-                $config          = "<?php \nreturn ".var_export($redis['setting'], true).';';
+                $config = "<?php \nreturn ".var_export($redis['setting'], true).';';
                 file_put_contents($redisConfigFile, $config);
             }
 

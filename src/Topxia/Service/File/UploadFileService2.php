@@ -32,9 +32,6 @@ interface UploadFileService2
 
     public function decreaseFileUsedCount($id);
 
-    //查询文件接口
-    public function search($conditions, $storage);
-
     /**
      * share file
      */
@@ -47,5 +44,7 @@ interface UploadFileService2
     public function waveUploadFile($id, $field, $diff);
 
     public function reconvertFile($id, $convertCallback);
+
+
 
 }

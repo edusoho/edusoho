@@ -180,8 +180,9 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/MaterialLib/MaterialLibBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
 
-        $count = $this->getAppService()->findAppCount();
-        $apps  = $this->getAppService()->findApps(0, $count);
+        $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
+        $count         = $this->getAppService()->findAppCount();
+        $apps          = $this->getAppService()->findApps(0, $count);
 
         foreach ($apps as $app) {
             if ($app['type'] != 'plugin') {

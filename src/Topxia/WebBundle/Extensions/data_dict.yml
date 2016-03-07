@@ -338,7 +338,7 @@ processStatus:
     processing: 正在转码
     ok: 转码成功
     error: 转码失败
-    
+
 state:
     banned: 禁用
     replaced: 屏蔽

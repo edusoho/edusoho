@@ -2,9 +2,9 @@
 
 namespace MaterialLib\Service\MaterialLib;
 
-interface MaterialLibService
+interface CloudFileService
 {
-    public function search($conditions, $start, $limit);
+    public function search($conditions);
 
     public function get($globalId);
 
@@ -13,6 +13,6 @@ interface MaterialLibService
     public function delete($globalId);
 
     public function download($globalId);
-
+    
     public function getDefaultHumbnails($globalId);
 }

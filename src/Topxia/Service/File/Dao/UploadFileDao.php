@@ -28,6 +28,8 @@ interface UploadFileDao
 
     public function deleteFile($id);
 
+    public function deleteByGlobalId($globalId);
+
     public function updateFile($id, array $fields);
 
     public function waveUploadFile($id, $field, $diff);

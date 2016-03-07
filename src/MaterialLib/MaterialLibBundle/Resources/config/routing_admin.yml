@@ -9,3 +9,21 @@ admin_material_lib_manage:
 admin_material_lib_render_table:
     pattern:  /materiallib/table/render
     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:render }
+
+admin_material_detail:
+    pattern:  /materiallib/{globalId}/detail
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:detail }
+
+admin_material_edit:
+    pattern:  /materiallib/{globalId}/edit
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:edit }
+    methods: [POST]
+
+admin_material_delete:
+    pattern:  /materiallib/{globalId}/delete
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:delete }
+    methods: [POST]
+
+admin_material_download:
+    pattern:  /materiallib/{globalId}/download
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:download }

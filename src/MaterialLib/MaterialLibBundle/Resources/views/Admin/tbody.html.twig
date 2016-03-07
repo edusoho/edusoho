@@ -1,15 +1,21 @@
 {% for material in materials %}
+  {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   <tr>
     <td>
       <div>
         <div class="pull-left" style="width:50%">
-          <a href="">
-            <img style="width:90%" src="{{ asset(material.thumbnail) }}">
+          <a href="javascript:;">
+            <img style="width:90%;height:100px" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.jpg')) }}">
           </a>
         </div>
         <div class="pull-right" style="width:50%">
-          <p>{{ material.name }}</p>
-          <p>{{ material.createdTime|date('Y-m-d H:i:s') }}</p>
+          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}">{{ material.name }}</p>
+
+          <div style="margin-top:40px">
+            <span class="text-sm text-muted" style="display:block">{{ createdUser.nickname|default('用户已删除') }} 上传</span>
+            <span class="text-sm text-muted" style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
+          </div>
+          
         </div>
       </div>
     </td>
@@ -44,17 +50,14 @@
 
     <td>
       <div class="btn-group">
-        <button type="button" class="btn btn-default">详情</button>
+        <a type="button" class="btn btn-default js-detail-btn" href="javascript:;" data-url="{{ path('admin_material_detail', {globalId:material.no}) }}">详情</a>
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="caret"></span>
           <span class="sr-only">Toggle Dropdown</span>
         </button>
         <ul class="dropdown-menu">
-          <li><a href="#">下载</a></li>
-          <li><a href="#">删除</a></li>
-          <li><a href="#">编辑</a></li>
-          <li role="separator" class="divider"></li>
-          <li><a href="#">查看引用</a></li>
+          <li class="js-download-btn"><a href="{{ path('admin_material_download', {globalId:material.no}) }}" target="__blank">下载</a></li>
+          <li class="js-delete-btn" data-url="{{ path('admin_material_delete', {globalId:material.no}) }}"><a href="javascript:;">删除</a></li>
         </ul>
     </td>
   </tr>

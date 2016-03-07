@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     require('jquery.select2-css');
     require('jquery.select2');
+    var DetailWidget = require('materiallibbundle/controller/web/detail');
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
 
@@ -13,7 +15,9 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav-tabs li': 'onClickNav',
-                'click .pagination li': 'onClickPagination'
+                'click .pagination li': 'onClickPagination',
+                'click .js-detail-btn': 'onClickDetailBtn',
+                'click .js-delete-btn': 'onClickDeleteBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -36,6 +40,45 @@ define(function(require, exports, module) {
                 this.element.find('.js-page').val($target.data('page'));
                 this.renderTable(true);
                 event.preventDefault();
+            },
+            onClickDetailBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $.ajax({
+                    type:'GET',
+                    url:$target.data('url'),
+                }).done(function(resp){
+                    self.element.hide();
+                    self.element.prev().hide();
+                    self.element.parent().append(resp);
+                    new DetailWidget({
+                        element:'#material-detail',
+                        callback: function() {
+                            var $form = $('#materials-form');
+                            $form.show();
+                            $form.prev().show();
+                            window.materialWidget.renderTable();
+                        }
+                    });
+                }).fail(function(){
+                    Notify.danger('Opps,出错了!');
+                });
+            },
+            onClickDeleteBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                this._loading();
+                $.ajax({
+                    type:'POST',
+                    url:$target.data('url'),
+                }).done(function(){
+                    Notify.success('删除成功!');
+                    self.renderTable();
+                }).fail(function(){
+                    Notify.danger('删除失败!');
+                });
             },
             submitForm: function(event)
             {
@@ -259,7 +302,7 @@ define(function(require, exports, module) {
             }
         });
 
-        new MaterialWidget({
+        window.materialWidget = new MaterialWidget({
             element: '#materials-form'
         });
         
