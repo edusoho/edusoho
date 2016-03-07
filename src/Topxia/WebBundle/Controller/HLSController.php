@@ -92,7 +92,7 @@ class HLSController extends BaseController
             'video' => $file['convertParams']['videoQuality'],
             'audio' => $file['convertParams']['audioQuality']
         );
-        $api = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('leaf');
 
         if ($fromApi) {
             $playlist = $api->get('/hls/playlist', array('streams' => $streams, 'qualities' => $qualities));
@@ -189,7 +189,7 @@ class HLSController extends BaseController
             $params['line'] = $line;
         }
 
-        $api = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('leaf');
 
         $stream = $api->get('/hls/stream', $params);
 
@@ -241,7 +241,7 @@ class HLSController extends BaseController
 
         return new Response($file['metas2'][$token['data']['level']]['hlsKey']);
 
-        $api = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('leaf');
 
         if (!empty($token['data']['keyencryption'])) {
             $stream = $api->get("/hls/clef/{$file['metas2'][$token['data']['level']]['hlsKey']}/algo/1", array());
