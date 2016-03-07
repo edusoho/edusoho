@@ -7964,6 +7964,11 @@ textarea {
 .es-filter .nav-sort > li {
   display: inline;
 }
+@media (max-width: 767px) {
+  .es-filter .nav-sort > li {
+    width: 80px;
+  }
+}
 .es-filter .nav-sort > li > a {
   float: left;
   height: 40px;
