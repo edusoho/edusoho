@@ -105,7 +105,9 @@ class ClassroomUserImporterProcessor implements ImporterProcessor
                     $user = null;
                 }
             } else {
-                $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
+                if (!empty($userData['verifiedMobile'])) {
+                    $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
+                }
             }
         }
 
