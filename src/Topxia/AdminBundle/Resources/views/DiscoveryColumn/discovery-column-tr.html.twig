@@ -15,7 +15,8 @@
 			<td>
 				{% if discoveryColumn.orderType == 'recommend' %}推荐
 				{% elseif discoveryColumn.orderType == 'hot' %}最热
-				{% else %}最新
+				{% elseif discoveryColumn.orderType == 'new' %}最新
+				{% else %} --
 				{% endif %}
 			</td>
 

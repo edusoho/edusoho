@@ -15,6 +15,9 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
 
     public function updateDiscoveryColumn($id, $fields)
     {
+        if ($fields['type'] == 'live') {
+            $fields['orderType'] = '';
+        }
         $fields = ArrayToolkit::parts($fields, array('categoryId', 'orderType', 'type', 'showCount', 'title', 'seq'));
         return $this->getDiscoveryColumnDao()->updateDiscoveryColumn($id, $fields);
     }
@@ -29,6 +32,11 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
         if (empty($fields['categoryId'])) {
             $fields['categoryId'] = 0;
         }
+
+        if ($fields['type'] == 'live') {
+            $fields['orderType'] = '';
+        }
+
         return $this->getDiscoveryColumnDao()->addDiscoveryColumn($fields);
     }
 
