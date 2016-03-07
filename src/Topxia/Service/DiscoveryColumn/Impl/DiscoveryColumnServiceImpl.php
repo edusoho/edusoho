@@ -26,6 +26,9 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
 
     public function addDiscoveryColumn($fields)
     {
+        if (empty($fields['categoryId'])) {
+            $fields['categoryId'] = 0;
+        }
         return $this->getDiscoveryColumnDao()->addDiscoveryColumn($fields);
     }
 
