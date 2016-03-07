@@ -26,7 +26,12 @@ class Classrooms extends BaseResource
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
 
         $total = count($classrooms);
-        return $this->wrap($this->filter($classrooms), $total);
+        $classrooms = $this->filter($classrooms);
+        foreach ($classrooms as $key => $value) {
+            $classrooms[$key]['createdTime'] =strtotime($value['createdTime']);
+            $classrooms[$key]['updatedTime'] =strtotime($value['updatedTime']);
+        }
+        return $this->wrap($classrooms, $total);
     }
 
     public function get(Application $app, Request $request)
