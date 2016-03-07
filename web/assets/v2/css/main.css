@@ -7079,6 +7079,7 @@ textarea {
   }
 }
 .course-list .course-item .metas {
+  position: relative;
   padding: 10px;
   color: #c1c1c1;
 }
@@ -7091,7 +7092,9 @@ textarea {
   margin-right: 5px;
 }
 .course-list .course-item .metas .course-price-widget {
-  float: right;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 .course-list .course-item .metas .price {
   color: #e83d2c;
@@ -7968,7 +7971,7 @@ textarea {
 @media (max-width: 767px) {
   .es-filter .nav-sort {
     padding-right: 0;
-    float: none;
+    width: 100%;
   }
 }
 .es-filter .nav-sort > li {
@@ -13057,6 +13060,7 @@ textarea {
   }
 }
 .user-center-header .container {
+  position: relative;
   z-index: 1;
   padding: 0 70px;
 }
