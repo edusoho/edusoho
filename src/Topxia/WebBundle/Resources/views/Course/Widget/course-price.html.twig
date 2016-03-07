@@ -14,7 +14,7 @@
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span class="price">{{ course.coinPrice }} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span class="price">{{ course.coinPrice }}{{setting('coin.coin_name', '虚拟币'|trans)}}</span>
       {% else %}
         <span class="price">{{ course.price }}{{'元'|trans}}</span>
       {% endif %}
