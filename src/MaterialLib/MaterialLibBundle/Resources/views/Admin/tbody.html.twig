@@ -50,7 +50,7 @@
         </span>
         
         <br>
-        <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" style="margin-top:10px">重新转码</a>
+        <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
       {% else %}
         <span class="label label-warning">
           {{ dict_text('processStatus', material.processStatus) }}

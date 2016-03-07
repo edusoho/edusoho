@@ -85,6 +85,7 @@ define(function(require, exports, module) {
             {
                 var self = this;
                 var $target = $(event.currentTarget);
+                $target.button('loading');
                 $.ajax({
                     type:'POST',
                     url:$target.data('url'),
@@ -94,6 +95,8 @@ define(function(require, exports, module) {
                     $target.closest('td').html(html);
                 }).fail(function(){
                     Notify.danger('重新转码失败!');
+                }).always(function(){
+                    $target.button('reset');
                 });
             },
             submitForm: function(event)
