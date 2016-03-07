@@ -13057,6 +13057,7 @@ textarea {
   }
 }
 .user-center-header .container {
+  z-index: 1;
   padding: 0 70px;
 }
 @media (max-width: 1199px) {
