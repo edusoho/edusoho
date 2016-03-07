@@ -8,6 +8,7 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
     var BatchAttachmentsUploader = require('../../quiz-question/batch-upload-attachments');
+    var UploadQuestionAttachments = require('../../quiz-question/upload-question-attachments');
 
     var QuestionCreator = Widget.extend({
         attrs: {
@@ -33,17 +34,26 @@ define(function(require, exports, module) {
                     
                 $("#cloud-btn", "#question-attachment").on('click',function(){
                     var url="";
-                    url = $(this).data("html5Url");
-                    
+                    if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                        url = $(this).data("normalUrl");
+                    } else {
+                        url = $(this).data("html5Url");
+                    }
                     $("#modal").html('');
                     $("#modal").modal('show');
                     $.get(url, function(html){
                         $("#modal").html(html);
-                        var batchAttachmentsUploader = new BatchAttachmentsUploader({
-                            editor:editor
-                        });
-                        
-
+                        if(find('#selectFiles')){
+                            var batchAttachmentsUploader = new BatchAttachmentsUploader({
+                                 editor:editor
+                            });
+                        }else{
+                            var uploadQuestionAttachments = new UploadQuestionAttachments({
+                                 editor:editor
+                            });
+                        }
+                         
+                       
                     });
                 })
               
@@ -80,7 +90,7 @@ define(function(require, exports, module) {
                 height: height
             });
 
-            self._uploadAttachment(editor);
+            //self._uploadAttachment(editor);
             self._initBatchAttachmentUploader(editor);
 
             this.get('validator').on('formValidate', function(elemetn, event) {

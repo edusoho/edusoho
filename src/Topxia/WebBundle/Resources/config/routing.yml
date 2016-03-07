@@ -800,6 +800,10 @@ course_manage_question_upload:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
     methods: [POST]
 
+course_manage_upload_question_attachment:
+    pattern:  /course/{id}/manage/upload/question/attachment/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
+
 course_manage_question_batch_upload_attachment:
     pattern: /course/{id}/manage/question/batch/upload/attachment/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:batchUploadAttachments }

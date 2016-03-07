@@ -273,6 +273,23 @@ class CourseQuestionManageController extends BaseController
         return $choices;
     }
 
+    public function uploadAttachmentsAction(Request $request, $id, $targetType)
+    {
+        if (!empty($id)) {
+            $course = $this->getCourseService()->tryManageCourse($id);
+        } else {
+            $course = null;
+        }
+
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        return $this->render('TopxiaWebBundle:CourseQuestionManage:modal-upload-question-attachment.html.twig', array(
+            'course'         => $course,
+            'storageSetting' => $storageSetting,
+            'targetType'     => $targetType,
+            'targetId'       => $id
+        ));
+    }
+
     public function batchUploadAttachmentsAction(Request $request, $id, $targetType)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
