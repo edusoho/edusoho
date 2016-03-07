@@ -308,7 +308,7 @@ class CourseQuestionManageController extends BaseController
 
     public function attachmentDownloadAction(Request $request, $id, $fileId)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
 
         $file = $this->getUploadFileService()->getFile($fileId);
 
