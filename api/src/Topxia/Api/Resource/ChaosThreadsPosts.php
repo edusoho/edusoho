@@ -69,8 +69,9 @@ class ChaosThreadsPosts extends BaseResource
         $limit       = $request->query->get('limit', 10);
 
         $conditions  = array(
-            'userId'=>$user['id']
+            'userId' => $currentUser['id']
         );
+
         $total       = $this->getCourseThreadService()->searchThreadPostsCount($conditions);
         $start       = $start == -1 ? rand(0, $total - 1) : $start;  
 
@@ -80,7 +81,8 @@ class ChaosThreadsPosts extends BaseResource
 
         foreach ($posts as $post) {            
             $course                          = $this->getCourseService()->getCourse($post['courseId']);
-            if(isset($course['userId']) && $course == $user['id']){
+
+            if(isset($course['userId']) && $course==$currentUser['id']){
                 continue;
             }
             if(!empty($course)){
