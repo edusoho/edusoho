@@ -39,6 +39,7 @@ class MaterialLibController extends BaseController
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type' => empty($conditions['type'])?'all':$conditions['type'],
             'materials' => $results['data'],
+            'createdUsers' => $results['createdUsers'],
             'paginator' => $paginator
         ));
     }

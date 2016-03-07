@@ -13,7 +13,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $conditions['start'] = $start;
         $conditions['limit'] = $limit;
         $conditions = $this->filterConditions($conditions);
-        return $this->getCloudFileService()->search($conditions);
+        $result = $this->getCloudFileService()->search($conditions);
+        $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
+        $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+        return $result;
     }
 
     public function get($globalId)

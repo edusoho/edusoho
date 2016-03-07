@@ -443,3 +443,12 @@ margin-top: 14px;
   max-height: 435px;
   overflow: auto;
 }
+
+.ellipsis,
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}

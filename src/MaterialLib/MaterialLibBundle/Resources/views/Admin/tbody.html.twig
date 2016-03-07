@@ -1,4 +1,5 @@
 {% for material in materials %}
+  {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   <tr>
     <td>
       <div>
@@ -8,8 +9,13 @@
           </a>
         </div>
         <div class="pull-right" style="width:50%">
-          <p>{{ material.name }}</p>
-          <p>{{ material.createdTime|date('Y-m-d H:i:s') }}</p>
+          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}">{{ material.name }}</p>
+
+          <div style="margin-top:40px">
+            <span class="text-sm text-muted" style="display:block">{{ createdUser.nickname|default('用户已删除') }} 上传</span>
+            <span class="text-sm text-muted" style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
+          </div>
+          
         </div>
       </div>
     </td>
