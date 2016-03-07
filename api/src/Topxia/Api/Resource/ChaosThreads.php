@@ -203,25 +203,33 @@ class ChaosThreads extends BaseResource
 
         $start         = $start == -1 ? rand(0, $total - 1) : $start;
         
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'createdNotStick' , $start, $limit);
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions,'createdNotStick',$start,$limit);
+
+        $courseIds     = ArrayToolkit::column($courseThreads,"courseId");
+
+        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);               
 
         $threads       = array();
-
         foreach ($courseThreads as $thread) {
-            $course                          =$this->getCourseService()->getCourse($thread['courseId']);
-            if(!empty($course)){
-                $threadPosts['courseId']     = $course['courseId'];
-                $threadPosts['courseTitle']  = $course['title'];
-                $threadPosts['smallPicture'] = $course['smallPicture'];
-                $threadPosts['middlePicture']= $course['middlePicture'];
-                $threadPosts['lagerPicture'] = $course['lagerPicture'];
+            $threadPosts                = array();
+            $threadPosts['id']          = $thread['id'];
+            $threadPosts['type']        = $thread['type'];  
+            $threadPosts['title']       = $thread['title'];
+            $threadPosts['content']     = $thread['content'];
+            $threadPosts['createdTime'] = $thread['createdTime'];
+            foreach ($courses as $course) {
+                if($thread['courseId'] == $course['id']){
+                    $threadPosts['courseId']     = $course['id'];
+                    $threadPosts['courseTitle']  = $course['title'];
+                    $threadPosts['smallPicture'] = $course['smallPicture'];
+                    $threadPosts['middlePicture']= $course['middlePicture'];
+                    $threadPosts['lagerPicture'] = $course['lagerPicture'];
+                    break;
+                }
             }
-            $threadPosts['id']               = $thread['id'];   
-            $threadPosts['title']            = $thread['title'];
-            $threadPosts['content']          = $thread['content'];
-            $threadPosts['createdTime']      = $thread['createdTime'];
+            array_push($threads,$threadPosts);
         }
-        return $threadPosts;
+        return $threads;
     }
 
     protected function getThreadService()

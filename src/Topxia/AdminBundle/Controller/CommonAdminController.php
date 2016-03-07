@@ -18,6 +18,12 @@ class CommonAdminController extends BaseController
         $admin['title'] = $data['title'];
         $admin['userId'] = $user['id'];
 
+        $admins = $this->getUserCommonAdminService()->findCommonAdminByUserId($user['id']);
+
+        if(count($admins)>=10){
+            
+        }
+
         if ($this->getUserCommonAdminService()->getCommonAdminByUserIdAndUrl($user['id'],$admin['url'])) {
 
             return $this->createJsonResponse('error');
