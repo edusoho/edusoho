@@ -98,7 +98,6 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
-
         $videoInfo = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
         $liveInfo  = isset($overview['service']['live']) ? $overview['service']['live'] : null;
         $smsInfo   = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
