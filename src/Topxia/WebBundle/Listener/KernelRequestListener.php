@@ -25,7 +25,7 @@ class KernelRequestListener
                 return;
             }
 
-            $whiteList = array('/coin/pay/return/alipay', '/coin/pay/notify/alipay', '/coin/pay/notify/wxpay', '/pay/center/pay/alipay/return', '/pay/center/pay/wxpay/notify', '/pay/center/pay/alipay/notify', '/live/verify', '/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/uploadfile/cloud_convertcallback2', '/uploadfile/cloud_convertcallback3', '/uploadfile/cloud_convertheadleadercallback', '/disk/upload', '/file/upload', '/editor/upload', '/editor/file/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth', '/edu_cloud/sms_callback');
+            $whiteList = array('/coin/pay/return/alipay', '/coin/pay/notify/alipay', '/coin/pay/notify/wxpay', '/pay/center/pay/alipay/return', '/pay/center/pay/wxpay/notify', '/pay/center/pay/alipay/notify', '/live/verify', '/course/order/pay/alipay/notify', '/vip/pay_notify/alipay', '/uploadfile/upload', '/uploadfile/cloud_convertcallback', '/uploadfile/cloud_convertcallback2', '/uploadfile/cloud_convertcallback3', '/uploadfile/cloud_convertheadleadercallback', '/disk/upload', '/file/upload', '/editor/upload', '/disk/convert/callback', '/partner/phpwind/api/notify', '/partner/discuz/api/notify', '/live/auth', '/edu_cloud/sms_callback');
 
             if (in_array($request->getPathInfo(), $whiteList)) {
                 return;
