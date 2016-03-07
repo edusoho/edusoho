@@ -67,10 +67,7 @@ class DefaultController extends BaseController
         $orders = ArrayToolkit::index($orders, "targetId");
 
         foreach ($members as $key => $value) {
-            if ($courses[$value["courseId"]]['parentId'] != 0) {
-                continue;
-            }
-
+            $course                    = array();
             $course['title']           = $courses[$value["courseId"]]['title'];
             $course['courseId']        = $courses[$value["courseId"]]['id'];
             $course['addedStudentNum'] = $value['co'];
