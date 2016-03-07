@@ -43,7 +43,7 @@ define(function(require, exports, module) {
                     $("#modal").modal('show');
                     $.get(url, function(html){
                         $("#modal").html(html);
-                        if(find('#selectFiles')){
+                        if($('#selectFiles')){
                             var batchAttachmentsUploader = new BatchAttachmentsUploader({
                                  editor:editor
                             });
