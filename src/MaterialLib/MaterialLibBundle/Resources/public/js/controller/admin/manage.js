@@ -17,7 +17,8 @@ define(function(require, exports, module) {
                 'click .nav-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
                 'click .js-detail-btn': 'onClickDetailBtn',
-                'click .js-delete-btn': 'onClickDeleteBtn'
+                'click .js-delete-btn': 'onClickDeleteBtn',
+                'click .js-reconvert-btn': 'onClickReconvertBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -78,6 +79,21 @@ define(function(require, exports, module) {
                     self.renderTable();
                 }).fail(function(){
                     Notify.danger('删除失败!');
+                });
+            },
+            onClickReconvertBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $.ajax({
+                    type:'POST',
+                    url:$target.data('url'),
+                }).done(function(){
+                    Notify.success('重新转码成功!');
+                    var html = '<span class="label label-info">等待转码</span>';
+                    $target.closest('td').html(html);
+                }).fail(function(){
+                    Notify.danger('重新转码失败!');
                 });
             },
             submitForm: function(event)

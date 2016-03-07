@@ -30,22 +30,32 @@
       {{ material.size|file_size }}
     </td>
     <td>
-      <span class="label 
-        {% if material.processStatus == 'ok' %}
-          label-success
-        {% elseif material.processStatus == 'waiting' %}
-          label-info
-        {% elseif material.processStatus == 'processing' %}
-          label-primary
-        {% elseif material.processStatus == 'error' %}
-          label-danger
-        {% else %}
-          label-warning
-        {% endif %}
-      ">
-        {{ dict_text('processStatus', material.processStatus) }}
-      </span>
-      
+      {% if material.processStatus == 'ok' %}
+        <span class="label label-success">
+          {{ dict_text('processStatus', material.processStatus) }}
+        </span>
+      {% elseif material.processStatus == 'waiting' %}
+        <span class="label label-info">
+          {{ dict_text('processStatus', material.processStatus) }}
+        </span>
+      {% elseif material.processStatus == 'processing' %}
+        label-primary
+        <span class="label label-primary">
+          {{ dict_text('processStatus', material.processStatus) }}
+        </span>
+      {% elseif material.processStatus == 'error' %}
+        <span class="label label-danger">
+          {{ dict_text('processStatus', material.processStatus) }}
+          <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="转码失败"></i>
+        </span>
+        
+        <br>
+        <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" style="margin-top:10px">重新转码</a>
+      {% else %}
+        <span class="label label-warning">
+          {{ dict_text('processStatus', material.processStatus) }}
+        </span>
+      {% endif %}
     </td>
 
     <td>

@@ -68,6 +68,9 @@ material_lib_file_preview_content:
     pattern:  /material/lib/{fileId}/preview/content
     defaults: { _controller: MaterialLibBundle:MaterialLib:content }
 
+material_reconvert:
+    pattern:  /material/lib/{globalId}/reconvert
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:reconvert }
 json_query_courses:
     pattern:  /json/courses
     defaults: { _controller: MaterialLibBundle:JSONAPI:courses }
