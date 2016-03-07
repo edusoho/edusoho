@@ -185,7 +185,7 @@ define(function(require, exports, module) {
                 var hlsEncrypted = self.element.data('hlsEncrypted');
                 var fileSuffix = file.name.substr(file.name.lastIndexOf(".")+1).toLowerCase();
                 var fileType = this.getFileType(fileSuffix);
-                if ((targetType == 'attachment') && uploadMode == 'cloud') {
+                if ((targetType == 'coursequestion') && uploadMode == 'cloud') {
                     if ($.inArray(fileType, ['audio','flash']) >= 0) {
                         data.convertor = '';
                     } else if ($.inArray(fileType, ['ppt','document']) >= 0) {

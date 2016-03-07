@@ -39,8 +39,8 @@ define(function(require, exports, module) {
 
 
 				var extensions = '';
-				if (targetType == 'attachment') {
-					extensions = 'mp3,mp4,avi,flv,wmv,mov,ppt,pptx,doc,docx,pdf,swf,zip,rar';
+				if (targetType == 'coursequestion') {
+					extensions = 'ppt,pptx,doc,docx,pdf,swf,zip,rar';
 				}
 				var filters = [];
 				if (extensions.length > 0) {

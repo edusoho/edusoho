@@ -60,8 +60,8 @@
             <span id="question-attachment" >
               
                <a id="cloud-btn" class="btn btn-info btn-sm pull-right "
-              data-html5-url="{{ path('course_manage_question_batch_upload_attachment', {id:course.id, targetType:'attachment'}) }}"
-               data-normal-url="{{ path('course_manage_upload_question_attachment', {id:course.id, targetType:'attachment'}) }}"
+              data-html5-url="{{ path('course_manage_question_batch_upload_attachment', {id:course.id, targetType:'coursequestion'}) }}"
+               data-normal-url="{{ path('course_manage_upload_question_attachment', {id:course.id, targetType:'coursequestion'}) }}"
                data-storage="{{setting('storage.upload_mode')}}"
               >
               <i class="glyphicon glyphicon-cloud-upload"></i>上传附件

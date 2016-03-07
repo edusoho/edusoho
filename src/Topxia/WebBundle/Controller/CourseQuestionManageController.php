@@ -293,7 +293,7 @@ class CourseQuestionManageController extends BaseController
         $storageSetting = $this->getSettingService()->get('storage', array());
         $fileExts       = "";
 
-        if ("attachment" == $targetType) {
+        if ("coursequestion" == $targetType) {
             $fileExts = "*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.zip";
         }
 
@@ -316,7 +316,7 @@ class CourseQuestionManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($id != $file["targetId"] || $file['targetType'] != 'attachment') {
+        if ($id != $file["targetId"] || $file['targetType'] != 'coursequestion') {
             throw $this->createNotFoundException();
         }
 
