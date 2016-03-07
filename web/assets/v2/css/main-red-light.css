@@ -7961,7 +7961,7 @@ textarea {
   border-radius: 2px;
   margin-bottom: 30px;
 }
-.es-filter .nav-sort {
+.es-filter .nav-sort > li {
   float: left;
 }
 .es-filter .nav-sort > li > a {
