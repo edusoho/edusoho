@@ -71,7 +71,7 @@ class ChaosThreadsPosts extends BaseResource
         $conditions  = array(
             'userId' => $currentUser['id']
         );
-
+        
         $total       = $this->getCourseThreadService()->searchThreadPostsCount($conditions);
         $start       = $start == -1 ? rand(0, $total - 1) : $start;  
 
