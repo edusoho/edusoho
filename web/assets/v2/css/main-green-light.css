@@ -7961,16 +7961,10 @@ textarea {
   border-radius: 2px;
   margin-bottom: 30px;
 }
-.es-filter .nav-sort > li {
-  display: inline;
-}
-@media (max-width: 767px) {
-  .es-filter .nav-sort > li {
-    width: 80px;
-  }
+.es-filter .nav-sort {
+  float: left;
 }
 .es-filter .nav-sort > li > a {
-  float: left;
   height: 40px;
   padding: 10px 15px;
   color: #616161;

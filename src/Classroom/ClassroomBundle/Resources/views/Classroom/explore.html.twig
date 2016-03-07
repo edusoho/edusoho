@@ -26,7 +26,7 @@
   {% set currentLevelId = fliter.currentLevelId|default('all')%}
   {{ render(controller('TopxiaWebBundle:Category:treeNav',{category:category, path:'classroom_explore',fliter:{price: price,currentLevelId: currentLevelId},orderBy:orderBy})) }}
   <div class="es-filter">
-    <ul class="nav nav-sort">
+    <ul class="nav nav-sort clearfix">
       <li>
         <a href="{{ path('classroom_explore', {category:category, fliter: {price: price,currentLevelId: currentLevelId},orderBy: 'createdTime'}) }}" class="{% if (orderBy == 'createdTime') %} active {% endif %}">最新</a>
       </li>
