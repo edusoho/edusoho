@@ -68,6 +68,10 @@ material_lib_file_preview_content:
     pattern:  /material/lib/{fileId}/preview/content
     defaults: { _controller: MaterialLibBundle:MaterialLib:content }
 
+global_file_player:
+    pattern:  /global_file/{globalId}/player
+    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }
+
 json_query_courses:
     pattern:  /json/courses
     defaults: { _controller: MaterialLibBundle:JSONAPI:courses }

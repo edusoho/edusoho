@@ -2,10 +2,10 @@
 
 namespace MaterialLib\MaterialLibBundle\Controller\Admin;
 
+use Topxia\Common\Paginator;
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
-use Topxia\Service\Util\CloudClientFactory;
-use Topxia\Common\Paginator;
 
 class MaterialLibController extends BaseController
 {
@@ -17,8 +17,8 @@ class MaterialLibController extends BaseController
     public function manageAction(Request $request)
     {
         return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
-            'type' => $request->query->get('type', ''),
-            'courseId' => $request->query->get('courseId', ''),
+            'type'          => $request->query->get('type', ''),
+            'courseId'      => $request->query->get('courseId', ''),
             'createdUserId' => $request->query->get('createdUserId', '')
         ));
     }
@@ -26,9 +26,9 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
-        $results = $this->getMaterialLibService()->search(
+        $results    = $this->getMaterialLibService()->search(
             $conditions,
-            ($request->query->get('page', 1) -1) * 20,
+            ($request->query->get('page', 1) - 1) * 20,
             20
         );
         $paginator = new Paginator(
@@ -38,21 +38,21 @@ class MaterialLibController extends BaseController
         );
 
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
-            'type' => empty($conditions['type'])?'all':$conditions['type'],
-            'materials' => $results['data'],
+            'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
+            'materials'    => $results['data'],
             'createdUsers' => $results['createdUsers'],
-            'paginator' => $paginator
+            'paginator'    => $paginator
         ));
     }
 
     public function detailAction(Request $reqeust, $globalId)
     {
-        $material = $this->getMaterialLibService()->get($globalId);
+        $material   = $this->getMaterialLibService()->get($globalId);
         $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
-            'material' => $material,
+            'material'   => $material,
             'thumbnails' => $thumbnails,
-            'params' => $reqeust->query->all()
+            'params'     => $reqeust->query->all()
         ));
     }
 
@@ -121,19 +121,19 @@ class MaterialLibController extends BaseController
         $factory = new CloudClientFactory();
         $client  = $factory->createClient();
 
-        if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-            if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                $token = $this->makeToken('hls.playlist', $file['id'], $context);
+        if (!empty($file['metas']) && !empty($file['metas']['levels']['sd']['key'])) {
+            // if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+            $token = $this->makeToken('hls.playlist', $file['id'], $context);
 
-                $params = array(
-                    'id'    => $file['id'],
-                    'token' => $token['token']
-                );
+            $params = array(
+                'id'    => $file['id'],
+                'token' => $token['token']
+            );
 
-                return $this->generateUrl('hls_playlist', $params, true);
-            } else {
-                $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-            }
+            return $this->generateUrl('hls_playlist', $params, true);
+            // } else {
+            //     $result = $client->generateHLSQualitiyListUrl($file['metas'], 3600);
+            // }
         } else {
             if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
                 $key = $file['metas']['hd']['key'];
@@ -147,6 +147,34 @@ class MaterialLibController extends BaseController
         }
 
         return $result['url'];
+    }
+
+    protected function makeToken($type, $fileId, $context = array())
+    {
+        $fileds = array(
+            'data'     => array(
+                'id' => $fileId
+            ),
+            'times'    => 3,
+            'duration' => 3600,
+            'userId'   => $this->getCurrentUser()->getId()
+        );
+
+        if (isset($context['watchTimeLimit'])) {
+            $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fileds['data']['hideBeginning'] = $context['hideBeginning'];
+        }
+
+        $token = $this->getTokenService()->makeToken($type, $fileds);
+        return $token;
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getMaterialLibService()
