@@ -771,10 +771,10 @@ class EduCloudController extends BaseController
 
         $emailStatus = array_merge($emailStatus, $sign);
 
-        if ($emailStatus['status'] != 'error') {
+        if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
             $this->getSettingService()->set('cloud_email', $emailStatus);
         }
-
+        $emailStatus = $this->getSettingService()->get('cloud_email', array());
         return $emailStatus;
     }
 

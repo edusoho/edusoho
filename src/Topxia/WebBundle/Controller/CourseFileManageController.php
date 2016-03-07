@@ -2,11 +2,8 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseFileManageController extends BaseController
 {
@@ -76,8 +73,7 @@ class CourseFileManageController extends BaseController
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file   = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -87,19 +83,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['targetType'] == 'courselesson') {
-            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
-        } elseif ($file['targetType'] == 'coursematerial' || $file['targetType'] == 'materiallib') {
-            if ($file['storage'] == 'cloud') {
-                $factory = new CloudClientFactory();
-                $client  = $factory->createClient();
-                $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-            } else {
-                return $this->createPrivateFileDownloadResponse($request, $file);
-            }
-        }
-
-        throw $this->createNotFoundException();
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $file['id']));
     }
 
     public function convertAction(Request $request, $id, $fileId)
@@ -198,28 +182,5 @@ class CourseFileManageController extends BaseController
     protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
-    }
-
-    protected function createPrivateFileDownloadResponse(Request $request, $file)
-    {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        $file['filename'] = urlencode($file['filename']);
-        $file['filename'] = str_replace('+', '%20', $file['filename']);
-
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
     }
 }

@@ -86,6 +86,8 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
+        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', '登录成功');
+
         $loginBind = $this->setting('login_bind', array());
 
         if (empty($loginBind['login_limit'])) {

@@ -410,7 +410,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        return $this->createLocalMediaResponse($request, $file, false);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function detailDataAction($courseId, $lessonId)
@@ -462,11 +462,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        return $this->forward('TopxiaWebBundle:UploadFile:download', array(
-            'request'    => $request,
-            'id'         => $lesson['mediaId'],
-            'isDownload' => true
-        ));
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function pptAction(Request $request, $courseId, $lessonId)
