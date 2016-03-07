@@ -118,11 +118,11 @@ class CourseUserImporterProcessor implements ImporterProcessor
         return $errorInfo;
     }
 
-    public function checkRepeatData($checkFields)
+    public function checkRepeatData()
     {
-        $errorInfo = array();
-
-        $fieldSort = $this->getFieldSort();
+        $errorInfo   = array();
+        $checkFields = array_keys($this->necessaryFields);
+        $fieldSort   = $this->getFieldSort();
 
         foreach ($checkFields as $checkField) {
             $nicknameData = array();

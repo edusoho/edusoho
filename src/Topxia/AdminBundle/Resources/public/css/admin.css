@@ -404,7 +404,7 @@ input.LargeInput {width: 600px;}
 
 
 .edu-user .name {
-  color: #333;
+  color: #428bca;
   font-size: 18px;
 }
 
@@ -453,7 +453,7 @@ input.LargeInput {width: 600px;}
 }
 
 .edu-balance .balance {
-  font-size: 24px;
+  font-size: 20px;
   padding-right: 10px;
 }
 
@@ -464,6 +464,14 @@ input.LargeInput {width: 600px;}
   color: #428bca;
   border-top: 1px solid #ccc;
   text-align: center;
+}
+
+/*.edu-service .panel-body {
+  padding: 40px;
+}*/
+
+.edu-service .panel-body p {
+  margin-bottom: 20px;
 }
 
 .navigation-table tr{

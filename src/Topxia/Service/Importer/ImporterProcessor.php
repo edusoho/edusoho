@@ -15,7 +15,7 @@ interface ImporterProcessor
 
     public function checkPassedRepeatData();
 
-    public function checkRepeatData($array);
+    public function checkRepeatData();
 
     public function arrayRepeat($array, $fieldCol);
 
