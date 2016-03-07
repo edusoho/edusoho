@@ -2,7 +2,7 @@
 {% if setting('coin.coin_enabled') %}
     {% if setting('coin.coin_enabled') %}
     <li  class="{% if side_nav == 'my-coin' %}active{% endif %}" >
-      <a href="{{ url('my_coin') }}" >我的{{setting('coin.coin_name')|default('虚拟币')}}
+      <a href="{{ url('my_coin') }}" >我的{{setting('coin.coin_name')|default('虚拟币')}}</a>
     </li>
     {% endif %}
 {% endif %}
@@ -11,9 +11,9 @@
     </a>
   </li>
 {% if setting('invite.invite_code_setting') == 1 %}
-    <li class="{% if side_nav == 'my-invite-code' %}active{% endif %}">
-      <a href="{{ url('my_invite_code') }}">{{'我的邀请码'|trans}}
-      </a>
-    </li>
+  <li class="{% if side_nav == 'my-invite-code' %}active{% endif %}">
+    <a href="{{ url('my_invite_code') }}">{{'我的邀请码'|trans}}
+    </a>
+  </li>
 {% endif %}
 </ul>
