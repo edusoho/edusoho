@@ -418,6 +418,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourse($course['id']);
 
+        $this->dispatchEvent("course.create", $course);
+
         $this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
 
         return $course;

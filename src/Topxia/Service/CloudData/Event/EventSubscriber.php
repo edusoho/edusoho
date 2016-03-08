@@ -23,12 +23,18 @@ class EventSubscriber implements EventSubscriberInterface
                 $tryTimes++;
                 $this->onCourseJoin($event);
             } else {
+                $subject = $event->getSubject();
+                $fields  = array(
+                    'name'    => $event->getName(),
+                    'subject' => $subject
+                );
+                $this->getCloudDataService()->add($fields);
             }
         }
     }
 
-    protected function getDataReportService()
+    protected function getCloudDataService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('CloudData.CloudDataService');
     }
 }

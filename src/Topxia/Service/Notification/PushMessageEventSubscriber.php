@@ -14,6 +14,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return array(
             'testpaper.reviewed'        => 'onTestPaperReviewed',
             'course.lesson.publish'     => 'onLessonPubilsh',
+            'course.create'             => 'onCourseCreate',
             'course.publish'            => 'onCoursePublish',
             'course.lesson.delete'      => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
@@ -33,6 +34,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.lesson_start'       => 'onCourseLessonStart',
             'course.thread.create'      => 'onCourseThreadCreate'
         );
+    }
+
+    public function onCourseCreate(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
+        $message     = array($course['title'], array($course['userId'], $currentUser['nickname']));
+
+        $result = CloudAPIFactory::create('root')->post('/im/conversation', $message);
     }
 
     public function onTestPaperReviewed(ServiceEvent $event)
