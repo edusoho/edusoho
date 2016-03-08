@@ -63,27 +63,28 @@ class ThreadManager extends BaseResource
         );
 	}
 
-    private function sortThreads($threads, $limit) {
-        function threadSort($t1, $t2) {
-            $latestPostTime1 = $t1['latestPostTime'];
-            $latestPostTime2 = $t2['latestPostTime'];
+    protected function threadSort($t1, $t2) {
+        $latestPostTime1 = $t1['latestPostTime'];
+        $latestPostTime2 = $t2['latestPostTime'];
 
-            if ($latestPostTime1 > 0) {
-                if ($latestPostTime2 > 0) {
-                    return $latestPostTime1 - $latestPostTime2;
-                }
-
-                return 1;
-            }
-
+        if ($latestPostTime1 > 0) {
             if ($latestPostTime2 > 0) {
-                return 1;
+                return $latestPostTime1 - $latestPostTime2;
             }
 
-            return $latestPostTime1 - $latestPostTime2;            
+            return 1;
         }
 
-        usort($threads, "threadSort");
+        if ($latestPostTime2 > 0) {
+            return 1;
+        }
+
+        return $latestPostTime1 - $latestPostTime2;            
+    }
+
+    private function sortThreads($threads, $limit) {
+        
+        usort($threads, array($this, "threadSort"));
         $threads = array_slice($threads, 0, $limit);
         return $threads;
     }
