@@ -39,10 +39,18 @@ define(function(require, exports, module) {
                     boundaryGap: false,
                     data: this.element.data('date')
                 },
-                yAxis: {
-                    type: 'value',
-                    boundaryGap: [0, '100%']
-                },
+                yAxis: [
+                    {
+                        name:this.element.data('ytitle1'),
+                        type: 'value',
+                        boundaryGap: [0, '100%']
+                    },
+                    {
+                        name:this.element.data('ytitle2'),
+                        type: 'value',
+                        boundaryGap: [0, '100%']
+                    }
+                ],
                 dataZoom: [{
                     type: 'inside',
                     start: 90,
@@ -55,6 +63,7 @@ define(function(require, exports, module) {
                     {
                         name:this.element.data('title1'),
                         type:'line',
+                        yAxisIndex:0,
                         smooth:true,
                         symbol: 'none',
                         sampling: 'average',
@@ -68,6 +77,7 @@ define(function(require, exports, module) {
                     {
                         name:this.element.data('title2'),
                         type:'line',
+                        yAxisIndex:1,
                         smooth:true,
                         symbol: 'none',
                         sampling: 'average',
