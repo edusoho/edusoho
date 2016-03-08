@@ -18,13 +18,13 @@ class GlobalFilePlayerController extends BaseController
         }
 
         if ($file['type'] == 'video') {
-            return $this->videoPlayer($request, $file);
+            return $this->videoPlayer($file);
         } elseif ($file['type'] == 'ppt') {
             return $this->render('MaterialLibBundle:Player:ppt-player.html.twig', array(
                 'file' => $file
             ));
         } elseif ($file["type"] == 'audio') {
-            return $this->audioPlayer($request, $file);
+            return $this->audioPlayer($file);
         }
     }
 
@@ -43,23 +43,21 @@ class GlobalFilePlayerController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function audioPlayer(Request $request, $file)
+    public function audioPlayer($file)
     {
-        $key = $file['no'];
-
+        $key     = $file['reskey'];
         $factory = new CloudClientFactory();
         $client  = $factory->createClient();
         $result  = $client->generateFileUrl($client->getBucket(), $key, 3600);
-
         return $this->render('MaterialLibBundle:Player:global-video-player.html.twig', array(
             'file'             => $file,
             'url'              => $result['url'],
             'player'           => 'audio-player',
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get("user-agent"))
         ));
     }
 
-    protected function videoPlayer($request, $file)
+    protected function videoPlayer($file)
     {
         $url = $this->getPlayUrl($file);
 
@@ -67,7 +65,7 @@ class GlobalFilePlayerController extends BaseController
             'file'             => $file,
             'url'              => $url,
             'player'           => 'balloon-cloud-video-player',
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+            'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get("user-agent"))
         ));
     }
 
