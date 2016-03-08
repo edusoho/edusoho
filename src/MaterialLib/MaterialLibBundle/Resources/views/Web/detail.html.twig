@@ -134,6 +134,7 @@
           {% if material.type == 'video' %}
             <div class="col-md-offset-2 col-md-8 controls">
               <a class="btn btn-fat btn-info js-reset-btn" href="javascript:;">还原</a>
+              <a class="btn btn-fat btn-info js-screenshot-btn" href="javascript:;" data-url="{{ path('material_thumbnail_generate', {globalId:material.no}) }}" data-loading-text="正在生成截图，请稍等...">截图</a>
               <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="正在保存..." type="submit">保存</button>
             </div>
           {% endif %}

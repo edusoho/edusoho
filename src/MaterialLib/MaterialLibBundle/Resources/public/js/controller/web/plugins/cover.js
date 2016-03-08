@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
     var Widget = require('widget');
     var Notify = require('common/bootstrap-notify');
+    var Messenger = require('topxiawebbundle/controller/player/messenger');
 
     var Cover = Widget.extend({
         attrs: {
@@ -11,6 +12,7 @@ define(function(require, exports, module) {
             'click .js-reset-btn': 'onClickReset',
             'click .js-set-default': 'onClickDefault',
             'click .js-set-select': 'onClickSelect',
+            'click .js-screenshot-btn': 'onClickScreenshot',
             'submit #cover-form': 'onSubmitCoverForm',
         },
         setup: function() {
@@ -26,7 +28,49 @@ define(function(require, exports, module) {
         onClickSelect: function(event) {
             this._changePane($(event.currentTarget));
         },
+        onClickScreenshot: function(event) {
+            var $target = $(event.currentTarget);
+            var self = this;
+            var second = this.player.getCurrentTime();
+            $target.button('loading');
+            $.ajax({
+                type:'get',
+                url:$target.data('url'),
+                data:{'second':second}
+            }).done(function(resp){
+                if (resp.status == 'success') {
+                    this._successGeneratePic($target, resp);
+                } else if (resp.status == 'waiting') {
+                    //轮询
+                    self.intervalId = setInterval(function(){
+                        $.get($target.data('url'), {'second':second}, function(resp){
+                            if (resp.status == 'success') {
+                                this._successGeneratePic($target, resp);
+                                clearInterval(self.intervalId);
+                            }
+                        });
+                    }, 3000);
+                } else {
+                    $target.button('reset');
+                    Notify.danger('生成截图失败！');
+                }
+             
+            }).fail(function(){
+                $target.button('reset');
+                Notify.danger('生成截图失败！');
+            });
+
+        },
+        _successGeneratePic: function($btn, resp) {
+            $btn.button('reset');
+            Notify.success('生成截图成功!');
+            var $coverTab = $btn.closest('#cover-tab');
+            $coverTab.find('.js-cover-img').attr('src', resp.url);
+            $coverTab.find('#thumbNo').val(resp.no);
+        },
         _initPlayer: function() {
+            var self = this;
+
             this.$('#viewerIframe');
             var messenger = new Messenger({
                 name: 'parent',
@@ -36,24 +80,9 @@ define(function(require, exports, module) {
             });
 
             messenger.on("ready", function() {
-                console.log('i am ready');
+                self.player = window.frames["viewerIframe"].contentWindow.BalloonPlayer;
             });
 
-            messenger.on("ended", function() {
-                console.log('i am ended');
-            });
-
-            messenger.on("playing", function() {
-                console.log('i am playing');
-            });
-
-            messenger.on("paused", function() {
-                console.log('i am paused');
-            });
-
-            messenger.on("onMarkerReached", function(marker,questionId){
-                console.log('MarkerReached');                
-            });
         },
         _changePane: function($target) {
             $target.parent().find('a.disabled').removeClass('disabled');
@@ -87,7 +116,7 @@ define(function(require, exports, module) {
         },
         onClickChangePic: function(event) {
             var $target = $(event.currentTarget);
-            var $coverTab =$target.closest('#cover-tab');
+            var $coverTab = $target.closest('#cover-tab');
             $coverTab.find('.js-cover-img').attr('src', $target.attr('src'));
             $coverTab.find('#thumbNo').val($target.data('no'));
         }
