@@ -896,6 +896,10 @@ course_manage_testpaper_build_check:
     pattern: /course/{courseId}/manage/testpaper/build_check
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildCheck }
 
+course_manage_testpaper_build_range:
+    pattern: /course/{courseId}/manage/testpaper/build_range
+    defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:buildRange }
+
 course_manage_testpaper_update:
     pattern: /course/{courseId}/manage/testpaper/{id}/update
     defaults: { _controller: TopxiaWebBundle:CourseTestpaperManage:update }
