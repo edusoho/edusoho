@@ -174,7 +174,7 @@
               </div>
             {% endif %} 
             #}
-            {% if hasSchoolName and accessCloud|default(0) != 0 and enabled|default(1) != 0  %}
+            {% if hasSchoolName and accessCloud|default(0) != 0 and enabled|default(1) != 0 and smsStatus.sms_enabled|default('0') == '1' %}
             <div class="page-header clearfix">
               <h1 class="pull-left">短信应用场景</h1>
             </div>
