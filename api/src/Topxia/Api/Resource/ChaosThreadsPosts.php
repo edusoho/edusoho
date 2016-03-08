@@ -98,7 +98,8 @@ class ChaosThreadsPosts extends BaseResource
             $threadPosts = array(); 
             $threadPosts['title']        = $thread['title'];
             $threadPosts['type']         = $thread['type'];
-            $threadPosts['id']           = $post['id'];            
+            $threadPosts['threadId']    =  $thread['id']; 
+            $threadPosts['id']           = $post['id'];
             $threadPosts['content']      = $post['content'];
             $threadPosts['createdTime']  = $post['createdTime'];
             foreach ($courses as $course) {
