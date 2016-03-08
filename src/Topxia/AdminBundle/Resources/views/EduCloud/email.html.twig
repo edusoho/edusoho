@@ -9,11 +9,11 @@
   {% if locked|default(0) == 1 %}
     <div class="alert alert-warning" role="alert">您的云邮件已被锁定，请联系客服人员：0571-86819929。</div>
   {% endif %}
-  {% if enabled|default(1) == 0 or email_enable == 'disable' %}
+  {% if enabled|default(1) == 0 or email_enable == 'stoped' %}
     <div class="alert alert-danger" role="alert">您的云邮件已被禁用，请联系客服人员：0571-86819929。</div>
   {% endif %}
   <div class="eduyun-main">
-  {% if enabled|default(1) == 0 or email_enable == 'disable' %}
+  {% if enabled|default(1) == 0 or email_enable == 'stoped' %}
     <div class="mask"></div>
   {% endif %}
   	<div class="page-header clearfix">
@@ -21,7 +21,7 @@
   	</div>
   	<div class="edu-service ">
   	  <div class="edu-balance">
-        {% if emailInfo.isTest|default(0) %}
+        {% if emailInfo.isTest|default(0) or email_enable == 'stoped' %}
   			<div class="alert alert-warning" role="alert">
           {{ emailInfo.message }}   
         </div>
