@@ -25,6 +25,10 @@ class GlobalFilePlayerController extends BaseController
             ));
         } elseif ($file["type"] == 'audio') {
             return $this->audioPlayer($file);
+        } elseif ($file["type"] == 'document') {
+            return $this->render('MaterialLibBundle:Player:document-player.html.twig', array(
+                'file' => $file
+            ));
         }
     }
 
@@ -40,6 +44,25 @@ class GlobalFilePlayerController extends BaseController
         $client  = $factory->createClient();
 
         $result = $client->pptImages($file['metas']['imagePrefix'], $file['metas']['length'].'');
+        return $this->createJsonResponse($result);
+    }
+
+    public function documentAction(Request $request, $globalId)
+    {
+        $file = $this->getMaterialLibService()->get($globalId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        var_dump($file);exit();
+        $factory          = new CloudClientFactory();
+        $client           = $factory->createClient();
+        $metas2           = $file['metas'];
+        $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $result['pdfUri'] = $url['url'];
+        $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        $result['swfUri'] = $url['url'];
         return $this->createJsonResponse($result);
     }
 

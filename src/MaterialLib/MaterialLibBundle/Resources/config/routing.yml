@@ -88,6 +88,10 @@ global_file_ppt:
     pattern:  /global_file/{globalId}/ppt
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:ppt }
 
+global_file_document:
+    pattern:  /global_file/{globalId}/document
+    defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:document }
+
 json_query_courses:
     pattern:  /json/courses
     defaults: { _controller: MaterialLibBundle:JSONAPI:courses }
