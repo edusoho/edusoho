@@ -210,6 +210,11 @@ class ChaosThreads extends BaseResource
         $courses       = $this->getCourseService()->findCoursesByIds($courseIds);               
 
         $threads       = array();
+
+        if(empty($courses)){
+            return $threads;
+        }
+        
         foreach ($courseThreads as $thread) {
             $threadPosts                = array();
             $threadPosts['id']          = $thread['id'];

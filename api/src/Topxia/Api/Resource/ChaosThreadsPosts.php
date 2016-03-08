@@ -87,6 +87,10 @@ class ChaosThreadsPosts extends BaseResource
 
         $courseThreadPosts = array();
 
+        if(empty($courses) || empty($threads)){
+            return $courseThreadPosts;
+        }
+
         foreach ($posts as $post) {
             $threadPosts = array();                        
             foreach ($threads as $thread) {
