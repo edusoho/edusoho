@@ -13,15 +13,6 @@
 %}
 {% block main %}
 
-<style>
-  
-  input[type=radio] {
-  margin-left: 17px;
-  margin-top: 10px;
-  }
-
-</style>
-
 <div class="panel panel-default panel-col">
   <div class="panel-heading">{{'基本信息'|trans}}</div>
   <div class="panel-body">
@@ -124,7 +115,7 @@
         <div class="col-md-2 control-label">
           <label>课程学习模式</label>
         </div>
-        <div class="col-md-7 controls">
+        <div class="col-md-7 controls radios">
           {{ radios('studyModel', {'ordered':'顺序模式', 'normal':'普通模式'}, course.studyModel|default(0)) }}
         <div class="help-block">顺序模式:学员必须学完当前课程才能继续学习下一节课程</div>
         </div>

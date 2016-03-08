@@ -188,8 +188,29 @@ class CourseLessonController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-        $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $json           = array();
+        $lesson  = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $json    = array();
+        $preview = $request->query->get('preview');
+
+        if ($preview != 1) {
+            if ($course['studyModel'] == 'ordered') {
+                $user = $this->getCurrentUser();
+
+                $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+                foreach ($lessons as $tempLesson) {
+                    if ($tempLesson['seq'] < $lesson['seq']) {
+                        $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $tempLesson['id']);
+
+                        if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
+                            $json['studyModel'] = 'ordered';
+                            return $this->createJsonResponse($json);
+                        }
+                    }
+                }
+            }
+        }
+
         $json['number'] = $lesson['number'];
         $chapter        = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
 
@@ -227,23 +248,6 @@ class CourseLessonController extends BaseController
         $json['testMode']               = $lesson['testMode'];
         $json['testStartTime']          = $lesson['testStartTime'];
         $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
-        $json['studyModel']             = 'normal';
-
-        if ($course['studyModel'] == 'ordered') {
-            $user    = $this->getCurrentUser();
-            $lessons = $this->getCourseService()->getCourseLessons($courseId);
-
-            foreach ($lessons as $tempLesson) {
-                if ($tempLesson['seq'] < $lesson['seq']) {
-                    $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $tempLesson['id']);
-
-                    if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
-                        $json['studyModel'] = 'ordered';
-                        break;
-                    }
-                }
-            }
-        }
 
         if ($lesson['testMode'] == 'realTime') {
             $testpaper                 = $this->getTestpaperService()->getTestpaper($lesson['mediaId']);
