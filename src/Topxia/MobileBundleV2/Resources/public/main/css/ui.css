@@ -2383,36 +2383,36 @@ a {
 }
 
 .ui-todolist .ui-list .ui-avatar-s {
-  width: 30px;
-  height: 30px;
-  margin: 0 10px 0 0;
+  width: 25px;
+  height: 25px;
+  margin: 8px 10px 0 0;
   display: inline-block;
 }
 
 .ui-todolist .ui-list .bottom-label {
   height: 40px;
+  font-size: 10px;
   line-height: 40px;
   position: absolute;
 }
 
 .ui-todolist .ui-list .bottom-label .bottom-label-bg {
   font-size: 8px;
-  border-radius: 5px;
-  background-color: #ddd;
-  padding: 3px 5px 3px 5px;
 }
 
 .ui-todolist .bottom-label.right {
   right: 16px;
+  font-size: 8px;
+  color: #999;
 }
 
 .ui-todolist .ui-list .ui-list-info {
-  padding: 8px;
+  padding: 8px 16px 4px 16px;
 }
 
 .ui-todolist .ui-list .ui-list-info p {
-  margin-top: -10px;
-  margin-bottom: 10px;
+  height: 30px;
+  line-height: 30px;
 }
 
 .todo-card .radius-label {
@@ -2433,6 +2433,8 @@ a {
 }
 
 .todo-card .ui-list li .bottom {
+  line-height: 40px;
+  height: 40px;
   position: relative;
 }
 
@@ -2449,8 +2451,8 @@ a {
 }
 
 .todo-card .ui-list-info h2 {
-  height: 44px;
-  line-height: 44px;
+  height: 35px;
+  line-height: 35px;
 }
 
 
