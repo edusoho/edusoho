@@ -89,26 +89,26 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
         if (!empty($userData['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($userData['nickname']);
+        } else
 
-            if (!empty($user) && !empty($userData['email']) && !in_array($userData['email'], $user)) {
-                $user = null;
-            }
+        if (!empty($userData['email'])) {
+            $user = $this->getUserService()->getUserByEmail($userData['email']);
+        } else
 
-            if (!empty($user) && !empty($userData['verifiedMobile'] && !in_array($userData['verifiedMobile'], $user))) {
-                $user = null;
-            }
-        } else {
-            if (!empty($userData['email'])) {
-                $user = $this->getUserService()->getUserByEmail($userData['email']);
+        if (!empty($userData['verifiedMobile'])) {
+            $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
+        }
 
-                if (!empty($userData['verifiedMobile']) && !in_array($userData['verifiedMobile'], $user)) {
-                    $user = null;
-                }
-            } else {
-                if (!empty($userData['verifiedMobile'])) {
-                    $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
-                }
-            }
+        if (!empty($user) && !empty($userData['email']) && !in_array($userData['email'], $user)) {
+            $user = null;
+        }
+
+        if (!empty($user) && !empty($userData['verifiedMobile'] && !in_array($userData['verifiedMobile'], $user))) {
+            $user = null;
+        }
+
+        if (!empty($user) && !empty($userData['nickname']) && !in_array($userData['nickname'], $user)) {
+            $user = null;
         }
 
         if (!$user) {
@@ -235,12 +235,14 @@ class CourseUserImporterProcessor implements ImporterProcessor
             if (empty($errorInfo)) {
                 if (!empty($userData['nickname'])) {
                     $user = $this->getUserService()->getUserByNickname($userData['nickname']);
-                } else {
-                    if (!empty($userData['email'])) {
-                        $user = $this->getUserService()->getUserByEmail($userData['email']);
-                    } else {
-                        $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
-                    }
+                } else
+
+                if (!empty($userData['email'])) {
+                    $user = $this->getUserService()->getUserByEmail($userData['email']);
+                } else
+
+                if (!empty($userData['verifiedMobile'])) {
+                    $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
                 }
 
                 $validate[] = array_merge($user, array('row' => $row));
