@@ -201,7 +201,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
 
-        $this->addGroupMember('classroom', $classroom['id'], $userId);
+        $this->addGroupMember('classroom', $classroom['conversationId'], $classroom['createdTime'], $userId);
 
         $from = array(
             'type'  => 'classroom',
@@ -223,14 +223,14 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
-        $this->deleteGroupMember('classroom', $classroom['id'], $userId);
+        $this->deleteGroupMember('course', $classroom['conversationId'], $classroom['createdTime'], $userId);
     }
 
     public function onCourseJoin(ServiceEvent $event)
     {
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $this->addGroupMember('course', $course['id'], $userId);
+        $this->addGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
     }
 
     public function onCourseQuit(ServiceEvent $event)
@@ -238,6 +238,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
         $this->deleteGroupMember('course', $course['id'], $userId);
+        $this->deleteGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
     }
 
     public function onClassroomPutCourse(ServiceEvent $event)
@@ -464,18 +465,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
     }
 
-    protected function addGroupMember($grouType, $groupId, $memberId)
+    protected function addGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
-        $uri    = "/groups/%s-%s/members";
-        $result = CloudAPIFactory::create('tui')->post(sprintf($uri, $grouType, $groupId), array(
-            'memberId' => $memberId
-        ));
+        $result = CloudAPIFactory::create('event')->post('edusoho.'.$grouType.'.join', array(
+            'conversationId' => $conversationId,
+            'memberId'       => $memberId
+        ), $timestamp);
     }
 
-    protected function deleteGroupMember($grouType, $groupId, $memberId)
+    protected function deleteGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
-        $uri    = "/groups/%s-%s/members/%s";
-        $result = CloudAPIFactory::create('tui')->delete(sprintf($uri, $grouType, $groupId, $memberId));
+        $result = CloudAPIFactory::create('event')->post('edusoho.'.$grouType.'.quit', array(
+            'conversationId' => $conversationId,
+            'memberId'       => $memberId
+        ), $timestamp);
     }
 
     protected function getTarget($type, $id)
