@@ -214,7 +214,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
 
-        $this->addGroupMember('classroom', $classroom['conversationId'], $classroom['createdTime'], $userId);
+        if ($classroom['conversationId']) {
+            $this->addGroupMember('classroom', $classroom['conversationId'], $classroom['createdTime'], $userId);
+        }
 
         $from = array(
             'type'  => 'classroom',
@@ -236,22 +238,30 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         $classroom = $event->getSubject();
         $userId    = $event->getArgument('userId');
-        $this->deleteGroupMember('course', $classroom['conversationId'], $classroom['createdTime'], $userId);
+
+        if ($classroom['conversationId']) {
+            $this->deleteGroupMember('course', $classroom['conversationId'], $classroom['createdTime'], $userId);
+        }
     }
 
     public function onCourseJoin(ServiceEvent $event)
     {
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $this->addGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
+
+        if (!$course['parentId'] && $course['conversation']) {
+            $this->addGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
+        }
     }
 
     public function onCourseQuit(ServiceEvent $event)
     {
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
-        $this->deleteGroupMember('course', $course['id'], $userId);
-        $this->deleteGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
+
+        if (!$course['parentId'] && $course['conversation']) {
+            $this->deleteGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
+        }
     }
 
     public function onClassroomPutCourse(ServiceEvent $event)
