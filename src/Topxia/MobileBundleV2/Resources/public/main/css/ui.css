@@ -2406,6 +2406,10 @@ a {
   color: #999;
 }
 
+.ui-todolist .ui-list .ui-list-info li {
+  margin-left: 0;
+}
+
 .ui-todolist .ui-list .ui-list-info {
   padding: 8px 16px 4px 16px;
 }
