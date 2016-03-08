@@ -856,6 +856,11 @@ admin_app_package_update_begin_upgrade:
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:beginUpgrade }
     methods: [POST]
 
+admin_app_package_update_check_newest:
+    pattern: /app/package_update/check/newest
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkNewest }
+    methods: [POST]
+
 admin_category:
     pattern: /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
