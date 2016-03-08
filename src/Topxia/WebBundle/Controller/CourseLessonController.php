@@ -231,16 +231,13 @@ class CourseLessonController extends BaseController
         $json['testStartTimeFormat']    = date("m-d H:i", $lesson['testStartTime']);
         $json['studyModel']             = 'normal';
 
-        if ($course['studyModel'] == 'normal') {
-            $json['studyModel'] = 'normal';
-        } else {
+        if ($course['studyModel'] == 'ordered') {
             $user    = $this->getCurrentUser();
             $lessons = $this->getCourseService()->getCourseLessons($courseId);
-            $seq     = $lesson['seq'];
 
-            foreach ($lessons as $lesson) {
-                if ($lesson['seq'] < $seq) {
-                    $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $lesson['id']);
+            foreach ($lessons as $tempLesson) {
+                if ($tempLesson['seq'] < $lesson['seq']) {
+                    $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $tempLesson['id']);
 
                     if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
                         $json['studyModel'] = 'ordered';
