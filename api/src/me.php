@@ -271,8 +271,7 @@ $api->get('/im/login', function (Request $request) {
         'clientId'   => $user['id'],
         'clientName' => $user['nickname']
     );
-    $result = CloudAPIFactory::create('leaf')->post('/im/login', $message);
-    return $result;
+    return CloudAPIFactory::create('leaf')->get('/im/login', $message);
 }
 
 );
