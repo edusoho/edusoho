@@ -11,15 +11,15 @@
         {% if course.about %}
           {{ course.about|raw }}
         {% else %}
-          <div class="text-muted">暂无课程简介</div>
+          <div class="text-muted">{{'暂无课程简介'|trans}}</div>
         {% endif %}
 
         {% if category %}
-          <p><strong>分类：</strong><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></p>
+          <p><strong>{{'分类：'|trans}}</strong><a href="{{ path('course_explore', {category:category.code|default(category.id)}) }}" target="_blank">{{ category.name }}</a></p>
         {% endif %}
 
         {% if tags %}
-          <p><strong>标签：</strong>
+          <p><strong>{{'标签：'|trans}}</strong>
             {% for tag in tags %}
               <a href="{{ path('tag_show', {name:tag.name}) }}">{{ tag.name }}</a>
             {% endfor %}
@@ -32,7 +32,7 @@
     {% if course.goals %}
       <div class="es-piece">
         <div class="piece-header">
-          课程目标
+          {{'课程目标'|trans}}
         </div>
         <div class="piece-body">
           <ul class="piece-body-list">
@@ -49,7 +49,7 @@
     {% if course.audiences %}
       <div class="es-piece">
         <div class="piece-header">
-          适合人群
+          {{'适合人群'|trans}}
         </div>
         <div class="piece-body">
           <ul class="piece-body-list">

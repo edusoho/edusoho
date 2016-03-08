@@ -1,0 +1,20 @@
+
+<div class="col-md-6">
+  <input id="smsUsedInfo"  type="hidden" value='{% if chartInfo.smsUsedInfo and setting('cloud_sms.sms_enabled') == '1' %}{{chartInfo.smsUsedInfo}}{% else %}{{"[]"}}{% endif %}'>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <p class="pull-right"><a href="{{path('admin_cloud_sms_account')}}" target="_blank">明细</a></p>	
+      <h3 class="panel-title">云短信使用情况（最近7天）</h3>
+    </div>
+    <div class="panel-body" id="sms-data-tab" style="height: 250px;">
+    {% if setting('cloud_sms.sms_enabled')|default('0') == '0' %}
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content text-muted">
+          <a href="{{path('admin_edu_cloud_sms')}}">开启</a>
+          云短信，享受优质的短信发送服务
+        </div>
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</div>

@@ -1,13 +1,13 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的任务 - {{ parent() }}{% endblock %}
+{% block title %}{{'我的任务'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-task' %}
 
 {% block main %}
 
 <div class="panel panel-default panel-col">
-    <div class="panel-heading">我的任务日历</div>
+    <div class="panel-heading">{{'我的任务日历'|trans}}</div>
      {% include 'TopxiaWebBundle:MyTask:task-calendar.html.twig' %}
 </div>
 {% endblock %}

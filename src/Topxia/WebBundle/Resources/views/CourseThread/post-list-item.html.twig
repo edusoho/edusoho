@@ -6,9 +6,9 @@
   <div class="thread-post-dropdown">
     <a href="javascript:" class="dropdown-toggle text-muted" data-toggle="dropdown"><i class="glyphicon glyphicon-collapse-down"></i></a>
     <ul class="dropdown-menu pull-right">
-      <li><a href="{{ path('course_thread_post_edit', {courseId:course.id,threadId:thread.id, id:post.id}) }}"><i class="glyphicon glyphicon-edit"></i> 编辑</a></li>
+      <li><a href="{{ path('course_thread_post_edit', {courseId:course.id,threadId:thread.id, id:post.id}) }}"><i class="glyphicon glyphicon-edit"></i> {{'编辑'|trans}}</a></li>
       {% if isManager %}
-        <li><a href="javascript:" data-action="post-delete" data-url="{{ path('course_thread_post_delete', {courseId:course.id,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> 删除</a></li>
+        <li><a href="javascript:" data-action="post-delete" data-url="{{ path('course_thread_post_delete', {courseId:course.id,threadId:thread.id, id:post.id}) }}" data-for="#post-{{ post.id }}"><i class="glyphicon glyphicon-remove"></i> {{'删除'|trans}}</a></li>
       {% endif %}
     </ul>
   </div>
@@ -22,7 +22,7 @@
     </div>
     <div class="editor-text">{{ post.content|raw }}</div>
     {% if app.user.id != author.id %}
-    <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >回复</a></div>
+    <div class="thread-post-action" data-user="{{ author.nickname }}"><a href="#thread-post-form" >{{'回复'|trans}}</a></div>
     {% endif %}
   </div>
 </li>

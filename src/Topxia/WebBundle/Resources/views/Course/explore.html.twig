@@ -6,7 +6,7 @@
 
 {% block keywords %}{% if categoryArray %}{{categoryArray.name}}{% if categoryParent %}{{ ','}}{{ categoryParent.name|default('') }}{% endif %}{% else %}{{ '全部' }}{% endif %}{% endblock %}
   {% block description %}{{ categoryArrayDescription|default('')|plain_text(100) }}{% endblock %}
-    {% block title %}{{ categoryArray.name|default('全部') }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
+    {% block title %}{{ categoryArray.name|default('全部'|trans) }} - {{setting('site.name')}}{% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}{% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
     {% endblock %}
 
 {% block top_content %}
@@ -14,7 +14,7 @@
     <div class="container">
       <div class="title">
         <i class="es-icon es-icon-viewcomfy"></i>
-        课程列表
+        {{'课程列表'|trans}}
       </div>
 
       {% set classrooms = data('Classrooms',{count:1}) %}
@@ -37,17 +37,17 @@
     <ul class="nav nav-sort">
       <li>
         <a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'latest'}) }}" class="{% if (orderBy == 'latest') %} active {% endif %}">
-          最新
+          {{'最新'|trans}}
         </a>
       </li>
       <li>
         <a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'studentNum'}) }}" class="{% if (orderBy == 'studentNum') %} active {% endif %}">
-          最热
+          {{'最热'|trans}}
         </a>
       </li>
       <li>
         <a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: currentLevelId},orderBy: 'recommendedSeq'}) }}" class="{% if (orderBy == 'recommendedSeq') %} active {% endif %}">
-          推荐
+          {{'推荐'|trans}}
         </a>
       </li>
     </ul>
@@ -55,11 +55,11 @@
       {% if is_plugin_installed('vip')%}
         <div class="btn-group">
           <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="es-icon es-icon-crown text-warning"></i>
-            {% if (currentLevelId == 'all') %}会员课程{% endif %}
+            {% if (currentLevelId == 'all') %}{{'会员课程'|trans}}{% endif %}
             {% for level in levels%}{% if (level.id == currentLevelId) %}{{level.name}}{% endif %}{% endfor %}
           </button>
           <ul class="dropdown-menu" role="menu">
-          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">全部</a></li>
+          <li role="presentation"class="{% if (currentLevelId == 'all') %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: 'all'},orderBy: orderBy}) }}">{{'全部'|trans}}</a></li>
           {% for level in levels %}
             <li role="presentation"class="{% if (level.id == currentLevelId) %}active {% endif %}"><a href="{{ path('course_explore', {category:category, fliter: {type: type,price: price,currentLevelId: level.id},orderBy: orderBy}) }}">{{level.name}}</a></li>
           {% endfor %}
@@ -69,19 +69,19 @@
       <label class="checkbox-inline">
         <input type="checkbox" {% if type == 'live'%}checked="true" {% endif %} id="live" value="
         {% if type == 'all'%}
-          {{ path('course_explore', {category:category, fliter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }} 
-        {% else %} 
-          {{ path('course_explore', {category:category, fliter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }} 
-        {% endif %}"> 直播课程
+          {{ path('course_explore', {category:category, fliter: {type: 'live',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% else %}
+          {{ path('course_explore', {category:category, fliter: {type: 'all',price: price,currentLevelId: currentLevelId},orderBy: orderBy}) }}
+        {% endif %}"> {{'直播课程'|trans}}
       </label>
       <label class="checkbox-inline">
         <input type="checkbox" {% if price == 'free'%}checked="true" {% endif %} id="free" value="
         {% if price == 'all'%}
           {{ path('course_explore', {category:category, fliter: {type: type,price: 'free',currentLevelId: currentLevelId},orderBy: orderBy}) }}
-        {% else %} 
+        {% else %}
           {{ path('course_explore', {category:category, fliter: {type: type,price: 'all',currentLevelId: currentLevelId},orderBy: orderBy}) }}
         {% endif %}
-        "> 免费课程
+        "> {{'免费课程'|trans}}
       </label>
     </div>
   </div>
@@ -90,12 +90,12 @@
     <div class="row">
       {% if courses %}
         {% for course in courses %}
-          <div class="col-lg-3 col-md-4 col-sm-6">
+          <div class="col-lg-3 col-md-4 col-xs-6">
             {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
           </div>
         {% endfor %}
       {% else %}
-        <div class="empty">该分类下无课程</div>
+        <div class="empty">{{'该分类下无课程'|trans}}</div>
       {% endif %}
     </div>
   </div>

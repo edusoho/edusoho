@@ -131,41 +131,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             throw "createNotFoundException";
         }
 
-        $file = $this->controller->getUploadFileService()->getFile($material['fileId']);
-
-        if (empty($file)) {
-            throw "createNotFoundException";
-        }
-
-        if ($file['storage'] == 'cloud') {
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-            $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-        } else {
-            return $this->createPrivateFileDownloadResponse($request, $file);
-        }
-    }
-
-    private function createPrivateFileDownloadResponse(Request $request, $file)
-    {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        $file['filename'] = urlencode($file['filename']);
-
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
+        return $this->controller->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
     public function learnLesson()
