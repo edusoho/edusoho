@@ -48,7 +48,7 @@ class ThreadManager extends BaseResource
             500
         );
 
-        $threads = $this->sortThreads($threads, $limit);
+        $threads = $this->sortThreads($threads, $start);
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         foreach ($threads as $key => &$thread) {
