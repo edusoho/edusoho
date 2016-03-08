@@ -159,7 +159,7 @@ abstract class BaseController extends Controller
 
     private function sendNormalEmail($params)
     {
-        $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
+        $format = isset($params['format']) && $params['format'] == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());
 
