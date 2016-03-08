@@ -22,4 +22,8 @@ interface ThreadPostDao
 	public function deletePost($id);
 
 	public function deletePostsByThreadId($threadId);
+
+	public function searchThreadPosts($conditions,$orderBy,$start,$limit);
+
+	public function searchThreadPostsCount($conditions);
 }
