@@ -90,13 +90,9 @@ class ChaosThreadsPosts extends BaseResource
         if(empty($courses) || empty($threads)){
             return $courseThreadPosts;
         }
-
         foreach ($posts as $post) {
-            $threadPosts = array();                        
+            $threadPosts = array();   
             foreach ($threads as $thread) {
-                if($thread['userId'] == $currentUser['id']){
-                    continue;
-                }
                 if($thread['id'] == $post['threadId']){
                     $threadPosts['title']        = $thread['title'];
                     $threadPosts['type']         = $thread['type'];
@@ -105,11 +101,11 @@ class ChaosThreadsPosts extends BaseResource
             }
             foreach ($courses as $course) {
                 if($post['courseId'] == $course['id']){
-                    $threadPosts['courseId']     = $post['id'];
+                    $threadPosts['courseId']     = $course['id'];
                     $threadPosts['courseTitle']  = $course['title'];
-                    $threadPosts['smallPicture'] = $course['smallPicture'];
-                    $threadPosts['middlePicture']= $course['middlePicture'];
-                    $threadPosts['lagerPicture'] = $course['lagerPicture'];
+                    $threadPosts['smallPicture'] = $this->getFileUrl($course['smallPicture']);
+                    $threadPosts['middlePicture']= $this->getFileUrl($course['middlePicture']);
+                    $threadPosts['lagerPicture'] = $this->getFileUrl($course['lagerPicture']);
                     break; 
                 }
             }
