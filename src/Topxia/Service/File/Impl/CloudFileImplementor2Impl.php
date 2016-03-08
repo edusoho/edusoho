@@ -17,9 +17,16 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $this->mergeCloudFile($file, $cloudFile);
     }
 
+    public function player($globalId)
+    {
+        $api    = CloudAPIFactory::create();
+        $player = $api->get("/resources/{$globalId}/player");
+        return $player;
+    }
+
     public function get($globalId)
     {
-        $api = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create();
         $cloudFile = $api->get("/resources/".$globalId);
         $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
         return $this->mergeCloudFile2($localFile, $cloudFile);
@@ -27,7 +34,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function edit($globalId, $fields)
     {
-        $api = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create();
         $cloudFile = $api->post("/resources/".$globalId, $fields);
         $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
         return $this->mergeCloudFile2($localFile, $cloudFile);
@@ -41,15 +48,27 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function download($globalId)
     {
-        $api              = CloudAPIFactory::create();
-        $download         = $api->get("/resources/{$globalId}/download");
+        $api      = CloudAPIFactory::create();
+        $download = $api->get("/resources/{$globalId}/download");
         return $download;
+    }
+
+    public function reconvert($globalId, $options)
+    {
+        $api              = CloudAPIFactory::create();
+        return $api->post("/resources/{$globalId}/processes", $options);
     }
 
     public function getDefaultHumbnails($globalId)
     {
-        $api              = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create();
         return $api->get("/resources/{$globalId}/default_thumbnails");
+    }
+
+    public function getStatistics($options)
+    {
+        $api              = CloudAPIFactory::create();
+        return $api->get("/resources/data/statistics", $options);
     }
 
     public function findFiles($files)
@@ -83,7 +102,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function getUploadAuth($params)
     {
-        $api       = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create();
 
         $apiResult = $api->post("/resources/{$params['globalId']}/upload/auth", $params);
         return $apiResult;
@@ -175,7 +194,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $result['outerId']  = $file['id'];
 
         $result['uploadMode']     = $apiResult['uploadMode'];
-        $result['uploadUrl']      = $apiResult['uploadUrl'];#'http://upload.edusoho.net';
+        $result['uploadUrl']      = $apiResult['uploadUrl']; #'http://upload.edusoho.net';
         $result['uploadProxyUrl'] = '';
         $result['uploadToken']    = $apiResult['uploadToken'];
 
@@ -274,19 +293,20 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function search($conditions)
     {
-        $api       = CloudAPIFactory::create();
-        $url = '/resources?'.http_build_query($conditions);
-        $result    = $api->get($url);
+        $api    = CloudAPIFactory::create();
+        $url    = '/resources?'.http_build_query($conditions);
+        $result = $api->get($url);
 
-        $cloudFiles = $result['data'];
-        $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
+        $cloudFiles   = $result['data'];
+        $cloudFiles   = ArrayToolkit::index($cloudFiles, 'no');
         $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
 
-        $localFiles = $this->getUploadFileDao()->findFilesByIds($localFileIds);
-        $localFiles = ArrayToolkit::index($localFiles, 'globalId');
+        $localFiles  = $this->getUploadFileDao()->findFilesByIds($localFileIds);
+        $localFiles  = ArrayToolkit::index($localFiles, 'globalId');
         $mergedFiles = array();
+
         foreach ($cloudFiles as $i => $cloudFile) {
-            $localFile = empty($localFiles[$cloudFile['no']]) ? null : $localFiles[$cloudFile['no']];
+            $localFile       = empty($localFiles[$cloudFile['no']]) ? null : $localFiles[$cloudFile['no']];
             $mergedFiles[$i] = $this->mergeCloudFile2($localFile, $cloudFile);
         }
 
@@ -299,7 +319,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     {
         $file['hashId']   = $cloudFile['reskey'];
         $file['fileSize'] = $cloudFile['size'];
-        $file['views'] = $cloudFile['views'];
+        $file['views']    = $cloudFile['views'];
 
         $statusMap = array(
             'none'       => 'none',
@@ -384,15 +404,16 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     public function mergeCloudFile2($localFile, $cloudFile)
     {
         if ($localFile) {
-            $cloudFile['hasLocal'] = true;
-            $cloudFile['targetType'] = $localFile['targetType'];
-            $cloudFile['targetId'] = $localFile['targetId'];
+            $cloudFile['id']            = $localFile['id'];
+            $cloudFile['targetType']    = $localFile['targetType'];
+            $cloudFile['targetId']      = $localFile['targetId'];
             $cloudFile['createdUserId'] = $localFile['createdUserId'];
             $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
         } else {
-            $cloudFile['hasLocal'] = false;
+            //没有本地文件
+            $cloudFile['id'] = 0;
         }
-         
+
         return $cloudFile;
     }
 

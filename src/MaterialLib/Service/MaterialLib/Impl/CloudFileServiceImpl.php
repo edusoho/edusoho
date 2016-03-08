@@ -2,9 +2,8 @@
 
 namespace MaterialLib\Service\MaterialLib\Impl;
 
-use MaterialLib\Service\MaterialLib\CloudFileService;
 use MaterialLib\Service\BaseService;
-use Topxia\Common\ArrayToolkit;
+use MaterialLib\Service\MaterialLib\CloudFileService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
@@ -28,14 +27,29 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->get($globalId);
     }
 
+    public function player($globalId)
+    {
+        return $this->getCloudFileImplementor()->player($globalId);
+    }
+
     public function download($globalId)
     {
         return $this->getCloudFileImplementor()->download($globalId);
     }
 
+    public function reconvert($globalId, $options = array())
+    {
+        return $this->getCloudFileImplementor()->reconvert($globalId, $options);
+    }
+
     public function getDefaultHumbnails($globalId)
     {
         return $this->getCloudFileImplementor()->getDefaultHumbnails($globalId);
+    }
+
+    public function getStatistics($options = array())
+    {
+        return $this->getCloudFileImplementor()->getStatistics($options);
     }
 
     protected function getCloudFileImplementor()

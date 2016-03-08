@@ -5,3 +5,7 @@ admin_material_lib:
 admin_material_lib_manage:
     name: 资源管理
     parent: admin_material_lib
+
+admin_material_lib_stats:
+    name: 数据统计
+    parent: admin_material_lib

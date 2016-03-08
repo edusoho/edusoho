@@ -1,4 +1,4 @@
-{% if isEditColor %}
+{% if isEditColor|default(0) %}
 	{% set maincolor = config.config.maincolor|default('default') %}
 	{% set navigationcolor = config.config.navigationcolor|default('default') %}
 {% else %}
