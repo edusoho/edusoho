@@ -5,7 +5,7 @@ use Psr\Log\LoggerInterface;
 
 class AbstractCloudAPI
 {
-    const VERSION = '';
+    const VERSION = 'v1';
 
     protected $userAgent = 'EduSoho Cloud API Client 1.0';
 
