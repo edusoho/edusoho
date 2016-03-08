@@ -65,7 +65,7 @@
       {% endif %}
     </div>
     
-    {% if  info.accessCloud|default(0) != 0  %}
+    {% if  info.accessCloud|default(0) != 0 and storageSetting.upload_mode|default('cloud') == "cloud" %}
     <div class="page-header clearfix">
       <h1 class="pull-left">云视频功能设置</h1>
     </div>
