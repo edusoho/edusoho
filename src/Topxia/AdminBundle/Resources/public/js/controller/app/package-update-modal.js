@@ -85,9 +85,9 @@ define(function(require, exports, module) {
                 var urls = $("#begin-update").data();
                 steps = getQueue(urls);
                 $.each(steps, function(i, step) {
-                    url = step.url.replace(/\d+/g,data.packageId);
+                    var url = step.url.replace(/\d+/g,data.packageId);
                     $(document).queue('update_step_queue', function() {
-                        exec(step.title, step.url, progressBar, step.progressRange[0], step.progressRange[1]);
+                        exec(step.title, url, progressBar, step.progressRange[0], step.progressRange[1]);
                     });
                 });
                 $(document).dequeue('update_step_queue');
