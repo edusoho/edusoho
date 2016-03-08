@@ -58,6 +58,8 @@ class Courses extends BaseResource
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
+            $userIds = $courses[$key]['teacherIds'];
+            $courses[$key]['teacher'] = $this->getUserService()->findUsersByIds($userIds);
         }   
         return $this->wrap($courses, min($result['showCount'], $total));
     }
@@ -135,5 +137,10 @@ class Courses extends BaseResource
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
