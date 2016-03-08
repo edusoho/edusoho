@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
             var player = new SlidePlayer({
                 element: '.slide-player',
-                slides: response
+                slides: response.images
             });
         }, 'json');
     }

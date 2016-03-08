@@ -15,4 +15,6 @@ interface MaterialLibService
     public function download($globalId);
 
     public function getDefaultHumbnails($globalId);
+
+    public function player($globalId);
 }

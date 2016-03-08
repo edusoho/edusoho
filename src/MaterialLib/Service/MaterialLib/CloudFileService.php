@@ -8,11 +8,13 @@ interface CloudFileService
 
     public function get($globalId);
 
+    public function player($globalId);
+
     public function edit($globalId, $fields);
 
     public function delete($globalId);
 
     public function download($globalId);
-    
+
     public function getDefaultHumbnails($globalId);
 }

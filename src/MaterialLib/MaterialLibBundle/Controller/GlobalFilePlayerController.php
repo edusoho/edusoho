@@ -2,7 +2,6 @@
 
 namespace MaterialLib\MaterialLibBundle\Controller;
 
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -34,43 +33,29 @@ class GlobalFilePlayerController extends BaseController
 
     public function pptAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->get($globalId);
+        $file = $this->getMaterialLibService()->player($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $result = $client->pptImages($file['metas']['imagePrefix'], $file['metas']['length'].'');
-        return $this->createJsonResponse($result);
+        return $this->createJsonResponse($file);
     }
 
     public function documentAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->get($globalId);
+        $file = $this->getMaterialLibService()->player($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
 
-        $factory          = new CloudClientFactory();
-        $client           = $factory->createClient();
-        $metas            = $file['metas'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas['pdf']['key'], 3600);
-        $result['pdfUri'] = $url['url'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas['swf']['key'], 3600);
-        $result['swfUri'] = $url['url'];
-        return $this->createJsonResponse($result);
+        return $this->createJsonResponse($file);
     }
 
     public function audioPlayer($file)
     {
-        $key     = $file['reskey'];
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-        $result  = $client->generateFileUrl($client->getBucket(), $key, 3600);
+        $result = $this->getMaterialLibService()->player($file['no']);
         return $this->render('MaterialLibBundle:Player:global-video-player.html.twig', array(
             'file'             => $file,
             'url'              => $result['url'],

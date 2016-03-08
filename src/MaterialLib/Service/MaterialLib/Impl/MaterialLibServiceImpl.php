@@ -2,19 +2,19 @@
 
 namespace MaterialLib\Service\MaterialLib\Impl;
 
-use MaterialLib\Service\MaterialLib\MaterialLibService;
-use MaterialLib\Service\BaseService;
 use Topxia\Common\ArrayToolkit;
+use MaterialLib\Service\BaseService;
+use MaterialLib\Service\MaterialLib\MaterialLibService;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
     public function search($conditions, $start, $limit)
     {
-        $conditions['start'] = $start;
-        $conditions['limit'] = $limit;
-        $conditions = $this->filterConditions($conditions);
-        $result = $this->getCloudFileService()->search($conditions);
-        $createdUserIds = ArrayToolkit::column($result['data'], 'createdUserId');
+        $conditions['start']    = $start;
+        $conditions['limit']    = $limit;
+        $conditions             = $this->filterConditions($conditions);
+        $result                 = $this->getCloudFileService()->search($conditions);
+        $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
         $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
         return $result;
     }
@@ -22,6 +22,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function get($globalId)
     {
         return $this->getCloudFileService()->get($globalId);
+    }
+
+    public function player($globalId)
+    {
+        return $this->getCloudFileService()->player($globalId);
     }
 
     public function edit($globalId, $fields)
@@ -55,8 +60,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         }
 
         if (!empty($filterConditions['courseId'])) {
-            $localFiles = $this->getCloudFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
-            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
+            $localFiles              = $this->getCloudFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
+            $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
         }
 
