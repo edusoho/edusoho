@@ -89,13 +89,9 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
         if (!empty($userData['nickname'])) {
             $user = $this->getUserService()->getUserByNickname($userData['nickname']);
-        } else
-
-        if (!empty($userData['email'])) {
+        } elseif (!empty($userData['email'])) {
             $user = $this->getUserService()->getUserByEmail($userData['email']);
-        } else
-
-        if (!empty($userData['verifiedMobile'])) {
+        } elseif (!empty($userData['verifiedMobile'])) {
             $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
         }
 
@@ -235,13 +231,9 @@ class CourseUserImporterProcessor implements ImporterProcessor
             if (empty($errorInfo)) {
                 if (!empty($userData['nickname'])) {
                     $user = $this->getUserService()->getUserByNickname($userData['nickname']);
-                } else
-
-                if (!empty($userData['email'])) {
+                } elseif (!empty($userData['email'])) {
                     $user = $this->getUserService()->getUserByEmail($userData['email']);
-                } else
-
-                if (!empty($userData['verifiedMobile'])) {
+                } elseif (!empty($userData['verifiedMobile'])) {
                     $user = $this->getUserService()->getUserByVerifiedMobile($userData['verifiedMobile']);
                 }
 
@@ -266,41 +258,30 @@ class CourseUserImporterProcessor implements ImporterProcessor
     {
         $passedUsers = $this->passValidateUser;
         $ids         = array();
-        $rows        = array();
+        $repeatRow   = array();
+        $repeatIds   = array();
 
         foreach ($passedUsers as $key => $passedUser) {
-            $repeatRow = array();
-
-            if (in_array($passedUser['id'], $ids)) {
-                continue;
+            if (in_array($passedUser['id'], $ids) && !in_array($passedUser['id'], $repeatIds)) {
+                $repeatIds[] = $passedUser['id'];
             } else {
                 $ids[] = $passedUser['id'];
-
-                foreach ($passedUsers as $copyKey => $value) {
-                    if ($passedUser['id'] == $value['id'] && $key != $copyKey) {
-                        if (!in_array($passedUser['row'], $repeatRow)) {
-                            $repeatRow[] = $passedUser['row'];
-                        }
-
-                        $repeatRow[] = $value['row'];
-                    }
-                }
-
-                if (empty($repeatRow)) {
-                    continue;
-                }
             }
+        }
 
-            $rows[] = $repeatRow;
+        foreach ($passedUsers as $key => $passedUser) {
+            if (in_array($passedUser['id'], $repeatIds)) {
+                $repeatRow[$passedUser['id']][] = $passedUser['row'];
+            }
         }
 
         $repeatRowInfo = '';
         $repeatArray   = array();
 
-        if (!empty($rows)) {
+        if (!empty($repeatRow)) {
             $repeatRowInfo .= "字段对应用户数据重复</br>";
 
-            foreach ($rows as $row) {
+            foreach ($repeatRow as $row) {
                 $repeatRowInfo .= "重复行：</br>";
 
                 foreach ($row as $value) {
