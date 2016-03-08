@@ -226,9 +226,9 @@ class ChaosThreads extends BaseResource
                 if($thread['courseId'] == $course['id']){
                     $threadPosts['courseId']     = $course['id'];
                     $threadPosts['courseTitle']  = $course['title'];
-                    $threadPosts['smallPicture'] = $course['smallPicture'];
-                    $threadPosts['middlePicture']= $course['middlePicture'];
-                    $threadPosts['lagerPicture'] = $course['lagerPicture'];
+                    $threadPosts['smallPicture'] = $this->getFileUrl$course['smallPicture']);
+                    $threadPosts['middlePicture']= $this->getFileUrl$course['middlePicture']);
+                    $threadPosts['lagerPicture'] = $this->getFileUrl$course['lagerPicture']);
                     break;
                 }
             }
