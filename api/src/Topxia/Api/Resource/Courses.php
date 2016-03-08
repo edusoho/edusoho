@@ -59,8 +59,8 @@ class Courses extends BaseResource
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
             $userIds = $courses[$key]['teacherIds'];
-            $courses[$key]['teacher'] = $this->getUserService()->findUsersByIds($userIds);
-            $courses[$key]['teacher'] = $this->multicallFilter('User', $courses[$key]['teacher']);
+            $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
+            $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
         }   
         return $this->wrap($courses, min($result['showCount'], $total));
     }
