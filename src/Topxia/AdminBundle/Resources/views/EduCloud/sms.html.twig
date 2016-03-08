@@ -34,11 +34,11 @@
     {% if locked|default(0) == 1 %}
       <div class="alert alert-warning" role="alert">您的云短信已被锁定，请联系客服人员：0571-86819929。</div>
     {% endif %}
-    {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'disable' %}
+    {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
       <div class="alert alert-danger" role="alert">您的云短信已被禁用，请联系客服人员：0571-86819929。</div>
     {% endif %}
     <div class="eduyun-main">
-      {% if enabled|default(1) == 0 %}
+      {% if enabled|default(1) == 0 or smsStatus.status|default(null) == 'stoped' %}
         <div class="mask"></div>
       {% endif %}
       <div class="page-header clearfix">
@@ -676,7 +676,7 @@
             {% endif %}
           </fieldset>
 
-          {% if hasSchoolName and smsStatus.sms_enabled|default('0') == '1' and accessCloud|default(0) != 0 %}
+          {% if hasSchoolName and smsStatus.sms_enabled|default('0') == '1' and accessCloud|default(0) != 0 and enabled|default(1) == 1 %}
             <div class="form-group">
               <div class="controls col-md-offset-3 col-md-8">
                 <button type="submit" class="btn btn-primary">提交</button>
