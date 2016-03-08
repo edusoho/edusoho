@@ -27,6 +27,7 @@ class MaterialLibController extends BaseController
         }
 
         $currentUserId = $currentUser['id'];
+        $data          = $request->query->all();
 
         $keyWord = $request->query->get('keyword') ?: "";
 
