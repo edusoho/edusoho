@@ -268,11 +268,14 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                if(lesson.studyModel == 'ordered'){
-                    $("#lesson-study-model-content").show();
-                    return;
-                }
-
+                var url = window.location.href;
+                    if(url.indexOf('preview') == -1){
+                        if(lesson.studyModel == 'ordered'){
+                            $("#lesson-study-model-content").show();
+                            return;
+                        }
+                    }
+                    
                 var number = lesson.number - 1;
 
                 if (lesson.canLearn.status != 'yes') {
