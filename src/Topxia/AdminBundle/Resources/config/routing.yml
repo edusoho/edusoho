@@ -342,8 +342,8 @@ admin_course_category:
     defaults: { _controller: TopxiaAdminBundle:Course:category }
 
 admin_course_data:
-    pattern:  /course/data
-    defaults: { _controller: TopxiaAdminBundle:Course:data }
+    pattern:  /course/{filter}/data
+    defaults: { _controller: TopxiaAdminBundle:Course:data , filter:'normal'}
 
 admin_course_lesson_data:
     pattern:  /course/lesson/data/{id}

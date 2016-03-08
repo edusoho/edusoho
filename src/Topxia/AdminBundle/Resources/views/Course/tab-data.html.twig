@@ -1,0 +1,7 @@
+<div class="btn-group">
+
+	<a href=" {{ url('admin_course_data', {filter: 'normal'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'normal'%}btn-primary{% endif %}">普通课程</a>
+
+
+	<a href=" {{ url('admin_course_data', {filter: 'classroom'}) }}" type="button" class="btn btn-default btn-sm {% if filter == 'classroom' %}btn-primary{% endif %}">{{setting("classroom.name")|default("班级")}}课程</a>
+</div>
