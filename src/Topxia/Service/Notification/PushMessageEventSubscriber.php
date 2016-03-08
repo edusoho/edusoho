@@ -42,9 +42,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $course = $event->getSubject();
 
         $currentUser = ServiceKernel::instance()->getCurrentUser();
-        $message     = array($course['title'], array($course['userId'], $currentUser['nickname']));
+        $message     = array(
+            'name'    => $course['title'],
+            'clients' => array(array('clientId' => $course['userId'], 'clientName' => $currentUser['nickname']))
+        );
 
-        $result = CloudAPIFactory::create('root')->post('/im/conversation', $message);
+        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
         $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
     }
 
@@ -53,9 +56,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $classroom = $event->getSubject();
 
         $currentUser = ServiceKernel::instance()->getCurrentUser();
-        $message     = array($classroom['title'], array($classroom['userId'], $currentUser['nickname']));
+        $message     = array(
+            'name'    => $classroom['title'],
+            'clients' => array(array('clientId' => $classroom['userId'], 'clientName' => $currentUser['nickname']))
+        );
 
-        $result = CloudAPIFactory::create('root')->post('/im/conversation', $message);
+        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
         $this->getClassroomService()->updateClassroom($classroom['id'], array('conversationId' => $result['no']));
     }
 
