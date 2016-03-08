@@ -27,4 +27,11 @@ class Version20160304091812 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
     }
+
+    protected function isFieldExist($table, $filedName)
+    {
+        $sql    = "DESCRIBE `{$table}` `{$filedName}`;";
+        $result = $this->connection->fetchAssoc($sql);
+        return empty($result) ? false : true;
+    }
 }

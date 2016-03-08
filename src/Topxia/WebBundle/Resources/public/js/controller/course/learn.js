@@ -268,13 +268,13 @@ define(function(require, exports, module) {
                     return;
                 }
 
-                var url = window.location.href;
-                    if(url.indexOf('preview') == -1){
-                        if(lesson.studyModel == 'ordered'){
-                            $("#lesson-study-model-content").show();
-                            return;
-                        }
+
+                if(!/preview=1/.test(window.location.href)){
+                    if(lesson.studyModel == 'ordered'){
+                        $("#lesson-study-model-content").show();
+                        return;
                     }
+                }
                     
                 var number = lesson.number - 1;
 
