@@ -21,7 +21,7 @@ $app->mount(_u('/files'), include dirname(__DIR__).'/src/files.php');
 /**
  * 新的路由配置方式
  */
-$app->get(_u('/users/{id}'), 'res.User:get');
+$app->get(_u('/user/{id}'), 'res.User:get');
 $app->get(_u('/users'), 'res.Users:get');
 $app->post(_u('/users'), 'res.Users:post');
 $app->get(_u('/courses'), 'res.Courses:get');
