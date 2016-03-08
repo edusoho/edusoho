@@ -90,6 +90,12 @@ define(function(require, exports, module) {
             var $container = $target.closest('#thumbnail-set');
             $container.find('.thumbnail-pane.active').removeClass('active');
             $container.find($target.attr('href')).addClass('active');
+
+            if ($target.attr('href') == '#self-select') {
+                this.$('.js-screenshot-btn').removeClass('hide');
+            } else {
+                 this.$('.js-screenshot-btn').addClass('hide');
+            }
         },
         onSubmitCoverForm: function(event) {
             var $target = $(event.currentTarget);
@@ -119,6 +125,9 @@ define(function(require, exports, module) {
             var $coverTab = $target.closest('#cover-tab');
             $coverTab.find('.js-cover-img').attr('src', $target.attr('src'));
             $coverTab.find('#thumbNo').val($target.data('no'));
+        },
+        destroy: function() {
+            clearInterval(this.intervalId);
         }
     });
 

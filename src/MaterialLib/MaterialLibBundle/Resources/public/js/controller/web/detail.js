@@ -13,9 +13,12 @@ define(function(require, exports, module) {
                 'click .js-info': 'onClickInfo'
             },
             setup: function() {
-                this.cover = new Cover({
-                    element: '#cover-tab'
-                });
+                if (this.$('#cover-tab').length >0) {
+                    this.cover = new Cover({
+                        element: '#cover-tab'
+                    });
+                };
+               
                 this.info = new Info({
                     element: '#info-tab'
                 });
@@ -45,6 +48,8 @@ define(function(require, exports, module) {
             back: function() {
                 this.get('callback')();
                 this.element.remove();
+                this.info.destroy();
+                this.cover && this.cover.destroy();
                 this.destroy();
             }
     });
