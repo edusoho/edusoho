@@ -17,4 +17,6 @@ interface MaterialLibService
     public function reconvert($globalId, $options);
 
     public function getDefaultHumbnails($globalId);
+
+    public function player($globalId);
 }
