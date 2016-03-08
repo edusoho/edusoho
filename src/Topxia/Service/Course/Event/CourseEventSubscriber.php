@@ -173,10 +173,11 @@ class CourseEventSubscriber implements EventSubscriberInterface
     public function onCourseUpdate(ServiceEvent $event)
     {   
         $context = $event->getSubject();
-        $argument = $context['argument'];
+
+        $argument = ArrayToolkit::unset($context['argument'], array('conversationId'));
         $course = $context['course'];
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($course['id'],1),'id');
-        if ($courseIds) {
+        if ($courseIds && $argument) {
             foreach ($courseIds as $key=>$courseId) {
                 $this->getCourseService()->updateCourse($courseIds[$key], $argument);
             }

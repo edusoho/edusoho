@@ -28,6 +28,16 @@ class ArrayToolkit
 		return $array;
 	}
 
+	public static function unset(array $array, array $keys)
+	{
+		foreach (array_keys($array) as $key) {
+			if (in_array($key, $keys)) {
+				unset($array[$key]);
+			}
+		}
+		return $array;
+	}
+
 	public static function requireds(array $array, array $keys)
 	{
 		foreach ($keys as $key) {

@@ -21,6 +21,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.lesson.unpublish'   => 'onCourseLessonUnpublish',
             'course.close'              => 'onCourseClose',
             'announcement.create'       => 'onAnnouncementCreate',
+            'classroom.create'          => 'onClassroomCreate',
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
             'classroom.put_course'      => 'onClassroomPutCourse',
@@ -44,6 +45,18 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $message     = array($course['title'], array($course['userId'], $currentUser['nickname']));
 
         $result = CloudAPIFactory::create('root')->post('/im/conversation', $message);
+        $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+    }
+
+    public function onClassroomCreate(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+
+        $currentUser = ServiceKernel::instance()->getCurrentUser();
+        $message     = array($classroom['title'], array($classroom['userId'], $currentUser['nickname']));
+
+        $result = CloudAPIFactory::create('root')->post('/im/conversation', $message);
+        $this->getClassroomService()->updateClassroom($classroom['id'], array('conversationId' => $result['no']));
     }
 
     public function onTestPaperReviewed(ServiceEvent $event)
