@@ -45,6 +45,4 @@ interface UploadFileService2
 
     public function reconvertFile($id, $convertCallback);
 
-
-
 }

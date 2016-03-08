@@ -58,11 +58,7 @@
             </div>
         </li>
         {% endif %}
-            {% for uploadFile in files %}
-                {% include 'MaterialLibBundle:MaterialLib:material-thumb-view-item.html.twig' %}
-            {% else %}
-                <div class="empty">无文件记录</div>
-            {% endfor %}
+        {% include 'MaterialLibBundle:MaterialLib:material-thumb-view-item.html.twig' %}
         </ul>
     </div>
 </div>

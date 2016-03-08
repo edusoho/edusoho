@@ -30,8 +30,8 @@ class MaterialLibController extends BaseController
 
         $keyWord = $request->query->get('keyword') ?: "";
 
-        $conditions          = array();
-        $conditions['stats'] = 'ok';
+        $conditions           = array();
+        $conditions['status'] = 'ok';
 
         if ($type != 'all') {
             $conditions['type'] = $type;
@@ -44,9 +44,9 @@ class MaterialLibController extends BaseController
         $conditions['source']        = $source;
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFileCount($conditions), 20);
+        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestCreated', $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
@@ -59,7 +59,8 @@ class MaterialLibController extends BaseController
         }
 
         $storageSetting = $this->getSettingService()->get("storage");
-        $tags           = $this->getTagService()->findAllTags(0, 999);
+
+        $tags = $this->getTagService()->findAllTags(0, 999);
 
         return $this->render($resultPage, array(
             'currentUserId'  => $currentUserId,
@@ -77,11 +78,23 @@ class MaterialLibController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $file = $this->tryAccessFile($id);
-        $this->getUploadFileService()->deleteFiles(array($id));
-        return $this->createJsonResponse(true);
+        $file   = $this->tryAccessFile($id);
+        $status = $this->getUploadFileService()->deleteFiles(array($id));
+        try {
+            $api = CloudAPIFactory::create('leaf');
+            $api->setApiUrl("http://andytest.edusoho.net:8081");
+            $result = $api->delete("/resources/{$file['globalId']}");
+        } catch (\RuntimeException $e) {
+            return $this->createJsonResponse(false);
+        }
+        if (isset($result['success']) && $result['success'] == true) {
+            return $this->createJsonResponse(true);
+        } else {
+            return $this->createJsonResponse(false);
+        }
     }
 
+    //需要改成调用云平台群删的接口
     public function deletesAction(Request $request)
     {
         $ids = $request->request->get('ids');
@@ -398,7 +411,7 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getUserService()
