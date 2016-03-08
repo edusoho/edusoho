@@ -3,19 +3,18 @@ namespace Topxia\Service\CloudPlatform\Client;
 
 class EventCloudAPI extends AbstractCloudAPI
 {
-
-    public function post($name, array $body = array(), $timestamp)
+    public function push($name, array $body = array(), $timestamp)
     {
-    	$event = array(
-		    "name"=> $name,
-		    "body"=>$body,
-		    'timestamp' => $timestamp
-		);
+        $event = array(
+            "name"      => $name,
+            "body"      => $body,
+            'timestamp' => $timestamp
+        );
 
-		$event['user'] => $this->accessKey;
-		$event["signature"]=> $this->makeSignature($event);
+        $event['user']      = $this->accessKey;
+        $event["signature"] = $this->makeSignature($event);
 
-        return parent::$this->_request('POST', $this->apiUrl, $event, array());
+        return parent::post('/events', $event);
     }
 
     public function makeSignature($event)

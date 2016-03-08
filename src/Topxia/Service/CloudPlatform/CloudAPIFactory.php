@@ -5,6 +5,7 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\CloudPlatform\Client\CloudAPI;
+use Topxia\Service\CloudPlatform\Client\EventCloudAPI;
 use Topxia\Service\CloudPlatform\Client\FailoverCloudAPI;
 
 class CloudAPIFactory
@@ -28,7 +29,7 @@ class CloudAPIFactory
             ));
             $api->setLogger($logger);
         } elseif ($type == 'event') {
-            $api = new CloudAPI(array(
+            $api = new EventCloudAPI(array(
                 'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
                 'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
                 'apiUrl'    => empty($storage['cloud_api_event_server']) ? '' : $storage['cloud_api_event_server'],

@@ -255,7 +255,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
 
-        if (!$course['parentId'] && $course['conversation']) {
+        if (!$course['parentId'] && $course['conversationId']) {
             $this->addGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
         }
     }
@@ -265,7 +265,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $course = $event->getSubject();
         $userId = $event->getArgument('userId');
 
-        if (!$course['parentId'] && $course['conversation']) {
+        if (!$course['parentId'] && $course['conversationId']) {
             $this->deleteGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
         }
     }
@@ -496,7 +496,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function addGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
-        $result = CloudAPIFactory::create('event')->post('edusoho.'.$grouType.'.join', array(
+        $result = CloudAPIFactory::create('event')->push('edusoho.'.$grouType.'.join', array(
             'conversationId' => $conversationId,
             'memberId'       => $memberId
         ), $timestamp);
@@ -504,7 +504,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function deleteGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
-        $result = CloudAPIFactory::create('event')->post('edusoho.'.$grouType.'.quit', array(
+        $result = CloudAPIFactory::create('event')->push('edusoho.'.$grouType.'.quit', array(
             'conversationId' => $conversationId,
             'memberId'       => $memberId
         ), $timestamp);
