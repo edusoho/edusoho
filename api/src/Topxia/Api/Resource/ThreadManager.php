@@ -53,7 +53,8 @@ class ThreadManager extends BaseResource
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         foreach ($threads as $key => &$thread) {
         	$lesson = $lessons[$thread["lessonId"]];
-        	$thread["lessonTitle"] = '课时:' . $lesson['number'] . $lesson["title"];
+            $lessonTitle = empty($lesson) ? "课程提问" : '课时:' . $lesson['number'] . $lesson["title"];
+        	$thread["lessonTitle"] = $lessonTitle;
             $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);
         }
         return array(
@@ -72,11 +73,11 @@ class ThreadManager extends BaseResource
                 return $latestPostTime1 - $latestPostTime2;
             }
 
-            return 1;
+            return -1;
         }
 
         if ($latestPostTime2 > 0) {
-            return 1;
+            return -1;
         }
 
         return $latestPostTime1 - $latestPostTime2;            
