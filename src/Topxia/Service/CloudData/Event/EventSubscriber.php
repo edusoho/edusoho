@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\Service\Course\Event;
+namespace Topxia\Service\CloudData\Event;
 
 use Topxia\Service\Common\ServiceEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
