@@ -22,7 +22,7 @@ define(function(require, exports, module) {
                     text: this.get('title'),
                 },
                 legend: {
-                    top: 'middle',  
+                    top: '10%',  
                     data:[this.element.data('title1'), this.element.data('title2')]
                 },
                 toolbox: {
@@ -58,8 +58,10 @@ define(function(require, exports, module) {
                         smooth:true,
                         symbol: 'none',
                         sampling: 'average',
-                        areaStyle: {
-                            normal: {}
+                        lineStyle: {
+                            normal: {
+                                color: '#97CAB2'
+                            }
                         },
                         data: this.element.data('data1')
                     },
@@ -69,8 +71,10 @@ define(function(require, exports, module) {
                         smooth:true,
                         symbol: 'none',
                         sampling: 'average',
-                        areaStyle: {
-                            normal: {}
+                        lineStyle: {
+                            normal: {
+                                color: '#E43C59'
+                            }
                         },
                         data: this.element.data('data2')
                     }

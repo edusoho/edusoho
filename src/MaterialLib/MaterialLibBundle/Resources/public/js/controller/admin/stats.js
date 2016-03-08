@@ -24,7 +24,6 @@ define(function(require, exports, module) {
             this._initEcharts($target.data('target'));
         },
         _initTime: function() {
-            //init timepicker
             $("#startDate").datetimepicker({
                 autoclose: true,
                 locale: 'zh-cn'
@@ -67,21 +66,21 @@ define(function(require, exports, module) {
             if (id == '#video-chart' && !this.videoLineChart ) {
                 this.videoLineChart = new LineChart({
                     element: '#video-line-chart',
-                    title: '空间/流量详情'
+                    title: '视频详情'
                 });
             }
             
             if (id == '#audio-chart' && !this.audioLineChart) {
                 this.audioLineChart = new LineChart({
                     element: '#audio-line-chart',
-                    title: '空间/流量详情'
+                    title: '音频详情'
                 });
             }
 
             if (id == '#document-chart' && !this.docLineChart) {
                 this.docLineChart = new LineChart({
                     element: '#document-line-chart',
-                    title: '空间/流量详情'
+                    title: '文档详情'
                 });
             }
 

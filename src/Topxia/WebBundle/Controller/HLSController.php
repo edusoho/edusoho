@@ -240,8 +240,6 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        return new Response($file['metas2'][$token['data']['level']]['hlsKey']);
-
         $api = CloudAPIFactory::create('leaf');
 
         if (!empty($token['data']['keyencryption'])) {
