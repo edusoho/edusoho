@@ -15,6 +15,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
 
     public function updateDiscoveryColumn($id, $fields)
     {
+        
         $fields = ArrayToolkit::parts($fields, array('categoryId', 'orderType', 'type', 'showCount', 'title', 'seq'));
         return $this->getDiscoveryColumnDao()->updateDiscoveryColumn($id, $fields);
     }
@@ -26,6 +27,7 @@ class DiscoveryColumnServiceImpl extends BaseService implements DiscoveryColumnS
 
     public function addDiscoveryColumn($fields)
     {
+        
         return $this->getDiscoveryColumnDao()->addDiscoveryColumn($fields);
     }
 

@@ -33,8 +33,17 @@ define(function(require, exports, module) {
             errormessageRequired: '请输入自定义名称，不能为空。'
         });
 
-
+        $('body').on('click', '#live', function(){
+            $('.order-form').addClass('hide');
+        });
         
+        $('body').on('click', '#course', function(){
+            $('.order-form').removeClass('hide');
+        });
+
+        $('body').on('click', '#classroom', function(){
+            $('.order-form').removeClass('hide');
+        })
     };
 
 });

@@ -14,7 +14,7 @@ class DiscoveryColumn extends BaseResource
         if (empty($result)) {
             return $this->error('error', '暂无分类内容!');
         }
-
+      
         return $this->wrap($result, sizeof($result));
     }
 

@@ -34,6 +34,14 @@ class DiscoveryColumnController extends BaseController
             $conditions                = $request->request->all();
             $conditions['createdTime'] = time();
 
+            if (empty($conditions['categoryId'])) {
+            $conditions['categoryId'] = 0;
+            }
+
+            if ($conditions['type'] == 'live') {
+                $conditions['orderType'] = '';
+            }
+
             $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($conditions['title']);
 
             if (empty($discoveryColumn) && $conditions['title']) {
@@ -67,6 +75,14 @@ class DiscoveryColumnController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $conditions      = $request->request->all();
+            if (empty($conditions['categoryId'])) {
+            $conditions['categoryId'] = 0;
+            }
+
+            if ($conditions['type'] == 'live') {
+                $conditions['orderType'] = '';
+            }
+
             $discoveryColumn = $this->getDiscoveryColumnService()->updateDiscoveryColumn($id, $conditions);
             return $this->redirect($this->generateUrl('admin_discovery_column_index'));
         }
