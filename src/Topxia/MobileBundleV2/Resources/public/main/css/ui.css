@@ -846,6 +846,7 @@ a {
   line-height: 30px;
   padding-left: 8px;
   padding-right: 8px;
+  padding-bottom: 8px;
 }
 
 .course-card .course-card-item .right-content .subtitle {
