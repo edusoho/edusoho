@@ -83,7 +83,7 @@ class MaterialLibController extends BaseController
             array('name' => '图片', 'value' => 278, 'per' => '24.49%'),
             array('name' => '文档', 'value' => 118, 'per' => '10.4%'),
             array('name' => 'PPT', 'value' => 54, 'per' => '4.76%'),
-            array('name' => '其他', 'value' => 459, 'per' => '40.44%'),
+            array('name' => '其他', 'value' => 459, 'per' => '40.44%')
         );
 
         $flow = array(
@@ -92,27 +92,25 @@ class MaterialLibController extends BaseController
             array('name' => '图片', 'value' => 278, 'per' => '24.49%'),
             array('name' => '文档', 'value' => 118, 'per' => '10.4%'),
             array('name' => 'PPT', 'value' => 54, 'per' => '4.76%'),
-            array('name' => '其他', 'value' => 459, 'per' => '40.44%'),
+            array('name' => '其他', 'value' => 459, 'per' => '40.44%')
         );
 
-        $date = array();
+        $date  = array();
         $data1 = array();
         $data2 = array();
-        for($i=1;$i<=365;$i++)
-        {
-            $inter = $i+1;
-            $date[] = date('Y-m-d', strtotime("+{$i} day"));
+        for ($i = 1; $i <= 365; $i++) {
+            $inter   = $i + 1;
+            $date[]  = date('Y-m-d', strtotime("+{$i} day"));
             $data1[] = rand(0, 100);
-            $data2[] = rand(0,200);
+            $data2[] = rand(0, 200);
         }
-
 
         $stats = $this->getMaterialLibService()->getStatistics();
         return $this->render('MaterialLibBundle:Admin:stats.html.twig', array(
             'stats' => $stats,
             'space' => $space,
-            'flow' => $flow,
-            'date' => $date,
+            'flow'  => $flow,
+            'date'  => $date,
             'data1' => $data1,
             'data2' => $data2
         ));

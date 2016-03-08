@@ -2,6 +2,10 @@ material_lib_browsing:
     pattern: /material/lib/browse/{type}/{viewMode}/{source}
     defaults: { _controller: MaterialLibBundle:MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
 
+material_lib_show_browsing:
+    pattern: /material/lib/show/browse/{type}/{viewMode}/{source}
+    defaults: { _controller: MaterialLibBundle:MaterialLib:showMyMaterialLibForm, type: 'all', viewMode: 'thumb', source: 'upload'}
+
 material_lib_my_sharing:
     pattern: /material/lib/my/sharing/show
     defaults: { _controller: MaterialLibBundle:MaterialLib:showShareForm }
