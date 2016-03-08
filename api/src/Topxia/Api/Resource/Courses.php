@@ -38,11 +38,11 @@ class Courses extends BaseResource
         if ($result['orderType'] == 'hot') {
             $orderBy = 'hitNum';
         }
-        elseif ($result['orderType'] == 'new') {
-            $orderBy = 'createdTime';
+        elseif ($result['orderType'] == 'recommend') {
+            $orderBy = 'recommendedSeq';
         }
         else {
-            $orderBy = 'recommendedSeq';
+            $orderBy = 'createdTime';
         }
 
         if ($result['type'] == 'live') {
@@ -50,6 +50,9 @@ class Courses extends BaseResource
         }
         else {
             $conditions['type'] = 'normal';
+        }
+        if (empty($result['showCount'])) {
+            $result['showCount'] = 6;
         }
         
         $total = $this->getCourseService()->searchCourseCount($conditions);
