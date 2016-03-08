@@ -55,13 +55,12 @@ class GlobalFilePlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        var_dump($file);exit();
         $factory          = new CloudClientFactory();
         $client           = $factory->createClient();
-        $metas2           = $file['metas'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
+        $metas            = $file['metas'];
+        $url              = $client->generateFileUrl($client->getBucket(), $metas['pdf']['key'], 3600);
         $result['pdfUri'] = $url['url'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
+        $url              = $client->generateFileUrl($client->getBucket(), $metas['swf']['key'], 3600);
         $result['swfUri'] = $url['url'];
         return $this->createJsonResponse($result);
     }

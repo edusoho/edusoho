@@ -1,6 +1,6 @@
 define(function(require, exports, module) {
 
-    var SlidePlayer = require('../../../../../topxiaweb/js/controller/widget/document-player');
+    var DocumentPlayer = require('../../../../../topxiaweb/js/controller/widget/document-player');
 
     exports.run = function() {
     	var player = $("#document-player");
