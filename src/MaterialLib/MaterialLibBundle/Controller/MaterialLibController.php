@@ -77,6 +77,10 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function showMyMaterialLibFormAction(Request $request, $type = "all", $viewMode = "thumb", $source = "upload")
+    {
+    }
+
     public function deleteAction(Request $request, $id)
     {
         $file   = $this->tryAccessFile($id);

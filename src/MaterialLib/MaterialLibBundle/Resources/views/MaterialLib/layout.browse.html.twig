@@ -5,7 +5,7 @@
 {% block page_body %}
 
 		<ul class="nav nav-tabs">
-			<li class="{{ type == 'all' ? 'active' : '' }}"><a name="search-items" data-url="{{ path('material_lib_browsing', {type:'all', viewMode: viewMode, source: source}) }}">全部</a></li>
+			<li class="{{ type == 'all' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'all', viewMode: viewMode, source: source}) }}">全部</a></li>
 			<li class="{{ type == 'video' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'video', viewMode: viewMode, source: source}) }}">视频</a></li>
 			<li class="{{ type == 'audio' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'audio', viewMode: viewMode, source: source}) }}">音频</a></li>
 			<li class="{{ type == 'image' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'image', viewMode: viewMode, source: source}) }}">图片</a></li>
@@ -52,7 +52,7 @@
             <div class="well well-sm" style="margin-bottom:10px">
                 <span style="padding-right:50px">标签:</span>
                 {% for tag in tags %}
-                <span class="mlm mrm">{{ tag.name }}</span>
+                <span class="mlm">{{ tag.name }}</span>
                 {% endfor %}
             </div>
         	<div class="form-group">
