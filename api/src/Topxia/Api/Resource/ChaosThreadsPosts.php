@@ -81,38 +81,36 @@ class ChaosThreadsPosts extends BaseResource
 
         $courses     = $this->getCourseService()->findCoursesByIds($courseIds);
 
-        $threadIds   = ArrayToolkit::column($posts,"threadId");
-
-        $threads     = $this->getCourseThreadService()->findThreadsByIds($threadIds);
-
         $courseThreadPosts = array();
 
-        if(empty($courses) || empty($threads)){
+        if(empty($courses)){
             return $courseThreadPosts;
         }
+
         foreach ($posts as $post) {
-            $threadPosts = array();   
-            foreach ($threads as $thread) {
-                if($thread['id'] == $post['threadId']){
-                    $threadPosts['title']        = $thread['title'];
-                    $threadPosts['type']         = $thread['type'];
-                    break;
-                }
+            $thread = $this->getCourseThreadService()->getThread($post['courseId'],$post['threadId']);
+            if(empty($thread)){
+                continue;
             }
+            if($thread['userId'] == $currentUser['id']){
+                continue;
+            }
+            $threadPosts = array(); 
+            $threadPosts['title']        = $thread['title'];
+            $threadPosts['type']         = $thread['type'];
+            $threadPosts['id']           = $post['id'];            
+            $threadPosts['content']      = $post['content'];
+            $threadPosts['createdTime']  = $post['createdTime'];
             foreach ($courses as $course) {
                 if($post['courseId'] == $course['id']){
-                    $threadPosts['courseId']     = $course['id'];
+                    $threadPosts['courseId']     = $post['id'];
                     $threadPosts['courseTitle']  = $course['title'];
-                    $threadPosts['smallPicture'] = $this->getFileUrl($course['smallPicture']);
-                    $threadPosts['middlePicture']= $this->getFileUrl($course['middlePicture']);
-                    $threadPosts['lagerPicture'] = $this->getFileUrl($course['lagerPicture']);
+                    $threadPosts['smallPicture'] = $course['smallPicture'];
+                    $threadPosts['middlePicture']= $course['middlePicture'];
+                    $threadPosts['lagerPicture'] = $course['lagerPicture'];
                     break; 
                 }
-            }
-            $threadPosts['id']               = $post['id'];            
-            $threadPosts['content']          = $post['content'];
-            $threadPosts['createdTime']      = $post['createdTime'];
-            
+            }           
             array_push($courseThreadPosts, $threadPosts);
         }
         return $courseThreadPosts;
