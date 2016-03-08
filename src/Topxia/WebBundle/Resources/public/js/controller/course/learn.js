@@ -269,11 +269,9 @@ define(function(require, exports, module) {
                 }
 
 
-                if(!/preview=1/.test(window.location.href)){
-                    if(lesson.studyModel == 'ordered'){
-                        $("#lesson-study-model-content").show();
-                        return;
-                    }
+                if((lesson.studyModel == 'ordered')　&& !/preview=1/.test(window.location.href)){
+                    $("#lesson-study-model-content").show();
+                    return;
                 }
                     
                 var number = lesson.number - 1;
