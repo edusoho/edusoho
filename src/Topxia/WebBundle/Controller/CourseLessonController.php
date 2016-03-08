@@ -192,6 +192,10 @@ class CourseLessonController extends BaseController
         $json    = array();
         $preview = $request->query->get('preview');
 
+        if ($member['role'] != 'teacher' && $preview == 1) {
+            return $this->createJsonResponse(array('message' => '您不是教师，无法预览!'));
+        }
+
         if ($preview != 1) {
             if ($course['studyModel'] == 'ordered') {
                 $user = $this->getCurrentUser();
@@ -204,6 +208,7 @@ class CourseLessonController extends BaseController
 
                         if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
                             $json['studyModel'] = 'ordered';
+
                             return $this->createJsonResponse($json);
                         }
                     }
