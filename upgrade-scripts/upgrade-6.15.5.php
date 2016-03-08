@@ -75,7 +75,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("UPDATE `course_thread` SET  `updatedTime` = `createdTime` where updatedTime = 0;");
         }
 
-        if (!$this->isFieldExist('thread', 'updateTime')) {
+        if ($this->isFieldExist('thread', 'updateTime')) {
             $connection->exec("ALTER TABLE `thread` ADD INDEX(`updateTime`);");
         }
 
@@ -88,7 +88,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("UPDATE `groups_thread` SET  `updatedTime` = `createdTime` where updatedTime = 0;");
         }
 
-        if (!$this->isFieldExist('article', 'updatedTime')) {
+        if ($this->isFieldExist('article', 'updatedTime')) {
             $connection->exec("ALTER TABLE `article` ADD INDEX(`updatedTime`);");
         }
     }
