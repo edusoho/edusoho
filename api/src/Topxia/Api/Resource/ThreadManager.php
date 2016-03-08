@@ -43,11 +43,12 @@ class ThreadManager extends BaseResource
         $threadCount = $this->getCourseThreadService()->searchThreadCountInCourseIds($conditions);
         $threads = $this->getCourseThreadService()->searchThreadInCourseIds(
             $conditions,
-            'createdNotStick',
+            'posted',
             0,
-            $start
+            500
         );
 
+        $threads = $this->sortThreads($threads, 500);
         $users   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         foreach ($threads as $key => &$thread) {
@@ -61,6 +62,31 @@ class ThreadManager extends BaseResource
         	"threads" => $this->muiltFilter($threads)
         );
 	}
+
+    private function sortThreads($threads, $limit) {
+        function threadSort($t1, $t2) {
+            $latestPostTime1 = $t1['latestPostTime'];
+            $latestPostTime2 = $t2['latestPostTime'];
+
+            if ($latestPostTime1 > 0) {
+                if ($latestPostTime2 > 0) {
+                    return $latestPostTime1 - $latestPostTime2;
+                }
+
+                return 1;
+            }
+
+            if ($latestPostTime2 > 0) {
+                return 1;
+            }
+
+            return $latestPostTime1 - $latestPostTime2;            
+        }
+
+        usort($threads, "threadSort");
+        $threads = array_slice($threads, 0, $limit);
+        return $threads;
+    }
 
 	protected function muiltFilter($res)
     {
