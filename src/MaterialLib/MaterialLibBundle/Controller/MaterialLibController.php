@@ -59,6 +59,7 @@ class MaterialLibController extends BaseController
         }
 
         $storageSetting = $this->getSettingService()->get("storage");
+        $tags           = $this->getTagService()->findAllTags(0, 999);
 
         return $this->render($resultPage, array(
             'currentUserId'  => $currentUserId,
@@ -69,7 +70,8 @@ class MaterialLibController extends BaseController
             'storageSetting' => $storageSetting,
             'viewMode'       => $viewMode,
             'source'         => $source,
-            'now'            => time()
+            'now'            => time(),
+            'tags'           => $tags
         ));
     }
 
@@ -402,6 +404,11 @@ class MaterialLibController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getNotificationService()

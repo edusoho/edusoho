@@ -16,6 +16,45 @@
 		<br>
 		
 		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('material_lib_browsing', {type: type, viewMode: viewMode, source: source}) }}" method="get" novalidate>
+            <div class="well well-sm" style="margin-bottom:10px">
+              <span style="padding-right:50px">筛选:</span>
+              <span>上传时间:</span>
+
+              <div class="form-group mlm">
+                <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+                -
+                <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+              </div>
+
+              <div class="checkbox">
+                <label class="mlm">
+                  <input type="checkbox" name="processStatus" value="error"> 转码失败
+                </label>
+              </div>
+            </div>
+            <div class="well well-sm" style="margin-bottom:10px">
+              <span style="padding-right:50px">排序:</span>
+
+              <div class="form-group">
+                <select class="form-control" name="uploadTime">
+                  <option value="desc">最近上传</option>
+                  <option value="asc">最早上传</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <select class="form-control" name="views">
+                  <option value="desc">最多播放</option>
+                  <option value="asc">最少播放</option>
+                </select>
+              </div>
+            </div>
+            <div class="well well-sm" style="margin-bottom:10px">
+                <span style="padding-right:50px">标签:</span>
+                {% for tag in tags %}
+                <span class="mlm mrm">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
         	<div class="form-group">
         	  <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
         	</div>
