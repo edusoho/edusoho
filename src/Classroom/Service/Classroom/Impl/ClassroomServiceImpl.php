@@ -99,7 +99,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
-
+        $this->dispatchEvent("classroom.create", $classroom);
         return $classroom;
     }
 
@@ -188,7 +188,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         }
 
         $classroom = $this->getClassroomDao()->updateClassroom($id, $fields);
-        $this->dispatchEvent("classroom.create", $classroom);
+
         return $classroom;
     }
 

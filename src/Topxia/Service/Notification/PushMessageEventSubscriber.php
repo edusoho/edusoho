@@ -44,7 +44,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         $message     = array(
             'name'    => $course['title'],
-            'clients' => array(array('clientId' => $course['userId'], 'clientName' => $currentUser['nickname']))
+            'clients' => array(array('clientId' => $currentUser['id'], 'clientName' => $currentUser['nickname']))
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
@@ -58,7 +58,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         $message     = array(
             'name'    => $classroom['title'],
-            'clients' => array(array('clientId' => $classroom['userId'], 'clientName' => $currentUser['nickname']))
+            'clients' => array(array('clientId' => $currentUser['id'], 'clientName' => $currentUser['nickname']))
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
