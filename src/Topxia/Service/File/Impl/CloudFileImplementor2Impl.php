@@ -58,6 +58,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $api->get("/resources/{$globalId}/default_thumbnails");
     }
 
+    public function getStatistics($options)
+    {
+        $api              = CloudAPIFactory::create();
+        return $api->get("/resources/data/statistics", $options);
+    }
+
     public function findFiles($files)
     {
         if (empty($files)) {

@@ -31,3 +31,7 @@ admin_material_download:
 admin_material_play:
     pattern:  /materiallib/{globalId}/play
     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:play }
+
+admin_material_lib_stats:
+    pattern:  /materiallib/stats
+    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:stats }

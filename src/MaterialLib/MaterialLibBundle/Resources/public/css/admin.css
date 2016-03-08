@@ -1,0 +1,88 @@
+.materiallib-stats .stats-summary {
+    padding: 15px;
+}
+
+.stats-summary .piece {
+    cursor: pointer;
+    padding: 0;
+    height: 100px;
+    border: solid 2px #eee;
+}
+
+.stats-summary .piece.border-sm-left {
+    border-left-width: 1px;
+}
+
+.stats-summary .piece.border-sm-top {
+    border-top-width: 1px;
+}
+
+.stats-summary .piece.border-sm-right {
+    border-right-width: 1px;
+}
+
+.stats-summary .piece.border-sm-bottom {
+    border-bottom-width: 1px;
+}
+
+.stats-summary .piece:hover {
+    border: solid 2px #499AE6;
+}
+
+.stats-summary .piece.active {
+    border: solid 2px #499AE6;
+}
+
+.stats-summary .piece .quantum {
+    padding: 20px;
+}
+
+.stats-summary .piece .quantum .p-text {
+    font-size: 16px;
+}
+
+.stats-summary .piece .quantum .number {
+    color: #499AE6;
+    font-weight: 500;
+}
+
+.materiallib-stats .pie-container {
+    padding: 15px;
+}
+
+.pie-container .left {
+    padding-left: 0; 
+    padding-right: 5px;
+}
+
+.pie-container .right {
+    padding-left: 5px; 
+    padding-right: 0;
+}
+
+.pie-container .pie {
+    padding: 0;
+    height: 460px;
+    border: solid 4px #eee;
+}
+
+.materiallib-stats .line-container {
+    padding: 15px;
+}
+
+.line-container .container {
+    padding: 0;
+}
+
+.line-container .line {
+    border: solid 4px #eee;
+    height: 300px;
+}
+
+.materiallib-stats .chart {
+    display: none;
+}
+
+.materiallib-stats .chart.active {
+    display: block;
+}
