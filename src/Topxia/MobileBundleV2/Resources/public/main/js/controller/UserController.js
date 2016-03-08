@@ -442,13 +442,15 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 			var lasterTime1 = thread1.latestPostTime ? thread1.latestPostTime : thread1.createdTime;					
 			var lasterTime2 = thread2.latestPostTime ? thread2.latestPostTime : thread2.createdTime;
 
-			if (thread1.isTeacherAnswer) {
-				if (thread2.isTeacherAnswer) {
+			lasterTime1 = new Date(lasterTime1).getTime();
+			lasterTime2 = new Date(lasterTime2).getTime();
+			if (thread1.isTeacherAnswer > 0) {
+				if (thread2.isTeacherAnswer > 0) {
 					return lasterTime1 - lasterTime2;
 				}
 				return 1;
 			}
-			if (thread2.isTeacherAnswer) {
+			if (thread2.isTeacherAnswer > 0) {
 				return 1;
 			}
 
@@ -468,10 +470,12 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 	};
 
 	$scope.initQuestionResult = function(limit) {
+		$scope.showLoad();
 		ThreadManagerService.questionResult({
 			start : limit,
 			courseId : $stateParams.courseId
 		}, function(data) {
+			$scope.hideLoad();
 			$scope.teachingResult = self.filter(data);
 		});
 	};
