@@ -1,3 +1,34 @@
+{% if source == "upload" %}
+    <li class="course-grid item-material" id="panel-upload-file">
+        <div style="width: 180px; height: 180px; padding: 8px;">
+       <div class="container" style="width: 100%; height: 120px; vertical-align: middle;">
+        <a class="btn btn-link center-block file-create-btn tip" style="margin-top: 30px;"
+        data-toggle="modal" data-target="#modal"
+        data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="添加"   data-placement="bottom" >
+            <i class="glyphicon glyphicon-plus" style="font-size:40px;"></i>
+        </a>
+        </div>
+            <div>
+            {% if type == 'all' %}
+                <span class="text-sm">支持常见文档、图片、音视频、压缩包等格式。</span>
+            {% elseif type == 'video' %}
+                <span class="text-sm">支持mp4, avi, flv, wmv, mov格式，文件不能超过1GB。</span>
+            {% elseif type == 'audio' %}
+                <span class="text-sm">仅支持mp3格式。</span>
+            {% elseif type == 'image' %}
+                <span class="text-sm">支持png, jpg, gif格式。</span>
+            {% elseif type == 'ppt' %}
+                <span class="text-sm">支持ppt, pptx格式。</span>
+            {% elseif type == 'document' %}
+                <span class="text-sm">支持doc, docx, pdf格式。</span>
+            {% elseif type == 'other' %}
+                <span class="text-sm">支持常见文档、图片、音视频、压缩包等格式。</span>
+            {% endif %}
+        
+            </div>
+        </div>
+    </li>
+{% endif %}
 {% for uploadFile in files %}
 	<li class="course-grid item-material">
 		<div style="width: 180px; height: 180px; padding: 2px;" class="course-item-list-multi">
