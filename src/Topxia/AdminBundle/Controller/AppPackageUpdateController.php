@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -81,19 +82,19 @@ class AppPackageUpdateController extends BaseController
             return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
         }
 
-        $app = $this->getAppService()->getAppByCode($code);
+        $apps = ArrayToolkit::index($this->getAppService()->checkAppUpgrades(), 'code');
 
-        if (empty($app)) {
+        if (empty($apps[$code])) {
             return $this->createJsonResponse(array('isUpgrade' => false));
         }
 
-        if (empty($app['id'])) {
+        if (empty($apps[$code]['package']['id']) || empty($apps[$code]['package']['toVersion'])) {
             $errors[] = '获取最新应用包信息失败';
 
             return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
         }
 
-        return $this->createJsonResponse(array('isUpgrade' => true, 'packageId' => $app['id']));
+        return $this->createJsonResponse(array('isUpgrade' => true, 'packageId' => $apps[$code]['package']['id'], 'toVersion' => $apps[$code]['package']['toVersion']));
     }
 
     protected function createResponseWithErrors($errors)

@@ -82,6 +82,7 @@ define(function(require, exports, module) {
                 title =  data.message;
                 exec(title, url, progressBar, startProgress, endProgress);
             } else if(data.isUpgrade){
+               $('.text-success').text(data.toVersion);
                 var urls = $("#begin-update").data();
                 steps = getQueue(urls);
                 $.each(steps, function(i, step) {
