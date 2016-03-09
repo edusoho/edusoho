@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Widget = require('widget');
 
     exports.run = function() {
-
         $('#modal').on('hidden.bs.modal', function (e) {
             window.location.reload();
         })
@@ -143,18 +142,29 @@ define(function(require, exports, module) {
                 title: '下载安装升级程序',
                 url: urls.downloadExtractUrl,
                 progressRange: [53, 60]
-            },
-            {
+            }
+        ];
+
+
+        var type = $("input[name='package-type']").val();
+        if(type == 'upgrade'){
+            steps.push({
                 title: '执行安装升级程序',
                 url: urls.beginUpgradeUrl,
                 progressRange: [62, 94]
-            },
-            {
+            });
+            steps.push({
                 title: '检查系统版本',
                 url: urls.checkNewestUrl,
                 progressRange: [97, 100]
-            }
-        ];
+            }); 
+        }else{
+            steps.push({
+                title: '执行安装升级程序',
+                url: urls.beginUpgradeUrl,
+                progressRange: [62, 100]
+            });
+        }
 
         return steps;
     }
