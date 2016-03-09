@@ -100,6 +100,7 @@
 
       {% if material.type == 'video' %}
         <div class="tab-pane" id="cover-tab">
+          {% if material.processStatus == 'ok' %}
           <form class="form-horizontal" id="cover-form" action="{{ path('admin_material_edit', {globalId:material.no}) }}">
             <div class="form-group">
               <label for="name" class="col-md-2 control-label">封面</label>
@@ -139,6 +140,11 @@
                 <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="正在保存..." type="submit">保存</button>
               </div>
           </form>
+          {% else %}
+            <div class="empty text-muted">
+              视频还没有转码完成，请等待转码完成......
+            </div>
+          {% endif %}
         </div>
       {% endif %}
     </div>

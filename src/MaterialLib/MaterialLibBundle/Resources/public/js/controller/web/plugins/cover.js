@@ -39,13 +39,13 @@ define(function(require, exports, module) {
                 data:{'second':second}
             }).done(function(resp){
                 if (resp.status == 'success') {
-                    this._successGeneratePic($target, resp);
+                    self._successGeneratePic($target, resp);
                 } else if (resp.status == 'waiting') {
                     //轮询
                     self.intervalId = setInterval(function(){
                         $.get($target.data('url'), {'second':second}, function(resp){
                             if (resp.status == 'success') {
-                                this._successGeneratePic($target, resp);
+                                self._successGeneratePic($target, resp);
                                 clearInterval(self.intervalId);
                             }
                         });
@@ -70,19 +70,20 @@ define(function(require, exports, module) {
         },
         _initPlayer: function() {
             var self = this;
+            if (this.$('#viewerIframe').length > 0) {
+                this.$('#viewerIframe');
+                var messenger = new Messenger({
+                    name: 'parent',
+                    project: 'PlayerProject',
+                    children: [document.getElementById('viewerIframe')],
+                    type: 'parent'
+                });
 
-            this.$('#viewerIframe');
-            var messenger = new Messenger({
-                name: 'parent',
-                project: 'PlayerProject',
-                children: [document.getElementById('viewerIframe')],
-                type: 'parent'
-            });
-
-            messenger.on("ready", function() {
-                self.player = window.frames["viewerIframe"].contentWindow.BalloonPlayer;
-            });
-
+                messenger.on("ready", function() {
+                    self.player = window.frames["viewerIframe"].contentWindow.BalloonPlayer;
+                });
+            }
+            
         },
         _changePane: function($target) {
             $target.parent().find('a.disabled').removeClass('disabled');
