@@ -39,7 +39,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $currentUser = ServiceKernel::instance()->getCurrentUser();
         $message     = array(
             'name'    => $course['title'],
-            'clients' => array(array('clientId' => $currentUser['id'], 'clientName' => $currentUser['nickname']))
+            'clients' => array(array(
+                'clientId'   => $currentUser['id'],
+                'clientName' => $currentUser['nickname']
+            ))
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
@@ -439,7 +442,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function addGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
         $user   = $this->getUserService()->getUser($memberId);
-        $result = CloudAPIFactory::create('event')->push('edusoho.'.$grouType.'.join', array(
+        $result = $this->getCloudDataService()->push('edusoho.'.$grouType.'.join', array(
             'conversationId' => $conversationId,
             'memberId'       => $memberId,
             'nickname'       => $user['nickname']
@@ -448,7 +451,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function deleteGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
-        $result = CloudAPIFactory::create('event')->push('edusoho.'.$grouType.'.quit', array(
+        $result = $this->getCloudDataService()->push('edusoho.'.$grouType.'.quit', array(
             'conversationId' => $conversationId,
             'memberId'       => $memberId
         ), $timestamp);
@@ -556,6 +559,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     protected function getTestpaperService()
     {
         return ServiceKernel::instance()->createService('Testpaper.TestpaperService');
+    }
+
+    protected function getCloudDataService()
+    {
+        return ServiceKernel::instance()->createService('CloudData.CloudDataService');
     }
 
     protected function getCrontabService()
