@@ -47,6 +47,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getDefaultHumbnails($globalId);
     }
 
+    public function getThumbnail($globalId, $options)
+    {
+        return $this->getCloudFileImplementor()->getThumbnail($globalId, $options);
+    }
+
     public function getStatistics($options = array())
     {
         return $this->getCloudFileImplementor()->getStatistics($options);

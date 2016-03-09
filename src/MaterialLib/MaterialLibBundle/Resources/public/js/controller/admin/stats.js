@@ -83,7 +83,6 @@ define(function(require, exports, module) {
                     title: '文档详情'
                 });
             }
-
         }
     });
 

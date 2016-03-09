@@ -118,32 +118,8 @@ class MaterialLibController extends BaseController
 
     public function playAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->get($globalId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['type'] == 'video') {
-            if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $file['videoWatermarkEmbedded'] = 1;
-            }
-
-            $player = "balloon-cloud-video-player";
-        } elseif ($file['type'] == 'audio') {
-            $player = "audio-player";
-        } else {
-            throw new Exception("Error File Type.");
-        }
-
-        $url = $this->getPlayUrl($globalId, array());
-
-        return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
-            'file'             => $file,
-            'url'              => $url,
-            'context'          => array(),
-            'player'           => $player,
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+            'globalId' => $globalId
         ));
     }
 
