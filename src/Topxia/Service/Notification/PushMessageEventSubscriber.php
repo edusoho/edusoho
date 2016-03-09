@@ -496,9 +496,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
     protected function addGroupMember($grouType, $conversationId, $timestamp, $memberId)
     {
+        $user   = $this->getUserService()->getUser($memberId);
         $result = CloudAPIFactory::create('event')->push('edusoho.'.$grouType.'.join', array(
             'conversationId' => $conversationId,
-            'memberId'       => $memberId
+            'memberId'       => $memberId,
+            'nickname'       => $user['nickname']
         ), $timestamp);
     }
 
