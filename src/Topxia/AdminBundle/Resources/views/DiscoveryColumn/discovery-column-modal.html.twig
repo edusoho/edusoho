@@ -1,6 +1,12 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}栏目添加{% endblock %}
+{% block title %}
+  {% if discoveryColumn|default(false) %}
+  栏目编辑
+  {% else %}
+  栏目添加
+  {% endif %}
+{% endblock %}
 
 {% block body %}
 <div id="category-creater-widget" data-upload-url="#">

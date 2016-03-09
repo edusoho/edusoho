@@ -39,10 +39,5 @@ define(function(require, exports, module) {
         });
         
 
-        $('.edit-btn').on('click', function() {
-        	$.post($(this).data('url'), function() {
-
-            });
-        });
     }
 });
