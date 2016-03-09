@@ -15,7 +15,7 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
         } catch (\Exception $e) {
             if ($tryTimes == 0) {
                 $tryTimes++;
-                $this->push($name, $body, $timestamp, $tryTimes);
+                return $this->push($name, $body, $timestamp, $tryTimes);
             } else {
                 $user   = $this->getCurrentUser();
                 $fields = array(
@@ -25,6 +25,7 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
                     'createdUserId' => $user['id']
                 );
                 $this->getCloudDataDao()->add($fields);
+                return false;
             }
         }
     }
@@ -37,6 +38,11 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
     public function searchCloudDatas($conditions, $orderBy, $start, $limit)
     {
         return $this->getCloudDataDao()->searchCloudDatas($conditions, $orderBy, $start, $limit);
+    }
+
+    public function deleteCloudData($id)
+    {
+        return $this->getCloudDataDao()->deleteCloudData($id);
     }
 
     protected function getCloudDataDao()

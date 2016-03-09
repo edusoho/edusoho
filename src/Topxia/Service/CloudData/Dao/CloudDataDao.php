@@ -6,6 +6,8 @@ interface CloudDataDao
 {
     public function add($fields);
 
+    public function deleteCloudData($id);
+
     public function getCloudData($id);
 
     public function searchCloudDataCount($conditions);

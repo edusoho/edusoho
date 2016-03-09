@@ -9,4 +9,6 @@ interface CloudDataService
     public function searchCloudDataCount($conditions);
 
     public function searchCloudDatas($conditions, $orderBy, $start, $limit);
+
+    public function deleteCloudData($id);
 }

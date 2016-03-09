@@ -62,4 +62,9 @@ class CloudDataDaoImpl extends BaseDao implements CloudDataDao
 
         return $this->getCloudData($this->getConnection()->lastInsertId());
     }
+
+    public function deleteCloudData($id)
+    {
+        return $this->getConnection()->delete($this->table, array('id' => $id));
+    }
 }
