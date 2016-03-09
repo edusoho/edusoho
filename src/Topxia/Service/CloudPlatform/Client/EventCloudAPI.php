@@ -21,7 +21,7 @@ class EventCloudAPI extends AbstractCloudAPI
     {
         $requestId = substr(md5(uniqid('', true)), -16);
 
-        $url = $this->apiUrl.'/'.$uri;
+        $url = $this->apiUrl.$uri;
         $this->debug && $this->logger && $this->logger->debug("[{$requestId}] {$method} {$url}", array('params' => $params, 'headers' => $headers));
 
         $headers[] = 'Content-type: application/json';

@@ -14,6 +14,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return array(
             'testpaper.reviewed'        => 'onTestPaperReviewed',
             'course.lesson.publish'     => 'onLessonPubilsh',
+            'course.join'               => 'onCourseJoin',
+            'course.quit'               => 'onCourseQuit',
             'course.create'             => 'onCourseCreate',
             'course.publish'            => 'onCoursePublish',
             'course.lesson.delete'      => 'onCourseLessonDelete',
