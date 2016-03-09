@@ -1123,9 +1123,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getLessonDao()->analysisLessonDataByTime($startTime, $endTime);
     }
 
-    public function findLiveLessonsByDate($courseIds, $limit)
+    public function findFutureLiveDates($courseIds, $limit)
     {
-        return $this->getLessonDao()->findLiveLessonsByDate($courseIds, $limit);
+        return $this->getLessonDao()->findFutureLiveDates($courseIds, $limit);
     }
 
     public function findRecentLiveLessons(array $courseIds, $start, $limit)

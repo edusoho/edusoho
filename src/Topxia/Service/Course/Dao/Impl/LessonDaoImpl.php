@@ -310,7 +310,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         );
     }
 
-    public function findLiveLessonsByDate($courseIds, $limit)
+    public function findFutureLiveDates($courseIds, $limit)
     {
         if (empty($courseIds)) {
             return array();
