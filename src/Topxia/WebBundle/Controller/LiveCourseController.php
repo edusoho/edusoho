@@ -93,7 +93,7 @@ class LiveCourseController extends BaseController
         ), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
         $courseIds = ArrayToolkit::column($courses, 'id');
 
-        $lessonsDate = $this->getCourseService()->findLiveLessonsByDate($courseIds, 4);
+        $lessonsDate = $this->getCourseService()->findFutureLiveDates($courseIds, 4);
 
         $currentLiveLessons = $this->getCourseService()->searchLessons(array(
             'startTimeLessThan'  => time(),

@@ -48,5 +48,5 @@ interface LessonDao
 
     public function analysisLessonDataByTime($startTime, $endTime);
 
-    public function findLiveLessonsByDate($courseIds, $limit);
+    public function findFutureLiveDates($courseIds, $limit);
 }
