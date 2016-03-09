@@ -13,6 +13,8 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
         try {
             return CloudAPIFactory::create('event')->push($name, $body, $timestamp);
         } catch (\Exception $e) {
+            $this->getLogService()->error('cloud_data', 'push', "事件发送失败", array('message' => $e->getMessage()));
+
             if ($tryTimes == 0) {
                 $tryTimes++;
                 return $this->push($name, $body, $timestamp, $tryTimes);
@@ -48,5 +50,10 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
     protected function getCloudDataDao()
     {
         return $this->createDao('CloudData.CloudDataDao');
+    }
+
+    protected function getLogService()
+    {
+        return $this->getServiceKernel()->createService('System.LogService');
     }
 }
