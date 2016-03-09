@@ -447,7 +447,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $result = $this->getCloudDataService()->push('edusoho.'.$grouType.'.join', array(
             'conversationId' => $conversationId,
             'memberId'       => $memberId,
-            'nickname'       => $user['nickname']
+            'memberName'     => $user['nickname']
         ), $timestamp);
     }
 

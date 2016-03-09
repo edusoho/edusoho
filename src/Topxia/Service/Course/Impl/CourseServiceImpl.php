@@ -484,7 +484,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable'    => 0,
             'tryLookTime'    => 0,
             'buyable'        => 0,
-            'conversationId' => 0
+            'conversationId' => ''
         ));
 
         if (!empty($fields['about'])) {
