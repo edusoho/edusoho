@@ -3,7 +3,7 @@
 {% set chapter = chapter|default(null) %}
 
 {% block title %}
-  {% if chapter %}编辑{% else %}添加{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}{% else %}{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}{% endif %}
+  {% if chapter %}{{'编辑'|trans}}{% else %}{{'添加'|trans}}{% endif %}{% if type == 'unit' %}{% if setting('default.part_name') %}{{setting('default.part_name')|default('节'|trans)}}{% else %}{{'节'|trans}}{% endif %}{% else %}{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章'|trans)}}{% else %}{{'章'|trans}}{% endif %}{% endif %}
 {% endblock %}
 {% block body %}
 
@@ -20,7 +20,7 @@
         <label for="chapter-title-field">{% if setting('default.part_name') %}{{setting('default.part_name')|default('节')}}{% else %}节{% endif %}标题</label>
       {% else %}
         <label for="chapter-title-field">{% if setting('default.chapter_name') %}{{setting('default.chapter_name')|default('章')}}{% else %}章{% endif %}标题</label>
-        {% endif %}
+      {% endif %}
     </div>
     <div class="col-md-8 controls"><input id="chapter-title-field" type="text" name="title" value="{{ field_value(chapter, 'title') }}" class="form-control"></div>
   </div>
@@ -32,8 +32,8 @@
 {% endblock %}
 
 {% block footer %}
-    <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-    <button id="course-chapter-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-chapter="{{default.chapter_name|default('章')}}" data-part="{{default.part_name|default('节')}}">{% if chapter %}保存{% else %}添加{% endif %}</button>
+    <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+    <button id="course-chapter-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#course-chapter-form" data-chapter="{{default.chapter_name|default('章'|trans)}}" data-part="{{default.part_name|default('节'|trans)}}">{% if chapter %}{{'保存'|trans}}{% else %}{{'添加'|trans}}{% endif %}</button>
 {% endblock %}
 
 {% set hideFooter = true %}

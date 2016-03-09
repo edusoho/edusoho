@@ -203,7 +203,7 @@ function BaseToolController($scope, OrderService, cordovaUtil)
     if (vipLevelId <= 0) {
       return false;
     }
-    return $scope.vipLevels.length <= 0;
+    return $scope.vipLevels.length > 0;
   }
 }
 
@@ -380,6 +380,7 @@ function CourseController($scope, $stateParams, CourseService, AppUtil, $state, 
         courseId : $stateParams.courseId,
         limit : 1
       }, function(data) {
+        $scope.reviewCount = data.total;
         $scope.reviews = data.data;
       });
     }
