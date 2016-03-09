@@ -2,16 +2,17 @@
 
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Topxia\Common\ArrayToolkit;
 
 class DiscoveryColumnController extends BaseController
 {
     public function deleteAction(Request $request, $id)
     {
         $result = $this->getDiscoveryColumnService()->deleteDiscoveryColumn($id);
-        if($result > 0){
+
+        if ($result > 0) {
             return $this->createJsonResponse(array('status' => 'ok'));
         } else {
             return $this->createJsonResponse(array('status' => 'error'));
@@ -22,7 +23,7 @@ class DiscoveryColumnController extends BaseController
     {
         $discoveryColumns = array();
         $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-        return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column.html.twig', array('discoveryColumns' => $discoveryColumns));
+        return $this->render('TopxiaAdminBundle:DiscoveryColumn:index.html.twig', array('discoveryColumns' => $discoveryColumns));
     }
 
     public function createAction(Request $request)
@@ -34,7 +35,7 @@ class DiscoveryColumnController extends BaseController
             $conditions['createdTime'] = time();
 
             if (empty($conditions['categoryId'])) {
-            $conditions['categoryId'] = 0;
+                $conditions['categoryId'] = 0;
             }
 
             if ($conditions['type'] == 'live') {
@@ -67,14 +68,16 @@ class DiscoveryColumnController extends BaseController
     public function editAction(Request $request, $id)
     {
         $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
+
         if (empty($discoveryColumn)) {
             throw $this->createNotFoundException();
         }
 
         if ($request->getMethod() == 'POST') {
-            $conditions      = $request->request->all();
+            $conditions = $request->request->all();
+
             if (empty($conditions['categoryId'])) {
-            $conditions['categoryId'] = 0;
+                $conditions['categoryId'] = 0;
             }
 
             if ($conditions['type'] == 'live') {
@@ -91,10 +94,11 @@ class DiscoveryColumnController extends BaseController
         ));
     }
 
-    public function checkTitleAction(Request $request,$id)
+    public function checkTitleAction(Request $request, $id)
     {
-        $title = $request->query->get('value');
-        $discoveryColumn    = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
+        $title           = $request->query->get('value');
+        $discoveryColumn = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
+
         if (empty($title)) {
             $response = array('success' => false, 'message' => '请输入栏目名称！');
         } elseif ($discoveryColumn && $title && $discoveryColumn[0]['id'] != $id) {
@@ -109,9 +113,9 @@ class DiscoveryColumnController extends BaseController
     public function sortAction(Request $request)
     {
         $data = $request->request->get('data');
-        $ids = ArrayToolkit::column($data, 'id');
-        if (!empty($ids)) {
+        $ids  = ArrayToolkit::column($data, 'id');
 
+        if (!empty($ids)) {
             $this->getDiscoveryColumnService()->sortDiscoveryColumns($ids);
         }
 

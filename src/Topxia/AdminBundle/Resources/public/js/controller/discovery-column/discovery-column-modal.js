@@ -19,9 +19,17 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     location.reload();
-                    Notify.success('更新栏目成功！');
+                    if($form.data('mode') == 'add') {
+                        Notify.success('添加栏目成功！');
+                    } else {
+                        Notify.success('更新栏目成功！');
+                    }
                 }).fail(function() {
-                    Notify.danger("更新栏目成功失败，请重试！");
+                    if($form.data('mode') == 'add') {
+                        Notify.danger("新增栏目成功失败，请重试！");
+                    }else{
+                        Notify.danger("更新栏目成功失败，请重试！");
+                    }
                 });
 
             }
