@@ -1,15 +1,23 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}栏目添加{% endblock %}
+{% block title %}
+  {% if discoveryColumn|default(false) %}
+  栏目编辑
+  {% else %}
+  栏目添加
+  {% endif %}
+{% endblock %}
 
 {% block body %}
 <div id="category-creater-widget" data-upload-url="#">
 
-	<form id="category-form" class="form-horizontal" {% if discoveryColumn %}action="{{ path('admin_discovery_column_edit',{id:discoveryColumn.id}) }}"{% else %}action="{{ path('admin_discovery_column_create') }}"{% endif %} method="post">
+	<form id="category-form" class="form-horizontal" {% if discoveryColumn %}action="{{ path('admin_discovery_column_edit',{id:discoveryColumn.id}) }}"{% else %}action="{{ path('admin_discovery_column_create') }}"{% endif %} method="post"
+  data-mode='{% if discoveryColumn|default(false) %}edit{% else %}add{% endif %}'
+  >
 		<div class="form-group">
 			<label class="col-md-3 control-label" for="category-name-field">栏目名称</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="category-name-field" type="text" name="title" value="{{ discoveryColumn.title|default() }}" tabindex="1">
+				<input class="form-control" id="category-name-field" type="text" data-url="{{ path('admin_discovery_column_title_check',{id:discoveryColumn.id|default(0)}) }}" name="title" value="{{ discoveryColumn.title|default() }}" tabindex="1">
 				<p class="help-block">提示：请将题目控制在十个字符之内。</p>
 			</div>
 		</div>
@@ -67,8 +75,7 @@
 		
 	</form>
 </div>
-
-<script type="text/javascript"> app.load('discovery-column/edit-modal') </script>
+<script type="text/javascript"> app.load('discovery-column/discovery-column-modal') </script>
 {% endblock %}
 
 {% block footer %}

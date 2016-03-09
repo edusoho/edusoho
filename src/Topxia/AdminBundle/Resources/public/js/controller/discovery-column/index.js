@@ -13,12 +13,8 @@ define(function(require, exports, module) {
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 var $tbody = $(item).parent();
-                // $tbody.find('tr.has-subItems').each(function() {
-                //     var $tr = $(this);
-                //     $tbody.find('[data-parent-id=' + $tr.data('id') + ']').detach().insertAfter($tr);
-                // });
                 var data = group.sortable("serialize").get();
-                $.post($tbody.data('updateSeqsUrl'), {data:data}, function(response){
+                    $.post($tbody.data('updateSeqsUrl'), {data:data}, function(response){
                 });
             }
         });
@@ -39,10 +35,5 @@ define(function(require, exports, module) {
         });
         
 
-        $('.edit-btn').on('click', function() {
-        	$.post($(this).data('url'), function() {
-
-            });
-        });
     }
 });

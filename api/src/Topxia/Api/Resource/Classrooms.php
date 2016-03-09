@@ -17,20 +17,25 @@ class Classrooms extends BaseResource
 
         if ($result['orderType'] == 'hot') {
             $orderBy = 'studentNum';
-        } elseif ($result['orderType'] == 'new') {
-            $orderBy = 'createdTime';
-        } else {
+        } elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
+        } else {
+            $orderBy = 'createdTime';
+        }
+        if (empty($result['showCount'])) {
+            $result['showCount'] = 6;
         }
 
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
 
-        $total = count($classrooms);
+        $total      = count($classrooms);
         $classrooms = $this->filter($classrooms);
+
         foreach ($classrooms as $key => $value) {
-            $classrooms[$key]['createdTime'] = strval(strtotime($value['createdTime']));;
+            $classrooms[$key]['createdTime'] = strval(strtotime($value['createdTime']));
             $classrooms[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
         }
+
         return $this->wrap($classrooms, $total);
     }
 
@@ -44,7 +49,7 @@ class Classrooms extends BaseResource
 
     public function filter(&$res)
     {
-        return $this->multicallFilter('Course', $res);
+        return $this->multicallFilter('Classroom', $res);
     }
 
     protected function multicallFilter($name, &$res)
@@ -52,6 +57,7 @@ class Classrooms extends BaseResource
         foreach ($res as &$one) {
             $this->callFilter($name, $one);
         }
+
         return $res;
     }
 
