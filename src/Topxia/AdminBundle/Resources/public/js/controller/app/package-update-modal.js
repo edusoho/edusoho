@@ -15,7 +15,6 @@ define(function(require, exports, module) {
 
         var urls = $updateBtn.data();
         var steps = getQueue(urls);
-        console.log(steps);
 
         $.each(steps, function(i, step) {
             $(document).queue('update_step_queue', function() {
