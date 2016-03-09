@@ -40,8 +40,6 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
 
     protected function _createSearchQueryBuilder($conditions)
     {
-
-
         if (isset($conditions['isPeriodic']) && true === $conditions['isPeriodic']) {
             unset($conditions['isPeriodic']);
             $conditions['type'] = 'periodic';
@@ -53,6 +51,7 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
         $builder = parent::_createSearchQueryBuilder($conditions)
             ->andWhere('rootId =:rootId')
             ->andWhere('type <> :excludeType')
+            ->andWhere('endTime < :endTimeLessThan')
         ;
 
         if (!empty($conditions['table']) && 'singleCourse' == $conditions['table']) {
