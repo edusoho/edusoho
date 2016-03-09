@@ -857,7 +857,7 @@ admin_app_package_update_begin_upgrade:
     methods: [POST]
 
 admin_app_package_update_check_newest:
-    pattern: /app/package_update/check/newest
+    pattern: /app/package_update/check/newest/code/{code}
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkNewest }
     methods: [POST]
 

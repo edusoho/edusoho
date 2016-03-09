@@ -73,21 +73,27 @@ class AppPackageUpdateController extends BaseController
         return $this->createResponseWithErrors($errors);
     }
 
-    public function checkNewestAction()
+    public function checkNewestAction($code)
     {
-        $apps = $this->getAppService()->checkAppUpgrades();
+        if (empty($code)) {
+            $errors[] = '参数缺失,更新应用包失败';
 
-        if (empty($apps)) {
+            return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
+        }
+
+        $app = $this->getAppService()->getAppByCode($code);
+
+        if (empty($app)) {
             return $this->createJsonResponse(array('isUpgrade' => false));
         }
 
-        if (empty($apps[0]['package']['id'])) {
+        if (empty($app['id'])) {
             $errors[] = '获取最新应用包信息失败';
 
             return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
         }
 
-        return $this->createJsonResponse(array('isUpgrade' => true, 'packageId' => $apps[0]['package']['id']));
+        return $this->createJsonResponse(array('isUpgrade' => true, 'packageId' => $app['id']));
     }
 
     protected function createResponseWithErrors($errors)
