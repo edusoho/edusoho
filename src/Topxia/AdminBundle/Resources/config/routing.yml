@@ -421,6 +421,10 @@ admin_discovery_column_edit:
     pattern:  /discovery_column/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:edit }
 
+admin_discovery_column_title_check:
+    pattern:  /discovery_column/title_check
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:checkTitle }
+
 admin_discovery_column_sort:
     pattern:  /discovery_column/sort
     defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:sort }

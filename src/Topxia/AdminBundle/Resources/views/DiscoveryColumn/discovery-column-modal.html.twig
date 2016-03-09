@@ -9,7 +9,7 @@
 		<div class="form-group">
 			<label class="col-md-3 control-label" for="category-name-field">栏目名称</label>
 			<div class="col-md-8 controls">
-				<input class="form-control" id="category-name-field" type="text" name="title" value="{{ discoveryColumn.title|default() }}" tabindex="1">
+				<input class="form-control" id="category-name-field" type="text" data-url="{{ path('admin_discovery_column_title_check') }}" name="title" value="{{ discoveryColumn.title|default() }}" tabindex="1">
 				<p class="help-block">提示：请将题目控制在十个字符之内。</p>
 			</div>
 		</div>

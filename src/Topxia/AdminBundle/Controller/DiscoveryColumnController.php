@@ -93,6 +93,21 @@ class DiscoveryColumnController extends BaseController
         ));
     }
 
+    public function checkTitleAction(Request $request)
+    {
+        $title = $request->query->get('value');
+        $discoveryColumn    = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
+        if (empty($title)) {
+            $response = array('success' => false, 'message' => '请输入栏目名称！');
+        } elseif ($discoveryColumn && $title) {
+            $response = array('success' => false, 'message' => '该栏目名称已经存在！');
+        } else {
+            $response = array('success' => true);
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     public function sortAction(Request $request)
     {
         $data = $request->request->get('data');

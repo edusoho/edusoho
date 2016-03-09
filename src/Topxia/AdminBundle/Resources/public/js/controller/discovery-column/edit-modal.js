@@ -30,7 +30,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#category-name-field',
             required: true,
-            errormessageRequired: '请输入自定义名称，不能为空。'
+            rule: 'remote'
         });
 
         $('body').on('click', '#live', function(){
