@@ -83,6 +83,64 @@ class LiveCourseController extends BaseController
         ));
     }
 
+    public function liveTabAction()
+    {
+        $courses = $this->getCourseService()->searchCourses(array(
+            'type'     => 'live',
+            'status'   => 'published',
+            'parentId' => 0,
+            'locked'   => 0
+        ), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $lessonsDate = $this->getCourseService()->findLiveLessonsByDate($courseIds, 4);
+
+        $currentLiveLessons = $this->getCourseService()->searchLessons(array(
+            'startTimeLessThan'  => time(),
+            'endTimeGreaterThan' => time(),
+            'type'               => 'live',
+            'courseIds'          => $courseIds,
+            'status'             => 'published'
+        ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+
+        $futureLiveLessons = $this->getCourseService()->searchLessons(array(
+            'startTimeGreaterThan' => time(),
+            'endTimeLessThan'      => strtotime(date('Y-m-d').' 23:59:59'),
+            'type'                 => 'live',
+            'courseIds'            => $courseIds,
+            'status'               => 'published'
+        ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+
+        $liveTabs['today']['current'] = $currentLiveLessons;
+        $liveTabs['today']['future']  = $futureLiveLessons;
+
+        $dateTabs = array('today');
+        $today    = date("Y-m-d");
+
+        foreach ($lessonsDate as $key => &$value) {
+            if ($today == $value['date']) {
+                continue;
+            } else {
+                $dayLessons = $futureLiveLessons = $this->getCourseService()->searchLessons(array(
+                    'startTimeGreaterThan' => strtotime($value['date']),
+                    'endTimeLessThan'      => strtotime($value['date'].' 23:59:59'),
+                    'type'                 => 'live',
+                    'courseIds'            => $courseIds,
+                    'status'               => 'published'
+                ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+
+                $date                      = date('m-d', strtotime($value['date']));
+                $liveTabs[$date]['future'] = $dayLessons;
+                $dateTabs[]                = $date;
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourse:live-tab.html.twig', array(
+            'liveTabs' => $liveTabs,
+            'dateTabs' => $dateTabs
+        ));
+    }
+
     public function ratingCoursesBlockAction()
     {
         $conditions = array(
