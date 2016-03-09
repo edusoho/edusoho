@@ -2,10 +2,11 @@
 
 namespace Topxia\Service\CloudData\Impl;
 
+use Topxia\Service\Common\BaseService;
 use Topxia\Service\CloudData\CloudDataService;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class CloudDataServiceImpl implements CloudDataService
+class CloudDataServiceImpl extends BaseService implements CloudDataService
 {
     public function push($name, array $body = array(), $timestamp, $tryTimes = 0)
     {
@@ -16,10 +17,12 @@ class CloudDataServiceImpl implements CloudDataService
                 $tryTimes++;
                 $this->push($name, $body, $timestamp, $tryTimes);
             } else {
+                $user   = $this->getCurrentUser();
                 $fields = array(
-                    'name'      => $name,
-                    'body'      => $body,
-                    'timestamp' => $timestamp
+                    'name'          => $name,
+                    'body'          => $body,
+                    'timestamp'     => $timestamp,
+                    'createdUserId' => $user['id']
                 );
                 $this->getCloudDataDao()->add($fields);
             }
