@@ -5,41 +5,47 @@
     {% set user = users[thread.userId]|default(null) %}
     {% endif %}
     <li class="media">
-       {{ web_macro.user_avatar(user, 'pull-left', 'avatar-md') }}
-      <div class="media-body">
-        {% if thread.postNum %}<span class="badge pull-right">{{thread.postNum}}</span>{% endif %}
+      <div class="media-left">
+        <span class="reply-num">
+         <strong>{% if thread.postNum %} {{thread.postNum}} {% else %} 0 {% endif %}</strong> {{'回复'|trans}}
+        </span>
+      </div>
+      <div class="media-body pts">
         <div class="media-heading">
-          {% if thread.isStick and not group %}
-            <span class="label label-danger">置顶</span>
+         <a class="title gray-darker" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
+          {% if thread.isStick %}
+            <span class="label label-primary">{{'置顶'|trans}}</span>
           {% endif %}
-          <a class="title" href="{{ path('group_thread_show', {id:thread.groupId, threadId:thread.id}) }}">{{thread.title|sub_text(90)}}</a>
           {% if thread.isElite %}
-            <span class="label label-warning">精</span>
+            <span class="label label-danger">{{'精华'|trans}}</span>
           {% endif %}
 
           {% if is_feature_enabled('group_reward') %}
             {% if thread.type == 'reward' and thread.rewardCoin > 0 %}
-              <span class="label label-danger">奖</span>
+              <span class="label label-danger">{{'奖'|trans}}</span>
             {% endif %}
           {% endif %}
         </div>
-        
+
         <div class="metas">
-          {% if group %}
-            <a class="link-muted" href="{{path('group_show',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
-            <span class="divider">•</span>
-          {% endif %}
-          {{ web_macro.user_link(user , 'link-muted') }}
+          {{ web_macro.user_avatar(user, 'userImg', 'avatar-xxs') }}
+          {{ web_macro.user_link(user ,'pls') }}{{'发起了问题'|trans}}
           <span class="divider">•</span>
           {{thread.createdTime|smart_time}}
+          {% if group %}
+          <span class="divider">•</span>
+          <a class="gray-darker" href="{{path('group_show',{id:thread.groupId})}}" title="{{ group.title }}" >{{ group.title }}</a>
+          {% endif %}
           {% if thread.lastPostTime %}
             <span class="divider">•</span>
-            最后回复 {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }} {{ thread.lastPostTime|smart_time}}
+            {{'最后回复'|trans}} {{ web_macro.user_link(lastPostMembers[thread.lastPostMemberId] , 'link-muted') }}
+            <span class="divider">•</span>
+            {{ thread.lastPostTime|smart_time}}
           {% endif %}
-        </div> 
+        </div>
       </div>
     </li>
   {% else %}
-    <li class="empty">暂无话题！</li>
+    <li class="empty">{{'暂无话题！'|trans}}</li>
   {% endfor %}
 </ul>

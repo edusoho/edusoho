@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}试卷题目管理 - {{ parent() }}{% endblock %}
+{% block title %}{{'试卷题目管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'testpaper' %}
 {% set script_controller = 'testpaper/item-manager' %}
@@ -37,12 +37,12 @@ tr.placeholder:before {
   <div class="panel-body clearfix">
 
     <ol class="breadcrumb">
-        <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">试卷管理</a></li>
-        <li class="active">试卷题目管理</li>
+        <li><a href="{{ path('course_manage_testpaper',{courseId:course.id}) }}">{{'试卷管理'|trans}}</a></li>
+        <li class="active">{{'试卷题目管理'|trans}}</li>
     </ol>
 
     <div class="clearfix mbm">
-      <button data-url="{{ path('course_manage_testpaper_item_picker',{courseId:course.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="glyphicon glyphicon-plus"></span> 新增试题</button>
+      <button data-url="{{ path('course_manage_testpaper_item_picker',{courseId:course.id, testpaperId:testpaper.id}) }}" class="btn btn-info btn-sm pull-right" data-role="pick-item"><span class="glyphicon glyphicon-plus"></span> {{'新增试题'|trans}}</button>
       <ul class="nav nav-pills nav-mini">
         {% for type in testpaper['metas']['question_type_seq'] %}
           <li><a href="javascript:" data-type="{{ type }}" data-name="{{ dict_text('questionType', type) }}" class="testpaper-nav-link">{{ dict_text('questionType', type) }}</a></li>
@@ -57,12 +57,12 @@ tr.placeholder:before {
           <tr>
             <th></th>
             <th><input type="checkbox" data-role="batch-select"></th>
-            <th>题号</th>
-            <th width="40%">题干</th>
-            <th>类型</th>
-            <th>难度</th>
-            <th width="8%">分值</th>
-            <th>操作</th>
+            <th>{{'题号'|trans}}</th>
+            <th width="40%">{{'题干'|trans}}</th>
+            <th>{{'类型'|trans}}</th>
+            <th>{{'难度'|trans}}</th>
+            <th width="8%">{{'分值'|trans}}</th>
+            <th>{{'操作'|trans}}</th>
           </tr>
         </thead>
 
@@ -83,22 +83,20 @@ tr.placeholder:before {
       </table>
 
       <div>
-        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="题目">删除</button>
+        <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+        <button type="button" class="btn btn-default btn-sm mlm" data-role="batch-delete"  data-name="{{'题目'|trans}}">{{'删除'|trans}}</button>
       </div>
 
       <div class="form-group">
-        <div class="col-md-8 controls passedScoreDiv">
-          {% if not hasEssay %}
-            这是一份纯客观题的试卷, 达到 <input type="text" name="passedScore" class="form-control width-input width-input-small" value="{{ passedScoreDefault }}" data-score-total="0" />分（含）可以自动审阅通过考试。
-          {% endif %}
+        <div class="col-md-8 controls">
+          <div class="passedScoreDiv" {% if hasEssay %}style="display:none"{% endif %}>这是一份纯客观题的试卷, 达到 <input type="text" name="passedScore" class="form-control width-input width-input-small" value="{{ passedScoreDefault }}" data-score-total="0" />分（含）可以自动审阅通过考试。</div>
         </div>
         <div class="col-md-4 controls">
-          <button type="button" class="btn btn-primary pull-right mlm request-save">保存</button>
+          <button type="button" class="btn btn-primary pull-right mlm request-save">{{'保存'|trans}}</button>
         </div>
       </div>
-      
-      
+
+
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
   </div>
@@ -108,24 +106,24 @@ tr.placeholder:before {
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">确认试卷题目信息</h4>
+          <h4 class="modal-title">{{'确认试卷题目信息'|trans}}</h4>
         </div>
         <div class="modal-body">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th>题目类型</th>
-                <th>题目数量</th>
-                <th>总分值</th>
+                <th>{{'题目类型'|trans}}</th>
+                <th>{{'题目数量'|trans}}</th>
+                <th>{{'总分值'|trans}}</th>
               </tr>
             </thead>
             <tbody class="detail-tbody"></tbody>
           </table>
-          
+
         </div>
         <div class="modal-footer">
           <button class="btn btn-link" data-dismiss="modal" type="button">关闭</button>
-          <button type="button" class="btn btn-primary confirm-submit" data-saving-text="正在保存...">确定</button>
+          <button type="button" class="btn btn-primary confirm-submit" data-saving-text="{{'正在保存'|trans}}...">{{'确定'|trans}}</button>
         </div>
       </div>
     </div>

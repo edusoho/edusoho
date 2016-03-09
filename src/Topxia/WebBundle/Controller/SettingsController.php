@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\SmsToolkit;
 use Topxia\Common\CurlToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Common\Mail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Component\OAuthClient\OAuthClientFactory;
@@ -81,6 +82,12 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $nickname = $request->request->get('nickname');
+
+            if ($this->getSensitiveService()->scanText($nickname)) {
+                $this->setFlashMessage('danger', '用户名中含有敏感词，更新失败！');
+                return $this->redirect($this->generateUrl('settings'));
+            }
+
             $this->getAuthService()->changeNickname($user['id'], $nickname);
             $this->setFlashMessage('success', '用户名修改成功！');
             return $this->redirect($this->generateUrl('settings'));
@@ -698,8 +705,9 @@ class SettingsController extends BaseController
 
     public function emailAction(Request $request)
     {
-        $user   = $this->getCurrentUser();
-        $mailer = $this->getSettingService()->get('mailer', array());
+        $user       = $this->getCurrentUser();
+        $mailer     = $this->getSettingService()->get('mailer', array());
+        $cloudEmail = $this->getSettingService()->get('cloud_email', array());
 
         if (empty($user['setup'])) {
             return $this->redirect($this->generateUrl('settings_setup'));
@@ -714,8 +722,7 @@ class SettingsController extends BaseController
             $form->bind($request);
 
             if ($form->isValid()) {
-                $data = $form->getData();
-
+                $data         = $form->getData();
                 $isPasswordOk = $this->getUserService()->verifyPassword($user['id'], $data['password']);
 
                 if (!$isPasswordOk) {
@@ -738,14 +745,22 @@ class SettingsController extends BaseController
                 $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $data['email']);
 
                 try {
-                    $this->sendEmail(
-                        $data['email'],
-                        "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
-                        $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
+                    $normalMail = array(
+                        'to'    => $data['email'],
+                        'title' => "重设{$user['nickname']}在".$this->setting('site.name', 'EDUSOHO')."的电子邮箱",
+                        'body'  => $this->renderView('TopxiaWebBundle:Settings:email-change.txt.twig', array(
                             'user'  => $user,
                             'token' => $token
                         ))
                     );
+                    $cloudMail = array(
+                        'to'        => $data['email'],
+                        'template'  => 'email_reset_email',
+                        'verifyurl' => $this->generateUrl('auth_email_confirm', array('token' => $token), true),
+                        'nickname'  => $user['nickname']
+                    );
+                    $mail = new Mail($normalMail, $cloudMail);
+                    $this->sendEmail($mail);
                     $this->setFlashMessage('success', "请到邮箱{$data['email']}中接收确认邮件，并点击确认邮件中的链接完成修改。");
                 } catch (\Exception $e) {
                     $this->setFlashMessage('danger', "邮箱变更确认邮件发送失败，请联系管理员。");
@@ -757,8 +772,9 @@ class SettingsController extends BaseController
         }
 
         return $this->render("TopxiaWebBundle:Settings:email.html.twig", array(
-            'form'   => $form->createView(),
-            'mailer' => $mailer
+            'form'       => $form->createView(),
+            'mailer'     => $mailer,
+            'cloudEmail' => $cloudEmail
         ));
     }
 
@@ -960,6 +976,11 @@ class SettingsController extends BaseController
     protected function getUserFieldService()
     {
         return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getSensitiveService()
+    {
+        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
     protected function downloadImg($url)

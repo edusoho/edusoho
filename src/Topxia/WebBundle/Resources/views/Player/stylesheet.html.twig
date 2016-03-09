@@ -2,9 +2,11 @@
 <link rel="stylesheet" media="screen" href="{{ asset('assets/css/common.css') }}" />
 <link rel="stylesheet" media="screen" href="{{ asset('assets/v2/css/main.css') }}" />
 
-{% if setting("developer.balloon_player")|default(0) %}
-  <link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.0.0/src/skin/video-js-debug.css') }}" rel="stylesheet" type="text/css">
+{% if player == 'balloon-cloud-video-player' %}
+<link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/video-js.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" media="screen" href="{{asset('assets/libs/balloon-video-player/1.3.0/src/skin/pluck.css') }}" rel="stylesheet" type="text/css">
 {% endif %}
+
 <style type="text/css">
   .lesson-content-audio {
     padding-top: 10%;

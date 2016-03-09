@@ -204,6 +204,14 @@ admin_login_record:
 admin_teacher:
     name: 教师管理
     parent: admin_user
+admin_teacher_manage:
+    name: 教师管理 
+    parent: admin_teacher
+    router_name: admin_teacher
+admin_teacher_promote:
+    name: 教师推荐
+    parent: admin_teacher
+    router_name: admin_teacher_promote_list
 admin_approval_approvals:
     name: 实名认证管理
     parent: admin_user
@@ -392,6 +400,10 @@ admin_setting_post_num_rules:
     name: 发帖限制设置
     parent: admin_system
     group: 2
+admin_report_status:
+    name: 系统自检
+    parent: admin_system
+    group: 2
 admin_logs:
     name: 系统日志
     parent: admin_system
@@ -404,18 +416,28 @@ admin_logs_prod:
     name: 程序运行日志
     parent: admin_logs
 admin_my_cloud:
-    name: 我的教育云
+    name: 账户概览
     parent: admin_app
-admin_setting_cloud_video:
-    name: 设置
+admin_cloud_video_setting:
+    name: 云视频设置
     parent: admin_app
+    router_name: admin_setting_cloud_video
+admin_edu_cloud_sms:
+    name: 云短信设置
+    parent: admin_app
+# admin_edu_cloud_email:
+#     name: 云邮件设置
+#     parent: admin_app
+# admin_setting_cloud_video:
+#     name: 设置
+#     parent: admin_app
 admin_app_center_show:
     name: ES应用
     parent: admin_app
     router_name: admin_app_center
     router_params: { postStatus : all }
 admin_setting_cloud:
-    name: 授权码
+    name: 授权信息
     parent: admin_app
 admin_app_center:
     name: 应用中心
@@ -433,17 +455,20 @@ admin_app_upgrades:
 admin_app_logs:
     name: 更新日志
     parent: admin_app_center_show
-admin_cloud_video_setting:
-    name: 云视频设置
-    parent: admin_setting_cloud_video
-    router_name: admin_setting_cloud_video
-admin_edu_cloud_sms:
-    name: 云短信设置
-    parent: admin_setting_cloud_video
+# admin_cloud_video_setting:
+#     name: 云视频设置
+#     parent: admin_setting_cloud_video
+#     router_name: admin_setting_cloud_video
+# admin_edu_cloud_sms:
+#     name: 云短信设置
+#     parent: admin_setting_cloud_video
 admin_cloud_bill:
     name: 云视频账单
     parent: admin_my_cloud
     router_name: admin_cloud_bill
+#admin_edu_cloud_search:
+#   name: 云搜索设置
+#   parent: admin_setting_cloud_video
 admin_batch_notification:
     name: 全站站内通知
     parent: admin_operation

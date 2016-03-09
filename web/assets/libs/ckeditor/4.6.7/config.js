@@ -47,6 +47,16 @@ CKEDITOR.editorConfig = function( config ) {
         { items: [ 'Find', '-', 'Source', '-', 'Maximize'] }
     ];
 
+    config.toolbar_Admin = [
+        { items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat', 'Format' ] },
+        { items: [ 'Link', 'Unlink' ] },
+        { items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+        { items: [ 'FontSize', 'TextColor', 'BGColor' ] },
+        { items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe' ] },
+        { items: [ 'PasteText', 'PasteFromWord'] },
+        { items: [ 'Find', '-', 'Source', '-', 'Maximize'] }
+    ];
+
     config.resize_enabled = false;
     config.title = false;
 

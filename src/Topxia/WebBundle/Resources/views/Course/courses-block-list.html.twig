@@ -1,64 +1,48 @@
-<ul class="course-wide-list">
-  {% for course in courses %}
-  <li class="course-item clearfix">
-    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
-      <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
-    </a>
-
-    <div class="course-body">
-     
-      <div style="float:right;" class="text-muted mrm mls">
-        {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
-      </div>
-
-      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
-      {% if course.serializeMode=='serialize' %}
-        <span class="label label-success ">更新中</span>
-      {% elseif course.serializeMode=='finished' %}
-        <span class="label label-warning ">已完结</span>
-      {% endif %}
-      {% if course.type == 'live' %}
-          {% set lesson = course['lesson']|default(null) %}
-          {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-            <span class="label label-warning series-mode-label">正在直播中</span>
-          {% else %}
-            <span class="label label-success series-mode-label">直播</span>
-          {% endif %}
-      {% endif %}
-      </h4>
-
-      {% if course.type == 'live' %}
-        {% set lesson = course.lesson|default(null) %}
-        {% if lesson %}
-          <div class="live-course-lesson mbm">
-            <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+<div class="course-list">
+  <div class="row">
+    {% for course in courses %}
+      <div class="col-lg-3 col-md-4 col-xs-6">
+        <div class="course-item">
+          <div class="course-img">
+            <a href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+              {% if course.discountId > 0 %}
+                {% if course.discount == 0 %}
+                  <!-- 限免 -->
+                  <span class="tag-discount free"></span>
+                {% else %}
+                  <!-- 折扣 -->
+                  <span class="tag-discount"></span>
+                {% endif %}
+              {% endif %}
+              {% if course.serializeMode == 'serialize' %}
+                <span class="tags"><span class="tag-serialing"></span></span>
+              {% elseif course.serializeMode == 'finished' %}
+                <span class="tags"><span class="tag-finished"></span></span>
+              {% endif %}
+              {% if course.type == 'live' %}
+                <span class="tags">
+                  <span class="tag-live"></span>
+                </span>
+              {% endif %}
+              <img class="img-responsive" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
+            </a>
           </div>
-        {% endif %}
-      {% else %}
-        <div class="course-about ellipsis">{{ course.subtitle }}</div>
-      {% endif %}
-
-      <div class="course-footer clearfix">
-        {% set teacher = users[course.teacherIds|first]|default(null) %}
-        {% if teacher %}
-          <div class="teacher">
-            <a href="{{ path('user_show', {id:teacher.id}) }}"><img src="{{ filepath(teacher.smallAvatar, 'avatar.png') }}" class="teacher-avatar"></a>
-            <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-            <span class="teacher-title ellipsis">{{ teacher.title }}</span>
+          <div class="course-info">
+            <div class="title">
+              <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+                {{ course.title }}
+              </a>
+            </div>
+            <div class="metas clearfix">
+              {% if setting('course.show_student_num_enabled', '1') == 1  %}
+              <span class="num"><i class="es-icon es-icon-people"></i>{{ course.studentNum }}</span>
+              {% endif %}
+              <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.ratingNum }}</span>
+              {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+            </div>
           </div>
-        {% endif %}
-
-        <div class="course-metas">
-          <span class="stars-{{ (course.rating)|number_format }}">&nbsp;</span>
-          {% if setting('course.show_student_num_enabled', '1') == 1 %}
-          <span class="divider"></span>
-          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员')}}</span>
-          {% endif %}
-
         </div>
       </div>
-    </div>
-  </li>
-  {% endfor %}
-</ul>
+    {% endfor %}
+  </div>
+</div>

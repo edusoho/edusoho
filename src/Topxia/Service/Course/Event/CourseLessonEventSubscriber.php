@@ -101,23 +101,37 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonGenerateReplay(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
+        $context       = $event->getSubject();
+        $courseIds     = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
+        $lessonReplays = $this->getCourseService()->getCourseLessonReplayByLessonId($context['lessonId']);
 
         if ($courseIds) {
             $lessonIds = ArrayToolkit::column($this->getCourseService()->findLessonsByCopyIdAndLockedCourseIds($context['lessonId'], $courseIds), 'id');
 
             foreach ($courseIds as $key => $courseId) {
-                $this->getCourseService()->generateLessonReplay($courseId, $lessonIds[$key]);
+                if ($lessonReplays) {
+                    foreach ($lessonReplays as $lessonReplay) {
+                        unset($lessonReplay['id']);
+                        $lessonReplay['courseId']    = $courseId;
+                        $lessonReplay['lessonId']    = $lessonIds[$key];
+                        $lessonReplay['createdTime'] = time();
+                        $this->getCourseService()->addCourseLessonReplay($lessonReplay);
+                    }
+                }
             }
         }
     }
 
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $lesson    = $context['lesson'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $lesson   = $context['lesson'];
+
+        if (!empty($lesson) && $lesson['type'] == 'testpaper') {
+            unset($argument['mediaId']);
+        }
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
 
         if ($courseIds) {
@@ -208,6 +222,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             }
         }
 
+        $user             = ServiceKernel::instance()->getCurrentUser();
+        $userLessonLearns = $this->getCourseService()->searchLearns(array('userId' => $user['id'], 'lessonId' => $lesson['id'], 'status' => 'finished'), array('startTime', 'ASC'), 0, 1);
+
         $this->getStatusService()->publishStatus(array(
             'type'       => 'learned_lesson',
             'courseId'   => $course['id'],
@@ -215,8 +232,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'objectId'   => $lesson['id'],
             'private'    => $private,
             'properties' => array(
-                'course' => $this->simplifyCousrse($course),
-                'lesson' => $this->simplifyLesson($lesson)
+                'course'               => $this->simplifyCousrse($course),
+                'lesson'               => $this->simplifyLesson($lesson),
+                'lessonLearnStartTime' => $userLessonLearns ? $userLessonLearns[0]['startTime'] : 0
             )
         ));
     }

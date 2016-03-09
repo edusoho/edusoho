@@ -8,7 +8,7 @@
       <div class="nav-mobile">
         <form class="navbar-form" action="{{ path('search') }}" method="get">
           <div class="form-group">
-            <input class="form-control" placeholder="搜索" name="q">
+            <input class="form-control" placeholder="{{'搜索'|trans}}" name="q">
             <button class="button es-icon es-icon-search"></button>
           </div>
         </form>
@@ -21,7 +21,7 @@
       {% if setting('site.logo') %}
         <img src="{{ asset(setting('site.logo')) }}">
       {% else %}
-        {{ setting('site.name', 'EDUSOHO') }}    
+        {{ setting('site.name', 'EDUSOHO') }}
       {% endif %}
     </a>
   </div>
@@ -33,33 +33,33 @@
       <ul class="nav user-nav">
         {% if app.user %}
         <li class="user-avatar-li nav-hover">
-          <a class="dropdown-toggle">
+          <a href="javascript:;" class="dropdown-toggle">
             <img class="avatar-xs" src="{{ filepath(app.user.smallAvatar, 'avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">
             <li role="presentation" class="dropdown-header">{{ app.user.nickname }}</li>
-            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>个人主页</a></li>
-            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>个人设置</a></li>
+            <li><a href="{{ path('user_show', {id:app.user.id}) }}"><i class="es-icon es-icon-person"></i>{{'个人主页'|trans}}</a></li>
+            <li><a href="{{ path('settings') }}"><i class="es-icon es-icon-setting"></i>{{'个人设置'|trans}}</a></li>
             <li class="hidden-lg">
               <a href="{{ path('my') }}">
-                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}我的教学{% else %}我的学习{% endif %}
+                <i class="es-icon es-icon-eventnote"></i>{% if 'ROLE_TEACHER' in app.user.roles %}{{'我的教学'|trans}}{% else %}{{'我的学习'|trans}}{% endif %}
               </a>
             </li>
-            <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>账户中心</a></li>
-            {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>管理后台</a></li>
+            <li><a href="{% if setting('coin.coin_enabled') %}{{path('my_coin')}}{% else %}{{path('my_bill')}}{% endif %}"><i class="es-icon es-icon-accountwallet"></i>{{'账户中心'|trans}}</a></li>
+            {% if is_granted('ROLE_BACKEND') %}<li><a href="{{ path('admin') }}"><i class="es-icon es-icon-dashboard"></i>{{'管理后台'|trans}}</a></li>
             {% endif %}
 
-            <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>通知</a></li>
-            <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>私信</a></li>
-            <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>退出登录</a></li>
+            <li class="hidden-lg"><a href="{{ path('notification') }}"><span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span><i class="es-icon es-icon-notificationson"></i>{{'通知'|trans}}</a></li>
+            <li class="hidden-lg"><a href="{{ path('message') }}"><span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span><i class="es-icon es-icon-mail"></i>{{'私信'|trans}}</a></li>
+            <li><a href="{{ path('logout') }}"><i class="es-icon es-icon-power"></i>{{'退出登录'|trans}}</a></li>
           </ul>
         </li>
         <li class="visible-lg">
           <a href="{{ path('my') }}">
             {% if 'ROLE_TEACHER' in app.user.roles %}
-              我的教学
-            {% else %} 
-              我的学习
+              {{'我的教学'|trans}}
+            {% else %}
+              {{'我的学习'|trans}}
             {% endif %}
           </a>
         </li>
@@ -78,14 +78,14 @@
               <li>
                 <a href="{{ path('notification') }}">
                   <span class="pull-right num">{% if app.user.newNotificationNum > 0 %}{{ app.user.newNotificationNum }}{% endif %}</span>
-                  <i class="es-icon es-icon-notificationson"></i>通知
+                  <i class="es-icon es-icon-notificationson"></i>{{'通知'|trans}}
                 </a>
               </li>
             {% endif %}
             <li>
               <a href="{{ path('message') }}">
                 <span class="pull-right num">{% if app.user.newMessageNum > 0 %}{{ app.user.newMessageNum }}{% endif %}</span>
-                <i class="es-icon es-icon-mail"></i>私信
+                <i class="es-icon es-icon-mail"></i>{{'私信'|trans}}
               </a>
             </li>
           </ul>
@@ -96,17 +96,17 @@
             <img class="avatar-xs" src="{{ asset('assets/img/default/avatar.png') }}">
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
-            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+            <li><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
+            <li><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'注册'|trans}}</a></li>
           </ul>
         </li>
-        <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">登录</a></li>
-        <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">注册</a></li>
+        <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
+        <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'注册'|trans}}</a></li>
         {% endif %}
       </ul>
       <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
-          <input class="form-control js-search" name="q" placeholder="搜索">
+          <input class="form-control js-search" name="q" placeholder="{{'搜索'|trans}}">
           <button class="button es-icon es-icon-search"></button>
         </div>
       </form>

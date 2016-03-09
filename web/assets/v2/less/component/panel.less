@@ -14,19 +14,22 @@
 .panel-default {
   padding: 0 15px;
   .es-box-shadow;
+  @media(max-width:@screen-xs-max) {
+    padding: 0 10px;
+  }
   >.panel-heading {
     position: relative;
     font-size: 16px;
     padding: 15px 0;
     background: #fff;
     border-bottom: 1px solid @gray-lighter;
+    @media(max-width:@screen-xs-max) {
+      padding: 10px 0;
+    }
     .panel-title {
       color: @gray-darker;
       >i {
         display: none;
-        // float: left;
-        // vertical-align: middle;
-        // margin-right: 10px;
       }
     }
     .more {
@@ -36,6 +39,9 @@
       display: block;
       color: @gray;
       .es-transition;
+      @media(max-width:@screen-xs-max) {
+        top: 8px;
+      }
       &:hover {
         color: @gray-dark;
         .es-transition;

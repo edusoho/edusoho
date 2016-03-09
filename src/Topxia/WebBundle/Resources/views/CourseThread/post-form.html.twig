@@ -4,16 +4,16 @@
 
 {% set post = post|default(null) %}
 
-{% block title %}{% if post %}编辑帖子{% else %}回复帖子{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{% if post %}{{'编辑帖子'|trans}}{% else %}{{'回复帖子'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'course/thread-post-form' %}
 
 {% block course_main %}
 
 <ul class="breadcrumb">
-  <li><a href="{{ path('course_threads', {id:course.id}) }}">讨论区</a></li>
+  <li><a href="{{ path('course_threads', {id:course.id}) }}">{{'讨论区'|trans}}</a></li>
   <li><a href="{{ path('course_thread_show', {courseId:thread.courseId, threadId:thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
-  <li class="active">编辑帖子</li>
+  <li class="active">{{'编辑帖子'|trans}}</li>
 </ul>
 
 <form id="thread-post-form" method="post"
@@ -25,18 +25,18 @@
   >
   <div class="form-group">
     <div class="controls">
-      {{ 
+      {{
         form_widget(
           form.content, {
             attr:{
-              class:'form-control', 
-              rows:15, 
-              'data-display':'内容', 
+              class:'form-control',
+              rows:15,
+              'data-display':'内容'|trans,
               'data-image-upload-url': path(
                 'editor_upload', {
                   token:upload_token('course')
                 }
-              ), 
+              ),
               'data-image-download-url': path(
                 'editor_download', {
                   token:upload_token('course')
@@ -44,15 +44,15 @@
               )
             }
           }
-        ) 
+        )
       }}
     </div>
   </div>
   <div class="form-group">
     <div class="controls clearfix">
       {{ form_rest(form) }}
-      <button type="submit" class="btn btn-primary pull-right">发表</button>
-      <a href="{{ path('course_threads', {id:course.id}) }}" class="btn btn-link pull-right">取消</a>
+      <button type="submit" class="btn btn-primary pull-right">{{'发表'|trans}}</button>
+      <a href="{{ path('course_threads', {id:course.id}) }}" class="btn btn-link pull-right">{{'取消'|trans}}</a>
     </div>
   </div>
 

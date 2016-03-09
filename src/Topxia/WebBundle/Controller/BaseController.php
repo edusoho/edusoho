@@ -1,9 +1,11 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Service\Common\Mail;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\AccessDeniedException;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -84,6 +86,8 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
+        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', '登录成功');
+
         $loginBind = $this->setting('login_bind', array());
 
         if (empty($loginBind['login_limit'])) {
@@ -114,36 +118,74 @@ abstract class BaseController extends Controller
         return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
-    protected function sendEmail($to, $title, $body, $format = 'text')
+    protected function sendEmail(Mail $mail)
     {
-        $format = $format == 'html' ? 'text/html' : 'text/plain';
+        $config      = $this->setting('mailer', array());
+        $cloudConfig = $this->setting('cloud_email', array());
+
+        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+            return $this->sendCloudEmail($mail->getCloudMail());
+        } elseif (isset($config['enabled']) && $config['enabled'] == 1) {
+            return $this->sendNormalEmail($mail->getMail());
+        }
+
+        return false;
+    }
+
+    private function sendCloudEmail($cloudMail)
+    {
+        $cloudConfig = $this->setting('cloud_email', array());
+
+        if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
+            $api    = CloudAPIFactory::create('leaf');
+            $site   = $this->setting('site', array());
+            $params = array(
+                'to'       => $cloudMail['to'],
+                'template' => $cloudMail['template'],
+                'params'   => array(
+                    'sitename'  => $site['name'],
+                    'nickname'  => $cloudMail['nickname'],
+                    'verifyurl' => $cloudMail['verifyurl'],
+                    'siteurl'   => $site['url']
+                )
+            );
+            $result = $api->post("/emails", $params);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private function sendNormalEmail($params)
+    {
+        $format = isset($params['format']) && $params['format'] == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());
 
-        if (empty($config['enabled'])) {
-            return false;
+        if (isset($config['enabled']) && $config['enabled'] == 1) {
+            $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
+                ->setUsername($config['username'])
+                ->setPassword($config['password']);
+
+            $mailer = \Swift_Mailer::newInstance($transport);
+
+            $email = \Swift_Message::newInstance();
+            $email->setSubject($params['title']);
+            $email->setFrom(array($config['from'] => $config['name']));
+            $email->setTo($params['to']);
+
+            if ($format == 'text/html') {
+                $email->setBody($params['body'], 'text/html');
+            } else {
+                $email->setBody($params['body']);
+            }
+
+            $mailer->send($email);
+            return true;
         }
 
-        $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
-            ->setUsername($config['username'])
-            ->setPassword($config['password']);
-
-        $mailer = \Swift_Mailer::newInstance($transport);
-
-        $email = \Swift_Message::newInstance();
-        $email->setSubject($title);
-        $email->setFrom(array($config['from'] => $config['name']));
-        $email->setTo($to);
-
-        if ($format == 'text/html') {
-            $email->setBody($body, 'text/html');
-        } else {
-            $email->setBody($body);
-        }
-
-        $mailer->send($email);
-
-        return true;
+        return false;
     }
 
     protected function createJsonResponse($data)
@@ -213,6 +255,19 @@ abstract class BaseController extends Controller
         } else {
             return new AccessDeniedException();
         }
+    }
+
+    protected function agentInWhiteList($userAgent)
+    {
+        $whiteList = array("iPhone", "iPad", "Android", "HTC");
+
+        foreach ($whiteList as $value) {
+            if (strpos($userAgent, $value) > -1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function getServiceKernel()

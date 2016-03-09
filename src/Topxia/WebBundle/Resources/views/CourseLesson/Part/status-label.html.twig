@@ -1,0 +1,6 @@
+{% if item.free %}
+	  <span class="label label-success mrm">{{'免费'|trans}}</span>
+{% elseif course.tryLookable and media.storage|default('') == 'cloud' %}
+	  <span class="label label-warning mrm">{{'试看'|trans}}</span>
+{% endif %}
+

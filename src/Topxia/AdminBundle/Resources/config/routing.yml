@@ -204,7 +204,10 @@ admin_teacher:
 admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
-    methods:  [POST]
+
+admin_teacher_promote_list:
+    pattern: /teacher/promote/list
+    defaults: { _controller: TopxiaAdminBundle:Teacher:promoteList }
 
 admin_teacher_promote_cancel:
     pattern:  /teacher/{id}/promote/cancel
@@ -485,56 +488,56 @@ admin_setting_payment:
 
 admin_setting_cloud_video:
     pattern:  /setting/cloud/video
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:video }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:video }
 
 admin_setting_cloud:
     pattern:  /setting/cloud
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
 
 admin_setting_cloud_key:
     pattern:  /setting/cloud/key
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:key }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:key }
 
 admin_setting_cloud_key_info:
     pattern:  /setting/cloud/key/info
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyInfo }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyInfo }
 
 admin_setting_cloud_key_bind:
     pattern:  /setting/cloud/key/bind
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyBind }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyBind }
 
 admin_setting_cloud_key_update:
     pattern:  /setting/cloud/key/update
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyUpdate }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyUpdate }
 
 admin_setting_cloud_key_apply:
     pattern:  /setting/cloud/key/apply
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyApply }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyApply }
     methods: [POST]
 
 admin_setting_cloud_key_copyright:
     pattern:  /setting/cloud/key/copyright
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:keyCopyright }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:keyCopyright }
     methods: [POST]
 
 admin_setting_cloud_video_watermark_upload:
     pattern: /setting/cloud/video_watermark/upload
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkUpload }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkUpload }
     methods: [POST]
 
 admin_setting_cloud_video_watermark_remove:
     pattern: /setting/cloud/video_watermark/remove
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
 
 admin_setting_cloud_video_embed_watermark_upload:
     pattern: /setting/cloud/video_embed_watermark/upload
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoEmbedWatermarkUpload }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoEmbedWatermarkUpload }
     methods: [POST]
 
 admin_setting_cloud_video_embed_watermark_remove:
     pattern: /setting/cloud/video_embed_watermark/remove
-    defaults: { _controller: TopxiaAdminBundle:CloudSetting:videoWatermarkRemove }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:videoWatermarkRemove }
     methods: [POST]
 
 admin_setting_refund:
@@ -560,10 +563,6 @@ admin_setting_default_course_picture_crop:
 admin_setting_ip_blacklist:
     pattern:  /setting/ip-blacklist
     defaults: { _controller: TopxiaAdminBundle:Setting:ipBlacklist }
-
-admin_setting_sensitive_word:
-    pattern:  /setting/sensitive_word
-    defaults: { _controller: TopxiaAdminBundle:SensitiveWord:index }
 
 admin_setting_theme:
     pattern:  /setting/theme
@@ -668,6 +667,10 @@ admin_setting_cdn:
     pattern:  /setting/cdn
     defaults: { _controller: TopxiaAdminBundle:CdnSetting:index }
 
+admin_setting_redis:
+    pattern:  /setting/redis
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:redis }
+
 admin_optimize:
     pattern:  /setting/optimize
     defaults: { _controller: TopxiaAdminBundle:Optimize:index }
@@ -752,6 +755,10 @@ admin_cloud_sms_account:
     pattern:  /cloud/sms/account
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
 
+admin_cloud_video_account:
+    pattern:  /cloud/video/account
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoAccount }
+
 admin_cloud_video_upgrade:
     pattern:  /cloud/video/upgrade
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
@@ -770,11 +777,11 @@ admin_app_center:
 
 admin_my_cloud:
     pattern:  /setting/my/cloud
-    defaults: { _controller: TopxiaAdminBundle:App:myCloud }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloud }
 
 admin_my_cloud_overview:
     pattern:  /setting/my/cloud/overview
-    defaults: { _controller: TopxiaAdminBundle:App:myCloudOverview }
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:myCloudOverview }
 
 # admin_app_cloud:
 #     pattern:  /app/center/cloud
@@ -1336,6 +1343,22 @@ admin_edu_cloud_sms_no_message:
     pattern: /edu_cloud/admin_edu_cloud_sms_no_message
     defaults: { _controller: TopxiaAdminBundle:EduCloud:smsNoMessage }
 
+admin_edu_cloud_email:
+    pattern: /setting/edu_cloud/email
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:email }
+
+admin_edu_cloud_search:
+    pattern: /setting/edu_cloud/search
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchSetting }
+
+admin_edu_cloud_search_clause:
+    pattern: /setting/edu_cloud/search/clause
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
+
+admin_edu_cloud_search_close:
+    pattern: /setting/edu_cloud/search/close
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
+
 admin_announcement:
     pattern:  /announcement
     defaults: { _controller: TopxiaAdminBundle:Announcement:index }
@@ -1378,3 +1401,23 @@ admin_batch_notification_send:
 admin_feedback:
     pattern: /feedback
     defaults: { _controller: TopxiaAdminBundle:Default:feedback }
+
+admin_report_status:
+    pattern: /reports/status
+    defaults: { _controller: TopxiaAdminBundle:System:report }
+
+admin_report_status_php:
+    pattern: /reports/status/php
+    defaults: { _controller: TopxiaAdminBundle:System:php }
+
+admin_report_status_directory:
+    pattern: /reports/status/directory
+    defaults: { _controller: TopxiaAdminBundle:System:checkDir }
+
+admin_report_status_ucenter:
+    pattern: /reports/status/ucenter
+    defaults: { _controller: TopxiaAdminBundle:System:ucenter }
+
+admin_report_status_email_send:
+    pattern: /reports/status/email/send
+    defaults: { _controller: TopxiaAdminBundle:System:emailSendCheck }

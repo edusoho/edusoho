@@ -3,8 +3,8 @@
 {% set layoutClass = 'before' %}
 
 {% block before_content %}
-  <ol class="breadcrumb">
-    <li><a href="{{ path('homepage') }}">首页</a></li>
+  <ol class="breadcrumb breadcrumb-o">
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
     {% for breadcrumb in breadcrumbs %}
       <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
     {% endfor %}
@@ -12,8 +12,8 @@
   </ol>
   {% if member and member.locked %}
   <div class="alert alert-warning">
-    您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。
-    <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:course.id, targetType:"course"}) }}">取消退款，继续学习！</button>
+    {{'您的退款申请已提交，请等待管理员的处理，退款期间将不能学习课程。'|trans}}
+    <button class="btn btn-warning btn-sm cancel-refund" data-url="{{ path('order_cancel_refund', {id:course.id, targetType:"course"}) }}">{{'取消退款，继续学习！'|trans}}</button>
   </div>
   {% endif %}
 {% endblock %}
@@ -29,7 +29,7 @@
       {{ header_macro.favorite_btn(course, hasFavorited) }}
       {{ header_macro.share_btn(course) }}
       {% if courseVip and course.parentId == '0' %}
-        <li class="hidden-xs color-warning icon-vip" title="会员课程" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
+        <li class="hidden-xs color-warning icon-vip" title="{{'会员课程'|trans}}" data-content="{% include 'TopxiaWebBundle:Course:Part/normal-header-vip.html.twig' %}">
           <i class="es-icon es-icon-crown"></i><br>
           {% include 'TopxiaWebBundle:Course:Part/normal-header-vip-link.html.twig' with {userVipStatus:userVipStatus, level: courseVip} %}
         </li>

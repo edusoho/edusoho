@@ -1,15 +1,15 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ setting('article.name', '资讯频道') }} - {{ parent() }}{% endblock %}
+{% block title %}{{ setting('article.name', '资讯频道'|trans) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-tag-page' %}
 
 {% block content %}
-  
+
   <div class="article-list-body row">
 
     <!-- list主内容-->
-    <div class="col-md-8 article-list-mian">
+    <div class="col-md-8 article-list-main">
       {% include 'TopxiaWebBundle:Article/Part:tag-header.html.twig' %}
       {% include 'TopxiaWebBundle:Article/Part:list-main.html.twig' %}
     </div>

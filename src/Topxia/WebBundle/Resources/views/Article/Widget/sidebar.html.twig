@@ -2,14 +2,14 @@
   <!-- 热门资讯 -->
     {{ render(controller('TopxiaWebBundle:Article:popularArticlesBlock')) }}
   <!-- 热门标签 -->
-  
+
   {% include 'TopxiaWebBundle:Article/Widget:tag-sidebar.html.twig' %}
-  
+
   <!-- 热门评论 -->
   <div class="panel panel-default hot-comments">
     <div class="panel-heading">
       <h3 class="panel-title">
-        <i class="es-icon es-icon-textsms"></i>热门评论
+        <i class="es-icon es-icon-textsms"></i>{{'热门评论'|trans}}
       </h3>
     </div>
     <div class="panel-body">
@@ -23,16 +23,16 @@
           </div>
           <div class="comments-info">
             {{ web_macro.user_link(post.user, '') }}
-            <span class="mhs">评论于</span>
+            <span class="mhs">{{'评论于'|trans}}</span>
             <a class="link-dark" href="{{ path('article_detail', { id:post.article.id }) }}">{{ post.article.title }}</a>
           </div>
           <div class="comments-content">
-           {{ post.content|at(post.ats)|raw }}
+           {{ post.content|at(post.ats)|sub_text(60) }}
           </div>
         </div>
       </div>
   {% else %}
-    <div class="empty">一个评论都没有！</div>
+    <div class="empty">{{'一个评论都没有！'|trans}}</div>
   {% endfor %}
 
   </div>

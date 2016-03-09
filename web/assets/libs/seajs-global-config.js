@@ -1,5 +1,6 @@
+
 seajs.config({
-	alias: {
+    alias: {
         'jquery': 'jquery/1.11.2/jquery',
         '$': 'jquery/1.11.2/jquery',
         '$-debug': 'jquery/1.11.2/jquery',
@@ -23,6 +24,7 @@ seajs.config({
         "jquery.plupload-queue-zh-cn": "jquery-plugin/plupload-queue/2.0.0/i18n/zh-cn",
         "jquery.waypoints": "jquery-plugin/waypoints/2.0.5/waypoints.min",
         "jquery.easy-pie-chart": "jquery-plugin/jquery.easy-pie-chart/jquery.easypiechart.min",
+        "jquery.blurr": "jquery-plugin/jquery.blurr/jquery.blurr",
         "mediaelementplayer": "gallery2/mediaelement/2.14.2/mediaelement-and-player",
         'bootstrap': 'gallery2/bootstrap/3.1.1/bootstrap',
         'echo.js': 'echo.js/1.7.0/index',
@@ -64,35 +66,38 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
-        'video-player': 'balloon-video-player/1.0.0/index'
+        'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
+        'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
+        'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
+        'video-player': 'balloon-video-player/1.3.0/index'
     },
 
-	// 预加载项
-	preload: [this.JSON ? '' : 'json'],
+    // 预加载项
+    preload: [this.JSON ? '' : 'json'],
 
-	// 路径配置
-	paths: app.jsPaths,
+    // 路径配置
+    paths: app.jsPaths,
 
-	// 变量配置
-	vars: {
-		'locale': 'zh-cn'
-	},
+    // 变量配置
+    vars: {
+        'locale': 'zh-cn'
+    },
 
-	charset: 'utf-8',
+    charset: 'utf-8',
 
-	debug: app.debug
+    debug: app.debug
 });
 
 var __SEAJS_FILE_VERSION = '?v' + app.version;
 
 seajs.on('fetch', function(data) {
-	if (!data.uri) {
-		return ;
-	}
+    if (!data.uri) {
+        return ;
+    }
 
-	if (data.uri.indexOf(app.mainScript) > 0) {
-		return ;
-	}
+    if (data.uri.indexOf(app.mainScript) > 0) {
+        return ;
+    }
 
     if (/\:\/\/.*?\/assets\/libs\/[^(common)]/.test(data.uri)) {
         return ;
@@ -103,7 +108,7 @@ seajs.on('fetch', function(data) {
 });
 
 seajs.on('define', function(data) {
-	if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
-	    data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
-	}
+    if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
+        data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
+    }
 });

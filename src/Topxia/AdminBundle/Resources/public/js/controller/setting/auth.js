@@ -50,7 +50,7 @@ define(function(require, exports, module) {
                 $('[data-modle="'+old_modle_value+'"]').addClass("btn-primary");
                 modle = old_modle_value;
 
-                Notify.danger("请先开启云短信功能！");
+                Notify.danger("请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~");
             }
         }
 

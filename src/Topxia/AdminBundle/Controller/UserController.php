@@ -3,6 +3,7 @@ namespace Topxia\AdminBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Common\Mail;
 use Topxia\WebBundle\DataDict\UserRoleDict;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -25,25 +26,6 @@ class UserController extends BaseController
 
         $conditions = array_merge($conditions, $fields);
 
-        //根据mobile查询user_profile获得userIds
-
-        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile') {
-            $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
-            $userProfiles  = $this->getUserService()->searchUserProfiles(
-                array('mobile' => $conditions['keyword']),
-                array('id', 'DESC'),
-                0,
-                $profilesCount
-            );
-            $userIds = ArrayToolkit::column($userProfiles, 'id');
-
-            if (!empty($userIds)) {
-                unset($conditions['keywordType']);
-                unset($conditions['keyword']);
-                $conditions['userIds'] = $userIds;
-            }
-        }
-
         $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
             $this->get('request'),
@@ -57,6 +39,39 @@ class UserController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        //根据mobile查询user_profile获得userIds
+
+        if (isset($conditions['keywordType']) && $conditions['keywordType'] == 'verifiedMobile' && !empty($conditions['keyword'])) {
+            $profilesCount = $this->getUserService()->searchUserProfileCount(array('mobile' => $conditions['keyword']));
+            $userProfiles  = $this->getUserService()->searchUserProfiles(
+                array('mobile' => $conditions['keyword']),
+                array('id', 'DESC'),
+                0,
+                $profilesCount
+            );
+            $userIds = ArrayToolkit::column($userProfiles, 'id');
+
+            if (!empty($userIds)) {
+                unset($conditions['keywordType']);
+                unset($conditions['keyword']);
+                $conditions['userIds'] = array_merge(ArrayToolkit::column($users, 'userId'), $userIds);
+            }
+
+            $userCount = $this->getUserService()->searchUserCount($conditions);
+            $paginator = new Paginator(
+                $this->get('request'),
+                $userCount,
+                20
+            );
+
+            $users = $this->getUserService()->searchUsers(
+                $conditions,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
 
         $app = $this->getAppService()->findInstallApp("UserImporter");
 
@@ -389,14 +404,21 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
 
         try {
-            $this->sendEmail(
-                $user['email'],
-                "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
-                $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
+            $mail = new Mail(array(
+                'to'     => $user['email'],
+                'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                'format' => 'html',
+                'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
                     'user'  => $user,
                     'token' => $token
-                )), 'html'
-            );
+                ))),
+                array(
+                    'to'        => $user['email'],
+                    'template'  => 'email_reset_password',
+                    'verifyurl' => $this->generateUrl('password_reset_update', array('token' => $token), true),
+                    'nickname'  => $user['nickname']
+                ));
+            $this->sendEmail($mail);
             $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
@@ -435,11 +457,19 @@ class UserController extends BaseController
         }
 
         try {
-            $this->sendEmail(
-                $user['email'],
-                '请激活你的帐号 完成注册',
-                $emailBody
+            $normalMail = array(
+                'to'    => $user['email'],
+                'title' => '请激活你的帐号 完成注册',
+                'body'  => $emailBody
             );
+            $cloudMail = array(
+                'to'        => $user['email'],
+                'template'  => 'email_reset_password',
+                'verifyurl' => $verifyurl,
+                'nickname'  => $user['nickname']
+            );
+            $mail = new Mail($normalMail, $cloudMail);
+            $this->sendEmail($mail);
             $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());

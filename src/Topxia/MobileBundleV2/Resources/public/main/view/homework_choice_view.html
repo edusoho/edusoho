@@ -1,0 +1,24 @@
+<div class="ui-choice">
+	<ul>
+		<li ng-repeat="meta in item.metas track by $index" ng-class="item.answer | fillAnswer : $index">
+			<span class="item" ng-bind="getItemIndex(item, $index)"></span>
+			<label class="body" ng-bind-html="meta"></label>
+		</li>
+	</ul>
+	<ul class="ui-grid-halve ui-answer">
+		<li>
+		    <span class="answer-status-label success" ng-class="item.result.status | questionResultStatusColor">
+		    	<i class="iconfont" ng-class="item.result.status | questionResultStatusIcon"></i>
+		    </span>
+		</li>
+		<li>
+		    <span>
+		        正确答案
+		        <label class="primary" ng-bind="getItemAnswer(item)"></label>
+		    </span>
+		    <span>学员答案
+		    	<label class="wrong" ng-bind="getResultAnswer(item)"></label>
+		    </span>
+		</li>
+	</ul>
+</div>

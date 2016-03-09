@@ -1,0 +1,22 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% block title %}{{'弹题管理'|trans}}{% endblock %}
+
+{% set script_controller = 'marker/index' %}
+{% set bodyClass="question-manage" %}
+
+{% block body %}
+    <div class="mvl mhl">
+      <a href="{{ path('course_manage_lesson', {id:course.id}) }}" class="btn btn-primary mrm">返回课时管理</a>
+      <a href="{{ path('course_learn', {id:course.id, preview:1}) }}#lesson/{{ lesson.id }}" class="btn btn-default mrm" target="_blank">{{'预览弹题'|trans}}</a>
+      <span class="text-sm color-gray">{{'本页面所有操作自动保存'|trans}}</span>
+    </div>
+  	<div class="lesson-dashboard lesson-dashboard-open" id="lesson-dashboard"
+    data-course-id="{{ course.id }}"
+    data-lesson-id="{{ lesson.id }}"
+    data-lesson-mediaid="{{ lesson.mediaId }}"
+    data-hide-media-lesson-learn-btn="{{ is_feature_enabled('hide_media_lesson_learn_btn') }}">
+  		{% include 'TopxiaWebBundle:Marker:player.html.twig' %}
+  		<div class="question hidden-xs" data-url="{{ path('course_lesson_question_marker_list',{courseId:course.id,lessonId:lesson.id})}}"></div>
+  	</div>
+	<div class="modal"></div>
+{% endblock %}

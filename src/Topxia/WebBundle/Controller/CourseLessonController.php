@@ -2,11 +2,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseLessonController extends BaseController
 {
@@ -27,19 +25,19 @@ class CourseLessonController extends BaseController
             ));
         }
 
-        $timeLimit = $this->setting('magic.lesson_watch_time_limit');
+        $course = $this->getCourseService()->getCourse($courseId);
 
-        if ($isPreview && !empty($timeLimit)) {
+        if ($isPreview && !empty($course['tryLookable'])) {
             return $this->forward('TopxiaWebBundle:Player:show', array(
                 'id'      => $lesson["mediaId"],
-                'context' => array('watchTimeLimit' => $timeLimit)
+                'context' => array('watchTimeLimit' => $course['tryLookTime'] * 60)
             ));
         }
 
-        list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
-        $context               = array();
-        $context['starttime']  = $request->query->get('starttime');
-
+        list($course, $member)    = $this->getCourseService()->tryTakeCourse($courseId);
+        $context                  = array();
+        $context['starttime']     = $request->query->get('starttime');
+        $context['hideBeginning'] = $request->query->get('hideBeginning', false);
         return $this->forward('TopxiaWebBundle:Player:show', array(
             'id'      => $lesson["mediaId"],
             'context' => $context
@@ -62,7 +60,7 @@ class CourseLessonController extends BaseController
 
         //开启限制加入
 
-        if (empty($lesson['free']) && empty($course['buyable'])) {
+        if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
@@ -70,13 +68,11 @@ class CourseLessonController extends BaseController
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
         }
 
-        $timelimit = $this->setting('magic.lesson_watch_time_limit');
-
         $user = $this->getCurrentUser();
 
         //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
-        if (empty($lesson['free']) && !($timelimit && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
+        if (empty($lesson['free']) && !(!empty($course['tryLookable']) && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
                 throw $this->createAccessDeniedException();
             }
@@ -96,16 +92,25 @@ class CourseLessonController extends BaseController
         }
 
         $hasVideoWatermarkEmbedded = 0;
+        $tryLookTime               = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
-            if (empty($lesson['free']) && empty($timelimit) && $file['storage'] != 'cloud') {
+            if (empty($lesson['free']) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
                     throw $this->createAccessDeniedException();
                 }
 
+                if ($course["parentId"] > 0) {
+                    return $this->redirect($this->generateUrl('classroom_buy_hint', array('courseId' => $course["id"])));
+                }
+
                 return $this->forward('TopxiaWebBundle:CourseOrder:buy', array('id' => $courseId), array('preview' => true, 'lessonId' => $lesson['id']));
+            }
+
+            if (empty($lesson['free']) && !empty($course['tryLookable'])) {
+                $tryLookTime = empty($course['tryLookTime']) ? 0 : $course['tryLookTime'];
             }
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -116,7 +121,8 @@ class CourseLessonController extends BaseController
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $token = $this->getTokenService()->makeToken('hls.playlist', array(
                         'data'     => array(
-                            'id' => $file['id']
+                            'id'          => $file['id'],
+                            'tryLookTime' => $tryLookTime
                         ),
                         'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
                         'duration' => 3600
@@ -404,7 +410,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        return $this->createLocalMediaResponse($request, $file, false);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function detailDataAction($courseId, $lessonId)
@@ -456,7 +462,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        return $this->fileAction($request, $lesson['mediaId'], true);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function pptAction(Request $request, $courseId, $lessonId)
@@ -588,42 +594,6 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function fileAction(Request $request, $fileId, $isDownload = false)
-    {
-        $file = $this->getUploadFileService()->getFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['storage'] == 'cloud') {
-            if ($isDownload) {
-                $key = $file['hashId'];
-            } else {
-                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                    $key = $file['metas']['hd']['key'];
-                } else {
-                    $key = $file['hashId'];
-                }
-            }
-
-            if (empty($key)) {
-                throw $this->createNotFoundException();
-            }
-
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
-            if ($isDownload) {
-                $client->download($client->getBucket(), $key, 3600, $file['filename']);
-            } else {
-                $client->download($client->getBucket(), $key);
-            }
-        }
-
-        return $this->createLocalMediaResponse($request, $file, $isDownload);
-    }
-
     public function learnStatusAction(Request $request, $courseId, $lessonId)
     {
         $user   = $this->getCurrentUser();
@@ -702,30 +672,6 @@ class CourseLessonController extends BaseController
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
         );
         return $this->createJsonResponse($response);
-    }
-
-    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
-    {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        if ($isDownload) {
-            $file['filename'] = urlencode($file['filename']);
-
-            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-            } else {
-                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-            }
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
     }
 
     protected function isMobile()
@@ -847,6 +793,23 @@ class CourseLessonController extends BaseController
         return $this->forward('TopxiaWebBundle:Testpaper:reDoTestpaper', array('targetType' => 'lesson', 'targetId' => $lessonId, 'testId' => $testId));
     }
 
+    public function statusLabelAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getLesson($lessonId);
+        $course = $this->getCourseService()->getCourse($courseId);
+        $media  = array();
+
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
+            $media = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        }
+
+        return $this->Render('TopxiaWebBundle:CourseLesson/Part:status-label.html.twig', array(
+            'item'   => $lesson,
+            'course' => $course,
+            'media'  => $media
+        ));
+    }
+
     private function checkTestPaper($lessonId, $testId, $status)
     {
         $user = $this->getCurrentUser();
@@ -893,19 +856,6 @@ class CourseLessonController extends BaseController
                 return $message = '实时考试，不能再考一次!';
             }
         }
-    }
-
-    protected function agentInWhiteList($userAgent)
-    {
-        $whiteList = array("iPhone", "iPad", "Mac", "Android");
-
-        foreach ($whiteList as $value) {
-            if (strpos(strtolower($userAgent), strtolower($value)) > -1) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function getCourseService()

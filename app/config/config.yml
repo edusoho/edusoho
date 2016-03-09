@@ -16,11 +16,11 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.12.4
+        assets_version: 6.15.5
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
-        handler_id:     session.handler.pdo
+        handler_id:     session.handler.factory
     fragments:       ~
 
 # Twig Configuration
@@ -115,29 +115,47 @@ services:
 
     session.handler.pdo:
         class:     Topxia\WebBundle\Handler\UserPdoSessionHandler
-        arguments: [@session.handler.pdo.connection, %session.handler.pdo.options%, @security.context, @service_container]
+        arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.context', '@service_container']
+
+    session.handler.redis.factory:
+        class: Topxia\Service\Common\RedisFactory
+        factory_class: Topxia\Service\Common\RedisFactory
+        factory_method: instance
+        arguments: 
+            - "@service_container"
+
+    session.handler.redis:
+        class:     Topxia\WebBundle\Handler\RedisSessionHandler
+        arguments: ['@session.handler.redis.factory', '@security.context']
+
+    session.handler.factory:
+        class: SessionHandlerInterface
+        factory_class: Topxia\Service\Common\SessionHandlerFactory
+        factory_method: getSessionHandler
+        arguments: 
+            - "@service_container"
 
     kernel.listener.ajax_exception_listener:
         class: Topxia\WebBundle\Listener\AjaxExceptionListener
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority:255 }
 
     kernel.listener.kernel_request_listener:
         class: Topxia\WebBundle\Listener\KernelRequestListener
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
-    
+
     kernel.listener.kernel_response_listener:
         class: Topxia\WebBundle\Listener\KernelResponseListener
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority:255 }
 
     topxia.twig.web_extension:
         class: Topxia\WebBundle\Twig\Extension\WebExtension
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 
@@ -153,18 +171,18 @@ services:
 
     topxia.twig.menu_extension:
         class: Topxia\WebBundle\Twig\Extension\MenuExtension
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 
     topxia.twig.block_extension:
         class: Topxia\WebBundle\Twig\Extension\BlockExtension
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onGetUserLoginListener}

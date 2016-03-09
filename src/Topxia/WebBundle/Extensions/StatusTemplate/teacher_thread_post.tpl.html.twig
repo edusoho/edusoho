@@ -1,0 +1,7 @@
+{% set props = status.properties %}
+
+{% if mode == 'simple' %}
+  问题"{{ props.thread.title|sub_text(15)}}"已被教师回复
+{% elseif mode == 'full' %}
+
+{% endif %}

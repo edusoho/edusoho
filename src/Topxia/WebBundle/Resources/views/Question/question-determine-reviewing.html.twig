@@ -10,13 +10,13 @@
 
   <div class="homework-question-result">
     {% if itemResult.status == 'right' %}
-	   <span class="glyphicon glyphicon-ok question-text-success"></span> 
+	   <span class="glyphicon glyphicon-ok question-text-success"></span>
     {% elseif itemResult.status == 'wrong' %}
-       <span class="glyphicon glyphicon-remove question-text-danger"></span> 
+       <span class="glyphicon glyphicon-remove question-text-danger"></span>
     {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span> 未答题
+　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span> {{'未答题'|trans}}
     {% endif %}
-	 正确答案是: <strong style="color:red">{% if rightAnswerIndex == 1 %} 正确 {% else %} 错误 {% endif %}</strong>
+	 {{'正确答案是'|trans}}: <strong style="color:red">{% if rightAnswerIndex == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>
 </div>
 
 {% endblock %}

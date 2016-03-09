@@ -22,8 +22,9 @@
     <div class="row row-9-3">
       <div class="col-md-9">
 
-        {% if setting('classroom.enabled') %}
+       
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
+          {% if classrooms %}
           <div class="es-box">
             <div class="es-box-heading">
               <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
@@ -78,7 +79,8 @@
               </ul>
             </div>
           </div>
-        {% endif %}
+          {% endif %}
+
 
         {# 推荐课程 #}
         {% set recommendCourses = data('RecommendCourses', {count:3}) %}
@@ -137,7 +139,7 @@
               {% for article in articles %}
                 {% if article %}
                   <li class="col-md-6">
-                    <em>{{ article.updatedTime|date('m-d H:i') }} </em>
+                    <em>{{ article.publishedTime|date('m-d H:i') }} </em>
                     <a href="{{ path('article_detail', {id:article.id}) }}" title="{{ article.title }}"> <span>[{{ article.category.name }}]</span>{{ article.title }} </a>
                   </li>
                 {% endif %}

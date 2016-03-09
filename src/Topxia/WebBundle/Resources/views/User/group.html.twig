@@ -6,15 +6,19 @@
 
 {% block main %}
   {% if adminGroups %}
-  <div class="page-header">
-    <h4> 管理的小组</h4>
-  </div>
-  {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':adminGroups,}%}
+    <div class="es-piece">
+      <div class="piece-header">
+        {{'管理小组'|trans}}
+      </div>
+      {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':adminGroups,}%}
+    </div>
+    <hr>
   {% endif %}
-  <div class="page-header">
-    <h4> 加入的小组</h4>
+  <div class="es-piece">
+    <div class="piece-header">
+      {{'加入小组'|trans}}
+    </div>
+    {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':groups} %}
   </div>
-  {% include 'TopxiaWebBundle:Group:groups-ul.html.twig' with {'groups':groups} %}
-  
   {{ web_macro.paginator(paginator) }}
 {% endblock %}

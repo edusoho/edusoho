@@ -1,0 +1,31 @@
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="edu-balance">
+      <h4 style="color:#555; margin-bottom:20px">
+        账户余额
+      </h4>
+      <p>
+        {% if overview.account.cash|default('0') > 0 %}
+          <span class="balance">{{ overview.account.cash|default(0) }}</span>元
+        {% else %}
+          <span class="balance">{{ overview.account.cash|default(0) }}</span>元
+        {% endif %}
+        <a href="{{path('admin_cloud_recharge')}}" class="btn btn-primary" target="_blank" style="margin-left:20px;">充值</a>
+      </p> 
+      {% if  overview.account.cash|default(0) < 50 and overview.account.cash|default(0) >= 0 %}
+        <p class="text-danger text-sm">你的余额不足50元，请尽快充值，以免影响正常使用。</p>
+      {% elseif overview.account.cash|default(0) < 0 %}
+        {% if overview.account.arrearageDays < 7 %}
+          <p class="text-danger text-sm">您已欠费，教育云将于{{ 7 - overview.account.arrearageDays }}天后暂停，请尽快充值，以免影响正常使用</p>
+        {% else %}
+          <p class="text-danger text-sm">您已欠费{{ overview.account.arrearageDays }}天，教育云服务已暂停，请尽快充值</p>
+        {% endif %}
+      {% endif %}
+      <hr style="margin: 10px 0">
+      <div>代金券余额：<span class="" >{{ overview.coupon.balance|default("0.00") }}</span>
+      <a href="http://open.edusoho.com/coupon/activate" target="_blank" style="margin-left:30px">激活代金券</a></div>
+    </div>
+  </div>
+</div>
+    

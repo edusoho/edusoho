@@ -106,8 +106,26 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_trial', array($this, 'isTrial')),
             new \Twig_SimpleFunction('timestamp', array($this, 'timestamp')),
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
-            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork'))
+            new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
+            new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
+            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists'))
         );
+    }
+
+    public function renderNotification($notification)
+    {
+        if ($notification) {
+            $manager                 = ExtensionManager::instance();
+            $notification['message'] = $manager->renderNotification($notification);
+        }
+
+        return $notification;
+    }
+
+    public function routeExists($name)
+    {
+        $router = $this->container->get('router');
+        return (null === $router->getRouteCollection()->get($name)) ? false : true;
     }
 
     public function isWithoutNetwork()
@@ -346,6 +364,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
+        $names[] = 'sensitiveword';
 
         $paths = array(
             'common' => 'common',
@@ -1114,13 +1133,10 @@ class WebExtension extends \Twig_Extension
                 if ($order['amount'] > 0) {
                     if ($order['payment'] == 'wxpay') {
                         $default = "微信支付";
-<<<<<<< HEAD
-=======
                     } elseif ($order['payment'] == 'heepay') {
                         $default = "网银支付";
                     } elseif ($order['payment'] == 'quickpay') {
                         $default = "快捷支付";
->>>>>>> master
                     } else {
                         $default = "支付宝";
                     }
@@ -1138,13 +1154,10 @@ class WebExtension extends \Twig_Extension
                     $default = "无";
                 } elseif ($order['payment'] == 'wxpay') {
                     $default = "微信支付";
-<<<<<<< HEAD
-=======
                 } elseif ($order['payment'] == 'heepay') {
                     $default = "网银支付";
                 } elseif ($order['payment'] == 'quickpay') {
                     $default = "快捷支付";
->>>>>>> master
                 } else {
                     $default = "支付宝";
                 }

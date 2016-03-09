@@ -76,8 +76,6 @@ class CourseController extends CourseBaseController
         $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
         unset($conditions['orderBy']);
 
-        $conditions['recommended'] = ($orderBy == 'recommendedSeq') ? 1 : null;
-
         $conditions['parentId'] = 0;
         $conditions['status']   = 'published';
         $paginator              = new Paginator(
@@ -86,12 +84,55 @@ class CourseController extends CourseBaseController
             20
         );
 
-        $courses = $this->getCourseService()->searchCourses(
-            $conditions,
-            $orderBy,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        if ($orderBy != 'recommendedSeq') {
+            $courses = $this->getCourseService()->searchCourses(
+                $conditions,
+                $orderBy,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+
+        if ($orderBy == 'recommendedSeq') {
+            $conditions['recommended'] = 1;
+            $recommendCount            = $this->getCourseService()->searchCourseCount($conditions);
+            $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
+            $recommendPage             = intval($recommendCount / 20);
+            $recommendLeft             = $recommendCount % 20;
+
+            if ($currentPage <= $recommendPage) {
+                $courses = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    $orderBy,
+                    ($currentPage - 1) * 20,
+                    20
+                );
+            } elseif (($recommendPage + 1) == $currentPage) {
+                $courses = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    $orderBy,
+                    ($currentPage - 1) * 20,
+                    20
+                );
+                $conditions['recommended'] = 0;
+                $coursesTemp               = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    'createdTime',
+                    0,
+                    20 - $recommendLeft
+                );
+                $courses = array_merge($courses, $coursesTemp);
+            } else {
+                $conditions['recommended'] = 0;
+                $courses                   = $this->getCourseService()->searchCourses(
+                    $conditions,
+                    'createdTime',
+                    (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
+                    20
+                );
+            }
+        }
+
         $group = $this->getCategoryService()->getGroupByCode('course');
 
         if (empty($group)) {
@@ -237,6 +278,24 @@ class CourseController extends CourseBaseController
             'member'   => $member,
             'category' => $category,
             'tags'     => $tags
+        ));
+    }
+
+    public function LessonListAction(Request $request, $id)
+    {
+        list($course, $member) = $this->buildCourseLayoutData($request, $id);
+
+        if ($course['parentId']) {
+            $classroom = $this->getClassroomService()->findClassroomByCourseId($course['id']);
+
+            if (!$this->getClassroomService()->canLookClassroom($classroom['classroomId'])) {
+                return $this->createMessageResponse('info', '非常抱歉，您无权限访问该班级，如有需要请联系客服', '', 3, $this->generateUrl('homepage'));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Course:lesson-list.html.twig', array(
+            'course' => $course,
+            'member' => $member
         ));
     }
 
