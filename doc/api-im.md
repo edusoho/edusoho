@@ -1,17 +1,15 @@
 # 云服务IM API
 
-## 获取登陆token
+## 获取登陆im的token
 
 ```
-GET /v1/im/login
+GET /im/login
 ```
 
 ### 参数
 
 | 名称 | 类型 | 必需 | 描述 |
 | ---- | ---- | ---- | ---- |
-| clientId | string | Y | 唯一表示用户的ID |
-| clientName | string | Y | 用户昵称 |
 
 ### 成功响应
 
