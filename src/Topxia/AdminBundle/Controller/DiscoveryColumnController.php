@@ -22,7 +22,6 @@ class DiscoveryColumnController extends BaseController
     {
         $discoveryColumns = array();
         $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-
         return $this->render('TopxiaAdminBundle:DiscoveryColumn:discovery-column.html.twig', array('discoveryColumns' => $discoveryColumns));
     }
 
@@ -68,7 +67,6 @@ class DiscoveryColumnController extends BaseController
     public function editAction(Request $request, $id)
     {
         $discoveryColumn = $this->getDiscoveryColumnService()->getDiscoveryColumn($id);
-
         if (empty($discoveryColumn)) {
             throw $this->createNotFoundException();
         }
@@ -93,13 +91,13 @@ class DiscoveryColumnController extends BaseController
         ));
     }
 
-    public function checkTitleAction(Request $request)
+    public function checkTitleAction(Request $request,$id)
     {
         $title = $request->query->get('value');
         $discoveryColumn    = $this->getDiscoveryColumnService()->findDiscoveryColumnByTitle($title);
         if (empty($title)) {
             $response = array('success' => false, 'message' => '请输入栏目名称！');
-        } elseif ($discoveryColumn && $title) {
+        } elseif ($discoveryColumn && $title && $discoveryColumn[0]['id'] != $id) {
             $response = array('success' => false, 'message' => '该栏目名称已经存在！');
         } else {
             $response = array('success' => true);

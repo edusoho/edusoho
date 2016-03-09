@@ -19,9 +19,9 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     location.reload();
-                    Notify.success('更新栏目成功！');
+                    Notify.success('添加栏目成功！');
                 }).fail(function() {
-                    Notify.danger("更新栏目成功失败，请重试！");
+                    Notify.danger("添加栏目成功失败，请重试！");
                 });
 
             }
