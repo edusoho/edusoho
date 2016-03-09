@@ -125,7 +125,7 @@ abstract class BaseController extends Controller
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
             return $this->sendCloudEmail($mail->getCloudMail());
-        } elseif (!isset($config['enabled']) && $config['enabled'] == 1) {
+        } elseif (isset($config['enabled']) && $config['enabled'] == 1) {
             return $this->sendNormalEmail($mail->getMail());
         }
 
@@ -159,11 +159,11 @@ abstract class BaseController extends Controller
 
     private function sendNormalEmail($params)
     {
-        $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
+        $format = isset($params['format']) && $params['format'] == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());
 
-        if (!isset($config['enabled']) && $config['enabled'] == 1) {
+        if (isset($config['enabled']) && $config['enabled'] == 1) {
             $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
                 ->setUsername($config['username'])
                 ->setPassword($config['password']);

@@ -97,6 +97,7 @@
       }
     }
     .metas {
+      position: relative;
       padding: 10px;
       // border-top: 1px solid #f1f1f1;
       color: @gray-medium;
@@ -104,14 +105,13 @@
       @media (max-width: @screen-xs-max) {
         padding: 5px;
       }
-      .num {
-        margin-right: 10px;
-      }
       i {
         margin-right: 5px;
       }
-      .price {
+      .course-price-widget {
         float: right;
+      }
+      .price {
         color: @brand-danger;
         font-size: 14px;
         margin-right: 0;
@@ -120,6 +120,7 @@
         color: #238312;
       }
       .comment {
+        margin-left: 10px;
         @media (max-width: @screen-xs-max) {
           display: none;
         }
