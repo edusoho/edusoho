@@ -27,7 +27,7 @@
                  {% for classroom in classrooms %}
                  {% set teachers = classroom.users|default(null) %}
                  {% if loop.index <= 5%}
-                <ul class="home-class-list">
+                <ul class="home-class-list clearfix">
                   <li class="class-item">
                     <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
                       {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
@@ -144,12 +144,13 @@
             <div class="es-box-body">
               <ul class="row vip-lists">
                   {% for level in levels %}
-                    <li class="col-sm-12">
+                    <li class="col-sm-12 col-xs-6">
                       <div class="vip-item">
                         <div class="row">
                           <div class="col-sm-4 col-md-4">
                             <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
                             <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
+                            </a>
                           </div>
                           </a>
                           <div class="col-sm-5 col-md-5">
@@ -273,17 +274,11 @@
 {% macro course_lists(courses) %}
   {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
   {% set mode = mode|default('default') %}
-  <ul class="course-wide-list">
+  <ul class="course-wide-list clearfix">
     {% for course in courses %}
     <li class="course-item clearfix">
       <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}">
         {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'course-picture', '') }}
-      </a>
-      <div class="course-body">
-        <div class="course-price-info">
-          {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
-        </div>
-        <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
         {% if course.serializeMode=='serialize' %}
           <span class="label label-success ">更新中</span>
         {% elseif course.serializeMode=='finished' %}
@@ -297,16 +292,25 @@
               <span class="label label-success series-mode-label">直播</span>
             {% endif %}
         {% endif %}
-        </h4>
+        </a>
 
+      <div class="course-body">
+        
+        <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
+       
+        </h4>
+        <div class="course-price-info">
+          {% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+        </div>
         {% if course.type == 'live' %}
           {% set lesson = course.lesson|default(null) %}
+          <div class="live-course-lesson mbs">
           {% if lesson %}
-            <div class="live-course-lesson mbm">
-              <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-              <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
-            </div>
+            <span class="text-success fsm mrm">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
+            <span class="text-muted fsm mrm">第{{ lesson.number }}课时</span>
+          </div>
           {% endif %}
+        </div>
         {% else %}
           <div class="course-about ellipsis">{{ course.subtitle }}</div>
         {% endif %}
