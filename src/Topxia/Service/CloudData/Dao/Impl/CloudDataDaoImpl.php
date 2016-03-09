@@ -13,6 +13,34 @@ class CloudDataDaoImpl extends BaseDao implements CloudDataDao
         'body' => 'json'
     );
 
+    public function searchCloudDatas($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
+
+        $result = $builder->execute()->fetchAll() ?: array();
+        return $this->createSerializer()->unserializes($result, $this->getSerializeFields());
+    }
+
+    public function searchCloudDataCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+                        ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+                        ->from($this->table, 'cloud_data');
+
+        return $builder;
+    }
+
     public function getCloudData($id)
     {
         $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";

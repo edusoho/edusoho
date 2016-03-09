@@ -28,4 +28,19 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
             }
         }
     }
+
+    public function searchCloudDataCount($conditions)
+    {
+        return $this->getCloudDataDao()->searchCloudDataCount($conditions);
+    }
+
+    public function searchCloudDatas($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getCloudDataDao()->searchCloudDatas($conditions, $orderBy, $start, $limit);
+    }
+
+    protected function getCloudDataDao()
+    {
+        return $this->createDao('CloudData.CloudDataDao');
+    }
 }
