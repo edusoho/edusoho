@@ -47,6 +47,15 @@ admin_operation_mobile_select_manage:
     name: 每周精选设置
     parent: admin_operation_mobile
     router_name: admin_operation_mobile_select
+admin_discovery_column_index:
+    name: 栏目管理
+    parent: admin_operation_mobile
+admin_discovery_column_create:
+    name: 添加栏目
+    parent: admin_discovery_column_index
+    router_params_context: 1
+    group: 2
+    mode: modal
 admin_operation_block:
     name: 编辑区管理
     parent: admin_operation
