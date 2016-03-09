@@ -101,7 +101,7 @@ class LiveCourseController extends BaseController
             'type'               => 'live',
             'courseIds'          => $courseIds,
             'status'             => 'published'
-        ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+        ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
         $futureLiveLessons = $this->getCourseService()->searchLessons(array(
             'startTimeGreaterThan' => time(),
@@ -109,7 +109,7 @@ class LiveCourseController extends BaseController
             'type'                 => 'live',
             'courseIds'            => $courseIds,
             'status'               => 'published'
-        ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+        ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
         $liveTabs['today']['current'] = $currentLiveLessons;
         $liveTabs['today']['future']  = $futureLiveLessons;
@@ -127,7 +127,7 @@ class LiveCourseController extends BaseController
                     'type'                 => 'live',
                     'courseIds'            => $courseIds,
                     'status'               => 'published'
-                ), array('startTime', 'asc'), 0, PHP_INT_MAX);
+                ), array('startTime', 'ASC'), 0, PHP_INT_MAX);
 
                 $date                      = date('m-d', strtotime($value['date']));
                 $liveTabs[$date]['future'] = $dayLessons;
@@ -138,6 +138,20 @@ class LiveCourseController extends BaseController
         return $this->render('TopxiaWebBundle:LiveCourse:live-tab.html.twig', array(
             'liveTabs' => $liveTabs,
             'dateTabs' => $dateTabs
+        ));
+    }
+
+    public function replayListAction()
+    {
+        $liveReplayList = $this->getCourseService()->searchLessons(array(
+            'endTimeLessThan' => time(),
+            'type'            => 'live',
+            'copyId'          => 0,
+            'status'          => 'published'
+        ), array('startTime', 'DESC'), 0, 10);
+
+        return $this->render('TopxiaWebBundle:LiveCourse:live-replay-list.html.twig', array(
+            'liveReplayList' => $liveReplayList
         ));
     }
 
