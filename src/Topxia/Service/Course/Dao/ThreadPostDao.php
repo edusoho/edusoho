@@ -23,7 +23,7 @@ interface ThreadPostDao
 
 	public function deletePostsByThreadId($threadId);
 
-	public function searchThreadPosts($conditions,$orderBy,$start,$limit);
+	public function searchThreadPosts($conditions,$orderBy,$start,$limit,$groupBy);
 
-	public function searchThreadPostsCount($conditions);
+	public function searchThreadPostsCount($conditions,$groupBy);
 }

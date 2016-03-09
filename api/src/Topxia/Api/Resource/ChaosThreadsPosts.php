@@ -71,9 +71,9 @@ class ChaosThreadsPosts extends BaseResource
         $conditions  = array(
            'userId' => $currentUser['id']
         );
-        $total       = $this->getCourseThreadService()->searchThreadPostsCount($conditions);
+        $total       = $this->getCourseThreadService()->searchThreadPostsCount($conditions,'threadId');
         $start       = $start == -1 ? rand(0, $total - 1) : $start;  
-        $posts       = $this->getCourseThreadService()->searchThreadPosts($conditions,null,$start,$limit);
+        $posts       = $this->getCourseThreadService()->searchThreadPosts($conditions,'',$start,$limit,'threadId');
 
         $courseIds   = ArrayToolkit::column($posts,"courseId");
 
