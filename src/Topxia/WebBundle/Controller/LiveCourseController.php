@@ -21,6 +21,8 @@ class LiveCourseController extends BaseController
 
     public function exploreAction(Request $request)
     {
+        // BlockToolkit::init($this->container->getParameter('topxia.upload.public_directory').'/../themes/block.json', $this->container);
+
         if (!$this->setting('course.live_course_enabled')) {
             return $this->createMessageResponse('info', '直播频道已关闭');
         }
@@ -205,14 +207,14 @@ class LiveCourseController extends BaseController
         $params = array();
 
         if ($this->getCourseService()->isCourseTeacher($courseId, $user['id'])) {
-            $teachers =$this->getCourseService()->findCourseTeachers($courseId);
-            $teacher = array_shift($teachers);
+            $teachers = $this->getCourseService()->findCourseTeachers($courseId);
+            $teacher  = array_shift($teachers);
+
             if ($teacher['userId'] == $user['id']) {
                 $params['role'] = 'teacher';
             } else {
                 $params['role'] = 'speaker';
             }
-
         } elseif ($this->getCourseService()->isCourseStudent($courseId, $user['id'])) {
             $params['role'] = 'student';
         } else {
