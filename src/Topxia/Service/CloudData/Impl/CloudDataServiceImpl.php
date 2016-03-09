@@ -13,7 +13,7 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
         try {
             return CloudAPIFactory::create('event')->push($name, $body, $timestamp);
         } catch (\Exception $e) {
-            $this->getLogService()->error('cloud_data', 'push', "事件发送失败", array('message' => $e->getMessage()));
+            $this->getLogService()->error('cloud_data', 'push', "{$name} 事件发送失败", array('message' => $e->getMessage()));
 
             if ($tryTimes == 0) {
                 $tryTimes++;
