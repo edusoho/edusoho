@@ -67,15 +67,22 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function filterConditions($conditions)
     {
-        $filterConditions = array_filter($conditions);
+        $filterConditions = array_filter($conditions, function ($value) {
+            if ($value === 0) {
+                return true;
+            }
+            return !empty($value);
+        });
 
         if (!empty($filterConditions['createdUserId'])) {
-            $filterConditions['endUser'] = $filterConditions['createdUserId'];
+            $localFiles = $this->getMaterialLibDao()->findFilesByUserId($filterConditions['createdUserId'], $filterConditions['start'], $filterConditions['limit']);
+            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
+            $filterConditions['nos'] = implode(',', $globalIds);
             unset($filterConditions['createdUserId']);
         }
 
         if (!empty($filterConditions['courseId'])) {
-            $localFiles              = $this->getCloudFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
+            $localFiles              = $this->getUploadFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
         }
@@ -86,6 +93,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService2');
+    }
+
+    protected function getMaterialLibDao()
+    {
+        return $this->createDao('MaterialLib:MaterialLib.MaterialLibDao');
     }
 
     protected function getCloudFileService()
