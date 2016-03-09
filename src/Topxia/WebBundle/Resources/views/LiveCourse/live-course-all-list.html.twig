@@ -17,29 +17,52 @@
       </div>
     </form>
   </div>
+
   <div class="panel-body">
     {% for course in liveCourses if course %}
       <div class="media">
         <div class="media-left">
-          {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+          {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime) or ("now"|date("U") < course.liveStartTime) %}
+            <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" title="{{ course.title }}">
+          {% elseif "now"|date("U") > course.liveStartTime %}
+            <a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}">
+          {% endif %}
+            {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+          </a>
         </div>
         <div class="media-body">
           <div class="title  mbm">
             <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker">{{ course.title }}</a>
           </div>
-          <!-- <span class="label label-success label-md">正在直播 今天 10：00</span> -->
+
+          {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime %}
+            <span class="label label-success label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
+          {% elseif "now"|date("U") < course.liveStartTime %}
+            <span class="label label-warning label-md">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
+          {% elseif "now"|date("U") > course.liveStartTime %}
+            <span class="label label-danger label-md">查看回放</span>
+          {% endif %}
+
           <div class="metas">
             <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ course.studentNum }}</span>
             <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ course.ratingNum }}</span>
           </div>
           <div class="user">
+            {% if course.teacherIds|default(null) %}
               {% set user = data('User',{userId:course.teacherIds[0]}) %}
               {{ web_macro.user_avatar(user) }}
               {{ web_macro.user_link(user, '') }}
+            {% endif %}
           </div>
           <div class="other">
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
-            <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">进入直播</a>
+
+            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime) or ("now"|date("U") < course.liveStartTime) %}
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-primary">进入直播</a>
+            {% elseif "now"|date("U") > course.liveStartTime %}
+              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">进入直播</a>
+            {% endif %}
+
           </div>
         </div>
       </div>

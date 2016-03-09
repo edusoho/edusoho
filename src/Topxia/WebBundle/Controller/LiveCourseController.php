@@ -118,7 +118,7 @@ class LiveCourseController extends BaseController
         $today    = date("Y-m-d");
 
         foreach ($lessonsDate as $key => &$value) {
-            if ($today == $value['date']) {
+            if ($today == $value['date'] || count($liveTabs) >= 4) {
                 continue;
             } else {
                 $dayLessons = $futureLiveLessons = $this->getCourseService()->searchLessons(array(
@@ -492,32 +492,32 @@ class LiveCourseController extends BaseController
             $courseIds = array(-1);
         }
 
+        $liveLessons = $this->getCourseService()->findRecentLiveLessons($courseIds, 0, PHP_INT_MAX);
+
         $conditions = array(
-            'status'    => 'published',
-            'type'      => 'live',
-            'courseIds' => $courseIds
-        );
-
-        $paginator = new Paginator(
-            $request,
-            $this->getCourseService()->searchLessonCount($conditions)
-            , 10
-        );
-
-        $liveLessons = $this->getCourseService()->findRecentLiveLessons($courseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
-
-        $courses = $this->getCourseService()->searchCourses(array(
             'status'    => 'published',
             'type'      => 'live',
             'parentId'  => '0',
             'courseIds' => ArrayToolkit::column($liveLessons, 'courseId')
-        ), 'lastest', 0, 10);
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->searchCourseCount($conditions)
+            , 10
+        );
+
+        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), 0, 10);
         $courses = ArrayToolkit::index($courses, 'id');
 
         $liveCourses = array();
 
         foreach ($liveLessons as $key => $val) {
-            $liveCourses[$val['id']] = $courses[$val['courseId']];
+            if (!isset($liveCourses[$val['courseId']])) {
+                $liveCourses[$val['courseId']]                  = $courses[$val['courseId']];
+                $liveCourses[$val['courseId']]['liveStartTime'] = $val['startTime'];
+                $liveCourses[$val['courseId']]['lessonId']      = $val['id'];
+            }
         }
 
         return array($liveCourses, $paginator);
