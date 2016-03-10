@@ -23,16 +23,62 @@
   margin:0;
 }
 
+.materials-ul li.img-li {
+  position: relative;
+}
+
 .materials-ul li .border-left {
   border-left: solid 1px #eee;
 }
 
 .materials-ul li.img-li {
-  height: auto;
+  min-height: 103px;
 }
 
 .materials-ul li.img-li img {
   cursor: pointer;
+}
+
+.materials-ul li.img-li:hover .mask {
+  display: block;
+}
+
+.materials-ul li.img-li .mask {
+    display: none;
+    cursor: pointer; 
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    background-color: #B6B6B6;
+    filter:alpha(opacity=60);  /*支持 IE 浏览器*/
+    -moz-opacity:0.60; /*支持 FireFox 浏览器*/
+    opacity:0.60;  /*支持 Chrome, Opera, Safari 等浏览器*/
+    z-index: 100;
+}
+
+.materials-ul li.img-li .status {
+  display: inline-block;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.materials-ul li.img-li .mask i {
+  padding-left: 5px;
+}
+
+.materials-ul li.img-li .mask span {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.materials-ul li.img-li .reconvert-btn {
+  position: absolute;
+  left: 35%;
+  top: 40%;
 }
 
 .materials-ul li.caption p {

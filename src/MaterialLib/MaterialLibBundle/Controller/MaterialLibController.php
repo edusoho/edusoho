@@ -112,7 +112,7 @@ class MaterialLibController extends BaseController
         //Return different views according to current viewing mode
 
         if ($viewMode == 'thumb') {
-            $resultPage = 'MaterialLibBundle:Web/Wdiget:thumb-list.html.twig';
+            $resultPage = 'MaterialLibBundle:Web/Widget:thumb-list.html.twig';
         } else {
             $resultPage = 'MaterialLibBundle:MaterialLib:material-list-view-item.html.twig';
         }

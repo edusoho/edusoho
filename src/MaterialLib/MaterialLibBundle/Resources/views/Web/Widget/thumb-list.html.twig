@@ -2,7 +2,7 @@
    <div class="col-md-3">
     <ul class="materials-ul">
       <li class="img-li">
-        <img src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.jpg')) }}">
+        {% include 'MaterialLibBundle:Web/Widget:thumbnail.html.twig' %}
       </li>
       <li class="caption">
         <p class="title text-overflow">{{ uploadFile.filename }}</p>
@@ -13,7 +13,7 @@
         <p class="text-muted date">{{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
       </li>
       <li class="row op-li">
-        
+
         <div class="op-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="收藏">
           <i class="glyphicon glyphicon-star"></i>
         </div>
