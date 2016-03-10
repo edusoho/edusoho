@@ -181,6 +181,12 @@ services:
         tags:
             - { name: twig.extension }
 
+    topxia.twig.theme_extension:
+        class: Topxia\WebBundle\Twig\Extension\ThemeExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener
         arguments:    ['@service_container']

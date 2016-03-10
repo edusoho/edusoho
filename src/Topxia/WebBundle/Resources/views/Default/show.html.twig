@@ -10,11 +10,20 @@
 
 {% block full_content %}
 
-  {{ block_show('jianmo:home_top_banner') }}
+  	{{ block_show('jianmo:home_top_banner') }}
 
-    {% for pendant in themeConfig.blocks.left|default([]) %}
+  	{% set themeConfig = current_theme() %}
 
-      {{ render(controller('TopxiaWebBundle:Theme:pendant', {config:pendant})) }}
+    {% for config in themeConfig.blocks.left|default([]) %}
+
+    	{% set code = config.code %}
+    	{% if config.sortName|default('') == 'recommended' and code == 'category-course' %}
+            {% set code = 'recommend-course' %}
+        {% endif %}
+
+
+    	{% set category = config.categoryId|default(0) ? data('category', {categoryId: config.categoryId})  : null %}
+		{% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
 
     {% endfor %}
 
