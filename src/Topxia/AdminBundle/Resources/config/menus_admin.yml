@@ -433,7 +433,7 @@ admin_role_namage:
     router_name: admin_roles
 admin_role_create:
     name: 新增权限
-    parent: admin_roles
+    parent: admin_role_namage
     mode: modal
     group: 2
 admin_logs_query:
