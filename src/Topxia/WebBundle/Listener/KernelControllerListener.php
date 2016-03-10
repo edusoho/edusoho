@@ -27,7 +27,7 @@ class KernelControllerListener
 
         if (preg_match('/admin/s', $route) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
             foreach ($permissions as $permission) {
-                if (isset($currentUser['roles'], $permission)) {
+                if (isset($currentUser['menus'][$permission])) {
                     return;
                 }
             }
