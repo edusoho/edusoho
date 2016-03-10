@@ -9,7 +9,7 @@
         {% if overview.account.cash|default('0') > 0 %}
           <span class="balance">{{ overview.account.cash|default(0) }}</span>元
         {% else %}
-          <span class="balance">{{ cashinfo.cash|default(0) }}</span>元
+          <span class="balance">{{ overview.account.cash|default(0) }}</span>元
         {% endif %}
         <a href="{{path('admin_cloud_recharge')}}" class="btn btn-primary" target="_blank" style="margin-left:20px;">充值</a>
       </p> 

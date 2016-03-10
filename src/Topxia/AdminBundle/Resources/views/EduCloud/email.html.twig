@@ -9,11 +9,11 @@
   {% if locked|default(0) == 1 %}
     <div class="alert alert-warning" role="alert">您的云邮件已被锁定，请联系客服人员：0571-86819929。</div>
   {% endif %}
-  {% if enabled|default(1) == 0 or email_enable == 'disable' %}
+  {% if enabled|default(1) == 0 or email_enable == 'stoped' %}
     <div class="alert alert-danger" role="alert">您的云邮件已被禁用，请联系客服人员：0571-86819929。</div>
   {% endif %}
   <div class="eduyun-main">
-  {% if enabled|default(1) == 0 or email_enable == 'disable' %}
+  {% if enabled|default(1) == 0 or email_enable == 'stoped' %}
     <div class="mask"></div>
   {% endif %}
   	<div class="page-header clearfix">
@@ -21,7 +21,7 @@
   	</div>
   	<div class="edu-service ">
   	  <div class="edu-balance">
-        {% if emailInfo.isTest|default(0) %}
+        {% if emailInfo.isTest|default(0) or email_enable == 'stoped' %}
   			<div class="alert alert-warning" role="alert">
           {{ emailInfo.message }}   
         </div>
@@ -30,14 +30,14 @@
           <form class="form-horizontal" method="post" id="email-form" novalidate="">
           {% if emailStatus.status|default('disable') in  ['disable'] and accessCloud|default(0) != 0 %}
     				<button name="email-open" class="btn btn-primary" >启用云邮件</button>
-          {% elseif emailStatus.status == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
+          {% elseif emailStatus.status|default('disable') == 'enable' and emailStatus.sign|default(null) != "" and accessCloud|default(0) != 0 %}
             <div name="status">
               <span class="text-success">已启用</span>
               <button  class="btn btn-default btn-sm mlm" name="email-close"><span class="text-muted">关闭</span></button>
               <p><span>发件人名称：{{ emailStatus.sign }}</span> <a href="#" name="sign-update">修改</a></p>
             </div>
             <div name="submit-sign" hidden="hidden">
-              <span>发件人名称：<input type="text" name="sign"></span><button class="btn btn-primary mlm mrm" >提交</button><a href="">取消</a>
+              <span>发件人名称：<input type="text" name="sign" placeholder="签名3-8字，建议使用汉字" style="width:250px" ></span><button class="btn btn-primary mlm mrm" >提交</button><a href="">取消</a>
             </div>
           {% elseif emailStatus.status|default(null) == 'error' or accessCloud|default(0) == 0 %}
             <div class="row">
@@ -52,14 +52,16 @@
           {% endif %}
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           </form>
+          {% if emailStatus.status|default('disable') == 'disable' %}
   				<div class="help-block">提供优质的邮件发送通道，保证邮件发送的稳定可靠；无复杂配置；无每日发送数量限制。</div>
+          {% endif %}
   			</div>
 
   		</div>
   	</div>
     {% if emailStatus.status|default(0) != 'error' and accessCloud|default(0) != 0 and enabled|default(1) != 0  %}
   	<div class="page-header clearfix">
-  	  <h1 class="pull-left">邮件使用场景</h1>
+  	  <h1 class="pull-left">邮件应用场景</h1>
   	</div>
 
   	<table class="table table-bordered">
@@ -78,25 +80,9 @@
         <tr>
           <td>1</td>
           <td>
-            用户注册
-            <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips1" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-            <div id="article-property-tips1-html" style="display:none;">
-              <div style="width:250px;font-size:14px;">
-                <span style="color:blue;"> 用户注册:</span><br>
-                这里是用户注册的引导说明
-                <br>
-              </div>
-            </div>
+            邮箱验证
           </td>
           <td>自动单发
-          <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips2" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
-          <div id="article-property-tips2-html" style="display:none;">
-              <div style="width:250px;font-size:14px;">
-                <span style="color:blue;"> 自助单发:</span><br>
-                这里是自助单发的引导说明
-                <br>
-              </div>
-            </div>
           </td>
           <td class="radios" >
             <label>
@@ -108,24 +94,8 @@
           <td>2</td>
           <td>
             重置密码
-            <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips3" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span> 
-            <div id="article-property-tips3-html" style="display:none;">
-              <div style="width:250px;font-size:14px;">
-                <span style="color:blue;"> 重置密码:</span><br>
-                这里是重置密码的引导说明
-                <br>
-              </div>
-            </div>
           </td>
           <td>自动单发
-          <span class="glyphicon glyphicon-question-sign text-muted pull-right" id="article-property-tips4" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
-          <div id="article-property-tips4-html" style="display:none;">
-              <div style="width:250px;font-size:14px;">
-                <span style="color:blue;"> 自助单发:</span><br>
-                这里是自助单发的引导说明
-                <br>
-              </div>
-            </div>
           </td>
           <td class="radios" >
             <label>

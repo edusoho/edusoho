@@ -59,7 +59,7 @@
           <div class="panel-body clearfix">
             {% set featuredArticles = data('LatestArticles',{'type':'featured','count':2}) %}
             {% if featuredArticles %}
-            <ul class="index-recommend-aricle">
+            <ul class="index-recommend-aricle clearfix">
               {% for article in featuredArticles %}
                 <li class="{% if loop.index == 2 %}last{% endif %}">
                   <a href="{{ path('article_detail', {id:article.id}) }}">

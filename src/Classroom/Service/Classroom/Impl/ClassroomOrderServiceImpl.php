@@ -114,6 +114,9 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
             'remark'  => empty($order['data']['note']) ? '' : $order['data']['note']
         );
 
+        $classroomSetting         = $this->getSettingService()->get('classroom');
+        $classroomSetting['name'] = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
+
         if (!$this->getClassroomService()->isClassroomStudent($order['targetId'], $order['userId'])) {
             $this->getClassroomService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
@@ -150,6 +153,9 @@ class ClassroomOrderServiceImpl extends BaseService implements ClassroomOrderSer
                 $message = StringToolkit::template($message, $variables);
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
+
+            $classroomSetting         = $this->getSettingService()->get('classroom');
+            $classroomSetting['name'] = empty($classroomSetting['name']) ? '班级' : $classroomSetting['name'];
 
             $adminmessage = '用户'."{$user['nickname']}".'申请退款'."<a href='{$classroomUrl}'>{$classroom['title']}</a>"."{$classroomSetting['name']}，请审核。";
             $adminCount   = $this->getUserService()->searchUserCount(array('roles' => 'ADMIN'));

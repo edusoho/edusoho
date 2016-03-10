@@ -19,6 +19,11 @@
     @media (min-width: @screen-md-min) {
       .es-transup;
     }
+    @media (max-width: @screen-xs-max) {
+      margin-bottom: 20px;
+      margin-left: -5px;
+      margin-right: -5px;
+    }
     // 用于近期直播
     &.course-default {
       background-color: @gray-lighter;
@@ -86,26 +91,39 @@
       margin-top: 10px;
       padding: 0 10px;
       .text-overflow;
+      @media (max-width: @screen-xs-max) {
+        margin-top: 5px;
+        padding: 0 5px;
+      }
     }
     .metas {
+      position: relative;
       padding: 10px;
       // border-top: 1px solid #f1f1f1;
       color: @gray-medium;
       // a { color: @gray-medium; }
-      .num {
-        margin-right: 10px;
+      @media (max-width: @screen-xs-max) {
+        padding: 5px;
       }
       i {
         margin-right: 5px;
       }
-      .price {
+      .course-price-widget {
         float: right;
+      }
+      .price {
         color: @brand-danger;
         font-size: 14px;
         margin-right: 0;
       }
       .free {
         color: #238312;
+      }
+      .comment {
+        margin-left: 10px;
+        @media (max-width: @screen-xs-max) {
+          display: none;
+        }
       }
     }
   }

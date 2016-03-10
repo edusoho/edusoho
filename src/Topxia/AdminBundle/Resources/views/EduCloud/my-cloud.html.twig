@@ -15,7 +15,7 @@
       {% endif %}
 
       {% if enabled|default(1) == 0 %}
-        <div class="alert alert-warning" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
+        <div class="alert alert-danger" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
       {% endif %}
 
       {% if is_trial() %}
@@ -123,7 +123,7 @@
             {% include 'TopxiaAdminBundle:EduCloud:cloud-sms-chart.html.twig'  %}
 
             <!-- 云邮件使用情况（最近七天） -->
-            {% include 'TopxiaAdminBundle:EduCloud:cloud-email-chart.html.twig'  %}
+            {#{% include 'TopxiaAdminBundle:EduCloud:cloud-email-chart.html.twig'  %}#}
           </div>
           
         </div>
