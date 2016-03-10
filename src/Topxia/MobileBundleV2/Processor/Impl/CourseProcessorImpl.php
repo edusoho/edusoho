@@ -784,8 +784,8 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         return array(
             "info"     => array(
-                "ratingNum" => $course["ratingNum"],
-                "rating"    => $course["rating"]
+                "ratingNum" => empty($course["ratingNum"]) ? 0 : $course["ratingNum"],
+                "rating"    => empty($course["rating"]) ? 0 : $course["rating"]
             ),
             "progress" => $progress
         );
