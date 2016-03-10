@@ -77,7 +77,7 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function showMyMaterialLibFormAction(Request $request, $viewMode = "thumb", $source = "upload")
+    public function showMyMaterialLibFormAction(Request $request, $viewMode = "thumb")
     {
         $currentUser = $this->getCurrentUser();
 
@@ -86,6 +86,7 @@ class MaterialLibController extends BaseController
         }
         $currentUserId = $currentUser['id'];
         $data          = $request->query->all();
+        $source        = $data['source'];
         $type          = $data['type'];
         $keyWord       = $request->query->get('keyword') ?: "";
 
