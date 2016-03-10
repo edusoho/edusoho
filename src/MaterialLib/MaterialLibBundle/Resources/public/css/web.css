@@ -36,6 +36,7 @@
 }
 
 .materials-ul li.img-li {
+  overflow: hidden;
   height: 103px;
 }
 
