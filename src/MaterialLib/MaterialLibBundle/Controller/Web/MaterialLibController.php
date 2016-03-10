@@ -14,6 +14,16 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function detailAction($globalId)
+    {
+        $material   = $this->getMaterialLibService()->get($globalId);
+        $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
+            'material'   => $material,
+            'thumbnails' => $thumbnails
+        ));
+    }
+
     public function generateThumbnailAction(Request $reqeust, $globalId)
     {
         $second = $reqeust->query->get('second');
