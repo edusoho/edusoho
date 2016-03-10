@@ -2,8 +2,6 @@
 namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Common\MenuBuilder;
-use Topxia\Common\ArrayToolkit;
-use Symfony\Component\Yaml\Yaml;
 
 class MenuExtension extends \Twig_Extension
 {
@@ -25,78 +23,41 @@ class MenuExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
+            new \Twig_SimpleFilter('menu_parent', array($this, 'getMenuParent'))
         );
     }
 
     public function getFunctions()
     {
         return array(
+            new \Twig_SimpleFunction('get_menu_by_code', array($this, 'getMenuByCode')),
             new \Twig_SimpleFunction('menu_children', array($this, 'getMenuChildren')),
-            new \Twig_SimpleFunction('menu_breadcrumb', array($this, 'getMenuBreadcrumb')),
             new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true))
         );
     }
 
     public function getMenuPath($env, $context, $menu)
     {
-        if (empty($this->levelOneMenus)) {
-            $this->levelOneMenus = $this->getMenuChildren('admin', 'admin', '1');
+        $menus = $this->getMenuChildren('admin', $menu['code'], '1');
 
-            foreach ($this->levelOneMenus as $levelOneMenu) {
-                $this->levelTwoMenus = array_merge($this->levelTwoMenus, $this->getMenuChildren('admin', $levelOneMenu['code'], '1'));
-                $this->levelTwoMenus = array_merge($this->levelTwoMenus, $this->getMenuChildren('admin', $levelOneMenu['code'], '2'));
-            }
-        }
+        if ($menus) {
+            $menu  = current($menus);
+            $menus = $this->getMenuChildren('admin', $menu['code'], '1');
 
-        if (in_array($menu['code'], ArrayToolkit::column($this->levelOneMenus, 'code'))) {
-            $thisTwoMenu = $this->getMenuChildren('admin', $menu['code'], '1');
-
-            if ($thisTwoMenu) {
-                $menu = $thisTwoMenu[0];
-            }
-        }
-
-        if (in_array($menu['code'], ArrayToolkit::column($this->levelTwoMenus, 'code'))) {
-            $thisThreeMenu = $this->getMenuChildren('admin', $menu['code'], '1');
-
-            if ($thisThreeMenu) {
-                $menu = $thisThreeMenu[0];
+            if ($menus) {
+                $menu = current($menus);
             }
         }
 
         $route  = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
-        if (!empty($menu['router_params_context'])) {
-            foreach ($params as $key => $value) {
-                $value        = explode('.', $value, 2);
-                $params[$key] = $context['_context'][$value[0]][$value[1]];
-            }
-        }
-
         return $this->container->get('router')->generate($route, $params);
     }
 
-    public function inMenuBlacklist($code = '')
+    public function getMenuByCode($position, $code)
     {
-        if (empty($code)) {
-            return false;
-        }
-
-        $filename = $this->container->getParameter('kernel.root_dir').'/../app/config/menu_blacklist.yml';
-
-        if (!file_exists($filename)) {
-            return false;
-        }
-
-        $yaml      = new Yaml();
-        $blackList = $yaml->parse(file_get_contents($filename));
-
-        if (empty($blackList)) {
-            $blackList = array();
-        }
-
-        return in_array($code, $blackList);
+        return $this->createMenuBuilder($position)->getMenuByCode($code);
     }
 
     public function getMenuChildren($position, $code, $group = null)
@@ -104,9 +65,9 @@ class MenuExtension extends \Twig_Extension
         return $this->createMenuBuilder($position)->getMenuChildren($code, $group);
     }
 
-    public function getMenuBreadcrumb($position, $code)
+    public function getMenuParent($code, $position = 'admin')
     {
-        return $this->createMenuBuilder($position)->getMenuBreadcrumb($code);
+        return $this->createMenuBuilder($position)->getMenuParent($code);
     }
 
     private function createMenuBuilder($position)

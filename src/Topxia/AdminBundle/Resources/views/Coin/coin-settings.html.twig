@@ -4,7 +4,14 @@
 {% set script_controller = "coin/range" %}
 
 {% block main %}
-
+ <ul class="nav nav-pills mbl small">
+    <li class="active">
+      <a href="{{path('admin_coin_model')}}">虚拟币设置</a>
+    </li>
+    <li>
+      <a href="{{path('admin_coin_model')}}">使用方式</a>
+    </li>
+  </ul>
   {{ web_macro.flash_messages() }}
   <form class="form-horizontal" method="post" id="coin-settings-form">
   

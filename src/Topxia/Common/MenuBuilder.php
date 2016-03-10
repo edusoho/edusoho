@@ -14,36 +14,6 @@ class MenuBuilder
         $this->position = $position;
     }
 
-    public function getMenuBreadcrumb($code)
-    {
-        $menus = $this->buildMenus();
-
-        if (empty($menus[$code]) || empty($menus[$code]['parent'])) {
-            return array();
-        }
-
-        $menu  = $menus[$code];
-        $paths = array($menus[$code]);
-
-        while (true) {
-            $menu = $menus[$menu['parent']];
-
-            if (empty($menu)) {
-                break;
-            }
-
-            $paths[] = $menu;
-
-            if (empty($menu['parent'])) {
-                break;
-            }
-        }
-
-        array_pop($paths);
-        $paths = array_reverse($paths);
-        return $paths;
-    }
-
     public function getMenuChildren($code, $group = null)
     {
         $menus = $this->buildMenus();
@@ -207,6 +177,28 @@ class MenuBuilder
         }*/
         $user = $this->getServiceKernel()->getCurrentUser();
         return $user['menus'];
+    }
+
+    public function getMenuByCode($code)
+    {
+        $menus = $this->buildMenus();
+
+        if (!isset($menus[$code])) {
+            return array();
+        }
+
+        return $menus[$code];
+    }
+
+    public function getMenuParent($code)
+    {
+        $menus = $this->buildMenus();
+
+        if (!isset($menus[$code]) || empty($menus[$code]['parent'])) {
+            return array();
+        }
+
+        return $menus[$menus[$code]['parent']];
     }
 
     protected function getAppService()

@@ -52,16 +52,6 @@ admin_block_manage:
     parent: admin_operation_block
     router_name: admin_block
     router_params: { 'category': 'all'}
-admin_block_visual_edit:
-    name: 编辑
-    parent: admin_block_manage
-    router_params: {'blockId': 'block.id'}
-    router_params_context: 1
-admin_block_visual_edit_history:
-    name: 历史记录
-    parent: admin_block_manage
-    router_params: {'blockId': 'block.id'}
-    router_params_context: 1
 admin_operation_content:
     name: 自定义页面管理
     parent: admin_operation
@@ -73,9 +63,13 @@ admin_content_manage:
 admin_operation_analysis_register:
     name: 数据统计
     parent: admin_operation
-    router_params: { tab: trend , analysisDateType:register }
     after: admin_operation_content
     group: 3
+admin_operation_analysis:
+    name: 数据统计
+    parent: admin_operation_analysis_register
+    router_params: { tab: trend , analysisDateType:register }
+    router_name: admin_operation_analysis_register
 admin_operation_article_manage:
     name: 资讯管理
     parent: admin_operation_article
@@ -136,7 +130,11 @@ admin_live_course_add:
 admin_live_course:
     name: 直播管理
     parent: admin_course
+admin_live_course_manage:
+    name: 直播管理
+    parent: admin_live_course
     router_params: {'status': 'coming'}
+    router_name: admin_live_course
 admin_course_thread:
     name: 话题管理
     parent: admin_course
@@ -155,17 +153,24 @@ admin_course_question_manage:
 admin_course_note:
     name: 笔记管理
     parent: admin_course
+admin_course_note_manage:
+    name: 笔记管理
+    parent: admin_course_note
+    router_name: admin_course_note
 admin_course_review:
     name: 评价管理
     parent: admin_course
 admin_course_category:
     name: 分类管理
     parent: admin_course
+admin_course_category_manage:
+    name: 分类管理
+    parent: admin_course_category
+    router_name: admin_course_category
 admin_category_create:
     name: 添加分类
-    parent: admin_course_category
+    parent: admin_course_category_manage
     router_params: {'groupId': 'group.id'}
-    router_params_context: 1
     group: 2
     mode: modal
 admin_course_tag:
@@ -210,6 +215,10 @@ admin_teacher_promote:
 admin_approval_approvals:
     name: 实名认证管理
     parent: admin_user
+admin_approval_approvals_manage:
+    name: 实名认证管理
+    parent: admin_approval_approvals
+    router_name: admin_approval_approvals
     router_params: { approvalStatus: approving}
 admin_message:
     name: 私信管理
@@ -356,39 +365,60 @@ admin_coin_settings:
     name: 虚拟币
     parent: admin_setting_finance
     router_name: admin_coin_settings
-admin_coin_settings:
-    name: 虚拟币设置
-    parent: _admin_coin_settings
-admin_coin_model:
-    name: 使用方式
-    fullname: 虚拟币使用方式设置
-    parent: _admin_coin_settings
 admin_setting_refund:
     name: 退款
     parent: admin_setting_finance
 admin_setting_mobile:
     name: 移动端设置
     parent: admin_system
+admin_setting_mobile_settings:
+    name: 移动端设置
+    parent: admin_setting_mobile
+    router_name: admin_setting_mobile
 admin_optimize:
     name: 优化和备份
     parent: admin_system
     group: 2
+admin_optimize_settings:
+    name: 优化和备份
+    parent: admin_optimize
+    router_name: admin_optimize
 admin_jobs:
     name: 定时任务
     parent: admin_system
     group: 2
+admin_jobs_manage:
+    name: 定时任务
+    parent: admin_jobs
+    router_name: admin_jobs
 admin_setting_ip_blacklist:
     name: IP黑名单
     parent: admin_system
     group: 2
+admin_setting_ip_blacklist_manage:
+    name: IP黑名单
+    parent: admin_setting_ip_blacklist
+    router_name: admin_setting_ip_blacklist
 admin_setting_post_num_rules:
     name: 发帖限制设置
+    parent: admin_system
+    group: 2
+admin_setting_post_num_rules_settings:
+    name: 发帖限制设置
+    parent: admin_setting_post_num_rules
+    router_name: admin_setting_post_num_rules
+admin_report_status:
+    name: 系统自检
     parent: admin_system
     group: 2
 admin_report_status:
     name: 系统自检
     parent: admin_system
     group: 2
+admin_report_status_list:
+    name: 系统自检
+    parent: admin_report_status
+    router_name: admin_report_status
 admin_logs:
     name: 系统日志
     parent: admin_system
@@ -397,6 +427,10 @@ admin_roles:
     name: 权限设置
     parent: admin_system
     group: 2
+admin_role_namage:
+    name: 权限管理
+    parent: admin_roles
+    router_name: admin_roles
 admin_role_create:
     name: 新增权限
     parent: admin_roles

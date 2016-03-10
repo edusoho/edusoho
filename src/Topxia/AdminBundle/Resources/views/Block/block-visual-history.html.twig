@@ -1,10 +1,18 @@
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
-{% set menu = 'admin_block_visual_edit_history' %}
+{% set menu = 'admin_block_manage' %}
 {% block page_title %} 编辑内容 {% endblock %}
 
 {% block main %}
+  <ul class="nav nav-pills mbl small">
+    <li>
+      <a href="{{ path('admin_block_visual_edit',{blockId:block.id}) }}">编辑</a>
 
+    </li>
+    <li class="active">
+      <a href="{{ path('admin_block_visual_edit_history',{blockId:block.id}) }}">历史记录</a>
+    </li>
+  </ul>
   {{ web_macro.flash_messages() }}
   <table id="block-history-table" class="visual-block-history-table table table-striped table-condensed">
     <thead>
@@ -17,7 +25,7 @@
         <tr id="{{ blockHistory.id }}">
           <td>{{ blockHistory.createdTime |date('Y-n-d H:i:s') }}</td>
           <td>{{ historyUsers[blockHistory.userId].nickname|default('用户已删除') }}</td>
-          <td>
+          <td>s
             <a class="btn btn-xs btn-default edit-btn" 
             href="{{ path('admin_blockhistory_preview', {id:blockHistory.id}) }}" target="_blank"> 预览 </a>
             

@@ -4,12 +4,7 @@
 
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
-{% set menu_breadcrumb = menu_breadcrumb('admin', menu) %}
-{% set menu_current = menu_breadcrumb|last %}
-{% set menu_nav = menu_breadcrumb[0]|default(null) %}
-{% set menu_sidebar = menu_breadcrumb[1]|default(null) %}
-{% set menu_main = menu_breadcrumb[2]|default(null) %}
-{% set menu_hiddens = setting('menu_hiddens', []) %}
+{% set menu_current = get_menu_by_code('admin', menu) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -22,13 +17,7 @@
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
     {% block title %}
-      {% for m in menu_breadcrumb|reverse %}
-        {% if loop.index == menu_breadcrumb|length %}
-          {{ m.name }}
-        {% else %}
-          {{ m.name }} -
-        {% endif %}
-      {% endfor %}
+      {{ menu_current.name }} - {{ menu|menu_parent.name }} - {{ menu|menu_parent.code|menu_parent.name  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -67,7 +56,7 @@
         <ul class="nav navbar-nav">
            {% for m in menu_children('admin', 'admin', 1) %}  
               {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
-                <li {% if m.code == menu_nav.code|default(null)  %}class="active"{% endif %}>
+                <li {% if menu and  m.code == menu|menu_parent.code|menu_parent.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
               {% endif %}
@@ -98,17 +87,14 @@
   <div class="container">
     <div class="row">
       {% block content %}
-
         <div class="col-md-2">
           {% block sidebar %}
-            {% for groupedMenus in menu_children('admin', menu_nav.code|default(null)) %}
+            {% for groupedMenus in menu_children('admin', menu|menu_parent.code|menu_parent.code|default(null)) %}
 
               <div class="list-group">
                 {% for m in groupedMenus %}
-                  {% if not menu_hiddens[m.code]|default(false)  %}
-                    {% set menuClass = m.code == menu_sidebar.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                    {% set menuClass = m.code == menu|menu_parent.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
                     {{ self_macro.menu_link_html(_context, m, menuClass) }}
-                  {% endif %}
                 {% endfor %}
               </div>
             {% endfor %}
@@ -116,54 +102,28 @@
         </div>
 
         <div class="col-md-10">
-        {% if menu_nav.code != 'admin_app' %}
           <div class="page-header clearfix">
             <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
             <div class="pull-right">
 
               {% block page_buttons %}
                 {% for m in menu_children('admin', menu_current.code, 2) %}
-                  {% if not menu_hiddens[m.code]|default(false) %}
                     {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
-                  {% endif %}
                 {% endfor %}
               {% endblock %}
 
             </div>
           </div>
-          {% endif %}
 
-          {% set menu_breadcrumb_length = menu_breadcrumb|length %}
-
-          {% if menu_breadcrumb_length >= 3 %}
-            {% set tabMenus = menu_children('admin', menu_breadcrumb[1].code|default(null), 1) %}
-          {% endif %}
-
-          {% if menu_breadcrumb_length >= 4 %}
-            {% set subTabMenus = menu_children('admin', menu_breadcrumb[2].code|default(null), 1) %}
-          {% endif %}
+          {% set tabMenus = menu_children('admin', menu|menu_parent.code|default(null), 1) %}
 
           {% block content_header %}{% endblock %}
           
-          {% if tabMenus|default(null) and menu_current.group == 1 %}
+          {% if tabMenus|default(null) and menu_current.group == 1 and tabMenus|length > 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
-                <li {% if m.code == menu_main.code|default(null) %}class="active"{% endif %}>
-                  {% if not menu_hiddens[m.code]|default(false) %}
+                <li {% if m.code == menu|default(null) %}class="active"{% endif %}>
                     {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
-                  {% endif %}
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-
-          {% if subTabMenus|default(null) and menu_current.group == 1 %}
-            <ul class="nav nav-pills mbl small">
-              {% for m in subTabMenus %}
-                <li {% if m.code == menu_breadcrumb[3].code|default(null) %}class="active"{% endif %}>
-                  {% if not menu_hiddens[m.code]|default(false) %}
-                    {{ self_macro.menu_link_html(_context, m) }}
-                  {% endif %}
                 </li>
               {% endfor %}
             </ul>
