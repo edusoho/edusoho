@@ -20,6 +20,7 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 
 	this.loadClassRoomTeachers = function() {
 		ClassRoomService.getTeachers({
+			limit : 10000,
 			classRoomId : $stateParams.targetId
 		}, function(data) {
 			$scope.users = data;
@@ -28,6 +29,7 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 
 	this.loadCourseTeachers = function() {
 		UserService.getCourseTeachers({
+			limit : 10000,
 			courseId : $stateParams.targetId
 		}, function(data) {
 			$scope.users = data;
@@ -78,12 +80,14 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 
 	function getClassRoomStudents(targetId, callback) {
 		ClassRoomService.getStudents({
+			limit : 10000,
 			classRoomId : $stateParams.targetId
 		}, callback);
 	}
 
 	function getCourseStudents(targetId, callback) {
 		CourseService.getStudents({
+			limit : 10000,
 			courseId : $stateParams.targetId,
 		}, callback);
 	}
