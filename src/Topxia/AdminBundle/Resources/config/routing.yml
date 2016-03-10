@@ -35,6 +35,27 @@ admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
 
+admin_dictionary:
+    pattern:  /dictionary
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:index }
+
+admin_dictionary_create:
+    pattern: /dictionary/create
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:create }
+
+admin_dictionary_delete:
+    pattern:  /Dictionary/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:delete }
+    methods: [POST]
+
+admin_dictionary_edit:
+    pattern:  /dictionary/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:edit }
+
+admin_dictionary_name_check:
+    pattern:  /dictionary/{id}/name_check
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:checkName }
+
 admin_content_create:
     pattern:  /content/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Content:create }
