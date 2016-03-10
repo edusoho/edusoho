@@ -275,6 +275,27 @@ a:focus {
 .vip-item a {
   overflow: hidden;
 }
+@media (max-width: 767px) {
+  .vip-item h3 {
+    padding: 0 10px;
+  }
+}
+.vip-item p {
+  margin: 0;
+}
+@media (max-width: 767px) {
+  .vip-item p {
+    height: 60px;
+    overflow: hidden;
+    padding: 0 10px;
+  }
+}
+@media (max-width: 767px) {
+  .vip-item .row {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+}
 .vip-price {
   margin-top: 20px;
 }
@@ -431,6 +452,14 @@ a:focus {
   border-radius: 5px;
   background-color: #fff;
 }
+@media (max-width: 767px) {
+  .home-class-list .class-item {
+    width: 46%;
+    float: left;
+    padding: 10px;
+    margin: 6px;
+  }
+}
 .home-class-list .class-item:hover {
   background: #f9f9f9;
 }
@@ -451,6 +480,16 @@ a:focus {
 .home-class-list .class-picture-link > img {
   width: 213px;
 }
+@media (max-width: 1199px) {
+  .home-class-list .class-picture-link > img {
+    width: 162px;
+  }
+}
+@media (max-width: 991px) {
+  .home-class-list .class-picture-link > img {
+    width: 213px;
+  }
+}
 @media (max-width: 767px) {
   .home-class-list .class-picture-link > img {
     width: 100%;
@@ -466,6 +505,16 @@ a:focus {
   color: #222;
   overflow: hidden;
 }
+@media (max-width: 767px) {
+  .home-class-list .class-title {
+    margin-bottom: 5px;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
+}
 .home-class-list .class-title a {
   font-weight: bold;
   color: #555;
@@ -474,9 +523,19 @@ a:focus {
   margin-bottom: 20px;
   color: #999;
 }
+@media (max-width: 767px) {
+  .home-class-list .class-metas {
+    margin-bottom: 10px;
+  }
+}
 .home-class-list .class-metas .fa {
   margin-right: 5px;
   font-size: 18px;
+}
+@media (max-width: 479px) {
+  .home-class-list .class-metas .fa {
+    font-size: 14px;
+  }
 }
 .home-class-list .class-metas a {
   color: #555;
@@ -498,8 +557,29 @@ a:focus {
   float: right;
   font-size: 18px;
 }
+@media (max-width: 767px) {
+  .home-class-list .class-price {
+    font-size: 14px;
+  }
+}
 @media (min-width: 1200px) {
   .home-class-list .class-price {
     margin-right: 50px;
   }
+}
+@media (max-width: 767px) {
+  .course-grid {
+    width: 46%;
+    float: left;
+    margin: 6px;
+  }
+  .course-grid .grid-body {
+    width: 100%;
+  }
+}
+.course-grid .title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }

@@ -160,7 +160,26 @@
 .vip-item a {
   overflow: hidden;
 }
+.vip-item h3{
+  @media (max-width: 767px) {
+    padding: 0 10px;
+  }
+}
+.vip-item p{
+  margin: 0;
+  @media (max-width: 767px) {
+    height: 60px;
+    overflow: hidden;
+    padding: 0 10px;
+  }
+}
+.vip-item .row{
+  @media (max-width: 767px) {
+    margin-left: -10px;
+    margin-right: -10px;
 
+  } 
+}
 .vip-price {
   margin-top: 20px;
 }
@@ -344,6 +363,12 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #fff;
+  @media (max-width: 767px) {
+    width: 46%;
+    float: left;
+    padding: 10px;
+    margin:6px;
+  }
 }
 .home-class-list .class-item:hover {
   background: #f9f9f9;
@@ -365,6 +390,16 @@
 .home-class-list .class-picture-link > img {
   width: 213px;
 }
+@media (max-width: 1199px) {
+  .home-class-list .class-picture-link > img{
+    width: 162px;
+  }
+}
+@media (max-width: 991px) {
+  .home-class-list .class-picture-link > img{
+    width: 213px;
+  }
+}
 @media (max-width: 767px) {
   .home-class-list .class-picture-link > img {
     width: 100%;
@@ -379,6 +414,14 @@
   line-height: 24px;
   color: #222;
   overflow: hidden;
+  @media (max-width: 767px) {
+    margin-bottom: 5px;
+    height: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+  }
 }
 .home-class-list .class-title a {
   font-weight: bold;
@@ -387,10 +430,16 @@
 .home-class-list .class-metas {
   margin-bottom: 20px;
   color: #999;
+  @media (max-width: 767px) {
+    margin-bottom: 10px;
+  }
 }
 .home-class-list .class-metas .fa {
   margin-right: 5px;
   font-size: 18px;
+   @media (max-width: 479px) {
+    font-size: 14px;
+   }
 }
 .home-class-list .class-metas a {
   color: #555;
@@ -411,9 +460,29 @@
 .home-class-list .class-price {
   float: right;
   font-size: 18px;
+  @media (max-width: 767px) {
+    font-size: 14px;
+  }
 }
 @media (min-width: 1200px) {
   .home-class-list .class-price {
     margin-right: 50px;
   }
+}
+@media (max-width: 767px) {
+.course-grid{
+    width: 46%;
+    float: left;
+    margin: 6px;
+    .grid-body{
+      width: 100%;
+    }
+  }
+}
+
+.course-grid .title{
+     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
 }
