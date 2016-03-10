@@ -1,0 +1,239 @@
+.materiallib-stats .stats-summary {
+    padding: 15px;
+}
+
+.stats-summary .piece {
+    cursor: pointer;
+    padding: 0;
+    height: 100px;
+    border: solid 2px #eee;
+}
+
+.stats-summary .piece.border-sm-left {
+    border-left-width: 1px;
+}
+
+.stats-summary .piece.border-sm-top {
+    border-top-width: 1px;
+}
+
+.stats-summary .piece.border-sm-right {
+    border-right-width: 1px;
+}
+
+.stats-summary .piece.border-sm-bottom {
+    border-bottom-width: 1px;
+}
+
+.stats-summary .piece:hover {
+    border: solid 2px #499AE6;
+}
+
+.stats-summary .piece.active {
+    border: solid 2px #499AE6;
+}
+
+.stats-summary .piece .quantum {
+    padding: 20px;
+}
+
+.stats-summary .piece .quantum .p-text {
+    font-size: 16px;
+}
+
+.stats-summary .piece .quantum .number {
+    color: #499AE6;
+    font-weight: 500;
+}
+
+.materiallib-stats .pie-container {
+    padding: 15px;
+}
+
+.pie-container .left {
+    padding-left: 0; 
+    padding-right: 5px;
+}
+
+.pie-container .right {
+    padding-left: 5px; 
+    padding-right: 0;
+}
+
+.pie-container .pie {
+    padding: 0;
+    height: 460px;
+    border: solid 4px #eee;
+}
+
+.materiallib-stats .line-container {
+    padding: 15px;
+}
+
+.line-container .container {
+    padding: 0;
+}
+
+.line-container .line {
+    border: solid 4px #eee;
+    height: 300px;
+}
+
+.materiallib-stats .chart {
+    display: none;
+}
+
+.materiallib-stats .chart.active {
+    display: block;
+}
+
+.material-detail-widget .header {
+  padding-bottom: 12px;
+  margin: 0 0 20px 0;
+  padding: 0;
+  border-bottom-width: 2px;
+  border-bottom: 1px solid #eee;
+}
+
+.material-detail-widget .header h1 {
+  display: inline;
+  font-size: 18px;
+  line-height: 32px;
+  margin: 0 0;
+}
+.material-detail-widget .content .tab-panne {
+  display: none;
+}
+
+.material-detail-widget .content .tab-panne.active {
+  display: block;
+}
+
+.material-detail-widget .content .nav {
+  margin-bottom: 20px;
+}
+
+.material-detail-widget .content #cover-tab img {
+  width: 100%;
+}
+
+.material-detail-widget .content #cover-tab .links {
+  padding-left: 15px;
+}
+
+.material-detail-widget .content #cover-tab .thumbnail-pane {
+  display: none;
+}
+
+.material-detail-widget .content #cover-tab .thumbnail-pane.active {
+  display: block;
+}
+
+.material-detail-widget .content #cover-tab .links a.disabled {
+  color: #777;
+}
+
+.material-detail-widget .content #cover-tab .links a.disabled:hover,
+.material-detail-widget .content #cover-tab .links a.disabled:focus {
+  color: #777;
+  text-decoration: none;
+  cursor: not-allowed;
+  background-color: transparent;
+}
+
+.materials-ul {
+  border: solid 1px #eee;
+  padding-left: 0;
+}
+.materials-ul li {
+  list-style-type: none;
+}
+
+.materials-ul li img {
+  width:100%;
+}
+
+.materials-ul li .op-btn {
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  padding:0;
+  cursor: pointer;
+  border-top: solid 1px #eee;
+}
+
+.materials-ul li .op-btn:hover {
+  background: #eee;
+}
+
+.materials-ul li.op-li {
+  margin:0;
+}
+
+.materials-ul li.img-li {
+  position: relative;
+}
+
+.materials-ul li .border-left {
+  border-left: solid 1px #eee;
+}
+
+.materials-ul li.img-li {
+  overflow: hidden;
+  height: 103px;
+}
+
+.materials-ul li.img-li img {
+  cursor: pointer;
+}
+
+.materials-ul li.img-li:hover .mask {
+  display: block;
+}
+
+.materials-ul li.img-li .mask {
+    display: none;
+    cursor: pointer; 
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 30px;
+    line-height: 30px;
+    background-color: #B6B6B6;
+    filter:alpha(opacity=60);  /*支持 IE 浏览器*/
+    -moz-opacity:0.60; /*支持 FireFox 浏览器*/
+    opacity:0.60;  /*支持 Chrome, Opera, Safari 等浏览器*/
+    z-index: 100;
+}
+
+.materials-ul li.img-li .status {
+  display: inline-block;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.materials-ul li.img-li .mask i {
+  padding-left: 5px;
+}
+
+.materials-ul li.img-li .mask span {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.materials-ul li.img-li .reconvert-btn {
+  position: absolute;
+  left: 35%;
+  top: 40%;
+}
+
+.materials-ul li.caption p {
+  margin: 0;
+  padding: 0 10px 0 10px;
+}
+
+.materials-ul li.caption p.tags, .materials-ul li.caption p.date{
+  font-size: 10px;
+}

@@ -123,13 +123,13 @@ define(function(require, exports, module) {
             },
             _loading: function()
             {
-                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</td></tr>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
             _loaded_error: function()
             {
-                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</td></tr>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
