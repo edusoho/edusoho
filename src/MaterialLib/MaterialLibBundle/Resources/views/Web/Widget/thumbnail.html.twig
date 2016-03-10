@@ -1,0 +1,16 @@
+<a href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" ><img src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.jpg')) }}">
+</a>
+
+{% if uploadFile.convertStatus == 'error' %}
+  <span class="status label label-danger">转码失败</span>
+  <button class="reconvert-btn btn btn-xs btn-primary">重新转码</button>
+{% elseif uploadFile.convertStatus == 'doing' %}
+  <span class="status label label-primary">正在转码</span>
+{% elseif uploadFile.convertStatus == 'waiting' %}
+  <span class="status label label-info">等待转码</span>
+{% endif %}
+
+<div class="mask">
+  <i class="es-icon es-icon-view"></i><span>{{ uploadFile.views|default(0) }}</span>
+  <span class="pull-right">{{ uploadFile.length|date('i:s') }}</span class="pull-right">
+</div>
