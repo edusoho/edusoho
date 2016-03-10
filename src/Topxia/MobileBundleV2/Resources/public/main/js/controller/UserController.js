@@ -434,9 +434,11 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 	this.filter = function(data) {
 		var users = data.users;
 		var threads = data.threads;
+
 		for (var i = 0; i < threads.length; i++) {
 			threads[i]["user"] = users[threads[i]["userId"]];
 		};
+		
 		data.threads = threads;
 		return data;
 	};
@@ -451,10 +453,12 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 	};
 
 	$scope.initQuestionResult = function(limit) {
+		$scope.showLoad();
 		ThreadManagerService.questionResult({
 			start : limit,
 			courseId : $stateParams.courseId
 		}, function(data) {
+			$scope.hideLoad();
 			$scope.teachingResult = self.filter(data);
 		});
 	};

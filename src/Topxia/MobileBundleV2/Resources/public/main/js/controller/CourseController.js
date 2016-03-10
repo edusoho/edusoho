@@ -615,3 +615,14 @@ function ClassRoomController($scope, $stateParams, ClassRoomService, AppUtil, $s
 
   this.loadClassRoom();
 }
+
+app.controller('CourseCardController', ['$scope', '$stateParams', 'CourseService', CourseCardController]);
+function CourseCardController($scope, $stateParams, CourseService)
+{
+
+  CourseService.getCourse({
+    courseId : $stateParams.courseId
+  }, function(data) {
+    $scope.course = data.course;
+  });
+}
