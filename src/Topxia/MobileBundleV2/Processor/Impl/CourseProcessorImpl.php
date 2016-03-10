@@ -776,8 +776,10 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
         $progress = array(0, 0, 0, 0, 0);
 
         foreach ($reviews as $key => $review) {
-            $rating = $review["rating"] < 1 ? 1 : $review["rating"];
-            $progress[$review["rating"] - 1]++;
+            if ($review["rating"] < 1) {
+                continue;
+            }
+            $progress[$review["rating"]]++;
         }
 
         return array(
