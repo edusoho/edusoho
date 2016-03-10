@@ -13,6 +13,7 @@
     </div>
     
     <ul class="homepage-category-nav">
+      {% set categories = data('Categories', {parentId:0, group:'course'}) %}
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
@@ -21,8 +22,6 @@
 
     <div class="row row-9-3">
       <div class="col-md-9">
-
-       
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           {% if classrooms %}
           <div class="es-box">

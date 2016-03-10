@@ -87,48 +87,6 @@ class DefaultController extends BaseController
         ));
     }
 
-    protected function getRecentLiveCourses()
-    {
-        $recenntLessonsCondition = array(
-            'status'             => 'published',
-            'endTimeGreaterThan' => time()
-        );
-
-        $recentlessons = $this->getCourseService()->searchLessons(
-            $recenntLessonsCondition,
-            array('startTime', 'ASC'),
-            0,
-            20
-        );
-
-        $courses = $this->getCourseService()->findCoursesByIds(ArrayToolkit::column($recentlessons, 'courseId'));
-
-        $liveCourses = array();
-
-        foreach ($recentlessons as $lesson) {
-            $course = $courses[$lesson['courseId']];
-
-            if ($course['status'] != 'published') {
-                continue;
-            }
-
-            if ($course['parentId'] != 0) {
-                continue;
-            }
-
-            $course['lesson']   = $lesson;
-            $course['teachers'] = $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-            if (count($liveCourses) >= 8) {
-                break;
-            }
-
-            $liveCourses[] = $course;
-        }
-
-        return $liveCourses;
-    }
-
     public function promotedTeacherBlockAction()
     {
         $teacher = $this->getUserService()->findLatestPromotedTeacher(0, 1);
