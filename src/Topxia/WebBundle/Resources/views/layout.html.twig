@@ -26,7 +26,9 @@
   {% endif %}
 
   {% block stylesheets %}
-    {{ render(controller('TopxiaWebBundle:Theme:getCurrentConfigColor', {isEditColor:isEditColor|default(false)})) }}
+    {% set currentTheme = current_theme() %}
+    {% include 'TopxiaWebBundle:Default:stylesheet.html.twig' with {config: currentTheme, isEditColor: isEditColor|default(false)} %}
+
   {% endblock %}
   
   <!--[if lt IE 9]>
