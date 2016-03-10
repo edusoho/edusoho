@@ -12,26 +12,26 @@
 		      {% for index, answer in item.question.answer %}
 		        {% set userAnswer = item.question.testResult.answer[index]|default(null) %}
 			    	<li>
-			    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+			    		填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 			    	  {% if userAnswer == '' %}
-			    	  。你未回答
+			    	  {{'。你未回答'|trans}}
 			    	  {% elseif item.question.testResult.status == "right" %}
-			    	  ，你的答案　<strong class="text-success">{{ userAnswer }}</strong>。 
+			    	  {{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
 			    	  {% elseif item.question.testResult.status == "partRight" %}
-			    	  ，你的答案　<strong class="text-warning">{{ userAnswer }}</strong>。 
+			    	  {{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
 			    	  {% else %}
-			    	  ，你的答案　<strong class="text-danger">{{ userAnswer }}</strong>。 
+			    	  {{'，你的答案'|trans}}　<strong class="text-danger">{{ userAnswer }}</strong>。
 			    	  {% endif %}
 			    	</li>
 		    	{% endfor %}
 		    </ul>
 
 		    {% if item.question.testResult.status == "right" %}
-			    <p class="text-success">回答正确。</p>
+			    <p class="text-success">{{'回答正确。'|trans}}</p>
 			  {% elseif item.question.testResult.status == "partRight" %}
-			    <p class="text-warning">回答部分正确，本题得分：{{ item.question.testResult.score }}分。</p>
+			    <p class="text-warning">{{'回答部分正确，本题得分：'|trans}}{{ item.question.testResult.score }}{{'分。'|trans}}</p>
 			  {% else %}
-			    <p class="text-danger">回答错误。</p>
+			    <p class="text-danger">{{'回答错误。'|trans}}</p>
 			  {% endif %}
 			</div>
 
@@ -62,13 +62,13 @@
 		    <ul>
 		      {% for index, answer in item.question.answer %}
 		    	<li>
-		    	  填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    		填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
 		    	</li>
 		      {% endfor %}
 		    </ul>
 		</div>
 	  </div>
-	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析')|bbCode2Html|raw|nl2br }}</div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
 	  {% endif %}
 
 	{% endif %}

@@ -10,14 +10,14 @@
     {{ render(controller('TopxiaWebBundle:Course:coursesBlock', {courses:courses, view: 'list'})) }}
     <nav class="text-center">
       {{ web_macro.paginator(paginator) }}
-    </nav> 
+    </nav>
   {% else %}
     {% if pageNav == 'teach' %}
-      <div class="empty">无在教的课程</div>
+      <div class="empty">{{'无在教的课程'|trans}}</div>
     {% elseif pageNav == 'learn' %}
-      <div class="empty">无在学的课程</div>
+      <div class="empty">{{'无在学的课程'|trans}}</div>
     {% elseif pageNav == 'favorited' %}
-      <div class="empty">无收藏的课程</div>
+      <div class="empty">{{'无收藏的课程'|trans}}</div>
     {% endif %}
   {% endif %}
 

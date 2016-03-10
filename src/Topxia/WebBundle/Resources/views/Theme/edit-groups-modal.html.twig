@@ -7,7 +7,7 @@
   <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
     <div class="row form-group">
       <div class="col-sm-3 control-label">
-        <label for="name">自定义名称</label>
+        <label for="name">{{'自定义名称'|trans}}</label>
       </div>
       <div class="col-sm-9 controls">
         <input type="text"  class="form-control" name="title">
@@ -16,7 +16,7 @@
 
     <div class="row form-group">
       <div class="col-sm-3 control-label">
-        <label for="subname">副标题名称</label>
+        <label for="subname">{{'副标题名称'|trans}}</label>
       </div>
       <div class="col-sm-9 controls">
         <input type="text"  class="form-control" name="subTitle">
@@ -38,49 +38,49 @@
       </div>
     </div> -->
     <div class="form-group">
-      <label class="col-sm-3 control-label">是否启用模块</label>
+      <label class="col-sm-3 control-label">{{'是否启用模块'|trans}}</label>
       <div class="col-sm-9 check-box">
         <label class="checkbox-inline">
           <input type="checkbox" name="select1" value={{config.select1}} checked={{config.select1}}>
-          热门小组
+          {{'热门小组'|trans}}
         </label>
         <label class="checkbox-inline" >
           <input type="checkbox" name="select2" value={{config.select2}} checked={{config.select2}}>
-          最新资讯
+          {{'最新资讯'|trans}}
         </label>
         <label class="checkbox-inline" >
           <input type="checkbox" name="select3"value={{config.select3}} checked={{config.select3}}>
-          学员评价
+          {{'学员评价'|trans}}
         </label>
         <label class="checkbox-inline" >
           <input type="checkbox"  name="select4"value={{config.select4}} checked={{config.select4}}>
-          学员动态
+          {{'学员动态'|trans}}
         </label>
       </div>
     </div>
 
-    <div class="form-group"> 
-      <label class="col-sm-3 control-label">背景颜色设置</label> 
+    <div class="form-group">
+      <label class="col-sm-3 control-label">{{'背景颜色设置'|trans}}</label>
       <div class="col-sm-9 check-box">
       <input type="hidden"  name="background" value={{config.background|default("")}}>
-        <label class="radio-inline"> 
-          <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}> 
-          灰色 
-        </label> 
-        <label class="radio-inline" > 
-          <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} > 
-          白色 
+        <label class="radio-inline">
+          <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}>
+          {{'灰色'|trans}}
         </label>
-        <label class="radio-inline" > 
-          <input type="radio"  value=""{% if config.background|default("") == ""%} checked="checked"{% endif %} > 
-          默认 
-        </label>  
-      </div> 
+        <label class="radio-inline" >
+          <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} >
+          {{'白色'|trans}}
+        </label>
+        <label class="radio-inline" >
+          <input type="radio"  value=""{% if config.background|default("") == ""%} checked="checked"{% endif %} >
+          {{'默认'|trans}}
+        </label>
+      </div>
     </div>
   </form>
 {% endblock %}
 {% block footer %}
-  <button data-submiting-text="正在保存" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">确定</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button data-submiting-text="{{'正在保存'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'确定'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('topxiawebbundle/controller/theme/left-edit-modal')</script>
 {% endblock %}

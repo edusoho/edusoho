@@ -107,9 +107,9 @@
     <th>手机号码</th>
     <td>
       {% if user.verifiedMobile %}
-        {{ user.verifiedMobile|default('')}}<span class="text-success">(已绑定)</span> 
+        {{ user.verifiedMobile|default('')}}<span class="text-success">({{'已绑定'|trans}})</span> 
       {% elseif profile.mobile %}
-        {{ profile.mobile }}<span class="text-danger">(未绑定)</span>
+        {{ profile.mobile }}<span class="text-danger">({{'未绑定'|trans}})</span>
       {% else %}
         {{ profile.mobile|default('暂无') }}
       {% endif %}
