@@ -12,7 +12,7 @@
       	{% for date,liveList in liveTabs %}
 	        <div class="tab-pane {% if date == 'today' %}active{% endif %}" id="{{ date }}">
 	        	{% if not liveList.current|default(null) and not liveList.future|default(null) %}
-							<div class="empty">暂无今日直播</div>
+							<div class="empty">今日暂无直播</div>
 						{% else %}
 							<div class="es-live-item">
 	          	{% if date == 'today' %}

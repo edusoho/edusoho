@@ -333,10 +333,27 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $marks = str_repeat('?,', count($courseIds) - 1).'?';
 
         $time = time();
-        $sql  = "SELECT id, recentTime,courseId,startTime,endTime,status FROM
+        $sql  = "SELECT * FROM
                (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
                 UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
-                recent ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
+             AS cl  ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
+    }
+
+    public function findRecentLiveCourses($courseIds, $start, $limit)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $time = time();
+        $sql  = "SELECT courseId,min(recentTime) as recentTime FROM
+               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
+                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
+             AS cl  GROUP BY courseId ORDER BY recentTime ASC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
     }

@@ -6,7 +6,6 @@ define(function(require, exports, module) {
         });
 
         $('#vipCategoryId').change(function(){
-             $("#categoryId").find("option[text='课程分类']").attr("selected",true);
             $(this).closest('form').submit();
         });
 	};

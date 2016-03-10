@@ -492,31 +492,24 @@ class LiveCourseController extends BaseController
             $courseIds = array(-1);
         }
 
-        $liveLessons = $this->getCourseService()->findRecentLiveLessons($courseIds, 0, PHP_INT_MAX);
-
-        $conditions = array(
-            'status'    => 'published',
-            'type'      => 'live',
-            'parentId'  => '0',
-            'courseIds' => ArrayToolkit::column($liveLessons, 'courseId')
-        );
-
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchCourseCount($conditions)
+            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0))
             , 10
         );
 
-        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), 0, 10);
-        $courses = ArrayToolkit::index($courses, 'id');
+        $liveLessons = $this->getCourseService()->findRecentLiveCourses($courseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $liveCourses = array();
 
         foreach ($liveLessons as $key => $val) {
             if (!isset($liveCourses[$val['courseId']])) {
-                $liveCourses[$val['courseId']]                  = $courses[$val['courseId']];
-                $liveCourses[$val['courseId']]['liveStartTime'] = $val['startTime'];
-                $liveCourses[$val['courseId']]['lessonId']      = $val['id'];
+                $liveCourses[$val['courseId']] = $this->getCourseService()->getCourse($val['courseId']);
+
+                $lessons = $this->getCourseService()->findRecentLiveLessons(array($val['courseId']), 0, 1);
+
+                $liveCourses[$val['courseId']]['liveStartTime'] = $lessons[0]['startTime'];
+                $liveCourses[$val['courseId']]['lessonId']      = $lessons[0]['id'];
             }
         }
 
