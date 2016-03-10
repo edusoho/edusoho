@@ -3,7 +3,7 @@ material_lib_browsing:
     defaults: { _controller: MaterialLibBundle:MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
 
 material_lib_show_browsing:
-    pattern: /material/lib/show/browse/{type}/{viewMode}/{source}
+    pattern: /material/lib/show/browse
     defaults: { _controller: MaterialLibBundle:MaterialLib:showMyMaterialLibForm, type: 'all', viewMode: 'thumb', source: 'upload'}
 
 material_lib_my_sharing:
