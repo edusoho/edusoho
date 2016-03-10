@@ -76,6 +76,10 @@ material_reconvert:
     pattern:  /material/lib/{globalId}/reconvert
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:reconvert }
 
+material_thumbnail_generate:
+    pattern:  /material/lib/{globalId}/thumbnail/generate
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:generateThumbnail }
+
 global_file_player:
     pattern:  /global_file/{globalId}/player
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }

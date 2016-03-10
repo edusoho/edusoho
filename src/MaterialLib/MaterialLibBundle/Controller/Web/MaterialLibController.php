@@ -14,6 +14,12 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
+    public function generateThumbnailAction(Request $reqeust, $globalId)
+    {
+        $second = $reqeust->query->get('second');
+        return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
+    }
+
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
