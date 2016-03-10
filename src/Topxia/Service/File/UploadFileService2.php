@@ -39,6 +39,8 @@ interface UploadFileService2
 
     public function cancelShareFile($sourceUserId, $targetUserId);
 
+    public function updateShare($shareHistoryId);
+
     public function findShareHistory($sourceUserId);
 
     public function findShareHistoryByUserId($sourceUserId, $targetUserId);

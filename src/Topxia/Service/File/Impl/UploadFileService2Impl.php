@@ -274,6 +274,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
     }
 
+    public function updateShare($shareHistoryId)
+    {
+        $fileShareFields = array(
+            'isActive'    => 1,
+            'updatedTime' => time()
+        );
+
+        return $this->getUploadFileShareDao()->updateShare($shareHistoryId, $fileShareFields);
+    }
+
     public function decreaseFileUsedCount($id)
     {
         $this->getUploadFileDao()->waveFileUsedCount($id, -1);
