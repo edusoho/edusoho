@@ -23,6 +23,12 @@ function LessonController($scope, $stateParams, LessonService, LessonLiveService
       id : $stateParams.lessonId,
       device : self.getDevice()
     }, function(data) {
+      if (true == data.nonsupport) {
+        self.showError({
+            message : "直播暂不支持在移动端播放!"
+        });
+        return;
+      }
       if (data.sdk) {
         $scope.hideLoad();
         cordovaUtil.closeWebView();
