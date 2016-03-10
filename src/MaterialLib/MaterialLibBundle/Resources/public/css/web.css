@@ -19,6 +19,10 @@
   border-top: solid 1px #eee;
 }
 
+.materials-ul li .op-btn:hover {
+  background: #eee;
+}
+
 .materials-ul li.op-li {
   margin:0;
 }

@@ -62,17 +62,6 @@
         <div id="material-lib-items-panel">
 			{% block list %}
       {% endblock %}
-                <div class="delete-operation">
-                    <label class="checkbox-inline">
-                        <input type="checkbox" data-role="batch-select" /> 全选
-                    </label>
-    	            {% if source == "upload" %}
-                  		<button class="btn btn-info btn-md ml25" data-role="batch-delete" data-name="资料库文件"  data-url="{{ path('materiallib_file_deletes') }}">
-                            <i class="es-icon es-icon-delete"></i> 删除
-                        </button>
-                    {% endif %}
-                </div>
-
           {{ web_macro.paginator(paginator) }}
         </div>
 		
