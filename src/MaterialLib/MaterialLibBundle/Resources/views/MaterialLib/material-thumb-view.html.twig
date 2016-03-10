@@ -25,8 +25,10 @@
         </tbody>
     </table>
 
-    <div id="material-item-list" data-url="{{ path('material_lib_show_browsing', { viewMode: viewMode, source: source}) }}">
-    </div>
+    <div>
+        <ul class="course-grids" id="material-item-list" data-url="{{ path('material_lib_show_browsing', { viewMode: viewMode, source: source}) }}">
+            {#{% include 'MaterialLibBundle:MaterialLib:material-thumb-view-item.html.twig' %}#}
+        </ul>
 </div>
 
 {% endblock %}

@@ -5,7 +5,9 @@
 {% block page_body %}
 		
 		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('material_lib_browsing', { viewMode: viewMode, source: source}) }}" method="get" novalidate>
+
     {% include 'MaterialLibBundle:MaterialLib/Form:nav.html.twig' %}
+    {% include 'MaterialLibBundle:MaterialLib/Form:head.html.twig' %}
             <div class="well well-sm" style="margin-bottom:10px">
               <span style="padding-right:50px">筛选:</span>
               <span>上传时间:</span>

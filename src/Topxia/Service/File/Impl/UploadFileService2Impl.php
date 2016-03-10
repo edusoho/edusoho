@@ -82,6 +82,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         return $files;
     }
+
     public function findFilesByTypeAndId($targetType, $targetId)
     {
         return $this->getUploadFileDao()->findFilesByTypeAndId($targetType, $targetId);
@@ -126,9 +127,9 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
-        $implementor       = $this->getFileImplementorByStorage($params['storage']);
-        
-        $auth       = $implementor->getUploadAuth($params);
+        $implementor = $this->getFileImplementorByStorage($params['storage']);
+
+        $auth = $implementor->getUploadAuth($params);
         return $auth;
     }
 
@@ -257,6 +258,30 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         );
 
         return $this->getUploadFileShareDao()->addShare($fileShareFields);
+    }
+
+    public function cancelShareFile($sourceUserId, $targetUserId)
+    {
+        $shareHistory = $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
+
+        if (!empty($shareHistory)) {
+            $fileShareFields = array(
+                'isActive'    => 0,
+                'updatedTime' => time()
+            );
+
+            $this->getUploadFileShareDao()->updateShare($shareHistory['id'], $fileShareFields);
+        }
+    }
+
+    public function updateShare($shareHistoryId)
+    {
+        $fileShareFields = array(
+            'isActive'    => 1,
+            'updatedTime' => time()
+        );
+
+        return $this->getUploadFileShareDao()->updateShare($shareHistoryId, $fileShareFields);
     }
 
     public function decreaseFileUsedCount($id)
