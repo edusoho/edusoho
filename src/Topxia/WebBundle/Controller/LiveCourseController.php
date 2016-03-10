@@ -118,7 +118,7 @@ class LiveCourseController extends BaseController
         $today    = date("Y-m-d");
 
         foreach ($lessonsDate as $key => &$value) {
-            if ($today == $value['date']) {
+            if ($today == $value['date'] || count($liveTabs) >= 4) {
                 continue;
             } else {
                 $dayLessons = $futureLiveLessons = $this->getCourseService()->searchLessons(array(
@@ -152,6 +152,42 @@ class LiveCourseController extends BaseController
 
         return $this->render('TopxiaWebBundle:LiveCourse:live-replay-list.html.twig', array(
             'liveReplayList' => $liveReplayList
+        ));
+    }
+
+    public function liveCourseListAction(Request $request)
+    {
+        $conditions = array(
+            'status'   => 'published',
+            'type'     => 'live',
+            'parentId' => 0
+        );
+
+        if (!empty($request->query->get('categoryId', ''))) {
+            $conditions['categoryId'] = $request->query->get('categoryId');
+        }
+
+        if (!empty($request->query->get('vipCategoryId', ''))) {
+            $conditions['vipLevelId'] = $request->query->get('vipCategoryId');
+        }
+
+        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        list($liveCourses, $paginator) = $this->_searchLiveCourse($request, $courseIds);
+
+        $levels = array();
+
+        if ($this->isPluginInstalled('Vip')) {
+            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
+        }
+
+        return $this->render('TopxiaWebBundle:LiveCourse:live-course-all-list.html.twig', array(
+            'liveCourses' => $liveCourses,
+            'paginator'   => $paginator,
+            'request'     => $request,
+            'levels'      => $levels
         ));
     }
 
@@ -450,6 +486,36 @@ class LiveCourseController extends BaseController
         return $categories;
     }
 
+    private function _searchLiveCourse($request, $courseIds)
+    {
+        if (!$courseIds) {
+            $courseIds = array(-1);
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0))
+            , 10
+        );
+
+        $liveLessons = $this->getCourseService()->findRecentLiveCourses($courseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        $liveCourses = array();
+
+        foreach ($liveLessons as $key => $val) {
+            if (!isset($liveCourses[$val['courseId']])) {
+                $liveCourses[$val['courseId']] = $this->getCourseService()->getCourse($val['courseId']);
+
+                $lessons = $this->getCourseService()->findRecentLiveLessons(array($val['courseId']), 0, 1);
+
+                $liveCourses[$val['courseId']]['liveStartTime'] = $lessons[0]['startTime'];
+                $liveCourses[$val['courseId']]['lessonId']      = $lessons[0]['id'];
+            }
+        }
+
+        return array($liveCourses, $paginator);
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -463,5 +529,10 @@ class LiveCourseController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    public function getLevelService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
     }
 }

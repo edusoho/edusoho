@@ -323,4 +323,38 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $sql = "SELECT count( id) as count, from_unixtime(startTime,'%Y-%m-%d') as date FROM `{$this->getTable()}` WHERE  `type`= 'live' AND status='published' AND courseId IN ({$marks}) AND startTime >= {$time} group by date order by date ASC limit 0, {$limit}";
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
+
+    public function findRecentLiveLessons($courseIds, $start, $limit)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $time = time();
+        $sql  = "SELECT * FROM
+               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
+                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
+             AS cl  ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
+    }
+
+    public function findRecentLiveCourses($courseIds, $start, $limit)
+    {
+        if (empty($courseIds)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+
+        $time = time();
+        $sql  = "SELECT courseId,min(recentTime) as recentTime FROM
+               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
+                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
+             AS cl  GROUP BY courseId ORDER BY recentTime ASC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
+    }
 }
