@@ -11,7 +11,6 @@
 }
 
 .materials-ul li .op-btn {
-  display: inline-block;
   text-align: center;
   height: 40px;
   line-height: 40px;
@@ -29,16 +28,16 @@
 }
 
 .materials-ul li.img-li {
-  height: 141px;
+  height: auto;
+}
+
+.materials-ul li.img-li img {
+  cursor: pointer;
 }
 
 .materials-ul li.caption p {
   margin: 0;
   padding: 0 10px 0 10px;
-}
-
-.materials-ul li.caption p.title {
-  padding-top: 10px;
 }
 
 .materials-ul li.caption p.tags, .materials-ul li.caption p.date{
