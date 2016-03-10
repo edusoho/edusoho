@@ -3,19 +3,9 @@
 {% set script_controller = 'materiallibbundle/controller/material-lib/index' %}
 
 {% block page_body %}
-
-		<ul class="nav nav-tabs">
-			<li class="{{ type == 'all' ? 'active' : '' }}"><a href="javascript:;{#{{ path('material_lib_browsing', {type:'all', viewMode: viewMode, source: source}) }}#}">全部</a></li>
-			<li class="{{ type == 'video' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'video', viewMode: viewMode, source: source}) }}">视频</a></li>
-			<li class="{{ type == 'audio' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'audio', viewMode: viewMode, source: source}) }}">音频</a></li>
-			<li class="{{ type == 'image' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'image', viewMode: viewMode, source: source}) }}">图片</a></li>
-			<li class="{{ type == 'document' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'document', viewMode: viewMode, source: source}) }}">文档</a></li>
-			<li class="{{ type == 'ppt' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'ppt', viewMode: viewMode, source: source}) }}">PPT</a></li>
-			<li class="{{ type == 'other' ? 'active' : '' }}"><a href="{{ path('material_lib_browsing', {type:'other', viewMode: viewMode, source: source}) }}">其它</a></li>
-			</ul>
-		<br>
 		
-		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('material_lib_browsing', {type: type, viewMode: viewMode, source: source}) }}" method="get" novalidate>
+		<form id="message-search-form" class="form-inline well well-sm" action="{{ path('material_lib_browsing', { viewMode: viewMode, source: source}) }}" method="get" novalidate>
+    {% include 'MaterialLibBundle:MaterialLib/Form:nav.html.twig' %}
             <div class="well well-sm" style="margin-bottom:10px">
               <span style="padding-right:50px">筛选:</span>
               <span>上传时间:</span>
@@ -70,7 +60,8 @@
         </form>
         
         <div id="material-lib-items-panel">
-			{% block list %}{% endblock %}
+			{% block list %}
+      {% endblock %}
                 <div class="delete-operation">
                     <label class="checkbox-inline">
                         <input type="checkbox" data-role="batch-select" /> 全选

@@ -77,16 +77,16 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function showMyMaterialLibFormAction(Request $request, $type = "all", $viewMode = "thumb", $source = "upload")
+    public function showMyMaterialLibFormAction(Request $request, $viewMode = "thumb", $source = "upload")
     {
         $currentUser = $this->getCurrentUser();
 
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
-
         $currentUserId = $currentUser['id'];
         $data          = $request->query->all();
+        $type          = $data['type'];
         $keyWord       = $request->query->get('keyword') ?: "";
 
         $conditions           = array();
@@ -103,7 +103,7 @@ class MaterialLibController extends BaseController
         $conditions['source']        = $source;
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
+        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 10);
 
         $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
