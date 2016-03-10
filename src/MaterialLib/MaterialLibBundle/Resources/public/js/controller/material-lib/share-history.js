@@ -22,8 +22,13 @@ define(function(require, exports, module) {
 		});
 
 		$("#share").on('click',function(){
-		  $("#share").animate({ left:'250px' } );
+		  $("#show-share-input").show();
+		  $("#show-share-input").animate({ left:'0px' },1000 );
 		}); 
+		$("#close-share-input").on('click',function(){
+			$("#show-share-input").animate({ right:'0px' },1000);
+			$("#show-share-input").hide();
+		});
 
 		$("#modal").on("hidden.bs.modal", function() {
 			window.location.reload();

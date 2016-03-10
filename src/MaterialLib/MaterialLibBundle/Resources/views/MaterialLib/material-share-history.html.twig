@@ -10,11 +10,20 @@
 
 <div id="share-history-table-container">
     <table class="table table-hover table-striped" id="share-history-table">
-        <div class="btn btn-primary pull-left" id="share" style="position:relative;">
-            {#<a class="btn btn-primary btn-sm" id="share" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">#}
-                <i class="glyphicon glyphicon-share"></i>
-                分享给
-            {#</a>#}
+        <div style="position:relative;">
+            <div class="btn btn-primary pull-left" id="share"style="
+            z-index:2;position:relative;">
+                {#<a class="btn btn-primary btn-sm" id="share" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">#}
+                    <i class="glyphicon glyphicon-share"></i>
+                    分享给
+                {#</a>#}
+            </div>
+            <div  id="show-share-input"hidden="hidden"style="
+                z-index:1;left:-250px;position:relative;">
+                <input class="mlm">
+                <a class="glyphicon glyphicon-remove-sign mlm" href="javascript:;"></a>
+                <a id="close-share-input"class="glyphicon glyphicon-ok-sign mlm " href="javascript:;"></a>
+            </div>
         </div>
         <thead>
             <tr>
