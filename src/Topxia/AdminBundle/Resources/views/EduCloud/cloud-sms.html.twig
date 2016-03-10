@@ -12,10 +12,10 @@
       <p class="text-muted">剩余短信:{{ overview.service.sms.remainCount|default(0) }}条      
         <a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank" style="margin-left:20px">购买</a>
       </p>
-      {% if overview.service.sms.status|default(null) == 'used' and overview.service.sms.remainCount < 100 %}
+      {% if overview.service.sms.status|default(null) == 'used' and 0 < overview.service.sms.remainCount and  overview.service.sms.remainCount < 100 %}
         <p class="text-warning text-sm">您的云短信包剩余不足100条短信，请尽快续购</p>
       {% endif %}
-      {% if overview.service.sms.status|default(null) == 'stoped' %}
+      {% if overview.service.sms.status|default(null) == 'used' and overview.service.sms.remainCount <= 0 %}
         <p class="text-danger text-sm">您的云短信包已用完，请尽快续购。以免影响正常使用</p>
       {% endif %}
     {% endif %}
