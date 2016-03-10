@@ -181,6 +181,7 @@ class CourseController extends BaseController
             $this->getCourseService()->searchCourseCount($conditions),
             12
         );
+
         $courses = $this->getCourseService()->searchCourses(
             $conditions,
             $orderBy,
