@@ -57,7 +57,17 @@ class ThreadDaoImpl extends BaseDao implements ThreadDao
         return $this->getConnection()->fetchAll($sql, array($courseId, $type)) ?: array();
     }
 
-    public function searchThreads($conditions, $orderBys, $start, $limit)
+    public function findThreadsByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
+    public function searchThreads($conditions, $orderBys,$start,$limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createThreadSearchQueryBuilder($conditions)

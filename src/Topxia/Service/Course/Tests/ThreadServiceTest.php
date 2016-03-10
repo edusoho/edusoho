@@ -6,6 +6,45 @@ use Topxia\Service\Common\BaseTestCase;
 
 class ThreadServiceTest extends BaseTestCase
 {
+
+    public function testSearchThreadPosts(){
+        $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
+
+        $thread = array(
+            'courseId' => $course['id'],
+            'type'     => 'discussion',
+            'title'    => 'test thread',
+            'content'  => 'test content'
+        );
+        $createdThread = $this->getThreadService()->createThread($thread);
+
+        $post1 = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content'  => 'post thread1'
+        );
+        $createdPost = $this->getThreadService()->createPost($post1);
+
+        $post2 = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content'  => 'post thread2'
+        );
+        $createdPost = $this->getThreadService()->createPost($post2);
+
+        $post3 = array(
+            'courseId' => $createdThread['courseId'],
+            'threadId' => $createdThread['id'],
+            'content'  => 'post thread3'
+        );
+        $createdPost = $this->getThreadService()->createPost($post3);
+
+        $conditions   = array('courseId' => $course['id']);
+
+        $posts=$this->getThreadService()->searchThreadPosts($conditions,"createdTimeByDesc",0,10);
+        var_dump($posts);
+        exit();
+    }
     /**
      * @group current
      */
@@ -271,6 +310,7 @@ class ThreadServiceTest extends BaseTestCase
         }
     }
 
+    
     /**
      * @group current
      */
