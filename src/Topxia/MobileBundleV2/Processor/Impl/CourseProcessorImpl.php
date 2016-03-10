@@ -779,7 +779,7 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
             if ($review["rating"] < 1) {
                 continue;
             }
-            $progress[$review["rating"]]++;
+            $progress[$review["rating"]-1]++;
         }
 
         return array(
