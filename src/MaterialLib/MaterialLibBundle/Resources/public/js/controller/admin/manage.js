@@ -68,18 +68,20 @@ define(function(require, exports, module) {
             },
             onClickDeleteBtn: function(event)
             {
-                var self = this;
-                var $target = $(event.currentTarget);
-                this._loading();
-                $.ajax({
-                    type:'POST',
-                    url:$target.data('url'),
-                }).done(function(){
-                    Notify.success('删除成功!');
-                    self.renderTable();
-                }).fail(function(){
-                    Notify.danger('删除失败!');
-                });
+                if (confirm('真的要删除该资源吗？')) {
+                    var self = this;
+                    var $target = $(event.currentTarget);
+                    this._loading();
+                    $.ajax({
+                        type:'POST',
+                        url:$target.data('url'),
+                    }).done(function(){
+                        Notify.success('删除成功!');
+                        self.renderTable();
+                    }).fail(function(){
+                        Notify.danger('删除失败!');
+                    });
+                }
             },
             onClickReconvertBtn: function(event)
             {
