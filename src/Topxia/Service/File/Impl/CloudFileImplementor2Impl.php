@@ -326,6 +326,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['hashId']   = $cloudFile['reskey'];
         $file['fileSize'] = $cloudFile['size'];
         $file['views']    = $cloudFile['views'];
+        $file['tags']    = $cloudFile['tags'];
+        $file['thumbnail']    = $cloudFile['thumbnail'];
 
         $statusMap = array(
             'none'       => 'none',

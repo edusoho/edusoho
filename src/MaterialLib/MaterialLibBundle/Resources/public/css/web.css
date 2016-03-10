@@ -1,0 +1,46 @@
+.materials-ul {
+  border: solid 1px #eee;
+  padding-left: 0;
+}
+.materials-ul li {
+  list-style-type: none;
+}
+
+.materials-ul li img {
+  width:100%;
+}
+
+.materials-ul li .op-btn {
+  display: inline-block;
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  padding:0;
+  cursor: pointer;
+  border-top: solid 1px #eee;
+}
+
+.materials-ul li.op-li {
+  margin:0;
+}
+
+.materials-ul li .border-left {
+  border-left: solid 1px #eee;
+}
+
+.materials-ul li.img-li {
+  height: 141px;
+}
+
+.materials-ul li.caption p {
+  margin: 0;
+  padding: 0 10px 0 10px;
+}
+
+.materials-ul li.caption p.title {
+  padding-top: 10px;
+}
+
+.materials-ul li.caption p.tags, .materials-ul li.caption p.date{
+  font-size: 10px;
+}

@@ -1,10 +1,5 @@
 {% extends 'MaterialLibBundle:Admin:layout.html.twig' %}
 
-{% block stylesheets %}
-  {{ parent() }}
-  <link href="{{ asset('bundles/materiallib/css/admin.css') }}" rel="stylesheet" />  
-{% endblock %}
-
 {% set menu = 'admin_material_lib_stats' %}
 {% do load_script('materiallibbundle/controller/admin/stats') %}
 
