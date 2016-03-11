@@ -13,7 +13,8 @@
           </div>
         </form>
         <ul class="nav navbar-nav">
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+          {% set navigations = data('NavigationsTree', {}) %}
+          {% include 'TopxiaWebBundle:Default:top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: true} %}
         </ul>
       </div>
     </div>
