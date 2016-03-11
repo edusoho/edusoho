@@ -5,12 +5,14 @@
 {% block page_body %}
         
 <form id="material-search-form" class="form-inline" action="{{ path('material_lib_browsing', { viewMode: viewMode, source: source}) }}" method="get" novalidate>
-    
+  
+  <input type="hidden" class="js-page" name="page" value="1">
   <div class="btn-group source-btn" role="group" aria-label="...">
-    <button type="button" class="btn btn-default active">我的资料</button>
-    <button type="button" class="btn btn-default">公共资料</button>
-    <button type="button" class="btn btn-default">收藏夹</button>
-    <button type="button" class="btn btn-default">来自分享</button>
+    <button type="button" data-value="my" class="js-source-btn btn btn-default active">我的资料</button>
+    <button type="button" data-value="public" class="js-source-btn btn btn-default">公共资料</button>
+    <button type="button" data-value="favorite" class="js-source-btn btn btn-default">收藏夹</button>
+    <button type="button" data-value="sharing" class="js-source-btn btn btn-default">来自分享</button>
+    <input type="hidden" name="source" value="my">
   </div>
 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
@@ -56,7 +58,7 @@
     </div>
     
     <div class="row material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing', { viewMode: viewMode, source: source}) }}"></div>
-        {{ web_macro.paginator(paginator) }}
+
 </form>
         
         

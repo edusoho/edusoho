@@ -20,6 +20,7 @@ define(function(require, exports, module) {
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-download-btn': 'onClickDownloadBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
+                'click .js-source-btn': 'onClickSourseBtn',
                 'click .op-li div.op-btn': 'onClickOperationBtn'
             },
             setup: function() {
@@ -113,6 +114,15 @@ define(function(require, exports, module) {
                     $target.button('reset');
                 });
             },
+
+            onClickSourseBtn: function(event)
+            {
+                var $target = $(event.currentTarget);
+                $target.parent().find('button.active').removeClass('active');
+                $target.addClass('active');
+                $target.parent().find("[name=source]").val($target.data('value'));
+                this.renderTable();
+            },
             onClickOperationBtn: function(event)
             {
                 var self = this;
@@ -150,13 +160,13 @@ define(function(require, exports, module) {
             },
             _loading: function()
             {
-                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</td></tr>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
             _loaded_error: function()
             {
-                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</td></tr>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },

@@ -67,10 +67,6 @@ class MaterialLibController extends BaseController
     public function showMyMaterialLibFormAction(Request $request, $viewMode = "thumb")
     {
         $currentUser = $this->getCurrentUser();
-
-        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
-        }
         $currentUserId = $currentUser['id'];
         $data          = $request->query->all();
         $source        = $data['source'];
@@ -91,25 +87,17 @@ class MaterialLibController extends BaseController
         $conditions['source']        = $source;
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 10);
+        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
 
         $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
-        //Return different views according to current viewing mode
-
-        if ($viewMode == 'thumb') {
-            $resultPage = 'MaterialLibBundle:Web/Widget:thumb-list.html.twig';
-        } else {
-            $resultPage = 'MaterialLibBundle:MaterialLib:material-list-view-item.html.twig';
-        }
-
         $storageSetting = $this->getSettingService()->get("storage");
 
         $tags = $this->getTagService()->findAllTags(0, 999);
 
-        return $this->render($resultPage, array(
+        return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
             'currentUserId'  => $currentUserId,
             'type'           => $type,
             'files'          => $files,
@@ -129,7 +117,7 @@ class MaterialLibController extends BaseController
         $this->getMaterialLibService()->edit($globalId, $fields);
         return $this->createJsonResponse(array('success' => true));
     }
-    
+
     public function reconvertAction($globalId)
     {
         $this->getMaterialLibService()->reconvert($globalId);
