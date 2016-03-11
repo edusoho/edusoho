@@ -116,6 +116,7 @@ define(function(require, exports, module) {
 					var maxCoinCanPay = getMaxCoinCanPay(totalCoinPrice);
 					var coinNumPay = $('[role="coinNum"]').val();
 
+					console.log(coinNumPay);
 					if(maxCoinCanPay <= parseFloat(coinNumPay)){
 						coinNumPay = maxCoinCanPay;
 					}
@@ -160,43 +161,6 @@ define(function(require, exports, module) {
 					break;
 			}
 
-			// if(totalPrice <= 0){
-			// 	totalPrice = 0;
-			// 	coinPriceZero();
-			// 	$('[role="pay-coin"]').text("0.00");
-			// 	$('[role="pay-rmb"]').text("0.00");
-			// } else {
-			// 	var coinNum = 0;
-			// 	if(cashRateElement.data("priceType") == "RMB") {
-			// 		coinNum = multiple(totalPrice, cashRate);
-			// 		coinNum = moneyFormatCeil(coinNum);
-			// 		coinNum = coinNum < maxCoin ? coinNum:maxCoin;
-			// 	} else {
-			// 		coinNum = totalPrice;
-			// 	}
-			// 	var coinNumPay = $('[role="accountCash"]').text();
-			// 	if($('[role="maxCoin"]').length > 0) {
-			// 		coinNumPay = $('[role="maxCoin"]').text();
-			// 	}
-			// 	coinNumPay = $('[role="coinNum"]').text();
-
-
-			// 	if(coinNumPay && $('[name="payPassword"]').length>0){
-			// 		if(coinNum <= parseFloat(coinNumPay)){
-			// 			coinNumPay = coinNum;
-			// 		}
-			// 		coinNumPay = afterCoinPay(coinNumPay);
-			// 		$('[role="coinNum"]').val(coinNumPay);
-			// 		var cashDiscount = $('[role="cash-discount"]').text();
-			// 		totalPrice = subtract(totalPrice, cashDiscount);
-			// 	} else {
-			// 		$('[role="coinNum"]').val(0);
-			// 		$('[role="cash-discount"]').text("0.00");
-			// 	}
-			// }
-
-			// totalPrice = totalPrice >= 0 ? totalPrice : 0;
-			// shouldPay(totalPrice);
 		}
 
 		function shouldPay(totalPrice){
@@ -326,17 +290,6 @@ define(function(require, exports, module) {
 			if(coupon.data('code') == "")
 			{
 				$('[role=no-use-coupon-code]').show();
-				var coinNum = $('[role="total-price"]').text();
-				coinNum = parseFloat(coinNum);
-				var currentCash = parseFloat($('[role="accountCash"]').text());
-
-				if(currentCash < coinNum){
-					coinNum = currentCash;
-				}
-
-				$('[role="coinNum"]').val(coinNum);
-				$('[role="password-input"]').show();
-				$('#payPassword').focus();
 				$('[role="cancel-coupon"]').trigger('click');
 				return;
 			}else{
