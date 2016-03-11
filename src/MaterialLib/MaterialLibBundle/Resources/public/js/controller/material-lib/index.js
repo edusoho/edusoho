@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('jquery.colorbox');
+    var DetailWidget = require('materiallibbundle/controller/web/detail');
 
     exports.run = function() {
         var MaterialWidget = Widget.extend({
@@ -55,7 +56,7 @@ define(function(require, exports, module) {
                     new DetailWidget({
                         element:'#material-detail',
                         callback: function() {
-                            var $form = $('#materials-form');
+                            var $form = $('#material-search-form');
                             $form.show();
                             $form.prev().show();
                             window.materialWidget.renderTable();
@@ -63,6 +64,7 @@ define(function(require, exports, module) {
                     });
                 }).fail(function(){
                     Notify.danger('Opps,出错了!');
+                }).always(function() {
                 });
             },
             onClickDeleteBtn: function(event)
@@ -321,7 +323,7 @@ define(function(require, exports, module) {
         });
 
         window.materialWidget = new MaterialWidget({
-            element: '#message-search-form'
+            element: '#material-search-form'
         });
        
     }
