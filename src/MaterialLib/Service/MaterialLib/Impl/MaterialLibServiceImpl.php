@@ -36,8 +36,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function delete($globalId)
     {
-        $this->getUploadFileService()->deleteByGlobalId($globalId);
-        $this->getCloudFileService()->delete($globalId);
+        if ($globalId) {
+            $this->getUploadFileService()->deleteByGlobalId($globalId);
+            $this->getCloudFileService()->delete($globalId);
+        }
+        
     }
 
     public function download($globalId)

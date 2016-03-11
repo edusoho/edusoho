@@ -84,6 +84,16 @@ material_lib_file_detail:
     pattern:  /material/lib/{globalId}/detail
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:detail }
 
+material_download:
+    pattern:  /materiallib/{globalId}/download
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:download }
+
+material_delete:
+    pattern:  /materiallib/{globalId}/delete
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:delete }
+    methods: [POST]
+
+
 global_file_player:
     pattern:  /global_file/{globalId}/player
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }

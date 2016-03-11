@@ -18,6 +18,7 @@ define(function(require, exports, module) {
                 'click .pagination li': 'onClickPagination',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
+                'click .js-download-btn': 'onClickDownloadBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn'
             },
             setup: function() {
@@ -74,18 +75,24 @@ define(function(require, exports, module) {
             },
             onClickDeleteBtn: function(event)
             {
-                var self = this;
+                if (confirm('真的要删除该资源吗？')) {
+                    var self = this;
+                    var $target = $(event.currentTarget);
+                    this._loading();
+                    $.ajax({
+                        type:'POST',
+                        url:$target.data('url'),
+                    }).done(function(){
+                        Notify.success('删除成功!');
+                        self.renderTable();
+                    }).fail(function(){
+                        Notify.danger('删除失败!');
+                    });
+                }
+            },
+            onClickDownloadBtn: function(event) {
                 var $target = $(event.currentTarget);
-                this._loading();
-                $.ajax({
-                    type:'POST',
-                    url:$target.data('url'),
-                }).done(function(){
-                    Notify.success('删除成功!');
-                    self.renderTable();
-                }).fail(function(){
-                    Notify.danger('删除失败!');
-                });
+                window.open($target.data('url'));
             },
             onClickReconvertBtn: function(event)
             {

@@ -146,6 +146,18 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function downloadAction($globalId)
+    {
+        $download = $this->getMaterialLibService()->download($globalId);
+        return $this->redirect($download['url']);
+    }
+
+    public function deleteAction($globalId)
+    {
+        $this->getMaterialLibService()->delete($globalId);
+        return $this->createJsonResponse(array('success' => true));
+    }
+
     public function generateThumbnailAction(Request $reqeust, $globalId)
     {
         $second = $reqeust->query->get('second');
