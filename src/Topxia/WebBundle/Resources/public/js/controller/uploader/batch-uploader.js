@@ -158,9 +158,9 @@ define(function(require, exports, module) {
             uploader.on('uploadStart', function(file) {
             });
 
-            uploader.on('uploadBeforeSend', function(object, data, headers) {
+            uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
                 var strategy = self.get('strategy');
-                strategy.uploadBeforeSend(object, data, headers);
+                strategy.uploadBeforeSend(object, data, headers, tr);
             });
         },
 

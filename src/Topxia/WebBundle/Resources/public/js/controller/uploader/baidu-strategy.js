@@ -8,60 +8,47 @@ define(function(require, exports, module) {
             file.gid = response.globalId;
             file.globalId = response.globalId;
             file.fileId = response.outerId;
-            file.uploaderWidget.set('uploadUrl', response.uploadUrl);
-            file.uploaderWidget.set('uploadProxyUrl', response.uploadProxyUrl);
-            file.uploaderWidget.set('uploadMode', response.uploadMode);
-            file.uploaderWidget.set('uploadId', response.uploadToken);
-            if (file.uploaderWidget.get('initResponse') && file.uploaderWidget.get('initResponse')['uploadToken']) {
-                file.uploaderWidget.set('uploadId', file.uploaderWidget.get('initResponse')['uploadToken']);
-            }
 
             this.file = file;
-	        var self = file.uploaderWidget;
-	        var cloud2UploadStatus = this._initCloud2UploadStatus();
+
+            var self = file.uploaderWidget;
+            self.set('uploadUrl', response.uploadUrl);
+            self.set('uploadProxyUrl', response.uploadProxyUrl);
+            self.set('uploadMode', response.uploadMode);
+            self.set('uploadId', response.uploadToken);
+            if (self.get('initResponse') && self.get('initResponse')['uploadToken']) {
+                self.set('uploadId', self.get('initResponse')['uploadToken']);
+            }
             var baiduParts = { parts: new Array()};
-
-            
-            self.uploader.option('server', self.get('uploadUrl')+'?partNumber='+cloud2UploadStatus.currentChunkIndex+'&uploadId='+self.get('uploadId'));
-            self.uploader.option('method', 'PUT');
-
-	        self.set('cloud2UploadStatus',cloud2UploadStatus);
             self.set('baiduParts',baiduParts);
 
-            file.uploaderWidget.uploader.option('chunked', true);
-            file.uploaderWidget.uploader.option('chunkSize', cloud2UploadStatus.chunkSize);
-            file.uploaderWidget.uploader.option('chunkRetry', 2);
-            file.uploaderWidget.uploader.option('sendAsBinary', true);
+            self.uploader.option('method', 'PUT');
+            self.uploader.option('chunked', true);
+            self.uploader.option('chunkSize', 1024*1024*5);
+            self.uploader.option('chunkRetry', 2);
+            self.uploader.option('sendAsBinary', true);
+            self.uploader.option('threads', 5);
 
         },
 
-        uploadBeforeSend: function(object, data, headers){
-            this._setChunkAuth();
-        	var self = this.file.uploaderWidget;
-        	$.each(data, function(i, n){
-                delete data[i];
-            })
-            headers['x-bce-date'] = self.get('bceDate');
-            headers['Authorization'] = self.get('chunkAuth');
-        },
+        uploadBeforeSend: function(object, data, headers, tr){
+            var self = this.file.uploaderWidget;            
 
-        _initCloud2UploadStatus: function(){
-            return {
-                chunkSize: 1024*1024,
-                currentChunkIndex: 1
-            };
-        },
-
-        _setChunkAuth: function(){
-            var self = this.file.uploaderWidget;
-            var cloud2UploadStatus = self.get('cloud2UploadStatus');
+            var partNumber = object.chunk + 1;
             var encryptParams = {
-                "partNumber" : cloud2UploadStatus.currentChunkIndex,
+                "partNumber" : partNumber,
                 "uploadId" : self.get('uploadId')
             }
-            var result = this._getUploadAuth(encryptParams, 'PUT');
-            self.set('chunkAuth', result['Authorization']);
-            self.set('bceDate', result['x-bce-date']);
+            var authResult = this._getUploadAuth(encryptParams, 'PUT');
+        	
+            headers['x-bce-date'] = authResult['x-bce-date'];
+            headers['Authorization'] = authResult['Authorization'];
+
+            $.each(data, function(i, n){
+                delete data[i];
+            });
+
+            tr.options.server = self.get('uploadUrl')+'?partNumber='+partNumber+'&uploadId='+self.get('uploadId');
         },
 
         _getUploadAuth: function(encryptParams, httpMethod){
@@ -83,9 +70,23 @@ define(function(require, exports, module) {
             return result;
         },
 
+        _getParameterByName: function (name, url) {
+            var query = url.substring( url.indexOf('?') + 1 );
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                if (decodeURIComponent(pair[0]) == name) {
+                    return decodeURIComponent(pair[1]);
+                }
+            }
+        },
+
         finishUpload: function(deferred) {
             var self = this.file.uploaderWidget;
             var baiduParts = self.get('baiduParts');
+            baiduParts.parts = baiduParts.parts.sort(function (a, b) {
+                return (a['partNumber'] - b['partNumber']);
+            });
             var uploadId = self.get('uploadId');
             var url = self.get('uploadUrl')+'?uploadId='+uploadId;
             encryptParams = {
@@ -113,18 +114,12 @@ define(function(require, exports, module) {
 
         uploadAccept: function(object, ret){
         	var self = this.file.uploaderWidget;
-        	var cloud2UploadStatus = self.get('cloud2UploadStatus');
             if (ret._responseHeaders && ret._responseHeaders['ETag']) {
+                var partNumber = this._getParameterByName('partNumber', ret._requestURL);
                 var baiduParts = self.get('baiduParts');
-                baiduParts.parts.push({partNumber:cloud2UploadStatus.currentChunkIndex, eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
+                baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
                 self.set('baiduParts', baiduParts);
             }
-
-            cloud2UploadStatus.currentChunkIndex++;
-            self.uploader.option('server', self.get('uploadUrl')+'?partNumber='+cloud2UploadStatus.currentChunkIndex+'&uploadId='+self.get('uploadId'));
-            self.uploader.option('method', 'PUT');
-            self.set('cloud2UploadStatus', cloud2UploadStatus);
-
         }
     });
 

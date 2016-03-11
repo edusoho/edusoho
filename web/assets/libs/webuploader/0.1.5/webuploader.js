@@ -3273,6 +3273,10 @@
             getResponseHeadersAsJson: function() {
                 return this.exec('getResponseHeadersAsJson');
             },
+
+            getRequestURL: function(){
+                return this.exec('getRequestURL');
+            },
     
             getStatus: function() {
                 return this.exec('getStatus');
@@ -4030,6 +4034,7 @@
                     ret = tr.getResponseAsJson() || {};
                     ret._raw = tr.getResponse();
                     ret._responseHeaders = tr.getResponseHeadersAsJson() || {};
+                    ret._requestURL = tr.getRequestURL();
                     fn = function( value ) {
                         reject = value;
                     };
@@ -4100,7 +4105,7 @@
     
                 // 在发送之间可以添加字段什么的。。。
                 // 如果默认的字段不够使用，可以通过监听此事件来扩展
-                owner.trigger( 'uploadBeforeSend', block, data, headers );
+                owner.trigger( 'uploadBeforeSend', block, data, headers, tr );
     
                 // 开始发送。
                 tr.appendBlob( opts.fileVal, block.blob, file.name );
@@ -6781,6 +6786,7 @@
                 this._status = 0;
                 this._response = null;
                 this._responseHeaders = null;
+                this._requestURL = null
             },
     
             send: function() {
@@ -6851,6 +6857,10 @@
 
             getResponseHeaders: function() {
                 return this._responseHeader;
+            },
+
+            getRequestURL: function() {
+                return this._requestURL;
             },
     
             getResponseHeadersAsJson: function() {
@@ -6928,6 +6938,8 @@
     
                     if ( xhr.status >= 200 && xhr.status < 300 ) {
                         me._responseHeaders = me._parseHeaders(xhr.getAllResponseHeaders());
+                        me._requestURL = xhr.responseURL;
+                        
                         me._response = xhr.responseText;
                         return me.trigger('load');
                     } else if ( xhr.status >= 500 && xhr.status < 600 ) {
@@ -7857,6 +7869,7 @@
                 this._response = null;
                 this._responseJson = null;
                 this._responseHeader = null;
+                this._requestURL = null;
             },
     
             send: function() {
@@ -7907,6 +7920,10 @@
 
             getResponseHeaders: function() {
                 return this._responseHeader || '';
+            },
+
+            getRequestURL: function (){
+                return this._requestURL;
             },
     
             getResponseHeadersAsJson: function() {
@@ -7960,6 +7977,7 @@
 
                         me._responseHeader = xhr.exec('getResponseHeaders');
                         me._response = xhr.exec('getResponse');
+                        me._requestURL = xhr.exec('getRequestURL');
                         me._response = decodeURIComponent( me._response );
                         // flash 处理可能存在 bug, 没辙只能靠 js 了
                         // try {
