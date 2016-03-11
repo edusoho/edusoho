@@ -30,6 +30,10 @@ material_lib_my_sharing_contacts:
     pattern: /material/lib/recent/contacts
     defaults: { _controller: MaterialLibBundle:MaterialLib:findMySharingContacts }
 
+material_lib_save_collection:
+    pattern: /material/lib/my/collection/save
+    defaults: { _controller: MaterialLibBundle:MaterialLib:collect }
+
 material_lib_file_preview_content:
     pattern:  /materiallib/file/{fileId}/preview_content
     defaults: { _controller: TopxiaWebBundle:CourseLesson:file }

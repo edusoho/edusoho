@@ -330,6 +330,26 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $convertHash;
     }
 
+    public function collectFile($userId, $fileId)
+    {
+        if (empty($userId) || empty($fileId)) {
+            throw $this->createServiceException("参数错误，请重新输入");
+        }
+        $collection = array(
+            'userId'      => $userId,
+            'fileId'      => $fileId,
+            'updatedTime' => time(),
+            'createdTime' => time()
+        );
+        $collection = $this->getUploadFileCollectDao()->addCollection($collection);
+        $result     = $this->getUploadFileDao()->getFile($collection['fileId']);
+        return $result;
+    }
+
+    public function cancelCollectFile($userId, $fileId)
+    {
+    }
+
     protected function _prepareSearchConditions($conditions)
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
@@ -388,6 +408,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function getUploadFileShareDao()
     {
         return $this->createDao('File.UploadFileShareDao');
+    }
+
+    protected function getUploadFileCollectDao()
+    {
+        return $this->createDao('File.UploadFileCollectDao');
     }
 }
 

@@ -7,7 +7,19 @@
 {% set parentId = parentId | default(null)%}
 
 {% block body %}
-
+<script type="text/javascript">
+$("#share-teachers-input").select2({
+    placeholder: "选择要分享的老师",
+    multiple: false,
+    data:[
+        {% for contact in allTeachers %}
+            {% if contact.id != currentUserId %}
+                {id: '{{ contact.id }}', text: '{{ contact.nickname }}'},
+            {% endif %}
+        {% endfor %}
+        ]
+});
+</script>
 <div id="share-history-table-container">
     <table class="table table-hover table-striped" id="share-history-table">
         <div style="position:relative;">
@@ -20,9 +32,9 @@
             </div>
             <div  id="show-share-input"hidden="hidden"style="
                 z-index:1;left:-250px;position:relative;">
-                <input class="mlm">
-                <a class="glyphicon glyphicon-remove-sign mlm" href="javascript:;"></a>
-                <a id="close-share-input"class="glyphicon glyphicon-ok-sign mlm " href="javascript:;"></a>
+                <input id="share-teachers-input" class=" mlm select2-container select2-container-multi "style="width:200px" >
+                <a id="close-share-input"class="glyphicon glyphicon-remove-sign mlm" href="javascript:;"></a>
+                <a id="submit-share-input" class="glyphicon glyphicon-ok-sign mlm " href="javascript:;"></a>
             </div>
         </div>
         <thead>
@@ -35,22 +47,22 @@
         <tbody>
             {% for history in shareHistories %}
                 <tr class="share-history-record" data-role="item">
-                	<td class="text-center">
-                	{% if history['isActive'] == '1' %}
-                							将资料分享给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
-                	{% else %}
-                							取消分享资料给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
-                	{% endif %}
-                	
-                	</td>
+                    <td class="text-center">
+                    {% if history['isActive'] == '1' %}
+                                            将资料分享给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
+                    {% else %}
+                                            取消分享资料给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
+                    {% endif %}
+                    
+                    </td>
                     <td class="text-center">{{ history['updatedTime']|date('Y-n-d H:i') }}</td>
-                	<td class="text-center">
-                		{% if history['isActive'] == '1' %}
+                    <td class="text-center">
+                        {% if history['isActive'] == '1' %}
                             <div class="pull-right">
-                    			<a data-url="{{ path('material_lib_cancel_sharing') }}" targetUserId="{{ history['targetUserId'] }}" class="btn btn-default btn-sm cancel-share-btn">取消分享</a>
+                                <a data-url="{{ path('material_lib_cancel_sharing') }}" targetUserId="{{ history['targetUserId'] }}" class="btn btn-default btn-sm cancel-share-btn">取消分享</a>
                             </div>
-                		{% endif %}
-                	</td>
+                        {% endif %}
+                    </td>
                 </tr>
             {% else %}
                 <tr class="empty"><td colspan="3">无资料分享记录</td></tr>

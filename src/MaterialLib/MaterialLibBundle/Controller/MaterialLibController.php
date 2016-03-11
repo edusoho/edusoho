@@ -84,12 +84,11 @@ class MaterialLibController extends BaseController
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
-        $currentUserId = $currentUser['id'];
-        $data          = $request->query->all();
-        $source        = $data['source'];
-        $type          = $data['type'];
-        $keyWord       = $request->query->get('keyword') ?: "";
-
+        $currentUserId        = $currentUser['id'];
+        $data                 = $request->query->all();
+        $source               = $data['source'];
+        $type                 = $data['type'];
+        $keyWord              = $request->query->get('keyword') ?: "";
         $conditions           = array();
         $conditions['status'] = 'ok';
 
@@ -232,11 +231,13 @@ class MaterialLibController extends BaseController
 
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
-
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
         return $this->render('MaterialLibBundle:MaterialLib:material-share-history.html.twig', array(
             'shareHistories' => $shareHistories,
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
-            'source'         => 'myShareHistory'
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'allTeachers'    => $allTeachers
         ));
     }
 
@@ -320,6 +321,18 @@ class MaterialLibController extends BaseController
     {
         $file = $this->tryAccessFile($id);
         return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
+    }
+
+    public function collectAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $data = $request->query->all();
+
+        $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
+        if (empty($collection)) {
+            return $this->createJsonResponse(false);
+        }
+        return $this->createJsonResponse(true);
     }
 
     protected function tryAccessFile($fileId)

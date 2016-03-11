@@ -19,7 +19,8 @@ define(function(require, exports, module) {
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-download-btn': 'onClickDownloadBtn',
-                'click .js-reconvert-btn': 'onClickReconvertBtn'
+                'click .js-reconvert-btn': 'onClickReconvertBtn',
+                'click .op-li div.op-btn': 'onClickOperationBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -112,6 +113,18 @@ define(function(require, exports, module) {
                     $target.button('reset');
                 });
             },
+            onClickOperationBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $.get($target.data('url'),function(data){
+                    if(data){
+                        $target.find('i').addClass("material-collection");
+                    } else {
+                        $target.find('i').removeClass("material-collection");
+                    }
+                });
+            },
             submitForm: function(event)
             {
                 this.renderTable();
@@ -137,13 +150,13 @@ define(function(require, exports, module) {
             },
             _loading: function()
             {
-                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</div>';
+                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</td></tr>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
             _loaded_error: function()
             {
-                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</div>';
+                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">Opps,出错了......</td></tr>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },
@@ -337,7 +350,6 @@ define(function(require, exports, module) {
         window.materialWidget = new MaterialWidget({
             element: '#material-search-form'
         });
-       
     }
 
 });
