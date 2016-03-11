@@ -9,7 +9,8 @@ return array(
         '/^\/api\/classrooms\/\w+\/members$/',
         '/^\/api\/discovery_columns$/',
         '/^\/api\/courses\/discovery\/columns$/',
-        '/^\/api\/classrooms\/discovery\/columns$/'
+        '/^\/api\/classrooms\/discovery\/columns$/',
+        '/^\/api\/lessons$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',
