@@ -323,6 +323,14 @@ class MaterialLibController extends BaseController
         return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
     }
 
+    public function collectAction(Request $request)
+    {
+        $user       = $this->getCurrentUser();
+        $data       = $request->request->all();
+        $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
+        return $this->createJsonResponse(json_decode($collection));
+    }
+
     protected function tryAccessFile($fileId)
     {
         $file = $this->getUploadFileService()->getFile($fileId);
