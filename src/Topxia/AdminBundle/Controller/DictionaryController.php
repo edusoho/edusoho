@@ -15,11 +15,11 @@ class DictionaryController extends BaseController
 			));
 	}
 
-	public function createAction(Request $request)
+	public function createAction(Request $request, $type)
     {
         if ($request->getMethod() == 'POST') {
         	$conditions = $request->request->all();
-        	$conditions['type'] = 'quitReason';
+        	$conditions['type'] = $type;
         	$conditions['createdTime'] = time();
             $dictionary = $this->getDictionaryService()->addDictionary($conditions);
             $dictionaries = $this->getDictionaryService()->findAllDictionariesOrderByWeight();
@@ -28,7 +28,7 @@ class DictionaryController extends BaseController
             	));
         }
 
-        return $this->render('TopxiaAdminBundle:Dictionary:modal.html.twig');
+        return $this->render('TopxiaAdminBundle:Dictionary:modal.html.twig',array('type'=>$type));
     }
 
     public function checkNameAction(Request $request, $id)

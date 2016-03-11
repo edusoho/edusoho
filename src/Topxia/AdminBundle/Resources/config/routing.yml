@@ -40,7 +40,7 @@ admin_dictionary:
     defaults: { _controller: TopxiaAdminBundle:Dictionary:index }
 
 admin_dictionary_create:
-    pattern: /dictionary/create
+    pattern: /dictionary/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Dictionary:create }
 
 admin_dictionary_delete:
