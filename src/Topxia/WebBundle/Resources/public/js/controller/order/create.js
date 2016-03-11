@@ -121,6 +121,9 @@ define(function(require, exports, module) {
 					}
 
 					$('[role="coinNum"]').val(coinNumPay);
+					if(coinNumPay==0) {
+						coinPriceZero();
+					}
 
 					if(coinNumPay && $('[name="payPassword"]').length>0){
 						coinNumPay = afterCoinPay(coinNumPay);
@@ -144,6 +147,10 @@ define(function(require, exports, module) {
 					}
 
 					$('[role="coinNum"]').val(coinNumPay);
+
+					if(coinNumPay==0) {
+						coinPriceZero();
+					}
 
 					if(coinNumPay && $('[name="payPassword"]').length>0){
 						coinNumPay = afterCoinPay(coinNumPay);
