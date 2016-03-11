@@ -169,7 +169,9 @@ class LiveCourseController extends BaseController
             $conditions['categoryId'] = $request->query->get('categoryId');
         }
 
-        if (!empty($request->query->get('vipCategoryId', ''))) {
+        $vipCategoryId = $request->query->get('vipCategoryId', '');
+
+        if (!empty($vipCategoryId)) {
             $conditions['vipLevelId'] = $request->query->get('vipCategoryId');
         }
 
