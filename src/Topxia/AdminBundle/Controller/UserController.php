@@ -266,8 +266,14 @@ class UserController extends BaseController
             $dataDict = new UserRoleDict();
             $roleDict = $dataDict->getDict();
 
-            foreach ($setRoles as $serRole) {
-                $roleDict[$serRole['code']] = $serRole['name'];
+            foreach ($setRoles as $setRole) {
+                $roleDict[$setRole['code']] = $setRole['name'];
+            }
+
+            foreach ($roles as $key => $role) {
+                if ($role == 'ROLE_BACKEND') {
+                    unset($roles[$key]);
+                }
             }
 
             $role         = "";
