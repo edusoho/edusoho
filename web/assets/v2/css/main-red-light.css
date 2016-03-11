@@ -13253,3 +13253,226 @@ textarea {
 .group-page .media:hover .post-delete-btn {
   visibility: visible;
 }
+.es-live-poster {
+  position: relative;
+}
+.es-live-poster .swiper-pager {
+  position: absolute;
+  bottom: 20px;
+  z-index: 100;
+  width: 100%;
+  text-align: center;
+}
+.es-live-poster .swiper-pager span {
+  cursor: pointer;
+  font-size: 0;
+  margin: 0 7px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+.es-live-poster .swiper-pager span.swiper-active-switch {
+  background: #ffffff;
+}
+.live-course-body .es-live-list {
+  padding: 0;
+}
+.live-course-body .es-live-list .panel-body {
+  padding: 0;
+}
+.live-course-body .es-live-list .panel-body > ul {
+  margin: 0;
+  padding: 0;
+}
+.live-course-body .es-live-list .panel-body > ul li {
+  float: left;
+  margin-bottom: -1px;
+  list-style-type: none;
+  padding: 12px 0;
+  width: 25%;
+  text-align: center;
+  color: #313131;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
+  border-right: 1px solid #e9e9e9;
+}
+.live-course-body .es-live-list .panel-body > ul li:last-child {
+  border-right: none;
+}
+.live-course-body .es-live-list .panel-body > ul li a {
+  color: #313131;
+}
+.live-course-body .es-live-list .panel-body > ul li.active {
+  background-color: #fff;
+  border-bottom: none;
+}
+.live-course-body .es-live-list .es-live-item {
+  position: relative;
+  margin: 20px 15px;
+}
+.live-course-body .es-live-list .es-live-item:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 5px;
+  height: 100%;
+  width: 2px;
+  background: #e1e1e1;
+}
+.live-course-body .es-live-list .es-live-item .live-content.living .time-icon,
+.live-course-body .es-live-list .es-live-item .live-content.live .time-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: #a8eb8b;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  left: -1px;
+}
+.live-course-body .es-live-list .es-live-item .live-content.living .time-icon em,
+.live-course-body .es-live-list .es-live-item .live-content.live .time-icon em {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: #70d445;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+}
+.live-course-body .es-live-list .es-live-item .live-content.living .label,
+.live-course-body .es-live-list .es-live-item .live-content.live .label {
+  margin-left: 24px;
+  padding: 0.3em 0.5em;
+}
+.live-course-body .es-live-list .es-live-item .live-content.live .time-icon {
+  background: #6dcbf5;
+}
+.live-course-body .es-live-list .es-live-item .live-content.live .time-icon em {
+  background: #2db7f5;
+}
+.live-course-body .es-live-list .es-live-item ul,
+.live-course-body .es-live-list .es-live-item li {
+  list-style-type: none;
+  padding: 0;
+}
+.live-course-body .es-live-list .es-live-item li {
+  margin-top: 15px;
+  padding-left: 24px;
+}
+.live-course-body .es-live-list .es-live-item li a {
+  color: #313131;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.live-course-body .es-live-list .es-live-item li a span {
+  color: #919191;
+  padding-right: 15px;
+}
+.live-course-body .es-live-recommend img {
+  max-width: 110px;
+}
+.live-course-body .es-live-recommend .title {
+  margin-bottom: 15px;
+  height: 20px;
+  overflow: hidden;
+}
+.live-course-body .es-live-recommend .price {
+  color: #e83d2c;
+}
+.live-course-body .es-live-back ul {
+  padding: 0;
+  margin: 0;
+}
+.live-course-body .es-live-back ul li {
+  list-style-type: none;
+  margin-top: 20px;
+}
+.live-course-body .es-live-back ul li:first-child {
+  margin-top: 5px;
+}
+.live-course-body .es-live-back ul li:last-child {
+  margin-bottom: 5px;
+}
+.live-course-body .es-live-back ul li .dat {
+  width: 4px;
+  height: 4px;
+  background: #fd5f56;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: middle;
+}
+.live-course-body .es-live-back ul li a {
+  color: #313131;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+}
+.live-course-body .es-live-back ul li a:hover {
+  color: #fd5f56;
+}
+.live-course-body .es-live-back ul li a span {
+  padding: 0 14px 0 8px;
+}
+.live-course-body .es-live-all .media {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f5f5f5 !important;
+}
+@media (max-width: 767px) {
+  .live-course-body .es-live-all .media-left {
+    display: block;
+    padding: 0;
+  }
+}
+.live-course-body .es-live-all .media-left img {
+  max-width: 302px;
+}
+@media (max-width: 767px) {
+  .live-course-body .es-live-all .media-left img {
+    max-width: 767px;
+    width: 100%;
+  }
+}
+.live-course-body .es-live-all .media-body {
+  position: relative;
+}
+.live-course-body .es-live-all .media-body .metas {
+  margin: 15px 0 25px;
+  color: #c1c1c1;
+}
+.live-course-body .es-live-all .media-body .user a {
+  color: #c1c1c1;
+}
+.live-course-body .es-live-all .media-body .user a:hover {
+  color: #fd5f56;
+}
+.live-course-body .es-live-all .media-body .other {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -45px;
+  text-align: center;
+}
+.live-course-body .es-live-all .media-body .other span {
+  display: block;
+  margin-bottom: 8px;
+  color: #fd5f56;
+}
+.live-course-body .es-live-all .media-body .other span.price {
+  color: #e83d2c;
+}
