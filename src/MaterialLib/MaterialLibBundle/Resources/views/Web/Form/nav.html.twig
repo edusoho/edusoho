@@ -7,4 +7,9 @@
   <li class="" data-value="ppt"><a href="javascript:;">PPT</a></li>
   <li class="" data-value="other"><a href="javascript:;">其它</a></li>
   <input type="hidden" name="type" value="{{ type|default('') }}">
+  <div class="form-group">
+    <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
+  </div>
+  <button class="btn btn-primary btn-sm">搜索</button>
+
 </ul>

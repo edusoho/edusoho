@@ -241,3 +241,8 @@
 .material-list-container {
   margin-top: 20px;
 }
+
+#material-search-form .source-btn {
+  margin-left: 60%;
+  margin-bottom: 15px;
+}
