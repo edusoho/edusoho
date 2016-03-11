@@ -8,12 +8,7 @@
     <div class="form-group">
       <div class="col-md-3 control-label">{{'退学原因'|trans}}</div>
       <div class="col-md-8 controls">
-        {% set reasons = {
-            'bad_content': '课程内容质量差'|trans,
-            'bad_teacher': '老师服务态度不好'|trans,
-            'other': '其他'|trans
-          }
-        %}
+
         <select class="form-control" name="reason[type]">
           {{ select_options(reasons) }}
         </select>
