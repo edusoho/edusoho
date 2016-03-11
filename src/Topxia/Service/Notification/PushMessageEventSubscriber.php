@@ -30,7 +30,34 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
             'course.lesson_start'       => 'onCourseLessonStart',
-            'course.thread.create'      => 'onCourseThreadCreate'
+            'course.thread.create'      => 'onCourseThreadCreate',
+            'user.register'             => 'onUserRegister',
+            'user.profile.update'       => 'onUserProfileUpdate',
+            'user.email.verify'         => 'onUserEmailVerify',
+            'user.nickname.update'      => 'onUserNicknameUpdate',
+            'user.email.update'         => 'onUserEmialUpdate',
+            'user.avatar.update'        => 'onUserAvatarUpdate',
+            'user.password.update'      => 'onUserPasswordUpdate',
+            'user.paypassword.update'   => 'onUserPayPasswordUpdate',
+            'user.mobile.update'        => 'onUserMobileUpdate',
+            'user.securequestion.add'   => 'onUserSecurequestionAdd',
+            'user.account.setup'        => 'onUserAccountSetup',
+            'user.roles.change'         => 'onUserRolesChange',
+            'user.unbind'               => 'onUserUnbind',
+            'user.binduser'             => 'onUserBinduser',
+            'user.lock'                 => 'onUserLock',
+            'user.unlock'               => 'onUserUnlock',
+            'user.promote'              => 'onUserPromote',
+            'user.cancelpromote'        => 'onUserCancelPromote',
+            'user.follow'               => 'onUserFollow',
+            'user.unfollow'             => 'onUserUnfollow',
+            'user.apply.approval'       => 'onUserApplyApproval',
+            'user.pass.approval'        => 'onUserPassApproval',
+            'user.reject.approval'      => 'onUserRejectApproval',
+            'user.create.invitecode'    => 'onUserCreateInvitecode',
+            'course.update'             => 'onCourseUpdate',
+            'course.pitcture.update'    => 'onCoursePictureUpdate',
+            'course.recommend'          => 'onCourseRecommend'
         );
     }
 
@@ -49,6 +76,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
         $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+        $this->pushCloudData('course', 'create', 'new', $course['id'], $course['createdTime']);
     }
 
     public function onClassroomCreate(ServiceEvent $event)
@@ -426,6 +454,182 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onUserRegister(ServiceEvernt $event)
+    {
+        $user = $event->getSubject();
+        $this->getCloudDataService()->push('edusoho.user.register', array(
+            'type'     => 'new',
+            'category' => 'user',
+            'id'       => $user['id']
+        ), $user['createdTime']);
+    }
+
+    public function onUserProfileUpdate(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'profile', 'update', $userId, time());
+    }
+
+    public function onUserEmailVerify(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->getCloudDataService()->push('edusoho.user.email.verify', array(
+            'type'     => 'update',
+            'category' => 'user',
+            'id'       => $user['id']
+        ), time());
+    }
+
+    public function onUserNicknameUpdate(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'nickname', 'update', $user['id'], time());
+    }
+
+    public function onUserEmialUpdate(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'email', 'update', $user['id'], time());
+    }
+
+    public function onUserAvatarUpdate(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'avater', 'update', $user['id'], time());
+    }
+
+    public function onUserPasswordUpdate(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'password', 'update', $user['id'], time());
+    }
+
+    public function onUserPayPasswordUpdate()
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'paypassword', 'update', $user['id'], time());
+    }
+
+    public function onUserMobileUpdate(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'mobile', 'update', $user['id'], time());
+    }
+
+    public function onUserSecurequestionAdd(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'securequestion', 'new', $userId, time());
+    }
+
+    public function onUserAccountSetup(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->getCloudDataService()->push('edusoho.user.account.setup', array(
+            'type'     => 'update',
+            'category' => 'user',
+            'id'       => $userId
+        ), time());
+    }
+
+    public function onUserRolesChange(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'roles', 'update', $userId, time());
+    }
+
+    public function onUserUnbind(Service $event)
+    {
+        $user = $event->getSubject();
+        $this->pushCloudData('user', 'bind', 'delete', $user['id'], time());
+    }
+
+    public function onUserBinduser(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'bind', 'new', $userId, time());
+    }
+
+    public function onUserLock(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'lock', 'update', $userId, time());
+    }
+
+    public function onUserUnlock(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'unlock', 'update', $userId, time());
+    }
+
+    public function onUserPromote(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'promote', 'update', $userId, time());
+    }
+
+    public function onUserCancelPromote(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'cancelpromote', 'update', $userId, time());
+    }
+
+    public function onUserFollow(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'follow', 'update', $userId, time());
+    }
+
+    public function onUserUnfollow(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'unfollow', 'update', $userId, time());
+    }
+
+    public function onUserApplyApproval(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'applyapproval', 'new', $userId, time());
+    }
+
+    public function onUserPassApproval(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'passapproval', 'update', $userId, time());
+    }
+
+    public function onUserRejectApproval(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'rejectapproval', 'update', $userId, time());
+    }
+
+    public function onUserCreateInvitecode(Service $event)
+    {
+        $userId = $event->getSubject();
+        $this->pushCloudData('user', 'invitecode', 'update', $userId, time());
+    }
+
+    public function onCourseUpdate(Service $event)
+    {
+        $context = $event->getSubject();
+        $course  = $context['course'];
+        $this->pushCloudData('course', 'course', 'update', $course['id'], time());
+    }
+
+    public function onCoursePictureUpdate(Service $event)
+    {
+        $context = $event->getSubject();
+        $course  = $context['course'];
+        $this->puchCloudData('course', 'coursepicture', 'update', $course['id'], time());
+    }
+
+    public function onCourseRecommend(Service $event)
+    {
+        $courseId = $event->getSubject();
+        $this->pushCloudData('course', 'recommend', 'update', $courseId, time());
+    }
+
     protected function push($title, $content, $from, $to, $body)
     {
         $message = array(
@@ -459,21 +663,33 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         ), $timestamp);
     }
 
+    protected function pushCloudData($category, $fieldType, $paramType, $userId, $timestamp)
+    {
+        $result = $this->getCloudDataService()->push('edusoho.'.$category.".".$fieldType.".".$paramType, array(
+            'type'     => $paramType,
+            'category' => $category,
+            'id'       => $userId
+        ), $timestamp);
+    }
+
     protected function getTarget($type, $id)
     {
         $target = array('type' => $type, 'id' => $id);
 
         switch ($type) {
-            case 'course':;
+            case 'course':
+                ;
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
                 break;
-            case 'classroom':;
+            case 'classroom':
+                ;
                 $classroom       = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
-            case 'global':;
+            case 'global':
+                ;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
                 $target['title'] = '网校公告';

@@ -24,6 +24,7 @@ class SettingsController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
+                $userProfile = $this->dispatchEvent("user.profile.update", $userProfile);
                 $this->setFlashMessage('success', '基础信息保存成功。');
             } else {
                 $this->setFlashMessage('danger', '不能修改已绑定的手机。');
@@ -122,8 +123,8 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     ->add('avatar', 'file')
-                     ->getForm();
+            ->add('avatar', 'file')
+            ->getForm();
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
 
@@ -254,7 +255,7 @@ class SettingsController extends BaseController
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
         $showBindMobile  = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
-        && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+            && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
         $itemScore     = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
         $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
@@ -284,10 +285,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -323,10 +324,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -353,11 +354,11 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     // ->add('currentUserLoginPassword','password')
-                     ->add('oldPayPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+        // ->add('currentUserLoginPassword','password')
+            ->add('oldPayPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -407,10 +408,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('payPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->add('currentUserLoginPassword', 'password')
-                     ->getForm();
+            ->add('payPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -456,8 +457,8 @@ class SettingsController extends BaseController
         $verifiedMobile       = $user['verifiedMobile'];
         $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
         $canSmsFind           = ($hasVerifiedMobile) &&
-        ($this->setting('cloud_sms.sms_enabled') == '1') &&
-        ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
+            ($this->setting('cloud_sms.sms_enabled') == '1') &&
+            ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
         if ((!$hasSecurityQuestions) && ($canSmsFind)) {
             return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -676,10 +677,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentPassword', 'password')
-                     ->add('newPassword', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('currentPassword', 'password')
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -714,9 +715,9 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('password', 'password')
-                     ->add('email', 'text')
-                     ->getForm();
+            ->add('password', 'password')
+            ->add('email', 'text')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
