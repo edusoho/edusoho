@@ -1,10 +1,10 @@
 material_lib_browsing:
     pattern: /material/lib/browse/{type}/{viewMode}/{source}
-    defaults: { _controller: MaterialLibBundle:MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
 
 material_lib_show_browsing:
     pattern: /material/lib/show/browse
-    defaults: { _controller: MaterialLibBundle:MaterialLib:showMyMaterialLibForm, type: 'all', viewMode: 'thumb', source: 'upload'}
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:showMyMaterialLibForm}
 
 material_lib_my_sharing:
     pattern: /material/lib/my/sharing/show
@@ -79,6 +79,10 @@ material_reconvert:
 material_thumbnail_generate:
     pattern:  /material/lib/{globalId}/thumbnail/generate
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:generateThumbnail }
+
+material_lib_file_detail:
+    pattern:  /material/lib/{globalId}/detail
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:detail }
 
 global_file_player:
     pattern:  /global_file/{globalId}/player

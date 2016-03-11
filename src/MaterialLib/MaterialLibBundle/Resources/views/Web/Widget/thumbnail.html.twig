@@ -12,5 +12,9 @@
 
 <div class="mask">
   <i class="es-icon es-icon-view"></i><span>{{ uploadFile.views|default(0) }}</span>
-  <span class="pull-right">{{ uploadFile.length|date('i:s') }}</span class="pull-right">
+  {% if uploadFile.type in ['video', 'audio'] %}
+    <span class="pull-right">{{ uploadFile.length|date('i:s') }}</span class="pull-right">
+  {% else %}
+    <span class="pull-right">{{ uploadFile.ext|upper }}</span class="pull-right">
+  {% endif %}
 </div>
