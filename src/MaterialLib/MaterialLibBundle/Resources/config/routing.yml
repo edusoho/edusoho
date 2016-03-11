@@ -1,6 +1,6 @@
 material_lib_browsing:
-    pattern: /material/lib/browse/{type}/{viewMode}/{source}
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:index, type: 'all', viewMode: 'thumb', source: 'upload'}
+    pattern: /material/lib/browse
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:index}
 
 material_lib_show_browsing:
     pattern: /material/lib/show/browse

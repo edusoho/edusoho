@@ -120,7 +120,7 @@ define(function(require, exports, module) {
                 var $target = $(event.currentTarget);
                 $target.parent().find('button.active').removeClass('active');
                 $target.addClass('active');
-                $target.parent().find("[name=source]").val($target.data('value'));
+                $target.parent().find("[name=sourceFrom]").val($target.data('value'));
                 this.renderTable();
             },
             onClickOperationBtn: function(event)

@@ -354,13 +354,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
-        if (isset($conditions['source']) && ($conditions['source'] == 'shared') && !empty($conditions['currentUserId'])) {
+        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'shared') && !empty($conditions['currentUserId'])) {
             $sharedUsers = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
 
             if (!empty($sharedUsers)) {
                 $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
                 $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
             }
+        }
+
+        if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {
+            $conditions['isPublic'] = 1;
         }
 
         if (!empty($conditions['currentUserId'])) {
