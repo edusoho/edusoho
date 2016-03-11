@@ -232,11 +232,13 @@ class MaterialLibController extends BaseController
 
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
         }
-
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
         return $this->render('MaterialLibBundle:MaterialLib:material-share-history.html.twig', array(
             'shareHistories' => $shareHistories,
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
-            'source'         => 'myShareHistory'
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'allTeachers'    => $allTeachers
         ));
     }
 
