@@ -116,7 +116,6 @@ define(function(require, exports, module) {
 					var maxCoinCanPay = getMaxCoinCanPay(totalCoinPrice);
 					var coinNumPay = $('[role="coinNum"]').val();
 
-					console.log(coinNumPay);
 					if(maxCoinCanPay <= parseFloat(coinNumPay)){
 						coinNumPay = maxCoinCanPay;
 					}
