@@ -2,10 +2,10 @@
 
 namespace MaterialLib\MaterialLibBundle\Controller\Web;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
@@ -40,7 +40,6 @@ class MaterialLibController extends BaseController
         $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
-
 
         if ($viewMode == 'thumb') {
             $resultPage = 'MaterialLibBundle:Web:material-thumb-view.html.twig';
@@ -93,7 +92,8 @@ class MaterialLibController extends BaseController
 
         $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 10);
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $collections = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
@@ -129,7 +129,7 @@ class MaterialLibController extends BaseController
         $this->getMaterialLibService()->edit($globalId, $fields);
         return $this->createJsonResponse(array('success' => true));
     }
-    
+
     public function reconvertAction($globalId)
     {
         $this->getMaterialLibService()->reconvert($globalId);
@@ -151,6 +151,18 @@ class MaterialLibController extends BaseController
             'material'   => $material,
             'thumbnails' => $thumbnails
         ));
+    }
+
+    public function collectAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $data = $request->query->all();
+
+        $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
+        if (empty($collection)) {
+            return $this->createJsonResponse(false);
+        }
+        return $this->createJsonResponse(true);
     }
 
     public function downloadAction($globalId)

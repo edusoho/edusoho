@@ -4,6 +4,8 @@ namespace Topxia\Service\File\Dao;
 
 interface UploadFileCollectDao
 {
+    public function findCollectonsByUserIdandFileIds($ids, $userId);
+
     public function getCollectonByUserIdandFileId($userId, $fileId);
 
     public function addCollection($collection);

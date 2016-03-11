@@ -351,6 +351,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return false;
     }
 
+    public function findcollectionsByUserIdAndFileIds($fileIds, $userId)
+    {
+        $collections = $this->getUploadFileCollectDao()->findCollectonsByUserIdandFileIds($fileIds, $userId);
+        return $collections;
+    }
+
     protected function _prepareSearchConditions($conditions)
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];

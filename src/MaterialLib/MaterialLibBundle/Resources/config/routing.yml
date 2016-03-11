@@ -32,7 +32,7 @@ material_lib_my_sharing_contacts:
 
 material_lib_save_collection:
     pattern: /material/lib/my/collection/save
-    defaults: { _controller: MaterialLibBundle:MaterialLib:collect }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:collect }
 
 material_lib_file_preview_content:
     pattern:  /materiallib/file/{fileId}/preview_content
