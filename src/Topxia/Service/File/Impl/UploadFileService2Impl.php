@@ -343,16 +343,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 'updatedTime' => time(),
                 'createdTime' => time()
             );
-
             $collection = $this->getUploadFileCollectDao()->addCollection($collection);
             $result     = $this->getUploadFileDao()->getFile($collection['fileId']);
             return $result;
         }
+        $this->getUploadFileCollectDao()->deleteCollection($collection['id']);
         return false;
-    }
-
-    public function cancelCollectFile($userId, $fileId)
-    {
     }
 
     protected function _prepareSearchConditions($conditions)
