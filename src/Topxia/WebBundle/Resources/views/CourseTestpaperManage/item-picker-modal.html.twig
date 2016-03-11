@@ -11,7 +11,7 @@
   <form id="testpaper-item-picker-form" class="form-inline well well-sm" action="{{ path('course_manage_testpaper_item_picker', {courseId:course.id, testpaperId:testpaper.id}) }}" novalidate>
     <div class="form-group">
       <select class="form-control" name="target" style="width:200px;height:32px;">
-        {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--'||trans) }}
+        {{ select_options(targetChoices, app.request.query.get('target'), '--按从属--'|trans) }}
       </select>
     </div>
 

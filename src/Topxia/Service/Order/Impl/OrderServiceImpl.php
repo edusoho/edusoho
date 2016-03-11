@@ -497,10 +497,6 @@ class OrderServiceImpl extends BaseService implements OrderService
             throw $this->createServiceException("当前订单(#{$order['id']})退款记录不存在，不能取消退款");
         }
 
-        if ($refund['status'] != 'created') {
-            throw $this->createServiceException("当前订单(#{$order['id']})退款记录状态下，不能取消退款");
-        }
-
         $this->getOrderRefundDao()->updateRefund($refund['id'], array(
             'status'      => 'cancelled',
             'updatedTime' => time()

@@ -119,7 +119,11 @@ define(function(require, exports, module) {
 				} else {
 					coinNum = totalPrice;
 				}
-				var coinNumPay = $('[role="coinNum"]').val();
+				var coinNumPay = $('[role="accountCash"]').text();
+				if($('[role="maxCoin"]').length > 0) {
+					coinNumPay = $('[role="maxCoin"]').text();
+				}
+
 				if(coinNumPay && $('[name="payPassword"]').length>0){
 					if(coinNum <= parseFloat(coinNumPay)){
 						coinNumPay = coinNum;
