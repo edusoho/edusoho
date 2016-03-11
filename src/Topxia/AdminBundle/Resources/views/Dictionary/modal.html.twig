@@ -9,7 +9,7 @@
 {% block body %}
 <div id="dictionary-creater-widget">
 
-	<form id="dictionary-form" class="form-horizontal" {% if dictionary|default() %}action="{{ path('admin_dictionary_edit',{id:dictionary.id}) }}"{% else %}action="{{ path('admin_dictionary_create',{type:type}) }}"{% endif %} method="post">
+	<form id="dictionary-form" class="form-horizontal" {% if dictionary|default() %}action="{{ path('admin_dictionary_edit',{id:dictionary.id}) }}"{% else %}action="{{ path('admin_dictionary_create',{type:type}) }}"{% endif %} method="post" {% if dictionary|default(false) %}data-flag="edit"{% else %}data-flag="add"{% endif %}>
 		<div class="form-group">
 			<label class="col-md-2 control-label" for="dictionary-name-field">名称</label>
 			<div class="col-md-8 controls">

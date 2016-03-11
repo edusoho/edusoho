@@ -20,12 +20,18 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     location.reload();
-
+                    if ($form.data('flag') == 'edit') {
                         Notify.success('更新栏目成功！');
+                    } else {
+                        Notify.success('添加栏目成功！');
+                    }
 
                 }).fail(function() {
-
+                    if ($foem.data('flag') == 'edit') {
                         Notify.danger("更新栏目成功失败，请重试！");
+                    } else {
+                        Notify.danger("添加栏目成功失败，请重试！");
+                    }
 
                 });
 
