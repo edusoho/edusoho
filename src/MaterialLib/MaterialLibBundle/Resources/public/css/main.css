@@ -237,3 +237,7 @@
 .materials-ul li.caption p.tags, .materials-ul li.caption p.date{
   font-size: 10px;
 }
+
+.material-list-container {
+  margin-top: 20px;
+}

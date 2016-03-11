@@ -18,7 +18,6 @@ class MaterialLibController extends BaseController
         }
 
         $currentUserId = $currentUser['id'];
-        $data          = $request->query->all();
 
         $keyWord = $request->query->get('keyword') ?: "";
 
@@ -45,8 +44,6 @@ class MaterialLibController extends BaseController
 
         if ($viewMode == 'thumb') {
             $resultPage = 'MaterialLibBundle:Web:material-thumb-view.html.twig';
-        } else {
-            $resultPage = 'MaterialLibBundle:MaterialLib:material-list-view.html.twig';
         }
 
         $storageSetting = $this->getSettingService()->get("storage");

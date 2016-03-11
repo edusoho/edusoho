@@ -4,73 +4,58 @@
 
 {% block page_body %}
         
-        <form id="message-search-form" class="form-inline well well-sm" action="{{ path('material_lib_browsing', { viewMode: viewMode, source: source}) }}" method="get" novalidate>
+<form id="message-search-form" class="form-inline" action="{{ path('material_lib_browsing', { viewMode: viewMode, source: source}) }}" method="get" novalidate>
 
-    {% include 'MaterialLibBundle:MaterialLib/Form:nav.html.twig' %}
-    {% include 'MaterialLibBundle:MaterialLib/Form:head.html.twig' %}
-            <div class="well well-sm" style="margin-bottom:10px">
-              <span style="padding-right:50px">筛选:</span>
-              <span>上传时间:</span>
+  {% include 'MaterialLibBundle:MaterialLib/Form:nav.html.twig' %}
+  {% include 'MaterialLibBundle:MaterialLib/Form:head.html.twig' %}
+    <div class="well well-sm" style="margin-bottom:10px">
+      <span style="padding-right:50px">筛选:</span>
+      <span>上传时间:</span>
 
-              <div class="form-group mlm">
-                <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-                -
-                <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
-              </div>
+      <div class="form-group mlm">
+        <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+        -
+        <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+      </div>
 
-              <div class="checkbox">
-                <label class="mlm">
-                  <input type="checkbox" name="processStatus" value="error"> 转码失败
-                </label>
-              </div>
-            </div>
-            <div class="well well-sm" style="margin-bottom:10px">
-              <span style="padding-right:50px">排序:</span>
+      <div class="checkbox">
+        <label class="mlm">
+          <input type="checkbox" name="processStatus" value="error"> 转码失败
+        </label>
+      </div>
+    </div>
+    <div class="well well-sm" style="margin-bottom:10px">
+      <span style="padding-right:50px">排序:</span>
 
-              <div class="form-group">
-                <select class="form-control" name="uploadTime">
-                  <option value="desc">最近上传</option>
-                  <option value="asc">最早上传</option>
-                </select>
-              </div>
+      <div class="form-group">
+        <select class="form-control" name="uploadTime">
+          <option value="desc">最近上传</option>
+          <option value="asc">最早上传</option>
+        </select>
+      </div>
 
-              <div class="form-group">
-                <select class="form-control" name="views">
-                  <option value="desc">最多播放</option>
-                  <option value="asc">最少播放</option>
-                </select>
-              </div>
-            </div>
-            <div class="well well-sm" style="margin-bottom:10px">
-                <span style="padding-right:50px">标签:</span>
-                  <div class="form-group">
-                    <input type="hidden" id="tags" name="tags" data-url="{{ path('tag_match') }}"> 
-                  </div>
-            </div>
-            <div class="form-group">
-              <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
-            </div>
-            <button class="btn btn-primary btn-sm">搜索</button>
-            {% if source == "upload" %}
-                <div class="pull-right">
-                    <a class="btn btn-info btn-sm file-create-btn"
-                        data-toggle="modal" data-target="#modal"
-                        data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}">
-                   <i class="glyphicon glyphicon-plus"></i>上传文件</a>
-                </div>
-                {% endif %}
+      <div class="form-group">
+        <select class="form-control" name="views">
+          <option value="desc">最多播放</option>
+          <option value="asc">最少播放</option>
+        </select>
+      </div>
+    </div>
+    <div class="well well-sm" style="margin-bottom:10px">
+        <span style="padding-right:50px">标签:</span>
+          <div class="form-group">
+            <input type="hidden" id="tags" name="tags" data-url="{{ path('tag_match') }}"> 
+          </div>
+    </div>
+    <div class="form-group">
+      <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
+    </div>
+    <button class="btn btn-primary btn-sm">搜索</button>
 
-            <div id="material-lib-items-panel">
-                <div class="row" id="material-item-list" data-url="{{ path('material_lib_show_browsing', { viewMode: viewMode, source: source}) }}"></div>
-                {{ web_macro.paginator(paginator) }}
-            </div>
-        </form>
+    <div class="row material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing', { viewMode: viewMode, source: source}) }}"></div>
+        {{ web_macro.paginator(paginator) }}
+</form>
         
         
         
-{% endblock %}
-
-{% block list %}
-
-
 {% endblock %}
