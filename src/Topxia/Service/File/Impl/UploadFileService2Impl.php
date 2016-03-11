@@ -335,15 +335,20 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (empty($userId) || empty($fileId)) {
             throw $this->createServiceException("参数错误，请重新输入");
         }
-        $collection = array(
-            'userId'      => $userId,
-            'fileId'      => $fileId,
-            'updatedTime' => time(),
-            'createdTime' => time()
-        );
-        $collection = $this->getUploadFileCollectDao()->addCollection($collection);
-        $result     = $this->getUploadFileDao()->getFile($collection['fileId']);
-        return $result;
+        $collection = $this->getUploadFileCollectDao()->getCollectonByUserIdandFileId($userId, $fileId);
+        if (empty($collection)) {
+            $collection = array(
+                'userId'      => $userId,
+                'fileId'      => $fileId,
+                'updatedTime' => time(),
+                'createdTime' => time()
+            );
+
+            $collection = $this->getUploadFileCollectDao()->addCollection($collection);
+            $result     = $this->getUploadFileDao()->getFile($collection['fileId']);
+            return $result;
+        }
+        return false;
     }
 
     public function cancelCollectFile($userId, $fileId)
