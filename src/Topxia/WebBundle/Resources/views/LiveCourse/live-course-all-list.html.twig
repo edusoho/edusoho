@@ -28,7 +28,9 @@
             <a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}">
           {% endif %}
             {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
-            <span class="re-live"></span>
+            {% if course.recommended %}
+              <span class="re-live"></span>
+            {% endif %}
           </a>
         </div>
         <div class="media-body">
