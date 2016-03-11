@@ -25,9 +25,17 @@ define(function(require, exports, module) {
 		  $("#show-share-input").show();
 		  $("#show-share-input").animate({ left:'0px' },1000 );
 		}); 
+
 		$("#close-share-input").on('click',function(){
-			$("#show-share-input").animate({ right:'0px' },1000);
-			$("#show-share-input").hide();
+			$("#show-share-input").animate({ left:'-250px' },1000,function(){
+				$("#show-share-input").hide();
+			});
+		});
+
+		$("#close-share-input").on('click',function(){
+			$("#show-share-input").animate({ left:'-250px' },1000,function(){
+				$("#show-share-input").hide();
+			});
 		});
 
 		$("#modal").on("hidden.bs.modal", function() {
