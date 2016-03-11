@@ -31,7 +31,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function edit($globalId, $fields)
     {
-        return $this->getCloudFileService()->edit($globalId, $fields);
+        $this->getCloudFileService()->edit($globalId, $fields);
+        $this->getUploadFileService()->edit($globalId, $fields);
     }
 
     public function delete($globalId)

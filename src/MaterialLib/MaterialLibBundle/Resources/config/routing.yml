@@ -93,6 +93,11 @@ material_delete:
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:delete }
     methods: [POST]
 
+material_edit:
+    pattern:  /materiallib/{globalId}/edit
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:edit }
+    methods: [POST]
+
 
 global_file_player:
     pattern:  /global_file/{globalId}/player

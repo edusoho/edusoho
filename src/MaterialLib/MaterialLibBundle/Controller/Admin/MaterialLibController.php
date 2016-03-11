@@ -56,13 +56,6 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $globalId)
-    {
-        $fields = $request->request->all();
-        $this->getMaterialLibService()->edit($globalId, $fields);
-        return $this->createJsonResponse(array('success' => true));
-    }
-
     public function statsAction(Request $request)
     {
         $space = array(

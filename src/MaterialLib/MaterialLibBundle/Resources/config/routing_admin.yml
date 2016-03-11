@@ -14,11 +14,6 @@ admin_material_detail:
     pattern:  /materiallib/{globalId}/detail
     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:detail }
 
-admin_material_edit:
-    pattern:  /materiallib/{globalId}/edit
-    defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:edit }
-    methods: [POST]
-
 admin_material_play:
     pattern:  /materiallib/{globalId}/play
     defaults: { _controller: MaterialLibBundle:Admin/MaterialLib:play }
