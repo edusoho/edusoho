@@ -428,7 +428,7 @@ class CourseController extends CourseBaseController
 
             if ($course['type'] == 'live' || $course['type'] == 'liveOpen') {
                 try {
-                    $this->$course['type']."Setting(".$course['type'].")";
+                    $this->$course['type']."Setting()";
                 } catch (\Exception $e) {
                     return $this->createMessageResponse('info', $e->getMessage());
                 }
@@ -898,7 +898,7 @@ class CourseController extends CourseBaseController
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
-    public function liveSetting($type)
+    public function liveSetting()
     {
         $courseSetting = $this->setting('course', array());
 
@@ -918,7 +918,7 @@ class CourseController extends CourseBaseController
         }
     }
 
-    public function liveOpenSetting($type)
+    public function liveOpenSetting()
     {
         $courseSetting = $this->setting('course', array());
 

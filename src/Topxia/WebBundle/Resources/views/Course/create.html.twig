@@ -48,7 +48,6 @@
                   <input type="radio" name="type" value="live" > {{'直播课程'|trans}}
                 </label>
               {% endif %}
-              {% endif %}
               {% if setting('course').open_course_enabled|default('') %}
                 <label>
                   <input type="radio" name="type" value="open"> {{'公开课'|trans}}
@@ -92,7 +91,6 @@
 
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
-
       {% endif %}
     </div>
 

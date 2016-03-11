@@ -138,13 +138,6 @@ admin_course_add:
     router_name: course_create
     group: 2
     blank: 1
-admin_live_course_add:
-    name: 创建直播课程
-    parent: admin_course_manage
-    router_name: course_create
-    router_params: {'flag': 'isLive'}
-    group: 2
-    blank: 1
 admin_live_course:
     name: 直播管理
     parent: admin_course
