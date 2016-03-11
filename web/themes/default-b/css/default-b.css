@@ -445,7 +445,7 @@ a:focus {
 @media (max-width: 767px) {
   .course-wide-list,
   .home-class-list {
-    margin: 0 -10px;
+    margin: 0 -5px;
   }
 }
 .navbar-right .es-header {
@@ -462,8 +462,9 @@ a:focus {
   .home-class-list .class-item {
     width: 50%;
     float: left;
-    padding: 0 10px;
+    padding: 0 5px;
     border: none;
+    margin-bottom: 10px;
   }
 }
 .home-class-list .class-item:hover {
@@ -591,8 +592,8 @@ a:focus {
   .course-grid {
     width: 50%;
     float: left;
-    margin: 0 0 20px 0;
-    padding: 0 10px;
+    margin: 0 0 10px 0;
+    padding: 0 5px;
     border: none;
   }
   .course-grid .grid-body {
@@ -605,4 +606,42 @@ a:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+}
+@media (max-width: 767px) {
+  .homepage .teachers ul {
+    margin: 0 -5px;
+  }
+  .course-grids {
+    margin: 0 -5px;
+  }
+  .teachers li {
+    padding: 0 5px;
+  }
+  .es-row-wrap .row-9-3 {
+    margin: 0 5px;
+  }
+  .es-row-wrap .col-md-9,
+  .es-row-wrap .col-md-3 {
+    padding: 0 5px;
+  }
+  .course-list .row {
+    margin: 0 -5px;
+  }
+  .course-list .col-xs-6 {
+    padding: 0 5px;
+  }
+  .course-list .course-item {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+  .homepage .vip ul {
+    margin-right: -5px;
+    margin-left: -5px;
+  }
+  .vip-lists li {
+    margin-bottom: 10px;
+  }
+  .vip li {
+    padding: 0 5px;
+  }
 }
