@@ -13381,15 +13381,17 @@ textarea {
   padding-right: 15px;
 }
 .live-course-body .es-live-recommend img {
+  width: 110px;
   max-width: 110px;
 }
 .live-course-body .es-live-recommend .title {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   height: 20px;
   overflow: hidden;
 }
 .live-course-body .es-live-recommend .price {
   color: #e83d2c;
+  font-size: 12px;
 }
 .live-course-body .es-live-back ul {
   padding: 0;
@@ -13397,10 +13399,10 @@ textarea {
 }
 .live-course-body .es-live-back ul li {
   list-style-type: none;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 .live-course-body .es-live-back ul li:first-child {
-  margin-top: 5px;
+  margin-top: 0px;
 }
 .live-course-body .es-live-back ul li:last-child {
   margin-bottom: 5px;
@@ -13433,6 +13435,18 @@ textarea {
   padding-bottom: 15px;
   border-bottom: 1px solid #f5f5f5 !important;
 }
+.live-course-body .es-live-all .media-left {
+  position: relative;
+}
+.live-course-body .es-live-all .media-left .re-live {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  width: 62px;
+  height: 62px;
+  background: url("../img/re-live.png") no-repeat;
+}
 @media (max-width: 767px) {
   .live-course-body .es-live-all .media-left {
     display: block;
@@ -13451,12 +13465,26 @@ textarea {
 .live-course-body .es-live-all .media-body {
   position: relative;
 }
+.live-course-body .es-live-all .media-body .label {
+  font-size: 12px;
+  padding: 5px 15px;
+}
+.live-course-body .es-live-all .media-body .title {
+  height: 20px;
+  overflow: hidden;
+}
+.live-course-body .es-live-all .media-body .title a {
+  font-size: 16px;
+}
 .live-course-body .es-live-all .media-body .metas {
-  margin: 15px 0 25px;
+  margin: 15px 0 20px;
   color: #c1c1c1;
 }
 .live-course-body .es-live-all .media-body .user a {
-  color: #c1c1c1;
+  color: #c1c1c1 !important;
+}
+.live-course-body .es-live-all .media-body .user a img {
+  margin-right: 14px;
 }
 .live-course-body .es-live-all .media-body .user a:hover {
   color: #ff7200;
@@ -13465,13 +13493,14 @@ textarea {
   position: absolute;
   right: 0;
   top: 50%;
-  margin-top: -45px;
+  margin-top: -34px;
   text-align: center;
 }
 .live-course-body .es-live-all .media-body .other span {
   display: block;
   margin-bottom: 8px;
   color: #ff7200;
+  font-size: 18px;
 }
 .live-course-body .es-live-all .media-body .other span.price {
   color: #e83d2c;
