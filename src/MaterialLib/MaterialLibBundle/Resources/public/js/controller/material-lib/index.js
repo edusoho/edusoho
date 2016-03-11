@@ -44,28 +44,33 @@ define(function(require, exports, module) {
             },
             onClickDetailBtn: function(event)
             {
-                var self = this;
-                var $target = $(event.currentTarget);
-                $.ajax({
-                    type:'GET',
-                    url:$target.data('url'),
-                }).done(function(resp){
-                    self.element.hide();
-                    self.element.prev().hide();
-                    self.element.parent().append(resp);
-                    new DetailWidget({
-                        element:'#material-detail',
-                        callback: function() {
-                            var $form = $('#material-search-form');
-                            $form.show();
-                            $form.prev().show();
-                            window.materialWidget.renderTable();
-                        }
+                if (!this.DetailBtnActive) {
+                    var self = this;
+                    var $target = $(event.currentTarget);
+                    this.DetailBtnActive = true;
+                    $.ajax({
+                        type:'GET',
+                        url:$target.data('url'),
+                    }).done(function(resp){
+                        self.element.hide();
+                        self.element.prev().hide();
+                        self.element.parent().append(resp);
+                        new DetailWidget({
+                            element:'#material-detail',
+                            callback: function() {
+                                var $form = $('#material-search-form');
+                                $form.show();
+                                $form.prev().show();
+                                window.materialWidget.renderTable();
+                            }
+                        });
+                    }).fail(function(){
+                        Notify.danger('Opps,出错了!');
+                    }).always(function() {
+                        self.DetailBtnActive = false;
                     });
-                }).fail(function(){
-                    Notify.danger('Opps,出错了!');
-                }).always(function() {
-                });
+                } 
+                
             },
             onClickDeleteBtn: function(event)
             {
