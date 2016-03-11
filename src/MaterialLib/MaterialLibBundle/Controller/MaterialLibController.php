@@ -325,10 +325,14 @@ class MaterialLibController extends BaseController
 
     public function collectAction(Request $request)
     {
-        $user       = $this->getCurrentUser();
-        $data       = $request->request->all();
+        $user = $this->getCurrentUser();
+        $data = $request->query->all();
+
         $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
-        return $this->createJsonResponse(json_decode($collection));
+        if (empty($collection)) {
+            return $this->createJsonResponse(false);
+        }
+        return $this->createJsonResponse(true);
     }
 
     protected function tryAccessFile($fileId)

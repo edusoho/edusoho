@@ -3,10 +3,22 @@
 namespace Topxia\Service\File\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
+use Topxia\Service\File\Dao\UploadFileCollectDao;
 
 class UploadFileCollectDaoImpl extends BaseDao implements UploadFileCollectDao
 {
     protected $table = 'upload_files_collection';
+    public function getCollection($id)
+    {
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
+    }
 
     public function getCollectonByUserIdandFileId($userId, $fileId)
     {
@@ -28,7 +40,7 @@ class UploadFileCollectDaoImpl extends BaseDao implements UploadFileCollectDao
             throw $this->createDaoException('Insert file collection error.');
         }
 
-        return $this->getConnection()->lastInsertId();
+        return $this->getCollection($this->getConnection()->lastInsertId());
     }
 
     public function deleteCollection($id)
