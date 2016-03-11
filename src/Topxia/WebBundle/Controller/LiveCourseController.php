@@ -163,7 +163,9 @@ class LiveCourseController extends BaseController
             'parentId' => 0
         );
 
-        if (!empty($request->query->get('categoryId', ''))) {
+        $categoryId = $request->query->get('categoryId', '');
+
+        if (!empty($categoryId)) {
             $conditions['categoryId'] = $request->query->get('categoryId');
         }
 
