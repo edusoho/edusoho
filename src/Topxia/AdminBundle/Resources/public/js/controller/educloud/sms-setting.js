@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
-		for (var i = 16; i >= 1; i--) {
+		for (var i = 17; i >= 1; i--) {
             var id = '#article-property-tips'+i;
             var htmlId = id + '-html';
             $(id).popover({
@@ -17,26 +17,33 @@ define(function(require, exports, module) {
         
 		if ($('#sms-form').length>0){	
 
-			$('[name="sms_enabled"]').click(function(){
-				var status = $('[name="sms_enabled"]:checked').val();
-				if (status == 0){
+			$('[name="sms-close"]').click(function(){
 					var registerMode = $('input[name="register-mode"]').val();
 					if (registerMode == 'email_or_mobile' || registerMode == 'mobile') {
-						
+
 						$('[name="sms_enabled"][value=1]').prop('checked',true);
 						Notify.danger("您启用了手机注册模式，不可关闭短信功能！");
-
-					} else {
-						$('.js-usage').hide();
+						return false
 					}
-					
-				}else{
-
-					$('.js-usage').show();
-				}
 			});
 			
 		}
+        $("[name='sign-update']").on('click',function(){
+        	$("[name='submit-sign']").show();
+        	$("[name='status']").hide();
+        	var validator = new Validator({
+	            element: '#sms-controller-form'
+	        });
+	        validator.addItem({
+	            element: '[name="sign"]',
+	            required: true,
+	            rule:'chinese_alphanumeric minlength{min:3} maxlength{max:8}',
+	            display: "签名",
+	            errormessageRequired: '签名3-8字，建议使用汉字'
+	        });
+        });
+        
+
 	}
 	
 });

@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:LiveCourse:layout.html.twig' %}
 
-{% block title %}直播 - {{ parent() }}{% endblock %}
+{% block title %}{{'直播'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'live-course/index' %}
 
@@ -20,6 +20,7 @@
 
   {% include 'TopxiaWebBundle:liveCourse:recommend-course-list.html.twig' %}
 
+
   {{ render(controller('TopxiaWebBundle:LiveCourse:replayList')) }}
   
   {% endblock %}
@@ -29,3 +30,4 @@
     {{ render(controller('TopxiaWebBundle:LiveCourse:liveCourseList',{request:app.request})) }}
 
   {% endblock %}
+

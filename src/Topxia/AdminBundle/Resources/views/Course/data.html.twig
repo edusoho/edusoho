@@ -3,6 +3,7 @@
 {% set menu = 'admin_course_data' %}
 
 {% block main %}
+  {% include 'TopxiaAdminBundle:Course:tab-data.html.twig' %}
 
     <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
       <div class="form-group">
@@ -22,6 +23,9 @@
         <table class="table table-bordered" style="word-break:break-all;text-align:center;">
           <tr class="active">
             <td width="30%">课程名</td>
+             {% if filter == 'classroom' %}
+            <td>所在{{setting("classroom.name")|default("班级")}}</td>
+             {% endif %}
             <td>课时数</td>
             <td>{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}人数</td>
             <td>完成课程人数</td>
@@ -34,6 +38,14 @@
             {% for course in courses %}
             <tr>
             <td><a data-toggle="modal" data-target="#modal" data-url="{{path('course_detail_data',{id:course.id})}}" href="javascript:">{{course.title}}</a></td>
+            {% if filter == 'classroom' %}
+            <td>
+            {% set classroom = classrooms[course.id]|default(null) %}
+            {% if classroom %}
+            <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+            {% endif %}
+            </td>
+            {% endif %}
             <td>{{course.lessonCount}}</td>
             <td>{{course.studentNum}}</td>
             <td>{{course.isLearnedNum}}</td>
