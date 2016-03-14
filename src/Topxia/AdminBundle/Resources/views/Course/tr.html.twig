@@ -22,7 +22,7 @@
     {% endif %}
 
   </td>
-  {% if course.type != 'open' and course.type != 'liveOpen' %}
+  {% if filter != 'open' and filter != 'liveOpen' %}
     <td>
       {% if  course.serializeMode =="none" %}
       <span class="text-info">非连载课程</span>
