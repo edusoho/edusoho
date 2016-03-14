@@ -187,6 +187,24 @@ services:
         tags:
             - { name: twig.extension }
 
+    array_cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:    ['/Users/fengni/edusoho/www/edusoho/app/cache/a']
+
+    cache_provider:
+        class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
+        arguments:    ['@array_cache']
+
+    cache_strategy:
+        class: Asm89\Twig\CacheExtension\CacheStrategy\LifetimeCacheStrategy
+        arguments:    ['@cache_provider']
+
+    topxia.twig.cache_extension:
+        class: Asm89\Twig\CacheExtension\Extension
+        arguments:    ['@cache_strategy']
+        tags:
+            - { name: twig.extension }
+
     kernel.listener.user_login_token_listener:
         class: Topxia\WebBundle\Listener\UserLoginTokenListener
         arguments:    ['@service_container']
