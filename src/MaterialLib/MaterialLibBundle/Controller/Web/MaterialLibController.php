@@ -2,10 +2,10 @@
 
 namespace MaterialLib\MaterialLibBundle\Controller\Web;
 
-use Symfony\Component\HttpFoundation\Request;
-use Topxia\Common\ArrayToolkit;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
+use Symfony\Component\HttpFoundation\Request;
+use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
@@ -35,27 +35,32 @@ class MaterialLibController extends BaseController
         $conditions['currentUserId'] = $currentUserId;
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
-            'tags'          => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
 
     public function showMyMaterialLibFormAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
-        $currentUserId = $currentUser['id'];
+        $currentUser          = $this->getCurrentUser();
+        $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
         $conditions['status'] = 'ok';
-
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
 
         $conditions['currentUserId'] = $currentUserId;
+        $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-
+        $files       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $collections = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
+        foreach ($files as $key => $file) {
+            if (in_array($file['id'], ArrayToolkit::column($collections, 'fileId'))) {
+                $files[$key]['collected'] = 1;
+            } else {
+                $files[$key]['collected'] = 0;
+            }
+        }
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
@@ -101,6 +106,18 @@ class MaterialLibController extends BaseController
             'material'   => $material,
             'thumbnails' => $thumbnails
         ));
+    }
+
+    public function collectAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $data = $request->query->all();
+
+        $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
+        if (empty($collection)) {
+            return $this->createJsonResponse(false);
+        }
+        return $this->createJsonResponse(true);
     }
 
     public function downloadAction($globalId)

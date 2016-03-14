@@ -105,8 +105,8 @@ class MaterialLibController extends BaseController
 
         $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 10);
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-
+        $files        = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $fileIds      = ArrayToolkit::column($files, 'id');
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         //Return different views according to current viewing mode
@@ -321,18 +321,6 @@ class MaterialLibController extends BaseController
     {
         $file = $this->tryAccessFile($id);
         return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
-    }
-
-    public function collectAction(Request $request)
-    {
-        $user = $this->getCurrentUser();
-        $data = $request->query->all();
-
-        $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
-        if (empty($collection)) {
-            return $this->createJsonResponse(false);
-        }
-        return $this->createJsonResponse(true);
     }
 
     protected function tryAccessFile($fileId)

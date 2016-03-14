@@ -53,7 +53,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     public function findFilesByTypeAndId($targetType, $targetId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
-        return $this->getConnection()->fetchAll($sql, array($targetType, $targetId))? :array();
+        return $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ?: array();
     }
 
     public function findCloudFilesByIds($ids)
@@ -166,7 +166,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
                         ->andWhere('type = :type')
                         ->andWhere('storage = :storage')
                         ->andWhere('filename LIKE :filenameLike')
-                        ->andWhere('ids IN ( :ids )')
+                        ->andWhere('id IN ( :ids )')
                         ->andWhere('createdUserId IN ( :createdUserIds )');
 
         return $builder;
