@@ -11,4 +11,6 @@ interface UploadFileCollectDao
     public function addCollection($collection);
 
     public function deleteCollection($id);
+
+    public function findCollectionsByUserId($userId);
 }

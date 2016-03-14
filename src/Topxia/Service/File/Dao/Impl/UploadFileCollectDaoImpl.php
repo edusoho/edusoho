@@ -45,6 +45,12 @@ class UploadFileCollectDaoImpl extends BaseDao implements UploadFileCollectDao
         return $this->getConnection()->fetchAll($sql, $parmaters);
     }
 
+    public function findCollectionsByUserId($userId)
+    {
+        $sql = "SELECT * FROM {$this->getTable()} WHERE userId = ? ";
+        return $this->getConnection()->fetchAll($sql, array($userId));
+    }
+
     public function addCollection($collection)
     {
         $affected = $this->getConnection()->insert($this->table, $collection);

@@ -351,9 +351,15 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return false;
     }
 
-    public function findcollectionsByUserIdAndFileIds($fileIds, $userId)
+    public function findCollectionsByUserIdAndFileIds($fileIds, $userId)
     {
         $collections = $this->getUploadFileCollectDao()->findCollectonsByUserIdandFileIds($fileIds, $userId);
+        return $collections;
+    }
+
+    public function findCollectionsByUserId($userId)
+    {
+        $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($userId);
         return $collections;
     }
 
@@ -368,6 +374,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
                 $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
             }
+        }
+
+        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
+            $collections       = $this->findCollectionsByUserId($conditions['currentUserId']);
+            $fileIds           = ArrayToolkit::column($collections, 'fileId');
+            $conditions['ids'] = $fileIds;
         }
 
         if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {
