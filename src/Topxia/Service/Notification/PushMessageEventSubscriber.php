@@ -614,12 +614,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         ), $timestamp);
     }
 
-    protected function pushCloudData($message, $type, $category, $userId, $timestamp)
+    protected function pushCloudData($message, $type, $category, $id, $timestamp)
     {
         $result = $this->getCloudDataService()->push($message, array(
             'type'     => $type,
             'category' => $category,
-            'id'       => $userId
+            'id'       => $id
         ), $timestamp);
     }
 
