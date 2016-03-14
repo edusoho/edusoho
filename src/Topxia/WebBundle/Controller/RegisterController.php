@@ -67,10 +67,16 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
+            if (($authSettings
+                && isset($authSettings['email_enabled'])
+                && $authSettings['email_enabled'] == 'closed')
+                || !$this->isEmptyVeryfyMobile($user)) {
+                $this->authenticateUser($user);
+            }
+
             return $this->redirect($this->generateUrl('register_success', array(
                 'userId' => $user['id'],
-                'goto'   => $this->getTargetPath($request),
-                'hash'   => $this->makeHash($user)
+                'goto'   => $this->getTargetPath($request)
             )));
         }
 
@@ -96,21 +102,10 @@ class RegisterController extends BaseController
 
     public function successAction(Request $request)
     {
-        $userId = $request->query->get('userId');
-        $hash   = $request->query->get('hash');
-        $user   = $this->checkHash($userId, $hash);
+        $user = $this->getCurrentUser();
 
-        if (!$user) {
+        if (!$user->isLogin()) {
             throw $this->createAccessDeniedException('对不起，无权操作');
-        }
-
-        $authSettings = $this->getSettingService()->get('auth', array());
-
-        if (($authSettings
-            && isset($authSettings['email_enabled'])
-            && $authSettings['email_enabled'] == 'closed')
-            || !$this->isEmptyVeryfyMobile($user)) {
-            $this->authenticateUser($user);
         }
 
         $goto = $this->generateUrl('register_submited', array(
