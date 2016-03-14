@@ -13308,6 +13308,22 @@ textarea {
 }
 .live-course-body .es-live-list .panel-body > ul li a {
   color: #313131;
+  padding: 14px 17px;
+}
+@media (max-width: 1199px) {
+  .live-course-body .es-live-list .panel-body > ul li a {
+    padding: 14px 0;
+  }
+}
+@media (max-width: 991px) {
+  .live-course-body .es-live-list .panel-body > ul li a {
+    padding: 14px 62px;
+  }
+}
+@media (max-width: 767px) {
+  .live-course-body .es-live-list .panel-body > ul li a {
+    padding: 14px 17px;
+  }
 }
 .live-course-body .es-live-list .panel-body > ul li.active {
   background-color: #fff;
