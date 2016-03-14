@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-source-btn': 'onClickSourseBtn',
-                'click .op-li div.op-btn': 'onClickOperationBtn'
+                'click .js-collect-btn': 'onClickCollectBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -109,7 +109,7 @@ define(function(require, exports, module) {
                 $target.parent().find("[name=sourceFrom]").val($target.data('value'));
                 this.renderTable();
             },
-            onClickOperationBtn: function(event)
+            onClickCollectBtn: function(event)
             {
                 var self = this;
                 var $target = $(event.currentTarget);

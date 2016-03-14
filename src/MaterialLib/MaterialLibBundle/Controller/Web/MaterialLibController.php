@@ -45,7 +45,7 @@ class MaterialLibController extends BaseController
         $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
         $conditions['status'] = 'ok';
-
+        var_dump($conditions['sourceFrom']);
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
@@ -54,8 +54,15 @@ class MaterialLibController extends BaseController
 
         $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
 
-        $files        = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-        $collections  = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
+        $files       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $collections = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
+        foreach ($files as $key => $file) {
+            if (in_array($file['id'], ArrayToolkit::column($collections, 'fileId'))) {
+                $files[$key]['collected'] = 1;
+            } else {
+                $files[$key]['collected'] = 0;
+            }
+        }
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");

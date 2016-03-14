@@ -14,8 +14,8 @@
         <p class="text-muted date">{{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
       </li>
       <li class="row op-li">
-        <div class="op-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">
-          <i class="glyphicon glyphicon-star {# if material-collection #}"></i>
+        <div class="op-btn js-collect-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">
+          <i class="glyphicon glyphicon-star {% if uploadFile.collected|default(0) %} material-collection {% endif %}"></i>
         </div>
         <div href="javascript:;" class="op-btn border-left js-detail-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="详情" data-url="{{ path('material_lib_file_detail', {globalId:uploadFile.globalId}) }}">
           <i class="glyphicon glyphicon-info-sign"></i>
