@@ -60,6 +60,12 @@
           <input type="hidden" name="tagId">
         </div>
     </div>
+
+    <div>
+      <a class="btn btn-primary" data-toggle="modal" data-target="#modal"
+      data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="添加"   data-placement="bottom" >上传资料
+      </a>
+    </div>
     
     <div class="row material-list-container" id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
 
