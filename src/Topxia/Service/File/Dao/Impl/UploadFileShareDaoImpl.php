@@ -12,8 +12,7 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao
     public function getShare($id)
     {
         $sql  = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        $file = $this->getConnection()->fetchAssoc($sql, array($id));
-        return $file ? $this->createSerializer()->unserialize($file, $this->serializeFields) : null;
+        return $this->getConnection()->fetchAssoc($sql, array($id));
     }
 
     public function findSharesByTargetUserIdAndIsActive($targetUserId, $active = 1)
