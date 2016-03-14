@@ -40,7 +40,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception("找不到要购买课程!");
         }
 
-        $users                                   = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
         $totalPrice = 0;
@@ -61,7 +62,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $course["coinPrice"];
         } elseif ($priceType == "RMB") {
             $totalPrice = $course["price"];
-            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);}
+            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
+        }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 

@@ -19,7 +19,7 @@
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% endif %}
       	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
-        data-price-type = "{{priceType|default('RMB')}}"/>
+        data-price-type = "{{priceType|default('RMB')}}" data-cash-model='{{setting('coin.cash_model')}}'/>
         <input type="hidden" name="targetType" value="{{targetType}}"/>
         <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
         <input type="hidden" name="targetId" value="{{targetId}}"/>
