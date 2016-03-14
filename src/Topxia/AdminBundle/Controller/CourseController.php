@@ -347,14 +347,19 @@ class CourseController extends BaseController
         ));
     }
 
-    public function dataAction(Request $request)
+    public function dataAction(Request $request, $filter)
     {
-        $cond = array('type' => 'normal');
-
         $conditions = $request->query->all();
 
-        $conditions = array_merge($cond, $conditions);
-        $count      = $this->getCourseService()->searchCourseCount($conditions);
+        if ($filter == 'normal') {
+            $conditions["parentId"] = 0;
+        }
+
+        if ($filter == 'classroom') {
+            $conditions["parentId_GT"] = 0;
+        }
+
+        $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
@@ -364,6 +369,18 @@ class CourseController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $classrooms = array();
+
+        if ($filter == 'classroom') {
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
 
         foreach ($courses as $key => $course) {
             $isLearnedNum = $this->getCourseService()->searchMemberCount(array('isLearned' => 1, 'courseId' => $course['id']));
@@ -378,8 +395,10 @@ class CourseController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Course:data.html.twig', array(
-            'courses'   => $courses,
-            'paginator' => $paginator
+            'courses'    => $courses,
+            'paginator'  => $paginator,
+            'filter'     => $filter,
+            'classrooms' => $classrooms
         ));
     }
 

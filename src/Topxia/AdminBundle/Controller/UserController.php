@@ -404,7 +404,7 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
 
         try {
-            $mail = new Email(array(
+            $mail = new Mail(array(
                 'to'     => $user['email'],
                 'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
                 'format' => 'html',

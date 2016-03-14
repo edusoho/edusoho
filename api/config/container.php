@@ -36,7 +36,8 @@ $resources = array(
     'ThreadManager',
     'Thread',
     'Upload',
-    'Status'
+    'Status',
+    'DiscoveryColumn'
 );
 
 foreach ($resources as $res) {
