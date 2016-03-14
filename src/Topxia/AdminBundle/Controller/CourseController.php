@@ -12,6 +12,8 @@ class CourseController extends BaseController
     {
         $conditions = $request->query->all();
 
+        $conditions['notInTypes'] = array('open', 'liveOpen');
+
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }
@@ -303,7 +305,7 @@ class CourseController extends BaseController
             ));
         }
 
-        if ($target == 'normal_index') {
+        if ($target == 'normal_index' || $target == 'open_index') {
             return $this->renderCourseTr($id, $request);
         }
     }

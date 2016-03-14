@@ -247,6 +247,14 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['tagIds']);
         }
 
+        if (isset($conditions['types'])) {
+            $builder->andWhere('type IN ( :types )');
+        }
+
+        if (isset($conditions['notInTypes'])) {
+            $builder->andWhere('type NOT IN ( :notInTypes )');
+        }
+
         return $builder;
     }
 

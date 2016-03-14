@@ -142,6 +142,11 @@ admin_live_course:
     name: 直播管理
     parent: admin_course
     router_params: {'status': 'coming'}
+
+admin_open_course:
+    name: 公开课管理
+    parent: admin_course
+
 admin_course_thread:
     name: 话题管理
     parent: admin_course

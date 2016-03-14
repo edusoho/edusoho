@@ -379,6 +379,10 @@ admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
 
+admin_open_course:
+    pattern: /open/{filter}/course
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:index, filter:'open' }
+
 admin_live_get_max_online:
     pattern: /livecourse/get/maxOnline
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:getMaxOnline }
