@@ -250,3 +250,13 @@
 .material-collection {
   color: #D48405;
 }
+
+.tags-container {
+  padding-left:80px;
+}
+
+.tags-container .label {
+  display: inline-block;
+  margin-left: 5px;
+  cursor: pointer;
+}

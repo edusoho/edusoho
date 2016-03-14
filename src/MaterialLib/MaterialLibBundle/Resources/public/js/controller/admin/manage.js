@@ -16,6 +16,7 @@ define(function(require, exports, module) {
                 'submit': 'submitForm',
                 'click .nav-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
+                'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn'
@@ -41,6 +42,15 @@ define(function(require, exports, module) {
                 this.element.find('.js-page').val($target.data('page'));
                 this.renderTable(true);
                 event.preventDefault();
+            },
+            onClickTag: function(event)
+            {
+                var $target = $(event.currentTarget);
+                var $container = $target.closest('.tags-container');
+                $container.find('.label-info').removeClass('label-info').addClass('label-default');
+                $target.addClass('label-info').removeClass('label-default');
+                $container.find('[name=tags]').val($target.html());
+                this.renderTable();
             },
             onClickDetailBtn: function(event)
             {
@@ -142,56 +152,6 @@ define(function(require, exports, module) {
             },
             _initSelect2: function()
             {
-                $('#tags').select2({
-                    ajax: {
-                        url: $('#tags').data('url') + '#',
-                        dataType: 'json',
-                        quietMillis: 100,
-                        data: function(term, page) {
-                            return {
-                                q: term,
-                                page_limit: 10
-                            };
-                        },
-                        results: function(data) {
-                            var results = [];
-                            $.each(data, function(index, item) {
-                                results.push({
-                                    id: item.name,
-                                    name: item.name
-                                });
-                            });
-                            return {
-                                results: results
-                            };
-                        }
-                    },
-                    initSelection: function(element, callback) {
-                        var data = [];
-                        $(element.val().split(",")).each(function() {
-                            data.push({
-                                id: this,
-                                name: this
-                            });
-                        });
-                        callback(data);
-                    },
-                    formatSelection: function(item) {
-                        return item.name;
-                    },
-                    formatResult: function(item) {
-                        return item.name;
-                    },
-                    width: 600,
-                    multiple: true,
-                    placeholder: "请输入标签",
-                    multiple: true,
-                    createSearchChoice: function() {
-                        return null;
-                    },
-                    maximumSelectionSize: 20
-                });
-
                 $("#js-course-search").select2({
                     placeholder: "选择课程",
                     minimumInputLength: 1,

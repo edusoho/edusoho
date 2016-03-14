@@ -35,7 +35,7 @@ class MaterialLibController extends BaseController
         $conditions['currentUserId'] = $currentUserId;
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
-            'currentUserId' => $currentUserId
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
 

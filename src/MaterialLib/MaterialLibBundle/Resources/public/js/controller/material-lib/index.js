@@ -15,6 +15,7 @@ define(function(require, exports, module) {
                 'submit': 'submitForm',
                 'click .nav.nav-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
+                'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
@@ -42,6 +43,15 @@ define(function(require, exports, module) {
                 this.element.find('.js-page').val($target.data('page'));
                 this.renderTable(true);
                 event.preventDefault();
+            },
+            onClickTag: function(event)
+            {
+                var $target = $(event.currentTarget);
+                var $container = $target.closest('.tags-container');
+                $container.find('.label-info').removeClass('label-info').addClass('label-default');
+                $target.addClass('label-info').removeClass('label-default');
+                $container.find('[name=tags]').val($target.html());
+                this.renderTable();
             },
             onClickDetailBtn: function(event)
             {
