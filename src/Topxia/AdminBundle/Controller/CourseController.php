@@ -12,8 +12,6 @@ class CourseController extends BaseController
     {
         $conditions = $request->query->all();
 
-        $conditions['notInTypes'] = array('open', 'liveOpen');
-
         if ($filter == 'normal') {
             $conditions["parentId"] = 0;
         }

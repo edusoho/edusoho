@@ -251,10 +251,6 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             $builder->andWhere('type IN ( :types )');
         }
 
-        if (isset($conditions['notInTypes'])) {
-            $builder->andWhere('type NOT IN ( :notInTypes )');
-        }
-
         return $builder;
     }
 
