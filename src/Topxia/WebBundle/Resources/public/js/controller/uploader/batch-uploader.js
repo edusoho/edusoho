@@ -248,7 +248,7 @@ define(function(require, exports, module) {
                             
                             var value = store.get(key);
                             if (value.response) {
-                                file.uploaderWidget.set('initResponse', value.response);
+                                file.initResponse = value.response;
                             }
 
                             require.async('./'+response.uploadMode+'-strategy', function(Strategy){
@@ -285,7 +285,7 @@ define(function(require, exports, module) {
                     store.remove(key);
 
                     var strategy = file.uploaderWidget.get('strategy');
-                    var data = strategy.finishUpload(deferred);
+                    var data = strategy.finishUpload(deferred, file);
                     data.filename = file.name;
                     data.size = file.size;
                     data.id = file.fileId;

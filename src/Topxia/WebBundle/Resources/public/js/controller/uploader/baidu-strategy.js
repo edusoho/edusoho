@@ -4,23 +4,22 @@ define(function(require, exports, module) {
 
     var Cloud2Strategy = Class.extend({
     	initialize: function(file, response) {
-
             file.gid = response.globalId;
             file.globalId = response.globalId;
             file.fileId = response.outerId;
+            file.uploadUrl = response.uploadUrl;
+            file.uploadProxyUrl = response.uploadProxyUrl;
+            file.uploadMode = response.uploadMode;
+            file.uploadId = response.uploadToken;
 
-            this.file = file;
+            var baiduParts = { parts: new Array()};
+            file.baiduParts = baiduParts;
+
+            if (file.initResponse && file.initResponse.uploadToken) {
+                file.uploadId = file.initResponse.uploadToken;
+            }
 
             var self = file.uploaderWidget;
-            self.set('uploadUrl', response.uploadUrl);
-            self.set('uploadProxyUrl', response.uploadProxyUrl);
-            self.set('uploadMode', response.uploadMode);
-            self.set('uploadId', response.uploadToken);
-            if (self.get('initResponse') && self.get('initResponse')['uploadToken']) {
-                self.set('uploadId', self.get('initResponse')['uploadToken']);
-            }
-            var baiduParts = { parts: new Array()};
-            self.set('baiduParts',baiduParts);
 
             self.uploader.option('method', 'PUT');
             self.uploader.option('chunked', true);
@@ -32,14 +31,13 @@ define(function(require, exports, module) {
         },
 
         uploadBeforeSend: function(object, data, headers, tr){
-            var self = this.file.uploaderWidget;            
-
+            var uploadAuthUrl = object.file.uploaderWidget.get('uploadAuthUrl');
             var partNumber = object.chunk + 1;
             var encryptParams = {
                 "partNumber" : partNumber,
-                "uploadId" : self.get('uploadId')
+                "uploadId" : object.file.uploadId
             }
-            var authResult = this._getUploadAuth(encryptParams, 'PUT');
+            var authResult = this._getUploadAuth(encryptParams, 'PUT', uploadAuthUrl, object.file.gid);
         	
             headers['x-bce-date'] = authResult['x-bce-date'];
             headers['Authorization'] = authResult['Authorization'];
@@ -48,18 +46,17 @@ define(function(require, exports, module) {
                 delete data[i];
             });
 
-            tr.options.server = self.get('uploadUrl')+'?partNumber='+partNumber+'&uploadId='+self.get('uploadId');
+            tr.options.server = object.file.uploadUrl+'?partNumber='+partNumber+'&uploadId='+object.file.uploadId;
         },
 
-        _getUploadAuth: function(encryptParams, httpMethod){
-            var self = this.file.uploaderWidget;
+        _getUploadAuth: function(encryptParams, httpMethod, uploadAuthUrl, gid){
             var result;
             $.ajax({
-                url: self.get('uploadAuthUrl'),
+                url: uploadAuthUrl,
                 type:'POST',
                 data:{
                         "encryptParams" : encryptParams,
-                        "globalId" : this.file.gid,
+                        "globalId" : gid,
                         "httpMethod" : httpMethod
                     },
                 async: false,
@@ -81,18 +78,18 @@ define(function(require, exports, module) {
             }
         },
 
-        finishUpload: function(deferred) {
-            var self = this.file.uploaderWidget;
-            var baiduParts = self.get('baiduParts');
+        finishUpload: function(deferred, file) {
+            var uploadAuthUrl = file.uploaderWidget.get('uploadAuthUrl');
+            var baiduParts = file.baiduParts;
             baiduParts.parts = baiduParts.parts.sort(function (a, b) {
                 return (a['partNumber'] - b['partNumber']);
             });
-            var uploadId = self.get('uploadId');
-            var url = self.get('uploadUrl')+'?uploadId='+uploadId;
+            var uploadId = file.uploadId;
+            var url = file.uploadUrl+'?uploadId='+uploadId;
             encryptParams = {
                 "uploadId":uploadId
             };
-            headers = this._getUploadAuth(encryptParams, "POST");
+            headers = this._getUploadAuth(encryptParams, "POST", uploadAuthUrl, file.gid);
             var result = {};
 
             $.ajax({
@@ -109,16 +106,13 @@ define(function(require, exports, module) {
                     result = data;
                 }
             });
-            return $.extend({id: this.file.fileId}, result);
+            return $.extend({id: file.fileId}, result);
         },
 
         uploadAccept: function(object, ret){
-        	var self = this.file.uploaderWidget;
             if (ret._responseHeaders && ret._responseHeaders['ETag']) {
                 var partNumber = this._getParameterByName('partNumber', ret._requestURL);
-                var baiduParts = self.get('baiduParts');
-                baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
-                self.set('baiduParts', baiduParts);
+                object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
             }
         }
     });
