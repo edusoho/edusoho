@@ -203,8 +203,7 @@ class LoginBindController extends BaseController
 
         $redirectUrl = $this->generateUrl('register_success', array(
             'userId' => $user['id'],
-            'goto'   => $this->getTargetPath($request),
-            'hash'   => $this->makeHash($user)
+            'goto'   => $this->getTargetPath($request)
         ));
         $response = array('success' => true, '_target_path' => $redirectUrl);
 
@@ -434,12 +433,6 @@ class LoginBindController extends BaseController
         $client = OAuthClientFactory::create($type, $config);
 
         return $client;
-    }
-
-    protected function makeHash($user)
-    {
-        $string = $user['id'].$user['email'].$this->container->getParameter('secret');
-        return md5($string);
     }
 
     protected function getSensitiveService()
