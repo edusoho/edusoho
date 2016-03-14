@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
+use Topxia\Service\Taxonomy\Impl\TagService;
 
 class MaterialLibController extends BaseController
 {
@@ -19,7 +20,8 @@ class MaterialLibController extends BaseController
         return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
             'type'          => $request->query->get('type', ''),
             'courseId'      => $request->query->get('courseId', ''),
-            'createdUserId' => $request->query->get('createdUserId', '')
+            'createdUserId' => $request->query->get('createdUserId', ''),
+            'tags'          => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
 
@@ -172,7 +174,12 @@ class MaterialLibController extends BaseController
 
     protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('User.TokenService');
+        return $this->createService('User.TokenService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 
     protected function getMaterialLibService()

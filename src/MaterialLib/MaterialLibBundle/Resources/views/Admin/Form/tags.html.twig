@@ -1,7 +1,11 @@
-<div class="well well-sm" style="margin-bottom:10px">
-  <span style="padding-right:50px">标签:</span>
+<div class="well well-sm" style="margin-bottom:10px;position:relative;">
+  <span style="position:absolute">标签:</span>
 
-  <div class="form-group">
-    <input type="hidden" id="tags" name="tags" data-url="{{ path('tag_match') }}"> 
+  <div class="tags-container">
+    {% for tag in tags %}
+      <span class="label label-default">{{ tag.name }}</span>
+    {% endfor %}
+    <input type="hidden" name="tags">
   </div>
+
 </div>
