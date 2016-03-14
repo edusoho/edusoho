@@ -367,9 +367,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
-        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'shared') && !empty($conditions['currentUserId'])) {
+        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
             $sharedUsers = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
-
             if (!empty($sharedUsers)) {
                 $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
                 $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
@@ -384,6 +383,19 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {
             $conditions['isPublic'] = 1;
+        }
+
+        if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'sharing' && !empty($conditions['currentUserId'])) {
+            $fromSharing = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId'], 1);
+            if (!empty($fromSharing)) {
+                $item = array();
+                foreach ($fromSharing as $key => $value) {
+                    $item[$key] = $value['sourceUserId'];
+                }
+                $conditions['createdUserIds'] = $item;
+            } else {
+                $conditions['createdUserIds'] = array();
+            }
         }
 
         if (!empty($conditions['currentUserId'])) {

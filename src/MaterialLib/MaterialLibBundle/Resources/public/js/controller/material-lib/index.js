@@ -5,6 +5,7 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('jquery.colorbox');
+    var DetailWidget = require('materiallibbundle/controller/web/detail');
 
     exports.run = function() {
         var MaterialWidget = Widget.extend({
@@ -18,6 +19,7 @@ define(function(require, exports, module) {
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
+                'click .js-download-btn': 'onClickDownloadBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-source-btn': 'onClickSourseBtn',
                 'click .js-collect-btn': 'onClickCollectBtn'
@@ -60,44 +62,55 @@ define(function(require, exports, module) {
                 
                 this.renderTable();
             },
+            onClickDeleteBtn: function(event)
+            {   
+                if (confirm('真的要删除该资源吗？')) {   
+                    var self = this;   
+                    var $target = $(event.currentTarget);   
+                    this._loading();  
+                    $.ajax({   
+                        type:'POST',   
+                        url:$target.data('url'),  
+                    }).done(function(){   
+                        Notify.success('删除成功!');  
+                        self.renderTable();  
+                    }).fail(function(){  
+                        Notify.danger('删除失败!');  
+                    });  
+                }
+            },
             onClickDetailBtn: function(event)
-            {
-                var self = this;
-                var $target = $(event.currentTarget);
-                $.ajax({
-                    type:'GET',
-                    url:$target.data('url'),
-                }).done(function(resp){
-                    self.element.hide();
-                    self.element.prev().hide();
-                    self.element.parent().append(resp);
-                    new DetailWidget({
-                        element:'#material-detail',
-                        callback: function() {
-                            var $form = $('#materials-form');
+            {   
+                if (!this.DetailBtnActive) {   
+                    var self = this;   
+                    var $target = $(event.currentTarget);   
+                    this.DetailBtnActive = true;   
+                    $.ajax({   
+                        type:'GET',   
+                        url:$target.data('url'),   
+                    }).done(function(resp){   
+                       self.element.hide(); 
+                        self.element.prev().hide();
+                        self.element.parent().append(resp);
+                        new DetailWidget({  
+                           element:'#material-detail',  
+                           callback: function() {
+                            var $form = $('#material-search-form');
                             $form.show();
                             $form.prev().show();
                             window.materialWidget.renderTable();
-                        }
+                            }
+                        });
+                    }).fail(function(){
+                        Notify.danger('Opps,出错了!');
+                    }).always(function() {
+                       self.DetailBtnActive = false;
                     });
-                }).fail(function(){
-                    Notify.danger('Opps,出错了!');
-                });
+               }
             },
-            onClickDeleteBtn: function(event)
-            {
-                var self = this;
+            onClickDownloadBtn: function(event) {
                 var $target = $(event.currentTarget);
-                this._loading();
-                $.ajax({
-                    type:'POST',
-                    url:$target.data('url'),
-                }).done(function(){
-                    Notify.success('删除成功!');
-                    self.renderTable();
-                }).fail(function(){
-                    Notify.danger('删除失败!');
-                });
+                window.open($target.data('url'));
             },
             onClickReconvertBtn: function(event)
             {
