@@ -15,8 +15,8 @@
       <p>
         <span class="text-muted mrm">存储空间: {{ overview.service.storage.freeSpace }}GB</span>
         {% if not overview.service.storage.renewVideo.effectiveDate|default(0) %}
-        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
         <a href="{{ path('admin_cloud_video_upgrade') }}" target="_blank">升级</a>
+        <a href="{{ path('admin_cloud_video_renew') }}" target="_blank">续费</a>
         {% else %}
         <span>
           已续费（将于{{ overview.service.storage.renewVideo.effectiveDate|date("Y年n月j日") }}生效)
@@ -28,7 +28,7 @@
         <p class="text-muted">服务期限: {{ overview.service.storage.startMonth|date('Y.n.d') }} ~ {{ overview.service.storage.endMonth|date('Y.n.d') }}
       {% endif %}
       {% if overview.service.storage.remaining > 0 and overview.service.storage.remaining < 30 %}
-        <p class="text-danger text-sm">您的云视频包将于{{ 30 - overview.service.storage.remaining }}天后到期，请尽快续费</p>
+        <p class="text-danger text-sm">您的云视频包将于{{ overview.service.storage.remaining }}天后到期，请尽快续费</p>
       {% elseif overview.service.storage.remaining <= 0 %}
         <p class="text-danger text-sm">您的云视频包已到期，请尽快续费</p>
       {% endif %}

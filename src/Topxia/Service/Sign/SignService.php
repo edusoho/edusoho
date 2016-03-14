@@ -16,4 +16,5 @@ interface SignService
     public function getSignTargetStatistics($targetType, $targetId, $date);
 
     public function getTodayRank($userId, $targetType, $targetId);
+
 }

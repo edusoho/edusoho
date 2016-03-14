@@ -2,9 +2,9 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\Common\Mail;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\User\AuthProvider\DiscuzAuthProvider;
 
 class SystemController extends BaseController
@@ -34,47 +34,54 @@ class SystemController extends BaseController
                 return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true,'message' => '未开通Ucenter'));
+            return $this->createJsonResponse(array('status' => true, 'message' => '未开通Ucenter'));
         }
     }
 
     public function emailSendCheckAction()
     {
-        $user = $this->getCurrentUser();
-        $site = $this->getSettingService()->get('site', array());
-        $mailer  = $this->getSettingService()->get('mailer', array());
-
+        $user      = $this->getCurrentUser();
+        $site      = $this->getSettingService()->get('site', array());
+        $mailer    = $this->getSettingService()->get('mailer', array());
+        $cloudMail = $this->getSettingService()->get('cloud_mail', array());
         if (!empty($mailer['enabled'])) {
             try {
-                $this->sendEmail(
-                    $user['email'],
-                    "【{$site['name']}】系统自检邮件",
-                    '系统邮件发送检测测试，请不要回复此邮件！'
-                );
+                if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
+                    return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
+                } else {
+                    $normalMail = array(
+                        'to'    => $user['email'],
+                        'title' => "【{$site['name']}】系统自检邮件",
+                        'body'  => '系统邮件发送检测测试，请不要回复此邮件！'
+                    );
+                    $cloudMail = array();
+                    $mail      = new Mail($normalMail, $cloudMail);
 
-                return $this->createJsonResponse(array('status' => true,'message' => '邮件发送正常'));
+                    $this->sendEmail($mail);
+
+                    return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
+                }
             } catch (\Exception $e) {
                 $this->getLogService()->error('user', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
-                return $this->createJsonResponse(array('status' => false,'message' => '邮件发送异常'));
+                return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
             }
         } else {
             return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送服务并没开通！'));
         }
-
     }
 
     public function checkDirAction()
     {
         $paths = array(
-            '/' => array('depth' => '<1', 'dir' => true),
-            'app' => array('depth' => '<1', 'dir' => true),
-            'src' => array(),
-            'plugins' => array(),
-            'api' => array(),
-            'vendor' => array('depth' => '<1', 'dir' => true),
-            'vendor2' => array('depth' => '<1', 'dir' => true),
+            '/'           => array('depth' => '<1', 'dir' => true),
+            'app'         => array('depth' => '<1', 'dir' => true),
+            'src'         => array(),
+            'plugins'     => array(),
+            'api'         => array(),
+            'vendor'      => array('depth' => '<1', 'dir' => true),
+            'vendor2'     => array('depth' => '<1', 'dir' => true),
             'vendor_user' => array('depth' => '<1', 'dir' => true),
-            'web' => array('depth' => '<1', 'dir' => true)
+            'web'         => array('depth' => '<1', 'dir' => true)
         );
 
         $errorPaths = array();
@@ -100,7 +107,6 @@ class SystemController extends BaseController
                     }
                 } catch (\Exception $e) {
                 }
-
             }
         }
 
@@ -126,7 +132,7 @@ class SystemController extends BaseController
         $env['mbstringOk']          = extension_loaded('mbstring');
         $env['gdOk']                = extension_loaded('gd');
         $env['curlOk']              = extension_loaded('curl');
-        $env['safemode'] = ini_get('safe_mode');
+        $env['safemode']            = ini_get('safe_mode');
 
         return $env;
     }
