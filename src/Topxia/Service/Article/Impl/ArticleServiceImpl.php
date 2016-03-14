@@ -121,6 +121,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
+        $this->dispatchEvent('article.update' new ServiceEvent($id));
 
         return $article;
     }
@@ -168,7 +169,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         );
 
         $this->getDispatcher()->dispatch('article.liked', new ServiceEvent($article));
-
+      
         return $this->getArticleLikeDao()->addArticleLike($articleLike);
     }
 
@@ -208,7 +209,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $this->getArticleDao()->updateArticle($id, array("{$property}" => $propertyVal));
 
         $this->getLogService()->info('setArticleProperty', 'updateArticleProperty', "文章#{$id},$article[$property]=>{$propertyVal}");
-
         return $propertyVal;
     }
 
@@ -237,6 +237,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
+        $this->dispatchEvent('article.trash',new ServiceEvent($id));
         $this->getLogService()->info('Article', 'trash', "文章#{$id}移动到回收站");
     }
 
@@ -251,7 +252,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $this->getArticleDao()->updateArticle($id, $fields = array('thumb' => '', 'originalThumb' => ''));
         $this->getFileService()->deleteFileByUri($checkArticle["thumb"]);
         $this->getFileService()->deleteFileByUri($checkArticle["originalThumb"]);
-
         $this->getLogService()->info('Article', 'removeThumb', "文章#{$id}removeThumb");
     }
 
@@ -264,6 +264,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $res = $this->getArticleDao()->deleteArticle($id);
+        $this->dispatchEvent('article.delete',new ServiceEvent($id));
         $this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
 
         return true;
@@ -307,6 +308,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
                 $data[$key]["file"] = $file;
 
                 $this->getFileService()->deleteFileByUri($files[$value["id"]]["uri"]);
+                $this->dispatchEvent('article.change.picture')
             } else {
                 $data[$key]["file"] = $files[$value["id"]];
             }

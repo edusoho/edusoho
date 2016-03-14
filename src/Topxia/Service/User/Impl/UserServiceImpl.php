@@ -821,7 +821,6 @@ class UserServiceImpl extends BaseService implements UserService
         if ($bind) {
             $bind        = $this->getUserBindDao()->deleteBind($bind['id']);
             $currentUser = $this->getCurrentUser();
-            $this->dispatchEvent("user.unbind", new ServiceEvent($user));
             $this->getLogService()->info('user', 'unbind', "用户名{$user['nickname']}解绑成功，操作用户为{$currentUser['nickname']}");
         }
 
@@ -885,7 +884,6 @@ class UserServiceImpl extends BaseService implements UserService
             'createdTime' => time(),
             'expiredTime' => empty($token['expiredTime']) ? 0 : $token['expiredTime']
         ));
-        $this->dispatchEvent("user.binduser", new ServiceEvent($toId));
         return $userBind;
     }
 
@@ -1042,8 +1040,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedSeq' => $number, 'promotedTime' => time()));
-        $this->dispatchEvent("user.promote", new ServiceEvent($id));
-
         $this->getLogService()->info('user', 'recommend', "推荐用户{$user['nickname']}(#{$user['id']})");
         return $user;
     }
@@ -1057,7 +1053,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 0, 'promotedSeq' => 0, 'promotedTime' => 0));
-        $this->dispatchEvent("user.cancelpromote", new ServiceEvent($id));
 
         $this->getLogService()->info('user', 'cancel_recommend', "取消推荐用户{$user['nickname']}(#{$user['id']})");
         return $user;
@@ -1177,7 +1172,6 @@ class UserServiceImpl extends BaseService implements UserService
         ));
         $this->getFriendDao()->updateFriendByFromIdAndToId($toId, $fromId, array('pair' => $pair));
         $this->getDispatcher()->dispatch('user.service.follow', new ServiceEvent($friend));
-        $this->dispatchEvent("user.follow", new ServiceEvent($fromId));
         return $friend;
     }
 
@@ -1204,7 +1198,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getDispatcher()->dispatch('user.service.unfollow', new ServiceEvent($friend));
-        $this->dispatchEvent("user.unfollow", new ServiceEvent($fromId));
         return $result;
     }
 
@@ -1312,8 +1305,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !");
 
-        $this->dispatchEvent('realname.approval', new ServiceEvent($user));
-
         $message = array(
             'note' => $note ? $note : '',
             'type' => 'through');
@@ -1345,7 +1336,6 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getLogService()->info('user', 'approval_fail', "用户{$user['nickname']}实名认证失败，操作人:{$currentUser['nickname']} !");
-        $this->dispatchEvent('user.reject.approval', new ServiceEvent($userId));
         $message = array(
             'note' => $note ? $note : '',
             'type' => 'reject');
@@ -1440,7 +1430,6 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $user = $this->getUserDao()->updateUser($userId, $code);
-        $this->dispatchEvent('user.create.invitecode', new ServiceEvent($userId));
         return $user;
     }
 

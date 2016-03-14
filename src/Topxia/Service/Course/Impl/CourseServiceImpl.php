@@ -568,7 +568,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             'recommendedSeq'  => (int) $number,
             'recommendedTime' => time()
         ));
-        $this->dispatchEvent("course.recommend", new ServiceEvent($id));
 
         $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
 
@@ -636,10 +635,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
         }
 
-        $this->dispatchEvent("course.delete", array(
-            "id" => $id
-        ));
-
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
         return true;
@@ -659,7 +654,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
         $this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent('course.publish', $course);
     }
 
     public function closeCourse($id, $source = 'course')
@@ -676,7 +670,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
         $this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent('course.close', $course);
+        $this->dispatchEvent('course.close', $id);
     }
 
     public function favoriteCourse($courseId)
@@ -706,7 +700,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //添加动态
         $this->dispatchEvent(
             'course.favorite',
-            new ServiceEvent($course)
+            new ServiceEvent($courseId)
         );
 
         $this->getFavoriteDao()->addFavorite(array(
