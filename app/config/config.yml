@@ -189,7 +189,7 @@ services:
 
     array_cache:
         class: Doctrine\Common\Cache\FilesystemCache
-        arguments:    ['/Users/fengni/edusoho/www/edusoho/app/cache/a']
+        arguments:    ['%kernel.root_dir%/../app/cache/twig']
 
     cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
