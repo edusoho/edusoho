@@ -45,7 +45,6 @@ class MaterialLibController extends BaseController
         $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
         $conditions['status'] = 'ok';
-        var_dump($conditions['sourceFrom']);
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
