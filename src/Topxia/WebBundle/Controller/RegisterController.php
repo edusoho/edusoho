@@ -67,7 +67,11 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
-            return $this->redirect($this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request))));
+            return $this->redirect($this->generateUrl('register_success', array(
+                'userId' => $user['id'],
+                'goto'   => $this->getTargetPath($request),
+                'hash'   => $this->makeHash($user)
+            )));
         }
 
         $inviteCode = '';
@@ -92,7 +96,13 @@ class RegisterController extends BaseController
 
     public function successAction(Request $request)
     {
-        $user = $this->getUserService()->getUser($request->query->get('userId'));
+        $userId = $request->query->get('userId');
+        $hash   = $request->query->get('hash');
+        $user   = $this->checkHash($userId, $hash);
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('对不起，无权操作');
+        }
 
         $authSettings = $this->getSettingService()->get('auth', array());
 
