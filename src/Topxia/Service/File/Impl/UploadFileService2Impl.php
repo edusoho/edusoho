@@ -47,7 +47,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return null;
         }
 
-        return ArrayToolkit::parts($file, array('id', 'hashId', 'globalId', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
+        return ArrayToolkit::parts($file, array('id', 'hashId', 'globalId', 'isPublic', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
     }
 
     public function getFileByGlobalId($globalId)

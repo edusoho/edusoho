@@ -5,11 +5,14 @@ namespace MaterialLib\Service\MaterialLib\Impl;
 use Topxia\Common\ArrayToolkit;
 use MaterialLib\Service\BaseService;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
+use MaterialLib\Service\MaterialLib\Permission;
+use Topxia\Service\Common\AccessDeniedException;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
     public function search($conditions, $start, $limit)
     {
+        $this->checkPermission(Permission::SEARCH);
         $conditions['start']    = $start;
         $conditions['limit']    = $limit;
         $conditions             = $this->filterConditions($conditions);
@@ -21,16 +24,19 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function get($globalId)
     {
+        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->get($globalId);
     }
 
     public function player($globalId)
     {
+        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->player($globalId);
     }
 
     public function edit($globalId, $fields)
     {
+        $this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
         $this->getCloudFileService()->edit($globalId, $fields);
         $this->getUploadFileService()->edit($globalId, $fields);
     }
@@ -38,6 +44,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function delete($globalId)
     {
         if ($globalId) {
+            $this->checkPermission(Permission::DELETE, array('globalId' => $globalId));
             $this->getUploadFileService()->deleteByGlobalId($globalId);
             $this->getCloudFileService()->delete($globalId);
         }
@@ -46,21 +53,25 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function download($globalId)
     {
+        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->download($globalId);
     }
 
     public function reconvert($globalId, $options = array())
     {
+        $this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
         return $this->getCloudFileService()->reconvert($globalId, $options);
     }
 
     public function getDefaultHumbnails($globalId)
     {
+        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getDefaultHumbnails($globalId);
     }
 
     public function getThumbnail($globalId, $options = array())
     {
+        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getThumbnail($globalId, $options);
     }
 
@@ -94,6 +105,13 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $filterConditions;
     }
 
+    protected function checkPermission($permission, $options = array())
+    {
+        if (!$this->getPermissionService()->check($permission, $options)) {
+            throw new AccessDeniedException("无权限操作", 403);
+        }
+    }
+
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService2');
@@ -102,6 +120,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getMaterialLibDao()
     {
         return $this->createDao('MaterialLib:MaterialLib.MaterialLibDao');
+    }
+
+    protected function getPermissionService()
+    {
+        return $this->createService('MaterialLib:MaterialLib.PermissionService');
     }
 
     protected function getCloudFileService()

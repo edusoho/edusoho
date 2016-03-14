@@ -12,7 +12,11 @@
           <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}">{{ material.name }}</p>
 
           <div style="margin-top:40px">
-            <span class="text-sm text-muted" style="display:block">{{ createdUser.nickname|default('用户已删除') }} 上传</span>
+            <span class="text-sm text-muted" style="display:block">
+              {% if createdUser %}
+                {{ createdUser.nickname }} 上传
+              {% endif %}
+            </span>
             <span class="text-sm text-muted" style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
           </div>
           
@@ -44,13 +48,7 @@
           {{ dict_text('processStatus', material.processStatus) }}
         </span>
       {% elseif material.processStatus == 'error' %}
-        <span class="label label-danger">
-          {{ dict_text('processStatus', material.processStatus) }}
-          <i class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="转码失败"></i>
-        </span>
-        
-        <br>
-        <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
+        <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span><br><a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
       {% else %}
         <span class="label label-warning">
           {{ dict_text('processStatus', material.processStatus) }}
