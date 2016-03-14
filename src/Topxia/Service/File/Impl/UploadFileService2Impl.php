@@ -335,19 +335,32 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (empty($userId) || empty($fileId)) {
             throw $this->createServiceException("参数错误，请重新输入");
         }
-        $collection = array(
-            'userId'      => $userId,
-            'fileId'      => $fileId,
-            'updatedTime' => time(),
-            'createdTime' => time()
-        );
-        $collection = $this->getUploadFileCollectDao()->addCollection($collection);
-        $result     = $this->getUploadFileDao()->getFile($collection['fileId']);
-        return $result;
+        $collection = $this->getUploadFileCollectDao()->getCollectonByUserIdandFileId($userId, $fileId);
+        if (empty($collection)) {
+            $collection = array(
+                'userId'      => $userId,
+                'fileId'      => $fileId,
+                'updatedTime' => time(),
+                'createdTime' => time()
+            );
+            $collection = $this->getUploadFileCollectDao()->addCollection($collection);
+            $result     = $this->getUploadFileDao()->getFile($collection['fileId']);
+            return $result;
+        }
+        $this->getUploadFileCollectDao()->deleteCollection($collection['id']);
+        return false;
     }
 
-    public function cancelCollectFile($userId, $fileId)
+    public function findCollectionsByUserIdAndFileIds($fileIds, $userId)
     {
+        $collections = $this->getUploadFileCollectDao()->findCollectonsByUserIdandFileIds($fileIds, $userId);
+        return $collections;
+    }
+
+    public function findCollectionsByUserId($userId)
+    {
+        $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($userId);
+        return $collections;
     }
 
     protected function _prepareSearchConditions($conditions)
@@ -361,6 +374,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
                 $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
             }
+        }
+
+        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
+            $collections       = $this->findCollectionsByUserId($conditions['currentUserId']);
+            $fileIds           = ArrayToolkit::column($collections, 'fileId');
+            $conditions['ids'] = $fileIds;
         }
 
         if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {

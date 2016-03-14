@@ -53,6 +53,7 @@ interface UploadFileService2
      */
     public function collectFile($userId, $fileId);
 
-    public function cancelCollectFile($userId, $fileId);
+    public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
 
+    public function findCollectionsByUserId($userId);
 }
