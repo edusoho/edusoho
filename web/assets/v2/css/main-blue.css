@@ -13273,9 +13273,11 @@ textarea {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+  background: #fff;
   background: rgba(255, 255, 255, 0.5);
 }
 .es-live-poster .swiper-pager span.swiper-active-switch {
+  background: #f5f5f5;
   background: #ffffff;
 }
 .live-course-body .es-live-list {
@@ -13287,6 +13289,7 @@ textarea {
 .live-course-body .es-live-list .panel-body > ul {
   margin: 0;
   padding: 0;
+  background: #f5f5f5;
 }
 .live-course-body .es-live-list .panel-body > ul li {
   float: left;
