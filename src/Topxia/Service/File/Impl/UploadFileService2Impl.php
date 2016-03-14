@@ -5,6 +5,7 @@ namespace Topxia\Service\File\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\UploadFileService2;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class UploadFileService2Impl extends BaseService implements UploadFileService2
 {
@@ -248,7 +249,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function deleteByGlobalId($globalId)
     {
-        $this->getUploadFileDao()->deleteByGlobalId($globalId);
+        try {
+            $api    = CloudAPIFactory::create('leaf');
+            $result = $api->DELETE('/v1/resources/:{$globalId}');
+            if (isset($result['success']) && $result['success']) {
+                $this->getUploadFileDao()->deleteByGlobalId($globalId);
+            }
+        } catch (\RuntimeException $e) {
+            $message = $e->getMessage();
+            return $this->createJsonResponse(array('error' => "删除文件失败, {$message}"));
+        }
     }
 
     public function increaseFileUsedCount($id)
