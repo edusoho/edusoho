@@ -187,21 +187,21 @@ services:
         tags:
             - { name: twig.extension }
 
-    array_cache:
+    topxia.twig.file_cache:
         class: Doctrine\Common\Cache\FilesystemCache
         arguments:    ['%kernel.root_dir%/../app/cache/twig']
 
-    cache_provider:
+    topxia.twig.cache_provider:
         class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
-        arguments:    ['@array_cache']
+        arguments:    ['@topxia.twig.file_cache']
 
-    cache_strategy:
+    topxia.twig.cache_strategy:
         class: Asm89\Twig\CacheExtension\CacheStrategy\LifetimeCacheStrategy
-        arguments:    ['@cache_provider']
+        arguments:    ['@topxia.twig.cache_provider']
 
     topxia.twig.cache_extension:
         class: Asm89\Twig\CacheExtension\Extension
-        arguments:    ['@cache_strategy']
+        arguments:    ['@topxia.twig.cache_strategy']
         tags:
             - { name: twig.extension }
 
