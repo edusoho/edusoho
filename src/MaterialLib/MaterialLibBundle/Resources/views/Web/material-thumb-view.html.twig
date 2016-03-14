@@ -55,9 +55,9 @@
 
         <div class="tags-container">
           {% for tag in tags %}
-            <span class="label label-default">{{ tag.name }}</span>
+            <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
           {% endfor %}
-          <input type="hidden" name="tags">
+          <input type="hidden" name="tagId">
         </div>
     </div>
     

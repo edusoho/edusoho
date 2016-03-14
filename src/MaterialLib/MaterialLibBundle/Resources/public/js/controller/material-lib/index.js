@@ -52,7 +52,7 @@ define(function(require, exports, module) {
                 var $container = $target.closest('.tags-container');
                 $container.find('.label-info').removeClass('label-info').addClass('label-default');
                 $target.addClass('label-info').removeClass('label-default');
-                $container.find('[name=tags]').val($target.html());
+                $container.find('[name=tagId]').val($target.data('id'));
                 this.renderTable();
             },
             onClickDetailBtn: function(event)

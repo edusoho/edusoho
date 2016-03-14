@@ -372,6 +372,13 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             unset($conditions['currentUserId']);
         }
 
+        if (!empty($conditions['tagId'])) {
+            $assos = $this->getUploadFileTagDao()->findByTagId($conditions['tagId'], 0, PHP_INT_MAX);
+            $ids = ArrayToolkit::column($assos, 'fileId');
+            $conditions['ids'] = $ids;
+            unset($conditions['tagId']);
+        }
+
         return $conditions;
     }
 
@@ -417,6 +424,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function getUploadFileCollectDao()
     {
         return $this->createDao('File.UploadFileCollectDao');
+    }
+
+    protected function getUploadFileTagDao()
+    {
+        return $this->createDao('File.UploadFileTagDao');
     }
 }
 
