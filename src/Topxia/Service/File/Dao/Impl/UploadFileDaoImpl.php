@@ -161,6 +161,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
                         ->andWhere('targetType = :targetType')
                         ->andWhere('targetId = :targetId')
                         ->andWhere('status = :status')
+                        ->andWhere('isPublic = :isPublic')
                         ->andWhere('targetId IN ( :targets )')
                         ->andWhere('type = :type')
                         ->andWhere('storage = :storage')

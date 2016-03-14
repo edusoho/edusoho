@@ -9,7 +9,7 @@ use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
-    public function indexAction(Request $request, $type = "all", $viewMode = "thumb", $source = "upload")
+    public function indexAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
 
@@ -21,102 +21,53 @@ class MaterialLibController extends BaseController
 
         $keyWord = $request->query->get('keyword') ?: "";
 
-        $conditions           = array();
+        $conditions           = $request->query->all();
         $conditions['status'] = 'ok';
 
-        if ($type != 'all') {
-            $conditions['type'] = $type;
+        if (empty($conditions['type'])) {
+            $conditions['type'] = 'all';
         }
 
         if (!empty($keyWord)) {
             $conditions['filename'] = $keyWord;
         }
 
-        $conditions['source']        = $source;
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-
-        $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
-
-        if ($viewMode == 'thumb') {
-            $resultPage = 'MaterialLibBundle:Web:material-thumb-view.html.twig';
-        }
-
-        $storageSetting = $this->getSettingService()->get("storage");
-
-        $tags = $this->getTagService()->findAllTags(0, 999);
-
-        return $this->render($resultPage, array(
-            'currentUserId'  => $currentUserId,
-            'type'           => $type,
-            'files'          => $files,
-            'createdUsers'   => $createdUsers,
-            'paginator'      => $paginator,
-            'storageSetting' => $storageSetting,
-            'viewMode'       => $viewMode,
-            'source'         => $source,
-            'now'            => time(),
-            'tags'           => $tags
+        return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
+            'currentUserId' => $currentUserId
         ));
     }
 
-    public function showMyMaterialLibFormAction(Request $request, $viewMode = "thumb")
+    public function showMyMaterialLibFormAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
-
-        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
-        }
-        $currentUserId = $currentUser['id'];
-        $data          = $request->query->all();
-        $source        = $data['source'];
-        $type          = $data['type'];
-        $keyWord       = $request->query->get('keyword') ?: "";
-
-        $conditions           = array();
+        $currentUser          = $this->getCurrentUser();
+        $currentUserId        = $currentUser['id'];
+        $conditions           = $request->query->all();
         $conditions['status'] = 'ok';
 
-        if ($type != 'all') {
-            $conditions['type'] = $type;
+        if (!empty($conditions['keyword'])) {
+            $conditions['filename'] = $conditions['keyword'];
         }
 
-        if (!empty($keyWord)) {
-            $conditions['filename'] = $keyWord;
-        }
-
-        $conditions['source']        = $source;
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 10);
+        $paginator = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
 
         $files        = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $collections  = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
-        //Return different views according to current viewing mode
-
-        if ($viewMode == 'thumb') {
-            $resultPage = 'MaterialLibBundle:Web/Widget:thumb-list.html.twig';
-        } else {
-            $resultPage = 'MaterialLibBundle:MaterialLib:material-list-view-item.html.twig';
-        }
-
         $storageSetting = $this->getSettingService()->get("storage");
 
         $tags = $this->getTagService()->findAllTags(0, 999);
 
-        return $this->render($resultPage, array(
+        return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
             'currentUserId'  => $currentUserId,
-            'type'           => $type,
             'files'          => $files,
             'createdUsers'   => $createdUsers,
             'paginator'      => $paginator,
             'storageSetting' => $storageSetting,
-            'viewMode'       => $viewMode,
-            'source'         => $source,
             'now'            => time(),
             'tags'           => $tags
         ));
@@ -176,9 +127,9 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
-    public function generateThumbnailAction(Request $reqeust, $globalId)
+    public function generateThumbnailAction(Request $request, $globalId)
     {
-        $second = $reqeust->query->get('second');
+        $second = $request->query->get('second');
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
     }
 
