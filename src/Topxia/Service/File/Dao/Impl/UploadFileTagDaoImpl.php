@@ -3,9 +3,9 @@
 namespace Topxia\Service\File\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\File\Dao\UploadFileShareDao;
+use Topxia\Service\File\Dao\UploadFileTagDao;
 
-class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao
+class UploadFileTagDaoImpl extends BaseDao implements UploadFileTagDao
 {
     protected $table = 'upload_files_tag';
 
@@ -39,12 +39,12 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao
     public function findByFileId($fileId)
     {
         $sql   = "SELECT * FROM {$this->table} WHERE fileId = ？";
-        return $this->getConnection()->fetchAll($sql, arrat($fileId));
+        return $this->getConnection()->fetchAll($sql, array($fileId));
     }
 
-    public function findByTagId($tagId, $start, $limit)
+    public function findByTagId($tagId)
     {
-        $sql   = "SELECT * FROM {$this->table} WHERE tagId = ？limit ?,?";
-        return $this->getConnection()->fetchAll($sql, arrat($tagId, $start, $$limit));
+        $sql   = "SELECT * FROM {$this->table} WHERE tagId = ?";
+        return $this->getConnection()->fetchAll($sql, array($tagId));
     }
 }

@@ -14,5 +14,5 @@ interface UploadFileTagDao
 
     public function findByFileId($fileId);
 
-    public function findByTagId($tagId, $start, $limit);
+    public function findByTagId($tagId);
 }

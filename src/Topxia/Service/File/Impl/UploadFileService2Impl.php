@@ -392,9 +392,13 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         if (!empty($conditions['tagId'])) {
-            $assos = $this->getUploadFileTagDao()->findByTagId($conditions['tagId'], 0, PHP_INT_MAX);
+            $assos = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
             $ids = ArrayToolkit::column($assos, 'fileId');
-            $conditions['ids'] = $ids;
+            if ($ids) {
+                $conditions['ids'] = $ids;
+            } else {
+                $conditions['ids'] = array('-1');
+            }
             unset($conditions['tagId']);
         }
 

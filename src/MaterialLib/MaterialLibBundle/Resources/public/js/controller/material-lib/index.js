@@ -48,9 +48,16 @@ define(function(require, exports, module) {
             {
                 var $target = $(event.currentTarget);
                 var $container = $target.closest('.tags-container');
-                $container.find('.label-info').removeClass('label-info').addClass('label-default');
-                $target.addClass('label-info').removeClass('label-default');
-                $container.find('[name=tagId]').val($target.data('id'));
+                var $prev = $container.find('.label-info');
+                if ($target.html() == $prev.html()) {
+                    $target.removeClass('label-info').addClass('label-default');
+                    $container.find('[name=tagId]').val('');
+                } else {
+                    $prev.removeClass('label-info').addClass('label-default');
+                    $target.addClass('label-info').removeClass('label-default');
+                    $container.find('[name=tagId]').val($target.data('id'));
+                }
+                
                 this.renderTable();
             },
             onClickDetailBtn: function(event)
