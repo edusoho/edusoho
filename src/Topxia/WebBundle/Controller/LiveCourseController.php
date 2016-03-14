@@ -498,7 +498,7 @@ class LiveCourseController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0))
+            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0, 'courseIds' => $courseIds))
             , 10
         );
 

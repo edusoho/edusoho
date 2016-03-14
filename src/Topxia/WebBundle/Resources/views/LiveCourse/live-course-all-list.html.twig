@@ -39,11 +39,11 @@
           </div>
 
           {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime %}
-            <span class="label label-success label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
+            <span class="label label-danger label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
           {% elseif "now"|date("U") < course.liveStartTime %}
             <span class="label label-warning label-md">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
           {% elseif "now"|date("U") > course.liveStartTime %}
-            <span class="label label-default label-md">查看回放</span>
+            <span class="label label-info label-md">查看回放</span>
           {% endif %}
 
           <div class="metas">
