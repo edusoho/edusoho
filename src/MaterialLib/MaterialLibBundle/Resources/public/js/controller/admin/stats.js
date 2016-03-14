@@ -2,6 +2,7 @@ define(function(require, exports, module) {
     require("jquery.bootstrap-datetimepicker");
     var PieChart = require('./pie-chart');
     var LineChart = require('./line-chart');
+    var BarChart = require('./bar-chart');
     var Widget = require('widget');
 
     var StatsWidget = Widget.extend({
@@ -57,7 +58,7 @@ define(function(require, exports, module) {
                     title: '流量使用分布'
                 });
 
-                this.totalLineChart = new LineChart({
+                this.totalLineChart = new BarChart({
                     element: '#total-line-chart',
                     title: '空间/流量详情'
                 });

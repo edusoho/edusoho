@@ -28,8 +28,6 @@ define(function(require, exports, module) {
                 toolbox: {
                     show: true,
                     feature: {
-                        dataView: {show: true, readOnly: false},
-                        magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
                         restore: {show: true},
                         saveAsImage: {show: true}
                     }

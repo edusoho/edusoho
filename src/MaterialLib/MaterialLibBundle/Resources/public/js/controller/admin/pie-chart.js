@@ -17,10 +17,10 @@ define(function(require, exports, module) {
                     text: this.get('title'),
                     x:'right'
                 },
-                tooltip : {
-                    trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c}GB ({d}%)"
-                },
+                // tooltip : {
+                //     trigger: 'item',
+                //     formatter: "{a} <br/>{b} : {c}GB ({d}%)"
+                // },
                 legend: {
                     orient: 'vertical',
                     left: 'left',
