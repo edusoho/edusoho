@@ -39,24 +39,16 @@ class OpenCourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        if (!isset($courseSetting['live_open_course_enabled'])) {
-            $courseSetting['live_open_course_enabled'] = "";
-        }
-
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaAdminBundle:OpenCourse:index.html.twig', array(
-            'conditions'     => $conditions,
-            'courses'        => $courses,
-            'categories'     => $categories,
-            'users'          => $users,
-            'paginator'      => $paginator,
-            'liveSetEnabled' => $courseSetting['live_open_course_enabled'],
-            'default'        => $default,
-            'classrooms'     => array(),
-            'filter'         => $filter
+            'courses'    => $courses,
+            'categories' => $categories,
+            'users'      => $users,
+            'paginator'  => $paginator,
+            'default'    => $default,
+            'classrooms' => array(),
+            'filter'     => $filter
         ));
     }
 
