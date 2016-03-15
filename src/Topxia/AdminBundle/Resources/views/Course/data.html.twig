@@ -43,6 +43,8 @@
             {% set classroom = classrooms[course.id]|default(null) %}
             {% if classroom %}
             <a href="{{path('classroom_show',{id:classroom.classroomId})}}" target="_blank">{{classroom.classroomTitle}}</a>
+            {% elseif not classroom %}
+            <span class="label label-danger live-label mls">未引用</span> 
             {% endif %}
             </td>
             {% endif %}
