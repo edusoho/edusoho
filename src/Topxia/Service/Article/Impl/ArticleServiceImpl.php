@@ -236,8 +236,8 @@ class ArticleServiceImpl extends BaseService implements ArticleService
             throw $this->createServiceException("文章不存在，操作失败。");
         }
 
-        $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
-        $this->dispatchEvent('article.trash',new ServiceEvent($id));
+        $article=$this->getArticleDao()->updateArticle($id, $fields = array('status' => 'trash'));
+        $this->dispatchEvent('article.trash',new ServiceEvent($article));
         $this->getLogService()->info('Article', 'trash', "文章#{$id}移动到回收站");
     }
 
@@ -264,7 +264,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $res = $this->getArticleDao()->deleteArticle($id);
-        $this->dispatchEvent('article.delete',new ServiceEvent($checkArticle));
+        $this->dispatchEvent('article.delete',new ServiceEvent($id));
         $this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
 
         return true;

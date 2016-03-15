@@ -636,7 +636,9 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent('course.delete', new ServiceEvent($course));
+        $this->dispatchEvent("course.delete", array(
+            "id" => $id
+        ));
 
         return true;
     }
@@ -654,8 +656,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
-        $this->dispatchEvent('course.publish', new ServiceEvent($course));
         $this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent('course.publish', $course);
     }
 
     public function closeCourse($id, $source = 'course')
@@ -672,7 +674,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'closed'));
         $this->getLogService()->info('course', 'close', "关闭课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent('course.close', $id);
+        $this->dispatchEvent('course.close', $course);
     }
 
     public function favoriteCourse($courseId)
@@ -702,7 +704,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         //添加动态
         $this->dispatchEvent(
             'course.favorite',
-            new ServiceEvent($courseId)
+            new ServiceEvent($course)
         );
 
         $this->getFavoriteDao()->addFavorite(array(
@@ -908,7 +910,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['discount']   = $discount['globalDiscount'];
 
                 $this->getCourseDao()->updateCourse($course['id'], $fields);
-                $this->dispatchEvent('course.set.price.with.discount', $course);
             }
         } else {
             $count     = $this->getDiscountService()->findItemsCountByDiscountId($discountId);
@@ -937,7 +938,6 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['discount']   = $item['discount'];
 
                 $this->getCourseDao()->updateCourse($course['id'], $fields);
-                $this->dispatchEvent('course.set.price.with.discount', $course);
             }
         }
     }
@@ -951,7 +951,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->clearCourseDiscountPrice($discountId);
-        $this->dispatchEvent('course.revert.price.discount', new ServiceEvent($course));
     }
 
     /**
@@ -971,8 +970,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function setCourseLessonMaxOnlineNum($lessonId, $num)
     {
-        $lesson = $this->getLessonDao()->getLesson($lessonId);
-        $this->dispatchEvent('lesson.set.max.online.num', $lesson);
+        $this->getLessonDao()->getLesson($lessonId);
         return $this->getLessonDao()->updateLesson($lessonId, array('maxOnlineNum' => $num));
     }
 

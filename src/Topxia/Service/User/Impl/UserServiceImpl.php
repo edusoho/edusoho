@@ -118,7 +118,7 @@ class UserServiceImpl extends BaseService implements UserService
     {
         $this->getUserDao()->updateUser($userId, array('emailVerified' => 1));
         $user = $this->getUser($userId);
-        $this->dispatchEvent('user.email.verify', new ServiceEvent($user));
+        $this->dispatchEvent('email.verify', new ServiceEvent($user));
     }
 
     public function changeNickname($userId, $nickname)
@@ -141,7 +141,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
         $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
-        $this->dispatchEvent('user.nickname.update', new ServiceEvent($user));
+        $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user)));
     }
 
     public function changeEmail($userId, $email)
@@ -157,7 +157,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($userId, array('email' => $email));
-        $this->dispatchEvent('user.email.update', new ServiceEvent($user));
+        $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user)));
     }
 
     public function changeAvatar($userId, $data)
@@ -194,7 +194,6 @@ class UserServiceImpl extends BaseService implements UserService
         }, $oldAvatars);
 
         $user = $this->getUserDao()->updateUser($userId, $fields);
-        $this->dispatchEvent('user.avatar.update', new ServiceEvent($user));
         return UserSerialize::unserialize($user);
     }
 
@@ -246,8 +245,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
-        $this->dispatchEvent("user.password.update", new ServiceEvent($user));
-
         $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
 
         $this->getLogService()->info('user', 'password-changed', "用户{$user['email']}(ID:{$user['id']})重置密码成功");
@@ -271,7 +268,6 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getUserDao()->updateUser($userId, $fields);
-        $this->dispatchEvent("user.paypassword.update", $user);
 
         $this->getLogService()->info('user', 'pay-password-changed', "用户{$user['email']}(ID:{$user['id']})重置支付密码成功");
 
@@ -302,11 +298,10 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getUserDao()->updateUser($id, $fields);
-        $this->dispatchEvent('user.mobile.update', $user);
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
-
+        $this->dispatchEvent('mobile.change', new ServiceEvent($user));
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
@@ -332,7 +327,6 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['createdTime'] = time();
 
             $userSecureQuestionDao->addOneUserSecureQuestion($fields);
-            $this->dispatchEvent('user.securequestion.add', new ServiceEvent($userId));
         }
 
         return true;
@@ -600,7 +594,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
         }
 
-        $this->getUserDao()->updateUser($userId, array('setup' => 1));
+        $user = $this->getUserDao()->updateUser($userId, array('setup' => 1));
+        $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user)));
         return $this->getUser($userId);
     }
 
@@ -674,6 +669,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (isset($fields['title'])) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
+            $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
         }
 
         unset($fields['title']);
@@ -700,7 +696,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $userProfile = $this->getProfileDao()->updateProfile($id, $fields);
 
-        $this->dispatchEvent('user.profile.update', new ServiceEvent($userProfile));
+        $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
 
         return $userProfile;
     }
@@ -871,7 +867,7 @@ class UserServiceImpl extends BaseService implements UserService
             $type = 'weixin';
         }
 
-        $userBind = $this->getUserBindDao()->addBind(array(
+        $this->getUserBindDao()->addBind(array(
             'type'        => $type,
             'fromId'      => $fromId,
             'toId'        => $toId,
@@ -879,7 +875,6 @@ class UserServiceImpl extends BaseService implements UserService
             'createdTime' => time(),
             'expiredTime' => empty($token['expiredTime']) ? 0 : $token['expiredTime']
         ));
-        return $userBind;
     }
 
     public function markLoginInfo()
@@ -1002,7 +997,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
-        $this->dispatchEvent("user.lock", new ServiceEvent($user));
+        $this->dispatchEvent("user.update", new ServiceEvent(array('user' => $user)));
 
         $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1019,7 +1014,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
-        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
+        $this->dispatchEvent("user.update", new ServiceEvent((array('user' => $user)));
 
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1422,8 +1417,7 @@ class UserServiceImpl extends BaseService implements UserService
             'inviteCode' => $inviteCode
         );
 
-        $user = $this->getUserDao()->updateUser($userId, $code);
-        return $user;
+        return $this->getUserDao()->updateUser($userId, $code);
     }
 
     public function findUnlockedUserMobilesByUserIds($userIds)
