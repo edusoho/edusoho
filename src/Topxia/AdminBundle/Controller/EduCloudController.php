@@ -98,7 +98,6 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
-
         $videoInfo = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
         $liveInfo  = isset($overview['service']['live']) ? $overview['service']['live'] : null;
         $smsInfo   = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
@@ -771,10 +770,10 @@ class EduCloudController extends BaseController
 
         $emailStatus = array_merge($emailStatus, $sign);
 
-        if ($emailStatus['status'] != 'error') {
+        if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
             $this->getSettingService()->set('cloud_email', $emailStatus);
         }
-
+        $emailStatus = $this->getSettingService()->get('cloud_email', array());
         return $emailStatus;
     }
 

@@ -1287,7 +1287,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $member = $this->getClassroomMember($classroomId, $userId);
 
-        if (empty($member) || in_array('student', $member['role'])) {
+        if (empty($member) || !in_array('student', $member['role'])) {
             throw $this->createServiceException("用户(#{$userId})不是该班级(#{$classroomId})的学员，解封学员失败。");
         }
 
