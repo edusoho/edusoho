@@ -359,6 +359,14 @@ class CourseController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
+            unset($conditions["title"]);
+        }
+
+        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+            unset($conditions["creator"]);
+        }
+
         $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
