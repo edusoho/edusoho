@@ -38,7 +38,7 @@
             <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker ">{{ course.title }}</a>
           </div>
 
-          {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime %}
+          {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime %}
             <span class="label label-danger label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
           {% elseif "now"|date("U") < course.liveStartTime %}
             <span class="label label-warning label-md">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
