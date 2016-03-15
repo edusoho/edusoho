@@ -3,7 +3,7 @@
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
 {% block keywords %}
-  {{ render(controller('TopxiaWebBundle:Course:keywords',{course: course} )) }}
+  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
 {% endblock %}
 {% block description %}{{ courseAbout|default('') }}{% endblock %}
 

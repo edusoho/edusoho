@@ -17,7 +17,6 @@
 
 {% block full_content %}
 
-	{% cache 'v1/summary' 9000 %}
   	{{ block_show('jianmo:home_top_banner') }}
 
     {% for config in themeConfig.blocks.left|default([]) %}
@@ -32,6 +31,4 @@
 
     {% endfor %}
     
-  	{% endcache %}
-
 {% endblock %}
