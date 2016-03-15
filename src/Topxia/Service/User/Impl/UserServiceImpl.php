@@ -1014,7 +1014,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
-        $this->dispatchEvent("user.update", new ServiceEvent((array('user' => $user)));
+        $this->dispatchEvent("user.update", new ServiceEvent(array('user' => $user)));
 
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
