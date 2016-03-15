@@ -14,9 +14,11 @@
         height: 14px;
         display: inline-block;
         .border-radius(50%);
+        background: #fff;
         background: rgba(255, 255, 255, 0.5);
       }
     span.swiper-active-switch{
+      background: @gray-lighter;
        background: rgba(255, 255, 255, 1)
     }
   }
@@ -30,6 +32,7 @@
         >ul{
       margin:0;
       padding: 0;
+      background: @gray-lighter;
        li{
       float: left;
       margin-bottom: -1px;
@@ -46,6 +49,16 @@
         }
         a{
           color: @gray-darker;
+          padding: 14px 17px;
+          @media (max-width:@screen-md-max){
+            padding: 14px 0;
+          }
+          @media (max-width:@screen-sm-max){
+            padding: 14px 62px;
+          }
+          @media (max-width:@screen-xs-max){
+            padding: 14px 17px;
+          }
         }
       }
       li.active{

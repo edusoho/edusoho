@@ -18,7 +18,7 @@
 	      </div>
 	      <div class="media-body">
 	        <div class="title">
-	          <a href="{{ path('course_show',{id:course.id}) }}" class="gray-darker" title="{{ course.title }}">{{ course.title }}</a>
+	          <a href="{{ path('course_show',{id:course.id}) }}" class="gray-darker" title="{{ course.title }}">{{ course.title|plain_text(20) }}</a>
 	        </div>
 	        <div class="metas">
 	        	{% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}

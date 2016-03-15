@@ -34,8 +34,10 @@
 	            <div class="live-content live">
 	            	{% if liveList.future|default(null) %}
 		              <div class="timeline">
-		               <span class="time-icon"><em></em></span>
-		               <span class="label label-info label-md">即将直播</span>
+		                <span class="time-icon"><em></em></span>
+		                {% if date == 'today' %}
+		               		<span class="label label-info label-md">即将直播</span>
+		                {% endif %}
 		              </div>
 		              <ul class="live-courses">
 		                {% for list in liveList.future %}
