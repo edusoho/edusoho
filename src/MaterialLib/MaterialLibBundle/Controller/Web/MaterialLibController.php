@@ -48,7 +48,6 @@ class MaterialLibController extends BaseController
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
-
         $conditions['currentUserId'] = $currentUserId;
         $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
         $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
@@ -80,6 +79,7 @@ class MaterialLibController extends BaseController
     public function editAction(Request $request, $globalId)
     {
         $fields = $request->request->all();
+
         $this->getMaterialLibService()->edit($globalId, $fields);
         return $this->createJsonResponse(array('success' => true));
     }
@@ -127,8 +127,18 @@ class MaterialLibController extends BaseController
 
     public function deleteAction($globalId)
     {
-        $this->getMaterialLibService()->delete($globalId);
-        return $this->createJsonResponse(array('success' => true));
+        $result = $this->getMaterialLibService()->delete($globalId);
+        return $this->createJsonResponse($result);
+    }
+
+    public function batchDeleteAction(Request $request)
+    {
+        $data = $request->request->all();
+        if (isset($data['globalIds']) && $data['globalIds'] != "") {
+            $result = $this->getMaterialLibService()->batchDelete($data['globalIds']);
+            return $this->createJsonResponse($result);
+        }
+        return $this->createJsonResponse(false);
     }
 
     public function generateThumbnailAction(Request $request, $globalId)

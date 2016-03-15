@@ -97,6 +97,11 @@ material_delete:
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:delete }
     methods: [POST]
 
+material_batch_delete:
+    pattern: /materials/batch/delete
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchDelete }
+    methods: [POST]
+
 material_edit:
     pattern:  /materiallib/{globalId}/edit
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:edit }

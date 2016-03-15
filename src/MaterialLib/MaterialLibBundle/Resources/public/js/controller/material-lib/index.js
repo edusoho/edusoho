@@ -71,14 +71,14 @@ define(function(require, exports, module) {
                     var self = this;   
                     var $target = $(event.currentTarget);   
                     this._loading();  
-                    $.ajax({   
-                        type:'POST',   
-                        url:$target.data('url'),  
-                    }).done(function(){   
-                        Notify.success('删除成功!');  
-                        self.renderTable();  
-                    }).fail(function(){  
-                        Notify.danger('删除失败!');  
+                    $.post($target.data('url'),function(data){
+                        if(data){
+                            Notify.success('删除成功!');  
+                            self.renderTable();
+                        } else {
+                            Notify.danger('删除失败!');  
+                            self.renderTable();
+                        }
                     });  
                 }
             },
@@ -166,14 +166,30 @@ define(function(require, exports, module) {
             },
             onClickDeleteBatchBtn: function(event)
             {
-                var ids = [];
-                $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
-                    ids.push(this.value);
-                });
-                if(ids == ""){
-                    Notify.danger('请先选择你要删除的文件!');  
+                if (confirm('确定要删除这些资源吗？')) {
+                    var self = this;   
+                    var $target = $(event.currentTarget);
+                    var ids = [];
+                    $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+                        ids.push(this.value);
+                    });
+                    if(ids == ""){
+                        Notify.danger('请先选择你要删除的资源!');  
+                    }
+
+                    $.post($target.data('url'),{"globalIds":ids},function(data){
+                        console.log(data);
+                        if(data){
+                            Notify.success('删除资源成功');
+                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            self.renderTable();
+                        } else {
+                            Notify.danger('删除资源失败');
+                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            self.renderTable();
+                        }
+                    });
                 }
-                console.log(ids);
                 
             },
             submitForm: function(event)
