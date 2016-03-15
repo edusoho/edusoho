@@ -58,7 +58,7 @@
           <div class="other">
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
 
-            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime) or ("now"|date("U") < course.liveEndTime) %}
+            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
               <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-primary">进入直播</a>
             {% else %}
               <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">查看回放</a>
