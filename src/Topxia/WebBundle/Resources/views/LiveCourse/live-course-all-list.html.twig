@@ -36,7 +36,7 @@
         <div class="media-body">
           <div class="title mbm">
             {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
-              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="gray-darker">{{ course.title }}</a>
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="gray-darker" title="{{ course.title }}">{{ course.title }}</a>
             {% else %}
               <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker" title="{{ course.title }}">{{ course.title }}</a>
             {% endif %}
