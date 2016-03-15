@@ -636,6 +636,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent('course.delete', new ServiceEvent($course));
 
         return true;
     }
@@ -653,6 +654,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array('status' => 'published'));
+        $this->dispatchEvent('course.publish', new ServiceEvent($course));
         $this->getLogService()->info('course', 'publish', "发布课程《{$course['title']}》(#{$course['id']})");
     }
 
@@ -906,6 +908,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['discount']   = $discount['globalDiscount'];
 
                 $this->getCourseDao()->updateCourse($course['id'], $fields);
+                $this->dispatchEvent('course.set.price.with.discount', $course);
             }
         } else {
             $count     = $this->getDiscountService()->findItemsCountByDiscountId($discountId);
@@ -934,6 +937,7 @@ class CourseServiceImpl extends BaseService implements CourseService
                 $fields['discount']   = $item['discount'];
 
                 $this->getCourseDao()->updateCourse($course['id'], $fields);
+                $this->dispatchEvent('course.set.price.with.discount', $course);
             }
         }
     }
@@ -946,7 +950,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException("折扣活动#{#discountId}不存在！");
         }
 
-        $this->getCourseDao()->clearCourseDiscountPrice($discountId);
+        $course = $this->getCourseDao()->clearCourseDiscountPrice($discountId);
+        $this->dispatchEvent('course.revert.price.discount', new ServiceEvent($course));
     }
 
     /**
@@ -966,6 +971,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function setCourseLessonMaxOnlineNum($lessonId, $num)
     {
+        $lesson = $this->getLessonDao()->getLesson($lessonId);
+        $this->dispatchEvent('lesson.set.max.online.num', $lesson);
         return $this->getLessonDao()->updateLesson($lessonId, array('maxOnlineNum' => $num));
     }
 

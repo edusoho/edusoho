@@ -246,7 +246,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($id, $fields);
 
-        $this->dispatchEvent("user.password.update", new ServiceEvent($id));
+        $this->dispatchEvent("user.password.update", new ServiceEvent($user));
 
         $this->markLoginSuccess($user['id'], $this->getCurrentUser()->currentIp);
 
@@ -302,11 +302,10 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getUserDao()->updateUser($id, $fields);
-
+        $this->dispatchEvent('user.mobile.update', $user);
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
-        $this->dispatchEvent('user.mobile.update', new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
@@ -602,8 +601,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($userId, array('setup' => 1));
-        $this->dispatchEvent("user.account.setup", new ServiceEvent($userId));
-
         return $this->getUser($userId);
     }
 
@@ -677,7 +674,6 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (isset($fields['title'])) {
             $this->getUserDao()->updateUser($id, array('title' => $fields['title']));
-            $this->dispatchEvent('user.update', new ServiceEvent($id));
         }
 
         unset($fields['title']);
@@ -704,7 +700,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $userProfile = $this->getProfileDao()->updateProfile($id, $fields);
 
-        $this->dispatchEvent('user.profile.update', new ServiceEvent());
+        $this->dispatchEvent('user.profile.update', new ServiceEvent($userProfile));
 
         return $userProfile;
     }
@@ -734,7 +730,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($id, UserSerialize::serialize(array('roles' => $roles)));
-        $this->dispatchEvent('user.roles.change', new ServiceEvent($id));
 
         $this->getLogService()->info('user', 'change_role', "设置用户{$user['nickname']}(#{$user['id']})的角色为：".implode(',', $roles));
     }
@@ -1007,7 +1002,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
-        $this->dispatchEvent("user.lock", new ServiceEvent($id));
+        $this->dispatchEvent("user.lock", new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1024,7 +1019,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
-        $this->dispatchEvent("user.unlock", new ServiceEvent($id));
+        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1269,8 +1264,6 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $this->getUserApprovalDao()->addApproval($approval);
-        $this->dispatchEvent("user.apply.approval", new ServiceEvent($userId));
-
         return true;
     }
 

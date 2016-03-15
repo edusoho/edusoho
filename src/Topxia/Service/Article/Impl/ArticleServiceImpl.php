@@ -121,7 +121,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         $article = $this->getArticleDao()->updateArticle($id, $article);
 
         $this->getLogService()->info('Article', 'update', "修改文章《({$article['title']})》({$article['id']})");
-        $this->dispatchEvent('article.update' new ServiceEvent($id));
+        $this->dispatchEvent('article.update' new ServiceEvent($article));
 
         return $article;
     }
@@ -264,7 +264,7 @@ class ArticleServiceImpl extends BaseService implements ArticleService
         }
 
         $res = $this->getArticleDao()->deleteArticle($id);
-        $this->dispatchEvent('article.delete',new ServiceEvent($id));
+        $this->dispatchEvent('article.delete',new ServiceEvent($checkArticle));
         $this->getLogService()->info('Article', 'delete', "文章#{$id}永久删除");
 
         return true;
