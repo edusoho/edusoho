@@ -111,6 +111,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     {
         $localFile = $this->getFileByGlobalId($globalId);
         if ($localFile) {
+            $this->updateTags($localFile, $fields);
             $fields = ArrayToolkit::parts($fields, array('isPublic'));
             $this->getUploadFileDao()->updateFile($localFile['id'], $fields);
         }
@@ -373,6 +374,18 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $collections;
     }
 
+    protected function updateTags($localFile, $fields)
+    {
+        if (!empty($fields['tags'])) {
+            $tagNames = explode(',', $fields['tags']);
+            $this->getUploadFileTagDao()->deleteByFileId($localFile['id']);
+            foreach ($tagNames as $tagName) {
+                $tag = $this->getTagService()->getTagByName($tagName);
+                $this->getUploadFileTagDao()->add(array('tagId' => $tag['id'], 'fileId' => $localFile['id']));
+            }
+        }
+    }
+
     protected function _prepareSearchConditions($conditions)
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
@@ -454,6 +467,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function getSettingService()
     {
         return $this->createService('System.SettingService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 
     protected function getUploadFileDao()
