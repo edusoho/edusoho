@@ -187,6 +187,17 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['title']);
         }
 
+        if (!empty($conditions['tags'])) {
+            $tagIds = $conditions['tags'];
+            $tags   = '';
+
+            foreach ($tagIds as $tagId) {
+                $tags .= "|".$tagId;
+            }
+
+            $conditions['tags'] = $tags."|";
+        }
+
         if (isset($conditions['tagId'])) {
             $tagId = (int) $conditions['tagId'];
 
@@ -218,6 +229,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
                         ->andWhere('userId = :userId')
                         ->andWhere('recommended = :recommended')
                         ->andWhere('tags LIKE :tagsLike')
+                        ->andWhere('tags = :tags')
                         ->andWhere('startTime >= :startTimeGreaterThan')
                         ->andWhere('startTime < :startTimeLessThan')
                         ->andWhere('rating > :ratingGreaterThan')

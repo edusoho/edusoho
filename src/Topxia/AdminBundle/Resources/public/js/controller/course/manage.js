@@ -1,5 +1,7 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
+	require('jquery.select2-css');
+    require('jquery.select2');
 
 	exports.run = function(options) {
 		var $table = $('#course-table');
@@ -57,6 +59,65 @@ define(function(require, exports, module) {
 		$table.on('click', '.copy-course[data-type="live"]', function(e) {
 			e.stopPropagation();
 		});
+
+		if($('#course_tags').length>0){
+			$('#course_tags').select2({
+	            ajax: {
+	                url: app.arguments.tagMatchUrl + '#',
+	                dataType: 'json',
+	                quietMillis: 100,
+	                data: function(term, page) {
+	                    return {
+	                        q: term,
+	                        page_limit: 10
+	                    };
+	                },
+	                results: function(data) {
+
+	                    var results = [];
+
+	                    $.each(data, function(index, item) {
+
+	                        results.push({
+	                            id: item.name,
+	                            name: item.name
+	                        });
+	                    });
+
+	                    return {
+	                        results: results
+	                    };
+
+	                }
+	            },
+	            initSelection: function(element, callback) {
+	                var data = [];
+	                $(element.val().split(",")).each(function() {
+	                    data.push({
+	                        id: this,
+	                        name: this
+	                    });
+	                });
+	                callback(data);
+	            },
+	            formatSelection: function(item) {
+	                return item.name;
+	            },
+	            formatResult: function(item) {
+	                return item.name;
+	            },
+	            width: 'off',
+	            multiple: true,
+	            maximumSelectionSize: 20,
+	            placeholder: "请输入标签",
+	            width: '162px',
+	            multiple: true,
+	            createSearchChoice: function() {
+	                return null;
+	            },
+	            maximumSelectionSize: 20
+	        });
+		}
 	};
 
 });

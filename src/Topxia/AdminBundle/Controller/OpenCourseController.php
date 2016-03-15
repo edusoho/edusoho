@@ -13,15 +13,24 @@ class OpenCourseController extends BaseController
 
         $conditions['types'] = array('open', 'liveOpen');
 
-        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+        if (!empty($conditions['tags'])) {
+            $tags               = $conditions['tags'];
+            $tagNames           = explode(",", $conditions['tags']);
+            $tagIds             = ArrayToolkit::column($this->getTagService()->findTagsByNames($tagNames), 'id');
+            $conditions['tags'] = $tagIds;
+        } else {
+            unset($conditions['tags']);
+        }
+
+        if (empty($conditions["categoryId"])) {
             unset($conditions["categoryId"]);
         }
 
-        if (isset($conditions["title"]) && $conditions["title"] == "") {
+        if (empty($conditions["title"])) {
             unset($conditions["title"]);
         }
 
-        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+        if (empty($conditions["creator"])) {
             unset($conditions["creator"]);
         }
 
@@ -42,6 +51,7 @@ class OpenCourseController extends BaseController
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaAdminBundle:OpenCourse:index.html.twig', array(
+            'tags'       => empty($tags) ? '' : $tags,
             'courses'    => $courses,
             'categories' => $categories,
             'users'      => $users,
@@ -50,6 +60,11 @@ class OpenCourseController extends BaseController
             'classrooms' => array(),
             'filter'     => $filter
         ));
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getCourseService()

@@ -20,19 +20,19 @@ class CourseController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
-        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+        if (empty($conditions["categoryId"])) {
             unset($conditions["categoryId"]);
         }
 
-        if (isset($conditions["status"]) && $conditions["status"] == "") {
+        if (empty($conditions["status"])) {
             unset($conditions["status"]);
         }
 
-        if (isset($conditions["title"]) && $conditions["title"] == "") {
+        if (empty($conditions["title"])) {
             unset($conditions["title"]);
         }
 
-        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+        if (empty($conditions["creator"])) {
             unset($conditions["creator"]);
         }
 
