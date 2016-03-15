@@ -132,22 +132,6 @@ class AnnouncementController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function blockAction(Request $request, $targetId, $targetType)
-    {
-        $conditions = array(
-            'targetType' => $targetType,
-            'targetId'   => $targetId,
-            'endTime'    => time()
-        );
-        $announcements = $this->getAnnouncementService()->searchAnnouncements($conditions, array('createdTime', 'DESC'), 0, 10);
-
-        return $this->render('TopxiaWebBundle:Announcement:announcement-block.html.twig', array(
-            'targetId'      => $targetId,
-            'targetType'    => $targetType
-            'announcements' => $announcements,
-        ));
-    }
-
     protected function getAnnouncementProcessor($targetType)
     {
         $processor = AnnouncementProcessorFactory::create($targetType);
