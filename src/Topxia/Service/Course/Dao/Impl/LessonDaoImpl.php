@@ -353,7 +353,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         $sql  = "SELECT courseId,min(recentTime) as recentTime FROM
                (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
                 UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
-             AS cl  GROUP BY courseId ORDER BY recentTime ASC LIMIT {$start}, {$limit}";
+             AS cl  GROUP BY courseId ORDER BY status DESC, recentTime ASC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
     }

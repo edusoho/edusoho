@@ -34,16 +34,20 @@
           </a>
         </div>
         <div class="media-body">
-          <div class="title  mbm">
-            <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker ">{{ course.title }}</a>
+          <div class="title mbm">
+            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="gray-darker" title="{{ course.title }}">{{ course.title }}</a>
+            {% else %}
+              <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker" title="{{ course.title }}">{{ course.title }}</a>
+            {% endif %}
           </div>
 
-          {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime %}
-            <span class="label label-success label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
-          {% elseif "now"|date("U") < course.liveStartTime %}
+          {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime %}
+            <span class="label label-danger label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
+          {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
             <span class="label label-warning label-md">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
-          {% elseif "now"|date("U") > course.liveStartTime %}
-            <span class="label label-default label-md">查看回放</span>
+          {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
+            <span class="label label-warning label-md">直播预告 {{ course.liveStartTime|date('m-d H:i')}}</span>
           {% endif %}
 
           <div class="metas">
@@ -60,10 +64,10 @@
           <div class="other">
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
 
-            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime) or ("now"|date("U") < course.liveStartTime) %}
+            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
               <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-primary">进入直播</a>
-            {% elseif "now"|date("U") > course.liveStartTime %}
-              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">进入直播</a>
+            {% else %}
+              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">查看回放</a>
             {% endif %}
 
           </div>

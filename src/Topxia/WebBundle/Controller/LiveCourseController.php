@@ -498,7 +498,7 @@ class LiveCourseController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0))
+            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0, 'courseIds' => $courseIds))
             , 10
         );
 
@@ -513,6 +513,7 @@ class LiveCourseController extends BaseController
                 $lessons = $this->getCourseService()->findRecentLiveLessons(array($val['courseId']), 0, 1);
 
                 $liveCourses[$val['courseId']]['liveStartTime'] = $lessons[0]['startTime'];
+                $liveCourses[$val['courseId']]['liveEndTime']   = $lessons[0]['endTime'];
                 $liveCourses[$val['courseId']]['lessonId']      = $lessons[0]['id'];
             }
         }
