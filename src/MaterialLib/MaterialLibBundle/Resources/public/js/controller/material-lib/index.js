@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     require('jquery.colorbox');
     var DetailWidget = require('materiallibbundle/controller/web/detail');
 
+
     exports.run = function() {
         var MaterialWidget = Widget.extend({
             attrs: {
@@ -22,7 +23,9 @@ define(function(require, exports, module) {
                 'click .js-download-btn': 'onClickDownloadBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-source-btn': 'onClickSourseBtn',
-                'click .js-collect-btn': 'onClickCollectBtn'
+                'click .js-collect-btn': 'onClickCollectBtn',
+                'click .js-manage-batch-btn': 'onClickManageBtn',
+                'click .js-batch-delete-btn': 'onClickDeleteBatchBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -153,6 +156,25 @@ define(function(require, exports, module) {
 
                     }
                 });
+            },
+            onClickManageBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').show();
+
+            },
+            onClickDeleteBatchBtn: function(event)
+            {
+                var ids = [];
+                $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+                    ids.push(this.value);
+                });
+                if(ids == ""){
+                    Notify.danger('请先选择你要删除的文件!');  
+                }
+                console.log(ids);
+                
             },
             submitForm: function(event)
             {
@@ -379,5 +401,7 @@ define(function(require, exports, module) {
         window.materialWidget = new MaterialWidget({
             element: '#material-search-form'
         });
+        var $panel = $('#material-lib-items-panel');
+        require('../../../../topxiaweb/js/util/batch-select')($panel);
     }
 });

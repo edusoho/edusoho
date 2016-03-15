@@ -260,3 +260,9 @@
   margin-left: 5px;
   cursor: pointer;
 }
+
+.batch-item {
+    position: absolute;
+    left: 8px;
+    top: 4px;
+}
