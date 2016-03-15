@@ -1,5 +1,5 @@
 
-{% set announcements = data('Announcements',{targetType:targetType, targetId:targetId}) %}
+{% set announcements = data('Announcements',{targetType:targetType, targetId:targetId, count:10}) %}
 {% if announcements %}
   <div class="alert alert-warning announcements aside-notice" role="alert">
     <div class="swiper-container">

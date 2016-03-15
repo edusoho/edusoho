@@ -22,7 +22,7 @@
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
 
-      {{ render(controller('TopxiaWebBundle:Announcement:block',{targetId:course.id,targetType:'course'})) }}
+      {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
 
       <section class="es-section">
         {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
