@@ -5,7 +5,7 @@
 {% block main %}
   {% include 'TopxiaAdminBundle:Course:tab-data.html.twig' %}
 
-    <form id="message-search-form" class="form-inline well well-sm mtl" action="{{ path('admin_course_data') }}" method="get" novalidate>
+    <form id="message-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
       <div class="form-group">
         <select class="form-control" name="categoryId">
           {{ select_options(category_choices('course'), app.request.query.get('categoryId'), '课程分类') }}
