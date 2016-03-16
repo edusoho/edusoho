@@ -950,7 +950,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException("折扣活动#{#discountId}不存在！");
         }
 
-        $course = $this->getCourseDao()->clearCourseDiscountPrice($discountId);
+        $this->getCourseDao()->clearCourseDiscountPrice($discountId);
     }
 
     /**

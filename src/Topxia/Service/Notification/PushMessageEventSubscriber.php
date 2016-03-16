@@ -63,8 +63,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-        $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
-        $this->pushCloudData('course', 'create', 'new', $course['id'], $course['createdTime']);
+        $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+
+        $this->getCloudDataService()->push('edusoho.course.create', $course, time());
     }
 
     public function onClassroomCreate(ServiceEvent $event)
@@ -582,9 +583,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         ), $timestamp);
     }
 
-    protected function pushCloudData($message, $type, $category, $id, $timestamp)
+    protected function pushCloudData($name, $type, $category, $id, $timestamp)
     {
-        $result = $this->getCloudDataService()->push($message, array(
+        $result = $this->getCloudDataService()->push($name, array(
             'type'     => $type,
             'category' => $category,
             'id'       => $id
