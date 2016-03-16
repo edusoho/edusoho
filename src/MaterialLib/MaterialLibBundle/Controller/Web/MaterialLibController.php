@@ -179,6 +179,16 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function batchShareAction(Request $request)
+    {
+        $data = $request->request->all();
+        if (isset($data['globalIds']) && $data['globalIds'] != "") {
+            $result = $this->getMaterialLibService()->batchShare($data['globalIds']);
+            return $this->createJsonResponse($result);
+        }
+        return $this->createJsonResponse(false);
+    }
+
     public function generateThumbnailAction(Request $request, $globalId)
     {
         $second = $request->query->get('second');
@@ -231,5 +241,10 @@ class MaterialLibController extends BaseController
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 }

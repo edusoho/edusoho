@@ -112,7 +112,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if ($localFile) {
             $this->updateTags($localFile, $fields);
             $fields = ArrayToolkit::parts($fields, array('isPublic'));
-            $this->getUploadFileDao()->updateFile($localFile['id'], $fields);
+            return $this->getUploadFileDao()->updateFile($localFile['id'], $fields);
         }
     }
 

@@ -14,6 +14,8 @@ interface MaterialLibService
 
     public function batchDelete($ids);
 
+    public function batchShare($ids);
+
     public function download($globalId);
 
     public function reconvert($globalId, $options);

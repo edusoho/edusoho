@@ -34,6 +34,16 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
     {
     }
 
+    public function deleteFile($file)
+    {
+
+    }
+
+    public function search($conditions)
+    {
+
+    }
+    
     public function initUpload($params)
     {
         $uploadParams = array();

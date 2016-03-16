@@ -105,6 +105,11 @@ material_batch_delete:
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchDelete }
     methods: [POST]
 
+material_batch_share:
+    pattern: /materials/batch/share
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchShare }
+    methods: [POST]
+
 material_edit:
     pattern:  /materiallib/{globalId}/edit
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:edit }
