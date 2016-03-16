@@ -8,12 +8,14 @@
       <ul class="dropdown-menu" role="menu">
         {% for nav in navigations[5:]  if nav.isOpen %}
           {% set subNavs = nav.children|default([]) %}
-            {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
+
+          {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
         {% endfor %}
       </ul>
     </li>
   {% endif %}
+  
   {% if loop.index < 6 or isMobile|default(false) %}
     {% include 'TopxiaWebBundle:Default:navigation-li.html.twig' %}
   {% endif %}
-{% endfor %}
+{% endfor %}      

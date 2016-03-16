@@ -1727,7 +1727,7 @@ class UserServiceTest extends BaseTestCase
             'email'    => 'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->promoteUser($registeredUser['id']);
+        $this->getUserService()->promoteUser($registeredUser['id'], 1);
         $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(1, $registeredUser['promoted']);
         $this->assertGreaterThan(0, $registeredUser['promotedTime']);
@@ -1739,7 +1739,7 @@ class UserServiceTest extends BaseTestCase
     public function testPromoteUserTwice()
     {
         $user = null;
-        $this->getUserService()->promoteUser($user);
+        $this->getUserService()->promoteUser($user, 1);
     }
 
     public function testCancelPromoteUser()
@@ -1750,7 +1750,7 @@ class UserServiceTest extends BaseTestCase
             'email'    => 'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $this->getUserService()->promoteUser($registeredUser['id']);
+        $this->getUserService()->promoteUser($registeredUser['id'], 1);
         $registeredUser = $this->getUserService()->getUser($registeredUser['id']);
         $this->assertEquals(1, $registeredUser['promoted']);
         $this->getUserService()->cancelPromoteUser($registeredUser['id']);
@@ -1777,7 +1777,7 @@ class UserServiceTest extends BaseTestCase
         $registeredUser = $this->getUserService()->register($userInfo);
         $this->getUserService()->changeUserRoles($registeredUser['id'], array(
             'ROLE_USER', 'ROLE_ADMIN', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER'));
-        $this->getUserService()->promoteUser($registeredUser['id']);
+        $this->getUserService()->promoteUser($registeredUser['id'], 1);
         $result = $this->getUserService()->findLatestPromotedTeacher(0, 20);
         $result = $result['0'];
         $this->assertEquals($registeredUser['id'], $result['id']);

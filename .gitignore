@@ -1,4 +1,3 @@
-.vscode/
 *.py
 Gruntfile.js
 package.json
@@ -73,3 +72,6 @@ web/assets/img/default/video.png
 /app/data/trial.lock
 /app/data/session_gc_time.data
 /web/install/edusoho_init*
+.crunch
+*.css.map
+

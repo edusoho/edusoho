@@ -1,5 +1,5 @@
 <div class="question question-{{ question.type }} question-{{ question.id }}"  data-question-id="{{ question.id }}">
-	<div class="question-heading editor-text">多选题<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
+	<div class="question-heading editor-text">{{'多选题'|trans}}<a type="button" class="close" data-dismiss="modal" aria-hidden="true">×</a></div>
 	<div class="question-body clearfix">
 		<div class="gray-darker mbm">{{ question.stem|bbCode2Html|striptags|raw }}</div>
 		{% if answer|default(null) %}
@@ -14,7 +14,7 @@
 					</span>
 					<span class="mll">{{ choice|bbCode2Html|striptags|raw}}</span>
 					{% if key in answer %}
-					<span class="label label-success label-md mll">正确答案</span>
+					<span class="label label-success label-md mll">{{'正确答案'|trans}}</span>
 					{% endif %}
 		    </li>
 		  {% endfor %}
@@ -22,7 +22,7 @@
 	</div>
 	<div class="question-footer">
 		{% include 'TopxiaWebBundle:Marker:answer-progress.html.twig' %}
-		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">	
-		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">{% if compelete %}完成{% else %}下一题{% endif %}</button>
+		<input id="data" data-markerid="{{markerId}}"data-type="{{question.type}}" data-questionid="{{question.id}}" data-url="{{ path('course_lesson_question_marker_next',{markerId:markerId,questionId:question.id}) }}" hidden="hidden">
+		<button id="continue" class="btn btn-primary btn-lg mvm pull-right">{% if compelete %}{{'完成'|trans}}{% else %}{{'下一题'|trans}}{% endif %}</button>
 	</div>
 </div>

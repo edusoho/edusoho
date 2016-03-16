@@ -25,40 +25,40 @@
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
             <span class="course-price" style="display:inline">
               {% if course.coinPrice > 0 %}
-                 价格： {{ course.coinPrice }}{{setting('coin.coin_name')}}
+                 {{'价格：'|trans}} {{ course.coinPrice }}{{setting('coin.coin_name')}}
               {% else %}
-                免费
+                {{'免费'|trans}}
               {% endif %}
             </span>
         {% else %}
           <span class="course-price">
             {% if course.price > 0 %}
-               价格： {{ course.price }}元
+               {{'价格：'|trans}} {{ course.price }}{{'元'|trans}}
             {% else %}
-              免费
+              {{'免费'|trans}}
             {% endif %}
           </span>
         {% endif %}
 
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
-          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员')}}</span>
+          <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员'|trans)}}</span>
         {% endif %}
 
         </div>
 
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
       {% if course.serializeMode=='serialize' %}
-        <span class="label label-success ">更新中</span>
+        <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode=='finished' %}
-        <span class="label label-warning ">已完结</span>
+        <span class="label label-warning ">{{'已完结'|trans}}</span>
       {% endif %}
       {% if course.type == 'live' %}
           {% set lesson = course['lesson']|default(null) %}
           {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-            <span class="label label-warning series-mode-label">正在直播中</span>
+            <span class="label label-warning series-mode-label">{{'正在直播中'|trans}}</span>
           {% else %}
-            <span class="label label-success series-mode-label">直播</span>
+            <span class="label label-success series-mode-label">{{'直播'|trans}}</span>
           {% endif %}
       {% endif %}
       </h4>
@@ -85,7 +85,7 @@
           </div>
         {% endif %}
 
-        <div class="course-metas-{{course.id}}" style="display:none;">        
+        <div class="course-metas-{{course.id}}" style="display:none;">
           <span class="glyphicon glyphicon-ok pull-right" style="z-index:100;color:#02b980;font-size:30px;"></span>
         </div>
 
@@ -94,6 +94,6 @@
   </li>
   {% endfor %}
   {% else %}
-  <div class="empty">找不到相关课程！</div>
+  <div class="empty">{{'找不到相关课程！'|trans}}</div>
   {% endif %}
 </ul>

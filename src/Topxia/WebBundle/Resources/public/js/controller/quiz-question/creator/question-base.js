@@ -2,10 +2,13 @@ define(function(require, exports, module) {
 
     var Widget = require('widget');
     var Handlebars = require('handlebars');
+     require('webuploader');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
     require('es-ckeditor');
+    var BatchAttachmentsUploader = require('../../quiz-question/batch-upload-attachments');
+    var UploadQuestionAttachments = require('../../quiz-question/upload-question-attachments');
 
     var QuestionCreator = Widget.extend({
         attrs: {
@@ -15,7 +18,7 @@ define(function(require, exports, module) {
         },
 
         events: {
-            'click [data-role=submit]': 'onSubmit'
+            'click [data-role=submit]': 'onSubmit',
         },
 
         setup: function() {
@@ -23,7 +26,39 @@ define(function(require, exports, module) {
             this._initForm();
             this._initStemField();
             this._initAnalysisField();
+            
         },
+
+        _initBatchAttachmentUploader: function(editor){
+
+                    
+                $("#cloud-btn", "#question-attachment").on('click',function(){
+                    var url="";
+                    if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                        url = $(this).data("normalUrl");
+                    } else {
+                        url = $(this).data("html5Url");
+                    }
+                    $("#modal").html('');
+                    $("#modal").modal('show');
+                    $.get(url, function(html){
+                        $("#modal").html(html);
+                        if($('#selectFiles').length > 0){
+                            var batchAttachmentsUploader = new BatchAttachmentsUploader({
+                                 editor:editor
+                            });
+                        }else{
+                            var uploadQuestionAttachments = new UploadQuestionAttachments({
+                                 editor:editor
+                            });
+                        }
+                         
+                       
+                    });
+                })
+              
+        },
+
 
         onSubmit: function(e){
             var submitType = $(e.currentTarget).data('submission');
@@ -54,6 +89,8 @@ define(function(require, exports, module) {
                 filebrowserImageUploadUrl: $('#question-stem-field').data('imageUploadUrl'),
                 height: height
             });
+
+            self._initBatchAttachmentUploader(editor);
 
             this.get('validator').on('formValidate', function(elemetn, event) {
                 editor.updateElement();
@@ -98,7 +135,7 @@ define(function(require, exports, module) {
             });
 
             return validator;
-        }
+        },
 
     });
 

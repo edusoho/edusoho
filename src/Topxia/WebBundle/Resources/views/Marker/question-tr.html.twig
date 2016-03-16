@@ -1,5 +1,5 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
-  {% for question in questions %} 
+  {% for question in questions %}
   <li class="row item-lesson {% if question.exist|default(false) %}disdrag {% else %} drag {% endif %}" id="" question-id="{{question.id}}">
     <div class="col-md-6 col-sm-10 title">
       <div class="before">
@@ -12,12 +12,12 @@
     </div>
     <div class="col-md-3 content">{{ dict('questionType')[question.type] }}</div>
     <div class="col-md-1 content">{{ dict('difficulty')[question.difficulty] }}</div>
-    <div class="col-xs-2 content not-add"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">预览</a></div>
-    <div class="col-xs-2 content have-add">已添加</div>
+    <div class="col-xs-2 content not-add"><a href="javascript:;" class="marker-preview" data-url="{{ path('course_manage_question_preview', {id:question.id, courseId:course.id}) }}">{{'预览'|trans}}</a></div>
+    <div class="col-xs-2 content have-add">{{'已添加'|trans}}</div>
   </li>
 
   {% else %}
-    <div class="empty">一道题都没有</div>
+    <div class="empty">{{'一道题都没有'|trans}}</div>
   {% endfor %}
   {{ web_macro.paginator(paginator) }}
 
