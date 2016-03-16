@@ -22,12 +22,15 @@
             <list-empty-view data="teachingResult.threads" title="暂时没有待回答问题">
             </list-empty-view>
             <ul class="ui-list ui-list-pure ui-border-t">
-                <li ng-repeat="thread in teachingResult.threads">
-                    <div class="ui-list-info ui-border-t" ng-click="showThreadChatView(thread)">
-                        <h2 class="ui-nowrap">{{ thread.title }}</h2>
+                <li ng-repeat="thread in teachingResult.threads" class="ui-border-t">
+                    <div class="ui-list-info" ng-click="showThreadChatView(thread)">
+                        <h2 class="ui-nowrap">
+                            <span class="radius-label" ng-class="thread.isTeacherAnswer > 0 ? 'blue' : 'red'">{{ thread.isTeacherAnswer > 0 ? "已回答" : "未回答" }}</span>
+                            {{ thread.title }}
+                        </h2>
                         <p>{{ thread.lessonTitle }}</p>
 
-                        <div class="bottom">
+                        <div class="bottom ui-border-t">
                             <div class="ui-avatar-s rr">
                                 <img ng-src="{{ thread.user.avatar | coverAvatar }}" />
                             </div>

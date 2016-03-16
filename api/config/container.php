@@ -13,6 +13,7 @@ $resources = array(
     'CourseMembership',
     'LessonLiveTickets',
     'LessonLiveTicket',
+    'LessonReplay',
     'Exercise',
     'ExerciseResult',
     'MeChatroomes',
@@ -36,7 +37,8 @@ $resources = array(
     'ThreadManager',
     'Thread',
     'Upload',
-    'Status'
+    'Status',
+    'DiscoveryColumn'
 );
 
 foreach ($resources as $res) {
