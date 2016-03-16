@@ -7,6 +7,11 @@ use Topxia\Service\Course\Dao\Impl\CourseDaoImpl as BaseCourseDao;
 
 class CourseDaoImpl extends BaseCourseDao implements CourseDao
 {
+    protected function getTablename()
+    {
+        return $this->getTable();
+    }
+
     public function getPeriodicCoursesCount($rootId)
     {
         $sql = "SELECT MAX(`periods`) FROM {$this->getTablename()} WHERE rootId = ?";
