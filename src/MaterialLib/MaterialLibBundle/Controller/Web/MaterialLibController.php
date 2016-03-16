@@ -199,12 +199,12 @@ class MaterialLibController extends BaseController
             throw $this->createNotFoundException();
         }
         // var_dump($data);
-        // return $this->render('MaterialLibBundle:MaterialLib:tag-modal.html.twig', array(
-        //     'tags' => $tags,
-        //     'paginator' => $paginator,
-        //     'globalIds' => $data
-        // ));
-        return $this->createJsonResponse(true);
+        return $this->render('MaterialLibBundle:MaterialLib:tag-modal.html.twig', array(
+            'tags' => $tags,
+            'paginator' => $paginator,
+            'globalIds' => $data
+        ));
+        // return $this->createJsonResponse(true);
     }
 
     public function generateThumbnailAction(Request $request, $globalId)
