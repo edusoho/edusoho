@@ -113,17 +113,7 @@ class MaterialLibController extends BaseController
         $file     = $this->tryAccessFile($fileId);
         $download = $this->getUploadFileService()->getDownloadFile($fileId);
         return $this->createJsonResponse($download);
-        // return $this->forward('MaterialLibBundle:GlobalFilePlayer:document', array(
-        //     'globalId' => $file['globalId'],
-        //     'download' => $download
-        // ));
     }
-
-    // public function contentAction(Request $request, $fileId)
-    // {
-    //     $file = $this->tryAccessFile($fileId);
-    //     return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('fileId' => $file['id'], 'isDownload' => true));
-    // }
 
     public function editAction(Request $request, $globalId)
     {
