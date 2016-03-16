@@ -970,7 +970,6 @@ class CourseServiceImpl extends BaseService implements CourseService
 
     public function setCourseLessonMaxOnlineNum($lessonId, $num)
     {
-        $this->getLessonDao()->getLesson($lessonId);
         return $this->getLessonDao()->updateLesson($lessonId, array('maxOnlineNum' => $num));
     }
 
