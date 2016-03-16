@@ -19,7 +19,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function player($globalId)
     {
-        $api    = CloudAPIFactory::create();
+        $api    = CloudAPIFactory::create('root');
         $player = $api->get("/resources/{$globalId}/player");
         return $player;
     }
@@ -42,20 +42,20 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function delete($globalId)
     {
-        $api = CloudAPIFactory::create();
-        return $api->delete("/resources/".$globalId);
+        $api = CloudAPIFactory::create('root');
+        return $api->delete("/resources/{$globalId}");
     }
 
     public function download($globalId)
     {
-        $api      = CloudAPIFactory::create();
+        $api      = CloudAPIFactory::create('root');
         $download = $api->get("/resources/{$globalId}/download");
         return $download;
     }
 
     public function reconvert($globalId, $options)
     {
-        $api              = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create();
         return $api->post("/resources/{$globalId}/processes", $options);
     }
 
@@ -73,7 +73,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function getStatistics($options)
     {
-        $api              = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create();
         return $api->get("/resources/data/statistics", $options);
     }
 
@@ -323,11 +323,11 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     private function mergeCloudFile($file, $cloudFile)
     {
-        $file['hashId']   = $cloudFile['reskey'];
-        $file['fileSize'] = $cloudFile['size'];
-        $file['views']    = $cloudFile['views'];
-        $file['tags']    = $cloudFile['tags'];
-        $file['thumbnail']    = $cloudFile['thumbnail'];
+        $file['hashId']    = $cloudFile['reskey'];
+        $file['fileSize']  = $cloudFile['size'];
+        $file['views']     = $cloudFile['views'];
+        $file['tags']      = $cloudFile['tags'];
+        $file['thumbnail'] = $cloudFile['thumbnail'];
 
         $statusMap = array(
             'none'       => 'none',
@@ -417,7 +417,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $cloudFile['targetId']      = $localFile['targetId'];
             $cloudFile['createdUserId'] = $localFile['createdUserId'];
             $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
-            $cloudFile['isPublic'] = $localFile['isPublic'];
+            $cloudFile['isPublic']      = $localFile['isPublic'];
         } else {
             //没有本地文件
             $cloudFile['id'] = 0;

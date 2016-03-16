@@ -7,6 +7,7 @@ define(function(require, exports, module) {
     require('jquery.colorbox');
     var DetailWidget = require('materiallibbundle/controller/web/detail');
 
+
     exports.run = function() {
         var MaterialWidget = Widget.extend({
             attrs: {
@@ -22,7 +23,9 @@ define(function(require, exports, module) {
                 'click .js-download-btn': 'onClickDownloadBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-source-btn': 'onClickSourseBtn',
-                'click .js-collect-btn': 'onClickCollectBtn'
+                'click .js-collect-btn': 'onClickCollectBtn',
+                'click .js-manage-batch-btn': 'onClickManageBtn',
+                'click .js-batch-delete-btn': 'onClickDeleteBatchBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -68,14 +71,14 @@ define(function(require, exports, module) {
                     var self = this;   
                     var $target = $(event.currentTarget);   
                     this._loading();  
-                    $.ajax({   
-                        type:'POST',   
-                        url:$target.data('url'),  
-                    }).done(function(){   
-                        Notify.success('删除成功!');  
-                        self.renderTable();  
-                    }).fail(function(){  
-                        Notify.danger('删除失败!');  
+                    $.post($target.data('url'),function(data){
+                        if(data){
+                            Notify.success('删除成功!');  
+                            self.renderTable();
+                        } else {
+                            Notify.danger('删除失败!');  
+                            self.renderTable();
+                        }
                     });  
                 }
             },
@@ -153,6 +156,42 @@ define(function(require, exports, module) {
 
                     }
                 });
+            },
+            onClickManageBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').show();
+
+            },
+            onClickDeleteBatchBtn: function(event)
+            {
+                if (confirm('确定要删除这些资源吗？')) {
+                    var self = this;   
+                    var $target = $(event.currentTarget);
+                    var ids = [];
+                    $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+                        ids.push(this.value);
+                    });
+                    if(ids == ""){
+                        Notify.danger('请先选择你要删除的资源!');
+                        return;  
+                    }
+
+                    $.post($target.data('url'),{"globalIds":ids},function(data){
+                        console.log(data);
+                        if(data){
+                            Notify.success('删除资源成功');
+                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            self.renderTable();
+                        } else {
+                            Notify.danger('删除资源失败');
+                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            self.renderTable();
+                        }
+                    });
+                }
+                
             },
             submitForm: function(event)
             {
@@ -379,5 +418,7 @@ define(function(require, exports, module) {
         window.materialWidget = new MaterialWidget({
             element: '#material-search-form'
         });
+        var $panel = $('#material-lib-items-panel');
+        require('../../../../topxiaweb/js/util/batch-select')($panel);
     }
 });

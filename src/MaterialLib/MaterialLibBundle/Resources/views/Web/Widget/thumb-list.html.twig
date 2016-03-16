@@ -2,7 +2,7 @@
 {% for uploadFile in files %}
    <div class="col-md-3">
     <ul class="materials-ul">
-      <li class="img-li">
+      <li class="img-li" style="position:relative;">
         {% include 'MaterialLibBundle:Web/Widget:thumbnail.html.twig' %}
       </li>
       <li class="caption">
@@ -17,7 +17,7 @@
         <div class="op-btn js-collect-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">
           <i class="glyphicon glyphicon-star {% if uploadFile.collected|default(0) %} material-collection {% endif %}"></i>
         </div>
-        <div href="javascript:;" class="op-btn border-left js-detail-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="详情" data-url="{{ path('material_lib_file_detail', {globalId:uploadFile.globalId}) }}">
+        <div href="javascript:;"class="op-btn border-left js-detail-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="详情" data-url="{{ path('material_lib_file_detail', {globalId:uploadFile.globalId}) }}">
           <i class="glyphicon glyphicon-info-sign"></i>
         </div>
         <div data-url="{{ path('material_download', {globalId:uploadFile.globalId}) }}" class="js-download-btn op-btn border-left col-md-3" data-toggle="tooltip" data-placement="bottom" title="下载">

@@ -249,7 +249,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function deleteByGlobalId($globalId)
     {
-        $this->getUploadFileDao()->deleteByGlobalId($globalId);
+        $result = $this->getUploadFileDao()->deleteByGlobalId($globalId);
+        return $result;
     }
 
     public function increaseFileUsedCount($id)
@@ -418,7 +419,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         if (!empty($conditions['tagId'])) {
             $assos = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
-            $ids = ArrayToolkit::column($assos, 'fileId');
+            $ids   = ArrayToolkit::column($assos, 'fileId');
             if ($ids) {
                 $conditions['ids'] = $ids;
             } else {

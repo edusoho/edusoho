@@ -4,9 +4,9 @@ namespace MaterialLib\Service\MaterialLib\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use MaterialLib\Service\BaseService;
-use MaterialLib\Service\MaterialLib\MaterialLibService;
 use MaterialLib\Service\MaterialLib\Permission;
 use Topxia\Service\Common\AccessDeniedException;
+use MaterialLib\Service\MaterialLib\MaterialLibService;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
@@ -45,10 +45,32 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         if ($globalId) {
             $this->checkPermission(Permission::DELETE, array('globalId' => $globalId));
-            $this->getUploadFileService()->deleteByGlobalId($globalId);
-            $this->getCloudFileService()->delete($globalId);
+            $result = $this->getCloudFileService()->delete($globalId);
+            if (isset($result['success']) && $result['success']) {
+                $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
+                return $result;
+            }
+            return false;
         }
-        
+    }
+
+    public function batchDelete($ids)
+    {
+        $files     = $this->getUploadFileService()->findFilesByIds($ids);
+        $globalIds = ArrayToolkit::column($files, 'globalId');
+        foreach ($globalIds as $key => $value) {
+            $this->checkPermission(Permission::DELETE, array('globalId' => $value));
+            $result = $this->getCloudFileService()->delete($value);
+            if (isset($result['success']) && $result['success']) {
+                $result = $this->getUploadFileService()->deleteByGlobalId($value);
+                if (!$result) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return array('success' => true);
     }
 
     public function download($globalId)
@@ -90,8 +112,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         });
 
         if (!empty($filterConditions['createdUserId'])) {
-            $localFiles = $this->getMaterialLibDao()->findFilesByUserId($filterConditions['createdUserId'], $filterConditions['start'], $filterConditions['limit']);
-            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
+            $localFiles              = $this->getMaterialLibDao()->findFilesByUserId($filterConditions['createdUserId'], $filterConditions['start'], $filterConditions['limit']);
+            $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
             unset($filterConditions['createdUserId']);
         }

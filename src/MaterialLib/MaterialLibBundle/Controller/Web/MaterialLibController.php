@@ -48,7 +48,6 @@ class MaterialLibController extends BaseController
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
-
         $conditions['currentUserId'] = $currentUserId;
         $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
         $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
@@ -77,9 +76,48 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function previewAction(Request $request, $fileId)
+    {
+        $file = $this->tryAccessFile($fileId);
+        return $this->render('MaterialLibBundle:Web:preview-modal.html.twig', array(
+            'file' => $file
+        ));
+    }
+
+    public function playerAction(Request $request, $fileId)
+    {
+        $file = $this->tryAccessFile($fileId);
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+            'globalId' => $file['globalId']
+        ));
+    }
+
+    public function pptAction(Request $request, $fileId)
+    {
+        $file = $this->tryAccessFile($fileId);
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:ppt', array(
+            'globalId' => $file['globalId']
+        ));
+    }
+
+    public function documentAction(Request $request, $fileId)
+    {
+        $file = $this->tryAccessFile($fileId);
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:document', array(
+            'globalId' => $file['globalId']
+        ));
+    }
+
+    // public function contentAction(Request $request, $fileId)
+    // {
+    //     $file = $this->tryAccessFile($fileId);
+    //     return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('fileId' => $file['id'], 'isDownload' => true));
+    // }
+
     public function editAction(Request $request, $globalId)
     {
         $fields = $request->request->all();
+
         $this->getMaterialLibService()->edit($globalId, $fields);
         return $this->createJsonResponse(array('success' => true));
     }
@@ -127,14 +165,57 @@ class MaterialLibController extends BaseController
 
     public function deleteAction($globalId)
     {
-        $this->getMaterialLibService()->delete($globalId);
-        return $this->createJsonResponse(array('success' => true));
+        $result = $this->getMaterialLibService()->delete($globalId);
+        return $this->createJsonResponse($result);
+    }
+
+    public function batchDeleteAction(Request $request)
+    {
+        $data = $request->request->all();
+        if (isset($data['globalIds']) && $data['globalIds'] != "") {
+            $result = $this->getMaterialLibService()->batchDelete($data['globalIds']);
+            return $this->createJsonResponse($result);
+        }
+        return $this->createJsonResponse(false);
     }
 
     public function generateThumbnailAction(Request $request, $globalId)
     {
         $second = $request->query->get('second');
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
+    }
+
+    protected function tryAccessFile($fileId)
+    {
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $user = $this->getCurrentUser();
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        if ($file['createdUserId'] == $user['id']) {
+            return $file;
+        }
+
+        $shares = $this->getUploadFileService()->findShareHistory($file['createdUserId']);
+
+        foreach ($shares as $share) {
+            if ($share['targetUserId'] == $user['id']) {
+                return $file;
+            }
+        }
+
+        throw $this->createAccessDeniedException('您无权访问此文件！');
     }
 
     protected function getMaterialLibService()
