@@ -242,7 +242,7 @@ define(function(require, exports, module) {
 
                 $.post($target.data('url'),{"globalIds":ids},function(data){
                     console.log(ids);
-                    $("#my-modal").modal();
+                    $("#my-modal").modal('show');
                 });
                 
                 
