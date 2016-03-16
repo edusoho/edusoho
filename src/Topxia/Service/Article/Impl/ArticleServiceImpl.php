@@ -308,7 +308,6 @@ class ArticleServiceImpl extends BaseService implements ArticleService
                 $data[$key]["file"] = $file;
 
                 $this->getFileService()->deleteFileByUri($files[$value["id"]]["uri"]);
-                $this->dispatchEvent('article.change.picture')
             } else {
                 $data[$key]["file"] = $files[$value["id"]];
             }
