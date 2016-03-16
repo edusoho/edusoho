@@ -44,7 +44,7 @@ materiallib_file_deletes:
 
 material_lib_file_preview:
     pattern:  /material/lib/file/{fileId}/preview
-    defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:preview }
 
 materiallib_file_delete:
     pattern: /materiallib/file/{id}/delete
@@ -56,7 +56,7 @@ materiallib_file_download:
 
 material_lib_file_player:
     pattern:  /material/lib/{fileId}/player
-    defaults: { _controller: MaterialLibBundle:MaterialLib:player }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:player }
 
 material_lib_file_play_url:
     pattern:  /material/lib/{fileId}/play_url{suffix}
@@ -70,11 +70,14 @@ material_lib_file_preview_hlskeyurl:
 
 material_lib_file_preview_ppt:
     pattern: /material/lib/{fileId}/preview/ppt
-    defaults: { _controller: MaterialLibBundle:MaterialLib:ppt }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:ppt }
 
-material_lib_file_preview_content:
-    pattern:  /material/lib/{fileId}/preview/content
-    defaults: { _controller: MaterialLibBundle:MaterialLib:content }
+# material_lib_file_preview_content:
+#     pattern:  /material/lib/{fileId}/preview/content
+#     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:content }
+material_lib_file_preview_document:
+    pattern:  /material/lib/{fileId}/preview/document
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:document }
 
 material_reconvert:
     pattern:  /material/lib/{globalId}/reconvert

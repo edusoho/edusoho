@@ -174,7 +174,8 @@ define(function(require, exports, module) {
                         ids.push(this.value);
                     });
                     if(ids == ""){
-                        Notify.danger('请先选择你要删除的资源!');  
+                        Notify.danger('请先选择你要删除的资源!');
+                        return;  
                     }
 
                     $.post($target.data('url'),{"globalIds":ids},function(data){

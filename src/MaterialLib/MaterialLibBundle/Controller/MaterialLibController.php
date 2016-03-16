@@ -308,76 +308,13 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function previewAction(Request $request, $fileId)
-    {
-        $file = $this->tryAccessFile($fileId);
-
-        return $this->render('MaterialLibBundle:MaterialLib:preview-modal.html.twig', array(
-            'file' => $file
-        ));
-    }
-
     public function downloadAction(Request $request, $id)
     {
         $file = $this->tryAccessFile($id);
         return $this->forward('TopxiaWebBundle:FileWatch:download', array('file' => $file));
     }
 
-    protected function tryAccessFile($fileId)
-    {
-        $file = $this->getUploadFileService()->getFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        $user = $this->getCurrentUser();
-
-        if ($user->isAdmin()) {
-            return $file;
-        }
-
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
-        }
-
-        if ($file['createdUserId'] == $user['id']) {
-            return $file;
-        }
-
-        $shares = $this->getUploadFileService()->findShareHistory($file['createdUserId']);
-
-        foreach ($shares as $share) {
-            if ($share['targetUserId'] == $user['id']) {
-                return $file;
-            }
-        }
-
-        throw $this->createAccessDeniedException('您无权访问此文件！');
-    }
-
     //加载播放器的地址
-    public function playerAction(Request $request, $fileId)
-    {
-        $file = $this->getUploadFileService()->getFile($fileId);
-        if (!empty($file)) {
-            try {
-                $api = CloudAPIFactory::create('leaf');
-                $api->setApiUrl("http://andytest.edusoho.net:8081");
-                $result = $api->get("/resources/{$file['globalId']}");
-            } catch (\RuntimeException $e) {
-                return $this->render('TopxiaAdminBundle:EduCloud:api-error.html.twig', array());
-            }
-        }
-        $file = $this->tryAccessFile($fileId);
-        $url  = $this->generateUrl("material_lib_file_play_url", array(
-            'fileId' => $fileId
-        ), true);
-        return $this->forward('TopxiaWebBundle:Player:show', array(
-            'id'  => $fileId,
-            'url' => $url
-        ));
-    }
 
     /**
      * Generate HLS key which will be used when preview a file from the cloud.

@@ -19,7 +19,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function player($globalId)
     {
-        $api    = CloudAPIFactory::create();
+        $api    = CloudAPIFactory::create('root');
         $player = $api->get("/resources/{$globalId}/player");
         return $player;
     }
@@ -42,13 +42,13 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function delete($globalId)
     {
-        $api = CloudAPIFactory::create('leaf');
+        $api = CloudAPIFactory::create('root');
         return $api->delete("/resources/{$globalId}");
     }
 
     public function download($globalId)
     {
-        $api      = CloudAPIFactory::create();
+        $api      = CloudAPIFactory::create('root');
         $download = $api->get("/resources/{$globalId}/download");
         return $download;
     }
