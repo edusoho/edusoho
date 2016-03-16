@@ -20,14 +20,17 @@
       {% endif %}
     ></div>
   {% elseif file.type == 'ppt' %}
-    <div id="lesson-preview-ppt-player" data-url="{{ path('material_lib_file_preview_ppt', {fileId: file.id}) }}" style="min-height: 500px; "></div>
+    <div  id="lesson-preview-ppt-player" data-url="{{ path('material_lib_file_preview_ppt', {fileId: file.id}) }}" style="min-height: 500px; "></div>
   {% elseif file.type == 'document' %}
     <div id="lesson-preview-doucment" data-url="{{ path('material_lib_file_preview_document', {fileId: file.id}) }}" style="min-height: 500px; "></div>
-  {% else %}
-    <div id="lesson-preview-iframe" data-url="{{ path('material_lib_file_preview_content', {fileId: file.id}) }}"></div>
+  {% elseif file.type == 'image' %}
+    <div id="lesson-preview-image" data-url="{{ path('material_lib_file_preview_image', {fileId: file.id}) }}"></div>
+
+    {#<div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
+    </div>#}
   {% endif %}
 
-  <script>app.load('course/lesson-preview')</script>
+  <script>app.load('materiallibbundle/controller/material-lib/preview')</script>
 {% endblock %}
 
 {% block footer %}

@@ -108,6 +108,17 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function imageAction(Request $request, $fileId)
+    {
+        $file     = $this->tryAccessFile($fileId);
+        $download = $this->getUploadFileService()->getDownloadFile($fileId);
+        return $this->createJsonResponse($download);
+        // return $this->forward('MaterialLibBundle:GlobalFilePlayer:document', array(
+        //     'globalId' => $file['globalId'],
+        //     'download' => $download
+        // ));
+    }
+
     // public function contentAction(Request $request, $fileId)
     // {
     //     $file = $this->tryAccessFile($fileId);
@@ -231,5 +242,10 @@ class MaterialLibController extends BaseController
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 }

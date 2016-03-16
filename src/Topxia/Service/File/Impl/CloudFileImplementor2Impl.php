@@ -11,7 +11,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 {
     public function getFile($file)
     {
-        $api       = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create('root');
         $cloudFile = $api->get("/resources/{$file['globalId']}");
 
         return $this->mergeCloudFile($file, $cloudFile);
@@ -26,7 +26,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function get($globalId)
     {
-        $api       = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create('root');
         $cloudFile = $api->get("/resources/".$globalId);
         $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
         return $this->mergeCloudFile2($localFile, $cloudFile);
@@ -34,7 +34,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function edit($globalId, $fields)
     {
-        $api       = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create('root');
         $cloudFile = $api->post("/resources/".$globalId, $fields);
         $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
         return $this->mergeCloudFile2($localFile, $cloudFile);
@@ -55,25 +55,25 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function reconvert($globalId, $options)
     {
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('root');
         return $api->post("/resources/{$globalId}/processes", $options);
     }
 
     public function getDefaultHumbnails($globalId)
     {
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('root');
         return $api->get("/resources/{$globalId}/default_thumbnails");
     }
 
     public function getThumbnail($globalId, $options)
     {
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('root');
         return $api->get("/resources/{$globalId}/thumbnail", $options);
     }
 
     public function getStatistics($options)
     {
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('root');
         return $api->get("/resources/data/statistics", $options);
     }
 
@@ -85,7 +85,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
         $globalIds = ArrayToolkit::column($files, 'globalId');
         $globalIds = array_unique($globalIds);
-        $api       = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create('root');
         $result    = $api->get("/resources?nos=".join(',', $globalIds));
 
         if (empty($result['data'])) {
@@ -108,7 +108,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function getUploadAuth($params)
     {
-        $api = CloudAPIFactory::create();
+        $api = CloudAPIFactory::create('root');
 
         $apiResult = $api->post("/resources/{$params['globalId']}/upload/auth", $params);
         return $apiResult;
@@ -124,7 +124,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'hash'   => $initParams['hash']
         );
 
-        $api       = CloudAPIFactory::create();
+        $api       = CloudAPIFactory::create('root');
         $apiResult = $api->post("/resources/{$file['globalId']}/upload_resume", $params);
 
         if (empty($apiResult['resumed']) || ($apiResult['resumed'] !== 'ok')) {
@@ -272,8 +272,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function getDownloadFile($file)
     {
-        $api              = CloudAPIFactory::create();
-        $download         = $api->get("/files/{$file['globalId']}/download");
+        $api              = CloudAPIFactory::create('root');
+        $download         = $api->get("/resources/{$file['globalId']}/download");
         $download['type'] = 'url';
         return $download;
     }
