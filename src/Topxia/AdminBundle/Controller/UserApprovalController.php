@@ -153,9 +153,8 @@ class UserApprovalController extends BaseController
     public function cancelAction(Request $request, $id)
     {
         $this->getUserService()->rejectApproval($id, '管理员撤销');
-
-        if (($this->isPluginInstalled('TeacherAudit'))
-            && (!empty($this->getTeacherAuditService()->getApprovalByUserId($id)))) {
+        $approval = $this->getTeacherAuditService()->getApprovalByUserId($id);
+        if ($this->isPluginInstalled('TeacherAudit') && !empty($approval)) {
             $this->getTeacherAuditService()->rejectApproval($id, '管理员撤销');
         }
 
