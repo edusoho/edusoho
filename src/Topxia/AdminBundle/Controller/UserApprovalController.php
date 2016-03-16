@@ -91,8 +91,10 @@ class UserApprovalController extends BaseController
             if ($data['form_status'] == 'success') {
                 $this->getUserService()->passApproval($id, $data['note']);
             } elseif ($data['form_status'] == 'fail') {
-                if (($this->isPluginInstalled('TeacherAudit'))
-                    && (!empty($this->getTeacherAuditService()->getApprovalByUserId($user['id'])))) {
+                $approval = $this->getTeacherAuditService()->getApprovalByUserId($user['id']);
+                if ($this->isPluginInstalled('TeacherAudit')
+                    && !empty($approval)
+                ) {
                     $this->getTeacherAuditService()->rejectApproval($user['id'], '教师资格申请因实名认证未通过而失败');
                 }
 
