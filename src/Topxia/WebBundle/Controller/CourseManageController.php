@@ -35,7 +35,7 @@ class CourseManageController extends BaseController
         $default = $this->getSettingService()->get('default', array());
 
         if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {
-            $template = 'TopxiaWebBundle:CourseManage:open-course-base.html.twig';
+            $template = 'TopxiaWebBundle:OpenCourseManage:open-course-base.html.twig';
         } else {
             $template = 'TopxiaWebBundle:CourseManage:base.html.twig';
         }
