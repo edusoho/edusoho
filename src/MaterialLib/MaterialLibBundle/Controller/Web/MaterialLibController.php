@@ -191,20 +191,20 @@ class MaterialLibController extends BaseController
 
     public function batchTagShowAction(Request $request)
     {
-        $data = $request->request->get('globalIds');
-        $total = $this->getTagService()->getAllTagCount();
+        $data      = $request->request->get('globalIds');
+        $total     = $this->getTagService()->getAllTagCount();
         $paginator = new Paginator($request, $total, 20);
-        $tags = $this->getTagService()->findAllTags($paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $tags      = $this->getTagService()->findAllTags($paginator->getOffsetCount(), $paginator->getPerPageCount());
         if (empty($tags)) {
             throw $this->createNotFoundException();
         }
         // var_dump($data);
-        return $this->render('MaterialLibBundle:MaterialLib:tag-modal.html.twig', array(
-            'tags' => $tags,
-            'paginator' => $paginator,
-            'globalIds' => $data
-        ));
-        // return $this->createJsonResponse(true);
+        // return $this->render('MaterialLibBundle:MaterialLib:tag-modal.html.twig', array(
+        //     'tags' => $tags,
+        //     'paginator' => $paginator,
+        //     'globalIds' => $data
+        // ));
+        return $this->createJsonResponse(true);
     }
 
     public function generateThumbnailAction(Request $request, $globalId)

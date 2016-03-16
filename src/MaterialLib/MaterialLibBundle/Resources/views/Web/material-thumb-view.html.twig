@@ -71,7 +71,7 @@
       </a>
       <a class="btn btn-primary js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}" style="display: none;" >共享
       </a>
-      <a class="btn btn-primary js-batch-tag-btn" data-role="batch-tag" data-url="{{ path('material_batch_tag_show') }}" data-toggle="modal" data-target="#modal" style="display: none;" >添加标签
+      <a class="btn btn-primary js-batch-tag-btn" data-role="batch-tag" data-url="{{ path('material_batch_tag_show') }}" style="display: none;" >添加标签
       </a>
       {#<a class="btn btn-primary js-batch-tag-btn" data-role="batch-tag" href="javascript:;" data-url="{{ path('material_batch_share_show') }}" style="display: none;" >添加标签
       </a>#}
@@ -82,6 +82,31 @@
       <div class="row material-list-container"  id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
     </div>
 </form>
+<div id="modal" class="modal in" aria-hidden="false" style="display: none;">
+  <div class="modal-dialog ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">  
+        <form class="form-horizontal" id="tag-form" action="{{ path('material_batch_tag_show') }}" method="post">
+          <div class="form-group">
+            {% for tag in tags %}
+            {{ tag.name }}
+            {% endfor %}
+          </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+        </form>
+      </div>
+      <input id="select-tag-items" name="fileIds" type="hidden" value="">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
+        <button id="tag-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#tag-form">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
         
         
         

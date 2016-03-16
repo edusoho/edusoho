@@ -240,10 +240,11 @@ define(function(require, exports, module) {
                     return;  
                 }
 
-                $.post($target.data('url'),{"globalIds":ids},function(data){
-                    console.log(ids);
-                    $("#my-modal").modal('show');
-                });
+                // $.post($target.data('url'),{"globalIds":ids},function(data){
+                console.log($("#select-tag-items").val(ids));
+                
+                $("#modal").modal('show');
+                //});
                 
                 
             },
