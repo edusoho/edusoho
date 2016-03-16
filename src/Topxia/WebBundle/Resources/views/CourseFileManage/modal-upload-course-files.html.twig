@@ -89,9 +89,11 @@
     </div>
   {% endif %}
 
-  <script>app.load('course-manage-file/upload-course-files')</script>
-
 {% endblock %}
+
+{% block script %}
+ <script>app.load('course-manage-file/upload-course-files')</script>
+ {% endblock %}
 
 {% block footer %}
   <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>

@@ -3,7 +3,6 @@ define(function(require, exports, module) {
     var Widget = require('widget');
 
     exports.run = function() {
-
         $('#modal').on('hidden.bs.modal', function (e) {
             window.location.reload();
         })
@@ -15,43 +14,7 @@ define(function(require, exports, module) {
         var $updateBtn = $("#begin-update");
 
         var urls = $updateBtn.data();
-        var steps = [
-            {
-                title: '检查系统环境',
-                url: urls.checkEnvironmentUrl,
-                progressRange: [3, 10]
-            },
-            {
-                title: '检查依赖',
-                url: urls.checkDependsUrl,
-                progressRange: [13, 20]
-            },
-            {
-                title: '备份系统文件',
-                url: urls.backupFileUrl,
-                progressRange: [23, 30]
-            },
-            {
-                title: '备份数据库',
-                url: urls.backupDbUrl,
-                progressRange: [33, 40]
-            },
-            {
-                title: '检查下载权限',
-                url: urls.checkDownloadExtractUrl,
-                progressRange: [43, 50]
-            },
-            {
-                title: '下载安装升级程序',
-                url: urls.downloadExtractUrl,
-                progressRange: [53, 60]
-            },
-            {
-                title: '执行安装升级程序',
-                url: urls.beginUpgradeUrl,
-                progressRange: [62, 100]
-            }
-        ];
+        var steps = getQueue(urls);
 
         $.each(steps, function(i, step) {
             $(document).queue('update_step_queue', function() {
@@ -117,6 +80,17 @@ define(function(require, exports, module) {
                 startProgress = endProgress;
                 title =  data.message;
                 exec(title, url, progressBar, startProgress, endProgress);
+            } else if(data.isUpgrade){
+               $('.text-success').text(data.toVersion);
+                var urls = $("#begin-update").data();
+                steps = getQueue(urls);
+                $.each(steps, function(i, step) {
+                    var url = step.url.replace(/\d+/g,data.packageId);
+                    $(document).queue('update_step_queue', function() {
+                        exec(step.title, url, progressBar, step.progressRange[0], step.progressRange[1]);
+                    });
+                });
+                $(document).dequeue('update_step_queue');
             } else {
                 progressBar.setProgress(endProgress, title + '完成');
                 $(document).dequeue('update_step_queue');
@@ -135,6 +109,64 @@ define(function(require, exports, module) {
         });
         html += '</ul>';
         return html;
+    }
+
+    var getQueue = function (urls){
+        var steps = [
+            {
+                title: '检查系统环境',
+                url: urls.checkEnvironmentUrl,
+                progressRange: [3, 10]
+            },
+            {
+                title: '检查依赖',
+                url: urls.checkDependsUrl,
+                progressRange: [13, 20]
+            },
+            {
+                title: '备份系统文件',
+                url: urls.backupFileUrl,
+                progressRange: [23, 30]
+            },
+            {
+                title: '备份数据库',
+                url: urls.backupDbUrl,
+                progressRange: [33, 40]
+            },
+            {
+                title: '检查下载权限',
+                url: urls.checkDownloadExtractUrl,
+                progressRange: [43, 50]
+            },
+            {
+                title: '下载安装升级程序',
+                url: urls.downloadExtractUrl,
+                progressRange: [53, 60]
+            }
+        ];
+
+
+        var type = $("input[name='package-type']").val();
+        if(type == 'upgrade'){
+            steps.push({
+                title: '执行安装升级程序',
+                url: urls.beginUpgradeUrl,
+                progressRange: [62, 94]
+            });
+            steps.push({
+                title: '检查系统版本',
+                url: urls.checkNewestUrl,
+                progressRange: [97, 100]
+            }); 
+        }else{
+            steps.push({
+                title: '执行安装升级程序',
+                url: urls.beginUpgradeUrl,
+                progressRange: [62, 100]
+            });
+        }
+
+        return steps;
     }
 
     var ProgressBar = Widget.extend({

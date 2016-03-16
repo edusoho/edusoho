@@ -88,58 +88,85 @@ define(function(require, exports, module) {
 			
 		}
 
-		function afterDiscountCourses(totalPrice){
-			var courseDiscountPrices = $("[role='course-discount-price']");
-			for (var i = 0; i < courseDiscountPrices.length; i++) {
-				courseDiscountPrice = courseDiscountPrices[i];
-				totalPrice -= parseFloat($(courseDiscountPrice).text());
-			};
-			if(totalPrice < 0 ) {
-				totalPrice = 0;
+		function getMaxCoinCanPay(totalCoinPrice){
+			var maxCoin = parseFloat($('[role="maxCoin"]').text());
+			var maxCoinCanPay = totalCoinPrice < maxCoin ? totalCoinPrice: maxCoin;
+			var myCashAccount = $('[role="accountCash"]');
+			if(myCashAccount.length>0){
+				var myCash = parseFloat(myCashAccount.text()*100)/100;
+				maxCoinCanPay = maxCoinCanPay < myCash ? maxCoinCanPay: myCash;
 			}
-			return totalPrice;
+
+			return maxCoinCanPay;
 		}
 
 		function conculatePrice(){
 			var totalPrice = parseFloat($('[role="total-price"]').text());
-			var maxCoin = parseFloat($('[role="maxCoin"]').text());
-			//totalPrice = afterDiscountCourses(totalPrice);
 			totalPrice = afterCouponPay(totalPrice);
-			if(totalPrice <= 0){
-				totalPrice = 0;
-				coinPriceZero();
-				$('[role="pay-coin"]').text("0.00");
-				$('[role="pay-rmb"]').text("0.00");
-			} else {
-				var coinNum = 0;
-				if(cashRateElement.data("priceType") == "RMB") {
-					coinNum = multiple(totalPrice, cashRate);
-					coinNum = moneyFormatCeil(coinNum);
-					coinNum = coinNum < maxCoin ? coinNum:maxCoin;
-				} else {
-					coinNum = totalPrice;
-				}
-				var coinNumPay = $('[role="accountCash"]').text();
-				if($('[role="maxCoin"]').length > 0) {
-					coinNumPay = $('[role="maxCoin"]').text();
-				}
+			
+			var cashModel = cashRateElement.data('cashModel');
+			switch(cashModel){
+				case 'none':
+					totalPrice = totalPrice >= 0 ? totalPrice : 0;
+					shouldPay(totalPrice);
+					break;
+				case 'deduction':
+					var totalCoinPrice = multiple(totalPrice, cashRate);
+					totalCoinPrice = moneyFormatCeil(totalCoinPrice);
+					var maxCoinCanPay = getMaxCoinCanPay(totalCoinPrice);
+					var coinNumPay = $('[role="coinNum"]').val();
 
-				if(coinNumPay && $('[name="payPassword"]').length>0){
-					if(coinNum <= parseFloat(coinNumPay)){
-						coinNumPay = coinNum;
+					if(maxCoinCanPay <= parseFloat(coinNumPay)){
+						coinNumPay = maxCoinCanPay;
 					}
-					coinNumPay = afterCoinPay(coinNumPay);
+
 					$('[role="coinNum"]').val(coinNumPay);
-					var cashDiscount = $('[role="cash-discount"]').text();
-					totalPrice = subtract(totalPrice, cashDiscount);
-				} else {
-					$('[role="coinNum"]').val(0);
-					$('[role="cash-discount"]').text("0.00");
-				}
+					if(coinNumPay==0) {
+						coinPriceZero();
+					}
+
+					if(coinNumPay && $('[name="payPassword"]').length>0){
+						coinNumPay = afterCoinPay(coinNumPay);
+						var cashDiscount = $('[role="cash-discount"]').text();
+						totalPrice = subtract(totalPrice, cashDiscount);
+					} else {
+						$('[role="coinNum"]').val(0);
+						$('[role="cash-discount"]').text("0.00");
+					}
+
+					totalPrice = totalPrice >= 0 ? totalPrice : 0;
+					shouldPay(totalPrice);
+					break;
+				case 'currency':
+					
+					var totalCoinPrice = totalPrice;
+					var coinNumPay = $('[role="coinNum"]').val();
+
+					if(totalCoinPrice <= parseFloat(coinNumPay)){
+						coinNumPay = totalCoinPrice;
+					}
+
+					$('[role="coinNum"]').val(coinNumPay);
+
+					if(coinNumPay==0) {
+						coinPriceZero();
+					}
+
+					if(coinNumPay && $('[name="payPassword"]').length>0){
+						coinNumPay = afterCoinPay(coinNumPay);
+						var cashDiscount = $('[role="cash-discount"]').text();
+						totalPrice = subtract(totalPrice, cashDiscount);
+					} else {
+						$('[role="coinNum"]').val(0);
+						$('[role="cash-discount"]').text("0.00");
+					}
+
+					totalPrice = totalPrice >= 0 ? totalPrice : 0;
+					shouldPay(totalPrice);
+
+					break;
 			}
 
-			totalPrice = totalPrice >= 0 ? totalPrice : 0;
-			shouldPay(totalPrice);
 		}
 
 		function shouldPay(totalPrice){
@@ -239,7 +266,6 @@ define(function(require, exports, module) {
 			data.targetId = couponCode.data("targetId");
 
 			var totalPrice = parseFloat($('[role="total-price"]').text());
-			//totalPrice = afterDiscountCourses(totalPrice);
 			
 			data.amount = totalPrice;
 			$.post('/'+data.targetType+'/'+data.targetId+'/coupon/check', data, function(data){
@@ -270,17 +296,6 @@ define(function(require, exports, module) {
 			if(coupon.data('code') == "")
 			{
 				$('[role=no-use-coupon-code]').show();
-				var coinNum = $('[role="total-price"]').text();
-				coinNum = parseFloat(coinNum);
-				var currentCash = parseFloat($('[role="accountCash"]').text());
-
-				if(currentCash < coinNum){
-					coinNum = currentCash;
-				}
-
-				$('[role="coinNum"]').val(coinNum);
-				$('[role="password-input"]').show();
-				$('#payPassword').focus();
 				$('[role="cancel-coupon"]').trigger('click');
 				return;
 			}else{
@@ -315,7 +330,6 @@ define(function(require, exports, module) {
  		} else {
  			$('[role="cash-discount"]').text("0.00");
  		}
- 		//totalPrice = afterDiscountCourses(totalPrice);
  		shouldPay(totalPrice);
 		
 		if($('#js-order-create-sms-btn').length > 0){
