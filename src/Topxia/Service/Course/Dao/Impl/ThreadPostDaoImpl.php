@@ -90,6 +90,31 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         return $this->getConnection()->executeUpdate($sql, array($threadId));
 	}
 
+	public function searchThreadPosts($conditions,$orderBy,$start,$limit,$groupBy='')
+	{
+		$this->filterStartLimit($start, $limit);
+        $builder =$this->createThreadPostSearchQueryBuilder($conditions)
+                       ->select('*')
+                       ->orderBy($orderBy[0], $orderBy[1])
+                       ->setFirstResult($start)
+                       ->setMaxResults($limit);
+
+        if(!empty($groupBy)){
+            $builder->addGroupBy($groupBy);
+        }
+        return $builder->execute()->fetchAll() ?: array();
+	}
+
+	public function searchThreadPostsCount($conditions,$groupBy='')
+    {
+        $builder =$this->createThreadPostSearchQueryBuilder($conditions)
+                       ->select('COUNT(id)');
+        if(!empty($groupBy)){
+            $builder->addGroupBy($groupBy);
+        }              
+        return $builder->execute()->fetchColumn(0);
+    }
+
 	protected function createThreadPostSearchQueryBuilder($conditions)
 	{
         if (isset($conditions['content'])) {

@@ -63,55 +63,53 @@ class ChaosThreadsPosts extends BaseResource
         return $this->filter($post);
     }
 
-    public function getThreadPosts(Application $app,Request $request){
+    public function getThreadPosts(Application $app, Request $request)
+    {
         $currentUser = $this->getCurrentUser();
         $start       = $request->query->get('start', 0);
         $limit       = $request->query->get('limit', 10);
-
         $conditions  = array(
             'userId' => $currentUser['id']
         );
-        
-        $total       = $this->getCourseThreadService()->searchThreadPostsCount($conditions);
-        $start       = $start == -1 ? rand(0, $total - 1) : $start;  
+        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions, 'threadId');
+        $start = $start == -1 ? rand(0, $total - 1) : $start;
+        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions, '', $start, $limit, 'threadId');
 
-        $posts       = $this->getCourseThreadService()->searchThreadPosts($conditions,null,$start,$limit);
+        $courseIds = ArrayToolkit::column($posts, "courseId");
 
-        $courseIds   = ArrayToolkit::column($posts,"courseId");
-
-        $courses     = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses = $this->getCourseService()->findCoursesByIds($courseIds);
 
         $courseThreadPosts = array();
 
-        if(empty($courses)){
+        if (empty($courses)) {
             return $courseThreadPosts;
         }
 
         foreach ($posts as $post) {
-            $thread = $this->getCourseThreadService()->getThread($post['courseId'],$post['threadId']);
-            if(empty($thread)){
+            $thread = $this->getCourseThreadService()->getThread($post['courseId'], $post['threadId']);
+            if (empty($thread)) {
                 continue;
             }
-            if($thread['userId'] == $currentUser['id']){
+            if ($thread['userId'] == $currentUser['id']) {
                 continue;
             }
-            $threadPosts = array(); 
-            $threadPosts['title']        = $thread['title'];
-            $threadPosts['type']         = $thread['type'];
-            $threadPosts['threadId']    =  $thread['id']; 
-            $threadPosts['id']           = $post['id'];
-            $threadPosts['content']      = $post['content'];
-            $threadPosts['createdTime']  = $post['createdTime'];
+            $threadPosts                = array();
+            $threadPosts['title']       = $thread['title'];
+            $threadPosts['type']        = $thread['type'];
+            $threadPosts['threadId']    = $thread['id'];
+            $threadPosts['id']          = $post['id'];
+            $threadPosts['content']     = $post['content'];
+            $threadPosts['createdTime'] = $post['createdTime'];
             foreach ($courses as $course) {
-                if($post['courseId'] == $course['id']){
-                    $threadPosts['courseId']     = $post['id'];
-                    $threadPosts['courseTitle']  = $course['title'];
-                    $threadPosts['smallPicture'] = $this->getFileUrl($course['smallPicture']);
-                    $threadPosts['middlePicture']= $this->getFileUrl($course['middlePicture']);
-                    $threadPosts['lagerPicture'] = $this->getFileUrl($course['lagerPicture']);
-                    break; 
+                if ($post['courseId'] == $course['id']) {
+                    $threadPosts['courseId']      = $post['id'];
+                    $threadPosts['courseTitle']   = $course['title'];
+                    $threadPosts['smallPicture']  = $this->getFileUrl($course['smallPicture']);
+                    $threadPosts['middlePicture'] = $this->getFileUrl($course['middlePicture']);
+                    $threadPosts['lagerPicture']  = $this->getFileUrl($course['lagerPicture']);
+                    break;
                 }
-            }           
+            }
             array_push($courseThreadPosts, $threadPosts);
         }
         return $courseThreadPosts;
@@ -138,7 +136,8 @@ class ChaosThreadsPosts extends BaseResource
         return $this->getServiceKernel()->createService('Group.ThreadService');
     }
 
-    protected function getCourseService(){
+    protected function getCourseService()
+    {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
