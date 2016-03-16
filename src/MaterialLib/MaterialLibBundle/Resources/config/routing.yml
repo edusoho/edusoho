@@ -110,6 +110,10 @@ material_batch_share:
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchShare }
     methods: [POST]
 
+material_batch_tag_show:
+    pattern: /materials/batch/tag/show
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchTagShow }
+
 material_edit:
     pattern:  /materiallib/{globalId}/edit
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:edit }
