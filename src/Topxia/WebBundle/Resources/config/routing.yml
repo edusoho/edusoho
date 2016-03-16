@@ -697,11 +697,11 @@ course_manage_teachers_match:
 
 course_manage_live_open_time_set:
     pattern:  /course/{id}/manage/live/open/time
-    defaults: { _controller: TopxiaWebBundle:CourseManage:liveOpenTimeSet }
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
 
 course_manage_open_marketing:
     pattern:  /course/{id}/manage/open/marketing
-    defaults: { _controller: TopxiaWebBundle:CourseManage:marketing }
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:marketing }
 
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
