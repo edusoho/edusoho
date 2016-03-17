@@ -554,11 +554,6 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
     }
 
-    protected function getCloudDataService()
-    {
-        return $this->getServiceKernel()->createService('CloudData.CloudDataService');
-    }
-
     protected function registerLimitValidator($registration, $authSettings, $request)
     {
         $registration['createdIp'] = $request->getClientIp();

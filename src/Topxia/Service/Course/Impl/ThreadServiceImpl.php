@@ -247,7 +247,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['content'] = $this->purifyHtml($fields['content']);
 
         $thread = $this->getThreadDao()->updateThread($threadId, $fields);
-        $this->dispatchEvent('thread.update', new ServiceEvent($thread));
+        $this->dispatchEvent('course.thread.update', new ServiceEvent($thread));
         return $thread;
     }
 
@@ -266,7 +266,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
 
-        $this->dispatchEvent('thread.delete', new ServiceEvent($thread));
+        $this->dispatchEvent('course.thread.delete', new ServiceEvent($thread));
         $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
     }
 
