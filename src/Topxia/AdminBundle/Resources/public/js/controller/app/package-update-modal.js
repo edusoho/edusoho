@@ -148,16 +148,20 @@ define(function(require, exports, module) {
 
         var type = $("input[name='package-type']").val();
         if(type == 'upgrade'){
-            steps.push({
-                title: '执行安装升级程序',
-                url: urls.beginUpgradeUrl,
-                progressRange: [62, 94]
-            });
-            steps.push({
-                title: '检查系统版本',
-                url: urls.checkNewestUrl,
-                progressRange: [97, 100]
-            }); 
+            var list = [
+                {
+                    title: '执行安装升级程序',
+                    url: urls.beginUpgradeUrl,
+                    progressRange: [62, 94]
+                },
+                {
+                    title: '检查系统版本',
+                    url: urls.checkNewestUrl,
+                    progressRange: [97, 100]
+                }
+            ];
+
+            $.merge(steps,list);
         }else{
             steps.push({
                 title: '执行安装升级程序',
