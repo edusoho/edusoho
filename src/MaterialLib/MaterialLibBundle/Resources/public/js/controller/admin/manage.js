@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
-                'click .js-search-type li': 'onClickSearchTypeBtn'
+                'click .js-search-type option': 'onClickSearchTypeBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -121,9 +121,11 @@ define(function(require, exports, module) {
             },
             onClickSearchTypeBtn: function(event)
             {
+                console.log(111);
                 var self = this;
                 var $target = $(event.currentTarget);
-                console.log($(".dropdown-toggle"));
+                console.log($target);
+                $("#search-type").val($target.data("value"));
             },
             submitForm: function(event)
             {

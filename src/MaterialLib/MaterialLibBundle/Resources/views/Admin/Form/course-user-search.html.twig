@@ -12,19 +12,19 @@
 	    <div class="input-group">
 	      <div class="input-group-btn">
 	      	<div class="form-group">
-	          <button type="button" class="btn btn-default dropdown-toggle"  name="searchType" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" value="course">按课程 <span class="caret" ></span></button>
-	          <ul class="dropdown-menu js-search-type">
-	            <li><a href="javascript:;" value="title">按标题</a></li>
-	            <li><a href="javascript:;" value="user">按用户</a></li>
-	          </ul>
+	          <select class="btn btn-default js-search-type" name="searchType">按来源 <span class="caret" ></span>
+	          	<option value="course"><a href="javascript:;" >按课程</a></option>
+	            <option value="title"><a href="javascript:;" >按标题</a></option>
+	            <option value="user"><a href="javascript:;" >按用户</a></option>
+	          </select>
 	        </div>
 	      </div>
 	        <div class="form-group">
 			    <input class="form-control" name="keywords" placeholder="输入关键词">
-			  </div>
-			  <div class="form-group mlm" >
-			    <button class="btn btn-primary btn-sm">搜索</button>
-			  </div>
+		    </div>
+		    <div class="form-group mlm">
+		      <button class="btn btn-primary btn-sm">搜索</button>
+		    </div>
 	    </div>
 	  </div>
 	</div>
