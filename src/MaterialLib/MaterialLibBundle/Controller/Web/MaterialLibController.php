@@ -122,11 +122,12 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    // public function contentAction(Request $request, $fileId)
-    // {
-    //     $file = $this->tryAccessFile($fileId);
-    //     return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array('fileId' => $file['id'], 'isDownload' => true));
-    // }
+    public function imageAction(Request $request, $fileId)
+    {
+        $file     = $this->tryAccessFile($fileId);
+        $download = $this->getUploadFileService()->getDownloadFile($fileId);
+        return $this->createJsonResponse($download);
+    }
 
     public function editAction(Request $request, $globalId)
     {
