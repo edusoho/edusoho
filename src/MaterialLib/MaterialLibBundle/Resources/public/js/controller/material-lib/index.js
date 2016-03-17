@@ -236,7 +236,7 @@ define(function(require, exports, module) {
                     ids.push(this.value);
                 });
                 if(ids == ""){
-                    Notify.danger('请先选择你要分享的资源!');
+                    Notify.danger('请先选择你要操作的资源!');
                     return;  
                 }
 
