@@ -139,9 +139,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('昵称已存在！');
         }
 
+        $updatedUser = $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
+        $this->dispatchEvent('user.change_nickname', new ServiceEvent($updatedUser));
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
-        $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
-        $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user)));
     }
 
     public function changeEmail($userId, $email)
@@ -156,8 +156,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email({$email})已经存在，Email变更失败。');
         }
 
-        $this->getUserDao()->updateUser($userId, array('email' => $email));
-        $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user)));
+        $updatedUser = $this->getUserDao()->updateUser($userId, array('email' => $email));
+        $this->dispatchEvent('user.change_email', new ServiceEvent($updatedUser));
     }
 
     public function changeAvatar($userId, $data)
@@ -595,7 +595,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->updateUser($userId, array('setup' => 1));
-        $this->dispatchEvent('user.update', new ServiceEvent(array('user' => $user)));
         return $this->getUser($userId);
     }
 
@@ -997,7 +996,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
-        $this->dispatchEvent("user.update", new ServiceEvent(array('user' => $user)));
+        $this->dispatchEvent("user.lock", new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1014,7 +1013,7 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
-        $this->dispatchEvent("user.update", new ServiceEvent(array('user' => $user)));
+        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
