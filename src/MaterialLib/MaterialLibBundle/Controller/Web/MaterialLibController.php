@@ -36,7 +36,7 @@ class MaterialLibController extends BaseController
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
-            'tagss' => ArrayToolkit::column($this->getTagService()->findAllTags(0, PHP_INT_MAX), 'name')
+            'tagNames' => ArrayToolkit::column($this->getTagService()->findAllTags(0, PHP_INT_MAX), 'name')
         ));
     }
 
