@@ -1,11 +1,10 @@
-
 define(function(require, exports, module) {
     window.$ = window.jQuery = require('jquery');
     require('bootstrap');
     require('common/bootstrap-modal-hack2');
     require("placeholder");
     require('./util/card');
-    var Swiper=require('swiper');
+    var Swiper = require('swiper');
     var Cookie = require('cookie');
 
     exports.load = function(name) {
@@ -22,10 +21,10 @@ define(function(require, exports, module) {
     };
 
     exports.loadScript = function(scripts) {
-        for(var index in scripts) {
+        for (var index in scripts) {
             exports.load(scripts[index]);
         }
-        
+
     }
 
     window.app.load = exports.load;
@@ -44,18 +43,18 @@ define(function(require, exports, module) {
 
     $(document).ajaxError(function(event, jqxhr, settings, exception) {
         var json = jQuery.parseJSON(jqxhr.responseText);
-            error = json.error;
+        error = json.error;
         if (!error) {
-            return ;
+            return;
         }
 
         if (error.name == 'Unlogin') {
             var $loginModal = $("#login-modal");
 
             $('.modal').modal('hide');
-        
+
             $loginModal.modal('show');
-            $.get($loginModal.data('url'), function(html){
+            $.get($loginModal.data('url'), function(html) {
                 $loginModal.html(html);
             });
         }
@@ -72,7 +71,7 @@ define(function(require, exports, module) {
         $('body').prepend(message);
     }
 
-    $( document ).ajaxSend(function(a, b, c) {
+    $(document).ajaxSend(function(a, b, c) {
         if (c.type == 'POST') {
             b.setRequestHeader('X-CSRF-Token', $('meta[name=csrf-token]').attr('content'));
         }
@@ -81,22 +80,22 @@ define(function(require, exports, module) {
     if (app.scheduleCrontab) {
         $.post(app.scheduleCrontab);
     }
-    
+
     $("i.hover-spin").mouseenter(function() {
         $(this).addClass("md-spin");
     }).mouseleave(function() {
         $(this).removeClass("md-spin");
     });
 
-    if($(".set-email-alert").length>0){
-        $(".set-email-alert .close").click(function(){
-            Cookie.set("close_set_email_alert",'true');
+    if ($(".set-email-alert").length > 0) {
+        $(".set-email-alert .close").click(function() {
+            Cookie.set("close_set_email_alert", 'true');
         });
     }
 
-    if($(".announcements-alert").length>0){
+    if ($(".announcements-alert").length > 0) {
 
-        if($('.announcements-alert .swiper-container .swiper-wrapper').children().length>1){
+        if ($('.announcements-alert .swiper-container .swiper-wrapper').children().length > 1) {
             var noticeSwiper = new Swiper('.alert-notice .swiper-container', {
                 speed: 300,
                 loop: true,
@@ -106,44 +105,54 @@ define(function(require, exports, module) {
             });
         }
 
-        $(".announcements-alert .close").click(function(){
-            Cookie.set("close_announcements_alert",'true',{path: '/'});
+        $(".announcements-alert .close").click(function() {
+            Cookie.set("close_announcements_alert", 'true', {
+                path: '/'
+            });
         });
     }
     var ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
-        if($('.weixin-alert.hide'))
+    if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+        if ($('.weixin-alert.hide'))
             $('.weixin-alert.hide').removeClass('hide');
     };
-    
-    $(".weixin-alert .close").click(function(){
-        Cookie.set("close_weixin_alert",'true',{path: '/'});
+
+    $(".weixin-alert .close").click(function() {
+        Cookie.set("close_weixin_alert", 'true', {
+            path: '/'
+        });
     });
 
-   	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
-	    $("li.nav-hover").mouseenter(function(event) {
-	        $(this).addClass("open");
-	    }).mouseleave(function(event) {
-	        $(this).removeClass("open");
-	    });
-	    
-	} else {
-        $("li.nav-hover >a").attr("data-toggle","dropdown");
-	}
-	
-    if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
-        $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
+    if (!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+        $("li.nav-hover").mouseenter(function(event) {
+            $(this).addClass("open");
+        }).mouseleave(function(event) {
+            $(this).removeClass("open");
+        });
+
+    } else {
+        $("li.nav-hover >a").attr("data-toggle", "dropdown");
     }
 
-    $(".js-search").focus(function () {
+    if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
+        $('.es-wrap [data-toggle="tooltip"]').tooltip({
+            container: 'body'
+        });
+    }
+
+    $(".js-search").focus(function() {
         $(this).prop("placeholder", "").addClass("active");
-    }).blur(function () {
+    }).blur(function() {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
 
-    if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+    if ($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
         require('jquery.lavalamp');
         $(".nav.nav-tabs").lavaLamp();
     }
+
+    $("select[name='language']").change(function() {
+        Cookie.set("locale", $('select[name=language]').val());
+    });
 
 });

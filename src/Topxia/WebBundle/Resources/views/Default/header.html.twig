@@ -103,6 +103,21 @@
         <li class="hidden-xs"><a href="{{ path('login', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'登录'|trans}}</a></li>
         <li class="hidden-xs"><a href="{{ path('register', {goto:_target_path|default(app.request.server.get('REQUEST_URI'))}) }}">{{'注册'|trans}}</a></li>
         {% endif %}
+
+<li class="hidden-xs">
+        <form action="{{path('switch_language')}}" method="post">
+            <label>Language</label>
+                <select name="language">
+                    <option value="zh_CN" {% if app.request.get('_locale') == 'zh_CN' %}selected="selected"{% endif %}>中文</option>
+                    <option value="ug_CN" {% if app.request.get('_locale') == 'ug_CN' %}selected="selected"{% endif %}>维吾尔文</option>
+                </select>
+                <input type="hidden" name="_target_path" value ="{% if app.request.attributes.get('_route')  %} {{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }} {% else %} {{path('homepage')}} {% endif %}
+                ">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+            <input type="submit" value="Ok"> 
+        </form>
+</li>
+
       </ul>
       <form class="navbar-form navbar-right hidden-xs hidden-sm" action="{{ path('search') }}" method="get">
         <div class="form-group">
