@@ -35,7 +35,8 @@ class MaterialLibController extends BaseController
         $conditions['currentUserId'] = $currentUserId;
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
-            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
+            'tagss' => ArrayToolkit::column($this->getTagService()->findAllTags(0, PHP_INT_MAX), 'name')
         ));
     }
 
@@ -191,20 +192,16 @@ class MaterialLibController extends BaseController
 
     public function batchTagShowAction(Request $request)
     {
-        $data      = $request->request->get('globalIds');
-        $total     = $this->getTagService()->getAllTagCount();
-        $paginator = new Paginator($request, $total, 20);
-        $tags      = $this->getTagService()->findAllTags($paginator->getOffsetCount(), $paginator->getPerPageCount());
-        if (empty($tags)) {
-            throw $this->createNotFoundException();
-        }
-        // var_dump($data);
-        // return $this->render('MaterialLibBundle:MaterialLib:tag-modal.html.twig', array(
-        //     'tags' => $tags,
-        //     'paginator' => $paginator,
-        //     'globalIds' => $data
-        // ));
-        return $this->createJsonResponse(true);
+        $data      = $request->request->all();
+
+        $tagNames = preg_split('/,/', $data['tags']);
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
+        $tags = $this->getTagService()->findTagsByNames($tagNames);
+        $tagIds = ArrayToolkit::column($tags, 'id');
+        
+        return $this->getUploadFileService()->batchTags($fileIds, $tagIds);
+        // return $this->createJsonResponse(true);
     }
 
     public function generateThumbnailAction(Request $request, $globalId)

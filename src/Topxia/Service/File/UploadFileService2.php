@@ -56,4 +56,6 @@ interface UploadFileService2
     public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
 
     public function findCollectionsByUserId($userId);
+
+    public function batchTags($fileIds, $tagIds);
 }
