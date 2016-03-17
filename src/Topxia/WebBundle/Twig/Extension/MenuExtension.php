@@ -52,6 +52,13 @@ class MenuExtension extends \Twig_Extension
         $route  = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
+        if (!empty($menu['router_params_context'])) {
+            foreach ($params as $key => $value) {
+                $value        = explode('.', $value, 2);
+                $params[$key] = $context['_context'][$value[0]][$value[1]];
+            }
+        }
+
         return $this->container->get('router')->generate($route, $params);
     }
 

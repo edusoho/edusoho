@@ -171,6 +171,7 @@ admin_category_create:
     name: 添加分类
     parent: admin_course_category_manage
     router_params: {'groupId': 'group.id'}
+    router_params_context: 1
     group: 2
     mode: modal
 admin_course_tag:
