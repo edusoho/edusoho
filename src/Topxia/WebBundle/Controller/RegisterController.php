@@ -67,7 +67,17 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
-            return $this->redirect($this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request))));
+            if (($authSettings
+                && isset($authSettings['email_enabled'])
+                && $authSettings['email_enabled'] == 'closed')
+                || !$this->isEmptyVeryfyMobile($user)) {
+                $this->authenticateUser($user);
+            }
+
+            return $this->redirect($this->generateUrl('register_success', array(
+                'userId' => $user['id'],
+                'goto'   => $this->getTargetPath($request)
+            )));
         }
 
         $inviteCode = '';
@@ -92,15 +102,10 @@ class RegisterController extends BaseController
 
     public function successAction(Request $request)
     {
-        $user = $this->getUserService()->getUser($request->query->get('userId'));
+        $user = $this->getCurrentUser();
 
-        $authSettings = $this->getSettingService()->get('auth', array());
-
-        if (($authSettings
-            && isset($authSettings['email_enabled'])
-            && $authSettings['email_enabled'] == 'closed')
-            || !$this->isEmptyVeryfyMobile($user)) {
-            $this->authenticateUser($user);
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('对不起，无权操作');
         }
 
         $goto = $this->generateUrl('register_submited', array(
