@@ -824,7 +824,8 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             if (empty($existItems[$item['questionId']])) {
                 $item['questionType'] = $question['type'];
                 $item['parentId']     = $question['parentId'];
-                // @todo, wellming.
+
+// @todo, wellming.
 
                 if (array_key_exists('missScore', $testpaper['metas']) && array_key_exists($question['type'], $testpaper['metas']['missScore'])) {
                     $item['missScore'] = $testpaper['metas']['missScore'][$question['type']];
@@ -889,7 +890,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $targetId = explode('/', $target[1]);
             $member   = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
 
-            // @todo: 这个是有问题的。
+// @todo: 这个是有问题的。
 
             if ($member['role'] == 'teacher') {
                 return $user['id'];

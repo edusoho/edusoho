@@ -13,7 +13,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         return array(
             'testpaper.reviewed'        => 'onTestPaperReviewed',
-            'course.lesson.publish'     => 'onLessonPubilsh',
+            'course.lesson.publish'     => 'onLessonPublish',
             'course.join'               => 'onCourseJoin',
             'course.quit'               => 'onCourseQuit',
             'course.create'             => 'onCourseCreate',
@@ -30,7 +30,30 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
             'course.lesson_start'       => 'onCourseLessonStart',
-            'course.thread.create'      => 'onCourseThreadCreate'
+            'course.thread.create'      => 'onCourseThreadCreate',
+            'user.update'               => 'onUserUpdate',
+            'course.lesson.create'      => 'onCourseLessonCreate',
+            'profile.update'            => 'onProfileUpdate',
+            'course.update'             => 'onCourseUpdate',
+
+            'user.register'             => 'pushCloudData',
+            'mobile.change'             => 'pushCloudData',
+            'course.close'              => 'pushCloudData',
+            'course.delete'             => 'pushCloudData',
+            'course.lesson.unpublish'   => 'pushCloudData',
+            'article.update'            => 'pushCloudData',
+            'article.trash'             => 'pushCloudData',
+            'article.delete'            => 'pushCloudData',
+            'thread.update'             => 'pushCloudData',
+            'thread.delete'             => 'pushCloudData',
+            'thread.create'             => 'pushCloudData',
+            'course.thread.update'      => 'pushCloudData',
+            'course.thread.delete'      => 'pushCloudData',
+            'user.change_nickname'      => 'pushCloudData',
+            'user.change_email'         => 'pushCloudData',
+            'user.unlock'               => 'pushCloudData',
+            'user.lock'                 => 'pushCloudData'
+
         );
     }
 
@@ -48,7 +71,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-        $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+        $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+
+        $this->getCloudDataService()->push('edusoho.course.create', $course, time());
     }
 
     public function onClassroomCreate(ServiceEvent $event)
@@ -89,10 +114,11 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'lessonId' => $lesson['id']
         );
 
-        $this->push($lesson['title'], $result['paperName'], $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.testpaper.reviewed', $testpaper, time());
+        //$this->push($lesson['title'], $result['paperName'], $from, $to, $body);
     }
 
-    public function onLessonPubilsh(ServiceEvent $event)
+    public function onLessonPublish(ServiceEvent $event)
     {
         $lesson = $event->getSubject();
         $course = $this->getCourseService()->getCourse($lesson['courseId']);
@@ -113,6 +139,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
             $this->createJob($lesson);
         }
+
+        $this->getCloudDataService()->push('edusoho.lesson.publish', $lesson, time());
     }
 
     public function onCourseLessonUpdate(ServiceEvent $event)
@@ -133,6 +161,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $this->createJob($lesson);
             }
         }
+
+        $this->getCloudDataService()->push('eduoho.lesson,update', $lesson, time());
+        //$this->puchCloudData('edusoho.course.lesson.update', 'update', 'lesson', $lesson['id'], time());
     }
 
     public function onCourseLessonDelete(ServiceEvent $event)
@@ -144,6 +175,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         if ($jobs) {
             $this->deleteJob($jobs);
         }
+
+        $this->getCloudDataService()->push('edusoho.lesson.delete', $lesson['id'], time());
     }
 
     public function onCoursePublish(ServiceEvent $event)
@@ -160,7 +193,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'course.open');
 
-        return $this->push($course['title'], '课程已发布!', $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.course.publish', $course, time());
+
+        //return $this->push($course['title'], '课程已发布!', $from, $to, $body);
     }
 
     public function onAnnouncementCreate(ServiceEvent $event)
@@ -185,7 +220,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'type' => 'announcement.create'
         );
 
-        $this->push($target['title'], $announcement['content'], $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.announcement.create', $announcement, time());
+
+        //$this->push($target['title'], $announcement['content'], $from, $to, $body);
     }
 
     public function onClassroomJoin(ServiceEvent $event)
@@ -210,7 +247,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'classroom.join', 'userId' => $userId);
 
-        $this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.classroom.join', $classroom, time());
+
+        //$this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
     }
 
     public function onClassroomQuit(ServiceEvent $event)
@@ -270,7 +309,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'content' => $course['about']
         );
 
-        $this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.classroom.put.course', $classroomCourse, time());
+
+        //$this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
     }
 
     public function onArticleCreate(ServiceEvent $event)
@@ -295,8 +336,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'image'   => $this->getFileUrl($article['thumb']),
             'content' => $this->plainText($article['body'], 50)
         );
-
-        $this->push('资讯', $article['title'], $from, $to, $body);
+        $this->getCloudDataService()->push('edusho.article.create', $article, time());
+        //$this->push('资讯', $article['title'], $from, $to, $body);
     }
 
     public function onCourseThreadPostCreate(ServiceEvent $event)
@@ -323,7 +364,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                     'questionTitle'       => $question['title'],
                     'postContent'         => $post['content']
                 );
-                $this->push($course['title'], $question['title'], $from, $to, $body);
+
+                $this->getCloudDataService()->push('edusho.course.thread.posy.create', $course, time());
+                // $this->push($course['title'], $question['title'], $from, $to, $body);
             }
         }
     }
@@ -350,7 +393,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'teacherSay'       => $homeworkResult['teacherSay']
         );
 
-        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.homework.check', $homeworkResult, time());
+
+        //$this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
     public function onCourseLessonFinish(ServiceEvent $event)
@@ -373,7 +418,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'learnStartTime'  => $learn['startTime'],
             'learnFinishTime' => $learn['finishedTime']
         );
-        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+
+        $this->getCloudDataService()->push('edusoho.lesson.finish', $lesson, time());
+        //$this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
     public function onCourseLessonStart(ServiceEvent $event)
@@ -394,7 +441,8 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'courseId'       => $learn['courseId'],
             'learnStartTime' => $learn['startTime']
         );
-        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+        $this->getCloudDataService()->push('edusoho.course.lesson.start', $lesson, time());
+        //$this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
     public function onCourseThreadCreate(ServiceEvent $event)
@@ -421,9 +469,44 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
             foreach ($course['teacherIds'] as $teacherId) {
                 $to['id'] = $teacherId;
-                $this->push($course['title'], $thread['title'], $from, $to, $body);
+                $this->getCloudDataService()->push('edusoho.course.thread.create', $thread, time());
+                //$this->push($course['title'], $thread['title'], $from, $to, $body);
             }
         }
+    }
+
+    public function pushCloudData(ServiceEvernt $event)
+    {
+        $data = $event->getSubject();
+        $this->getCloudDataService()->push('edusoho.'.$event->getName(), $data, time());
+    }
+
+    public function onUserUpdate(Service $event)
+    {
+        $context = $event->getSubject();
+        $user    = $context['user'];
+        $this->getCloudDataService()->push('edusoho.user.update', $user, time());
+    }
+
+    public function onProfileUpdate(Service $event)
+    {
+        $context = $event->getSubject();
+        $user    = $context['user'];
+        $this->getCloudDataService()->push('edusoho.profile.update', $user, time());
+    }
+
+    public function onCourseUpdate(Service $event)
+    {
+        $context = $event->getSubject();
+        $course  = $context['course'];
+        $this->getCloudDataService()->push('eudsoho.course.update', $course, time());
+    }
+
+    public function onCourseLessonCreate(Service $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+        $this->getCloudDataService()->push('eudsoho.lesson.create', $lesson, time());
     }
 
     protected function push($title, $content, $from, $to, $body)
@@ -464,16 +547,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = array('type' => $type, 'id' => $id);
 
         switch ($type) {
-            case 'course':;
+            case 'course':
+                ;
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
                 break;
-            case 'classroom':;
+            case 'classroom':
+                ;
                 $classroom       = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
-            case 'global':;
+            case 'global':
+                ;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
                 $target['title'] = '网校公告';

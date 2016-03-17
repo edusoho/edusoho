@@ -132,7 +132,7 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function checkUsername($username, $randomName = '')
     {
-        //如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
+//如果一步注册则$randomName为空，正常校验discus和系统校验，如果两步注册，则判断是否使用默认生成的，如果是，跳过discus和系统校验
 
         if (empty($randomName) || $username != $randomName) {
             try {
@@ -201,9 +201,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (SimpleValidator::email($emailOrMobile)) {
             return $this->checkEmail($emailOrMobile);
-        } else
-
-        if (SimpleValidator::mobile($emailOrMobile)) {
+        } elseif (SimpleValidator::mobile($emailOrMobile)) {
             return $this->checkMobile($emailOrMobile);
         } else {
             return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');

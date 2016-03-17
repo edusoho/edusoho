@@ -225,9 +225,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($courseId, $threadId, $fields)
     {
-        $thread = $this->getThread($courseId, $threadId);
+        $checkThread = $this->getThread($courseId, $threadId);
 
-        if (empty($thread)) {
+        if (empty($checkThread)) {
             throw $this->createServiceException('话题不存在，更新失败！');
         }
 
@@ -245,7 +245,10 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新thread过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        return $this->getThreadDao()->updateThread($threadId, $fields);
+
+        $thread = $this->getThreadDao()->updateThread($threadId, $fields);
+        $this->dispatchEvent('course.thread.update', new ServiceEvent($thread));
+        return $thread;
     }
 
     public function deleteThread($threadId)
@@ -263,6 +266,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getThreadPostDao()->deletePostsByThreadId($threadId);
         $this->getThreadDao()->deleteThread($threadId);
 
+        $this->dispatchEvent('course.thread.delete', new ServiceEvent($thread));
         $this->getLogService()->info('thread', 'delete', "删除话题 {$thread['title']}({$thread['id']})");
     }
 

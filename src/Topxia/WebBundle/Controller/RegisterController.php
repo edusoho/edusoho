@@ -27,7 +27,8 @@ class RegisterController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $registration = $request->request->all();
-            // $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+
+// $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
@@ -44,7 +45,7 @@ class RegisterController extends BaseController
             //验证码校验
             $this->captchaEnabledValidator($authSettings, $registration, $request);
 
-            //手机校验码
+//手机校验码
 
             if ($this->smsCodeValidator($authSettings, $registration, $request)) {
                 $registration['verifiedMobile'] = '';
@@ -59,7 +60,7 @@ class RegisterController extends BaseController
                 }
             }
 
-            //ip次数限制
+//ip次数限制
 
             if ($this->registerLimitValidator($registration, $authSettings, $request)) {
                 return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
