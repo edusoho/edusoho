@@ -108,46 +108,6 @@ class ChaosThreads extends BaseResource
         return $this->callFilter('Thread', $thread);
     }
 
-    public function getThreads(Application $app,Request $request)
-    {
-        $currentUser   = $this->getCurrentUser();
-        $start         = $request->query->get('start', 0);
-        $limit         = $request->query->get('limit', 10);
-        $conditions    = array(
-            'userId'      => $currentUser['id']
-        );
-        $total         = $this->getCourseThreadService()->searchThreadCount($conditions);
-        $start         = $start == -1 ? rand(0, $total - 1) : $start;
-        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions,'createdNotStick',$start,$limit);
-        $courseIds     = ArrayToolkit::column($courseThreads,"courseId");
-        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);               
-        $threads       = array();
-
-        if(empty($courses)){
-            return $threads;
-        }       
-        foreach ($courseThreads as $thread) {
-            $threadPosts                = array();
-            $threadPosts['id']          = $thread['id'];
-            $threadPosts['threadId']    = $thread['id'];
-            $threadPosts['type']        = $thread['type'];  
-            $threadPosts['title']       = $thread['title'];
-            $threadPosts['content']     = $thread['content'];
-            $threadPosts['createdTime'] = $thread['createdTime'];
-            foreach ($courses as $course) {
-                if($thread['courseId'] == $course['id']){
-                    $threadPosts['courseId']     = $course['id'];
-                    $threadPosts['courseTitle']  = $course['title'];
-                    $threadPosts['smallPicture'] = $this->getFileUrl($course['smallPicture']);
-                    $threadPosts['middlePicture']= $this->getFileUrl($course['middlePicture']);
-                    $threadPosts['lagerPicture'] = $this->getFileUrl($course['lagerPicture']);
-                    break;
-                }
-            }
-            array_push($threads,$threadPosts);
-        }
-        return $threads;
-    }
     public function filter(&$res)
     {
         return $res;
@@ -231,16 +191,14 @@ class ChaosThreads extends BaseResource
 
     public function getThreads(Application $app,Request $request)
     {
-        $currentUser   = $this->getCurrentUser();
-        $start         = $request->query->get('start', 0);
-        $limit         = $request->query->get('limit', 10);
-
-        $conditions    = array(
-            'userId'      => $currentUser['id']
+        $currentUser = $this->getCurrentUser();
+        $start       = $request->query->get('start', 0);
+        $limit       = $request->query->get('limit', 10);
+        $conditions  = array(
+            'userId' => $currentUser['id']
         );
 
         $total         = $this->getCourseThreadService()->searchThreadCount($conditions);
-
         $start         = $start == -1 ? rand(0, $total - 1) : $start;
         
         $courseThreads = $this->getCourseThreadService()->searchThreads($conditions,'createdNotStick',$start,$limit);

@@ -63,9 +63,9 @@ interface ThreadService
      */
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
 
-    public function searchThreadPosts($conditions,$sort, $start, $limit);
+    public function searchThreadPosts($conditions,$sort, $start, $limit,$groupBy);
 
-    public function searchThreadPostsCount($conditions);
+    public function searchThreadPostsCount($conditions,$groupBy);
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId);
 
@@ -92,8 +92,4 @@ interface ThreadService
     public function updatePost($courseId, $id, $fields);
 
     public function deletePost($courseId, $id);
-
-    public function searchThreadPosts($conditions,$sort, $start, $limit,$groupBy);
-
-    public function searchThreadPostsCount($conditions,$groupBy);
 }
