@@ -176,14 +176,14 @@ class CouponServiceImpl extends BaseService implements CouponService
                 'message' => '优惠码'.$code.'不可用'
             );
         }
+
         if ($coupon['targetType'] == 'fullDiscount') {
-            if($amount<$coupon['fullDiscountValue']){
+            if ($amount < $coupon['fullDiscountPrice']) {
                 return array(
-                'useable' => 'no',
-                'message' => '优惠码'.$code.'不可用'
+                    'useable' => 'no',
+                    'message' => '优惠码'.$code.'不可用'
                 );
             }
-           
         }
 
         if ($coupon['type'] == 'minus') {
