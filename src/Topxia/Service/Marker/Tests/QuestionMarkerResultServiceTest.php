@@ -11,6 +11,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result = array(
             'markerId'         => 1,
             'questionMarkerId' => 2,
+            'lessonId'        =>1,
             'userId'           => 1,
             'status'           => 'none'
         );
@@ -27,6 +28,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result = array(
             'markerId'         => 3,
             'questionMarkerId' => 4,
+            'lessonId'        =>1,
             'userId'           => 6,
             'status'           => 'noAnswer'
         );
@@ -35,6 +37,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result = array(
             'markerId'         => 6,
             'questionMarkerId' => 1,
+            'lessonId'        =>1,
             'userId'           => 7,
             'status'           => 'right'
         );
@@ -60,6 +63,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result1 = array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
+            'lessonId'        =>1,
             'userId'           => $jim,
             'status'           => 'noAnswer'
         );
@@ -68,6 +72,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result2 = array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
+            'lessonId'        =>1,
             'userId'           => $tony,
             'status'           => 'wrong'
         );
@@ -76,6 +81,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result3 = array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
+            'lessonId'        =>1,
             'userId'           => $andy,
             'status'           => 'right'
         );
@@ -100,6 +106,7 @@ class QuestionMarkerResultServiceTest extends BaseTestCase
         $result1 = array(
             'markerId'         => $markerId,
             'questionMarkerId' => $questionMarkerId,
+            'lessonId'        =>1,
             'userId'           => $jim,
             'status'           => 'noAnswer'
         );

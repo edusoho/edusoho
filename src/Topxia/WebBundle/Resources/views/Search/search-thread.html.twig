@@ -3,10 +3,7 @@
 </div>
 
 <ul class="nav nav-pills mbl js-nav-pills">
-	<li {% if not targetType %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type})}}" data-url="">{{'全部话题'|trans}}</a></li>
 	<li {% if targetType =='group' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'group'})}}" data-url="">{{'小组话题'|trans}}</a></li>
-	<li {% if targetType =='classroom' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'classroom'})}}" data-url="">{{'班级话题'|trans}}</a></li>
-	<li {% if targetType =='course' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'course'})}}" data-url="">{{'课程话题'|trans}}</a></li>
 </ul>
 
 <div class="media-list">
@@ -31,14 +28,14 @@
 				" target="_blank">{{thread.title|raw}}</a></div>
 				<div class="text-sm color-gray">{{'来自'|trans}}
 					{% if thread.targetType == 'group'%}
-						{% set group = data('Group',{'groupId':thread.targetId}) %}
-						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}">{{group.title|default('')}}</a>
+						{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
+						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
 					{% elseif thread.targetType == 'classroom'%}
-						{% set classroom = data('Classroom',{'classroomId':thread.targetId}) %}
-						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}">{{classroom.title|default('')}}</a>
+						{% set classroom = data('Classroom',{'classroomId':thread.targetId|default(0)}) %}
+						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}" target="_blank">{{classroom.title|default('')}}</a>
 					{% elseif thread.targetType == 'course'%}
-						{% set course = data('Course',{'courseId':thread.targetId}) %}
-						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}">{{course.title|default('')}}</a>
+						{% set course = data('Course',{'courseId':thread.targetId|default(0)}) %}
+						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}" target="_blank">{{course.title|default('')}}</a>
 					{% endif %}
 					<span class="mlm">{{thread.createdTime|smart_time}}</span>
 				</div>

@@ -16,8 +16,6 @@
 
 {% block content %}
 
-  <!-- 核心内容区 -->
-
   <div class="course-filter search-filter" id="course-filter">
     <div class="result-declare">
       共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
@@ -62,20 +60,19 @@
 
   </div>
 
-    <!-- 课程列表 -->
+  <!-- 课程列表 -->
   <div class="course-list">
-      {% if courses %}
-        <div class="row">
-          {% for course in courses %}
-            <div class="col-lg-3 col-md-4 col-sm-6">
-              {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="empty">{{'没有搜到相关课程，请换个关键词试试！'|trans}}</div>
-      {% endif %}
-
+    {% if courses %}
+      <div class="row">
+        {% for course in courses %}
+          <div class="col-lg-3 col-md-4 col-xs-6">
+            {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' with {course:course}%}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">{{'没有搜到相关课程，请换个关键词试试！'|trans}}</div>
+    {% endif %}
   </div>
 
   <nav class="text-center">
@@ -83,7 +80,5 @@
     {{ web_macro.paginator(paginator) }}
     {% endif %}
   </nav>
-
-  <!-- /核心内容区 -->
 
 {% endblock %}

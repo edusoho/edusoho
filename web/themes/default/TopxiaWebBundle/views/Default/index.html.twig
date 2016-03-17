@@ -17,6 +17,7 @@
 
 
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
+          {% if classrooms %}
           <div class="es-box">
               <div class="es-box-heading">
                 <h2>{{ setting('classroom.name')|default("班级") }}</h2>
@@ -74,6 +75,7 @@
                 </ul>
               </div>
             </div>
+            {% endif %}
 
 
 

@@ -19,7 +19,7 @@
         <input type="hidden" name="orderId" value="{{order.id}}"/>
         {% endif %}
       	<input type="hidden" role="cash-rate" value="{{cashRate|default(null)}}"
-        data-price-type = "{{priceType|default('RMB')}}"/>
+        data-price-type = "{{priceType|default('RMB')}}" data-cash-model='{{setting('coin.cash_model')}}'/>
         <input type="hidden" name="targetType" value="{{targetType}}"/>
         <input type="hidden" name="maxRate" value="{{maxRate|default(100)}}"/>
         <input type="hidden" name="targetId" value="{{targetId}}"/>
@@ -38,21 +38,22 @@
         {% if targetType == "classroom" %}
           {% include 'TopxiaWebBundle:Order:classroom.html.twig' %}
         {% endif %}
+        {% if targetType == "groupSell" %}
+          {% include 'GroupSellBundle:GroupSell:Order/group_sell.html.twig' %}
+        {% endif %}
         </div>
 
-
+        {% if targetType in ['course','vip','classroom'] %}
         <div class="order-detail-bg">
-          {% if targetType in ['course','vip','classroom'] %}
 
-            {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
-
-          {% endif %}
+          {{ render(controller('TopxiaWebBundle:Card:useableCoupons', {targetType: targetType, targetId: targetId, totalPrice: totalPrice,priceType:priceType|default('RMB') })) }}
 
           {% if setting('coin.coin_enabled') %}
           	{% include 'TopxiaWebBundle:Order:order-item-coin.html.twig' %}
           {% endif %}
-        </div>
 
+        </div>
+        {% endif %}
 
         <div class="form-group">
           <div class="total-price">

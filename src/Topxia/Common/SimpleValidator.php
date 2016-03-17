@@ -11,21 +11,26 @@ class SimpleValidator
     {
         $value = (string) $value;
         $valid = filter_var($value, FILTER_VALIDATE_EMAIL);
-        return $valid !== false ;
+        return $valid !== false;
     }
 
     public static function nickname($value, array $option = array())
     {
-        
         $option = array_merge(
             array('minLength' => 4, 'maxLength' => 18),
             $option
         );
 
         $len = (strlen($value) + mb_strlen($value, 'utf-8')) / 2;
+
         if ($len > $option['maxLength'] || $len < $option['minLength']) {
             return false;
         }
+
+        if (preg_match('/^1\d{10}$/', $value)) {
+            return false;
+        }
+
         return !!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-z0-9_.]+$/u', $value);
     }
 
@@ -93,5 +98,4 @@ class SimpleValidator
     {
         return !!preg_match('/^(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/', $value);
     }
-
 }

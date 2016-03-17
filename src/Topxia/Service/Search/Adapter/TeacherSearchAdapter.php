@@ -21,12 +21,15 @@ class TeacherSearchAdapter extends AbstractSearchAdapter
 
         foreach ($teachers as $index => $teacher) {
             if (array_key_exists($teacher['userId'], $users)) {
-                $teacher['id']          = $teacher['userId'];
                 $teacher['profile']     = array_key_exists($teacher['userId'], $userProfiles) ? $userProfiles[$teacher['userId']] : array();
                 $teacher['largeAvatar'] = $users[$teacher['userId']]['largeAvatar'];
                 $teacher['isFollowed']  = in_array($teacher['userId'], $myFollowings);
-                array_push($adaptResult, $teacher);
+            }else{
+                $teacher['profile']=array();
+                $teacher['largeAvatar']='';
             }
+            $teacher['id']          = $teacher['userId'];
+            array_push($adaptResult, $teacher);
         }
 
         return $adaptResult;

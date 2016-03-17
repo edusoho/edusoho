@@ -8,9 +8,7 @@
   </td>
   <td>
     {% if user.promoted %}
-      <span class="text-success">是</span>
-      <br>
-      <span class="text-muted text-sm">{{ user.promotedTime|date('Y-n-d H:i') }}</span>
+      <span class="label label-default">荐:{{ user.promotedTime|date('Y-m-d') }} / 序号:{{ user.promotedSeq }}</span>
     {% else %}
       <span class="text-muted">否</span>
     {% endif %}
@@ -28,11 +26,11 @@
       </a>
       <ul class="dropdown-menu">
         {% if not user.promoted %}
-        <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote', {id:user.id}) }}">推荐教师</a></li>
+        <li><a class="promote-teacher" href="#modal" data-toggle="modal" data-url="{{ path('admin_teacher_promote', {id:user.id ,type:'teacherList'}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐老师</a></li>
         {% endif %}
         
         {% if user.promoted %}
-          <li><a class="promote-user" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
+          <li><a class="cancel-promote-teacher" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
         {% endif %}
       </ul>
     </div>

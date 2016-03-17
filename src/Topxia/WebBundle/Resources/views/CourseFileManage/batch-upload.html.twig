@@ -108,8 +108,8 @@
       <ul>
         <li>支持常见文档、图片、音视频、压缩包文件格式。{% if storageSetting.upload_mode == 'local' %}且文件大小不能超过<strong>{{ upload_max_filesize() }}</strong>。{% endif %}</li>
         {% if storageSetting.upload_mode == 'cloud' %}
-          {{'<li>文件将上传到<strong>云服务器</strong>。</li>'|trans}}
-          {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans}}
+          {{'<li>文件将上传到<strong>云服务器</strong>。</li>'|trans|raw}}
+          {{'<li>支持<strong>断点续传</strong>（仅支持HTML5浏览器）。</li>'|trans|raw}}
         {% else %}
           <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
         {% endif %}
@@ -117,8 +117,13 @@
     </div>
   {% endif %}
 </div>
+
+{% endblock %}
+
+{% block script %}
 <script>app.load('course-manage-file/batch-upload-course-files')</script>
 {% endblock %}
+
 {% block footer %}
     <button type="button" class="btn btn-primary" data-dismiss="modal">{{'关闭'|trans}}</button>
 {% endblock %}

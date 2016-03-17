@@ -109,21 +109,25 @@ class UserDaoImpl extends BaseDao implements UserDao
         );
     }
 
-    public function searchUsers($conditions, $orderBy, $start, $limit)
+    public function searchUsers($conditions, $orderBys, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createUserQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        for ($i = 0; $i < count($orderBys); $i = $i + 2) {
+            $builder->addOrderBy($orderBys[$i], $orderBys[$i + 1]);
+        };
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchUserCount($conditions)
     {
         $builder = $this->createUserQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -194,32 +198,32 @@ class UserDaoImpl extends BaseDao implements UserDao
         $conditions['verifiedMobileNull'] = "";
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'user')
-                        ->andWhere('promoted = :promoted')
-                        ->andWhere('roles LIKE :roles')
-                        ->andWhere('roles = :role')
-                        ->andWhere('UPPER(nickname) LIKE :nickname')
-                        ->andWhere('id =: id')
-                        ->andWhere('loginIp = :loginIp')
-                        ->andWhere('createdIp = :createdIp')
-                        ->andWhere('approvalStatus = :approvalStatus')
-                        ->andWhere('UPPER(email) LIKE :email')
-                        ->andWhere('level = :level')
-                        ->andWhere('createdTime >= :startTime')
-                        ->andWhere('createdTime <= :endTime')
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('approvalTime >= :startApprovalTime')
-                        ->andWhere('approvalTime <= :endApprovalTime')
-                        ->andWhere('loginTime >= :loginStartTime')
-                        ->andWhere('loginTime <= :loginEndTime')
-                        ->andWhere('locked = :locked')
-                        ->andWhere('level >= :greatLevel')
-                        ->andWhere('UPPER(verifiedMobile) LIKE :verifiedMobile')
-                        ->andWhere('type LIKE :type')
-                        ->andWhere('id IN ( :userIds)')
-                        ->andWhere('inviteCode = :inviteCode')
-                        ->andWhere('inviteCode != :NoInviteCode')
-                        ->andWhere('id NOT IN ( :excludeIds )');
+            ->from($this->table, 'user')
+            ->andWhere('promoted = :promoted')
+            ->andWhere('roles LIKE :roles')
+            ->andWhere('roles = :role')
+            ->andWhere('UPPER(nickname) LIKE :nickname')
+            ->andWhere('id =: id')
+            ->andWhere('loginIp = :loginIp')
+            ->andWhere('createdIp = :createdIp')
+            ->andWhere('approvalStatus = :approvalStatus')
+            ->andWhere('UPPER(email) LIKE :email')
+            ->andWhere('level = :level')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('approvalTime >= :startApprovalTime')
+            ->andWhere('approvalTime <= :endApprovalTime')
+            ->andWhere('loginTime >= :loginStartTime')
+            ->andWhere('loginTime <= :loginEndTime')
+            ->andWhere('locked = :locked')
+            ->andWhere('level >= :greatLevel')
+            ->andWhere('UPPER(verifiedMobile) LIKE :verifiedMobile')
+            ->andWhere('type LIKE :type')
+            ->andWhere('id IN ( :userIds)')
+            ->andWhere('inviteCode = :inviteCode')
+            ->andWhere('inviteCode != :NoInviteCode')
+            ->andWhere('id NOT IN ( :excludeIds )');
 
         if (array_key_exists('hasVerifiedMobile', $conditions)) {
             $builder = $builder->andWhere('verifiedMobile != :verifiedMobileNull');
