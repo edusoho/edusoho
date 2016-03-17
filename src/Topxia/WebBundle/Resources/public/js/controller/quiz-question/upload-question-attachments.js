@@ -65,7 +65,7 @@ define(function(require, exports, module) {
 		            },			
 					init: {
 						FileUploaded: function(up, file, info) {
-							response = $.parseJSON(info.response);
+							var response = $.parseJSON(info.response);
 
 							var url = divData.callback;
 							if (url) {
@@ -84,10 +84,8 @@ define(function(require, exports, module) {
 							}
 
 							var fileId = response.id;
-							var targetId = response.targetId;
-							self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/question/attachment/"+fileId+"/download'>" + file.name + "</a>");
 
-
+							self.get("editor").insertHtml("附件:  <a href='/file/download/" + fileId + "'>" + file.name + "</a>");
 						},
 
 						QueueChanged: function(up){

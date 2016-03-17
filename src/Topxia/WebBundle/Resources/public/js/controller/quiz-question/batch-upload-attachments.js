@@ -90,7 +90,7 @@ define(function(require, exports, module) {
                         $.post(url, serverData, function(response) {
                             $("div[role='progressbar']", "#fileProgressBar"+fileIndex).text("完成");
                             var targetId = that.element.data('targetId');
-                            self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/question/attachment/"+response.id+"/download'>" + file.name + "</a>");
+                            self.get("editor").insertHtml("附件:  <a href='/file/download/" + response.id + "'>" + file.name + "</a>");
                         }, 'json');
                     }
                 });
