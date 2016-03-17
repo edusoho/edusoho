@@ -8,13 +8,20 @@ use Topxia\Service\File\UploadFileTagService;
 
 class UploadFileTagServiceImpl extends BaseService implements UploadFileTagService
 {
+	public function get($id)
+	{
+		return $this->getUploadFileTagDao()->get($id);
+	}
+
+	public function delete($id)
+	{
+		return $thid->getUploadFileTagDao()->delete($id);
+	}
+
 	public function edit($fileIds, $tagIds)
 	{
 		foreach ($fileIds as $fileId ) {
 			$tags = $this->getUploadFileTagDao()->findByFileId($fileId);
-			  // var_dump($tags);exit();
-
-			
 			foreach ($tagIds as $tagId ) {
 				$condition = array(
 					'fileId' => $fileId,
@@ -29,7 +36,6 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 				}
 			} 
 		}
-		// var_dump($this->getUploadFileTagDao()->get($result));exit();
 		return $this->getUploadFileTagDao()->get($result);
 
 	}

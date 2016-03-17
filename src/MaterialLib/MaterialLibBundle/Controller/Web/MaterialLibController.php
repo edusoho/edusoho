@@ -217,7 +217,10 @@ class MaterialLibController extends BaseController
             'tagIds' => $tagIds
             );
         $this->getUploadFileTagService()->edit($fileIds, $tagIds);
-        return true;  
+        return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
+            'tagss' => ArrayToolkit::column($this->getTagService()->findAllTags(0, PHP_INT_MAX), 'name')
+        ));
     }
 
     public function generateThumbnailAction(Request $request, $globalId)
