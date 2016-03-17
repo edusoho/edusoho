@@ -25,7 +25,9 @@ define(function(require, exports, module) {
                 'click .js-source-btn': 'onClickSourseBtn',
                 'click .js-collect-btn': 'onClickCollectBtn',
                 'click .js-manage-batch-btn': 'onClickManageBtn',
-                'click .js-batch-delete-btn': 'onClickDeleteBatchBtn'
+                'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
+                'click .js-batch-share-btn': 'onClickShareBatchBtn',
+                'click .js-batch-tag-btn': 'onClickTagBatchBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -162,6 +164,8 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(event.currentTarget);
                 $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').show();
+                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').show();
+                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-tag]').show();
 
             },
             onClickDeleteBatchBtn: function(event)
@@ -191,6 +195,57 @@ define(function(require, exports, module) {
                         }
                     });
                 }
+                
+            },
+            onClickShareBatchBtn: function(event)
+            {
+                if (confirm('确定要分享这些资源吗？')) {
+                    var self = this;   
+                    var $target = $(event.currentTarget);
+                    var ids = [];
+                    $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+                        ids.push(this.value);
+                    });
+                    if(ids == ""){
+                        Notify.danger('请先选择你要分享的资源!');
+                        return;  
+                    }
+
+                    $.post($target.data('url'),{"globalIds":ids},function(data){
+                        console.log(ids);
+                        if(data){
+                            Notify.success('分享资源成功');
+                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
+                            self.renderTable();
+                        } else {
+                            Notify.danger('分享资源失败');
+                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
+                            self.renderTable();
+                        }
+                    });
+                }
+                
+            },
+            onClickTagBatchBtn: function(event)
+            {
+                
+                var self = this;   
+                var $target = $(event.currentTarget);
+                var ids = [];
+                $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+                    ids.push(this.value);
+                });
+                if(ids == ""){
+                    Notify.danger('请先选择你要操作的资源!');
+                    return;  
+                }
+
+                // $.post($target.data('url'),{"globalIds":ids},function(data){
+                console.log($("#select-tag-items").val(ids));
+                
+                $("#modal").modal('show');
+                //});
+                
                 
             },
             submitForm: function(event)

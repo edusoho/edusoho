@@ -73,6 +73,25 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return array('success' => true);
     }
 
+    public function batchShare($ids)
+    {
+        $files = $this->getUploadFileService()->findFilesByIds($ids);
+        $globalIds = ArrayToolkit::column($files, 'globalId');
+        foreach ($globalIds as $key => $value) {
+            $this->checkPermission(Permission::EDIT, array('globalId' => $value));
+            $fields = array('isPublic' => '1');
+
+            $result = $this->getUploadFileService()->edit($value, $fields);
+            if (!$result) {
+                return false;
+            } else {
+                return true;
+            }
+            
+        }
+        return array('success' => true);
+    }
+
     public function download($globalId)
     {
         $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));

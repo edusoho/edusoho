@@ -35,8 +35,22 @@ class MaterialLibController extends BaseController
         $conditions['currentUserId'] = $currentUserId;
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
-            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
+            'tagNames' => ArrayToolkit::column($this->getTagService()->findAllTags(0, PHP_INT_MAX), 'name')
         ));
+    }
+
+    public function matchAction(Request $request)
+    {
+        $data = array();
+        $queryString = $request->query->get('q');
+        // $callback = $request->query->get('callback');
+        $tags = $this->getTagService()->getTagByLikeName($queryString);
+        foreach ($tags as $tag) {
+            $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
+        }
+        
+        return $this->createJsonResponse($data);
     }
 
     public function showMyMaterialLibFormAction(Request $request)
@@ -180,6 +194,36 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function batchShareAction(Request $request)
+    {
+        $data = $request->request->all();
+        if (isset($data['globalIds']) && $data['globalIds'] != "") {
+            $result = $this->getMaterialLibService()->batchShare($data['globalIds']);
+            return $this->createJsonResponse($result);
+        }
+        return $this->createJsonResponse(false);
+    }
+
+    public function batchTagShowAction(Request $request)
+    {
+        $data      = $request->request->all();
+
+        $tagNames = preg_split('/,/', $data['tags']);
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
+        $tags = $this->getTagService()->findTagsByNames($tagNames);
+        $tagIds = ArrayToolkit::column($tags, 'id');
+        $conditions = array(
+            'fileIds' => $fileIds,
+            'tagIds' => $tagIds
+                );
+        $this->getUploadFileTagService()->edit($fileIds, $tagIds);
+        return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
+            'tagNames' => ArrayToolkit::column($this->getTagService()->findAllTags(0, PHP_INT_MAX), 'name')
+        ));
+    }
+
     public function generateThumbnailAction(Request $request, $globalId)
     {
         $second = $request->query->get('second');
@@ -237,5 +281,10 @@ class MaterialLibController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService2');
+    }
+
+    protected function getUploadFileTagService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileTagService');
     }
 }
