@@ -380,7 +380,9 @@ factory('cordovaUtil', ['$rootScope', 'sideDelegate', 'localStore', 'platformUti
 
 		var isNative = platformUtil.native;
 		for ( var func in cordovaUtil) {
-			self[func] = isNative ? esNativeCore[func] : cordovaUtil[func];
+			var nativeFunc = window.esNativeCore ? esNativeCore[func]: null;
+			
+			self[func] = isNative ? nativeFunc : cordovaUtil[func];
 		}
 
 		return self;
