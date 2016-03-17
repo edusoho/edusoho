@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\User\Tests;
 
+use Topxia\Common\SimpleValidator;
 use Topxia\Service\Common\BaseTestCase;
 
 // TODO
@@ -149,9 +150,8 @@ class AuthServiceTest extends BaseTestCase
 
     public function testCheckUserNameWithNumNickname()
     {
-        $result = $this->getAuthService()->checkUserName('11111111111');
-        $this->assertEquals('error_match', $result[0]);
-        $this->assertEquals('用户名不允许以1开头的11位纯数字!', $result[1]);
+        $result = SimpleValidator::nickname('11111111111');
+        $this->assertEquals(false, $result);
     }
 
     public function testCheckEmailWithUnexistEmail()
