@@ -136,7 +136,7 @@
           {% endif %}
         {% endif %}
 
-        {% if lesson.type != 'testpaper' %}
+        {% if lesson.type != 'testpaper' and course.type != 'open'%}
           <li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>{{'添加资料'|trans}}</a></li>
           <li class="divider"></li>
         {% endif %}
