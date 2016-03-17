@@ -392,7 +392,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
             $collections       = $this->findCollectionsByUserId($conditions['currentUserId']);
             $fileIds           = ArrayToolkit::column($collections, 'fileId');
-            $conditions['ids'] = $fileIds;
+            $conditions['ids'] = $fileIds ? $fileIds : array(0);
         }
 
         if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {

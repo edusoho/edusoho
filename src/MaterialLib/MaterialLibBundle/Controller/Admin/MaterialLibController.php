@@ -6,7 +6,6 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
-use Topxia\Service\Taxonomy\Impl\TagService;
 
 class MaterialLibController extends BaseController
 {
@@ -17,6 +16,9 @@ class MaterialLibController extends BaseController
 
     public function manageAction(Request $request)
     {
+        // $conditions = $request->query->all();
+        // var_dump($conditions);
+
         return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
             'type'          => $request->query->get('type', ''),
             'courseId'      => $request->query->get('courseId', ''),
@@ -38,7 +40,7 @@ class MaterialLibController extends BaseController
             $results['count'],
             20
         );
-
+        var_dump($conditions);
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],

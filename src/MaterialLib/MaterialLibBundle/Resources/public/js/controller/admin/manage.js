@@ -19,7 +19,8 @@ define(function(require, exports, module) {
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
-                'click .js-reconvert-btn': 'onClickReconvertBtn'
+                'click .js-reconvert-btn': 'onClickReconvertBtn',
+                'click .js-search-type li': 'onClickSearchTypeBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -117,6 +118,12 @@ define(function(require, exports, module) {
                 }).always(function(){
                     $target.button('reset');
                 });
+            },
+            onClickSearchTypeBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                console.log($(".dropdown-toggle"));
             },
             submitForm: function(event)
             {
