@@ -2,14 +2,6 @@
 
 {% set script_controller = 'materiallibbundle/controller/material-lib/index' %}
 
-
-{% 
-  set script_arguments = {
-    categoryUrl: path('category_all'),
-    tagMatchUrl: path('tag_match'),
-    locationUrl: path('location_all')
-  } 
-%}
 {% block page_body %}
         
 <form id="material-search-form" class="form-inline" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
@@ -22,6 +14,7 @@
     <button type="button" data-value="sharing" class="js-source-btn btn btn-default">来自分享</button>
     <input type="hidden" name="sourceFrom" value="my">
   </div>
+l
 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
   {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
@@ -104,7 +97,7 @@
             
             <label class="col-md-2 control-label">标签</label>
             <div class="col-md-8 controls">
-              <input type="text" id="tags" name="tags" required="required" class="width-full" tabindex="-1" value="{{ tagss|join(',') }}" data-explain="将会应用于按标签搜索课程、相关课程的提取等">
+              <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}"name="tags" required="required" class="width-full" tabindex="-1" value="{{ tagss|join(',') }}" data-explain="将会应用于按标签搜索课程、相关课程的提取等">
               <div class="help-block">将会应用于按标签搜索课程、相关课程的提取等</div>
             </div>
             

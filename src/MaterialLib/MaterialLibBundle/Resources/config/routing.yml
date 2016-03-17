@@ -18,6 +18,10 @@ material_lib_save_sharing:
     pattern: /material/lib/my/sharing/save
     defaults: { _controller: MaterialLibBundle:MaterialLib:saveShare }
 
+material_tag_show_match:
+    pattern: /material/lib/tag/match_jsonp
+    defaults: { _controller: MaterialLibBundle:MaterialLib:match }
+
 material_lib_show_sharing_history:
     pattern: /material/lib/my/sharing/history
     defaults: { _controller: MaterialLibBundle:MaterialLib:showShareHistory }

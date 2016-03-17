@@ -116,20 +116,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
     }
 
-    public function batchTags($fileIds, $tagIds)
-    {
-        foreach ($fileIds as $fileId ) {
-            foreach ($tagIds as $tagId ) {
-                $fields = array(
-                    'fileId' => $fileId,
-                    'tagId' => $tagId
-                    );
-                $this->getUploadFileTagDao()->add($fields);
-            }
-        }
-        return 1;
-    }
-
     public function getDownloadFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);

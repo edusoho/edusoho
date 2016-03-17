@@ -40,6 +40,19 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function matchAction(Request $request)
+    {
+        $data = array();
+        var_dump($data);exit();
+        $queryString = $request->query->get('q');
+        $callback = $request->query->get('callback');
+        $tags = $this->getTagService()->getTagByLikeName($queryString);
+        foreach ($tags as $tag) {
+            $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
+        }
+        return new JsonResponse($data);
+    }
+
     public function showMyMaterialLibFormAction(Request $request)
     {
         $currentUser          = $this->getCurrentUser();
@@ -199,9 +212,12 @@ class MaterialLibController extends BaseController
 
         $tags = $this->getTagService()->findTagsByNames($tagNames);
         $tagIds = ArrayToolkit::column($tags, 'id');
-        
-        return $this->getUploadFileService()->batchTags($fileIds, $tagIds);
-        // return $this->createJsonResponse(true);
+        $conditions = array(
+            'fileIds' => $fileIds,
+            'tagIds' => $tagIds
+            );
+        $this->getUploadFileTagService()->edit($fileIds, $tagIds);
+        return true;  
     }
 
     public function generateThumbnailAction(Request $request, $globalId)
@@ -261,5 +277,10 @@ class MaterialLibController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService2');
+    }
+
+    protected function getUploadFileTagService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileTagService');
     }
 }
