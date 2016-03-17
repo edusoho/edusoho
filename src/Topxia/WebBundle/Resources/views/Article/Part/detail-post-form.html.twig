@@ -4,7 +4,7 @@
   </div>
   <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" {% if not app.user %}disabled{% endif %} name="content"></textarea>
   <div class="form-group clearfix">
-  	{% if not app.user %}<a href="{{ path('login') }}">登录</a> 后发表看法{% endif %}
+  	{% if not app.user %}<a href="{{ path('login') }}">{{'登陆'|trans}}</a>{{'后发表看法'|trans}}{% endif %}
     <button type="submit" class="btn btn-default pull-right {% if not app.user %}disabled{% endif %}" data-loading-text="{{'正在评论'|trans}}">{{'发表评论'|trans}}</button>
   </div>
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
