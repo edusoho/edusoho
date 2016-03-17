@@ -102,9 +102,7 @@ class CourseStudentManageController extends BaseController
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
             $user = $this->getUserService()->getUserByLoginField($data['queryfield']);
-            if (empty($data['price'])) {
-                $data['price'] = 0;
-            }
+
             $data["isAdminAdded"] = 1;
 
             list($course, $member, $order) = $this->getCourseMemberService()->becomeStudentAndCreateOrder($user["id"], $course["id"], $data);
@@ -383,8 +381,8 @@ class CourseStudentManageController extends BaseController
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
-            'request'      => $request,
-            'targetId'      => $id,
+            'request'    => $request,
+            'targetId'   => $id,
             'targetType' => 'course'
         ));
     }
