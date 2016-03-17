@@ -7,7 +7,7 @@
     {% endif %}
   {% endif %}
 
-  {% if cardDetail.targetType == "classroom" %}
+  {% if cardDetail.targetType == "classroom" or cardDetail.targetType == "fullDiscount" %}
     <p class="title">{{'可用于抵扣全站班级'|trans}}</p>
   {% endif %}
 
@@ -25,5 +25,8 @@
     {% if cardDetail.type == "minus" %}￥{% endif %}<strong>{{ cardDetail.rate }}</strong>{% if cardDetail.type == "discount" %}{{'折'|trans}}{% endif %}
   </p>
   <p>{{'有效期截止：'|trans}}<span>{{ cardDetail.deadline|date('Y年n月d日') }}</span></p>
+  {% if cardDetail.targetType == 'fullDiscount' and cardDetail.fullDiscountPrice %}
+    <p>{{'使用条件：'|trans}}<span>满{{ (cardDetail.fullDiscountPrice) }}可用</span></p>
+  {% endif %}
   <div class="stamp stamp-outdate"></div>
 </div>
