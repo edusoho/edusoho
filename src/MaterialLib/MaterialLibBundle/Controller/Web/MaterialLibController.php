@@ -43,14 +43,14 @@ class MaterialLibController extends BaseController
     public function matchAction(Request $request)
     {
         $data = array();
-        var_dump($data);exit();
         $queryString = $request->query->get('q');
         $callback = $request->query->get('callback');
         $tags = $this->getTagService()->getTagByLikeName($queryString);
         foreach ($tags as $tag) {
             $data[] = array('id' => $tag['id'],  'name' => $tag['name'] );
         }
-        return new JsonResponse($data);
+        
+        return $this->createJsonResponse($data);
     }
 
     public function showMyMaterialLibFormAction(Request $request)

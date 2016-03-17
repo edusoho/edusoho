@@ -19,8 +19,8 @@ material_lib_save_sharing:
     defaults: { _controller: MaterialLibBundle:MaterialLib:saveShare }
 
 material_tag_show_match:
-    pattern: /material/lib/tag/match_jsonp
-    defaults: { _controller: MaterialLibBundle:MaterialLib:match }
+    pattern: /material/lib/tag/match
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:match }
 
 material_lib_show_sharing_history:
     pattern: /material/lib/my/sharing/history
