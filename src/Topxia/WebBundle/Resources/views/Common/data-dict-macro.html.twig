@@ -1,8 +1,29 @@
 {% macro courseStatus(status) %}
-  {% set page = { 
-    draft: '<span class="text-muted">未发布</span>', 
-    published: '<span class="text-success">已发布</span>', 
-    closed: '<span class="text-danger">已关闭</span>' } 
-  %}
-  {{page[status]|raw}}
-{% endmacro  %}
+    {% if status == 'draft' %}
+        <span class="text-muted">{{ '未发布'|trans }}</span>
+    {% elseif  status == 'published' %}
+        <span class="text-success">{{ '已发布'|trans }}</span>
+    {% elseif status == 'closed' %}
+        <span class="text-danger">{{ '已关闭'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro fileType(type) %}
+    {% if type == 'video' %}
+        <span class="glyphicon glyphicon-facetime-video text-success">{{ '视频'|trans }}</span>
+    {% elseif type == 'audio' %}
+        <span class="glyphicon glyphicon-music text-success">{{ '音频'|trans }}</span>
+    {% elseif type == 'document' %}
+        <span class="glyphicon glyphicon-briefcase text-success">{{ '文档'|trans }}</span>
+    {% elseif type == 'image' %}
+        <span class="glyphicon glyphicon-picture text-success">{{ '图片'|trans }}</span>
+    {% elseif type == 'other' %}
+        <span class="glyphicon glyphicon-question-sign text-success">{{ '其他'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+    
+    
+   
+    
+    
+

@@ -25,14 +25,7 @@ fileType:
     ppt: PPT
     flash: Flash
     other: 其他
-
-'fileType:html':
-    video: <span class="glyphicon glyphicon-facetime-video text-success">视频</span>
-    audio: <span class="glyphicon glyphicon-music text-success">音频</span>
-    document: <span class="glyphicon glyphicon-briefcase text-success">文档</span>
-    image: <span class="glyphicon glyphicon-picture text-success">图片</span>
-    other: <span class="glyphicon glyphicon-question-sign text-success">其他</span>
-
+    
 orderStatus:
     created: 未付款
     paid: 已付款
