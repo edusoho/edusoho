@@ -157,10 +157,14 @@ class LiveCourseController extends BaseController
 
     public function liveCourseListAction(Request $request)
     {
+        $liveLessons   = $this->getCourseService()->searchLessons(array('status' => 'published', 'type' => 'live'), array('startTime', 'ASC'), 0, PHP_INT_MAX);
+        $liveCourseIds = array_unique(ArrayToolkit::column($liveLessons, 'courseId'));
+
         $conditions = array(
-            'status'   => 'published',
-            'type'     => 'live',
-            'parentId' => 0
+            'status'    => 'published',
+            'type'      => 'live',
+            'parentId'  => 0,
+            'courseIds' => $liveCourseIds
         );
 
         $categoryId = $request->query->get('categoryId', '');
