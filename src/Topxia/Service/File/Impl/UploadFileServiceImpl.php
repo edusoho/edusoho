@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\File\Impl;
 
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
@@ -132,9 +133,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
-        $file = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
-
-        $file = $this->getUploadFileDao()->addFile($file);
+        $file         = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
+        $file['uuid'] = Uuid::uuid4();
+        $file         = $this->getUploadFileDao()->addFile($file);
         
         return $file; 
     }

@@ -83,9 +83,9 @@ define(function(require, exports, module) {
 								$(".plupload_start").addClass("plupload_disabled");
 							}
 
-							var fileId = response.id;
+							var uuid = response.uuid;
 
-							self.get("editor").insertHtml("附件:  <a href='/file/download/" + fileId + "'>" + file.name + "</a>");
+							self.get("editor").insertHtml("附件:  <a href='/file/download/" + uuid + "'>" + file.name + "</a>");
 						},
 
 						QueueChanged: function(up){

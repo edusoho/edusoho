@@ -11,8 +11,8 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     public function getFile($id)
     {
-        $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
+        $sql = "SELECT * FROM {$this->table} WHERE id = ? or uuid = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($id, $id)) ?: null;
     }
 
     public function getFileByHashId($hash)
