@@ -69,7 +69,9 @@ seajs.config({
         'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
-        'video-player': 'balloon-video-player/1.3.0/index'
+        'video-player': 'balloon-video-player/1.3.0/index',
+        'ztree-core': 'jquery-plugin/zTree/3.5.21/js/ztree.core-debug',
+        'ztree-excheck': 'jquery-plugin/zTree/3.5.21/js/ztree.excheck-debug',
     },
 
     // 预加载项

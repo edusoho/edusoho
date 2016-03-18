@@ -3,6 +3,8 @@ define(function(require, exports, module) {
     var Widget     = require('widget');
     var Notify = require('common/bootstrap-notify');
     var Validator = require('bootstrap.validator');
+    var zTreeCheckSelect = require('topxiawebbundle/controller/default/zTreeCheckSelect');
+    var zTreeSelect = require('topxiawebbundle/controller/default/zTreeSelect');
     require('common/validator-rules').inject(Validator);
     require('jquery.nouislider');
     require('jquery.nouislider-css');
@@ -70,7 +72,6 @@ define(function(require, exports, module) {
         initBuildFields: function() {
             this.initDifficultyPercentageSlider();
             //@todo, refact it, wellming.
-            this.initRangeField();
             this.initQuestionTypeSortable();
 
             var validator = this.get('validator'),
@@ -114,6 +115,7 @@ define(function(require, exports, module) {
                 data: $form.serialize(),
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response);
                     if (response.status != 'yes') {
                         var missingTexts = [];
                         var types = {
@@ -250,29 +252,8 @@ define(function(require, exports, module) {
         },
 
         getQuestionNums: function(){
-            var rangeValue = $('input[name=range]:checked').val();
-            var startLessonId = $("#testpaper-range-start").val();
-            var endLessonId = $("#testpaper-range-end").val();
-
-            var options = $("#testpaper-range-start").children();
-            var status = false;
-            var targets = "";
-            $.each(options,function(i,n){
-                var option = $(n);
-                var value = option.attr("value");
-                if(value == startLessonId){
-                    status = true;
-                    targets += value+",";
-                    if(value == endLessonId){
-                        status = false;
-                    }
-                } else if(value == endLessonId){
-                    status = false;
-                    targets += value+",";
-                } else if(status){
-                    targets += value+",";
-                }
-            });
+            var rangeValue = 'lesson';
+            var targets = $('#ranges').val();
             var courseId = $("#testpaper-form").data("courseId");
             $.get('../../../../../course/'+courseId+'/manage/testpaper/get_question_num', {range: rangeValue, targets:targets}, function(data){
                 $('[role="questionNum"]').text(0);
@@ -282,103 +263,21 @@ define(function(require, exports, module) {
             });
         },
 
-        initRangeField: function() {
-            var self = this;
-            $('input[name=range]').on('click', function() {
-                if ($(this).val() == 'lesson') {
-                    $("#testpaper-range-selects").show();
-                } else {
-                    $("#testpaper-range-selects").hide();
-                }
-
-                self._refreshRangesValue();
-                self.getQuestionNums();
-            });
-
-            $("#testpaper-range-start").change(function() {
-                var startIndex = self._getRangeStartIndex();
-
-                self._resetRangeEndOptions(startIndex);
-
-                self._refreshRangesValue();
-                self.getQuestionNums();
-            });
-
-            $("#testpaper-range-end").change(function() {
-                self._refreshRangesValue();
-                self.getQuestionNums();
-            });
-
-        },
-
-        _resetRangeEndOptions: function(startIndex) {
-            if (startIndex > 0) {
-                startIndex--;
-                var $options = $("#testpaper-range-start option:gt(" + startIndex + ")");
-            } else {
-                var $options = $("#testpaper-range-start option");
-            }
-
-            var selected = $("#testpaper-range-end option:selected").val();
-
-            $("#testpaper-range-end option").remove();
-            $("#testpaper-range-end").html($options.clone());
-            $("#testpaper-range-end option").each(function() {
-                if ($(this).val() == selected) {
-                    $("#testpaper-range-end").val(selected);
-                }
-            });
-        },
-
-        _refreshRangesValue: function() {
-            var $ranges = $('input[name=ranges]');
-            if ($('input[name=range]:checked').val() != 'lesson') {
-                $ranges.val('');
-                return;
-            }
-
-            var startIndex = this._getRangeStartIndex();
-            var endIndex = this._getRangeEndIndex();
-
-            if (startIndex < 0 || endIndex < 0) {
-                $ranges.val('');
-                return;
-            }
-
-            var values = [];
-            for (var i = startIndex; i <= endIndex; i++) {
-                values.push($("#testpaper-range-start option:eq(" + i + ")").val());
-            }
-
-            $ranges.val(values.join(','));
-        },
-
-        _getRangeStartIndex: function() {
-            var $startOption = $("#testpaper-range-start option:selected");
-            return parseInt($("#testpaper-range-start option").index($startOption));
-        },
-
-        _getRangeEndIndex: function() {
-            var selected = $("#testpaper-range-end option:selected").val();
-            if (selected == '') {
-                return -1;
-            }
-
-            var index = -1;
-            $("#testpaper-range-start option").each(function(i, item) {
-                if ($(this).val() == selected) {
-                    index = i;
-                }
-            });
-
-            return index;
-        }
     });
 
     exports.run = function() {
-        new TestpaperForm({
+        var testpaperForm = new TestpaperForm({
             element: '#testpaper-form'
         });
+
+        zTreeCheckSelect = new zTreeCheckSelect({
+            selectInput: 'range-input',
+            selectInputValue: 'ranges',
+            zTreeRoot: 'range-tree',
+            checkEnable: true,
+            func:testpaperForm.getQuestionNums
+        });
+
 
 
     }

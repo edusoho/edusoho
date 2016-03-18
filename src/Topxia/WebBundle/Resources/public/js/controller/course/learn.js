@@ -232,7 +232,19 @@ define(function(require, exports, module) {
                 }
                 return data;
             }
-            $.get(this.get('courseUri') + '/lesson/' + id, function(lesson) {
+            
+            if(/preview=1/.test(window.location.href)){
+                var url = this.get('courseUri') + '/lesson/' + id + '?preview=' + 1;
+            }else{
+                url = this.get('courseUri') + '/lesson/' + id;
+            }
+
+            $.get(url, function(lesson) {
+
+                if((lesson.studyModel == 'ordered')　&& !/preview=1/.test(window.location.href)){
+                    $("#lesson-study-model-content").show();
+                    return;
+                }
 
                 that.set('type', lesson.type);
                 that.element.find('[data-role=lesson-title]').html(lesson.title);
@@ -267,7 +279,7 @@ define(function(require, exports, module) {
                     $("#lesson-unpublished-content").show();
                     return;
                 }
-
+                    
                 var number = lesson.number - 1;
 
                 if (lesson.canLearn.status != 'yes') {
