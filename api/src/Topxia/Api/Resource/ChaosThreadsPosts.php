@@ -71,9 +71,9 @@ class ChaosThreadsPosts extends BaseResource
         $conditions  = array(
             'userId' => $currentUser['id']
         );
-        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions,'threadId');
+        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions, 'threadId');
         $start = $start == -1 ? rand(0, $total - 1) : $start;
-        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions,'',$start,$limit,'threadId');
+        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions, '', $start, $limit, 'threadId');
 
         $courseIds = ArrayToolkit::column($posts, "courseId");
 
@@ -87,12 +87,15 @@ class ChaosThreadsPosts extends BaseResource
 
         foreach ($posts as $post) {
             $thread = $this->getCourseThreadService()->getThread($post['courseId'], $post['threadId']);
+
             if (empty($thread)) {
                 continue;
             }
+
             if ($thread['userId'] == $currentUser['id']) {
                 continue;
             }
+
             $threadPosts                = array();
             $threadPosts['title']       = $thread['title'];
             $threadPosts['type']        = $thread['type'];
@@ -100,6 +103,7 @@ class ChaosThreadsPosts extends BaseResource
             $threadPosts['id']          = $post['id'];
             $threadPosts['content']     = $post['content'];
             $threadPosts['createdTime'] = $post['createdTime'];
+
             foreach ($courses as $course) {
                 if ($post['courseId'] == $course['id']) {
                     $threadPosts['courseId']      = $post['id'];
@@ -110,8 +114,10 @@ class ChaosThreadsPosts extends BaseResource
                     break;
                 }
             }
+
             array_push($courseThreadPosts, $threadPosts);
         }
+
         return $courseThreadPosts;
     }
 

@@ -47,7 +47,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadDao()->findEliteThreadsByType($type, $status, $start, $limit);
     }
 
-    public function findThreadsByIds(array $ids){
+    public function findThreadsByIds(array $ids)
+    {
         return $this->getThreadDao()->findThreadsByIds($ids);
     }
 
@@ -169,22 +170,23 @@ class ThreadServiceImpl extends BaseService implements ThreadService
     {
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
     }
-    
-    public function searchThreadPosts($conditions,$sort, $start, $limit,$groupBy)
+
+    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy)
     {
-        if(is_array($sort)){
+        if (is_array($sort)) {
             $orderBy = $sort;
-        }elseif ($sort == 'createdTimeByAsc') {
+        } elseif ($sort == 'createdTimeByAsc') {
             $orderBy = array('createdTime', 'ASC');
         } else {
             $orderBy = array('createdTime', 'DESC');
         }
-        return $this->getThreadPostDao()->searchThreadPosts($conditions,$orderBy,$start,$limit,$groupBy);
+
+        return $this->getThreadPostDao()->searchThreadPosts($conditions, $orderBy, $start, $limit, $groupBy);
     }
 
-    public function searchThreadPostsCount($conditions,$groupBy)
+    public function searchThreadPostsCount($conditions, $groupBy)
     {
-        $this->getThreadPostDao()->searchThreadPostsCount($conditions,$groupBy);
+        $this->getThreadPostDao()->searchThreadPostsCount($conditions, $groupBy);
     }
 
     public function createThread($thread)
