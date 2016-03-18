@@ -47,4 +47,14 @@
         <span class="text-muted">{{ '已取消'|trans }}</span>
     {% endif %}
 {% endmacro %}
-:
+
+{% macro logLevel(level) %}
+    {% if level == 'info' %}
+        <span>{{ '提示'|trans }}</span>
+    {% elseif level == 'warning' %}
+        <span class="text-warning">{{ '警告'|trans }}</span>
+    {% elseif level == 'error' %}
+        <span class="text-danger">{{ '错误'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
