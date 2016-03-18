@@ -25,7 +25,8 @@ class LogDaoImpl extends BaseDao implements LogDao
 	        ->from($this->table, $this->table);
         $builder->addOrderBy($sort[0], $sort[1]);
 
-		$builder->setFirstResult($start)->setMaxResults($limit);    
+		$builder->setFirstResult($start)->setMaxResults($limit);
+  
        	return $builder->execute()->fetchAll() ? : array();
 	}
 
@@ -41,7 +42,6 @@ class LogDaoImpl extends BaseDao implements LogDao
 	{
 		$conditions = array_filter($conditions);
 
-
 		$builder = $this->createDynamicQueryBuilder($conditions)
 			->andWhere('module = :module')
 			->andWhere('action = :action')
@@ -49,7 +49,8 @@ class LogDaoImpl extends BaseDao implements LogDao
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
 			->andWhere('createdTime < :endDateTime')
-			->andWhere('userId IN ( :userIds )');
+			->andWhere('userId IN ( :userIds )')
+			->andWhere('data Like :data');
 
 		return $builder;
 	}
