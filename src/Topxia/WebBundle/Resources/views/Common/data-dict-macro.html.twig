@@ -68,7 +68,6 @@
     {% endif %}
 {% endmacro %}
 
-
 {% macro articleStatus(status) %}
     {% if status == 'published' %}
         <span class="text-success">{{ '已发布'|trans }}</span>
@@ -76,5 +75,15 @@
         <span class="text-muted">{{ '未发布'|trans }}</span>
     {% elseif status == 'trash' %}
         <span class="text-warning">{{ '回收站'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% macro discountStatus(status) %}
+    {% if status == 'unstart' %}
+        <span class="text-muted">{{ '未开始'|trans }}</span>
+    {% elseif status == 'running' %}
+        <span class="text-success">{{ '进行中'|trans }}</span>
+    {% elseif status == 'finished' %}
+        <span class="text-muted">{{ '已结束'|trans }}</span>
     {% endif %}
 {% endmacro %}

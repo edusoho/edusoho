@@ -236,11 +236,6 @@ discountStatus:
     running: 进行中
     finished: 已结束
 
-'discountStatus:html':
-    unstart: <span class="text-muted">未开始</span>
-    running: <span class="text-success">进行中</span>
-    finished: <span class="text-muted">已结束</span>
-
 discountAuditStatus:
     passed: 已通过
     rejected: 未通过
