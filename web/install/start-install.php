@@ -194,9 +194,8 @@ function install_step3($init_data = 0)
             $init->initNavigations();
             $init->initBlocks();
             $init->initThemes();
-            $init->initRefundSetting();
-            $init->initArticleSetting();
             $init->initDefaultSetting();
+            $init->initSetting($admin);
             $init->initCrontabJob();
         } else {
             $init->deleteKey();
@@ -521,53 +520,7 @@ class SystemInit
         return $keys;
     }
 
-    public function initRefundSetting()
-    {
-        $setting = array(
-            'maxRefundDays'       => 10,
-            'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
-            'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
-            'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
-        );
-        $setting = $this->getSettingService()->set('refund', $setting);
-    }
-
-    public function initArticleSetting()
-    {
-        $setting = array(
-            'name' => '资讯频道', 'pageNums' => 20
-        );
-        $setting = $this->getSettingService()->set('article', $setting);
-    }
-
-    public function initSiteSettings($settings)
-    {
-        $default = array(
-            'name'              => $settings['sitename'],
-            'slogan'            => '',
-            'url'               => '',
-            'logo'              => '',
-            'seo_keywords'      => '',
-            'seo_description'   => '',
-            'master_email'      => $settings['email'],
-            'icp'               => '',
-            'analytics'         => '',
-            'status'            => 'open',
-            'closed_note'       => '',
-            'homepage_template' => 'less'
-        );
-
-        $this->getSettingService()->set('site', $default);
-    }
-
-    public function initDeveloperSetting()
-    {
-        $developer                       = $this->getSettingService()->get('developer', array());
-        $developer['cloud_api_failover'] = 1;
-        $this->getSettingService()->set('developer', $developer);
-    }
-
-    public function initRegisterSetting($user)
+    public function initSetting($user)
     {
         $emailBody = <<<'EOD'
 Hi, {{nickname}}
@@ -587,18 +540,48 @@ Hi, {{nickname}}
 (这是一封自动产生的email，请勿回复。)
 EOD;
 
-        $default = array(
-            'register_mode'          => 'email',
-            'email_activation_title' => '请激活您的{{sitename}}账号',
-            'email_activation_body'  => trim($emailBody),
-            'welcome_enabled'        => 'opened',
-            'welcome_sender'         => $user['nickname'],
-            'welcome_methods'        => array(),
-            'welcome_title'          => '欢迎加入{{sitename}}',
-            'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
+        $settings = array(
+            'refund'    => array(
+                'maxRefundDays'       => 10,
+                'applyNotification'   => '您好，您退款的{{item}}，管理员已收到您的退款申请，请耐心等待退款审核结果。',
+                'successNotification' => '您好，您申请退款的{{item}} 审核通过，将为您退款{{amount}}元。',
+                'failedNotification'  => '您好，您申请退款的{{item}} 审核未通过，请与管理员再协商解决纠纷。'
+            ),
+            'article'   => array(
+                'name' => '资讯频道', 'pageNums' => 20
+            ),
+            'site'      => array(
+                'name'              => $settings['sitename'],
+                'slogan'            => '',
+                'url'               => '',
+                'logo'              => '',
+                'seo_keywords'      => '',
+                'seo_description'   => '',
+                'master_email'      => $settings['email'],
+                'icp'               => '',
+                'analytics'         => '',
+                'status'            => 'open',
+                'closed_note'       => '',
+                'homepage_template' => 'less'
+            ),
+            'developer' => array('cloud_api_failover' => 1),
+            'auth'      => array(
+                'register_mode'          => 'email',
+                'email_activation_title' => '请激活您的{{sitename}}账号',
+                'email_activation_body'  => trim($emailBody),
+                'welcome_enabled'        => 'opened',
+                'welcome_sender'         => $user['nickname'],
+                'welcome_methods'        => array(),
+                'welcome_title'          => '欢迎加入{{sitename}}',
+                'welcome_body'           => '您好{{nickname}}，我是{{sitename}}的管理员，欢迎加入{{sitename}}，祝您学习愉快。如有问题，随时与我联系。'
+            )
         );
 
-        $this->getSettingService()->set('auth', $default);
+        foreach ($settings as $key => $value) {
+            $setting = $this->getSettingService()->get($key, array());
+            $setting = array_merge($value, $setting);
+            $this->getSettingService()->set($key, $setting);
+        }
     }
 
     public function initMailerSetting($sitename)
