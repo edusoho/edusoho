@@ -914,6 +914,12 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
 
     public function canLookTestpaper($resultId)
     {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
         $paperResult = $this->getTestpaperResult($resultId);
 
         if (!$paperResult) {
@@ -925,8 +931,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
         if (!$paper) {
             throw $this->createNotFoundException('试卷不存在!');
         }
-
-        $user = $this->getCurrentUser();
 
         if (($paperResult['status'] == 'doing' || $paper['status'] == 'paused') && ($paperResult['userId'] != $user['id'])) {
             throw $this->createNotFoundException('无权查看此试卷');
@@ -942,7 +946,7 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $targetId = explode('/', $target[1]);
             $member   = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
 
-            if (!$member && ($paperResult['userId'] != $user['id'])) {
+            if ($paperResult['userId'] != $user['id']) {
                 throw $this->createNotFoundException('无权查看此试卷');
             }
 
