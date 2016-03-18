@@ -48,6 +48,13 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             $result = $this->getCloudFileService()->delete($globalId);
             if (isset($result['success']) && $result['success']) {
                 $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
+                if ($result) {
+                    $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+                    $fileIds = array($file['id']);
+                    $tagIds = array();
+                    $tags = $this->getUploadFileTagService()->edit($fileIds,$tagIds);
+                    
+                }
                 return $result;
             }
             return false;
@@ -70,6 +77,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 return false;
             }
         }
+        $fileIds = ArrayToolkit::column($files, 'id');
+        $tagIds = array();
+        $this->getUploadFileTagService()->edit($fileIds,$tagIds);
         return array('success' => true);
     }
 
@@ -173,4 +183,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->createService('MaterialLib:MaterialLib.CloudFileService');
     }
 
+    protected function getUploadFileTagService()
+    {
+        return $this->createService('File.UploadFileTagService');
+    }
 }
