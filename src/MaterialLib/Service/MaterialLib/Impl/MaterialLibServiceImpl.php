@@ -172,4 +172,5 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         return $this->createService('MaterialLib:MaterialLib.CloudFileService');
     }
+
 }

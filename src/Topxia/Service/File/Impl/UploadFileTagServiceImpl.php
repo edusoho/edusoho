@@ -39,7 +39,6 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 				}
 			} 
 		}
-		// var_dump($this->getUploadFileTagDao()->get($result));exit();
 		return $this->getUploadFileTagDao()->get($result);
 
 	}

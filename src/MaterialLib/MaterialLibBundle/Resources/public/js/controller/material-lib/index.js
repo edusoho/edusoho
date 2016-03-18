@@ -27,7 +27,8 @@ define(function(require, exports, module) {
                 'click .js-manage-batch-btn': 'onClickManageBtn',
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
-                'click .js-batch-tag-btn': 'onClickTagBatchBtn'
+                'click .js-batch-tag-btn': 'onClickTagBatchBtn',
+                'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -163,10 +164,13 @@ define(function(require, exports, module) {
             {
                 var self = this;
                 var $target = $(event.currentTarget);
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').show();
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').show();
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-tag]').show();
-
+                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
+            },
+            onClickFinishBatchBtn: function(event)
+            {
+                var self = this;
+                var$target = $(event.currentTarget);
+                $('#material-lib-items-panel').find('[data-role=batch-manage],[data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
             },
             onClickDeleteBatchBtn: function(event)
             {
@@ -185,11 +189,11 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),{"globalIds":ids},function(data){
                         if(data){
                             Notify.success('删除资源成功');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
                             self.renderTable();
                         } else {
                             Notify.danger('删除资源失败');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
                             self.renderTable();
                         }
                     });
@@ -213,11 +217,11 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),{"globalIds":ids},function(data){
                         if(data){
                             Notify.success('分享资源成功');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
+                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         } else {
                             Notify.danger('分享资源失败');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
+                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         }
                     });
