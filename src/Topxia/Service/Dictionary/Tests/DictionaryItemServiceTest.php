@@ -3,9 +3,9 @@ namespace Topxia\Service\Dictionary\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 
-class DictionaryServiceTest extends BaseTestCase
+class DictionaryItemServiceTest extends BaseTestCase
 {
-	public function testGetDictionary()
+	public function testGetDictionaryItem()
 	{
 		$dictionaryInfo = array(
 			'type' => 'quitReason',
@@ -14,14 +14,14 @@ class DictionaryServiceTest extends BaseTestCase
 			'createdTime' =>time()
 			);
 
-		$newDictionary = $this->getDictionaryService()->addDictionary($dictionaryInfo);
-		$dictionary = $this->getDictionaryService()->getDictionary($newDictionary['id']);
+		$newDictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
+		$dictionary = $this->getDictionaryItemService()->getDictionaryItem($newDictionaryItem['id']);
 
-		$this->assertEquals($dictionary,$newDictionary);
+		$this->assertEquals($dictionary,$newDictionaryItem);
 
 	}
 
-	public function testDeleteDictionary()
+	public function testDeleteDictionaryItem()
 	{
 		$dictionaryInfo = array(
 			'type' => 'quitReason',
@@ -30,13 +30,13 @@ class DictionaryServiceTest extends BaseTestCase
 			'createdTime' =>time()
 			);
 
-		$newDictionary = $this->getDictionaryService()->addDictionary($dictionaryInfo);
-		$this->getDictionaryService()->deleteDictionary($newDictionary['id']);
-		$result = $this->getDictionaryService()->getDictionary($newDictionary['id']);
+		$newDictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
+		$this->getDictionaryItemService()->deleteDictionaryItem($newDictionaryItem['id']);
+		$result = $this->getDictionaryItemService()->getDictionaryItem($newDictionaryItem['id']);
 		$this->assertEmpty($result);
 	}
 
-	public function testUpdateDictionary()
+	public function testUpdateDictionaryItem()
 	{
 		$dictionaryInfo = array(
 			'type' => 'quitReason',
@@ -45,13 +45,13 @@ class DictionaryServiceTest extends BaseTestCase
 			'createdTime' =>time()
 			);
 
-		$newDictionary = $this->getDictionaryService()->addDictionary($dictionaryInfo);
+		$newDictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
 
 		$updateInfo = array(
 			'name' => '教学',
 			'weight' => 2,
 			);
-		$dictionary = $this->getDictionaryService()->updateDictionary($newDictionary['id'], $updateInfo);
+		$dictionary = $this->getDictionaryItemService()->updateDictionaryItem($newDictionaryItem['id'], $updateInfo);
 
 		$this->assertEquals($dictionary['name'],$updateInfo['name']);
 		$this->assertEquals($dictionary['weight'],$updateInfo['weight']);
@@ -66,9 +66,9 @@ class DictionaryServiceTest extends BaseTestCase
 			'createdTime' =>time()
 			);
 
-		$newDictionary = $this->getDictionaryService()->addDictionary($dictionaryInfo);
+		$newDictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
 
-		$dictionary = $this->getDictionaryService()->getDictionary($newDictionary['id']);
+		$dictionary = $this->getDictionaryItemService()->getDictionaryItem($newDictionaryItem['id']);
 
 		$this->assertEquals($dictionary['type'],$dictionaryInfo['type']);
 		$this->assertEquals($dictionary['name'],$dictionaryInfo['name']);
@@ -84,7 +84,7 @@ class DictionaryServiceTest extends BaseTestCase
 			'weight' => 1,
 			'createdTime' =>time()
 			);
-		$dictionary = $this->getDictionaryService()->addDictionary($dictionaryInfo);
+		$dictionary = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
 
 		$dictionaryInfo2 = array(
 			'type' => 'quitReason',
@@ -92,18 +92,18 @@ class DictionaryServiceTest extends BaseTestCase
 			'weight' => 3,
 			'createdTime' =>time()
 			);
-		$dictionaryTemp = $this->getDictionaryService()->addDictionary($dictionaryInfo);
+		$dictionaryTemp = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
 
 		if ($dictionaryTemp['weight']>$dictionary['weight']) {
 			$dictionariesTemp = array($dictionaryTemp,$dictionary);
 		} else {
 			$dictionariesTemp = array($dictionary,$dictionaryTemp);
 		}
-		$dictionaries = $this->getDictionaryService()->findAllDictionariesOrderByWeight();
+		$dictionaries = $this->getDictionaryItemService()->findAllDictionariesOrderByWeight();
 		$this->assertEquals($dictionaries,$dictionariesTemp);
 	}
 
-	public function findDictionaryByName()
+	public function findDictionaryItemByName()
 	{
 		$dictionaryInfo = array(
 			'type' => 'quitReason',
@@ -111,15 +111,15 @@ class DictionaryServiceTest extends BaseTestCase
 			'weight' => 1,
 			'createdTime' =>time()
 			);
-		$newDictionary = $this->getDictionaryService()->addDictionary($dictionaryInfo);
+		$newDictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($dictionaryInfo);
 
-		$dictionary = $this->getDictionaryService()->getDictionayByName($newDictionary['name']);
+		$dictionary = $this->getDictionaryItemService()->findDictionaryByName($newDictionaryItem['name']);
 
-		$this->assertEquals($dictionay,$newDictionary);
+		$this->assertEquals($dictionay,$newDictionaryItem);
 	}
 
-	protected function getDictionaryService()
+	protected function getDictionaryItemService()
     {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
+        return $this->getServiceKernel()->createService('Dictionary.DictionaryItemService');
     }
 }

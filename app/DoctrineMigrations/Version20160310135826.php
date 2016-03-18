@@ -16,7 +16,7 @@ class Version20160310135826 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("CREATE TABLE `dictionary` (
+        $this->addSql("CREATE TABLE `dictionary_item` (
                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                      `type` varchar(255) NOT NULL,
                      `code` varchar(64) DEFAULT NULL,

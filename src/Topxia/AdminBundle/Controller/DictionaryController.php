@@ -9,9 +9,9 @@ class DictionaryController extends BaseController
 {
 	public function indexAction(Request $Request)
 	{
-		$dictionaries = $this->getDictionaryService()->findAllDictionariesOrderByWeight();
+		$dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
 		return $this->render('TopxiaAdminBundle:Dictionary:index.html.twig',array(
-			'dictionaries' =>$dictionaries
+			'dictionaryItems' =>$dictionaryItems
 			));
 	}
 
@@ -21,10 +21,10 @@ class DictionaryController extends BaseController
         	$conditions = $request->request->all();
         	$conditions['type'] = $type;
         	$conditions['createdTime'] = time();
-            $dictionary = $this->getDictionaryService()->addDictionary($conditions);
-            $dictionaries = $this->getDictionaryService()->findAllDictionariesOrderByWeight();
+            $dictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($conditions);
+            $dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
             return $this->render('TopxiaAdminBundle:Dictionary:tbody.html.twig',array(
-            	'dictionaries' =>$dictionaries
+            	'dictionaryItems' =>$dictionaryItems
             	));
         }
 
@@ -34,11 +34,11 @@ class DictionaryController extends BaseController
     public function checkNameAction(Request $request, $id)
     {
         $name = $request->query->get('value');
-        $dictionary = $this->getDictionaryService()->findDictionaryByName($name);
+        $dictionaryItem = $this->getDictionaryItemService()->findDictionaryItemByName($name);
 
         if (empty($name)) {
             $response = array('success' => false, 'message' => '请输入名称！');
-        } elseif ($dictionary && $name && $dictionary[0]['id'] != $id) {
+        } elseif ($dictionaryItem && $name && $dictionaryItem[0]['id'] != $id) {
             $response = array('success' => false, 'message' => '该名称已经存在！');
         } else {
             $response = array('success' => true);
@@ -49,7 +49,7 @@ class DictionaryController extends BaseController
 
     public function deleteAction(Request $request, $id)
     {
-        $result = $this->getDictionaryService()->deleteDictionary($id);
+        $result = $this->getDictionaryItemService()->deleteDictionaryItem($id);
         if ($result > 0) {
             return $this->createJsonResponse(array('status' => 'ok'));
         } else {
@@ -59,26 +59,26 @@ class DictionaryController extends BaseController
 
     public function editAction(Request $request, $id)
     {
-        $dictionary = $this->getDictionaryService()->getDictionary($id);
-        if (empty($dictionary)) {
+        $dictionaryItem = $this->getDictionaryItemService()->getDictionaryItem($id);
+        if (empty($dictionaryItem)) {
             throw $this->createNotFoundException();
         }
 
         if ($request->getMethod() == 'POST') {
-            $dictionary = $this->getDictionaryService()->updateDictionary($id, $request->request->all());
-            $dictionaries = $this->getDictionaryService()->findAllDictionariesOrderByWeight();
+            $dictionaryItem = $this->getDictionaryItemService()->updateDictionaryItem($id, $request->request->all());
+            $dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
             return $this->render('TopxiaAdminBundle:Dictionary:tbody.html.twig',array(
-            	'dictionaries' =>$dictionaries
+            	'dictionaryItems' =>$dictionaryItems
             	));
         }
 
         return $this->render('TopxiaAdminBundle:Dictionary:modal.html.twig', array(
-            'dictionary' => $dictionary
+            'dictionaryItem' => $dictionaryItem
         ));
     }
 
-    protected function getDictionaryService()
+    protected function getDictionaryItemService()
     {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
+        return $this->getServiceKernel()->createService('Dictionary.DictionaryItemService');
     }
 }
