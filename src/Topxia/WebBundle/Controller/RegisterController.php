@@ -74,10 +74,23 @@ class RegisterController extends BaseController
                 $this->authenticateUser($user);
             }
 
-            return $this->redirect($this->generateUrl('register_success', array(
-                'userId' => $user['id'],
-                'goto'   => $this->getTargetPath($request)
-            )));
+            $goto = $this->generateUrl('register_submited', array(
+                'id'   => $user['id'],
+                'hash' => $this->makeHash($user),
+                'goto' => $this->getTargetPath($request)
+            ));
+
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                $currentUser = $this->getCurrentUser();
+
+                if ($currentUser->isLogin()) {
+                    $this->authenticateUser($user);
+                }
+
+                $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+            }
+
+            return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
         }
 
         $inviteCode = '';
@@ -102,14 +115,11 @@ class RegisterController extends BaseController
 
     public function successAction(Request $request)
     {
-        $userId = $request->query->get('userId');
-        $user   = $this->getUserService()->getUser($userId);
+        $goto = $request->query->get('goto');
 
-        $goto = $this->generateUrl('register_submited', array(
-            'id'   => $user['id'],
-            'hash' => $this->makeHash($user),
-            'goto' => $request->query->get('goto')
-        ));
+        if (empty($goto)) {
+            $goto = $this->generateUrl('homepage');
+        }
 
         return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
     }
