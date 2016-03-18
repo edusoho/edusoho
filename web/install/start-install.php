@@ -34,7 +34,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-
 function check_installed()
 {
     if (array_key_exists('nokey', $_GET)) {
@@ -222,24 +221,8 @@ function install_step4($init_data = 0)
 {
     global $twig;
 
-    $userAgent      = 'EduSoho Install Client 1.0';
-    $connectTimeout = 10;
-    $timeout        = 10;
-    $url            = "http://open.edusoho.com/api/v1/block/two_dimension_code";
-    $curl           = curl_init();
-    curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
-    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
-    curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl, CURLOPT_HEADER, 0);
-    curl_setopt($curl, CURLOPT_URL, $url);
-    $response = curl_exec($curl);
-    curl_close($curl);
-    $response = json_decode($response, true);
-
     echo $twig->render('step-4.html.twig', array(
-        'step'     => 4,
-        "response" => $response
+        'step' => 4
     ));
 }
 
@@ -253,6 +236,24 @@ function install_step5($init_data = 0)
 
     header("Location: ../app.php/");
     exit();
+}
+
+function install_step888()
+{
+    $userAgent      = 'EduSoho Install Client 1.0';
+    $connectTimeout = 10;
+    $timeout        = 10;
+    $url            = "http://open.edusoho.com/api/v1/block/two_dimension_code";
+    $curl           = curl_init();
+    curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+    curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
+    curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HEADER, 0);
+    curl_setopt($curl, CURLOPT_URL, $url);
+    $response = curl_exec($curl);
+    curl_close($curl);
+    echo $response;
 }
 
 /**
