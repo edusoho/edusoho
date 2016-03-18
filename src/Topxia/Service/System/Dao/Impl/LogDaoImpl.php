@@ -49,8 +49,7 @@ class LogDaoImpl extends BaseDao implements LogDao
 			->andWhere('userId = :userId')
 			->andWhere('createdTime > :startDateTime')
 			->andWhere('createdTime < :endDateTime')
-			->andWhere('userId IN ( :userIds )')
-			->andWhere('data Like :data');
+			->andWhere('userId IN ( :userIds )');
 
 		return $builder;
 	}

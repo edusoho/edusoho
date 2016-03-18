@@ -101,13 +101,6 @@ class LogServiceImpl extends BaseService implements  LogService
         	$conditions['level'] = $conditions['level'];
         } else {
         	unset($conditions['level']);
-        }
-
-        if (!empty($conditions['data'])) {
-        	$data = json_encode($conditions['data']);
-        	$data = str_replace("\"","",$data);
-        	$data = str_replace("\\","_",$data);       	
-            $conditions['data'] = "%{$data}%";
         }		
         
         return $conditions;
