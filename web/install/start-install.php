@@ -574,6 +574,19 @@ EOD;
                 'user_name'    => '学员',
                 'chapter_name' => '章',
                 'part_name'    => '节'
+            ),
+            'coin'           => array(
+                'coin_enabled'        => 0,
+                'cash_model'          => 'none',
+                'cash_rate'           => 1,
+                'coin_name'           => '虚拟币',
+                'coin_content'        => '',
+                'coin_picture'        => '',
+                'coin_picture_50_50'  => '',
+                'coin_picture_30_30'  => '',
+                'coin_picture_20_20'  => '',
+                'coin_picture_10_10'  => '',
+                'charge_coin_enabled' => ''
             )
         );
 
