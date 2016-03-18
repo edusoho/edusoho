@@ -1,8 +1,8 @@
 {% if courses %}
 {% do load_script('course/related-courses-block') %}
-<div class="panel panel-default hidden-xs">
+<div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title"><i class="es-icon es-icon-explore"></i>相关课程</h3>
+    <h3 class="panel-title"><i class="es-icon es-icon-explore"></i>{{'相关课程'|trans}}</h3>
   </div>
   <div class="panel-body">
     <div class="course-list no-shadow no-margin">
@@ -11,7 +11,7 @@
         {% for course in courses %}
           {% if key < 3 and currentCourse.id != course.id %}
           {% set key = key + 1 %}
-          <div class="col-lg-4 col-md-6 col-sm-6">
+          <div class="col-lg-4 col-md-6 col-xs-6 {% if key > 2 %}hidden-sm hidden-xs{% endif %}">
             {% include 'TopxiaWebBundle:Course:Widget/course-grid.html.twig' %}
           </div>
           {% endif %}

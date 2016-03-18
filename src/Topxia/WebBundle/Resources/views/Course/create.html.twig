@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}创建{% if type == 'normal' %}课程{% else %}直播课程{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'course/create' %}
 
@@ -8,23 +8,23 @@
 <div class="row">
   <div class="col-md-offset-2 col-md-8">
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>创建{% if type == 'normal' %}课程{% else %}直播课程{% endif %}</h2></div>
-      
+      <div class="panel-heading"><h2>{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %}</h2></div>
+
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
         <div class="alert alert-info">
-          <h5><strong>请先完成以下设置，才能创建课程：</strong></h5>
+          <h5><strong>{{'请先完成以下设置，才能创建课程：'|trans}}</strong></h5>
           <ol>
-            <li>设置头像。
+            <li>{{'设置头像。'|trans}}
               {% if app.user.largeAvatar %}
-                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
+                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
               {% else %}
-                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings_avatar', {fromCourse:true}) }}" class="alert-link">去设置</a>
+                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>{{'，'|trans}}<a href="{{ path('settings_avatar', {fromCourse:true}) }}" class="alert-link">{{'去设置'|trans}}</a>
               {% endif %}
-            <li>设置头衔 、自我介绍。
+            <li>{{'设置头衔 、自我介绍。'|trans}}
               {% if app.user.title and userProfile.about %}
-                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> 已完成</span> </li>
+                <span class="text-success"><span class="glyphicon glyphicon-ok-circle"></span> {{'已完成'|trans}}</span> </li>
               {% else %}
-                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> 未完成</span>，<a href="{{ path('settings', {fromCourse:true}) }}" class="alert-link">去设置</a>
+                <span class="text-danger"><span class="glyphicon glyphicon-remove-circle"></span> {{'未完成'|trans}}</span>{{'，'|trans}}<a href="{{ path('settings', {fromCourse:true}) }}" class="alert-link">{{'去设置'|trans}}</a>
               {% endif %}
             </li>
           </ol>
@@ -35,7 +35,7 @@
           {{ web_macro.flash_messages() }}
 
           <div class="form-group">
-            <div class="col-md-2 control-label"><label for="course_title" class="required">标题</label></div>
+            <div class="col-md-2 control-label"><label for="course_title" class="required">{{'标题'|trans}}</label></div>
             <div class="col-md-8 controls">
               <input type="text" id="course_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
               <div class="help-block" style="display:none;"></div>
@@ -43,23 +43,23 @@
           </div>
 
       <div class="form-group">
-        <label class="col-md-2 control-label">课程购买</label>
+        <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>
           <div class="col-md-8 controls radios">
-            {{ radios('buyable', {'1':'开启', '0':'关闭'}, course.buyable|default(1) ) }}
-           <div class="help-block">关闭后课程将无法在线购买加入、由教师/管理员后台导入。</div>
+            {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
+           <div class="help-block">{{'关闭后课程将无法在线购买加入、由教师/管理员后台导入。'|trans}}</div>
         </div>
       </div>
 
           <div class="form-group">
             <div class="col-md-offset-2 col-md-8 controls">
-              <input id="course-create-btn" data-submiting-text="正在创建" class="btn btn-fat btn-primary" type="submit" value="创建">
+              <input id="course-create-btn" data-submiting-text="{{'正在创建'|trans}}" class="btn btn-fat btn-primary" type="submit" value="{{'创建'|trans}}">
             </div>
           </div>
 
           {% if not setting('copyright.owned') %}
           <div class="form-group">
             <div class="col-md-offset-2 col-md-8 controls">
-              <p class="mtl"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">如何创建课程？</a></p>
+              <p class="mtl"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">{{'如何创建课程？'|trans}}</a></p>
             </div>
           </div>
           {% endif %}

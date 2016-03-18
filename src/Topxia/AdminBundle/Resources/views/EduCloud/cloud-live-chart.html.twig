@@ -1,0 +1,10 @@
+
+<div class="col-md-6">
+  <input id="liveUsedInfo"  type="hidden" value='{% if chartInfo.liveUsedInfo %}{{chartInfo.liveUsedInfo}}{% else %}{{"[]"}}{% endif %}'> 
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">参与直播人数（最近7天）</h3>
+    </div>
+    <div class="panel-body" id="live-data-tab" style="height: 250px;"></div>
+  </div>
+</div>

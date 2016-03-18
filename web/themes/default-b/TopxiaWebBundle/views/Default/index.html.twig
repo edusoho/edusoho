@@ -24,6 +24,7 @@
 
        
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
+          {% if classrooms %}
           <div class="es-box">
             <div class="es-box-heading">
               <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
@@ -78,6 +79,7 @@
               </ul>
             </div>
           </div>
+          {% endif %}
 
 
         {# 推荐课程 #}

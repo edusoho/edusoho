@@ -30,6 +30,48 @@ class Courses extends BaseResource
 
     }
 
+    public function discoveryColumn(Application $app, Request $request)
+    {
+        $result = $request->query->all();
+        $conditions['categoryId'] = $result['categoryId'];
+
+        if ($result['orderType'] == 'hot') {
+            $orderBy = 'hitNum';
+        }
+        elseif ($result['orderType'] == 'recommend') {
+            $orderBy = 'recommendedSeq';
+        }
+        else {
+            $orderBy = 'createdTime';
+        }
+
+        if ($result['type'] == 'live') {
+            $conditions['type'] = 'live';
+        }
+        else {
+            $conditions['type'] = 'normal';
+        }
+        if (empty($result['showCount'])) {
+            $result['showCount'] = 6;
+        }
+        
+        $total = $this->getCourseService()->searchCourseCount($conditions);
+        $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
+        $courses = $this->filter($courses);
+        foreach ($courses as $key => $value) {
+            $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
+            $courses[$key]['updatedTime'] = strval(strtotime($value['updatedTime']));
+            $userIds = $courses[$key]['teacherIds'];
+            $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
+            $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
+        }   
+        return $this->wrap($courses, min($result['showCount'], $total));
+    }
+    public function post(Application $app, Request $request)
+    {
+        
+    }
+
     protected function assemblyCourses(&$courses)
     {
         $tagIds = array();
@@ -99,5 +141,10 @@ class Courses extends BaseResource
     protected function getCategoryService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }

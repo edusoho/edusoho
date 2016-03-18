@@ -189,7 +189,7 @@ class CourseManageController extends BaseController
 
         $questionCount = $this->getThreadService()->searchThreadCount(array('courseId' => $id, 'type' => 'question'));
 
-        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('createdTime', 'ASC'), 0, 1000);
+        $lessons = $this->getCourseService()->searchLessons(array('courseId' => $id), array('seq', 'ASC'), 0, 1000);
 
         foreach ($lessons as $key => $value) {
             $lessonLearnedNum = $this->getCourseService()->findLearnsCountByLessonId($value['id']);

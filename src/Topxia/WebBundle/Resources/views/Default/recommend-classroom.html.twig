@@ -5,19 +5,19 @@
     <div class="container"> 
       <div class="text-line"> 
         <h5> 
-          <span>{{config.title|default("推荐班级")}}</span> 
+          <span>{{config.title|default("推荐班级"|trans)}}</span> 
           <div class="line"></div> 
         </h5> 
         <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div> 
       </div> 
       <div class="recommend-class-list row"> 
         {% for classroom in RecommendClassrooms %} 
-          <div class="col-md-3 col-sm-6"> 
+          <div class="col-md-3 col-xs-6"> 
              {% include 'ClassroomBundle:Classroom:class-grid.html.twig' %} 
           </div> 
         {% endfor %} 
       </div> 
-      <div class="text-center mvl"> 
+      <div class="section-more-btn"> 
         <a href="{{ path('classroom_explore') }}" class="btn btn-default btn-lg"> 
           更多{{ setting('classroom.name')|default("班级") }} <i class="mrs-o es-icon es-icon-chevronright"></i> 
         </a> 
@@ -25,3 +25,4 @@
     </div> 
   </section> 
 {% endif %} 
+

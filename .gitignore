@@ -70,4 +70,7 @@ web/assets/img/default/video.png
 /installFiles
 /app/data/trial.lock
 /app/data/session_gc_time.data
+.crunch
+*.css.map
+*.codekit
 

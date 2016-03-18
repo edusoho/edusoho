@@ -7,7 +7,7 @@
   {% if course.status == 'published' %}
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="course-title">课程标题</label>
+        <label for="course-title">{{'课程标题'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
@@ -18,7 +18,7 @@
 
   	<div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}用户名</label>
+        <label for="student-nickname">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'用户名'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <div style="margin-top: 7px;">
@@ -29,7 +29,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="set-more-expiryday">增加天数</label>
+        <label for="set-more-expiryday">{{'增加天数'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="set-more-expiryday" name="expiryDay" value="0" class="form-control width-input">
@@ -47,8 +47,8 @@
 
 {% block footer %}
   {% if course.status == 'published' %}
-    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{default.user_name|default('学员')}}">保存</button>
+    <button type="submit" id="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#expiryday-set-form" data-user="{{default.user_name|default('学员'|trans)}}">{{'保存'|trans}}</button>
   {% endif %}
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('course-manage/set-expiryday-modal')</script>
 {% endblock %}
