@@ -52,6 +52,19 @@ class CategoeryServiceTest extends BaseTestCase
 
     }
 
+    public function testUpdateCategory()
+    {
+        $createdCategory1 = $this->createCategory('deewddd', 'code2', 11, 1);
+        $updateField      = array('name' => 'name1', 'code' => 'testcode', 'weight' => 3, 'parentId' => 3);
+        $updateCategory   = $this->getCategoryService()->updateCategory($createdCategory1['id'], $updateField);
+
+        $this->assertEquals($updateField['name'], $updateCategory['name']);
+        $this->assertEquals($updateField['code'], $updateCategory['code']);
+        $this->assertEquals($updateField['weight'], $updateCategory['weight']);
+        $this->assertEquals($updateField['parentId'], $updateCategory['parentId']);
+
+    }
+
     private function createCategory($name = 'cate', $code = 'code1', $weight = 12, $parentId = 0)
     {
         $category = array(
