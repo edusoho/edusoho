@@ -191,16 +191,14 @@ class ChaosThreads extends BaseResource
 
     public function getThreads(Application $app,Request $request)
     {
-        $currentUser   = $this->getCurrentUser();
-        $start         = $request->query->get('start', 0);
-        $limit         = $request->query->get('limit', 10);
-
-        $conditions    = array(
-            'userId'      => $currentUser['id']
+        $currentUser = $this->getCurrentUser();
+        $start       = $request->query->get('start', 0);
+        $limit       = $request->query->get('limit', 10);
+        $conditions  = array(
+            'userId' => $currentUser['id']
         );
 
         $total         = $this->getCourseThreadService()->searchThreadCount($conditions);
-
         $start         = $start == -1 ? rand(0, $total - 1) : $start;
         
         $courseThreads = $this->getCourseThreadService()->searchThreads($conditions,'createdNotStick',$start,$limit);

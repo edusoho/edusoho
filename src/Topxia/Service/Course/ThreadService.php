@@ -63,9 +63,9 @@ interface ThreadService
      */
     public function findThreadPosts($courseId, $threadId, $sort, $start, $limit);
 
-    public function searchThreadPosts($conditions,$sort, $start, $limit);
+    public function searchThreadPosts($conditions,$sort, $start, $limit,$groupBy);
 
-    public function searchThreadPostsCount($conditions);
+    public function searchThreadPostsCount($conditions,$groupBy);
 
     public function getPostCountByuserIdAndThreadId($userId, $threadId);
 
