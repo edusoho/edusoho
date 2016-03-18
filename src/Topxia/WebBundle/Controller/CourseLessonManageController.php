@@ -8,7 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 class CourseLessonManageController extends BaseController
 {
     // @todo refactor it.
-    public function editTestpaperActionAction(Request $request, $courseId, $lessonId)
+
+    public function editAction(Request $request, $courseId, $lessonId)
     {
         $course = $this->getCourseService()->tryManageCourse($courseId);
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lessonId);

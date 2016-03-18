@@ -8,7 +8,6 @@ define(function(require, exports, module) {
             element: '#user-import-progress'
         });
 
-        var $updateBtn = $("#begin-update");
         var importUrl = $("#user-import").data('import-url');
         var finishedUrl = $("#user-import").data('finished-url');
         var checkType = $("#user-import").data('check-type');
@@ -42,7 +41,6 @@ define(function(require, exports, module) {
             $("#finish-import-btn").show();
         });
 
-        $updateBtn.hide();
         $("#updating-hint").show();
         progressBar.show();
         $(document).dequeue('update_step_queue');
