@@ -327,7 +327,7 @@ define(function(require, exports, module) {
                     formatResult: function(item) {
                         return item.name;
                     },
-                    width: 600,
+                    width: 400,
                     multiple: true,
                     placeholder: "请输入标签",
                     multiple: true,
