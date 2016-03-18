@@ -8,7 +8,8 @@ class OpenCourseManageController extends BaseController
 {
     public function liveOpenTimeSetAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course         = $this->getCourseService()->tryManageCourse($id);
+        $openLiveLesson = $this->getCourseService()->getCourseLessons($course['id']);
 
         if ($request->getMethod() == 'POST') {
             $liveLesson              = $request->request->all();
@@ -55,7 +56,8 @@ class OpenCourseManageController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:live-open-time-set.html.twig', array(
-            'course' => $course
+            'course'         => $course,
+            'openLiveLesson' => $openLiveLesson
         ));
     }
 

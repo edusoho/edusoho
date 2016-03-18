@@ -6,73 +6,18 @@ define(function(require, exports, module) {
     
     exports.run = function() {
        
-        var $modal = $('#live-lesson-form').parents('.modal');
         var $content = $("#live-lesson-content-field");
         var now = new Date();
         var validator = new Validator({
             
-            element: '#live-lesson-form',
+            element: '#live-open-course-form',
             autoSubmit: false,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
-                $('#live-course-create-btn').button('submiting').addClass('disabled');
-                var $panel = $('.lesson-manage-panel');
-                $.post($form.attr('action'), $form.serialize(), function(html) {
-                    var id = '#' + $(html).attr('id'),
-                    $item = $(id);
-                    var $parent = $('#'+$form.data('parentid'));
-                    if ($item.length) {
-                        $item.replaceWith(html);
-                        Notify.success('课时已保存');
-                    } else {
-                        $panel.find('.empty').remove();
-                        if($parent.length){
-                            var add = 0;
-                            if($parent.hasClass('item-chapter  clearfix')){
-                                $parent.nextAll().each(function(){
-                                if($(this).hasClass('item-chapter  clearfix')){
-                                    $(this).before(html);
-                                    add = 1;
-                                    return false;
-                                 }
-                              });
-                                if(add !=1 ){
-                                    $("#course-item-list").append(html);
-                                    add = 1;
-                                }
-                                
-                            }else{                           
-                             $parent.nextAll().each(function(){
-                                if($(this).hasClass('item-chapter  clearfix'))
-                                    return false;
-                                if($(this).hasClass('item-chapter item-chapter-unit clearfix')){
-                                    $(this).before(html);
-                                    add = 1;
-                                    return false;
-                             }
-                          });
-                        }
-                         if(add != 1 )
-                            $parent.after(html);  
-                        var $list = $("#course-item-list");
-                        sortList($list);
-                     }else{
-                      $("#course-item-list").append(html);
-                    }                       
-                    Notify.success('添加直播课时成功');
-                }
-                $modal.modal('hide');
-	}).error(function(event){
-                    var error = event.responseText;
-                    if (error && error.length > 0) {
-                        error = JSON.parse(error);
-                        Notify.danger(error.error.message);
-                    } else {
-                        Notify.danger('操作失败');
-                    }
-	});
+                $('#live-open-course-form-btn').button('submiting').addClass('disabled');
+
             }
         });
 
@@ -126,10 +71,6 @@ define(function(require, exports, module) {
             $('[name=startTime]').attr('disabled',false);
         }
 
-        validator.addItem({
-            element: '#live-title-field',
-            required: true
-        });
 
         validator.addItem({
             element: '[name=startTime]',
