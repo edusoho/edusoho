@@ -39,12 +39,6 @@ refundStatus:
     failed: 退款失败
     cancelled: 已取消
 
-refundStatus:html:
-    created: <span class="text-warning">已申请</span>
-    success: <span class="text-success">退款成功</span>
-    failed: <span class="text-danger">退款失败</span>
-    cancelled: <span class="text-muted">已取消</span>
-
 payment:
     alipay: 支付宝
     wxpay: 微信支付

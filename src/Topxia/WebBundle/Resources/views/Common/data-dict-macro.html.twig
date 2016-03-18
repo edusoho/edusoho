@@ -22,21 +22,29 @@
     {% endif %}
 {% endmacro %}
 
-
 {% macro  orderStatus(status) %}
     {% if status == 'created' %}
-        <span class="label label-danger">未付款</span>
+        <span class="label label-danger">{{ '未付款'|trans }}</span>
     {% elseif status == 'paid' %}
-        <span class="label label-success">已付款</span>
+        <span class="label label-success">{{ '已付款'|trans }}</span>
     {% elseif status == 'refunding' %}
-        <span class="text-warning">退款中</span>
+        <span class="text-warning">{{ '退款中'|trans }}</span>
     {% elseif status == 'refunded' %}
-        <span class="text-danger">已退款</span>
+        <span class="text-danger">{{ '已退款'|trans }}</span>
     {% elseif status == 'cancelled' %}
-        <span class="text-muted">已关闭</span>
+        <span class="text-muted">{{ '已关闭'|trans }}</span>
     {% endif %}
 {% endmacro %}
 
-
-
-
+{% macro refundStatus(status) %}
+    {% if status == 'created' %}
+        <span class="text-warning">{{ '已申请'|trans }}</span>
+    {% elseif status == 'success' %}
+        <span class="text-success">{{ '退款成功'|trans }}</span>
+    {% elseif status == 'failed' %}
+        <span class="text-danger">{{ '退款失败'|trans }}</span>
+    {% elseif status == 'cancelled' %}
+        <span class="text-muted">{{ '已取消'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+:
