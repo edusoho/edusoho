@@ -23,6 +23,25 @@ class DiscoveryColumnController extends BaseController
     {
         $discoveryColumns = array();
         $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
+        foreach ($discoveryColumns as $key => $value) {
+            if ($value['type'] == 'classroom') {
+                $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($value['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($value['categoryId']), $childrenIds);
+                $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($createdTime, 'desc'), 0, $value['showCount']);
+                $discoveryColumns[$key]['count'] = count($classrooms);
+            } else {
+                $conditions['categoryId'] = $value['categoryId'];
+                if ($value['type'] == 'live') {
+                    $conditions['type'] = 'live';
+                }
+                else {
+                    $conditions['type'] = 'normal';
+                }
+                $courses = $this->getCourseService()->searchCourses($conditions, 'createdTime',0,$value['showCount']);
+                $discoveryColumns[$key]['count'] = count($courses);
+            }
+        }
+            // var_dump($discoveryColumns);exit();
         return $this->render('TopxiaAdminBundle:DiscoveryColumn:index.html.twig', array('discoveryColumns' => $discoveryColumns));
     }
 
@@ -125,5 +144,20 @@ class DiscoveryColumnController extends BaseController
     protected function getDiscoveryColumnService()
     {
         return $this->getServiceKernel()->createService('DiscoveryColumn.DiscoveryColumnService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 }
