@@ -217,6 +217,7 @@ class MaterialLibController extends BaseController
             'fileIds' => $fileIds,
             'tagIds' => $tagIds
                 );
+        // var_dump($data);exit();
         $this->getUploadFileTagService()->edit($fileIds, $tagIds);
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX),

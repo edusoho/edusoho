@@ -32,6 +32,7 @@ define(function(require, exports, module) {
             var $target = $(event.currentTarget);
             var self = this;
             var second = this.player.getCurrentTime();
+            second = Math.ceil(second);
             $target.button('loading');
             $.ajax({
                 type:'get',
