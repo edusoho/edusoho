@@ -21,9 +21,22 @@
         <span class="glyphicon glyphicon-question-sign text-success">{{ '其他'|trans }}</span>
     {% endif %}
 {% endmacro %}
-    
-    
-   
-    
-    
+
+
+{% macro  orderStatus(status) %}
+    {% if status == 'created' %}
+        <span class="label label-danger">未付款</span>
+    {% elseif status == 'paid' %}
+        <span class="label label-success">已付款</span>
+    {% elseif status == 'refunding' %}
+        <span class="text-warning">退款中</span>
+    {% elseif status == 'refunded' %}
+        <span class="text-danger">已退款</span>
+    {% elseif status == 'cancelled' %}
+        <span class="text-muted">已关闭</span>
+    {% endif %}
+{% endmacro %}
+
+
+
 

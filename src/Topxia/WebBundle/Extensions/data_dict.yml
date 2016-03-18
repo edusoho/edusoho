@@ -33,13 +33,6 @@ orderStatus:
     refunded: 已退款
     cancelled: 已关闭
 
-orderStatus:html:
-    created: <span class="label label-danger">未付款</span>
-    paid: <span class="label label-success">已付款</span>
-    refunding: <span class="text-warning">退款中</span>
-    refunded: <span class="text-danger">已退款</span>
-    cancelled: <span class="text-muted">已关闭</span>
-
 refundStatus:
     created: 已申请
     success: 退款成功
