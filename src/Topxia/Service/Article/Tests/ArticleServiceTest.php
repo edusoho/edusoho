@@ -17,14 +17,12 @@ class ArticleServiceTest extends BaseTestCase
 		$this->assertEquals('正午时分',$getArticle['body']);
 	}
 
-	// public function testgetArticlePrevious()
-	// {
-	// 	// $newArticle = $this->createArticle();
-	// 	// $newArticlesend = $this->createArticlesencond();
-	// 	// $getArticle = $this->getArticleService()->getArticlePrevious($newArticle['id']);
-	// 	// var_dump($getArticle);exit();
-	// 	// 待定
-	// }
+	public function testgetArticlePrevious()
+	{
+		$newArticle = $this->createArticle();
+		$newArticlesend = $this->createArticlesencond();
+		$getArticle = $this->getArticleService()->getArticlePrevious($newArticle['id']);
+	}
 
 	// public function testgetArticleByAlias()
 	// {
@@ -40,23 +38,25 @@ class ArticleServiceTest extends BaseTestCase
 		$this->assertEquals('2',count($article));
 	}
 
-	// public function testfindArticlesByIds()
-	// {
-	// 	$newarticle = $this->createArticle();
-	// 	$ids = array(
-	// 		'1'=>'1',
-	// 		);
-	// 	$findArticles = $this->getArticleService()->findArticlesByIds($ids);
-	// 	var_dump($findAllArticles);exit();
-	// }
+	public function testfindArticlesByIds()
+	{
+		$newarticle1 = $this->createArticle();
+		$newarticle2 = $this->createArticle();
+		$ids = array(
+			$newarticle1['id'],
+			$newarticle2['id'],
+			);
+		$findArticles = $this->getArticleService()->findArticlesByIds($ids);
+		$this->assertEquals('2',count($findArticles));
+	}
 
 	public function testsearchArticles()
 	{
 		$newArticle = $this->createArticle();
 		$newarticle2 = $this->createArticlesencond();
 		$conditions = array(
-            'status' => 'published'
-        );
+            		'status' => 'published'
+        		);
 		$result = $this->getArticleService()->searchArticles($conditions,'published',0,20);
 		$this->assertEquals('2',count($result));
 	}
@@ -151,9 +151,9 @@ class ArticleServiceTest extends BaseTestCase
 	public function testgetArticleLike()
 	{		
 		$user = $this->createCurrentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        		$currentUser = new CurrentUser();
+        		$currentUser->fromArray($user);
+        		$this->getServiceKernel()->setCurrentUser($currentUser);
 
 		$newArticle = $this->createArticle();
 		$this->getArticleService()->like($newArticle['id']);
@@ -165,9 +165,9 @@ class ArticleServiceTest extends BaseTestCase
 	public function testlike()
 	{
 		$user = $this->createCurrentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        		$currentUser = new CurrentUser();
+        		$currentUser->fromArray($user);
+        		$this->getServiceKernel()->setCurrentUser($currentUser);
 
 		$newArticle = $this->createArticle();
 		$this->getArticleService()->like($newArticle['id']);
@@ -177,8 +177,8 @@ class ArticleServiceTest extends BaseTestCase
 	}
 
 	/**
-     * @expectedException Topxia\Service\Common\ServiceException
-     */
+     	* @expectedException Topxia\Service\Common\ServiceException
+     	*/
 	public function testlikeWithEmptyContent()
 	{
 		$newArticle = null;
@@ -186,19 +186,22 @@ class ArticleServiceTest extends BaseTestCase
 	}
 
 
-	// public function testlikeTwich()
-	// {
-	// 	$newArticle = $this->createArticle();
-	// 	$this->getArticleService()->like($newArticle['id']);
-	// 	$this->getArticleService()->like($newArticle['id']);
-	// }
+	/**
+     	* @expectedException Topxia\Service\Common\AccessDeniedException
+     	*/
+	public function testlikeTwich()
+	{
+		$newArticle = $this->createArticle();
+		$this->getArticleService()->like($newArticle['id']);
+		$this->getArticleService()->like($newArticle['id']);
+	}
 
 	public function testcancelLike()
 	{
 		$user = $this->createCurrentUser();
-        $currentUser = new CurrentUser();
-        $currentUser->fromArray($user);
-        $this->getServiceKernel()->setCurrentUser($currentUser);
+        		$currentUser = new CurrentUser();
+        		$currentUser->fromArray($user);
+        		$this->getServiceKernel()->setCurrentUser($currentUser);
 
 		$newArticle = $this->createArticle();
 		$this->getArticleService()->like($newArticle['id']);
@@ -234,24 +237,13 @@ class ArticleServiceTest extends BaseTestCase
     	$this->assertEquals('0',$getArticle['promoted']);
     }
 
-    // public function testtrashArticle()
-    // {
-    // 	$newArticle = $this->createArticle();
-    // 	$this->getArticleService()->transhArticle($newArticle['id']);
-    // 	$getArticle = $this->getArticleService()->getArticle($newArticle['id']);
-    // 	var_dump($getArticle);exit();
-    // }
-
-    // public function testremoveArticlethumb()
-    // {
-    // }
-
-    // public function testcount()
-    // {
-    // 	$newArticle = $this->createArticle();
-    // 	$a = $this->getArticleService()->count($newArticle['id'], 'upsNum', -1);
-    // 	var_dump($a);exit();
-    // }
+    public function testtrashArticle()
+    {
+    	$newArticle = $this->createArticle();
+    	$this->getArticleService()->trashArticle($newArticle['id']);
+    	$trashArticle = $this->getArticleService()->getArticle($newArticle['id']);
+    	$this->assertEquals('trash', $trashArticle['status']);
+    }
 
     public function testpublishArticle()
     {
