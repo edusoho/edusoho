@@ -112,6 +112,7 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
   app.rootPath = window.location.origin + window.location.pathname;
   $rootScope.stateParams = {};
 
+  console.log("app run");
   applicationProvider.init(app.host);
   FastClick.attach(document.body);
 }]);
@@ -119,6 +120,10 @@ app.run(["applicationProvider", "$rootScope", '$timeout', 'platformUtil',
 angular.element(document).ready(function() {
     var platformUtil = angular.injector(["AppFactory", "ng"]).get("platformUtil");
     if (platformUtil.native) {
+      if (platformUtil.android && window.cordova.isDeviceready()) {
+        angular.bootstrap( document, ["app"] );
+        return;
+      }
       document.addEventListener("deviceready", function() {
           angular.bootstrap( document, ["app"] );
       });

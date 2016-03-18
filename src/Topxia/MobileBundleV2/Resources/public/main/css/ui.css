@@ -2313,6 +2313,10 @@ a {
   background: #f0f0f0;
 }
 
+.ui-todolist .course-card-item {
+  padding: 8px 16px 8px 16px;
+}
+
 .ui-todolist .list-chart {
   width: 100%;
   padding: 8px;
