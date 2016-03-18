@@ -8,13 +8,6 @@ use Topxia\Service\Order\OrderProcessor\OrderProcessorFactory;
 
 class ClassroomOrderProcessorTest extends BaseTestCase
 {
-    public function testGetRouter()
-    {
-        $processor = OrderProcessorFactory::create('classroom');
-        $route     = $processor->getRouter();
-        $this->assertEquals('classroom_show', $route);
-    }
-
     public function testPreCheckWithBecomedStudent()
     {
         $user        = $this->createUser();

@@ -3,7 +3,7 @@
 namespace Topxia\Service\Common\Annotations\Loader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\FileCacheReader;
+use Topxia\Service\Common\Annotations\Reader\FileCacheReader;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\Annotations\Annotation;
 
@@ -25,7 +25,7 @@ class AnnotationsLoader
 
         if (!self::$reader) {
             $env = ServiceKernel::instance()->getEnvironment();
-            $cacheDir = ServiceKernel::instance()->getParameter('kernel.cache_dir').'/annotations/topxia';
+            $cacheDir = ServiceKernel::instance()->getParameter('kernel.root_dir').'/cache/'.$env.'/annotations/topxia';
             $debug = $env !== 'prod';
             self::$reader = new FileCacheReader(new AnnotationReader(), $cacheDir, $debug);
         }

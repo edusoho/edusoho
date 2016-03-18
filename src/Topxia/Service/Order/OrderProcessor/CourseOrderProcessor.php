@@ -9,11 +9,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = "course_show";
 
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
         if ($this->getCourseService()->isCourseStudent($targetId, $userId)) {
@@ -45,7 +40,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception("找不到要购买课程!");
         }
 
-        $users                                   = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
         $totalPrice = 0;
@@ -66,7 +62,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             $totalPrice = $course["coinPrice"];
         } elseif ($priceType == "RMB") {
             $totalPrice = $course["price"];
-            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);}
+            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
+        }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
@@ -201,12 +198,6 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     public function pay($payData)
     {
         return $this->getPayCenterService()->pay($payData);
-    }
-
-    public function callbackUrl($router, $order, $container)
-    {
-        $goto = !empty($router) ? $container->get('router')->generate($router, array('id' => $order["targetId"]), true) : $this->generateUrl('homepage', array(), true);
-        return $goto;
     }
 
     public function cancelOrder($id, $message, $data)

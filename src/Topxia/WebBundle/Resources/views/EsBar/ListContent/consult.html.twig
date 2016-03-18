@@ -1,7 +1,7 @@
 {% if setting('consult.enabled', 0)  %}
   {% set consult = setting('consult') %}
   <div class="bar-popover-content" style="display:none;">
-    <div id="bar-qq-content"> 
+    <div id="bar-qq-content">
       {% set countQq = 0 %}
       {% for qq in consult.qq if qq.name is not empty %}
         {% set countQq = 1 %}
@@ -12,13 +12,13 @@
         {% for qq in consult.qq if qq.name is not empty %}
           {% if qq.url|default(false) %}
             <div class="col-xs-6 mbm text-overflow">
-              <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
+              <a class="link-light" href="{{ qq.url|raw }}" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
                 {{ qq.name }}
               </a>
             </div>
           {% else %}
             <div class="col-xs-6 mbm text-overflow">
-              <a class="link-light" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
+              <a class="link-light" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" target="_blank"><img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="{{'点击这里给我发消息'|trans}}" alt="">
                 {{ qq.name }}
               </a>
             </div>
@@ -35,7 +35,7 @@
               <img class="mrs" src="{{asset("assets/v2/img/bar_qq_group.png")}}" alt="">
               {{ qqgroup.name }}
             </p>
-            
+
             {% if not qqgroup.url|default(false) %}
               <p class="text-overflow">
                 {{ qqgroup.number }}
@@ -47,7 +47,7 @@
                 {{ qqgroup.url|raw }}
               </p>
             {% endif %}
-            
+
           </div>
         {% endfor %}
       </div>
@@ -55,13 +55,13 @@
 
     <div id="bar-phone-content">
       {% if consult.worktime is not empty %}
-        <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>工作时间： {{ consult.worktime }}</p>
+        <p class="mtm"><i class="es-icon es-icon-accesstime mrm"></i>{{'工作时间：'|trans}} {{ consult.worktime }}</p>
       {% endif %}
       {% for phone in consult.phone if phone.name is not empty %}
-        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}： {{ phone.number }}</p>
+        <p class="mtm"><i class="es-icon es-icon-phone mrm"></i>{{ phone.name }}{{'：'|trans}} {{ phone.number }}</p>
       {% endfor %}
       {% if consult.email is not empty %}
-        <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>邮箱： <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
+        <p class="mtm"><i class="es-icon es-icon-mail mrm"></i>{{'邮箱：'|trans}} <a class="link-light" href="mailto:{{consult.email}}">{{consult.email}}</a></p>
       {% endif %}
     </div>
 

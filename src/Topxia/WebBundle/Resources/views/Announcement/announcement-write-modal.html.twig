@@ -13,7 +13,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="startTime">发布时间</label>
+        <label for="startTime">{{'发布时间'|trans}}</label>
       </div>
       <div class="col-md-9 controls" style="z-index:2000;">
         <input type="text" id="startTime"  name="startTime" class="form-control" value="{% if announcement.startTime|default('now') %}{{announcement.startTime|default('now')|date("Y-m-d H:i")}}{% endif %}">
@@ -22,7 +22,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="endTime">结束时间</label>
+        <label for="endTime">{{'结束时间'|trans}}</label>
       </div>
       <div class="col-md-9 controls" style="z-index:2000;">
         <input type="text" id="endTime"  name="endTime" class="form-control" value="{% if announcement.endTime|default(null) %}{{announcement.endTime|date("Y-m-d H:i")}}{% endif %}">
@@ -31,10 +31,10 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label">
-        <label for="content">公告内容</label>
+        <label for="content">{{'公告内容'|trans}}</label>
       </div>
       <div class="col-md-9 controls">
-        <textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
+        <textarea class="form-control" id="announcement-content-field" name="content" data-display="{{'公告内容'|trans}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
       </div>
     </div>
 
@@ -61,6 +61,6 @@
 
 {% endblock %}
 {% block footer %}
-  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">保存</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">{{'保存'|trans}}</button>
 {% endblock %}

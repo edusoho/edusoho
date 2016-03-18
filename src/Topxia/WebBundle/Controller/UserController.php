@@ -17,7 +17,6 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
-
         // 关注数
         $following = $this->getUserService()->findUserFollowingCount($user['id']);
         // 粉丝数
@@ -392,7 +391,7 @@ class UserController extends BaseController
             $isFollowed = $this->getUserService()->isFollowed($currentUser['id'], $userId);
         }
 
-        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCount($userId);
+        $user['learningNum']  = $this->getCourseService()->findUserLearnCourseCountNotInClassroom($userId);
         $user['followingNum'] = $this->getUserService()->findUserFollowingCount($userId);
         $user['followerNum']  = $this->getUserService()->findUserFollowerCount($userId);
         $levels               = array();
@@ -601,5 +600,10 @@ class UserController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 }
