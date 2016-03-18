@@ -183,7 +183,6 @@ define(function(require, exports, module) {
                     }
 
                     $.post($target.data('url'),{"globalIds":ids},function(data){
-                        console.log(data);
                         if(data){
                             Notify.success('删除资源成功');
                             $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
@@ -212,7 +211,6 @@ define(function(require, exports, module) {
                     }
 
                     $.post($target.data('url'),{"globalIds":ids},function(data){
-                        console.log(ids);
                         if(data){
                             Notify.success('分享资源成功');
                             $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
@@ -240,10 +238,10 @@ define(function(require, exports, module) {
                     return;  
                 }
 
+                $("#select-tag-items").val(ids);
                 // $.post($target.data('url'),{"globalIds":ids},function(data){
-                console.log($("#select-tag-items").val(ids));
                 
-                $("#modal").modal('show');
+                $("#tag-modal").modal('show');
                 //});
                 
                 
