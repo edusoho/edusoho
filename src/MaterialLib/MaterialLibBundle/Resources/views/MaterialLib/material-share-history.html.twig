@@ -8,9 +8,8 @@
 
 {% block body %}
 <script type="text/javascript">
-$("#share-teachers-input").select2({
-    placeholder: "选择要分享的老师",
-    multiple: false,
+$("#target-teachers-input").select2({
+    multiple: true,
     data:[
         {% for contact in allTeachers %}
             {% if contact.id != currentUserId %}
@@ -23,6 +22,8 @@ $("#share-teachers-input").select2({
 <div id="share-history-table-container">
     <table class="table table-hover table-striped" id="share-history-table">
         <div style="position:relative;">
+        <form id="share-materials-form" class="form-horizontal" method="post"
+    action="{{ path('material_lib_save_sharing') }}">
             <div class="btn btn-primary pull-left" id="share"style="
             z-index:2;position:relative;">
                 {#<a class="btn btn-primary btn-sm" id="share" href="javascript:;" data-toggle="modal" data-target="#modal" data-url="{{ path('material_lib_my_sharing') }}">#}
@@ -30,12 +31,17 @@ $("#share-teachers-input").select2({
                     分享给
                 {#</a>#}
             </div>
-            <div  id="show-share-input"hidden="hidden"style="
+            <div class="col-md-8 controls">
+            <div class="select2-container select2-container-multi width-full"
+                id="target-teachers-input"></div>
+            </div>
+        </form>
+            {#<div  id="show-share-input"hidden="hidden"style="
                 z-index:1;left:-250px;position:relative;">
                 <input id="share-teachers-input" class=" mlm select2-container select2-container-multi "style="width:200px" >
                 <a id="close-share-input"class="glyphicon glyphicon-remove-sign mlm" href="javascript:;"></a>
                 <a id="submit-share-input" class="glyphicon glyphicon-ok-sign mlm " href="javascript:;"></a>
-            </div>
+            </div>#}
         </div>
         <thead>
             <tr>
@@ -71,4 +77,12 @@ $("#share-teachers-input").select2({
     </table>
 </div>
 <script>app.load('materiallibbundle/controller/material-lib/share-history')</script>
+<script>app.load('materiallibbundle/controller/material-lib/teachers')</script>
+{% endblock %}
+{% block footer %}
+<button id="share-materials-form-submit" type="submit"
+    class="btn btn-primary pull-right" data-toggle="form-submit"
+    data-target="#share-materials-form" data-submiting-text="正在保存...">保存</button>
+<button type="button" class="btn btn-link pull-right"
+    data-dismiss="modal">取消</button>
 {% endblock %}

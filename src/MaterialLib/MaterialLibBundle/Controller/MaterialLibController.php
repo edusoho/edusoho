@@ -253,9 +253,8 @@ class MaterialLibController extends BaseController
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
-
         $currentUserId = $currentUser['id'];
-        $targetUserIds = $request->get('targetUserIds');
+        $targetUserIds = $request->request->get('targetUserIds');
 
         if (!empty($targetUserIds)) {
             foreach ($targetUserIds as $targetUserId) {
