@@ -58,3 +58,23 @@
     {% endif %}
 {% endmacro %}
 
+{% macro contentStatus(status) %}
+    {% if status == 'published' %}
+        <span class="text-success">{{ '已发布'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="text-muted">{{ '未发布'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ '回收站'|trans }}</span>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro articleStatus(status) %}
+    {% if status == 'published' %}
+        <span class="text-success">{{ '已发布'|trans }}</span>
+    {% elseif status == 'unpublished' %}
+        <span class="text-muted">{{ '未发布'|trans }}</span>
+    {% elseif status == 'trash' %}
+        <span class="text-warning">{{ '回收站'|trans }}</span>
+    {% endif %}
+{% endmacro %}
