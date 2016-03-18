@@ -946,10 +946,6 @@ class TestpaperServiceImpl extends BaseService implements TestpaperService
             $targetId = explode('/', $target[1]);
             $member   = $this->getCourseService()->getCourseMember($targetId[0], $user['id']);
 
-            if ($paperResult['userId'] != $user['id']) {
-                throw $this->createNotFoundException('无权查看此试卷');
-            }
-
             if ($member['role'] == 'teacher') {
                 return $user['id'];
             }
