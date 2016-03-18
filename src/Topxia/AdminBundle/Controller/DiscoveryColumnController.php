@@ -21,28 +21,33 @@ class DiscoveryColumnController extends BaseController
 
     public function indexAction(Request $request)
     {
-        $discoveryColumns = array();
         $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
-        foreach ($discoveryColumns as $key => $value) {
-            if ($value['type'] == 'classroom') {
-                $childrenIds = $this->getCategoryService()->findCategoryChildrenIds($value['categoryId']);
-                $conditions['categoryIds'] = array_merge(array($value['categoryId']), $childrenIds);
-                $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($createdTime, 'desc'), 0, $value['showCount']);
+
+        foreach ($discoveryColumns as $key => $discoveryColumn) {
+            if ($discoveryColumn['type'] == 'classroom') {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
+                $classrooms                = $this->getClassroomService()->searchClassrooms($conditions, array($createdTime, 'desc'), 0, $discoveryColumn['showCount']);
+
                 $discoveryColumns[$key]['count'] = count($classrooms);
             } else {
-                $conditions['categoryId'] = $value['categoryId'];
-                if ($value['type'] == 'live') {
+                $conditions['categoryId'] = $discoveryColumn['categoryId'];
+
+                if ($discoveryColumn['type'] == 'live') {
                     $conditions['type'] = 'live';
-                }
-                else {
+                } else {
                     $conditions['type'] = 'normal';
                 }
-                $courses = $this->getCourseService()->searchCourses($conditions, 'createdTime',0,$value['showCount']);
+
+                $courses = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
+
                 $discoveryColumns[$key]['count'] = count($courses);
             }
         }
-            // var_dump($discoveryColumns);exit();
-        return $this->render('TopxiaAdminBundle:DiscoveryColumn:index.html.twig', array('discoveryColumns' => $discoveryColumns));
+
+        return $this->render('TopxiaAdminBundle:DiscoveryColumn:index.html.twig', array(
+            'discoveryColumns' => $discoveryColumns
+        ));
     }
 
     public function createAction(Request $request)
