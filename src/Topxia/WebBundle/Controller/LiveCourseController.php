@@ -21,8 +21,6 @@ class LiveCourseController extends BaseController
 
     public function exploreAction(Request $request)
     {
-        // BlockToolkit::init($this->container->getParameter('topxia.upload.public_directory').'/../themes/block.json', $this->container);
-
         if (!$this->setting('course.live_course_enabled')) {
             return $this->createMessageResponse('info', '直播频道已关闭');
         }
