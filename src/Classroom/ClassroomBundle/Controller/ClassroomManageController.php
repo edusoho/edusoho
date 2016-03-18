@@ -256,7 +256,9 @@ class ClassroomManageController extends BaseController
 
             $classroomSetting = $this->getSettingService()->get('classroom');
             $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
-
+            if (empty($data['price'])) {
+                $data['price'] = 0;
+            }
             $order = $this->getOrderService()->createOrder(array(
                 'userId'     => $user['id'],
                 'title'      => "购买".$classroomName."《{$classroom['title']}》(管理员添加)",
