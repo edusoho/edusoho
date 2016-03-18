@@ -1,6 +1,6 @@
-{% for imglink in carousel|default(null) if imglink.src|default('') %}
- <div class="swiper-slide swiper-hidden">
-  <div class="container">
+{% for imglink in posters|default(null) if imglink.src|default('') %}
+ <div class="swiper-slide swiper-hidden" style="background: {{ imglink.background }};">
+  <div {% if imglink.layout == 'limitWide' %}class="container"{% endif %}>
     <a href="{{ imglink.href|default('') }}" target="_blank" ><img class="img-responsive" src="{{ asset(imglink.src) }}">
     </a>
   </div>

@@ -56,7 +56,7 @@ class ImporterController extends BaseController
             }
 
             $allUserData = json_decode($userData['allUserData'], true);
-            $allUserData = array_chunk($allUserData, count($allUserData) / 20 + 1);
+            $allUserData = array_chunk($allUserData, count($allUserData) / 100 + 1);
             $progress    = array();
 
             foreach ($allUserData as $index => $userDataInfo) {

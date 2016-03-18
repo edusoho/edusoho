@@ -21,8 +21,6 @@ class LiveCourseController extends BaseController
 
     public function exploreAction(Request $request)
     {
-        // BlockToolkit::init($this->container->getParameter('topxia.upload.public_directory').'/../themes/block.json', $this->container);
-
         if (!$this->setting('course.live_course_enabled')) {
             return $this->createMessageResponse('info', '直播频道已关闭');
         }
@@ -157,10 +155,14 @@ class LiveCourseController extends BaseController
 
     public function liveCourseListAction(Request $request)
     {
+        $liveLessons   = $this->getCourseService()->searchLessons(array('status' => 'published', 'type' => 'live'), array('startTime', 'ASC'), 0, PHP_INT_MAX);
+        $liveCourseIds = array_unique(ArrayToolkit::column($liveLessons, 'courseId'));
+
         $conditions = array(
-            'status'   => 'published',
-            'type'     => 'live',
-            'parentId' => 0
+            'status'    => 'published',
+            'type'      => 'live',
+            'parentId'  => 0,
+            'courseIds' => $liveCourseIds
         );
 
         $categoryId = $request->query->get('categoryId', '');
