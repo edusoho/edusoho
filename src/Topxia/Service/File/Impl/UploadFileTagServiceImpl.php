@@ -30,12 +30,16 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 				$result = $this->getUploadFileTagDao()->add($condition);
 			
 			}
-			if ($tags && $result) {
+			if (empty($result)) {
+				$result = NULL;
+			}
+			if ($tags) {
 				foreach ($tags as $tag ) {
 					$this->getUploadFileTagDao()->delete($tag['id']);
 				}
 			} 
 		}
+		// var_dump($this->getUploadFileTagDao()->get($result));exit();
 		return $this->getUploadFileTagDao()->get($result);
 
 	}

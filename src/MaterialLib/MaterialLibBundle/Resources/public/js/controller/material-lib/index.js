@@ -242,7 +242,7 @@ define(function(require, exports, module) {
                 // $.post($target.data('url'),{"globalIds":ids},function(data){
                 
                 $("#tag-modal").modal('show');
-                //});
+                // });
                 
                 
             },
