@@ -18,12 +18,12 @@ class KernelRequestListener
         $request = $event->getRequest();
 
         if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
-            $blacklistedIp = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
+            $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
 
-            if (isset($blacklistedIp['ips'])) {
-                $blacklistedIp = $blacklistedIp['ips'];
+            if (isset($blacklistIps['ips'])) {
+                $blacklistIps = $blacklistIps['ips'];
 
-                if (in_array($request->getClientIp(), $blacklistedIp)) {
+                if (in_array($request->getClientIp(), $blacklistIps)) {
                     throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
                 }
             }
