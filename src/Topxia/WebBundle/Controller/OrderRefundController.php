@@ -50,9 +50,9 @@ class OrderRefundController extends BaseController
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-        $dictionaries = $this->getDictionaryService()->findAllDictionariesOrderByWeight();
+        $dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
         
-        foreach ($dictionaries as $key => $value) {
+        foreach ($dictionaryItems as $key => $value) {
             $reasons[$key] = $value['name'];
         }
         $reasons['other'] = '其他';
@@ -104,8 +104,8 @@ class OrderRefundController extends BaseController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    protected function getDictionaryService()
+    protected function getDictionaryItemService()
     {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
+        return $this->getServiceKernel()->createService('Dictionary.DictionaryItemService');
     }
 }

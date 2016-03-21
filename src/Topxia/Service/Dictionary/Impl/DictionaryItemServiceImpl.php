@@ -39,6 +39,11 @@ class DictionaryItemServiceImpl extends BaseService implements DictionaryItemSer
 		return $this->getDictionaryItemDao()->findDictionaryItemByName($name);
 	}
 
+	public function findDictionaryItemByType($type)
+	{
+		return $this->getDictionaryItemDao()->findDictionaryItemByType($type);
+	}
+
 	protected function getDictionaryItemDao()
 	{
 		return $this->createDao('Dictionary.DictionaryItemDao');

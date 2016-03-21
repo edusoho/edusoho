@@ -31,6 +31,16 @@ class Version20160310135826 extends AbstractMigration
         $this->addSql("INSERT INTO `dictionary` (`id`, `type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('1', 'quitReason', NULL, '课程内容质量差', '0', '0', '0');");
 
         $this->addSql("INSERT INTO `dictionary` (`id`, `type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('2', 'quitReason', NULL, '老师服务态度不好', '0', '0', '0');");
+
+        $this->addSql("CREATE TABLE `dictionary` (
+                     `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                     `name` varchar(255) NOT NULL,
+                     `code` varchar(64) DEFAULT NULL,
+                     `type` varchar(255) NOT NULL,
+                     PRIMARY KEY (`id`)
+                    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8");
+
+        $this->addSql("INSERT INTO `dictionary` (`id`, `name`, `code`, `type`) VALUES ('1', '退学原因', 'abs2', 'refund_reason');");
     }
 
     /**

@@ -51,4 +51,11 @@ class DictionaryItemDaoImpl extends BaseDao implements DictionaryItemDao
         return $dictionary;
     }
 
+    public function findDictionaryItemByType($type)
+    {
+    	$sql = "SELECT * FROM {$this->table} where type = ?";
+        $dictionary = $this->getConnection()->fetchAll($sql, array($type));
+        return $dictionary;
+    }
+
 }

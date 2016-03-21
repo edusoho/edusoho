@@ -16,4 +16,6 @@ interface DictionaryItemDao
 
 	public function findDictionaryItemByName($name);
 
+	public function findDictionaryItemByType($type);
+
 }

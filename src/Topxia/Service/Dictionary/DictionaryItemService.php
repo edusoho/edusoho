@@ -16,4 +16,6 @@ interface DictionaryItemService
 
 	public function findDictionaryItemByName($name);
 
+	public function findDictionaryItemByType($type);
+
 }

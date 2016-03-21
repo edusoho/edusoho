@@ -164,6 +164,11 @@ services:
         tags:
             - { name: twig.extension }
 
+    topxia.twig.dictionary_extension:
+        class: Topxia\WebBundle\Twig\Extension\DictionaryExtension
+        tags:
+            - { name: twig.extension }
+
     topxia.twig.data_extension:
         class: Topxia\WebBundle\Twig\Extension\DataExtension
         tags:
