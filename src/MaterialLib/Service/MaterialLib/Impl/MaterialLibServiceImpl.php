@@ -43,16 +43,20 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function delete($globalId)
     {
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $tags = $this->getUploadFileTagService()->findByFileId($file['id']);
+
         if ($globalId) {
             $this->checkPermission(Permission::DELETE, array('globalId' => $globalId));
             $result = $this->getCloudFileService()->delete($globalId);
             if (isset($result['success']) && $result['success']) {
                 $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
+
                 if ($result) {
-                    $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
-                    $fileIds = array($file['id']);
-                    $tagIds = array();
-                    $tags = $this->getUploadFileTagService()->edit($fileIds,$tagIds);
+                    foreach ($tags as $tag) {
+                    
+                        $this->getUploadFileTagService()->delete($tag['id']);
+                    }
                     
                 }
                 return $result;

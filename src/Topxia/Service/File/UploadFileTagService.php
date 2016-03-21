@@ -8,4 +8,6 @@ interface UploadFileTagService
 	public function delete($id);
 	
 	public function edit($fileIds, $tagIds);
+
+	public function findByFileId($fileId);
 }
