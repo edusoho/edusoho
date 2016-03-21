@@ -211,18 +211,18 @@ class ChaosThreads extends BaseResource
         $courses       = $this->getCourseService()->findCoursesByIds($courseIds);               
         $courses       = ArrayToolkit::index($courses,"id");
 
-        foreach ($courseThreads as &$thread) {
+        foreach ($courseThreads as $key => &$thread) {
             if(isset($courses[$thread['courseId']])){
                 $course = $courses[$thread['courseId']];
                 $course['smallPicture'] = $this->getFileUrl($course['smallPicture']);
                 $course['middlePicture']= $this->getFileUrl($course['middlePicture']);
-                $course['lagerPicture'] = $this->getFileUrl($course['lagerPicture']);
+                $course['largePicture'] = $this->getFileUrl($course['largePicture']);
                 $thread['course'] = $course;
             } else {
-                $thread['course'] = array();
+                unset($courseThreads[$key]);
+                continue;
             }
         }
-        
         return $courseThreads;
     }
 
