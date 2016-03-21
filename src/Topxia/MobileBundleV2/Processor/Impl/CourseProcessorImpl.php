@@ -1433,6 +1433,9 @@ class CourseProcessorImpl extends BaseProcessor implements CourseProcessor
 
         if (!empty($courses)) {
             foreach ($lessons as $key => &$lesson) {
+                if (empty($courses[$lesson['courseId']])) {
+                    continue;
+                }
                 $newCourses[$key]                    = $courses[$lesson['courseId']];
                 $newCourses[$key]["liveLessonTitle"] = $lesson["title"];
                 $newCourses[$key]["liveStartTime"]   = date("c", $lesson["startTime"]);
