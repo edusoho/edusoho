@@ -5939,6 +5939,7 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.btn-tag.active,
 .btn-tag:hover {
   color: #fff;
   background-color: #ff7200;
