@@ -217,13 +217,27 @@ class ChaosThreads extends BaseResource
                 $course['smallPicture'] = $this->getFileUrl($course['smallPicture']);
                 $course['middlePicture']= $this->getFileUrl($course['middlePicture']);
                 $course['largePicture'] = $this->getFileUrl($course['largePicture']);
-                $thread['course'] = $course;
+                $thread['course'] = $this->filterCourse($course);
             } else {
                 unset($courseThreads[$key]);
                 continue;
             }
         }
         return $courseThreads;
+    }
+    
+    protected function filterCourse(array $course){
+        $keys = array(
+            'id',
+            'type',
+            'title',
+            'userId',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'createdTime'
+        );
+        return ArrayToolkit::parts($course,$keys);
     }
 
     protected function getThreadService()

@@ -96,13 +96,28 @@ class ChaosThreadsPosts extends BaseResource
                 $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
                 $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
                 $course['largePicture']  = $this->getFileUrl($course['largePicture']);
-                $post['course']          = $course;
+                $post['type']            = $thread['type'];
+                $post['course']          = $this->filterCourse($course);
             }else{
                 unset($posts[$key]);
                 continue;
             }
         }
         return $posts;
+    }
+
+    protected function filterCourse(array $course){
+        $keys = array(
+            'id',
+            'type',
+            'title',
+            'userId',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'createdTime'
+        );
+        return ArrayToolkit::parts($course,$keys);
     }
 
     public function filter(&$res)
