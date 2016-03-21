@@ -50,19 +50,12 @@ class OrderRefundController extends BaseController
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-        $dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
-        
-        foreach ($dictionaryItems as $key => $value) {
-            $reasons[$key] = $value['name'];
-        }
-        $reasons['other'] = '其他';
         return $this->render('TopxiaWebBundle:OrderRefund:refund-modal.html.twig', array(
             'target'        => $target,
             'targetType'    => $targetType,
             'order'         => $order,
             'maxRefundDays' => $maxRefundDays,
             'refundOverdue' => $refundOverdue,
-            'reasons' => $reasons
         ));
     }
 
@@ -104,8 +97,4 @@ class OrderRefundController extends BaseController
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
-    protected function getDictionaryItemService()
-    {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryItemService');
-    }
 }
