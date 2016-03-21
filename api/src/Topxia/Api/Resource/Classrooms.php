@@ -10,7 +10,9 @@ class Classrooms extends BaseResource
     public function discoveryColumn(Application $app, Request $request)
     {
         $result = $request->query->all();
-
+        if(empty($result['categoryId'])) {
+            $result['categoryId'] = 0;
+        }
         $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
         $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         unset($conditions['categoryId']);
@@ -26,6 +28,8 @@ class Classrooms extends BaseResource
             $result['showCount'] = 6;
         }
 
+        $conditions['status'] = 'published';
+        $conditions['showable'] = 1;
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
 
         $total      = count($classrooms);
