@@ -1,17 +1,18 @@
 <tbody>
+	{% for dictionary in dictionaries %}
 	<tr class="drop-out-reason">
 		<td>
-			└─退学原因
+			└─{{ dictionary.name }}
 		</td>
-		<td></td>
+		<td>{{ dictionary.code }}</td>
 		<td></td>
 
 		<td>
-			<a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_dictionary_create',{type:'quitReason'}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加</a>
+			<a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_dictionary_create',{type:dictionary.type}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加</a>
 		</td>
   	</tr>
   	{% for dictionaryItem in dictionaryItems %}
-  		{% if dictionaryItem.type == 'quitReason' %}
+  		{% if dictionaryItem.type == dictionary.type %}
 	  	<tr>
 	  		<td>
 	  			&nbsp;&nbsp;&nbsp;&nbsp;└─ {{ dictionaryItem.name }}
@@ -30,5 +31,6 @@
 	  	{% endif %}
 	{% else %}
 		<tr><td colspan="20"><div class="empty">暂无分类记录</div></td></tr>
+	{% endfor %}
 	{% endfor %}
 </tbody>

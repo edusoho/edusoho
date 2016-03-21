@@ -10,8 +10,10 @@ class DictionaryController extends BaseController
 	public function indexAction(Request $Request)
 	{
 		$dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
+        $dictionaries = $this->getDictionaryService()->findAllDictionaries();
 		return $this->render('TopxiaAdminBundle:Dictionary:index.html.twig',array(
-			'dictionaryItems' =>$dictionaryItems
+			'dictionaryItems' => $dictionaryItems,
+            'dictionaries' => $dictionaries
 			));
 	}
 
@@ -23,8 +25,10 @@ class DictionaryController extends BaseController
         	$conditions['createdTime'] = time();
             $dictionaryItem = $this->getDictionaryItemService()->addDictionaryItem($conditions);
             $dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
+            $dictionaries = $this->getDictionaryService()->findAllDictionaries();
             return $this->render('TopxiaAdminBundle:Dictionary:tbody.html.twig',array(
-            	'dictionaryItems' =>$dictionaryItems
+            	'dictionaryItems' => $dictionaryItems,
+                'dictionaries' => $dictionaries
             	));
         }
 
@@ -67,8 +71,10 @@ class DictionaryController extends BaseController
         if ($request->getMethod() == 'POST') {
             $dictionaryItem = $this->getDictionaryItemService()->updateDictionaryItem($id, $request->request->all());
             $dictionaryItems = $this->getDictionaryItemService()->findAllDictionaryItemsOrderByWeight();
+            $dictionaries = $this->getDictionaryService()->findAllDictionaries();
             return $this->render('TopxiaAdminBundle:Dictionary:tbody.html.twig',array(
-            	'dictionaryItems' =>$dictionaryItems
+            	'dictionaryItems' => $dictionaryItems,
+                'dictionaries' => $dictionaries
             	));
         }
 
@@ -80,5 +86,10 @@ class DictionaryController extends BaseController
     protected function getDictionaryItemService()
     {
         return $this->getServiceKernel()->createService('Dictionary.DictionaryItemService');
+    }
+
+    protected function getDictionaryService()
+    {
+        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
     }
 }
