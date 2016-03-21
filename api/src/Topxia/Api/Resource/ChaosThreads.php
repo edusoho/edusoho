@@ -213,6 +213,7 @@ class ChaosThreads extends BaseResource
 
         foreach ($courseThreads as $key => &$thread) {
             if(isset($courses[$thread['courseId']])){
+                unset($thread['private']);
                 $course = $courses[$thread['courseId']];
                 $course['smallPicture'] = $this->getFileUrl($course['smallPicture']);
                 $course['middlePicture']= $this->getFileUrl($course['middlePicture']);
@@ -225,7 +226,7 @@ class ChaosThreads extends BaseResource
         }
         return $courseThreads;
     }
-    
+
     protected function filterCourse(array $course){
         $keys = array(
             'id',
