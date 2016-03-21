@@ -201,7 +201,9 @@ class LoginBindController extends BaseController
 
         $this->authenticateUser($user);
 
-        $redirectUrl = $this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request)));
+        $redirectUrl = $this->generateUrl('register_success', array(
+            'goto' => $this->getTargetPath($request)
+        ));
         $response = array('success' => true, '_target_path' => $redirectUrl);
 
         response:

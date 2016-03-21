@@ -342,8 +342,8 @@ admin_course_category:
     defaults: { _controller: TopxiaAdminBundle:Course:category }
 
 admin_course_data:
-    pattern:  /course/data
-    defaults: { _controller: TopxiaAdminBundle:Course:data }
+    pattern:  /course/{filter}/data
+    defaults: { _controller: TopxiaAdminBundle:Course:data , filter:'normal'}
 
 admin_course_lesson_data:
     pattern:  /course/lesson/data/{id}
@@ -880,6 +880,11 @@ admin_app_package_update_begin_upgrade:
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:beginUpgrade }
     methods: [POST]
 
+admin_app_package_update_check_newest:
+    pattern: /app/package_update/check/newest/code/{code}
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkNewest }
+    methods: [POST]
+
 admin_category:
     pattern: /category
     defaults: { _controller: TopxiaAdminBundle:Category:index }
@@ -945,54 +950,6 @@ admin_thread_batch_delete:
     pattern: /thread/batch_delete
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
-
-admin_money_card:
-    pattern: /money_card
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:index }
-
-admin_money_card_batch:
-    pattern: /money_card/batch
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:indexBatch }
-
-admin_money_card_get_password:
-    pattern: /money_card/get_password/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:getPassword }
-
-admin_money_card_create:
-    pattern: /money_card/create
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:create }
-
-admin_money_card_lock:
-    pattern: /money_card/lock/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:lock }
-
-admin_money_card_unlock:
-    pattern: /money_card/unlock/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:unlock }
-
-admin_money_card_delete:
-    pattern: /money_card/delete/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:delete }
-
-admin_money_card_lock_batch:
-    pattern: /money_card/batch/lock/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:lockBatch }
-
-admin_money_card_unlock_batch:
-    pattern: /money_card/batch/unlock/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:unlockBatch }
-
-admin_money_card_batch_delete:
-    pattern: /money_card/batch/delete/{id}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:deleteBatch }
-
-admin_money_card_batch_card_prefix_check:
-    pattern: /money_card/card_prefix/check
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:cardPrefixCheck }
-
-admin_money_card_batch_export_csv:
-    pattern: /money_card/batch/export/csv/{batchId}
-    defaults: {_controller: TopxiaAdminBundle:MoneyCard:exportCsv }
 
 admin_question:
     pattern:  /question/{postStatus}

@@ -17,7 +17,7 @@
   <div class="order-item-detail">
     {% if hasPayPassword %}
     {{'本次使用'|trans}}
-    <input  {% if maxRate == 0 and priceType|default("RMB") == "RMB" %}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center inline-block width-input-small mhm" role="coinNum" type="text" name="coinPayAmount" value="{{ (min(coinPayAmount|default(0),maxCoin|default(0)))}}" maxlength="">
+    <input  {% if maxRate == 0 and priceType|default("RMB") == "RMB" %}readonly="true"{% endif %} id="coinPayAmount" class="form-control text-center inline-block width-input-small mhm" role="coinNum" type="text" name="coinPayAmount" value="" maxlength="">
     {{setting("coin.coin_name")}}
     {% endif %}
     <span class="coin-detail hidden-xs hidden-sm">

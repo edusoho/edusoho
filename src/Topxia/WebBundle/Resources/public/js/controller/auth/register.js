@@ -31,6 +31,22 @@ define(function(require, exports, module) {
             "{{display}}格式错误"
     );
 
+    Validator.addRule(
+            'nickname',
+            function(options, commit){
+                var nickname = options.element.val();
+                var reg_nickname = /^1\d{10}$/;
+                var result = false;
+                var isNickname = reg_nickname.test(nickname);
+
+                if(!isNickname){
+                    result = true;
+                }
+                return result;
+            },
+                "{{display}}不允许以1开头的11位纯数字"
+        );
+
     exports.run = function() {
         $(".date").datetimepicker({
             language: 'zh-CN',
@@ -113,7 +129,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="nickname"]', 
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
+            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} nickname remote'
         });
 
         validator.addItem({
