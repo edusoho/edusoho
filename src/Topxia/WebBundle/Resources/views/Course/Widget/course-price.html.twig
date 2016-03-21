@@ -15,11 +15,7 @@
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-<<<<<<< HEAD
         <span class="price">{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
-=======
-        <span class="price">{{ course.coinPrice }}{{setting('coin.coin_name', '虚拟币'|trans)}}</span>
->>>>>>> release/6.15.6
       {% else %}
         <span class="price">{{ course.price }}{{'元'|trans}}</span>
       {% endif %}
@@ -27,11 +23,7 @@
 
     {% if 'full' in shows or 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-<<<<<<< HEAD
         <span class="origin-price"><del>{{course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
-=======
-        <span class="origin-price"><del>{{course.originCoinPrice}}{{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
->>>>>>> release/6.15.6
       {% else %}
         <span class="origin-price"><del>{{course.originPrice}}{{'元'|trans}}</del></span>
       {% endif %}

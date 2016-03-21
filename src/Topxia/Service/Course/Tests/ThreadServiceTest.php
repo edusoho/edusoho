@@ -42,8 +42,6 @@ class ThreadServiceTest extends BaseTestCase
         $conditions   = array('courseId' => $course['id']);
 
         $posts=$this->getThreadService()->searchThreadPosts($conditions,"createdTimeByDesc",0,10);
-        var_dump($posts);
-        exit();
     }
     /**
      * @group current
