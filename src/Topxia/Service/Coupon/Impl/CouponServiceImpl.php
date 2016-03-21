@@ -244,56 +244,16 @@ class CouponServiceImpl extends BaseService implements CouponService
             return null;
         }
 
-        $card = $this->getCardService()->getCardByCardIdAndCardType($coupon['id'], 'coupon');
-
-        if (!empty($card)) {
-            $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
-                'status'  => 'used',
-                'useTime' => $order['paidTime']
-            ));
-            $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
-                'status'    => 'used',
-                // 'targetType' => $order['targetType'],
-                'targetId'  => $order['targetId'],
-                'orderTime' => time(),
-                'userId'    => $order['userId'],
-                'orderId'   => $order['id']
-            ));
-        } else {
-            $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
-                'status'     => 'used',
-                'targetType' => $order['targetType'],
-                'targetId'   => $order['targetId'],
-                'orderTime'  => time(),
-                'userId'     => $order['userId'],
-                'orderId'    => $order['id']
-            ));
-        }
-
-        $this->getCardService()->updateCardByCardIdAndCardType($coupon['id'], 'coupon', array(
-            'status'  => 'used',
-            'useTime' => $coupon['orderTime']
+        $coupon = $this->getCouponDao()->updateCoupon($coupon['id'], array(
+            'status'     => 'used',
+            'targetType' => $order['targetType'],
+            'targetId'   => $order['targetId'],
+            'orderTime'  => time(),
+            'userId'     => $order['userId'],
+            'orderId'    => $order['id']
         ));
 
-        $usedCount = $this->getCouponDao()->searchCouponsCount(array('status' => 'used', 'batchId' => $coupon['batchId']));
-        $coupons   = $this->getCouponDao()->searchCoupons(array('status' => 'used', 'batchId' => $coupon['batchId']), array('createdTime', 'DESC'), 0, $usedCount);
-
-        $orders      = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
-        $allDiscount = 0;
-
-        foreach ($coupons as $key => $oneCoupon) {
-            $order = $orders[$oneCoupon['orderId']];
-
-            if ($order["priceType"] == 'Coin') {
-                $rate = $order["coinRate"];
-            } else {
-                $rate = 1;
-            }
-
-            $allDiscount += ($order["couponDiscount"] / $rate);
-        }
-
-        $this->dispatchEvent('coupon.use', new ServiceEvent($coupon, array('usedNum' => $usedCount, 'money' => $allDiscount)));
+        $this->dispatchEvent('coupon.use', $coupon);
 
         return $coupon;
     }
