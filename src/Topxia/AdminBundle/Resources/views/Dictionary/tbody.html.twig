@@ -29,8 +29,10 @@
 	  		</td>
 	  	</tr>
 	  	{% endif %}
-	{% else %}
+	
+	{% endfor %}
+	{% endfor %}
+	{% if not dictionaryItems %}
 		<tr><td colspan="20"><div class="empty">暂无分类记录</div></td></tr>
-	{% endfor %}
-	{% endfor %}
+	{% endif %}
 </tbody>
