@@ -47,7 +47,7 @@ class CourseController extends CourseBaseController
             if ($priceType == 'RMB') {
                 $conditions['price'] = '0.00';
             } else {
-                $conditions['coinPrice'] = '0.00';
+                $conditions['price'] = '0.00';
             }
         }
 
