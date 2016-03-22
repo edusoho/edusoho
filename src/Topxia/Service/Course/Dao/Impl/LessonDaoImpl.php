@@ -123,17 +123,17 @@ class LessonDaoImpl extends BaseDao implements LessonDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchLessonCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -261,23 +261,23 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('courseId = :courseId')
-                        ->andWhere('updatedTime >= :updatedTime_GE')
-                        ->andWhere('status = :status')
-                        ->andWhere('type = :type')
-                        ->andWhere('free = :free')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('mediaId = :mediaId')
-                        ->andWhere('startTime >= :startTimeGreaterThan')
-                        ->andWhere('endTime < :endTimeLessThan')
-                        ->andWhere('startTime <= :startTimeLessThan')
-                        ->andWhere('endTime > :endTimeGreaterThan')
-                        ->andWhere('title LIKE :titleLike')
-                        ->andWhere('createdTime >= :startTime')
-                        ->andWhere('createdTime <= :endTime')
-                        ->andWhere('copyId = :copyId')
-                        ->andWhere('courseId IN ( :courseIds )');
+            ->from($this->table, $this->table)
+            ->andWhere('courseId = :courseId')
+            ->andWhere('updatedTime >= :updatedTime_GE')
+            ->andWhere('status = :status')
+            ->andWhere('type = :type')
+            ->andWhere('free = :free')
+            ->andWhere('userId = :userId')
+            ->andWhere('mediaId = :mediaId')
+            ->andWhere('startTime >= :startTimeGreaterThan')
+            ->andWhere('endTime < :endTimeLessThan')
+            ->andWhere('startTime <= :startTimeLessThan')
+            ->andWhere('endTime > :endTimeGreaterThan')
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('createdTime >= :startTime')
+            ->andWhere('createdTime <= :endTime')
+            ->andWhere('copyId = :copyId')
+            ->andWhere('courseId IN ( :courseIds )');
 
         if (isset($conditions['notLearnedIds'])) {
             $builder->andWhere('id NOT IN ( :notLearnedIds)');
@@ -356,5 +356,23 @@ class LessonDaoImpl extends BaseDao implements LessonDao
              AS cl  GROUP BY courseId ORDER BY status DESC, recentTime ASC LIMIT {$start}, {$limit}";
 
         return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
+    }
+
+    public function findFutureLiveLessons()
+    {
+        $time = time();
+        $sql  = "SELECT min(startTime) as startTime, courseId FROM {$this->table} WHERE endTime >= {$time} AND status='published' AND
+                type = 'live' GROUP BY courseId ORDER BY startTime ASC";
+
+        return $this->getConnection()->fetchAll($sql);
+    }
+
+    public function findReplayLiveLessons()
+    {
+        $time = time();
+        $sql  = "SELECT max(startTime) as startTime, courseId FROM {$this->table} WHERE endTime < {$time} AND status='published' AND
+                type = 'live' GROUP BY courseId ORDER BY startTime DESC";
+
+        return $this->getConnection()->fetchAll($sql);
     }
 }

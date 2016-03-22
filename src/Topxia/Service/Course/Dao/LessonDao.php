@@ -53,4 +53,8 @@ interface LessonDao
     public function findFutureLiveDates($courseIds, $limit);
 
     public function findRecentLiveCourses($courseIds, $start, $limit);
+
+    public function findFutureLiveLessons();
+
+    public function findReplayLiveLessons();
 }

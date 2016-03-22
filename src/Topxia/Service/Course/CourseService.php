@@ -180,6 +180,10 @@ interface CourseService
 
     public function findRecentLiveCourses($courseIds, $start, $limit);
 
+    public function findFutureLiveLessons();
+
+    public function findReplayLiveLessons();
+
     public function analysisLessonFinishedDataByTime($startTime, $endTime);
 
     public function searchAnalysisLessonViewCount($conditions);
