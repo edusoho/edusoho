@@ -13260,7 +13260,7 @@ textarea {
   margin: 0 auto;
   max-height: 300px;
 }
-.es-live-poster a .img-responsive {
+.es-live-poster a.img-responsive {
   max-width: none;
   width: 100%;
 }
@@ -13291,6 +13291,9 @@ textarea {
 .es-live-poster .swiper-pager span.swiper-active-switch {
   background: #f5f5f5;
   background: #ffffff;
+}
+.live-course-body .label {
+  padding: 0.4em 0.8em!important;
 }
 .live-course-body .es-live-list {
   padding: 0;
@@ -13334,7 +13337,7 @@ textarea {
 }
 @media (max-width: 767px) {
   .live-course-body .es-live-list .panel-body > ul li a {
-    padding: 14px 17px;
+    padding: 14px 9px;
   }
 }
 .live-course-body .es-live-list .panel-body > ul li.active {
@@ -13405,6 +13408,7 @@ textarea {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+  font-size: 12px;
 }
 .live-course-body .es-live-list .es-live-item li a span {
   color: #919191;
@@ -13504,6 +13508,7 @@ textarea {
 .live-course-body .es-live-all .media-body .title {
   height: 20px;
   overflow: hidden;
+  margin-top: 10px;
 }
 .live-course-body .es-live-all .media-body .title a {
   font-size: 16px;
@@ -13527,6 +13532,11 @@ textarea {
   top: 50%;
   margin-top: -34px;
   text-align: center;
+}
+@media (max-width: 767px) {
+  .live-course-body .es-live-all .media-body .other {
+    margin-top: -14px;
+  }
 }
 .live-course-body .es-live-all .media-body .other span {
   display: block;

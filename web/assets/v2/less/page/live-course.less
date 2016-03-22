@@ -3,7 +3,7 @@
   background: #fff;
   margin: 0 auto;
   max-height: 300px;
-  a .img-responsive{
+  a.img-responsive{
     max-width: none;
     width: 100%;
   }
@@ -17,7 +17,7 @@
     z-index: 100;
     width: 100%;
     text-align: center;
-      span{
+    span{
         cursor: pointer;
         font-size: 0;
         margin: 0 7px;
@@ -27,7 +27,7 @@
         .border-radius(50%);
         background: #fff;
         background: rgba(255, 255, 255, 0.5);
-      }
+     }
     span.swiper-active-switch{
       background: @gray-lighter;
        background: rgba(255, 255, 255, 1)
@@ -36,11 +36,14 @@
 }
 
 .live-course-body{
+  .label{
+    padding:0.4em 0.8em!important; 
+  }
   .es-live-list{
     padding: 0;
     .panel-body{
       padding: 0;
-        >ul{
+      >ul{
       margin:0;
       padding: 0;
       background: @gray-lighter;
@@ -68,7 +71,7 @@
             padding: 14px 62px;
           }
           @media (max-width:@screen-xs-max){
-            padding: 14px 17px;
+            padding: 14px 9px;
           }
         }
       }
@@ -77,7 +80,7 @@
         border-bottom: none;
       }
     }
-    }
+  }
   
    
     .es-live-item{
@@ -131,12 +134,11 @@
         a{
           color: @gray-darker;
           .text-overflow ;
+          font-size: 12px;
           span{
            color: @gray;
            padding-right: 15px;
-
           }
-
         }
       }
     }
@@ -226,6 +228,7 @@
       .title{
         height: 20px;
         overflow: hidden;
+        margin-top: 10px;
         a{
           font-size: 16px;
         }
@@ -249,6 +252,9 @@
         top: 50%;
         margin-top: -34px;
         text-align: center;
+        @media(max-width:@screen-xs-max){
+          margin-top: -14px;
+        }
         span{
           display: block;
           margin-bottom: 8px;
