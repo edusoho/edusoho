@@ -335,6 +335,17 @@
 .es-materials-manage .form-csearch-type{
   width: auto;
 }
+.es-materillib-table a{
+  color: #616161;
+}
+.es-materillib-table a:hover{
+  color: #428bca;
+  text-decoration: none;
+}
+.es-materials-manage .table>tbody>tr>td{
+  vertical-align: middle;
+  color: #313131;
+}
 .label {
   padding: 0.2em 0.6em;
   font-weight: normal;
@@ -348,4 +359,3 @@
   	padding: 2px;
   }
 }
- 

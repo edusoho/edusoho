@@ -30,9 +30,8 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
-        var_dump($conditions);
-        unset($conditions['processStatus']);
-        unset($conditions['searchType']);
+        unset($conditions["searchType"]);
+        unset($conditions["processStatus"]);
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
