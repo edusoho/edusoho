@@ -1,9 +1,9 @@
 .course-list {
-  &.no-shadow {
-    .course-item {
-      .box-shadow(none); 
-    }
-  }
+  // &.no-shadow {
+  //   .course-item {
+  //     .box-shadow(none); 
+  //   }
+  // }
   &.no-margin {
     .course-item {
       margin-bottom: 0; 
@@ -14,7 +14,8 @@
     z-index: 1;
     margin-bottom: 30px;
     .border-radius;
-    .es-box-shadow;
+    // .es-box-shadow;
+    border: 1px solid @border-color;
     background-color: #fff;
     @media (min-width: @screen-md-min) {
       .es-transup;
@@ -165,6 +166,6 @@
   }
 }
 
-.lt-ie9 .course-list .course-item {
-  border: 1px solid @gray-light;
-}
+// .lt-ie9 .course-list .course-item {
+//   border: 1px solid @gray-light;
+// }

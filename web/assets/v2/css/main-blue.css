@@ -933,9 +933,7 @@
 .es-row-wrap {
   margin-bottom: 20px;
   background: #fff;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  border: 1px solid #e4ecf3;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
@@ -1585,9 +1583,7 @@ a.link-muted {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e4ecf3;
 }
 .watermark.active {
   -webkit-touch-callout: none;
@@ -5121,9 +5117,7 @@ a.homework-essay-textarea-pack-up {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e4ecf3;
 }
 .es-section.section-lg {
   min-height: 400px;
@@ -5163,9 +5157,6 @@ a.homework-essay-textarea-pack-up {
 }
 .es-section .section-header .more > i {
   font-size: 24px;
-}
-.lt-ie9 .es-section {
-  border: 1px solid #e1e1e1;
 }
 .nav.nav-tabs {
   position: relative;
@@ -5987,7 +5978,7 @@ textarea.form-control-o {
 .es-tabs {
   background: #fff;
   margin-bottom: 30px;
-  border: 1px solid #e1e1e1;
+  border: 1px solid #e4ecf3;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -6037,6 +6028,9 @@ textarea.form-control-o {
   margin: 0;
   list-style-type: none;
 }
+.es-tabs .tab-body > ul + ul {
+  border-top: 1px dashed #e4ecf3;
+}
 .es-tabs .tab-body > ul > li {
   float: left;
 }
@@ -6062,9 +6056,6 @@ textarea.form-control-o {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
-.es-tabs .tab-body > ul + ul {
-  border-top: 1px dashed #e1e1e1;
 }
 .image-overlay {
   position: absolute;
@@ -6434,12 +6425,7 @@ textarea {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-}
-.lt-ie9 .sidenav {
-  border: 1px solid #e1e1e1;
+  border: 1px solid #e4ecf3;
 }
 .nav-pills > li {
   margin-right: 5px;
@@ -6479,13 +6465,7 @@ textarea {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  border-left: 2px solid #0081e6;
-}
-.lt-ie9 .es-tag {
-  border: 1px solid #e1e1e1;
+  border: 1px solid #e4ecf3;
   border-left: 2px solid #0081e6;
 }
 .es-piece {
@@ -6961,11 +6941,6 @@ textarea {
   box-shadow: none;
   border: none;
 }
-.course-list.no-shadow .course-item {
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
 .course-list.no-margin .course-item {
   margin-bottom: 0;
 }
@@ -6976,9 +6951,7 @@ textarea {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #e4ecf3;
   background-color: #fff;
 }
 @media (min-width: 992px) {
@@ -7156,9 +7129,6 @@ textarea {
 }
 .course-list .course-date .btn-circle.btn-live {
   background: #0081e6;
-}
-.lt-ie9 .course-list .course-item {
-  border: 1px solid #e1e1e1;
 }
 .es-banner {
   position: relative;
@@ -9491,13 +9461,10 @@ textarea {
 .belongs-class .media-left img {
   width: 100px;
   height: auto;
-  border: 3px solid #fff;
+  border: 3px solid #e4ecf3;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 .belongs-class .media-body {
   vertical-align: middle;
