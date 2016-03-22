@@ -3,7 +3,7 @@
 {% block title %}{{'营销设置'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'marketing' %}
-{% set script_controller = 'course-manage/live-open-time-set' %}
+{% set script_controller = 'open-course-manage/live-open-time-set' %}
 
 {% block main %}
 
@@ -36,7 +36,7 @@
         <input type="hidden" name="courseIds" value="">
         <div class="col-md-12" role="course-item-container">
           <ul class="course-grids">
-            <li class="course-grid related-course-grid" role="add-course" style="cursor:pointer" data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="/admin/course/search">
+            <li class="course-grid related-course-grid" role="add-course" style="cursor:pointer" data-backdrop="static" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_open_course_pick', {id:course['id']})}}">
               <i class="add-course grid-body glyphicon glyphicon-plus"></i>
             </li>
           </ul>

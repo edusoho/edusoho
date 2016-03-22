@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\Paginator;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -67,6 +68,47 @@ class OpenCourseManageController extends BaseController
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-marketing.html.twig', array(
             'course' => $course
+        ));
+    }
+
+    public function pickAction(Request $request, $filter, $id)
+    {
+        $user                 = $this->getCurrentUser();
+        $course               = $this->getCourseService()->tryManageCourse($id);
+        $conditions           = $request->query->all();
+        $conditions['status'] = 'published';
+
+        if ($filter == 'openCourse') {
+            $conditions['type']   = 'open';
+            $conditions['userId'] = $user['id'];
+        }
+
+        if ($filter == 'otherCourse') {
+            $conditions['type']   = 'normal';
+            $conditions['userId'] = $user['id'];
+        }
+
+        if ($filter == 'normal') {
+        }
+
+        if (isset($conditions['title']) && $conditions['title'] == "") {
+            unset($conditions['title']);
+        }
+
+        $count     = $this->getCourseService()->searchCourseCount($conditions);
+        $paginator = new Paginator($this->get('request'), $count, 5);
+        $courses   = $this->getCourseService()->searchCourses(
+            $conditions,
+            null,
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-pick-modal.html.twig', array(
+            'courses'   => $courses,
+            'paginator' => $paginator,
+            'courseId'  => $course['id'],
+            'filter'    => $filter
         ));
     }
 
