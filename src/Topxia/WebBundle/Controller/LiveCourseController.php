@@ -547,8 +547,6 @@ class LiveCourseController extends BaseController
                     $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId, 'endTimeLessThan' => time()), array('startTime', 'DESC'), 0, 1);
                 }
 
-                //$lessons = $this->getCourseService()->findRecentLiveLessons(array($courseId), 0, 1);
-
                 $courses[$courseId]['liveStartTime'] = $lessons[0]['startTime'];
                 $courses[$courseId]['liveEndTime']   = $lessons[0]['endTime'];
                 $courses[$courseId]['lessonId']      = $lessons[0]['id'];
