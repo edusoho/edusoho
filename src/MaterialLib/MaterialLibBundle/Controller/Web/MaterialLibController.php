@@ -223,6 +223,7 @@ class MaterialLibController extends BaseController
         );
 
         $this->getUploadFileTagService()->edit($fileIds, $tagIds);
+
         return $this->redirect($this->generateUrl('material_lib_browsing'));
     }
 
