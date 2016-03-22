@@ -107,7 +107,6 @@
         }
         .label{
           margin-left: 24px;
-          padding: 0.3em 0.5em;
         }
       }
       .live-content.live{
@@ -139,6 +138,7 @@
     img{
       width: 110px;
       max-width: 110px;
+      .border-radius(4px);
     }
     .title{
       margin-bottom: 10px;
@@ -206,6 +206,7 @@
         }
       img{
         max-width: 302px;
+        .border-radius(4px);
         @media(max-width:@screen-xs-max){
           max-width:@screen-xs-max;
           width: 100%;
@@ -215,10 +216,6 @@
     }
     .media-body{
       position: relative;
-      .label{
-        font-size: 12px;
-        padding: 5px 15px;
-      }
       .title{
         height: 20px;
         overflow: hidden;
