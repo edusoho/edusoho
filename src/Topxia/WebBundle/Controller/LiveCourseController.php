@@ -513,7 +513,7 @@ class LiveCourseController extends BaseController
         $futureLiveCoursesCount = $this->getCourseService()->searchCourseCount($conditions);
 
         $pages = floor($futureLiveCoursesCount / $pageSize);
-        $start = $currentPage - $pages - 1;
+        $start = ($currentPage - $pages - 1) * $pageSize;
 
         $replayLiveLessonCourses = $this->getCourseService()->findReplayLiveLessons();
         $replayLiveCourseIds     = ArrayToolkit::column($replayLiveLessonCourses, 'courseId');
