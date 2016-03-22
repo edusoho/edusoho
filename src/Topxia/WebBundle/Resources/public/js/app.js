@@ -152,7 +152,11 @@ define(function(require, exports, module) {
     }
 
     $("select[name='language']").change(function() {
-        Cookie.set("locale", $('select[name=language]').val());
+        $.post($("select[name='language']").parents('form').attr('action'), $("select[name='language']").parents('form').serialize(), function() {
+            Cookie.set("locale", $('select[name=language]').val());
+            window.location.reload();
+        });
+
     });
 
 });
