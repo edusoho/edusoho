@@ -21,6 +21,7 @@ class KernelControllerListener
 
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
+        
         $permissions = $this->container->get('router')->getRouteCollection()->get($route)->getPermissions();
 
         $currentUser = $this->getUserService()->getCurrentUser();
