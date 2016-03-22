@@ -85,23 +85,18 @@ class ChaosThreadsPosts extends BaseResource
         $course  = ArrayToolkit::index($courses,"id");
 
         foreach ($posts as $key => &$post) 
-        {                                  
-            if(isset($courses[$post['courseId']])){   
-                $course = $courses[$post['courseId']];
-                $thread = $this->getCourseThreadService()->getThread($course['id'],$post['threadId']);
-                if($thread['userId'] == $currentUser['id']){
-                    unset($posts[$key]);
-                    continue;
-                }
-                $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
-                $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
-                $course['largePicture']  = $this->getFileUrl($course['largePicture']);
-                $post['type']            = $thread['type'];
-                $post['course']          = $this->filterCourse($course);
-            }else{
+        {       
+            $thread = $this->getCourseThreadService()->getThread(null,$post['threadId']);
+            if($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])){
                 unset($posts[$key]);
                 continue;
-            }
+            }                             
+            $course = $courses[$post['courseId']];            
+            $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
+            $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
+            $course['largePicture']  = $this->getFileUrl($course['largePicture']);
+            $post['type']            = $thread['type'];
+            $post['course']          = $this->filterCourse($course);
         }
         return $posts;
     }

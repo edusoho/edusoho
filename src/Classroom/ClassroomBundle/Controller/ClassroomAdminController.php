@@ -39,6 +39,12 @@ class ClassroomAdminController extends BaseController
         $priceAll            = array();
         $classroomCoursesNum = array();
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($classroomIds as $key => $value) {
             $courses                     = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
             $classroomCoursesNum[$value] = count($courses);
@@ -47,7 +53,7 @@ class ClassroomAdminController extends BaseController
             $price     = 0;
 
             foreach ($courses as $course) {
-                $coinPrice += $course['coinPrice'];
+                $coinPrice += $course['price'] * $cashRate;
                 $price += $course['price'];
             }
 
@@ -236,8 +242,14 @@ class ClassroomAdminController extends BaseController
         $courses                  = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
         $classroomCoursesNum[$id] = count($courses);
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($courses as $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 

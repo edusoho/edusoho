@@ -606,8 +606,14 @@ class ClassroomManageController extends BaseController
         $price     = 0;
         $courses   = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($courses as $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -685,10 +691,16 @@ class ClassroomManageController extends BaseController
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
 
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 

@@ -48,17 +48,6 @@ class ClassroomController extends BaseController
         $fliter = $conditions['fliter'];
 
         if ($fliter['price'] == 'free') {
-            $coinSetting = $this->getSettingService()->get("coin");
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $priceType   = "RMB";
-
-            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-                $priceType = $coinSetting["price_type"];
-            }
-
-            if ($priceType == 'Coin') {
-                $conditions['coinPrice'] = '0.00';
-            }
             $conditions['price'] = '0.00';
         }
 
@@ -213,10 +202,16 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($courses as $key => $course) {
             $lessonNum += $course['lessonNum'];
 
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -440,8 +435,14 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($courses as $key => $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -886,11 +887,17 @@ class ClassroomController extends BaseController
     {
         $coursesTotalPrice = 0;
 
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = 0;
+        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
+            $cashRate = $coinSetting["cash_rate"];
+        }
         foreach ($courses as $key => $course) {
             if ($priceType == "RMB") {
                 $coursesTotalPrice += $course["originPrice"];
             } elseif ($priceType == "Coin") {
-                $coursesTotalPrice += $course["originCoinPrice"];
+                $coursesTotalPrice += $course["originPrice"] * $cashRate;
             }
         }
 
