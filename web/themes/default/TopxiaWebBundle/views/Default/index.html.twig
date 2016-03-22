@@ -28,7 +28,7 @@
                  {% set teachers = classroom.users|default(null) %}
                 <ul class="home-class-list clearfix">
                   {% for classroom in classrooms %}
-                  {% if loop.index <= 5%}
+                  {% if loop.index <= 1 %}
                     <li class="class-item">
                       <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
                         {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}

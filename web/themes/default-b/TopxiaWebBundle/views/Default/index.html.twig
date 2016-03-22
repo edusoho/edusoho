@@ -48,7 +48,7 @@
                             <span class="class-teacher">
                               <i class="fa fa-user"></i>
                               {% for teacher in teachers %}
-                                {% if loop.index <= 5%}
+                                {% if loop.index <= 1 %}
                                 <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                                  {% endif %}
                               {% endfor %}
