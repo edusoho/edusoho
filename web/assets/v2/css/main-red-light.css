@@ -13499,6 +13499,11 @@ textarea {
   color: #fff;
   font-weight: bold;
 }
+@media (max-width: 1200px) {
+  .live-course-body .es-live-all .media-left .re-report {
+    width: 288px;
+  }
+}
 @media (max-width: 767px) {
   .live-course-body .es-live-all .media-left {
     display: block;
@@ -13511,10 +13516,15 @@ textarea {
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .live-course-body .es-live-all .media-left img {
     max-width: 767px;
     width: 100%;
+  }
+}
+@media (max-width: 1200px) {
+  .live-course-body .es-live-all .media-left img {
+    max-width: 288px;
   }
 }
 .live-course-body .es-live-all .media-body {
@@ -13561,4 +13571,8 @@ textarea {
 }
 .live-course-body .es-live-all .media-body .other span.price {
   color: #e83d2c;
+}
+.live-course-body .es-live-all .media-body .other a {
+  position: absolute;
+  right: 0;
 }

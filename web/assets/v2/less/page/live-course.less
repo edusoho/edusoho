@@ -223,6 +223,9 @@
         line-height: 25px;
         color: #fff;
         font-weight: bold;
+        @media(max-width:@screen-lg-min){
+          width: 288px;
+        }
       }
         @media(max-width:@screen-xs-max){
           display: block;
@@ -231,9 +234,12 @@
       img{
         max-width: 302px;
         .border-radius(4px);
-        @media(max-width:@screen-xs-max){
+        @media(max-width:@screen-md-max){
           max-width:@screen-xs-max;
           width: 100%;
+        }
+        @media(max-width:@screen-lg-min){
+           max-width: 288px;
         }
 
       }
@@ -278,6 +284,10 @@
         }
         span.price{
           color: #e83d2c;
+        }
+        a{
+          position: absolute;
+          right: 0;
         }
       }
     }
