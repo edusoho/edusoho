@@ -184,7 +184,12 @@ class LiveCourseController extends BaseController
         $furtureLiveCourseIds     = ArrayToolkit::column($furtureLiveLessonCourses, 'courseId');
 
         $conditions['courseIds'] = $furtureLiveCourseIds;
-        $furtureLiveCourses      = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $furtureLiveCourses      = $this->getCourseService()->searchCourses(
+            $conditions, 
+            array('createdTime', 'DESC'), 
+            $paginator->getOffsetCount(), 
+            $paginator->getPerPageCount()
+        );
         $furtureLiveCourses      = ArrayToolkit::index($furtureLiveCourses, 'id');
         $furtureLiveCourses      = $this->_liveCourseSort($furtureLiveCourseIds, $furtureLiveCourses, 'furture');
 
