@@ -1,9 +1,12 @@
 <div class="class-item">
-  <div class="class-bg-layer"></div>
-  <div class="class-item-bg">
+  <div class="class-img-wrap">
     <a class="class-img" href="{{ path('classroom_show', {id:classroom.id}) }}">
       {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
     </a>
-    <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+    <div class="mask">
+      <a href="{{ path('classroom_show', {id:classroom.id}) }}" class="btn btn-warning">立即加入</a>
+    </div>
   </div>
+  <h3><a class="link-dark" href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a></h3>
+  <div class="metas">共{{classroom.courseNum}}门课程</div>
 </div>
