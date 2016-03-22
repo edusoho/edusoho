@@ -13256,9 +13256,16 @@ textarea {
 }
 .es-live-poster {
   position: relative;
+  background: #fff;
+  margin: 0 auto;
+  max-height: 300px;
 }
 .es-live-poster a .img-responsive {
   max-width: none;
+  width: 100%;
+}
+.es-live-poster .swiper-slide {
+  margin: 0 auto;
   width: 100%;
 }
 .es-live-poster .swiper-pager {
