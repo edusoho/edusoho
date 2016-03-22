@@ -40,10 +40,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $connection = $this->getConnection();
 
-        if ($this->isTableExist('friend')) {
-            $connection->exec("UPDATE friend SET pair=1 WHERE id IN ( SELECT a.id id FROM (SELECT id,fromId,toId FROM friend) AS a, (SELECT id,fromId,toId FROM friend) AS b WHERE a.fromId=b.toId AND a.toId=b.fromId)");
-        }
-
         if (!$this->isTableExist('discovery_column')) {
             $connection->exec("
                 CREATE TABLE `discovery_column` (
