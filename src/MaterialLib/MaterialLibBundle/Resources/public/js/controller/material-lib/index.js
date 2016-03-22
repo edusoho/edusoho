@@ -190,12 +190,15 @@ define(function(require, exports, module) {
                         if(data){
                             Notify.success('删除资源成功');
                             // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+                            
                             self.renderTable();
                         } else {
                             Notify.danger('删除资源失败');
                             // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
                             self.renderTable();
                         }
+                        $('#material-lib-items-panel').find('[data-role=batch-item]').show();
+
                     });
                 }
                 
