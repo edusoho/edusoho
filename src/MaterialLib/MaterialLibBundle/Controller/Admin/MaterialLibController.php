@@ -16,8 +16,8 @@ class MaterialLibController extends BaseController
 
     public function manageAction(Request $request)
     {
-        // $conditions = $request->query->all();
-        // var_dump($conditions);
+        $conditions = $request->query->all();
+        var_dump($conditions);
 
         return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
             'type'          => $request->query->get('type', ''),
@@ -30,6 +30,9 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
+        var_dump($conditions);
+        unset($conditions['processStatus']);
+        unset($conditions['searchType']);
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
