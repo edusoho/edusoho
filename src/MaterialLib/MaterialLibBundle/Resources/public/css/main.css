@@ -51,12 +51,12 @@
 }
 
 .pie-container .left {
-    padding-left: 0; 
+    padding-left: 0;
     padding-right: 5px;
 }
 
 .pie-container .right {
-    padding-left: 5px; 
+    padding-left: 5px;
     padding-right: 0;
 }
 
@@ -193,7 +193,7 @@
 
 .materials-ul li.img-li .mask {
     display: none;
-    cursor: pointer; 
+    cursor: pointer;
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -268,8 +268,8 @@
 }
 
 
-.materials-type{ 
-  margin-bottom:25px!important; 
+.materials-type{
+  margin-bottom:25px!important;
 }
 .materials-type ul{
   padding:0;
@@ -334,4 +334,18 @@
 }
 .es-materials-manage .form-csearch-type{
   width: auto;
-} 
+}
+.label {
+  padding: 0.2em 0.6em;
+  font-weight: normal;
+  .border-radius;
+  vertical-align: middle;
+  &.label-md {
+    font-size: 100%;
+  }
+  &.label-xs {
+  	font-size: 12px;
+  	padding: 2px;
+  }
+}
+ 
