@@ -155,33 +155,51 @@ class LiveCourseController extends BaseController
 
     public function liveCourseListAction(Request $request)
     {
-        $liveLessons   = $this->getCourseService()->searchLessons(array('status' => 'published', 'type' => 'live'), array('startTime', 'ASC'), 0, PHP_INT_MAX);
-        $liveCourseIds = array_unique(ArrayToolkit::column($liveLessons, 'courseId'));
-
         $conditions = array(
-            'status'    => 'published',
-            'type'      => 'live',
-            'parentId'  => 0,
-            'courseIds' => $liveCourseIds
+            'status'      => 'published',
+            'type'        => 'live',
+            'parentId'    => 0,
+            'lessonNumGT' => 0
         );
 
         $categoryId = $request->query->get('categoryId', '');
 
         if (!empty($categoryId)) {
-            $conditions['categoryId'] = $request->query->get('categoryId');
+            $conditions['categoryId'] = $categoryId;
         }
 
         $vipCategoryId = $request->query->get('vipCategoryId', '');
 
         if (!empty($vipCategoryId)) {
-            $conditions['vipLevelId'] = $request->query->get('vipCategoryId');
+            $conditions['vipLevelId'] = $vipCategoryId;
         }
 
-        $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $paginator = new Paginator(
+            $request,
+            $this->getCourseService()->searchCourseCount($conditions)
+            , 10
+        );
 
-        $courseIds = ArrayToolkit::column($courses, 'id');
+        $furtureLiveLessonCourses = $this->getCourseService()->findFutureLiveCourseIds();
+        $furtureLiveCourseIds     = ArrayToolkit::column($furtureLiveLessonCourses, 'courseId');
 
-        list($liveCourses, $paginator) = $this->_searchLiveCourse($request, $courseIds);
+        $conditions['courseIds'] = $furtureLiveCourseIds;
+        $furtureLiveCourses      = $this->getCourseService()->searchCourses(
+            $conditions, 
+            array('createdTime', 'DESC'), 
+            $paginator->getOffsetCount(), 
+            $paginator->getPerPageCount()
+        );
+        $furtureLiveCourses      = ArrayToolkit::index($furtureLiveCourses, 'id');
+        $furtureLiveCourses      = $this->_liveCourseSort($furtureLiveCourseIds, $furtureLiveCourses, 'furture');
+
+        $replayLiveCourses = array();
+
+        if (count($furtureLiveCourses) < $paginator->getPerPageCount()) {
+            $replayLiveCourses = $this->_searchReplayLiveCourse($request, $conditions, $furtureLiveCourseIds, $furtureLiveCourses);
+        }
+
+        $liveCourses = array_merge($furtureLiveCourses, $replayLiveCourses);
 
         $levels = array();
 
@@ -492,35 +510,55 @@ class LiveCourseController extends BaseController
         return $categories;
     }
 
-    private function _searchLiveCourse($request, $courseIds)
+    private function _searchReplayLiveCourse($request, $conditions, $allFurtureLiveCourseIds, $pageFurtureLiveCourses)
     {
-        if (!$courseIds) {
-            $courseIds = array(-1);
+        $pageSize    = 10;
+        $currentPage = $request->query->get('page', 1);
+
+        $futureLiveCoursesCount = $this->getCourseService()->searchCourseCount($conditions);
+
+        $pages = floor($futureLiveCoursesCount / $pageSize);
+        $start = ($currentPage - $pages - 1) * $pageSize;
+
+        $replayLiveLessonCourses = $this->getCourseService()->findPastLiveCourseIds();
+        $replayLiveCourseIds     = ArrayToolkit::column($replayLiveLessonCourses, 'courseId');
+
+        unset($conditions['courseIds']);
+        $conditions['excludeIds'] = $allFurtureLiveCourseIds;
+
+        $replayLiveCourses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $pageSize - count($pageFurtureLiveCourses));
+
+        $replayLiveCourses = ArrayToolkit::index($replayLiveCourses, 'id');
+        $replayLiveCourses = $this->_liveCourseSort($replayLiveCourseIds, $replayLiveCourses, 'replay');
+
+        return $replayLiveCourses;
+    }
+
+    private function _liveCourseSort($liveLessonCourseIds, $liveCourses, $type)
+    {
+        $courses = array();
+
+        if (empty($liveCourses)) {
+            return array();
         }
 
-        $paginator = new Paginator(
-            $request,
-            $this->getCourseService()->searchCourseCount(array('status' => 'published', 'type' => 'live', 'parentId' => 0, 'courseIds' => $courseIds))
-            , 10
-        );
+        foreach ($liveLessonCourseIds as $key => $courseId) {
+            if (isset($liveCourses[$courseId])) {
+                $courses[$courseId] = $liveCourses[$courseId];
 
-        $liveLessons = $this->getCourseService()->findRecentLiveCourses($courseIds, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+                if ($type == 'furture') {
+                    $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId, 'endTimeGreaterThan' => time()), array('startTime', 'ASC'), 0, 1);
+                } else {
+                    $lessons = $this->getCourseService()->searchLessons(array('courseId' => $courseId, 'endTimeLessThan' => time()), array('startTime', 'DESC'), 0, 1);
+                }
 
-        $liveCourses = array();
-
-        foreach ($liveLessons as $key => $val) {
-            if (!isset($liveCourses[$val['courseId']])) {
-                $liveCourses[$val['courseId']] = $this->getCourseService()->getCourse($val['courseId']);
-
-                $lessons = $this->getCourseService()->findRecentLiveLessons(array($val['courseId']), 0, 1);
-
-                $liveCourses[$val['courseId']]['liveStartTime'] = $lessons[0]['startTime'];
-                $liveCourses[$val['courseId']]['liveEndTime']   = $lessons[0]['endTime'];
-                $liveCourses[$val['courseId']]['lessonId']      = $lessons[0]['id'];
+                $courses[$courseId]['liveStartTime'] = $lessons[0]['startTime'];
+                $courses[$courseId]['liveEndTime']   = $lessons[0]['endTime'];
+                $courses[$courseId]['lessonId']      = $lessons[0]['id'];
             }
         }
 
-        return array($liveCourses, $paginator);
+        return $courses;
     }
 
     protected function getCourseService()

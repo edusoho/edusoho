@@ -3201,7 +3201,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: -24.99999999px;
+  margin-top: -25px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -13256,9 +13256,16 @@ textarea {
 }
 .es-live-poster {
   position: relative;
+  background: #fff;
+  margin: 0 auto;
+  max-height: 300px;
 }
 .es-live-poster a .img-responsive {
   max-width: none;
+  width: 100%;
+}
+.es-live-poster .swiper-slide {
+  margin: 0 auto;
   width: 100%;
 }
 .es-live-poster .swiper-pager {
@@ -13375,7 +13382,6 @@ textarea {
 .live-course-body .es-live-list .es-live-item .live-content.living .label,
 .live-course-body .es-live-list .es-live-item .live-content.live .label {
   margin-left: 24px;
-  padding: 0.3em 0.5em;
 }
 .live-course-body .es-live-list .es-live-item .live-content.live .time-icon {
   background: #6dcbf5;
@@ -13407,6 +13413,9 @@ textarea {
 .live-course-body .es-live-recommend img {
   width: 110px;
   max-width: 110px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 .live-course-body .es-live-recommend .title {
   margin-bottom: 10px;
@@ -13479,6 +13488,9 @@ textarea {
 }
 .live-course-body .es-live-all .media-left img {
   max-width: 302px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 @media (max-width: 767px) {
   .live-course-body .es-live-all .media-left img {
@@ -13488,10 +13500,6 @@ textarea {
 }
 .live-course-body .es-live-all .media-body {
   position: relative;
-}
-.live-course-body .es-live-all .media-body .label {
-  font-size: 12px;
-  padding: 5px 15px;
 }
 .live-course-body .es-live-all .media-body .title {
   height: 20px;
