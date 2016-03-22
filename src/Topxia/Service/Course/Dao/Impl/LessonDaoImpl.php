@@ -324,41 +324,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 
-    public function findRecentLiveLessons($courseIds, $start, $limit)
-    {
-        if (empty($courseIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-
-        $time = time();
-        $sql  = "SELECT * FROM
-               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
-                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
-             AS cl  ORDER BY recentTime ASC,status DESC LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
-    }
-
-    public function findRecentLiveCourses($courseIds, $start, $limit)
-    {
-        if (empty($courseIds)) {
-            return array();
-        }
-
-        $marks = str_repeat('?,', count($courseIds) - 1).'?';
-
-        $time = time();
-        $sql  = "SELECT courseId,min(recentTime) as recentTime FROM
-               (SELECT id, ABS({$time}-startTime) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime<={$time} AND courseId IN({$marks})
-                UNION SELECT id, ABS(startTime-{$time}) AS recentTime,courseId,startTime,endTime,(startTime>{$time}) AS status FROM {$this->table} WHERE type='live' AND status='published' AND startTime>={$time} AND courseId IN({$marks}))
-             AS cl  GROUP BY courseId ORDER BY status DESC, recentTime ASC LIMIT {$start}, {$limit}";
-
-        return $this->getConnection()->fetchAll($sql, array_merge($courseIds, $courseIds));
-    }
-
-    public function findFutureLiveLessons()
+    public function findFutureLiveCourseIds()
     {
         $time = time();
         $sql  = "SELECT min(startTime) as startTime, courseId FROM {$this->table} WHERE endTime >= {$time} AND status='published' AND
@@ -367,7 +333,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function findReplayLiveLessons()
+    public function findPastLiveCourseIds()
     {
         $time = time();
         $sql  = "SELECT max(startTime) as startTime, courseId FROM {$this->table} WHERE endTime < {$time} AND status='published' AND

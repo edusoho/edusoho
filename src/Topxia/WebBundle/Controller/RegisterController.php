@@ -83,7 +83,7 @@ class RegisterController extends BaseController
             if ($this->getAuthService()->hasPartnerAuth()) {
                 $currentUser = $this->getCurrentUser();
 
-                if ($currentUser->isLogin()) {
+                if (!$currentUser->isLogin()) {
                     $this->authenticateUser($user);
                 }
 
