@@ -13524,7 +13524,7 @@ textarea {
 }
 @media (max-width: 1200px) {
   .live-course-body .es-live-all .media-left img {
-    max-width: 288px;
+    width: 288px;
   }
 }
 .live-course-body .es-live-all .media-body {
