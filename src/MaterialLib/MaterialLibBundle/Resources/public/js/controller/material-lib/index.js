@@ -189,12 +189,10 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),{"globalIds":ids},function(data){
                         if(data){
                             Notify.success('删除资源成功');
-                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
                             
                             self.renderTable();
                         } else {
                             Notify.danger('删除资源失败');
-                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
                             self.renderTable();
                         }
                         $('#material-lib-items-panel').find('[data-role=batch-item]').show();
@@ -220,11 +218,9 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),{"globalIds":ids},function(data){
                         if(data){
                             Notify.success('分享资源成功');
-                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         } else {
                             Notify.danger('分享资源失败');
-                            // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         }
                         $('#material-lib-items-panel').find('[data-role=batch-item]').show();
@@ -248,10 +244,8 @@ define(function(require, exports, module) {
                 }
 
                 $("#select-tag-items").val(ids);
-                // $.post($target.data('url'),{"globalIds":ids},function(data){
                 
                 $("#tag-modal").modal('show');
-                // });
                 
                 
             },

@@ -37,7 +37,6 @@ class UploadFileTagDaoImpl extends BaseDao implements UploadFileTagDao
         $result = $this->getConnection()->executeUpdate($sql, array($fileId));
         $this->clearCached();
         return $result;
-        // return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
     }
 
     public function findByFileId($fileId)
@@ -45,17 +44,6 @@ class UploadFileTagDaoImpl extends BaseDao implements UploadFileTagDao
         $sql   = "SELECT * FROM {$this->table} WHERE fileId = ?";
         return $this->getConnection()->fetchAll($sql, array($fileId));
     }
-
-    // public function findTagsByFileIds(array $fileIds)
-    // {
-    //     if (empty($fileIds)) {
-    //         return array();
-    //     }
-
-    //     $marks = str_repeat('?,', count($fileIds) - 1).'?';
-    //     $sql   = "SELECT * FROM {$this->getTable()} WHERE id IN ({$marks}) LIMIT {$start}, {$limit};";
-    //     return $this->getConnection()->fetchAll($sql, $fileIds);
-    // }
 
     public function findByTagId($tagId)
     {
