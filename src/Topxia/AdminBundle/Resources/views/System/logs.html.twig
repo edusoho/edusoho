@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set menu = 'admin_logs_query' %}
@@ -67,7 +68,7 @@
           </div>
           <span class="text-muted text-sm">{{ log.module }}.{{ log.action }}</span>
         </td>
-        <td>{{ dict('logLevel:html')[log.level]|raw }}</td>
+        <td>{{ dict_macro.logLevel(log.level)}}</td>
         <td>
           <span class="">{{ log.createdTime|date("Y-m-d H:i:s") }}</span>
           <br />

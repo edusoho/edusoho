@@ -1,0 +1,16 @@
+<li class="hidden-xs">
+    <form action="{{ path('switch_language') }}" method="post">
+        <label>Language</label>
+        <select name="language">
+            <option value="zh_CN" {% if app.request.get('_locale') == 'zh_CN' %}selected="selected"{% endif %}>中文
+            </option>
+            <option value="ug_CN" {% if app.request.get('_locale') == 'ug_CN' %}selected="selected"{% endif %}>维吾尔文
+            </option>
+        </select>
+        <input type="hidden" name="_target_path"
+               value="{% if app.request.attributes.get('_route') %} {{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) }} {% else %} {{ path('homepage') }} {% endif %}
+                ">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+       {#  <input type="submit" value="Ok"> #}
+    </form>
+</li>

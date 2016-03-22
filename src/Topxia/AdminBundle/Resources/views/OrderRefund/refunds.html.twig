@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% extends 'TopxiaAdminBundle::layout.html.twig' %}
 
 {% set script_controller = 'order/refunds' %}
@@ -69,7 +70,7 @@
               {{ admin_macro.user_link(user) }}
             </td>
             <td>
-              {{ dict_text('refundStatus:html', refund.status) }}
+              {{ dict_macro.refundStatus(refund.status) }}
               {% if refund.status == 'success' %}
                 <div class="text-sm text-muted">实退{{ refund.actualAmount }}元</div>
               {% endif %}

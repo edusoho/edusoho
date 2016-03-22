@@ -1444,6 +1444,11 @@ class UserServiceImpl extends BaseService implements UserService
         return array_unique($mobiles);
     }
 
+    public function updateUserLocale($id, $locale)
+    {
+        $this->getUserDao()->updateUser($id, array('locale' => $locale));
+    }
+
     public function getUserPayAgreement($id)
     {
         return $this->getUserPayAgreementDao()->getUserPayAgreement($id);

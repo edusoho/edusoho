@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% extends 'TopxiaWebBundle:MyOrder:layout.html.twig' %}
 
 {% block title %}{{'退款记录'|trans}} - {{ parent() }}{% endblock %}
@@ -30,7 +31,7 @@
       		  	{{ refund.createdTime|date('Y-n-d H:i') }}
       		  </td>
       		  <td>
-      		    {{ dict_text('refundStatus:html', refund.status) }}
+              {{ dict_macro.refundStatus(refund.status) }}
       		  </td>
     		  </tr>
     		{% endfor %}

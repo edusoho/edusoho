@@ -1,4 +1,5 @@
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% set target = 'normal_index' %}
 <tr id="course-tr-{{ course.id }}">
   <td>{{ course.id }}</td>
@@ -43,7 +44,7 @@
   <td><span class="money-text">{{ course.income }}</span></td>
   {% endif %}
 
-  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
+  <td> {{ dict_macro.courseStatus( course.status) }}</td>
   <td>
     {{ admin_macro.user_link(user) }}
     <br>
