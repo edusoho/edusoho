@@ -33,6 +33,21 @@ abstract class BaseResource
         return $res;
     }
 
+    /**
+     * 检查每个API必需参数的完整性
+     */
+    protected function checkRequiredFields($requiredFields, $requestData)
+    {
+        $requestFields = array_keys($requestData);
+        foreach ($requiredFields as $field) {
+            if (!in_array($field, $requestFields)) {
+                throw new \Exception("缺少必需的请求参数{$field}");
+            }
+        }
+
+        return $requestData;
+    }
+
     protected function error($code, $message)
     {
         return array('error' => array(
@@ -161,5 +176,4 @@ abstract class BaseResource
     {
         return ServiceKernel::instance();
     }
-
 }
