@@ -58,8 +58,8 @@
           <div class="user">
             {% if course.teacherIds|default(null) %}
               {% set user = data('User',{userId:course.teacherIds[0]}) %}
-              {{ web_macro.user_avatar(user) }}
-              {{ web_macro.user_link(user, '') }}
+              {{ web_macro.user_avatar(user, 'mrm','avatar-xs') }}
+              {{ web_macro.user_link(user, 'link-light') }}
             {% endif %}
           </div>
           <div class="other">
