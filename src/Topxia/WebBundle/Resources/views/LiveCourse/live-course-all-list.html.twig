@@ -22,9 +22,9 @@
     {% for course in liveCourses if course %}
       <div class="media">
         <div class="media-left">
-          {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveStartTime) or ("now"|date("U") < course.liveStartTime) %}
+          {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
             <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" title="{{ course.title }}" target="_blank">
-          {% elseif "now"|date("U") > course.liveStartTime %}
+          {% else %}
             <a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}" target="_blank">
           {% endif %}
             {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
