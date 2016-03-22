@@ -1131,14 +1131,14 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getLessonDao()->findFutureLiveDates($courseIds, $limit);
     }
 
-    public function findFutureLiveCourseIdsGroupByCourseId()
+    public function findFutureLiveCourseIds()
     {
-        return $this->getLessonDao()->findFutureLiveCourseIdsGroupByCourseId();
+        return $this->getLessonDao()->findFutureLiveCourseIds();
     }
 
-    public function findReplayLiveCourseIdsGroupByCourseId()
+    public function findPastLiveCourseIds()
     {
-        return $this->getLessonDao()->findReplayLiveCourseIdsGroupByCourseId();
+        return $this->getLessonDao()->findPastLiveCourseIds();
     }
 
     protected function fillLessonMediaFields(&$lesson)

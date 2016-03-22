@@ -176,9 +176,9 @@ interface CourseService
 
     public function findFutureLiveDates($courseIds, $limit);
 
-    public function findFutureLiveCourseIdsGroupByCourseId();
+    public function findFutureLiveCourseIds();
 
-    public function findReplayLiveCourseIdsGroupByCourseId();
+    public function findPastLiveCourseIds();
 
     public function analysisLessonFinishedDataByTime($startTime, $endTime);
 

@@ -50,7 +50,7 @@ interface LessonDao
 
     public function findFutureLiveDates($courseIds, $limit);
 
-    public function findFutureLiveCourseIdsGroupByCourseId();
+    public function findFutureLiveCourseIds();
 
-    public function findReplayLiveCourseIdsGroupByCourseId();
+    public function findPastLiveCourseIds();
 }
