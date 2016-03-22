@@ -12,7 +12,7 @@ class CourseNotes extends BaseResource
     {
         $note = $this->getCourseNoteService()->getNote($id);
         if (empty($note)) {
-            throw new \Exception("ID为{$id}的笔记不存在");
+            return $this->error('500', "ID为{$id}的笔记不存在");
         }
         return $this->filter($note);
     }
@@ -61,7 +61,6 @@ class CourseNotes extends BaseResource
     {
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
-        return $res;
     }
 
     protected function getCourseNoteService()

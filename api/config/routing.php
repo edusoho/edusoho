@@ -46,6 +46,9 @@ $app->get(_u('/notes/{id}'), 'res.CourseNotes:get');
 $app->get(_u('/notes'), 'res.CourseNotes:search');
 $app->post(_u('/notes'), 'res.CourseNotes:post');
 
+$app->get(_u('/courses/{courseId}/reviews'), 'res.CourseReviews:get');
+$app->post(_u('/courses/{courseId}/reviews'), 'res.CourseReviews:post');
+
 $app->get(_u('/classrooms'), 'res.Classrooms:get');
 $app->post(_u('/classrooms'), 'res.Classrooms:post');
 $app->get(_u('/classrooms/discovery/columns'), 'res.Classrooms:discoveryColumn');
