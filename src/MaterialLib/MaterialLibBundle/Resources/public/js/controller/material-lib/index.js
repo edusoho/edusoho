@@ -227,6 +227,8 @@ define(function(require, exports, module) {
                             // $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         }
+                        $('#material-lib-items-panel').find('[data-role=batch-item]').show();
+
                     });
                 }
                 
