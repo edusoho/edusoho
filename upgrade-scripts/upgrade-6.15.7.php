@@ -1,8 +1,8 @@
 <?php
 
+use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
-use Topxia\Common\BlockToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -44,20 +44,20 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("UPDATE friend SET pair=1 WHERE id IN ( SELECT a.id id FROM (SELECT id,fromId,toId FROM friend) AS a, (SELECT id,fromId,toId FROM friend) AS b WHERE a.fromId=b.toId AND a.toId=b.fromId)");
         }
 
-        if (!$this->isTableExist('discovery_column'))
+        if (!$this->isTableExist('discovery_column')) {
             $connection->exec("
                 CREATE TABLE `discovery_column` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `title` varchar(255) NOT NULL,
-                  `type` varchar(32) NOT NULL COMMENT='栏目类型',
-                  `categoryId` int(10) NOT NULL DEFAULT '0' COMMENT='分类',
-                  `orderType` varchar(32) NOT NULL COMMENT='排序字段',
-                  `showCount` int(10) NOT NULL COMMENT='展示数量',
-                  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT='排序',
+                  `type` varchar(32) NOT NULL COMMENT '栏目类型',
+                  `categoryId` int(10) NOT NULL DEFAULT '0' COMMENT '分类',
+                  `orderType` varchar(32) NOT NULL COMMENT '排序字段',
+                  `showCount` int(10) NOT NULL COMMENT '展示数量',
+                  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
                   `createdTime` int(10) unsigned NOT NULL,
                   `updateTime` int(10) unsigned NOT NULL DEFAULT '0',
                   PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发现页栏目';
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '发现页栏目';
             ");
         }
 
