@@ -180,7 +180,7 @@ class LiveCourseController extends BaseController
             , 10
         );
 
-        $furtureLiveLessonCourses = $this->getCourseService()->findFutureLiveLessons();
+        $furtureLiveLessonCourses = $this->getCourseService()->findFutureLiveCourseIdsGroupByCourseId();
         $furtureLiveCourseIds     = ArrayToolkit::column($furtureLiveLessonCourses, 'courseId');
 
         $conditions['courseIds'] = $furtureLiveCourseIds;
@@ -515,7 +515,7 @@ class LiveCourseController extends BaseController
         $pages = floor($futureLiveCoursesCount / $pageSize);
         $start = ($currentPage - $pages - 1) * $pageSize;
 
-        $replayLiveLessonCourses = $this->getCourseService()->findReplayLiveLessons();
+        $replayLiveLessonCourses = $this->getCourseService()->findReplayLiveCourseIdsGroupByCourseId();
         $replayLiveCourseIds     = ArrayToolkit::column($replayLiveLessonCourses, 'courseId');
 
         unset($conditions['courseIds']);

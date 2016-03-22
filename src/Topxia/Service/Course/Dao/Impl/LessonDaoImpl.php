@@ -324,7 +324,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql, $courseIds);
     }
 
-    public function findFutureLiveLessons()
+    public function findFutureLiveCourseIdsGroupByCourseId()
     {
         $time = time();
         $sql  = "SELECT min(startTime) as startTime, courseId FROM {$this->table} WHERE endTime >= {$time} AND status='published' AND
@@ -333,7 +333,7 @@ class LessonDaoImpl extends BaseDao implements LessonDao
         return $this->getConnection()->fetchAll($sql);
     }
 
-    public function findReplayLiveLessons()
+    public function findReplayLiveCourseIdsGroupByCourseId()
     {
         $time = time();
         $sql  = "SELECT max(startTime) as startTime, courseId FROM {$this->table} WHERE endTime < {$time} AND status='published' AND
