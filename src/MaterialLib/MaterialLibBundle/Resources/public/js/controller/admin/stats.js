@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         _initTime: function() {
             $("#startDate").datetimepicker({
                 autoclose: true,
-                locale: 'zh-cn'
+                language: 'zh-CN'
             }).on('changeDate',function(){
                 $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
             });
@@ -36,7 +36,7 @@ define(function(require, exports, module) {
 
             $("#endDate").datetimepicker({
                 autoclose: true,
-                locale: 'zh-cn'
+                language: 'zh-CN'
             }).on('changeDate',function(){
 
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
@@ -70,7 +70,7 @@ define(function(require, exports, module) {
                     title: '视频详情'
                 });
             }
-            
+
             if (id == '#audio-chart' && !this.audioLineChart) {
                 this.audioLineChart = new LineChart({
                     element: '#audio-line-chart',

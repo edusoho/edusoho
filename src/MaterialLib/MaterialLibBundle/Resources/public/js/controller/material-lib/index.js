@@ -461,6 +461,7 @@ define(function(require, exports, module) {
             {
                 //init timepicker
                 $("#startDate").datetimepicker({
+                    language: 'zh-CN',
                     autoclose: true,
                 }).on('changeDate',function(){
                     $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
@@ -469,6 +470,7 @@ define(function(require, exports, module) {
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
 
                 $("#endDate").datetimepicker({
+                    language: 'zh-CN',
                     autoclose: true,
                 }).on('changeDate',function(){
 
