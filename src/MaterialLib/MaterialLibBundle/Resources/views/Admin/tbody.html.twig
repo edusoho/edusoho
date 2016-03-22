@@ -3,15 +3,15 @@
   <tr>
     <td>
       <div>
-        <div class="pull-left" style="width:50%">
+        <div class="pull-left" style="width:25%">
           <a href="javascript:;">
-            <img style="width:90%;height:100px" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.jpg')) }}">
+            <img style="width:60px;height:60px;border-radius:4px;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.jpg')) }}">
           </a>
         </div>
-        <div class="pull-right" style="width:50%">
-          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}">{{ material.name }}</p>
+        <div class="pull-right" style="width:75%">
+          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}" style="margin:0;">{{ material.name }}</p>
 
-          <div style="margin-top:40px">
+          <div>
             <span class="text-sm text-muted" style="display:block">
               {% if createdUser %}
                 {{ createdUser.nickname }} 上传
@@ -43,28 +43,26 @@
       </div>
     </td>
 
-    <td>
+    <td class="text-center">
       {{ material.views }}
     </td>
-    <td>
+    <td class="text-center">
       {{ dict_text('fileType', material.type) }}
     </td>    
-    <td>
+    <td class="text-center">
       {{ material.size|file_size }}
     </td>
     <td>
-    <span class="text-sm text-muted" style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
-
+      <span style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
     </td>
-
-    <td>
-      <a type="button" class="glyphicon glyphicon-info-sign js-detail-btn" href="javascript:;"data-toggle="tooltip" data-placement="top" title="详细信息" data-url="{{ path('admin_material_detail', {globalId:material.no}) }}"></a>
-      <a class="glyphicon glyphicon-save js-download-btn" href="{{ path('material_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
+    <td class="es-materillib-table">
+      <a type="button" class="glyphicon glyphicon-info-sign js-detail-btn mrl" href="javascript:;"data-toggle="tooltip" data-placement="top" title="详细信息" data-url="{{ path('admin_material_detail', {globalId:material.no}) }}"></a>
+      <a class="glyphicon glyphicon-save js-download-btn mrl" href="{{ path('material_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
       <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="caret"></span>
+        <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="glyphicon glyphicon-info-sign"></span>
           <span class="sr-only">Toggle Dropdown</span>
-        </button>
+        </a>
         <ul class="dropdown-menu">
           <li class="js-refresh-btn" {#data-url="{{ path('material_delete', {globalId:material.no}) }}"#}><a class="glyphicon glyphicon-refresh" href="javascript:;"> 重新转码</a></li>
           <li class="js-delete-btn" data-url="{{ path('material_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
