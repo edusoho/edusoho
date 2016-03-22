@@ -1,16 +1,26 @@
-<div class="well well-sm" style="margin-bottom:10px">
-  <span style="padding-right:50px">筛选:</span>
-  <span>时间范围:</span>
-
-  <div class="form-group ">
-    <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-    -
-    <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+<ul class="nav nav-tabs">
+  <li class="all"><span>筛选：</span></li>
+  <div class="form-group es-materials-filter">
+    <input class="form-control mrs" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+    - <input class="form-control mls" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+  </div>
+  <div class="form-group mll" style="margin-top:7px;">
+    <select class="form-control" name="processStatus">
+      <option>转码状态</option>
+      <option>转码成功</option>
+      <option>转码失败</option>
+    </select>
+  </div>
+  <div class="form-group mll" style="margin-top:7px;">
+    <select class="form-control">
+      <option>未使用</option>
+      <option>已使用</option>
+    </select>
   </div>
 
-  <div class="checkbox">
+ {#  <div class="checkbox">
     <label>
       <input type="checkbox" name="processStatus" value="error"> 转码失败
     </label>
-  </div>
-</div>
+  </div> #}
+</ul>
