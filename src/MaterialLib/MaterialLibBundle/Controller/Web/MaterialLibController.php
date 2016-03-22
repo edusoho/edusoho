@@ -71,7 +71,12 @@ class MaterialLibController extends BaseController
             } else {
                 $files[$key]['collected'] = 0;
             }
+            $uploadTags = $this->getUploadFileTagService()->findByFileId($file['id']);
+            $tagIds = ArrayToolkit::column($uploadTags, 'tagId');
+            $tags = $this->getTagService()->findTagsByIds($tagIds);
+            $files[$key]['tags'] = ArrayToolkit::column($tags, 'name');
         }
+        
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
