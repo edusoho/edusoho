@@ -196,7 +196,7 @@ class LiveCourseController extends BaseController
         $replayLiveCourses = array();
 
         if (count($furtureLiveCourses) < $paginator->getPerPageCount()) {
-            $replayLiveCourses = $this->_searchReplayLiveCourse($request, $conditions, $furtureLiveCourseIds, $furtureLiveCourse);
+            $replayLiveCourses = $this->_searchReplayLiveCourse($request, $conditions, $furtureLiveCourseIds, $furtureLiveCourses);
         }
 
         $liveCourses = array_merge($furtureLiveCourses, $replayLiveCourses);
