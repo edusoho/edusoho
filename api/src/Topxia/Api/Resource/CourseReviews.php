@@ -20,7 +20,7 @@ class CourseReviews extends BaseResource
             $conditions,
             array('createdTime' => 'DESC'),
             isset($fields['start']) ? (int) $fields['start'] : 0,
-            isset($fields['limit']) ? (int) $fields['limit'] : 1
+            isset($fields['limit']) ? (int) $fields['limit'] : 20
         );
         return $this->wrap($this->multicallFilter('CourseReviews', $reviews), $total);
     }
