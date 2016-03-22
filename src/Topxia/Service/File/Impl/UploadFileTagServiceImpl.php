@@ -22,7 +22,11 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 	{
 		return $this->getUploadFileTagDao()->delete($id);
 	}
-
+	public function deleteByFileId($fileId)
+	{
+		$result = $this->getUploadFileTagDao()->deleteByFileId($fileId);
+		return $result;
+	}
 	public function edit($fileIds, $tagIds)
 	{
 		foreach ($fileIds as $fileId ) {
@@ -33,18 +37,17 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 					'tagId' => $tagId
 					);
 				$result = $this->getUploadFileTagDao()->add($condition);
-			
 			}
 			if (empty($result)) {
-				$result = NULL;
+				$result = array();
 			}
 			if ($tags) {
 				foreach ($tags as $tag ) {
 					$this->getUploadFileTagDao()->delete($tag['id']);
 				}
-			} 
+			}
 		}
-		return $this->getUploadFileTagDao()->get($result);
+		return $result;
 
 	}
 

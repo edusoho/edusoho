@@ -53,11 +53,12 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
 
                 if ($result) {
-                    foreach ($tags as $tag) {
-                    
-                        $this->getUploadFileTagService()->delete($tag['id']);
-                    }
-                    
+                  $this->getUploadFileTagService()->deleteByFileId($file['id']);
+                    // foreach ($tags as $tag) {
+                    //
+                    //     $this->getUploadFileTagService()->delete($tag['id']);
+                    // }
+
                 }
                 return $result;
             }
@@ -101,7 +102,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             } else {
                 return true;
             }
-            
+
         }
         return array('success' => true);
     }

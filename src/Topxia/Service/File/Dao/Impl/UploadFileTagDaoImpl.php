@@ -31,9 +31,13 @@ class UploadFileTagDaoImpl extends BaseDao implements UploadFileTagDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function deleteByFileId($fileId)
+	  public function deleteByFileId($fileId)
     {
-        return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
+        $sql    = "DELETE FROM {$this->table} WHERE fileId = ?";
+        $result = $this->getConnection()->executeUpdate($sql, array($fileId));
+        $this->clearCached();
+        return $result;
+        // return $this->getConnection()->delete($this->table, array('fileId' => $fileId));
     }
 
     public function findByFileId($fileId)
