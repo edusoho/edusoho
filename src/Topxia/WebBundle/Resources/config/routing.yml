@@ -707,6 +707,10 @@ course_manage_open_course_pick:
     pattern: /course/manage/{filter}/course/{id}/pick    
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
 
+opencourse_course_search:
+    pattern: /opencourse/{filter}/course/{id}/search
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}    
+
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:index }

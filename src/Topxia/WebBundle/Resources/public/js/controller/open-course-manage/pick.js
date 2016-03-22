@@ -4,12 +4,12 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
+        require("../../controller/open-course-manage/tab-manage").run();
+
         var ids=[];
 
         $url=$('#sure').data('url');
-        alert($url);
-        exit;
-
+       
         $('#sure').on('click',function(){
             $('#sure').button('submiting').addClass('disabled');
        
@@ -52,6 +52,8 @@ define(function(require, exports, module) {
                 return false;
             }
         });
+       
+      
 
         $('#all-courses').on('click',function(){
 

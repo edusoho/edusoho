@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -73,10 +74,11 @@ class OpenCourseManageController extends BaseController
 
     public function pickAction(Request $request, $filter, $id)
     {
-        $user                 = $this->getCurrentUser();
-        $course               = $this->getCourseService()->tryManageCourse($id);
-        $conditions           = $request->query->all();
-        $conditions['status'] = 'published';
+        $user                   = $this->getCurrentUser();
+        $course                 = $this->getCourseService()->tryManageCourse($id);
+        $conditions             = $request->query->all();
+        $conditions['status']   = 'published';
+        $conditions['parentId'] = 0;
 
         if ($filter == 'openCourse') {
             $conditions['type']   = 'open';
@@ -103,8 +105,18 @@ class OpenCourseManageController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+        $courseIds = ArrayToolkit::column($courses, 'id');
+        $userIds   = array();
+
+        foreach ($courses as &$course) {
+            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+            $userIds        = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-pick-modal.html.twig', array(
+            'users'     => $users,
             'courses'   => $courses,
             'paginator' => $paginator,
             'courseId'  => $course['id'],
@@ -112,9 +124,66 @@ class OpenCourseManageController extends BaseController
         ));
     }
 
+    public function searchAction(Request $request, $id, $filter)
+    {
+        $user = $this->getCurrentUser();
+        $this->getCourseService()->tryManageCourse($id);
+        $key = $request->request->get("key");
+
+        if (isset($key) && $key == "") {
+            unset($key);
+        }
+
+        $conditions = array("title" => $key);
+
+        $conditions['status']   = 'published';
+        $conditions['parentId'] = 0;
+
+        if ($filter == 'openCourse') {
+            $conditions['type']   = 'open';
+            $conditions['userId'] = $user['id'];
+        }
+
+        if ($filter == 'otherCourse') {
+            $conditions['type']   = 'normal';
+            $conditions['userId'] = $user['id'];
+        }
+
+        if ($filter == 'normal') {
+        }
+
+        $courses = $this->getCourseService()->searchCourses(
+            $conditions,
+            'latest',
+            0,
+            5
+        );
+
+        $courseIds = ArrayToolkit::column($courses, 'id');
+
+        $userIds = array();
+
+        foreach ($courses as &$course) {
+            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
+            $userIds        = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
+            'users'   => $users,
+            'courses' => $courses
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    private function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
     protected function getWebExtension()
