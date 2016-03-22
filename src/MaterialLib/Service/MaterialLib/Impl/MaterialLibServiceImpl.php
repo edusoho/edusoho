@@ -43,11 +43,23 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function delete($globalId)
     {
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $tags = $this->getUploadFileTagService()->findByFileId($file['id']);
+
         if ($globalId) {
             $this->checkPermission(Permission::DELETE, array('globalId' => $globalId));
             $result = $this->getCloudFileService()->delete($globalId);
             if (isset($result['success']) && $result['success']) {
                 $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
+
+                if ($result) {
+                  $this->getUploadFileTagService()->deleteByFileId($file['id']);
+                    // foreach ($tags as $tag) {
+                    //
+                    //     $this->getUploadFileTagService()->delete($tag['id']);
+                    // }
+
+                }
                 return $result;
             }
             return false;
@@ -70,6 +82,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 return false;
             }
         }
+        $fileIds = ArrayToolkit::column($files, 'id');
+        $tagIds = array();
+        $this->getUploadFileTagService()->edit($fileIds,$tagIds);
         return array('success' => true);
     }
 
@@ -87,7 +102,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             } else {
                 return true;
             }
-            
+
         }
         return array('success' => true);
     }
@@ -171,5 +186,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getCloudFileService()
     {
         return $this->createService('MaterialLib:MaterialLib.CloudFileService');
+    }
+
+    protected function getUploadFileTagService()
+    {
+        return $this->createService('File.UploadFileTagService');
     }
 }

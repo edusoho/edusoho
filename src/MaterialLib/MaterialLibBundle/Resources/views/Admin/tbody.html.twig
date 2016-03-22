@@ -38,7 +38,7 @@
               </span>
             {% endif %}
           </div>
-          
+
         </div>
       </div>
     </td>
@@ -48,7 +48,7 @@
     </td>
     <td class="text-center">
       {{ dict_text('fileType', material.type) }}
-    </td>    
+    </td>
     <td class="text-center">
       {{ material.size|file_size }}
     </td>
@@ -59,8 +59,7 @@
       <a type="button" class="glyphicon glyphicon-info-sign js-detail-btn mrl" href="javascript:;"data-toggle="tooltip" data-placement="top" title="详细信息" data-url="{{ path('admin_material_detail', {globalId:material.no}) }}"></a>
       <a class="glyphicon glyphicon-save js-download-btn mrl" href="{{ path('material_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
       <div class="btn-group">
-        <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="glyphicon glyphicon-info-sign"></span>
+        <a href="javascript:;" class="es-icon es-icon-morehoriz" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="sr-only">Toggle Dropdown</span>
         </a>
         <ul class="dropdown-menu">
@@ -96,5 +95,3 @@
     {% endif %}
   </td>
 </tr>
-
-

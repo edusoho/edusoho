@@ -11,6 +11,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         var MaterialWidget = Widget.extend({
             attrs: {
+                model: '',
                 renderUrl: ''
             },
             events: {
@@ -27,7 +28,8 @@ define(function(require, exports, module) {
                 'click .js-manage-batch-btn': 'onClickManageBtn',
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
-                'click .js-batch-tag-btn': 'onClickTagBatchBtn'
+                'click .js-batch-tag-btn': 'onClickTagBatchBtn',
+                'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -64,41 +66,41 @@ define(function(require, exports, module) {
                     $target.addClass('label-info').removeClass('label-default');
                     $container.find('[name=tagId]').val($target.data('id'));
                 }
-                
+
                 this.renderTable();
             },
             onClickDeleteBtn: function(event)
-            {   
-                if (confirm('真的要删除该资源吗？')) {   
-                    var self = this;   
-                    var $target = $(event.currentTarget);   
-                    this._loading();  
+            {
+                if (confirm('真的要删除该资源吗？')) {
+                    var self = this;
+                    var $target = $(event.currentTarget);
+                    this._loading();
                     $.post($target.data('url'),function(data){
                         if(data){
-                            Notify.success('删除成功!');  
+                            Notify.success('删除成功!');
                             self.renderTable();
                         } else {
-                            Notify.danger('删除失败!');  
+                            Notify.danger('删除失败!');
                             self.renderTable();
                         }
-                    });  
+                    });
                 }
             },
             onClickDetailBtn: function(event)
-            {   
-                if (!this.DetailBtnActive) {   
-                    var self = this;   
-                    var $target = $(event.currentTarget);   
-                    this.DetailBtnActive = true;   
-                    $.ajax({   
-                        type:'GET',   
-                        url:$target.data('url'),   
-                    }).done(function(resp){   
-                       self.element.hide(); 
+            {
+                if (!this.DetailBtnActive) {
+                    var self = this;
+                    var $target = $(event.currentTarget);
+                    this.DetailBtnActive = true;
+                    $.ajax({
+                        type:'GET',
+                        url:$target.data('url'),
+                    }).done(function(resp){
+                       self.element.hide();
                         self.element.prev().hide();
                         self.element.parent().append(resp);
-                        new DetailWidget({  
-                           element:'#material-detail',  
+                        new DetailWidget({
+                           element:'#material-detail',
                            callback: function() {
                             var $form = $('#material-search-form');
                             $form.show();
@@ -161,17 +163,23 @@ define(function(require, exports, module) {
             },
             onClickManageBtn: function(event)
             {
+                this.set('model','edit');
                 var self = this;
                 var $target = $(event.currentTarget);
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').show();
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').show();
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-tag]').show();
-
+                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
+            },
+            onClickFinishBatchBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                this.set('model','normal');
+                this.renderTable();
+                //$('#material-lib-items-panel').find('[data-role=batch-manage],[data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
             },
             onClickDeleteBatchBtn: function(event)
             {
                 if (confirm('确定要删除这些资源吗？')) {
-                    var self = this;   
+                    var self = this;
                     var $target = $(event.currentTarget);
                     var ids = [];
                     $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -179,27 +187,28 @@ define(function(require, exports, module) {
                     });
                     if(ids == ""){
                         Notify.danger('请先选择你要删除的资源!');
-                        return;  
+                        return;
                     }
 
                     $.post($target.data('url'),{"globalIds":ids},function(data){
                         if(data){
                             Notify.success('删除资源成功');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
+
                             self.renderTable();
                         } else {
                             Notify.danger('删除资源失败');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete]').hide();
                             self.renderTable();
                         }
+                        $('#material-lib-items-panel').find('[data-role=batch-item]').show();
+
                     });
                 }
-                
+
             },
             onClickShareBatchBtn: function(event)
             {
                 if (confirm('确定要分享这些资源吗？')) {
-                    var self = this;   
+                    var self = this;
                     var $target = $(event.currentTarget);
                     var ids = [];
                     $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -207,27 +216,26 @@ define(function(require, exports, module) {
                     });
                     if(ids == ""){
                         Notify.danger('请先选择你要分享的资源!');
-                        return;  
+                        return;
                     }
 
                     $.post($target.data('url'),{"globalIds":ids},function(data){
                         if(data){
                             Notify.success('分享资源成功');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         } else {
                             Notify.danger('分享资源失败');
-                            $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-share]').hide();
                             self.renderTable();
                         }
+                        $('#material-lib-items-panel').find('[data-role=batch-item]').show();
+
                     });
                 }
-                
             },
             onClickTagBatchBtn: function(event)
             {
-                
-                var self = this;   
+
+                var self = this;
                 var $target = $(event.currentTarget);
                 var ids = [];
                 $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
@@ -235,16 +243,14 @@ define(function(require, exports, module) {
                 });
                 if(ids == ""){
                     Notify.danger('请先选择你要操作的资源!');
-                    return;  
+                    return;
                 }
 
                 $("#select-tag-items").val(ids);
-                // $.post($target.data('url'),{"globalIds":ids},function(data){
-                
+
                 $("#tag-modal").modal('show');
-                //});
-                
-                
+
+
             },
             submitForm: function(event)
             {
@@ -263,6 +269,12 @@ define(function(require, exports, module) {
                     data:this.element.serialize()
                 }).done(function(resp){
                     $table.html(resp);
+                    var mode = self.get('model');
+                    if(mode == 'edit'){
+                      $table.find('[data-role=batch-item]').show();
+                    } else if(mode == 'normal'){
+                      $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
+                    }
                     var $temp = $table.find('.js-paginator');
                     self.element.find('[data-role=paginator]').html($temp.html());
                 }).fail(function(){
@@ -377,7 +389,7 @@ define(function(require, exports, module) {
                                     name: resp.title
                                 });
 
-                                callback(data); 
+                                callback(data);
                             });
                         }
                     },
@@ -431,7 +443,7 @@ define(function(require, exports, module) {
                                     id: resp.id,
                                     name: resp.nickname
                                 });
-                                callback(data); 
+                                callback(data);
                             });
                         }
                     },
@@ -469,6 +481,9 @@ define(function(require, exports, module) {
         });
 
         window.materialWidget = new MaterialWidget({
+            attrs:{
+              model: 'normal'
+            },
             element: '#material-search-form'
         });
         var $panel = $('#material-lib-items-panel');
