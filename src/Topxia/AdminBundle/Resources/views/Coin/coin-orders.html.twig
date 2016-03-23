@@ -5,7 +5,7 @@
 {% set script_controller = 'manage/list' %}
 
 {% block main %}
-
+{% if  setting ('coin.coin_enabled') %}
   <form id="coin-orders-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
     <div class="mbm">
     <div class="form-group">
@@ -47,7 +47,7 @@
     })}}">导出结果</a>
      </div>
   </form>
-
+{% endif %}
   {% include 'TopxiaWebBundle:Coin:coin-table.html.twig'  %}
 
   <div class="paginator">
