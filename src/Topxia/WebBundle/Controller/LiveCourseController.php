@@ -183,15 +183,19 @@ class LiveCourseController extends BaseController
         $furtureLiveLessonCourses = $this->getCourseService()->findFutureLiveCourseIds();
         $furtureLiveCourseIds     = ArrayToolkit::column($furtureLiveLessonCourses, 'courseId');
 
-        $conditions['courseIds'] = $furtureLiveCourseIds;
-        $furtureLiveCourses      = $this->getCourseService()->searchCourses(
-            $conditions,
-            array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $furtureLiveCourses = ArrayToolkit::index($furtureLiveCourses, 'id');
-        $furtureLiveCourses = $this->_liveCourseSort($furtureLiveCourseIds, $furtureLiveCourses, 'furture');
+        $furtureLiveCourses = array();
+
+        if ($furtureLiveLessonCourses) {
+            $conditions['courseIds'] = $furtureLiveCourseIds;
+            $furtureLiveCourses      = $this->getCourseService()->searchCourses(
+                $conditions,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+            $furtureLiveCourses = ArrayToolkit::index($furtureLiveCourses, 'id');
+            $furtureLiveCourses = $this->_liveCourseSort($furtureLiveCourseIds, $furtureLiveCourses, 'furture');
+        }
 
         $replayLiveCourses = array();
 
@@ -515,7 +519,11 @@ class LiveCourseController extends BaseController
         $pageSize    = 10;
         $currentPage = $request->query->get('page', 1);
 
-        $futureLiveCoursesCount = $this->getCourseService()->searchCourseCount($conditions);
+        $futureLiveCoursesCount = 0;
+
+        if (isset($conditions['courseIds'])) {
+            $futureLiveCoursesCount = $this->getCourseService()->searchCourseCount($conditions);
+        }
 
         $pages = $futureLiveCoursesCount <= $pageSize ? 1 : floor($futureLiveCoursesCount / $pageSize);
 
