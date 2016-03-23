@@ -17,6 +17,4 @@ return array(
     'Gregwar\\Captcha\\'                     => array($vendorDir . '/gregwar/captcha'),
     'Endroid\\QrCode\\'                      => array($vendorDir . '/endroid/qrcode/src', $vendorDir . '/endroid/qrcode/tests'),
     'Doctrine\\Bundle\\DoctrineBundle\\'     => array($vendorDir . '/doctrine/doctrine-bundle'),
-    'Ramsey\\Uuid\\Doctrine\\'               => array($vendorDir . '/ramsey/uuid-doctrine/src'),
-    'Ramsey\\Uuid\\'                         => array($vendorDir . '/ramsey/uuid/src'),
 );

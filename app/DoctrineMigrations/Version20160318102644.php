@@ -18,7 +18,6 @@ class Version20160318102644 extends AbstractMigration
         if (!$this->isFieldExist('upload_files', 'uuid')) {
             $this->addSql("ALTER TABLE upload_files ADD uuid VARCHAR(36) NULL;");
         }
-
     }
 
     /**
