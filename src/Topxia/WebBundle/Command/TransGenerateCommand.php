@@ -13,8 +13,8 @@ class TransGenerateCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('trans:generate')
-             ->addArgument('dir', InputArgument::REQUIRED, 'Bundle Directory')
-             ->setDescription('生成Bundle的语言文件! eg. src/Topxia/WebBundle');
+            ->addArgument('dir', InputArgument::REQUIRED, 'Bundle Directory')
+            ->setDescription('生成Bundle的语言文件! eg. src/Topxia/WebBundle');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -31,15 +31,15 @@ class TransGenerateCommand extends BaseCommand
         $this->printScanResult($menuKeywords, $output);
 
         $output->writeln("<comment>\n正在扫描PHP文件的语言串:</comment>");
-        $phpKeywords = $this->scanPHPTrans($dir,$output);
-        $this->printScanResult($phpKeywords,$output);
+        $phpKeywords = $this->scanPHPTrans($dir, $output);
+        $this->printScanResult($phpKeywords, $output);
 
         $output->writeln("<comment>\n正在扫描数据字典配置文件的语言串:</comment>");
         $dictsKeywords = $this->scanDictTrans($dir, $output);
         $this->printScanResult($menuKeywords, $output);
 
         $output->writeln("<comment>\n语言串总和:</comment>");
-        $keywords = array_merge($viewKeywords, $menuKeywords, $dictsKeywords,$phpKeywords);
+        $keywords = array_merge($viewKeywords, $menuKeywords, $dictsKeywords, $phpKeywords);
 
         $this->printScanResult($keywords, $output);
         $keywords = array_values(array_unique($keywords));
@@ -48,9 +48,10 @@ class TransGenerateCommand extends BaseCommand
 
         $locale = $this->getLocale();
 
-        $tranFile = sprintf("%s/%s/Resources/translations/messages.%s.yml", dirname($this->getContainer()->getParameter('kernel.root_dir')), $dir, $locale);
+        $tranFile = sprintf("%s/%s/Resources/translations/messages.%s.yml", dirname($this->getRootDir()), $dir, $locale);
 
         $existTrans = array();
+
         if (!file_exists($tranFile)) {
             $output->writeln("创建语言文件 <info>{$tranFile}</info>");
         } else {
@@ -64,6 +65,7 @@ class TransGenerateCommand extends BaseCommand
 
         $addCount   = 0;
         $existCount = 0;
+
         foreach ($keywords as $keyword) {
             if (array_key_exists($keyword, $existTrans)) {
                 $existCount++;
@@ -85,7 +87,7 @@ class TransGenerateCommand extends BaseCommand
 
     protected function getLocale()
     {
-        $content = file_get_contents($this->getContainer()->getParameter('kernel.root_dir').'/config/parameters.yml');
+        $content = file_get_contents($this->getRootDir().'/config/parameters.yml');
 
         $matched = preg_match('/locale\s*?\:\s*?(\w+)/', $content, $matches);
 
@@ -109,12 +111,15 @@ class TransGenerateCommand extends BaseCommand
     {
         $keywords = array();
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../'.$dir.'/Resources/config');
+        $path = realpath($this->getRootDir().'/../'.$dir.'/Resources/config');
+
         if (empty($path)) {
             $output->writeln("<error>不存在{$dir}/Resources/config目录。</error>");
         }
+
         $finder = new Finder();
         $finder->files()->in($path)->name('menus_*');
+
         foreach ($finder as $file) {
             $output->write("{$file->getRealpath()}");
             $yaml         = new Yaml();
@@ -133,12 +138,16 @@ class TransGenerateCommand extends BaseCommand
     {
         $keywords = array();
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../'.$dir.'/Extensions');
+        $path = realpath($this->getRootDir().'/../'.$dir.'/Extensions');
+
         if (empty($path)) {
-            return $output->writeln("<error>不存在{$dir}/Extensions目录。</error>");
+            $output->writeln("<error>不存在{$dir}/Extensions目录。</error>");
+            return $keywords;
         }
+
         $finder = new Finder();
         $finder->files()->in($path)->name('data_dict.yml');
+
         foreach ($finder as $file) {
             $output->write("{$file->getRealpath()}");
             $yaml     = new Yaml();
@@ -154,13 +163,15 @@ class TransGenerateCommand extends BaseCommand
     {
         $keywords = array();
 
-        $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../'.$dir.'/Resources/views');
+        $path = realpath($this->getRootDir().'/../'.$dir.'/Resources/views');
+
         if (empty($path)) {
             $output->write("<error>{$dir}/Resources/views is not exist.</error>");
         }
 
         $finder = new Finder();
         $finder->files()->in($path);
+
         foreach ($finder as $file) {
             $content = file_get_contents($file->getRealpath());
 
@@ -177,33 +188,37 @@ class TransGenerateCommand extends BaseCommand
 
         return $keywords;
     }
-    /**
-    *该方法需要重构
-    **/
+
     protected function scanPHPTrans($dir, $output)
     {
         $keywords = array();
 
-        $path = array(realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../' . $dir));
-        if($dir == 'src/Topxia/WebBundle') {
-             $path[] = $path[0]. '/../Service';
+        $path = array(realpath($this->getRootDir().'/../'.$dir));
+
+        if (!in_array($dir, $this->standardPath())) {
+            $path = array_merge($path, $this->additionalPath($dir));
         }
+
         if (empty($path)) {
             $output->write("<error>{$dir}/Controller is not exist.</error>");
+            return $keywords;exit;
         }
+
         $finder = new Finder();
         $finder->files()->in($path)->name('*.php');
-        foreach($finder as $file) {
-        
+
+        foreach ($finder as $file) {
             $content = file_get_contents($file->getRealpath());
-            $matched = preg_match_all('/trans\(\'(.*?)\'/',$content,$matches);
+            $matched = preg_match_all('/trans\(\'(.*?)\'/', $content, $matches);
+
             if ($matched) {
                 $output->write("{$file->getRealpath()}");
                 $count = count($matches[1]);
                 $output->writeln("<info> ... {$count}</info>");
                 $keywords = array_merge($keywords, $matches[1]);
-            }   
+            }
         }
+
         return $keywords;
     }
 
@@ -211,6 +226,7 @@ class TransGenerateCommand extends BaseCommand
     private function arrayReduce($dicts)
     {
         $dictText = array();
+
         foreach ($dicts as $key => $dict) {
             if (is_array($dict)) {
                 $dictText = array_merge($dictText, array_values($dict));
@@ -218,6 +234,34 @@ class TransGenerateCommand extends BaseCommand
                 $dictText[] = $dict;
             }
         }
+
         return $dictText;
+    }
+
+    private function standardPath()
+    {
+        return array(
+            'src/Topxia/AdminBundle',
+            'src/Topxia/MobileBundle',
+            'src/Topxia/MobileBundleV2'
+        );
+    }
+
+    private function additionalPath($dir)
+    {
+        $additionalPath = array(
+            realpath($this->getRootDir().'/../'.$dir.'/../Service'),
+            realpath($this->getRootDir().'/../'.$dir.'/../Common'),
+            realpath($this->getRootDir().'/../'.$dir.'/../Component')
+        );
+
+        return array_filter($additionalPath, function ($additional) {
+            return (!is_bool($additional));
+        });
+    }
+
+    private function getRootDir()
+    {
+        return $this->getContainer()->getParameter('kernel.root_dir');
     }
 }
