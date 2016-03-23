@@ -82,8 +82,15 @@ class ExtensionManager
         if (empty($this->dataDict[$type])) {
             return array();
         }
+        return $this->trans($this->dataDict[$type]);
+    }
 
-        return $this->dataDict[$type];
+    private function trans($dict)
+    {
+        array_walk($dict, function (&$value, $key) {
+            $value = $this->kernel->getContainer()->get('translator')->trans($value);
+        });
+        return $dict;
     }
 
     public function getDataTag($name)

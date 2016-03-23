@@ -1,3 +1,4 @@
+{% import "TopxiaWebBundle:Common:data-dict-macro.html.twig" as dict_macro %}
 {% import "TopxiaAdminBundle::macro.html.twig" as admin_macro %}
 <tr id="disk-table-{{file.id}}" data-role="item">
   <td><input value="{{file.id}}" type="checkbox"  data-role="batch-item" ></td>
@@ -6,7 +7,7 @@
     {{ admin_macro.bytesToSize(file.size) }}
   </td>
 
-  <td>{{ dict_text('fileType:html', file.type) }}</td>
+  <td>{{ dict_macro.fileType(file.type) }}</td>
 
   <td>
       {% if file.storage == 'local' %}
