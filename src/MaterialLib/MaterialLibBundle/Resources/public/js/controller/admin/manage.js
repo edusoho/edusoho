@@ -282,6 +282,7 @@ define(function(require, exports, module) {
                 //init timepicker
                 $("#startDate").datetimepicker({
                     autoclose: true,
+                    language: 'zh-CN',
                 }).on('changeDate',function(){
                     $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
                 });
@@ -290,6 +291,7 @@ define(function(require, exports, module) {
 
                 $("#endDate").datetimepicker({
                     autoclose: true,
+                    language: 'zh-CN',
                 }).on('changeDate',function(){
 
                     $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
