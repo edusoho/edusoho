@@ -23,7 +23,14 @@
 
 五、安装php 
 
-    sudo brew install php55 --with-debug --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear php5 --with-cli --with-curl --with-fpm --with-intl --with-mcrypt --with-mysqlnd_ms --with-gd
+    5.1 php56
+
+    brew install php56 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd --without-apache 
+
+    5.2 php55
+
+    brew install php55 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd
+
 
 ## 下载EduSoho源码
 

@@ -2,8 +2,8 @@
 namespace Topxia\Service\Common;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Topxia\Service\Common\Proxy\ProxyManager;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ServiceKernel
 {
@@ -18,6 +18,8 @@ class ServiceKernel
     protected $environment;
     protected $debug;
     protected $booted;
+
+    protected $translator;
 
     protected $parameterBag;
 
@@ -133,6 +135,20 @@ class ServiceKernel
         return $this->parameterBag->get($name);
     }
 
+    public function setTranslator($translator)
+    {
+        $this->translator = $translator;
+    }
+
+    public function getTranslator()
+    {
+        if (is_null($this->translator)) {
+            throw new \RuntimeException('尚未初始化Translator');
+        }
+
+        return $this->translator;
+    }
+
     public function hasParameter($name)
     {
         if (is_null($this->parameterBag)) {
@@ -238,6 +254,35 @@ class ServiceKernel
         }
 
         return $this->_moduleConfig[$key];
+    }
+
+    /**
+     * 翻译数组文本
+     * @param  [type] $message        要翻译的数组文本
+     * @param  array  $arguments      占位符
+     * @param  [type] $domain         [description]
+     * @param  [type] $locale         [description]
+     * @return [type] [description]
+     */
+    public function transArray($messages, $arguments = array(), $domain = null, $locale = null)
+    {
+        array_walk($messages, function (&$message, $key, $params) {
+            $message = $this->trans($message, $params[0], $params[1], $params[2]);
+        }, array($arguments, $domain, $locale));
+        return $messages;
+    }
+
+    /**
+     * 翻译文本
+     * @param  [type] $message        要翻译的文本
+     * @param  array  $arguments      占位符
+     * @param  [type] $domain         [description]
+     * @param  [type] $locale         [description]
+     * @return [type] [description]
+     */
+    public function trans($message, $arguments = array(), $domain = null, $locale = null)
+    {
+        return $this->getTranslator()->trans($message, $arguments, $domain, $locale);
     }
 
     protected function getClassName($type, $name)

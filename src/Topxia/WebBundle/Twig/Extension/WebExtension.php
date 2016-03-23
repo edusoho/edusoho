@@ -76,6 +76,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('percent', array($this, 'calculatePercent')),
             new \Twig_SimpleFunction('category_choices', array($this, 'getCategoryChoices')),
             new \Twig_SimpleFunction('dict', array($this, 'getDict')),
+            // dict_text 已经废弃，不要再使用,请使用macro方式
             new \Twig_SimpleFunction('dict_text', array($this, 'getDictText'), array('is_safe' => array('html'))),
             new \Twig_SimpleFunction('upload_max_filesize', array($this, 'getUploadMaxFilesize')),
             new \Twig_SimpleFunction('js_paths', array($this, 'getJsPaths')),
@@ -663,7 +664,8 @@ class WebExtension extends \Twig_Extension
 
         if (empty($uri)) {
             $url = $assets->getUrl('assets/img/default/'.$default);
-            // $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
+
+// $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
 
             if ($absolute) {
                 $url = $request->getSchemeAndHttpHost().$url;
@@ -1210,7 +1212,9 @@ class WebExtension extends \Twig_Extension
 
     public function getDict($type)
     {
-        return ExtensionManager::instance()->getDataDict($type);
+        $dict = ExtensionManager::instance()->getDataDict($type);
+
+        return ServiceKernel::instance()->transArray($dict);
     }
 
     public function getDictText($type, $key)
