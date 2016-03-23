@@ -15,7 +15,7 @@ class Version20160318102644 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if ($this->isFieldExist('upload_files', 'uuid')) {
+        if (!$this->isFieldExist('upload_files', 'uuid')) {
             $this->addSql("ALTER TABLE upload_files ADD uuid VARCHAR(36) NULL;");
         }
 
