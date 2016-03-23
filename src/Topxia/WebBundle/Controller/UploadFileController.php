@@ -40,7 +40,11 @@ class UploadFileController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
-        $file = $this->getUploadFileService()->getFile($fileId);
+        if (strpos($fileId, '-')) {
+            $file = $this->getUploadFileService()->getFileByUuid($fileId);
+        } else {
+            $file = $this->getUploadFileService()->getFile($fileId);
+        }
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -405,8 +409,7 @@ class UploadFileController extends BaseController
         $fileExts       = "*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.zip";
         $origin         = array(
             'storageSetting' => $storageSetting,
-            'fileExts'       => $fileExts,
-            'storageSetting' => $storageSetting,
+            'fileExts'       => $fileExts
         );
 
         return $this->render('TopxiaWebBundle:CourseQuestionManage:batch-upload.html.twig', array_merge($origin, $responseParams));

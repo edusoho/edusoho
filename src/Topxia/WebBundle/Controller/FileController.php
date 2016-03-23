@@ -111,9 +111,4 @@ class FileController extends BaseController
     {
         return $this->getServiceKernel()->createService('Content.FileService');
     }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
 }

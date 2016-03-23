@@ -7,6 +7,8 @@ interface UploadFileService
 {   
 	public function getFile($id);
 
+    public function getFileByUuid($uuid);
+
     public function getFileByHashId($hashId);
 
     public function getFileByConvertHash($hash);

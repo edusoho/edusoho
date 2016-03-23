@@ -26,6 +26,15 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
        return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
+    public function getFileByUuid($uuid)
+    {
+        $file = $this->getUploadFileDao()->getFileByUuid($uuid);
+        if (empty($file)) {
+            return null;
+        }
+        return $this->getFileImplementorByFile($file)->getFile($file);
+    }
+
     public function getFileByHashId($hashId)
     {
        $file = $this->getUploadFileDao()->getFileByHashId($hashId);
