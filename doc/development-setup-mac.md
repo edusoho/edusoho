@@ -6,7 +6,7 @@
 
 一、安装homebrew 
 
-    curl -LsSf http://github.com/mxcl/homebrew/tarball/master | sudo tar xvz -C/usr/local --strip 1
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 二、安装nginx 
 
@@ -22,8 +22,13 @@
     sudo brew tap josegonzalez/homebrew-php 
 
 五、安装php 
+    5.1 php55
 
-    sudo brew install php55 --with-debug --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear php5 --with-cli --with-curl --with-fpm --with-intl --with-mcrypt --with-mysqlnd_ms --with-gd
+    brew install php55 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd
+
+    5.2 php56
+
+    brew install php56 --with-fpm --with-gmp --with-homebrew-openssl --with-imap --with-intl --with-libmysql --without-bz2 --without-mysql --without-pcntl --without-pear --with-cli --with-curl --with-mcrypt --with-mysqlnd_ms --with-gd --without-apache 
 
 ## 下载EduSoho源码
 
