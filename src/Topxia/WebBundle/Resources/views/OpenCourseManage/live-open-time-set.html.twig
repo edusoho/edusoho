@@ -46,7 +46,7 @@
       <div class="form-group">
         <label class="col-md-2 control-label">{{'直播开始时间'|trans}}</label>
         <div class="col-md-8 controls" style="z-index:2000;">
-          <input type="text"  name="startTime" class="form-control width-input width-input-large" value="">
+          <input type="text"  name="startTime" class="form-control width-input width-input-large" value="{% if openLiveLesson %}{{ openLiveLesson.startTime|date('Y-m-d H:i:s') }}{% endif %}">
           <div class="help-block" id="starttime-help-block">
             {{'教师可在直播开始前1小时内进入直播教室，以准备相关教学资料。'|trans}}
           </div>
@@ -56,7 +56,7 @@
       <div class="form-group">
         <label class="col-md-2 control-label">{{'直播时长'|trans}}</label>
         <div class="col-md-8 controls">
-          <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="" placeholder="时长" data-calculate-left-capacity-url="" data-max-Student-Num = ""> {{'分钟'|trans}}
+          <input type="text"  name="timeLength" id="live-length-field" class="form-control width-input width-input-large" value="{{ openLiveLesson.length|default(60) }}" placeholder="时长" data-calculate-left-capacity-url="" data-max-Student-Num = ""> {{'分钟'|trans}}
           <div class="help-block" id="timelength-help-block"></div>
         </div>
 
@@ -65,7 +65,8 @@
 
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
-            <button class="btn btn-fat btn-primary" id="live-open-course-form-btn" type="submit">{{'保存'|trans}}</button>
+            <button class="btn btn-fat btn-primary" id="live-open-course-form-btn" type="submit"
+            data-submiting-text="{{'正在保存...'|trans}}">{{'保存'|trans}}</button>
         </div>
       </div>
 
