@@ -208,7 +208,7 @@ class ChaosThreads extends BaseResource
         }
 
         $courseIds     = ArrayToolkit::column($courseThreads,"courseId");
-        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);               
+        $courses       = $this->getCourseService()->findCoursesByIds($courseIds);
         $courses       = ArrayToolkit::index($courses,"id");
 
         foreach ($courseThreads as $key => &$thread) {
@@ -221,13 +221,12 @@ class ChaosThreads extends BaseResource
                 $thread['course'] = $this->filterCourse($course);
             } else {
                 unset($courseThreads[$key]);
-                continue;
             }
         }
         return $courseThreads;
     }
 
-    protected function filterCourse(array $course){
+    protected function filterCourse($course){
         $keys = array(
             'id',
             'type',

@@ -83,7 +83,7 @@ class ChaosThreadsPosts extends BaseResource
         $courseIds = ArrayToolkit::column($posts, "courseId");
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
         $course  = ArrayToolkit::index($courses,"id");
-
+        
         foreach ($posts as $key => &$post) 
         {       
             $thread = $this->getCourseThreadService()->getThread(null,$post['threadId']);
@@ -96,12 +96,13 @@ class ChaosThreadsPosts extends BaseResource
             $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
             $course['largePicture']  = $this->getFileUrl($course['largePicture']);
             $post['type']            = $thread['type'];
-            $post['course']          = $this->filterCourse($course);
+            $post['course']          = $this->filterCourse($course);   
         }
-        return $posts;
+
+        return array_values($posts);
     }
 
-    protected function filterCourse(array $course){
+    protected function filterCourse($course){
         $keys = array(
             'id',
             'type',
