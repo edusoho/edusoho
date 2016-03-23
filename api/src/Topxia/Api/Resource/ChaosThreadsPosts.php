@@ -96,6 +96,7 @@ class ChaosThreadsPosts extends BaseResource
             $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
             $course['largePicture']  = $this->getFileUrl($course['largePicture']);
             $post['type']            = $thread['type'];
+            $post['title']           = $thread['title'];
             $post['course']          = $this->filterCourse($course);   
         }
 
