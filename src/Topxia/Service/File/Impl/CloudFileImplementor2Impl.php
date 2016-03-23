@@ -426,6 +426,11 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $cloudFile;
     }
 
+    public function synData($conditions)
+    {
+      $files = $this->getUploadFileDao()->searchFiles($conditions,array('createdTime','DESC'),0,999);
+    }
+
     protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');

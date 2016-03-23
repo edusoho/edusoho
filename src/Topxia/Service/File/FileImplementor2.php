@@ -20,4 +20,6 @@ interface FileImplementor2
     public function finishedUpload($file, $params);
 
     public function search($conditions);
+
+    public function synData($conditions);
 }

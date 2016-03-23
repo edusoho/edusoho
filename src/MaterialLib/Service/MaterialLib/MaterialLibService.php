@@ -25,4 +25,6 @@ interface MaterialLibService
     public function getThumbnail($globalId, $options);
 
     public function player($globalId);
+
+    public function synData();
 }

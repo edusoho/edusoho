@@ -57,6 +57,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         return $this->getCloudFileImplementor()->getStatistics($options);
     }
 
+    public function synData($conditions)
+    {
+      return $this->getCloudFileImplementor()->synData($conditions);
+    }
+
     protected function getCloudFileImplementor()
     {
         return $this->createService('File.CloudFileImplementor2');

@@ -159,6 +159,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         $builder = $this->createDynamicQueryBuilder($conditions)
                         ->from($this->table, $this->table)
                         ->andWhere('targetType = :targetType')
+                        ->andWhere('globalId = :globalId')
                         ->andWhere('targetId = :targetId')
                         ->andWhere('status = :status')
                         ->andWhere('isPublic = :isPublic')

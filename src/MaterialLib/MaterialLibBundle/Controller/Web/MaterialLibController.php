@@ -76,7 +76,7 @@ class MaterialLibController extends BaseController
             $tags = $this->getTagService()->findTagsByIds($tagIds);
             $files[$key]['tags'] = ArrayToolkit::column($tags, 'name');
         }
-        
+
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
