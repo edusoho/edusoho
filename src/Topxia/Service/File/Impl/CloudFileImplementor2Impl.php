@@ -430,8 +430,11 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
     {
       $files = $this->getUploadFileDao()->searchFiles($conditions,array('createdTime','DESC'),0,999);
       $api              = CloudAPIFactory::create('root');
-      $syncData         = $api->post("/resources/data/sync",array($files));
-      return $syncData;
+      $syncData         = $api->post("/resources/data/sync",$files);
+      foreach ($syncData as $key => $value) {
+        $this->getUploadFileDao()->updateFile($key,array('globalId'=>$value));
+      }
+      return true;
     }
 
     protected function getUploadFileDao()
