@@ -20,7 +20,7 @@
 									{% if liveList.current|default(null) %}
 			              <div class="timeline">
 			               <span class="time-icon"><em></em></span>
-			               <span class="label label-success label-md">正在直播</span>
+			               <span class="label label-success">正在直播课时</span>
 			              </div>
 			              <ul class="live-courses">
 			              	{% for list in liveList.current %}
@@ -36,12 +36,12 @@
 		              <div class="timeline">
 		                <span class="time-icon"><em></em></span>
 		                {% if date == 'today' %}
-		               		<span class="label label-info label-md">即将直播</span>
+		               		<span class="label label-info">即将直播课时</span>
 		                {% endif %}
 		              </div>
 		              <ul class="live-courses">
 		                {% for list in liveList.future %}
-		                	<li><a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}"><span>{{ list.startTime|date('H:i') }}</span>{{ list.title }}</a></li>
+		                	<li><a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}" target="_blank"><span>{{ list.startTime|date('H:i') }}</span>{{ list.title }}</a></li>
 		                {% endfor %}
 		              </ul>
 		            {% endif %}
