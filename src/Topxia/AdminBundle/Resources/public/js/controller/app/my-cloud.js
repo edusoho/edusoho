@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         var videoData = eval("(" + $('#videoUsedInfo').attr("value") +")");
         var smsData = eval("(" + $('#smsUsedInfo').attr("value") + ")");
         var liveData = eval("(" + $('#liveUsedInfo').attr("value") + ")");
-        var emailData = eval("(" + $('#emailUsedInfo').attr("value") + ")");
+        // var emailData = eval("(" + $('#emailUsedInfo').attr("value") + ")");
         if(videoData!=""){
           Morris.Line({
             element: 'storage-data-tab',
@@ -43,16 +43,16 @@ define(function(require, exports, module) {
             labels: ['使用量']
           });
         }
-        if(emailData!=""){
-          Morris.Bar({
-            element: 'email-data-tab',
-            data: emailData,
-            units: "封",
-            xkey: 'date',
-            ykeys: ['count'],
-            labels: ['使用量']
-          });
-        }
+        // if(emailData!=""){
+        //   Morris.Bar({
+        //     element: 'email-data-tab',
+        //     data: emailData,
+        //     units: "封",
+        //     xkey: 'date',
+        //     ykeys: ['count'],
+        //     labels: ['使用量']
+        //   });
+        // }
     };
 
 });

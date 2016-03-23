@@ -481,7 +481,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'locked'        => 0,
             'tryLookable'   => 0,
             'tryLookTime'   => 0,
-            'buyable'       => 0
+            'buyable'       => 0,
+            'studyModel'    => 'normal'
         ));
 
         if (!empty($fields['about'])) {
@@ -1068,10 +1069,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->fillLessonMediaFields($lesson);
 
-        //课程内容的过滤 @todo
-        // if(isset($lesson['content'])){
-        //     $lesson['content'] = $this->purifyHtml($lesson['content']);
-        // }
+//课程内容的过滤 @todo
+
+// if(isset($lesson['content'])){
+
+//     $lesson['content'] = $this->purifyHtml($lesson['content']);
+
+// }
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -1101,7 +1105,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             LessonSerialize::serialize($lesson)
         );
 
-        // Increase the linked file usage count, if there's a linked file used by this lesson.
+// Increase the linked file usage count, if there's a linked file used by this lesson.
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
@@ -1263,17 +1267,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->updateCourseCounter($course['id'], array(
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
-        // Update link count of the course lesson file, if the lesson file is changed
+
+// Update link count of the course lesson file, if the lesson file is changed
 
         if (array_key_exists('mediaId', $fields)) {
             if ($fields['mediaId'] != $lesson['mediaId']) {
-                // Incease the link count of the new selected lesson file
+// Incease the link count of the new selected lesson file
 
                 if (!empty($fields['mediaId'])) {
                     $this->getUploadFileService()->waveUploadFile($fields['mediaId'], 'usedCount', 1);
                 }
 
-                // Decrease the link count of the original lesson file
+// Decrease the link count of the original lesson file
 
                 if (!empty($lesson['mediaId'])) {
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
@@ -1331,9 +1336,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->updateCourseCounter($course['id'], array(
             'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
         ));
-        // [END] 更新课时序号
 
-        // Decrease the course lesson file usage count, if there's a linked file used by this lesson.
+// [END] 更新课时序号
+
+// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
@@ -2542,12 +2548,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException("course, member参数不能为空");
         }
 
-        /*
-        如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
-        if ($course['expiryDay'] == 0) {
-        return true;
-        }
-         */
+/*
+如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
+if ($course['expiryDay'] == 0) {
+return true;
+}
+ */
 
         if ($member['deadline'] == 0) {
             return true;

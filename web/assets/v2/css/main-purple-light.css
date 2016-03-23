@@ -7079,6 +7079,7 @@ textarea {
   }
 }
 .course-list .course-item .metas {
+  position: relative;
   padding: 10px;
   color: #c1c1c1;
 }
@@ -7087,20 +7088,22 @@ textarea {
     padding: 5px;
   }
 }
-.course-list .course-item .metas .num {
-  margin-right: 10px;
-}
 .course-list .course-item .metas i {
   margin-right: 5px;
 }
-.course-list .course-item .metas .price {
+.course-list .course-item .metas .course-price-widget {
   float: right;
+}
+.course-list .course-item .metas .price {
   color: #e83d2c;
   font-size: 14px;
   margin-right: 0;
 }
 .course-list .course-item .metas .free {
   color: #238312;
+}
+.course-list .course-item .metas .comment {
+  margin-left: 10px;
 }
 @media (max-width: 767px) {
   .course-list .course-item .metas .comment {
@@ -7787,10 +7790,13 @@ textarea {
 .es-card .avatar-md {
   border: 2px solid #fff;
 }
+.es-card .user-avatar {
+  position: relative;
+}
 .es-card .icon-user-status {
   position: absolute;
   bottom: 0;
-  right: 5px;
+  right: 0;
 }
 .es-card .content {
   font-size: 12px;
@@ -7953,23 +7959,13 @@ textarea {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  height: 40px;
   margin-bottom: 30px;
 }
-.es-filter .nav-sort {
-  float: left;
-  padding-right: 300px;
-}
-@media (max-width: 767px) {
-  .es-filter .nav-sort {
-    padding-right: 0;
-  }
-}
 .es-filter .nav-sort > li {
-  display: inline-block;
+  float: left;
 }
 .es-filter .nav-sort > li > a {
-  display: block;
+  height: 40px;
   padding: 10px 15px;
   color: #616161;
   -webkit-transition: all 0.3s ease;
@@ -13051,6 +13047,8 @@ textarea {
   }
 }
 .user-center-header .container {
+  position: relative;
+  z-index: 1;
   padding: 0 70px;
 }
 @media (max-width: 1199px) {
