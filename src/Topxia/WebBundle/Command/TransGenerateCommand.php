@@ -30,12 +30,17 @@ class TransGenerateCommand extends BaseCommand
         $menuKeywords = $this->scanMenuTrans($dir, $output);
         $this->printScanResult($menuKeywords, $output);
 
+        $output->writeln("<comment>\n正在扫描PHP文件的语言串:</comment>");
+        $phpKeywords = $this->scanPHPTrans($dir,$output);
+        $this->printScanResult($phpKeywords,$output);
+
         $output->writeln("<comment>\n正在扫描数据字典配置文件的语言串:</comment>");
         $dictsKeywords = $this->scanDictTrans($dir, $output);
         $this->printScanResult($menuKeywords, $output);
 
         $output->writeln("<comment>\n语言串总和:</comment>");
-        $keywords = array_merge($viewKeywords, $menuKeywords, $dictsKeywords);
+        $keywords = array_merge($viewKeywords, $menuKeywords, $dictsKeywords,$phpKeywords);
+
         $this->printScanResult($keywords, $output);
         $keywords = array_values(array_unique($keywords));
 
@@ -170,6 +175,35 @@ class TransGenerateCommand extends BaseCommand
             }
         }
 
+        return $keywords;
+    }
+    /**
+    *该方法需要重构
+    **/
+    protected function scanPHPTrans($dir, $output)
+    {
+        $keywords = array();
+
+        $path = array(realpath($this->getContainer()->getParameter('kernel.root_dir') . '/../' . $dir));
+        if($dir == 'src/Topxia/WebBundle') {
+             $path[] = $path[0]. '/../Service';
+        }
+        if (empty($path)) {
+            $output->write("<error>{$dir}/Controller is not exist.</error>");
+        }
+        $finder = new Finder();
+        $finder->files()->in($path)->name('*.php');
+        foreach($finder as $file) {
+        
+            $content = file_get_contents($file->getRealpath());
+            $matched = preg_match_all('/trans\(\'(.*?)\'/',$content,$matches);
+            if ($matched) {
+                $output->write("{$file->getRealpath()}");
+                $count = count($matches[1]);
+                $output->writeln("<info> ... {$count}</info>");
+                $keywords = array_merge($keywords, $matches[1]);
+            }   
+        }
         return $keywords;
     }
 
