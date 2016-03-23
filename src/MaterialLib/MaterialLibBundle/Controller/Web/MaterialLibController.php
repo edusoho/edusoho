@@ -82,7 +82,7 @@ class MaterialLibController extends BaseController
         $storageSetting = $this->getSettingService()->get("storage");
 
         $tags = $this->getTagService()->findAllTags(0, 999);
-
+        //$synData = $this->getMaterialLibService()->synData();
         return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
             'currentUserId'  => $currentUserId,
             'files'          => $files,
