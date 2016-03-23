@@ -139,9 +139,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function synData()
     {
         $conditions = array(
-          'globalId' => 0
+          'globalId' => '0'
         );
         $oldFiles = $this->getCloudFileService()->synData($conditions);
+        return $oldFiles;
     }
 
     protected function filterConditions($conditions)
