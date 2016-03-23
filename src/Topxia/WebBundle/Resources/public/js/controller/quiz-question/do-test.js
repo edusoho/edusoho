@@ -5,7 +5,8 @@ define(function(require, exports, module) {
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
-
+    var BatchAttachmentsUploader = require('./batch-upload-attachments');
+    var UploadQuestionAttachments = require('./upload-question-attachments');
     require('es-ckeditor');
     require('../widget/document-player');
 
@@ -399,6 +400,7 @@ define(function(require, exports, module) {
             var $shortTextarea = $(this).hide();
             var $longTextarea = $shortTextarea.parent().find('.testpaper-question-essay-input-long').show();
             var $textareaBtn = $shortTextarea.parent().find('.testpaper-question-essay-input-btn').show();
+            var $attachment = $('#question-attachment').show();
 
             var editor = CKEDITOR.replace($longTextarea.attr('id'), {
                 toolbar: 'Minimal',
@@ -421,6 +423,7 @@ define(function(require, exports, module) {
                     editor.destroy();
                     $longTextarea.hide();
                     $textareaBtn.hide();
+                    $attachment.hide();
                     $shortTextarea.show();
                 });
             });
@@ -440,6 +443,27 @@ define(function(require, exports, module) {
                     $longTextarea.change();
                 }, 1);
             });
+
+            $("#cloud-btn", "#question-attachment").on('click', function () {
+                var url = $(this).data("url");
+
+                $("#modal").html('');
+                $("#modal").modal('show');
+                $.get(url, function (html) {
+                    $("#modal").html(html);
+                    if ($('#selectFiles').length > 0) {
+                        var batchAttachmentsUploader = new BatchAttachmentsUploader({
+                            editor: editor
+                        });
+                    } else {
+                        var uploadQuestionAttachments = new UploadQuestionAttachments({
+                            editor: editor
+                        });
+                    }
+
+
+                });
+            })
 
         });
 

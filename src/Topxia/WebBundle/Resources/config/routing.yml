@@ -794,17 +794,13 @@ course_manage_question_upload:
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
     methods: [POST]
 
-course_manage_upload_question_attachment:
-    pattern:  /course/{id}/manage/upload/question/attachment/{targetType}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
+ckeditor_file_upload:
+    pattern: /ckeditor/upload/file/{storage}
+    defaults: { _controller: TopxiaWebBundle:UploadFile:ckeditorUpload }
 
-course_manage_question_batch_upload_attachment:
-    pattern: /course/{id}/manage/question/batch/upload/attachment/{targetType}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:batchUploadAttachments }
-
-course_manage_question_attachment_download:
-    pattern: /course/{id}/manage/question/attachment/{fileId}/download
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:attachmentDownload }
+attachment_download:
+    pattern: /file/download/{uuid}
+    defaults: { _controller: TopxiaWebBundle:UploadFile:attachmentDownload }
 
 course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category

@@ -36,6 +36,7 @@
 		"doctrine/orm" : "v2.4.7",
 		"endroid/qrcode" : "1.5.4",
 		"ezyang/htmlpurifier" : "v4.7.0",
+		"ramsey/uuid-doctrine": "^1.0",
 		"gregwar/captcha":"v1.1",
 		"imagine/imagine" : "0.6.2",
 		"incenteev/composer-parameter-handler" : "v2.1.1",

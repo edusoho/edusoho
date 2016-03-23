@@ -55,6 +55,23 @@ class UploadFileController extends BaseController
         }
     }
 
+    public function attachmentDownloadAction(Request $request, $uuid)
+    {
+        $file = $this->getUploadFileService()->getFileByUuid($uuid);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['targetType'] != 'ckeditor_attachment') {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array(
+            'fileId' => $file['id']
+        ));
+    }
+
     protected function downloadCloudFile($file)
     {
         if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -376,6 +393,39 @@ class UploadFileController extends BaseController
         $info = $this->getUploadFileService()->getMediaInfo($key, $type);
 
         return $this->createJsonResponse($info['format']['duration']);
+    }
+
+    public function ckeditorUploadAction(Request $request, $storage)
+    {
+        $actionMapper = array(
+            'cloud' => 'ckeditorCloud',
+            'local' => 'ckeditorLocal'
+        );
+
+        return call_user_func(array($this, $actionMapper[$storage]), $request, array(
+            'targetType' => 'ckeditor_attachment',
+            'targetId'   => 0
+        ));
+    }
+
+    private function ckeditorLocal(Request $request, $responseParams)
+    {
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        return $this->render('TopxiaWebBundle:CourseQuestionManage:modal-upload-question-attachment.html.twig', array_merge(array(
+            'storageSetting' => $storageSetting
+        ), $responseParams));
+    }
+
+    private function ckeditorCloud(Request $request, $responseParams)
+    {
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $fileExts       = "*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.zip";
+        $origin         = array(
+            'storageSetting' => $storageSetting,
+            'fileExts'       => $fileExts
+        );
+
+        return $this->render('TopxiaWebBundle:CourseQuestionManage:batch-upload.html.twig', array_merge($origin, $responseParams));
     }
 
     protected function getSettingService()

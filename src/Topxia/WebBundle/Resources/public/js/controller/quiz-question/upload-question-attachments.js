@@ -65,7 +65,7 @@ define(function(require, exports, module) {
 		            },			
 					init: {
 						FileUploaded: function(up, file, info) {
-							response = $.parseJSON(info.response);
+							var response = $.parseJSON(info.response);
 
 							var url = divData.callback;
 							if (url) {
@@ -83,11 +83,9 @@ define(function(require, exports, module) {
 								$(".plupload_start").addClass("plupload_disabled");
 							}
 
-							var fileId = response.id;
-							var targetId = response.targetId;
-							self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/question/attachment/"+fileId+"/download'>" + file.name + "</a>");
+							var uuid = response.uuid;
 
-
+							self.get("editor").insertHtml("附件:  <a href='/file/download/" + uuid + "'>" + file.name + "</a>");
 						},
 
 						QueueChanged: function(up){
