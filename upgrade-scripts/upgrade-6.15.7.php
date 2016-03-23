@@ -38,10 +38,8 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
-        global $kernel;
-        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/block.json"), $kernel->getContainer());
-
         $connection = $this->getConnection();
+        $connection->exec("delete from block where code='live_top_banner'");
 
         if (!$this->isTableExist('discovery_column')) {
             $connection->exec("
@@ -59,6 +57,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT '发现页栏目';
             ");
         }
+
+        global $kernel;
+        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/block.json"), $kernel->getContainer());
     }
 
     private function updateCrontabSetting()
