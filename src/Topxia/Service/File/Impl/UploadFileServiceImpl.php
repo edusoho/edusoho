@@ -6,6 +6,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
+use Topxia\Common\IdToolKit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Util\EdusohoCloudClient;
 use Topxia\Service\File\UploadFileService;
@@ -143,7 +144,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function addFile($targetType,$targetId,array $fileInfo=array(),$implemtor='local',UploadedFile $originalFile=null)    
     {
         $file         = $this->getFileImplementor($implemtor)->addFile($targetType,$targetId,$fileInfo,$originalFile);
-        $file['uuid'] = Uuid::uuid4();
+        $file['uuid'] = IdToolKit::uuid();
         $file         = $this->getUploadFileDao()->addFile($file);
         
         return $file; 
