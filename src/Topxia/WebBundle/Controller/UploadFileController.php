@@ -40,11 +40,7 @@ class UploadFileController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
-        if (strpos($fileId, '-')) {
-            $file = $this->getUploadFileService()->getFileByUuid($fileId);
-        } else {
-            $file = $this->getUploadFileService()->getFile($fileId);
-        }
+        $file = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -57,6 +53,23 @@ class UploadFileController extends BaseController
         } else {
             return $this->downloadLocalFile($request, $file);
         }
+    }
+
+    public function attachmentDownloadAction(Request $request, $uuid)
+    {
+        $file = $this->getUploadFileService()->getFileByUuid($uuid);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['targetType'] != 'ckeditor_attachment') {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array(
+            'fileId' => $file['id']
+        ));
     }
 
     protected function downloadCloudFile($file)
