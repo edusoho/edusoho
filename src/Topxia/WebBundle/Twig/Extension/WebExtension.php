@@ -1212,7 +1212,9 @@ class WebExtension extends \Twig_Extension
 
     public function getDict($type)
     {
-        return ExtensionManager::instance()->getDataDict($type);
+        $dict = ExtensionManager::instance()->getDataDict($type);
+
+        return ServiceKernel::instance()->transArray($dict);
     }
 
     public function getDictText($type, $key)
