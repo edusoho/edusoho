@@ -83,7 +83,7 @@ class CourseScoreBatchController extends BaseController
     {
         $course                     = $this->getCourseService()->tryManageCourse($courseId);
         $data                       = array();
-        $data['excel_example']      = 'bundles/topxiaweb/example/user_score_import_example.xlsx';
+        $data['excel_example']      = 'bundles/moocweb/example/user_score_import_example.xlsx';
         $data['excel_validate_url'] = 'course_manage_student_score_import';
         $data['excel_import_url']   = 'course_manage_student_score_to_base';
 
@@ -355,7 +355,7 @@ class CourseScoreBatchController extends BaseController
             return false;
         }
 
-        $scoreArray = explode("其他评分", $data);
+        $scoreArray = explode("其他", $data);
 
         if (count($scoreArray) <= 1) {
             return false;
