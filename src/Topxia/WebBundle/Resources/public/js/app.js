@@ -153,7 +153,7 @@ define(function(require, exports, module) {
 
     $("select[name='language']").change(function() {
         $.post($("select[name='language']").parents('form').attr('action'), $("select[name='language']").parents('form').serialize(), function() {
-            Cookie.set("locale", $('select[name=language]').val());
+            Cookie.set("locale", $('select[name=language]').val(),{'path':'/'});
             window.location.reload();
         });
 
