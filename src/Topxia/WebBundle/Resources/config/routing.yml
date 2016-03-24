@@ -2025,6 +2025,10 @@ live_course_manage_lesson_replay_title_update:
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
 
+open_course_show:
+    pattern:  /open/course/{courseId}
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:show }
+
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
