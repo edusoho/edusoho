@@ -21,8 +21,8 @@ define(function(require, exports, module) {
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-search-type option': 'onClickSearchTypeBtn',
-                'click .processStatus': 'onClickProcessStatusBtn',
-                'click .useStatus': 'onClickUseStatusBtn'
+                'click .js-process-status-select': 'onClickProcessStatusBtn',
+                'click .js-use-status-select': 'onClickUseStatusBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
