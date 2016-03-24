@@ -2,11 +2,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseLessonController extends BaseController
 {
@@ -60,7 +58,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        //开启限制加入
+//开启限制加入
 
         if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
@@ -72,7 +70,7 @@ class CourseLessonController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+//课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
         if (empty($lesson['free']) && !(!empty($course['tryLookable']) && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
@@ -190,8 +188,34 @@ class CourseLessonController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-        $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $json           = array();
+        $lesson  = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $json    = array();
+        $preview = $request->query->get('preview');
+
+        if ($member['role'] != 'teacher' && $preview == 1) {
+            return $this->createJsonResponse(array('message' => '您不是教师，无法预览!'));
+        }
+
+        if ($preview != 1) {
+            if ($course['studyModel'] == 'ordered') {
+                $user = $this->getCurrentUser();
+
+                $lessons = $this->getCourseService()->getCourseLessons($courseId);
+
+                foreach ($lessons as $tempLesson) {
+                    if ($tempLesson['seq'] < $lesson['seq']) {
+                        $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $tempLesson['id']);
+
+                        if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
+                            $json['studyModel'] = 'ordered';
+
+                            return $this->createJsonResponse($json);
+                        }
+                    }
+                }
+            }
+        }
+
         $json['number'] = $lesson['number'];
         $chapter        = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
 
@@ -412,7 +436,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        return $this->createLocalMediaResponse($request, $file, false);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function detailDataAction($courseId, $lessonId)
@@ -464,7 +488,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        return $this->fileAction($request, $lesson['mediaId'], true);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function pptAction(Request $request, $courseId, $lessonId)
@@ -596,42 +620,6 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function fileAction(Request $request, $fileId, $isDownload = false)
-    {
-        $file = $this->getUploadFileService()->getFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['storage'] == 'cloud') {
-            if ($isDownload) {
-                $key = $file['hashId'];
-            } else {
-                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                    $key = $file['metas']['hd']['key'];
-                } else {
-                    $key = $file['hashId'];
-                }
-            }
-
-            if (empty($key)) {
-                throw $this->createNotFoundException();
-            }
-
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
-            if ($isDownload) {
-                $client->download($client->getBucket(), $key, 3600, $file['filename']);
-            } else {
-                $client->download($client->getBucket(), $key);
-            }
-        }
-
-        return $this->createLocalMediaResponse($request, $file, $isDownload);
-    }
-
     public function learnStatusAction(Request $request, $courseId, $lessonId)
     {
         $user   = $this->getCurrentUser();
@@ -712,64 +700,42 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
-    {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        if ($isDownload) {
-            $file['filename'] = urlencode($file['filename']);
-
-            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-            } else {
-                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-            }
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
-    }
-
     protected function isMobile()
     {
-        // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+// 如果有HTTP_X_WAP_PROFILE则一定是移动设备
 
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
             return true;
         }
 
-        //如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+//如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
 
         if (isset($_SERVER['HTTP_VIA'])) {
             //找不到为flase,否则为true
             return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
         }
 
-        //判断手机发送的客户端标志,兼容性有待提高
+//判断手机发送的客户端标志,兼容性有待提高
 
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $clientkeywords = array('nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
                 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
                 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
                 'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile');
-            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+
+// 从HTTP_USER_AGENT中查找手机浏览器的关键字
 
             if (preg_match("/(".implode('|', $clientkeywords).")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
         }
 
-        //协议法，因为有可能不准确，放到最后判断
+//协议法，因为有可能不准确，放到最后判断
 
         if (isset($_SERVER['HTTP_ACCEPT'])) {
-            // 如果只支持wml并且不支持html那一定是移动设备
-            // 如果支持wml和html但是wml在html之前则是移动设备
+// 如果只支持wml并且不支持html那一定是移动设备
+
+// 如果支持wml和html但是wml在html之前则是移动设备
 
             if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
                 return true;

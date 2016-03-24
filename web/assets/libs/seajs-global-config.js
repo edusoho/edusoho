@@ -1,5 +1,5 @@
 seajs.config({
-    alias: {
+	alias: {
         'jquery': 'jquery/1.11.2/jquery',
         '$': 'jquery/1.11.2/jquery',
         '$-debug': 'jquery/1.11.2/jquery',
@@ -65,7 +65,6 @@ seajs.config({
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin': 'fullcalendar/lib/moment.min.js',
-        'video-player': 'balloon-video-player/1.3.0/index',
         'underscore': 'gallery/underscore/1.8.2/underscore',
         'dc': 'gallery2/dc/2.0.0/js/dc-debug',
         'dc-css': 'gallery2/dc/2.0.0/css/dc.css',
@@ -74,45 +73,48 @@ seajs.config({
         'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
+        'video-player': 'balloon-video-player/1.3.0/index',
+        'ztree-core': 'jquery-plugin/zTree/3.5.21/js/ztree.core-debug',
+        'ztree-excheck': 'jquery-plugin/zTree/3.5.21/js/ztree.excheck-debug',
     },
 
-    // 预加载项
-    preload: [this.JSON ? '' : 'json'],
+	// 预加载项
+	preload: [this.JSON ? '' : 'json'],
 
-    // 路径配置
-    paths: app.jsPaths,
+	// 路径配置
+	paths: app.jsPaths,
 
-    // 变量配置
-    vars: {
-        'locale': 'zh-cn'
-    },
+	// 变量配置
+	vars: {
+		'locale': 'zh-cn'
+	},
 
-    charset: 'utf-8',
+	charset: 'utf-8',
 
-    debug: app.debug
+	debug: app.debug
 });
 
 var __SEAJS_FILE_VERSION = '?v' + app.version;
 
-seajs.on('fetch', function (data) {
-    if (!data.uri) {
-        return;
-    }
+seajs.on('fetch', function(data) {
+	if (!data.uri) {
+		return ;
+	}
 
-    if (data.uri.indexOf(app.mainScript) > 0) {
-        return;
-    }
+	if (data.uri.indexOf(app.mainScript) > 0) {
+		return ;
+	}
 
     if (/\:\/\/.*?\/assets\/libs\/[^(common)]/.test(data.uri)) {
-        return;
+        return ;
     }
 
     data.requestUri = data.uri + __SEAJS_FILE_VERSION;
 
 });
 
-seajs.on('define', function (data) {
-    if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
-        data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
-    }
+seajs.on('define', function(data) {
+	if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
+	    data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
+	}
 });

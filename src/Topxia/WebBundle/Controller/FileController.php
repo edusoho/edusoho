@@ -58,6 +58,7 @@ class FileController extends BaseController
 
         $record = $this->getFileService()->getFile($fileId);
 
+
         if (empty($record)) {
             return $this->createMessageResponse("error", "文件不存在");
         }

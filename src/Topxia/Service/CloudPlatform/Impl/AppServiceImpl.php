@@ -479,6 +479,10 @@ class AppServiceImpl extends BaseService implements AppService
             $cachePath = $this->getKernel()->getParameter('kernel.root_dir') . '/cache/' . $this->getKernel()->getEnvironment();
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
+            //注解需要该目录存在
+            if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
+                $filesystem->mkdir($cachePath.'/annotations/topxia');
+            }
         } catch (\Exception $e) {
             $errors[] = "应用安装升级成功，但刷新缓存失败！请检查{$cachePath}的权限";
             $this->createPackageUpdateLog($package, 'ROLLBACK', implode('\n', $errors));

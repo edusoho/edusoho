@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\SmsToolkit;
+use Topxia\Service\Common\Mail;
 use Topxia\Common\SimpleValidator;
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\HttpFoundation\Request;
@@ -92,7 +93,7 @@ class RegisterController extends BaseController
     public function successAction(Request $request)
     {
         $user = $this->getUserService()->getUser($request->query->get('userId'));
-        
+
         $authSettings = $this->getSettingService()->get('auth', array());
 
         if (($authSettings
@@ -110,10 +111,10 @@ class RegisterController extends BaseController
 
         if ($this->getAuthService()->hasPartnerAuth()) {
             $this->authenticateUser($user);
-            return $this->redirect($this->generateUrl('partner_login', array('goto' => $goto)));
+            $goto = $this->generateUrl('partner_login', array('goto' => $goto));
         }
 
-        return $this->redirect($goto);
+        return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
     }
 
     protected function isMobileRegister($registration)
@@ -488,7 +489,20 @@ class RegisterController extends BaseController
         $emailTitle        = str_replace($valuesToBeReplace, $valuesToReplace, $emailTitle);
         $emailBody         = str_replace($valuesToBeReplace, $valuesToReplace, $emailBody);
         try {
-            $this->sendEmail($user['email'], $emailTitle, $emailBody);
+            $normalMail = array(
+                'to'    => $user['email'],
+                'title' => $emailTitle,
+                'body'  => $emailBody
+            );
+            $cloudMail = array(
+                'to'        => $user['email'],
+                'verifyurl' => $verifyurl,
+                'template'  => 'email_registration',
+                'nickname'  => $user['nickname']
+            );
+            $mail = new Mail($normalMail, $cloudMail);
+
+            $this->sendEmail($mail);
         } catch (\Exception $e) {
             $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
         }

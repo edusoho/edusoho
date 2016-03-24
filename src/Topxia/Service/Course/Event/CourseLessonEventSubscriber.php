@@ -124,9 +124,14 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $lesson    = $context['lesson'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $lesson   = $context['lesson'];
+
+        if (!empty($lesson) && $lesson['type'] == 'testpaper') {
+            unset($argument['mediaId']);
+        }
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($lesson['courseId'], 1), 'id');
 
         if ($courseIds) {
@@ -217,6 +222,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             }
         }
 
+        $user             = ServiceKernel::instance()->getCurrentUser();
+        $userLessonLearns = $this->getCourseService()->searchLearns(array('userId' => $user['id'], 'lessonId' => $lesson['id'], 'status' => 'finished'), array('startTime', 'ASC'), 0, 1);
+
         $this->getStatusService()->publishStatus(array(
             'type'       => 'learned_lesson',
             'courseId'   => $course['id'],
@@ -224,8 +232,9 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
             'objectId'   => $lesson['id'],
             'private'    => $private,
             'properties' => array(
-                'course' => $this->simplifyCousrse($course),
-                'lesson' => $this->simplifyLesson($lesson)
+                'course'               => $this->simplifyCousrse($course),
+                'lesson'               => $this->simplifyLesson($lesson),
+                'lessonLearnStartTime' => $userLessonLearns ? $userLessonLearns[0]['startTime'] : 0
             )
         ));
     }

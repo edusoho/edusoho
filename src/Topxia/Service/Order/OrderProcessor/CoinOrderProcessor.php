@@ -7,11 +7,6 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
 {
     protected $router = "my_coin";
 
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
     public function preCheck($targetId, $userId)
     {
     }
@@ -61,12 +56,6 @@ class CoinOrderProcessor extends BaseProcessor implements OrderProcessor
     public function pay($payData)
     {
         return $this->getCashOrdersService()->payOrder($payData);
-    }
-
-    public function callbackUrl($router, $order, $container)
-    {
-        $goto = !empty($router) ? $container->get('router')->generate($router) : $this->generateUrl('homepage', array(), true);
-        return $goto;
     }
 
     public function cancelOrder($id, $message, $data)
