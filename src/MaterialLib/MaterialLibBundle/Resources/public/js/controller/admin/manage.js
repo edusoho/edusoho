@@ -22,7 +22,8 @@ define(function(require, exports, module) {
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-search-type option': 'onClickSearchTypeBtn',
                 'click .processStatus': 'onClickProcessStatusBtn',
-                'click .useStatus': 'onClickUseStatusBtn'
+                'click .useStatus': 'onClickUseStatusBtn',
+                'click .js-refresh-btn': 'onClickRefreshBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));
@@ -108,6 +109,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(event.currentTarget);
                 $target.button('loading');
+
                 $.ajax({
                     type:'POST',
                     url:$target.data('url'),
@@ -115,6 +117,24 @@ define(function(require, exports, module) {
                     Notify.success('重新转码成功!');
                     var html = '<span class="label label-info">等待转码</span>';
                     $target.closest('td').html(html);
+                }).fail(function(){
+                    Notify.danger('重新转码失败!');
+                }).always(function(){
+                    $target.button('reset');
+                });
+            },
+            onClickRefreshBtn: function(event)
+            {
+                var self = this;
+                var $target = $(event.currentTarget);
+                $target.button('loading');
+
+                $.ajax({
+                    type:'POST',
+                    url:$target.data('url'),
+                }).done(function(){
+                    Notify.success('重新转码成功!');
+                    self.renderTable();
                 }).fail(function(){
                     Notify.danger('重新转码失败!');
                 }).always(function(){
@@ -146,7 +166,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $table = this.element.find('#materials-table');
                 this._loading();
-                console.log(this.element.serialize());
+                
                 $.ajax({
                     type:'GET',
                     url:this.get('renderUrl'),
