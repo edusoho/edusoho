@@ -255,9 +255,15 @@
   padding: 0 10px 0 10px;
 }
 
-.materials-ul li.caption p.tags, .materials-ul li.caption p.date{
+.materials-ul li.caption p.tags, .materials-ul li.caption p.date {
   font-size: 10px;
 }
+
+.materials-ul li.caption p.use-time {
+   font-size: 10px;
+   margin-top: 0px;
+   margin-bottom: 5px;
+ }
 
 .material-list-container {
   margin-top: 20px;

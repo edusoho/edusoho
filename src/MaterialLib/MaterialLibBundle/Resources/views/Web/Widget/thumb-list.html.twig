@@ -8,9 +8,10 @@
       <li class="caption">
         <p class="title text-overflow">{{ uploadFile.filename }}</p>
         <p class="text-muted tags text-overflow">
-          <i class="glyphicon glyphicon-tag"></i>
+          <i class="glyphicon glyphicon-tag"></i>热门标签：
           {{ uploadFile.tags|default('没有标签')|join(' ') }}
         </p>
+        <p class="text-muted use-time text-overflow">使用次数： {{ uploadFile.usedTimes|default(0) }}次</p>
         <p class="text-muted date">{{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
       </li>
       <li class="row op-li">
