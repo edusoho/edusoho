@@ -18,10 +18,12 @@
     {{'给TA分享您的邀请码或者邀请链接'|trans}}，
     {% if inviteSetting %}
       {% if inviteSetting.promoted_user_value  %}
-        {% trans with {'%promoted_user_value%': inviteSetting.promoted_user_value} %}TA注册后将获得%coin_name%元优惠券{% endtrans %}
+        {{'TA注册后将获得%coin_value%元优惠券'|trans({'%coin_value%': inviteSetting.promoted_user_value})}}
+       {#  {% trans with {'%promoted_user_value%': inviteSetting.promoted_user_value} %}TA注册后将获得%coin_name%元优惠券{% endtrans %} #}
       {% endif %}
       {% if inviteSetting.promote_user_value %}
-        {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}TA在消费后您将获得%coin_name%元优惠券{% endtrans %}
+         {{'TA在消费后您将获得%coin_name%元优惠券'|trans({'%coin_value%': inviteSetting.promoted_user_value})}}
+        {# {% trans with {'%promote_user_value%': inviteSetting.promote_user_value} %}TA在消费后您将获得%coin_value%元优惠券{% endtrans %} #}
       {% endif %}
     {{'。'|trans}}
     {% else %}
