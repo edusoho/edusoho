@@ -46,3 +46,7 @@ admin_setting_theme:
     pattern:  /setting/theme
     defaults: { _controller: MoocAdminBundle:Theme:index }
 
+admin_app_installed:
+    pattern:  /app/installed/{postStatus}
+    defaults: { _controller: MoocAdminBundle:App:installed }
+
