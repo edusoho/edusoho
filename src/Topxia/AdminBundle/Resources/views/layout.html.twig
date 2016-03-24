@@ -25,9 +25,9 @@
     {% block title %}
       {% for m in menu_breadcrumb|reverse %}
         {% if loop.index == menu_breadcrumb|length %}
-          {{ m.name }}
+          {{ m.name|trans }}
         {% else %}
-          {{ m.name }} -
+          {{ m.name|trans }} -
         {% endif %}
       {% endfor %}
     {% endblock %}
@@ -141,7 +141,7 @@
         <div class="col-md-10">
         {% if menu_nav.code != 'admin_app' %}
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
+            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name)|trans }}{% endblock %}</h1>
             <div class="pull-right">
 
               {% block page_buttons %}
@@ -231,5 +231,5 @@
   {% if menu.blank|default(false) %}
     target="blank"
   {% endif %}
-  >{{ menu.name }}</a>
+  >{{ menu.name|trans }}</a>
 {% endmacro %}

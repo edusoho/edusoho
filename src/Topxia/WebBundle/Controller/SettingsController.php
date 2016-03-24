@@ -26,9 +26,9 @@ class SettingsController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->setFlashMessage('success', $this->get('translator')->trans('基础信息保存成功。'));
+                $this->setFlashMessage('success', $this->getServiceKernel()->trans('基础信息保存成功。'));
             } else {
-                $this->setFlashMessage('danger', $this->get('translator')->trans('不能修改已绑定的手机。'));
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('不能修改已绑定的手机。'));
             }
 
             return $this->redirect($this->generateUrl('settings'));

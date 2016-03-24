@@ -34,12 +34,16 @@ class TransGenerateCommand extends BaseCommand
         $phpKeywords = $this->scanPHPTrans($dir, $output);
         $this->printScanResult($phpKeywords, $output);
 
+        $output->writeln("<comment>\n正在扫描JS文件的语言串:</comment>");
+        $jsKeywords = $this->scanJSTrans($dir, $output);
+        $this->printScanResult($jsKeywords, $output);
+
         $output->writeln("<comment>\n正在扫描数据字典配置文件的语言串:</comment>");
         $dictsKeywords = $this->scanDictTrans($dir, $output);
         $this->printScanResult($menuKeywords, $output);
 
         $output->writeln("<comment>\n语言串总和:</comment>");
-        $keywords = array_merge($viewKeywords, $menuKeywords, $dictsKeywords, $phpKeywords);
+        $keywords = array_merge($viewKeywords, $menuKeywords, $dictsKeywords, $phpKeywords,$jsKeywords);
 
         $this->printScanResult($keywords, $output);
         $keywords = array_values(array_unique($keywords));
@@ -176,6 +180,36 @@ class TransGenerateCommand extends BaseCommand
             $content = file_get_contents($file->getRealpath());
 
             $matched = preg_match_all('/\{\{\s*\'(.*?)\'\s*\|\s*?trans.*?\}\}/', $content, $matches);
+
+            if ($matched) {
+                $output->write("{$file->getRealpath()}");
+                $count = count($matches[1]);
+                $output->writeln("<info> ... {$count}</info>");
+
+                $keywords = array_merge($keywords, $matches[1]);
+            }
+        }
+
+        return $keywords;
+    }
+
+    protected function scanJSTrans($dir, $output)
+    {
+        $keywords = array();
+
+        $path = realpath($this->getRootDir().'/../'.$dir.'/Resources/public/js');
+
+        if (empty($path)) {
+            $output->write("<error>{$dir}/Resources/public/js is not exist.</error>");
+        }
+
+        $finder = new Finder();
+        $finder->files()->in($path);
+
+        foreach ($finder as $file) {
+            $content = file_get_contents($file->getRealpath());
+
+            $matched = preg_match_all('/trans\(\'(.*?)\'/', $content, $matches);
 
             if ($matched) {
                 $output->write("{$file->getRealpath()}");
