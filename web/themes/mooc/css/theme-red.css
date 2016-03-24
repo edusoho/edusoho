@@ -274,6 +274,9 @@ input:focus {
   border: 1px solid #cf363f;
   border-radius: 0;
 }
+.es-bar-main .btn-action {
+  padding: 0!important;
+}
 .stars-0,
 .stars-1,
 .stars-2,
@@ -2932,6 +2935,10 @@ label {
 .period-list .lesson-item:hover {
   background: #fafafa;
 }
+.lesson-manage-panel .panel-heading,
+.swiper-container {
+  z-index: 0!important;
+}
 .homepage .text-center {
   margin-top: 40px;
 }
@@ -3158,7 +3165,6 @@ label {
 }
 .mooc-classroom .swiper-container {
   margin: 0 -10px !important;
-  z-index: inherit;
 }
 .mooc-classroom .text-center {
   margin-top: 30px;
@@ -3653,6 +3659,9 @@ footer .footer-attr p i {
 .footer-by p {
   margin-bottom: 0;
   padding-bottom: 15px;
+}
+.mooc-poster.swiper-container {
+  z-index: inherit;
 }
 .mooc-poster:hover .arrow-left,
 .mooc-poster:hover .arrow-right {
