@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class OpenCourseManageController extends BaseController
 {
@@ -65,10 +66,50 @@ class OpenCourseManageController extends BaseController
 
     public function marketingAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course    = $this->getCourseService()->tryManageCourse($id);
+        $userIds   = array();
+        $coinPrice = 0;
+        $price     = 0;
+
+        if ($request->getMethod() == 'POST') {
+            $courseIds = $request->request->get('courseIds');
+
+            if (empty($courseIds)) {
+                $courseIds = array();
+            }
+
+            $this->getOpenCourseRecommendedService()->updateOpenCourseRecommendedCourses($id, $courseIds);
+
+            $this->setFlashMessage('success', "推荐课程修改成功");
+
+            return $this->redirect($this->generateUrl('course_manage_open_marketing', array(
+                'id' => $id
+            )));
+        }
+
+        $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCourseIdsByOpenCourseId($id);
+
+        $recommendedCourses = array();
+
+        foreach ($recommends as $key => $existCourse) {
+            $recommendedCourses[] = $this->getCourseService()->getCourse($existCourse['recommendCourseId']);
+        }
+
+        foreach ($recommendedCourses as $recommendedCourse) {
+            $userIds = array_merge($userIds, $course['teacherIds']);
+
+            $coinPrice += $recommendedCourse['coinPrice'];
+            $price += $recommendedCourse['price'];
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-marketing.html.twig', array(
-            'course' => $course
+            'courses'   => $recommendedCourses,
+            'price'     => $price,
+            'coinPrice' => $coinPrice,
+            'users'     => $users,
+            'course'    => $course
         ));
     }
 
@@ -119,7 +160,7 @@ class OpenCourseManageController extends BaseController
             'users'     => $users,
             'courses'   => $courses,
             'paginator' => $paginator,
-            'courseId'  => $course['id'],
+            'courseId'  => $id,
             'filter'    => $filter
         ));
     }
@@ -176,12 +217,37 @@ class OpenCourseManageController extends BaseController
         ));
     }
 
+    public function recommendesCoursesSelectAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $data = $request->request->all();
+        $ids  = array();
+
+        if (isset($data['ids']) && $data['ids'] != "") {
+            $ids = $data['ids'];
+            $ids = explode(",", $ids);
+        } else {
+            return new Response('success');
+        }
+
+        $this->getOpenCourseRecommendedService()->addRecommendedCoursesToOpenCourse($id, $ids);
+        $this->setFlashMessage('success', "推荐课程添加成功");
+
+        return new Response('success');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    private function getTagService()
+    protected function getOpenCourseRecommendedService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
+    }
+
+    protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }

@@ -709,7 +709,11 @@ course_manage_open_course_pick:
 
 opencourse_course_search:
     pattern: /opencourse/{filter}/course/{id}/search
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}    
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search} 
+
+opencourse_recommended_course_select:
+    pattern: /opencourse/{id}/recommended/course/select
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendesCoursesSelect}       
 
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson

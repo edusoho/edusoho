@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="sure" class="btn btn-primary pull-right" data-url="">添加</button>
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{path('opencourse_recommended_course_select', {id:courseId})}}">添加</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 
   <script>app.load('topxiawebbundle/controller/open-course-manage/pick')</script>
