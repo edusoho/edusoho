@@ -18,22 +18,22 @@
               {% endif %}
             </span>
             {% if material.processStatus == 'ok' %}
-              <span class="label label-success">
+              {#}<span class="label label-success">
                 {{ dict_text('processStatus', material.processStatus) }}
-              </span>
+              </span>#}
             {% elseif material.processStatus == 'waiting' %}
               <span class="label label-info">
                 {{ dict_text('processStatus', material.processStatus) }}
               </span>
             {% elseif material.processStatus == 'processing' %}
               label-primary
-              <span class="label label-primary">
+              <span class="label label-info">
                 {{ dict_text('processStatus', material.processStatus) }}
               </span>
             {% elseif material.processStatus == 'error' %}
               <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span><br><a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
             {% else %}
-              <span class="label label-warning">
+              <span class="label label-default">
                 {{ dict_text('processStatus', material.processStatus) }}
               </span>
             {% endif %}

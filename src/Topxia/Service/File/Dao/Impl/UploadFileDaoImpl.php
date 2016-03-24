@@ -149,7 +149,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     protected function createSearchQueryBuilder($conditions)
     {
         $conditions           = array_filter($conditions,function ($value){
-            if($value == 0) {
+            if($value === '0') {
               return true;
             }
             if(empty($value)) {
@@ -157,8 +157,8 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             }
             return true;
         });
-        $conditions['status'] = 'ok';
 
+        $conditions['status'] = 'ok';
         if (isset($conditions['filename'])) {
             $conditions['filenameLike'] = "%{$conditions['filename']}%";
             unset($conditions['filename']);

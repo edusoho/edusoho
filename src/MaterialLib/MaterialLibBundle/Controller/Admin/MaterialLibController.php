@@ -29,6 +29,7 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
+        var_dump($conditions);
         unset($conditions["searchType"]);
         unset($conditions["processStatus"]);
         $results    = $this->getMaterialLibService()->search(
@@ -41,7 +42,6 @@ class MaterialLibController extends BaseController
             $results['count'],
             20
         );
-        var_dump($conditions);
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
@@ -100,6 +100,11 @@ class MaterialLibController extends BaseController
             'data1' => $data1,
             'data2' => $data2
         ));
+    }
+
+    public function reconvertAction(Request $request, $globalId)
+    {
+      return $this->getMaterialLibService()->reconvert($globalId,array());
     }
 
     public function playAction(Request $request, $globalId)

@@ -57,7 +57,7 @@ define(function(require, exports, module) {
                     $target.addClass('label-info').removeClass('label-default');
                     $container.find('[name=tags]').val($target.html());
                 }
-                
+
                 this.renderTable();
             },
             onClickDetailBtn: function(event)
@@ -121,10 +121,8 @@ define(function(require, exports, module) {
             },
             onClickSearchTypeBtn: function(event)
             {
-                console.log(111);
                 var self = this;
                 var $target = $(event.currentTarget);
-                console.log($target);
                 $("#search-type").val($target.data("value"));
             },
             submitForm: function(event)
@@ -138,6 +136,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $table = this.element.find('#materials-table');
                 this._loading();
+                console.log(this.element.serialize());
                 $.ajax({
                     type:'GET',
                     url:this.get('renderUrl'),
@@ -208,7 +207,7 @@ define(function(require, exports, module) {
                                     name: resp.title
                                 });
 
-                                callback(data); 
+                                callback(data);
                             });
                         }
                     },
@@ -262,7 +261,7 @@ define(function(require, exports, module) {
                                     id: resp.id,
                                     name: resp.nickname
                                 });
-                                callback(data); 
+                                callback(data);
                             });
                         }
                     },
@@ -280,11 +279,13 @@ define(function(require, exports, module) {
             _initHeader: function()
             {
                 //init timepicker
+                var self = this;
                 $("#startDate").datetimepicker({
                     autoclose: true,
                     language: 'zh-CN',
                 }).on('changeDate',function(){
                     $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+                    self.renderTable();
                 });
 
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
@@ -293,8 +294,8 @@ define(function(require, exports, module) {
                     autoclose: true,
                     language: 'zh-CN',
                 }).on('changeDate',function(){
-
                     $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+                    self.renderTable();
                 });
 
                 $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
@@ -304,7 +305,7 @@ define(function(require, exports, module) {
         window.materialWidget = new MaterialWidget({
             element: '#materials-form'
         });
-        
+
     }
 
 });

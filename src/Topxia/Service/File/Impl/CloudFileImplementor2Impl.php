@@ -91,7 +91,6 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         if (empty($result['data'])) {
             return $files;
         }
-
         $cloudFiles = $result['data'];
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
 
@@ -299,10 +298,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function search($conditions)
     {
-        $api    = CloudAPIFactory::create();
+        $api    = CloudAPIFactory::create('root');
         $url    = '/resources?'.http_build_query($conditions);
         $result = $api->get($url);
-
         $cloudFiles   = $result['data'];
         $cloudFiles   = ArrayToolkit::index($cloudFiles, 'no');
         $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
