@@ -3345,7 +3345,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3365,7 +3365,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -9582,6 +9582,7 @@ textarea {
   margin-bottom: 15px;
 }
 .lesson-list .item-chapter {
+  position: relative;
   margin-left: -30px;
 }
 .lesson-list .item-chapter-unit {
@@ -10821,7 +10822,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -13255,6 +13256,17 @@ textarea {
 }
 .es-live-poster {
   position: relative;
+  background: #fff;
+  margin: 0 auto;
+  max-height: 300px;
+}
+.es-live-poster a.img-responsive {
+  max-width: none;
+  width: 100%;
+}
+.es-live-poster .swiper-slide {
+  margin: 0 auto;
+  width: 100%;
 }
 .es-live-poster .swiper-pager {
   position: absolute;
@@ -13273,10 +13285,15 @@ textarea {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   border-radius: 50%;
+  background: #fff;
   background: rgba(255, 255, 255, 0.5);
 }
 .es-live-poster .swiper-pager span.swiper-active-switch {
+  background: #f5f5f5;
   background: #ffffff;
+}
+.live-course-body .label {
+  padding: 0.4em 0.8em!important;
 }
 .live-course-body .es-live-list {
   padding: 0;
@@ -13287,6 +13304,7 @@ textarea {
 .live-course-body .es-live-list .panel-body > ul {
   margin: 0;
   padding: 0;
+  background: #f5f5f5;
 }
 .live-course-body .es-live-list .panel-body > ul li {
   float: left;
@@ -13305,6 +13323,22 @@ textarea {
 }
 .live-course-body .es-live-list .panel-body > ul li a {
   color: #313131;
+  padding: 14px 17px;
+}
+@media (max-width: 1199px) {
+  .live-course-body .es-live-list .panel-body > ul li a {
+    padding: 14px 0;
+  }
+}
+@media (max-width: 991px) {
+  .live-course-body .es-live-list .panel-body > ul li a {
+    padding: 14px 60px;
+  }
+}
+@media (max-width: 767px) {
+  .live-course-body .es-live-list .panel-body > ul li a {
+    padding: 14px 9px;
+  }
 }
 .live-course-body .es-live-list .panel-body > ul li.active {
   background-color: #fff;
@@ -13351,7 +13385,6 @@ textarea {
 .live-course-body .es-live-list .es-live-item .live-content.living .label,
 .live-course-body .es-live-list .es-live-item .live-content.live .label {
   margin-left: 24px;
-  padding: 0.3em 0.5em;
 }
 .live-course-body .es-live-list .es-live-item .live-content.live .time-icon {
   background: #6dcbf5;
@@ -13375,21 +13408,27 @@ textarea {
   text-overflow: ellipsis;
   white-space: nowrap;
   word-wrap: normal;
+  font-size: 12px;
 }
 .live-course-body .es-live-list .es-live-item li a span {
   color: #919191;
   padding-right: 15px;
 }
 .live-course-body .es-live-recommend img {
+  width: 110px;
   max-width: 110px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
 .live-course-body .es-live-recommend .title {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   height: 20px;
   overflow: hidden;
 }
 .live-course-body .es-live-recommend .price {
   color: #e83d2c;
+  font-size: 12px;
 }
 .live-course-body .es-live-back ul {
   padding: 0;
@@ -13397,10 +13436,10 @@ textarea {
 }
 .live-course-body .es-live-back ul li {
   list-style-type: none;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 .live-course-body .es-live-back ul li:first-child {
-  margin-top: 5px;
+  margin-top: 0px;
 }
 .live-course-body .es-live-back ul li:last-child {
   margin-bottom: 5px;
@@ -13433,6 +13472,38 @@ textarea {
   padding-bottom: 15px;
   border-bottom: 1px solid #f5f5f5 !important;
 }
+.live-course-body .es-live-all .media-left {
+  position: relative;
+}
+.live-course-body .es-live-all .media-left .re-live {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  width: 62px;
+  height: 62px;
+  background: url("../img/re-live.png") no-repeat;
+}
+.live-course-body .es-live-all .media-left .re-report {
+  position: absolute;
+  bottom: 0;
+  background-color: #000;
+  background: rgba(0, 0, 0, 0.5);
+  width: 302px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  height: 25px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 25px;
+  color: #fff;
+  font-weight: bold;
+}
+@media (max-width: 1200px) {
+  .live-course-body .es-live-all .media-left .re-report {
+    width: 288px;
+  }
+}
 @media (max-width: 767px) {
   .live-course-body .es-live-all .media-left {
     display: block;
@@ -13441,22 +13512,38 @@ textarea {
 }
 .live-course-body .es-live-all .media-left img {
   max-width: 302px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .live-course-body .es-live-all .media-left img {
     max-width: 767px;
     width: 100%;
   }
 }
+@media (max-width: 1200px) {
+  .live-course-body .es-live-all .media-left img {
+    width: 288px;
+  }
+}
 .live-course-body .es-live-all .media-body {
   position: relative;
 }
+.live-course-body .es-live-all .media-body .title {
+  height: 20px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.live-course-body .es-live-all .media-body .title a {
+  font-size: 16px;
+}
 .live-course-body .es-live-all .media-body .metas {
-  margin: 15px 0 25px;
+  margin: 15px 0 20px;
   color: #c1c1c1;
 }
 .live-course-body .es-live-all .media-body .user a {
-  color: #c1c1c1;
+  color: #c1c1c1 !important;
 }
 .live-course-body .es-live-all .media-body .user a:hover {
   color: #ff7200;
@@ -13465,14 +13552,20 @@ textarea {
   position: absolute;
   right: 0;
   top: 50%;
-  margin-top: -45px;
+  margin-top: -34px;
   text-align: center;
+}
+@media (max-width: 767px) {
+  .live-course-body .es-live-all .media-body .other {
+    margin-top: -14px;
+  }
 }
 .live-course-body .es-live-all .media-body .other span {
   display: block;
   margin-bottom: 8px;
-  color: #ff7200;
+  font-size: 18px;
 }
-.live-course-body .es-live-all .media-body .other span.price {
-  color: #e83d2c;
+.live-course-body .es-live-all .media-body .other a {
+  position: absolute;
+  right: 0;
 }

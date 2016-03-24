@@ -16,7 +16,7 @@
         <p class="text-warning text-sm">您的云短信包剩余不足100条短信，请尽快续购</p>
       {% endif %}
       {% if overview.service.sms.status|default(null) == 'used' and overview.service.sms.remainCount <= 0 %}
-        <p class="text-danger text-sm">您的云短信包已用完，请尽快续购。以免影响正常使用</p>
+        <p class="text-danger text-sm">您的云短信包已用完，请尽快续购</p>
       {% endif %}
     {% endif %}
     </div>

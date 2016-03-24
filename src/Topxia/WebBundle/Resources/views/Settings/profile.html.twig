@@ -63,6 +63,8 @@
 								<p class="text-warning" >
 									{{'您尚未实名认证，'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'点此认证'|trans}}</a>{{'。'|trans}}
 									</strong>
+									{% if is_plugin_installed('TeacherAudit') %}{{'若您想成为教师，请去'|trans}}<strong><a href="{{ path('teacher_audit_submit') }}">{{'教师资格申请'|trans}}</a>。
+									</strong>{% endif %}
 								</p>
 							{% elseif app.user.approvalStatus == 'approve_fail' %}
 								 <p class="text-danger" >
