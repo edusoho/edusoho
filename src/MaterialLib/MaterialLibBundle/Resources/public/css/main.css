@@ -200,17 +200,12 @@
 }
 
 .materials-ul li.img-li .star {
-    display: none;
-    cursor: pointer;
-    position: absolute;
-    width: 10%;
-    bottom: 0;
-    margin-left:10px;
-    height: 80px;
-    filter:alpha(opacity=60);  /*支持 IE 浏览器*/
-    -moz-opacity:0.60; /*支持 FireFox 浏览器*/
-    opacity:0.60;  /*支持 Chrome, Opera, Safari 等浏览器*/
-    z-index: 100;
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  z-index:100;
 }
 
 .materials-ul li.img-li:hover .mask {
