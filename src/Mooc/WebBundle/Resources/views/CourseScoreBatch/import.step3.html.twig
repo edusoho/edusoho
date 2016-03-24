@@ -5,6 +5,6 @@
 {% block main %}
 {{ web_macro.flash_messages() }}
 
-{{ render(controller('CustomWebBundle:CourseScoreBatch:importExcelData',{request:app.request, id:course.id})) }}
+  {{ render(controller('MoocWebBundle:CourseScoreBatch:importExcelData',{request:app.request, id:course.id})) }}
 
 {% endblock %}
