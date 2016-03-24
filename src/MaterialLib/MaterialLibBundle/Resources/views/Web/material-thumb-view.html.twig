@@ -7,34 +7,59 @@
 <form id="material-search-form" class="form-inline" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
   
   <input type="hidden" class="js-page" name="page" value="1">
-  <div class="btn-group source-btn" role="group" aria-label="...">
-    <button type="button" data-value="my" class="js-source-btn btn btn-default active">我的资料</button>
-    <button type="button" data-value="public" class="js-source-btn btn btn-default">公共资料</button>
-    <button type="button" data-value="favorite" class="js-source-btn btn btn-default">收藏夹</button>
-    <button type="button" data-value="sharing" class="js-source-btn btn btn-default">来自分享</button>
+  <div class="source-btn" role="group" aria-label="...">
+    <ul class="nav nav-tabs">
+      <li class="active" data-value="my"><a href="javascript:;" class="js-source-btn">我的资料</a></li>
+      <li class="" data-value="public"><a href="javascript:;">公共资料</a></li>
+      <li class="" data-value="favorite"><a href="javascript:;">收藏夹</a></li>
+      <li class="" data-value="sharing"><a href="javascript:;">来自分享</a></li>
+    </ul>
     <input type="hidden" name="sourceFrom" value="my">
   </div>
-
-
+  <div class="mbl">
+    <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
+    <button class="btn btn-primary">搜索</button>
+    {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
+  </div>
+ 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
-  {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
-    <div class="well well-sm" style="margin-bottom:10px">
-      <span style="padding-right:50px">筛选:</span>
-      <span>上传时间:</span>
-
-      <div class="form-group mlm">
-        <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-        -
-        <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
-      </div>
-
-      <div class="checkbox">
-        <label class="mlm">
-          <input type="checkbox" name="processStatus" value="error"> 转码失败
-        </label>
-      </div>
+  <ul class="es-material-tabs nav">
+    <li class="all"><span>筛选：</span></li>
+    <div class="form-group" style="margin-top:7px;">
+      <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
     </div>
-    <div class="well well-sm" style="margin-bottom:10px">
+    <div class="form-group mll" style="margin-top:7px;">
+      <select class="form-control" name="processStatus">
+        <option value="">转码状态</option>
+        <option value="ok">转码成功</option>
+        <option value="error">转码失败</option>
+      </select>
+    </div>
+    <div class="form-group mll js-use-status-select" style="margin-top:7px;">
+      <select class="form-control">
+        <option>使用状态</option>
+        <option>未使用</option>
+        <option>已使用</option>
+      </select>
+    </div>
+
+  </ul>
+{#   <div class="well well-sm" style="margin-bottom:10px">
+    <span style="padding-right:50px">筛选:</span>
+    <span>上传时间:</span>
+    <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+    -
+    <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+  </div>
+  <div class="checkbox">
+    <label class="mlm">
+      <input type="checkbox" name="processStatus" value="error"> 转码失败
+    </label>
+  </div> #}
+  </div>
+   {#  <div class="well well-sm" style="margin-bottom:10px">
       <span style="padding-right:50px">排序:</span>
 
       <div class="form-group">
@@ -50,7 +75,7 @@
           <option value="asc">最少播放</option>
         </select>
       </div>
-    </div>
+    </div> #}
     <div class="well well-sm" style="margin-bottom:10px">
       <span style="position:absolute">标签:</span>
 

@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             },
             events: {
                 'submit': 'submitForm',
-                'click .nav.nav-tabs li': 'onClickNav',
+                'click .es-material-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
