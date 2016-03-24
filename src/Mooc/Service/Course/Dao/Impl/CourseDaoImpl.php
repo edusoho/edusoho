@@ -59,13 +59,13 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
             ->andWhere('endTime < :endTimeLessThan')
         ;
 
-        /*if (!empty($conditions['table']) && 'singleCourse' == $conditions['table']) {
+        if (!empty($conditions['table']) && 'singleCourse' == $conditions['table']) {
             $now   = time();
             $table = "(select a.* from (	select b.* from (
 						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime > {$now} UNION all select b.* from (
 						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime < {$now}) a group by rootId )";
             $builder->from($table, 'course');
-        }*/
+        }
 
         return $builder;
     }

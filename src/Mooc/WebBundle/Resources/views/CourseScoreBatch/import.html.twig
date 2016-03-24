@@ -4,7 +4,7 @@
 {% set side_nav = 'transcripts' %}
 {% block main %}
   {% if course.status == 'published' %}
-    {{ render(controller('CustomWebBundle:CourseScoreBatch:ValidateExcelInfo',{request:app.request, courseId:course.id})) }}
+    {{ render(controller('MoocWebBundle:CourseScoreBatch:ValidateExcelInfo',{request:app.request, courseId:course.id})) }}
   {% else %}
      <div class="empty">课程还未发布，不能导入成绩，请发布课程后，再进行此操作。</div>
   {% endif %}
