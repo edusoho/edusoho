@@ -13,6 +13,13 @@
   <span class="status label label-info">等待转码</span>
 {% endif %}
 
+<div class="option-vertical">
+  <i class='glyphicon glyphicon-option-vertical'></i>
+</div>
+
+<div class="star">
+    <i class="glyphicon glyphicon-star js-collect-btn left {% if uploadFile.collected|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
+</div>
 <div class="mask">
   <i class="es-icon es-icon-view"></i><span>{{ uploadFile.views|default(0) }}</span>
   {% if uploadFile.type in ['video', 'audio'] %}

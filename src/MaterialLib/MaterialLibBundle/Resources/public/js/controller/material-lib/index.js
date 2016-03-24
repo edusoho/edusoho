@@ -152,10 +152,10 @@ define(function(require, exports, module) {
                 var $target = $(event.currentTarget);
                 $.get($target.data('url'),function(data){
                     if(data){
-                        $target.find('i').addClass("material-collection");
+                        $target.addClass("material-collection");
                         Notify.success('收藏成功');
                     } else {
-                        $target.find('i').removeClass("material-collection");
+                        $target.removeClass("material-collection");
                         Notify.success('取消收藏成功');
 
                     }
