@@ -4,6 +4,8 @@
         <select name="language">
             <option value="zh_CN" {% if app.request.get('_locale') == 'zh_CN' %}selected="selected"{% endif %}>中文
             </option>
+             <option value="en_US" {% if app.request.get('_locale') == 'en_US' %}selected="selected"{% endif %}>英文
+            </option>
             <option value="ug_CN" {% if app.request.get('_locale') == 'ug_CN' %}selected="selected"{% endif %}>维吾尔文
             </option>
         </select>
