@@ -13,10 +13,22 @@
   <span class="status label label-info">等待转码</span>
 {% endif %}
 
-<div class="option-vertical">
-  <i class='glyphicon glyphicon-option-vertical'></i>
-</div>
 
+<div class="btn-group option-vertical">
+  <a href="javascript:;" class="glyphicon glyphicon-option-vertical" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  </a>
+  <ul class="dropdown-menu">
+      <li>
+      <a href="javascript:;"class="glyphicon glyphicon-option-vertical js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {globalId:uploadFile.globalId}) }}">详情</a>
+      </li>
+      <li>
+        <a data-url="{{ path('material_download', {globalId:uploadFile.globalId}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >下载</a>
+      </li>
+      <li>
+        <aclass="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {globalId:uploadFile.globalId}) }}">删除</a>
+      </li>
+  </ul>
+</div>
 <div class="star">
     <i class="glyphicon glyphicon-star js-collect-btn left {% if uploadFile.collected|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
 </div>
