@@ -27,4 +27,15 @@ class MaterialLibDaoImpl extends BaseDao implements MaterialLibDao
         $sql = "SELECT * FROM upload_files WHERE createdUserId = ? AND (globalId != 0 OR globalId = '') ORDER BY createdTime DESC LIMIT {$start},{$limit}";
         return $this->getConnection()->fetchAll($sql, array($userId));
     }
+
+    public function findFilesByUserIds($userIds, $start, $limit)
+    {
+        if (empty($userIds)) {
+            return array();
+        }
+        $marks = str_repeat('?,', count($userIds) - 1).'?';
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM upload_files WHERE createdUserId IN ({$marks}) AND (globalId != 0 OR globalId = '') ORDER BY createdTime DESC LIMIT {$start},{$limit}";
+        return $this->getConnection()->fetchAll($sql, $userIds);
+    }
 }

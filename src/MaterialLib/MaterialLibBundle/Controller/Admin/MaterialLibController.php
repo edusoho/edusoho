@@ -5,6 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller\Admin;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
@@ -29,8 +30,7 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
-        // var_dump($conditions);exit();
-        unset($conditions["searchType"]);
+        
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
@@ -41,7 +41,8 @@ class MaterialLibController extends BaseController
             $results['count'],
             20
         );
-        // var_dump($results['data']);exit();
+
+
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
@@ -100,6 +101,11 @@ class MaterialLibController extends BaseController
             'data1' => $data1,
             'data2' => $data2
         ));
+    }
+
+    public function reconvertAction(Request $request, $globalId)
+    {
+      return $this->getMaterialLibService()->reconvert($globalId,array());
     }
 
     public function playAction(Request $request, $globalId)
@@ -189,4 +195,5 @@ class MaterialLibController extends BaseController
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
+
 }

@@ -35,4 +35,6 @@ interface UploadFileDao
     public function waveUploadFile($id, $field, $diff);
 
     public function getFileByTargetType($targetType);
+
+    public function findFilesByCourseIds($targetIds);
 }

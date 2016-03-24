@@ -333,9 +333,9 @@ passedStatus:
     unpassed: 不合格
 
 processStatus:
-    none: 未知状态
-    waiting: 等待转码
-    processing: 正在转码
+    none: 未转码
+    waiting: 转码中
+    processing: 转码中
     ok: 转码成功
     error: 转码失败
 

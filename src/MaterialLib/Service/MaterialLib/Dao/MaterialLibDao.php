@@ -9,4 +9,6 @@ interface MaterialLibDao
     public function findLatestUploadUsers($limit);
 
     public function findFilesByUserId($userId, $start, $limit);
+
+    public function findFilesByUserIds($userIds, $start, $limit);
 }

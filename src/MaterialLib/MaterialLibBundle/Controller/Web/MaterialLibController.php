@@ -54,6 +54,7 @@ class MaterialLibController extends BaseController
 
     public function showMyMaterialLibFormAction(Request $request)
     {
+        //$synData = $this->getMaterialLibService()->synData();
         $currentUser          = $this->getCurrentUser();
         $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
@@ -82,7 +83,7 @@ class MaterialLibController extends BaseController
         $storageSetting = $this->getSettingService()->get("storage");
 
         $tags = $this->getTagService()->findAllTags(0, 999);
-        //$synData = $this->getMaterialLibService()->synData();
+
         return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
             'currentUserId'  => $currentUserId,
             'files'          => $files,

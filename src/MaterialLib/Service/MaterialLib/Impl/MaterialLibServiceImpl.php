@@ -147,6 +147,25 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function filterConditions($conditions)
     {
+        if (!empty($conditions['keywords'])) {
+            if ($conditions['searchType'] == 'title') {
+                $conditions['name'] = $conditions['keywords'];
+                
+            } elseif ($conditions['searchType'] == 'course') {
+                $courses = $this->getCourseService()->findCoursesByLikeTitle($conditions['keywords']);
+                
+                $courseIds = ArrayToolkit::column($courses, 'id');
+
+                $conditions['courseIds'] = $courseIds;
+            } elseif ($conditions['searchType'] == 'user') {
+                $users = $this->getUserService()->searchUsers(array('nickname'=>$conditions['keywords']), array('id','desc'),0,999);
+                $userIds = ArrayToolkit::column($users, 'id');
+                $conditions['createdUserIds'] = $userIds;
+
+            }
+        }
+        unset($conditions['searchType']);
+        unset($conditions['keywords']);
         $filterConditions = array_filter($conditions, function ($value) {
             if ($value === 0) {
                 return true;
@@ -154,18 +173,25 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             return !empty($value);
         });
 
-        if (!empty($filterConditions['createdUserId'])) {
-            $localFiles              = $this->getMaterialLibDao()->findFilesByUserId($filterConditions['createdUserId'], $filterConditions['start'], $filterConditions['limit']);
+        if (!empty($filterConditions['name'])) {
+            $localFiles = $this->getUploadFileService()->searchFiles(array('filename'=>$filterConditions['name']), array('createdTime', 'desc'), $filterConditions['start'], $filterConditions['limit']);
+            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
+            $filterConditions['nos'] = implode(',', $globalIds);
+        }
+        if (!empty($filterConditions['createdUserIds'])) {
+            $localFiles = $this->getMaterialLibDao()->findFilesByUserIds($filterConditions['createdUserIds'], $filterConditions['start'], $filterConditions['limit']);
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
-            unset($filterConditions['createdUserId']);
+            unset($filterConditions['createdUserIds']);
         }
 
-        if (!empty($filterConditions['courseId'])) {
-            $localFiles              = $this->getUploadFileService()->findFilesByTypeAndId('courselesson', $filterConditions['courseId']);
+        if (!empty($filterConditions['courseIds'])) {
+            $localFiles              = $this->getUploadFileService()->findFilesByCourseIds($filterConditions['courseIds']);
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
+            unset($filterConditions['courseIds']);
         }
+ 
 
         return $filterConditions;
     }
@@ -200,5 +226,15 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getUploadFileTagService()
     {
         return $this->createService('File.UploadFileTagService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->createService('Course.CourseService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }
