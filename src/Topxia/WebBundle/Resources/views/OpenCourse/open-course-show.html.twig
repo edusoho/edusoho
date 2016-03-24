@@ -1,3 +1,102 @@
-<html>
-<div>live-open-course-show</div>
-</html>
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+  
+  <div id="content-container" class="container">
+    {% block content %}
+      <ol class="breadcrumb breadcrumb-o">
+        <li><a href="">首页</a></li>
+        <li><a href="">公开课</a></li>
+        <li>edusoho运营指南</li>
+      </ol>
+      <div class="clearfix">
+        <div class="open-course-views">
+          <img src="/assets/img/default/course.png" alt="">
+        </div>
+        <div class="open-course-tab">
+          <ul class="clearfix">
+            <li class="tab-header active"><i class=""></i>推荐课程</li>
+            <li class="tab-header"><i class=""></i>直播列表</li>
+          </ul>
+          <ul>
+            <li class="tab-content clearfix">
+              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+              <div class="open-course-info">
+                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                <div class="num">2345人在学习</div>
+              </div>
+            </li>
+            <li class="tab-content clearfix">
+              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+              <div class="open-course-info">
+                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                <div class="num">2345人在学习</div>
+              </div>
+            </li>
+            <li class="tab-content clearfix">
+              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+              <div class="open-course-info">
+                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                <div class="num">2345人在学习</div>
+              </div>
+            </li>
+            <li class="tab-content clearfix">
+              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+              <div class="open-course-info">
+                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                <div class="num">2345人在学习</div>
+              </div>
+            </li>
+            <li class="tab-content clearfix">
+              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+              <div class="open-course-info">
+                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                <div class="num">2345人在学习</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="open-course-header">
+        <div class="course-img">
+          <img class="img-responsive" src="/assets/img/default/course.png?6.15.7" alt="测试直播api">
+        </div>
+        <div class="course-info">
+          <h2 class="title">
+            edusoho网校运营指南
+          </h2>
+        </div>
+        <div class="course-operation">
+          <ul class="course-data clearfix  two-col ">
+            <li id="unfavorite-btn" data-url="/course/471/unfavorite" style="display:none;">
+              <a href="javascript:;" class="color-primary">
+                <p><i class="es-icon es-icon-bookmark"></i></p>
+                <p>已收藏</p>
+            </a>
+           </li>
+            <li id="favorite-btn" data-url="/course/471/favorite">
+              <a href="javascript:;">
+                <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
+                <p>收藏</p>
+              </a>
+            </li>
+            <li>
+              <span class="es-share top">
+                <a class="dropdown-toggle" href="" data-toggle="dropdown">
+                  <p><i class="es-icon es-icon-share"></i></p>
+                  <p>分享</p>
+                </a>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+  </div> 
+      
+    {% endblock %}
+  </div>
+  
+  {% block bottom_content %}{% endblock %}
+{% endblock %}
+    
