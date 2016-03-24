@@ -1,4 +1,36 @@
 <div class="ui-todolist" ng-init="initChartData()">
+
+    <section class="ui-panel ui-panel-card course-card ui-border-t" ng-controller="CourseCardController">
+        <ul class="ui-list ui-border-tb course-card-item">
+          <li class="ui-border-t">
+                <div class="ui-list-img">
+                    <img ng-src="{{ course.middlePicture }}" img-error="course" />
+                </div>
+                <div class="ui-list-info">
+                    <h2 class="ui-nowrap ui-list-title">{{ course.title }}</h2>
+                    <p class="bottom right-content">
+                        <img class="avatar" align="left" ng-src="{{ course.teachers[0].avatar }}" img-error="avatar" />
+                        <span class="title" ng-if="course.teachers.length > 0">
+                              {{ course.teachers[0].nickname }}
+                              <span class="subtitle">
+                                教师
+                              </span>
+                        </span>
+                        <span class="title" ng-if="!course.teachers || course.teachers.length <= 0">
+                              暂无教师
+                        </span>
+                    </p>
+                </div>
+          </li>
+          <li>
+            <span>课程简介：</span>
+            <p style="width:80%;" ng-if="course.about.length > 0"> {{ course.about | blockStr :100 }}</p>
+            <p style="width:80%;" ng-if="!course.about || course.about.length == 0">暂无课程简介</p>
+          </li>
+        </ul>
+        
+    </section>
+
     <section class="ui-panel ui-panel-card ui-border-t">
         <h2 class="title-body ui-border-b">
             <span class="title">
@@ -27,49 +59,6 @@
         </div>
     </section>
 
-    <section class="ui-panel ui-panel-card ui-border-t" ng-controller="HomeworkTeachingController" ng-init="initTeachingResult()">
-        <h2 class="title-body">
-            <span class="title">
-                <span class="circle-label"></span>
-                作业批改
-            </span>
-
-            <a class="title-tips">
-                待批作业:
-                <label>{{ teachingResult.homeworksResultsCounts }}</label>
-            </a>
-        </h2>
-        <div class="todo-card">
-            <list-empty-view data="teachingResult.homeworkResults" title="暂时没有待批作业">
-            </list-empty-view>
-            <ul class="ui-list ui-list-pure ui-border-t">
-                <li ng-repeat="homeworkResult in teachingResult.homeworkResults">
-                    <div class="ui-list-info ui-border-t" ng-click="showHomeWorkResult(homeworkResult)">
-                        <h2 class="ui-nowrap">{{ homeworkResult.lessonTitle }}</h2>
-
-                        <div class="bottom">
-                            <div class="ui-avatar-s rr">
-                                    <img ng-src="{{ homeworkResult.user.avatar | coverAvatar }}" />
-                            </div>
-                                
-                            <span class="bottom-label">
-                                {{ homeworkResult.user.nickname }}
-                                <span class="bottom-label-bg">
-                                    {{ homeworkResult.user.roles | coverUserRole }}
-                                </span>
-                            </span>
-                            <span class="bottom-label right">{{ homeworkResult.createdTime | coverLearnTime }}</span>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-            <div class="ui-btn-group" ng-if="teachingResult.homeworkResults.length < teachingResult.homeworksResultsCounts                                                  ">
-                <button type="button" class="btn-green">更多</button>
-            </div>
-        </div>
-        
-    </section>
-
     <section class="ui-panel ui-panel-card ui-border-t" ng-controller="ThreadTeachingController" ng-init="initQuestionResult(3)">
         <h2 class="title-body">
             <span class="title">
@@ -86,12 +75,15 @@
             <list-empty-view data="teachingResult.threads" title="暂时没有待回答问题">
             </list-empty-view>
             <ul class="ui-list ui-list-pure ui-border-t">
-                <li ng-repeat="thread in teachingResult.threads">
-                    <div class="ui-list-info ui-border-t" ng-click="showThreadChatView(thread)">
-                        <h2 class="ui-nowrap">{{ thread.title }}</h2>
+                <li ng-repeat="thread in teachingResult.threads" class="ui-border-t">
+                    <div class="ui-list-info" ng-click="showThreadChatView(thread)">
+                        <h2 class="ui-nowrap">
+                            <span class="radius-label" ng-class="thread.isTeacherAnswer > 0 ? 'blue' : 'red'">{{ thread.isTeacherAnswer > 0 ? "已回答" : "未回答" }}</span>
+                            {{ thread.title }}
+                        </h2>
                         <p>{{ thread.lessonTitle }}</p>
 
-                        <div class="bottom">
+                        <div class="bottom ui-border-t">
                             <div class="ui-avatar-s rr">
                                 <img ng-src="{{ thread.user.avatar | coverAvatar }}" />
                             </div>
