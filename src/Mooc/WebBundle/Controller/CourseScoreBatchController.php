@@ -380,9 +380,9 @@ class CourseScoreBatchController extends BaseController
         $userFieldArray = array();
 
         $fieldArray = array(
-            "truename"         => '用户名',
+            "truename"         => '学员姓名',
             "staffNo"          => '学号',
-            "importOtherScore" => '其他评分'
+            "importOtherScore" => '其他'
         );
 
         return $fieldArray;
