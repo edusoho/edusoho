@@ -5,6 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller\Admin;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Common\ArrayToolkit;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
@@ -29,9 +30,7 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
-        var_dump($conditions);
-        unset($conditions["searchType"]);
-        unset($conditions["processStatus"]);
+        
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
@@ -42,6 +41,8 @@ class MaterialLibController extends BaseController
             $results['count'],
             20
         );
+
+
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
@@ -194,4 +195,5 @@ class MaterialLibController extends BaseController
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
+
 }
