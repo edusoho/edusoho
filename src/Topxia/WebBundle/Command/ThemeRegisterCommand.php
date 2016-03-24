@@ -32,7 +32,7 @@ class ThemeRegisterCommand extends BaseCommand
 
         $themeDir = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/web/themes/' . $code;
         if (!is_dir($themeDir)) {
-            throw new \RuntimeException("主题目录{$themeDir}不存在！");
+            throw new \RuntimeException($this->getServiceKernel()->trans('主题目录%themeDir%不存在！', array('%themeDir%' =>$themeDir )));
         }
         $output->writeln("<comment>  - 检查主题目录...</comment><info>OK</info>");
 

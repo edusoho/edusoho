@@ -58,7 +58,7 @@
         validator.addItem({
             element: '[name="profile[weibo]"]',
             rule: 'url',
-            errormessageUrl: '微博地址不正确，须以http://开头。'
+            errormessageUrl: Translator.trans('微博地址不正确，须以http://开头。')
         });
 
         validator.addItem({

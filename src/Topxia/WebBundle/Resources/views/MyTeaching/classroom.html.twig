@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}{{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }} - {{ parent() }}{% endblock %}
+{% block title %}{{'所教'|trans}}{{ setting('classroom.name')|default('班级'|trans) }} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-classroom' %}
 
@@ -8,7 +8,7 @@
 
 <div class="panel panel-default panel-col lesson-manage-panel">
   <div class="panel-heading">
-    {{'所教'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}
+    {{'所教'|trans}}{{ setting('classroom.name')|default('班级'|trans) }}
   </div>
 
   <div class="panel-body">
@@ -22,7 +22,7 @@
               <div class="course-body">
                 {% if members[classroom.id].role == "headTeacher"  or is_granted('ROLE_ADMIN') %}
                   <div style="float:right;" class="text-muted mrm mls">
-                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'管理'|trans}}{{ setting('classroom.name')|default("班级"|trans) }}</a>
+                  <span class="glyphicon glyphicon-cog"></span> <a href="{{path('classroom_manage',{id:classroom.id})}}">{{'管理'|trans}}{{ setting('classroom.name')|default('班级'|trans) }}</a>
                   </div>
                 {% endif %}
                 <h4 class="mbl"><a href="{{ path('classroom_show', {id:classroom.id}) }}" target="_blank">{{classroom.title}}</a>
@@ -46,7 +46,7 @@
             </li>
             {% endfor %}
             {% else %}
-              <div class="empty">找不到所教{{ setting('classroom.name')|default("班级"|trans) }}！</div>
+              <div class="empty">找不到所教{{ setting('classroom.name')|default('班级'|trans) }}！</div>
             {% endif %}
           </ul>
   </div>

@@ -156,7 +156,7 @@ define(function(require, exports, module) {
             if (isOk) {
                 if (totalNumber == 0) {
                     isOk = false;
-                    Notify.danger('试卷题目总数量不能为0。');
+                    Notify.danger(Translator.trans('试卷题目总数量不能为0。'));
                     return isOk;
                 }
 
