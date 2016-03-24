@@ -343,7 +343,7 @@ class CourseScoreBatchController extends BaseController
         $data = implode("", $data);
         $data = $this->trim($data);
 
-        $trueNameArray = explode("用户名", $data);
+        $trueNameArray = explode("学员姓名", $data);
 
         if (count($trueNameArray) <= 1) {
             return false;
