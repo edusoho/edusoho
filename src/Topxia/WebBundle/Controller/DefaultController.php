@@ -253,7 +253,7 @@ class DefaultController extends BaseController
         );
     }
 
-    public function tansAction(Request $request)
+    public function translateAction(Request $request)
     {
         $locale     = $request->request->get('language');
         $targetPath = $request->request->get('_target_path');
@@ -261,9 +261,11 @@ class DefaultController extends BaseController
         $request->getSession()->set('_locale', $locale);
 
         $currentUser = $this->getCurrentUser();
+
         if ($currentUser->isLogin()) {
             $this->getUserService()->updateUserLocale($currentUser['id'], $locale);
         }
+
         return $this->redirect($targetPath);
     }
 
