@@ -1,18 +1,19 @@
 <ul class="nav nav-tabs">
   <li class="all"><span>筛选：</span></li>
   <div class="form-group es-materials-filter">
-    <input class="form-control mrs" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-    - <input class="form-control mls" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+    <input class="form-control mrs startDate" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+    - <input class="form-control mls endDate" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
   </div>
   <div class="form-group mll" style="margin-top:7px;">
-    <select class="form-control" name="processStatus">
-      <option>转码状态</option>
-      <option>转码成功</option>
-      <option>转码失败</option>
+    <select class="form-control processStatus" name="processStatus">
+      <option value="">转码状态</option>
+      <option value="ok">转码成功</option>
+      <option value="error">转码失败</option>
     </select>
   </div>
-  <div class="form-group mll" style="margin-top:7px;">
+  <div class="form-group mll useStatus" style="margin-top:7px;">
     <select class="form-control">
+      <option>使用状态</option>
       <option>未使用</option>
       <option>已使用</option>
     </select>

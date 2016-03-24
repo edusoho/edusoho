@@ -29,8 +29,8 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
+        // var_dump($conditions);exit();
         unset($conditions["searchType"]);
-        unset($conditions["processStatus"]);
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
@@ -41,7 +41,7 @@ class MaterialLibController extends BaseController
             $results['count'],
             20
         );
-        var_dump($conditions);
+        // var_dump($results['data']);exit();
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
