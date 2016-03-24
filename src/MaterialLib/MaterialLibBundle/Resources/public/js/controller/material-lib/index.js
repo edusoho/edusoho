@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             },
             events: {
                 'submit': 'submitForm',
-                'click .es-material-tabs li': 'onClickNav',
+                'click .nav.nav-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
@@ -141,9 +141,10 @@ define(function(require, exports, module) {
             onClickSourseBtn: function(event)
             {
                 var $target = $(event.currentTarget);
-                $target.parent().find('button.active').removeClass('active');
-                $target.addClass('active');
-                $target.parent().find("[name=sourceFrom]").val($target.data('value'));
+                console.log($target.parent().parent().parent().find('input[name="sourceFrom"]').val());
+                $target.parent().find('li.active').removeClass('active');
+                $target.parent().addClass('active');
+                $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
                 this.renderTable();
             },
             onClickCollectBtn: function(event)
