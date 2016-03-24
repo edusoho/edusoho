@@ -179,11 +179,13 @@
 }
 
 .materials-ul li.img-li {
-  height: 103px;
+  
 }
 
 .materials-ul li.img-li img {
   cursor: pointer;
+  height: 103px;
+  overflow: hidden;
 }
 
 .materials-ul li.img-li .option-vertical {
@@ -223,7 +225,6 @@
     filter:alpha(opacity=60);  /*支持 IE 浏览器*/
     -moz-opacity:0.60; /*支持 FireFox 浏览器*/
     opacity:0.60;  /*支持 Chrome, Opera, Safari 等浏览器*/
-    z-index: 100;
 }
 
 .materials-ul li.img-li .status {
@@ -257,7 +258,9 @@
 .materials-ul li.caption p.tags, .materials-ul li.caption p.date {
   font-size: 10px;
 }
-
+.materials-ul li.caption p.date{
+  height: 17px;
+}
 .materials-ul li.caption p.use-time {
    font-size: 10px;
    margin-top: 0px;

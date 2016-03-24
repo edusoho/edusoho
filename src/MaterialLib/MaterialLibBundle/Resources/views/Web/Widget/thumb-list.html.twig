@@ -14,7 +14,7 @@
         <p class="text-muted use-time text-overflow">使用次数： {{ uploadFile.usedTimes|default(0) }}次</p>
         <p class="text-muted date">{{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
       </li>
-      <span class="label label-info pull-right">转码状态<span>
+      <span class="label label-info pull-right mbm">转码状态<span>
       {#<li class="row op-li">
         <div class="op-btn js-collect-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">
           <i class="glyphicon glyphicon-star {% if uploadFile.collected|default(0) %} material-collection {% endif %}"></i>
