@@ -3,7 +3,7 @@
 {% block title %}我的成绩 - {{ parent() }}{% endblock %}
 {% set side_nav = 'my-grades' %}
 
-{% set script_controller = '../../../moocweb/js/controller/course-manage/repost-table' %}	
+{% set script_controller = 'moocwebbundle/controller/course-manage/repost-table' %}	
 {% block main %}
 	{% include 'MoocWebBundle:MyGrades:cards.html.twig' %}
 {% endblock %}

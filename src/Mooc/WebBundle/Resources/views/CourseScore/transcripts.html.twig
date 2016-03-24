@@ -2,7 +2,7 @@
 
 {% block title %}成绩单 - {{ parent() }}{% endblock %}
 {% set side_nav = 'transcripts' %}
-{% set script_controller = '../../../moocweb/js/controller/course-score/transcripts-list' %}
+{% set script_controller = 'moocwebbundle/controller/course-score/transcripts-list' %}
 {% set script_arguments = {
 	ztreeDates : data('OrganizationZtree', {all:1})
 } %}

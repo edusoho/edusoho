@@ -2,7 +2,7 @@
 
 {% set menu = 'admin_user_manage' %}
 
-{% set script_controller = '../../../moocweb/js/controller/user/list' %}
+{% set script_controller = 'moocwebbundle/controller/user/list' %}
 {% set organizations = data('Organization', {all:1}) %}
 {% set script_arguments = {
         ztreeDates : data('OrganizationZtree', {all:1}) 

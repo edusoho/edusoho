@@ -2,7 +2,7 @@
 
 {% block title %}学生成绩单 - {{ parent() }}{% endblock %}
 {% set side_nav = 'transcripts' %}
-{% set script_controller = '../../../moocweb/js/controller/course-manage/repost-table' %}	
+{% set script_controller = 'moocwebbundle/controller/course-manage/repost-table' %}	
 
 {% block main %}
 	{% include 'MoocWebBundle:MyGrades:cards.html.twig' %}
