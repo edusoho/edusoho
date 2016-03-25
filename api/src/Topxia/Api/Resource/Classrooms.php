@@ -21,6 +21,7 @@ class Classrooms extends BaseResource
             $orderBy = 'studentNum';
         } elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
+            $conditions['recommended'] = 1;
         } else {
             $orderBy = 'createdTime';
         }
@@ -32,6 +33,11 @@ class Classrooms extends BaseResource
         $conditions['showable'] = 1;
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
 
+        if ($result['orderType'] == 'recommend' && count($classrooms)<$result['showCount']) {
+            $conditions['recommended'] = 0;
+            $unrecommendClassrooms = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']-count($courses));
+            $classrooms = array_merge($classrooms, $unrecommendClassrooms);
+        }
         $total      = count($classrooms);
         $classrooms = $this->filter($classrooms);
 
