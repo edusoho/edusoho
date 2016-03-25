@@ -1,0 +1,19 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'open-course/open-course-header' %}
+
+{% set script_arguments = {lesson: lessons[0]}  %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+  
+  <div class="container">
+    {% block content %}
+      <div class="col-md-9 open-course-views">
+        <img src="/assets/img/default/course.png" alt="">
+      </div>
+    {% endblock %}
+  </div>
+  
+  {% block bottom_content %}{% endblock %}
+{% endblock %}
+    
