@@ -25,8 +25,17 @@ class DiscoveryColumnController extends BaseController
 
         foreach ($discoveryColumns as $key => $discoveryColumn) {
             if ($discoveryColumn['type'] == 'classroom') {
-                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
-                $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
+                $conditions['status'] = 'published';
+                $conditions['showable'] = 1;
+                if ($discoveryColumn['orderType'] == 'recommend') {
+                    $conditions['recommended'] = 1;
+                }
+                if ($discoveryColumn['categoryId']) {
+
+                    $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
+                    $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
+                }
+                unset($discoveryColumn['categoryId']);
                 $classrooms                = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'desc'), 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($classrooms);
@@ -38,7 +47,8 @@ class DiscoveryColumnController extends BaseController
                 } else {
                     $conditions['type'] = 'normal';
                 }
-
+                $conditions['parentId'] = 0;
+                $conditions['status'] = 'published';
                 $courses = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($courses);
