@@ -1,4 +1,5 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'open-course/open-course' %}
 
 {% block full_content %}
   {% block top_content %}{% endblock %}
@@ -10,52 +11,91 @@
         <li><a href="">公开课</a></li>
         <li>edusoho运营指南</li>
       </ol>
-      <div class="clearfix">
-        <div class="open-course-views">
+      <div class="row">
+        <div class="col-md-9 open-course-views">
           <img src="/assets/img/default/course.png" alt="">
         </div>
-        <div class="open-course-tab">
-          <ul class="clearfix">
+        <div class="col-md-3 open-course-tab">
+          <ul class="clearfix" id="tab">
             <li class="tab-header active"><i class=""></i>推荐课程</li>
             <li class="tab-header"><i class=""></i>直播列表</li>
           </ul>
-          <ul>
-            <li class="tab-content clearfix">
-              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
-              <div class="open-course-info">
-                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
-                <div class="num">2345人在学习</div>
-              </div>
-            </li>
-            <li class="tab-content clearfix">
-              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
-              <div class="open-course-info">
-                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
-                <div class="num">2345人在学习</div>
-              </div>
-            </li>
-            <li class="tab-content clearfix">
-              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
-              <div class="open-course-info">
-                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
-                <div class="num">2345人在学习</div>
-              </div>
-            </li>
-            <li class="tab-content clearfix">
-              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
-              <div class="open-course-info">
-                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
-                <div class="num">2345人在学习</div>
-              </div>
-            </li>
-            <li class="tab-content clearfix">
-              <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
-              <div class="open-course-info">
-                <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
-                <div class="num">2345人在学习</div>
-              </div>
-            </li>
-          </ul>
+          <div id="content">
+            <ul>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库教学资料库课教学资料库课课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+            </ul>
+            <ul style="display:none">
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >2edusoho教学资料库教学资料库课教学资料库课课程学习</a></div>
+                  <div class="num">2人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+              <li class="tab-content clearfix">
+                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <div class="open-course-info">
+                  <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
+                  <div class="num">2345人在学习</div>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div class="open-course-header">
