@@ -144,6 +144,7 @@
 .materials-ul {
   border: solid 1px #eee;
   padding-left: 0;
+  height: 193px;
 }
 .materials-ul li {
   list-style-type: none;
@@ -179,7 +180,7 @@
 }
 
 .materials-ul li.img-li {
-  
+
 }
 
 .materials-ul li.img-li img {
@@ -188,7 +189,12 @@
   overflow: hidden;
 }
 
+.materials-ul li.img-li:hover .option-vertical {
+  display: block;
+}
+
 .materials-ul li.img-li .option-vertical {
+  display: none;
   cursor: pointer;
   position: absolute;
   right: 0;
@@ -214,12 +220,14 @@
 }
 
 .materials-ul li.img-li .mask {
+    text-align: center;
     display: none;
     cursor: pointer;
     position: absolute;
-    width: 100%;
+    width: 25%;
     bottom: 0;
-    height: 30px;
+    right:0;
+    height: 25px;
     line-height: 30px;
     background-color: #B6B6B6;
     filter:alpha(opacity=60);  /*支持 IE 浏览器*/
@@ -258,12 +266,10 @@
 .materials-ul li.caption p.tags, .materials-ul li.caption p.date {
   font-size: 10px;
 }
-.materials-ul li.caption p.date{
-  height: 17px;
-}
+
 .materials-ul li.caption p.use-time {
    font-size: 10px;
-   margin-top: 0px;
+   margin-top: 5px;
    margin-bottom: 5px;
  }
 

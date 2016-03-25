@@ -29,8 +29,8 @@ define(function(require, exports, module) {
                 'click .js-manage-batch-btn': 'onClickManageBtn',
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
-                'click .js-batch-tag-btn': 'onClickTagBatchBtn',
-                'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
+                'click .js-batch-tag-btn': 'onClickTagBatchBtn'
+                //'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -179,13 +179,13 @@ define(function(require, exports, module) {
                 var $target = $(event.currentTarget);
                 $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
             },
-            onClickFinishBatchBtn: function(event)
-            {
-                var self = this;
-                var $target = $(event.currentTarget);
-                this.set('model','normal');
-                this.renderTable();
-            },
+            // onClickFinishBatchBtn: function(event)
+            // {
+            //     var self = this;
+            //     var $target = $(event.currentTarget);
+            //     this.set('model','normal');
+            //     this.renderTable();
+            // },
             onClickDeleteBatchBtn: function(event)
             {
                 if (confirm('确定要删除这些资源吗？')) {

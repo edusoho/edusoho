@@ -7,14 +7,26 @@
       </li>
       <li class="caption">
         <p class="title text-overflow">{{ uploadFile.filename }}</p>
-        <p class="text-muted tags text-overflow">
-          <i class="glyphicon glyphicon-tag"></i>热门标签：
-          {{ uploadFile.tags|default('没有标签')|join(' ') }}
+
+        <p class="text-overflow">
+        {% if uploadFile.type != 'image' %}
+          {% if uploadFile.convertStatus == 'error' %}
+            <span class="status label label-danger">转码失败</span>
+            <button class="reconvert-btn btn btn-xs btn-primary">重新转码</button>
+          {% elseif uploadFile.convertStatus != 'doing' %}
+            <span class="status label label-info">转码中</span>
+          {% elseif uploadFile.convertStatus == 'waiting' %}
+            <span class="status label label-info">等待转码</span>
+          {% endif %}
+        {% endif %}
+          {% if uploadFile.usedCount|default(0) == 0 %}
+            <span class="label label-default">未使用</span>
+          {% endif %}
         </p>
-        <p class="text-muted use-time text-overflow">使用次数： {{ uploadFile.usedTimes|default(0) }}次</p>
-        <p class="text-muted date">{{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
+        <p class="text-muted use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>
+        <p class="text-muted date">时间：  {{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
       </li>
-      <span class="label label-info pull-right mbm">转码状态<span>
+
       {#<li class="row op-li">
         <div class="op-btn js-collect-btn col-md-3" data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}">
           <i class="glyphicon glyphicon-star {% if uploadFile.collected|default(0) %} material-collection {% endif %}"></i>
