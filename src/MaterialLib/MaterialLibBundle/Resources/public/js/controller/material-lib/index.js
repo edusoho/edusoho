@@ -29,7 +29,9 @@ define(function(require, exports, module) {
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
-                'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
+                'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
+                'click .js-process-status-select': 'onClickProcessStatusBtn',
+                'click .js-use-status-select': 'onClickUseStatusBtn'
             },
             setup: function() {
                 this.set('renderUrl', $('#material-item-list').data('url'));
@@ -466,6 +468,7 @@ define(function(require, exports, module) {
                     autoclose: true,
                 }).on('changeDate',function(){
                     $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+                    self.renderTable();
                 });
 
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
@@ -476,6 +479,7 @@ define(function(require, exports, module) {
                 }).on('changeDate',function(){
 
                     $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+                    self.renderTable();
                 });
 
                 $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
