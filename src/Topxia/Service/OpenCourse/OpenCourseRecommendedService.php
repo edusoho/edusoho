@@ -5,7 +5,7 @@ interface OpenCourseRecommendedService
 {
     public function addRecommendedCoursesToOpenCourse($openCourseId, $recommendCourseIds);
 
-    public function findRecommendedCourseIdsByOpenCourseId($openCourseId);
+    public function findRecommendedCoursesByOpenCourseId($openCourseId);
 
     public function findRecommendCourse($classroomId, $courseId);
 }

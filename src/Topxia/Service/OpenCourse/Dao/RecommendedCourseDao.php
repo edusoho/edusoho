@@ -5,7 +5,7 @@ interface RecommendedCourseDao
 {
     public function getRecommendedCourse($id);
 
-    public function findRecommendedCourseIdsByOpenCourseId($oepnCourseId);
+    public function findRecommendedCoursesByOpenCourseId($oepnCourseId);
 
     public function addRecommendedCourse($recommended);
 

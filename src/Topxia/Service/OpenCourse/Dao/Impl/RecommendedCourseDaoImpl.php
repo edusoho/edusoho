@@ -21,7 +21,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         );
     }
 
-    public function findRecommendedCourseIdsByOpenCourseId($openCourseId)
+    public function findRecommendedCoursesByOpenCourseId($openCourseId)
     {
         $that = $this;
 

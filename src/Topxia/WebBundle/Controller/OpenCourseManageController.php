@@ -87,7 +87,7 @@ class OpenCourseManageController extends BaseController
             )));
         }
 
-        $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCourseIdsByOpenCourseId($id);
+        $recommends = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($id);
 
         $recommendedCourses = array();
 

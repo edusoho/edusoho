@@ -9,7 +9,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 {
     public function addRecommendedCoursesToOpenCourse($openCourseId, $recommendCourseIds)
     {
-        $allExistingRecommendedCourses = $this->findRecommendedCourseIdsByOpenCourseId($openCourseId);
+        $allExistingRecommendedCourses = $this->findRecommendedCoursesByOpenCourseId($openCourseId);
 
         $existRecommendedCourseIds = array();
 
@@ -33,7 +33,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     public function updateOpenCourseRecommendedCourses($openCourseId, $activeCourseIds)
     {
         $this->getCourseService()->tryManageCourse($openCourseId);
-        $allExistingRecommendedCourses = $this->findRecommendedCourseIdsByOpenCourseId($openCourseId);
+        $allExistingRecommendedCourses = $this->findRecommendedCoursesByOpenCourseId($openCourseId);
 
         $existRecommendedCourseIds = array();
 
@@ -52,10 +52,15 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $this->refreshCoursesSeq($openCourseId, $activeCourseIds);
     }
 
-    public function findRecommendedCourseIdsByOpenCourseId($openCourseId)
+    public function findRecommendedCoursesByOpenCourseId($openCourseId)
     {
-        $recommendCourseIds = $this->getRecommendedCourseDao()->findRecommendedCourseIdsByOpenCourseId($openCourseId);
+        $recommendCourseIds = $this->getRecommendedCourseDao()->findRecommendedCoursesByOpenCourseId($openCourseId);
         return $recommendCourseIds;
+    }
+
+    public function findRecommendCourse($openCourseId, $recommendCourseId)
+    {
+        return $this->getRecommendedCourseDao()->findRecommendCourse($openCourseId, $recommendCourseId);
     }
 
     protected function refreshCoursesSeq($openCourseId, $recommendCourseIds)
@@ -87,11 +92,6 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
             );
             $this->getRecommendedCourseDao()->addRecommendedCourse($recommended);
         }
-    }
-
-    public function findRecommendCourse($openCourseId, $recommendCourseId)
-    {
-        return $this->getRecommendedCourseDao()->findRecommendCourse($openCourseId, $recommendCourseId);
     }
 
     protected function getCourseService()
