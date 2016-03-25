@@ -73,7 +73,15 @@
       <label class="checkbox-inline" data-role="batch-manage" >
         <input type="checkbox" data-role="batch-select"/> 全选
       </label>
-      <span class="pull-right">排序方式<i class="es-icon es-icon-data-order"></i></span>
+      <span class="pull-right">排序方式
+        <a href="javascript:;" class="es-icon es-icon-data-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="sr-only">Toggle Dropdown</span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="js-refresh-btn" {#data-url="{{ path('material_delete', {globalId:material.no|defaul}) }}"#}><a class="glyphicon glyphicon-refresh" href="javascript:;"> 播放次数</a></li>
+          <li class="js-delete-btn"><a class="glyphicon glyphicon-trash" href="javascript:;"> 上传时间</a></li>
+        </ul>
+      </span>
     </div>
     <div class="row material-list-container"  id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>

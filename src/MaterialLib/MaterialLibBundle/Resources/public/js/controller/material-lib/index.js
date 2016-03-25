@@ -178,6 +178,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(event.currentTarget);
                 $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
+                $('.materials-ul').addClass('batch-hidden');
             },
             // onClickFinishBatchBtn: function(event)
             // {
