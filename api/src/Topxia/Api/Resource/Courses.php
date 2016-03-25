@@ -36,7 +36,7 @@ class Courses extends BaseResource
         $conditions['categoryId'] = $result['categoryId'];
 
         if ($result['orderType'] == 'hot') {
-            $orderBy = 'hitNum';
+            $orderBy = 'studentNum';
         }
         elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
