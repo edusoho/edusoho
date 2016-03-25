@@ -65,7 +65,7 @@ class Courses extends BaseResource
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
         if ($result['orderType'] == 'recommend' && count($courses)<$result['showCount']) {
             $conditions['recommended'] = 0;
-            $unrecommendCourses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']-count($courses));
+            $unrecommendCourses = $this->getCourseService()->searchCourses($conditions,'createdTime',0,$result['showCount']-count($courses));
             $courses = array_merge($courses, $unrecommendCourses);
         }
         $courses = $this->filter($courses);
