@@ -17,6 +17,7 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav.nav-tabs li': 'onClickNav',
+                'click .js-material-tabs li': 'onClickTabs',
                 'click .pagination li': 'onClickPagination',
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
@@ -45,6 +46,15 @@ define(function(require, exports, module) {
                 $target.closest('.nav').find('[name=type]').val($target.data('value'));
                 this.renderTable();
                 event.preventDefault();
+            },
+            onClickTabs: function(event)
+            {
+              var $target = $(event.currentTarget);
+              $target.closest('.nav').find('.active').removeClass('active');
+              $target.addClass('active');
+              $target.closest('.nav').find('[name=type]').val($target.data('value'));
+              this.renderTable();
+              event.preventDefault();
             },
             onClickPagination: function(event)
             {
