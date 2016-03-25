@@ -28,9 +28,9 @@
     	</div>
 			<div class="col-md-7 controls radios">
         <input type="radio" id="course" name="type" checked="checked" value="course">
-        <label for="course">课程</label>
+        <label for="course">普通课程</label>
         <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live">
-        <label for="live">直播</label>
+        <label for="live">直播课程</label>
         <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom">
         <label for="classroom">班级</label>
     	</div>
