@@ -21,6 +21,15 @@ define(function(require, exports, module) {
                 element: '[name="title"]',
                 required: true
             });
+
+            $('input[name="type"]').click(function(){
+                var typeValue = $(this).val();
+                if(typeValue == 'open' || typeValue == 'liveOpen') {
+                    $('#course-buy-div').hide();
+                } else {
+                    $('#course-buy-div').show();
+                }
+            })
         
         }
     };

@@ -6,7 +6,7 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
-class CourseController extends CourseBaseController
+class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request, $category)
     {
@@ -416,38 +416,12 @@ class CourseController extends CourseBaseController
 
     public function createAction(Request $request)
     {
-        $user        = $this->getUserService()->getCurrentUser();
-        $userProfile = $this->getUserService()->getUserProfile($user['id']);
+        $course = $request->request->all();
+        unset($course['buyable']);
 
-        if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
-            throw $this->createAccessDeniedException();
-        }
+        $course = $this->getOpenCourseService()->createCourse($course);
 
-        if ($request->getMethod() == 'POST') {
-            $course = $request->request->all();
-
-            if ($course['type'] == 'live' || $course['type'] == 'liveOpen') {
-                try {
-                    $this->_checkLiveCloudSetting($course['type']);
-                } catch (\Exception $e) {
-                    return $this->createMessageResponse('info', $e->getMessage());
-                }
-            }
-
-            if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {
-                return $this->forward('TopxiaWebBundle:OpenCourse:create', array(
-                    'request' => $request
-                ));
-            }
-
-            $course = $this->getCourseService()->createCourse($course);
-
-            return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
-        }
-
-        return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
-            'userProfile' => $userProfile
-        ));
+        return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
     }
 
     public function exitAction(Request $request, $id)
@@ -904,24 +878,49 @@ class CourseController extends CourseBaseController
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
-    private function _checkLiveCloudSetting($type)
+    public function liveSetting()
     {
         $courseSetting = $this->setting('course', array());
 
-        if ($type == 'live' && empty($courseSetting['live_course_enabled'])) {
+        if (empty($courseSetting['live_course_enabled'])) {
             throw new \RuntimeException('请前往后台开启直播,尝试创建！');
-        } elseif ($type == 'liveOpen' && empty($courseSetting['live_open_course_enabled'])) {
+        }
+
+        if (!empty($courseSetting['live_course_enabled'])) {
+            $client   = new EdusohoLiveClient();
+            $capacity = $client->getCapacity();
+        } else {
+            $capacity = array();
+        }
+
+        if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
+            throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+        }
+    }
+
+    public function liveOpenSetting()
+    {
+        $courseSetting = $this->setting('course', array());
+
+        if (empty($courseSetting['live_open_course_enabled'])) {
             throw new \RuntimeException('请前往后台开启公开课直播,尝试创建！');
         }
 
-        $client   = new EdusohoLiveClient();
-        $capacity = $client->getCapacity();
-
-        if (empty($capacity['capacity'])) {
-            throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+        if (!empty($courseSetting['live_open_course_enabled'])) {
+            $client   = new EdusohoLiveClient();
+            $capacity = $client->getCapacity();
+        } else {
+            $capacity = array();
         }
 
-        return true;
+        if (empty($capacity['capacity']) && !empty($courseSetting['live_open_course_enabled'])) {
+            throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+        }
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 
     protected function getTokenService()
