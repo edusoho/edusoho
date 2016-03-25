@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{{'创建课程'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'course/create' %}
 
@@ -8,7 +8,7 @@
 <div class="row">
   <div class="col-md-offset-2 col-md-8">
     <div class="panel panel-default panel-page">
-      <div class="panel-heading"><h2>{% if type == 'normal' %}{{'创建课程'|trans}}{% else %}{{'创建直播课程'|trans}}{% endif %}</h2></div>
+      <div class="panel-heading"><h2>{{'创建课程'|trans}}</h2></div>
 
       {% if not app.user.largeAvatar or not app.user.title or not userProfile.about %}
         <div class="alert alert-info">
@@ -34,6 +34,37 @@
 
           {{ web_macro.flash_messages() }}
 
+          {% if setting('course').live_course_enabled|default('') or setting('course').open_course_enabled|default('') or setting('course').live_open_course_enabled|default('') %} 
+            <div class="form-group">
+              <div class="col-md-2 control-label">
+                <label>{{'选择类型'|trans}}</label>
+              </div>
+
+              <div class="controls col-md-8 radios">
+                <label>
+                  <input type="radio" name="type" value="normal" checked="checked"> {{'普通课程'|trans}}
+                </label>
+                {% if setting('course').live_course_enabled|default('') %}
+                  <label>
+                    <input type="radio" name="type" value="live" > {{'直播课程'|trans}}
+                  </label>
+                {% endif %}
+                {% if setting('course').open_course_enabled|default('') %}
+                  <label>
+                    <input type="radio" name="type" value="open"> {{'公开课'|trans}}
+                  </label>
+                {% endif %}
+                {% if setting('course').live_open_course_enabled|default('') %}
+                  <label>
+                    <input type="radio" name="type" value="liveOpen"> {{'直播公开课'|trans}}
+                  </label>
+                {% endif %}
+              </div>
+            </div>
+          {% else %}
+             <input type="hidden" name="type" value="normal"/>
+          {% endif %}
+
           <div class="form-group">
             <div class="col-md-2 control-label"><label for="course_title" class="required">{{'标题'|trans}}</label></div>
             <div class="col-md-8 controls">
@@ -41,15 +72,13 @@
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
-
-      <div class="form-group">
-        <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>
-          <div class="col-md-8 controls radios">
-            {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
-           <div class="help-block">{{'关闭后课程将无法在线购买加入、由教师/管理员后台导入。'|trans}}</div>
-        </div>
-      </div>
-
+          <div class="form-group" id="course-buy-div">
+            <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>
+              <div class="col-md-8 controls radios">
+                {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
+               <div class="help-block">{{'关闭后课程将无法在线购买加入、由教师/管理员后台导入。'|trans}}</div>
+            </div>
+          </div>
           <div class="form-group">
             <div class="col-md-offset-2 col-md-8 controls">
               <input id="course-create-btn" data-submiting-text="{{'正在创建'|trans}}" class="btn btn-fat btn-primary" type="submit" value="{{'创建'|trans}}">
@@ -57,18 +86,15 @@
           </div>
 
           {% if not setting('copyright.owned') %}
-          <div class="form-group">
-            <div class="col-md-offset-2 col-md-8 controls">
-              <p class="mtl"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">{{'如何创建课程？'|trans}}</a></p>
+            <div class="form-group">
+              <div class="col-md-offset-2 col-md-8 controls">
+                <p class="mtl"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">{{'如何创建课程？'|trans}}</a></p>
+              </div>
             </div>
-          </div>
           {% endif %}
 
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-          <input type="hidden" name="type" value="{{ type }}">
-
         </form>
-
       {% endif %}
     </div>
 

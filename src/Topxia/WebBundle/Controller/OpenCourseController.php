@@ -5,7 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
-class OpenCourseController extends CourseBaseController
+class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request, $category)
     {
@@ -176,6 +176,16 @@ class OpenCourseController extends CourseBaseController
         ));
     }
 
+    public function createAction(Request $request)
+    {
+        $course = $request->request->all();
+        unset($course['buyable']);
+
+        $course = $this->getOpenCourseService()->createCourse($course);
+
+        return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
+    }
+
     public function showAction(Request $request, $courseId)
     {
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
@@ -238,6 +248,11 @@ class OpenCourseController extends CourseBaseController
         ));
     }
 
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
@@ -261,5 +276,10 @@ class OpenCourseController extends CourseBaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }
