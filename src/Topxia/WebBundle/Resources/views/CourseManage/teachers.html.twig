@@ -1,4 +1,9 @@
-{% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% if course.type == 'open' or course.type == 'liveOpen' %}
+  {% set layout = 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
+{% else %}
+  {% set layout = 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
+{% endif %}
+{% extends layout %}
 
 {% block title %}{{'教师设置'|trans}} - {{ parent() }}{% endblock %}
 
