@@ -34,7 +34,9 @@ class Courses extends BaseResource
     {
         $result = $request->query->all();
         $conditions['categoryId'] = $result['categoryId'];
-
+        if ($conditions['categoryId'] == 0) {
+            unset($conditions['categoryId']);
+        }
         if ($result['orderType'] == 'hot') {
             $orderBy = 'studentNum';
         }
@@ -63,7 +65,7 @@ class Courses extends BaseResource
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
         if ($result['orderType'] == 'recommend' && count($courses)<$result['showCount']) {
             $conditions['recommended'] = 0;
-            $unrecommendCourses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']-count($courses));
+            $unrecommendCourses = $this->getCourseService()->searchCourses($conditions,'createdTime',0,$result['showCount']-count($courses));
             $courses = array_merge($courses, $unrecommendCourses);
         }
         $courses = $this->filter($courses);
