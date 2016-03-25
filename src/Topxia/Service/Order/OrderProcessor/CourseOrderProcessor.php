@@ -59,7 +59,13 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         if ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $coinSetting = $this->getSettingService()->get('coin');
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $crshRate    = 1;
+            if ($coinEnable && array_key_exists("cash_rate",$coinSetting)){
+                $cashRate=$coinSetting['cash_rate'];
+            }
+            $totalPrice = $course["price"] * $cashRate;
         } elseif ($priceType == "RMB") {
             $totalPrice = $course["price"];
             $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
@@ -150,12 +156,18 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
     protected function getTotalPrice($targetId, $priceType)
     {
         $totalPrice = 0;
-        $course     = $this->getCourseService()->getCourse($targetId);
+        $course     = $this->getCourseService()->getCourse($targetId);  
 
         if ($priceType == "RMB") {
             $totalPrice = $course["price"];
         } elseif ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $coinSetting = $this->getSettingService()->get('coin');
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $crshRate    = 1;
+            if ($coinEnable && array_key_exists("cash_rate",$coinSetting)){
+                $cashRate=$coinSetting['cash_rate'];
+            }
+            $totalPrice = $course["price"] * $cashRate;
         }
 
         $totalPrice = (float) $totalPrice;

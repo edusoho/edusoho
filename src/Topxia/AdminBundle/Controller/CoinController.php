@@ -103,7 +103,6 @@ class CoinController extends BaseController
             }
 
             $courses = $this->getCourseService()->searchCourses(array('originPrice_GT' => '0.00', 'parentId' => 0), 'latest', 0, 99999);
-
             return $this->render('TopxiaAdminBundle:Coin:coin-course-set.html.twig', array(
                 'set'   => $set,
                 'items' => $courses
@@ -149,11 +148,9 @@ class CoinController extends BaseController
             $data                         = $request->request->all();
             $coinSettings['coin_enabled'] = 1;
             $coinSettings['cash_rate']    = $data['cash_rate'];
-
             if ($data['cash_model'] == "deduction") {
                 $coinSettings['price_type'] = "RMB";
                 $coinSettings['cash_model'] = "deduction";
-
                 if (isset($data['item-rate'])) {
                     $this->updateMaxRate($data);
                 }
@@ -166,7 +163,6 @@ class CoinController extends BaseController
                     $this->updateCoursesCoinPrice($data["course-cash"]);
                 }
             }
-
             $this->getSettingService()->set('coin', $coinSettings);
         }
 
