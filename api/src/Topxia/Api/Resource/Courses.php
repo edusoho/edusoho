@@ -34,7 +34,9 @@ class Courses extends BaseResource
     {
         $result = $request->query->all();
         $conditions['categoryId'] = $result['categoryId'];
-
+        if ($conditions['categoryId'] == 0) {
+            unset($conditions['categoryId']);
+        }
         if ($result['orderType'] == 'hot') {
             $orderBy = 'studentNum';
         }
