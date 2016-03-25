@@ -13572,10 +13572,26 @@ textarea {
 .open-course-views {
   padding: 0;
   height: 500px;
+  position: relative;
 }
 .open-course-views img {
   width: 100%;
   height: 100%;
+  display: block;
+}
+.open-course-views .mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  background-color: #000;
+}
+.open-course-views .mask button {
+  left: 50%;
 }
 .open-course-tab {
   height: 500px;
@@ -13588,7 +13604,7 @@ textarea {
   margin-bottom: 0;
   list-style-type: none;
 }
-.open-course-tab .tab-header {
+.open-course-tab ul .tab-header {
   width: 50%;
   float: left;
   padding: 20px 25px;
@@ -13596,13 +13612,53 @@ textarea {
   cursor: pointer;
   background-color: #313131;
 }
-.open-course-tab .tab-header.active,
-.open-course-tab .tab-header:hover {
+.open-course-tab ul .tab-header.active,
+.open-course-tab ul .tab-header:hover {
   background-color: #212121;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+.open-course-tab .tab-recommand {
+  padding: 10px 20px 10px 15px;
+}
+.open-course-tab .tab-recommand:first-child {
+  padding: 15px 20px 10px 15px;
+}
+.open-course-tab .tab-recommand:last-child {
+  padding: 10px 20px 15px 15px;
+}
+.open-course-tab .tab-recommand img {
+  width: 115px;
+  border-radius: 4px;
+  float: left;
+  margin-right: 15px;
+}
+.open-course-tab .tab-recommand .open-course-info {
+  float: left;
+  font-size: 12px;
+}
+.open-course-tab .tab-recommand .open-course-info .title {
+  width: 120px;
+  height: 42px;
+  line-height: 21px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 8px;
+}
+.open-course-tab .tab-recommand .open-course-info .title a {
+  color: rgba(255, 255, 255, 0.8);
+}
+.open-course-tab .tab-recommand .open-course-info .title a:hover {
+  color: #46c37b;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.open-course-tab .tab-recommand .open-course-info .num {
+  color: rgba(255, 255, 255, 0.5);
 }
 .open-course-tab .tab-live a {
   padding: 14px 50px 14px 20px;
@@ -13655,16 +13711,16 @@ textarea {
   margin-bottom: 0;
   list-style-type: none;
 }
-.open-course-header .course-operation > li {
+.open-course-header .course-operation li {
   float: left;
   padding: 0 10px;
   width: 145px;
   border-right: 1px solid #f1f1f1;
 }
-.open-course-header .course-operation > li:last-child {
+.open-course-header .course-operation li:last-child {
   border-right: 0;
 }
-.open-course-header .course-operation > li i {
+.open-course-header .course-operation li i {
   float: left;
   display: block;
   width: 35px;
@@ -13681,22 +13737,22 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-.open-course-header .course-operation > li .es-icon-thumbup {
+.open-course-header .course-operation li .es-icon-thumbup {
   background-color: #e85749;
 }
-.open-course-header .course-operation > li .es-icon-bookmarkoutline {
+.open-course-header .course-operation li .es-icon-bookmarkoutline {
   background-color: #53c3f5;
 }
-.open-course-header .course-operation > li .es-icon-share {
+.open-course-header .course-operation li .es-icon-share {
   background-color: #83d460;
 }
-.open-course-header .course-operation > li .es-icon-phone1 {
+.open-course-header .course-operation li .es-icon-phone1 {
   background-color: #ff8a0c;
 }
-.open-course-header .course-operation > li .open-course-qrcode {
+.open-course-header .course-operation li .open-course-qrcode {
   position: relative;
 }
-.open-course-header .course-operation > li .open-course-qrcode .qrcode-popover {
+.open-course-header .course-operation li .open-course-qrcode .qrcode-popover {
   position: absolute;
   left: 0;
   top: 0;
@@ -13706,10 +13762,10 @@ textarea {
   z-index: 10;
   cursor: pointer;
 }
-.open-course-header .course-operation > li .open-course-qrcode .qrcode-popover img {
+.open-course-header .course-operation li .open-course-qrcode .qrcode-popover img {
   width: 100%;
 }
-.open-course-header .course-operation > li .open-course-qrcode:hover .qrcode-popover {
+.open-course-header .course-operation li .open-course-qrcode:hover .qrcode-popover {
   display: block;
 }
 .course-intro {

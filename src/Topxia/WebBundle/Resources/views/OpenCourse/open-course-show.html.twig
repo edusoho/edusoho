@@ -13,7 +13,12 @@
       </ol>
       <div class="row" style="margin:0">
         <div class="col-md-9 open-course-views">
-          <img src="/assets/img/default/course.png" alt="">
+          <img src="/assets/img/default/open-course-bg.jpg" alt="">
+          <div class="mask">
+            <button class="btn btn-warning">
+              开始播放<i class=""></i>
+            </button>
+          </div>
         </div>
         <div class="col-md-3 open-course-tab">
           <ul class="clearfix" id="tab">
@@ -21,7 +26,7 @@
             <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>直播列表</li>
           </ul>
           <div id="content">
-            <ul style="display:none">
+            <ul>
               <li class="tab-recommand clearfix">
                 <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
@@ -58,7 +63,7 @@
                 </div>
               </li>
             </ul>
-            <ul>
+            <ul style="display:none">
               <li class="tab-live clearfix">
                 <a href="">课时1：以理服人</a>
               </li>
@@ -148,7 +153,8 @@
             全球经济趋势正发生改变，我们的企业家通过学习与实践已经作好准备，蓄势待发，你准备好了吗？
             <img src="/assets/img/default/course.png" alt="">
           </div>
-          <div class="es-section course-comment">  <div>评论(2332)</div>
+          <!-- <div class="es-section course-comment">  
+            <div class="gray-darker">评论(2332)</div>
             <div class="media">
               <div class="media-left media-middle">
                 <a href="#">
@@ -156,7 +162,7 @@
                 </a>
               </div>
               <div class="media-body">
-                <textarea class="form-control" rows="2" placeholder="请输入评价"></textarea>
+                <textarea class="form-control" rows="2" placeholder="发表评论"></textarea>
               </div>
             </div>
             <div class="media">
@@ -201,9 +207,59 @@
               <div class="media-body">
                 <h5 class="media-heading"><a href="">关云长</a><span class="pll color-gray">3天前</span></h5>
                 老师教得非常好，强烈支持！
+              </div>
+            </div>
+          </div> -->
+          <div class="es-section">
+            <form id="review-form" method="post" action="/course/396/review/create" style="" novalidate="novalidate" data-widget-cid="widget-1">
+              <div class="form-group controls">
+                请打分： <span data-rating="5" data-img-path="/assets/img/raty" class="rating-btn" style="cursor: pointer; width: 100px;"><img src="/assets/img/raty/star-on.png" alt="1" title="很差">&nbsp;<img src="/assets/img/raty/star-on.png" alt="2" title="较差">&nbsp;<img src="/assets/img/raty/star-on.png" alt="3" title="还行">&nbsp;<img src="/assets/img/raty/star-on.png" alt="4" title="推荐">&nbsp;<img src="/assets/img/raty/star-on.png" alt="5" title="力荐"><input type="hidden" name="score" value="5"></span>
+                <input type="hidden" name="rating" value="5" data-widget-cid="widget-2" data-explain="">
+                <div class="help-block" style="display:none;"></div>
+              </div>
+              <div class="form-group controls">
+                <textarea class="form-control" rows="8" data-display="评价详细内容" name="content" data-widget-cid="widget-3" data-explain="">123</textarea>
+                <div class="help-block" style="display:none;"></div>
+              </div>
+              <div class="form-group clearfix">
+                <span class="text-success pull-left" style="display: none;">评价已保存！</span>
+                <button type="submit" class="btn btn-primary pull-right" data-loading-text="正在保存..." autocomplete="off">保存</button>
+                <button class="btn btn-link pull-right js-hide-review-form" type="button" style="">取消</button>
+              </div>
+              <input type="hidden" name="_csrf_token" value="58acf2f79d53878448cbae83dcf3aa6e84f30dd1">
+            </form>
+            <div class="js-reviews">
+              <div class="media media-evaluate">
+                <div class="media-left">
+                  <a class=" js-user-card" href="/user/153" data-card-url="/user/153/card/show" data-user-id="153">
+                    <img class="avatar-sm" src="/files/user/2015/03-12/1654317d2199808935.gif?6.15.8">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <div class="title">    
+                    <a class="link-dark " href="/user/153">无名</a>
+                    2016-02-16
+                  </div>
+                  <div class="score">     
+                    <i class="es-icon es-icon-star color-warning"></i>
+                    <i class="es-icon es-icon-star color-warning"></i>
+                    <i class="es-icon es-icon-star color-warning"></i>
+                    <i class="es-icon es-icon-star color-warning"></i>
+                    <i class="es-icon es-icon-star"></i>
+                  </div>
+                  <div class="content">
+                    <div class="short-content">123</div>
+                    <div class="full-content" style="display:none;">123</div>
+                  </div>
+                  <div class="actions">
+                    <a href="javascript:;" class="show-full-btn">[展开全文]</a>
+                    <a href="javascript:;" class="show-short-btn" style="display:none;">[收起全文]</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+          
         </div>
         <div class="col-md-3">
           <div class="open-course-teacher panel panel-default">
