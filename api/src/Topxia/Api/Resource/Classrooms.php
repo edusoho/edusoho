@@ -35,7 +35,8 @@ class Classrooms extends BaseResource
 
         if ($result['orderType'] == 'recommend' && count($classrooms)<$result['showCount']) {
             $conditions['recommended'] = 0;
-            $unrecommendClassrooms = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']-count($courses));
+            $unrecommendClassrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']-count($classrooms));
+
             $classrooms = array_merge($classrooms, $unrecommendClassrooms);
         }
         $total      = count($classrooms);
