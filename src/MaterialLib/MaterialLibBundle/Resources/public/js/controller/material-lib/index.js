@@ -33,6 +33,7 @@ define(function(require, exports, module) {
                 //'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
             },
             setup: function() {
+                this.set('model','normal');
                 this.set('renderUrl', $('#material-item-list').data('url'));
                 this.renderTable();
                 this._initHeader();
@@ -174,19 +175,30 @@ define(function(require, exports, module) {
             },
             onClickManageBtn: function(event)
             {
-                this.set('model','edit');
+                var self = this;
+                var mode = self.get('model');
+
+                console.log(mode);
+                if(mode == "normal") {
+                  this.set('model','edit');
+                  var $target = $(event.currentTarget);
+                  $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
+                  $('.materials-ul').addClass('batch-hidden');
+                } else {
+                  this.set('model','normal');
+                  var self = this;
+                  var $target = $(event.currentTarget);
+                  $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
+                  $('.materials-ul').removeClass('batch-hidden');
+                }
+            },
+            onClickFinishBatchBtn: function(event)
+            {
                 var self = this;
                 var $target = $(event.currentTarget);
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
-                $('.materials-ul').addClass('batch-hidden');
+                this.set('model','normal');
+                this.renderTable();
             },
-            // onClickFinishBatchBtn: function(event)
-            // {
-            //     var self = this;
-            //     var $target = $(event.currentTarget);
-            //     this.set('model','normal');
-            //     this.renderTable();
-            // },
             onClickDeleteBatchBtn: function(event)
             {
                 if (confirm('确定要删除这些资源吗？')) {
@@ -494,9 +506,6 @@ define(function(require, exports, module) {
         });
 
         window.materialWidget = new MaterialWidget({
-            attrs:{
-              model: 'normal'
-            },
             element: '#material-search-form'
         });
         var $panel = $('#material-lib-items-panel');
