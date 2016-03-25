@@ -35,13 +35,15 @@ class DiscoveryColumnController extends BaseController
                     $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
                     $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
                 }
-                unset($discoveryColumn['categoryId']);
+                
                 $classrooms                = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'desc'), 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($classrooms);
             } else {
                 $conditions['categoryId'] = $discoveryColumn['categoryId'];
-
+                if ($conditions['categoryId'] == 0) {
+                    unset($conditions['categoryId']);
+                }
                 if ($discoveryColumn['type'] == 'live') {
                     $conditions['type'] = 'live';
                 } else {
