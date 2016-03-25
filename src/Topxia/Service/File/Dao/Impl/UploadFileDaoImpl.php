@@ -167,7 +167,6 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             }
             return true;
         });
-
         $conditions['status'] = 'ok';
         if (isset($conditions['filename'])) {
             $conditions['filenameLike'] = "%{$conditions['filename']}%";
