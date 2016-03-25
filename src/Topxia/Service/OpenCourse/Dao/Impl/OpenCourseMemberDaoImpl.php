@@ -1,0 +1,103 @@
+<?php
+namespace Topxia\Service\OpenCourse\Dao\Impl;
+
+use Topxia\Service\Common\BaseDao;
+use Topxia\Service\OpenCourse\Dao\OpenCourseMemberDao;
+
+class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
+{
+    protected $table = 'open_course_member';
+
+    public function getMember($id)
+    {
+        $that = $this;
+
+        return $this->fetchCached("id:{$id}", $id, function ($id) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($id)) ?: null;
+        }
+
+        );
+    }
+
+    public function getMemberByCourseIdAndUserId($courseId, $userId)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
+        }
+
+        );
+    }
+
+    public function findMembersByCourseIds($courseIds)
+    {
+        $marks = str_repeat('?,', count($courseIds) - 1).'?';
+        $sql   = "SELECT * FROM {$this->getTable()} WHERE courseId IN ({$marks})";
+
+        return $this->getConnection()->fetchAll($sql, $courseIds) ?: array();
+    }
+
+    public function searchMemberCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchMembers($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    public function addMember($member)
+    {
+        $affected = $this->getConnection()->insert($this->table, $member);
+        $this->clearCached();
+
+        if ($affected <= 0) {
+            throw $this->createDaoException('Insert course member error.');
+        }
+
+        return $this->getMember($this->getConnection()->lastInsertId());
+    }
+
+    public function updateMember($id, $member)
+    {
+        $this->getConnection()->update($this->table, $member, array('id' => $id));
+        $this->clearCached();
+        return $this->getMember($id);
+    }
+
+    public function deleteMember($id)
+    {
+        $result = $this->getConnection()->delete($this->table, array('id' => $id));
+        $this->clearCached();
+        return $result;
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'open_course_member')
+            ->andWhere('userId = :userId')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('role = :role')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan')
+            ->andWhere('courseId IN (:courseIds)')
+            ->andWhere('userId IN (:userIds)')
+            ->andWhere('mobile = :mobile');
+        return $builder;
+    }
+}

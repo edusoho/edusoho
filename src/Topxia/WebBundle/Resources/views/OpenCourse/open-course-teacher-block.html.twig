@@ -1,0 +1,27 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"> <i class="es-icon es-icon-assignmentind"></i>
+      {{'授课教师'|trans}}
+    </h3>
+  </div>
+  <div class="panel-body">
+    {% if teachers %}
+      {% for teacher in teachers %}
+        <div class="media media-default">
+          <div class="media-left">
+            {{ web_macro.user_avatar(teacher, '', 'avatar-md') }}
+          </div>
+          <div class="media-body">
+            <div class="title">
+              {{ web_macro.user_link(teacher , 'link-light') }}
+            </div>
+            <div class="content">{{ teacher.title }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">{{'暂无教师'|trans}}</div>
+    {% endif %}
+  </div>
+</div>

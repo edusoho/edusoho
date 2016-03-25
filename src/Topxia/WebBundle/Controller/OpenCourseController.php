@@ -5,7 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 
-class OpenCourseController extends CourseBaseController
+class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request, $category)
     {
@@ -176,6 +176,16 @@ class OpenCourseController extends CourseBaseController
         ));
     }
 
+    public function createAction(Request $request)
+    {
+        $course = $request->request->all();
+        unset($course['buyable']);
+
+        $course = $this->getOpenCourseService()->createCourse($course);
+
+        return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
+    }
+
     public function showAction(Request $request, $courseId)
     {
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
@@ -187,55 +197,35 @@ class OpenCourseController extends CourseBaseController
      */
     public function headerAction($course, $manage = false)
     {
-        $user = $this->getCurrentUser();
+        $user    = $this->getCurrentUser();
+        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
-        $member = $this->getCourseService()->getCourseMember($course['id'], $user['id']);
-
-        $users = empty($course['teacherIds']) ? array() : $this->getUserService()->findUsersByIds($course['teacherIds']);
-
-        if (empty($member)) {
-            $member['deadline'] = 0;
-            $member['levelId']  = 0;
-        }
-
-        $isNonExpired = $this->getCourseService()->isMemberNonExpired($course, $member);
-
-        if ($member['levelId'] > 0) {
-            $vipChecked = $this->getVipService()->checkUserInMemberLevel($user['id'], $course['vipLevelId']);
-        } else {
-            $vipChecked = 'ok';
-        }
-
-        if ($this->isBecomeStudentFromCourse($member)
-            || $this->isBecomeStudentFromClassroomButExitedClassroom($course, $member, $user)) {
-            $canExit = true;
-        } else {
-            $canExit = false;
-        }
-
-        return $this->render('TopxiaWebBundle:Course:header.html.twig', array(
-            'course'       => $course,
-            'canManage'    => $this->getCourseService()->canManageCourse($course['id']),
-            'canExit'      => $canExit,
-            'member'       => $member,
-            'users'        => $users,
-            'manage'       => $manage,
-            'isNonExpired' => $isNonExpired,
-            'vipChecked'   => $vipChecked,
-            'isAdmin'      => $this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')
+        return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
+            'course'  => $course,
+            'lessons' => $lessons
         ));
     }
 
-    public function teachersBlockAction($course)
+    public function teachersAction($courseId)
     {
-        $users    = $this->getUserService()->findUsersByIds($course['teacherIds']);
-        $profiles = $this->getUserService()->findUserProfilesByIds($course['teacherIds']);
+        $course         = $this->getOpenCourseService()->getCourse($courseId);
+        $teachersNoSort = $this->getUserService()->findUsersByIds($course['teacherIds']);
 
-        return $this->render('TopxiaWebBundle:Course:teachers-block.html.twig', array(
+        $teachers = array();
+
+        foreach ($course['teacherIds'] as $key => $teacherId) {
+            $teachers[$teacherId] = $teachersNoSort[$teacherId];
+        }
+
+        return $this->render('TopxiaWebBundle:OpenCourse:open-course-teacher-block.html.twig', array(
             'course'   => $course,
-            'users'    => $users,
-            'profiles' => $profiles
+            'teachers' => $teachers
         ));
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 
     protected function getUserService()
@@ -261,5 +251,10 @@ class OpenCourseController extends CourseBaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getAppService()
+    {
+        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 }
