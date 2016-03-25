@@ -55,6 +55,7 @@ class Courses extends BaseResource
             $result['showCount'] = 6;
         }
         
+        $conditions['parentId'] = 0;
         $conditions['status'] = 'published';
         $total = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
