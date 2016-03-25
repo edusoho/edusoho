@@ -34,7 +34,13 @@ class CourseManageController extends BaseController
         $tags    = $this->getTagService()->findTagsByIds($course['tags']);
         $default = $this->getSettingService()->get('default', array());
 
-        return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
+        if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {
+            $template = 'TopxiaWebBundle:OpenCourseManage:open-course-base.html.twig';
+        } else {
+            $template = 'TopxiaWebBundle:CourseManage:base.html.twig';
+        }
+
+        return $this->render($template, array(
             'course'  => $course,
             'tags'    => ArrayToolkit::column($tags, 'name'),
             'default' => $default
@@ -553,6 +559,24 @@ class CourseManageController extends BaseController
             'course' => $course,
             'type'   => $type,
             'url'    => $url
+        ));
+    }
+
+    public function liveOpenTimeSetAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage:live-open-time-set.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function marketingAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage:open-course-marketing.html.twig', array(
+            'course' => $course
         ));
     }
 

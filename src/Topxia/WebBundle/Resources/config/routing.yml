@@ -695,6 +695,14 @@ course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
 
+course_manage_live_open_time_set:
+    pattern:  /course/{id}/manage/live/open/time
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
+
+course_manage_open_marketing:
+    pattern:  /course/{id}/manage/open/marketing
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:marketing }
+
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:index }
@@ -702,6 +710,10 @@ course_manage_lesson:
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+
+open_course_manage_lesson:
+    pattern: /course/{id}/manage/open/lesson
+    defaults: {_controller: TopxiaWebBundle:OpenCourseLessonManage:index}
 
 course_draft_create:
     pattern:  /course/draft/create
