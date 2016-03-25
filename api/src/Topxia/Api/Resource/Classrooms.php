@@ -10,12 +10,11 @@ class Classrooms extends BaseResource
     public function discoveryColumn(Application $app, Request $request)
     {
         $result = $request->query->all();
-
-        if ($result['categoryId']) {
+        if($result['categoryId']) {
+            $result['categoryId'] = 0;
             $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
             $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         }
-        
         unset($conditions['categoryId']);
 
         if ($result['orderType'] == 'hot') {
@@ -34,12 +33,6 @@ class Classrooms extends BaseResource
         $conditions['showable'] = 1;
         $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array($orderBy, 'desc'), 0, $result['showCount']);
 
-        if ($result['orderType'] == 'recommend' && count($classrooms)<$result['showCount']) {
-            $conditions['recommended'] = 0;
-            $unrecommendClassrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'desc'), 0, $result['showCount']-count($classrooms));
-
-            $classrooms = array_merge($classrooms, $unrecommendClassrooms);
-        }
         $total      = count($classrooms);
         $classrooms = $this->filter($classrooms);
 
