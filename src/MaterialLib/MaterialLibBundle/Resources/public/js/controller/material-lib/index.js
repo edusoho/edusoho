@@ -121,6 +121,14 @@ define(function(require, exports, module) {
                 var $target = $(event.currentTarget);
                 window.open($target.data('url'));
             },
+            onClickProcessStatusBtn: function(event)
+            {
+                this.renderTable();
+            },
+            onClickUseStatusBtn: function(event)
+            {
+                this.renderTable();
+            },
             onClickReconvertBtn: function(event)
             {
                 var self = this;
@@ -463,6 +471,7 @@ define(function(require, exports, module) {
             _initHeader: function()
             {
                 //init timepicker
+                var self = this;
                 $("#startDate").datetimepicker({
                     language: 'zh-CN',
                     autoclose: true,
