@@ -20,5 +20,36 @@ define(function(require, exports, module) {
 			// 	$ul.css('display','none');
 			// 	$ul.eq($t).css('display','block');
 			// })
+		 $("#favorite-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#unfavorite-btn").show();
+            });
+        });
+
+        $("#unfavorite-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#favorite-btn").show();
+            });
+        });
+
+         $("#zan-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#unzan-btn").show();
+            });
+        });
+
+        $("#unzan-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#zan-btn").show();
+            });
+        });
 	};
 });

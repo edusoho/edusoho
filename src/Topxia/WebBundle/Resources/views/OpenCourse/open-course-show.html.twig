@@ -13,14 +13,16 @@
       </ol>
       <div class="row" style="margin:0">
         <!-- <div class="col-md-9 open-course-views">
-          <img src="/assets/img/default/open-course-bg.jpg" alt="">
+          <img class="img-responsive" src="/assets/img/default/open-course-bg.jpg" alt="">
           <div class="mask">
-            <button class="btn btn-warning start-btn">
-              开始播放<i class="es-icon es-icon-playcircleoutline"></i>
-            </button>
+            <div class="mask-content">
+              <button class="btn btn-warning btn-lg mask-btn" style="margin-top:60px;">
+                开始播放<i class="es-icon es-icon-playcircleoutline"></i>
+              </button>
+            </div>
           </div>
         </div> -->
-        <div class="col-md-9 open-course-views">
+        <!-- <div class="col-md-9 open-course-views">
           <img src="/assets/img/default/open-course-bg.jpg" alt="">
           <div class="mask">
             <div class="modal-dialog">
@@ -31,68 +33,83 @@
                 </div>
                 <div class="modal-body clearfix">
                   <div class="modal-img">
-                    <img src="/assets/img/default/course.png" alt="">
+                    <img class="img-responsive" src="/assets/img/default/course.png" alt="">
                     edusoho运营指南
                   </div>
                   <div class="modal-img">
-                    <img src="/assets/img/default/course.png" alt="">
+                    <img class="img-responsive" src="/assets/img/default/course.png" alt="">
                     edusoho运营指南
                   </div>
                   <div class="modal-img">
-                    <img src="/assets/img/default/course.png" alt="">
+                    <img  class="img-responsive" src="/assets/img/default/course.png" alt="">
                     edusoho运营指南
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <a href="" class="btn-link">重播</a>
-                  <button type="button" class="btn btn-primary">
-                     分享
+                  <a href="" class="btn-link color-gray prl"><i class="es-icon es-icon-refresh prs"></i>重播</a>
+                  <button type="button" class="btn btn-md share-btn">
+                    <i class="es-icon es-icon-share prs"></i>分享
                   </button>
-                  <button type="button" class="btn btn-primary">
-                     下一课
+                  <button type="button" class="btn btn-md next-btn">
+                    <i class="es-icon es-icon-arrowforward prs"></i>下一课
                   </button>
                 </div>
               </div>
             </div>
           </div>
+        </div> -->
+        <div class="col-md-9 open-course-views">
+          <img src="/assets/img/default/open-course-bg.jpg" alt="">
+          <div class="mask">
+            <div class="mask-content">
+              <h2>直播将于<span class="phm">2月22日 19:30</span>开始</h2>
+              <button class="btn btn-info btn-lg mask-btn">
+              提醒我参加<i class="es-icon es-icon-alarmon"></i>
+              </button>
+              <button class="btn btn-info btn-lg mask-btn active">
+              已设置提醒<i class="es-icon es-icon-alarmon"></i>
+              </button>
+              <div class="color-gray mtl">已有8735人设置了提醒</div>
+            </div>
+          </div>
         </div>
         <div class="col-md-3 open-course-tab">
-          <ul class="clearfix" id="tab">
+          <ul class="clearfix">
             <li class="tab-header active"><i class="es-icon es-icon-staroutline prm"></i>推荐课程</li>
             <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>直播列表</li>
           </ul>
           <div id="content">
             <ul>
               <li class="tab-recommand clearfix">
-                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
                   <div class="title"><a href="" >edusoho教学资料库教学资料库课教学资料库课课程学习</a></div>
                   <div class="num">2345人在学习</div>
                 </div>
               </li>
               <li class="tab-recommand clearfix">
-                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
                   <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
                   <div class="num">2345人在学习</div>
                 </div>
               </li>
               <li class="tab-recommand clearfix">
-                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
                   <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
                   <div class="num">2345人在学习</div>
                 </div>
               </li>
               <li class="tab-recommand clearfix">
-                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
                   <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
                   <div class="num">2345人在学习</div>
                 </div>
               </li>
               <li class="tab-recommand clearfix">
-                <a href=""><img class="" src="/assets/img/default/course.png" alt=""></a>
+                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
                   <div class="title"><a href="" >edusoho教学资料库课程学习</a></div>
                   <div class="num">2345人在学习</div>
@@ -128,63 +145,92 @@
           </div>
         </div>
       </div>
-      <div class="es-section open-course-header clearfix">
-        <div class="course-img">
-          <img class="img-responsive" src="/assets/img/default/course.png?6.15.7" alt="测试直播api">
-        </div>
-        <div class="course-info">
-          <h2 class="title">
-            edusoho网校运营指南
-          </h2>
-          <div class="matas">
-            <span><i class="es-icon es-icon-removeredeye mrm"></i>2231</span>
-            <span><i class="es-icon es-icon-textsms mrm"></i>55</span>
+      <div class="open-course-detail row">
+        <div class="col-md-12">
+          <div class="es-section open-course-header clearfix">
+          <div class="course-img">
+            <img class="img-responsive" src="/assets/img/default/course.png?6.15.7" alt="测试直播api">
+          </div>
+          <div class="course-info">
+            <h2 class="title">
+              edusoho网校运营指南
+            </h2>
+            <div class="matas">
+              <span><i class="es-icon es-icon-removeredeye mrm"></i>2231</span>
+              <span><i class="es-icon es-icon-textsms mrm"></i>55</span>
+            </div>
+          </div>
+          <div class="course-operation">
+            <ul class="clearfix">
+              <!-- <li class="unoperation-list">
+                <a href="javascript:;"><i class="es-icon es-icon-thumbup unoperation-icon"></i></a>
+                点赞
+                <div class="gray-darker">12523</div>
+              </li>
+              <li class="operation-list" style="display:none">
+                <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
+                已点赞
+                <div class="gray-darker">12523</div>
+              </li> -->
+              <!-- <li id="unfavorite-btn" data-url="" style="display: none;">
+                <a href="javascript:;" class="color-primary">
+                  <p><i class="es-icon es-icon-bookmark"></i></p>
+                  <p>已收藏</p>
+                </a>
+              </li>
+              <li id="favorite-btn" data-url="" style="display: list-item;">
+                <a href="javascript:;">
+                  <p><i class="es-icon es-icon-bookmarkoutline"></i></p>
+                  <p>收藏</p>
+                </a>
+              </li> -->
+              <li id="zan-btn" data-url="" style="display: none;">
+                <a href="javascript:;"><i class="es-icon es-icon-thumbup active operation-icon"></i></a>
+                已点赞
+                <div class="gray-darker">523</div>
+              </li>
+              <li id="unzan-btn" data-url="" style="display: list-item;">
+                <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
+                点赞
+                <div class="gray-darker">523</div>
+              </li>
+              <li>
+                <div class="es-share top open">
+                  <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share operation-icon"></i></a>
+                  分享
+                  <div class="gray-darker">523</div>
+                  <div class="dropdown-menu  js-social-share-params" data-title="在线学习平台在线学习平台在线学习平台" data-summary="" data-message="我正在学习《在线学习平台在线学习平台在线学习平台》，收获巨大哦，一起来学习吧！" data-url="http://try6.edusoho.cn/course/396" data-picture="/files/default/2015/10-14/2250317a2750604169.png?6.15.8">
+                  <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A%2F%2Ftry6.edusoho.cn%2Fcourse%2F396"><i class="es-icon es-icon-weixin"></i></a>
+                  <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo"><i class="es-icon es-icon-weibo"></i></a>
+                  <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq"><i class="es-icon es-icon-qq"></i></a>
+                  <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone"><i class="es-icon es-icon-qzone"></i></a>
+                  </div>
+                </div>
+              </li>
+              <li id="favorite-btn" data-url="" style="display: none;">
+                <a href="javascript:;"><i class="es-icon es-icon-bookmark operation-icon"></i></a>
+                已收藏
+                <div class="gray-darker">523</div>
+              </li>
+              <li id="unfavorite-btn" data-url="" style="display: list-item;">
+                <a href="javascript:;"><i class="es-icon es-icon-bookmarkoutline operation-icon"></i></a>
+                收藏
+                <div class="gray-darker">523</div>
+              </li>
+              <li>
+                <i class="es-icon es-icon-phone1 operation-icon"></i>
+                  二维码
+                <a class="qrcode-popover top" href="">
+                  <div class="gray-darker">点击查看</div>
+                  <div class="qrcode-content">
+                   <img src="/assets/img/default/weixin.png?6.15.8" alt="">  
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
           </div>
         </div>
-        <div class="course-operation">
-          <ul class="clearfix">
-            <li class="unoperation-list">
-              <a href="javascript:;"><i class="es-icon es-icon-thumbup unoperation-icon"></i></a>
-              点赞
-              <div class="gray-darker">12523</div>
-            </li>
-            <li class="operation-list" style="display:none">
-              <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
-              已点赞
-              <div class="gray-darker">12523</div>
-            </li>
-            <li>
-              <div class="es-share top open">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share operation-icon"></i></a>
-                分享
-                <div class="gray-darker">523</div>
-                <div class="dropdown-menu  js-social-share-params" data-title="在线学习平台在线学习平台在线学习平台" data-summary="" data-message="我正在学习《在线学习平台在线学习平台在线学习平台》，收获巨大哦，一起来学习吧！" data-url="http://try6.edusoho.cn/course/396" data-picture="/files/default/2015/10-14/2250317a2750604169.png?6.15.8">
-                <a href="javascript:;" class="js-social-share" data-cmd="weixin" title="分享到微信" data-share="weixin" data-qrcode-url="/common/qrcode?text=http%3A%2F%2Ftry6.edusoho.cn%2Fcourse%2F396"><i class="es-icon es-icon-weixin"></i></a>
-                <a href="javascript:;" class="js-social-share" data-cmd="tsina" title="分享到新浪微博" data-share="weibo"><i class="es-icon es-icon-weibo"></i></a>
-                <a href="javascript:;" class="js-social-share" data-cmd="qq" title="分享到QQ好友" data-share="qq"><i class="es-icon es-icon-qq"></i></a>
-                <a href="javascript:;" class="js-social-share" data-cmd="qzone" title="分享到QQ空间" data-share="qzone"><i class="es-icon es-icon-qzone"></i></a>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href=""><i class="es-icon es-icon-bookmarkoutline operation-icon"></i></a>
-              收藏
-              <div class="gray-darker">523</div>
-            </li>
-            <li>
-              <i class="es-icon es-icon-phone1 operation-icon"></i>
-                二维码
-              <a class="qrcode-popover top" href="">
-                <div class="gray-darker">点击查看</div>
-                <div class="qrcode-content">
-                 <img src="/assets/img/default/weixin.png?6.15.8" alt="">  
-                </div>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div class="open-course-detail row">
         <div class="col-md-9">
           <div class="es-section gray-darker">
             移动互联网来了，所有的法则失效了，所有的一切都将推倒重来。<br/>
@@ -259,7 +305,7 @@
                 <div class="help-block" style="display:none;"></div>
               </div>
               <div class="form-group controls">
-                <textarea class="form-control" rows="8" data-display="评价详细内容" name="content" data-widget-cid="widget-3" data-explain="">123</textarea>
+                <textarea class="form-control" rows="8" data-display="评价详细内容" name="content" data-widget-cid="widget-3" data-explain="" placeholder="发表评论"></textarea>
                 <div class="help-block" style="display:none;"></div>
               </div>
               <div class="form-group clearfix">
