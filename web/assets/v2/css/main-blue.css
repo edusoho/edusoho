@@ -13653,10 +13653,11 @@ textarea {
 .open-course-tab ul .tab-header {
   width: 50%;
   float: left;
-  padding: 20px 0 20px 25px;
+  padding: 20px 0;
   font-size: 16px;
   cursor: pointer;
   background-color: #313131;
+  text-align: center;
 }
 .open-course-tab ul .tab-header.active,
 .open-course-tab ul .tab-header:hover {

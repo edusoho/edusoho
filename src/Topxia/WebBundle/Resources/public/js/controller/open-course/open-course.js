@@ -51,5 +51,21 @@ define(function(require, exports, module) {
                 $("#zan-btn").show();
             });
         });
+
+        $("#alert-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#alerted-btn").show();
+            });
+        });
+
+        $("#alerted-btn").on('click', function() {
+            var $btn = $(this);
+            $.post($btn.data('url'), function() {
+                $btn.hide();
+                $("#alert-btn").show();
+            });
+        });
 	};
 });

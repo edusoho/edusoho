@@ -63,10 +63,10 @@
           <div class="mask">
             <div class="mask-content">
               <h2>直播将于<span class="phm">2月22日 19:30</span>开始</h2>
-              <button class="btn btn-info btn-lg mask-btn">
+              <button id="alert-btn" class="btn btn-info btn-lg mask-btn" >
               提醒我参加<i class="es-icon es-icon-alarmon"></i>
               </button>
-              <button class="btn btn-info btn-lg mask-btn active">
+              <button id="alerted-btn" class="btn btn-info btn-lg mask-btn active" style="display:none;">
               已设置提醒<i class="es-icon es-icon-alarmon"></i>
               </button>
               <div class="color-gray mtl">已有8735人设置了提醒</div>
@@ -79,7 +79,7 @@
             <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>直播列表</li>
           </ul>
           <div id="content">
-            <ul>
+            <ul id="recommand-tab">
               <li class="tab-recommand clearfix">
                 <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
                 <div class="open-course-info">
@@ -116,7 +116,7 @@
                 </div>
               </li>
             </ul>
-            <ul style="display:none">
+            <ul id="live-tab" style="display:none">
               <li class="tab-live clearfix">
                 <a href="">课时1：以理服人</a>
               </li>
