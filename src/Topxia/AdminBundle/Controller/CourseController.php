@@ -175,17 +175,6 @@ class CourseController extends BaseController
                 return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
             }
 
-            //判断作业插件版本号
-            $homework = $this->getAppService()->findInstallApp("Homework");
-
-            if (!empty($homework)) {
-                $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
-
-                if (!$isDeleteHomework) {
-                    return $this->createJsonResponse(array('code' => 1, 'message' => '作业插件未升级'));
-                }
-            }
-
             if ($type) {
                 $isCheckPassword = $request->getSession()->get('checkPassword');
 

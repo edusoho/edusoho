@@ -21,6 +21,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->findCoursesByIds($ids);
     }
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getOpenCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
+    }
+
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         return $this->getOpenCourseDao()->searchCourses($conditions, $orderBy, $start, $limit);
@@ -73,6 +78,49 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function waveCourse($id, $field, $diff)
     {
         return $this->getOpenCourseDao()->waveCourse($id, $field, $diff);
+    }
+
+    public function publishCourse($id)
+    {
+        $course = $this->tryManageOpenCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getOpenCourseDao()->updateCourse($id, array('status' => 'published'));
+    }
+
+    public function closeCourse($id)
+    {
+        $course = $this->tryManageOpenCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getOpenCourseDao()->updateCourse($id, array('status' => 'closed'));
+    }
+
+    public function tryManageOpenCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $course = $this->getOpenCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->hasOpenCourseManagerRole($courseId, $user['id'])) {
+            throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+        }
+
+        return $course;
     }
 
     /**
@@ -283,6 +331,21 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $lesson;
     }
 
+    protected function hasOpenCourseManagerRole($courseId, $userId)
+    {
+        if ($this->getUserService()->hasAdminRoles($userId)) {
+            return true;
+        }
+
+        $member = $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if ($member && ($member['role'] == 'teacher')) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function _getNextLessonNumber($courseId)
     {
         $lessonCount = $this->searchLessonCount(array('courseId' => $courseId));
@@ -312,5 +375,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }

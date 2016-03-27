@@ -34,12 +34,12 @@ class OpenCourseController extends BaseController
             unset($conditions["creator"]);
         }
 
-        $count = $this->getCourseService()->searchCourseCount($conditions);
+        $count = $this->getOpenCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
-        $courses   = $this->getCourseService()->searchCourses(
+        $courses   = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            null,
+            array('createdTime', 'desc'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
@@ -62,14 +62,78 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    public function publishAction(Request $request, $id)
+    {
+        $this->getOpenCourseService()->publishCourse($id);
+
+        return $this->renderOpenCourseTr($id, $request);
+    }
+
+    public function closeAction(Request $request, $id)
+    {
+        $this->getOpenCourseService()->closeCourse($id);
+        return $this->renderOpenCourseTr($id, $request);
+    }
+
+    public function deleteAction(Request $request, $courseId, $type)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isSuperAdmin()) {
+            throw $this->createAccessDeniedException('您不是超级管理员！');
+        }
+
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
+        if ($course['status'] == 'published') {
+            throw $this->createAccessDeniedException('发布课程，不能删除！');
+        }
+
+        $subCourses = $this->getOpenCourseService()->findCoursesByParentIdAndLocked($courseId, 1);
+
+        if (!empty($subCourses)) {
+            return $this->createJsonResponse(array('code' => 2, 'message' => '请先删除班级课程'));
+        }
+
+        if ($course['status'] == 'draft') {
+            $result = $this->getOpenCourseService()->deleteCourse($courseId);
+            return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
+        }
+
+        if ($course['status'] == 'closed') {
+            $isCheckPassword = $request->getSession()->get('checkPassword');
+
+            if (!$isCheckPassword) {
+                throw $this->createAccessDeniedException('未输入正确的校验密码！');
+            }
+        }
+
+        return $this->render('TopxiaAdminBundle:OpenCourse:delete.html.twig', array('course' => $course));
+    }
+
+    protected function renderOpenCourseTr($courseId, $request)
+    {
+        $fields  = $request->query->all();
+        $course  = $this->getOpenCourseService()->getCourse($courseId);
+        $default = $this->getSettingService()->get('default', array());
+
+        return $this->render('TopxiaAdminBundle:OpenCourse:tr.html.twig', array(
+            'user'     => $this->getUserService()->getUser($course['userId']),
+            'category' => $this->getCategoryService()->getCategory($course['categoryId']),
+            'course'   => $course,
+            'default'  => $default,
+            'filter'   => $fields["filter"]
+        ));
+    }
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 
-    protected function getCourseService()
+    protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 
     protected function getSettingService()

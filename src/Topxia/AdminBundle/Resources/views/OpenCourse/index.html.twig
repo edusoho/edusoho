@@ -49,7 +49,7 @@
       {% for course in courses %}
         {% set user = users[course.userId]|default(null) %}
         {% set category = categories[course.categoryId]|default(null) %}
-        {% include 'TopxiaAdminBundle:Course:tr.html.twig' %}
+        {% include 'TopxiaAdminBundle:OpenCourse:tr.html.twig' %}
       {% else %}
         <tr><td colspan="20"><div class="empty">暂无课程记录</div></td></tr>
       {% endfor %}
