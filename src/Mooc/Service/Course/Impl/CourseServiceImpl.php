@@ -9,6 +9,7 @@ class CourseServiceImpl extends BaseCourseServiceImpl
 {
     protected function _filterCourseFields($fields)
     {
+        $fields = parent::_filterCourseFields($fields);
         $fields = ArrayToolkit::filter($fields, array(
             'title'         => '',
             'subtitle'      => '',
@@ -20,9 +21,8 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             'goals'         => array(),
             'audiences'     => array(),
             'tags'          => '',
-            'startTime'     => '',
-            'endTime'       => '',
-            'rootId'        => 0,
+            'startTime'     => 0,
+            'endTime'       => 0,
             'locationId'    => 0,
             'address'       => '',
             'maxStudentNum' => 0,
@@ -30,31 +30,13 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             'approval'      => 0,
             'maxRate'       => 0,
             'locked'        => 0,
+            'tryLookable'   => 0,
+            'tryLookTime'   => 0,
             'buyable'       => 0,
-            'certi'         => 0
+            'studyModel'    => 'normal',
+            'rootId'        => 0,
+            'certi'         => 0,
         ));
-
-        if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
-        }
-
-        if (!empty($fields['startTime'])) {
-            $fields['startTime'] = strtotime($fields['startTime']);
-        }
-
-        if (!empty($fields['endTime'])) {
-            $fields['endTime'] = strtotime($fields['endTime']);
-        }
-
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
-            }
-
-            );
-        }
 
         return $fields;
     }

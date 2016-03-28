@@ -80,6 +80,8 @@
           {% endif %}
 
           {% if m.code != "admin_system" %}
+           {#  {% if not in_menu_blacklist(m.code) and  not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network()))%} #}
+          {#  {% if not in_menu_blacklist(m.code) and  not (m.code == 'admin_app' and is_without_network())%} #}
             {% if not in_menu_blacklist(m.code) %}
               <li {% if m.code == menu_nav.code|default(null) %}class="active"{% endif %}>
                 {{ self_macro.menu_link_html(_context, m) }}
