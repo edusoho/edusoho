@@ -129,7 +129,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="staffNo"]',
             // required: true,
-            rule: 'staff_no integer minlength{min:5} maxlength{max:12} remote',
+            rule: 'staff_no minlength{min:5} maxlength{max:12} remote',
         });
 
         validator.addItem({
