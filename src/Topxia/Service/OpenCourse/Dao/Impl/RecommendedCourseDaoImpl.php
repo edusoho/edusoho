@@ -80,4 +80,39 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         $this->clearCached();
         return $result;
     }
+
+    public function searchRecommendCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchRecommends($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        $builder = $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'open_course_recommend')
+            ->andWhere('userId = :userId')
+            ->andWhere('openCourseId = :openCourseId')
+            ->andWhere('recommendCourseId = :recommendCourseId')
+            ->andWhere('type = :type')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan')
+        ;
+        return $builder;
+    }
 }

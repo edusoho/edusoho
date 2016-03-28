@@ -100,15 +100,18 @@ class OpenCourseController extends BaseController
             return $this->createJsonResponse(array('code' => 0, 'message' => '删除课程成功'));
         }
 
-        if ($type) {
-            $isCheckPassword = $request->getSession()->get('checkPassword');
+        if ($course['status'] == 'closed') {
+            if ($type) {
+                $isCheckPassword = $request->getSession()->get('checkPassword');
 
-            if (!$isCheckPassword) {
-                throw $this->createAccessDeniedException('未输入正确的校验密码！');
+                if (!$isCheckPassword) {
+                    throw $this->createAccessDeniedException('未输入正确的校验密码！');
+                }
+
+                $result = $this->getOpenCourseDeleteService()->delete($courseId, $type);
+
+                return $this->createJsonResponse($this->returnDeleteStatus($result, $type));
             }
-
-            $result = $this->getOpenCourseDeleteService()->delete($courseId, $type);
-            return $this->createJsonResponse($this->returnDeleteStatus($result, $type));
         }
 
         return $this->render('TopxiaAdminBundle:OpenCourse:delete.html.twig', array('course' => $course));

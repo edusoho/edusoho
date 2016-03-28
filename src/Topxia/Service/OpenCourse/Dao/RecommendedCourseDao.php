@@ -17,4 +17,8 @@ interface RecommendedCourseDao
 
     public function deleteRecommendByOpenCouseIdAndRecommendCourseId($openCourseId, $recommendCourseId);
 
+    public function searchRecommendCount($conditions);
+
+    public function searchRecommends($conditions, $orderBy, $start, $limit);
+
 }

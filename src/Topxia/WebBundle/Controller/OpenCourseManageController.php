@@ -11,7 +11,7 @@ class OpenCourseManageController extends BaseController
 {
     public function liveOpenTimeSetAction(Request $request, $id)
     {
-        $course         = $this->getCourseService()->tryManageCourse($id);
+        $course         = $this->getCourseService()->tryManageOpenCourse($id);
         $openLiveLesson = $this->getCourseService()->getCourseLessons($course['id']);
 
         if ($request->getMethod() == 'POST') {
@@ -66,7 +66,8 @@ class OpenCourseManageController extends BaseController
 
     public function marketingAction(Request $request, $id)
     {
-        $course    = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageOpenCourse($id);
+
         $userIds   = array();
         $coinPrice = 0;
         $price     = 0;
@@ -116,7 +117,7 @@ class OpenCourseManageController extends BaseController
     public function pickAction(Request $request, $filter, $id)
     {
         $user                   = $this->getCurrentUser();
-        $course                 = $this->getCourseService()->tryManageCourse($id);
+        $course                 = $this->getCourseService()->tryManageOpenCourse($id);
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
@@ -168,7 +169,7 @@ class OpenCourseManageController extends BaseController
     public function searchAction(Request $request, $id, $filter)
     {
         $user = $this->getCurrentUser();
-        $this->getCourseService()->tryManageCourse($id);
+        $this->getCourseService()->tryManageOpenCourse($id);
         $key = $request->request->get("key");
 
         if (isset($key) && $key == "") {
@@ -219,7 +220,7 @@ class OpenCourseManageController extends BaseController
 
     public function recommendesCoursesSelectAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageOpenCourse($id);
 
         $data = $request->request->all();
         $ids  = array();
@@ -239,7 +240,7 @@ class OpenCourseManageController extends BaseController
 
     protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 
     protected function getOpenCourseRecommendedService()

@@ -300,7 +300,7 @@ admin_course_delete:
 
 admin_open_course_delete:
     pattern: /open/course/{courseId}/delete/{type}
-    defaults: { _controller: TopxiaAdminBundle:OpenCourse:delete,type:''}    
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:delete, type:'' }    
 
 admin_check_password:
     pattern:  /check/password
