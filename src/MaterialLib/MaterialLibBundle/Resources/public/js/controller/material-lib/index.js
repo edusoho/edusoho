@@ -160,9 +160,8 @@ define(function(require, exports, module) {
             },
 
             onClickSourseBtn: function(event)
-            {
+            {   
                 var $target = $(event.currentTarget);
-                console.log($target.parent().parent().parent().find('input[name="sourceFrom"]').val());
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
