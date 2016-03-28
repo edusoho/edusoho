@@ -65,11 +65,8 @@
         <ul class="dropdown-menu">
           {% if material.processStatus == 'error' %}
             <li><a href="javascript:;" class="glyphicon glyphicon-refresh js-refresh-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..."> 重新转码</a></li>
-          
-            <li class="js-delete-btn" data-url="{{ path('material_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
-          {% else %}
-            <li class="js-delete-btn" data-url="{{ path('material_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
           {% endif %}
+          <li class="js-delete-btn" data-url="{{ path('material_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
         </ul>
       </div>
     </td>
