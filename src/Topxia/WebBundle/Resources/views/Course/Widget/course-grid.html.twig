@@ -26,6 +26,10 @@
   <div class="course-info">
     <div class="title">
       <a class="link-dark" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+        <!-- 待修改 -->
+        {% if is_plugin_installed('vip')  %}
+          <label class="label label-warning mrm">会员</label>
+        {% endif %}
         {{ course.title }}
       </a>
     </div>

@@ -114,6 +114,17 @@
                     }
                 ]
             },
+            "icon1link": {
+                "title": "图标1 链接",
+                "decs":"",
+                "count": 1,
+                "type": "link",
+                "default": [
+                    {
+                        
+                    }
+                ]
+            },
             "icon1title": {
                 "title": "图标１标题",
                 "desc": "",

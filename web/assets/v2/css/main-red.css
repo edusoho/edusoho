@@ -2169,16 +2169,6 @@ select:-webkit-autofill {
 .es-footer {
   position: relative;
 }
-.es-footer .footer-link {
-  background: #2e2e2e;
-  padding: 55px 0;
-  border-bottom: 1px solid #111;
-}
-@media (max-width: 767px) {
-  .es-footer .footer-link {
-    padding: 20px 0;
-  }
-}
 .es-footer .copyright {
   background: #212121;
   border-top: 1px solid #444;
@@ -2206,6 +2196,16 @@ select:-webkit-autofill {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
   color: #fff;
+}
+.es-footer-link {
+  background: #2e2e2e;
+  padding: 55px 0;
+  border-bottom: 1px solid #111;
+}
+@media (max-width: 767px) {
+  .es-footer-link {
+    padding: 20px 0;
+  }
 }
 .footer-main .link-item {
   width: 20%;
@@ -8370,21 +8370,28 @@ textarea {
 }
 .introduction-section {
   position: relative;
-  background-color: #cf010e;
+  background-color: #fff;
 }
-.introduction-section h4,
-.introduction-section h5 {
-  color: #fff;
+.introduction-section h3 {
+  margin-bottom: 20px;
+}
+@media (max-width: 767px) {
+  .introduction-section h3 {
+    font-size: 14px;
+  }
 }
 .introduction-section img {
-  margin-bottom: 30px;
   margin: 0 auto 30px auto;
 }
 .introduction-section .introduction-item {
   margin: 90px 0;
   text-align: center;
-  height: 220px;
   vertical-align: top;
+  display: block;
+  color: #313131;
+}
+.introduction-section .introduction-item:hover {
+  color: #313131;
 }
 @media (max-width: 991px) {
   .introduction-section .introduction-item {
