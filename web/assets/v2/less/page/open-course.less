@@ -59,9 +59,9 @@
 	.modal-dialog {
 		.modal-img {
 			float: left;
-			width: 33%;
-			padding-right: 15px;
+			width: 33.3%;
 			color: @gray-darker;
+			padding: 0 8px;
 			img {
 				.border-radius(3px);
 				margin-bottom: 12px;
@@ -106,6 +106,9 @@
 	background-color: #212121;
 	color: #ffffff;
 	padding: 0;
+	@media(max-width:@screen-md-max) {
+		height: auto;	
+	}
 	ul {
 		padding: 0;
     margin-bottom: 0;
@@ -121,9 +124,6 @@
 			&.active, &:hover {
 				background-color: #212121;
 				.es-transition;
-			}
-			@media(max-width:@screen-md-max) {
-				padding: 20px 0 20px 15px;
 			}
 		}
 	}
@@ -355,6 +355,7 @@
 .open-course-detail .course-img {
 	width: 120px;
 	display: block;
+	margin-top: 10px;
 }
 .open-course-teacher {
 	img {
@@ -367,6 +368,7 @@
     word-wrap: normal;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		text-align: left;
 	}
 }
 .course-comment {

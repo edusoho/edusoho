@@ -13611,8 +13611,8 @@ textarea {
 }
 .open-course-views .modal-dialog .modal-img {
   float: left;
-  width: 33%;
-  padding-right: 15px;
+  width: 31%;
+  margin-right: 15px;
   color: #313131;
 }
 .open-course-views .modal-dialog .modal-img img {
@@ -13645,6 +13645,11 @@ textarea {
   color: #ffffff;
   padding: 0;
 }
+@media (max-width: 1199px) {
+  .open-course-tab {
+    height: auto;
+  }
+}
 .open-course-tab ul {
   padding: 0;
   margin-bottom: 0;
@@ -13666,11 +13671,6 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
-@media (max-width: 1199px) {
-  .open-course-tab ul .tab-header {
-    padding: 20px 0 20px 15px;
-  }
 }
 .open-course-tab .tab-recommand {
   padding: 10px 20px 10px 15px;
@@ -13842,6 +13842,7 @@ textarea {
 .open-course-detail .course-img {
   width: 120px;
   display: block;
+  margin-top: 10px;
 }
 .open-course-teacher img {
   margin: 0 auto;
@@ -13852,6 +13853,7 @@ textarea {
   word-wrap: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 }
 .course-comment {
   padding: 15px 20px;
