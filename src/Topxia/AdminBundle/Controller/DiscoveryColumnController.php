@@ -63,6 +63,7 @@ class DiscoveryColumnController extends BaseController
                 }
                 $discoveryColumns[$key]['count'] = count($courses);
             }
+            unset($conditions);
         }
 
         return $this->render('TopxiaAdminBundle:DiscoveryColumn:index.html.twig', array(
