@@ -160,7 +160,7 @@ define(function(require, exports, module) {
             },
 
             onClickSourseBtn: function(event)
-            {   
+            {
                 var $target = $(event.currentTarget);
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
@@ -187,18 +187,19 @@ define(function(require, exports, module) {
                 var self = this;
                 var mode = self.get('model');
 
-                console.log(mode);
                 if(mode == "normal") {
                   this.set('model','edit');
                   var $target = $(event.currentTarget);
                   $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
                   $('.materials-ul').addClass('batch-hidden');
+                  $target.html('完成管理');
                 } else {
                   this.set('model','normal');
                   var self = this;
                   var $target = $(event.currentTarget);
                   $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
                   $('.materials-ul').removeClass('batch-hidden');
+                  $target.html('批量管理');
                 }
             },
             onClickFinishBatchBtn: function(event)
