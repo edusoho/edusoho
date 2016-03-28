@@ -407,24 +407,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="open-course-teacher panel panel-default">
-            <div class="panel-heading"> 
-              <h3 class="panel-title">
-                课程教师
-              </h3>
-            </div>
-            <div class="panel-body text-center">
-              <a href=""><img class="avatar-lg" src="/assets/img/default/course.png" alt=""></a>
-              <h3><a href="" class="link-dark">李小龙</a></h3>
-              <p class="color-gray">首席架构师</p>
-              <div class="intro">
-                杭州阔知网络科技有限公司是中国领先的在线教育基础服务提供商，专注于在线教育，截止2015年5月19日已有1万3千多家网校在使截止2015年5月19日已有1万3千多家网校在使...
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        
+        {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
     {% endblock %}
   </div>
   

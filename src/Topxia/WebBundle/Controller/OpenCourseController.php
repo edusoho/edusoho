@@ -188,7 +188,10 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId)
     {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+            'course' => $course
         ));
     }
 
@@ -217,9 +220,12 @@ class OpenCourseController extends BaseController
             $teachers[$teacherId] = $teachersNoSort[$teacherId];
         }
 
+        $profiles = $this->getUserService()->findUserProfilesByIds($course['teacherIds']);
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-teacher-block.html.twig', array(
             'course'   => $course,
-            'teachers' => $teachers
+            'teachers' => $teachers,
+            'profiles' => $profiles
         ));
     }
 
