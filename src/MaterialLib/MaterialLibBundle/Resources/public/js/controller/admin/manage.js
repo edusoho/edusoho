@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                 'submit': 'submitForm',
                 'click .nav-tabs li': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
-                'click .tags-container .label': 'onClickTag',
+                'click .js-tags-container li': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
@@ -50,15 +50,19 @@ define(function(require, exports, module) {
             onClickTag: function(event)
             {
                 var $target = $(event.currentTarget);
-                var $container = $target.closest('.tags-container');
-                var $prev = $container.find('.label-info');
+                var $container = $target.closest('.js-tags-container');
+                var $prev = $container.find('.active');
                 if ($target.html() == $prev.html()) {
-                    $target.removeClass('label-info').addClass('label-default');;
-                    $container.find('[name=tags]').val('');
+                  if(!$container.find('.active')) {
+                    $target.removeClass('active');
+                  } else {
+                    $target.addClass('active');
+                  }
+                  $container.find('[name=tags]').val('');
                 } else {
-                    $prev.removeClass('label-info').addClass('label-default');
-                    $target.addClass('label-info').removeClass('label-default');
-                    $container.find('[name=tags]').val($target.html());
+                    $prev.removeClass('active').addClass('active');
+                    $target.addClass('active').removeClass('active');
+                    $container.find('[name=tags]').val($target.data('value'));
                 }
 
                 this.renderTable();
