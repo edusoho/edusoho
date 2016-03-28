@@ -33,9 +33,14 @@
             {% elseif material.processStatus == 'error' %}
               <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span><br><a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
             {% else %}
-              <span class="label label-default">
-                {{ dict_text('processStatus', material.processStatus) }}
-              </span>
+              {% if material.type != "image" %}
+                <span class="label label-default">
+                  {{ dict_text('processStatus', material.processStatus) }}
+                </span>
+              {% endif %}
+            {% endif %}
+            {% if uploadFile.usedCount|default(0) == 0 %}
+              <span class="label label-default">未使用</span>
             {% endif %}
           </div>
 
