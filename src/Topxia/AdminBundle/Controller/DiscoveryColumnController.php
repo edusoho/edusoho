@@ -40,6 +40,9 @@ class DiscoveryColumnController extends BaseController
 
                 $discoveryColumns[$key]['count'] = count($classrooms);
             } else {
+                if ($discoveryColumn['orderType'] == 'recommend') {
+                    $conditions['recommended'] = 1;
+                }
                 $conditions['categoryId'] = $discoveryColumn['categoryId'];
                 if ($conditions['categoryId'] == 0) {
                     unset($conditions['categoryId']);
