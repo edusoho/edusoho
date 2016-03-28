@@ -7,6 +7,7 @@ use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
@@ -77,7 +78,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-    //概览页，服务概况页
+//概览页，服务概况页
     // refactor
     public function myCloudOverviewAction(Request $request)
     {
@@ -98,6 +99,7 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
+
         $videoInfo = isset($overview['service']['storage']) ? $overview['service']['storage'] : null;
         $liveInfo  = isset($overview['service']['live']) ? $overview['service']['live'] : null;
         $smsInfo   = isset($overview['service']['sms']) ? $overview['service']['sms'] : null;
@@ -544,7 +546,7 @@ class EduCloudController extends BaseController
             ));
         }
 
-        //是否接入教育云
+//是否接入教育云
 
         if (empty($info['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
@@ -689,7 +691,8 @@ class EduCloudController extends BaseController
 
         $settings  = $this->getSettingService()->get('cloud_sms', array());
         $smsStatus = array();
-        //启用云短信，没有则创建云平台短信服务帐号
+
+//启用云短信，没有则创建云平台短信服务帐号
 
         if (isset($dataUserPosted['sms-open'])) {
             if (isset($settings['sms_school_name'])) {
@@ -722,7 +725,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        //关闭云短信
+//关闭云短信
 
         if (isset($dataUserPosted['sms-close'])) {
             $status                   = $api->get('/me/sms_account');
@@ -734,7 +737,7 @@ class EduCloudController extends BaseController
             return $smsStatus;
         }
 
-        //更新云短信签名
+//更新云短信签名
 
         if (isset($dataUserPosted['sign'])) {
             if (empty($dataUserPosted['sign'])) {
@@ -773,6 +776,7 @@ class EduCloudController extends BaseController
         if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
             $this->getSettingService()->set('cloud_email', $emailStatus);
         }
+
         $emailStatus = $this->getSettingService()->get('cloud_email', array());
         return $emailStatus;
     }
