@@ -64,7 +64,7 @@ class OpenCourseDeleteServiceImpl extends BaseService implements OpenCourseDelet
             $members = $this->getOpenCourseMemberDao()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'desc'), 0, 500);
 
             foreach ($members as $member) {
-                $result = $this->getOpensCourseMemberDao()->deleteMember($member['id']);
+                $result = $this->getOpenCourseMemberDao()->deleteMember($member['id']);
                 $count += $result;
             }
 

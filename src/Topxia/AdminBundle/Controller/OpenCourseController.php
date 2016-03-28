@@ -132,6 +132,16 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    protected function returnDeleteStatus($result, $type)
+    {
+        $dataDictionary = array('lessons' => '课时', 'recommend' => '推荐课程', 'members' => '课程成员', 'course' => '课程');
+
+        if ($result > 0) {
+            $message = $dataDictionary[$type]."数据删除";
+            return array('success' => true, 'message' => $message);
+        }
+    }
+
     protected function getTagService()
     {
         return $this->getServiceKernel()->createService('Taxonomy.TagService');

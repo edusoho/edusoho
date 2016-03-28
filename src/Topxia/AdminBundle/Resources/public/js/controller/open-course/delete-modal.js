@@ -16,8 +16,9 @@ define(function(require, exports, module) {
         var steps = [
             
             {
-                title: '删除课时资料',
-                url: urls.lessonDeleteUrl,
+
+                title: '删除成员',
+                url: urls.memberDeleteUrl,              
                 progressRange: [3, 30]
             },
             {
@@ -26,8 +27,8 @@ define(function(require, exports, module) {
                 progressRange: [31, 64]
             },
             {
-                title: '删除成员',
-                url: urls.memberDeleteUrl,
+                title: '删除课时资料',
+                url: urls.lessonDeleteUrl,
                 progressRange: [65,98]
             },       
             {
