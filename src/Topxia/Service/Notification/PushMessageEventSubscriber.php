@@ -346,28 +346,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         //$this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
     }
 
-    public function onClassroomJoin(ServiceEvent $event)
-    {
-        $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
-
-        $this->addGroupMember('classroom', $classroom['id'], $userId);
-
-        $from = array(
-            'type'  => 'classroom',
-            'id'    => $classroom['id'],
-            'image' => $this->getFileUrl($classroom['smallPicture'])
-        );
-
-        $to = array(
-            'type' => 'classroom',
-            'id'   => $classroom['id']
-        );
-
-        $body = array('type' => 'classroom.join', 'userId' => $userId);
-
-        $this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
-    }
+    
 
     public function onClassroomQuit(ServiceEvent $event)
     {
