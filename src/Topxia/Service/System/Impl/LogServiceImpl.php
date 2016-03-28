@@ -101,9 +101,9 @@ class LogServiceImpl extends BaseService implements  LogService
         	$conditions['level'] = $conditions['level'];
         } else {
         	unset($conditions['level']);
-        }
-
-		return $conditions;
+        }		
+        
+        return $conditions;
 	}
 
 	public function analysisLoginNumByTime($startTime,$endTime)

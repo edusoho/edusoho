@@ -242,7 +242,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     public function searchMemberCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('COUNT(id)');
+                        ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -250,10 +250,10 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->orderBy($orderBy[0], $orderBy[1])
-            ->setFirstResult($start)
-            ->setMaxResults($limit);
+                        ->select('*')
+                        ->orderBy($orderBy[0], $orderBy[1])
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -261,16 +261,16 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-            ->select('*')
-            ->setFirstResult($start)
-            ->setMaxResults($limit)
-            ->orderBy('createdTime', 'ASC');
+                        ->select('*')
+                        ->setFirstResult($start)
+                        ->setMaxResults($limit)
+                        ->orderBy('createdTime', 'ASC');
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function countMembersByStartTimeAndEndTime($startTime, $endTime)
     {
-        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime <  ? AND createdTime > ? AND role='student'  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
+        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime <  ? AND createdTime > ? AND role='student' AND classroomId = 0  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
         return $this->getConnection()->fetchAll($sql, array($endTime, $startTime));
     }
 
@@ -364,17 +364,17 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course_member')
-            ->andWhere('userId = :userId')
-            ->andWhere('courseId = :courseId')
-            ->andWhere('isLearned = :isLearned')
-            ->andWhere('noteNum > :noteNumGreaterThan')
-            ->andWhere('role = :role')
-            ->andWhere('createdTime >= :startTimeGreaterThan')
-            ->andWhere('createdTime < :startTimeLessThan')
-            ->andWhere('courseId IN (:courseIds)')
-            ->andWhere('userId IN (:userIds)')
-            ->andWhere('classroomId = :classroomId');
+                        ->from($this->table, 'course_member')
+                        ->andWhere('userId = :userId')
+                        ->andWhere('courseId = :courseId')
+                        ->andWhere('isLearned = :isLearned')
+                        ->andWhere('noteNum > :noteNumGreaterThan')
+                        ->andWhere('role = :role')
+                        ->andWhere('createdTime >= :startTimeGreaterThan')
+                        ->andWhere('createdTime < :startTimeLessThan')
+                        ->andWhere('courseId IN (:courseIds)')
+                        ->andWhere('userId IN (:userIds)')
+                        ->andWhere('classroomId = :classroomId');
         return $builder;
     }
 }

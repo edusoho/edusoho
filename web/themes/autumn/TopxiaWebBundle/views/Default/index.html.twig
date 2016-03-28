@@ -31,7 +31,7 @@
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
-              <ul class="home-class-list">
+              <ul class="home-class-list clearfix">
                 {% for classroom in classrooms %}
                  {% set teachers = classroom.users|default(null) %}
                  {% if loop.index <= 5%}
@@ -48,7 +48,7 @@
                       <span class="class-teacher">
                         <i class="fa fa-user"></i>
                         {% for teacher in teachers %}
-                          {% if loop.index <= 5%}
+                          {% if loop.index <= 1 %}
                              <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                            {% endif %}
                         {% endfor %}
@@ -94,7 +94,7 @@
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
-            <ul class="autumn-grids">             
+            <ul class="autumn-grids clearfix">             
               {% for course in recommendCourses %}
                 {% include 'TopxiaWebBundle:Default:course-grid.html.twig' %}
               {% endfor %}
@@ -183,7 +183,7 @@
             <ul class="row teacher-grids">
               {% for teacher in teachers %}
                 {% if teacher %}
-                  <li class="col-sm-6 col-md-4">
+                  <li class="col-xs-6 col-md-4 ">
                     <div class="teachers-item">
                       <a href="{{ path('user_show', {id:teacher.id}) }}">
                        <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">

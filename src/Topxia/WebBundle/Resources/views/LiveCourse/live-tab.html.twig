@@ -1,0 +1,57 @@
+<div class="panel panel-default es-live-list">
+    <div class="panel-body">
+      <ul class="clearfix">
+      	{% for dateTab in dateTabs %}
+	        <li {% if dateTab == 'today' %}class="active"{% endif %}>
+	          <a href="#{{ dateTab }}" data-toggle="tab">{% if dateTab == 'today' %}今日直播{% else %}{{ dateTab }}{% endif %}</a>
+	        </li>
+        {% endfor %}
+        
+      </ul>
+      <div class="tab-content">
+      	{% for date,liveList in liveTabs %}
+	        <div class="tab-pane {% if date == 'today' %}active{% endif %}" id="{{ date }}">
+	        	{% if not liveList.current|default(null) and not liveList.future|default(null) %}
+							<div class="empty">今日暂无直播</div>
+						{% else %}
+							<div class="es-live-item">
+	          	{% if date == 'today' %}
+		           	<div class="live-content living mbl">
+									{% if liveList.current|default(null) %}
+			              <div class="timeline">
+			               <span class="time-icon"><em></em></span>
+			               <span class="label label-success">正在直播课时</span>
+			              </div>
+			              <ul class="live-courses">
+			              	{% for list in liveList.current %}
+			                	<li><a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}"><span>{{ list.startTime|date('H:i') }}</span>{{ list.title }}</a></li>
+			                {% endfor %}
+			              </ul>
+			            {% endif %}
+		            </div>
+		          {% endif %}
+
+	            <div class="live-content live">
+	            	{% if liveList.future|default(null) %}
+		              <div class="timeline">
+		                <span class="time-icon"><em></em></span>
+		                {% if date == 'today' %}
+		               		<span class="label label-info">即将直播课时</span>
+		                {% endif %}
+		              </div>
+		              <ul class="live-courses">
+		                {% for list in liveList.future %}
+		                	<li><a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}" target="_blank"><span>{{ list.startTime|date('H:i') }}</span>{{ list.title }}</a></li>
+		                {% endfor %}
+		              </ul>
+		            {% endif %}
+	            </div>
+	          </div>
+	        	{% endif %}
+	          
+	        </div>
+				{% endfor %}
+
+      </div>
+    </div>
+  </div>
