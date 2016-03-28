@@ -126,11 +126,11 @@ define(function(require, exports, module) {
             rule: 'chinese_alphanumeric not_all_digital byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
 
-        // validator.addItem({
-        //     element: '[name="staffNo"]',
-        //     required: true,
-        //     rule: 'staff_no minlength{min:5} maxlength{max:12} remote',
-        // });
+        validator.addItem({
+            element: '[name="staffNo"]',
+            // required: true,
+            rule: 'staff_no integer minlength{min:5} maxlength{max:12} remote',
+        });
 
         validator.addItem({
             element: '[name="password"]',
