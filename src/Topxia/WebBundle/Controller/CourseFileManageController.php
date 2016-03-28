@@ -139,7 +139,7 @@ class CourseFileManageController extends BaseController
         $fileExts       = "";
 
         if ("courselesson" == $targetType) {
-            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
+            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
         }
 
         return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(

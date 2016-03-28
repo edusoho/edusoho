@@ -823,6 +823,36 @@ a {
   background: #ccc;
 }
 
+.course-card .course-card-item .ui-list-img {
+  width: 160px;
+  height: 90px;
+}
+
+.course-card .course-card-item .right-content {
+  height: 30px;
+  line-height: 30px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.course-card .course-card-item .right-content .avatar {
+  height: 30px;
+  width: auto;
+}
+
+.course-card .course-card-item .right-content .title {
+  height: 30px;
+  font-size: 15px;
+  line-height: 30px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 8px;
+}
+
+.course-card .course-card-item .right-content .subtitle {
+  font-size: 14px;
+}
+
 /* course-card*/ 
 
 /** .category-card */
@@ -2283,6 +2313,10 @@ a {
   background: #f0f0f0;
 }
 
+.ui-todolist .course-card-item {
+  padding: 8px 16px 8px 16px;
+}
+
 .ui-todolist .list-chart {
   width: 100%;
   padding: 8px;
@@ -2351,38 +2385,64 @@ a {
 .ui-todolist .title-body .title {
   margin-left: 16px;
 }
+
 .ui-todolist .ui-list .ui-avatar-s {
-  margin: 0 10px 0 0;
+  width: 25px;
+  height: 25px;
+  margin: 8px 10px 0 0;
   display: inline-block;
 }
 
 .ui-todolist .ui-list .bottom-label {
   height: 40px;
+  font-size: 10px;
   line-height: 40px;
   position: absolute;
 }
 
 .ui-todolist .ui-list .bottom-label .bottom-label-bg {
   font-size: 8px;
+}
+
+.ui-todolist .bottom-label.right {
+  right: 16px;
+  font-size: 8px;
+  color: #999;
+}
+
+.ui-todolist .ui-list li {
+  margin-left: 0;
+}
+
+.ui-todolist .ui-list .ui-list-info {
+  padding: 8px 16px 4px 16px;
+}
+
+.ui-todolist .ui-list .ui-list-info p {
+  height: 30px;
+  line-height: 30px;
+}
+
+.todo-card .radius-label {
+  font-size: 10px;
   border-radius: 5px;
   background-color: #ddd;
   padding: 3px 5px 3px 5px;
 }
 
-.ui-todolist .bottom-label.right {
-  right: 16px;
+.todo-card .radius-label.blue {
+  color: #fff;
+  background-color: #37b97d;
 }
 
-.ui-todolist .ui-list .ui-list-info {
-  padding: 8px;
-}
-
-.ui-todolist .ui-list .ui-list-info p {
-  margin-top: -10px;
-  margin-bottom: 10px;
+.todo-card .radius-label.red {
+  color: #fff;
+  background-color: #EF4242;
 }
 
 .todo-card .ui-list li .bottom {
+  line-height: 40px;
+  height: 40px;
   position: relative;
 }
 
@@ -2399,9 +2459,11 @@ a {
 }
 
 .todo-card .ui-list-info h2 {
-  height: 44px;
-  line-height: 44px;
+  height: 35px;
+  line-height: 35px;
 }
+
+
 /* todo list */
 
 /* ui-homework */

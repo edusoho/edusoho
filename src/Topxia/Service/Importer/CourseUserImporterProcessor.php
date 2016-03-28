@@ -99,7 +99,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
             $user = null;
         }
 
-        if (!empty($user) && !empty($userData['verifiedMobile'] && !in_array($userData['verifiedMobile'], $user))) {
+        if (!empty($user) && !empty($userData['verifiedMobile']) && !in_array($userData['verifiedMobile'], $user)) {
             $user = null;
         }
 

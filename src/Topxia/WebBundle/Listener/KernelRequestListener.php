@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Listener;
 
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Service\Common\AccessDeniedException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
@@ -15,6 +16,18 @@ class KernelRequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+
+        if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
+            $blacklistIps = ServiceKernel::instance()->createService('System.SettingService')->get('blacklist_ip');
+
+            if (isset($blacklistIps['ips'])) {
+                $blacklistIps = $blacklistIps['ips'];
+
+                if (in_array($request->getClientIp(), $blacklistIps)) {
+                    throw new AccessDeniedException('您的IP已被列入黑名单，访问被拒绝，如有疑问请联系管理员！');
+                }
+            }
+        }
 
         if (($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) && ($request->getMethod() == 'POST')) {
             if (stripos($request->getPathInfo(), '/mapi') === 0) {
