@@ -386,23 +386,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function _prepareSearchConditions($conditions)
     {
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
-
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
-            $sharedUsers = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
-            if (!empty($sharedUsers)) {
-                $sharedUserIds                = ArrayToolkit::column($sharedUsers, 'sourceUserId');
-                $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], $sharedUserIds);
-            }
-        }
-
-        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
-            $collections       = $this->findCollectionsByUserId($conditions['currentUserId']);
-            $fileIds           = ArrayToolkit::column($collections, 'fileId');
-            $conditions['ids'] = $fileIds ? $fileIds : array(0);
-        }
-
-        if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {
-            $conditions['isPublic'] = 1;
+            $conditions['createdUserIds'] = array($conditions['currentUserId']);
         }
 
         if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'sharing' && !empty($conditions['currentUserId'])) {
@@ -414,13 +399,22 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 }
                 $conditions['createdUserIds'] = $item;
             } else {
-                $conditions['createdUserIds'] = array();
+                $conditions['createdUserIds'] = array(0);
             }
         }
 
-        if (!empty($conditions['currentUserId'])) {
-            $conditions['createdUserIds'] = array_merge($conditions['createdUserIds'], array($conditions['currentUserId']));
-            unset($conditions['currentUserId']);
+        if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'public') {
+            $conditions['isPublic'] = 1;
+            unset($conditions['createdUserId']);
+            unset($conditions['createdUserIds']);
+        }
+
+        if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'favorite') && !empty($conditions['currentUserId'])) {
+            $collections       = $this->findCollectionsByUserId($conditions['currentUserId']);
+            $fileIds           = ArrayToolkit::column($collections, 'fileId');
+            $conditions['ids'] = $fileIds ? $fileIds : array(0);
+            unset($conditions['createdUserId']);
+            unset($conditions['createdUserIds']);
         }
 
         if (!empty($conditions['tagId'])) {
@@ -433,7 +427,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             }
             unset($conditions['tagId']);
         }
-
         return $conditions;
     }
 

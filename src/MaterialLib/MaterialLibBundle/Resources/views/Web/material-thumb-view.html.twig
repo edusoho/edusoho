@@ -3,85 +3,88 @@
 {% set script_controller = 'materiallibbundle/controller/material-lib/index' %}
 
 {% block page_body %}
-        
+
 <form id="material-search-form" class="form-inline" action="{{ path('material_lib_browsing') }}" method="get" novalidate>
-  
+
   <input type="hidden" class="js-page" name="page" value="1">
-  <div class="btn-group source-btn" role="group" aria-label="...">
-    <button type="button" data-value="my" class="js-source-btn btn btn-default active">我的资料</button>
-    <button type="button" data-value="public" class="js-source-btn btn btn-default">公共资料</button>
-    <button type="button" data-value="favorite" class="js-source-btn btn btn-default">收藏夹</button>
-    <button type="button" data-value="sharing" class="js-source-btn btn btn-default">来自分享</button>
+  <div class="source-btn" role="group" aria-label="...">
+    <ul class="nav nav-tabs">
+      <li class="active" data-value="my"><a href="javascript:;" class="js-source-btn">我的资料</a></li>
+      <li class="" data-value="public"><a href="javascript:;" class="js-source-btn">公共资料</a></li>
+      <li class="" data-value="favorite"><a href="javascript:;" class="js-source-btn">收藏夹</a></li>
+      <li class="" data-value="sharing"><a href="javascript:;" class="js-source-btn">来自分享</a></li>
+    </ul>
     <input type="hidden" name="sourceFrom" value="my">
   </div>
-
+  <div class="mbl">
+    <input class="form-control" type="text" placeholder="输入标题关键词"  name="keyword" value="{{ app.request.get('keyword') }}">
+    <button class="btn btn-primary">搜索</button>
+    {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
+  </div>
 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
-  {% include 'MaterialLibBundle:Web/Form:head.html.twig' %}
-    <div class="well well-sm" style="margin-bottom:10px">
-      <span style="padding-right:50px">筛选:</span>
-      <span>上传时间:</span>
-
-      <div class="form-group mlm">
-        <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-        -
-        <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
-      </div>
-
-      <div class="checkbox">
-        <label class="mlm">
-          <input type="checkbox" name="processStatus" value="error"> 转码失败
-        </label>
-      </div>
+  <ul class="es-material-tabs nav">
+    <li class="all"><span>筛选：</span></li>
+    <div class="form-group" style="margin-top:7px;">
+      <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
     </div>
-    <div class="well well-sm" style="margin-bottom:10px">
-      <span style="padding-right:50px">排序:</span>
-
-      <div class="form-group">
-        <select class="form-control" name="uploadTime">
-          <option value="desc">最近上传</option>
-          <option value="asc">最早上传</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <select class="form-control" name="views">
-          <option value="desc">最多播放</option>
-          <option value="asc">最少播放</option>
-        </select>
-      </div>
+    <div class="form-group mll" style="margin-top:7px;">
+      <select class="form-control js-process-status-select" name="processStatus">
+        <option value="">转码状态</option>
+        <option value="ok">转码成功</option>
+        <option value="error">转码失败</option>
+      </select>
     </div>
-    <div class="well well-sm" style="margin-bottom:10px">
-      <span style="position:absolute">标签:</span>
-
-        <div class="tags-container">
-          {% for tag in tags %}
-            <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
-          {% endfor %}
-          <input type="hidden" name="tagId">
-        </div>
+    <div class="form-group mll js-use-status-select" style="margin-top:7px;">
+      <select class="form-control">
+        <option>使用状态</option>
+        <option>未使用</option>
+        <option>已使用</option>
+      </select>
     </div>
+  </ul>
+  <div class="well well-sm" style="margin-bottom:10px">
+    <span style="position:absolute">标签:</span>
 
-    <div id="material-lib-items-panel">
+      <div class="tags-container">
+        {% for tag in tags %}
+          <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
+        {% endfor %}
+        <input type="hidden" name="tagId">
+      </div>
+  </div>
+  <div id="material-lib-items-panel">
+    <div>
       <a class="btn btn-primary" data-toggle="modal" data-target="#modal"
       data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="上传资料"   data-placement="bottom" >上传资料
       </a>
-      <a class="btn btn-primary js-manage-batch-btn" href="javascript:;">批量管理
+      <a class="btn btn-info js-manage-batch-btn" href="javascript:;">批量管理
       </a>
-      <a class="btn btn-primary js-finish-batch-btn" href="javascript:;" style="float: right;display: none;" data-role="finish-batch">完成管理
+      <a class="btn btn-info js-batch-tag-btn" data-role="batch-tag">添加标签
       </a>
-      <a class="btn btn-primary js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_batch_delete') }}" style="display: none;" >删除
+      {#<a class="btn btn-primary js-finish-batch-btn" href="javascript:;" style="float: right;" data-role="finish-batch">完成管理
+      </a>#}
+      <a class="btn btn-info js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >共享
       </a>
-      <a class="btn btn-primary js-batch-share-btn" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}" style="display: none;" >共享
+      <a class="btn btn-danger js-batch-delete-btn" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_batch_delete') }}"  >删除
       </a>
-      <a class="btn btn-primary js-batch-tag-btn" data-role="batch-tag" style="display: none;" >添加标签
-      </a>
-      <label class="checkbox-inline" style="display: none;" data-role="batch-manage" >
+      <label class="checkbox-inline" data-role="batch-manage" >
         <input type="checkbox" data-role="batch-select"/> 全选
       </label>
-
-      <div class="row material-list-container"  id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
+      <span class="pull-right">排序方式
+        <a href="javascript:;" class="es-icon es-icon-data-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="sr-only">Toggle Dropdown</span>
+        </a>
+        <ul class="dropdown-menu">
+          <li class="js-refresh-btn" {#data-url="{{ path('material_delete', {globalId:material.no|defaul}) }}"#}><a class="glyphicon glyphicon-refresh" href="javascript:;"> 播放次数</a></li>
+          <li class="js-delete-btn"><a class="glyphicon glyphicon-trash" href="javascript:;"> 上传时间</a></li>
+        </ul>
+      </span>
     </div>
+    <div class="row material-list-container"  id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
+  </div>
 </form>
 <div id="tag-modal" class="modal in" aria-hidden="false" style="display: none;">
   <div class="modal-dialog ">
@@ -90,17 +93,17 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h4 class="modal-title"></h4>
       </div>
-      <div class="modal-body">  
+      <div class="modal-body">
         <form class="form-horizontal" id="tag-form" action="{{ path('material_batch_tag_show') }}" method="post">
           <div class="form-group" id="form">
-            
-            
+
+
             <label class="col-md-2 control-label">标签</label>
             <div class="col-md-8 controls">
               <input type="text" id="tags" data-url="{{ path('material_tag_show_match') }}"name="tags" required="required" class="width-full" tabindex="-1" value="" data-explain="将会应用于按标签搜索课程、相关课程的提取等">
               <div class="help-block">将会应用于按标签搜索课程、相关课程的提取等</div>
             </div>
-            
+
           </div>
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
           <input id="select-tag-items" name="fileIds" type="hidden" value="">
@@ -113,7 +116,7 @@
     </div>
   </div>
 </div>
-        
-        
-        
+
+
+
 {% endblock %}
