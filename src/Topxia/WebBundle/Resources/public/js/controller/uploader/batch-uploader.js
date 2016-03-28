@@ -254,8 +254,8 @@ define(function(require, exports, module) {
                             if (value.response) {
                                 file.initResponse = value.response;
                             }
-
-                            require.async('./'+response.uploadMode+'-strategy', function(Strategy){
+                            var uploadMode = file.uploaderWidget.getStrategyModel(response.uploadMode);
+                            require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
                                 deferred.resolve();
@@ -370,6 +370,19 @@ define(function(require, exports, module) {
             }
 
             return extProcessors[ext];
+        },
+
+        getStrategyModel: function(mode){
+            if (mode == 'baidu' && (this.isIE(8) || this.isIE(9))) {
+                return mode + "-direct";
+            }
+            return mode;
+        },
+
+        isIE: function(ver){
+            var b = document.createElement('b')
+            b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
+            return b.getElementsByTagName('i').length === 1
         }
 
     });
