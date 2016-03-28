@@ -13571,7 +13571,6 @@ textarea {
 }
 .open-course-views {
   padding: 0;
-  height: 500px;
   position: relative;
 }
 .open-course-views .mask {
@@ -13611,9 +13610,9 @@ textarea {
 }
 .open-course-views .modal-dialog .modal-img {
   float: left;
-  width: 33%;
-  padding-right: 15px;
+  width: 33.3%;
   color: #313131;
+  padding: 0 8px;
 }
 .open-course-views .modal-dialog .modal-img img {
   -webkit-border-radius: 3px;
@@ -13621,22 +13620,25 @@ textarea {
   border-radius: 3px;
   margin-bottom: 12px;
 }
-.open-course-views .modal-dialog button {
+.open-course-views .modal-dialog .modal-footer .es-share .dropdown-menu {
+  left: 96px;
+}
+.open-course-views .modal-dialog .modal-footer .es-share button {
   color: #fff;
   font-size: 14px;
 }
-.open-course-views .modal-dialog .share-btn {
+.open-course-views .modal-dialog .modal-footer .es-share .share-btn {
   background-color: #70d445;
   border-color: #70d445;
 }
-.open-course-views .modal-dialog .share-btn:hover {
+.open-course-views .modal-dialog .modal-footer .es-share .share-btn:hover {
   background-color: #56bb2b;
 }
-.open-course-views .modal-dialog .next-btn {
+.open-course-views .modal-dialog .modal-footer .es-share .next-btn {
   background-color: #ff8a0c;
   border-color: #ff8a0c;
 }
-.open-course-views .modal-dialog .next-btn:hover {
+.open-course-views .modal-dialog .modal-footer .es-share .next-btn:hover {
   background-color: #d87000;
 }
 .open-course-tab {
@@ -13644,6 +13646,11 @@ textarea {
   background-color: #212121;
   color: #ffffff;
   padding: 0;
+}
+@media (max-width: 991px) {
+  .open-course-tab {
+    height: auto;
+  }
 }
 .open-course-tab ul {
   padding: 0;
@@ -13666,11 +13673,6 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-}
-@media (max-width: 1199px) {
-  .open-course-tab ul .tab-header {
-    padding: 20px 0 20px 15px;
-  }
 }
 .open-course-tab .tab-recommand {
   padding: 10px 20px 10px 15px;
@@ -13842,6 +13844,7 @@ textarea {
 .open-course-detail .course-img {
   width: 120px;
   display: block;
+  margin-top: 10px;
 }
 .open-course-teacher img {
   margin: 0 auto;
@@ -13852,6 +13855,7 @@ textarea {
   word-wrap: normal;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
 }
 .course-comment {
   padding: 15px 20px;
