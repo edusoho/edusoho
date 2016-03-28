@@ -2,6 +2,7 @@
 
 namespace Mooc\WebBundle\Controller;
 
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\CourseLessonController as BaseCourseLessonController;
 
