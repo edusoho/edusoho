@@ -1,15 +1,15 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}账户中心 - {{ parent() }}{% endblock %}
+{% block title %}{{'账户中心'|trans}} - {{ parent() }}{% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-md-3">
     {% block side %}
-      
+
       <div class="sidenav">
         <ul class="list-group">
-          <li class="list-group-heading">账户中心</li>
+          <li class="list-group-heading">{{'账户中心'|trans}}</li>
           <li class="list-group-item {% if side_nav in ['my-bill', 'my-coin', 'my-invite-code'] %} active {% endif %}">
             <a href="
               {% if setting('coin.coin_enabled') %}
@@ -17,21 +17,21 @@
               {% else %}
                 {{path('my_bill')}}
               {% endif %}
-              ">我的账户
+              ">{{'我的账户'|trans}}
             </a>
           </li>
           <li class="list-group-item {% if side_nav == 'my-orders' %} active {% endif %}">
-            <a href="{{path('my_orders')}}">我的订单</a> 
-          </li>  
+            <a href="{{path('my_orders')}}">{{'我的订单'|trans}}</a>
+          </li>
           <li class="list-group-item {% if side_nav == 'my-cards' %} active {% endif %}">
-            <a href="{{path('my_cards')}}">我的卡包</a> 
-          </li> 
+            <a href="{{path('my_cards')}}">{{'我的卡包'|trans}}</a>
+          </li>
           </li>
           {% if is_plugin_installed('Vip')%}
           <li class="list-group-item {% if side_nav == 'my-vip-record' %} active {% endif %}">
-            <a href="{{path('vip_history')}}">会员记录</a> 
+            <a href="{{path('vip_history')}}">{{'会员记录'|trans}}</a>
           </li>
-          {% endif %} 
+          {% endif %}
         </ul>
       </div>
     {% endblock %}

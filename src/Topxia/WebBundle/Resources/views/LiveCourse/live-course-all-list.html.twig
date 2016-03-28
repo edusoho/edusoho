@@ -1,0 +1,85 @@
+{% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <form id="live-search-form" class="form-inline" action="{{ path('live_course_explore') }}" method="get" novalidate="">
+      <div class="form-group mrl">
+        <select style="width:150px;" class="form-control" name="categoryId" id="categoryId">
+          {{ select_options(category_choices('course'), request.query.get('categoryId'), '课程分类') }}
+        </select>
+      </div>
+      <div class="form-group">
+        <select style="width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
+          <option value="">会员课程</option>
+          {% for level in levels if level %}
+            <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <div class="panel-body  es-live-all">
+    {% for course in liveCourses if course %}
+      <div class="media">
+        <div class="media-left">
+          {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
+            <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" title="{{ course.title }}" target="_blank">
+          {% else %}
+            <a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}" target="_blank">
+          {% endif %}
+            {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+            {% if course.recommended %}
+              <span class="re-live"></span>
+            {% endif %}
+            {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime %}
+              <span class="re-report">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
+            {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+              <span class="re-report">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
+            {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
+              <span class="re-report">直播预告 {{ course.liveStartTime|date('m-d H:i')}}</span>
+            {% endif %}
+          </a>
+        </div>
+        <div class="media-body">
+          <div class="title mbm">
+            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="gray-darker" title="{{ course.title }}" target="_blank">{{ course.title }}</a>
+            {% else %}
+              <a href="{{ path('course_show',{id:course.id}) }}"  class="gray-darker" title="{{ course.title }}" target="_blank">{{ course.title }}</a>
+            {% endif %}
+          </div>
+
+       
+
+          <div class="metas">
+            <span class="num prl"><i class="es-icon es-icon-people prm"></i>{{ course.studentNum }}</span>
+            <span class="comment"><i class="es-icon es-icon-textsms prm"></i>{{ course.ratingNum }}</span>
+          </div>
+          <div class="user">
+            {% if course.teacherIds|default(null) %}
+              {% set user = data('User',{userId:course.teacherIds[0]}) %}
+              {{ web_macro.user_avatar(user, 'mrm','avatar-xs') }}
+              {{ web_macro.user_link(user, 'link-light') }}
+            {% endif %}
+          </div>
+          <div class="other">
+            {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
+
+            {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-warning" target="_blank">进入直播</a>
+            {% else %}
+              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary" target="_blank">查看回放</a>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="empty">暂无直播课程</div>
+    {% endfor %}
+
+    {{ web_macro.paginator(paginator) }}
+
+  </div>
+</div>
+{% do load_script('live-course/list') %}

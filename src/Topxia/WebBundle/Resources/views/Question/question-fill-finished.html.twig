@@ -7,20 +7,20 @@
 {% block body %}
 
 {% if itemResult.status == 'right' %}
-  
-  {% set itemResultStatus = '你答对了' %}
-  
+
+  {% set itemResultStatus = '你答对了'|trans %}
+
 {% elseif itemResult.status == 'wrong' %}
 
-  {% set itemResultStatus = '回答错误' %}
+  {% set itemResultStatus = '回答错误'|trans %}
 
 {% elseif itemResult.status == 'partRight' %}
 
-  {% set itemResultStatus = '部分回答正确' %}
+  {% set itemResultStatus = '部分回答正确'|trans %}
 
 {% elseif itemResult.status == 'noAnswer' %}
 
-  {% set itemResultStatus = '你未回答' %}
+  {% set itemResultStatus = '你未回答'|trans %}
 
 {% endif %}
 
@@ -31,14 +31,14 @@
           {% for index,rightAnswer in question.answer %}
 
             <li>
-              填空({{index+1}})： 正确答案 
-              <strong class="question-text-success">{{ rightAnswer|join(' 或 ') }}</strong>
+              填空({{index+1}})： 正确答案
+              <strong class="question-text-success">{{ rightAnswer|join(' 或 '|trans) }}</strong>
               {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
-             回答是
+             {{'回答是'|trans}}
 
               <strong class="question-text-danger">{{ itemResult.answer[index] }}</strong>。
               {% else %}
-              未回答
+              {{'未回答'|trans}}
               {% endif %}
 
               {% if itemResult.answer[index]|default(null)  in rightAnswer %}

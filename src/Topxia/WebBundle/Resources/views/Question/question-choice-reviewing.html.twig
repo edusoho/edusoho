@@ -1,8 +1,8 @@
 {% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
 
 {% block heading %}
-  {% if question.type == 'single_choice' %}（单选）
-  {% elseif question.type == 'choice' %}（多选）
+  {% if question.type == 'single_choice' %}{{'（单选）'|trans}}
+  {% elseif question.type == 'choice' %}{{'（多选）'|trans}}
   {% endif %}
   {{ question.stem|bbCode2Html|raw }}
 {% endblock %}
@@ -36,7 +36,7 @@
         {% endfor %}
        </strong>
     {% elseif itemResult.status == 'noAnswer' %}
-　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>未答题
+　　　  <span class="glyphicon glyphicon-remove question-text-danger"></span>{{'未答题'|trans}}
     {% endif %}
 </div>
 

@@ -34,6 +34,9 @@ define(function(require, exports, module) {
                         }
                     }
                     Notify.success('设置推荐老师操作成功!');
+                    setTimeout(function(){ 
+                     window.location.reload();
+                    },2000);
                 }).error(function(){
                     Notify.danger('设置推荐老师操作失败!');
                 });
