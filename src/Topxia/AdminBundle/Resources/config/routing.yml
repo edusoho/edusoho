@@ -298,6 +298,10 @@ admin_course_delete:
     pattern:  /course/{courseId}/delete/{type}
     defaults: { _controller: TopxiaAdminBundle:Course:delete, type:'' }
 
+admin_open_course_delete:
+    pattern: /open/course/{courseId}/delete/{type}
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:delete,type:''}    
+
 admin_check_password:
     pattern:  /check/password
     defaults: { _controller: TopxiaAdminBundle:Course:checkPassword }
@@ -307,10 +311,20 @@ admin_course_publish:
     defaults: { _controller: TopxiaAdminBundle:Course:publish }
     methods: [POST]
 
+admin_open_course_publish:
+    pattern: /open/course/{id}/publish
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:publish } 
+    methods: [POST]   
+
 admin_course_close:
     pattern: /course/{id}/close
     defaults: { _controller: TopxiaAdminBundle:Course:close }
     methods: [POST]
+
+admin_open_course_close:
+    pattern: /open/course/{id}/close
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:close } 
+    methods: [POST]   
 
 admin_course_copy:
     pattern: /course/{id}/copy
@@ -378,6 +392,10 @@ admin_course_search_to_fill_banner:
 admin_live_course:
     pattern: /livecourse/{status}
     defaults: { _controller: TopxiaAdminBundle:LiveCourse:index }
+
+admin_open_course:
+    pattern: /open/{filter}/course
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:index, filter:'open' }
 
 admin_live_get_max_online:
     pattern: /livecourse/get/maxOnline

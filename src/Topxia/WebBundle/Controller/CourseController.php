@@ -419,42 +419,28 @@ class CourseController extends CourseBaseController
         $user        = $this->getUserService()->getCurrentUser();
         $userProfile = $this->getUserService()->getUserProfile($user['id']);
 
-        $isLive = $request->query->get('flag');
-        $type   = ($isLive == "isLive") ? 'live' : 'normal';
-
-        if ($type == 'live') {
-            $courseSetting = $this->setting('course', array());
-
-            if (empty($courseSetting['live_course_enabled'])) {
-                return $this->createMessageResponse('info', '请前往后台开启直播,尝试创建！');
-            }
-
-            if (!empty($courseSetting['live_course_enabled'])) {
-                $client   = new EdusohoLiveClient();
-                $capacity = $client->getCapacity();
-            } else {
-                $capacity = array();
-            }
-
-            if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
-                return $this->createMessageResponse('info', '请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
-            }
-        }
-
         if (false === $this->get('security.context')->isGranted('ROLE_TEACHER')) {
             throw $this->createAccessDeniedException();
         }
 
         if ($request->getMethod() == 'POST') {
             $course = $request->request->all();
+
+            if ($course['type'] == 'live' || $course['type'] == 'liveOpen') {
+                try {
+                    $this->$course['type']."Setting()";
+                } catch (\Exception $e) {
+                    return $this->createMessageResponse('info', $e->getMessage());
+                }
+            }
+
             $course = $this->getCourseService()->createCourse($course);
 
             return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
         }
 
         return $this->render('TopxiaWebBundle:Course:create.html.twig', array(
-            'userProfile' => $userProfile,
-            'type'        => $type
+            'userProfile' => $userProfile
         ));
     }
 
@@ -910,6 +896,46 @@ class CourseController extends CourseBaseController
         }
 
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
+    }
+
+    public function liveSetting()
+    {
+        $courseSetting = $this->setting('course', array());
+
+        if (empty($courseSetting['live_course_enabled'])) {
+            throw new \RuntimeException('请前往后台开启直播,尝试创建！');
+        }
+
+        if (!empty($courseSetting['live_course_enabled'])) {
+            $client   = new EdusohoLiveClient();
+            $capacity = $client->getCapacity();
+        } else {
+            $capacity = array();
+        }
+
+        if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
+            throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+        }
+    }
+
+    public function liveOpenSetting()
+    {
+        $courseSetting = $this->setting('course', array());
+
+        if (empty($courseSetting['live_open_course_enabled'])) {
+            throw new \RuntimeException('请前往后台开启公开课直播,尝试创建！');
+        }
+
+        if (!empty($courseSetting['live_open_course_enabled'])) {
+            $client   = new EdusohoLiveClient();
+            $capacity = $client->getCapacity();
+        } else {
+            $capacity = array();
+        }
+
+        if (empty($capacity['capacity']) && !empty($courseSetting['live_open_course_enabled'])) {
+            throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
+        }
     }
 
     protected function getTokenService()

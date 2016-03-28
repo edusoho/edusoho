@@ -723,6 +723,10 @@ course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
 
+open_course_manage_lesson:
+    pattern: /course/{id}/manage/open/lesson
+    defaults: {_controller: TopxiaWebBundle:OpenCourseLessonManage:index}
+
 course_draft_create:
     pattern:  /course/draft/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:draftCreate }

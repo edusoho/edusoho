@@ -31,7 +31,8 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
-        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+
         $default = $this->getSettingService()->get('default', array());
 
         if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {

@@ -35,22 +35,26 @@
         <div class="col-md-10">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
+        {% if course.type=='normal' or course.type=='live' %}
         <div class="col-md-2">
           <div class="checkbox">
             <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}</label>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
 
+  {% if course.type=='normal' or course.type=='live'%}
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}">
     <div class="col-md-2 control-label"><label for="lesson-summary-field">{{'简介'|trans}}</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
 
     </div>
   </div>
-
+  {% endif %}
+   
   <div class="form-group for-text-type">
 
 

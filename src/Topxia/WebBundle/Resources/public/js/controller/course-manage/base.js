@@ -31,9 +31,7 @@ define(function(require, exports, module) {
                     };
                 },
                 results: function(data) {
-
                     var results = [];
-
                     $.each(data, function(index, item) {
 
                         results.push({

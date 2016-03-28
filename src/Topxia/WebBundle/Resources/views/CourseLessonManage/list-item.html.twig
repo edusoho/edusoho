@@ -103,7 +103,7 @@
 
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
 
-        {% if is_plugin_installed('Homework') and (lesson.type != 'testpaper') %}
+        {% if is_plugin_installed('Homework') and (lesson.type != 'testpaper') and (course.type != 'open') %}
           {% set homework =  homeworks[lesson.id]|default(null) %}
           {% set homeworkId =  homework.id|default(null) %}
           {% if homework %}
@@ -136,7 +136,7 @@
           {% endif %}
         {% endif %}
 
-        {% if lesson.type != 'testpaper' %}
+        {% if lesson.type != 'testpaper' and course.type != 'open'%}
           <li><a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}"><span class="glyphicon glyphicon-paperclip prs"></span>{{'添加资料'|trans}}</a></li>
           <li class="divider"></li>
         {% endif %}
