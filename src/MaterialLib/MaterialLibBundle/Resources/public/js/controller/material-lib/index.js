@@ -32,7 +32,8 @@ define(function(require, exports, module) {
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
                 //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
                 'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn'
+                'click .js-use-status-select': 'onClickUseStatusBtn',
+                'click .js-upload-time-btn': 'onClickUploadTimeBtn'
             },
             setup: function() {
                 this.set('model','normal');
@@ -200,6 +201,12 @@ define(function(require, exports, module) {
                   $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
                   $('.materials-ul').removeClass('batch-hidden');
                 }
+            },
+            onClickUploadTimeBtn: function(event)
+            {
+
+                $('#orderBy').val('createdTime');
+                this.renderTable();
             },
             onClickFinishBatchBtn: function(event)
             {
