@@ -255,7 +255,9 @@ class MobileBaseController extends BaseController
         $teacherIds = array();
 
         foreach ($courses as $course) {
-            $teacherIds = array_merge($teacherIds, $course['teacherIds']);
+            if (isset($course['teacherIds']) && !empty($course['teacherIds'])) {
+                $teacherIds = array_merge($teacherIds, $course['teacherIds']);
+            }
         }
 
         $teachers = $this->getUserService()->findUsersByIds($teacherIds);

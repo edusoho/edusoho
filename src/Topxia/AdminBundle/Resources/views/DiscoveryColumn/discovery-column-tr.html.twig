@@ -1,0 +1,37 @@
+<tbody data-update-seqs-url="{{ path('admin_discovery_column_sort') }}">
+	{% for discoveryColumn in discoveryColumns %}
+		<tr class="sort " data-id="{{ discoveryColumn.id }}">
+			<td>
+				<span class="glyphicon glyphicon-move"></span>
+				<span>&nbsp;&nbsp;{{ discoveryColumn.title }}</span>
+			</td>
+		
+			<td>
+				{% if discoveryColumn.type == 'classroom' %}班级
+				{% elseif discoveryColumn.type == 'course' %}普通课程
+				{% else %}直播课程
+				{% endif %}
+			</td>
+
+			<td>
+				{% if discoveryColumn.orderType == 'recommend' %}推荐
+				{% elseif discoveryColumn.orderType == 'hot' %}最热
+				{% elseif discoveryColumn.orderType == 'new' %}最新
+				{% else %} --
+				{% endif %}
+			</td>
+				
+			<td>
+				{{ discoveryColumn.showCount }}
+			</td>
+
+			<td>{{ discoveryColumn.count }}</td>
+			<td>
+				<a href="javascript:;" class="btn btn-default btn-sm edit-btn" data-url="{{ path('admin_discovery_column_edit', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+		    <a href="javascript:;" class="btn btn-default btn-sm delete-btn " data-url="{{ path('admin_discovery_column_delete', {id:discoveryColumn.id}) }}" data-toggle="modal" data-target="{{ discoveryColumn.id }}"><i class="glyphicon glyphicon-trash"></i> 删除</a>
+			</td>
+		</tr>
+	{% else %}
+		<tr><td colspan="20"><div class="empty">暂无分类记录</div></td></tr>
+	{% endfor %}
+</tbody>

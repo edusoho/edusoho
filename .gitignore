@@ -74,4 +74,5 @@ web/assets/img/default/video.png
 /web/install/edusoho_init*
 .crunch
 *.css.map
+*.codekit
 
