@@ -29,8 +29,10 @@ define(function(require, exports, module) {
                 'click .js-manage-batch-btn': 'onClickManageBtn',
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
-                'click .js-batch-tag-btn': 'onClickTagBatchBtn'
-                //'click .js-finish-batch-btn': 'onClickFinishBatchBtn'
+                'click .js-batch-tag-btn': 'onClickTagBatchBtn',
+                //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
+                'click .js-process-status-select': 'onClickProcessStatusBtn',
+                'click .js-use-status-select': 'onClickUseStatusBtn'
             },
             setup: function() {
                 this.set('model','normal');
@@ -129,6 +131,14 @@ define(function(require, exports, module) {
             onClickDownloadBtn: function(event) {
                 var $target = $(event.currentTarget);
                 window.open($target.data('url'));
+            },
+            onClickProcessStatusBtn: function(event)
+            {
+                this.renderTable();
+            },
+            onClickUseStatusBtn: function(event)
+            {
+                this.renderTable();
             },
             onClickReconvertBtn: function(event)
             {
@@ -484,11 +494,13 @@ define(function(require, exports, module) {
             _initHeader: function()
             {
                 //init timepicker
+                var self = this;
                 $("#startDate").datetimepicker({
                     language: 'zh-CN',
                     autoclose: true,
                 }).on('changeDate',function(){
                     $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+                    self.renderTable();
                 });
 
                 $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
@@ -499,6 +511,7 @@ define(function(require, exports, module) {
                 }).on('changeDate',function(){
 
                     $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+                    self.renderTable();
                 });
 
                 $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
