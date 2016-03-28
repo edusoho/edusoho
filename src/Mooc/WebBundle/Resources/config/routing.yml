@@ -143,4 +143,6 @@ course_manage_lesson_edit:
     pattern:  /course/{courseId}/manage/lesson/{lessonId}/edit
     defaults: { _controller: MoocWebBundle:CourseLessonManage:edit }
 
-
+course_lesson_show:
+    pattern:  /course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: MoocWebBundle:CourseLesson:show }
