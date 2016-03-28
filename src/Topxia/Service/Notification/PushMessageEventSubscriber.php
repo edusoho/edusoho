@@ -20,7 +20,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.publish'            => 'onCoursePublish',
             'course.lesson.delete'      => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
-            'course.lesson.unpublish'   => 'onCourseLessonUnpublish',
             'course.close'              => 'onCourseClose',
             'announcement.create'       => 'onAnnouncementCreate',
             'classroom.create'          => 'onClassroomCreate',
@@ -29,8 +28,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'classroom.put_course'      => 'onClassroomPutCourse',
             'article.create'            => 'onArticleCreate',
             'discount.pass'             => 'onDiscountPass',
-            'course.join'               => 'onCourseJoin',
-            'course.quit'               => 'onCourseQuit',
             'course.thread.post.create' => 'onCourseThreadPostCreate',
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
@@ -344,59 +341,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->getCloudDataService()->push('edusoho.classroom.put.course', $classroomCourse, time());
 
         //$this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
-    }
-
-    
-
-    public function onClassroomQuit(ServiceEvent $event)
-    {
-        $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
-        $this->deleteGroupMember('classroom', $classroom['id'], $userId);
-    }
-
-    public function onCourseJoin(ServiceEvent $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $this->addGroupMember('course', $course['id'], $userId);
-    }
-
-    public function onCourseQuit(ServiceEvent $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-        $this->deleteGroupMember('course', $course['id'], $userId);
-    }
-
-    public function onClassroomPutCourse(ServiceEvent $event)
-    {
-        $classroomCourse = $event->getSubject();
-
-        $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
-
-        $from = array(
-            'type'  => 'classroom',
-            'id'    => $classroom['id'],
-            'image' => $this->getFileUrl($classroom['smallPicture'])
-        );
-
-        $to = array(
-            'type' => 'classroom',
-            'id'   => $classroom['id']
-        );
-
-        $course = $this->getCourseService()->getCourse($classroomCourse['courseId']);
-
-        $body = array(
-            'type'    => 'classroom.put_course',
-            'id'      => $course['id'],
-            'title'   => $course['title'],
-            'image'   => $this->getFileUrl($course['smallPicture']),
-            'content' => $course['about']
-        );
-
-        $this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
     }
 
     public function onArticleCreate(ServiceEvent $event)
