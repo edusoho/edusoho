@@ -44,8 +44,6 @@
     {% else %}
     <br>
     {% endif %}
-<<<<<<< HEAD
-=======
     {% if uploadFile.type == "cloud" and uploadFile.convertStatus == 'none' and uploadFile.type != 'flash' %}
       <span class="label label-default tip">{{'未转码'|trans}}</span>
     {% endif %}
@@ -53,7 +51,6 @@
 
       <span class="label label-success tip">{{'已转码'|trans}}</span>
     {% endif %}
->>>>>>> master
 
     {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}
       {% if uploadFile.convertParams.videoQuality == "low" %}
@@ -79,13 +76,8 @@
   <td>
     {{ dict_text('fileType', uploadFile.type) }}
   </td>
-<<<<<<< HEAD
-  <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
-  <td>
-=======
   <td>{{ web_macro.bytesToSize(uploadFile.size) }}</td>
   <td>
->>>>>>> master
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>
     <span class="text-muted text-sm">{{ uploadFile.updatedTime|date('Y-n-d H:i')}}</span>

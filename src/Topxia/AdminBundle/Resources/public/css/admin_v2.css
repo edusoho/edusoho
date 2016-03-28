@@ -322,13 +322,13 @@ tbody.sortable-list tr.placeholder {
   padding-top: 7px;
   margin-top: 0;
   margin-bottom: 0;
-}  
+}
 .lock-user-text-right{
   /*text-align: right;*/
   padding-top: 7px;
   margin-top: 0;
   margin-bottom: 0;
-}  
+}
 fieldset #checkboxChoices{
   margin:0;
   padding:0;
@@ -508,7 +508,6 @@ margin-top: 14px;
   max-height: 435px;
   overflow: auto;
 }
-<<<<<<< HEAD
 
 .ellipsis,
 .text-overflow {
@@ -518,5 +517,3 @@ margin-top: 14px;
   white-space: nowrap;
   word-wrap: normal;
 }
-=======
->>>>>>> master
