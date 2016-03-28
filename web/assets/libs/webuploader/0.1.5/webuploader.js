@@ -4034,7 +4034,7 @@
                     ret = tr.getResponseAsJson() || {};
                     ret._raw = tr.getResponse();
                     ret._responseHeaders = tr.getResponseHeadersAsJson() || {};
-                    ret._requestURL = tr.getRequestURL();
+                    ret._requestURL = tr.options.server;
                     fn = function( value ) {
                         reject = value;
                     };

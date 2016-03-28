@@ -38,7 +38,7 @@ define(function(require, exports, module) {
                 resize: false,
 
                 // swf文件路径
-                swf: CLOUD_FILE_SERVER + '/uploader.swf',
+                swf: '/assets/libs/webuploader/0.1.5/Uploader.swf',
 
                 // 选择文件的按钮。可选。
                 // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -54,6 +54,10 @@ define(function(require, exports, module) {
             }
 
             this._initUploaderHook();
+            if ( !WebUploader.Uploader.support() ) {
+                alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
+                throw new Error( 'WebUploader does not support the browser you are using.' );
+            }
             var uploader = this.uploader = WebUploader.create(defaults);
             this._registerUploaderEvent(uploader);
 

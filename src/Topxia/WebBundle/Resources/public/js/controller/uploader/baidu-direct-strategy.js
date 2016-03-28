@@ -15,7 +15,7 @@ define(function(require, exports, module) {
 	        var self = file.uploaderWidget;
 
             self.uploader.option('server', self.get('uploadUrl'));
-            self.uploader.option('method', 'PUT');
+            self.uploader.option('method', 'POST');
 
             file.uploaderWidget.uploader.option('chunked', false);
             file.uploaderWidget.uploader.option('sendAsBinary', true);
@@ -35,7 +35,7 @@ define(function(require, exports, module) {
         _setAuth: function(){
             var self = this.file.uploaderWidget;
             var encryptParams = {}
-            var result = this._getUploadAuth(encryptParams, 'PUT');
+            var result = this._getUploadAuth(encryptParams, 'POST');
             self.set('uploadAuth', result['Authorization']);
             self.set('bceDate', result['x-bce-date']);
         },

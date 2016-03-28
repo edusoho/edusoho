@@ -21,7 +21,7 @@ define(function(require, exports, module) {
 
             var self = file.uploaderWidget;
 
-            self.uploader.option('method', 'PUT');
+            self.uploader.option('method', 'POST');
             self.uploader.option('chunked', true);
             self.uploader.option('chunkSize', 1024*1024*5);
             self.uploader.option('chunkRetry', 2);
@@ -37,7 +37,7 @@ define(function(require, exports, module) {
                 "partNumber" : partNumber,
                 "uploadId" : object.file.uploadId
             }
-            var authResult = this._getUploadAuth(encryptParams, 'PUT', uploadAuthUrl, object.file.gid);
+            var authResult = this._getUploadAuth(encryptParams, 'POST', uploadAuthUrl, object.file.gid);
         	
             headers['x-bce-date'] = authResult['x-bce-date'];
             headers['Authorization'] = authResult['Authorization'];
@@ -68,7 +68,9 @@ define(function(require, exports, module) {
         },
 
         _getParameterByName: function (name, url) {
-            var query = url.substring( url.indexOf('?') + 1 );
+            var parser = document.createElement('a');
+            parser.href = url;
+            var query = parser.search.substring(1);
             var vars = query.split('&');
             for (var i = 0; i < vars.length; i++) {
                 var pair = vars[i].split('=');
@@ -111,6 +113,7 @@ define(function(require, exports, module) {
 
         uploadAccept: function(object, ret){
             if (ret._responseHeaders && ret._responseHeaders['ETag']) {
+                console.log(ret._requestURL);
                 var partNumber = this._getParameterByName('partNumber', ret._requestURL);
                 object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
             }
