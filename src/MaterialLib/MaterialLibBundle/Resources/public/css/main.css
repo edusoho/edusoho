@@ -144,7 +144,14 @@
 .materials-ul {
   border: solid 1px #eee;
   padding-left: 0;
+  height: 220px;
+  background: #fafafa;
 }
+
+.materials-ul.batch-hidden i{
+  display: none !important;
+}
+
 .materials-ul li {
   list-style-type: none;
 }
@@ -178,8 +185,9 @@
   border-left: solid 1px #eee;
 }
 
-.materials-ul li.img-li {
-  
+.materials-ul li.img-li i{
+  font-size: 16px;
+  margin-right: 10px;
 }
 
 .materials-ul li.img-li img {
@@ -188,16 +196,30 @@
   overflow: hidden;
 }
 
+.materials-ul li.img-li:hover .option-vertical {
+  display: block;
+}
+
+.materials-ul li.img-li:hover .option-vertical:hover {
+  opacity: 1;
+}
+
 .materials-ul li.img-li .option-vertical {
+  display: none;
   cursor: pointer;
   position: absolute;
   right: 0;
   top: 10px;
   z-index:100;
+  opacity: .6;
 }
 
 .materials-ul li.img-li:hover .star {
   display: block;
+}
+
+.materials-ul li.img-li:hover .star:hover {
+  opacity: 1;
 }
 
 .materials-ul li.img-li .star {
@@ -207,20 +229,26 @@
   right: 20px;
   top: 10px;
   z-index:100;
+  margin-right: 6px;
+  opacity: .6;
 }
 
 .materials-ul li.img-li:hover .mask {
   display: block;
+  background: #000;
+  color: #fff;
+  font-size: 12px;
 }
 
 .materials-ul li.img-li .mask {
+    text-align: center;
     display: none;
     cursor: pointer;
     position: absolute;
-    width: 100%;
+    width: 25%;
     bottom: 0;
-    height: 30px;
-    line-height: 30px;
+    right:0;
+    line-height: 20px;
     background-color: #B6B6B6;
     filter:alpha(opacity=60);  /*支持 IE 浏览器*/
     -moz-opacity:0.60; /*支持 FireFox 浏览器*/
@@ -250,20 +278,18 @@
   top: 40%;
 }
 
-.materials-ul li.caption p {
-  margin: 0;
-  padding: 0 10px 0 10px;
+.materials-ul li.caption {
+  padding: 8px 10px;
 }
 
 .materials-ul li.caption p.tags, .materials-ul li.caption p.date {
   font-size: 10px;
+  margin-bottom: 0;
 }
-.materials-ul li.caption p.date{
-  height: 17px;
-}
+
 .materials-ul li.caption p.use-time {
    font-size: 10px;
-   margin-top: 0px;
+   margin-top: 5px;
    margin-bottom: 5px;
  }
 

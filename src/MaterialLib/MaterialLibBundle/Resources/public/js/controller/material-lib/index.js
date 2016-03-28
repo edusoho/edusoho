@@ -17,6 +17,7 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav.nav-tabs li': 'onClickNav',
+                'click .js-material-tabs li': 'onClickTabs',
                 'click .pagination li': 'onClickPagination',
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
@@ -29,11 +30,12 @@ define(function(require, exports, module) {
                 'click .js-batch-delete-btn': 'onClickDeleteBatchBtn',
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
-                'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
+                //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
                 'click .js-process-status-select': 'onClickProcessStatusBtn',
                 'click .js-use-status-select': 'onClickUseStatusBtn'
             },
             setup: function() {
+                this.set('model','normal');
                 this.set('renderUrl', $('#material-item-list').data('url'));
                 this.renderTable();
                 this._initHeader();
@@ -47,6 +49,15 @@ define(function(require, exports, module) {
                 $target.closest('.nav').find('[name=type]').val($target.data('value'));
                 this.renderTable();
                 event.preventDefault();
+            },
+            onClickTabs: function(event)
+            {
+              var $target = $(event.currentTarget);
+              $target.closest('.nav').find('.active').removeClass('active');
+              $target.addClass('active');
+              $target.closest('.nav').find('[name=type]').val($target.data('value'));
+              this.renderTable();
+              event.preventDefault();
             },
             onClickPagination: function(event)
             {
@@ -174,10 +185,22 @@ define(function(require, exports, module) {
             },
             onClickManageBtn: function(event)
             {
-                this.set('model','edit');
                 var self = this;
-                var $target = $(event.currentTarget);
-                $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
+                var mode = self.get('model');
+
+                console.log(mode);
+                if(mode == "normal") {
+                  this.set('model','edit');
+                  var $target = $(event.currentTarget);
+                  $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
+                  $('.materials-ul').addClass('batch-hidden');
+                } else {
+                  this.set('model','normal');
+                  var self = this;
+                  var $target = $(event.currentTarget);
+                  $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
+                  $('.materials-ul').removeClass('batch-hidden');
+                }
             },
             onClickFinishBatchBtn: function(event)
             {
@@ -496,9 +519,6 @@ define(function(require, exports, module) {
         });
 
         window.materialWidget = new MaterialWidget({
-            attrs:{
-              model: 'normal'
-            },
             element: '#material-search-form'
         });
         var $panel = $('#material-lib-items-panel');
