@@ -1,7 +1,8 @@
 .open-course-views {
-	padding: 0;
-	// height: 500px;
 	position: relative;
+	display: table;
+	padding: 0;
+	height: 500px;
 	.mask {
 		position: absolute;
 		left: 0;
@@ -10,19 +11,19 @@
 		bottom: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.9);
+		background-color: rgba(0, 0, 0, .9);
 		.mask-content {
 			position: absolute;
-			width: 330px;
-			height: 160px;
 			left: 50%;
 			top: 50%;
+			width: 330px;
+			height: 160px;
 			margin-top: -80px;
 			margin-left: -165px;
 			text-align: center;
 			h2 {
-				font-size: 20px;
 				color: #fff;
+				font-size: 20px;
 				margin-bottom: 20px;
 			}
 			.mask-btn {
@@ -34,40 +35,22 @@
 				}
 			}
 		}
-		// .start-btn {
-		// 	position: absolute;
-		// 	left: 50%;
-		// 	top: 50%;
-		// 	margin-left: -85px;
-		// 	margin-top: -30px;
-		// 	width: 170px;
-		// 	height: 60px;
-		// 	.border-radius(4px);
-		// 	font-size: 20px;
-		// 	.es-icon {
-		// 		font-size: 23px;
-		// 		padding-left: 13px;
-		// 	}
-		// }
 	}
 	.modal-dialog {
+		margin: 13% auto;
+		@media(max-width:@screen-sm-max) {
+			margin: 15% auto;
+		}
 		.modal-img {
 			float: left;
 			width: 33.3%;
-			color: @gray-darker;
 			padding: 0 8px;
+			color: @gray-darker;
 			img {
-				.border-radius(3px);
 				margin-bottom: 12px;
+				.border-radius(3px);
 			}
 		}
-		// .refresh-btn {
-		// 	color: @gray;
-		// 	padding-right: 20px;
-		// 	.es-icon {
-		// 		padding-right: 5px;
-		// 	}
-		// }
 		.modal-footer .es-share{
 			.dropdown-menu {
 				left: 96px;
@@ -75,10 +58,6 @@
 			a {
 				color: #fff;
 				font-size: 14px;
-				// .es-icon {
-				// 	padding-right: 10px;
-				// 	font-size: 14px;
-				// }
 			}
 			.share-btn {
 				background-color: #70d445;
@@ -99,8 +78,6 @@
 }
 
 .open-course-tab {
-	// float: left;
-	// width: 288px;
 	height: 500px;
 	background-color: #212121;
 	color: #ffffff;
@@ -113,13 +90,13 @@
     margin-bottom: 0;
     list-style-type: none;
     .tab-header {
-			width: 50%;
 			float: left;
+			width: 50%;
 			padding: 20px 0;
 			font-size: 16px;
+			text-align: center;
 			cursor: pointer;
 			background-color: @gray-darker;
-			text-align: center;
 			&.active, &:hover {
 				background-color: #212121;
 				.es-transition;
@@ -132,90 +109,51 @@
 			padding: 15px 20px 10px 15px;
 		}
 		img {
-			width: 44%;
-			.border-radius(4px);
 			float: left;
-			margin-right: 15px;
+			width: 118px;
+			.border-radius(4px);
+			@media(max-width:@screen-md-max) {
+				width: 100px;
+			}
 		}
 		.open-course-info {
-			float: left;
-			font-size: 12px;
-			width: 48%;
+			margin-left: 138px;
+			@media(max-width:@screen-md-max) {
+				margin-left: 108px;
+			}
 			.title {
-				height: 42px;
+				display: inline-block;
+				padding-bottom: 8px;
+				max-height: 42px;
 				line-height: 21px;
+				font-size: 12px;
 		    overflow: hidden;
   			text-overflow: ellipsis;
-				padding-bottom: 8px;
-				a {
-					color: rgba(255, 255, 255, 0.8);
-					&:hover {
-						color: @brand-primary;
-						.es-transition;
-					}
+				color: rgba(255, 255, 255, .8);
+				&:hover {
+					color: @brand-primary;
+					.es-transition;
 				}
 			}
 			.num {
 				color: rgba(255, 255, 255, 0.5);
+				overflow: hidden;
+				height: 21px;
 			}
 		}
 	}
-	// .tab-recommand {
-	// 	padding: 10px 20px 10px 15px;
-	// 	&:first-child {
-	// 		padding: 15px 20px 10px 15px;
-	// 	}
-	// 	&:last-child {
-	// 		padding: 10px 20px 15px 15px;
-	// 	}
-	// 	img {
-	// 		width: 45%;
-	// 		.border-radius(4px);
-	// 		float: left;
-	// 		margin-right 15px;
-	// 	}
-	// 	.open-course-info {
-	// 		float: left;
-	// 		font-size: 12px;
-	// 		width: 48%;
-	// 		.title {
-	// 			height: 42px;
-	// 			line-height: 21px;
-	// 	    overflow: hidden;
- //  			text-overflow: ellipsis;
-	// 			padding-bottom: 8px;
-	// 			a {
-	// 				color: rgba(255, 255, 255, 0.8);
-	// 				&:hover {
-	// 					color: @brand-primary;
-	// 					.es-transition;
-	// 				}
-	// 			}
-	// 		}
-	// 		.num {
-	// 			color: rgba(255, 255, 255, 0.5);
-	// 		}
-	// 	}
-	// }
 	.tab-live a{
-		padding: 14px 50px 14px 20px;
-    white-space: nowrap;
-    word-wrap: normal;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		cursor: pointer;
 		display: block;
+		padding: 14px 50px 14px 20px;
 		color: rgba(255, 255, 255, 0.7);
-		// a {
-		// 	color: rgba(255, 255, 255, 0.7);
-		// 	display: block;
-		// 	&:hover,&:active {
-		// 		color: rgba(255, 255, 255, 1);
-		// 	}
-		// }
+		cursor: pointer;
+		overflow: hidden;
+    word-wrap: normal;
+    white-space: nowrap;
+		text-overflow: ellipsis;
 		&:hover,&:active {
-			background-color: @brand-primary;
 			color: rgba(255, 255, 255, 1);
+			background-color: @brand-primary;
 		}
 	}
 }
@@ -223,9 +161,9 @@
 .open-course-header {
 	margin-top: 20px;
 	.course-img {
+		float: left;
 		width: 120px;
 		margin-right: 20px;
-		float: left;
 		img {
 			.border-radius(3px);
 		}
@@ -233,9 +171,9 @@
 	.course-info {
 		float: left;
 		.title {
-			font-size: 20px;
 			margin-top: 5px;
 			margin-bottom: 10px;
+			font-size: 20px;
 		}
 		.matas span{
 			padding-right: 25px;
@@ -244,7 +182,7 @@
 	}
 	.course-operation {
 		float: right;
-		padding-top: 15px;
+		// padding-top: 15px;
 		color: @gray;
 		ul {
 			padding: 0;
@@ -253,20 +191,26 @@
 		}
 		li {
 			float: left;
-			padding: 0 10px;
 			width: 145px;
+			padding: 15px 10px 0 10px;
 			border-right: 1px solid #f1f1f1;
 			&:last-child {
 				border-right: 0;
+			}
+			@media(max-width:@screen-sm-min) {
+				&:nth-child(3) {
+					border-right: 0;
+					width: 134px;
+				}
 			}
 			.operation-icon {
 				float: left;
 		    display: block;
 		    width: 35px;
 		    height: 35px;
-		    line-height: 35px;
 		    margin: 0 10px;
 		    font-size: 22px;
+		    line-height: 35px;
 		    vertical-align: middle;
 		    border-radius: 50%;
 		    color: #fff;
@@ -284,9 +228,6 @@
 				}
 				.unoperation-icon {
 				background-color: @gray;
-				// &:active,&:hover {
-				// 	background-color: #e85749;
-				// }
 				}
 				.operation-list {
 					background-color: #e85749;
@@ -318,9 +259,6 @@
 					display: none;
 					z-index: 10;
 					cursor: pointer;
-					// img {
-					// 	width: 100%;
-					// }
 				}
 				&:hover .qrcode-popover{
 					display: block;
@@ -328,6 +266,9 @@
 			}
 			.es-share.top .dropdown-menu {
 				left: 15px;
+				a {
+			    margin: 3px 2px 2px 5px !important;
+				}
 			}
 			.qrcode-popover.top .qrcode-content{
 				top: -250px;
@@ -351,7 +292,7 @@
 // 		margin-top: 10px;
 // 	}
 // }
-.open-course-detail .course-img {
+.open-course-detail .intro-img {
 	width: 120px;
 	display: block;
 	margin-top: 10px;
