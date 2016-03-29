@@ -40,7 +40,8 @@ $resources = array(
     'Thread',
     'Upload',
     'Status',
-    'DiscoveryColumn'
+    'DiscoveryColumn',
+    'Playlist'
 );
 
 foreach ($resources as $res) {

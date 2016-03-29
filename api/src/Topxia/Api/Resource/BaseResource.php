@@ -153,7 +153,7 @@ abstract class BaseResource
         }
         $path = str_replace('public://', '', $path);
         $path = str_replace('files/', '', $path);
-        $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
+        $path = $this->getHttpHost()."/files/{$path}";
 
         return $path;
     }
@@ -163,8 +163,19 @@ abstract class BaseResource
         if (empty($path)) {
             return '';
         }
-        $path = "http://{$_SERVER['HTTP_HOST']}/assets/{$path}";
+        $path = $this->getHttpHost()."/assets/{$path}";
         return $path;
+    }
+
+    protected function getHttpHost()
+    {
+        return "http://{$_SERVER['HTTP_HOST']}";
+    }
+
+    protected function generateUrl($route, $parameters = array())
+    {
+        global $app;
+        return $app['url_generator']->generate($route, $parameters);
     }
 
     protected function getCurrentUser()

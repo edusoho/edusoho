@@ -27,6 +27,7 @@ $app->post(_u('/users'), 'res.Users:post');
 $app->get(_u('/courses'), 'res.Courses:get');
 $app->get(_u('/courses/discovery/columns'), 'res.Courses:discoveryColumn');
 $app->get(_u('/lessons'), 'res.Lessons:get');
+$app->get(_u('/lessons/{id}'), 'res.Lesson:get');
 $app->get(_u('/threads'), 'res.Threads:get');
 $app->get(_u('/chaos_threads'), 'res.ChaosThreads:get');
 $app->post(_u('/chaos_threads'), 'res.ChaosThreads:post');
