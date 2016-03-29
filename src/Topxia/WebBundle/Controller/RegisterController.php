@@ -67,7 +67,30 @@ class RegisterController extends BaseController
 
             $user = $this->getAuthService()->register($registration);
 
-            return $this->redirect($this->generateUrl('register_success', array('userId' => $user['id'], 'goto' => $this->getTargetPath($request))));
+            if (($authSettings
+                && isset($authSettings['email_enabled'])
+                && $authSettings['email_enabled'] == 'closed')
+                || !$this->isEmptyVeryfyMobile($user)) {
+                $this->authenticateUser($user);
+            }
+
+            $goto = $this->generateUrl('register_submited', array(
+                'id'   => $user['id'],
+                'hash' => $this->makeHash($user),
+                'goto' => $this->getTargetPath($request)
+            ));
+
+            if ($this->getAuthService()->hasPartnerAuth()) {
+                $currentUser = $this->getCurrentUser();
+
+                if (!$currentUser->isLogin()) {
+                    $this->authenticateUser($user);
+                }
+
+                $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+            }
+
+            return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
         }
 
         $inviteCode = '';
@@ -92,26 +115,10 @@ class RegisterController extends BaseController
 
     public function successAction(Request $request)
     {
-        $user = $this->getUserService()->getUser($request->query->get('userId'));
+        $goto = $request->query->get('goto');
 
-        $authSettings = $this->getSettingService()->get('auth', array());
-
-        if (($authSettings
-            && isset($authSettings['email_enabled'])
-            && $authSettings['email_enabled'] == 'closed')
-            || !$this->isEmptyVeryfyMobile($user)) {
-            $this->authenticateUser($user);
-        }
-
-        $goto = $this->generateUrl('register_submited', array(
-            'id'   => $user['id'],
-            'hash' => $this->makeHash($user),
-            'goto' => $request->query->get('goto')
-        ));
-
-        if ($this->getAuthService()->hasPartnerAuth()) {
-            $this->authenticateUser($user);
-            $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+        if (empty($goto)) {
+            $goto = $this->generateUrl('homepage');
         }
 
         return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
@@ -219,13 +226,18 @@ class RegisterController extends BaseController
             return $this->redirect($this->getTargetPath($request));
         }
 
-        if ($auth && $auth['register_mode'] != 'mobile' && array_key_exists('email_enabled', $auth) && ($auth['email_enabled'] == 'opened')) {
+        if ($auth && $auth['register_mode'] != 'mobile'
+            && array_key_exists('email_enabled', $auth)
+            && ($auth['email_enabled'] == 'opened')) {
             return $this->render("TopxiaWebBundle:Register:email-verify.html.twig", array(
                 'user'          => $user,
                 'hash'          => $hash,
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                 '_target_path'  => $this->getTargetPath($request)
             ));
+        } elseif ($this->getAuthService()->hasPartnerAuth()) {
+            $this->authenticateUser($user);
+            return $this->redirect($this->getTargetPath($request));
         } else {
             $this->authenticateUser($user);
             return $this->redirect($this->getTargetPath($request));

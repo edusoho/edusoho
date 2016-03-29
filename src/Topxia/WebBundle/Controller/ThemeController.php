@@ -54,7 +54,6 @@ class ThemeController extends BaseController
     public function getCurrentConfigBottomAction($isIndex = null)
     {
         $config = $this->getThemeService()->getCurrentThemeConfig();
-
         if ($isIndex) {
             $config = $config['confirmConfig']['bottom'];
         } else {

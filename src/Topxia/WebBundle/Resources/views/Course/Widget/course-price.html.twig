@@ -10,11 +10,12 @@
 {% set priceType = (setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin') ? 'coin' : 'default'  %}
 
 <span class="course-price-widget">
+
   {% if course.discountId %}
 
     {% if 'full' in shows or 'price' in shows %}
       {% if priceType == 'coin' %}
-        <span class="price">{{ course.coinPrice }}{{setting('coin.coin_name', '虚拟币'|trans)}}</span>
+        <span class="price">{{ course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</span>
       {% else %}
         <span class="price">{{ course.price }}{{'元'|trans}}</span>
       {% endif %}
@@ -22,7 +23,7 @@
 
     {% if 'full' in shows or 'originPrice' in shows %}
       {% if priceType == 'coin' %}
-        <span class="origin-price"><del>{{course.originCoinPrice}}{{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
+        <span class="origin-price"><del>{{course.price * setting('coin.cash_rate')}} {{setting('coin.coin_name', '虚拟币'|trans)}}</del></span>
       {% else %}
         <span class="origin-price"><del>{{course.originPrice}}{{'元'|trans}}</del></span>
       {% endif %}

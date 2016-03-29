@@ -50,3 +50,6 @@ admin_app_installed:
     pattern:  /app/installed/{postStatus}
     defaults: { _controller: MoocAdminBundle:App:installed }
 
+admin_setting_cloud_key_update:
+    pattern:  /setting/cloud/key/update
+    defaults: { _controller: MoocAdminBundle:EduCloud:keyUpdate }

@@ -1,8 +1,10 @@
 <section class="es-section">
   <div class="article-list">
     {% for article in articles %}
-      {% set category = categories[article.categoryId] %}
-      {% include 'TopxiaWebBundle:Article/Widget:list-item.html.twig' %}
+      {% set category = categories[article.categoryId]|default() %}
+      {% if category is not empty %}
+      	{% include 'TopxiaWebBundle:Article/Widget:list-item.html.twig' %}
+  	  {% endif %}
     {% else %}
        <div class="empty tac text-muted mvl">{{'还没有任何资讯'|trans}}</div>
     {% endfor %}

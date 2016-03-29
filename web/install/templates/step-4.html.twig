@@ -3,9 +3,8 @@
 {% block main %}
 
   <h4 class="text-success">恭喜，系统已安装成功！</h4>
-  {% if response %}
-     {{response.content|raw}}
-  {% endif %}
+  <div id="content">
+  </div>
   <div class="well key-result-well key-creating">
     正在生成授权码，请稍等...
     <br>
@@ -55,6 +54,11 @@
     }).fail(function(){
       $("#error-reason").html('生成Key失败，请联系EduSoho官方技术支持！');
       $('.key-create-fail').removeClass('hide');
+    });
+
+
+    $.post('start-install.php?step=888', function(response) {
+      $('#content').html(response.content);
     });
 
   });

@@ -188,34 +188,8 @@ class CourseLessonController extends BaseController
     {
         list($course, $member) = $this->getCourseService()->tryTakeCourse($courseId);
 
-        $lesson  = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $json    = array();
-        $preview = $request->query->get('preview');
-
-        if ($member['role'] != 'teacher' && $preview == 1) {
-            return $this->createJsonResponse(array('message' => '您不是教师，无法预览!'));
-        }
-
-        if ($preview != 1) {
-            if ($course['studyModel'] == 'ordered') {
-                $user = $this->getCurrentUser();
-
-                $lessons = $this->getCourseService()->getCourseLessons($courseId);
-
-                foreach ($lessons as $tempLesson) {
-                    if ($tempLesson['seq'] < $lesson['seq']) {
-                        $lessonLearnStatus = $this->getCourseService()->getUserLearnLessonStatus($user['id'], $courseId, $tempLesson['id']);
-
-                        if ($lessonLearnStatus == null || $lessonLearnStatus == 'learning') {
-                            $json['studyModel'] = 'ordered';
-
-                            return $this->createJsonResponse($json);
-                        }
-                    }
-                }
-            }
-        }
-
+        $lesson         = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $json           = array();
         $json['number'] = $lesson['number'];
         $chapter        = empty($lesson['chapterId']) ? null : $this->getCourseService()->getChapter($course['id'], $lesson['chapterId']);
 

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Mooc\WebBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +33,6 @@ class CourseLessonController extends BaseCourseLessonController
 
     private function checkTestPaper($lessonId, $testId, $status)
     {
-
         $user = $this->getCurrentUser();
 
         $message   = '';
@@ -58,7 +56,7 @@ class CourseLessonController extends BaseCourseLessonController
             return $message = '不是试卷所属课程老师或学生';
         }
 
-        if($course['type'] == 'periodic' && time() > $course['endTime']) {
+        if ($course['type'] == 'periodic' && time() > $course['endTime']) {
             return $message = '周期课程已经结束, 不可考试';
         }
 
@@ -84,5 +82,4 @@ class CourseLessonController extends BaseCourseLessonController
             }
         }
     }
-
 }

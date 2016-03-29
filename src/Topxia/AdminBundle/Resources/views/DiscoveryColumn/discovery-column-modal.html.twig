@@ -1,0 +1,84 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% block title %}
+  {% if discoveryColumn|default(false) %}
+  栏目编辑
+  {% else %}
+  栏目添加
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+<div id="category-creater-widget" data-upload-url="#">
+
+	<form id="category-form" class="form-horizontal" {% if discoveryColumn %}action="{{ path('admin_discovery_column_edit',{id:discoveryColumn.id}) }}"{% else %}action="{{ path('admin_discovery_column_create') }}"{% endif %} method="post"
+  data-mode='{% if discoveryColumn|default(false) %}edit{% else %}add{% endif %}'
+  >
+		<div class="form-group">
+			<label class="col-md-3 control-label" for="category-name-field">栏目名称</label>
+			<div class="col-md-8 controls">
+				<input class="form-control" id="category-name-field" type="text" data-url="{{ path('admin_discovery_column_title_check',{id:discoveryColumn.id|default(0)}) }}" name="title" value="{{ discoveryColumn.title|default() }}" tabindex="1">
+				<p class="help-block">栏目名称控制在十个字符之内。</p>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-3 control-label">
+      	<label for="keyword-name-field">类型</label>
+    	</div>
+			<div class="col-md-7 controls radios">
+        <input type="radio" id="course" name="type" checked="checked" value="course">
+        <label for="course">普通课程</label>
+        <input type="radio" id="live" name="type"{% if discoveryColumn and discoveryColumn.type == 'live' %} checked="checked" {% endif %}value="live">
+        <label for="live">直播课程</label>
+        <input type="radio" id="classroom" name="type" {% if discoveryColumn and discoveryColumn.type == 'classroom' %} checked="checked" {% endif %}value="classroom">
+        <label for="classroom">班级</label>
+    	</div>
+    </div>
+
+		<div class="form-group">
+      <label class="col-md-3 control-label">分类</label>
+      <div class="col-md-8 controls">
+        <select id="" name="categoryId" required="required" class="form-control width-input width-input-large">
+					{{ select_options(category_choices('course'), categoryId, '分类') }}
+        </select>
+        <div class="help-block" style="display:none;"></div>
+      </div>
+    </div>
+
+		<div {% if discoveryColumn and discoveryColumn.type == 'live' %}class="form-group order-form hide" {% else %}class="form-group order-form" {% endif %}>
+			<div class="col-md-3 control-label">
+      	<label for="keyword-name-field">排序方式</label>
+    	</div>
+			<div class="col-md-7 controls radios">
+        <input type="radio" id="new" name="orderType" checked="checked" value="new">
+        <label for="new">最新</label>
+        <input type="radio" id="hot" name="orderType" {% if discoveryColumn.orderType|default(0) == 'hot' %}checked="checked" {% endif %}value="hot">
+        <label for="hot">最热</label>
+        <input type="radio" id="recommend" name="orderType" {% if discoveryColumn.orderType|default(0) == 'recommend' %}checked="checked" {% endif %}value="recommend">
+        <label for="recommend">推荐</label>
+    	</div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-3 control-label">展示数量设置</label>
+      <div class="col-sm-9">
+	      <select class="form-control width-input-large" name="showCount">
+	        <option value="2" {% if discoveryColumn.showCount|default(0) == 2 %} selected="selected" {% endif %}>2</option>
+	        <option value="4" {% if discoveryColumn.showCount|default(0) == 4 %} selected="selected" {% endif %}>4</option>
+	        <option value="6" {% if discoveryColumn.showCount|default(0) == 6 %} selected="selected" {% endif %}>6</option>
+	      </select>
+	      <p class="help-block">提示：一个模块最多显示六门课程。如果有更多的显示要求可以进入更多选项查看更多的课程。</p>
+    	</div>
+    </div>
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+		
+	</form>
+</div>
+<script type="text/javascript"> app.load('discovery-column/discovery-column-modal') </script>
+{% endblock %}
+
+{% block footer %}
+  	<button type="button" class="btn btn-link" data-dismiss="modal" tabindex="6">取消</button>
+	<button id="category-create-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary" data-toggle="form-submit" data-target="#category-form" tabindex="4">确定</button>
+{% endblock %}

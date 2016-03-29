@@ -44,7 +44,7 @@ class OrderProcessorImpl extends BaseProcessor implements OrderProcessor
         );
 
     }
-    
+
     public function validateIAPReceipt()
     {
         $user = $this->controller->getUserByToken($this->request);
