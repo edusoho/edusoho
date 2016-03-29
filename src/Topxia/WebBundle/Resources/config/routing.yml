@@ -1253,6 +1253,10 @@ my_teaching_courses:
     pattern: /my/teaching/courses/{filter}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:courses, filter:'normal' }
 
+my_teaching_open_courses:
+    pattern: /my/teaching/open/courses
+    defaults: { _controller: TopxiaWebBundle:MyTeaching:openCourses}
+
 my_teaching_threads:
     pattern: /my/teaching/threads/{type}
     defaults: { _controller: TopxiaWebBundle:MyTeaching:threads }

@@ -63,6 +63,15 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    public function openCoursesAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是教师，不能查看此页面! ');
+        }
+    }
+
     public function classroomsAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -190,5 +199,9 @@ class MyTeachingController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getOpenCourseService()
+    {
     }
 }
