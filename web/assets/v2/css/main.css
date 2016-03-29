@@ -9261,14 +9261,14 @@ textarea {
 .course-detail-header.before .course-info {
   float: left;
   width: 390px;
-  width: 386px\9;
+  width: 388px\9;
   padding: 15px 20px 15px 5px;
   background-color: #fff;
 }
 @media (max-width: 1199px) {
   .course-detail-header.before .course-info {
     width: 350px;
-    width: 346px\9;
+    width: 348px\9;
     padding: 8px 10px;
   }
   .course-detail-header.before .course-info .title {
@@ -9286,9 +9286,9 @@ textarea {
 }
 @media (max-width: 991px) and (min-width: 768px) {
   .course-detail-header.before .course-info {
-    width: 360px;
+    width: 358px;
     width: 356px\9;
-    height: 211px;
+    height: 212px;
     border-top-right-radius: 4px;
   }
 }
@@ -9300,11 +9300,11 @@ textarea {
 }
 .course-detail-header.before .course-operation {
   float: right;
-  width: 240px;
+  width: 238px;
 }
 @media (max-width: 1199px) and (min-width: 992px) {
   .course-detail-header.before .course-operation {
-    width: 190px;
+    width: 188px;
     padding: 10px;
   }
 }
@@ -9323,6 +9323,7 @@ textarea {
     float: left;
     width: 33.33%;
     border: none;
+    margin-top: 10px;
   }
 }
 .course-detail-header.before .course-operation .buy {
@@ -9395,14 +9396,14 @@ textarea {
 .course-detail-header.after .course-info {
   float: left;
   width: 570px;
-  width: 566px\9;
+  width: 568px\9;
   padding: 15px 25px;
   background-color: #fff;
 }
 @media (max-width: 1199px) {
   .course-detail-header.after .course-info {
     width: 470px;
-    width: 466px\9;
+    width: 468px\9;
     padding: 10px;
   }
   .course-detail-header.after .course-info .title {
@@ -9412,7 +9413,7 @@ textarea {
 @media (max-width: 991px) {
   .course-detail-header.after .course-info {
     width: 320px;
-    width: 316px\9;
+    width: 318px\9;
   }
 }
 @media (max-width: 767px) {
@@ -9422,17 +9423,17 @@ textarea {
 }
 .course-detail-header.after .course-operation {
   float: right;
-  width: 240px;
+  width: 238px;
 }
 @media (max-width: 1199px) {
   .course-detail-header.after .course-operation {
-    width: 210px;
+    width: 208px;
     padding: 10px;
   }
 }
 @media (max-width: 991px) {
   .course-detail-header.after .course-operation {
-    width: 140px;
+    width: 138px;
   }
 }
 @media (max-width: 767px) {
