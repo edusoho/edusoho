@@ -97,6 +97,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
+        if ($orderBy[0] == '') {
+            $orderBy[0] = 'createdTime';
+        }
+        if (!in_array($orderBy[0], array('createdTime', 'palyTimes'))) {
+            throw new \RuntimeException("不允许对{$orderBy[0]}字段进行排序", 1);
+        }
+
+        if (!in_array(strtoupper($orderBy[1]), array('ASC', 'DESC'))) {
+            throw new \RuntimeException("orderBy排序方式错误", 1);
+        }
         $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
 
         if (empty($files)) {
