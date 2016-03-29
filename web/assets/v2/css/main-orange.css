@@ -8621,6 +8621,54 @@ textarea {
   padding-bottom: 20px;
   background: #fff;
 }
+.es-friend-link {
+  border-top: 1px solid #e1e8ed;
+  background-color: #f5f8fa;
+  padding: 20px 0;
+}
+@media (max-width: 767px) {
+  .es-friend-link {
+    padding: 10px 0;
+  }
+}
+.es-friend-link .container {
+  position: relative;
+}
+.es-friend-link .container .title {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  color: #919191;
+  font-size: 18px;
+}
+@media (max-width: 767px) {
+  .es-friend-link .container .title {
+    display: none;
+  }
+}
+.es-friend-link .container ul {
+  padding-left: 80px;
+  margin-bottom: 0;
+}
+@media (max-width: 767px) {
+  .es-friend-link .container ul {
+    padding-left: 0;
+  }
+}
+.es-friend-link .container ul li {
+  margin: 5px 30px;
+  display: inline-block;
+}
+@media (max-width: 1199px) {
+  .es-friend-link .container ul li {
+    margin: 5px 15px;
+  }
+}
+@media (max-width: 767px) {
+  .es-friend-link .container ul li {
+    margin: 5px;
+  }
+}
 .aricle-carousel {
   overflow: hidden;
 }

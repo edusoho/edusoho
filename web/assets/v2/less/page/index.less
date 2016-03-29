@@ -461,3 +461,44 @@
   padding-bottom: 20px;
   background: #fff;
 }
+
+// 友情链接
+.es-friend-link {
+  border-top: 1px solid #e1e8ed;
+  background-color: @bg-new-color;
+  padding: 20px 0;
+  @media(max-width: @screen-xs-max) {
+    padding: 10px 0;
+  }
+  .container {
+    position: relative;
+    .title {
+      position: absolute;
+      top: 2px;
+      left: 0;
+      color: @gray;
+      font-size: 18px;
+      @media(max-width: @screen-xs-max) {
+        // position: 
+        display: none;
+      }
+    }
+    ul {
+      padding-left: 80px;
+      margin-bottom: 0;
+      @media(max-width: @screen-xs-max) {
+        padding-left: 0;
+      }
+      li {
+        margin: 5px 30px;
+        display: inline-block;
+        @media(max-width: @screen-md-max) {
+          margin: 5px 15px;
+        }
+        @media(max-width: @screen-xs-max) {
+          margin: 5px;
+        }
+      }
+    }
+  }
+}
