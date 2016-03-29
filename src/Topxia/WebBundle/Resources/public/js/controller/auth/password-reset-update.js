@@ -18,7 +18,7 @@ define(function(require, exports, module) {
             element: '[name="form[confirmPassword]"]',
             required: true,
             rule: 'confirmation{target:"#form_password"}',
-            errormessageConfirmation: '两次密码输入不一致，请重新输入'
+            errormessageConfirmation: Translator.trans('两次密码输入不一致，请重新输入')
         });
 
     };

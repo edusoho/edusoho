@@ -62,7 +62,7 @@ define(function(require, exports, module) {
                 element: '[name="thread[title]"]',
                 required: true,
                 rule: 'minlength{min:2} maxlength{max:200}',
-                errormessageUrl: '长度为2-200位'
+                errormessageUrl: Translator.trans('长度为2-200位')
             });
             validator_thread.addItem({
                 element: '[name="thread[content]"]',
@@ -113,7 +113,7 @@ define(function(require, exports, module) {
                             if(data.error) {
                                 Notify.danger(data.error.message);
                             } else {
-                                Notify.danger('发表回复失败，请重试');
+                                Notify.danger(Translator.trans('发表回复失败，请重试'));
                             }
                         }
                     });
@@ -137,7 +137,7 @@ define(function(require, exports, module) {
                 $('#fromUserIdDiv').html('<input type="hidden" id="fromUserId" value="' + fromUserId + '">');
                 $('#li-' + postId).show();
                 $('#reply-content-' + postId).focus();
-                $('#reply-content-' + postId).val("回复 " + $(this).attr("postName") + ":");
+                $('#reply-content-' + postId).val(Translator.trans('回复 ') + $(this).attr("postName") + ":");
 
             });
 
@@ -255,7 +255,7 @@ define(function(require, exports, module) {
                                     if(data.error) {
                                         Notify.danger(data.error.message);
                                     } else {
-                                        Notify.danger('发表回复失败，请重试');
+                                        Notify.danger(Translator.trans('发表回复失败，请重试'));
                                     }
                                     replyBtn.button('reset').removeClass('disabled');
                                 }
@@ -306,7 +306,7 @@ define(function(require, exports, module) {
         }
         if ($('#exit-btn').length > 0) {
             $('#exit-btn').click(function() {
-                if (!confirm('真的要退出该小组？您在该小组的信息将删除！')) {
+                if (!confirm(Translator.trans('真的要退出该小组？您在该小组的信息将删除！'))) {
                     return false;
                 }
             })
@@ -348,7 +348,7 @@ define(function(require, exports, module) {
                 element: '[name="group[grouptitle]"]',
                 required: true,
                 rule: 'minlength{min:2} maxlength{max:100}',
-                errormessageUrl: '长度为2-100位'
+                errormessageUrl: Translator.trans('长度为2-100位')
 
 
             });

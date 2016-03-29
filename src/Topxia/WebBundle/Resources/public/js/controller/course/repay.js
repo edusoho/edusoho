@@ -5,15 +5,15 @@ define(function(require, exports, module) {
     exports.run = function() {
 
         $(".cancel").on('click', function(){
-            if (!confirm('真的要取消订单吗？')) {
+            if (!confirm(Translator.trans('真的要取消订单吗？'))) {
                 return false;
             }
 
             $.post($(this).data('url'), function(data) {
                 if(data!=true) {
-                    Notify.danger('订单取消失败！'); 
+                    Notify.danger(Translator.trans('订单取消失败！')); 
                 }
-                Notify.success('订单已取消成功！');
+                Notify.success(Translator.trans('订单已取消成功！'));
                 window.location.reload();
             });
         });

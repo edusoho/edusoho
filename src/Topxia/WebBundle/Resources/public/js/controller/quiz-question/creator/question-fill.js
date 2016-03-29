@@ -14,7 +14,7 @@ define(function(require, exports, module) {
         },
 
         _initValidator: function() {
-            Validator.addRule('fillCheck',/(\[\[(.+?)\]\])/i, '请输入正确的答案,如今天是[[晴|阴|雨]]天.');
+            Validator.addRule('fillCheck',/(\[\[(.+?)\]\])/i, Translator.trans('请输入正确的答案,如今天是[[晴|阴|雨]]天.'));
             this.get("validator").removeItem('#question-stem-field');
             this.get("validator").addItem({
                 element: '#question-stem-field',

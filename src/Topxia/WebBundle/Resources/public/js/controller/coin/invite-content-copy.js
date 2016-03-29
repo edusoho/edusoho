@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 		$('#copy').click(function(){
 	        $("#content").select();
 	        document.execCommand("Copy"); 
-	        Notify.success('链接复制成功');
+	        Notify.success(Translator.trans('链接复制成功'));
     	});
 	}
 });

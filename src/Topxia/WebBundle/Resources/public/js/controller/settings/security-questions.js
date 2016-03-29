@@ -55,7 +55,7 @@ define(function(require, exports, module) {
 
         q1.change(function(){ 
             if (q1.val() === q2.val() || q3.val() === q2.val() || q1.val() === q3.val()){
-                alert('问题类型不能重复')
+                alert(Translator.trans('问题类型不能重复'))
                 q1.val('parents');
                 q3.val('teacher');
                 q3.val('lover');
@@ -67,7 +67,7 @@ define(function(require, exports, module) {
 
         q2.change(function(){ 
             if (q1.val() === q2.val() || q3.val() === q2.val() || q1.val() === q3.val()){
-                alert('问题类型不能重复')
+                alert(Translator.trans('问题类型不能重复'))
                 q1.val('parents');
                 q3.val('teacher');
                 q3.val('lover');
@@ -79,7 +79,7 @@ define(function(require, exports, module) {
 
         q3.change(function(){ 
             if (q1.val() === q2.val() || q3.val() === q2.val() || q1.val() === q3.val()){
-                alert('问题类型不能重复')
+                alert(Translator.trans('问题类型不能重复'))
                 q1.val('parents');
                 q3.val('teacher');
                 q3.val('lover');

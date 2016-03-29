@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             return false;
         }
         return true;
-    },"余额不足!");
+    },Translator.trans('余额不足!'));
 
     Validator.addRule('reward_check',
     function() {
@@ -29,7 +29,7 @@ define(function(require, exports, module) {
             return false;
         }
         return true;
-    },"悬赏额范围在1-50之间!");
+    },Translator.trans('悬赏额范围在1-50之间!'));
 
     exports.run = function() {
 

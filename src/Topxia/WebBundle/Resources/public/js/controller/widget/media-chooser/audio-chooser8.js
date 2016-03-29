@@ -9,7 +9,7 @@ define(function(require, exports, module) {
     		uploaderSettings: {
                 file_types : "*.mp3",
                 file_size_limit : "500 MB",
-                file_types_description: "音频文件"
+                file_types_description: Translator.trans('音频文件')
     		},
             preUpload: function(uploader, file) {
                 var data = {};
@@ -32,7 +32,7 @@ define(function(require, exports, module) {
                         uploader.setPostParams(response.postParams);
                     },
                     error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
+                        Notify.danger(Translator.trans('请求上传授权码失败！'));
                     }
                 });
             }

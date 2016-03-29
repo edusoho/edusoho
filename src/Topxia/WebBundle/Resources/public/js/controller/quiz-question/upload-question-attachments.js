@@ -85,7 +85,7 @@ define(function(require, exports, module) {
 
 							var fileId = response.id;
 							var targetId = response.targetId;
-							self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/question/attachment/"+fileId+"/download'>" + file.name + "</a>");
+							self.get("editor").insertHtml(Translator.trans('附件:')  +"<a href='/course/"+targetId+"/manage/question/attachment/"+fileId+"/download'>" + file.name + "</a>");
 
 
 						},
@@ -95,7 +95,7 @@ define(function(require, exports, module) {
 						},
 
 						Error: function(up, args) {
-							Notify.danger('文件上传失败，可能的原因: 1.文件大小超出限制. 2.文件不存在. 3.文件不能被写入硬盘. 4.临时目录不存在.', 60);
+							Notify.danger(Translator.trans('文件上传失败，可能的原因: 1.文件大小超出限制. 2.文件不存在. 3.文件不能被写入硬盘. 4.临时目录不存在.'), 60);
 						},
 						UploadComplete: function(up, files) {
 				            up.refresh();
@@ -143,7 +143,7 @@ define(function(require, exports, module) {
 									up.refresh();
 								},
 								error: function(jqXHR, status, error) {
-									Notify.danger('请求上传授权码失败！');
+									Notify.danger(Translator.trans('请求上传授权码失败！'));
 									up.stop();
 								}
 							});
@@ -159,7 +159,7 @@ define(function(require, exports, module) {
 					
 					if (uploader.files.length > 0 && (uploader.total.uploaded != (uploader.files.length - uploader.total.failed))) {
 						
-						if (!confirm('当前正在上传的文件将停止上传，确定关闭？')) {
+						if (!confirm(Translator.trans('当前正在上传的文件将停止上传，确定关闭？'))) {
 							return false;
 						}
 					}

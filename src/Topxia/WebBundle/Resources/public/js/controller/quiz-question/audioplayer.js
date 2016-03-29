@@ -31,19 +31,19 @@ define(function(require, exports, module) {
             $.get('/question_ajax/file_url', {id:fileId}, function(response) {
                 if (response.status == 'waiting') {
                     Notify.warning(response.message);
-                    self.element.html('<a href="javascript:;" class="retry"><span class="glyphicon glyphicon-volume-up text-danger"></span> 请重试</a>');
+                    self.element.html('<a href="javascript:;" class="retry"><span class="glyphicon glyphicon-volume-up text-danger"></span>'+ Translator.trans('请重试')+'</a>');
                     return ;
                 }
 
                 if (response.status == 'error') {
                     Notify.danger(response.message);
-                    self.element.html('<a href="javascript:;" class="retry"><span class="glyphicon glyphicon-volume-up text-danger"></span> 请重试</a>');
+                    self.element.html('<a href="javascript:;" class="retry"><span class="glyphicon glyphicon-volume-up text-danger"></span>'+ Translator.trans('请重试')+'</a>');
                     return ;
                 }
 
                 if (response.status != 'ok') {
-                    Notify.danger('音频载入失败，请重试。');
-                    self.element.html('<a href="javascript:;" class="retry"><span class="glyphicon glyphicon-volume-up text-danger"></span> 请重试</a>');
+                    Notify.danger(Translator.trans('音频载入失败，请重试。'));
+                    self.element.html('<a href="javascript:;" class="retry"><span class="glyphicon glyphicon-volume-up text-danger"></span>'+ Translator.trans('请重试')+'</a>');
                     return ;
                 }
 

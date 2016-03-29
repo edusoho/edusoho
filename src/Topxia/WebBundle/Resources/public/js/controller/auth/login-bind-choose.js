@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                     return false;
                 }
                 if(!$('#user_terms').find('input[type=checkbox]').attr('checked')) {
-                 Notify.danger('勾选同意此服务协议，才能继续注册！');
+                 Notify.danger(Translator.trans('勾选同意此服务协议，才能继续注册！'));
                  return ;
                 }
                 $form.find('[type=submit]').button('loading');
@@ -27,11 +27,11 @@ define(function(require, exports, module) {
                         $('#bind-new-form-error').html(response.message).show();
                         return ;
                     }
-                    Notify.success('登录成功，正在跳转至首页！');
+                    Notify.success(Translator.trans('登录成功，正在跳转至首页！'));
                     window.location.href = response._target_path;
 
                 }, 'json').fail(function() {
-                    Notify.danger('登录失败，请重新登录后再试！');
+                    Notify.danger(Translator.trans('登录失败，请重新登录后再试！'));
                 }).always(function() {
                    $form.find('button[type=submit]').button('reset');
                 });

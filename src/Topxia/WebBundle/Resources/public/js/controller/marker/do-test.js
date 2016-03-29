@@ -9,7 +9,7 @@ define(function(require, exports, module) {
         btn.on('click', function() {
             var answer = doMarkerQuestion(questionType);
             if(!answer|| answer.length==0){
-                $('.text-danger').html("请先作答!");
+                $('.text-danger').html(Translator.trans('请先作答!'));
                 setTimeout(clearHtml,1500);
                 return;
             }

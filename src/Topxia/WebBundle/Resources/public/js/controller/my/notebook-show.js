@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
         $('#notebook').on('click', '.notebook-note-delete', function(){
             var $btn = $(this);
-        	if (!confirm('真的要删除该笔记吗？')) {
+        	if (!confirm(Translator.trans('真的要删除该笔记吗？'))) {
         		return false;
         	}
 

@@ -39,7 +39,7 @@ define(function(require, exports, module) {
                     required: true,
                     rule: 'alphanumeric remote',
                     onItemValidated: function(error, message, eleme) {
-                        if (message == "验证码错误"){
+                        if (message == Translator.trans('验证码错误')){
                             $('.js-sms-send').addClass('disabled');
                             $("#getcode_num").attr("src",$("#getcode_num").data("url")+ "?" + Math.random()); 
                         } else {
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
                     required: true,
                     triggerType: 'submit',
                     rule: 'integer fixedLength{len:6} remote',
-                    display: '短信验证码'           
+                    display: Translator.trans('短信验证码')           
                 });
             }
             

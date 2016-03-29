@@ -63,7 +63,7 @@ define(function(require, exports, module) {
                     required: true,
                     triggerType: 'submit',
                     rule: 'integer fixedLength{len:6} remote',
-                    display: '短信验证码'           
+                    display: Translator.trans('短信验证码')           
                 });
 
                 if (('undefined' != typeof smsSender)&&("undefined" != typeof smsSender.destroy)){
