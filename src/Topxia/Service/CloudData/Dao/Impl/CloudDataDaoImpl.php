@@ -23,7 +23,7 @@ class CloudDataDaoImpl extends BaseDao implements CloudDataDao
                         ->setMaxResults($limit);
 
         $result = $builder->execute()->fetchAll() ?: array();
-        return $this->createSerializer()->unserializes($result, $this->getSerializeFields());
+        return $this->createSerializer()->unserializes($result, $this->serializeFields);
     }
 
     public function searchCloudDataCount($conditions)
@@ -45,7 +45,7 @@ class CloudDataDaoImpl extends BaseDao implements CloudDataDao
     {
         $sql    = "SELECT * FROM {$this->getTable()} WHERE id = ? LIMIT 1";
         $result = $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
-        return $this->createSerializer()->unserialize($result, $this->getSerializeFields());
+        return $this->createSerializer()->unserialize($result, $this->serializeFields);
     }
 
     public function add($fields)
