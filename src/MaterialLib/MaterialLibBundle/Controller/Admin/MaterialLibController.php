@@ -5,6 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller\Admin;
 use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\Common\ArrayToolkit;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
@@ -12,7 +13,16 @@ class MaterialLibController extends BaseController
 {
     public function indexAction()
     {
-        return $this->redirect($this->generateUrl('admin_material_lib_manage'));
+        try{
+          $api = CloudAPIFactory::create('root');
+          $result = $api->get("/me");
+        } catch (\RuntimeException $e) {
+            return $this->render('MaterialLibBundle:Admin:api-error.html.twig', array());
+        }
+        if(isset($result['hasStorage']) && $result['hasStorage'] == '1' ){
+          return $this->redirect($this->generateUrl('admin_material_lib_manage'));
+        }
+        return $this->render('MaterialLibBundle:Admin:error.html.twig', array());
     }
 
     public function manageAction(Request $request)
