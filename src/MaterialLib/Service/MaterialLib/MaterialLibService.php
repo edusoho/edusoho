@@ -27,4 +27,6 @@ interface MaterialLibService
     public function player($globalId);
 
     public function synData();
+
+    public function filterTagCondition($conditions,$data);
 }
