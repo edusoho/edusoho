@@ -695,14 +695,6 @@ course_manage_teachers_match:
     pattern: /course/{id}/manage/teachersMatch
     defaults: { _controller: TopxiaWebBundle:CourseManage:teachersMatch }
 
-course_manage_live_open_time_set:
-    pattern:  /course/{id}/manage/live/open/time
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
-
-course_manage_open_marketing:
-    pattern:  /course/{id}/manage/open/marketing
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:marketing }
-
 course_manage_lesson:
     pattern:  /course/{id}/manage/lesson
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:index }
@@ -2032,6 +2024,46 @@ live_course_manage_lesson_replay_title_update:
     pattern:  /livecourse/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update_title
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
+
+open_course_manage:
+    pattern:  /open/course/{id}/manage
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:index }
+
+open_course_manage_base:
+    pattern:  /open/course/{id}/manage/base
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:base }
+
+open_course_manage_lesson:
+    pattern:  /open/course/{id}/manage/lesson
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:lesson }
+
+open_course_manage_picture:
+    pattern:  /open/course/{id}/manage/picture
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:picture }
+
+open_course_manage_picture_crop:
+    pattern:  /open/course/{id}/manage/picture/crop
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pictureCrop }
+
+open_course_manage_teachers:
+    pattern:  /open/course/{id}/manage/teachers
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:teachers }
+
+open_course_manage_live_time_set:
+    pattern:  /open/course/{id}/manage/live/time
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:liveOpenTimeSet }
+
+open_course_manage_marketing:
+    pattern:  /open/course/{id}/manage/marketing
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:marketing }
+
+open_course_manage_students:
+    pattern:  /open/course/{id}/manage/students
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:students }
+
+open_course_manage_files:
+    pattern:  /open/course/{id}/manage/files
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:files }
 
 open_course_show:
     pattern:  /open/course/{courseId}

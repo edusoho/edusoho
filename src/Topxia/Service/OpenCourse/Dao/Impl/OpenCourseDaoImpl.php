@@ -10,7 +10,8 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
     protected $table = 'open_course';
 
     private $serializeFields = array(
-        'teacherIds' => 'saw'
+        'teacherIds' => 'saw',
+        'tags'       => 'saw'
     );
 
     public function getCourse($id)
@@ -101,7 +102,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 
         $currentTime = time();
 
-        $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+        $sql = "UPDATE {$this->table} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
 
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
         $this->clearCached();

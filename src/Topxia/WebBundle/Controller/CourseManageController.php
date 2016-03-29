@@ -34,13 +34,7 @@ class CourseManageController extends BaseController
         $tags    = $this->getTagService()->findTagsByIds($course['tags']);
         $default = $this->getSettingService()->get('default', array());
 
-        if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {
-            $template = 'TopxiaWebBundle:OpenCourseManage:open-course-base.html.twig';
-        } else {
-            $template = 'TopxiaWebBundle:CourseManage:base.html.twig';
-        }
-
-        return $this->render($template, array(
+        return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
             'course'  => $course,
             'tags'    => ArrayToolkit::column($tags, 'name'),
             'default' => $default

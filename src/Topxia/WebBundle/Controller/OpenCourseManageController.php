@@ -1,15 +1,136 @@
 <?php
 namespace Topxia\WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseManageController extends BaseController
 {
+    public function indexAction(Request $request, $id)
+    {
+        $openCourse = $this->getOpenCourseService()->getCourse($id);
+
+        return $this->forward('TopxiaWebBundle:OpenCourseManage:base', array('id' => $id));
+    }
+
+    public function baseAction(Request $request, $id)
+    {
+        //$course        = $this->getCourseService()->tryManageCourse($id);
+        $course        = $this->getOpenCourseService()->getCourse($id);
+        $courseSetting = $this->getSettingService()->get('course', array());
+
+        /*if ($request->getMethod() == 'POST') {
+        $data = $request->request->all();
+        $this->getCourseService()->updateCourse($id, $data);
+        $this->setFlashMessage('success', '课程基本信息已保存！');
+        return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
+        }*/
+
+        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
+        $default = $this->getSettingService()->get('default', array());
+
+        return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-base.html.twig', array(
+            'course'  => $course,
+            'tags'    => ArrayToolkit::column($tags, 'name'),
+            'default' => $default
+        ));
+    }
+
+    public function pictureAction(Request $request, $id)
+    {
+        //$course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function pictureCropAction(Request $request, $id)
+    {
+        //$course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->getCourseService()->changeCoursePicture($course['id'], $data["images"]);
+            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
+        }
+
+        $fileId                                      = $request->getSession()->get("fileId");
+        list($pictureUrl, $naturalSize, $scaledSize) = $this->getFileService()->getImgFileMetaInfo($fileId, 480, 270);
+
+        return $this->render('TopxiaWebBundle:CourseManage:picture-crop.html.twig', array(
+            'course'      => $course,
+            'pictureUrl'  => $pictureUrl,
+            'naturalSize' => $naturalSize,
+            'scaledSize'  => $scaledSize
+        ));
+    }
+
+    public function teachersAction(Request $request, $id)
+    {
+        //$course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        if ($request->getMethod() == 'POST') {
+            $data        = $request->request->all();
+            $data['ids'] = empty($data['ids']) ? array() : array_values($data['ids']);
+
+            $teachers = array();
+
+            foreach ($data['ids'] as $teacherId) {
+                $teachers[] = array(
+                    'id'        => $teacherId,
+                    'isVisible' => empty($data['visible_'.$teacherId]) ? 0 : 1
+                );
+            }
+
+            $this->getCourseService()->setCourseTeachers($id, $teachers);
+
+            $this->setFlashMessage('success', '教师设置成功！');
+
+            return $this->redirect($this->generateUrl('open_course_manage_teachers', array('id' => $id)));
+        }
+
+        $teacherMembers = $this->getOpenCourseService()->searchMembers(array(
+            'courseId'  => $id,
+            'role'      => 'teacher',
+            'isVisible' => 1
+        ),
+            array('seq', 'ASC'),
+            0, 100
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
+
+        $teachers = array();
+
+        foreach ($teacherMembers as $member) {
+            if (empty($users[$member['userId']])) {
+                continue;
+            }
+
+            $teachers[] = array(
+                'id'        => $member['userId'],
+                'nickname'  => $users[$member['userId']]['nickname'],
+                'avatar'    => $this->getWebExtension()->getFilePath($users[$member['userId']]['smallAvatar'], 'avatar.png'),
+                'isVisible' => $member['isVisible'] ? true : false
+            );
+        }
+
+        return $this->render('TopxiaWebBundle:CourseManage:teachers.html.twig', array(
+            'course'   => $course,
+            'teachers' => $teachers
+        ));
+    }
+
     public function liveOpenTimeSetAction(Request $request, $id)
     {
-        $liveCourse     = $this->getCourseService()->tryManageCourse($id);
-        $openLiveLesson = $this->getCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime', 'DESC'), 0, 1);
+        //$liveCourse     = $this->getCourseService()->tryManageCourse($id);
+        $liveCourse     = $this->getOpenCourseService()->getCourse($id);
+        $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime', 'DESC'), 0, 1);
         $openLiveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
 
         if ($request->getMethod() == 'POST') {
@@ -19,7 +140,7 @@ class OpenCourseManageController extends BaseController
                 $updateLiveLesson['startTime'] = strtotime($liveLesson['startTime']);
                 $updateLiveLesson['length']    = $liveLesson['timeLength'];
 
-                $openLiveLesson = $this->getCourseService()->updateLesson($liveCourse['id'], $openLiveLesson['id'], $updateLiveLesson);
+                $openLiveLesson = $this->getOpenCourseService()->updateLesson($liveCourse['id'], $openLiveLesson['id'], $updateLiveLesson);
             } else {
                 $liveLesson['type']      = 'liveOpen';
                 $liveLesson['courseId']  = $liveCourse['id'];
@@ -32,7 +153,7 @@ class OpenCourseManageController extends BaseController
 
                 $liveLesson['mediaId']      = $live['id'];
                 $liveLesson['liveProvider'] = $live['provider'];
-                $liveLesson                 = $this->getCourseService()->createLesson($liveLesson);
+                $liveLesson                 = $this->getOpenCourseService()->createLesson($liveLesson);
             }
         }
 
@@ -44,7 +165,8 @@ class OpenCourseManageController extends BaseController
 
     public function marketingAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageCourse($id);
+        //$course = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getOpenCourseService()->getCourse($id);
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-marketing.html.twig', array(
             'course' => $course
@@ -87,6 +209,11 @@ class OpenCourseManageController extends BaseController
         return $live;
     }
 
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -100,5 +227,10 @@ class OpenCourseManageController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->getServiceKernel()->createService('Taxonomy.TagService');
     }
 }

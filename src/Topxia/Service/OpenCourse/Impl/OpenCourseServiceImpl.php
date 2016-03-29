@@ -75,6 +75,37 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->waveCourse($id, $field, $diff);
     }
 
+    public function changeCoursePicture($courseId, $data)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException('课程不存在，图标更新失败！');
+        }
+
+        $fileIds = ArrayToolkit::column($data, "id");
+        $files   = $this->getFileService()->getFilesByIds($fileIds);
+
+        $files   = ArrayToolkit::index($files, "id");
+        $fileIds = ArrayToolkit::index($data, "type");
+
+        $fields = array(
+            'smallPicture'  => $files[$fileIds["small"]["id"]]["uri"],
+            'middlePicture' => $files[$fileIds["middle"]["id"]]["uri"],
+            'largePicture'  => $files[$fileIds["large"]["id"]]["uri"]
+        );
+
+        $this->_deleteNotUsedPictures($course);
+
+        $this->getLogService()->info('open_course', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
+
+        $update_picture = $this->updateCourse($courseId, $fields);
+
+        $this->dispatchEvent("open.course.picture.update", array('argument' => $data, 'course' => $update_picture));
+
+        return $update_picture;
+    }
+
     /**
      * open_course_lesson
      */
@@ -289,6 +320,26 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return ($lessonCount + 1);
     }
 
+    private function _deleteNotUsedPictures($course)
+    {
+        $oldPictures = array(
+            'smallPicture'  => $course['smallPicture'] ? $course['smallPicture'] : null,
+            'middlePicture' => $course['middlePicture'] ? $course['middlePicture'] : null,
+            'largePicture'  => $course['largePicture'] ? $course['largePicture'] : null
+        );
+
+        $courseCount = $this->searchCourseCount(array('smallPicture' => $course['smallPicture']));
+
+        if ($courseCount <= 1) {
+            $fileService = $this->getFileService();
+            array_map(function ($oldPicture) use ($fileService) {
+                if (!empty($oldPicture)) {
+                    $fileService->deleteFileByUri($oldPicture);
+                }
+            }, $oldPictures);
+        }
+    }
+
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
@@ -312,5 +363,10 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getLogService()
     {
         return $this->createService('System.LogService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->createService('Content.FileService');
     }
 }
