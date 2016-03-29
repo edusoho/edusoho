@@ -78,8 +78,9 @@
           <span class="sr-only">Toggle Dropdown</span>
         </a>
         <ul class="dropdown-menu">
-          <li class="js-play-times-btn" {#data-url="{{ path('material_delete', {globalId:material.no|defaul}) }}"#}><a class="glyphicon glyphicon-ok" href="javascript:;"> 播放次数</a></li>
-          <li class="js-upload-time-btn "><a {#class="glyphicon glyphicon-ok"#} href="javascript:;"> 上传时间</a></li>
+          <li class="js-play-times-btn" ><a class="glyphicon glyphicon-ok" href="javascript:;"> 播放次数</a></li>
+          <li class="js-upload-time-btn "><a{#class="glyphicon glyphicon-ok"#} href="javascript:;" class="upload-time-btn"> 上传时间</a>
+          <input type="hidden" value="" name="sort" id="sort"></input></li>
         </ul>
       </span>
     </div>

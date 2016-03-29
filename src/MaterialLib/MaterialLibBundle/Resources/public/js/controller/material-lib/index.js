@@ -32,7 +32,8 @@ define(function(require, exports, module) {
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
                 //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
                 'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn'
+                'click .js-use-status-select': 'onClickUseStatusBtn',
+                'click .js-upload-time-btn': 'onClickUploadTimeBtn'
             },
             setup: function() {
                 this.set('model','normal');
@@ -201,6 +202,12 @@ define(function(require, exports, module) {
                   $('.materials-ul').removeClass('batch-hidden');
                   $target.html('批量管理');
                 }
+            },
+            onClickUploadTimeBtn: function(event)
+            {
+
+                $('#sort').val('createdTime');
+                this.renderTable();
             },
             onClickFinishBatchBtn: function(event)
             {
