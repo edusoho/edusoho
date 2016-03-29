@@ -1,0 +1,33 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set menu = 'admin_discovery_column_index' %}
+
+{% set script_controller = 'topxiaadminbundle/controller/discovery-column/index' %}
+
+
+{% block main %}
+{% if setting("mobile.enabled") == 1 %}
+<table class="table table-hover" id="category-table">
+  <thead>
+    <tr>
+      <th width="25%">栏目名称</th>
+      <th width="15%">内容类型</th>
+      <th width="10%">排序方式</th>
+      <th width="15%">设置展示数量</th>
+      <th width="15%">实际展示数量</th>
+      <th width="20%">操作</th>
+    </tr>
+  </thead>
+  {% include 'TopxiaAdminBundle:DiscoveryColumn:discovery-column-tr.html.twig' %}
+</table>
+
+{% else %}
+<div class="well" style="text-align:center;">
+
+
+移动端未开启，请先在<a href="{{ path('admin_setting_mobile') }}"> 系统-课程设置-移动端设置 </a>中设置开启
+
+</div>
+{% endif %}
+
+{% endblock %}

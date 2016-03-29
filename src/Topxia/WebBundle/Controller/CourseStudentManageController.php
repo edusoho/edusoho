@@ -381,8 +381,8 @@ class CourseStudentManageController extends BaseController
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
-            'request'      => $request,
-            'targetId'      => $id,
+            'request'    => $request,
+            'targetId'   => $id,
             'targetType' => 'course'
         ));
     }

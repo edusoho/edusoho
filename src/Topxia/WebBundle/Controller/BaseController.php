@@ -229,6 +229,7 @@ abstract class BaseController extends Controller
             || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
             || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
             || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
+            || $url[0] == $this->generateUrl('common_crontab')
 
         ) {
             $targetPath = $this->generateUrl('homepage');

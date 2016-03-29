@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\SimpleValidator;
+use Topxia\Common\ExtensionManager;
 use Topxia\MobileBundleV2\Controller\MobileBaseController;
 use Topxia\MobileBundleV2\Processor\BaseProcessor;
 use Topxia\MobileBundleV2\Processor\UserProcessor;
@@ -296,7 +297,7 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 		$limit = (int) $this->getParam("limit", 10);
 
 		$total = $this->getNotificationService()->getUserNotificationCount($user['id']);
-		$this->getNotificationService()->clearUserNewNotificationCounter($user['id']);
+		//$this->getNotificationService()->clearUserNewNotificationCounter($user['id']);
 		$notifications = $this->getNotificationService()->findUserNotifications(
 			$user['id'],
 			$start,
@@ -317,10 +318,8 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 	private function coverNotifyContent($notification) {
 		$message = "";
 		$type = $notification['type'];
-
-		$message = $this->controller->render("TopxiaWebBundle:Notification:item-" . $type . ".html.twig", array(
-			"notification" => $notification,
-		))->getContent();
+		$manager = ExtensionManager::instance();
+        $message = $manager->renderNotification($notification);
 
 		$message = preg_replace_callback('/<div class=\"([\\w-]+)\">([^>]*)<\/div>/', function ($matches) {
 			$content = $matches[2];

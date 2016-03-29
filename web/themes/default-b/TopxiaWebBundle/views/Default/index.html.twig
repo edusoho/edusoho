@@ -30,7 +30,7 @@
               <h2>推荐{{ setting('classroom.name')|default("班级") }}</h2>
             </div>
             <div class="es-box-body">
-              <ul class="home-class-list">
+              <ul class="home-class-list clearfix">
                 {% for classroom in classrooms %}
                   {% set teachers = classroom.users|default(null) %}
                   {% if loop.index <= 5%}
@@ -47,7 +47,7 @@
                             <span class="class-teacher">
                               <i class="fa fa-user"></i>
                               {% for teacher in teachers %}
-                                {% if loop.index <= 5%}
+                                {% if loop.index <= 1 %}
                                 <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
                                  {% endif %}
                               {% endfor %}
@@ -198,7 +198,7 @@
               <ul class="row teacher-grids">
                 {% for teacher in teachers %}
                   {% if teacher %}
-                    <li class="col-sm-6 col-md-4">
+                    <li class="col-xs-6  col-sm-6 col-md-4">
                       <div class="teachers-item">
                         <a href="{{ path('user_show', {id:teacher.id}) }}">
                          <img class="img-circle" src="{{ filepath(teacher.mediumAvatar, 'avatar.png') }}">
@@ -410,7 +410,7 @@
 {% macro course_grids(courses) %}
   {% set mode = mode|default('default') %}
   {% if courses %}
-  <ul class="course-grids">
+  <ul class="course-grids clearfix">
     {% for course in courses %}
       <li class="course-grid">
         <a href="{{ path('course_show', {id:course.id}) }}" class="grid-body">

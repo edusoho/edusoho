@@ -1,0 +1,16 @@
+<div class="panel panel-default es-live-back">
+  <div class="panel-heading">
+    <h3 class="panel-title">直播回放</h3>
+  </div>
+  <div class="panel-body">
+    <ul>
+    	{% for list in liveReplayList if list %}
+      	<li class="text-sm">
+      		<a href="{{ path('course_learn', {id:list.courseId}) }}#lesson/{{ list.id }}" target="_blank"><i class="dat"></i><span class="color-gray">{{ list.startTime|date("m-d H:i") }}</span>{{ list.title }}</a>
+      	</li>
+      {% else %}
+      	<li><div class="empty">暂无回放直播</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div> 

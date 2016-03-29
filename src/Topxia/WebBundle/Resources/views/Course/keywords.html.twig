@@ -1,5 +1,3 @@
-
-
 {% block keywords %}
 	{% set tags = data('Tags', {tagIds: course.tags}) %}
   	{% for tag in tags %}{{tag.name}}{% if not loop.last%},{% endif %}{% endfor %}

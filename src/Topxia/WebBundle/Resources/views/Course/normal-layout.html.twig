@@ -5,6 +5,7 @@
 {% block keywords %}
   {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
 {% endblock %}
+
 {% block description %}{{ courseAbout|default('') }}{% endblock %}
 
 {% set bodyClass = 'course-dashboard-page' %}

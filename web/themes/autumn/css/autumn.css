@@ -644,9 +644,58 @@ a:hover {
   width: 213px;
 }
 @media (max-width: 767px) {
+  .home-class-list {
+    margin: 0;
+  }
+  .homepage .teachers ul {
+    margin: 0;
+  }
+  .teachers li {
+    padding: 0 5px;
+  }
+  .vip-item .row {
+    margin: 0;
+  }
+  .vip-item {
+    border: none;
+  }
+  .panel-autumn .panel-body {
+    background: #fff;
+  }
+  .home-class-list .class-item {
+    float: left;
+    width: 50%;
+    padding: 0 5px;
+    margin-bottom: 10px;
+    border: none;
+  }
+  .home-class-list .class-body {
+    border: 1px solid #e2e2e2;
+    padding: 10px;
+  }
   .home-class-list .class-picture-link > img {
     width: 100%;
     display: block;
+  }
+  .home-class-list .class-metas .fa,
+  .home-class-list .class-price {
+    font-size: 14px!important;
+  }
+  .autumn-grid {
+    float: left;
+    width: 50%;
+    padding: 0 5px;
+    border: none;
+    margin: 0 0 10px;
+  }
+  .autumn-course-grid .course-picture {
+    margin: 0;
+  }
+  .autumn-course-grid .course-name {
+    height: 40px;
+  }
+  .autumn-course-grid .course-body {
+    border: 1px solid #e2e2e2;
   }
 }
 .home-class-list .class-title {
