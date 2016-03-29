@@ -6272,6 +6272,8 @@ textarea {
 }
 .form-control {
   color: #616161;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   border-color: #e1e1e1;
 }
 .form-control.form-control-lg {
@@ -8370,7 +8372,7 @@ textarea {
 }
 .introduction-section {
   position: relative;
-  background-color: #fff;
+  background-color: #81d867;
 }
 .introduction-section h3 {
   margin-bottom: 20px;
@@ -8388,10 +8390,7 @@ textarea {
   text-align: center;
   vertical-align: top;
   display: block;
-  color: #313131;
-}
-.introduction-section .introduction-item:hover {
-  color: #313131;
+  color: #fff;
 }
 @media (max-width: 991px) {
   .introduction-section .introduction-item {
