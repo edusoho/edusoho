@@ -58,9 +58,7 @@ class MaterialLibController extends BaseController
         $currentUser          = $this->getCurrentUser();
         $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
-        if (empty($conditions['sort'])) {
-            $conditions['sort'] = 'createdTime';
-        }
+        
         $conditions['status'] = 'ok';
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
