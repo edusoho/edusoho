@@ -428,10 +428,16 @@ class CourseController extends CourseBaseController
 
             if ($course['type'] == 'live' || $course['type'] == 'liveOpen') {
                 try {
-                    $this->$course['type']."Setting()";
+                    $this->_checkLiveCloudSetting($course['type']);
                 } catch (\Exception $e) {
                     return $this->createMessageResponse('info', $e->getMessage());
                 }
+            }
+
+            if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {
+                return $this->forward('TopxiaWebBundle:OpenCourse:create', array(
+                    'request' => $request
+                ));
             }
 
             $course = $this->getCourseService()->createCourse($course);
@@ -898,44 +904,24 @@ class CourseController extends CourseBaseController
         return $this->render('TopxiaWebBundle:Course:course-order.html.twig', array('order' => $order, 'course' => $course));
     }
 
-    public function liveSetting()
+    private function _checkLiveCloudSetting($type)
     {
         $courseSetting = $this->setting('course', array());
 
-        if (empty($courseSetting['live_course_enabled'])) {
+        if ($type == 'live' && empty($courseSetting['live_course_enabled'])) {
             throw new \RuntimeException('请前往后台开启直播,尝试创建！');
-        }
-
-        if (!empty($courseSetting['live_course_enabled'])) {
-            $client   = new EdusohoLiveClient();
-            $capacity = $client->getCapacity();
-        } else {
-            $capacity = array();
-        }
-
-        if (empty($capacity['capacity']) && !empty($courseSetting['live_course_enabled'])) {
-            throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
-        }
-    }
-
-    public function liveOpenSetting()
-    {
-        $courseSetting = $this->setting('course', array());
-
-        if (empty($courseSetting['live_open_course_enabled'])) {
+        } elseif ($type == 'liveOpen' && empty($courseSetting['live_open_course_enabled'])) {
             throw new \RuntimeException('请前往后台开启公开课直播,尝试创建！');
         }
 
-        if (!empty($courseSetting['live_open_course_enabled'])) {
-            $client   = new EdusohoLiveClient();
-            $capacity = $client->getCapacity();
-        } else {
-            $capacity = array();
-        }
+        $client   = new EdusohoLiveClient();
+        $capacity = $client->getCapacity();
 
-        if (empty($capacity['capacity']) && !empty($courseSetting['live_open_course_enabled'])) {
+        if (empty($capacity['capacity'])) {
             throw new \RuntimeException('请联系EduSoho官方购买直播教室，然后才能开启直播功能！');
         }
+
+        return true;
     }
 
     protected function getTokenService()

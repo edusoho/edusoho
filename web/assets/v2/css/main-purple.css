@@ -13595,3 +13595,329 @@ textarea {
   position: absolute;
   right: 0;
 }
+.open-course-views {
+  position: relative;
+  display: table;
+  padding: 0;
+  height: 500px;
+}
+.open-course-views .mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+.open-course-views .mask .mask-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 330px;
+  height: 160px;
+  margin-top: -80px;
+  margin-left: -165px;
+  text-align: center;
+}
+.open-course-views .mask .mask-content h2 {
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+.open-course-views .mask .mask-content .mask-btn {
+  font-size: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.open-course-views .mask .mask-content .mask-btn .es-icon {
+  font-size: 23px;
+  padding-left: 10px;
+}
+.open-course-views .modal-dialog {
+  margin: 13% auto;
+}
+@media (max-width: 991px) {
+  .open-course-views .modal-dialog {
+    margin: 15% auto;
+  }
+}
+.open-course-views .modal-dialog .modal-img {
+  float: left;
+  width: 33.3%;
+  padding: 0 8px;
+  color: #313131;
+}
+.open-course-views .modal-dialog .modal-img img {
+  margin-bottom: 12px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.open-course-views .modal-dialog .modal-footer .es-share .dropdown-menu {
+  left: 96px;
+}
+.open-course-views .modal-dialog .modal-footer .es-share a {
+  color: #fff;
+  font-size: 14px;
+}
+.open-course-views .modal-dialog .modal-footer .es-share .share-btn {
+  background-color: #70d445;
+  border-color: #70d445;
+}
+.open-course-views .modal-dialog .modal-footer .es-share .share-btn:hover {
+  background-color: #56bb2b;
+}
+.open-course-views .modal-dialog .modal-footer .es-share .next-btn {
+  background-color: #ff8a0c;
+  border-color: #ff8a0c;
+}
+.open-course-views .modal-dialog .modal-footer .es-share .next-btn:hover {
+  background-color: #d87000;
+}
+.open-course-tab {
+  height: 500px;
+  background-color: #212121;
+  color: #ffffff;
+  padding: 0;
+}
+@media (max-width: 991px) {
+  .open-course-tab {
+    height: auto;
+  }
+}
+.open-course-tab ul {
+  padding: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.open-course-tab ul .tab-header {
+  float: left;
+  width: 50%;
+  padding: 20px 0;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #313131;
+}
+.open-course-tab ul .tab-header.active,
+.open-course-tab ul .tab-header:hover {
+  background-color: #212121;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.open-course-tab .tab-recommand {
+  padding: 10px 20px 10px 15px;
+}
+.open-course-tab .tab-recommand:first-child {
+  padding: 15px 20px 10px 15px;
+}
+.open-course-tab .tab-recommand img {
+  float: left;
+  width: 118px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+@media (max-width: 1199px) {
+  .open-course-tab .tab-recommand img {
+    width: 100px;
+  }
+}
+.open-course-tab .tab-recommand .open-course-info {
+  margin-left: 138px;
+}
+@media (max-width: 1199px) {
+  .open-course-tab .tab-recommand .open-course-info {
+    margin-left: 108px;
+  }
+}
+.open-course-tab .tab-recommand .open-course-info .title {
+  display: inline-block;
+  padding-bottom: 8px;
+  max-height: 42px;
+  line-height: 21px;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(255, 255, 255, 0.8);
+}
+.open-course-tab .tab-recommand .open-course-info .title:hover {
+  color: #773cec;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.open-course-tab .tab-recommand .open-course-info .num {
+  color: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  height: 21px;
+}
+.open-course-tab .tab-live a {
+  display: block;
+  padding: 14px 50px 14px 20px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  overflow: hidden;
+  word-wrap: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.open-course-tab .tab-live a:hover,
+.open-course-tab .tab-live a:active {
+  color: #ffffff;
+  background-color: #773cec;
+}
+.open-course-header {
+  margin-top: 20px;
+}
+.open-course-header .course-img {
+  float: left;
+  width: 120px;
+  margin-right: 20px;
+}
+.open-course-header .course-img img {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.open-course-header .course-info {
+  float: left;
+}
+.open-course-header .course-info .title {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+.open-course-header .course-info .matas span {
+  padding-right: 25px;
+  color: #919191;
+}
+.open-course-header .course-operation {
+  float: right;
+  color: #919191;
+}
+.open-course-header .course-operation ul {
+  padding: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+.open-course-header .course-operation li {
+  float: left;
+  width: 145px;
+  padding: 15px 10px 0 10px;
+  border-right: 1px solid #f1f1f1;
+}
+.open-course-header .course-operation li:last-child {
+  border-right: 0;
+}
+@media (max-width: 992px) {
+  .open-course-header .course-operation li:nth-child(3) {
+    border-right: 0;
+    width: 134px;
+  }
+}
+.open-course-header .course-operation li .operation-icon {
+  float: left;
+  display: block;
+  width: 35px;
+  height: 35px;
+  margin: 0 10px;
+  font-size: 22px;
+  line-height: 35px;
+  vertical-align: middle;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.open-course-header .course-operation li .unoperation-list:hover .unoperation-list,
+.open-course-header .course-operation li .unoperation-list:active .unoperation-list {
+  display: none;
+}
+.open-course-header .course-operation li .unoperation-list:hover .operation-list,
+.open-course-header .course-operation li .unoperation-list:active .operation-list {
+  display: block;
+}
+.open-course-header .course-operation li .unoperation-list .unoperation-icon {
+  background-color: #919191;
+}
+.open-course-header .course-operation li .unoperation-list .operation-list {
+  background-color: #e85749;
+}
+.open-course-header .course-operation li .es-icon-thumbup {
+  background-color: #919191;
+}
+.open-course-header .course-operation li .es-icon-thumbup.active {
+  background-color: #e85749;
+}
+.open-course-header .course-operation li .es-icon-bookmarkoutline,
+.open-course-header .course-operation li .es-icon-bookmark {
+  background-color: #53c3f5;
+}
+.open-course-header .course-operation li .es-icon-share {
+  background-color: #83d460;
+}
+.open-course-header .course-operation li .es-icon-phone1 {
+  background-color: #ff8a0c;
+}
+.open-course-header .course-operation li .open-course-qrcode {
+  position: relative;
+}
+.open-course-header .course-operation li .open-course-qrcode .qrcode-popover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 110px;
+  height: 110px;
+  display: none;
+  z-index: 10;
+  cursor: pointer;
+}
+.open-course-header .course-operation li .open-course-qrcode:hover .qrcode-popover {
+  display: block;
+}
+.open-course-header .course-operation li .es-share.top .dropdown-menu {
+  left: 15px;
+}
+.open-course-header .course-operation li .es-share.top .dropdown-menu a {
+  margin: 3px 2px 2px 5px !important;
+}
+.open-course-header .course-operation li .qrcode-popover.top .qrcode-content {
+  top: -250px;
+}
+.open-course-detail .intro-img {
+  width: 120px;
+  display: block;
+  margin-top: 10px;
+}
+.open-course-teacher img {
+  margin: 0 auto;
+}
+.open-course-teacher .intro {
+  height: 80px;
+  line-height: 20px;
+  word-wrap: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+.course-comment {
+  padding: 15px 20px;
+}
+.course-comment .media {
+  margin-bottom: 40px;
+  margin-top: 20px;
+}
+.course-comment .media:first-child {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f5f5f5;
+}

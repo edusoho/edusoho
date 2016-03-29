@@ -1062,7 +1062,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException('添加课时失败，课程不存在。');
         }
 
-        if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt', 'document', 'flash'))) {
+        if (!in_array($lesson['type'], array('text', 'audio', 'video', 'testpaper', 'live', 'ppt', 'document', 'flash', 'open', 'liveOpen'))) {
             throw $this->createServiceException('课时类型不正确，添加失败！');
         }
 

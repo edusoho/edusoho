@@ -44,18 +44,33 @@
             
             <td>{{ dict_text('courseStatus:html', course.status) }}</td>
             <td>
+             {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
               <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+                <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
 
                 <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu pull-right">
-                  <li><a href="{{ path('course_manage_lesson', {id:course.id}) }}">{{'课时管理'|trans}}</a></li>
-                  <li><a href="{{ path('course_manage_files', {id:course.id}) }}">{{'文件管理'|trans}}</a></li>
-                  <li><a href="{{ path('course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
+                  <li><a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">{{'课时管理'|trans}}</a></li>
+                  <li><a href="{{ path('open_course_manage_files', {id:course.id}) }}">{{'文件管理'|trans}}</a></li>
+                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
                 </ul>
               </div>
+             {% elseif 'ROLE_TEACHER' in app.user.roles %}
+              <div class="btn-group">
+                <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
+
+                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                  <li><a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">{{'查看课时'|trans}}</a></li>
+                  <li><a href="{{ path('open_course_manage_files', {id:course.id}) }}">{{'查看文件'|trans}}</a></li>
+                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('查看学员'|trans)}}{% else %}{{'查看'|trans}}{% endif %}{{'学员'|trans}}</a></li>
+                </ul>
+              </div>
+             {% endif %}            
             </td>
           </tr>
         {% endfor %}

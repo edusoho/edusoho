@@ -70,13 +70,7 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是教师，不能查看此页面! ');
         }
 
-        $conditions = array();
-
-        if ($user->isAdmin()) {
-            $conditions['userId'] = $user['id'];
-        } else {
-            $conditions = array();
-        }
+        $conditions = $this->_createSearchConitons($user);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -194,6 +188,28 @@ class MyTeachingController extends BaseController
             'type'       => $type,
             'threadType' => 'course'
         ));
+    }
+
+    private function _createSearchConitons($user)
+    {
+        $conditions = array();
+
+        if ($user->isAdmin()) {
+            $conditions['userId'] = $user['id'];
+        } else {
+            $members = $this->getOpenCourseService()->searchMembers(
+                array('userId' => $user['id'], 'role' => 'teacher'),
+                array('createdTime', 'ASC'),
+                0,
+                999
+            );
+
+            foreach ($members as $key => $member) {
+                $conditions['courseIds'][$key] = $member['courseId'];
+            }
+        }
+
+        return $conditions;
     }
 
     protected function getCourseThreadService()

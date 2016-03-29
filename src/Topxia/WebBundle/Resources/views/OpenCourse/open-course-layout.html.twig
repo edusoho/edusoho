@@ -1,0 +1,15 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+{% set script_controller = 'open-course/open-course' %}
+
+{% block full_content %}
+  {% block top_content %}{% endblock %}
+  
+  <div class="container">
+    {% block content %}
+      <a>222</a>
+    {% endblock %}
+  </div>
+  
+  {% block bottom_content %}{% endblock %}
+{% endblock %}
+    

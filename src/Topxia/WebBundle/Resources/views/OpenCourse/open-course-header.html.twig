@@ -1,0 +1,20 @@
+{% if lesson.mediaSource == 'iframe' %}
+  <div id="lesson-preview-iframe" data-url="{{ lesson.mediaUri }}" style="display:none;">
+  </div>
+{% elseif lesson.type == 'video' or lesson.type == 'audio' %}
+  {% if lesson.mediaSource == 'self' %}
+    <div id="lesson-preview-player"
+      style="height:300px;overflow:hidden"
+      data-balloon-player="1"
+      data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1})}}"
+      {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
+        data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
+      {% endif %}
+      {% if setting('storage.video_fingerprint') and app.user %}
+        data-fingerprint="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
+      {% endif %}
+    ></div>
+
+    <input type="hidden" id="videoWatermarkEmbedded" value="{{ hasVideoWatermarkEmbedded }}">
+  {% endif %}
+{% endif %}

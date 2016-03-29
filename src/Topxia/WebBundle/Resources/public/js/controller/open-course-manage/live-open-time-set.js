@@ -7,17 +7,18 @@ define(function(require, exports, module) {
     exports.run = function() {
        
         var $content = $("#live-lesson-content-field");
+        var $form = $('#live-open-course-form');
+
         var now = new Date();
         var validator = new Validator({
             
-            element: '#live-open-course-form',
-            autoSubmit: false,
+            element: $form,
+            autoSubmit: true,
             onFormValidated: function(error, results, $form) {
                 if (error) {
                     return false;
                 }
                 $('#live-open-course-form-btn').button('submiting').addClass('disabled');
-
             }
         });
 

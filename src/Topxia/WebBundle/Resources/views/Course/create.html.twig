@@ -37,7 +37,7 @@
           {% if setting('course').live_course_enabled|default('') or setting('course').open_course_enabled|default('') or setting('course').live_open_course_enabled|default('') %} 
             <div class="form-group">
               <div class="col-md-2 control-label">
-                <label>选择类型</label>
+                <label>{{'选择类型'|trans}}</label>
               </div>
 
               <div class="controls col-md-8 radios">
@@ -72,7 +72,7 @@
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="course-buy-div">
             <label class="col-md-2 control-label">{{'课程购买'|trans}}</label>
               <div class="col-md-8 controls radios">
                 {{ radios('buyable', {'1':'开启'|trans, '0':'关闭'|trans}, course.buyable|default(1) ) }}
