@@ -12,7 +12,7 @@ class OpenCourseManageController extends BaseController
 {
     public function indexAction(Request $request, $id)
     {
-        $openCourse = $this->getOpenCourseService()->getCourse($id);
+        $openCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         return $this->forward('TopxiaWebBundle:OpenCourseManage:base', array('id' => $id));
     }
@@ -20,16 +20,15 @@ class OpenCourseManageController extends BaseController
     public function baseAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $course = $this->getOpenCourseService()->getCourse($id);
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        /*if ($request->getMethod() == 'POST') {
-        $data = $request->request->all();
-        $this->getCourseService()->updateCourse($id, $data);
-        $this->setFlashMessage('success', '课程基本信息已保存！');
-        return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
-        }*/
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->getOpenCourseService()->updateCourse($id, $data);
+            $this->setFlashMessage('success', '课程基本信息已保存！');
+            return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
+        }
 
         $tags    = $this->getTagService()->findTagsByIds($course['tags']);
         $default = $this->getSettingService()->get('default', array());
@@ -43,23 +42,22 @@ class OpenCourseManageController extends BaseController
 
     public function pictureAction(Request $request, $id)
     {
-        //$course = $this->getCourseService()->tryManageCourse($id);
-        $course = $this->getOpenCourseService()->getCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         return $this->render('TopxiaWebBundle:CourseManage:picture.html.twig', array(
             'course' => $course
+
         ));
     }
 
     public function pictureCropAction(Request $request, $id)
     {
-        $course         = $this->getCourseService()->tryManageOpenCourse($id);
-        $openLiveLesson = $this->getCourseService()->getCourseLessons($course['id']);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
-            $this->getCourseService()->changeCoursePicture($course['id'], $data["images"]);
-            return $this->redirect($this->generateUrl('course_manage_picture', array('id' => $course['id'])));
+            $this->getOpenCourseService()->changeCoursePicture($course['id'], $data["images"]);
+            return $this->redirect($this->generateUrl('open_course_manage_picture', array('id' => $course['id'])));
         }
 
         $fileId                                      = $request->getSession()->get("fileId");
@@ -405,5 +403,10 @@ class OpenCourseManageController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 }

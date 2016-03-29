@@ -67,6 +67,15 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function updateCourse($id, $fields)
     {
+        $argument = $fields;
+        $course   = $this->getOpenCourseDao()->getCourse($id);
+
+        if (empty($course)) {
+            throw $this->createServiceException('课程不存在，更新失败！');
+        }
+
+        $fields = $this->_filterCourseFields($fields);
+
         return $this->getOpenCourseDao()->updateCourse($id, $fields);
     }
 
@@ -147,7 +156,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->getLogService()->info('open_course', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
 
-        $update_picture = $this->updateCourse($courseId, $fields);
+        $update_picture = $this->getOpenCourseDao()->updateCourse($courseId, $fields);
 
         $this->dispatchEvent("open.course.picture.update", array('argument' => $data, 'course' => $update_picture));
 
@@ -401,6 +410,35 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
                 }
             }, $oldPictures);
         }
+    }
+
+    protected function _filterCourseFields($fields)
+    {
+        $fields = ArrayToolkit::filter($fields, array(
+            'title'      => '',
+            'subtitle'   => '',
+            'about'      => '',
+            'categoryId' => 0,
+            'tags'       => '',
+            'studentNum' => 0,
+            'locked'     => 0
+        ));
+
+        if (!empty($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        if (!empty($fields['tags'])) {
+            $fields['tags'] = explode(',', $fields['tags']);
+            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
+            array_walk($fields['tags'], function (&$item, $key) {
+                $item = (int) $item['id'];
+            }
+
+            );
+        }
+
+        return $fields;
     }
 
     protected function getUploadFileService()
