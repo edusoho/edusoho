@@ -6,7 +6,6 @@ use Topxia\Service\Common\BaseTestCase;
 
 class ThreadServiceTest extends BaseTestCase
 {
-   
     /**
      * @group current
      */
@@ -156,7 +155,6 @@ class ThreadServiceTest extends BaseTestCase
             $this->assertEquals('question', $thread['type']);
         }
     }
-    
     public function testSearchThreadPosts(){
         $course = $this->getCourseService()->createCourse(array('title' => 'test course'));
 
