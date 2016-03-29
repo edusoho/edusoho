@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav.nav-tabs li': 'onClickNav',
-                'click .js-material-tabs .type': 'onClickTabs',
+                'click .js-material-tabs .js-type-btn': 'onClickTabs',
                 'click .pagination li': 'onClickPagination',
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
