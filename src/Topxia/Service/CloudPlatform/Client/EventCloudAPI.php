@@ -107,7 +107,7 @@ class EventCloudAPI extends AbstractCloudAPI
 
     public function makeSignature($event)
     {
-        $text = http_build_query(['name' => $event['name'], 'timestamp' => $event['timestamp']]);
+        $text = http_build_query(array('name' => $event['name'], 'timestamp' => $event['timestamp']));
         $text .= "\n".$this->secretKey;
         return md5($text);
     }
