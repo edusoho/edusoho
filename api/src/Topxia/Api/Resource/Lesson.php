@@ -219,7 +219,6 @@ class Lesson extends BaseResource
                         'data'     => array(
                             'id'      => $file['id']
                         ),
-                        'times'    => 3,
                         'duration' => 3600,
                         'userId'   => $this->getCurrentUser()->getId()
                     ));
