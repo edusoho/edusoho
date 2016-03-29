@@ -205,7 +205,7 @@ define(function(require, exports, module) {
             onClickUploadTimeBtn: function(event)
             {
 
-                $('#orderBy').val('createdTime');
+                $('#sort').val('createdTime');
                 this.renderTable();
             },
             onClickFinishBatchBtn: function(event)
