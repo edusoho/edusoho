@@ -355,7 +355,13 @@ class CourseLessonManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
+        if ($course['type'] == 'open' || $course['type'] == 'liveOpen') {
+            $template = 'TopxiaWebBundle:OpenCourseLessonManage:index.html.twig';
+        } else {
+            $template = 'TopxiaWebBundle:CourseLessonManage:index.html.twig';
+        }
+
+        return $this->render($template, array(
             'course'    => $course,
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,

@@ -1,0 +1,51 @@
+{% extends 'TopxiaWebBundle::layout.html.twig' %}
+
+{% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
+
+{% block keywords %}{{ render(controller('TopxiaWebBundle:Course:keywords',{course: course} )) }}{% endblock %}
+{% block description %}{{ courseAbout|default('') }}{% endblock %}
+
+{% set bodyClass = 'course-dashboard-page' %}
+{% set script_arguments = {course_uri: path('course_show', {id:course.id})} %}
+
+{% block top_content %}
+  {{ render(controller('TopxiaWebBundle:Part/Course:header',{course: course, member: member})) }}
+{% endblock %}
+
+{% block content %}
+
+  {% if is_plugin_installed('GroupSell') and not member%}
+    {{ render(controller('GroupSellBundle:GroupSell:showGroup',{type:'course',targetId:course.id})) }}  
+  {% endif %}
+  <div class="course-detail row">
+    <div class="col-lg-9 col-md-8  course-detail-main">
+
+      {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
+
+      <section class="es-section">
+        {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}
+        {% block course_main %}{% endblock %}
+      </section>
+      {% block dashboard_relatedCoursesBlock %}
+        {% if setting('course.relatedCourses') == 1 %}
+          {{ render(controller('TopxiaWebBundle:Course:relatedCoursesBlock',{course:course})) }}
+        {% endif %}
+      {% endblock %}
+    </div>
+
+    <div class="col-lg-3 col-md-4  course-sidebar">
+      {% block course_sidebar %}
+        {% if member|default(null) %}
+          {{ render(controller('TopxiaWebBundle:Part/Course:belongClassrooms',{course: course})) }}
+        {% endif %}
+        {% if course.parentId == 0 %}
+          {{ render(controller('TopxiaWebBundle:Part/Course:recommendClassrooms',{course: course})) }}
+        {% endif %}
+        {{ render(controller('TopxiaWebBundle:Part/Course:teachers',{course: course})) }}
+        {{ render(controller('TopxiaWebBundle:Part/Course:students',{course: course})) }}
+        {% include 'TopxiaWebBundle:Course:Part/normal-sidebar-statuses.html.twig' %}
+
+      {% endblock %}
+    </div>
+  </div>
+{% endblock %}

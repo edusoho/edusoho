@@ -20,19 +20,19 @@ class CourseController extends BaseController
             $conditions["parentId_GT"] = 0;
         }
 
-        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+        if (empty($conditions["categoryId"])) {
             unset($conditions["categoryId"]);
         }
 
-        if (isset($conditions["status"]) && $conditions["status"] == "") {
+        if (empty($conditions["status"])) {
             unset($conditions["status"]);
         }
 
-        if (isset($conditions["title"]) && $conditions["title"] == "") {
+        if (empty($conditions["title"])) {
             unset($conditions["title"]);
         }
 
-        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+        if (empty($conditions["creator"])) {
             unset($conditions["creator"]);
         }
 
@@ -81,24 +81,16 @@ class CourseController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($courses, 'userId'));
 
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        if (!isset($courseSetting['live_course_enabled'])) {
-            $courseSetting['live_course_enabled'] = "";
-        }
-
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaAdminBundle:Course:index.html.twig', array(
-            'conditions'     => $conditions,
-            'courses'        => $courses,
-            'users'          => $users,
-            'categories'     => $categories,
-            'paginator'      => $paginator,
-            'liveSetEnabled' => $courseSetting['live_course_enabled'],
-            'default'        => $default,
-            'classrooms'     => $classrooms,
-            'filter'         => $filter
+            'courses'    => $courses,
+            'users'      => $users,
+            'categories' => $categories,
+            'paginator'  => $paginator,
+            'default'    => $default,
+            'classrooms' => $classrooms,
+            'filter'     => $filter
         ));
     }
 
@@ -181,17 +173,6 @@ class CourseController extends BaseController
 
             if ($classroomCourse) {
                 return $this->createJsonResponse(array('code' => 3, 'message' => '当前课程未移除,请先移除班级课程'));
-            }
-
-            //判断作业插件版本号
-            $homework = $this->getAppService()->findInstallApp("Homework");
-
-            if (!empty($homework)) {
-                $isDeleteHomework = $homework && version_compare($homework['version'], "1.3.1", ">=");
-
-                if (!$isDeleteHomework) {
-                    return $this->createJsonResponse(array('code' => 1, 'message' => '作业插件未升级'));
-                }
             }
 
             if ($type) {
@@ -303,7 +284,7 @@ class CourseController extends BaseController
             ));
         }
 
-        if ($target == 'normal_index') {
+        if ($target == 'normal_index' || $target == 'open_index') {
             return $this->renderCourseTr($id, $request);
         }
     }
