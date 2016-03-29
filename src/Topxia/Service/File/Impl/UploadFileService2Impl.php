@@ -100,7 +100,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if ($orderBy[0] == '') {
             $orderBy[0] = 'createdTime';
         }
-        if (!in_array($orderBy[0], array('createdTime'))) {
+        if (!in_array($orderBy[0], array('createdTime', 'palyTimes'))) {
             throw new \RuntimeException("不允许对{$orderBy[0]}字段进行排序", 1);
         }
 
