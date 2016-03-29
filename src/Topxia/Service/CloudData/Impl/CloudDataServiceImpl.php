@@ -54,6 +54,6 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
 
     protected function getLogService()
     {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return $this->createService('System.LogService');
     }
 }
