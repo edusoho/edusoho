@@ -536,28 +536,28 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->getCloudDataService()->push('edusoho.'.$event->getName(), $data, time());
     }
 
-    public function onUserUpdate(Service $event)
+    public function onUserUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
         $user    = $context['user'];
         $this->getCloudDataService()->push('edusoho.user.update', $user, time());
     }
 
-    public function onProfileUpdate(Service $event)
+    public function onProfileUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
         $user    = $context['user'];
         $this->getCloudDataService()->push('edusoho.profile.update', $user, time());
     }
 
-    public function onCourseUpdate(Service $event)
+    public function onCourseUpdate(ServiceEvent $event)
     {
         $context = $event->getSubject();
         $course  = $context['course'];
         $this->getCloudDataService()->push('eudsoho.course.update', $course, time());
     }
 
-    public function onCourseLessonCreate(Service $event)
+    public function onCourseLessonCreate(ServiceEvent $event)
     {
         $context = $event->getSubject();
         $lesson  = $context['lesson'];
