@@ -14,9 +14,11 @@
       <li>
         <a data-url="{{ path('material_download', {globalId:uploadFile.globalId}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" ><i class="glyphicon glyphicon-save prm"></i>下载</a>
       </li>
+      {% if uploadFile.isMine %}
       <li>
         <a class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {globalId:uploadFile.globalId}) }}"> <i class="glyphicon glyphicon-trash prm"></i>删除</a>
       </li>
+      {% endif %}
   </ul>
 </div>
 <div class="star">
