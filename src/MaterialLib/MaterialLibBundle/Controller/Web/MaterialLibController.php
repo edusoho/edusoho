@@ -262,6 +262,10 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
+        if ($file['isPublic'] == 1 ) {
+            return $file;
+        }
+
         if ($file['createdUserId'] == $user['id']) {
             return $file;
         }
