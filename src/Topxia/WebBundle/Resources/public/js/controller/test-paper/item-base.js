@@ -76,7 +76,7 @@ define(function(require, exports, module) {
 		},
 
 		submit: function(e){
-			$(e.currentTarget).text("努力保存中...");
+			$(e.currentTarget).text(Translator.trans('努力保存中...'));
 			$('[data-role=item-body]').empty();
 			this.$('#test-create2-form').submit();
 		},
@@ -108,7 +108,7 @@ define(function(require, exports, module) {
                 var score = $(this).val();
 
                 if (!/^\d+$/.test(score)) {
-                    Notify.danger('分数输入不正确！');
+                    Notify.danger(Translator.trans('分数输入不正确！'));
                 }
 
             });
@@ -130,7 +130,7 @@ define(function(require, exports, module) {
 
                 if (self.$('[data-type=' + key + ']').length == 0) {
 
-                	$('#'+id).append("<tr><td colspan='20'><div class='empty'>暂无题目,请添加</div></td></tr>");
+                	$('#'+id).append("<tr><td colspan='20'><div class='empty'>"+Translator.trans('暂无题目,请添加')+"</div></td></tr>");
                 	
                 } else {
 

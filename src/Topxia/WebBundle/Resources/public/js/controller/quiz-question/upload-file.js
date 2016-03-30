@@ -10,7 +10,7 @@ define(function(require, exports, module) {
 
             var file = $uploadForm.find('[name=uploadFile]').val();
             if (!file) {
-                Notify.danger('请先选择要上传的图片');
+                Notify.danger(Translator.trans('请先选择要上传的图片'));
                 return false;
             }
             $uploadForm.ajaxSubmit({
@@ -20,10 +20,10 @@ define(function(require, exports, module) {
                     var html = '[' + response.type + ']' + response.hashId + '[/' + response.type + ']';
 
                     $('#question-stem-field').append(html);
-                    Notify.success('上传图片成功！');
+                    Notify.success(Translator.trans('上传图片成功！'));
                 },
                 error: function(response) {
-                    Notify.danger('上传图片失败，请重试！');
+                    Notify.danger(Translator.trans('上传图片失败，请重试！'));
                 }
             });
         });

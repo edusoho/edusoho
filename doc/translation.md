@@ -79,10 +79,10 @@ Notify.danger(Translator.trans('试卷题目总数量不能为0。'));
 格式为Translator.trans('翻译文本'),
 以下未有参数的（以上面代码为例）：
 ```js
-Notify.danger(Translator.trans('试卷题目总数量不%foo%能为0。',{%foo%:123}));
+Notify.danger(Translator.trans('试卷题目总数量不%foo%能为0。',{foo:123}));
 
 ```
-格式为：Translator.trans('翻译%foo%文本',{%foo%:参数})
+格式为：Translator.trans('翻译%foo%文本',{foo:参数})
 同样以上不要随意在里面添加空格，统一使用单引号
 
 #### 3

@@ -94,7 +94,7 @@ define(function(require, exports, module) {
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
                     if (self.isUploading()) {
-                        var result = confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                        var result = confirm(Translator.trans('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？'));
                         if(result){
                             self.get("uploadPanel").destroy();
                         }

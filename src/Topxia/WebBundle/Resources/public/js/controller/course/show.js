@@ -96,7 +96,7 @@ define(function(require, exports, module) {
 
 
         $(".cancel-refund").on('click', function() {
-            if (!confirm('真的要取消退款吗？')) {
+            if (!confirm(Translator.trans('真的要取消退款吗？'))) {
                 return false;
             }
 
@@ -110,10 +110,10 @@ define(function(require, exports, module) {
                 if (result == true) {
                     window.location.reload();
                 } else {
-                    alert('加入学习失败，请联系管理员！');
+                    alert(Translator.trans('加入学习失败，请联系管理员！'));
                 }
             }, 'json').error(function() {
-                alert('加入学习失败，请联系管理员！');
+                alert(Translator.trans('加入学习失败，请联系管理员！'));
             });
         });
 

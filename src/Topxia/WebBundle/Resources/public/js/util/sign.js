@@ -53,7 +53,7 @@ define(function(require, exports, module) {
                 dataType: 'json',
                 success: function(data){
 
-                $('#sign').html('<div  class="sign-area" data-role="signed" onclick="return false;" ><a class="btn-signin after" >已签到 <br>连续'+data.keepDays+'天</a></div>');
+                $('#sign').html('<div  class="sign-area" data-role="signed" onclick="return false;" >'+'<a class="btn-signin after" >'+Translator.trans('已签到') +'<br>'+Translator.trans('连续')+data.keepDays+Translator.trans('天')+'</a></div>');
                     self.showSignTable();
                     self.initTable(true);
                     self.element.find('.d-' + today).addClass('signed_anime_day');
@@ -123,7 +123,7 @@ define(function(require, exports, module) {
                 success: function(data){
                     for(var i=0;i<data.records.length;i++){ 
                         var day = parseInt(data.records[i]['day']);
-                        $tbody.find(".d-" + day).addClass('signed_day').attr('title', '于'+ data.records[i]['time'] + '签到,第'+ data.records[i]['rank']+'个签到.');
+                        $tbody.find(".d-" + day).addClass('signed_day').attr('title', Translator.trans('于')+ data.records[i]['time'] + Translator.trans('签到,第')+ data.records[i]['rank']+Translator.trans('个签到.'));
                     }
                     
                     self.element.find('.today-rank').html(data.todayRank);
@@ -145,7 +145,7 @@ define(function(require, exports, module) {
                 });
                 $signbtn.on('click',false);
                 $signbtn.addClass('sign-btn');
-                $signbtn.find('.sign-text').html('已签');
+                $signbtn.find('.sign-text').html(Translator.trans('已签'));
             }
           
         },
@@ -166,7 +166,7 @@ define(function(require, exports, module) {
             this.selectedDate = nextYear + '/' + nextMonth;
             this.element.find('tbody').html('');
             this.element.find('[data-role=next]').removeClass('disabled-next');
-            this.element.find('#title-month').html(nextYear + '年' + nextMonth + '月');
+            this.element.find('#title-month').html(nextYear + Translator.trans('年') + nextMonth + Translator.trans('月'));
             this.initTable();
         },
         nextMonth: function(){
@@ -190,7 +190,7 @@ define(function(require, exports, module) {
             nextMonth = nextMonth < 10 ? '0' + nextMonth : nextMonth;
             this.selectedDate = nextYear + '/' + nextMonth;
             this.element.find('tbody').html('');
-            this.element.find('#title-month').html(nextYear + '年' + nextMonth + '月');
+            this.element.find('#title-month').html(nextYear + Translator.trans('年') + nextMonth + Translator.trans('月'));
             this.initTable();
         }
 

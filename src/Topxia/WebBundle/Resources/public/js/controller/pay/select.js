@@ -22,9 +22,9 @@ define(function(require, exports, module){
             var $this = $(this);
             $.post($this.data('url'), function(data) {
                 if(data!=true) {
-                    Notify.danger('订单取消失败！');
+                    Notify.danger(Translator.trans('订单取消失败！'));
                 }
-                Notify.success('订单已取消成功！');
+                Notify.success(Translator.trans('订单已取消成功！'));
                 window.location.href = $this.data('goto');
             });
 
@@ -36,7 +36,7 @@ define(function(require, exports, module){
 
         }).on('click', '.js-pay-bank .closed', function() {
 
-            if(!confirm('确定解除绑定该银行卡吗')){
+            if(!confirm(Translator.trans('确定解除绑定该银行卡吗'))){
                 return;
             }
 

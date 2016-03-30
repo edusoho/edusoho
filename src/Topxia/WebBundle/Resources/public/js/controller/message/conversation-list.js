@@ -12,7 +12,7 @@ define(function(require, exports, module) {
     	});
 
     	$('.conversation-list').on('click', '.delete-conversation-btn', function(e){
-    		if (!confirm('真的要删除该私信吗？')) {
+    		if (!confirm(Translator.trans('真的要删除该私信吗？'))) {
     			return false;
     		}
 

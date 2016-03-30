@@ -12,7 +12,7 @@ define(function(require, exports, module) {
         var fileId = $this.data('fileId');
         var orgHtml = $this.html();
 
-        $this.html('正在载入音频...');
+        $this.html(Translator.trans('正在载入音频...'));
 
         $.get('/question_ajax/file_url', {id:fileId}, function(response) {
             if (response.status == 'waiting') {
@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             }
 
             if (response.status != 'ok') {
-                Notify.danger('音频载入失败，请重试。');
+                Notify.danger(Translator.trans('音频载入失败，请重试。'));
                 $this.html(orgHtml);
                 return ;
             }

@@ -33,7 +33,7 @@ define(function(require, exports, module) {
                         uploader.setPostParams(response.postParams);
                     },
                     error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
+                        Notify.danger(Translator.trans('请求上传授权码失败！'));
                     }
                 });
             }

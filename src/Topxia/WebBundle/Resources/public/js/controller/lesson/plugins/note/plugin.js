@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
 	var NotePlugin = BasePlugin.extend({
 		code: 'note',
-		name: '笔记',
+		name: Translator.trans('笔记'),
 		iconClass: 'glyphicon glyphicon-edit',
 		api: {
 			init: '../../lessonplugin/note/init',

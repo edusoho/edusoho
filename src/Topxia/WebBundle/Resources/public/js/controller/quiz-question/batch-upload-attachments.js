@@ -41,7 +41,7 @@ define(function(require, exports, module) {
 
                 chunkUpload.on("upload_progress_handler", function(file, bytesLoaded, bytesTotal, fileIndex) {
                     var percentage = Math.ceil((bytesLoaded / bytesTotal) * 100);
-                    $("div[role='progressbar']","#fileProgressBar"+fileIndex).text("上传中");
+                    $("div[role='progressbar']","#fileProgressBar"+fileIndex).text(Translator.trans('上传中'));
                     var progressbar = $("#fileProgressBar"+fileIndex).data("progressbar");
                     if(percentage > progressbar.get("percentage")){
                         progressbar.setProgress(percentage);
@@ -88,9 +88,9 @@ define(function(require, exports, module) {
                         }
                         var that = this;
                         $.post(url, serverData, function(response) {
-                            $("div[role='progressbar']", "#fileProgressBar"+fileIndex).text("完成");
+                            $("div[role='progressbar']", "#fileProgressBar"+fileIndex).text(Translator.trans('完成'));
                             var targetId = that.element.data('targetId');
-                            self.get("editor").insertHtml("附件:  <a href='/course/"+targetId+"/manage/question/attachment/"+response.id+"/download'>" + file.name + "</a>");
+                            self.get("editor").insertHtml(Translator.trans('附件:')  +"<a href='/course/"+targetId+"/manage/question/attachment/"+response.id+"/download'>" + file.name + "</a>");
                         }, 'json');
                     }
                 });
@@ -102,14 +102,14 @@ define(function(require, exports, module) {
                 $("#btn_upload").on('click', function(){
                     var fileQueueLength = chunkUpload.get("fileQueue").length;
                     if(fileQueueLength==0){
-                        Notify.danger('请先添加待上传文件！');
+                        Notify.danger(Translator.trans('请先添加待上传文件！'));
                         return ;
                     }
                     var uploadButton = $("#btn_upload");
                     $("#selectFiles").prop("disabled",true);
                     chunkUpload.trigger("upload", chunkUpload.get("currentFileIndex"));
                     uploadButton.unbind("click");
-                    uploadButton.find("span").text("暂停");
+                    uploadButton.find("span").text(Translator.trans('暂停'));
                     uploadButton.on("click", function(){
                         self.stopUpload(chunkUpload);
                     });
@@ -120,7 +120,7 @@ define(function(require, exports, module) {
                     var currentFileIndex = chunkUpload.get("currentFileIndex");
                     
                     if(length != currentFileIndex){
-                        if(!confirm("当前正在上传的文件将停止上传，确定关闭？")){
+                        if(!confirm(Translator.trans('当前正在上传的文件将停止上传，确定关闭？'))){
                             return false;
                         }
                     }
@@ -138,7 +138,7 @@ define(function(require, exports, module) {
 
             stopUpload : function(chunkUpload){
                 var uploadButton = $("#btn_upload");
-                uploadButton.find("span").text("上传");
+                uploadButton.find("span").text(Translator.trans('上传'));
                 chunkUpload.stopUpload();
                 uploadButton.unbind("click");
                 $("#selectFiles").prop("disabled",false);
@@ -150,7 +150,7 @@ define(function(require, exports, module) {
 
             continueUpload: function(chunkUpload){
                 var uploadButton = $("#btn_upload");
-                uploadButton.find("span").text("暂停");
+                uploadButton.find("span").text(Translator.trans('暂停'));
                 chunkUpload.continueUpload();
                 uploadButton.unbind("click");
                 $("#selectFiles").prop("disabled",true);
@@ -225,7 +225,7 @@ define(function(require, exports, module) {
 
                     },
                     error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
+                        Notify.danger(Translator.trans('请求上传授权码失败！'));
                     }
                 });
             },
@@ -244,7 +244,7 @@ define(function(require, exports, module) {
                     tr += "<td>"+this.getFileSize(file.size)+"</td>";
                     tr += "<td id='file_"+index+"'>";
                     tr += "<div class='progress' id='fileProgressBar"+index+"'>";
-                    tr += "<div class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; text-align:left;'>未开始</div>";
+                    tr += "<div class='progress-bar' role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100' style='width: 0%; text-align:left;'>"+Translator.trans('未开始')+"</div>";
                     tr += "</div>";
                     tr += "</td>";
                     tr += "</tr>";

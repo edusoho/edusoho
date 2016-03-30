@@ -6,7 +6,7 @@ define(function(require, exports, module) {
 
 	var LessonPlugin = BasePlugin.extend({
 		code: 'lesson',
-		name: '目录',
+		name: Translator.trans('目录'),
 		iconClass: 'glyphicon glyphicon-th-list',
 		api: {
 			list: '../../lessonplugin/lesson/list'

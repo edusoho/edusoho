@@ -100,7 +100,7 @@ define(function(require, exports, module) {
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
                     if (self.isUploading()) {
-                        return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                        return confirm(Translator.trans('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？'));
                     }
                     self._destoryUploader();
                 }
@@ -152,7 +152,7 @@ define(function(require, exports, module) {
 
             validator.addItem({
                 element: '[name="link"]',
-                display: '链接地址',
+                display: Translator.trans('链接地址'),
                 required: true,
                 rule: 'url'
             }).on('itemValidated', function(error, results, $item){
@@ -206,7 +206,7 @@ define(function(require, exports, module) {
 
             uploader.bind('FilesAdded', function(uploader, files) {
                 if (uploader.files.length > 0) {
-                    Notify.danger('文件正在上传中，请等待本次上传完毕后，再上传。');
+                    Notify.danger(Translator.trans('文件正在上传中，请等待本次上传完毕后，再上传。'));
                     uploader.removeFile(files[0]);
                 }
                 uploader.refresh();
@@ -227,7 +227,7 @@ define(function(require, exports, module) {
                         uploader.refresh();
                     },
                     error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
+                        Notify.danger(Translator.trans('请求上传授权码失败！'));
                         uploader.stop();
                     }
                 });
@@ -248,18 +248,18 @@ define(function(require, exports, module) {
                     $.post(btnData.callback, response, function(response) {
                         var media = self._convertFileToMedia(response);
                         self.trigger('change',  media);
-                        Notify.success('文件上传成功！');
+                        Notify.success(Translator.trans('文件上传成功！'));
                     }, 'json');
                 } else {
                     var media = self._convertFileToMedia(response);
                     self.trigger('change',  media);
-                    Notify.success('文件上传成功！');
+                    Notify.success(Translator.trans('文件上传成功！'));
                 }
             });
 
             uploader.bind('Error', function(uploader) {
 
-                Notify.danger('文件上传失败，请重试！');
+                Notify.danger(Translator.trans('文件上传失败，请重试！'));
             });
 
             uploader.init();

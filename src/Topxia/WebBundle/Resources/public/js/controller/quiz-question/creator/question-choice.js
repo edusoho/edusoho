@@ -23,7 +23,7 @@ define(function(require, exports, module) {
         onAddChoice: function(event) {
             var choiceCount = this.$('[data-role=choice]').length;
             if (choiceCount >= 10) {
-                Notify.danger("选项最多十个!");
+                Notify.danger(Translator.trans('选项最多十个!'));
                 return false;
             }
             var choiceCount = this.$('[data-role=choice]').length;
@@ -35,7 +35,7 @@ define(function(require, exports, module) {
         onDeleteChoice: function(event) {
             var choiceCount = this.$('[data-role=choice]').length;
             if (choiceCount <= 2 ) {
-                Notify.danger("选项至少二个!");
+                Notify.danger(Translator.trans('选项至少二个!'));
                 return false;
             }
             this.deleteChoice(event);
@@ -74,7 +74,7 @@ define(function(require, exports, module) {
             this.get('validator').removeItem(id);
             $btn.parents('[data-role=choice]').remove();
             this.$('[data-role=choice]').each(function(index, item){
-                $(this).find('.choice-label').html('选项' + String.fromCharCode(index + 65));
+                $(this).find('.choice-label').html(Translator.trans('选项') + String.fromCharCode(index + 65));
             });
         },
 
@@ -88,7 +88,7 @@ define(function(require, exports, module) {
                 }
             });
             if (0 == answers.length){
-                Notify.danger("请选择正确答案!");
+                Notify.danger(Translator.trans('请选择正确答案!'));
                 return false;
             }
 

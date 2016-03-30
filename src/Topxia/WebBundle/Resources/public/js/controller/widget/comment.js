@@ -30,7 +30,7 @@ define(function(require, exports, module) {
 			});
 		},
 		deleteComment: function(e) {
-			if (!confirm('真的要删除该评论吗？')) {
+			if (!confirm(Translator.trans('真的要删除该评论吗？'))) {
 				return ;
 			}
 

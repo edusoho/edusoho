@@ -36,7 +36,7 @@ define(function(require, exports, module) {
             element: '[name="inviteCode"]',
             required: false,
             rule: 'reg_inviteCode',
-            display: '邀请码'
+            display: Translator.trans('邀请码')
         });
     }
 });
