@@ -363,8 +363,8 @@ class CourseController extends CourseBaseController
 
         $courseAbout = strip_tags($courseAbout, '');
 
-        $courseAbout = preg_replace("/ /", "", $courseAbout);
-        $courseAbout = substr($courseAbout, 0, 100);
+        $courseAbout = preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", "", $courseAbout);
+
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
             'course'      => $course,
             'member'      => $member,
