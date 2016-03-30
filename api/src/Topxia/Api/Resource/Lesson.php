@@ -177,14 +177,15 @@ class Lesson extends BaseResource
                             if ($headLeaderInfo) {
                                 $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                     'data'     => array(
-                                        'id' => $headLeaderInfo['id']
+                                        'id' => $headLeaderInfo['id'],
+                                        'fromApi' => true
                                     ),
                                     'times'    => 2,
                                     'duration' => 3600
                                 ));
 
                                 $headUrl = array(
-                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?hideBeginning=1&line=".$line
+                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&hideBeginning=1&line=".$line
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -192,14 +193,15 @@ class Lesson extends BaseResource
 
                             $token = $this->getTokenService()->makeToken('hls.playlist', array(
                                 'data'     => array(
-                                    'id'      => $file['id']
+                                    'id'      => $file['id'],
+                                    'fromApi' => true
                                 ),
                                 'times'    => 2,
                                 'duration' => 3600
                             ));
 
                             $url = array(
-                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?hideBeginning=1&line=".$line
+                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&hideBeginning=1&line=".$line
                             );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
