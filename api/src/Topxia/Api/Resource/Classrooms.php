@@ -10,17 +10,18 @@ class Classrooms extends BaseResource
     public function discoveryColumn(Application $app, Request $request)
     {
         $result = $request->query->all();
-        if(empty($result['categoryId'])) {
+        if($result['categoryId']) {
             $result['categoryId'] = 0;
+            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
+            $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         }
-        $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
-        $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         unset($conditions['categoryId']);
 
         if ($result['orderType'] == 'hot') {
             $orderBy = 'studentNum';
         } elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
+            $conditions['recommended'] = 1;
         } else {
             $orderBy = 'createdTime';
         }
