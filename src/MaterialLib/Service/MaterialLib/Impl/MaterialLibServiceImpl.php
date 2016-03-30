@@ -19,6 +19,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $result                 = $this->getCloudFileService()->search($conditions);
         $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
         $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+
         return $result;
     }
 
@@ -155,8 +156,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 $courses = $this->getCourseService()->findCoursesByLikeTitle($conditions['keywords']);
 
                 $courseIds = ArrayToolkit::column($courses, 'id');
-
+                if (empty($courseIds)) {
+                    $courseIds = array('0');
+                }
                 $conditions['courseIds'] = $courseIds;
+                
             } elseif ($conditions['searchType'] == 'user') {
                 $users = $this->getUserService()->searchUsers(array('nickname'=>$conditions['keywords']), array('id','desc'),0,999);
                 $userIds = ArrayToolkit::column($users, 'id');
@@ -188,10 +192,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
         if (!empty($filterConditions['courseIds'])) {
             $localFiles              = $this->getUploadFileService()->findFilesByCourseIds($filterConditions['courseIds']);
+            
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
             unset($filterConditions['courseIds']);
-        }
+        } 
 
         return $filterConditions;
     }
