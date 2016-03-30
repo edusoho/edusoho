@@ -54,9 +54,8 @@ class Lesson extends BaseResource
             case 'document':
                 return $this->getDocumentLesson($lesson);
             default:
-                $lesson['content'] = $this->filterHtml($lesson['content']);
+                return $this->getTextLesson($lesson);
         }
-        return $lesson;
     }
 
     protected function getPPTLesson($lesson)
@@ -138,6 +137,17 @@ class Lesson extends BaseResource
             'status'   => empty($testResult) ? 'nodo' : $testResult['status'],
             'resultId' => empty($testResult) ? 0 : $testResult['id']
         );
+
+        return $lesson;
+    }
+
+    private function getTextLesson($lesson)
+    {
+        $lesson['content'] = $this->filterHtml($lesson['content']);
+        $template = $this->render('course/lesson-text-content.html.twig', array(
+            'content' => $lesson['content']
+        ));
+        $lesson['content'] = $template;
 
         return $lesson;
     }

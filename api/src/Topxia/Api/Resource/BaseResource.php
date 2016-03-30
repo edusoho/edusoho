@@ -178,6 +178,12 @@ abstract class BaseResource
         return $app['url_generator']->generate($route, $parameters);
     }
 
+    protected function render($templatePath, $args)
+    {
+        global $app;
+        return $app['twig']->render($templatePath, $args);
+    }
+
     protected function getCurrentUser()
     {
         return $this->getServiceKernel()->getCurrentUser();
