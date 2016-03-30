@@ -40,9 +40,10 @@ class CourseReviews extends BaseResource
         return $this->filter($review);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
+        return $res;
     }
 
     protected function getCourseReviewService()

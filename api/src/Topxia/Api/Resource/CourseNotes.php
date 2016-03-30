@@ -57,10 +57,11 @@ class CourseNotes extends BaseResource
         return $this->filter($note);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
+        return $res;
     }
 
     protected function getCourseNoteService()

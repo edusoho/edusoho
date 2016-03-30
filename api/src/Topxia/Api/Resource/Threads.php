@@ -17,22 +17,24 @@ class Threads extends BaseResource
         $limit = $request->query->get('limit', 10);
 
         $total = $this->getThreadService()->searchThreadCount($conditions);
-        $start = $start == -1 ? rand(0, $total - 1) : $start;  
+        $start = $start == -1 ? rand(0, $total - 1) : $start;
         $threads = $this->getThreadService()->searchThreads($conditions, $sort, $start, $limit);
+
         return $this->wrap($this->filter($threads), $total);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('Thread', $res);
     }
 
-    protected function multicallFilter($name, &$res)
+    protected function multicallFilter($name, $res)
     {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
-            $one['body'] = '';
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callFilter($name, $one);
+            $res[$key]['body'] = '';
         }
+
         return $res;
     }
 

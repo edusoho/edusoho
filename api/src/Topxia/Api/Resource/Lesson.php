@@ -37,7 +37,7 @@ class Lesson extends BaseResource
         return $this->filter($lesson);
     }
 
-    public function filter(&$lesson)
+    public function filter($lesson)
     {
         $lesson['createdTime'] = date('c', $lesson['createdTime']);
         $lesson['updatedTime'] = date('c', $lesson['updatedTime']);

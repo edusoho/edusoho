@@ -9,24 +9,24 @@ class Analysis extends BaseResource
 {
     public function get(Application $app, Request $request, $type, $tab)
     {
-    	$class = $this->getClassName($type);
-	    	
-		if (!class_exists($class)) {
-			throw $this->createNotFoundException ('service not exists');
-		}
+        $class = $this->getClassName($type);
+            
+        if (!class_exists($class)) {
+            throw $this->createNotFoundException('service not exists');
+        }
 
-		$instance = new $class($request);
-		$result = call_user_func(array($instance, $tab));
+        $instance = new $class($request);
+        $result = call_user_func(array($instance, $tab));
 
-    	return $result;
+        return $result;
     }
 
     private function getClassName($name)
     {
-    	return __NAMESPACE__ . "\AnalysisType\\{$name}";
+        return __NAMESPACE__ . "\AnalysisType\\{$name}";
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         if (strpos($res['avatar'], "files/") !== false) {
             $res['avatar'] = $this->getFileUrl($res['avatar']);

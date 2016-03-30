@@ -14,7 +14,7 @@ class Article extends BaseResource
         return $this->filter($article);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['thumb'] = $this->getFileUrl($res['thumb']);
         $res['originalThumb'] = $this->getFileUrl($res['originalThumb']);
@@ -38,5 +38,4 @@ class Article extends BaseResource
     {
         return $this->getServiceKernel()->createService('System.SettingService');
     }
-
 }

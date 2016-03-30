@@ -97,19 +97,19 @@ class Users extends BaseResource
         return array('message' => '已经超出用户注册次数限制，用户注册失败');
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('User', $res);
     }
 
-    protected function multicallFilter($name, &$res)
+    protected function multicallFilter($name, $res)
     {
         $ids = ArrayToolkit::column($res, 'id');
         $profiles = $this->getUserService()->findUserProfilesByIds($ids);
 
-        foreach ($res as &$user) {
-            $user['profile'] = $profiles[$user['id']];
-            $this->callFilter($name, $user);
+        foreach ($res as $key => $one) {
+            $res[$key]['profile'] = $profiles[$one['id']];
+            $res[$key] = $this->callFilter($name, $one);
         }
         return $res;
     }

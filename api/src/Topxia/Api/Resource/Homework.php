@@ -32,7 +32,7 @@ class Homework extends BaseResource
             $questions = $this->getQuestionService()->findQuestionsByIds(array_keys($indexdItems));
             $homework['items'] = $this->filterItem($questions, null);
         }
-        
+
         return $this->filter($homework);
     }
 
@@ -47,7 +47,7 @@ class Homework extends BaseResource
             return $this->error('500', '作业不存在！');
         }
 
-        if (empty($currentUser) || (!$canCheckHomework && $homeworkResult['userId'] != $currentUser['id']) ) {
+        if (empty($currentUser) || (!$canCheckHomework && $homeworkResult['userId'] != $currentUser['id'])) {
             return $this->error('500', '不能查看该作业结果');
         }
 
@@ -98,13 +98,13 @@ class Homework extends BaseResource
             if ($itemSetResults) {
                 $item['result'] = $itemSetResults[$item['id']];
             }
-            
+
             $item['stem'] = $this->coverDescription($item['stem']);
             if ($item['parentId'] != 0 && isset($materialMap[$item['parentId']])) {
                 $materialMap[$item['parentId']][] = $item;
                 continue;
             }
-            
+
             $item['items'] = array();
             $newItmes[$item['id']] = $item;
         }
@@ -116,34 +116,39 @@ class Homework extends BaseResource
         return array_values($newItmes);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res = ArrayToolkit::parts($res, array('id', 'courseId', 'lessonId', 'description', 'itemCount', 'items', 'courseTitle', 'lessonTitle'));
+
         return $res;
     }
 
-    private function filterAnswer($item, $itemSetResults) {
-
+    private function filterAnswer($item, $itemSetResults)
+    {
         if (empty($itemSetResults)) {
             if ('fill' == $item['type']) {
-                return array_map(function($answer) {
-                    return "";
+                return array_map(function ($answer) {
+                    return '';
                 }, $item['answer']);
             }
-            return null;
+
+            return;
         }
 
         return $this->coverAnswer($item['answer']);
     }
 
-    private function coverAnswer($answer) {
+    private function coverAnswer($answer)
+    {
         if (is_array($answer)) {
-            $answer = array_map(function($answerValue){
+            $answer = array_map(function ($answerValue) {
                 if (is_array($answerValue)) {
                     return implode('|', $answerValue);
                 }
+
                 return $answerValue;
             }, $answer);
+
             return $answer;
         }
 
@@ -153,8 +158,9 @@ class Homework extends BaseResource
     private function coverDescription($stem)
     {
         $ext = $this;
-        $stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function($matches) use ($ext) {
+        $stem = preg_replace_callback('/\[image\](.*?)\[\/image\]/i', function ($matches) use ($ext) {
             $url = $ext->getFileUrl($matches[1]);
+
             return "<img src='{$url}' />";
         }, $stem);
 

@@ -41,7 +41,7 @@ class Classroom extends BaseResource
         return $simple;
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         foreach (array('createdTime', 'updatedTime') as $key) {
             if (isset($res[$key])) {

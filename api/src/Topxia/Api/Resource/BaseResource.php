@@ -6,23 +6,23 @@ use Topxia\Service\Common\ServiceKernel;
 
 abstract class BaseResource
 {
-    abstract function filter(&$res);
+    abstract public function filter($res);
 
-    protected function callFilter($name, &$res)
+    protected function callFilter($name, $res)
     {
         global $app;
         return $app["res.{$name}"]->filter($res);
     }
 
-    protected function multicallFilter($name, &$res)
+    protected function multicallFilter($name, $res)
     {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callFilter($name, $one);
         }
         return $res;
     }
 
-    protected function callSimplify($name, &$res)
+    protected function callSimplify($name, $res)
     {
         global $app;
         return $app["res.{$name}"]->simplify($res);

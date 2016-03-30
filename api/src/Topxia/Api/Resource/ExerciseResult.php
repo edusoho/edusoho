@@ -14,17 +14,18 @@ class ExerciseResult extends BaseResource
 
         $rawQuestionItems = $this->getExerciseService()->getItemSetByExerciseId($exerciseId);
         $questionItems = $rawQuestionItems['items'];
-        $questionIds = ArrayToolkit::column($questionItems, "questionId");
+        $questionIds = ArrayToolkit::column($questionItems, 'questionId');
 
         $answers = !empty($answers['data']) ? $answers['data'] : array();
         $exercise = $this->getExerciseService()->getExercise($exerciseId);
-        $result = $this->getExerciseService()->submitExercise($exerciseId,$answers);
+        $result = $this->getExerciseService()->submitExercise($exerciseId, $answers);
         $course = $this->getCourseService()->getCourse($exercise['courseId']);
-        $lesson = $this->getCourseService()->getCourseLesson($exercise['courseId'],$result['lessonId']);
-        $this->getExerciseService()->finishExercise($course,$lesson,$exercise['courseId'],$exerciseId);
+        $lesson = $this->getCourseService()->getCourseLesson($exercise['courseId'], $result['lessonId']);
+        $this->getExerciseService()->finishExercise($course, $lesson, $exercise['courseId'], $exerciseId);
         $res = array(
             'id' => $result['id'],
         );
+
         return $res;
     }
 
@@ -33,18 +34,19 @@ class ExerciseResult extends BaseResource
         $user = $this->getCurrentUser();
         $exercise = $this->getExerciseService()->getExerciseByLessonId($lessonId);
         if (empty($exercise)) {
-            return "";
+            return '';
         }
-        $exerciseResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($exercise['id'],$user->id);
+        $exerciseResults = $this->getExerciseService()->getItemSetResultByExerciseIdAndUserId($exercise['id'], $user->id);
         if (empty($exerciseResults)) {
-            throw $this->createNotFoundException ('无法查看练习结果！');
+            throw $this->createNotFoundException('无法查看练习结果！');
         }
+
         return $exerciseResults;
     }
 
     private function filterItem($items)
     {
-        $questionIds = ArrayToolkit::column($items, "questionId");
+        $questionIds = ArrayToolkit::column($items, 'questionId');
         $questions = $this->getQuestionService()->findQuestionsByIds($questionIds);
 
         $materialMap = array();
@@ -78,11 +80,12 @@ class ExerciseResult extends BaseResource
         return array_values($newItems);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['usedTime'] = date('c', $res['usedTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
+
         return $res;
     }
 

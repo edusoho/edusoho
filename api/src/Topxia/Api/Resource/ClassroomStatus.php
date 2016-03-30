@@ -39,7 +39,7 @@ class ClassroomStatus extends BaseResource
         return $this->_filterStatus($statuses);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         $res = ArrayToolkit::parts($res, array('id', 'userId', 'courseId', 'classroomId', 'type', 'objectType', 'objectId', 'properties', 'createdTime'));
 

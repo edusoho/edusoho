@@ -41,7 +41,7 @@ class User extends BaseResource
         return $this->filter($user);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         foreach ($this->_unsetFields as $key) {
             unset($res[$key]);

@@ -69,7 +69,6 @@ class ChaosThreads extends BaseResource
 
         switch ($fields['threadType']) {
             case 'common':
-
                 if (!ArrayToolkit::requireds($fields, array('title', 'content', 'targetId', 'type', 'targetType'))) {
                     return array('message' => '缺少必填字段');
                 }
@@ -79,7 +78,6 @@ class ChaosThreads extends BaseResource
                 break;
 
             case 'course':
-
                 if (!ArrayToolkit::requireds($fields, array('title', 'content', 'courseId', 'type'))) {
                     return array('message' => '缺少必填字段');
                 }
@@ -108,7 +106,7 @@ class ChaosThreads extends BaseResource
         return $this->callFilter('Thread', $thread);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $res;
     }

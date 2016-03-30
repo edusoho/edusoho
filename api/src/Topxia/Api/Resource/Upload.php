@@ -12,7 +12,7 @@ class Upload extends BaseResource
         if ($request->getMethod() != 'POST') {
             return $this->error('404', 'only allow post!');
         }
-    	try {
+        try {
             $file = $request->files->get('file');
             if (empty($file)) {
                 return $this->error('404', '没有添加上传文件!');
@@ -34,8 +34,8 @@ class Upload extends BaseResource
         return $this->getServiceKernel()->createService('Content.FileService');
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
-        
+        return $res;
     }
 }

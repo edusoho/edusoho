@@ -26,7 +26,7 @@ class CourseMembers extends BaseResource
         return $this->wrap($this->filter($members), $total);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('CourseMember', $res);
     }
@@ -40,5 +40,4 @@ class CourseMembers extends BaseResource
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
-
 }

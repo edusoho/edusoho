@@ -4,7 +4,7 @@ namespace Topxia\Api\Resource;
 
 class Course extends BaseResource
 {
-    public function filter(&$res)
+    public function filter($res)
     {
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);

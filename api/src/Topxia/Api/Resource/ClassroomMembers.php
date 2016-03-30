@@ -26,7 +26,7 @@ class ClassroomMembers extends BaseResource
         return $this->wrap($this->filter($members), $total);
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('ClassroomMember', $res);
     }

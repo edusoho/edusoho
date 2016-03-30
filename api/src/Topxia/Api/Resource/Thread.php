@@ -10,24 +10,24 @@ class Thread extends BaseResource
     /**
      * @todo  有问题，要重写。
      */
-	public function create(Application $app, Request $request)
+    public function create(Application $app, Request $request)
     {
-    	try{
+        try {
             $data = $request->request->all();
-            if (!isset($data["type"])) {
-                $data['type'] = "question";
+            if (!isset($data['type'])) {
+                $data['type'] = 'question';
             }
 
             $targetType = $data['targetType'];
             $targetId = $data['targetId'];
 
             if (empty($targetId) || empty($targetType)) {
-                return $this->error('500', "创建问答失败，缺失数据");
+                return $this->error('500', '创建问答失败，缺失数据');
             }
-            if ("lesson" == $targetType) {
+            if ('lesson' == $targetType) {
                 $lesson = $this->getCourseService()->getLesson($targetId);
                 if (empty($lesson)) {
-                    return $this->error('500', "课时不存在");
+                    return $this->error('500', '课时不存在');
                 }
                 $data['courseId'] = $lesson['courseId'];
                 $data['lessonId'] = $targetId;
@@ -40,9 +40,9 @@ class Thread extends BaseResource
 
             $thread = $this->getThreadService()->createThread($data);
             if (!empty($thread)) {
-            	return array("threadId" => $thread['id']);
+                return array('threadId' => $thread['id']);
             }
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             return $this->error('500', $e->getMessage());
         }
 
@@ -59,9 +59,8 @@ class Thread extends BaseResource
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
-  
         $res['updateTime'] = date('c', $res['updateTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['threadId'] = $res['id'];
@@ -86,5 +85,4 @@ class Thread extends BaseResource
 
         return $res;
     }
-
 }
