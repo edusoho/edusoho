@@ -37,20 +37,25 @@ class ThreadManager extends BaseResource
 
         $conditions = array(
             'courseIds' => array($courseId),
-            'type' => 'question', );
+            'type' => 'question',
+        );
+
         $threadCount = $this->getCourseThreadService()->searchThreadCountInCourseIds($conditions);
         $threads = $this->getCourseThreadService()->searchThreadInCourseIds(
             $conditions,
-            'createdNotStick',
+            'posted',
             0,
-            $start
+            500
         );
 
+        $threads = $this->sortThreads($threads, $start);
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($threads, 'userId'));
         $lessons = $this->getCourseService()->findLessonsByIds(ArrayToolkit::column($threads, 'lessonId'));
         foreach ($threads as $key => &$thread) {
             $lesson = $lessons[$thread['lessonId']];
-            $thread['lessonTitle'] = '课时:'.$lesson['number'].$lesson['title'];
+            $lessonTitle = empty($lesson) ? '课程提问' : '课时:'.$lesson['number'].$lesson['title'];
+            $thread['lessonTitle'] = $lessonTitle;
+            $thread['isTeacherAnswer'] = $this->getCourseThreadService()->getPostCountByuserIdAndThreadId($user['id'], $thread['id']);
         }
 
         return array(
@@ -60,10 +65,38 @@ class ThreadManager extends BaseResource
         );
     }
 
+    protected function threadSort($t1, $t2)
+    {
+        $latestPostTime1 = $t1['latestPostTime'];
+        $latestPostTime2 = $t2['latestPostTime'];
+
+        if ($latestPostTime1 > 0) {
+            if ($latestPostTime2 > 0) {
+                return $latestPostTime1 - $latestPostTime2;
+            }
+
+            return -1;
+        }
+
+        if ($latestPostTime2 > 0) {
+            return -1;
+        }
+
+        return $latestPostTime1 - $latestPostTime2;
+    }
+
+    private function sortThreads($threads, $limit)
+    {
+        usort($threads, array($this, 'threadSort'));
+        $threads = array_slice($threads, 0, $limit);
+
+        return $threads;
+    }
+
     protected function muiltFilter($res)
     {
-        foreach ($res as &$one) {
-            $this->filter($one);
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->filter($one);
         }
 
         return $res;

@@ -864,6 +864,8 @@ class FileToolkit
             'movie'       => 'video/x-sgi-movie'                                                         ,
             'smv'         => 'video/x-smv'                                                               ,
             'ice'         => 'x-conference/x-cooltalk'                                                   ,
+            'mpg'         => 'video/mpeg'
+                                                    ,
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }
@@ -872,7 +874,7 @@ class FileToolkit
     {   
         $extension = strtolower($extension);
 
-        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov','m4v', 'rmvb'))) {
+        if (in_array($extension, array('mp4', 'avi', 'wmv', 'flv', 'mov','m4v', 'rmvb', 'mpg'))) {
             return 'video';
         } elseif (in_array($extension, array('mp3', 'wma'))) {
             return 'audio';

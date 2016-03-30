@@ -11,7 +11,8 @@ return array(
         '/^\/api\/courses\/discovery\/columns$/',
         '/^\/api\/classrooms\/discovery\/columns$/',
         '/^\/api\/lessons$/',
-        '/^\/api\/lessons\/\d+$/'
+        '/^\/api\/lessons\/\d+$/',
+        // '/^\/api\/course\/\d+\/lessons$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',

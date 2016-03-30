@@ -17,8 +17,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.publish'            => 'onCoursePublish',
             'course.lesson.delete'      => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
+            'course.lesson.unpublish'   => 'onCourseLessonUnpublish',
+            'course.close'              => 'onCourseClose',
             'announcement.create'       => 'onAnnouncementCreate',
+            'classroom.join'            => 'onClassroomJoin',
+            'classroom.quit'            => 'onClassroomQuit',
+            'classroom.put_course'      => 'onClassroomPutCourse',
             'article.create'            => 'onArticleCreate',
+            'discount.pass'             => 'onDiscountPass',
+            'course.join'               => 'onCourseJoin',
+            'course.quit'               => 'onCourseQuit',
             'course.thread.post.create' => 'onCourseThreadPostCreate',
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
@@ -77,6 +85,16 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onCourseLessonUnpublish(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+        $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+
+        if ($jobs) {
+            $this->deleteJob($jobs);
+        }
+    }
+
     public function onCourseLessonUpdate(ServiceEvent $event)
     {
         $context       = $event->getSubject();
@@ -125,6 +143,23 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         return $this->push($course['title'], '课程已发布!', $from, $to, $body);
     }
 
+    public function onCourseClose(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+
+        $from = array(
+            'type'  => 'course',
+            'id'    => $course['id'],
+            'image' => $this->getFileUrl($course['smallPicture'])
+        );
+
+        $to = array('type' => 'course', 'id' => $course['id']);
+
+        $body = array('type' => 'course.close');
+
+        return $this->push($course['title'], '课程被关闭!', $from, $to, $body);
+    }
+
     public function onAnnouncementCreate(ServiceEvent $event)
     {
         $announcement = $event->getSubject();
@@ -148,6 +183,80 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $this->push($target['title'], $announcement['content'], $from, $to, $body);
+    }
+
+    public function onClassroomJoin(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+        $userId    = $event->getArgument('userId');
+
+        $this->addGroupMember('classroom', $classroom['id'], $userId);
+
+        $from = array(
+            'type'  => 'classroom',
+            'id'    => $classroom['id'],
+            'image' => $this->getFileUrl($classroom['smallPicture'])
+        );
+
+        $to = array(
+            'type' => 'classroom',
+            'id'   => $classroom['id']
+        );
+
+        $body = array('type' => 'classroom.join', 'userId' => $userId);
+
+        $this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
+    }
+
+    public function onClassroomQuit(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+        $userId    = $event->getArgument('userId');
+        $this->deleteGroupMember('classroom', $classroom['id'], $userId);
+    }
+
+    public function onCourseJoin(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->addGroupMember('course', $course['id'], $userId);
+    }
+
+    public function onCourseQuit(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+        $this->deleteGroupMember('course', $course['id'], $userId);
+    }
+
+    public function onClassroomPutCourse(ServiceEvent $event)
+    {
+        $classroomCourse = $event->getSubject();
+
+        $classroom = $this->getClassroomService()->getClassroom($classroomCourse['classroomId']);
+
+        $from = array(
+            'type'  => 'classroom',
+            'id'    => $classroom['id'],
+            'image' => $this->getFileUrl($classroom['smallPicture'])
+        );
+
+        $to = array(
+            'type' => 'classroom',
+            'id'   => $classroom['id']
+        );
+
+        $course = $this->getCourseService()->getCourse($classroomCourse['courseId']);
+
+        $body = array(
+            'type'    => 'classroom.put_course',
+            'id'      => $course['id'],
+            'title'   => $course['title'],
+            'image'   => $this->getFileUrl($course['smallPicture']),
+            'content' => $course['about']
+        );
+
+        $this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
     }
 
     public function onArticleCreate(ServiceEvent $event)
@@ -174,6 +283,32 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
 
         $this->push('资讯', $article['title'], $from, $to, $body);
+    }
+
+    public function onDiscountPass(ServiceEvent $event)
+    {
+        $discount = $event->getSubject();
+
+        $from = array('type' => 'global');
+        $to   = array('type' => 'global');
+        $body = array(
+            'type' => 'discount.'.$discount['type']
+        );
+        $content;
+
+        switch ($discount['type']) {
+            case 'free':;
+                $content = "【限时免费】";
+                break;
+            case 'discount':;
+                $content = "【限时打折】";
+                break;
+            default:;
+                $content = "【全站打折】";
+                break;
+        }
+
+        $this->push('打折活动', $content.$discount['name'], $from, $to, $body);
     }
 
     public function onCourseThreadPostCreate(ServiceEvent $event)
