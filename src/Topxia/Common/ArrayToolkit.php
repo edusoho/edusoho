@@ -98,7 +98,7 @@ class ArrayToolkit
         $keys = array_keys($map);
 
         foreach ($array as $key => $value) {
-            if (array_key_exists($key, $keys)) {
+            if (in_array($key, $keys)) {
                 $array[$map[$key]] = $value;
                 unset($array[$key]);
             }
