@@ -2,7 +2,6 @@
 
 namespace Topxia\AdminBundle\Controller;
 
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Topxia\WebBundle\Controller\BaseController as WebBaseController;
 
 class BaseController extends WebBaseController
@@ -20,34 +19,5 @@ class BaseController extends WebBaseController
         }
 
         return $disableds;
-    }
-
-    protected function refreshCopyright($info = array())
-    {
-        $settingService = $this->getServiceKernel()->createService('System.SettingService');
-
-        if (empty($info)) {
-            $api  = CloudAPIFactory::create('leaf');
-            $info = $api->get('/me');
-        }
-
-        if (isset($info['copyright'])) {
-            if ($info['copyright']) {
-                $copyright = $settingService->get('copyright', array());
-
-                if (empty($copyright['owned'])) {
-                    $copyright['owned'] = 1;
-                    $settingService->set('copyright', $copyright);
-                }
-
-                if ($info['thirdCopyright']) {
-                    $copyright                   = $settingService->get('copyright', array());
-                    $copyright['thirdCopyright'] = $info['thirdCopyright'];
-                    $settingService->set('copyright', $copyright);
-                }
-            } else {
-                $settingService->delete('copyright');
-            }
-        }
     }
 }

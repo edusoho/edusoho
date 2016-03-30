@@ -442,7 +442,24 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('storage', $settings);
             }
 
-            $this->refreshCopyright($info);
+            if (isset($info['copyright'])) {
+                if ($info['copyright']) {
+                    $copyright = $this->getSettingService()->get('copyright', array());
+
+                    if (empty($copyright['owned'])) {
+                        $copyright['owned'] = 1;
+                        $this->getSettingService()->set('copyright', $copyright);
+                    }
+
+                    if ($info['thirdCopyright']) {
+                        $copyright                   = $this->getSettingService()->get('copyright', array());
+                        $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                        $this->getSettingService()->set('copyright', $copyright);
+                    }
+                } else {
+                    $this->getSettingService()->delete('copyright');
+                }
+            }
         } else {
             $settings                      = $this->getSettingService()->get('storage', array());
             $settings['cloud_key_applied'] = 0;
