@@ -90,6 +90,6 @@ class TagController extends BaseController
 
 	protected function getUploadFileTagService()
     {
-        return $this->createService('File.UploadFileTagService');
+        return $this->getServiceKernel()->createService('File.UploadFileTagService');
     }
 }
