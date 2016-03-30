@@ -71,54 +71,50 @@ class ChaosThreadsPosts extends BaseResource
         $conditions  = array(
             'userId' => $currentUser['id']
         );
-        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions, 'threadId');
+
+        $total = $this->getCourseThreadService()->searchThreadPostsCount($conditions,'threadId');
         $start = $start == -1 ? rand(0, $total - 1) : $start;
-        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions, '', $start, $limit, 'threadId');
+        
+        $posts = $this->getCourseThreadService()->searchThreadPosts($conditions,'createdTime',$start,$limit,'threadId');
+        if(empty($posts)){
+            return array();
+        }
 
         $courseIds = ArrayToolkit::column($posts, "courseId");
-
         $courses = $this->getCourseService()->findCoursesByIds($courseIds);
-
-        $courseThreadPosts = array();
-
-        if (empty($courses)) {
-            return $courseThreadPosts;
+        $course  = ArrayToolkit::index($courses,"id");
+        
+        foreach ($posts as $key => &$post) 
+        {       
+            $thread = $this->getCourseThreadService()->getThread(null,$post['threadId']);
+            if($thread['userId'] == $currentUser['id'] || !isset($courses[$post['courseId']])){
+                unset($posts[$key]);
+                continue;
+            }                             
+            $course = $courses[$post['courseId']];            
+            $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
+            $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
+            $course['largePicture']  = $this->getFileUrl($course['largePicture']);
+            $post['type']            = $thread['type'];
+            $post['title']           = $thread['title'];
+            $post['course']          = $this->filterCourse($course);   
         }
 
-        foreach ($posts as $post) {
-            $thread = $this->getCourseThreadService()->getThread($post['courseId'], $post['threadId']);
+        return array_values($posts);
+    }
 
-            if (empty($thread)) {
-                continue;
-            }
-
-            if ($thread['userId'] == $currentUser['id']) {
-                continue;
-            }
-
-            $threadPosts                = array();
-            $threadPosts['title']       = $thread['title'];
-            $threadPosts['type']        = $thread['type'];
-            $threadPosts['threadId']    = $thread['id'];
-            $threadPosts['id']          = $post['id'];
-            $threadPosts['content']     = $post['content'];
-            $threadPosts['createdTime'] = $post['createdTime'];
-
-            foreach ($courses as $course) {
-                if ($post['courseId'] == $course['id']) {
-                    $threadPosts['courseId']      = $post['id'];
-                    $threadPosts['courseTitle']   = $course['title'];
-                    $threadPosts['smallPicture']  = $this->getFileUrl($course['smallPicture']);
-                    $threadPosts['middlePicture'] = $this->getFileUrl($course['middlePicture']);
-                    $threadPosts['lagerPicture']  = $this->getFileUrl($course['lagerPicture']);
-                    break;
-                }
-            }
-
-            array_push($courseThreadPosts, $threadPosts);
-        }
-
-        return $courseThreadPosts;
+    protected function filterCourse($course){
+        $keys = array(
+            'id',
+            'type',
+            'title',
+            'userId',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'createdTime'
+        );
+        return ArrayToolkit::parts($course,$keys);
     }
 
     public function filter(&$res)
