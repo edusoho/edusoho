@@ -427,6 +427,21 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             unset($conditions['createdUserIds']);
         }
 
+        if (empty($conditions['startDate'])) {
+            unset($conditions['startDate']);
+        }
+
+        if (empty($conditions['endDate'])) {
+            unset($conditions['endDate']);
+        }
+
+        if (isset($conditions['startDate'])) {
+            $conditions['startDate'] = strtotime($conditions['startDate']);
+        }
+
+        if (isset($conditions['endDate'])) {
+            $conditions['endDate'] = strtotime($conditions['endDate']);
+        }
         if (!empty($conditions['tagId'])) {
             $assos = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
             $ids   = ArrayToolkit::column($assos, 'fileId');
