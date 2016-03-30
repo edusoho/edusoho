@@ -54,6 +54,10 @@ define(function(require, exports, module) {
             }
 
             this._initUploaderHook();
+            if ( !WebUploader.Uploader.support() ) {
+                alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
+                throw new Error( 'WebUploader does not support the browser you are using.' );
+            }
             var uploader = this.uploader = WebUploader.create(defaults);
             this._registerUploaderEvent(uploader);
 
@@ -96,7 +100,7 @@ define(function(require, exports, module) {
             this.element.html(html);
         },
 
-        
+
 
         _registerUploaderEvent: function(uploader) {
             var self = this;
@@ -150,7 +154,7 @@ define(function(require, exports, module) {
                 var value = store.get(key);
                 value[object.chunk] = ret;
                 store.set(key, value);
-                
+
                 var strategy = self.get('strategy');
                 strategy.uploadAccept(object, ret);
             });
@@ -158,9 +162,9 @@ define(function(require, exports, module) {
             uploader.on('uploadStart', function(file) {
             });
 
-            uploader.on('uploadBeforeSend', function(object, data, headers) {
+            uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
                 var strategy = self.get('strategy');
-                strategy.uploadBeforeSend(object, data, headers);
+                strategy.uploadBeforeSend(object, data, headers, tr);
             });
         },
 
@@ -194,7 +198,7 @@ define(function(require, exports, module) {
             if ((this.get('process') == 'auto') && extOutput) {
                 params = paramsDefault[extOutput];
                 params.output = extOutput;
-            } 
+            }
 
             return params;
         },
@@ -232,7 +236,7 @@ define(function(require, exports, module) {
 
                         var key = 'file_' + file.hash;
                         var value = store.get(key);
-                        
+
                         if(value && value.id) {
                             params.id = value.id;
                         }
@@ -245,13 +249,13 @@ define(function(require, exports, module) {
                                 value.response = response;
                                 store.set(key, value);
                             }
-                            
+
                             var value = store.get(key);
                             if (value.response) {
-                                file.uploaderWidget.set('initResponse', value.response);
+                                file.initResponse = value.response;
                             }
-
-                            require.async('./'+response.uploadMode+'-strategy', function(Strategy){
+                            var uploadMode = file.uploaderWidget.getStrategyModel(response.uploadMode);
+                            require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
                                 deferred.resolve();
@@ -285,7 +289,7 @@ define(function(require, exports, module) {
                     store.remove(key);
 
                     var strategy = file.uploaderWidget.get('strategy');
-                    var data = strategy.finishUpload(deferred);
+                    var data = strategy.finishUpload(deferred, file);
                     data.filename = file.name;
                     data.size = file.size;
                     data.id = file.fileId;
@@ -366,6 +370,19 @@ define(function(require, exports, module) {
             }
 
             return extProcessors[ext];
+        },
+
+        getStrategyModel: function(mode){
+            if (mode == 'baidu' && (this.isIE(8) || this.isIE(9))) {
+                return mode + "-direct";
+            }
+            return mode;
+        },
+
+        isIE: function(ver){
+            var b = document.createElement('b')
+            b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
+            return b.getElementsByTagName('i').length === 1
         }
 
     });
