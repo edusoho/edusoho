@@ -60,7 +60,7 @@ $app->get(_u('/classrooms/discovery/columns'), 'res.Classrooms:discoveryColumn')
 $app->get(_u('/classrooms/{id}'), 'res.Classroom:get');
 $app->post(_u('/classrooms/{id}'), 'res.Classroom:post');
 
-$app->get(_u('/classrooms/{classroomId}/status'), 'res.ClassroomStatus:get');
+$app->get(_u('/classrooms/{classroomId}/status'), 'res.ClassroomStatuses:get');
 
 $app->get(_u('/classrooms/{classroomId}/members'), 'res.ClassroomMembers:get');
 $app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.ClassroomMember:get');
