@@ -358,18 +358,12 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
-        $items       = $this->getCourseService()->getCourseItems($course['id']);
-        $courseAbout = $course['about'];
-
-        $courseAbout = strip_tags($courseAbout, '');
-
-        $courseAbout = preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", "", $courseAbout);
+        $items = $this->getCourseService()->getCourseItems($course['id']);
 
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course'      => $course,
-            'member'      => $member,
-            'items'       => $items,
-            'courseAbout' => $courseAbout
+            'course' => $course,
+            'member' => $member,
+            'items'  => $items
         ));
     }
 
