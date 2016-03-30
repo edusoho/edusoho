@@ -14,7 +14,7 @@ class HeepayResponse extends Response
         $error  = $this->hasError($params);
 
         if ($error) {
-            throw new \RuntimeException(sprintf('网银支付校验失败(%s)。', $error));
+            throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('网银支付校验失败(%error%)。', array('%error%' =>$error ))));
         }
 
         $data['payment'] = 'heepay';
@@ -29,7 +29,7 @@ class HeepayResponse extends Response
             $returnArray = $this->toArray($result);
 
             if ($returnArray['result'] != 1) {
-                throw new \RuntimeException('网银支付失败');
+                throw new \RuntimeException($this->getServiceKernel()->trans('网银支付失败'));
             }
 
             if (in_array($returnArray['result'], array(1))) {
@@ -126,7 +126,7 @@ class HeepayResponse extends Response
         $data = explode("|", $result);
 
         if (count($data) <= 1) {
-            throw new \RuntimeException(sprintf('该笔单据查询超过１次,请过15分钟之后查询'));
+            throw new \RuntimeException(sprintf($this->getServiceKernel()->trans('该笔单据查询超过１次,请过15分钟之后查询')));
         }
 
         $param = array();
