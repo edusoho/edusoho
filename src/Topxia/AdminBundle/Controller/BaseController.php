@@ -38,6 +38,11 @@ class BaseController extends WebBaseController
                     $copyright['owned'] = 1;
                     $settingService->set('copyright', $copyright);
                 }
+                if($info['thirdCopyright']) {
+                  $copyright = $settingService->get('copyright', array());
+                  $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                  $settingService->set('copyright', $copyright);
+                }
             } else {
                 $settingService->delete('copyright');
             }
