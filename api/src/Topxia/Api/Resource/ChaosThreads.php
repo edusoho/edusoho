@@ -211,7 +211,7 @@ class ChaosThreads extends BaseResource
 
         foreach ($courseThreads as $key => &$thread) {
             if (isset($courses[$thread['courseId']])) {
-                ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
+                $thread                  = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
                 $course                  = $courses[$thread['courseId']];
                 $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
                 $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
