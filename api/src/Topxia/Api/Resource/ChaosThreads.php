@@ -211,7 +211,7 @@ class ChaosThreads extends BaseResource
 
         foreach ($courseThreads as $key => &$thread) {
             if (isset($courses[$thread['courseId']])) {
-                $this->multicallFilter('Thread', $thread);
+                $this->callFilter('Thread', $thread);
                 $course                  = $courses[$thread['courseId']];
                 $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
                 $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
@@ -223,15 +223,6 @@ class ChaosThreads extends BaseResource
         }
 
         return $courseThreads;
-    }
-
-    protected function multicallFilter($name, &$res)
-    {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
-        }
-
-        return $res;
     }
 
     protected function filterCourse($course)
