@@ -166,6 +166,11 @@ define(function(require, exports, module) {
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
+                if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
+                    $('.js-manage-batch-btn').removeClass('hide');
+                } else {
+                    $('.js-manage-batch-btn').addClass('hide');
+                }
                 this.renderTable();
             },
             onClickCollectBtn: function(event)
