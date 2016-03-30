@@ -40,7 +40,6 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
-
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
