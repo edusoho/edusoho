@@ -2,6 +2,7 @@ imports:
     - { resource: parameters_default.yml }
     - { resource: parameters_service.yml, ignore_errors: true }
     - { resource: parameters.yml }
+    - { resource: route_white_list.yml }
     - { resource: security.yml }
 
 framework:
