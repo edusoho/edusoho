@@ -16,7 +16,7 @@ class Version20160317173219 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `user` ADD `locale` VARCHAR(20) NOT NULL AFTER `payPasswordSalt`;");
+        $this->addSql("ALTER TABLE `user` ADD `locale` VARCHAR(20) AFTER `payPasswordSalt`;");
     }
 
     /**
