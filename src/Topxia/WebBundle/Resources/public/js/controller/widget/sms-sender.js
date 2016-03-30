@@ -46,7 +46,7 @@ define(function(require, exports, module) {
                 $('#js-time-left').html('120');
                 $('#js-fetch-btn-text').html(Translator.trans('秒后重新获取'));
                 Notify.success(Translator.trans('发送短信成功'));
-                self.element.addClass(Translator.trans('disabled'));
+                self.element.addClass('disabled');
                 refreshTimeLeft();
             } else {
                 if ("undefined" != typeof response['error']){
