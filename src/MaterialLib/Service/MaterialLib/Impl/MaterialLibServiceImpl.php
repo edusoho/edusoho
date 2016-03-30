@@ -63,6 +63,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 }
                 return $result;
             }
+            var_dump(111);
             return false;
         }
     }
@@ -160,7 +161,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                     $courseIds = array('0');
                 }
                 $conditions['courseIds'] = $courseIds;
-                
+
             } elseif ($conditions['searchType'] == 'user') {
                 $users = $this->getUserService()->searchUsers(array('nickname'=>$conditions['keywords']), array('id','desc'),0,999);
                 $userIds = ArrayToolkit::column($users, 'id');
@@ -192,11 +193,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
         if (!empty($filterConditions['courseIds'])) {
             $localFiles              = $this->getUploadFileService()->findFilesByCourseIds($filterConditions['courseIds']);
-            
+
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
             unset($filterConditions['courseIds']);
-        } 
+        }
 
         return $filterConditions;
     }

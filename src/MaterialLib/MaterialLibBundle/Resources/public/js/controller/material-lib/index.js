@@ -123,7 +123,7 @@ define(function(require, exports, module) {
                             }
                         });
                     }).fail(function(){
-                        Notify.danger('Opps,出错了!');
+                        Notify.danger('抱歉，您无权操作此文件');
                     }).always(function() {
                        self.DetailBtnActive = false;
                     });
