@@ -22,6 +22,8 @@ define(function(require, exports, module) {
 		});
 
 		$(".js-share-users").on('click', function(){
+			$(this).addClass('active');
+			$(".js-share-history-detail").removeClass('active');
 			$('.share-show-users-thead').show();
 			$('.share-show-users-tbody').show();
 			$('.share-history-detail-thead').hide();
@@ -29,6 +31,8 @@ define(function(require, exports, module) {
 		});
 
 		$(".js-share-history-detail").on('click', function(){
+			$(this).addClass('active');
+			$(".js-share-users").removeClass('active');
 			$('.share-history-detail-thead').show();
 			$('.share-history-detail-tbody').show();
 			$('.share-show-users-thead').hide();
