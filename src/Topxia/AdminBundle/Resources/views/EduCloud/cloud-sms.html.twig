@@ -1,0 +1,24 @@
+<div class="col-md-6">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">云短信包状态</h3>
+    </div>
+    <div class="panel-body" style="height: 250px; padding:40px">
+    {% if overview.service.sms.enableBuy|default(0) != 1 %}
+      <div class="edu-verticalmiddle">
+        <div class="edu-verticalmiddle-content text-muted"><i class="glyphicon glyphicon-info-sign" aria-hidden="true"></i><a class="mhm" href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank">购买</a>云短信包，享受更优惠的短信服务</div> 
+      </div>
+    {% else %}
+      <p class="text-muted">剩余短信:{{ overview.service.sms.remainCount|default(0) }}条      
+        <a href="{{ path('admin_cloud_buy',{type:'sms'}) }}" target="_blank" style="margin-left:20px">购买</a>
+      </p>
+      {% if overview.service.sms.status|default(null) == 'used' and 0 < overview.service.sms.remainCount and  overview.service.sms.remainCount < 100 %}
+        <p class="text-warning text-sm">您的云短信包剩余不足100条短信，请尽快续购</p>
+      {% endif %}
+      {% if overview.service.sms.status|default(null) == 'used' and overview.service.sms.remainCount <= 0 %}
+        <p class="text-danger text-sm">您的云短信包已用完，请尽快续购</p>
+      {% endif %}
+    {% endif %}
+    </div>
+  </div>
+</div>

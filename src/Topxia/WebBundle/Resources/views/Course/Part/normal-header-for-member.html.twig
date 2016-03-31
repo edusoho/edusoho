@@ -4,7 +4,7 @@
 
 {% block before_content %}
   <ol class="breadcrumb breadcrumb-o">
-    <li><a href="{{ path('homepage') }}">首页</a></li>
+    <li><a href="{{ path('homepage') }}">{{'首页'|trans}}</a></li>
     {% for breadcrumb in breadcrumbs %}
       <li><a href="{{ path('course_explore',{'category':breadcrumb.code}) }}">{{ breadcrumb.name }}</a></li>
     {% endfor %}
@@ -31,12 +31,12 @@
             {% if member.orderId  %}
               <a href="#modal" data-toggle="modal" data-url="{{ path('order_refund', {id:course.id, targetType:'course'}) }}">
                 <p><i class="es-icon es-icon-exit"></i><p>
-                <p>退出</p>
+                <p>{{'退出'|trans}}</p>
               </a>
             {% else %}
               <a id="exit-course-learning" class="course-exit-btn" href="javascript:;" data-url="{{ path('course_exit', {id:course.id}) }}"  data-goto="{{ path('course_show', {id:course.id}) }}" {% if member.role != 'student' %} disabled {% endif %}>
                 <p><i class="es-icon es-icon-exit"></i><p>
-                <p>退出</p>
+                <p>{{'退出'|trans}}</p>
               </a>
             {% endif %}
           </li>
@@ -55,10 +55,10 @@
   </div>
 
   <div class="course-header-bottom clearfix">
-    <span class="pull-left">完成课时： {{ learnProgress.number }}/{{ learnProgress.total }}</span>
+    <span class="pull-left">{{'完成课时：'|trans}} {{ learnProgress.number }}/{{ learnProgress.total }}</span>
     {% if nextLearnLesson %}
-      <a class="btn btn-lg btn-primary" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">继续学习</a>
-      <span class="next-class hidden-xs">下一课时：<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title }}</a></span>
+      <a class="btn btn-lg btn-primary" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{'继续学习'|trans}}</a>
+      <span class="next-class hidden-xs">{{'下一课时：'|trans}}<a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{ nextLearnLesson.id }}">{{ nextLearnLesson.title }}</a></span>
     {% endif %}
   </div>
 

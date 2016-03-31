@@ -62,7 +62,7 @@ class FileToolkit
         return $errors;
     }
 
-    public static function isImageFile(File $file) 
+    public static function isImageFile(File $file)
     {
         $ext = static::getFileExtension($file);
         return in_array(strtolower($ext), explode(' ', static::getImageExtensions()));
@@ -864,12 +864,14 @@ class FileToolkit
             'movie'       => 'video/x-sgi-movie'                                                         ,
             'smv'         => 'video/x-smv'                                                               ,
             'ice'         => 'x-conference/x-cooltalk'                                                   ,
+            'mpg'         => 'video/mpeg'
+                                                    ,
         );
         return empty($mimes[$extension]) ? null : $mimes[$extension];
     }
 
     public static function getFileTypeByExtension($extension)
-    {   
+    {
         $extension = strtolower($extension);
 
         if (in_array($extension, array('mp4', 'avi', 'flv', 'f4v', 'wmv', 'mov', 'rmvb', 'mkv', 'm4v'))) {

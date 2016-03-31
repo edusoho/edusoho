@@ -22,8 +22,8 @@ define(function(require, exports, module) {
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-search-type option': 'onClickSearchTypeBtn',
                 'click .js-refresh-btn': 'onClickRefreshBtn',
-                'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn'
+                'change .js-process-status-select': 'onClickProcessStatusBtn',
+                'change .js-use-status-select': 'onClickUseStatusBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));

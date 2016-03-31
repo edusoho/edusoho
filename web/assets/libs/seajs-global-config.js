@@ -1,5 +1,6 @@
+
 seajs.config({
-	alias: {
+    alias: {
         'jquery': 'jquery/1.11.2/jquery',
         '$': 'jquery/1.11.2/jquery',
         '$-debug': 'jquery/1.11.2/jquery',
@@ -72,32 +73,32 @@ seajs.config({
         'echarts': 'echarts/3.1.2/echarts.min.js'
     },
 
-	// 预加载项
-	preload: [this.JSON ? '' : 'json'],
+    // 预加载项
+    preload: [this.JSON ? '' : 'json'],
 
-	// 路径配置
-	paths: app.jsPaths,
+    // 路径配置
+    paths: app.jsPaths,
 
-	// 变量配置
-	vars: {
-		'locale': 'zh-cn'
-	},
+    // 变量配置
+    vars: {
+        'locale': 'zh-cn'
+    },
 
-	charset: 'utf-8',
+    charset: 'utf-8',
 
-	debug: app.debug
+    debug: app.debug
 });
 
 var __SEAJS_FILE_VERSION = '?v' + app.version;
 
 seajs.on('fetch', function(data) {
-	if (!data.uri) {
-		return ;
-	}
+    if (!data.uri) {
+        return ;
+    }
 
-	if (data.uri.indexOf(app.mainScript) > 0) {
-		return ;
-	}
+    if (data.uri.indexOf(app.mainScript) > 0) {
+        return ;
+    }
 
     if (/\:\/\/.*?\/assets\/libs\/[^(common)]/.test(data.uri)) {
         return ;
@@ -108,7 +109,7 @@ seajs.on('fetch', function(data) {
 });
 
 seajs.on('define', function(data) {
-	if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
-	    data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
-	}
+    if (data.uri.lastIndexOf(__SEAJS_FILE_VERSION) > 0) {
+        data.uri = data.uri.replace(__SEAJS_FILE_VERSION, '');
+    }
 });

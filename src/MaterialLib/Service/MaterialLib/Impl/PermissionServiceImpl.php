@@ -8,8 +8,9 @@ class PermissionServiceImpl extends BaseService
 {
     public function check($permission, $options)
     {
-        $method = strtolower($permission);
+        $method      = strtolower($permission);
         $currentUser = $this->getCurrentUser();
+
         if (!$currentUser->isLogin()) {
             return false;
         }
@@ -24,6 +25,7 @@ class PermissionServiceImpl extends BaseService
     public function view($currentUser, $options)
     {
         $file = $this->getUploadFileService()->getFileByGlobalId($options['globalId']);
+
         if ($file['isPublic']) {
             return true;
         }
@@ -31,7 +33,6 @@ class PermissionServiceImpl extends BaseService
         if ($file['createdUserId'] == $currentUser['id']) {
             return true;
         }
-
     }
 
     public function upload($currentUser, $options)
@@ -47,7 +48,7 @@ class PermissionServiceImpl extends BaseService
 
     public function delete($currentUser, $options)
     {
-        $file = $this->getUploadFileService()->getFileByGlobalId($options['globalId']);
+        $file = $options['file'];
         return $file['createdUserId'] == $currentUser['id'];
     }
 

@@ -45,67 +45,55 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function delete($globalId)
     {
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
-        $tags = $this->getUploadFileTagService()->findByFileId($file['id']);
 
         if ($globalId) {
-            $this->checkPermission(Permission::DELETE, array('globalId' => $globalId));
+            $this->checkPermission(Permission::DELETE, array('file' => $file));
             $result = $this->getCloudFileService()->delete($globalId);
+
             if (isset($result['success']) && $result['success']) {
                 $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
 
                 if ($result) {
-                  $this->getUploadFileTagService()->deleteByFileId($file['id']);
-                    // foreach ($tags as $tag) {
-                    //
-                    //     $this->getUploadFileTagService()->delete($tag['id']);
-                    // }
-
+                    $this->getUploadFileTagService()->deleteByFileId($file['id']);
                 }
+
                 return $result;
             }
-            var_dump(111);
-            return false;
         }
+
+        return false;
     }
 
     public function batchDelete($ids)
     {
         $files     = $this->getUploadFileService()->findFilesByIds($ids);
         $globalIds = ArrayToolkit::column($files, 'globalId');
-        foreach ($globalIds as $key => $value) {
-            $this->checkPermission(Permission::DELETE, array('globalId' => $value));
-            $result = $this->getCloudFileService()->delete($value);
-            if (isset($result['success']) && $result['success']) {
-                $result = $this->getUploadFileService()->deleteByGlobalId($value);
-                if (!$result) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+
+        foreach ($globalIds as $key => $globalId) {
+            $result = $this->delete($globalId);
         }
-        $fileIds = ArrayToolkit::column($files, 'id');
-        $tagIds = array();
-        $this->getUploadFileTagService()->edit($fileIds,$tagIds);
+
         return array('success' => true);
     }
 
     public function batchShare($ids)
     {
-        $files = $this->getUploadFileService()->findFilesByIds($ids);
+        $files     = $this->getUploadFileService()->findFilesByIds($ids);
         $globalIds = ArrayToolkit::column($files, 'globalId');
+
         foreach ($globalIds as $key => $value) {
             $this->checkPermission(Permission::EDIT, array('globalId' => $value));
             $fields = array('isPublic' => '1');
 
             $result = $this->getUploadFileService()->edit($value, $fields);
+
             if (!$result) {
                 return false;
             } else {
                 return true;
             }
-
         }
+
         return array('success' => true);
     }
 
@@ -141,7 +129,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function synData()
     {
         $conditions = array(
-          'globalId' => '0'
+            'globalId' => '0'
         );
         $oldFiles = $this->getCloudFileService()->synData($conditions);
         return $oldFiles;
@@ -152,23 +140,23 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         if (!empty($conditions['keywords'])) {
             if ($conditions['searchType'] == 'title') {
                 $conditions['name'] = $conditions['keywords'];
-
             } elseif ($conditions['searchType'] == 'course') {
                 $courses = $this->getCourseService()->findCoursesByLikeTitle($conditions['keywords']);
 
                 $courseIds = ArrayToolkit::column($courses, 'id');
+
                 if (empty($courseIds)) {
                     $courseIds = array('0');
                 }
+
                 $conditions['courseIds'] = $courseIds;
-
             } elseif ($conditions['searchType'] == 'user') {
-                $users = $this->getUserService()->searchUsers(array('nickname'=>$conditions['keywords']), array('id','desc'),0,999);
-                $userIds = ArrayToolkit::column($users, 'id');
+                $users                        = $this->getUserService()->searchUsers(array('nickname' => $conditions['keywords']), array('id', 'desc'), 0, 999);
+                $userIds                      = ArrayToolkit::column($users, 'id');
                 $conditions['createdUserIds'] = $userIds;
-
             }
         }
+
         unset($conditions['searchType']);
         unset($conditions['keywords']);
         unset($conditions['tags']);
@@ -176,23 +164,25 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             if ($value === 0) {
                 return true;
             }
+
             return !empty($value);
         });
 
         if (!empty($filterConditions['name'])) {
-            $localFiles = $this->getUploadFileService()->searchFiles(array('filename'=>$filterConditions['name']), array('createdTime', 'desc'), $filterConditions['start'], $filterConditions['limit']);
-            $globalIds = ArrayToolkit::column($localFiles, 'globalId');
+            $localFiles              = $this->getUploadFileService()->searchFiles(array('filename' => $filterConditions['name']), array('createdTime', 'desc'), $filterConditions['start'], $filterConditions['limit']);
+            $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
         }
+
         if (!empty($filterConditions['createdUserIds'])) {
-            $localFiles = $this->getMaterialLibDao()->findFilesByUserIds($filterConditions['createdUserIds'], $filterConditions['start'], $filterConditions['limit']);
+            $localFiles              = $this->getMaterialLibDao()->findFilesByUserIds($filterConditions['createdUserIds'], $filterConditions['start'], $filterConditions['limit']);
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
             unset($filterConditions['createdUserIds']);
         }
 
         if (!empty($filterConditions['courseIds'])) {
-            $localFiles              = $this->getUploadFileService()->findFilesByCourseIds($filterConditions['courseIds']);
+            $localFiles = $this->getUploadFileService()->findFilesByCourseIds($filterConditions['courseIds']);
 
             $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
             $filterConditions['nos'] = implode(',', $globalIds);
@@ -202,26 +192,28 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $filterConditions;
     }
 
-    public function filterTagCondition($conditions,$files)
+    public function filterTagCondition($conditions, $files)
     {
-      if(!empty($conditions['tags'])) {
+        if (!empty($conditions['tags'])) {
+            $filesInTags = $this->getUploadFileTagService()->findByTagId($conditions['tags']);
+            $fileIds     = ArrayToolkit::column($filesInTags, 'fileId');
 
-        $filesInTags = $this->getUploadFileTagService()->findByTagId($conditions['tags']);
-        $fileIds = ArrayToolkit::column($filesInTags,'fileId');
-        if(isset($files['data'])) {
-            $filterFiles = array();
-            foreach ($files['data'] as $key => $file) {
-              if(in_array($file['extno'],$fileIds)) {
-                array_push($filterFiles,$file);
-              }
+            if (isset($files['data'])) {
+                $filterFiles = array();
+
+                foreach ($files['data'] as $key => $file) {
+                    if (in_array($file['extno'], $fileIds)) {
+                        array_push($filterFiles, $file);
+                    }
+                }
+
+                $files['data']  = $filterFiles;
+                $files['count'] = count($filterFiles);
+                return $files;
             }
-
-          $files['data'] = $filterFiles;
-          $files['count'] = count($filterFiles);
-          return $files;
         }
-      }
-      return $files;
+
+        return $files;
     }
 
     protected function checkPermission($permission, $options = array())

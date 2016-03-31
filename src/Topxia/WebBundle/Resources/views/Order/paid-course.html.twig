@@ -1,5 +1,5 @@
 <div class="order-detail-item clearfix">
-  <h4>您已购买过：</h4>
+  <h4>{{'您已购买过：'|trans}}</h4>
   <div class="paid-courses">
     {% for paidCourse in paidCourses %}
     <div class="course-item clearfix">
@@ -10,15 +10,15 @@
         <h4><a class="link-light" href="{{path("course_show", {id:paidCourse.id})}}" target="_blank">{{paidCourse.title}}</a></h4>
       </div>
       <div class="course-info">
-        抵扣：
+        {{'抵扣：'|trans}}
         <span style="font-size: 18px">{{paidCourse.afterDiscountPrice}}</span>
         <span> {% if priceType|default('RMB') == "RMB" %}
-          元
+          {{'元'|trans}}
         {% elseif priceType|default('RMB') == "Coin" %}
           {{setting("coin.coin_name")}}
-        {% endif %} </span> 
+        {% endif %} </span>
       </div>
     </div>
-    {% endfor %} 
+    {% endfor %}
   </div>
 </div>

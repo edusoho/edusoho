@@ -174,6 +174,12 @@ interface CourseService
 
     public function analysisLessonDataByTime($startTime, $endTime);
 
+    public function findFutureLiveDates($courseIds, $limit);
+
+    public function findFutureLiveCourseIds();
+
+    public function findPastLiveCourseIds();
+
     public function analysisLessonFinishedDataByTime($startTime, $endTime);
 
     public function searchAnalysisLessonViewCount($conditions);

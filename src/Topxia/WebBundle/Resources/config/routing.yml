@@ -137,6 +137,10 @@ register_captcha_num:
     path:     /captcha_num
     defaults: { _controller: TopxiaWebBundle:Register:captcha }
 
+user_import_modal:
+    pattern:  /import/modal
+    defaults: { _controller: TopxiaWebBundle:Importer:importModal }
+
 file_upload:
     pattern:  /file/upload
     defaults: { _controller: TopxiaWebBundle:File:upload }
@@ -843,6 +847,18 @@ course_manage_question_upload:
     pattern: /course/{courseId}/manage/question/uploadfile/{type}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
     methods: [POST]
+
+course_manage_upload_question_attachment:
+    pattern:  /course/{id}/manage/upload/question/attachment/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
+
+course_manage_question_batch_upload_attachment:
+    pattern: /course/{id}/manage/question/batch/upload/attachment/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:batchUploadAttachments }
+
+course_manage_question_attachment_download:
+    pattern: /course/{id}/manage/question/attachment/{fileId}/download
+    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:attachmentDownload }
 
 course_manage_question_category:
     pattern: /course/{courseId}/manage/question/category
