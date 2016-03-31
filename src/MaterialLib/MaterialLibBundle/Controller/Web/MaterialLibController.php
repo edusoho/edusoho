@@ -157,20 +157,21 @@ class MaterialLibController extends BaseController
                 'thumbnails' => $thumbnails
             ));
         }
-
         $material   = $this->getMaterialLibService()->get($globalId);
-        $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        if($material['type'] == 'video' ) {
+          $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        }
         $currentUser = $this->getCurrentUser();
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
         if (!($file['createdUserId'] == $currentUser['id'])) {
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $material,
-                'thumbnails' => $thumbnails
+                'thumbnails' => empty($thumbnails) ? "" : $thumbnails
             ));
         }
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
-            'thumbnails' => $thumbnails
+            'thumbnails' => empty($thumbnails) ? "" : $thumbnails
         ));
     }
 

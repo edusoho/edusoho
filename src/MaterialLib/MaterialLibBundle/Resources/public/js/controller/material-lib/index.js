@@ -31,8 +31,8 @@ define(function(require, exports, module) {
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
                 //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
-                'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn',
+                'change .js-process-status-select': 'onClickProcessStatusBtn',
+                'change .js-use-status-select': 'onClickUseStatusBtn',
                 'click .js-upload-time-btn': 'onClickUploadTimeBtn'
             },
             setup: function() {
@@ -212,7 +212,6 @@ define(function(require, exports, module) {
             },
             onClickUploadTimeBtn: function(event)
             {
-
                 $('#sort').val('createdTime');
                 this.renderTable();
             },
