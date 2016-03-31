@@ -63,10 +63,9 @@ class MaterialLibController extends BaseController
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
-        $orderBy = array($conditions['sort'], 'DESC');
         $conditions['currentUserId'] = $currentUserId;
         $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-        $files                       = $this->getUploadFileService()->searchFiles($conditions, $orderBy, $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime','DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $collections                 = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
         foreach ($files as $key => $file) {
             if (in_array($file['id'], ArrayToolkit::column($collections, 'fileId'))) {

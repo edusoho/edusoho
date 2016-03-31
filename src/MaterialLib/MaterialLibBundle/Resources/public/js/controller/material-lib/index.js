@@ -168,8 +168,10 @@ define(function(require, exports, module) {
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
                 if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
                     $('.js-manage-batch-btn').removeClass('hide');
+                    $('.js-upload-file-btn').removeClass('hide');
                 } else {
                     $('.js-manage-batch-btn').addClass('hide');
+                    $('.js-upload-file-btn').addClass('hide');
                 }
                 this.renderTable();
             },
