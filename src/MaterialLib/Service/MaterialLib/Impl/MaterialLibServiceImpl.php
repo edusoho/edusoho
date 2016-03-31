@@ -47,7 +47,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if ($globalId) {
-            $this->checkPermission(Permission::DELETE, array('globalId' => $globalId));
+            $this->checkPermission(Permission::DELETE, array('file' => $file));
             $result = $this->getCloudFileService()->delete($globalId);
 
             if (isset($result['success']) && $result['success']) {
@@ -69,24 +69,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $files     = $this->getUploadFileService()->findFilesByIds($ids);
         $globalIds = ArrayToolkit::column($files, 'globalId');
 
-        foreach ($globalIds as $key => $value) {
-            $this->checkPermission(Permission::DELETE, array('globalId' => $value));
-            $result = $this->getCloudFileService()->delete($value);
-
-            if (isset($result['success']) && $result['success']) {
-                $result = $this->getUploadFileService()->deleteByGlobalId($value);
-
-                if (!$result) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
+        foreach ($globalIds as $key => $globalId) {
+            $result = $this->delete($globalId);
         }
 
-        $fileIds = ArrayToolkit::column($files, 'id');
-        $tagIds  = array();
-        $this->getUploadFileTagService()->edit($fileIds, $tagIds);
         return array('success' => true);
     }
 
