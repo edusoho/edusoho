@@ -14,6 +14,14 @@ material_lib_delete_file:
     pattern: /material/lib/{id}/delete
     defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
 
+material_lib_my_sharing_users:
+    pattern: /material/lib/my/sharing/users_shows
+    defaults: { _controller: MaterialLibBundle:MaterialLib:showUsers }
+
+material_lib_my_sharing_history:
+    pattern: /material/lib/my/sharing/users_history
+    defaults: { _controller: MaterialLibBundle:MaterialLib:showHistory }
+
 material_lib_save_sharing:
     pattern: /material/lib/my/sharing/save
     defaults: { _controller: MaterialLibBundle:MaterialLib:saveShare }

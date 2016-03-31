@@ -27,6 +27,12 @@ class UploadFileShareDaoImpl extends BaseDao implements UploadFileShareDao
         return $this->getConnection()->fetchAll($sql, array($sourceId)) ?: null;
     }
 
+    public function findActiveShareHistoryByUserId($sourceId)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? AND isActive = 1 ORDER BY updatedTime DESC;";
+        return $this->getConnection()->fetchAll($sql, array($sourceId)) ?: null;
+    }
+
     public function findShareHistory($sourceId, $targetId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? AND targetUserId = ? LIMIT 1;";

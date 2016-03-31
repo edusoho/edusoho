@@ -12,6 +12,8 @@ interface UploadFileShareDao
 
     public function findShareHistory($sourceUserId, $targetUserId);
 
+    public function findActiveShareHistoryByUserId($sourceId);
+
     public function addShare($share);
 
     public function updateShare($id, $share);

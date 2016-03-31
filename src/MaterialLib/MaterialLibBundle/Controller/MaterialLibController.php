@@ -212,6 +212,64 @@ class MaterialLibController extends BaseController
      * @param  Request                                    $request HTTP request
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      */
+    public function showUsersAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $shareHistories = $this->getUploadFileService()->findActiveShareHistory($user['id']);
+
+        $targetUserIds = array();
+
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+        }
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-users.html.twig', array(
+            'shareHistories' => $shareHistories,
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'allTeachers'    => $allTeachers
+        ));
+    }
+
+    public function showHistoryAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $shareHistories = $this->getUploadFileShareHistoryService()->findShareHistory();
+
+        $targetUserIds = array();
+
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+        }
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-history-detail.html.twig', array(
+            'shareHistories' => $shareHistories,
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'allTeachers'    => $allTeachers
+        ));
+    }
+
     public function showShareHistoryAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -220,7 +278,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
-        $shareHistories = $this->getUploadFileService()->findShareHistory($user['id']);
+        $shareHistories = $this->getUploadFileService()->findActiveShareHistory($user['id']);
 
         $targetUserIds = array();
 
@@ -267,6 +325,8 @@ class MaterialLibController extends BaseController
                         $this->getUploadFileService()->addShare($currentUserId, $targetUserId);
                     }
 
+                    $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 1);
+
                     $targetUser   = $this->getUserService()->getUser($targetUserId);
                     $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
                     $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
@@ -297,6 +357,7 @@ class MaterialLibController extends BaseController
 
         if (!empty($targetUserId)) {
             $this->getUploadFileService()->cancelShareFile($currentUserId, $targetUserId);
+            $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 0);
 
             $targetUser   = $this->getUserService()->getUser($targetUserId);
             $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
@@ -409,6 +470,11 @@ class MaterialLibController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService2');
+    }
+
+    protected function getUploadFileShareHistoryService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileShareHistoryService');
     }
 
     protected function getUserService()

@@ -63,7 +63,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 }
                 return $result;
             }
-            var_dump(111);
+
             return false;
         }
     }
