@@ -78,8 +78,8 @@ class MaterialLibController extends BaseController
             $tagIds = ArrayToolkit::column($uploadTags, 'tagId');
             $tags = $this->getTagService()->findTagsByIds($tagIds);
             $files[$key]['tags'] = ArrayToolkit::column($tags, 'name');
+            $files[$key]['isMine'] = $currentUserId == $file['createdUserId'];
         }
-
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
@@ -161,6 +161,14 @@ class MaterialLibController extends BaseController
 
         $material   = $this->getMaterialLibService()->get($globalId);
         $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        $currentUser = $this->getCurrentUser();
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if (!($file['createdUserId'] == $currentUser['id'])) {
+            return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
+                'material'   => $material,
+                'thumbnails' => $thumbnails
+            ));
+        }
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
             'thumbnails' => $thumbnails
