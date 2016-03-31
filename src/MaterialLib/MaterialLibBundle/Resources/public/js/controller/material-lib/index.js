@@ -17,7 +17,7 @@ define(function(require, exports, module) {
             events: {
                 'submit': 'submitForm',
                 'click .nav.nav-tabs li': 'onClickNav',
-                'click .js-material-tabs li': 'onClickTabs',
+                'click .js-material-tabs .js-type-btn': 'onClickTabs',
                 'click .pagination li': 'onClickPagination',
                 'click .tags-container .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
@@ -32,7 +32,8 @@ define(function(require, exports, module) {
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
                 //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
                 'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn'
+                'click .js-use-status-select': 'onClickUseStatusBtn',
+                'click .js-upload-time-btn': 'onClickUploadTimeBtn'
             },
             setup: function() {
                 this.set('model','normal');
@@ -122,7 +123,7 @@ define(function(require, exports, module) {
                             }
                         });
                     }).fail(function(){
-                        Notify.danger('Opps,出错了!');
+                        Notify.danger('抱歉，您无权操作此文件');
                     }).always(function() {
                        self.DetailBtnActive = false;
                     });
@@ -160,11 +161,16 @@ define(function(require, exports, module) {
             },
 
             onClickSourseBtn: function(event)
-            {   
+            {
                 var $target = $(event.currentTarget);
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
+                if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
+                    $('.js-manage-batch-btn').removeClass('hide');
+                } else {
+                    $('.js-manage-batch-btn').addClass('hide');
+                }
                 this.renderTable();
             },
             onClickCollectBtn: function(event)
@@ -187,19 +193,26 @@ define(function(require, exports, module) {
                 var self = this;
                 var mode = self.get('model');
 
-                console.log(mode);
                 if(mode == "normal") {
                   this.set('model','edit');
                   var $target = $(event.currentTarget);
                   $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').show();
                   $('.materials-ul').addClass('batch-hidden');
+                  $target.html('完成管理');
                 } else {
                   this.set('model','normal');
                   var self = this;
                   var $target = $(event.currentTarget);
                   $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
                   $('.materials-ul').removeClass('batch-hidden');
+                  $target.html('批量管理');
                 }
+            },
+            onClickUploadTimeBtn: function(event)
+            {
+
+                $('#sort').val('createdTime');
+                this.renderTable();
             },
             onClickFinishBatchBtn: function(event)
             {

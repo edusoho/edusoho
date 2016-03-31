@@ -58,13 +58,15 @@ class MaterialLibController extends BaseController
         $currentUser          = $this->getCurrentUser();
         $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
+
         $conditions['status'] = 'ok';
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
         }
+        $orderBy = array($conditions['sort'], 'DESC');
         $conditions['currentUserId'] = $currentUserId;
         $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files                       = $this->getUploadFileService()->searchFiles($conditions, $orderBy, $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $collections                 = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
         foreach ($files as $key => $file) {
             if (in_array($file['id'], ArrayToolkit::column($collections, 'fileId'))) {
@@ -76,8 +78,8 @@ class MaterialLibController extends BaseController
             $tagIds = ArrayToolkit::column($uploadTags, 'tagId');
             $tags = $this->getTagService()->findTagsByIds($tagIds);
             $files[$key]['tags'] = ArrayToolkit::column($tags, 'name');
+            $files[$key]['isMine'] = $currentUserId == $file['createdUserId'];
         }
-
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
         $storageSetting = $this->getSettingService()->get("storage");
@@ -159,6 +161,14 @@ class MaterialLibController extends BaseController
 
         $material   = $this->getMaterialLibService()->get($globalId);
         $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        $currentUser = $this->getCurrentUser();
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if (!($file['createdUserId'] == $currentUser['id'])) {
+            return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
+                'material'   => $material,
+                'thumbnails' => $thumbnails
+            ));
+        }
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
             'thumbnails' => $thumbnails
@@ -250,6 +260,10 @@ class MaterialLibController extends BaseController
 
         if (!$user->isTeacher()) {
             throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        if ($file['isPublic'] == 1 ) {
+            return $file;
         }
 
         if ($file['createdUserId'] == $user['id']) {

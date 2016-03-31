@@ -31,7 +31,7 @@ class UploadFileTagDaoImpl extends BaseDao implements UploadFileTagDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-	  public function deleteByFileId($fileId)
+	public function deleteByFileId($fileId)
     {
         $sql    = "DELETE FROM {$this->table} WHERE fileId = ?";
         $result = $this->getConnection()->executeUpdate($sql, array($fileId));
@@ -39,6 +39,14 @@ class UploadFileTagDaoImpl extends BaseDao implements UploadFileTagDao
         return $result;
     }
 
+    public function deleteByTagId($tagId)
+    {
+        $sql    = "DELETE FROM {$this->table} WHERE tagId = ?";
+        $result = $this->getConnection()->executeUpdate($sql, array($tagId));
+        $this->clearCached();
+        return $result;
+    }
+    
     public function findByFileId($fileId)
     {
         $sql   = "SELECT * FROM {$this->table} WHERE fileId = ?";

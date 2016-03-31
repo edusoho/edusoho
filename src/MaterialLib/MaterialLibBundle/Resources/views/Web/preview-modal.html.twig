@@ -8,7 +8,7 @@
     {# {{ render(controller('TopxiaWebBundle:FileWatch:modalBody', {file:file})) }} #}
 
     {% if file.type == 'video' or file.type == 'audio' %}
-    <div id="lesson-preview-player" 
+    <div id="lesson-preview-player"
         style="height:300px"
         data-balloon-player="{{ setting('developer.balloon_player')|default(0) }}"
         data-player-url="{{path('material_lib_file_player', {fileId: file.id})}}"
@@ -26,6 +26,9 @@
   {% elseif file.type == 'image' %}
     <div id="lesson-preview-image" data-url="{{ path('material_lib_file_preview_image', {fileId: file.id}) }}"></div>
   {% else %}
+    <div class="text-center">
+      {{'该文件暂不支持预览'|trans}}
+    </div>
     {#<div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
     </div>#}
   {% endif %}

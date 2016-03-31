@@ -14,9 +14,9 @@ define(function(require, exports, module) {
             },
             events: {
                 'submit': 'submitForm',
-                'click .nav-tabs li': 'onClickNav',
+                'click .nav-tabs .js-type-btn': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
-                'click .js-tags-container li': 'onClickTag',
+                'click .js-tags-container .js-tag-btn': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
@@ -53,18 +53,13 @@ define(function(require, exports, module) {
                 var $container = $target.closest('.js-tags-container');
                 var $prev = $container.find('.active');
                 if ($target.html() == $prev.html()) {
-                  if(!$container.find('.active')) {
-                    $target.removeClass('active');
-                  } else {
-                    $target.addClass('active');
-                  }
+                  $target.removeClass('active');
                   $container.find('[name=tags]').val('');
                 } else {
-                    $prev.removeClass('active').addClass('active');
-                    $target.addClass('active').removeClass('active');
-                    $container.find('[name=tags]').val($target.data('value'));
+                    $prev.removeClass('active');
+                    $target.addClass('active');
+                    $container.find('[name=tags]').val($target.find('a').data('value'));
                 }
-
                 this.renderTable();
             },
             onClickDetailBtn: function(event)

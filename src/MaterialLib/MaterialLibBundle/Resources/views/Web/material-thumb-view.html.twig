@@ -37,11 +37,11 @@
         <option value="error">转码失败</option>
       </select>
     </div>
-    <div class="form-group mll js-use-status-select" style="margin-top:7px;">
-      <select class="form-control">
-        <option>使用状态</option>
-        <option>未使用</option>
-        <option>已使用</option>
+    <div class="form-group mll" style="margin-top:7px;">
+      <select class="form-control js-use-status-select" name="useStatus">
+        <option value="">使用状态</option>
+        <option value="unused">未使用</option>
+        <option value="used">已使用</option>
       </select>
     </div>
   </ul>
@@ -78,12 +78,13 @@
           <span class="sr-only">Toggle Dropdown</span>
         </a>
         <ul class="dropdown-menu">
-          <li class="js-play-times-btn" {#data-url="{{ path('material_delete', {globalId:material.no|defaul}) }}"#}><a class="glyphicon glyphicon-ok" href="javascript:;"> 播放次数</a></li>
-          <li class="js-upload-time-btn "><a {#class="glyphicon glyphicon-ok"#} href="javascript:;"> 上传时间</a></li>
+          {#<li class="js-play-times-btn" ><a class="glyphicon glyphicon-ok" href="javascript:;"> 播放次数</a></li>#}
+          <li class="js-upload-time-btn "><a{#class="glyphicon glyphicon-ok"#} href="javascript:;" class="upload-time-btn"> 上传时间</a>
+          <input type="hidden" value="" name="sort" id="sort"></input></li>
         </ul>
       </span>
     </div>
-    <div class="row material-list-container"  id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
+    <div class="material-list-container"id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
 </form>
 <div id="tag-modal" class="modal in" aria-hidden="false" style="display: none;">

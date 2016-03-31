@@ -54,6 +54,7 @@ class TagController extends BaseController
 	public function deleteAction(Request $request, $id)
 	{
 		$this->getTagService()->deleteTag($id);
+		$this->getUploadFileTagService()->deleteByTagId($id);
 		return $this->createJsonResponse(true);
 	}
 
@@ -87,4 +88,8 @@ class TagController extends BaseController
 		return $tag;
 	}
 
+	protected function getUploadFileTagService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileTagService');
+    }
 }

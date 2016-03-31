@@ -1,4 +1,5 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
+<div class="row">
 {% for uploadFile in files %}
    <div class="col-md-3">
     <ul class="materials-ul clearfix">
@@ -46,7 +47,7 @@
 {% else %}
    <div class="empty">无文件记录</div>
 {% endfor %}
-
+</div>
 {% if paginator.lastPage > 1 %}
 <nav class=" {{ class|default('text-center') }}">
   <ul class="pagination">

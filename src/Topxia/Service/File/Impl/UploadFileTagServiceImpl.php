@@ -18,15 +18,28 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 		return $this->getUploadFileTagDao()->findByFileId($fileId);
 	}
 
+	public function findByTagId($tagId)
+	{
+		return $this->getUploadFileTagDao()->findByTagId($tagId);
+	}
+
 	public function delete($id)
 	{
 		return $this->getUploadFileTagDao()->delete($id);
 	}
+
 	public function deleteByFileId($fileId)
 	{
 		$result = $this->getUploadFileTagDao()->deleteByFileId($fileId);
 		return $result;
 	}
+
+	public function deleteByTagId($tagId)
+	{
+		$result = $this->getUploadFileTagDao()->deleteByTagId($tagId);
+		return $result;
+	}
+
 	public function edit($fileIds, $tagIds)
 	{
 		foreach ($fileIds as $fileId ) {

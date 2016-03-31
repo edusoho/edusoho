@@ -11,5 +11,9 @@ interface UploadFileTagService
 
 	public function deleteByFileId($fileId);
 
+	public function deleteByTagId($tagId);
+
 	public function findByFileId($fileId);
+
+	public function findByTagId($tagId);
 }
