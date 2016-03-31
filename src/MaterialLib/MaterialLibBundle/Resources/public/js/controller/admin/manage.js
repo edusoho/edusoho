@@ -16,7 +16,7 @@ define(function(require, exports, module) {
                 'submit': 'submitForm',
                 'click .nav-tabs .js-type-btn': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
-                'click .js-tags-container li': 'onClickTag',
+                'click .js-tags-container .js-tag-btn': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
