@@ -26,9 +26,9 @@ class UploadFileShareHistoryDaoImpl extends BaseDao implements UploadFileShareHi
         return $this->getConnection()->lastInsertId();
     }
 
-    public function findShareHistory()
+    public function findShareHistoryByUserId($sourceUserId)
     {
-    	$sql = "SELECT * FROM {$this->table} ORDER BY createdTime DESC;";
-        return $this->getConnection()->fetchAll($sql) ?: null;
+    	$sql = "SELECT * FROM {$this->table} WHERE sourceUserId = ? ORDER BY createdTime DESC;";
+        return $this->getConnection()->fetchAll($sql, array($sourceUserId)) ?: null;
     }
 }

@@ -223,7 +223,7 @@ class MaterialLibController extends BaseController
 
         $shareHistories = $this->getUploadFileService()->findActiveShareHistory($user['id']);
 
-        $shareHistorydetails = $this->getUploadFileShareHistoryService()->findShareHistory();
+        $shareHistorydetails = $this->getUploadFileShareHistoryService()->findShareHistory($user['id']);
         $targetUserIds = array();
         $completeTargetUserIds = array();
         if (!empty($shareHistories)) {

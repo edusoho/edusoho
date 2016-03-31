@@ -7,5 +7,5 @@ interface UploadFileShareHistoryService
 
 	public function addShareHistory($sourceUserId, $targetUserId, $isActive);
 
-	public function findShareHistory();
+	public function findShareHistory($sourceUserId);
 }

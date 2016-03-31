@@ -25,9 +25,9 @@ class UploadFileShareHistoryServiceImpl extends BaseService implements UploadFil
         return $this->getUploadFileShareHistoryDao()->addShareHistory($fileShareHistoryFields);
 	}
 
-	public function findShareHistory()
+	public function findShareHistory($sourceUserId)
     {
-        $shareHistories = $this->getUploadFileShareHistoryDao()->findShareHistory();
+        $shareHistories = $this->getUploadFileShareHistoryDao()->findShareHistoryByUserId($sourceUserId);
 
         return $shareHistories;
     }

@@ -39,12 +39,6 @@ define(function(require, exports, module) {
 			$('.share-show-users-tbody').hide();
 		});
 
-		$(".show-share-history").on('click', function(){
-			$.post($(this).data('url'),function(html){
-				$(".share-body").html();
-				$(".share-body").html(html);
-			});
-		});
 
 		$("#share").on('click',function(){
 		  $("#show-share-input").show();
