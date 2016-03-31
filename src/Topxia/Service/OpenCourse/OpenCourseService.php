@@ -40,7 +40,7 @@ interface OpenCourseService
 
     public function createLesson($lesson);
 
-    public function updateLesson($id, $fields);
+    public function updateLesson($courseId, $lessonId, $fields);
 
     public function deleteLesson($id);
 
@@ -49,6 +49,16 @@ interface OpenCourseService
     public function closeCourse($id);
 
     public function tryManageOpenCourse($courseId);
+
+    public function getCourseItems($courseId);
+
+    public function getCourseLesson($courseId, $lessonId);
+
+    public function unpublishLesson($courseId, $lessonId);
+
+    public function publishLesson($courseId, $lessonId);
+
+    public function sortCourseItems($courseId, array $items);
 
     /**
      * open_course_member

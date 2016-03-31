@@ -10,11 +10,8 @@
 <div class="panel panel-default panel-col lesson-manage-panel">
 	<div class="panel-heading">
 		<div class="pull-right">
-
-			<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'课时'|trans}}{% endif %}</button>
-
+			<button class="btn btn-info btn-sm" id="lesson-create-btn" data-toggle="modal" data-target="#modal" data-backdrop="static" data-keyboard="false" data-url="{% if course.type == 'open' %}{{ path('open_course_manage_lesson_create', {id:course.id}) }}{% endif %}"><i class="glyphicon glyphicon-plus"></i> {% if course.type == 'open' %}{{'课时'|trans}}{% endif %}</button>
 		</div>
-
 		{{'课时管理'|trans}}
 	</div>
 
@@ -25,9 +22,9 @@
 	 {% endif %}
 
 	<div class="panel-body">
-		<ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('course_manage_lesson_sort', {id:course.id}) }}">
+		<ul class="lesson-list sortable-list" id="course-item-list" data-sort-url="{{ path('open_course_manage_lesson_sort', {id:course.id}) }}">
 			{% for id, item in items %}
-			 
+			  
 			  {% if 'lesson' in id  %}
 			  	{% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
 			  {#

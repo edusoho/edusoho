@@ -2044,7 +2044,32 @@ open_course_manage_base:
 
 open_course_manage_lesson:
     pattern:  /open/course/{id}/manage/lesson
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:lesson }
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:lesson }
+
+open_course_manage_lesson_create:
+    pattern:  /open/course/{id}/manage/lesson/create
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:create }
+
+open_course_manage_lesson_edit:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/edit
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:edit }  
+
+open_course_manage_lesson_publish:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/publish
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:publish } 
+
+open_course_manage_lesson_delete:
+    pattern: /open/course/{courseId}/manage/lesson/{lessonId}/delete
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:delete}    
+
+open_course_manage_lesson_unpublish:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/unpublish
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:unpublish } 
+
+open_course_manage_lesson_sort:
+    pattern:  /open/course/{id}/manage/lesson/sort
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:sort }  
+    methods: [POST]            
 
 open_course_manage_picture:
     pattern:  /open/course/{id}/manage/picture
@@ -2087,8 +2112,9 @@ opencourse_course_search:
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search} 
 
 opencourse_recommended_course_select:
-    pattern: /opencourse/{id}/recommended/course/select
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendesCoursesSelect}       
+    pattern: /open/course/{id}/recommended/course/select
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendesCoursesSelect} 
+
 
 #esbar_my_history:
 #    pattern:  /esbar/my/history

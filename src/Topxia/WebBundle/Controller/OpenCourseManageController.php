@@ -96,13 +96,15 @@ class OpenCourseManageController extends BaseController
             return $this->redirect($this->generateUrl('open_course_manage_teachers', array('id' => $id)));
         }
 
-        $teacherMembers = $this->getOpenCourseService()->searchMembers(array(
-            'courseId'  => $id,
-            'role'      => 'teacher',
-            'isVisible' => 1
-        ),
+        $teacherMembers = $this->getOpenCourseService()->searchMembers(
+            array(
+                'courseId'  => $id,
+                'role'      => 'teacher',
+                'isVisible' => 1
+            ),
             array('seq', 'ASC'),
-            0, 100
+            0,
+            100
         );
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($teacherMembers, 'userId'));
@@ -167,7 +169,7 @@ class OpenCourseManageController extends BaseController
 
     public function marketingAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $userIds   = array();
         $coinPrice = 0;
@@ -218,7 +220,7 @@ class OpenCourseManageController extends BaseController
     public function pickAction(Request $request, $filter, $id)
     {
         $user                   = $this->getCurrentUser();
-        $course                 = $this->getCourseService()->tryManageOpenCourse($id);
+        $course                 = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $conditions             = $request->query->all();
         $conditions['status']   = 'published';
         $conditions['parentId'] = 0;
@@ -240,9 +242,9 @@ class OpenCourseManageController extends BaseController
             unset($conditions['title']);
         }
 
-        $count     = $this->getCourseService()->searchCourseCount($conditions);
+        $count     = $this->getOpenCourseService()->searchCourseCount($conditions);
         $paginator = new Paginator($this->get('request'), $count, 5);
-        $courses   = $this->getCourseService()->searchCourses(
+        $courses   = $this->getOpenCourseService()->searchCourses(
             $conditions,
             null,
             $paginator->getOffsetCount(),
@@ -270,7 +272,7 @@ class OpenCourseManageController extends BaseController
     public function searchAction(Request $request, $id, $filter)
     {
         $user = $this->getCurrentUser();
-        $this->getCourseService()->tryManageOpenCourse($id);
+        $this->getOpenCourseService()->tryManageOpenCourse($id);
         $key = $request->request->get("key");
 
         if (isset($key) && $key == "") {
@@ -295,7 +297,7 @@ class OpenCourseManageController extends BaseController
         if ($filter == 'normal') {
         }
 
-        $courses = $this->getCourseService()->searchCourses(
+        $courses = $this->getOpenCourseService()->searchCourses(
             $conditions,
             'latest',
             0,
@@ -321,7 +323,7 @@ class OpenCourseManageController extends BaseController
 
     public function recommendesCoursesSelectAction(Request $request, $id)
     {
-        $course = $this->getCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $data = $request->request->all();
         $ids  = array();
@@ -380,11 +382,6 @@ class OpenCourseManageController extends BaseController
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
-    }
-
     protected function getOpenCourseRecommendedService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
@@ -408,5 +405,10 @@ class OpenCourseManageController extends BaseController
     protected function getFileService()
     {
         return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 }
