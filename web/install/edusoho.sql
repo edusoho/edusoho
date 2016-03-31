@@ -1727,6 +1727,7 @@ CREATE TABLE IF NOT EXISTS `keyword_banlog` (
   KEY `keywordId` (`keywordId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `discovery_column`;
 CREATE TABLE `discovery_column` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
