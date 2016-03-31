@@ -48,10 +48,6 @@ class PermissionServiceImpl extends BaseService
 
     public function delete($currentUser, $options)
     {
-        if ($currentUser->isAdmin()) {
-            return true;
-        }
-
         $file = $options['file'];
         return $file['createdUserId'] == $currentUser['id'];
     }
