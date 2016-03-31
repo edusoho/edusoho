@@ -20,12 +20,19 @@ define(function(require, exports, module) {
 			keyboard : false,
 			show : false
 		});
-console.log($(".show-share-users"));
-		$(".show-share-users").on('click', function(){
-			$.post($(this).data('url'),function(html){
-				$(".share-body").html();
-				$(".share-body").html(html);
-			});
+
+		$(".js-share-users").on('click', function(){
+			$('.share-show-users-thead').show();
+			$('.share-show-users-tbody').show();
+			$('.share-history-detail-thead').hide();
+			$('.share-history-detail-tbody').hide();
+		});
+
+		$(".js-share-history-detail").on('click', function(){
+			$('.share-history-detail-thead').show();
+			$('.share-history-detail-tbody').show();
+			$('.share-show-users-thead').hide();
+			$('.share-show-users-tbody').hide();
 		});
 
 		$(".show-share-history").on('click', function(){

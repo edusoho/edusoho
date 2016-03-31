@@ -43,21 +43,68 @@ $("#target-teachers-input").select2({
                 <a id="submit-share-input" class="glyphicon glyphicon-ok-sign mlm " href="javascript:;"></a>
             </div>#}
         </div>
+        <div class="content">
+            <ul class="nav nav-pills">
+              <li class="active js-share-users" data-target="#user-tab"><a href="#user-tab" class="share-user">分享用户</a></li>
+
+                <li  class="js-share-history-detail" data-target="#detail-tab"><a href="#detail-tab">历史记录</a></li>
+            </ul>
+        </div>
+        <div id="user-tab">
+            <thead class="share-show-users-thead">
+                <tr>
+                    <th width="40%"class="text-center">昵称</th>
+                    <th width="40%" class="text-center">时间</th>
+                    <th width="20%"class="text-center">操作</th>
+                </tr>
+            </thead>
+            <tbody class="share-show-users-tbody">
+                {% for history in shareHistories %}
+                    <tr class="share-history-record" data-role="item">
+                        <td class="text-center">
+                            将资料分享给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
+                        </td>
+                        <td class="text-center">{{ history['updatedTime']|date('Y-n-d H:i') }}</td>
+                        <td class="text-center">
+                            {% if history['isActive'] == '1' %}
+                                <div class="pull-right">
+                                    <a data-url="{{ path('material_lib_cancel_sharing') }}" targetUserId="{{ history['targetUserId'] }}" class="btn btn-default btn-sm cancel-share-btn">取消分享</a>
+                                </div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr class="empty"><td colspan="3">无资料分享记录</td></tr>
+                {% endfor %}
+            </tbody>
+        </div>
+        <div id="detail-tab">
+            <thead class='share-history-detail-thead' style="display:none;">
+                <tr>
+                    <th width="50%" class="text-center">时间</th>
+                    <th width="50%" class="text-center">描述</th>
+                </tr>
+            </thead>
+            <tbody class='share-history-detail-tbody' style="display:none;">
+                {% for history in shareHistorydetails %}
+
+                <tr>
+                    <td class="text-center">{{ history['createdTime']|date('Y-n-d H:i') }}</td>
+                    <td class="text-center">
+                        {% if history['isActive'] %}
+                            分享给{{ (completeTargetUsers[history['targetUserId']])['nickname'] }}
+                        {% else %}
+                            取消与{{ (completeTargetUsers[history['targetUserId']])['nickname'] }}的分享
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr class="empty"><td colspan="3">无资料分享记录</td></tr>
+                {% endfor %}
+            </tbody>
+        </div>
     </table>
 </div>
-        
-<div class="content">
-    <ul class="nav nav-pills">
-      <li><a href="javascript:;" data-url="{{ path("material_lib_my_sharing_users")}}" class="btn btn-default btn-sm show-share-users" type="button">分享用户</a></li>
-
-        <li><a href="javascript:;" data-url="{{ path("material_lib_my_sharing_history")}}" class="btn btn-default btn-sm show-share-history" type="button">历史记录</a></li>
-    </ul>
-</div>
-
-<div class="share-body">
-    
-</div>
-
 <script>app.load('materiallibbundle/controller/material-lib/share-history')</script>
 <script>app.load('materiallibbundle/controller/material-lib/teachers')</script>
 {% endblock %}
