@@ -2103,16 +2103,16 @@ open_course_show:
     pattern:  /open/course/{courseId}
     defaults: { _controller: TopxiaWebBundle:OpenCourse:show }
 
-course_manage_open_course_pick:
-    pattern: /course/manage/{filter}/course/{id}/pick    
+open_course_manage_course_pick:
+    pattern: /open/course/manage/{filter}/course/{id}/pick    
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
 
-opencourse_course_search:
-    pattern: /opencourse/{filter}/course/{id}/search
+open_course_course_search:
+    pattern: /open/course/{filter}/course/{id}/search
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search} 
 
-opencourse_recommended_course_select:
-    pattern: /open/course/{id}/recommended/course/select
+open_course_recommended_course_select:
+    pattern: /open/course/{filter}/recommended/course/{id}/select
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendesCoursesSelect} 
 
 

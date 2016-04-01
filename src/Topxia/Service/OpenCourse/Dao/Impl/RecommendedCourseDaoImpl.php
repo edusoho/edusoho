@@ -108,6 +108,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
             ->from($this->table, 'open_course_recommend')
             ->andWhere('userId = :userId')
             ->andWhere('openCourseId = :openCourseId')
+            ->andWhere('origin = :origin')
             ->andWhere('recommendCourseId = :recommendCourseId')
             ->andWhere('type = :type')
             ->andWhere('createdTime >= :startTimeGreaterThan')

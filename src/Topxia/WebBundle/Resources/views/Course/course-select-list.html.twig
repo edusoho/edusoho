@@ -22,6 +22,7 @@
     </a>
     <div class="course-body">
      <div style="float:right;" class="text-muted mrm mls">
+     {% if course.type == 'normal' or course.type == 'live' %}
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
             <span class="course-price" style="display:inline">
               {% if course.coinPrice > 0 %}
@@ -39,7 +40,7 @@
             {% endif %}
           </span>
         {% endif %}
-
+      {% endif %}
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员'|trans)}}</span>
@@ -48,10 +49,12 @@
         </div>
 
       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+      {% if course.type == 'normal' or course.type == 'live' %}
       {% if course.serializeMode=='serialize' %}
         <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode=='finished' %}
         <span class="label label-warning ">{{'已完结'|trans}}</span>
+      {% endif %}
       {% endif %}
       {% if course.type == 'live' %}
           {% set lesson = course['lesson']|default(null) %}

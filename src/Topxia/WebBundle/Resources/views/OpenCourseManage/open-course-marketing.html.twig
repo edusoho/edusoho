@@ -39,7 +39,7 @@
 
 <div class="panel panel-default panel-col">
   <div class="panel-heading">{{'营销设置'|trans}}
-  <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_open_course_pick', {id:course['id']})}}">添加课程</button></div>
+  <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">添加课程</button></div>
   <div class="panel-body">
     <form class="form-horizontal" id="course-form" method="post">
 
@@ -59,6 +59,7 @@
                         <button class="close delete-btn pull-right mrl mts mll" data-role="item-delete" type="button" title="删除" style="font-size:35px;" data-id="{{course.id}}">× </button>
                     <div class="course-body">
                      <div style="float:right;" class="text-muted mrm mls">
+                     {% if course.type == 'normal' or course.type == 'live' %}
                         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                             <span class="course-price course-price-{{course.id}}" style="display:inline" data-price="{{ course.coinPrice }}">
                               {% if course.coinPrice > 0 %}
@@ -77,13 +78,16 @@
                             {% endif %}
                           </span>
                         {% endif %}
+                      {% endif %}    
                       </div>
 
                       <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+                      {% if course.type == 'normal' or course.type == 'live' %}
                       {% if course.serializeMode=='serialize' %}
                         <span class="label label-success ">更新中</span>
                       {% elseif course.serializeMode=='finished' %}
                         <span class="label label-warning ">已完结</span>
+                      {% endif %}
                       {% endif %}
                       {% if course.type == 'live' %}
                           {% set lesson = course['lesson']|default(null) %}
@@ -127,7 +131,9 @@
                             <span class="text-muted text-sm">
                                 {{course.lessonNum}}个课时
                             </span>
+                             {% if course.type == 'normal' or course.type == 'live' %}
                             <span class="divider"></span>
+                           
                             <span class="text-muted text-sm">
                                 有效期:
                                 {% if course.expiryDay %}
@@ -136,6 +142,7 @@
                                     永久
                                 {% endif %}
                             </span>
+                            {% endif %}
                         </div>
 
                       </div>
