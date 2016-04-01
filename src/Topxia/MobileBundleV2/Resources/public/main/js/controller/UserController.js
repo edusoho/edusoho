@@ -75,19 +75,31 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 		return "该课程暂无学员";
 	}
 
+	$scope.canLoad = true;
+    $scope.start = $scope.start || 0;
+
 	$scope.title = getTitle($stateParams.targetType);
 	$scope.emptyStr = getEmptyStr($stateParams.targetType);
 
+	$scope.loadMore = function(successCallback){
+        if (! $scope.canLoad) {
+            return;
+        }
+        setTimeout(function() {
+        	$scope.loadUsers(successCallback);
+        }, 200);
+    };
+
 	function getClassRoomStudents(targetId, callback) {
 		ClassRoomService.getStudents({
-			limit : 10000,
+			start : $scope.start,
 			classRoomId : $stateParams.targetId
 		}, callback);
 	}
 
 	function getCourseStudents(targetId, callback) {
 		CourseService.getStudents({
-			limit : 10000,
+			start : $scope.start,
 			courseId : $stateParams.targetId,
 		}, callback);
 	}
@@ -101,7 +113,7 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 		return users;
 	}
 
-	$scope.loadUsers = function() {
+	$scope.loadUsers = function(successCallback) {
 		var service;
 		if ("classroom" == $stateParams.targetType) {
 			service = getClassRoomStudents;
@@ -109,7 +121,20 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 			service = getCourseStudents;
 		}
 		service($stateParams.targetId, function(data) {
-			$scope.users = getStudentArray(data.resources);
+			if (successCallback) {
+              successCallback();
+            }
+            var length  = data ? data.resources.length : 0;
+            if (length == 0 || length < 10) {
+                $scope.canLoad = false;
+            }
+			var users = getStudentArray(data.resources);
+			$scope.users = $scope.users || [];
+            for (var i = 0; i < length; i++) {
+              $scope.users.push(users[i]);
+            };
+
+            $scope.start += 10;
 		});
 	}
 
