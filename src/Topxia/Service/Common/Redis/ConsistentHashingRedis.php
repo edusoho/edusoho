@@ -18,16 +18,17 @@ class ConsistentHashingRedis
         $redisServers = array();
 
         foreach ($servers as $key => $value) {
-            $key            = $value['host'].':'.$value['port'];
-            $redisServers[] = $key;
-
-            $redis = new Redis();
-            $redis->pconnect($value['host'], $value['port'], $config['timeout'], $config['reserved'], $config['retry_interval']);
-            $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
-            $this->reidsPool[$key] = $redis;
+            try {
+                $key   = $value['host'].':'.$value['port'];
+                $redis = new Redis();
+                $redis->pconnect($value['host'], $value['port'], $config['timeout'], $config['reserved'], $config['retry_interval']);
+                $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+                $this->reidsPool[$key] = $redis;
+                $redisServers[]        = $key;
+            } catch (\Exception $e) {
+            }
         }
 
-        // bulk add
         $this->hash->addTargets($redisServers);
     }
 
