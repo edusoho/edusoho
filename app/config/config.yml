@@ -118,8 +118,8 @@ services:
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.context', '@service_container']
 
     session.handler.redis.factory:
-        class: Topxia\Service\Common\RedisFactory
-        factory_class: Topxia\Service\Common\RedisFactory
+        class: Topxia\Service\Common\Redis\RedisFactory
+        factory_class: Topxia\Service\Common\Redis\RedisFactory
         factory_method: instance
         arguments: 
             - "@service_container"

@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Service\Common;
+namespace Topxia\Service\Common\Redis;
 
 use Redis;
 
@@ -45,9 +45,13 @@ class RedisPool
 
         $cnf = $this->config[$group];
 
-        $redis = new Redis();
-        $redis->pconnect($cnf['host'], $cnf['port'], $cnf['timeout'], $cnf['reserved'], $cnf['retry_interval']);
-        $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        if (empty($cnf['servers'])) {
+            $redis = new Redis();
+            $redis->pconnect($cnf['host'], $cnf['port'], $cnf['timeout'], $cnf['reserved'], $cnf['retry_interval']);
+            $redis->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP);
+        } else {
+            $redis = new ConsistentHashingRedis($cnf);
+        }
 
         $this->pool[$poolKey] = $redis;
 
