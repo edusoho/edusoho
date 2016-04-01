@@ -141,18 +141,27 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
           unset($conditions['tags']);
           $filterConditions = $this->filterKeyWords($conditions);
           if(isset($filterConditions['nos'])) {
-            $filterConditions['nos'] = implode(',',$filterConditions['nos']);
+            if(empty($filterConditions['nos'])) {
+              $filterConditions['nos'] = 0;
+            } else {
+              $filterConditions['nos'] = implode(',',$filterConditions['nos']);
+            }
           }
         } elseif (empty($conditions['keywords'])) {
           unset($conditions['searchType']);
           $filterConditions = $this->filterTags($conditions);
           if(isset($filterConditions['nos'])) {
-            $filterConditions['nos'] = implode(',',$filterConditions['nos']);
+            if(empty($filterConditions['nos'])) {
+              $filterConditions['nos'] = 0;
+            } else {
+              $filterConditions['nos'] = implode(',',$filterConditions['nos']);
+            }
           }
         } else {
           $filterKeyWordsConditions = $this->filterKeyWords($conditions);
           $filterTagsConditions = $this->filterTags($conditions);
           $filterConditions = $this->mergeConditions($filterKeyWordsConditions,$filterTagsConditions);
+          var_dump($filterConditions['nos']);
         }
         $filterConditions = array_filter($filterConditions, function ($value) {
             if ($value === 0) {
@@ -174,7 +183,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         if($files) {
           $conditions['nos'] = ArrayToolkit::column($files, 'globalId');
         } else {
-          $conditions['nos'] = 0 ;
+          $conditions['nos'] = array(0) ;
         }
       }
       unset($conditions['tags']);
@@ -184,8 +193,15 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function mergeConditions($filterKeyWordsConditions,$filterTagsConditions)
     {
       if(!empty($filterKeyWordsConditions['nos']) && !empty($filterTagsConditions['nos'])) {
+        var_dump($filterKeyWordsConditions['nos']);
+        var_dump($filterTagsConditions['nos']);
         $filterTagsConditions['nos'] = array_intersect($filterKeyWordsConditions['nos'],$filterTagsConditions['nos']);
-        $filterTagsConditions['nos'] = implode(',',$filterTagsConditions['nos']);
+        //var_dump($filterTagsConditions['nos']);
+        if(empty($filterTagsConditions['nos'])) {
+          $filterTagsConditions['nos'] = 0 ;
+        } else {
+          $filterTagsConditions['nos'] = implode(',',$filterTagsConditions['nos']);
+        }
         return $filterTagsConditions;
       } else {
         $conditions = array_merge($filterKeyWordsConditions,$filterTagsConditions);
