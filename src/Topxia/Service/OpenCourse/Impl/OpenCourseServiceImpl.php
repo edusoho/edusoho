@@ -49,7 +49,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
-        $course                = $this->getOpenCourseDao()->addCourse($course);
+        $course                = $this->getOpenCourseDao()->addCourse(CourseSerialize::serialize($course));
 
         $member = array(
             'courseId'    => $course['id'],
@@ -458,6 +458,64 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
     }
 
+    public function setCourseTeachers($courseId, $teachers)
+    {
+        // 过滤数据
+        $teacherMembers = array();
+
+        foreach (array_values($teachers) as $index => $teacher) {
+            if (empty($teacher['id'])) {
+                throw $this->createServiceException("教师ID不能为空，设置课程(#{$courseId})教师失败");
+            }
+
+            $user = $this->getUserService()->getUser($teacher['id']);
+
+            if (empty($user)) {
+                throw $this->createServiceException("用户不存在或没有教师角色，设置课程(#{$courseId})教师失败");
+            }
+
+            $teacherMembers[] = array(
+                'courseId'    => $courseId,
+                'userId'      => $user['id'],
+                'role'        => 'teacher',
+                'seq'         => $index,
+                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1,
+                'createdTime' => time()
+            );
+        }
+
+        // 先清除所有的已存在的教师学员
+        $existTeacherMembers = $this->findCourseTeachers($courseId);
+
+        foreach ($existTeacherMembers as $member) {
+            $this->getOpenCourseMemberDao()->deleteMember($member['id']);
+        }
+
+        // 逐个插入新的教师的学员数据
+        $visibleTeacherIds = array();
+
+        foreach ($teacherMembers as $member) {
+            // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
+            $existMember = $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+
+            if ($existMember) {
+                $this->getOpenCourseMemberDao()->deleteMember($existMember['id']);
+            }
+
+            $member = $this->getOpenCourseMemberDao()->addMember($member);
+
+            if ($member['isVisible']) {
+                $visibleTeacherIds[] = $member['userId'];
+            }
+        }
+
+        $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+
+        // 更新课程的teacherIds，该字段为课程可见教师的ID列表
+        $fields = array('teacherIds' => $visibleTeacherIds);
+        $course = $this->getOpenCourseDao()->updateCourse($courseId, CourseSerialize::serialize($fields));
+    }
+
     public function createMember($member)
     {
         return $this->getOpenCourseMemberDao()->addMember($member);
@@ -571,6 +629,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
     }
 
+    private function findCourseTeachers($courseId)
+    {
+        return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
+    }
+
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
@@ -633,5 +696,21 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
+    }
+}
+
+class CourseSerialize
+{
+    public static function serialize(array &$course)
+    {
+        if (isset($course['teacherIds'])) {
+            if (is_array($course['teacherIds']) && !empty($course['teacherIds'])) {
+                $course['teacherIds'] = '|'.implode('|', $course['teacherIds']).'|';
+            } else {
+                $course['teacherIds'] = null;
+            }
+        }
+
+        return $course;
     }
 }

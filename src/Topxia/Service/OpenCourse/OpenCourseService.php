@@ -79,4 +79,6 @@ interface OpenCourseService
 
     public function deleteMember($id);
 
+    public function setCourseTeachers($courseId, $teachers);
+
 }

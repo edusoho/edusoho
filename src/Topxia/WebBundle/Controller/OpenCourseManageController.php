@@ -89,7 +89,7 @@ class OpenCourseManageController extends BaseController
                 );
             }
 
-            $this->getCourseService()->setCourseTeachers($id, $teachers);
+            $this->getOpenCourseService()->setCourseTeachers($id, $teachers);
 
             $this->setFlashMessage('success', '教师设置成功！');
 
