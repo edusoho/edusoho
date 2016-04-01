@@ -46,7 +46,6 @@ class MaterialLibController extends BaseController
             ($request->query->get('page', 1) - 1) * 20,
             20
         );
-        $results  = $this->getMaterialLibService()->filterTagCondition($conditions,$results);
 
         $paginator = new Paginator(
             $this->get('request'),

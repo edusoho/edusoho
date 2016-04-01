@@ -90,8 +90,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function findFilesByCourseIds($targetIds)
     {
-        return $this->getUploadFileDao()->findFilesByCourseIds
-        ($targetIds);
+        return $this->getUploadFileDao()->findFilesByCourseIds($targetIds);
     }
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
@@ -432,12 +431,13 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (isset($conditions['endDate'])) {
             $conditions['endDate'] = strtotime($conditions['endDate']);
         }
-
-        if ($conditions['useStatus'] == 'unused') {
-            $conditions['endCount'] = 1;
-        } elseif ($conditions['useStatus'] == 'used') {
-            $conditions['startCount'] = 1;
-        } else {
+        if(isset($conditions['useStatus'])){
+          if ($conditions['useStatus'] == 'unused') {
+              $conditions['endCount'] = 1;
+          } elseif($conditions['useStatus'] == 'used') {
+              $conditions['startCount'] = 1;
+          }
+        }else{
             $conditions['startCount'] = 0;
         }
 
