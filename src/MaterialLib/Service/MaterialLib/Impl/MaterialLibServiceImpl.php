@@ -161,7 +161,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
           $filterKeyWordsConditions = $this->filterKeyWords($conditions);
           $filterTagsConditions = $this->filterTags($conditions);
           $filterConditions = $this->mergeConditions($filterKeyWordsConditions,$filterTagsConditions);
-          var_dump($filterConditions['nos']);
         }
         $filterConditions = array_filter($filterConditions, function ($value) {
             if ($value === 0) {
@@ -193,10 +192,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function mergeConditions($filterKeyWordsConditions,$filterTagsConditions)
     {
       if(!empty($filterKeyWordsConditions['nos']) && !empty($filterTagsConditions['nos'])) {
-        var_dump($filterKeyWordsConditions['nos']);
-        var_dump($filterTagsConditions['nos']);
         $filterTagsConditions['nos'] = array_intersect($filterKeyWordsConditions['nos'],$filterTagsConditions['nos']);
-        //var_dump($filterTagsConditions['nos']);
         if(empty($filterTagsConditions['nos'])) {
           $filterTagsConditions['nos'] = 0 ;
         } else {
