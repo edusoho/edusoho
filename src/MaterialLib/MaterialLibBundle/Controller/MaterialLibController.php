@@ -108,7 +108,6 @@ class MaterialLibController extends BaseController
         $files        = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $fileIds      = ArrayToolkit::column($files, 'id');
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
-
         //Return different views according to current viewing mode
 
         if ($viewMode == 'thumb') {
@@ -214,7 +213,8 @@ class MaterialLibController extends BaseController
      * @param  Request                                    $request HTTP request
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      */
-    protected function getShareHistoryUsers()
+
+    public function showShareHistoryAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
@@ -229,7 +229,7 @@ class MaterialLibController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $shareHistoryCount,
-            5
+            100
         );
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
@@ -252,33 +252,62 @@ class MaterialLibController extends BaseController
         }
 
         $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
-        return $result = array('shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-history.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
             'source'         => 'myShareHistory',
             'currentUserId'  => $user['id'],
             'allTeachers'    => $allTeachers,
-            'paginator'      => $paginator);
-    }
-
-    public function showShareHistoryAction(Request $request)
-    {
-        $result = $this->getShareHistoryUsers();
-        return $this->render('MaterialLibBundle:MaterialLib:material-share-history.html.twig', $result);
+            'paginator'      => $paginator
+            ));
     }
 
     public function historyUserShowAction(Request $request)
     {
-        $result = $this->getShareHistoryUsers();
-        return $this->render('MaterialLibBundle:MaterialLib:material-share-history-users.html.twig', $result);
+        $user = $this->getCurrentUser();
+
+        $conditions['sourceUserId'] = $user['id'];
+
+        $conditions['isActive'] = 1;
+        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            100
+        );
+
+        $shareHistories = $this->getUploadFileService()->searchShareHistories(
+            $conditions,
+            array('updatedTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $targetUserIds = array();
+        $completeTargetUserIds = array();
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
+        }
+
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-history-users.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'paginator'      => $paginator
+            ));
     }
 
     public function historyDetailShowAction(Request $request)
     {
         $user = $this->getCurrentUser();
 
-        if (!$user->isTeacher() && !$user->isAdmin()) {
-            throw $this->createAccessDeniedException('您无权访问此页面');
-        }
         $conditions['sourceUserId'] = $user['id'];
 
         $shareHistoryCount = $this->getUploadFileShareHistoryService()->searchShareHistoryCount($conditions);
@@ -286,7 +315,7 @@ class MaterialLibController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $shareHistoryCount,
-            10
+            100
         );
 
         $shareHistories = $this->getUploadFileShareHistoryService()->searchShareHistories(
@@ -307,13 +336,11 @@ class MaterialLibController extends BaseController
 
         }
 
-        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
         return $this->render('MaterialLibBundle:MaterialLib:material-share-history-detail.html.twig', array(
             'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
             'source'         => 'myShareHistory',
             'currentUserId'  => $user['id'],
-            'allTeachers'    => $allTeachers,
             'paginator'      => $paginator
         ));
     }

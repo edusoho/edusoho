@@ -55,6 +55,7 @@ $("#target-teachers-input").select2({
             </ul>
         </div>
         <tbody class="share-show-users-tbody">
+        <div>
             <tr>
                 <th width="40%"class="text-center">昵称</th>
                 <th width="40%" class="text-center">时间</th>
@@ -78,12 +79,19 @@ $("#target-teachers-input").select2({
             {% else %}
                 <tr class="empty"><td colspan="3">无资料分享记录</td></tr>
             {% endfor %}
+            </div>
+            
         </tbody>
       
     </table>
+    <input class="js-page" type="hidden" name="page" value="1">
+
+
 </div>
 <script>app.load('materiallibbundle/controller/material-lib/share-history')</script>
 <script>app.load('materiallibbundle/controller/material-lib/teachers')</script>
+
+
 {% endblock %}
 {% block footer %}
 <button id="share-materials-form-submit" type="submit"

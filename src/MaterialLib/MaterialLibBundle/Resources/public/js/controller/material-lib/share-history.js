@@ -23,6 +23,7 @@ define(function(require, exports, module) {
 
 		$(".js-share-users").on('click', function(){
 			$.post($(this).data('url'),function(html){
+
 				$('.share-show-users-tbody').html();
 				$('.share-show-users-tbody').html(html);
 
@@ -31,6 +32,17 @@ define(function(require, exports, module) {
 			$(".js-share-history-detail").parent().removeClass('active');
 		});
 
+		$(".pagination li").on('click', function(){
+			var self = $(this);
+
+			console.log(1);
+			$('.js-page').val(self.data('page'));
+			// $.post($(".js-share-history-detail").data('url'),{ page:page },function(html){
+			// 	$('.share-show-users-tbody').html();
+			// 	$('.share-show-users-tbody').html(html);
+
+			// })
+		});
 		$(".js-share-history-detail").on('click', function(){
 			$.post($(this).data('url'),function(html){
 				$('.share-show-users-tbody').html();
