@@ -16,6 +16,7 @@ return array(
     'Pimple'                                => array($vendorDir.'/pimple/pimple/lib'),
     'PHPExcel'                              => array($vendorDir.'/phpoffice/phpexcel/Classes'),
     'Asm89'                                 => array($vendorDir.'/asm89/twig-cache-extension/lib'),
+    'Flexihash'                             => array($vendorDir.'/flexihash/flexihash/src'),
     'Imagine'                               => array($vendorDir.'/imagine/imagine/lib'),
     'HTMLPurifier'                          => array($vendorDir.'/ezyang/htmlpurifier/library'),
     'Doctrine\\ORM\\'                       => array($vendorDir.'/doctrine/orm/lib'),
