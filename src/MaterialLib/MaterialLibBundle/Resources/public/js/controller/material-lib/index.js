@@ -169,9 +169,21 @@ define(function(require, exports, module) {
                 if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
                     $('.js-manage-batch-btn').removeClass('hide');
                     $('.js-upload-file-btn').removeClass('hide');
+                    var self = this;
+                    var mode = self.get('model');
+                    if(mode == "edit") {
+                        $('.js-batch-tag-btn').show();
+                        $('.js-batch-share-btn').show();
+                        $('.js-batch-delete-btn').show();
+                    }
                 } else {
                     $('.js-manage-batch-btn').addClass('hide');
                     $('.js-upload-file-btn').addClass('hide');
+                    $('.js-batch-tag-btn').hide();
+                    $('.js-batch-share-btn').hide();
+                    $('.js-batch-delete-btn').hide();
+                    $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item]').hide();
+                    
                 }
                 this.renderTable();
             },
