@@ -209,6 +209,15 @@ function MyInfoController($scope, UserService, cordovaUtil, platformUtil, $state
 			'profile[gender]' : userinfo.gender,
 			'profile[signature]' : userinfo.signature
 		};
+		if (userinfo.signature == "") {
+			$scope.toast("签名不能为空！");
+			return
+		}
+
+		if (userinfo.nickname.indexOf(".") != -1 || userinfo.nickname.indexOf("^") != -1) {
+			$scope.toast("昵称不能包含.^等特殊字符!");
+			return
+		}
 		$scope.showLoad();
 		UserService.updateUserProfile(params, function(data) {
 			if (data.error) {
