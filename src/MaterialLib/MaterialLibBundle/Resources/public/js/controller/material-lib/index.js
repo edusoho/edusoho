@@ -12,7 +12,8 @@ define(function(require, exports, module) {
         var MaterialWidget = Widget.extend({
             attrs: {
                 model: '',
-                renderUrl: ''
+                renderUrl: '',
+                attribute: ''
             },
             events: {
                 'submit': 'submitForm',
@@ -37,6 +38,7 @@ define(function(require, exports, module) {
             },
             setup: function() {
                 this.set('model','normal');
+                this.set('attribute','mine');
                 this.set('renderUrl', $('#material-item-list').data('url'));
                 this.renderTable();
                 this._initHeader();
@@ -166,23 +168,25 @@ define(function(require, exports, module) {
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
+                
                 if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
+                    this.set('attribute','mine');
                     $('.js-manage-batch-btn').removeClass('hide');
                     $('.js-upload-file-btn').removeClass('hide');
-                    var self = this;
-                    var mode = self.get('model');
+                    var mode = this.get('model');
                     if(mode == "edit") {
                         $('.js-batch-tag-btn').show();
                         $('.js-batch-share-btn').show();
                         $('.js-batch-delete-btn').show();
                     }
                 } else {
+                    this.set('attribute','others');
                     $('.js-manage-batch-btn').addClass('hide');
                     $('.js-upload-file-btn').addClass('hide');
                     $('.js-batch-tag-btn').hide();
                     $('.js-batch-share-btn').hide();
                     $('.js-batch-delete-btn').hide();
-                    $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item]').hide();
+                    $('#material-lib-items-panel').find('[data-role=batch-manage]').hide();
                     
                 }
                 this.renderTable();
@@ -328,7 +332,8 @@ define(function(require, exports, module) {
                 }).done(function(resp){
                     $table.html(resp);
                     var mode = self.get('model');
-                    if(mode == 'edit'){
+                    var attribute = self.get('attribute');
+                    if(mode == 'edit' && attribute == 'mine'){
                       $table.find('[data-role=batch-item]').show();
                     } else if(mode == 'normal'){
                       $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
