@@ -9,4 +9,8 @@ interface UploadFileShareHistoryDao
 	public function addShareHistory($fileShareHistoryFields);
 
 	public function findShareHistoryByUserId($sourceUserId);
+
+	public function searchShareHistoryCount($conditions);
+
+	public function searchShareHistories($conditions, $orderBy, $start, $limit);
 }

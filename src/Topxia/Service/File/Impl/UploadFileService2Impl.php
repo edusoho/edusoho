@@ -323,6 +323,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $shareHistories;
     }
 
+    public function searchShareHistoryCount($conditions)
+    {
+        return $this->getUploadFileShareDao()->searchShareHistoryCount($conditions);
+    }
+
+    public function searchShareHistories($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getUploadFileShareDao()->searchShareHistories($conditions,$orderBy, $start, $limit);
+    }
+
     public function findActiveShareHistory($sourceUserId)
     {
         $shareHistories = $this->getUploadFileShareDao()->findActiveShareHistoryByUserId($sourceUserId);

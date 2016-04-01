@@ -22,21 +22,23 @@ define(function(require, exports, module) {
 		});
 
 		$(".js-share-users").on('click', function(){
-			$(this).addClass('active');
-			$(".js-share-history-detail").removeClass('active');
-			$('.share-show-users-thead').show();
-			$('.share-show-users-tbody').show();
-			$('.share-history-detail-thead').hide();
-			$('.share-history-detail-tbody').hide();
+			$.post($(this).data('url'),function(html){
+				$('.share-show-users-tbody').html();
+				$('.share-show-users-tbody').html(html);
+
+			})
+			$(this).parent().addClass('active');
+			$(".js-share-history-detail").parent().removeClass('active');
 		});
 
 		$(".js-share-history-detail").on('click', function(){
-			$(this).addClass('active');
-			$(".js-share-users").removeClass('active');
-			$('.share-history-detail-thead').show();
-			$('.share-history-detail-tbody').show();
-			$('.share-show-users-thead').hide();
-			$('.share-show-users-tbody').hide();
+			$.post($(this).data('url'),function(html){
+				$('.share-show-users-tbody').html();
+				$('.share-show-users-tbody').html(html);
+
+			})
+			$(this).parent().addClass('active');
+			$(".js-share-users").parent().removeClass('active');
 		});
 
 

@@ -10,13 +10,17 @@ material_lib_my_sharing:
     pattern: /material/lib/my/sharing/show
     defaults: { _controller: MaterialLibBundle:MaterialLib:showShareForm }
 
+material_lib_my_sharing_detail:
+    pattern: /material/lib/my/sharing_detail/show
+    defaults: { _controller: MaterialLibBundle:MaterialLib:historyDetailShow }
+
+material_lib_my_sharing_users:
+    pattern: /material/lib/my/sharing_users/show
+    defaults: { _controller: MaterialLibBundle:MaterialLib:historyUserShow }
+
 material_lib_delete_file:
     pattern: /material/lib/{id}/delete
     defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
-
-material_lib_my_sharing_users:
-    pattern: /material/lib/my/sharing/users_shows
-    defaults: { _controller: MaterialLibBundle:MaterialLib:showUsers }
 
 material_lib_my_sharing_history:
     pattern: /material/lib/my/sharing/users_history

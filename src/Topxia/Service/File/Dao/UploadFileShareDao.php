@@ -17,4 +17,8 @@ interface UploadFileShareDao
     public function addShare($share);
 
     public function updateShare($id, $share);
+
+    public function searchShareHistories(array $conditions, array $orderBy, $start, $limit);
+
+    public function searchShareHistoryCount($conditions);
 }
