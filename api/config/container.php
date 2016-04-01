@@ -43,7 +43,9 @@ $resources = array(
     'Upload',
     'Status',
     'DiscoveryColumn',
-    'Playlist'
+    'Playlist',
+    'MeIMLogin',
+    'MeIMConversation',
 );
 
 foreach ($resources as $res) {

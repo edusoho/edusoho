@@ -92,3 +92,6 @@ $app->get(_u('/homework/manager/check/{homeworkResultId}'), 'res.HomeworkManager
 $app->post(_u('/thread/create'), 'res.Thread:create');
 
 $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
+
+$app->post(_u('/im/me/login'), 'res.MeIMLogin:post');
+$app->post(_u('/im/me/conversations/{toUserId}'), 'res.MeIMConversation:post');
