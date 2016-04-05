@@ -388,7 +388,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
             $conditions['createdUserIds'] = array($conditions['currentUserId']);
         }
-
         if (!empty($conditions['sourceFrom']) && $conditions['sourceFrom'] == 'sharing' && !empty($conditions['currentUserId'])) {
             $fromSharing = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId'], 1);
             if (!empty($fromSharing)) {
