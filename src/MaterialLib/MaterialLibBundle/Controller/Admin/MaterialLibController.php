@@ -117,7 +117,9 @@ class MaterialLibController extends BaseController
 
     public function reconvertAction(Request $request, $globalId)
     {
-      return $this->getMaterialLibService()->reconvert($globalId,array());
+      return $this->getMaterialLibService()->reconvert($globalId,array(
+        'directives' => array()
+      ));
     }
 
     public function playAction(Request $request, $globalId)
