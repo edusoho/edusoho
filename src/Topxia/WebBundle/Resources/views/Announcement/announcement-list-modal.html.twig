@@ -12,26 +12,26 @@
             <span class="title">
               {{ announcement.content|plain_text(40) }}
             </span>
-            
+
             {% if canManage %}
 	            <span class="editor">
                 {{ announcement.createdTime|date('Y-m-d') }}
-	              <a class="mlm" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetId}) }}"><i class="es-icon es-icon-edit" data-toggle="tooltip" data-placement="top" title="编辑"></i></a>
-	              <a href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetId}) }}"><i class="es-icon es-icon-delete ml10" data-toggle="tooltip" data-placement="top" title="删除"></i></a>
+	              <a class="mlm" data-target="#modal"  data-toggle="modal" data-url="{{ path('announcement_update',{id:announcement.id, targetType:targetType,  targetId:targetId}) }}"><i class="es-icon es-icon-edit" data-toggle="tooltip" data-placement="top" title="{{'编辑'|trans}}"></i></a>
+	              <a href="javascript:;" data-role="delete" data-url="{{ path('announcement_delete',{id:announcement.id, targetType:targetType, targetId:targetId}) }}"><i class="es-icon es-icon-delete ml10" data-toggle="tooltip" data-placement="top" title="{{'删除'|trans}}"></i></a>
               </span>
             {% else %}
             	<span class="data">{{ announcement.createdTime|date('Y-m-d H:i:s') }}</span>
         	  {% endif %}
-            
+
           </div>
           <div class="details">
             {{ announcement.content|raw }}
           </div>
         </div>
 
-  	{% endfor %}    
+  	{% endfor %}
   {% else %}
-		<div class="alert alert-edit">暂无公告</div>
+		<div class="alert alert-edit">{{'暂无公告'|trans}}</div>
 	{% endif %}
   </div>
 

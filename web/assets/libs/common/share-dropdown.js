@@ -59,8 +59,8 @@ define(function(require, exports, module) {
         html += '      </div>';
         html += '      <div class="modal-body">';
         html += '        <p class="weixin-share-loading" style="text-align:center;">正在加载二维码...</p>';
-        html += '        <p class="weixin-share-qrcode"></p>'
-        html += '        <p class="text-muted"><small>打开微信，点击底部的“发现”，</small><br><small>使用 “扫一扫” 即可将网页分享到我的朋友圈。</small></p>';
+        html += '        <p class="weixin-share-qrcode text-center"></p>'
+        html += '        <p class="text-muted text-center"><small>打开微信，点击底部的“发现”，</small><br><small>使用 “扫一扫” 即可将网页分享到我的朋友圈。</small></p>';
         html += '      </div>'
         html += '    </div>';
         html += '  </div>';

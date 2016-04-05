@@ -31,8 +31,8 @@ define(function(require, exports, module) {
                 'click .js-batch-share-btn': 'onClickShareBatchBtn',
                 'click .js-batch-tag-btn': 'onClickTagBatchBtn',
                 //'click .js-finish-batch-btn': 'onClickFinishBatchBtn',
-                'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn',
+                'change .js-process-status-select': 'onClickProcessStatusBtn',
+                'change .js-use-status-select': 'onClickUseStatusBtn',
                 'click .js-upload-time-btn': 'onClickUploadTimeBtn'
             },
             setup: function() {
@@ -166,6 +166,13 @@ define(function(require, exports, module) {
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
+                if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
+                    $('.js-manage-batch-btn').removeClass('hide');
+                    $('.js-upload-file-btn').removeClass('hide');
+                } else {
+                    $('.js-manage-batch-btn').addClass('hide');
+                    $('.js-upload-file-btn').addClass('hide');
+                }
                 this.renderTable();
             },
             onClickCollectBtn: function(event)
@@ -205,7 +212,6 @@ define(function(require, exports, module) {
             },
             onClickUploadTimeBtn: function(event)
             {
-
                 $('#sort').val('createdTime');
                 this.renderTable();
             },

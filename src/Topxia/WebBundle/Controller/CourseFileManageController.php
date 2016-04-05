@@ -99,8 +99,7 @@ class CourseFileManageController extends BaseController
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file   = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -110,25 +109,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $api    = CloudAPIFactory::create();
-        $result = $api->get("/files/{$file['globalId']}/download");
-
-        header("Location: {$result['url']}");
-        exit();
-
-        // if ($file['targetType'] == 'courselesson') {
-        //     return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
-        // } else if ($file['targetType'] == 'coursematerial' || $file['targetType'] == 'materiallib') {
-        //     if ($file['storage'] == 'cloud') {
-        //         $factory = new CloudClientFactory();
-        //         $client = $factory->createClient();
-        //         $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-        //     } else {
-        //         return $this->createPrivateFileDownloadResponse($request, $file);
-        //     }
-        // }
-
-        // throw $this->createNotFoundException();
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $file['id']));
     }
 
     public function convertAction(Request $request, $id, $fileId)
@@ -169,6 +150,30 @@ class CourseFileManageController extends BaseController
             'storageSetting' => $storageSetting,
             'targetType'     => $targetType,
             'targetId'       => $id
+        ));
+    }
+
+    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
+    {
+        if ("materiallib" != $targetType) {
+            $course = $this->getCourseService()->tryManageCourse($id);
+        } else {
+            $course = null;
+        }
+
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        $fileExts       = "";
+
+        if ("courselesson" == $targetType) {
+            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
+        }
+
+        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
+            'course'         => $course,
+            'storageSetting' => $storageSetting,
+            'targetType'     => $targetType,
+            'targetId'       => $id,
+            'fileExts'       => $fileExts
         ));
     }
 

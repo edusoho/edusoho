@@ -51,10 +51,11 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 
 	this.showErrorResultDlg = function(error) {
 		if ("coin_no_enough" == error.name) {
+			var buttons = platformUtil.android ? [ "确认" ] : [ "确认" ,"充值" ];
 			var dia = $.dialog({
 			        title : '支付提醒' ,
 			        content : '账户余额不足!' ,
-			        button : [ "确认" ,"充值" ]
+			        button : [ "确认" ]
 			});
 
 			dia.on("dialog:action",function(e){
@@ -98,6 +99,10 @@ function BasePayController($scope, $stateParams, OrderService, cordovaUtil, plat
 
 		OrderService.createOrder(defaultParams, function(data) {
 			if (data.status != "ok") {
+				if (data.error) {
+					self.showErrorResultDlg(data.error);
+					return
+				}
 				self.showErrorResultDlg({
 					name : "error",
 					message : data.message

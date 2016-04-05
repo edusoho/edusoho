@@ -27,8 +27,7 @@
     </div>
   {% else %}
     {{ web_macro.flash_messages() }}
-
-    <form class="form-horizontal" method="post" id="mailer-form" novalidate>
+    <form class="form-horizontal" method="post" id="mailer-form" {#hidden="hidden"#}novalidate>
       <div class="row form-group">
         <div class="col-md-3 control-label">
           <label >邮件发送</label>
@@ -107,7 +106,9 @@
           <button type="submit" class="btn btn-primary">提交</button>
         </div>
       </div>
+      <input type="hidden" name="email-setting-status" value="{{status}}">
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
     </form>
+
   {% endif %}
 {% endblock %}

@@ -16,14 +16,14 @@ define(function(require, exports, module) {
                 'submit': 'submitForm',
                 'click .nav-tabs .js-type-btn': 'onClickNav',
                 'click .pagination li': 'onClickPagination',
-                'click .js-tags-container li': 'onClickTag',
+                'click .js-tags-container .js-tag-btn': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-reconvert-btn': 'onClickReconvertBtn',
                 'click .js-search-type option': 'onClickSearchTypeBtn',
                 'click .js-refresh-btn': 'onClickRefreshBtn',
-                'click .js-process-status-select': 'onClickProcessStatusBtn',
-                'click .js-use-status-select': 'onClickUseStatusBtn'
+                'change .js-process-status-select': 'onClickProcessStatusBtn',
+                'change .js-use-status-select': 'onClickUseStatusBtn'
             },
             setup: function() {
                 this.set('renderUrl', this.element.find('#materials-table').data('url'));

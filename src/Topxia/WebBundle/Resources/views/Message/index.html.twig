@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}私信 - {{ parent() }}{% endblock %}
+{% block title %}{{'私信'|trans}} - {{ parent() }}{% endblock %}
 {% set script_controller = 'message/conversation-list' %}
 
 {% block content %}
@@ -8,8 +8,8 @@
   <div class="col-md-8 col-md-offset-2">
     <div class="panel panel-default panel-page">
       <div class="panel-heading">
-        <a class="btn btn-primary pull-right" href="{{ path('message_send') }}">写私信</a>
-        <h2>私信</h2>
+        <a class="btn btn-primary pull-right" href="{{ path('message_send') }}">{{'写私信'|trans}}</a>
+        <h2>{{'私信'|trans}}</h2>
       </div>
 
       <ul class="media-list conversation-list">
@@ -17,7 +17,7 @@
           {% set fromUser = users[conversation.fromId] %}
           {% include 'TopxiaWebBundle:Message/Template:conversation-' ~ conversation.latestMessageType ~ '.tpl.html.twig' %}
         {% else %}
-          <li class="empty">暂无私信</li>
+          <li class="empty">{{'暂无私信'|trans}}</li>
         {% endfor %}
       </ul>
 

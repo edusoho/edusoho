@@ -1,9 +1,9 @@
 <div class="alert alert-blank alert-sm">
-	EduSoho教育云为您找到话题结果约 <span class="color-danger">{{counts}}</span>个
+	{{'EduSoho教育云为您找到话题结果约'|trans}} <span class="color-danger">{{counts}}</span>个
 </div>
 
 <ul class="nav nav-pills mbl js-nav-pills">
-	<li {% if targetType =='group' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'group'})}}" data-url="">小组话题</a></li>
+	<li {% if targetType =='group' %} class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : type,targetType:'group'})}}" data-url="">{{'小组话题'|trans}}</a></li>
 </ul>
 
 <div class="media-list">
@@ -12,7 +12,7 @@
 			<div class="media-left">
 				<div class="reply">
 					{{thread.postNum}}<br>
-					<span class="text-sm">回复</span>
+					<span class="text-sm">{{'回复'|trans}}</span>
 				</div>
 			</div>
 			<div class="media-body">
@@ -26,7 +26,7 @@
 				{% endif %}
 
 				" target="_blank">{{thread.title|raw}}</a></div>
-				<div class="text-sm color-gray">来自
+				<div class="text-sm color-gray">{{'来自'|trans}}
 					{% if thread.targetType == 'group'%}
 						{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
 						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
