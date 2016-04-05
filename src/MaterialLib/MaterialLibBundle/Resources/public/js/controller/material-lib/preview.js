@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 
 		if ($("#lesson-preview-player").length > 0) {
             var lessonVideoDiv = $('#lesson-preview-player');
-            
+
             var courseId = lessonVideoDiv.data("courseId");
             var lessonId = lessonVideoDiv.data("lessonId");
             var playerUrl = lessonVideoDiv.data("playerUrl");
@@ -72,8 +72,8 @@ define(function(require, exports, module) {
                 $.get(player.data('url'), function(response) {
                     var html = '<div id="lesson-swf-player" ></div>';
                     $("#lesson-preview-flash").html(html);
-                    swfobject.embedSWF(response.mediaUri, 
-                        'lesson-swf-player', '100%', '100%', "9.0.0", null, null, 
+                    swfobject.embedSWF(response.mediaUri,
+                        'lesson-swf-player', '100%', '100%', "9.0.0", null, null,
                         {wmode:'opaque',allowFullScreen:'true'});
                 });
             }
@@ -128,8 +128,9 @@ define(function(require, exports, module) {
         if ($("#lesson-preview-image").length > 0) {
 
             $.post($("#lesson-preview-image").data('url'),function(response){
-                var html = '<img src = "'+response.url+'">'
+                var html = '<img src = "'+response.url+'">';
                 $("#lesson-preview-image").html(html);
+
             });
         }
 

@@ -64,10 +64,12 @@ class MaterialLibController extends BaseController
     public function detailAction(Request $reqeust, $globalId)
     {
         $material   = $this->getMaterialLibService()->get($globalId);
-        $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        if($material['type'] == 'video' ) {
+          $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        }
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
-            'thumbnails' => $thumbnails,
+            'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
             'params'     => $reqeust->query->all()
         ));
     }
@@ -115,7 +117,9 @@ class MaterialLibController extends BaseController
 
     public function reconvertAction(Request $request, $globalId)
     {
-      return $this->getMaterialLibService()->reconvert($globalId,array());
+      return $this->getMaterialLibService()->reconvert($globalId,array(
+        'directives' => array()
+      ));
     }
 
     public function playAction(Request $request, $globalId)

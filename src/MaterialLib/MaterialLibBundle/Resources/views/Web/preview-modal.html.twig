@@ -29,8 +29,6 @@
     <div class="text-center">
       {{'该文件暂不支持预览'|trans}}
     </div>
-    {#<div {% if setting('course.copy_enabled')|default(0) > 0 %} oncopy="return false;" oncut="return false;" onselectstart="return false" oncontextmenu="return false;"{% endif %}>
-    </div>#}
   {% endif %}
 
   <script>app.load('materiallibbundle/controller/material-lib/preview')</script>

@@ -158,7 +158,7 @@ class MaterialLibController extends BaseController
     public function detailAction($globalId)
     {
         if (!$globalId) {
-            $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
+            return $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
         }
         $material   = $this->getMaterialLibService()->get($globalId);
         if($material['type'] == 'video' ) {

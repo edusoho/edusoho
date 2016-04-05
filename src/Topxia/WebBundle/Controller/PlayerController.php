@@ -78,7 +78,6 @@ class PlayerController extends BaseController
                 } else {
                     $key = $file['hashId'];
                 }
-
                 if ($key) {
                     $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
                 }
