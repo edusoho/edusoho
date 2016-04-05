@@ -105,6 +105,14 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException();
         }
 
+        $lessonCount = $this->searchLessonCount(
+            array('courseId' => $course['id'])
+        );
+
+        if ($lessonCount < 1) {
+            throw $this->createNotFoundException();
+        }
+
         $this->getOpenCourseDao()->updateCourse($id, array('status' => 'published'));
     }
 
