@@ -183,7 +183,7 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->createCourse($course);
 
-        return $this->redirect($this->generateUrl('course_manage', array('id' => $course['id'])));
+        return $this->redirect($this->generateUrl('open_course_manage', array('id' => $course['id'])));
     }
 
     public function showAction(Request $request, $courseId)

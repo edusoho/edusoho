@@ -46,11 +46,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         $course                = ArrayToolkit::parts($course, array('title', 'type', 'about', 'categoryId', 'tags'));
         $course['status']      = 'draft';
         $course['about']       = !empty($course['about']) ? $this->purifyHtml($course['about']) : '';
-        $course['tags']        = !empty($course['tags']) ? $course['tags'] : '';
+        $course['tags']        = !empty($course['tags']) ? array($course['tags']) : array();
         $course['userId']      = $this->getCurrentUser()->id;
         $course['createdTime'] = time();
         $course['teacherIds']  = array($course['userId']);
-        $course                = $this->getOpenCourseDao()->addCourse($course);
+
+        $course = $this->getOpenCourseDao()->addCourse($course);
 
         $member = array(
             'courseId'    => $course['id'],
