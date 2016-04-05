@@ -23,6 +23,10 @@ interface OpenCourseService
 
     public function waveCourse($id, $field, $diff);
 
+    public function favoriteCourse($courseId);
+
+    public function unFavoriteCourse($courseId);
+
     /**
      * open_course_lesson
      */
@@ -38,7 +42,7 @@ interface OpenCourseService
 
     public function createLesson($lesson);
 
-    public function updateLesson($id, $fields);
+    public function updateLesson($courseId, $lessonId, $fields);
 
     public function deleteLesson($id);
 
@@ -47,7 +51,9 @@ interface OpenCourseService
      */
     public function getMember($id);
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId);
+    public function getCourseMember($courseId, $userId);
+
+    public function getCourseMemberByIp($courseId, $ip);
 
     public function findMembersByCourseIds($courseIds);
 

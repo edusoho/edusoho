@@ -94,7 +94,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 
     public function waveCourse($id, $field, $diff)
     {
-        $fields = array('hitNum', 'lessonNum');
+        $fields = array('postNum', 'hitNum', 'lessonNum', 'collectNum', 'likeNum');
 
         if (!in_array($field, $fields)) {
             throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
@@ -106,7 +106,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
         $this->clearCached();
-        return $result;
+        return $this->getCourse($id);
     }
 
     protected function _createSearchQueryBuilder($conditions)

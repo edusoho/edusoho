@@ -190,7 +190,7 @@ define(function(require, exports, module) {
             var $list = this.$('.thread-pripost-list');
             var $form = this.$('#thread-post-form');
             var that = this;
-
+console.log(this.$('.thread-pripost-list').length);
             if ($form.length == 0) {
                 return ;
             }

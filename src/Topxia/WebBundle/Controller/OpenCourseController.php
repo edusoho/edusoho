@@ -190,6 +190,10 @@ class OpenCourseController extends BaseController
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
+        if (!$this->_checkCourseStatus($courseId)) {
+            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+        }
+
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course' => $course
         ));
@@ -198,12 +202,12 @@ class OpenCourseController extends BaseController
     /**
      * Block Actions.
      */
-    public function headerAction($course)
+    public function headerAction(Request $request, $course)
     {
-        $user    = $this->getCurrentUser();
-        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
+        $user = $this->getCurrentUser();
 
-        $lesson = $lessons ? $lesson[0] : array();
+        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
+        $lesson  = $lessons ? $lessons[0] : array();
 
         $hasVideoWatermarkEmbedded = 0;
 
@@ -259,11 +263,18 @@ class OpenCourseController extends BaseController
             }
         }
 
+        if ($user->isLogin()) {
+            $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
+        } else {
+            $member = $this->getOpenCourseService()->getCourseMemberByIp($course['id'], $request->getClientIp());
+        }
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
             'course'                    => $course,
-            'lesson'                    => $lesson[0],
+            'lesson'                    => $lesson,
             'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
-            'hlsUrl'                    => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : ''
+            'hlsUrl'                    => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
+            'member'                    => $member
         ));
     }
 
@@ -287,9 +298,257 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    public function infoBarAction($courseId)
+    {
+        $course                = $this->getOpenCourseService()->getCourse($courseId);
+        $course['favoriteNum'] = $this->_getFavoriteNum($courseId);
+
+        return $this->render('TopxiaWebBundle:OpenCourse:open-course-info-bar-block.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function favoriteAction(Request $request, $id)
+    {
+        $favoriteNum = $this->getOpenCourseService()->favoriteCourse($id);
+
+        return $this->createJsonResponse(array('result' => true, 'number' => $favoriteNum));
+    }
+
+    public function unfavoriteAction(Request $request, $id)
+    {
+        $favoriteNum = $this->getOpenCourseService()->unFavoriteCourse($id);
+
+        return $this->createJsonResponse(array('result' => true, 'number' => $favoriteNum));
+    }
+
+    public function likeAction(Request $request, $id)
+    {
+        if (!$this->_checkCourseStatus($id)) {
+            return $this->createJsonResponse(array('result' => false));
+        }
+
+        $course = $this->getOpenCourseService()->waveCourse($id, 'likeNum', +1);
+
+        return $this->createJsonResponse(array('result' => true, 'number' => $course['likeNum']));
+    }
+
+    public function unlikeAction(Request $request, $id)
+    {
+        if (!$this->_checkCourseStatus($id)) {
+            return $this->createJsonResponse(array('result' => false));
+        }
+
+        $course = $this->getOpenCourseService()->waveCourse($id, 'likeNum', -1);
+
+        return $this->createJsonResponse(array('result' => true, 'number' => $course['likeNum']));
+    }
+
+    public function qrcodeAction(Request $request, $id)
+    {
+        $user  = $this->getUserService()->getCurrentUser();
+        $host  = $request->getSchemeAndHttpHost();
+        $token = $this->getTokenService()->makeToken('qrcode', array(
+            'userId'   => $user['id'],
+            'data'     => array(
+                'url'    => $this->generateUrl('open_course_show', array('courseId' => $id), true),
+                'appUrl' => ""
+            ),
+            'times'    => 0,
+            'duration' => 3600
+        ));
+        $url = $this->generateUrl('common_parse_qrcode', array('token' => $token['token']), true);
+
+        $response = array(
+            'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
+        );
+        return $this->createJsonResponse($response);
+    }
+
+    public function commentAction(Request $request, $courseId)
+    {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
+        if (!$course) {
+            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+        }
+
+        $conditions = array(
+            'targetId'   => $course['id'],
+            'targetType' => 'openCourse',
+            'parentId'   => 0
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getThreadService()->searchPostsCount($conditions),
+            10
+        );
+
+        $posts = $this->getThreadService()->searchPosts(
+            $conditions,
+            array('createdTime' => 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($posts, 'userId'));
+
+        return $this->render('TopxiaWebBundle:OpenCourse:open-course-comment.html.twig', array(
+            'course'    => $course,
+            'posts'     => $posts,
+            'users'     => $users,
+            'paginator' => $paginator,
+            'service'   => $this->getThreadService()
+        ));
+    }
+
+    public function postAction(Request $request, $id)
+    {
+        if (!$this->_checkCourseStatus($id)) {
+            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+        }
+
+        return $this->forward('TopxiaWebBundle:Thread:postSave', array(
+            'request'    => $request,
+            'targetType' => 'openCourse',
+            'targetId'   => $id
+        ));
+    }
+
+    public function postReplyAction(Request $request, $id, $postId)
+    {
+        if (!$this->_checkCourseStatus($id)) {
+            return $this->createMessageResponse('error', '课程不存在，或未发布。');
+        }
+
+        $fields               = $request->request->all();
+        $fields['content']    = $this->autoParagraph($fields['content']);
+        $fields['targetId']   = $id;
+        $fields['parentId']   = $postId;
+        $fields['targetType'] = 'openCourse';
+
+        $post = $this->getThreadService()->createPost($fields);
+
+        return $this->render('TopxiaWebBundle:Thread:subpost-item.html.twig', array(
+            'post'    => $post,
+            'author'  => $this->getCurrentUser(),
+            'service' => $this->getThreadService()
+        ));
+    }
+
+    public function memberSmsAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->getCourse($id);
+        $user   = $this->getCurrentUser();
+
+        if (!$course) {
+            return $this->createJsonResponse(array('result' => false, 'message' => '该课程不存在或已删除！'));
+        }
+
+        $result = $this->_checkExistsMember($request, $id);
+
+        if (!$result['result']) {
+            return $this->createJsonResponse($result);
+        }
+
+        $smsSetting = $this->getSettingService()->get('cloud_sms', array());
+
+        if (!$user->isLogin() && !$smsSetting['sms_enabled']) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('TopxiaWebBundle:OpenCourse:member-sms-modal.html.twig', array(
+            'course' => $course
+        ));
+    }
+
+    public function createMemberAction(Request $request, $id)
+    {
+        $result = $this->_checkExistsMember($request, $id);
+
+        if (!$result['result']) {
+            return $this->createJsonResponse($result);
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $fields             = $request->request->all();
+            $fields['ip']       = $request->getClientIp();
+            $fields['courseId'] = $id;
+
+            $member    = $this->getOpenCourseService()->createMember($fields);
+            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id));
+
+            return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
+        }
+    }
+
+    private function _checkCourseStatus($courseId)
+    {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
+        if (!$course || ($course && $course['status'] != 'published')) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function _getFavoriteNum($courseId)
+    {
+        $favoriteNum = $this->getCourseService()->searchCourseFavoriteCount(array(
+            'courseId' => $courseId,
+            'type'     => 'openCourse'
+        )
+        );
+
+        return $favoriteNum;
+    }
+
+    private function _checkExistsMember(Request $request, $courseId)
+    {
+        $user   = $this->getCurrentUser();
+        $userIp = $request->getClientIp();
+
+        if (!$user->isLogin()) {
+            $openCourseMember = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $userIp);
+        } else {
+            $openCourseMember = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
+        }
+
+        if ($openCourseMember) {
+            return array('result' => false, 'message' => '课程用户已存在！');
+        }
+
+        return array('result' => true);
+    }
+
+    protected function autoParagraph($text)
+    {
+        if (trim($text) !== '') {
+            $text  = htmlspecialchars($text, ENT_NOQUOTES, 'UTF-8');
+            $text  = preg_replace("/\n\n+/", "\n\n", str_replace(array("\r\n", "\r"), "\n", $text));
+            $texts = preg_split('/\n\s*\n/', $text, -1, PREG_SPLIT_NO_EMPTY);
+            $text  = '';
+
+            foreach ($texts as $txt) {
+                $text .= '<p>'.nl2br(trim($txt, "\n"))."</p>\n";
+            }
+
+            $text = preg_replace('|<p>\s*</p>|', '', $text);
+        }
+
+        return $text;
+    }
+
     protected function getOpenCourseService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
     protected function getUserService()
@@ -317,8 +576,13 @@ class OpenCourseController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
-    protected function getAppService()
+    protected function getTokenService()
     {
-        return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+        return $this->getServiceKernel()->createService('User.TokenService');
+    }
+
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Thread.ThreadService');
     }
 }

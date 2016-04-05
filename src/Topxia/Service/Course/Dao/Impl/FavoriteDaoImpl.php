@@ -15,10 +15,10 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
         return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
     }
 
-    public function getFavoriteByUserIdAndCourseId($userId, $courseId)
+    public function getFavoriteByUserIdAndCourseId($userId, $courseId, $type = 'course')
     {
-        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ? : null; 
+        $sql = "SELECT * FROM {$this->table} WHERE userId = ? AND courseId = ? AND type = ? LIMIT 1";
+        return $this->getConnection()->fetchAssoc($sql, array($userId, $courseId, $type)) ? : null; 
     }
 
     public function findCourseFavoritesByUserId($userId, $start, $limit)
@@ -59,6 +59,7 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     public function searchCourseFavorites($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
             ->orderBy($orderBy[0], $orderBy[1])
@@ -71,7 +72,8 @@ class FavoriteDaoImpl extends BaseDao implements FavoriteDao
     {   
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'course_favorite')
-            ->andWhere('courseId = :courseId');
+            ->andWhere('courseId = :courseId')
+            ->andWhere('type = :type');
         return $builder;
     }
 

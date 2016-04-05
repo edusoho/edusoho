@@ -97,6 +97,11 @@ class EduCloudController extends BaseController
                 $to = $user['verifiedMobile'];
             }
 
+            if ($smsType == 'sms_open_course_member_notify') {
+                $to          = $request->request->get('to');
+                $description = '直播公开课';
+            }
+
             if (!$this->checkPhoneNum($to)) {
                 return $this->createJsonResponse(array('error' => "手机号错误:{$to}"));
             }
@@ -251,7 +256,7 @@ class EduCloudController extends BaseController
 
     protected function checkSmsType($smsType, $user)
     {
-        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password'))) {
+        if (!in_array($smsType, array('sms_bind', 'sms_user_pay', 'sms_registration', 'sms_forget_password', 'sms_forget_pay_password', 'sms_open_course_member_notify'))) {
             throw new \RuntimeException('不存在的sms Type');
         }
 

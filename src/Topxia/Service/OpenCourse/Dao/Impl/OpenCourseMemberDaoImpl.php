@@ -20,13 +20,25 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
         );
     }
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId)
+    public function getCourseMember($courseId, $userId)
     {
         $that = $this;
 
         return $this->fetchCached("courseId:{$courseId}:userId:{$userId}", $courseId, $userId, function ($courseId, $userId) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE userId = ? AND courseId = ? LIMIT 1";
             return $that->getConnection()->fetchAssoc($sql, array($userId, $courseId)) ?: null;
+        }
+
+        );
+    }
+
+    public function getCourseMemberByIp($courseId, $ip)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:ip:{$ip}", $courseId, $ip, function ($courseId, $ip) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE ip = ? AND courseId = ? LIMIT 1";
+            return $that->getConnection()->fetchAssoc($sql, array($ip, $courseId)) ?: null;
         }
 
         );

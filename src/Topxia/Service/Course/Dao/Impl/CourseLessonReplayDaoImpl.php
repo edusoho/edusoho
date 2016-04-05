@@ -33,9 +33,9 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         );
     }
 
-    public function deleteLessonReplayByLessonId($lessonId)
+    public function deleteLessonReplayByLessonId($lessonId, $lessonType = 'live')
     {
-        $result = $this->getConnection()->delete($this->table, array('lessonId' => $lessonId));
+        $result = $this->getConnection()->delete($this->table, array('lessonId' => $lessonId, 'type' => $lessonType));
         $this->clearCached();
         return $result;
     }
@@ -74,18 +74,19 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
     public function searchCourseLessonReplayCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
     public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('replayId', 'createdTime'));
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -103,9 +104,9 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
         return $this->getCourseLessonReplay($id);
     }
 
-    public function updateCourseLessonReplayByLessonId($lessonId, $fields)
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType = 'live')
     {
-        $this->getConnection()->update($this->table, $fields, array('lessonId' => $lessonId));
+        $this->getConnection()->update($this->table, $fields, array('lessonId' => $lessonId, 'type' => $lessonType));
         $this->clearCached();
         return $this->getCourseLessonReplayByLessonId($lessonId);
     }
@@ -113,8 +114,9 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'course_lesson_replay')
-                        ->andWhere('courseId = :courseId');
+            ->from($this->table, 'course_lesson_replay')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('type = :type');
         return $builder;
     }
 }

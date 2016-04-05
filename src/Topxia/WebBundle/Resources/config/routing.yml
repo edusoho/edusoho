@@ -2069,6 +2069,61 @@ open_course_show:
     pattern:  /open/course/{courseId}
     defaults: { _controller: TopxiaWebBundle:OpenCourse:show }
 
+open_course_favorite:
+    pattern: /open/course/{id}/favorite
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:favorite }
+    methods: [POST]
+
+open_course_unfavorite:
+    pattern: /open/course/{id}/unfavorite
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:unfavorite }
+    methods: [POST]
+
+open_course_like:
+    pattern: /open/course/{id}/like
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:like }
+    methods: [POST]
+
+open_course_unlike:
+    pattern: /open/course/{id}/unfavorite
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:unlike }
+    methods: [POST]
+
+open_course_qrcode:
+    pattern:  /open/course/{id}/qrcode
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:qrcode }
+
+open_course_post:
+    pattern:  /open/course/{id}/post
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:post }
+
+open_course_post_reply:
+    pattern:  /open/course/{id}/post/{postId}
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:postReply }
+    methods: [POST]
+
+live_open_course_play:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/live_entry
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entry }
+
+live_open_course_manage_replay:
+    pattern:  /open/course/{id}/manage/replay
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:replayManage }
+
+live_open_course_lesson_replay_create:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
+
+open_course_member_sms:
+    pattern:  /open/course/{id}/member/sms
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:memberSms }
+
+open_course_member_create:
+    pattern:  /open/course/{id}/member/create
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:createMember }
+
+
+
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}

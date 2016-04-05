@@ -356,6 +356,10 @@ interface CourseService
 
     public function hasFavoritedCourse($courseId);
 
+    public function searchCourseFavoriteCount($conditions);
+
+    public function searchCourseFavorites($conditions, $orderBy, $start, $limit);
+
     public function generateLessonReplay($courseId, $lessonId);
 
     public function entryReplay($lessonId, $courseLessonReplayId);
@@ -372,12 +376,12 @@ interface CourseService
 
     public function addCourseLessonReplay($courseLessonReplay);
 
-    public function deleteLessonReplayByLessonId($lessonId);
+    public function deleteLessonReplayByLessonId($lessonId, $lessonType);
 
     public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
 
     public function updateCourseLessonReplay($id, $fields);
 
-    public function updateCourseLessonReplayByLessonId($lessonId, $fields);
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
 
 }
