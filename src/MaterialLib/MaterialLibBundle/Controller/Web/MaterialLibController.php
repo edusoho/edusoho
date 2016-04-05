@@ -65,10 +65,12 @@ class MaterialLibController extends BaseController
 
         if (!empty($conditions['keyword'])) {
             $conditions['filename'] = $conditions['keyword'];
+            unset($conditions['keyword']);
         }
+
         $conditions['currentUserId'] = $currentUserId;
         $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime','DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $collections                 = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
 
         foreach ($files as $key => $file) {
@@ -160,10 +162,13 @@ class MaterialLibController extends BaseController
         if (!$globalId) {
             $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
         }
-        $material   = $this->getMaterialLibService()->get($globalId);
-        if($material['type'] == 'video' ) {
-          $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+
+        $material = $this->getMaterialLibService()->get($globalId);
+
+        if ($material['type'] == 'video') {
+            $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
         }
+
         $currentUser = $this->getCurrentUser();
         $file        = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
