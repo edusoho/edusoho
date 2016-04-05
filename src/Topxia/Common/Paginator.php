@@ -21,7 +21,7 @@ class Paginator {
         $this->setPerPageCount($perPage);
 
         $page = (int) $request->query->get('page');
-        var_dump($page);
+
         $maxPage = ceil($total / $perPage) ? : 1;
         $this->setCurrentPage($page <= 0 ? 1 : ($page > $maxPage ? $maxPage : $page));
 

@@ -229,7 +229,7 @@ class MaterialLibController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $shareHistoryCount,
-            1
+            10
         );
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
@@ -238,7 +238,7 @@ class MaterialLibController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-        // $shareHistories = $this->getUploadFileService()->findActiveShareHistory($user['id']);
+
 
         $targetUserIds = array();
         $completeTargetUserIds = array();
@@ -274,7 +274,7 @@ class MaterialLibController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $shareHistoryCount,
-            1
+            10
         );
 
         $shareHistories = $this->getUploadFileService()->searchShareHistories(
@@ -315,7 +315,7 @@ class MaterialLibController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $shareHistoryCount,
-            1
+            10
         );
 
 
@@ -325,7 +325,7 @@ class MaterialLibController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-// var_dump($shareHistories);
+
         $targetUserIds = array();
 
         if (!empty($shareHistories)) {
