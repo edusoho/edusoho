@@ -22,26 +22,24 @@
 {% endfor %}
 </div>
 <input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
-<tr >
-  <td class="js-paginator">
-    {% if paginator.lastPage > 1 %}
-    <nav class=" {{ class|default('text-center') }}">
-      <ul class="pagination" data-url="{{ path('material_lib_my_sharing_detail') }}">
-        {% if paginator.currentPage != paginator.firstPage %}
-          <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">首页</a></li>
-          <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
-        {% endif %}
-        {% for page in paginator.pages %}
-          <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
-        {% endfor %}
 
-        {% if paginator.currentPage != paginator.lastPage %}
-          <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
-          <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">尾页</a></li>
-        {% endif %}
-      </ul>
-    </nav>
+{% if paginator.lastPage > 1 %}
+<nav class=" {{ class|default('text-center') }}">
+  <ul class="pagination" data-url="{{ path('material_lib_my_sharing_detail') }}">
+    {% if paginator.currentPage != paginator.firstPage %}
+      <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">首页</a></li>
+      <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
     {% endif %}
-  </td>
-</tr>
+    {% for page in paginator.pages %}
+      <li {% if page == paginator.currentPage %}class="active"{% endif %} data-page="{{ page }}"><a href="javascript:;">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if paginator.currentPage != paginator.lastPage %}
+      <li data-page="{{paginator.nextPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronright"></i></a></li>
+      <li data-page="{{paginator.getLastPage}}"><a  href="javascript:;">尾页</a></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
 
