@@ -1,5 +1,5 @@
-{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %} 
-{% set modalSize = 'large' %} 
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+{% set modalSize = 'large' %}
 
 {% block title %}我的分享历史{% endblock %}
 
@@ -59,7 +59,7 @@ $("#target-teachers-input").select2({
                     {% else %}
                                             取消分享资料给 {{ (targetUsers[history['targetUserId']])['nickname'] }} 老师。
                     {% endif %}
-                    
+
                     </td>
                     <td class="text-center">{{ history['updatedTime']|date('Y-n-d H:i') }}</td>
                     <td class="text-center">

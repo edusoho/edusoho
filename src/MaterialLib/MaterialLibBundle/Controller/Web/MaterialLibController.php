@@ -56,6 +56,7 @@ class MaterialLibController extends BaseController
     public function showMyMaterialLibFormAction(Request $request)
     {
         //$synData = $this->getMaterialLibService()->synData();
+
         $currentUser   = $this->getCurrentUser();
         $currentUserId = $currentUser['id'];
         $conditions    = $request->query->all();
