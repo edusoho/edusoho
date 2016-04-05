@@ -4,7 +4,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\EdusohoLiveClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +24,7 @@ class OpenCourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $data = $request->request->all();
+
             $this->getOpenCourseService()->updateCourse($id, $data);
             $this->setFlashMessage('success', '课程基本信息已保存！');
             return $this->redirect($this->generateUrl('open_course_manage_base', array('id' => $id)));
@@ -134,35 +134,34 @@ class OpenCourseManageController extends BaseController
         //$liveCourse     = $this->getCourseService()->tryManageCourse($id);
         $liveCourse     = $this->getOpenCourseService()->getCourse($id);
         $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime', 'DESC'), 0, 1);
-        $openLiveLesson = $openLiveLesson ? $openLiveLesson[0] : array();
+        $liveLesson     = $openLiveLesson ? $openLiveLesson[0] : array();
 
         if ($request->getMethod() == 'POST') {
-            $liveLesson = $request->request->all();
+            $liveLessonFields = $request->request->all();
+
+            $liveLesson['type']      = 'liveOpen';
+            $liveLesson['courseId']  = $liveCourse['id'];
+            $liveLesson['startTime'] = strtotime($liveLessonFields['startTime']);
+            $liveLesson['length']    = $liveLessonFields['timeLength'];
+            $liveLesson['title']     = $liveCourse['title'];
+            $liveLesson['status']    = 'published';
 
             if ($openLiveLesson) {
-                $updateLiveLesson['startTime'] = strtotime($liveLesson['startTime']);
-                $updateLiveLesson['length']    = $liveLesson['timeLength'];
-
-                $openLiveLesson = $this->getOpenCourseService()->updateLesson($liveCourse['id'], $openLiveLesson['id'], $updateLiveLesson);
+                $live       = $this->getLiveCourseService()->editLiveRoom($liveCourse, $liveLesson, $this->container);
+                $liveLesson = $this->getOpenCourseService()->updateLesson($liveLesson['courseId'], $liveLesson['id'], $liveLesson);
             } else {
-                $liveLesson['type']      = 'liveOpen';
-                $liveLesson['courseId']  = $liveCourse['id'];
-                $liveLesson['startTime'] = strtotime($liveLesson['startTime']);
-                $liveLesson['length']    = $liveLesson['timeLength'];
-                $liveLesson['title']     = $liveCourse['title'];
-                $liveLesson['status']    = 'published';
-
-                $live = $this->_createCloudLive($liveCourse, $liveLesson);
+                $live = $this->getLiveCourseService()->createLiveRoom($liveCourse, $liveLesson, $this->container);
 
                 $liveLesson['mediaId']      = $live['id'];
                 $liveLesson['liveProvider'] = $live['provider'];
-                $liveLesson                 = $this->getOpenCourseService()->createLesson($liveLesson);
+
+                $liveLesson = $this->getOpenCourseService()->createLesson($liveLesson);
             }
         }
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:live-open-time-set.html.twig', array(
             'course'         => $liveCourse,
-            'openLiveLesson' => $openLiveLesson
+            'openLiveLesson' => $liveLesson
         ));
     }
 
@@ -508,11 +507,6 @@ class OpenCourseManageController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content.FileService');
-    }
-
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
@@ -521,5 +515,15 @@ class OpenCourseManageController extends BaseController
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
+    }
+
+    protected function getLiveCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.LiveCourseService');
     }
 }

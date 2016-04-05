@@ -2052,24 +2052,24 @@ open_course_manage_lesson_create:
 
 open_course_manage_lesson_edit:
     pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/edit
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:edit }  
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:edit }
 
 open_course_manage_lesson_publish:
     pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/publish
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:publish } 
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:publish }
 
 open_course_manage_lesson_delete:
     pattern: /open/course/{courseId}/manage/lesson/{lessonId}/delete
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:delete}    
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:delete}
 
 open_course_manage_lesson_unpublish:
     pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/unpublish
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:unpublish } 
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:unpublish }
 
 open_course_manage_lesson_sort:
     pattern:  /open/course/{id}/manage/lesson/sort
-    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:sort }  
-    methods: [POST]            
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:sort }
+    methods: [POST]
 
 open_course_manage_picture:
     pattern:  /open/course/{id}/manage/picture
@@ -2105,28 +2105,81 @@ open_course_manage_batch_upload_course_files:
 
 open_course_manage_upload_course_files:
     pattern:  /open/course/{id}/manage/upload/course/files/{targetType}
-    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles } 
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles }
 
 open_course_manage_upload_course_delete_files:
     pattern:  /open/course/{id}/delete/files/{type}
     defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteCourseFiles }
-    methods: [POST]       
+    methods: [POST]
 
 open_course_show:
     pattern:  /open/course/{courseId}
     defaults: { _controller: TopxiaWebBundle:OpenCourse:show }
 
+open_course_favorite:
+    pattern: /open/course/{id}/favorite
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:favorite }
+    methods: [POST]
+
+open_course_unfavorite:
+    pattern: /open/course/{id}/unfavorite
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:unfavorite }
+    methods: [POST]
+
+open_course_like:
+    pattern: /open/course/{id}/like
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:like }
+    methods: [POST]
+
+open_course_unlike:
+    pattern: /open/course/{id}/unlike
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:unlike }
+    methods: [POST]
+
+open_course_qrcode:
+    pattern:  /open/course/{id}/qrcode
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:qrcode }
+
+open_course_post:
+    pattern:  /open/course/{id}/post
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:post }
+
+open_course_post_reply:
+    pattern:  /open/course/{id}/post/{postId}
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:postReply }
+    methods: [POST]
+
+live_open_course_play:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/live_entry
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entry }
+
+live_open_course_manage_replay:
+    pattern:  /open/course/{id}/manage/replay
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:replayManage }
+
+live_open_course_lesson_replay_create:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
+
+open_course_member_sms:
+    pattern:  /open/course/{id}/member/sms
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:memberSms }
+
+open_course_member_create:
+    pattern:  /open/course/{id}/member/create
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:createMember }
+
 open_course_manage_course_pick:
-    pattern: /open/course/manage/{filter}/course/{id}/pick    
+    pattern: /open/course/manage/{filter}/course/{id}/pick
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
 
 open_course_course_search:
     pattern: /open/course/{filter}/course/{id}/search
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search} 
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}
 
 open_course_recommended_course_select:
     pattern: /open/course/{filter}/recommended/course/{id}/select
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendesCoursesSelect} 
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendesCoursesSelect}
 
 
 #esbar_my_history:

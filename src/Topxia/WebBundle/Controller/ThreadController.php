@@ -244,12 +244,38 @@ class ThreadController extends BaseController
         ));
     }
 
-    public function postReplyAction(Request $request, $threadId, $postId)
+    public function postSaveAction(Request $request, $targetType, $targetId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            $this->createAccessDeniedException('用户没有登录,不能评论!');
+        }
+
+        if ($request->getMethod() == "POST") {
+            $fields = $request->request->all();
+
+            $post['content']    = $this->autoParagraph($fields['content']);
+            $post['targetType'] = $targetType;
+            $post['targetId']   = $targetId;
+
+            $post = $this->getThreadService()->createPost($post);
+
+            return $this->render('TopxiaWebBundle:Thread/Part:post-item.html.twig', array(
+                'post'         => $post,
+                'author'       => $user,
+                'service'      => $this->getThreadService(),
+            ));
+        }
+    }
+
+    public function postReplyAction(Request $request, $threadId, $postId, $targetType = 'classroom')
     {
         $fields             = $request->request->all();
         $fields['content']  = $this->autoParagraph($fields['content']);
         $fields['threadId'] = $threadId;
         $fields['parentId'] = $postId;
+        $fields['targetType'] = $targetType;
 
         $post = $this->getThreadService()->createPost($fields);
 

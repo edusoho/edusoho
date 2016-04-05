@@ -6,7 +6,9 @@ interface OpenCourseMemberDao
 {
     public function getMember($id);
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId);
+    public function getCourseMember($courseId, $userId);
+
+    public function getCourseMemberByIp($courseId, $ip);
 
     public function findMembersByCourseIds($courseIds);
 

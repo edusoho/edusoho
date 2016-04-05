@@ -9,13 +9,15 @@
       </div>
       <div class="panel-body text-center">
         {% for teacher in teachers if teacher %}
-          {% set userProfile = profiles[teacher.id]|default(null) %}
-          {{ web_macro.user_avatar(teacher, '', 'avatar-md') }}
-          <h3>{{ web_macro.user_link(teacher, '', false) }}</h3>
-          <p class="color-gray">{{ teacher.title }}</p>
-          <div class="intro">
-            {{ userProfile.about|default(null)|raw }}
-          </div>
+          {% if loop.index == 1 %}
+            {% set userProfile = profiles[teacher.id]|default(null) %}
+            {{ web_macro.user_avatar(teacher, '', 'avatar-md') }}
+            <h3>{{ web_macro.user_link(teacher, '', false) }}</h3>
+            <p class="color-gray">{{ teacher.title }}</p>
+            <div class="intro">
+              {{ userProfile.about|default(null)|raw }}
+            </div>
+          {% endif %}
         {% else %}
             <div class="empty">{{'暂无教师'|trans}}</div>
         {% endfor %}

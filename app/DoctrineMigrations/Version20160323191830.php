@@ -15,7 +15,7 @@ class Version20160323191830 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if (!empty($this->isTableExist('open_course'))) {
+        if (!$this->isTableExist('open_course')) {
             $this->addSql("
                 CREATE TABLE `open_course` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
@@ -24,8 +24,6 @@ class Version20160323191830 extends AbstractMigration
                   `status` enum('draft','published','closed') NOT NULL DEFAULT 'draft' COMMENT '课程状态',
                   `type` varchar(255) NOT NULL DEFAULT 'normal' COMMENT '课程类型',
                   `lessonNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '课时数',
-                  `rating` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排行分数',
-                  `ratingNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '投票人数',
                   `categoryId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '分类ID',
                   `tags` text COMMENT '标签IDs',
                   `smallPicture` varchar(255) NOT NULL DEFAULT '' COMMENT '小图',
@@ -35,6 +33,8 @@ class Version20160323191830 extends AbstractMigration
                   `teacherIds` text COMMENT '显示的课程教师IDs',
                   `studentNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学员数',
                   `hitNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '查看次数',
+                  `likeNum` int(10) NOT NULL DEFAULT '0' COMMENT '点赞数',
+                  `postNum` int(10) NOT NULL DEFAULT '0' COMMENT '评论数',
                   `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
                   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
                   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
@@ -47,7 +47,7 @@ class Version20160323191830 extends AbstractMigration
             $this->addSql("ALTER TABLE `open_course` ADD INDEX `updatedTime` (`updatedTime`);");
         }
 
-        if (!empty($this->isTableExist('open_course_lesson'))) {
+        if (!$this->isTableExist('open_course_lesson')) {
             $this->addSql("
                 CREATE TABLE `open_course_lesson` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课时ID',
@@ -94,7 +94,7 @@ class Version20160323191830 extends AbstractMigration
             $this->addSql("ALTER TABLE `open_course_lesson` ADD INDEX `updatedTime` (`updatedTime`);");
         }
 
-        if (!empty($this->isTableExist('open_course_member'))) {
+        if (!$this->isTableExist('open_course_member')) {
             $this->addSql("
                 CREATE TABLE `open_course_member` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学员记录ID',
@@ -103,6 +103,8 @@ class Version20160323191830 extends AbstractMigration
                   `mobile` varchar(32) NOT NULL DEFAULT  '' COMMENT '手机号码',
                   `learnedNum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已学课时数',
                   `learnTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '学习时间',
+                  `seq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序序号',
+                  `isVisible` tinyint(2) NOT NULL DEFAULT '1' COMMENT '可见与否，默认为可见',
                   `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '课程会员角色',
                   `ip` varchar(64) COMMENT 'IP地址',
                   `lastEnterTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次进入时间',
@@ -111,6 +113,14 @@ class Version20160323191830 extends AbstractMigration
                   UNIQUE KEY `courseId` (`courseId`,`userId`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             ");
+        }
+
+        if (!$this->isFieldExist('course_favorite', 'type')) {
+            $this->addSql("ALTER TABLE course_favorite ADD `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型';");
+        }
+
+        if (!$this->isFieldExist('course_lesson_replay', 'type')) {
+            $this->addSql("ALTER TABLE course_lesson_replay ADD `type` varchar(50) NOT NULL DEFAULT 'live' COMMENT '课程类型';");
         }
     }
 

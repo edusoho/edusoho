@@ -21,7 +21,7 @@
   <div class="teachers">
     {% if course.teacherIds|default(null) %}
       {{'教师：'|trans}}
-      {% for id in course.teacherIds %}
+      {% for id in course.teacherIds if id %}
         {% set user = users[id] %}
         <a href="{{ path('user_show',  {id:user.id}) }}" >{{ user.nickname }}</a>
       {% endfor %}

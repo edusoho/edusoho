@@ -8,7 +8,7 @@ interface CourseLessonReplayDao
 
     public function getCourseLessonReplay($id);
 
-    public function deleteLessonReplayByLessonId($lessonId);
+    public function deleteLessonReplayByLessonId($lessonId, $lessonType);
 
     public function getCourseLessonReplayByLessonId($lessonId);
 
@@ -24,6 +24,6 @@ interface CourseLessonReplayDao
 
     public function updateCourseLessonReplay($id, $fields);
 
-    public function updateCourseLessonReplayByLessonId($lessonId, $fields);
+    public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
 
 }
