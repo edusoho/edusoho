@@ -19,6 +19,14 @@ $("#target-teachers-input").select2({
         {% endfor %}
         ]
 });
+
+$(".pagination li").on('click', function(){
+    var self = $(this);
+
+      console.log(self);
+      $('.js-page').val(self.data('page'));
+
+});
 </script>
 <div id="share-history-table-container">
     <table class="table table-hover table-striped" id="share-history-table">
@@ -54,7 +62,7 @@ $("#target-teachers-input").select2({
                 <li  data-target="#detail-tab"><a href="javascript:;" class="js-share-history-detail" data-url="{{ path('material_lib_my_sharing_detail') }}">历史记录</a></li>
             </ul>
         </div>
-        <input type="hidden" class="js-page" name="page" value="1">
+        
         <tbody class="share-show-users-tbody">
         <div>
             <tr>
@@ -85,7 +93,7 @@ $("#target-teachers-input").select2({
         </tbody>
       
     </table>
-    <input class="js-page" type="hidden" name="page" value="1">
+    
 
 
 </div>

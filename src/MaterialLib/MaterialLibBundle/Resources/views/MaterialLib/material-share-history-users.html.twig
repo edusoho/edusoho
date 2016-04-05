@@ -1,3 +1,4 @@
+
 <div>
 <tr>
     <th width="40%"class="text-center">昵称</th>
@@ -24,9 +25,11 @@
     <tr class="empty"><td colspan="3">无资料分享记录</td></tr>
 {% endfor %}
 </div>
-{#{% if paginator.lastPage > 1 %}
+<input class="js-page" type="hidden" name="page" value="{{ paginator.currentPage|default(1) }}">
+<input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+{% if paginator.lastPage > 1 %}
 <nav class=" {{ class|default('text-center') }}">
-  <ul class="pagination">
+  <ul class="pagination" data-url="{{ path('material_lib_my_sharing_users') }}">
     {% if paginator.currentPage != paginator.firstPage %}
       <li data-page="{{paginator.firstPage}}"><a  href="javascript:;">首页</a></li>
       <li data-page="{{paginator.previousPage}}"><a  href="javascript:;"><i class="es-icon es-icon-chevronleft"></i></a></li>
@@ -41,5 +44,5 @@
     {% endif %}
   </ul>
 </nav>
-{% endif %}#}
+{% endif %}
 
