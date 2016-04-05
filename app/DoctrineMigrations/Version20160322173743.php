@@ -17,6 +17,7 @@ class Version20160322173743 extends AbstractMigration
     {
         $this->addSql("CREATE TABLE `open_course_recommend` (
                          `id` int(10) NOT NULL AUTO_INCREMENT,
+                         `origin` varchar(255) NOT NULL COMMENT 'opencourse or course',
                          `openCourseId` int(10) NOT NULL COMMENT '公开课id',
                          `recommendCourseId` int(10) NOT NULL DEFAULT '0' COMMENT '推荐课程id',
                          `seq` int(10) NOT NULL DEFAULT '0' COMMENT '序列',

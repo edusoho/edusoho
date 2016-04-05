@@ -2097,7 +2097,20 @@ open_course_manage_students:
 
 open_course_manage_files:
     pattern:  /open/course/{id}/manage/files
-    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:files }
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:index }
+
+open_course_manage_batch_upload_course_files:
+    pattern:  /open/course/{id}/manage/batch/upload/course/files/{targetType}
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:batchUploadCourseFiles }
+
+open_course_manage_upload_course_files:
+    pattern:  /open/course/{id}/manage/upload/course/files/{targetType}
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:uploadCourseFiles } 
+
+open_course_manage_upload_course_delete_files:
+    pattern:  /open/course/{id}/delete/files/{type}
+    defaults: { _controller: TopxiaWebBundle:OpenCourseFileManage:deleteCourseFiles }
+    methods: [POST]       
 
 open_course_show:
     pattern:  /open/course/{courseId}

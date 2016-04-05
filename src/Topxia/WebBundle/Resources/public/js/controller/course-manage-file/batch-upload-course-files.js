@@ -57,7 +57,7 @@ define(function(require, exports, module) {
         var fileSuffix = file.name.substr(file.name.lastIndexOf(".")+1).toLowerCase();
         var fileType = getFileType(fileSuffix);
 
-		if ((targetType == 'courselesson' || targetType == 'materiallib') && uploadMode == 'cloud') {
+		if ((targetType == 'courselesson' || targetType == 'materiallib' || targetType == 'opencourselesson') && uploadMode == 'cloud') {
 			if ($.inArray(fileType, ['audio','flash']) >= 0) {
 				data.convertor = '';
             } else if ($.inArray(fileType, ['ppt','document']) >= 0) {
