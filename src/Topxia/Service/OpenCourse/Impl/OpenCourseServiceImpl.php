@@ -339,7 +339,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             $this->fillLessonMediaFields($fields);
         }
 
-        $updatedLesson = $this->geTOpenCourseLessonDao()->updateLesson($lessonId, $fields);
+        $updatedLesson = $this->getOpenCourseLessonDao()->updateLesson($lessonId, $fields);
 
         if (array_key_exists('mediaId', $fields)) {
             if ($fields['mediaId'] != $lesson['mediaId']) {
@@ -354,7 +354,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         }
 
         return $updatedLesson;
-        return $this->getOpenCourseLessonDao()->updateLesson($id, $fields);
     }
 
     public function deleteLesson($id)
