@@ -62,6 +62,35 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    public function openCoursesAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            return $this->createMessageResponse('error', '您不是教师，不能查看此页面! ');
+        }
+
+        $conditions = $this->_createSearchConitons($user);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $this->getOpenCourseService()->searchCourseCount($conditions),
+            12
+        );
+
+        $OpenCourses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('createdTime', 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $this->render('TopxiaWebBundle:MyTeaching:open-course.html.twig', array(
+            'courses'   => $OpenCourses,
+            'paginator' => $paginator
+        ));
+    }
+
     public function classroomsAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -161,6 +190,28 @@ class MyTeachingController extends BaseController
         ));
     }
 
+    private function _createSearchConitons($user)
+    {
+        $conditions = array();
+
+        if ($user->isAdmin()) {
+            $conditions['userId'] = $user['id'];
+        } else {
+            $members = $this->getOpenCourseService()->searchMembers(
+                array('userId' => $user['id'], 'role' => 'teacher'),
+                array('createdTime', 'ASC'),
+                0,
+                999
+            );
+
+            foreach ($members as $key => $member) {
+                $conditions['courseIds'][$key] = $member['courseId'];
+            }
+        }
+
+        return $conditions;
+    }
+
     protected function getCourseThreadService()
     {
         return $this->getServiceKernel()->createService('Course.ThreadService');
@@ -189,5 +240,10 @@ class MyTeachingController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getOpenCourseService()
+    {
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 }

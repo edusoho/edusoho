@@ -23,7 +23,8 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
             $course = $that->getConnection()->fetchAssoc($sql, array($id));
 
             return $course ? $this->createSerializer()->unserialize($course, $this->serializeFields) : null;
-        });
+        }
+        );
     }
 
     public function findCoursesByIds(array $ids)
@@ -37,6 +38,22 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
         $courses = $this->getConnection()->fetchAll($sql, $ids);
 
         return $courses ? $this->createSerializer()->unserializes($courses, $this->serializeFields) : null;
+    }
+
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        $that = $this;
+
+        return $this->fetchCached("parentId:{$parentId}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
+            if (empty($parentId)) {
+                return array();
+            }
+
+            $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? AND locked = ?";
+            return $that->getConnection()->fetchAll($sql, array($parentId, $locked));
+        }
+
+        );
     }
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
@@ -80,6 +97,8 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
     public function updateCourse($id, $fields)
     {
         $fields['updatedTime'] = time();
+        $fields                = $this->createSerializer()->serialize($fields, $this->serializeFields);
+
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getCourse($id);
@@ -131,7 +150,8 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'course')
+
+            ->from($this->table, 'open_course')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')
             ->andWhere('type = :type')

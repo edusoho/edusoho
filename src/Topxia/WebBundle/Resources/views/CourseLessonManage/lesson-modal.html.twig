@@ -10,6 +10,7 @@
 
 {% block body %}
 
+{% if course.type == 'normal' or course.type =='live' %}
 <form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   data-create-draft-url="{{path('course_draft_create')}}"
   {% if lesson %}
@@ -18,6 +19,19 @@
     action="{{ path('course_manage_lesson_create', {id:course.id}) }}"
   {% endif %}
   >
+{% elseif course.type == 'open' or course.type =='openLive' %}
+
+<form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
+  data-create-draft-url="{{path('course_draft_create')}}"
+  {% if lesson %}
+    action="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
+  {% else %}
+    action="{{ path('open_course_manage_lesson_create', {id:course.id}) }}"
+  {% endif %}
+  >
+
+{% endif %}
+
 
   <div class="form-group" {% if lesson %}style="display:none;"{% endif %}>
     <div class="col-md-2 control-label"><label>{{'类型'|trans}}</label></div>
@@ -35,22 +49,26 @@
         <div class="col-md-10">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
+        {% if course.type=='normal' or course.type=='live' %}
         <div class="col-md-2">
           <div class="checkbox">
             <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}</label>
           </div>
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
 
+  {% if course.type=='normal' or course.type=='live'%}
   <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}">
     <div class="col-md-2 control-label"><label for="lesson-summary-field">{{'简介'|trans}}</label></div>
     <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
 
     </div>
   </div>
-
+  {% endif %}
+   
   <div class="form-group for-text-type">
 
 

@@ -9,12 +9,12 @@
       <span class="label label-danger ">{{'已关闭'|trans}}</span>
     {% elseif course.status=='draft' %}
       <span class="label label-warning ">{{'未发布'|trans}}</span>
-    {% elseif course.status=='published' %}
-      {% if course.serializeMode=='serialize' %}
+    {% elseif course.status=='published' %}    
+      {% if course.serializeMode|default(null)=='serialize' %}
         <span class="label label-success ">{{'更新中'|trans}}</span>
-      {% elseif course.serializeMode=='finished' %}
+      {% elseif course.serializeMode|default(null)=='finished' %}
         <span class="label label-warning ">{{'已完结'|trans}}</span>
-      {% endif %}
+      {% endif %}  
     {% endif %}
   </h1>
 
@@ -63,11 +63,16 @@
     {% else %}
 
       {% if course.status == 'published' %}
+        {% if course.type == 'normal' or course.type == 'live' %}
         <div class="btn-group">
           <a class="btn btn-default btn-sm" href="{{ path('course_show', {id:course.id}) }}">{{'返回课程主页'|trans}}</a>
         </div>
+        {% elseif course.type == 'open' or course.type == 'liveOpen'%}
+          <a class="btn btn-default btn-sm" href="">{{'返回课程主页'|trans}}</a>
+        {% endif %}  
       {% endif %}
 
+      {% if course.type == 'normal' or course.type == 'live' %}
       <div class="btn-group">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">{{'预览'|trans}} <span class="caret"></span></button>
         <ul class="dropdown-menu pull-right">
@@ -75,6 +80,7 @@
           <li><a href="{{ path('course_show', {id:course.id, previewAs:'guest'}) }}" target="_blank">{{'作为 未购买用户'|trans}}</a></li>
         </ul>
       </div>
+      {% endif %}
 
       {% if course.status != 'published' %}
         <div class="btn-group">

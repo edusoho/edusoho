@@ -22,6 +22,11 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->findCoursesByIds($ids);
     }
 
+    public function findCoursesByParentIdAndLocked($parentId, $locked)
+    {
+        return $this->getOpenCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
+    }
+
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         return $this->getOpenCourseDao()->searchCourses($conditions, $orderBy, $start, $limit);
@@ -91,6 +96,49 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->waveCourse($id, $field, $diff);
     }
 
+    public function publishCourse($id)
+    {
+        $course = $this->tryManageOpenCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getOpenCourseDao()->updateCourse($id, array('status' => 'published'));
+    }
+
+    public function closeCourse($id)
+    {
+        $course = $this->tryManageOpenCourse($id);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->getOpenCourseDao()->updateCourse($id, array('status' => 'closed'));
+    }
+
+    public function tryManageOpenCourse($courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            throw $this->createAccessDeniedException('未登录用户，无权操作！');
+        }
+
+        $course = $this->getOpenCourseDao()->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$this->hasOpenCourseManagerRole($courseId, $user['id'])) {
+            throw $this->createAccessDeniedException('您不是课程的教师或管理员，无权操作！');
+        }
+
+        return $course;
+    }
+
     public function changeCoursePicture($courseId, $data)
     {
         $course = $this->getCourse($courseId);
@@ -115,7 +163,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->getLogService()->info('open_course', 'update_picture', "更新公开课《{$course['title']}》(#{$course['id']})图片", $fields);
 
-        $update_picture = $this->updateCourse($courseId, $fields);
+        $update_picture = $this->getOpenCourseDao()->updateCourse($courseId, $fields);
 
         $this->dispatchEvent("open.course.picture.update", array('argument' => $data, 'course' => $update_picture));
 
@@ -195,6 +243,25 @@ throw $this->createServiceException('不能收藏未发布课程');
         ));
 
         return $courseFavoriteNum;
+    }
+
+    public function getCourseItems($courseId)
+    {
+        $lessons = $this->getOpenCourseLessonDao()->findLessonsByCourseId($courseId);
+
+        $items = array();
+
+        foreach ($lessons as $lesson) {
+            $lesson['itemType']              = 'lesson';
+            $items["lesson-{$lesson['id']}"] = $lesson;
+        }
+
+        uasort($items, function ($item1, $item2) {
+            return $item1['seq'] > $item2['seq'];
+        }
+
+        );
+        return $items;
     }
 
     /**
@@ -279,6 +346,7 @@ throw $this->createServiceException('不能收藏未发布课程');
         $lesson['status']      = $course['status'] == 'published' ? 'unpublished' : 'published';
         $lesson['free']        = empty($lesson['free']) ? 0 : 1;
         $lesson['number']      = $this->_getNextLessonNumber($lesson['courseId']);
+        $lesson['seq']         = $this->_getNextCourseItemSeq($lesson['courseId']);
         $lesson['userId']      = $this->getCurrentUser()->id;
         $lesson['createdTime'] = time();
 
@@ -303,7 +371,71 @@ throw $this->createServiceException('不能收藏未发布课程');
 
     public function updateLesson($courseId, $lessonId, $fields)
     {
-        return $this->getOpenCourseLessonDao()->updateLesson($lessonId, $fields);
+        $argument = $fields;
+        $course   = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException("课程(#{$courseId})不存在！");
+        }
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时(#{$lessonId})不存在！");
+        }
+
+        $fields = ArrayToolkit::filter($fields, array(
+            'title'         => '',
+            'summary'       => '',
+            'content'       => '',
+            'media'         => array(),
+            'mediaId'       => 0,
+            'number'        => 0,
+            'seq'           => 0,
+            'chapterId'     => 0,
+            'free'          => 0,
+            'length'        => 0,
+            'startTime'     => 0,
+            'giveCredit'    => 0,
+            'requireCredit' => 0,
+            'homeworkId'    => 0,
+            'exerciseId'    => 0,
+            'testMode'      => 'normal',
+            'testStartTime' => 0,
+            'suggestHours'  => '1.0',
+            'replayStatus'  => 'ungenerated'
+        ));
+
+        if (isset($fields['title'])) {
+            $fields['title'] = $this->purifyHtml($fields['title']);
+        }
+
+        $fields['type'] = $lesson['type'];
+
+        if ($fields['type'] == 'live' && isset($fields['startTime'])) {
+            $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
+            $fields['suggestHours'] = $fields['length'] / 60;
+        }
+
+        if (array_key_exists('media', $fields)) {
+            $this->fillLessonMediaFields($fields);
+        }
+
+        $updatedLesson = $this->getOpenCourseLessonDao()->updateLesson($lessonId, $fields);
+
+        if (array_key_exists('mediaId', $fields)) {
+            if ($fields['mediaId'] != $lesson['mediaId']) {
+                if (!empty($fields['mediaId'])) {
+                    $this->getUploadFileService()->waveUploadFile($fields['mediaId'], 'usedCount', 1);
+                }
+
+                if (!empty($lesson['mediaId'])) {
+                    $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
+                }
+            }
+        }
+
+        return $updatedLesson;
     }
 
     public function deleteLesson($id)
@@ -350,6 +482,74 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $replayList;
     }
 
+    public function getCourseLesson($courseId, $lessonId)
+    {
+        $lesson = $this->getOpenCourseLessonDao()->getLesson($lessonId);
+
+        if (empty($lesson) || ($lesson['courseId'] != $courseId)) {
+            return null;
+        }
+
+        return $lesson;
+    }
+
+    public function publishLesson($courseId, $lessonId)
+    {
+        $course = $this->tryManageOpenCourse($courseId);
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时#{$lessonId}不存在");
+        }
+
+        $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+    }
+
+    public function unpublishLesson($courseId, $lessonId)
+    {
+        $course = $this->tryManageOpenCourse($courseId);
+
+        $lesson = $this->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createServiceException("课时#{$lessonId}不存在");
+        }
+
+        $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+    }
+
+    public function sortCourseItems($courseId, array $itemIds)
+    {
+        $items          = $this->getCourseItems($courseId);
+        $existedItemIds = array_keys($items);
+
+        if (count($itemIds) != count($existedItemIds)) {
+            throw $this->createServiceException('itemdIds参数不正确');
+        }
+
+        $diffItemIds = array_diff($itemIds, array_keys($items));
+
+        if (!empty($diffItemIds)) {
+            throw $this->createServiceException('itemdIds参数不正确');
+        }
+
+        $lessonNum = $seq = 0;
+
+        foreach ($itemIds as $itemId) {
+            $seq++;
+            list($type) = explode('-', $itemId);
+            $lessonNum++;
+
+            $item   = $items[$itemId];
+            $fields = array('number' => $lessonNum, 'seq' => $seq);
+
+            if ($fields['number'] != $item['number'] || $fields['seq'] != $item['seq']) {
+                $this->updateLesson($courseId, $item['id'], $fields);
+            }
+        }
+    }
+
     /**
      * open_course_member
      */
@@ -386,6 +586,64 @@ throw $this->createServiceException('不能收藏未发布课程');
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         return $this->getOpenCourseMemberDao()->searchMembers($conditions, $orderBy, $start, $limit);
+    }
+
+    public function setCourseTeachers($courseId, $teachers)
+    {
+        // 过滤数据
+        $teacherMembers = array();
+
+        foreach (array_values($teachers) as $index => $teacher) {
+            if (empty($teacher['id'])) {
+                throw $this->createServiceException("教师ID不能为空，设置课程(#{$courseId})教师失败");
+            }
+
+            $user = $this->getUserService()->getUser($teacher['id']);
+
+            if (empty($user)) {
+                throw $this->createServiceException("用户不存在或没有教师角色，设置课程(#{$courseId})教师失败");
+            }
+
+            $teacherMembers[] = array(
+                'courseId'    => $courseId,
+                'userId'      => $user['id'],
+                'role'        => 'teacher',
+                'seq'         => $index,
+                'isVisible'   => empty($teacher['isVisible']) ? 0 : 1,
+                'createdTime' => time()
+            );
+        }
+
+        // 先清除所有的已存在的教师学员
+        $existTeacherMembers = $this->findCourseTeachers($courseId);
+
+        foreach ($existTeacherMembers as $member) {
+            $this->getOpenCourseMemberDao()->deleteMember($member['id']);
+        }
+
+        // 逐个插入新的教师的学员数据
+        $visibleTeacherIds = array();
+
+        foreach ($teacherMembers as $member) {
+            // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
+            $existMember = $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+
+            if ($existMember) {
+                $this->getOpenCourseMemberDao()->deleteMember($existMember['id']);
+            }
+
+            $member = $this->getOpenCourseMemberDao()->addMember($member);
+
+            if ($member['isVisible']) {
+                $visibleTeacherIds[] = $member['userId'];
+            }
+        }
+
+        $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
+
+        // 更新课程的teacherIds，该字段为课程可见教师的ID列表
+        $fields = array('teacherIds' => $visibleTeacherIds);
+        $course = $this->getOpenCourseDao()->updateCourse($courseId, $fields);
     }
 
     public function createMember($member)
@@ -503,10 +761,31 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $fields;
     }
 
+    protected function hasOpenCourseManagerRole($courseId, $userId)
+    {
+        if ($this->getUserService()->hasAdminRoles($userId)) {
+            return true;
+        }
+
+        $member = $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+
+        if ($member && ($member['role'] == 'teacher')) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function _getNextLessonNumber($courseId)
     {
         $lessonCount = $this->searchLessonCount(array('courseId' => $courseId));
         return ($lessonCount + 1);
+    }
+
+    private function _getNextCourseItemSeq($courseId)
+    {
+        $lessonMaxSeq = $this->getOpenCourseLessonDao()->getLessonMaxSeqByCourseId($courseId);
+        return $lessonMaxSeq + 1;
     }
 
     private function _deleteNotUsedPictures($course)
@@ -527,6 +806,40 @@ throw $this->createServiceException('不能收藏未发布课程');
                 }
             }, $oldPictures);
         }
+    }
+
+    private function findCourseTeachers($courseId)
+    {
+        return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
+    }
+
+    protected function _filterCourseFields($fields)
+    {
+        $fields = ArrayToolkit::filter($fields, array(
+            'title'      => '',
+            'subtitle'   => '',
+            'about'      => '',
+            'categoryId' => 0,
+            'tags'       => '',
+            'studentNum' => 0,
+            'locked'     => 0
+        ));
+
+        if (!empty($fields['about'])) {
+            $fields['about'] = $this->purifyHtml($fields['about'], true);
+        }
+
+        if (!empty($fields['tags'])) {
+            $fields['tags'] = explode(',', $fields['tags']);
+            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
+            array_walk($fields['tags'], function (&$item, $key) {
+                $item = (int) $item['id'];
+            }
+
+            );
+        }
+
+        return $fields;
     }
 
     protected function getUploadFileService()
@@ -564,8 +877,14 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $this->createService('System.LogService');
     }
 
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
+    }
+
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
     }
 }
+

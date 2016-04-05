@@ -47,7 +47,7 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
     public function searchLessons($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'startTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'startTime', 'seq'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
@@ -91,6 +91,18 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
         return $result;
+    }
+
+    public function getLessonMaxSeqByCourseId($courseId)
+    {
+        $that = $this;
+
+        return $this->fetchCached("courseId:{$courseId}:max:seq", $courseId, function ($courseId) use ($that) {
+            $sql = "SELECT MAX(seq) FROM {$that->getTable()} WHERE  courseId = ?";
+            return $that->getConnection()->fetchColumn($sql, array($courseId));
+        }
+
+        );
     }
 
     protected function _createSearchQueryBuilder($conditions)

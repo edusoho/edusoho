@@ -31,7 +31,8 @@ class CourseManageController extends BaseController
             return $this->redirect($this->generateUrl('course_manage_base', array('id' => $id)));
         }
 
-        $tags    = $this->getTagService()->findTagsByIds($course['tags']);
+        $tags = $this->getTagService()->findTagsByIds($course['tags']);
+
         $default = $this->getSettingService()->get('default', array());
 
         return $this->render('TopxiaWebBundle:CourseManage:base.html.twig', array(
@@ -134,11 +135,6 @@ class CourseManageController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $fields = $request->request->all();
-
-            if (isset($fields['coinPrice'])) {
-                $this->getCourseService()->setCoursePrice($course['id'], 'coin', $fields['coinPrice']);
-                unset($fields['coinPrice']);
-            }
 
             if (isset($fields['price'])) {
                 $this->getCourseService()->setCoursePrice($course['id'], 'default', $fields['price']);

@@ -10,7 +10,7 @@ return array(
         '/^\/api\/discovery_columns$/',
         '/^\/api\/courses\/discovery\/columns$/',
         '/^\/api\/classrooms\/discovery\/columns$/',
-        '/^\/api\/lessons$/'
+        '/^\/api\/course\/\d+\/lessons$/'
     ),
     'POST' => array(
         '/^\/api\/users$/',

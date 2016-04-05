@@ -62,7 +62,7 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
     public function searchMembers($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'seq'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
@@ -96,6 +96,14 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
         return $result;
+    }
+
+    public function findMembersByCourseIdAndRole($courseId, $role, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND role = ? ORDER BY seq, createdTime DESC LIMIT {$start}, {$limit}";
+
+        return $this->getConnection()->fetchAll($sql, array($courseId, $role));
     }
 
     protected function _createSearchQueryBuilder($conditions)

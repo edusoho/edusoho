@@ -355,7 +355,9 @@ class CourseLessonManageController extends BaseController
             }
         }
 
-        return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
+        $template = 'TopxiaWebBundle:CourseLessonManage:index.html.twig';
+
+        return $this->render($template, array(
             'course'    => $course,
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
