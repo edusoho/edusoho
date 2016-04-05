@@ -241,7 +241,6 @@ class MaterialLibController extends BaseController
 
 
         $targetUserIds = array();
-        $completeTargetUserIds = array();
         if (!empty($shareHistories)) {
             foreach ($shareHistories as $history) {
                 array_push($targetUserIds, $history['targetUserId']);
@@ -285,7 +284,7 @@ class MaterialLibController extends BaseController
         );
 
         $targetUserIds = array();
-        $completeTargetUserIds = array();
+
         if (!empty($shareHistories)) {
             foreach ($shareHistories as $history) {
                 array_push($targetUserIds, $history['targetUserId']);
