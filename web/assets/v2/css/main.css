@@ -13476,3 +13476,47 @@ textarea {
 .live-course-body .es-live-all .media-body .other span.price {
   color: #e83d2c;
 }
+.panel-create-course {
+  padding: 25px 30px;
+}
+.panel-create-course .panel-heading h2 {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e1e1e1;
+}
+.panel-create-course .course-select {
+  margin: 35px 0 55px 0;
+  height: 280px;
+  padding: 35px 15px;
+  border: 2px solid transparent;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #f4f6f8;
+}
+.panel-create-course .course-select:hover {
+  border: 1px solid #46c37b;
+}
+.panel-create-course .course-select.active,
+.panel-create-course .course-select:active {
+  background-color: #46c37b;
+  color: #fff;
+}
+.panel-create-course .course-select.active .course-type,
+.panel-create-course .course-select:active .course-type {
+  border-bottom: 2px solid #e1e1e1;
+}
+.panel-create-course .course-select .es-icon {
+  font-size: 47px;
+}
+.panel-create-course .course-select .course-type {
+  padding: 20px 0;
+  font-size: 20px;
+  border-bottom: 2px solid #e1e1e1;
+}
+.panel-create-course .course-select .course-intro {
+  padding-top: 20px;
+  font-size: 16px;
+}
+.panel-create-course .course-title {
+  margin-bottom: 50px;
+}

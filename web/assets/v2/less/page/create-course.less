@@ -1,0 +1,42 @@
+.panel-create-course {
+	padding: 25px 30px;
+	.panel-heading h2 {
+		padding-bottom: 20px;
+		border-bottom: 1px solid @gray-light;
+	}
+	.course-select {
+		margin: 35px 0 55px 0;
+		height: 280px;
+		padding: 35px 15px;
+		border: 2px solid transparent;
+		text-align: center;
+		border-radius: 10px;
+		cursor: pointer;
+		background-color: #f4f6f8;
+		&:hover {
+			border: 2px solid @brand-primary;
+		}
+		&.active, &:active {
+			background-color: @brand-primary;
+			color: #fff;
+			.course-type {
+				border-bottom: 2px solid @gray-light;
+			}
+		}
+		.es-icon {
+			font-size: 47px;
+		}
+		.course-type {
+			padding: 20px 0;
+			font-size: 20px;
+			border-bottom: 2px solid @gray-light;
+		}
+		.course-intro {
+			padding-top: 20px;
+			font-size: 16px;
+		}
+	}
+	.course-title {
+		margin-bottom: 50px;
+	}
+}
