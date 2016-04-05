@@ -13494,7 +13494,7 @@ textarea {
   background-color: #f4f6f8;
 }
 .panel-create-course .course-select:hover {
-  border: 1px solid #46c37b;
+  border: 2px solid #46c37b;
 }
 .panel-create-course .course-select.active,
 .panel-create-course .course-select:active {

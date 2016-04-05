@@ -30,7 +30,10 @@ define(function(require, exports, module) {
                     $('#course-buy-div').show();
                 }
             })
-        
+           $("#course-create-form .course-select").click(function(){
+                $this = $(this);
+                $this.addClass('active').parent().siblings().find('.course-select').removeClass('active');
+           })
         }
     };
 
