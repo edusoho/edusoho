@@ -2,7 +2,6 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
-use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -421,7 +420,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        return $this->createLocalMediaResponse($request, $file, false);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function detailDataAction($courseId, $lessonId)
@@ -473,7 +472,7 @@ class CourseLessonController extends BaseController
 
         $this->getCourseService()->tryTakeCourse($courseId);
 
-        return $this->fileAction($request, $lesson['mediaId'], true);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $lesson['mediaId']));
     }
 
     public function pptAction(Request $request, $courseId, $lessonId)
@@ -635,42 +634,6 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    public function fileAction(Request $request, $fileId, $isDownload = false)
-    {
-        $file = $this->getUploadFileService()->getFile($fileId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file['storage'] == 'cloud') {
-            if ($isDownload) {
-                $key = $file['hashId'];
-            } else {
-                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                    $key = $file['metas']['hd']['key'];
-                } else {
-                    $key = $file['hashId'];
-                }
-            }
-
-            if (empty($key)) {
-                throw $this->createNotFoundException();
-            }
-
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
-            if ($isDownload) {
-                $client->download($client->getBucket(), $key, 3600, $file['filename']);
-            } else {
-                $client->download($client->getBucket(), $key);
-            }
-        }
-
-        return $this->createLocalMediaResponse($request, $file, $isDownload);
-    }
-
     public function learnStatusAction(Request $request, $courseId, $lessonId)
     {
         $user   = $this->getCurrentUser();
@@ -749,30 +712,6 @@ class CourseLessonController extends BaseController
             'img' => $this->generateUrl('common_qrcode', array('text' => $url), true)
         );
         return $this->createJsonResponse($response);
-    }
-
-    protected function createLocalMediaResponse(Request $request, $file, $isDownload = false)
-    {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        if ($isDownload) {
-            $file['filename'] = urlencode($file['filename']);
-
-            if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-                $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-            } else {
-                $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-            }
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
     }
 
     protected function isMobile()

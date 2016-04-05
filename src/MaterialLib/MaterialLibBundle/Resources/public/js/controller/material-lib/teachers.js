@@ -10,19 +10,10 @@ define(function(require, exports, module) {
 
 		var selectedUser = $('#s2id_target-teachers-input');
 
-		var teacherSelect = $('#teacher-select');
+		var teacherSelect = $('#target-teachers-input');
 
-		$(".teacherNameBtn").on('click', function() { 
-			addTeacher(this.id, this.innerHTML);
-		});
-		
 		teacherSelect.on('change', function(data) {
-			var teacherId = $("#teacher-select").val();
-			var teacherName = $("#teacher-select option:selected").text();
-
-			if (teacherId != "") {
-				addTeacher(teacherId, teacherName);
-			}
+			$('.help-block').hide();
 		});
 
 		var validator = new Validator({
@@ -45,9 +36,16 @@ define(function(require, exports, module) {
 					Notify.danger('素材分享失败!');
 					$btn.button('reset').removeClass('disabled');
 				});
-
-			}
+			},
 		});
+		// var rule =
+		validator.addItem({
+				element: '#target-teachers-input',
+				required: true,
+				rule: 'visible_character',
+				display: '要分享的老师'
+		});
+
 
 		addTeacher = function(id, nickname) {
 			var selectedUsers = $("#target-teachers-input").select2("val");

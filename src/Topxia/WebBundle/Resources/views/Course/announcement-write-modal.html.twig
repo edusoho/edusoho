@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}{% if announcement.id %}编辑{% else %}添加{% endif %}公告{% endblock %}
+{% block title %}{% if announcement.id %}{{'编辑公告'|trans}}{% else %}{{'添加公告'|trans}}{% endif %}{% endblock %}
 
 {% block body %}
   <form id="announcement-write-form" method="post"
@@ -13,7 +13,7 @@
 
     <div class="form-group">
       <div class="controls">
-        <textarea class="form-control" id="announcement-content-field" name="content" data-display="公告内容" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
+        <textarea class="form-control" id="announcement-content-field" name="content" data-display="{{'公告内容'|trans}}" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{ announcement.content }}</textarea>
       </div>
     </div>
     {% if not announcement.id %}
@@ -33,6 +33,6 @@
 
 {% endblock %}
 {% block footer %}
-  <button type="button" class="btn btn-link" data-dismiss="modal">取消</button>
-  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">保存</button>
+  <button type="button" class="btn btn-link" data-dismiss="modal">{{'取消'|trans}}</button>
+  <button type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#announcement-write-form">{{'保存'|trans}}</button>
 {% endblock %}

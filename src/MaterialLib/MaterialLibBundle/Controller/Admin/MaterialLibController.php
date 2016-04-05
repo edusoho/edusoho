@@ -40,13 +40,11 @@ class MaterialLibController extends BaseController
     public function renderAction(Request $request)
     {
         $conditions = $request->query->all();
-
         $results    = $this->getMaterialLibService()->search(
             $conditions,
             ($request->query->get('page', 1) - 1) * 20,
             20
         );
-        $results  = $this->getMaterialLibService()->filterTagCondition($conditions,$results);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -66,10 +64,12 @@ class MaterialLibController extends BaseController
     public function detailAction(Request $reqeust, $globalId)
     {
         $material   = $this->getMaterialLibService()->get($globalId);
-        $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        if($material['type'] == 'video' ) {
+          $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        }
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
-            'thumbnails' => $thumbnails,
+            'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
             'params'     => $reqeust->query->all()
         ));
     }

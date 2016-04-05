@@ -76,7 +76,6 @@ class CourseController extends CourseBaseController
         $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
         unset($conditions['orderBy']);
 
-
         $conditions['parentId'] = 0;
         $conditions['status']   = 'published';
         $paginator              = new Paginator(
@@ -84,6 +83,7 @@ class CourseController extends CourseBaseController
             $this->getCourseService()->searchCourseCount($conditions),
             20
         );
+
         if ($orderBy != 'recommendedSeq') {
             $courses = $this->getCourseService()->searchCourses(
                 $conditions,
@@ -92,28 +92,26 @@ class CourseController extends CourseBaseController
                 $paginator->getPerPageCount()
             );
         }
+
         if ($orderBy == 'recommendedSeq') {
-
             $conditions['recommended'] = 1;
-            $recommendCount = $this->getCourseService()->searchCourseCount($conditions);
-            $currentPage = $request->query->get('page') ? $request->query->get('page') : 1 ;
-            $recommendPage = intval($recommendCount/20);
-            $recommendLeft = $recommendCount%20;
+            $recommendCount            = $this->getCourseService()->searchCourseCount($conditions);
+            $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
+            $recommendPage             = intval($recommendCount / 20);
+            $recommendLeft             = $recommendCount % 20;
 
-            if($currentPage<=$recommendPage) {
+            if ($currentPage <= $recommendPage) {
                 $courses = $this->getCourseService()->searchCourses(
                     $conditions,
                     $orderBy,
-                    ($currentPage-1)*20,
+                    ($currentPage - 1) * 20,
                     20
                 );
-            }
-            elseif(($recommendPage+1) == $currentPage)  {
-
+            } elseif (($recommendPage + 1) == $currentPage) {
                 $courses = $this->getCourseService()->searchCourses(
                     $conditions,
                     $orderBy,
-                    ($currentPage-1)*20,
+                    ($currentPage - 1) * 20,
                     20
                 );
                 $conditions['recommended'] = 0;
@@ -121,16 +119,15 @@ class CourseController extends CourseBaseController
                     $conditions,
                     'createdTime',
                     0,
-                    20-$recommendLeft
+                    20 - $recommendLeft
                 );
                 $courses = array_merge($courses, $coursesTemp);
-            }
-            else {
+            } else {
                 $conditions['recommended'] = 0;
-                $courses               = $this->getCourseService()->searchCourses(
+                $courses                   = $this->getCourseService()->searchCourses(
                     $conditions,
                     'createdTime',
-                    (20-$recommendLeft)+($currentPage-$recommendPage-2)*20,
+                    (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
                     20
                 );
             }
@@ -361,18 +358,12 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
-        $items       = $this->getCourseService()->getCourseItems($course['id']);
-        $courseAbout = $course['about'];
+        $items = $this->getCourseService()->getCourseItems($course['id']);
 
-        $courseAbout = strip_tags($courseAbout, '');
-
-        $courseAbout = preg_replace("/ /", "", $courseAbout);
-        $courseAbout = substr($courseAbout, 0, 100);
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course'      => $course,
-            'member'      => $member,
-            'items'       => $items,
-            'courseAbout' => $courseAbout
+            'course' => $course,
+            'member' => $member,
+            'items'  => $items
         ));
     }
 

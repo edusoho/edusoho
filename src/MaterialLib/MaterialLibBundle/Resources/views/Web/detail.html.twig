@@ -66,10 +66,10 @@
             <div class="form-group">
               <label for="name" class="col-md-2 control-label">封面</label>
               <div class="col-md-4">
-                <img class="js-cover-img" src="{{ asset(material.thumbnail) }}">
+                <img class="js-cover-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.jpg')) }}">
               </div>
 
-              
+
                 <div class="col-md-6" id="thumbnail-set">
                   <div class="links" style="padding-left:15px;">
                     <a class="js-set-default disabled" href="#default-thumbnails">默认</a>
@@ -83,7 +83,7 @@
                       </div>
                     {% endfor %}
                   </div>
-                  
+
                   <div class="thumbnail-pane" id="self-select">
                     <div class="video-player-container">
                       <iframe src="{{ path('admin_material_play', {globalId:material.no}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>

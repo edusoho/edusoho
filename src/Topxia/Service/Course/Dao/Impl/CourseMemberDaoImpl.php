@@ -270,7 +270,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
 
     public function countMembersByStartTimeAndEndTime($startTime, $endTime)
     {
-        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime <  ? AND createdTime > ? AND role='student'  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
+        $sql = "SELECT * FROM (SELECT courseId, count(userId) AS co,role FROM {$this->table} WHERE createdTime <  ? AND createdTime > ? AND role='student' AND classroomId = 0  GROUP BY courseId) coursemembers ORDER BY coursemembers.co DESC LIMIT 0,5";
         return $this->getConnection()->fetchAll($sql, array($endTime, $startTime));
     }
 
@@ -373,6 +373,7 @@ class CourseMemberDaoImpl extends BaseDao implements CourseMemberDao
                         ->andWhere('createdTime >= :startTimeGreaterThan')
                         ->andWhere('createdTime < :startTimeLessThan')
                         ->andWhere('courseId IN (:courseIds)')
+                        ->andWhere('userId IN (:userIds)')
                         ->andWhere('classroomId = :classroomId');
         return $builder;
     }

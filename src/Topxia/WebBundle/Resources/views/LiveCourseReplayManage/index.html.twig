@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
 
-{% block title %}录播管理 - {{ parent() }}{% endblock %}
+{% block title %}{{'录播管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'replay' %}
 {% set script_controller = 'course-manage/lesson' %}
@@ -9,12 +9,12 @@
 
 <div class="panel panel-default panel-col lesson-manage-panel">
 	<div class="panel-heading">
-		录播管理
+		{{'录播管理'|trans}}
 	</div>
 
 	{% if items is empty %}
 
-	 <div class="empty">暂无课时内容！</div>
+	 <div class="empty">{{'暂无课时内容！'|trans}}</div>
 
 	 {% endif %}
 
@@ -28,7 +28,7 @@
 			    {% include 'TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig' with {lesson: item} %}
 			  {% endif %}
 			{% endfor %}
-			
+
 		</ul>
 	</div>
 </div>

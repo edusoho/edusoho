@@ -322,13 +322,13 @@ tbody.sortable-list tr.placeholder {
   padding-top: 7px;
   margin-top: 0;
   margin-bottom: 0;
-}  
+}
 .lock-user-text-right{
   /*text-align: right;*/
   padding-top: 7px;
   margin-top: 0;
   margin-bottom: 0;
-}  
+}
 fieldset #checkboxChoices{
   margin:0;
   padding:0;
@@ -417,6 +417,71 @@ fieldset #checkboxChoices{
   -moz-transition: all .3s ease;
   -o-transition: all .3s ease;
   transition: all .3s ease;
+}
+
+/*edu-cloud*/
+.eduyun-main {
+  position: relative;
+}
+.eduyun-main .mask {
+  position: absolute;
+  z-index: 1001;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #000;
+  background: rgba(0,0,0,.4);
+}
+.edu-user .edu-user-img {
+  width: 80px;
+  height: auto;
+}
+.edu-user .edu-user-info{
+  margin-left: 100px;
+}
+.edu-user .edu-user-info {
+  display: table;
+  height: 80px;
+}
+.edu-user .edu-user-info .detail {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.edu-verticalmiddle {
+  display:table;height:100%;width:100%
+}
+.edu-verticalmiddle-content {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.edu-alert {
+  position: absolute;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  left: -1px;
+  right: -1px;
+  top: -2px;
+}
+
+.email-status {
+  padding-left: 20%;
+  margin-top: 100px;
+}
+.email-status p {
+  margin-bottom: 30px;
+}
+
+.icon-security {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: url('../img/iconsecurity.png') no-repeat;
+  background-size: 100%;
 }
 
 .form-horizontal .col-md-10.form-group{

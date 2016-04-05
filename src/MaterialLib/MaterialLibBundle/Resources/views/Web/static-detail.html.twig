@@ -18,20 +18,20 @@
         <form class="form-horizontal" id="info-form" action="{{ path('material_edit', {globalId:material.no}) }}">
           <div class="form-group">
             <label for="name" class="col-md-2 control-label">标题</label>
-            <div class="col-md-6">
-              <input type="text" class="form-control" id="name" name="name" required="true" placeholder="标题" value="{{ material.name }}">
+            <div class="col-md-6" style="padding:6px;">
+              {{ material.name }}
             </div>
           </div>
           <div class="form-group">
             <label for="tags" class="col-md-2 control-label">标签</label>
-            <ul class="nav nav-tabs js-tags-container">
-                <li><a >{{ material.tags|join('  ') }}</a></li>
-            </ul>
+            <div class="col-md-6 controls" style="padding:7px;">
+                {{ material.tags|join('  ') }}
+            </div>
           </div>
           <div class="form-group">
             <label class="col-md-2 control-label">简介</label>
-            <div class="col-md-6 controls">
-              <textarea id="description" name="description" class="form-control" rows="6">{{ material.description }}</textarea>
+            <div class="col-md-6 controls" style="padding:6px;">
+              {{ material.description }}
             </div>
           </div>
 
@@ -49,7 +49,7 @@
               </div>
 
             </div>
-              
+
           </form>
           {% else %}
             <div class="empty text-muted">

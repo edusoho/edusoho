@@ -34,6 +34,7 @@
       <select class="form-control js-process-status-select" name="processStatus">
         <option value="">转码状态</option>
         <option value="ok">转码成功</option>
+        <option value="waiting">转码中</option>
         <option value="error">转码失败</option>
       </select>
     </div>
@@ -57,15 +58,13 @@
   </div>
   <div id="material-lib-items-panel">
     <div>
-      <a class="btn btn-primary" data-toggle="modal" data-target="#modal"
+      <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-target="#modal"
       data-url="{{ path('uploader_batch_uplod', {token:uploader_token('materiallib', app.user.id, 'private')}) }}" title="上传资料"   data-placement="bottom" >上传资料
       </a>
       <a class="btn btn-info js-manage-batch-btn" href="javascript:;">批量管理
       </a>
       <a class="btn btn-info js-batch-tag-btn" style="display:none;" data-role="batch-tag">添加标签
       </a>
-      {#<a class="btn btn-primary js-finish-batch-btn" href="javascript:;" style="float: right;" data-role="finish-batch">完成管理
-      </a>#}
       <a class="btn btn-info js-batch-share-btn" style="display:none;" data-role="batch-share" href="javascript:;" data-url="{{ path('material_batch_share') }}"  >共享
       </a>
       <a class="btn btn-danger js-batch-delete-btn" style="display:none;" data-role="batch-dalete" href="javascript:;" data-url="{{ path('material_batch_delete') }}"  >删除
@@ -73,16 +72,6 @@
       <label class="checkbox-inline" style="display:none;" data-role="batch-manage" >
         <input type="checkbox"  data-role="batch-select"/> 全选
       </label>
-      <span class="pull-right dropdown">排序方式
-        <a href="javascript:;" class="es-icon es-icon-data-order" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="sr-only">Toggle Dropdown</span>
-        </a>
-        <ul class="dropdown-menu">
-          {#<li class="js-play-times-btn" ><a class="glyphicon glyphicon-ok" href="javascript:;"> 播放次数</a></li>#}
-          <li class="js-upload-time-btn "><a{#class="glyphicon glyphicon-ok"#} href="javascript:;" class="upload-time-btn"> 上传时间</a>
-          <input type="hidden" value="" name="sort" id="sort"></input></li>
-        </ul>
-      </span>
     </div>
     <div class="material-list-container"id="material-item-list" data-url="{{ path('material_lib_show_browsing') }}"></div>
   </div>
