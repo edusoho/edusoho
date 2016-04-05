@@ -65,7 +65,7 @@ class MaterialLibController extends BaseController
         }
         $orderBy = array($conditions['sort'], 'DESC');
         $conditions['currentUserId'] = $currentUserId;
-        $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 10);
+        $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
         $files                       = $this->getUploadFileService()->searchFiles($conditions, $orderBy, $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $collections                 = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
         foreach ($files as $key => $file) {
