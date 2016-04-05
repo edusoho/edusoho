@@ -16,7 +16,7 @@ class Version20160331185209 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        if (!$this->isTableExist('upload_files_tag')) {
+        if (!$this->isTableExist('upload_files_share_history')) {
             $this->addSql("
             CREATE TABLE `upload_files_share_history` (
                          `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
@@ -37,5 +37,12 @@ class Version20160331185209 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 
+    }
+
+    protected function isTableExist($table)
+    {
+        $sql    = "SHOW TABLES LIKE '{$table}'";
+        $result = $this->connection->fetchAssoc($sql);
+        return empty($result) ? false : true;
     }
 }
