@@ -15,7 +15,7 @@ class Version20160323191830 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        if (!empty($this->isTableExist('open_course'))) {
+        if (!$this->isTableExist('open_course')) {
             $this->addSql("
                 CREATE TABLE `open_course` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程ID',
@@ -47,7 +47,7 @@ class Version20160323191830 extends AbstractMigration
             $this->addSql("ALTER TABLE `open_course` ADD INDEX `updatedTime` (`updatedTime`);");
         }
 
-        if (!empty($this->isTableExist('open_course_lesson'))) {
+        if (!$this->isTableExist('open_course_lesson')) {
             $this->addSql("
                 CREATE TABLE `open_course_lesson` (
                   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '课时ID',
@@ -94,7 +94,7 @@ class Version20160323191830 extends AbstractMigration
             $this->addSql("ALTER TABLE `open_course_lesson` ADD INDEX `updatedTime` (`updatedTime`);");
         }
 
-        if (!empty($this->isTableExist('open_course_member'))) {
+        if (!$this->isTableExist('open_course_member')) {
             $this->addSql("
                 CREATE TABLE `open_course_member` (
                   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '课程学员记录ID',

@@ -55,7 +55,6 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
                 $btn.hide();
-                console.log(data['result']);
                 if (data['result']) {
                     $("#unzan-btn").show();
                     $("#unzan-btn").find('.gray-darker').html(parseInt(data['number']));

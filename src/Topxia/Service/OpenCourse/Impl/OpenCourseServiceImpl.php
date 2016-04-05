@@ -568,11 +568,6 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $this->getOpenCourseMemberDao()->getCourseMemberByIp($courseId, $ip);
     }
 
-    public function getMemberByCourseIdAndUserId($courseId, $userId)
-    {
-        return $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
-    }
-
     public function findMembersByCourseIds($courseIds)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIds($courseIds);
@@ -626,7 +621,7 @@ throw $this->createServiceException('不能收藏未发布课程');
 
         foreach ($teacherMembers as $member) {
             // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
-            $existMember = $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $member['userId']);
+            $existMember = $this->getCourseMember($courseId, $member['userId']);
 
             if ($existMember) {
                 $this->getOpenCourseMemberDao()->deleteMember($existMember['id']);
@@ -767,7 +762,7 @@ throw $this->createServiceException('不能收藏未发布课程');
             return true;
         }
 
-        $member = $this->getOpenCourseMemberDao()->getMemberByCourseIdAndUserId($courseId, $userId);
+        $member = $this->getCourseMember($courseId, $userId);
 
         if ($member && ($member['role'] == 'teacher')) {
             return true;
@@ -811,35 +806,6 @@ throw $this->createServiceException('不能收藏未发布课程');
     private function findCourseTeachers($courseId)
     {
         return $this->getOpenCourseMemberDao()->findMembersByCourseIdAndRole($courseId, 'teacher', 0, 100);
-    }
-
-    protected function _filterCourseFields($fields)
-    {
-        $fields = ArrayToolkit::filter($fields, array(
-            'title'      => '',
-            'subtitle'   => '',
-            'about'      => '',
-            'categoryId' => 0,
-            'tags'       => '',
-            'studentNum' => 0,
-            'locked'     => 0
-        ));
-
-        if (!empty($fields['about'])) {
-            $fields['about'] = $this->purifyHtml($fields['about'], true);
-        }
-
-        if (!empty($fields['tags'])) {
-            $fields['tags'] = explode(',', $fields['tags']);
-            $fields['tags'] = $this->getTagService()->findTagsByNames($fields['tags']);
-            array_walk($fields['tags'], function (&$item, $key) {
-                $item = (int) $item['id'];
-            }
-
-            );
-        }
-
-        return $fields;
     }
 
     protected function getUploadFileService()
@@ -887,4 +853,3 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $this->createService('Content.FileService');
     }
 }
-

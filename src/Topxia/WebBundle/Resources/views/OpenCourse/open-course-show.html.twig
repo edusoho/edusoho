@@ -7,7 +7,7 @@
   <div class="container">
     {% block content %}
       <ol class="breadcrumb breadcrumb-o">
-        <li><a href="">首页</a></li>
+        <li><a href="{{ path('homepage') }}">首页</a></li>
         <li><a href="">公开课</a></li>
         <li>{{ course.title }}</li>
       </ol>
@@ -104,7 +104,7 @@
 
         <div class="col-md-9">
           <div class="es-section gray-darker">
-            {{ course.about }}
+            {{ course.about|raw }}
             <img src="{{ filepath(course.smallPicture|default(''), 'course.png') }}" alt="{{ course.title }}" class="intro-img">
           </div>
 

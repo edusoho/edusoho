@@ -74,7 +74,6 @@ class OpenCourseManageController extends BaseController
     public function teachersAction(Request $request, $id)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $course = $this->getOpenCourseService()->getCourse($id);
 
         if ($request->getMethod() == 'POST') {
             $data        = $request->request->all();
@@ -149,7 +148,7 @@ class OpenCourseManageController extends BaseController
 
             if ($openLiveLesson) {
                 $live       = $this->getLiveCourseService()->editLiveRoom($liveCourse, $liveLesson, $this->container);
-                $liveLesson = $this->getOpenCourseService()->updateLesson($liveLesson['id'], $liveLesson);
+                $liveLesson = $this->getOpenCourseService()->updateLesson($liveLesson['courseId'], $liveLesson['id'], $liveLesson);
             } else {
                 $live = $this->getLiveCourseService()->createLiveRoom($liveCourse, $liveLesson, $this->container);
 
@@ -466,9 +465,9 @@ class OpenCourseManageController extends BaseController
     {
         $existRecommendCourses = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($openCourseId);
 
-        if (!empty($existRecommendCourses)) {
-            $existIds = array();
+        $existIds = array();
 
+        if (!empty($existRecommendCourses)) {
             foreach ($existRecommendCourses as $existRecommendCourse) {
                 if ($existRecommendCourse['origin'] == 'open_course') {
                     $existIds['openCourse'][] = $existRecommendCourse['recommendCourseId'];
@@ -506,11 +505,6 @@ class OpenCourseManageController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getFileService()
-    {
-        return $this->getServiceKernel()->createService('Content.FileService');
     }
 
     protected function getUploadFileService()

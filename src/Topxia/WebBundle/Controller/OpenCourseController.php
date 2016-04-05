@@ -194,6 +194,8 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
+        $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
+
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course' => $course
         ));
