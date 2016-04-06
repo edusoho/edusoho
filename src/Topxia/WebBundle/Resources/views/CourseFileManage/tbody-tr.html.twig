@@ -14,11 +14,7 @@
       <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
       <br><span class="text-warning text-sm">{{'正在文件格式转换'|trans}}</span>
       {% if ( now - uploadFile.updatedTime ) > 28800 %}
-        {% if uploadFile.targetType in ['courselesson', 'coursematerial'] %}
         <a href="javascript:;" data-url="{{ path('course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">{{'重新转换'|trans}}</a>
-        {% else %}
-         <a href="javascript:;" data-url="{{ path('open_course_manage_file_convert', {id:course.id, fileId:uploadFile.id}) }}" class="convert-file-btn text-danger">{{'重新转换'|trans}}</a>
-        {% endif %}
       {% endif %}
     {% elseif uploadFile.convertStatus == 'doing' %}
       <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>

@@ -475,9 +475,9 @@ class OpenCourseManageController extends BaseController
                     $existIds['course'][] = $existRecommendCourse['recommendCourseId'];
                 }
             }
-
-            $existIds['openCourse'][] = $openCourseId;
         }
+
+        $existIds['openCourse'][] = $openCourseId;
 
         return $existIds;
     }
