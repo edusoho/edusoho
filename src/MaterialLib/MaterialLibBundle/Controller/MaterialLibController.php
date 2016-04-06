@@ -108,7 +108,6 @@ class MaterialLibController extends BaseController
         $files        = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
         $fileIds      = ArrayToolkit::column($files, 'id');
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
-
         //Return different views according to current viewing mode
 
         if ($viewMode == 'thumb') {
@@ -189,6 +188,8 @@ class MaterialLibController extends BaseController
      * @param  Request                                    $request HTTP request
      * @return \Symfony\Component\HttpFoundation\Response the for the share files
      */
+
+
     public function showShareFormAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
@@ -212,6 +213,7 @@ class MaterialLibController extends BaseController
      * @param  Request                                    $request HTTP request
      * @return \Symfony\Component\HttpFoundation\Response HTTP response
      */
+
     public function showShareHistoryAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -219,8 +221,67 @@ class MaterialLibController extends BaseController
         if (!$user->isTeacher() && !$user->isAdmin()) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
+        $conditions['sourceUserId'] = $user['id'];
 
-        $shareHistories = $this->getUploadFileService()->findShareHistory($user['id']);
+        $conditions['isActive'] = 1;
+        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            10
+        );
+
+        $shareHistories = $this->getUploadFileService()->searchShareHistories(
+            $conditions,
+            array('updatedTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+
+        $targetUserIds = array();
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
+        }
+
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-history.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'allTeachers'    => $allTeachers,
+            'paginator'      => $paginator
+            ));
+    }
+
+    public function historyUserShowAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions['sourceUserId'] = $user['id'];
+
+        $conditions['isActive'] = 1;
+        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            10
+        );
+
+        $shareHistories = $this->getUploadFileService()->searchShareHistories(
+            $conditions,
+            array('updatedTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
         $targetUserIds = array();
 
@@ -230,17 +291,59 @@ class MaterialLibController extends BaseController
             }
 
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
         }
-        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
-        return $this->render('MaterialLibBundle:MaterialLib:material-share-history.html.twig', array(
-            'shareHistories' => $shareHistories,
+
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-history-users.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
             'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
             'source'         => 'myShareHistory',
             'currentUserId'  => $user['id'],
-            'allTeachers'    => $allTeachers
-        ));
+            'paginator'      => $paginator
+            ));
     }
 
+    public function historyDetailShowAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        // var_dump($request->query->get('page'));
+        $conditions['sourceUserId'] = $user['id'];
+
+        $shareHistoryCount = $this->getUploadFileShareHistoryService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            10
+        );
+
+
+        $shareHistories = $this->getUploadFileShareHistoryService()->searchShareHistories(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $targetUserIds = array();
+
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
+        }
+
+        return $this->render('MaterialLibBundle:MaterialLib:material-share-history-detail.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'paginator'      => $paginator
+        ));
+    }
     /**
      * Save the sharing settings. If a previous sharing record exists, then update it. Otherwise create a new record.
      * @param  Request                                        $request HTTP request
@@ -266,6 +369,8 @@ class MaterialLibController extends BaseController
                     } else {
                         $this->getUploadFileService()->addShare($currentUserId, $targetUserId);
                     }
+
+                    $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 1);
 
                     $targetUser   = $this->getUserService()->getUser($targetUserId);
                     $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
@@ -297,6 +402,7 @@ class MaterialLibController extends BaseController
 
         if (!empty($targetUserId)) {
             $this->getUploadFileService()->cancelShareFile($currentUserId, $targetUserId);
+            $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 0);
 
             $targetUser   = $this->getUserService()->getUser($targetUserId);
             $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
@@ -409,6 +515,11 @@ class MaterialLibController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService2');
+    }
+
+    protected function getUploadFileShareHistoryService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileShareHistoryService');
     }
 
     protected function getUserService()

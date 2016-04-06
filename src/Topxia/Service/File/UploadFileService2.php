@@ -43,6 +43,12 @@ interface UploadFileService2
 
     public function findShareHistory($sourceUserId);
 
+    public function searchShareHistoryCount($conditions);
+
+    public function searchShareHistories($conditions, $orderBy, $start, $limit);
+
+    public function findActiveShareHistory($sourceUserId);
+
     public function findShareHistoryByUserId($sourceUserId, $targetUserId);
 
     public function waveUploadFile($id, $field, $diff);
