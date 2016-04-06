@@ -233,18 +233,15 @@ class MaterialLibController extends BaseController
     public function batchTagShowAction(Request $request)
     {
         $data = $request->request->all();
-
-        $tagNames = preg_split('/,/', $data['tags']);
         $fileIds  = preg_split('/,/', $data['fileIds']);
-
-        $tags       = $this->getTagService()->findTagsByNames($tagNames);
-        $tagIds     = ArrayToolkit::column($tags, 'id');
-        $conditions = array(
-            'fileIds' => $fileIds,
-            'tagIds'  => $tagIds
-        );
-
-        $this->getUploadFileTagService()->edit($fileIds, $tagIds);
+        foreach ($fileIds as $key => $fileId) {
+          $file = $this->getUploadFileService()->getFile($fileId);
+          if(!empty($file['globalId'])){
+            $this->getMaterialLibService()->edit($file['globalId'], array('tags'=>$data['tags']));
+          } else {
+            continue;
+          }
+        }
 
         return $this->redirect($this->generateUrl('material_lib_browsing'));
     }
