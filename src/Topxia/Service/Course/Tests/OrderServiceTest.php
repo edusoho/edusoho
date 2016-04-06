@@ -67,6 +67,44 @@ class OrderServiceTest extends BaseTestCase
 
     }
 
+    public function testUpdateOrder()
+    {
+        $this->teacherLogin();
+        $course1 = $this->getCourseService()->createCourse(array('title' => 'test course 1'));
+
+        $this->getCourseService()->publishCourse($course1['id']);
+
+        $this->normalLogin();
+        $order = array(
+            'targetId' => $course1['id'],
+            'payment' => 'none',
+            'totalPrice' => 10,
+            'priceType' =>'RMB',
+            'coinRate' => 1,
+            'coinAmount' => 0
+        );
+        $createdOrder = $this->getOrderService()->createOrder($order);
+
+        $updatedOrder = $this->getOrderService()->updateOrder($createdOrder['id'],array(
+            'payment' => 'alipay',
+            'totalPrice' => 12,
+            'priceType' =>'RMB',
+            'coinRate' => 1,
+            'coinAmount' => 1,
+            'amount' => 1,
+            'userId' =>$createdOrder['userId'],
+            'courseId' => $course1['id'],
+        ));
+
+        $this->assertEquals('alipay',$updatedOrder['payment']);
+        $this->assertEquals(12,$updatedOrder['totalPrice']);
+        $this->assertEquals('RMB',$updatedOrder['priceType']);
+        $this->assertEquals(1,$updatedOrder['coinRate']);
+        $this->assertEquals(1,$updatedOrder['coinAmount']);
+
+    }
+
+
 
 
     protected function normalLogin()
