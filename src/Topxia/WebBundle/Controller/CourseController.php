@@ -358,30 +358,12 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
-        $items       = $this->getCourseService()->getCourseItems($course['id']);
-        $courseAbout = $course['about'];
+        $items = $this->getCourseService()->getCourseItems($course['id']);
 
-        $courseAbout = strip_tags($courseAbout, '');
-
-        $courseAbout = preg_replace("/ /", "", $courseAbout);
-        $courseAbout = substr($courseAbout, 0, 100);
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course'      => $course,
-            'member'      => $member,
-            'items'       => $items,
-            'courseAbout' => $courseAbout
-        ));
-    }
-
-    public function keywordsAction($course)
-    {
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
-
-        return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
-            'category' => $category,
-            'tags'     => $tags,
-            'course'   => $course
+            'course' => $course,
+            'member' => $member,
+            'items'  => $items
         ));
     }
 

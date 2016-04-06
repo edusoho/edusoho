@@ -166,7 +166,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
     }
 
-    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy)
+    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy  = '')
     {
         if (is_array($sort)) {
             $orderBy = $sort;

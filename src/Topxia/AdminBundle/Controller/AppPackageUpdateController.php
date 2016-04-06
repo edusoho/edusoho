@@ -85,8 +85,7 @@ class AppPackageUpdateController extends BaseController
         $apps = $this->getAppService()->checkAppUpgrades();
 
         if (empty($apps)) {
-            $errors[] = '获取最新应用包信息失败';
-            return $this->createJsonResponse(array('status' => 'error', 'errors' => $errors));
+            return $this->createJsonResponse(array('isUpgrade' => false));
         }
 
         $apps = ArrayToolkit::index($apps, 'code');

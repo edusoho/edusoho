@@ -2,7 +2,6 @@
 <!-- 小组动态 -->
 {% set groups = data('HotGroup',{'count':config.count|default(6)}) %}
 {% set reviews = data('LatestCourseReviews',{'count':config.count|default(4)}) %}
-{% set ArticlesIsNull = false %}
 <section class="dynamic-section {{config.background|default("")}}">
   <div class="container">
     <div class="text-line gray">
@@ -37,8 +36,8 @@
                       </a>
                     </div>
                     <div class="metas">
-                      <span>{{ group.memberNum }}<i class="es-icon es-icon-people"></i></span>
-                      <span>{{ group.threadNum }}<i class="es-icon es-icon-textsms"></i></span>
+                      <span><i class="es-icon es-icon-people"></i>{{ group.memberNum }}</span>
+                      <span><i class="es-icon es-icon-textsms"></i>{{ group.threadNum }}</span>
                     </div>
                   </div>
                 </div>
@@ -62,7 +61,6 @@
             {% if featuredArticles %}
             <ul class="index-recommend-aricle clearfix">
               {% for article in featuredArticles %}
-                {% set ArticlesIsNull = true %}
                 <li class="{% if loop.index == 2 %}last{% endif %}">
                   <a href="{{ path('article_detail', {id:article.id}) }}">
                     {% if article.thumb %}
@@ -77,7 +75,7 @@
               {% endfor %}
             </ul>
             {% endif %}
-            <ul class="index-new-article {% if ArticlesIsNull %}{% else %}full{% endif %}">
+            <ul class="index-new-article {% if not featuredArticles|default(false) %}full{% endif %}">
               {% set articles = data('LatestArticles',{'count':5}) %}
               {% if articles %}
                 {% for article in articles %}

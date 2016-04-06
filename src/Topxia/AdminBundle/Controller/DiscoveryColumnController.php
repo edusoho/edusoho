@@ -24,14 +24,34 @@ class DiscoveryColumnController extends BaseController
         $discoveryColumns = $this->getDiscoveryColumnService()->getAllDiscoveryColumns();
 
         foreach ($discoveryColumns as $key => $discoveryColumn) {
+            $conditions = array();
+
             if ($discoveryColumn['type'] == 'classroom') {
-                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
-                $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
-                $classrooms                = $this->getClassroomService()->searchClassrooms($conditions, array($createdTime, 'desc'), 0, $discoveryColumn['showCount']);
+                $conditions['status']   = 'published';
+                $conditions['showable'] = 1;
+
+                if ($discoveryColumn['orderType'] == 'recommend') {
+                    $conditions['recommended'] = 1;
+                }
+
+                if ($discoveryColumn['categoryId']) {
+                    $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($discoveryColumn['categoryId']);
+                    $conditions['categoryIds'] = array_merge(array($discoveryColumn['categoryId']), $childrenIds);
+                }
+
+                $classrooms = $this->getClassroomService()->searchClassrooms($conditions, array('createdTime', 'desc'), 0, $discoveryColumn['showCount']);
 
                 $discoveryColumns[$key]['count'] = count($classrooms);
             } else {
+                if ($discoveryColumn['orderType'] == 'recommend') {
+                    $conditions['recommended'] = 1;
+                }
+
                 $conditions['categoryId'] = $discoveryColumn['categoryId'];
+
+                if ($conditions['categoryId'] == 0) {
+                    unset($conditions['categoryId']);
+                }
 
                 if ($discoveryColumn['type'] == 'live') {
                     $conditions['type'] = 'live';
@@ -39,7 +59,15 @@ class DiscoveryColumnController extends BaseController
                     $conditions['type'] = 'normal';
                 }
 
-                $courses = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
+                $conditions['parentId'] = 0;
+                $conditions['status']   = 'published';
+                $courses                = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount']);
+
+                if ($discoveryColumn['orderType'] == 'recommend' && count($courses) < $discoveryColumn['showCount']) {
+                    $conditions['recommended'] = 0;
+                    $unrecommendCourses        = $this->getCourseService()->searchCourses($conditions, 'createdTime', 0, $discoveryColumn['showCount'] - count($courses));
+                    $courses                   = array_merge($courses, $unrecommendCourses);
+                }
 
                 $discoveryColumns[$key]['count'] = count($courses);
             }
