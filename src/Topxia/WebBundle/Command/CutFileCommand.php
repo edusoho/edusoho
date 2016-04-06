@@ -21,7 +21,7 @@ class CutFileCommand extends BaseCommand
         $this->addArgument(
                 'line',
                 InputArgument::OPTIONAL,
-                '每个文件的行数'
+                $this->trans('每个文件的行数')
             )->setName ( 'topxia:cutfile' );
     }
 

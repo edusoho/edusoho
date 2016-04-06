@@ -14,7 +14,7 @@ class LiveNotifyCommand extends BaseCommand
 	protected function configure()
 	{
 		$this->setName ( 'topxia:live-notify' )
-			->setDescription('直播通知');
+			->setDescription($this->trans('直播通知'));
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -47,9 +47,9 @@ class LiveNotifyCommand extends BaseCommand
 		      $minStartTime = $this->getCourseService()->findMinStartTimeByCourseId($value['courseId']);
 		      
 		      if (time() >= strtotime($startDate)) {
-		      	$noticeDay = "今天";
+		      	$noticeDay = $this->trans('今天');
 		      } else {
-		      	$noticeDay = "明天";
+		      	$noticeDay = $this->trans('明天');
 		      }
 
 		      $minStartTime = date("Y-m-d H:i:s",$minStartTime[0]['startTime']);
@@ -101,7 +101,7 @@ class LiveNotifyCommand extends BaseCommand
 		$currentUser = new CurrentUser();
 		$currentUser->fromArray(array(
 		    'id' => 1,
-		    'nickname' => '测试管理员',
+		    'nickname' => $this->trans('测试管理员'),
 		    'currentIp' =>  '127.0.0.1',
 		    'roles' => array("ROLE_SUPER_ADMIN"),
 		));

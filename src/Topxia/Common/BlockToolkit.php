@@ -11,7 +11,7 @@ class BlockToolkit
         if (file_exists($jsonFile)) {
             $blockMeta = json_decode(file_get_contents($jsonFile), true);
             if (empty($blockMeta)) {
-                throw new \RuntimeException($this->getServiceKernel()->trans('插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式',
+                throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%blockMeta%格式不符合JSON规范，解析失败，请检查元信息文件格式',
                     array('%blockMeta%' =>$blockMeta )));
             }
 

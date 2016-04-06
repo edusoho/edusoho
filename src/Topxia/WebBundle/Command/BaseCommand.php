@@ -13,9 +13,11 @@ abstract class BaseCommand extends ContainerAwareCommand
 
     protected function trans($message, $arguments = array(), $domain = null, $locale = null)
     {
-        $translator = $this->getContainer()->get('translator');
+        /*$translator = $this->getContainer()->get('translator');
 
-        return $translator->trans($message, $arguments, $domain, $locale); // works fine! :)
+        return $translator->trans($message, $arguments, $domain, $locale); // works fine! :)*/
+        return $message;
+
     }
 
 }

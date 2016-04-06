@@ -16,13 +16,13 @@ class RegisterController extends BaseController
         $user   = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你已经登录了'), null, 3000, $this->generateUrl('homepage'));
         }
 
         $registerEnable = $this->getAuthService()->isRegisterEnabled();
 
         if (!$registerEnable) {
-            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('注册已关闭，请联系管理员'), null, 3000, $this->generateUrl('homepage'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -34,7 +34,7 @@ class RegisterController extends BaseController
             }
 
             if ($this->getSensitiveService()->scanText($registration['nickname'])) {
-                return $this->createMessageResponse('error', '用户名中含有敏感词！');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户名中含有敏感词！'));
             }
 
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
@@ -55,14 +55,14 @@ class RegisterController extends BaseController
                 if ($result) {
                     $registration['verifiedMobile'] = $sessionField['to'];
                 } else {
-                    return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
+                    return $this->createMessageResponse('info', $this->getServiceKernel()->trans('手机号码和短信验证码不匹配，请重新注册'));
                 }
             }
 
             //ip次数限制
 
             if ($this->registerLimitValidator($registration, $authSettings, $request)) {
-                return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('由于您注册次数过多，请稍候尝试'));
             }
 
             $user = $this->getAuthService()->register($registration);
@@ -105,7 +105,7 @@ class RegisterController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            throw $this->createAccessDeniedException('对不起，无权操作');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('对不起，无权操作'));
         }
 
         $goto = $this->generateUrl('register_submited', array(
@@ -119,7 +119,7 @@ class RegisterController extends BaseController
             $goto = $this->generateUrl('partner_login', array('goto' => $goto));
         }
 
-        return $this->createMessageResponse('info', '正在跳转页面，请稍等......', '注册成功', 1, $goto);
+        return $this->createMessageResponse('info', $this->getServiceKernel()->trans('正在跳转页面，请稍等......'), $this->getServiceKernel()->trans('注册成功'), 1, $goto);
     }
 
     protected function isMobileRegister($registration)
@@ -340,7 +340,7 @@ class RegisterController extends BaseController
         $user       = $this->getUserService()->getUserByInviteCode($inviteCode);
 
         if (empty($user)) {
-            return $this->validateResult('false', '邀请码不正确');
+            return $this->validateResult('false', $this->getServiceKernel()->trans('邀请码不正确'));
         } else {
             return $this->validateResult('success', '');
         }
@@ -356,10 +356,10 @@ class RegisterController extends BaseController
         $captchaFilledByUser = strtolower($request->query->get('value'));
 
         if ($request->getSession()->get('captcha_code') == $captchaFilledByUser) {
-            $response = array('success' => true, 'message' => '验证码正确');
+            $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('验证码正确'));
         } else {
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
-            $response = array('success' => false, 'message' => '验证码错误');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('验证码错误'));
         }
 
         return $this->createJsonResponse($response);
@@ -485,8 +485,8 @@ class RegisterController extends BaseController
     {
         $site       = $this->getSettingService()->get('site', array());
         $emailTitle = $this->setting('auth.email_activation_title',
-            '请激活你的帐号 完成注册');
-        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+            $this->getServiceKernel()->trans('请激活你的帐号 完成注册'));
+        $emailBody = $this->setting('auth.email_activation_body', $this->getServiceKernel()->trans('验证邮箱内容'));
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
         $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
@@ -509,7 +509,7 @@ class RegisterController extends BaseController
 
             $this->sendEmail($mail);
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'register', '注册激活邮件发送失败:'.$e->getMessage());
+            $this->getLogService()->error('user', 'register', $this->getServiceKernel()->trans('注册激活邮件发送失败:').$e->getMessage());
         }
     }
 
@@ -526,16 +526,16 @@ class RegisterController extends BaseController
             $captchaCode             = $request->getSession()->get('captcha_code');
 
             if (!isset($captchaCodePostedByUser) || strlen($captchaCodePostedByUser) < 5) {
-                throw new \RuntimeException('验证码错误。');
+                throw new \RuntimeException($this->getServiceKernel()->trans('验证码错误。'));
             }
 
             if (!isset($captchaCode) || strlen($captchaCode) < 5) {
-                throw new \RuntimeException('验证码错误。');
+                throw new \RuntimeException($this->getServiceKernel()->trans('验证码错误。'));
             }
 
             if ($captchaCode != $captchaCodePostedByUser) {
                 $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
-                throw new \RuntimeException('验证码错误。');
+                throw new \RuntimeException($this->getServiceKernel()->trans('验证码错误。'));
             }
 
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));

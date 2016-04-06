@@ -13,19 +13,19 @@ class DumpInitDataCommand extends BaseCommand
         $this->addArgument(
             'domain',
             InputArgument::OPTIONAL,
-            '服务器地址?'
+            $this->trans('服务器地址?')
         )->addArgument(
             'user',
             InputArgument::OPTIONAL,
-            '数据库用户名?'
+            $this->trans('数据库用户名?')
         )->addArgument(
             'password',
             InputArgument::OPTIONAL,
-            '数据库密码?'
+            $this->trans('数据库密码?')
         )->addArgument(
             'database',
             InputArgument::OPTIONAL,
-            '数据库?'
+            $this->trans('数据库?')
         )->setName('topxia:dump-init-data');
     }
 

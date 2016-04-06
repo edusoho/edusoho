@@ -382,7 +382,7 @@ class BuildCommand extends BaseCommand
         $metas = json_decode($metas, true);
 
         if (empty($metas)) {
-            throw new \RuntimeException("插件元信息文件{$metaFilePath}格式不符合JSON规范，解析失败，请检查元信息文件格式");
+            throw new \RuntimeException($this->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' =>$metaFilePath)));
         }
 
         foreach ($metas as $code => $meta) {
@@ -430,7 +430,7 @@ class BuildCommand extends BaseCommand
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id'        => 0,
-            'nickname'  => '游客',
+            'nickname'  => $this->trans('游客'),
             'currentIp' => '127.0.0.1',
             'roles'     => array()
         ));

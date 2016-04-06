@@ -16,16 +16,16 @@ class FileController extends BaseController
         list($groupCode, $type) = $this->tryUploadFile($request);
         
         if(!$this->isGroup($groupCode)) {
-            return $this->createMessageResponse("error", "参数不正确");
+            return $this->createMessageResponse("error", $this->getServiceKernel()->trans('参数不正确'));
         }
         
         $file = $request->files->get('file');
         if ($type == 'image') {
             if (!FileToolkit::isImageFile($file)) {
-                throw new \RuntimeException("您上传的不是图片文件，请重新上传。");
+                throw new \RuntimeException($this->getServiceKernel()->trans('您上传的不是图片文件，请重新上传。'));
             }
         } else {
-            throw new \RuntimeException("上传类型不正确！");
+            throw new \RuntimeException($this->getServiceKernel()->trans('上传类型不正确！'));
         }
 
         $record = $this->getFileService()->uploadFile($groupCode, $file);
@@ -44,17 +44,17 @@ class FileController extends BaseController
         }
 
         if(!$this->isGroup($options['group'])) {
-            return $this->createMessageResponse("error", "参数不正确");
+            return $this->createMessageResponse("error", $this->getServiceKernel()->trans('参数不正确'));
         }
 
         $fileId = $request->getSession()->get("fileId");
         if(empty($fileId)) {
-            return $this->createMessageResponse("error", "参数不正确");
+            return $this->createMessageResponse("error", $this->getServiceKernel()->trans('参数不正确'));
         }
 
         $record = $this->getFileService()->getFile($fileId);
         if(empty($record)) {
-            return $this->createMessageResponse("error", "文件不存在");
+            return $this->createMessageResponse("error", $this->getServiceKernel()->trans('文件不存在'));
         }
         $parsed = $this->getFileService()->parseFileUri($record['uri']);
 
@@ -96,7 +96,7 @@ class FileController extends BaseController
         $token = $maker->parse($token);
 
         if (empty($token)) {
-            throw new \RuntimeException("上传授权码已过期，请刷新页面后重试！");
+            throw new \RuntimeException($this->getServiceKernel()->trans('上传授权码已过期，请刷新页面后重试！'));
         }
 
         $groupCode = $token['group'];
