@@ -63,10 +63,14 @@ class MaterialLibController extends BaseController
 
     public function detailAction(Request $reqeust, $globalId)
     {
+      try{
         $material   = $this->getMaterialLibService()->get($globalId);
         if($material['type'] == 'video' ) {
           $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
         }
+      }catch (\RuntimeException $e) {
+        return $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
+      }
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
