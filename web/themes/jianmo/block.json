@@ -110,7 +110,10 @@
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/icon_introduction_1.png",
-                        "alt": "中部横幅"
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
+
                     }
                 ]
             },
@@ -145,7 +148,10 @@
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/icon_introduction_2.png",
-                        "alt": "中部横幅"
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
+
                     }
                 ]
             },
@@ -180,7 +186,10 @@
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/icon_introduction_3.png",
-                        "alt": "中部横幅"
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
+
                     }
                 ]
             },
