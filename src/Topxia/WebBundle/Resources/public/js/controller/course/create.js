@@ -22,17 +22,11 @@ define(function(require, exports, module) {
                 required: true
             });
 
-            $('input[name="type"]').click(function(){
-                var typeValue = $(this).val();
-                if(typeValue == 'open' || typeValue == 'liveOpen') {
-                    $('#course-buy-div').hide();
-                } else {
-                    $('#course-buy-div').show();
-                }
-            })
            $("#course-create-form .course-select").click(function(){
                 $this = $(this);
                 $this.addClass('active').parent().siblings().find('.course-select').removeClass('active');
+                $('input[name="type"]').attr('checked',false);
+                $this.find('input[name="type"]').attr('checked',true);
            })
         }
     };
