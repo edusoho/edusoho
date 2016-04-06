@@ -11,12 +11,12 @@
   <div class="order-info">
     {% if type|default(true) %}
       {% if buyType == "upgrade" %}
-      {{'会员升级为：'|trans}}{{level.name}}
+      {{'会员升级为：%level.name%'|trans({'level.name':level.name})}}
       {% elseif buyType == "renew" %}
-        {{ level.name}} 会员续费 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
+         {{ '%level.name% 会员续费 x %duration%'|trans({'%level.name%':level.name,'%duration%':duration})}}{% if unitType == "month" %}{{'个月'|trans}}{% elseif unitType == "year" %}{{'年'|trans}}
       {% endif %}
       {% else %}
-        购买 {{ level.name}}会员 x {{duration}}{% if unitType == "month" %}个月{% elseif unitType == "year" %}年
+        {{'购买 %level.name%会员 x %duration%'|trans({'%level.name%':level.name,'%duration%':duration})}}{% if unitType == "month" %}{{'个月'|trans}}{% elseif unitType == "year" %}{{'年'|trans}}
       {% endif %}
       {% endif %}
     {% endif %}

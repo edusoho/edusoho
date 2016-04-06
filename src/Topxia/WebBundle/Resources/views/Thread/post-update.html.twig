@@ -7,13 +7,13 @@
   >
   <div class="form-group">
     <div class="controls">
-      <textarea id="post-content-field" class="form-control" name="content" data-display="内容" rows="15">{{ post.content|default('') }}</textarea>
+      <textarea id="post-content-field" class="form-control" name="content" data-display="{{'内容'|trans}}" rows="15">{{ post.content|default('') }}</textarea>
     </div>
   </div>
   <div class="form-group">
     <div class="controls clearfix">
-      <button type="submit" class="btn btn-primary pull-right">发表</button>
-      <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right">取消</a>
+      <button type="submit" class="btn btn-primary pull-right">{{'发表'|trans}}</button>
+      <a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}" class="btn btn-link pull-right">{{'取消'|trans}}</a>
     </div>
   </div>
 

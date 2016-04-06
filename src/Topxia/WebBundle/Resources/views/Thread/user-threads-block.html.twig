@@ -1,6 +1,6 @@
 {% if threads|length > 1 or (threads|length == 1 and threads[0].id != currentThread.id) %}
 <div class="panel panel-default">
-  <div class="panel-heading">作者其他话题</div>
+  <div class="panel-heading">{{'作者其他话题'|trans}}</div>
   <div class="panel-body">
     <ul class="media-list">
       {% for thread in threads %}

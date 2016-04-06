@@ -2,12 +2,12 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}编辑{% endblock %}
+{% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}{{'编辑'|trans}}{% endblock %}
 {% block body %}
     <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
        <div class="row form-group">
           <div class="col-md-3 control-label">
-            <label for="name">{{'自定义名称'}}</label>
+            <label for="name">{{'自定义名称'|trans}}</label>
           </div>
           <div class="col-md-7 controls">
             <input type="text"  class="form-control" name="title">
@@ -24,7 +24,7 @@
        </div>
 
        <div class="form-group">
-          <label class="col-sm-3 control-label">教师数量设置</label>
+          <label class="col-sm-3 control-label">{{'教师数量设置'|trans}}</label>
           <div class="col-sm-4">
             <select class="form-control width-input-large" name="count">
               <option value="4">4</option>
@@ -35,20 +35,20 @@
        </div>
 
       <div class="form-group">
-        <label class="col-sm-3 control-label">背景颜色设置</label>
+        <label class="col-sm-3 control-label">{{'背景颜色设置'|trans}}</label>
         <div class="col-sm-9 check-box">
         <input type="hidden"  name="background" value={{config.background|default("")}}>
           <label class="radio-inline">
             <input type="radio"  value="section-gray"{% if config.background|default("") == "section-gray"%} checked="checked"{% endif %}>
-            灰色
+            {{'灰色'|trans}}
           </label>
           <label class="radio-inline" >
             <input type="radio"  value="section-wihte"{% if config.background|default("") == "section-wihte"%} checked="checked"{% endif %} >
-            白色
+            {{'白色'|trans}}
           </label>
           <label class="radio-inline" >
             <input type="radio"  value=""{% if config.background|default("") == ""%} checked="checked"{% endif %} >
-            默认
+            {{'默认'|trans}}
           </label>
         </div>
       </div>
@@ -56,7 +56,7 @@
 
 {% endblock %}
 {% block footer %}
-  <button data-submiting-text="正在保存" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">确定</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button data-submiting-text="{{'正在保存'|trans}}" class="btn btn-primary pull-right" data-form="#edit-left-course-form" id="save-btn">{{'确定'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('topxiawebbundle/controller/theme/left-edit-modal')</script>
 {% endblock %}

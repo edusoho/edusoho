@@ -17,8 +17,8 @@
         {% endif %}
         <input type="hidden" value="{{allUserData}}" name="data">
         <input type="hidden" value="{{progress}}" name="progress" >
-        <div class="col-md-offset-2">校验成功！一共包含 <b>{{userCount}}</b>个用户信息</div><br>
-        <div class="col-md-offset-2"><button type="button" class="btn btn-primary" id="start-import-btn" data-target="#modal"  data-toggle="modal" data-url="{{ path('user_import_modal') }}" data-keyboard="false" data-backdrop="static">确定导入</button> <a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">返回</a></div>
+        <div class="col-md-offset-2">{{'校验成功！一共包含'|trans}} <b>{{userCount}}</b>{{'个用户信息'|trans}}</div><br>
+        <div class="col-md-offset-2"><button type="button" class="btn btn-primary" id="start-import-btn" data-target="#modal"  data-toggle="modal" data-url="{{ path('user_import_modal') }}" data-keyboard="false" data-backdrop="static">{{'确定导入'|trans}}</button> <a type="button" class="btn btn-primary" href="{{ path(data.excel_validate_url, {id:targetObject.id}) }}">{{'返回'|trans}}</a></div>
       {% endif %}
     </div>
   </div>

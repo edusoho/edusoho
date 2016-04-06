@@ -14,7 +14,6 @@
     <select class="form-control" name="datePicker" id="datePicker">
       {{ select_options({longinDate:'登录时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
     </select>
-
     <div class="form-group ">
       <input class="form-control" type="text" id="startDate" name="startDate" value="{{app.request.query.get('startDate')}}" placeholder="起始时间">
       -

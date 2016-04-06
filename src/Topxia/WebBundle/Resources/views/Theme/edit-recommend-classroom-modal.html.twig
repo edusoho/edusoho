@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
 {% set modalSize = 'large' %}
-{% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}编辑{% endblock %}
+{% block title %}{% if config.title %}{{ config.title }}{% else %}{{ config.defaultTitle }}{% endif %}{{'编辑'|trans}}{% endblock %}
 {% block body %}
     <form id="edit-left-course-form" class="form-horizontal item-config-form" role="form">
        <div class="row form-group">

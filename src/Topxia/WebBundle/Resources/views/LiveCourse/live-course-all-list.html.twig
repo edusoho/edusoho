@@ -4,12 +4,12 @@
     <form id="live-search-form" class="form-inline" action="{{ path('live_course_explore') }}" method="get" novalidate="">
       <div class="form-group mrl">
         <select style="max-width:150px;" class="form-control" name="categoryId" id="categoryId">
-          {{ select_options(category_choices('course'), request.query.get('categoryId'), '课程分类') }}
+          {{ select_options(category_choices('course'), request.query.get('categoryId'), '课程分类'|trans) }}
         </select>
       </div>
       <div class="form-group">
         <select style="max-width:150px;" class="form-control" name="vipCategoryId" id="vipCategoryId">
-          <option value="">会员课程</option>
+          <option value="">{{'会员课程'|trans}}</option>
           {% for level in levels if level %}
             <option value="{{ level.id }}" {% if level.id == request.query.get('vipCategoryId') %}selected{% endif %}>{{ level.name }}</option>
           {% endfor %}
@@ -43,11 +43,11 @@
           </div>
 
           {% if "now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime %}
-            <span class="label label-danger label-md">正在直播 今天 {{ course.liveStartTime|date('H:i')}}</span>
+            <span class="label label-danger label-md">{{'正在直播 今天 %liveStartTime%'|trans({'%liveStartTime%':course.liveStartTime|date('H:i')})}}</span>
           {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-            <span class="label label-warning label-md">即将直播 {{ course.liveStartTime|date('m-d H:i')}}</span>
+            <span class="label label-warning label-md">{{'即将直播 %liveStartTime%'|trans({'%liveStartTime%':course.liveStartTime|date('m-d H:i')})}}</span>
           {% elseif "now"|date("U") < course.liveStartTime and course.liveStartTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-            <span class="label label-warning label-md">直播预告 {{ course.liveStartTime|date('m-d H:i')}}</span>
+            <span class="label label-warning label-md">{{'直播预告 %liveStartTime%'|trans({'%liveStartTime%':course.liveStartTime|date('m-d H:i')})}}</span>
           {% endif %}
 
           <div class="metas">
@@ -65,16 +65,16 @@
             {% include 'TopxiaWebBundle:Course:Widget/course-price.html.twig' with {shows:'price'} %}
 
             {% if ("now"|date("U") >= course.liveStartTime and "now"|date("U") <= course.liveEndTime) %}
-              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-primary">进入直播</a>
+              <a href="{{ path('course_learn', {id:course.id}) }}#lesson/{{course.lessonId}}" class="btn btn-primary">{{'进入直播'|trans}}</a>
             {% else %}
-              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">查看回放</a>
+              <a href="{{ path('course_show',{id:course.id}) }}" class="btn btn-primary">{{'查看回放'|trans}}</a>
             {% endif %}
 
           </div>
         </div>
       </div>
     {% else %}
-      <div class="empty">暂无直播课程</div>
+      <div class="empty">{{'暂无直播课程'|trans}}</div>
     {% endfor %}
 
     {{ web_macro.paginator(paginator) }}
