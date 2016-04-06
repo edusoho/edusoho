@@ -18,11 +18,11 @@
                 <div class="media-body">
                   <h4 class="media-heading">{{course.title}}</h4>
                   <div class="notebook-metas">
-                    <span class="notebook-number">{{'共'|trans}} {{ member.noteNum }} {{'篇笔记'|trans}}</span>
+                    <span class="notebook-number">{{'共 %noteNum% 篇笔记'|trans({'%noteNum%':member.noteNum})}}</span>
                   </div>
                   <div class="notebook-metas">
                     {% if member.noteLastUpdateTime > 0 %}
-                      <span class="notebook-time">{{'最后更新'|trans}} {{ member.noteLastUpdateTime | smart_time }}</span>
+                      <span class="notebook-time">{{'最后更新%noteLastUpdateTime%'|trans({'%noteLastUpdateTime%':member.noteLastUpdateTime | smart_time})}} </span>
                     {% endif %}
                     <a class="pull-right notebook-go" href="{{ path('my_notebook_show', {courseId: course.id }) }}">{{'查看笔记'|trans}}</a>
                   </div>

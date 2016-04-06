@@ -6,6 +6,6 @@
 
 {% block main %}
   <div class="editor-text">
-	 {% if userProfile.about %}{{userProfile.about|raw}}{% else %}<div class="empty">暂无介绍</div>{% endif %}
+	 {% if userProfile.about %}{{userProfile.about|raw}}{% else %}<div class="empty">{{'暂无介绍'|trans}}</div>{% endif %}
   </div>
 {% endblock %}

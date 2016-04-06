@@ -28,7 +28,7 @@
                 <div class="course-about ellipsis">{{ course.subtitle }}</div>
                 <div class="live-course-lesson mtm">
                   <span class="text-success fsl mrl">{{ lesson.startTime|date('n月j日 H:i') }} ~ {{ lesson.endTime|date('H:i') }}</span>
-                  <span class="text-muted fsl mrl">第{{ lesson.number }}课时</span>
+                  <span class="text-muted fsl mrl">{{'第%number%课时'|trans({'%number%':lesson.number})}}</span>
                 </div>
               </div>
           </li>

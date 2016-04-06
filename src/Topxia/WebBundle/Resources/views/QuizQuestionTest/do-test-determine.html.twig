@@ -9,11 +9,11 @@
 		<div class="testpaper-question-footer clearfix">
 		  <div class="testpaper-question-result">
 				{% if item.question.testResult.status == 'right' %}
-					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">{{'，你答对了'|trans}}
+					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong class="text-success">，{{'你答对了'|trans}}
 				{% elseif item.question.testResult.status == 'wrong' %}
-					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>{{'， 你<strong class="text-danger">答错</strong>了'|trans|raw}}
+					{{'正确答案是'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>，{{'你'|trans}}<strong class="text-danger">{{'答错'|trans}}</strong>{{'了'|trans}}
 				{% elseif item.question.testResult.status == 'noAnswer' %}
-					{{'正确答案：'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>{{'，你未答题'|trans}}
+					{{'正确答案：'|trans}} <strong class="text-success">{% if item.question.answer[0] == 1 %} {{'正确'|trans}} {% else %} {{'错误'|trans}} {% endif %}</strong>，{{'你未答题'|trans}}
 				{% endif %}
 		  </div>
 

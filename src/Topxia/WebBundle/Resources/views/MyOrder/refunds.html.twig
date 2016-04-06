@@ -25,7 +25,7 @@
               {% else %}
                 {{ order.title }}
               {% endif %}
-      		    <div class="text-sm text-muted">{{'订单号：'|trans}}{{ order.sn }}</div>
+      		    <div class="text-sm text-muted">{{'订单号：%sn%'|trans({'%sn%':order.sn})}}</div>
       		  </td>
       		  <td>
       		  	{{ refund.createdTime|date('Y-n-d H:i') }}

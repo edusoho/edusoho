@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}批量导入{% endblock %}
+{% block title %}{{'批量导入'|trans}}{% endblock %}
 
 {% set script_controller = 'user-import/import-modal' %}
 
@@ -17,9 +17,9 @@
 
 {% block footer %}
 
-  <strong class="text text-danger" id="updating-hint" style="display:none;">正在导入，请不要关闭当前窗口...</strong>
+  <strong class="text text-danger" id="updating-hint" style="display:none;">{{'正在导入，请不要关闭当前窗口'|trans}}...</strong>
 
-  <button id="finish-import-btn" data-loading-text="正在完成导入, 请稍等..." class="btn btn-primary" style="display:none">完成导入</button>
+  <button id="finish-import-btn" data-loading-text="{{'正在完成导入, 请稍等'|trans}}..." class="btn btn-primary" style="display:none">{{'完成导入'|trans}}</button>
 
   <script type="text/javascript"> app.load('topxiawebbundle/controller/importer/import-modal') </script>
 {% endblock %}

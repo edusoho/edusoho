@@ -19,10 +19,10 @@
           <select class="form-control width-input width-input-large" id="coupon-select" name="couponCode">
               {% for coupon in coupons %}
                 {% if coupon.type == 'minus' %}
-                    <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵扣{{ coupon.rate }}元</option>
+                    <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠码 抵扣%rate%元'|trans({'%rate%':coupon.rate})}}</option>
                 {% endif %}
                 {% if coupon.type == 'discount' %}
-                  <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">优惠码 抵价{{ coupon.rate }}折</option>
+                  <option data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="{{ totalPrice }}" data-code="{{ coupon.code }}" value="{{ coupon.code }}">{{'优惠码 抵价%rate%折'|trans({'%rate%':coupon.rate})}}</option>
                 {% endif %}
               {% endfor %}
               <option data-code="" value="">{{'不使用优惠码'|trans}}</option>
@@ -35,7 +35,7 @@
     {% if targetType in ['course','vip','classroom'] %}
       <div role="coupon-code" class="input-group" style="display: none;">
         <input role="coupon-code-verified" name="couponCode" type="hidden"/>
-        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="请输入优惠码" data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
+        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="{{'请输入优惠码'|trans}}" data-target-type="{{targetType}}" data-target-id="{{targetId|default(0) }}" data-amount="
          {{ totalPrice }}  {# {{courses[0]['price']}} #}
         "/>
           <button class="btn btn-primary" type="button" role="coupon-use">{{'使用'|trans}}</button>
@@ -47,7 +47,7 @@
     {% if app.request.query.get('targetType') in ['course','vip','classroom'] %}
       <div role="coupon-code" class="input-group" style="display: none;">
         <input role="coupon-code-verified" name="couponCode" type="hidden"/>
-        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="请输入优惠码" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
+        <input style="width:150px;" role="coupon-code-input" type="text" class="form-control mrm" placeholder="{{'请输入优惠码'|trans}}" data-target-type="{{app.request.query.get('targetType')}}" data-target-id="{{app.request.query.get('targetId')|default(0) }}" data-amount="
          {{ totalPrice }}  {# {{courses[0]['price']}} #}
         "/>
           <button class="btn btn-primary" type="button" role="coupon-use">{{'使用'|trans}}</button>

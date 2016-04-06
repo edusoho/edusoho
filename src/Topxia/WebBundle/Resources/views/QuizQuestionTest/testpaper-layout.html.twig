@@ -12,7 +12,7 @@
 {% block content %}
 <div class="es-section testpaper-heading">
   <div class="testpaper-titlebar clearfix">
-    <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}{{'答题人：'|trans}}{{ student.nickname }} {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} {{'用时：'|trans}}{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}{{'答题人：'|trans}}{{ student.nickname }} {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} {{'用时：'|trans}}{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
+       <h1 class="testpaper-title">{{ paper.name }} <br><small class="text-sm">{% if paperResult.status|default(null) == 'reviewing' %}{{'答题人：'|trans}}{{ student.nickname }} {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} {{'用时：'|trans}}{{ paperResult.usedTime|duration }}{% elseif paperResult.status|default(null) == 'finished' %}{{'答题人：'|trans}}{{ student.nickname }} {{'交卷时间：'|trans}}{{ paperResult.endTime|date('Y-n-d H:i') }} {{'用时：'|trans}}{{ paperResult.usedTime|duration }}{% endif %}</small></h1>
     <div class="testpaper-status">{% block testpaper_heading_status %}{% endblock %}</div>
   </div>
   {% block testpaper_heading_content %}{% endblock %}
@@ -85,7 +85,7 @@
 
               <div class="form-group">
                 <div class="controls">
-                  <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="请输入评语"></textarea>
+                  <textarea class="form-control" rows='4' id="testpaper-teacherSay-input" placeholder="{{'请输入评语'|trans}}"></textarea>
                 </div>
               </div>
               <div class="form-group">

@@ -29,7 +29,7 @@ class ThemeServiceImpl extends BaseService implements ThemeService
         $currentTheme = $this->getSettingService()->get('theme');
 
         if (!isset($currentTheme['name'])) {
-            $currentTheme['name'] = "简墨";
+            $currentTheme['name'] = $this->getServiceKernel()->trans('简墨');
         }
 
         if (empty($this->themeName) && empty($this->defaultConfig)) {
