@@ -2,9 +2,9 @@
 {% block title %}{{'搜索'|trans}} - {{ parent() }}{% endblock %}
 {% block content %}
   <ol class="breadcrumb breadcrumb-o" style="margin-top:-18px">
-    <li><a href="{{path('homepage')}}">{{ setting('homepage.name', '首页'|trans) }}</a></li>
-    <li><a href="{{path('group')}}">{{setting('group.name', '小组主页'|trans)}}</a></li>
-    <li><a href="{{path('group_search_group')}}">{{setting('search.name', '搜索小组'|trans)}}</a></li>
+    <li><a href="{{path('homepage')}}">{{'%name%'|trans({'%name%': homepage.name,|default('首页'|trans)}) }}</a></li>
+    <li><a href="{{path('group')}}">{{'%name%'|trans({'%name%': group.name,|default('小组主页'|trans)})}}</a></li>
+    <li><a href="{{path('group_search_group')}}">{{'%name%'|trans({'%name%': search.name,|default('搜索小组'|trans)})}}</a></li>
   </ol>
 
   <div class="row">

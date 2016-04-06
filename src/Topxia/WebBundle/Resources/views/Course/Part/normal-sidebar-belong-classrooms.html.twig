@@ -2,7 +2,7 @@
   <div class="panel panel-default belongs-class">
     <div class="panel-heading">
       <h3 class="panel-title"> <i class="es-icon es-icon-locallibrary"></i>
-        {{'所属'|trans}}{{setting('classroom.name')|default('班级'|trans)}}
+        {{'所属%name%'|trans({'%name%': setting('classroom.name')|default('班级'|trans)})}}
       </h3>
     </div>
     <div class="panel-body">

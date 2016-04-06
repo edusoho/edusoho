@@ -10,7 +10,7 @@
     <div class="panel panel-default panel-col">
       <div class="panel-heading">{{'学员批量导入'|trans}}</div>
       <div class="panel-body">
-        <div class="empty">{{'未发布'|trans}}{{setting("classroom.name")|default('班级'|trans)}}{{'不能导入学员'|trans}}!</div>
+        <div class="empty">{{'未发布%name%不能导入学员'|trans({'%name%': setting('classroom.name')|default('班级'|trans)})}}!</div>
       </div>
     </div>
   {% endif %}

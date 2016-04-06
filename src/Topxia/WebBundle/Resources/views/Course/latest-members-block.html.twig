@@ -2,7 +2,7 @@
 {% if students %}
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title">{{'最新'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</h3>
+		<h3 class="panel-title">{{'最新'|trans}}{% if setting('default.user_name') %}{{'%user_name%'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% else %}{{'学员'|trans}}{% endif %}</h3>
 	</div>
 	<div class="panel-body">
 		<ul class="user-grids">

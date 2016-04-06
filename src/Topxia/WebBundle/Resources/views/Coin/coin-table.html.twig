@@ -50,6 +50,6 @@
 </table>
 {% else %}
 <div class="well" style="text-align:center;">
-虚拟币未开启，请先在<a href="{{ path('admin_coin_model') }}"> 系统-账务设置-虚拟币-使用方式  </a>中设置开启
+{{'虚拟币未开启'|trans}}，{{'请先在'|trans}}<a href="{{ path('admin_coin_model') }}"> {{'系统-账务设置-虚拟币-使用方式'|trans}}  </a>{{'中设置开启'|trans}}
 </div>
 {% endif %}

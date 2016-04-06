@@ -19,7 +19,7 @@
     {% if not announcement.id %}
     <div class="checkbox">
       <label>
-        <input type="checkbox" name="notify" value="notify"> 发送系统通知给该课程的{{ setting('default.user_name', '学员') }}
+        <input type="checkbox" name="notify" value="notify"> {{'发送系统通知给该课程的%user.name%'|trans({'%user.name%': setting('default.user_name')|default('学员'|trans)}) }}
       </label>
     </div>
     {% endif %}

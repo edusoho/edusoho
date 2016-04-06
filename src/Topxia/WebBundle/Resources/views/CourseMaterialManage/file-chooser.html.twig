@@ -44,7 +44,7 @@
               {% if storageSetting.upload_mode == 'cloud' %}
                 {{'<li>文件将上传到<strong>云服务器</strong></li>'|trans|raw}}
               {% else %}
-                <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
+                <li>{{视频将上传到<strong>网站服务器</strong>|trans|raw}}，{{'如需使用'|trans}}{{ 'EduSoho'|copyright_less }}{{'云视频'|trans}},{{'点击'|trans}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</li>
               {% endif %}
             </ul>
           </div>

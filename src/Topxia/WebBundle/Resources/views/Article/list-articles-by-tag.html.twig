@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% block title %}{{ setting('article.name', '资讯频道'|trans) }} - {{ parent() }}{% endblock %}
+{% block title %}{{ '%name%'|trans ({'%name%': article.name|default('资讯频道'|trans)}) }} - {{ parent() }}{% endblock %}
 
 {% set bodyClass = 'artcile-tag-page' %}
 

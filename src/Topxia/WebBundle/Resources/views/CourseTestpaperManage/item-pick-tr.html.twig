@@ -3,7 +3,7 @@
     {% if question.includeImg|default('') %}<span class="glyphicon glyphicon-picture"></span>{% endif %}
     {{ question.stem|fill_question_stem_text|plain_text(40) }}
     {% if question.type == 'material' %}
-      <small class="text-muted">({{ question.subCount}}{{'子题'|trans}})</small>
+      <small class="text-muted">({{'%subCount%子题'|trans({'%subCount%': question.subCount})}})</small>
     {% endif %}
     <br>
     <small class="text-muted">{{'从属：'|trans}}

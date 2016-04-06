@@ -55,11 +55,11 @@
 
     {% if uploadFile.type == "video" and uploadFile.metas2|default(null) %}
       {% if uploadFile.convertParams.videoQuality == "low" %}
-      {% set quality = "流畅画质" %}
+      {% set quality = "{{'流畅画质'|traans}}" %}
       {% elseif uploadFile.convertParams.videoQuality == "normal" %}
-      {% set quality = "标准画质" %}
+      {% set quality = "{{'标准画质'|trans}}" %}
       {% elseif uploadFile.convertParams.videoQuality == "high" %}
-      {% set quality = "精细画质" %}
+      {% set quality = "{{'精细画质'|trans}}" %}
       {% endif %}
       {% if uploadFile.metas2.shd|default(null) %}
       {% if uploadFile.useNum != 0 %}<br>{% endif %}

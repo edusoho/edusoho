@@ -45,7 +45,7 @@
       <div class="col-md-9 controls">
         <div class="checkbox">
           <label>
-            <input type="checkbox" name="notify" value="notify"> 给{{ setting('default.user_name', '学员') }}发送系统通知
+            <input type="checkbox" name="notify" value="notify"> {{'给%user_name%发送系统通知'|trans({'%user_name%': default.user_name|default('学员'|trans)})}}
           </label>
         </div>
       </div>

@@ -10,13 +10,13 @@
       {% if testpaper.status == 'closed' %}{{'已关闭'|trans}}{% endif %}
     </td>
     <td>
-      {{ testpaper.itemCount}}{{'题'|trans}} <span class="text-muted">/</span> {{testpaper.score}}{{'分'|trans}}
+      {{'%itemCount%题'|trans({'%itemCount%': testpaper.itemCount})}} <span class="text-muted">/</span> {{'%score分%'|trans({'%score%': testpaper.score})}}
       {% if testpaper.passedScore > 0 %}
-        <div class="text-muted"><small>{{'及格：'|trans}}{{ testpaper.passedScore }}{{'分'|trans}}</small></div>
+        <div class="text-muted"><small>{{'及格%passedScore%分'|trans({'%passedScore%': testpaper.passedScore })}}</small></div>
       {% endif %}
     </td>
     <td>
-      {% if testpaper.limitedTime > 0 %}{{ testpaper.limitedTime}}{{'分钟'|trans}}{% else %}{{'无限制'|trans}}{% endif %}
+      {% if testpaper.limitedTime > 0 %}{{'%limitedTime%分钟'|trans({'%limitedTime%': testpaper.limitedTime})}}{% else %}{{'无限制'|trans}}{% endif %}
     </td>
     <td>
       {{ macro.user_link(user) }}
@@ -33,10 +33,10 @@
 
           <ul class="dropdown-menu pull-right">
             {% if testpaper.status in ['draft', 'closed'] %}
-              <li><a class="open-testpaper" href="javascript:" title="发布试卷{{ testpaper.name }}" data-url="{{ path('course_manage_testpaper_publish', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-ok"></span> {{'发布试卷'|trans}}</a></li>
+              <li><a class="open-testpaper" href="javascript:" title="{{'发布试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_manage_testpaper_publish', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-ok"></span> {{'发布试卷'|trans}}</a></li>
             {% endif %}
             {% if testpaper.status == 'open' %}
-              <li><a class="close-testpaper" href="javascript:" title="关闭试卷{{ testpaper.name }}" data-url="{{ path('course_manage_testpaper_close', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'关闭试卷'|trans}}</a></li>
+              <li><a class="close-testpaper" href="javascript:" title="{{'关闭试卷%name%'|trans({'%name%': testpaper.name })}}" data-url="{{ path('course_manage_testpaper_close', {courseId:course.id, id:testpaper.id}) }}"><span class="glyphicon glyphicon-list"></span> {{'关闭试卷'|trans}}</a></li>
             {% endif %}
 
             {% if testpaper.status == 'draft' %}

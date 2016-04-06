@@ -5,7 +5,7 @@
 
 
 {% block title %}
-  {% if lesson %}{{'编辑课时'|trans}}{{ lesson.number }}{% else %}{{'添加课时'|trans}}{% endif %}
+  {% if lesson %}{{'编辑课时%number%'|trans({'%number%': lesson.number })}}{% else %}{{'添加课时'|trans}}{% endif %}
 {% endblock %}
 
 {% block body %}
@@ -89,7 +89,7 @@
     <div class="col-md-offset-2 col-md-9">
       <div class="alert alert-info">
         <p>{{ 'PPT课时需要开通EduSoho云文档服务才能使用,'|trans|copyright_less }}
-          点击<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">这里</a>了解详情。</p>
+          {{'点击'|trans}}<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</p>
       </div>
     </div>
   </div>
@@ -98,7 +98,7 @@
     <div class="col-md-offset-2 col-md-9">
       <div class="alert alert-info">
         <p>{{ '文档课时需要开通EduSoho云文档服务才能使用,'|trans|copyright_less }}
-          点击<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">这里</a>了解详情。</p>
+          {{'点击'|trans}}<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</p>
       </div>
     </div>
   </div>
@@ -107,7 +107,7 @@
     <div class="col-md-offset-2 col-md-9">
       <div class="alert alert-info">
         <p>{{ 'Flash课时需要开通EduSoho云视频服务才能使用,'|trans|copyright_less }}
-          点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</p>
+          {{'点击'|trans}}<a href="http://open.edusoho.com/show/cloud/video" target="_blank">{{'这里'|trans}}</a>{{'了解详情。'|trans}}</p>
       </div>
     </div>
   </div>

@@ -11,6 +11,7 @@
 
 <form id="user-search-form" class="form-inline well well-sm" action="" method="get" novalidate>
   <div class="mbm">
+    
     <select class="form-control" name="datePicker" id="datePicker">
       {{ select_options({longinDate:'登录时间', registerDate: '注册时间'}, app.request.get('datePicker') ,'--时间类型--') }}
     </select>

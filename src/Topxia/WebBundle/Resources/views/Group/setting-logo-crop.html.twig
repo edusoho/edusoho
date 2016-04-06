@@ -10,7 +10,7 @@
   {% set settingNav = 'background' %}
 {% endif %}
 
-{% block title %}{{groupinfo.title}}{{'小组'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'%title%小组'|trans({'%title%': groupinfo.title})}} - {{ parent() }}{% endblock %}
 
 {% block group_setting_body %}
 

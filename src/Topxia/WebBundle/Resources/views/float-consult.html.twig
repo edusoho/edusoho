@@ -34,7 +34,7 @@
       {% for qq in consult.qq if qq.name is not empty %}
         {% if not qq.url|default(false) %}
         <p>
-          <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
+          <a target="_blank" href="http://wpa.qq.com/mlessonsgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
             <img class="mrs" src="{{asset("assets/v2/img/bar_qq.png")}}" alt="" title="点击这里给我发消息" alt="">
             {{ qq.name }}
           </a>

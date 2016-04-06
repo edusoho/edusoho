@@ -2,7 +2,7 @@
   <div class="pull-left">
     <div class="date">
       <div class="day">{{ article.publishedTime|date('d') }}</div>
-      <div class="month">{{ article.publishedTime|date('m') }}{{'月'|trans}}</div>
+      <div class="month">{{'%publishedTime%月'|trans({'%publishedTime%': article.publishedTime|date('m')}) }}</div>
     </div>
   </div>
   <div class="metas-body">

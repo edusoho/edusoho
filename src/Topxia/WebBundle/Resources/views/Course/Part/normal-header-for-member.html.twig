@@ -41,8 +41,8 @@
             {% endif %}
           </li>
         {% elseif member["joinedType"] == 'groupSell'%}
-          <div class="last" href="javascript:;" data-toggle="tooltip" data-placement="top" title="组合购买课程不能退出">
-          <a href="javascript:;"> <i class="hz-icon icon-exit"></i>退出</a>
+          <div class="last" href="javascript:;" data-toggle="tooltip" data-placement="top" title={{'"组合购买课程不能退出"'|trans}}>
+          <a href="javascript:;"> <i class="hz-icon icon-exit"></i>{{'退出'|trans}}</a>
           </div>
         {% endif %}
       </ul>

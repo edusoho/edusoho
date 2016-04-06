@@ -9,7 +9,7 @@
         <button class="btn btn-default btn-sm disabled pull-right">{{'您已完成全部课时的学习'|trans}}</button>
       {% else %}
         {% if nextLearnLesson %}
-          <a class="btn btn-primary btn-sm pull-right" id="next-learn-btn" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="{{'继续学习：'|trans}}{{ nextLearnLesson.title }}">{{'继续学习'|trans}}</a>
+          <a class="btn btn-primary btn-sm pull-right" id="next-learn-btn" href="{{ path('course_learn', {id:course.id}) }}#lesson/{{nextLearnLesson.id}}" title="{{'继续学习：%title%'|trans({'%title%': nextLearnLesson.title })}}">{{'继续学习'|trans}}</a>
         {% endif %}
       {% endif %}
 
@@ -21,7 +21,7 @@
 
       {% if not member.deadline|default(0) == 0 %}
         <br>
-        <span class="text-muted">有效期： <strong class="text-success" title="从 {{ member.createdTime|date('Y-m-d H:i') }} 到 {{ member.deadline|date('Y-m-d H:i') }}">还有{{ member.deadline|remain_time }}</strong></span>
+        <span class="text-muted">{{'有效期'|trans}}： <strong class="text-success" title="{{'从%createdTime%到%deadline%'|trans({'%createdTime%': member.createdTime|date('Y-m-d H:i'),'%deadline%': member.deadline|date('Y-m-d H:i') })}}">{{'还有'|trans}}{{ member.deadline|remain_time }}</strong></span>
       {% endif %}
 
     </div>
