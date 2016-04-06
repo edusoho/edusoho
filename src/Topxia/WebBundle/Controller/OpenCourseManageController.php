@@ -131,8 +131,8 @@ class OpenCourseManageController extends BaseController
 
     public function liveOpenTimeSetAction(Request $request, $id)
     {
-        //$liveCourse     = $this->getCourseService()->tryManageCourse($id);
-        $liveCourse     = $this->getOpenCourseService()->getCourse($id);
+        $liveCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
         $openLiveLesson = $this->getOpenCourseService()->searchLessons(array('courseId' => $liveCourse['id']), array('startTime', 'DESC'), 0, 1);
         $liveLesson     = $openLiveLesson ? $openLiveLesson[0] : array();
 
@@ -321,7 +321,7 @@ class OpenCourseManageController extends BaseController
         ));
     }
 
-    public function recommendesCoursesSelectAction(Request $request, $id, $filter)
+    public function recommendedCoursesSelectAction(Request $request, $id, $filter)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $types  = array(

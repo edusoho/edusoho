@@ -36,8 +36,8 @@
       {% endif %}
     {% elseif course.type == 'open' or course.type == 'liveOpen' %}
      <button class="btn btn-info btn-sm pull-right"
-        data-html5-url="{{ path('open_course_manage_batch_upload_course_files', {id:course.id, targetType:'opencourselesson'}) }}"
-        data-normal-url="{{ path('open_course_manage_upload_course_files', {id:course.id, targetType:'opencourselesson'}) }}"
+        data-html5-url="{{ path('open_course_manage_files_batch_upload', {id:course.id, targetType:'opencourselesson'}) }}"
+        data-normal-url="{{ path('open_course_manage_files_upload', {id:course.id, targetType:'opencourselesson'}) }}"
         data-storage="{{storageSetting.upload_mode}}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}
@@ -101,7 +101,7 @@
         <i class="glyphicon glyphicon-trash"></i>
         {{'删除'|trans}}</button>
         {% elseif course.type == 'open' or course.type == 'liveOpen' %}
-        <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('open_course_manage_upload_course_delete_files', {id:course.id, type:tab}) }}">
+        <button class="btn btn-danger btn-sm" data-role="batch-delete" data-name="{{'文件记录'|trans}}" data-url="{{ path('open_course_manage_files_delete', {id:course.id, type:tab}) }}">
         <i class="glyphicon glyphicon-trash"></i>
         {{'删除'|trans}}</button>
         {% endif %}

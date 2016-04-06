@@ -648,6 +648,7 @@ throw $this->createServiceException('不能收藏未发布课程');
 
         if ($user->isLogin()) {
             $member['userId'] = $user['id'];
+            $member['mobile'] = $user['verifiedMobile'];
         } else {
             $member['userId'] = 0;
         }
