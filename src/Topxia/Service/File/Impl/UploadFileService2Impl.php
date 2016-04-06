@@ -8,7 +8,7 @@ use Topxia\Service\File\UploadFileService2;
 
 class UploadFileService2Impl extends BaseService implements UploadFileService2
 {
-    static $implementor = array(
+  static $implementor = array(
         'local' => 'File.LocalFileImplementor2',
         'cloud' => 'File.CloudFileImplementor2'
     );
@@ -334,6 +334,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
     }
 
+    public function findMySharingContacts($targetUserId)
+    {
+        $userIds = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($targetUserId);
+
+        if (!empty($userIds)) {
+            return $this->getUserService()->findUsersByIds(ArrayToolkit::column($userIds, 'sourceUserId'));
+        } else {
+            return null;
+        }
+    }
+
     public function waveUploadFile($id, $field, $diff)
     {
         $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
@@ -377,6 +388,9 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function findCollectionsByUserIdAndFileIds($fileIds, $userId)
     {
+        if(empty($fileIds)) {
+          return array();
+        }
         $collections = $this->getUploadFileCollectDao()->findCollectonsByUserIdandFileIds($fileIds, $userId);
         return $collections;
     }
@@ -468,6 +482,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             unset($conditions['tagId']);
         }
         return $conditions;
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 
     protected function getFileImplementorName($file)
