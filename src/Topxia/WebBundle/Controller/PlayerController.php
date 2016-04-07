@@ -28,8 +28,7 @@ class PlayerController extends BaseController
             $player = "audio-player";
         }
         $url = $this->getPlayUrl($file);
-        // var_dump($url);
-        // exit();
+
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
             'url'              => $url,

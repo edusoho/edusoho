@@ -223,7 +223,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $fields = array(
             'status'        => 'ok',
             'convertStatus' => $result['convertStatus'],
-            'length'        => $params['length'],
+            'length'        => $result['length'],
             'fileName'      => $params['filename'],
             'fileSize'      => $params['size']
         );
