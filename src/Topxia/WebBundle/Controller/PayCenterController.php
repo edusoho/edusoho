@@ -538,24 +538,13 @@ class PayCenterController extends BaseController
 
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
-                if (!$this->isMicroMessenger()) {
-                    $enableds[$payName] = array(
-                        'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
-                    );
-                } elseif ($payName == 'wxpay') {
-                    $enableds[$payName] = array(
-                        'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
-                    );
-                }
+                $enableds[$payName] = array(
+                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                );
             }
         }
 
         return $enableds;
-    }
-
-    protected function isMicroMessenger()
-    {
-        return strpos($this->getRequest()->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     protected function getCouponService()

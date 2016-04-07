@@ -31,14 +31,17 @@
         </label>
       </div>
 
-      <div class="form-group">
-        <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="{{'正在登录'|trans}}...">{{'确认登录'|trans}}</button>
+      <div class="form-group clearfix">
+        <div class="row">
+          <div class="col-xs-6">
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="{{'正在登录'|trans}}...">{{'确认登录'|trans}}</button>
+          </div>
+          <div class="col-xs-6">
+            <a class="btn btn btn-default btn-lg btn-block" href="{{ path('login_bind_change', {type: type}) }}">{{'绑定已有帐号'|trans}}</a>
+          </div>
+        </div>
       </div>
-
       <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-      <div class="form-group text-right">
-        <a href="{{ path('login_bind_change', {type: type}) }}">{{'绑定已有帐号'|trans}}</a>
-      </div>
     </form>
 </div>
 
