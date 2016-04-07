@@ -109,7 +109,9 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('get_user_vip_level', array($this, 'getUserVipLevel')),
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
-            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists'))
+            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
+            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger'))
+
         );
     }
 
@@ -167,6 +169,12 @@ class WebExtension extends \Twig_Extension
     {
         $content = str_replace(" ", "&nbsp;", $content);
         return $content;
+    }
+
+    public function isMicroMessenger()
+    {
+        return true;
+        return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     public function getFingerprint()
