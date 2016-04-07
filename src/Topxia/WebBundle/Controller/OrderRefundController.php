@@ -38,11 +38,11 @@ class OrderRefundController extends BaseController
             $data   = $request->request->all();
             $reason = empty($data['reason']) ? array() : $data['reason'];
             $amount = empty($data['applyRefund']) ? 0 : null;
-
             if (isset($data["applyRefund"]) && $data["applyRefund"]) {
                 $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
             } else {
-                $processor->removeStudent($order['targetId'], $user['id']);
+                $refund = $processor->applyRefundOrder($member['orderId'], $amount, $reason, $this->container);
+                // $processor->removeStudent($order['targetId'], $user['id']);
             }
 
             return $this->createJsonResponse(true);

@@ -177,6 +177,49 @@ class ClassroomManageController extends BaseController
         ));
     }
 
+    public function recordAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $fields    = $request->query->all();
+
+        $condition = array(
+            'targetType' => 'classroom',
+            'targetId' => $id,
+            'status' => 'success'
+            );
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchRefundCount($condition),
+            20
+        );
+
+        $refunds = $this->getOrderService()->searchRefunds(
+            $condition, 
+            'createdTime',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($refunds as $key => $refund) {
+            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
+            $refunds[$key]['student'] = $this->getClassroomService()->searchMembers(
+                array('orderId'=>$refund['orderId']),
+                array('createdTime', 'DESC'),
+                0,
+                1
+            );
+        }
+// var_dump($refunds);exit();
+        return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
+            'classroom' => $classroom,
+            'paginator' => $paginator,
+            'refunds' => $refunds
+        ));
+    }
+
     public function remarkAction(Request $request, $classroomId, $userId)
     {
         $this->getClassroomService()->tryManageClassroom($classroomId);
