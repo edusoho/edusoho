@@ -26,7 +26,7 @@
         {% else %}
           {% if not setting('cloud_search.search_enabled') %}
             <div class="col-md-2 control-cloud">
-              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">启用云搜索</a>
+               <a class="btn btn-primary mhs" href="{{ path('admin_edu_cloud_search_open') }}">启用云搜索</a>
             </div>
           {% elseif setting('cloud_search.search_enabled') and setting('cloud_search.status') == 'waiting' %}
             <div class="col-md-10 form-group control-cloud">
@@ -37,7 +37,7 @@
               <span class="text-success">已启用</span>
             </div>
             <div class="controls col-md-8 cloud-warning">
-              <a class="btn btn-primary mhs" href="{{ path('admin_edu_cloud_search_close') }}">关闭</a>
+              <a class="btn btn-default btn-sm mhs" href="{{ path('admin_edu_cloud_search_close') }}">关闭</a>
             </div>
           {% endif %}
 
