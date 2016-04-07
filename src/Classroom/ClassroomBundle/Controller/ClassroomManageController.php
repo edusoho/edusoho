@@ -212,7 +212,7 @@ class ClassroomManageController extends BaseController
                 1
             );
         }
-// var_dump($refunds);exit();
+
         return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
             'classroom' => $classroom,
             'paginator' => $paginator,
