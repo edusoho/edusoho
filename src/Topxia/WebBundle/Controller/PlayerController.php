@@ -82,7 +82,6 @@ class PlayerController extends BaseController
                     $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
                 }
             }
-
             return $result['url'];
         } else {
             $token = $this->makeToken('local.media', $file['id']);

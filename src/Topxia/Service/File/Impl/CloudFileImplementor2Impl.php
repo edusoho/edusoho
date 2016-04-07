@@ -435,6 +435,19 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
       return true;
     }
 
+    protected function decodeMetas($metas)
+    {
+        if (empty($metas)) {
+            return array();
+        }
+
+        if (is_array($metas)) {
+            return $metas;
+        }
+
+        return json_decode($metas, true);
+    }
+
     protected function getUploadFileDao()
     {
         return $this->createDao('File.UploadFileDao');

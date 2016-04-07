@@ -106,6 +106,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 //Browsing shared files, but nobody is sharing with current user.
                 return array();
             }
+        } elseif(array_key_exists('source', $conditions) && $conditions['source'] == 'public') {
+          $conditions['isPublic'] = 1 ;
+        } elseif(array_key_exists('source', $conditions) && $conditions['source'] == 'collection') {
+          $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($conditions['currentUserId']);
+          if(!empty($collections)) {
+            $fileIds = ArrayToolkit::column($collections,"fileId");
+            $conditions['ids'] = $fileIds;
+          } else {
+            return array();
+          }
         } elseif (isset($conditions['currentUserId'])) {
             $createdUserIds = array($conditions['currentUserId']);
         }
@@ -129,6 +139,16 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 //Browsing shared files, but nobody is sharing with current user.
                 return 0;
             }
+        } elseif(array_key_exists('source', $conditions) && $conditions['source'] == 'public') {
+          $conditions['isPublic'] = 1 ;
+        } elseif(array_key_exists('source', $conditions) && $conditions['source'] == 'collection') {
+          $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($conditions['currentUserId']);
+          if(!empty($collections)) {
+            $fileIds = ArrayToolkit::column($collections,"fileId");
+            $conditions['ids'] = $fileIds;
+          } else {
+            return array();
+          }
         } elseif (isset($conditions['currentUserId'])) {
             $createdUserIds = array($conditions['currentUserId']);
         }
@@ -509,6 +529,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     protected function getUploadFileShareDao()
     {
         return $this->createDao('File.UploadFileShareDao');
+    }
+
+    protected function getUploadFileCollectDao()
+    {
+        return $this->createDao('File.UploadFileCollectDao');
     }
 
     protected function getUserService()
