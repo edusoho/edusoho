@@ -56,7 +56,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
 
-        // $this->isPluginInstalled('Coupon') &&
+// $this->isPluginInstalled('Coupon') &&
 
         if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
@@ -538,13 +538,24 @@ class PayCenterController extends BaseController
 
         foreach ($payNames as $payName) {
             if (!empty($setting[$payName.'_enabled'])) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
-                );
+                if (!$this->isMicroMessenger()) {
+                    $enableds[$payName] = array(
+                        'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                    );
+                } elseif ($payName == 'wxpay') {
+                    $enableds[$payName] = array(
+                        'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                    );
+                }
             }
         }
 
         return $enableds;
+    }
+
+    protected function isMicroMessenger()
+    {
+        return strpos($this->getRequest()->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     protected function getCouponService()
