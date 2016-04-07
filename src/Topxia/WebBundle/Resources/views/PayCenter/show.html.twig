@@ -36,8 +36,9 @@
         <div class="form-group order-detail-bg">
           {% for payment, options in payments %}
             {% if payment == 'alipay' and is_micro_messenger() %}
-           <!--  <div class="check disabled {% if loop.index == 1 %} active {% endif %}" id="{{payment}}"> -->
-           <div class="check disabled">
+            <p class="color-danger">当前浏览器无法使用支付宝支付!</p>
+            <!--  <div class="check disabled {% if loop.index == 1 %} active {% endif %}" id="{{payment}}"> -->
+            <div class="check disabled">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
               <span class="icon"></span>
