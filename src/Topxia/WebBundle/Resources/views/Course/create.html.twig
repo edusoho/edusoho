@@ -41,42 +41,38 @@
 
           <div class="row">
             <div class="col-md-3">
-              <div class="course-select active">
+              <div class="course-select active" data-type="normal">
                 <i class="es-icon es-icon-putongkecheng "></i>
                 <div class="course-type">普通课程</div>
                 <div class="course-intro">完整的教学主干课，支持视频、图文等各种形式</div>
-                <input type="hidden" name="type" value="normal" checked="checked" />
               </div>
             </div>
             {% if setting('course.live_course_enabled') %}
               <div class="col-md-3">
-                <div class="course-select">
+                <div class="course-select" data-type="live">
                   <i class="es-icon es-icon-zhibokecheng "></i>
                   <div class="course-type">直播课程</div>
                   <div class="course-intro">纯直播形式教学的完整课程</div>
-                  <input type="hidden" name="type" value="live" />
                 </div>
               </div>
             {% endif %}
 
             {% if setting('course.open_course_enabled') %}
               <div class="col-md-3">
-                <div class="course-select">
+                <div class="course-select" data-type="open">
                   <i class="es-icon es-icon-lubogongkaike"></i>
                   <div class="course-type">录播课</div>
                   <div class="course-intro">无门槛观看、结构简单的课程，常用于营销推广</div>
-                  <input type="hidden" name="type" value="open" />
                 </div>
               </div>
             {% endif %}
 
             {% if setting('course.live_course_enabled') and setting('course.live_open_course_enabled') %}
               <div class="col-md-3">
-                <div class="course-select">
+                <div class="course-select" data-type="liveOpen">
                   <i class="es-icon es-icon-zhibokecheng2"></i>
                   <div class="course-type">直播公开课</div>
                   <div class="course-intro">直播形式的公开课</div>
-                  <input type="hidden" name="type" value="liveOpen" />
                 </div>
               </div>
             {% endif %}
@@ -109,6 +105,7 @@
             </div>
           {% endif %}
 
+          <input type="hidden" name="type" value="normal" />
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         </form>
         

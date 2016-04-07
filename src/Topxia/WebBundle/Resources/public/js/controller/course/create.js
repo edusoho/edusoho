@@ -4,10 +4,12 @@ define(function(require, exports, module) {
 
     exports.run = function() {
 
-        if($("#course-create-form").length>0) {
+        var $form = $('#course-create-form');
+
+        if($form.length>0) {
 
             var validator = new Validator({
-                element: '#course-create-form',
+                element: $form,
                 triggerType: 'change',
                 onFormValidated: function(error){
                     if (error) {
@@ -24,9 +26,10 @@ define(function(require, exports, module) {
 
            $("#course-create-form .course-select").click(function(){
                 $this = $(this);
+                var courseType = $this.data('type');
                 $this.addClass('active').parent().siblings().find('.course-select').removeClass('active');
-                $('input[name="type"]').attr('checked',false);
-                $this.find('input[name="type"]').attr('checked',true);
+
+                $form.find('input[name="type"]').val(courseType);
            })
         }
     };

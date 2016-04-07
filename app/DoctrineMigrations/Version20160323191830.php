@@ -113,6 +113,7 @@ class Version20160323191830 extends AbstractMigration
                   UNIQUE KEY `courseId` (`courseId`,`userId`)
                 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
             ");
+            $this->addSql("DROP INDEX courseId ON open_course_member;");
         }
 
         if (!$this->isFieldExist('course_favorite', 'type')) {

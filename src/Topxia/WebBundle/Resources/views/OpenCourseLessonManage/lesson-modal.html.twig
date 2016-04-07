@@ -13,9 +13,9 @@
 <form id="course-lesson-form" data-course-id="{{course.id}}" class="form-horizontal lesson-form" method="post" {% if parentId is defined%}data-parentId="{{parentId}}" {% endif %}
   data-create-draft-url="{{path('course_draft_create')}}"
   {% if lesson %}
-    action="{{ path('course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
+    action="{{ path('open_course_manage_lesson_edit', {courseId:course.id, lessonId:lesson.id}) }}" data-lesson-id="{{lesson.id}}"
   {% else %}
-    action="{{ path('course_manage_lesson_create', {id:course.id}) }}"
+    action="{{ path('open_course_manage_lesson_create', {id:course.id}) }}"
   {% endif %}
   >
 
@@ -23,7 +23,7 @@
     <div class="col-md-2 control-label"><label>{{'类型'|trans}}</label></div>
     <div class="col-md-9 controls">
       <div class="radios">
-        {{ radios('type', dict('lessonType'), field_value(lesson, 'type')|default('video')) }}
+        <label><input type="radio" name="type" value="video" checked="checked" /> {{'视频'|trans}}</label>
       </div>
     </div>
   </div>
@@ -35,25 +35,11 @@
         <div class="col-md-10">
           <input id="lesson-title-field" class="form-control" type="text" name="title" value="{{ field_value(lesson, 'title') }}" >
         </div>
-        <div class="col-md-2">
-          <div class="checkbox">
-            <label><input type="checkbox" name="free" value="1" {% if field_value(lesson, 'free') %} checked="checked" {% endif %}> {{'免费课时'|trans}}</label>
-          </div>
-        </div>
       </div>
     </div>
   </div>
-
-  <div class="form-group for-text-type for-video-type for-audio-type {% if storageSetting.upload_mode == 'cloud' %}for-ppt-type for-document-type for-flash-type{% endif %}">
-    <div class="col-md-2 control-label"><label for="lesson-summary-field">{{'简介'|trans}}</label></div>
-    <div class="col-md-9 controls"><textarea class="form-control" id="lesson-summary-field" name="summary" >{{ field_value(lesson, 'summary') }}</textarea>
-
-    </div>
-  </div>
-
+   
   <div class="form-group for-text-type">
-
-
 
     <div class="col-md-2 control-label"><label for="lesson-content-field" class="style1">{{'内容'|trans}}</label></div>
     <div class="col-md-9 controls">
@@ -85,33 +71,6 @@
     </div>
   </div>
 
-  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-ppt-type{% endif %}">
-    <div class="col-md-offset-2 col-md-9">
-      <div class="alert alert-info">
-        <p>{{ 'PPT课时需要开通EduSoho云文档服务才能使用,'|trans|copyright_less }}
-          点击<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">这里</a>了解详情。</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-document-type{% endif %}">
-    <div class="col-md-offset-2 col-md-9">
-      <div class="alert alert-info">
-        <p>{{ '文档课时需要开通EduSoho云文档服务才能使用,'|trans|copyright_less }}
-          点击<a href="http://open.edusoho.com/show/cloud/doc" target="_blank">这里</a>了解详情。</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="form-group for-none-type {% if storageSetting.upload_mode != 'cloud' %}for-flash-type{% endif %}">
-    <div class="col-md-offset-2 col-md-9">
-      <div class="alert alert-info">
-        <p>{{ 'Flash课时需要开通EduSoho云视频服务才能使用,'|trans|copyright_less }}
-          点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</p>
-      </div>
-    </div>
-  </div>
-
   <div class="form-group for-video-type for-audio-type" id="lesson-length-form-group">
       <div class="col-md-2 control-label for-video-type"><label>{{'视频时长'|trans}}</label></div>
       <div class="hide"><label for="lesson-length-field">{{'视频时长或'|trans}}</label></div>
@@ -123,30 +82,7 @@
     </div>
   </div>
 
-  {% if 'lesson_credit' in features %}
-  <div class="form-group for-text-type for-video-type for-audio-type for-ppt-type">
-    <div class="col-md-2 control-label"><label for="lesson-give-credit-field">{{'学分'|trans}}</label></div>
-    <div class="col-md-9 controls">
-      <input class="form-control width-input width-input-small" id="lesson-give-credit-field" type="text" name="giveCredit" value="{{ lesson.giveCredit|default(0) }}"> {{'分'|trans}}
-      <div class="help-block">{{'学完此课时，可获得的学分'|trans}}</div>
-    </div>
-  </div>
-  {% endif %}
-
-
-  <div class="form-group">
-    <div class="col-md-2 control-label"><label>{{'建议学习时长'|trans}}</label></div>
-    <div class="col-md-9 controls">
-      <input class="form-control width-input width-input-small" id="lesson-suggest-period-field" type="text" name="suggestHours" value="{{ lesson.suggestHours|default('1.0') }}">{{'小时'|trans}}
-      <span class="for-video-type">{{'（如未设置，则默认学习时长为视频时长3倍取整。）'|trans}}</span>
-      <span class="for-audio-type">{{'（如未设置，则默认学习时长为音频时长3倍取整。）'|trans}}</span>
-      <span class="for-flash-type for-text-type for-ppt-type for-document-type">{{'（如未设置，则默认学习时长1小时。）'|trans}}</span>
-      <div class="help-block"></div>
-    </div>
-  </div>
-
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
-
 
 </form>
 

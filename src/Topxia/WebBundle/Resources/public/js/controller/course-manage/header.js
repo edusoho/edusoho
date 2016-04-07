@@ -1,4 +1,5 @@
 define(function(require, exports, module) {
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
 
@@ -7,8 +8,12 @@ define(function(require, exports, module) {
                 return ;
             }
 
-            $.post($(this).data('url'), function() {
-                window.location.reload();
+            $.post($(this).data('url'), function(response) {
+                if (!response['result']) {
+                    Notify.danger(response['message']);
+                } else {
+                    window.location.reload();
+                }
             });
 
         });

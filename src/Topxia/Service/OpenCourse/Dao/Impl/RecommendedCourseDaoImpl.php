@@ -92,7 +92,7 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
     public function searchRecommends($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'seq'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')

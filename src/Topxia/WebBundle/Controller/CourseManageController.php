@@ -433,7 +433,7 @@ class CourseManageController extends BaseController
     public function publishAction(Request $request, $id)
     {
         $this->getCourseService()->publishCourse($id);
-        return $this->createJsonResponse(true);
+        return $this->createJsonResponse(array('result' => true));
     }
 
     public function teachersMatchAction(Request $request)

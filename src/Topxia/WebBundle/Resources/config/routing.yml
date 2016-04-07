@@ -2041,6 +2041,10 @@ open_course_manage:
     pattern:  /open/course/{id}/manage
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:index }
 
+open_course_manage_publish:
+    pattern:  /open/course/{id}/manage/publish
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:publish }
+
 open_course_manage_base:
     pattern:  /open/course/{id}/manage/base
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:base }
@@ -2131,6 +2135,10 @@ open_course_show:
     pattern:  /open/course/{courseId}
     defaults: { _controller: TopxiaWebBundle:OpenCourse:show }
 
+open_course_lesson:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:lessonShow }
+
 open_course_favorite:
     pattern: /open/course/{id}/favorite
     defaults: { _controller: TopxiaWebBundle:OpenCourse:favorite }
@@ -2183,6 +2191,10 @@ open_course_member_sms:
 open_course_member_create:
     pattern:  /open/course/{id}/member/create
     defaults: { _controller: TopxiaWebBundle:OpenCourse:createMember }
+
+open_course_lesson_player:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/player
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:player }
 
 
 

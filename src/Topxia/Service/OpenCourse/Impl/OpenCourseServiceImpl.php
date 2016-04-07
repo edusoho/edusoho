@@ -99,21 +99,15 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function publishCourse($id)
     {
-        $course = $this->tryManageOpenCourse($id);
-
-        if (empty($course)) {
-            throw $this->createNotFoundException();
-        }
-
-        $lessonCount = $this->searchLessonCount(
-            array('courseId' => $course['id'])
-        );
+        $lessonCount = $this->searchLessonCount(array('courseId' => $id, 'status' => 'published'));
 
         if ($lessonCount < 1) {
-            throw $this->createNotFoundException();
+            return array('result' => false, 'message' => '请先添加课时并发布！');
         }
 
-        $this->getOpenCourseDao()->updateCourse($id, array('status' => 'published'));
+        $course = $this->updateCourse($id, array('status' => 'published'));
+
+        return array('result' => true, 'course' => $course);
     }
 
     public function closeCourse($id)
@@ -449,7 +443,13 @@ throw $this->createServiceException('不能收藏未发布课程');
 
     public function deleteLesson($id)
     {
-        return $this->getOpenCourseLessonDao()->deleteLesson($id);
+        $lesson = $this->getLesson($id);
+
+        $result = $this->getOpenCourseLessonDao()->deleteLesson($id);
+
+        $this->dispatchEvent("open.course.lesson.delete", array('lesson' => $lesson));
+
+        return $result;
     }
 
     public function generateLessonReplay($courseId, $lessonId)
@@ -734,19 +734,25 @@ throw $this->createServiceException('不能收藏未发布课程');
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'      => '',
-            'subtitle'   => '',
-            'about'      => '',
-            'categoryId' => 0,
-            'tags'       => '',
-            'startTime'  => 0,
-            'endTime'    => 0,
-            'locationId' => 0,
-            'address'    => '',
-            'locked'     => 0,
-            'hitNum'     => 0,
-            'likeNum'    => 0,
-            'postNum'    => 0
+            'title'         => '',
+            'subtitle'      => '',
+            'about'         => '',
+            'categoryId'    => 0,
+            'tags'          => '',
+            'startTime'     => 0,
+            'endTime'       => 0,
+            'locationId'    => 0,
+            'address'       => '',
+            'locked'        => 0,
+            'hitNum'        => 0,
+            'likeNum'       => 0,
+            'postNum'       => 0,
+            'status'        => 'draft',
+            'lessonNum'     => 0,
+            'smallPicture'  => '',
+            'middlePicture' => '',
+            'largePicture'  => '',
+            'teacherIds'    => ''
         ));
 
         if (!empty($fields['about'])) {

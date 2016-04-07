@@ -129,6 +129,46 @@ class OpenCourseManageController extends BaseController
         ));
     }
 
+    public function studentsAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        $fields = $request->query->all();
+
+        $condition = array('courseId' => $course['id'], 'role' => 'student');
+
+        if (isset($fields['userType']) && $fields['userType'] == 'login') {
+            $condition['userIdGT'] = 0;
+        }
+
+        if (isset($fields['userType']) && $fields['userType'] == 'unlogin') {
+            $condition['userId'] = 0;
+        }
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOpenCourseService()->searchMemberCount($condition),
+            20
+        );
+
+        $students = $this->getOpenCourseService()->searchMembers(
+            $condition,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $studentUserIds = ArrayToolkit::column($students, 'userId');
+        $users          = $this->getUserService()->findUsersByIds($studentUserIds);
+
+        return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-students.html.twig', array(
+            'course'    => $course,
+            'students'  => $students,
+            'users'     => $users,
+            'paginator' => $paginator
+        ));
+    }
+
     public function liveOpenTimeSetAction(Request $request, $id)
     {
         $liveCourse = $this->getOpenCourseService()->tryManageOpenCourse($id);
@@ -345,6 +385,23 @@ class OpenCourseManageController extends BaseController
         $this->setFlashMessage('success', "推荐课程添加成功");
 
         return new Response('success');
+    }
+
+    public function publishAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+
+        $result = $this->getOpenCourseService()->publishCourse($id);
+
+        if ($course['type'] == 'liveOpen' && !$result['result']) {
+            $result['message'] = '请先设置直播时间';
+        }
+
+        if ($course['type'] == 'open' && !$result['result']) {
+            $result['message'] = '请先创建课时';
+        }
+
+        return $this->createJsonResponse($result);
     }
 
     private function _createCloudLive($liveCourse, $formFields)

@@ -1,8 +1,4 @@
-
-{% set layout = 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
-
-{% extends layout %}
-
+{% extends 'TopxiaWebBundle:OpenCourseManage:open-course-layout.html.twig' %}
 
 {% block title %}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}} - {{ parent() }}{% endblock %}
 
@@ -19,19 +15,18 @@
     {% endif %}
   </div>
 
-
   <div class="panel-body">
     <ul class="nav nav-tabs">            
        <li class="active">
-          <a>已登陆的</a>
+          <a href="{{ path('open_course_manage_students',{id:course.id,userType:'login'}) }}">已登陆的</a>
        </li>
        <li>
-         <a>未登录的</a>
+         <a href="{{ path('open_course_manage_students',{id:course.id,userType:'unlogin'}) }}">未登录的</a>
        </li>
     </ul>
-    <form class="form-inline well well-sm " action="" method="get" novalidate>
+    <form class="form-inline well well-sm " action="{{ path('open_course_manage_students',{id:course.id}) }}" method="get" novalidate>
       <div class="form-group col-md-7">
-        <input class="form-control " type="text" style="width:45%" placeholder="{{'请输入用户名/邮箱/手机号'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
+        <input class="form-control " type="text" style="width:45%" placeholder="{{'请输入用户名'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
 
         <button class="btn btn-primary">{{'搜索'|trans}}</button>
       </div>
@@ -46,7 +41,12 @@
         </tr>
       </thead>
       <tbody>
-       
+        {% for student in students %}
+          {% set user = users[student.userId] %}
+          {% include 'TopxiaWebBundle:OpenCourseManage:student-tr.html.twig' %}
+        {% else %}
+          <tr class="empty"><td colspan="20">{{'暂无记录'|trans}}</td></tr>
+        {% endfor %}
       </tbody>
     </table>
   </div>

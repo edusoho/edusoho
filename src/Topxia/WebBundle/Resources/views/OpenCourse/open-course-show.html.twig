@@ -33,67 +33,10 @@
           </ul  >
           <div id="content">
             <ul id="recommand-tab" >
-              <li class="tab-recommand clearfix">
-                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
-                <div class="open-course-info">
-                  <a class="title" href="">edusoho教学资料库教学资料库课教学资料库课课程学习</a>
-                  <div class="num">2345人在学习</div>
-                </div>
-              </li>
-              <li class="tab-recommand clearfix">
-                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
-                <div class="open-course-info">
-                  <a class="title" href="" >edusoho教学资料库课程学习</a>
-                  <div class="num">2345人在学习</div>
-                </div>
-              </li>
-              <li class="tab-recommand clearfix">
-                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
-                <div class="open-course-info">
-                  <a class="title" href="" >edusoho教学资料库课程学习</a>
-                  <div class="num">2345人在学习</div>
-                </div>
-              </li>
-              <li class="tab-recommand clearfix">
-                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
-                <div class="open-course-info">
-                  <a class="title" href="" >edusoho教学资料库课程学习</a>
-                  <div class="num">2345人在学习</div>
-                </div>
-              </li>
-              <li class="tab-recommand clearfix">
-                <a href=""><img class="img-responsive" src="/assets/img/default/course.png" alt=""></a>
-                <div class="open-course-info">
-                  <a class="title" href="" >edusoho教学资料库课程学习</a>
-                  <div class="num">2345人在学习</div>
-                </div>
-              </li>
+              {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig'%}
             </ul>
             <ul id="live-tab" style="display:none">
-              <li class="tab-live clearfix">
-                <a href="">课时1：以理服人</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时2：以情化人：情感形态广告什么的</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时1：以理服人</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时2：以情化人：情感形态广告什么的</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时1：以理服人</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时2：以情化人：情感形态广告什么的</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时1：以理服人</a>
-              </li>
-              <li class="tab-live clearfix">
-                <a href="">课时2：以情化人：情感形态广告什么的</a>
-              </li>
+              {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig'%}
             </ul>
           </div>
         </div>

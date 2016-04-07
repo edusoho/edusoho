@@ -232,13 +232,14 @@ define(function(require, exports, module) {
                 });
                 break;
         }
-
-        validator.addItem({
-            element: '#lesson-suggest-period-field',
-            required: true,
-            rule: 'arithmetic_number',
-            display: '建议学习时长'
-        });
+        if ($('#lesson-suggest-period-field').length > 0){
+            validator.addItem({
+                element: '#lesson-suggest-period-field',
+                required: true,
+                rule: 'arithmetic_number',
+                display: '建议学习时长'
+            });
+        }
     }
 
     exports.run = function() {

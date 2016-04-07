@@ -10,8 +10,28 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            'open.course.lesson.create' => 'onLessonCreate',
+            'open.course.lesson.delete' => 'onLessonDelete',
             'open.course.member.create' => 'onMemberCreate'
         );
+    }
+
+    public function onLessonCreate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+
+        $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
+        $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
+    }
+
+    public function onLessonDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $lesson  = $context['lesson'];
+
+        $lessonNum = $this->getOpenCourseService()->searchLessonCount(array('courseId' => $lesson['courseId']));
+        $this->getOpenCourseService()->updateCourse($lesson['courseId'], array('lessonNum' => $lessonNum));
     }
 
     public function onMemberCreate(ServiceEvent $event)

@@ -86,7 +86,7 @@ class OpenCourseLessonManageController extends BaseController
 
             $lessonId = 0;
 
-            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+            return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
                 'file'   => $file
@@ -107,7 +107,7 @@ class OpenCourseLessonManageController extends BaseController
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-        return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:lesson-modal.html.twig', array(
             'course'         => $course,
             'targetType'     => $targetType,
             'targetId'       => $targetId,
@@ -158,7 +158,7 @@ class OpenCourseLessonManageController extends BaseController
                 }
             }
 
-            return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+            return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
                 'course' => $course,
                 'lesson' => $lesson,
                 'file'   => $file
@@ -208,7 +208,7 @@ class OpenCourseLessonManageController extends BaseController
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
-        return $this->render('TopxiaWebBundle:CourseLessonManage:lesson-modal.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:lesson-modal.html.twig', array(
             'course'         => $course,
             'lesson'         => $lesson,
             'file'           => $file,
@@ -235,7 +235,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
-        return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'file'   => $file
@@ -255,7 +255,7 @@ class OpenCourseLessonManageController extends BaseController
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
-        return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array(
+        return $this->render('TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
             'file'   => $file
@@ -281,6 +281,11 @@ class OpenCourseLessonManageController extends BaseController
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    protected function textToSeconds($minutes, $seconds)
+    {
+        return intval($minutes) * 60 + intval($seconds);
     }
 
     protected function secondsToText($value)

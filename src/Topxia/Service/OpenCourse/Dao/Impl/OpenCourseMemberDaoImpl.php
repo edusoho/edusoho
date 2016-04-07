@@ -111,6 +111,7 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'open_course_member')
             ->andWhere('userId = :userId')
+            ->andWhere('userId > :userIdGT')
             ->andWhere('courseId = :courseId')
             ->andWhere('role = :role')
             ->andWhere('createdTime >= :startTimeGreaterThan')

@@ -8,9 +8,9 @@
     {% elseif lesson.type == 'video' or lesson.type == 'audio' %}
       {% if lesson.mediaSource == 'self' %}
         <div id="lesson-preview-player"
-          style="height:300px;overflow:hidden"
+          style="height:500px;overflow:hidden"
           data-balloon-player="1"
-          data-player-url="{{path('course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id, isPreview:1})}}"
+          data-player-url="{{path('open_course_lesson_player', {courseId:lesson.courseId, lessonId:lesson.id})}}"
           {% if setting('storage.video_watermark') and setting('storage.video_watermark_image') %}
             data-watermark="{{ file_url(setting('storage.video_watermark_image'), null, true) }}"
           {% endif %}

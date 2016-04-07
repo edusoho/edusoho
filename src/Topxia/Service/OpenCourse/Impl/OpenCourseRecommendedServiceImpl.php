@@ -95,6 +95,16 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         }
     }
 
+    public function searchRecommendCount($conditions)
+    {
+        return $this->getRecommendedCourseDao()->searchRecommendCount($conditions);
+    }
+
+    public function searchRecommends($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getRecommendedCourseDao()->searchRecommends($conditions, $orderBy, $start, $limit);
+    }
+
     protected function getCourseService()
     {
         return $this->createService('Course.CourseService');

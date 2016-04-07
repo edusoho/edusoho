@@ -1,0 +1,8 @@
+{% set lessons = data('OpenCourseLessons',{'courseId':course.id}) %}
+{% for lesson in lessons if lesson %}
+	<li class="tab-live clearfix">
+	  <a href="">课时{{ loop.index }}：{{ lesson.title }}</a>
+	</li>
+{% else %}
+	<li class="tab-live clearfix"><div class="empty">暂无课时记录</div></li>
+{% endfor %}

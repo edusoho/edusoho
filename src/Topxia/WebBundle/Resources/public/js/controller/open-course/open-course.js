@@ -9,24 +9,11 @@ define(function(require, exports, module) {
 
 		$('.tab-header').on('click', function() {
 			var $this = $(this);
-			var $index = $this.index();
-  			var $content = $this.parent().find('#content');
+			var index = $this.index();
   			$this.addClass('active').siblings().removeClass('active');
-  			$content.find('ul:eq($index)').show().siblings().hide();
-			console.log($content.find('ul:eq(1)'));
+  			$('#content').find('ul').eq(index).show().siblings().hide();
 		});
 
-						
-			// $('#open-tab li').mouseover(function(){
-			// 	var $this = $(this);
-			// 	var $li = $('#open-tab li');
-			// 	var $ul = $('#content ul');
-			// 	var $t = $this.index();
-			// 	$li.removeClass();
-			// 	$this.addClass('current');
-			// 	$ul.css('display','none');
-			// 	$ul.eq($t).css('display','block');
-			// })
 		$("#favorite-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {

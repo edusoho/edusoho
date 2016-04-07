@@ -194,11 +194,24 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }
 
+        if (!$this->_checkPublishedLessonExists($courseId)) {
+            return $this->createMessageResponse('error', '请先创建课时并发布！');
+        }
+
         $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course' => $course
         ));
+    }
+
+    public function lessonShow($courseId, $lessonId)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+
+        if (!$lesson) {
+            return $this->createMessageResponse('error', '该课时不存在！');
+        }
     }
 
     /**
@@ -208,64 +221,10 @@ class OpenCourseController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
-        $lesson  = $lessons ? $lessons[0] : array();
+        $lesson = $this->_checkPublishedLessonExists($course['id']);
+        $lesson = $lesson ? $lesson : array();
 
-        $hasVideoWatermarkEmbedded = 0;
-
-        if ($lesson) {
-            if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
-                $file = $this->getUploadFileService()->getFile($lesson[0]['mediaId']);
-
-                if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                    $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
-                    $hls     = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-
-                    if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                        $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                            'data'     => array(
-                                'id' => $file['id']
-                            ),
-                            'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
-                            'duration' => 3600
-                        ));
-
-                        $hls = array(
-                            'url' => $this->generateUrl('hls_playlist', array(
-                                'id'    => $file['id'],
-                                'token' => $token['token'],
-                                'line'  => $request->query->get('line')
-                            ), true)
-                        );
-                    } else {
-                        $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-                    }
-                }
-
-                if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                    $hasVideoWatermarkEmbedded = 1;
-                }
-            } elseif ($lesson['mediaSource'] == 'youku') {
-                $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-                if ($matched) {
-                    $lesson['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
-                    $lesson['mediaSource'] = 'iframe';
-                } else {
-                    $lesson['mediaUri'] = $lesson['mediaUri'];
-                }
-            } elseif ($lesson['mediaSource'] == 'tudou') {
-                $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
-
-                if ($matched) {
-                    $lesson['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
-                    $lesson['mediaSource'] = 'iframe';
-                } else {
-                    $lesson['mediaUri'] = $lesson['mediaUri'];
-                }
-            }
-        }
+        list($lesson, $hasVideoWatermarkEmbedded, $hlsUrl) = $this->_getLessonVedioInfo($lesson);
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
@@ -487,6 +446,81 @@ class OpenCourseController extends BaseController
         }
     }
 
+    public function playerAction($courseId, $lessonId)
+    {
+        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException('课时不存在！');
+        }
+
+        return $this->forward('TopxiaWebBundle:Player:show', array(
+            'id'      => $lesson["mediaId"],
+            'context' => array()
+        ));
+    }
+
+    public function _getLessonVedioInfo($lesson)
+    {
+        $hasVideoWatermarkEmbedded = 0;
+
+        if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
+            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+                $factory = new CloudClientFactory();
+                $client  = $factory->createClient();
+                $hls     = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $token = $this->getTokenService()->makeToken('hls.playlist', array(
+                        'data'     => array(
+                            'id' => $file['id']
+                        ),
+                        'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
+                        'duration' => 3600
+                    ));
+
+                    $hls = array(
+                        'url' => $this->generateUrl('hls_playlist', array(
+                            'id'    => $file['id'],
+                            'token' => $token['token'],
+                            'line'  => $request->query->get('line')
+                        ), true)
+                    );
+                } else {
+                    $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                }
+            }
+
+            if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                $hasVideoWatermarkEmbedded = 1;
+            }
+        } elseif ($lesson['mediaSource'] == 'youku') {
+            $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+
+            if ($matched) {
+                $lesson['mediaUri']    = "http://player.youku.com/embed/{$matches[1]}";
+                $lesson['mediaSource'] = 'iframe';
+            } else {
+                $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
+        } elseif ($lesson['mediaSource'] == 'tudou') {
+            $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
+
+            if ($matched) {
+                $lesson['mediaUri']    = "http://www.tudou.com/programs/view/html5embed.action?code={$matches[1]}";
+                $lesson['mediaSource'] = 'iframe';
+            } else {
+                $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
+        }
+
+        $hlsUrl = (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '';
+
+        return array($lesson, $hasVideoWatermarkEmbedded, $hlsUrl);
+    }
+
     private function _checkCourseStatus($courseId)
     {
         $course = $this->getOpenCourseService()->getCourse($courseId);
@@ -496,6 +530,21 @@ class OpenCourseController extends BaseController
         }
 
         return true;
+    }
+
+    private function _checkPublishedLessonExists($courseId)
+    {
+        $lessons = $this->getOpenCourseService()->searchLessons(array(
+            'courseId' => $courseId,
+            'status'   => 'published'),
+            array('seq', 'ASC'), 0, 1
+        );
+
+        if (!$lessons) {
+            return false;
+        }
+
+        return $lessons[0];
     }
 
     private function _getFavoriteNum($courseId)
