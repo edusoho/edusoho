@@ -16,12 +16,12 @@ define(function(require, exports, module) {
                 validator.addItem({
                     element: '[name="alipay_secret"]',
                     required: true,
-                    errormessageRequired: '请输入KEY'
+                    errormessageRequired: Translator.trans('请输入KEY')
                 });
                 validator.addItem({
                     element: '[name=alipay_key]',
                     required: true,
-                    errormessageRequired: '请输入PID'
+                    errormessageRequired: Translator.trans('请输入PID')
                 })
             } else {
                 validator.removeItem('[name="alipay_secret"]');

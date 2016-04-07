@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 $('#refund-confirm-btn').button('submiting').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(response){
                     $modal.modal('hide');
-                    Notify.success('退款申请处理结果已提交');
+                    Notify.success(Translator.trans('退款申请处理结果已提交'));
                     window.location.reload();
                 });
             }
@@ -30,7 +30,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: 'input[name=result]',
             required: true,
-            errormessageRequired: '请选择审核结果'
+            errormessageRequired: Translator.trans('请选择审核结果')
         });
 
         validator.addItem({

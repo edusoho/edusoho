@@ -27,11 +27,11 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('用户信息保存成功');
+                    Notify.success(Translator.trans('用户信息保存成功'));
                     var $tr = $(html);
                     $('#' + $tr.attr('id')).replaceWith($tr);
                 }).error(function(){
-                    Notify.danger('操作失败');
+                    Notify.danger(Translator.trans('操作失败'));
                 });
             }
         });
@@ -54,13 +54,13 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="weibo"]',
             rule: 'url',
-            errormessageUrl: '网站地址不正确，须以http://weibo.com开头。'
+            errormessageUrl: Translator.trans('网站地址不正确，须以http://weibo.com开头。')
         });
 
         validator.addItem({
             element: '[name="site"]',
             rule: 'url',
-            errormessageUrl: '网站地址不正确，须以http://开头。'
+            errormessageUrl: Translator.trans('网站地址不正确，须以http://开头。')
         });
 
         validator.addItem({

@@ -19,13 +19,13 @@ define(function(require, exports, module) {
             }
 		});
 
-        var titleArr = ['真实姓名','手机号码','QQ','所在公司','身份证号码','性别','职业','微博','微信'];
+        var titleArr = [Translator.trans('真实姓名'),Translator.trans('手机号码'),Translator.trans('QQ'),Translator.trans('所在公司'),Translator.trans('身份证号码'),Translator.trans('性别'),Translator.trans('职业'),Translator.trans('微博'),Translator.trans('微信')];
         $('#add-btn').on('click', function() {
             var field_title = $('input[name="field_title"]').val();
             
             if($.inArray(field_title, titleArr) >= 0 )
             {
-                Notify.danger('请勿添加与默认字段相同的自定义字段！')
+                Notify.danger(Translator.trans('请勿添加与默认字段相同的自定义字段！'))
                 return false;
             }
         });
@@ -45,7 +45,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="field_type"]',
             required: true,
-            errormessageRequired: '请选择字段类型'
+            errormessageRequired: Translator.trans('请选择字段类型')
         });
 
 
