@@ -174,7 +174,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
     public function clearCourseDiscountPrice($discountId)
     {
         $currentTime = time();
-        $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, coinPrice = originCoinPrice, discountId = 0, discount = 10 WHERE discountId = ?";
+        $sql         = "UPDATE course SET updatedTime = '{$currentTime}', price = originPrice, discountId = 0, discount = 10 WHERE discountId = ?";
         $result      = $this->getConnection()->executeQuery($sql, array($discountId));
         $this->clearCached();
         return $result;

@@ -226,7 +226,7 @@
                           </div>
                           <div class="vip-price col-sm-3 col-md-3">
                               {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                               <h4> {{ set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
+                               <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name', '虚拟币')}}</h4>
                                {% else %}
                                 <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                                {% endif %}

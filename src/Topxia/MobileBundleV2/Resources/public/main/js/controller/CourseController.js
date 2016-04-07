@@ -214,8 +214,7 @@ function CourseToolController($scope, $stateParams, OrderService, CourseService,
 
     this.goToPay = function() {
       var course = $scope.course;
-      var priceType = course.priceType;
-      var price = "Coin" == priceType ? course.coinPrice : course.price;
+      var price = course.price;
       if (price <= 0) {
         self.payCourse(price, "course", $stateParams.courseId);
       } else {
@@ -447,8 +446,7 @@ function ClassRoomToolController($scope, $stateParams, OrderService, ClassRoomSe
     $scope.signDate = new Date();
     this.goToPay = function() {
       var classRoom = $scope.classRoom;
-      var priceType = classRoom.priceType;
-      var price = "Coin" == priceType ? classRoom.coinPrice : classRoom.price;
+      var price = classRoom.price;
       if (price <= 0) {
         self.payCourse(price, "classroom", $stateParams.classRoomId);
       } else {
