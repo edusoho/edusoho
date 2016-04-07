@@ -41,10 +41,9 @@
           </div>
         </div>
       </div>
+      
+      {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id})) }}
       <div class="open-course-detail row">
-
-        {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id})) }}
-
         <div class="col-md-9">
           <div class="es-section gray-darker">
             {{ course.about|raw }}

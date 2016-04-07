@@ -1,8 +1,9 @@
 .open-course-views {
 	position: relative;
-	display: table;
+	// display: table;
 	padding: 0;
 	height: 500px;
+	background-color: #000;
 	.mask {
 		position: absolute;
 		left: 0;
@@ -151,7 +152,7 @@
     word-wrap: normal;
     white-space: nowrap;
 		text-overflow: ellipsis;
-		&:hover,&:active {
+		&:hover,&:active,&.active {
 			color: rgba(255, 255, 255, 1);
 			background-color: @brand-primary;
 		}
@@ -161,54 +162,87 @@
 .open-course-header {
 	margin-top: 20px;
 	.course-img {
-		float: left;
-		width: 120px;
-		margin-right: 20px;
+		@media(min-width:@screen-md-min)  {
+		width: 12.5%;
+		padding-left: 0;
+		}
+		// @media(max-width:@screen-sm-max)  {
+		// 	text-align: center;
+		// }
 		img {
-			.border-radius(3px);
+			.border-radius(5px);
+			@media(min-width:@screen-md-min) {
+				width: 120px;
+			}
+			@media(max-width:@screen-sm-max)   {
+				width: 100%;
+			}
 		}
 	}
-	.course-info {
-		float: left;
-		.title {
-			margin-top: 5px;
-			margin-bottom: 10px;
-			font-size: 20px;
+	.title {
+		margin-top: 8px;
+		margin-bottom: 10px;
+		font-size: 20px;
+		@media(max-width:@screen-sm-max) {
+			margin-top: 15px;
+			// text-align: center;
 		}
-		.matas span{
-			padding-right: 25px;
+	}
+	.matas {
+		// @media(max-width:@screen-sm-max)  {
+		// 	text-align: center;
+		// }
+		span{
 			color: @gray;
+			&:first-child {
+				padding-right: 25px;
+			}
 		}
-	}
+	} 
 	.course-operation {
-		float: right;
 		// padding-top: 15px;
 		color: @gray;
+		// float: right;
 		ul {
+			float: right;
+			width: 90%;
 			padding: 0;
-    	margin-bottom: 0;
-    	list-style-type: none;
+		    	margin-bottom: 0;
+		    	list-style-type: none;
+		    	@media(max-width:@screen-sm-max) {
+		    		float: left;
+		    	}
 		}
 		li {
 			float: left;
-			width: 145px;
+			// width: 145px;
+			width: 25%;
 			padding: 15px 10px 0 10px;
 			border-right: 1px solid #f1f1f1;
-			&:last-child {
-				border-right: 0;
-			}
-			@media(max-width:@screen-sm-min) {
+			@media(max-width:@screen-sm-max)  {
+				width: 50%;
+				height: 55px;
 				&:nth-child(3) {
 					border-right: 0;
-					width: 134px;
 				}
+			}
+			// @media(max-width:@screen-xs-min)  {
+			// 	width: 25%;
+			// 	height: auto;
+			// 	text-align: center;
+			// 	&:nth-child(3) {
+			// 		border-right: 1px solid #f1f1f1;
+			// 	}
+			// }
+			&:last-child {
+				border-right: 0;
 			}
 			.operation-icon {
 				float: left;
 		    display: block;
 		    width: 35px;
 		    height: 35px;
-		    margin: 0 10px;
+		    margin: 0 10px 5px;
 		    font-size: 22px;
 		    line-height: 35px;
 		    vertical-align: middle;
@@ -293,7 +327,7 @@
 // 	}
 // }
 .open-course-detail .intro-img {
-	width: 120px;
+	width: 186px;
 	display: block;
 	margin-top: 10px;
 }
