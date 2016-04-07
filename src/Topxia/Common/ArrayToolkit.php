@@ -93,6 +93,27 @@ class ArrayToolkit
         return $indexedArray;
     }
 
+    public static function rename(array $array, array $map)
+    {
+        $filtered = array();
+
+        foreach ($specialValues as $key => $value) {
+            if (!array_key_exists($key, $array)) {
+                continue;
+            }
+
+        $keys = array_keys($map);
+
+        foreach ($array as $key => $value) {
+            if (in_array($key, $keys)) {
+                $array[$map[$key]] = $value;
+                unset($array[$key]);
+            }
+        }
+
+        return $array;
+    }
+
     public static function filter(array $array, array $specialValues)
     {
         $filtered = array();
