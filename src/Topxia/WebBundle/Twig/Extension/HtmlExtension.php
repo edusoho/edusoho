@@ -93,13 +93,13 @@ class HtmlExtension extends \Twig_Extension
         $unit =  '';
         $result = '';
         if($countdown >= 86400){
-            $unit = '天';
+            $unit = $this->getServiceKernel()->trans('天');
             $result = $countdown / 86400;
         }elseif ($countdown >= 3600) {
-            $unit = '小时';
+            $unit = $this->getServiceKernel()->trans('小时');
             $result = $countdown / 3600;          
         }else{
-            $unit = '分钟';
+            $unit = $this->getServiceKernel()->trans('分钟');
             $result = $countdown / 60;  
         }
 

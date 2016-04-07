@@ -18,7 +18,7 @@ class ClassroomDataTag extends CourseBaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         if (empty($arguments['classroomId'])) {
-            throw new \InvalidArgumentException("classroomId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('classroomId参数缺失'));
         } else {
             $classroom = $this->getClassroomService()->getClassroom($arguments['classroomId']);
         }
