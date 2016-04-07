@@ -542,11 +542,11 @@ class PayCenterController extends BaseController
                     $enableds[$payName] = array(
                         'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
                     );
-                } else ($payName == 'wxpay') {
+                } elseif ($payName == 'wxpay') {
                     $enableds[$payName] = array(
                         'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
                     );
-                } 
+                }
             }
         }
 
