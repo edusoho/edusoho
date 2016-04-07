@@ -38,4 +38,8 @@ class UserProfileType extends AbstractType
     {
         return 'profile';
     }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

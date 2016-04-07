@@ -40,5 +40,9 @@ class CourseType extends AbstractType
     {
         return 'course';
     }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 
 }

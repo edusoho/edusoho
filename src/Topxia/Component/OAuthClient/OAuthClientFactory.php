@@ -92,12 +92,15 @@ class OAuthClientFactory
             ),
         );
 
-        $kernel = ServiceKernel::instance();
-        if ($kernel->hasParameter('oauth2_clients')) {
-            $extras = $kernel->getParameter('oauth2_clients');
+        if ($this->getServiceKernel()->hasParameter('oauth2_clients')) {
+            $extras =$this->getServiceKernel()->getParameter('oauth2_clients');
             $clients = array_merge($clients, $extras);
         }
 
         return $clients;
+    }
+
+    protected function getServiceKernel(){
+        return ServiceKernel::instance();
     }
 }

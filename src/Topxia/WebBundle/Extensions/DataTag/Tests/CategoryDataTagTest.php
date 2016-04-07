@@ -10,7 +10,7 @@ class CategoryDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-        $group = $this->getCategoryService()->addGroup(array('name' => $this->getServiceKernel()->trans('课程'), 'code' => 'course', 'depth' => 2));
+        $group = $this->getCategoryService()->addGroup(array('name' => '课程', 'code' => 'course', 'depth' => 2));
 
         $category1 = $this->getCategoryService()->createCategory(array(
             'name' => 'category 1',

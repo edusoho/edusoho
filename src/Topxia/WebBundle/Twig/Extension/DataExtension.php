@@ -95,5 +95,8 @@ class DataExtension extends \Twig_Extension
     {
         return ServiceKernel::instance()->createService($name);
     }
-
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

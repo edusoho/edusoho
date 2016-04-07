@@ -79,4 +79,8 @@ class AuthenticationFailureHandler extends DefaultAuthenticationFailureHandler
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

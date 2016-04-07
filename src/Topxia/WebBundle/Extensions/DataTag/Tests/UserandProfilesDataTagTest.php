@@ -17,11 +17,11 @@ class UserandProfilesDataTagTest extends BaseTestCase
             'confirmPassword' => '123456',
             'createdIp' => '127.0.0.1'
         ));
-        $this->getUserService()->updateUserProfile($user1['id'],array('truename' => $this->getServiceKernel()->trans('乐山乐水')));
+        $this->getUserService()->updateUserProfile($user1['id'],array('truename' => '乐山乐水'));
         $datatag = new UserandProfilesDataTag();
         $user = $datatag->getData(array('userId' => $user1['id']));
         $this->assertEquals($user['id'],$user1['id']);
-        $this->assertEquals($user['profiles']['truename'],$this->getServiceKernel()->trans('乐山乐水'));
+        $this->assertEquals($user['profiles']['truename'],'乐山乐水');
 
     }
 

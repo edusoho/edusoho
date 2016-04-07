@@ -200,5 +200,9 @@ class AuthenticationProvider extends UserAuthenticationProvider
     {
         return ServiceKernel::instance()->createService('User.AuthService');
     }
+            protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 
 }

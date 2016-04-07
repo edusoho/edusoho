@@ -62,4 +62,8 @@ class KernelRequestListener
             }
         }
     }
+            protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

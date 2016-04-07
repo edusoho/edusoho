@@ -111,5 +111,9 @@ class HtmlExtension extends \Twig_Extension
     {
         return 'topxia_html_twig';
     }
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 
 }

@@ -120,4 +120,8 @@ class UserLoginTokenListener
     {
         return ServiceKernel::instance()->createService('User.AuthService');
     }
+    protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

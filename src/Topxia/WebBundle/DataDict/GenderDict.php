@@ -18,4 +18,8 @@ class GenderDict implements DataDictInterface
     public function getGroupedDict() {
         return $this->getDict();
     }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 }

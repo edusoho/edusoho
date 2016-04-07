@@ -11,6 +11,11 @@ class MemberLevelDisct  implements DataDictInterface{
 			'level_g'=>$this->getServiceKernel()->trans('金牌会员'),
 		);
 	}
+	
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 
 }
 

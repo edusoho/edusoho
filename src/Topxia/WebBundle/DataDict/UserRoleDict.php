@@ -24,5 +24,9 @@ class UserRoleDict implements DataDictInterface
     {
         return $this->getDict();
     }
+            protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
+    }
 
 }

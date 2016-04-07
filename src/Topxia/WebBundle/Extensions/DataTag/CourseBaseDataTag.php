@@ -34,7 +34,7 @@ abstract class CourseBaseDataTag extends BaseDataTag implements DataTag
     protected function checkUserId(array $arguments)
     {
         if (empty($arguments['userId'])) {
-            throw new \InvalidArgumentException("userId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('userId参数缺失'));
         }
     }
 
