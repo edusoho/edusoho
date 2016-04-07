@@ -9,9 +9,8 @@ class LoginController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $user       = $this->getCurrentUser();
-        $setting    = $this->getSettingService()->get('login_bind');
-        $user_agent = $request->server->get('HTTP_USER_AGENT');
+        $user    = $this->getCurrentUser();
+        $setting = $this->getSettingService()->get('login_bind');
 
         if ($user->isLogin()) {
             return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
@@ -23,7 +22,7 @@ class LoginController extends BaseController
             $error = $request->getSession()->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        if (strpos($user_agent, 'MicroMessenger') && $setting['enabled'] && $setting['weixinmob_enabled']) {
+        if ($this->getWebExtension()->isMicroMessenger() && $setting['enabled'] && $setting['weixinmob_enabled']) {
             return $this->forward('TopxiaWebBundle:LoginBind:index', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request)));
         }
 
@@ -99,5 +98,10 @@ class LoginController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getWebExtension()
+    {
+        return $this->container->get('topxia.twig.web_extension');
     }
 }
