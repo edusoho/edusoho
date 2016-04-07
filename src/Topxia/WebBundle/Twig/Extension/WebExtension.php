@@ -173,7 +173,6 @@ class WebExtension extends \Twig_Extension
 
     public function isMicroMessenger()
     {
-        return true;
         return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
