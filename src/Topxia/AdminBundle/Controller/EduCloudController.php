@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+
 
 class EduCloudController extends BaseController
 {

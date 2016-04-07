@@ -16,11 +16,12 @@
     {% else %}
       <div class="row form-group">
         {% if data.status == 'unconnect' %}
-          <div class="col-md-2 control-cloud">
-            <a class="btn btn-primary mhs" disable="disabled">启用云搜索</a>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
           </div>
-          <div class="controls col-md-8 cloud-warning">
-            <span class="text-danger">抱歉，您尚未接入教育云，不能使用云搜索服务</span><a href="">立即接入</a>
+          <div class="col-md-10">
+            <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云搜索服务！</span>
+            <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
           </div>
         {% else %}
           {% if not setting('cloud_search.search_enabled') %}
