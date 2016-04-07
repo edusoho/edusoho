@@ -1,0 +1,28 @@
+{% extends 'TopxiaWebBundle:CourseStudentManage:index.html.twig' %}
+
+{% block title %}退出记录 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'record' %}
+
+{% set script_controller = 'course-manage/students' %}
+
+{% block maincontent %}
+	<table class="table table-striped" id="quit-record-list">
+    <thead>
+      <tr>
+        <th width="40%">学员</th>
+        <th width="30%">退出学习原因</th>
+        <th width="30%">退出学习时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for refund in refunds %}        
+        {% include 'TopxiaWebBundle:CourseStudentManage:quit-record-tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">无学员记录</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

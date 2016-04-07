@@ -74,7 +74,7 @@ class CourseStudentManageController extends BaseController
         $courseSetting              = $this->getSettingService()->get('course', array());
         $isTeacherAuthManageStudent = !empty($courseSetting['teacher_manage_student']) ? 1 : 0;
         $default                    = $this->getSettingService()->get('default', array());
-        return $this->render('TopxiaWebBundle:CourseStudentManage:index.html.twig', array(
+        return $this->render('TopxiaWebBundle:CourseStudentManage:student.html.twig', array(
             'course'                     => $course,
             'students'                   => $students,
             'users'                      => $users,
@@ -84,6 +84,48 @@ class CourseStudentManageController extends BaseController
             'paginator'                  => $paginator,
             'canManage'                  => $this->getCourseService()->canManageCourse($course['id']),
             'default'                    => $default
+        ));
+    }
+
+    public function recordAction(Request $request, $id)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $fields    = $request->query->all();
+        $condition = array();
+
+        $condition = array(
+            'targetType' => 'course',
+            'targetId' => $id,
+            'status' => 'success'
+            );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchRefundCount($condition),
+            20
+        );
+
+        $refunds = $this->getOrderService()->searchRefunds(
+            $condition, 
+            'createdTime',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        foreach ($refunds as $key => $refund) {
+            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
+            $refunds[$key]['student'] = $this->getCourseService()->searchMembers(
+                array('orderId'=>$refund['orderId']),
+                array('createdTime', 'DESC'),
+                0,
+                1
+            );
+        }
+        return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
+            'course'                     => $course,
+            'refunds'                   => $refunds,
+            'paginator'                  => $paginator
         ));
     }
 
