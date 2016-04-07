@@ -24,6 +24,7 @@ class CourseThread extends BaseResource
 
     public function filter($res)
     {
+        $res['latestPostTime'] = date('c', $res['latestPostTime']);
         $res['createdTime'] = date('c', $res['createdTime']);
         $res['updatedTime'] = date('c', $res['updatedTime']);
         return $res;
