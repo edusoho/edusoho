@@ -58,7 +58,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        //开启限制加入
+//开启限制加入
 
         if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
@@ -70,7 +70,7 @@ class CourseLessonController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+//课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
         if (empty($lesson['free']) && !(!empty($course['tryLookable']) && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
@@ -174,6 +174,9 @@ class CourseLessonController extends BaseController
             }
         }
 
+        var_dump($lesson);
+        var_dump($hasVideoWatermarkEmbedded);
+        var_dump($hlsUrl);
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,
             'course'                    => $course,
@@ -676,38 +679,40 @@ class CourseLessonController extends BaseController
 
     protected function isMobile()
     {
-        // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+// 如果有HTTP_X_WAP_PROFILE则一定是移动设备
 
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
             return true;
         }
 
-        //如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+//如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
 
         if (isset($_SERVER['HTTP_VIA'])) {
             //找不到为flase,否则为true
             return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
         }
 
-        //判断手机发送的客户端标志,兼容性有待提高
+//判断手机发送的客户端标志,兼容性有待提高
 
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $clientkeywords = array('nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
                 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
                 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
                 'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile');
-            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+
+// 从HTTP_USER_AGENT中查找手机浏览器的关键字
 
             if (preg_match("/(".implode('|', $clientkeywords).")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
         }
 
-        //协议法，因为有可能不准确，放到最后判断
+//协议法，因为有可能不准确，放到最后判断
 
         if (isset($_SERVER['HTTP_ACCEPT'])) {
-            // 如果只支持wml并且不支持html那一定是移动设备
-            // 如果支持wml和html但是wml在html之前则是移动设备
+// 如果只支持wml并且不支持html那一定是移动设备
+
+// 如果支持wml和html但是wml在html之前则是移动设备
 
             if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
                 return true;

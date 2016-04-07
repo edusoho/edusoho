@@ -205,13 +205,17 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    public function lessonShow($courseId, $lessonId)
+    public function lessonShowAction($courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
         if (!$lesson) {
             return $this->createMessageResponse('error', '该课时不存在！');
         }
+
+        $lesson = $this->_getLessonVedioInfo($lesson);
+
+        return $this->createJsonResponse($lesson);
     }
 
     /**
@@ -224,7 +228,7 @@ class OpenCourseController extends BaseController
         $lesson = $this->_checkPublishedLessonExists($course['id']);
         $lesson = $lesson ? $lesson : array();
 
-        list($lesson, $hasVideoWatermarkEmbedded, $hlsUrl) = $this->_getLessonVedioInfo($lesson);
+        $lesson = $this->_getLessonVedioInfo($lesson);
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
@@ -233,11 +237,9 @@ class OpenCourseController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
-            'course'                    => $course,
-            'lesson'                    => $lesson,
-            'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
-            'hlsUrl'                    => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
-            'member'                    => $member
+            'course' => $course,
+            'lesson' => $lesson,
+            'member' => $member
         ));
     }
 
@@ -462,7 +464,7 @@ class OpenCourseController extends BaseController
 
     public function _getLessonVedioInfo($lesson)
     {
-        $hasVideoWatermarkEmbedded = 0;
+        $lesson['videoWatermarkEmbedded'] = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -491,10 +493,12 @@ class OpenCourseController extends BaseController
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
+
+                $lesson['mediaHLSUri'] = $url['url'];
             }
 
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $hasVideoWatermarkEmbedded = 1;
+                $lesson['videoWatermarkEmbedded'] = 1;
             }
         } elseif ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
@@ -516,9 +520,7 @@ class OpenCourseController extends BaseController
             }
         }
 
-        $hlsUrl = (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '';
-
-        return array($lesson, $hasVideoWatermarkEmbedded, $hlsUrl);
+        return $lesson;
     }
 
     private function _checkCourseStatus($courseId)
