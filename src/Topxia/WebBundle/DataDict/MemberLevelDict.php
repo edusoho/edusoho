@@ -7,8 +7,8 @@ class MemberLevelDisct  implements DataDictInterface{
 	public function getDict()
 	{
 		return array(
-			'level_p'=>'普通会员',
-			'level_g'=>'金牌会员',
+			'level_p'=>$this->getServiceKernel()->trans('普通会员'),
+			'level_g'=>$this->getServiceKernel()->trans('金牌会员'),
 		);
 	}
 
