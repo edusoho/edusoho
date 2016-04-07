@@ -4,7 +4,7 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var ua = navigator.userAgent.toLowerCase();
-        if (ua.match(/MicroMessenger/i) != "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+        if (ua.match(/MicroMessenger/i) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
             window.location.href = '/login/bind/weixinmob?_target_path='+location.href;
         };
 
