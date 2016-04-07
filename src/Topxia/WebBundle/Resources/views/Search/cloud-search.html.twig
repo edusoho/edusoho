@@ -9,7 +9,6 @@
       <form class="input-group search-input-group" id="search-input-group" action="{{path('search')}}" method="get">
         <div class="input-wrap">
           <input type="hidden" name="type" value="{{type|default('')}}" >
-          <input type="hidden" name="targetType" value="{{targetType|default('')}}" >
           <input type="text" name="q" class="form-control" placeholder="{{'搜索'|trans}}" value="{{keywords}}">
           <i class="js-btn-clear es-icon es-icon-close01"></i>
         </div>

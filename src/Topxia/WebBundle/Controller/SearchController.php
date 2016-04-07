@@ -105,7 +105,6 @@ class SearchController extends BaseController
 
         $type       = $request->query->get('type', 'course');
         $page       = $request->query->get('page', '1');
-        $targetType = $request->query->get('targetType', 'group');
 
         $conditions = array(
             'type'  => $type,
@@ -119,7 +118,7 @@ class SearchController extends BaseController
             $conditions['num']     = $pageSize;
             $conditions['filters'] = json_encode(array('role' => 'teacher'));
         } elseif ($type == 'thread' && !empty($targetType)) {
-            $conditions['filters'] = json_encode(array('targetType' => $targetType));
+            $conditions['filters'] = json_encode(array('targetType' => 'group'));
         }
 
         $counts = 0;
@@ -141,7 +140,6 @@ class SearchController extends BaseController
             'resultSet'  => $resultSet,
             'counts'     => $counts,
             'paginator'  => $paginator,
-            'targetType' => $targetType
         ));
     }
 

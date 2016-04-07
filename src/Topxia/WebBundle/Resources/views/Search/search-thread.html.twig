@@ -14,16 +14,8 @@
 			<div class="media-body">
 				<div class="title"><a class="link-dark" href="{{path('group_thread_show',{id:thread.targetId,threadId:thread.id})}}" target="_blank">{{thread.title|raw}}</a></div>
 				<div class="text-sm color-gray">{{'来自'|trans}}
-					{% if thread.targetType == 'group'%}
 						{% set group = data('Group',{'groupId':thread.targetId|default(0)}) %}
 						<a class="mls" href="{{path('group_show',{id:thread.targetId})}}" target="_blank">{{group.title|default('')}}</a>
-					{% elseif thread.targetType == 'classroom'%}
-						{% set classroom = data('Classroom',{'classroomId':thread.targetId|default(0)}) %}
-						<a class="mls" href="{{path('classroom_show',{id:thread.targetId})}}" target="_blank">{{classroom.title|default('')}}</a>
-					{% elseif thread.targetType == 'course'%}
-						{% set course = data('Course',{'courseId':thread.targetId|default(0)}) %}
-						<a class="mls" href="{{path('course_show',{id:thread.targetId})}}" target="_blank">{{course.title|default('')}}</a>
-					{% endif %}
 					<span class="mlm">{{thread.createdTime|smart_time}}</span>
 				</div>
 			</div>
