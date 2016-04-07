@@ -122,15 +122,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'name'   => $initParams['fileName'],
             'hash'   => $initParams['hash']
         );
-<<<<<<< HEAD
 
         $api       = CloudAPIFactory::create('root');
-=======
-        #TODO... 暂时直传
-        // $params['uploadType'] = 'direct';
-        
-        $api       = CloudAPIFactory::create();
->>>>>>> feature/cloud-materialLib-baidu
         $apiResult = $api->post("/resources/{$file['globalId']}/upload_resume", $params);
 
         if (empty($apiResult['resumed']) || ($apiResult['resumed'] !== 'ok')) {
