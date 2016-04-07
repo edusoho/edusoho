@@ -1090,10 +1090,6 @@ settings_avatar:
     pattern:  /settings/avatar
     defaults: { _controller: TopxiaWebBundle:Settings:avatar }
 
-settings_approve:
-    pattern:  /settings/approve
-    defaults: { _controller: TopxiaWebBundle:Settings:approvalSubmit  }
-
 settings_avatar_crop:
     pattern:  /settings/avatar/crop
     defaults: { _controller: TopxiaWebBundle:Settings:avatarCrop }
