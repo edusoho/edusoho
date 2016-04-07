@@ -28,7 +28,7 @@
         <ul class="nav nav-tabs" id="search-nav-tabs" role="tablist">
           <li {% if type == 'course' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'course'}) }}" data-type="course" >{{'课程'|trans}}</a></li>
           <li {% if type == 'teacher' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'teacher'}) }}" data-type="teacher" >{{'教师'|trans}}</a></li>
-          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'话题'|trans}}</a></li>
+          <li {% if type == 'thread' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'thread'}) }}" data-type="thread" >{{'小组话题'|trans}}</a></li>
           <li {% if type == 'article' %}class="active" {% endif %}><a href="{{path('cloud_search',{q : keywords,type : 'article'}) }}" data-type="article" >{{'资讯'|trans}}</a></li>
         </ul>
         <div class="search-result" id="search-result">
@@ -42,14 +42,18 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">{{'常用关键词'|trans}}</h3>
-        </div>
-        <div class="panel-body">
+        {% if type %}
+          {% include 'TopxiaWebBundle:Search:search-hot-' ~ type|lower ~ '.html.twig' %}
+        {% else %}
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{'常用关键词'|trans}}</h3>
+          </div>
+          <div class="panel-body">
 
+          </div>
         </div>
-      </div>
+        {% endif %}
     </div>
   </div>
 
