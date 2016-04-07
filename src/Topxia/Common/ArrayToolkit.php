@@ -95,13 +95,6 @@ class ArrayToolkit
 
     public static function rename(array $array, array $map)
     {
-        $filtered = array();
-
-        foreach ($specialValues as $key => $value) {
-            if (!array_key_exists($key, $array)) {
-                continue;
-            }
-
         $keys = array_keys($map);
 
         foreach ($array as $key => $value) {
