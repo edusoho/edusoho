@@ -7,6 +7,9 @@
 
 {{ web_macro.flash_messages() }}
 
+<div class="page-header clearfix">
+  <h1 class="pull-left">云搜索</h1>
+</div>
 <form class="form-horizontal" id="cloud-setting-form" method="post" novalidate>
 
     {% if data.status == 'unlink' %}
@@ -17,12 +20,17 @@
       <div class="row form-group">
         {% if data.status == 'unconnect' %}
           <div class="col-md-2">
-            <button type="submit" class="btn btn-primary" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
           </div>
           <div class="col-md-10">
             <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云搜索服务！</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
           </div>
+        {% elseif data.status == 'close' %}
+            <div class="col-md-2">
+            <button type="submit" class="btn btn-primary mhs" name="upload_mode" value="cloud">启用云搜索</button>
+          </div>
+
         {% else %}
           {% if not setting('cloud_search.search_enabled') %}
             <div class="col-md-2 control-cloud">
