@@ -56,7 +56,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
 
-        // $this->isPluginInstalled('Coupon') &&
+// $this->isPluginInstalled('Coupon') &&
 
         if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);
@@ -537,7 +537,7 @@ class PayCenterController extends BaseController
         $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay');
 
         foreach ($payNames as $payName) {
-            if (!empty($setting[$payName.'_enabled'])) {
+            if (!empty($setting[$payName.'_enabled']) && strpos($this->getRequest()->headers->get('User-Agent'), 'MicroMessenger') !== false) {
                 $enableds[$payName] = array(
                     'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
                 );
