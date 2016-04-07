@@ -51,7 +51,7 @@
 
                       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
                           {% if classroom.price > 0 %}
-                           {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
+                           {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name', '虚拟币')}}
                           {% else %}
                             免费
                           {% endif %}
