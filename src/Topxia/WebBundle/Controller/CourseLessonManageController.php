@@ -347,11 +347,11 @@ class CourseLessonManageController extends BaseController
         $mediaIds = array_keys($mediaMap);
         $files    = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
-        foreach ($files as $file) {
-            $lessonIds = $mediaMap[$file['id']];
+        foreach ($files['data'] as $file) {
+            $lessonIds = $mediaMap[$file['extno']];
 
             foreach ($lessonIds as $lessonId) {
-                $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
+                $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['processStatus'];
             }
         }
 
@@ -360,7 +360,7 @@ class CourseLessonManageController extends BaseController
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
             'homeworks' => empty($homeworks) ? array() : $homeworks,
-            'files'     => ArrayToolkit::index($files, 'id')
+            'files'     => ArrayToolkit::index($files['data'], 'extno')
         ));
     }
 
