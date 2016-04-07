@@ -51,6 +51,6 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
 
     protected function getSettingService()
     {
-        return $this->getServiceKernel()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }
