@@ -118,8 +118,8 @@ services:
         arguments: ['@session.handler.pdo.connection', '%session.handler.pdo.options%', '@security.context', '@service_container']
 
     session.handler.redis.factory:
-        class: Topxia\Service\Common\RedisFactory
-        factory_class: Topxia\Service\Common\RedisFactory
+        class: Topxia\Service\Common\Redis\RedisFactory
+        factory_class: Topxia\Service\Common\Redis\RedisFactory
         factory_method: instance
         arguments: 
             - "@service_container"
@@ -178,6 +178,30 @@ services:
     topxia.twig.block_extension:
         class: Topxia\WebBundle\Twig\Extension\BlockExtension
         arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    topxia.twig.theme_extension:
+        class: Topxia\WebBundle\Twig\Extension\ThemeExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+    topxia.twig.file_cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:    ['%kernel.root_dir%/../app/cache/twig']
+
+    topxia.twig.cache_provider:
+        class: Asm89\Twig\CacheExtension\CacheProvider\DoctrineCacheAdapter
+        arguments:    ['@topxia.twig.file_cache']
+
+    topxia.twig.cache_strategy:
+        class: Asm89\Twig\CacheExtension\CacheStrategy\LifetimeCacheStrategy
+        arguments:    ['@topxia.twig.cache_provider']
+
+    topxia.twig.cache_extension:
+        class: Asm89\Twig\CacheExtension\Extension
+        arguments:    ['@topxia.twig.cache_strategy']
         tags:
             - { name: twig.extension }
 

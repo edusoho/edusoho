@@ -12,16 +12,12 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
     {
         $goto = $request->query->get('goto');
 
-        $setting = $this->getSettingService()->get('login_bind');
-
-        $user_agent = $request->server->get('HTTP_USER_AGENT');
-
-        if (strpos($user_agent, 'MicroMessenger') && $setting['enabled'] && $setting['weixinmob_enabled']) {
-            $goto = "homepage";
-        }
-
         if (!$goto) {
-            $goto = "login";
+            if ($this->isMicroMessenger($request) && $this->isWeixinEnabled()) {
+                $goto = "homepage";
+            } else {
+                $goto = "login";
+            }
         }
 
         $this->targetUrl = $this->httpUtils->generateUri($request, $goto);
@@ -44,9 +40,20 @@ class LogoutSuccessHandler extends DefaultLogoutSuccessHandler
         return parent::onLogoutSuccess($request);
     }
 
+    protected function isWeixinEnabled()
+    {
+        $setting = $this->getSettingService()->get('login_bind');
+        return isset($setting['enabled']) && isset($setting['weixinmob_enabled']) && $setting['enabled'] && $setting['weixinmob_enabled'];
+    }
+
     private function getAuthService()
     {
         return ServiceKernel::instance()->createService('User.AuthService');
+    }
+
+    public function isMicroMessenger($request)
+    {
+        return strpos($request->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     protected function getSettingService()

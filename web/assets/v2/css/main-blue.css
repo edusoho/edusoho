@@ -4379,6 +4379,31 @@ a.homework-essay-textarea-pack-up {
 .quality-switcher .quality-actions {
   margin-top: 10px;
 }
+.ui-autocomplete {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 2px 2px 3px #eee;
+  z-index: 9999 !important;
+}
+.ui-autocomplete-ctn {
+  margin: 0;
+  padding: 0;
+}
+.ui-autocomplete-item {
+  width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 30px;
+  padding: 0 10px 0 10px;
+  cursor: default;
+}
+.ui-autocomplete-item-hover {
+  background: #f2f2f2;
+}
+.ui-autocomplete-item-hl {
+  background: #f6ff94;
+}
 .study-plan-form {
   color: #919191;
 }
@@ -5914,6 +5939,7 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.btn-tag.active,
 .btn-tag:hover {
   color: #fff;
   background-color: #0081e6;
@@ -11677,6 +11703,14 @@ textarea {
 }
 .form-paytype .check.active .icon {
   display: block;
+}
+.form-paytype .check.disabled {
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  cursor: default;
+}
+.form-paytype .check.disabled:hover {
+  border-color: #f5f5f5;
 }
 .form-paytype .check .icon {
   display: none;

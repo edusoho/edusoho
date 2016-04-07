@@ -50,10 +50,9 @@ define(function(require, exports, module) {
         }
         if (error.name == 'Unlogin') {
             var ua = navigator.userAgent.toLowerCase();
-            if (ua.match(/MicroMessenger/i) != "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+            if (ua.match(/MicroMessenger/) == "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
                 window.location.href = '/login/bind/weixinmob?_target_path='+location.href;
-            }
-            else {
+            } else {
                 var $loginModal = $("#login-modal");
                 $('.modal').modal('hide');
                 $loginModal.modal('show');
@@ -113,15 +112,6 @@ define(function(require, exports, module) {
             Cookie.set("close_announcements_alert",'true',{path: '/'});
         });
     }
-    var ua = navigator.userAgent.toLowerCase();
-    if (ua.match(/MicroMessenger/i)=="micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
-        if($('.weixin-alert.hide'))
-            $('.weixin-alert.hide').removeClass('hide');
-    };
-    
-    $(".weixin-alert .close").click(function(){
-        Cookie.set("close_weixin_alert",'true',{path: '/'});
-    });
 
    	if(!navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)){
 	    $("li.nav-hover").mouseenter(function(event) {

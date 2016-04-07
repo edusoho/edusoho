@@ -2,8 +2,9 @@
 namespace Topxia\Service\Common;
 
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Topxia\Service\Common\Proxy\ProxyManager;
+use Topxia\Service\Common\Redis\RedisFactory;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ServiceKernel
 {

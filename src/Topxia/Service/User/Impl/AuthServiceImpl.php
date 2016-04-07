@@ -11,26 +11,33 @@ class AuthServiceImpl extends BaseService implements AuthService
 
     public function register($registration, $type = 'default')
     {
-        $registration = $this->refillFormData($registration, $type);
-        $authUser     = $this->getAuthProvider()->register($registration);
+        $this->getKernel()->getConnection()->beginTransaction();
+        try {
+            $registration = $this->refillFormData($registration, $type);
+            $authUser     = $this->getAuthProvider()->register($registration);
 
-        if ($type == 'default') {
-            if (!empty($authUser['id'])) {
-                $registration['token'] = array(
-                    'userId' => $authUser['id']
-                );
+            if ($type == 'default') {
+                if (!empty($authUser['id'])) {
+                    $registration['token'] = array(
+                        'userId' => $authUser['id']
+                    );
+                }
+
+                $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
+            } else {
+                $newUser = $this->getUserService()->register($registration, $type);
+
+                if (!empty($authUser['id'])) {
+                    $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
+                }
             }
 
-            $newUser = $this->getUserService()->register($registration, $this->getAuthProvider()->getProviderName());
-        } else {
-            $newUser = $this->getUserService()->register($registration, $type);
-
-            if (!empty($authUser['id'])) {
-                $this->getUserService()->bindUser($this->getPartnerName(), $authUser['id'], $newUser['id'], null);
-            }
+            $this->getKernel()->getConnection()->commit();
+            return $newUser;
+        } catch (\Exception $e) {
+            $this->getKernel()->getConnection()->rollBack();
+            return array();
         }
-
-        return $newUser;
     }
 
     protected function refillFormData($registration, $type = 'default')
@@ -205,9 +212,7 @@ class AuthServiceImpl extends BaseService implements AuthService
     {
         if (SimpleValidator::email($emailOrMobile)) {
             return $this->checkEmail($emailOrMobile);
-        } else
-
-        if (SimpleValidator::mobile($emailOrMobile)) {
+        } elseif (SimpleValidator::mobile($emailOrMobile)) {
             return $this->checkMobile($emailOrMobile);
         } else {
             return array('error_dateInput', '电子邮箱或者手机号码格式不正确!');
