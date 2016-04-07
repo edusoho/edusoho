@@ -202,12 +202,8 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             $lessonNum += $course['lessonNum'];
 
@@ -435,12 +431,8 @@ class ClassroomController extends BaseController
         $coinPrice = 0;
         $price     = 0;
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
@@ -621,10 +613,11 @@ class ClassroomController extends BaseController
         }
 
         $order = $this->getOrderService()->getOrder($member['orderId']);
+
         if ($order['targetType'] == 'groupSell') {
             throw $this->createAccessDeniedException('组合购买课程不能退出。');
         }
-        
+
         $this->getClassroomService()->exitClassroom($id, $user["id"]);
 
         return $this->redirect($this->generateUrl('classroom_show', array('id' => $id)));
@@ -859,10 +852,10 @@ class ClassroomController extends BaseController
         $courseMembers     = $this->getCourseService()->findCoursesByStudentIdAndCourseIds($user["id"], $courseIds);
         $isJoinedCourseIds = ArrayToolkit::column($courseMembers, "courseId");
         $courses           = $this->getCourseService()->findCoursesByIds($isJoinedCourseIds);
+        $priceType         = "RMB";
 
         $coinSetting = $this->getSettingService()->get("coin");
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $priceType   = "RMB";
 
         if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
             $priceType = $coinSetting["price_type"];
@@ -887,12 +880,8 @@ class ClassroomController extends BaseController
     {
         $coursesTotalPrice = 0;
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $key => $course) {
             if ($priceType == "RMB") {
                 $coursesTotalPrice += $course["originPrice"];
@@ -1035,6 +1024,14 @@ class ClassroomController extends BaseController
             'users'      => $users,
             'classrooms' => $classrooms
         ));
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     public function orderInfoAction(Request $request, $sn)

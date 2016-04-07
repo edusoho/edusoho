@@ -259,6 +259,7 @@ class ClassroomManageController extends BaseController
             if (empty($data['price'])) {
                 $data['price'] = 0;
             }
+
             $order = $this->getOrderService()->createOrder(array(
                 'userId'     => $user['id'],
                 'title'      => "购买".$classroomName."《{$classroom['title']}》(管理员添加)",
@@ -606,12 +607,8 @@ class ClassroomManageController extends BaseController
         $price     = 0;
         $courses   = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $course) {
             $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
@@ -691,12 +688,8 @@ class ClassroomManageController extends BaseController
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
 
@@ -793,8 +786,8 @@ class ClassroomManageController extends BaseController
         }
 
         return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
-            'request'      => $request,
-            'targetId'      => $id,
+            'request'    => $request,
+            'targetId'   => $id,
             'targetType' => 'classroom'
         ));
     }
@@ -844,8 +837,8 @@ class ClassroomManageController extends BaseController
         $teachers   = $this->getUserService()->findUsersByIds($teacherIds);
 
         return $this->render('ClassroomBundle:ClassroomManage/Testpaper:index.html.twig', array(
-            'classroom' => $classroom,
-            'status'    => $status,
+            'classroom'    => $classroom,
+            'status'       => $status,
 
             'users'        => ArrayToolkit::index($users, 'id'),
             'paperResults' => $paperResults,
@@ -990,6 +983,14 @@ class ClassroomManageController extends BaseController
             $userIds[] = $user ? $user['id'] : null;
             return $userIds;
         }
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     protected function getClassroomService()

@@ -39,12 +39,8 @@ class ClassroomAdminController extends BaseController
         $priceAll            = array();
         $classroomCoursesNum = array();
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate    = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
+        $cashRate = $this->getCashRate();
+
         foreach ($classroomIds as $key => $value) {
             $courses                     = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
             $classroomCoursesNum[$value] = count($courses);
@@ -241,13 +237,8 @@ class ClassroomAdminController extends BaseController
         $classroomCoursesNum      = array();
         $courses                  = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
         $classroomCoursesNum[$id] = count($courses);
+        $cashRate                 = $this->getCashRate();
 
-        $coinSetting = $this->getSettingService()->get("coin");
-        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-        $cashRate = 0;
-        if ($coinEnable && !empty($coinSetting) && array_key_exists("cash_rate", $coinSetting)) {
-            $cashRate = $coinSetting["cash_rate"];
-        }
         foreach ($courses as $course) {
             $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
@@ -262,6 +253,14 @@ class ClassroomAdminController extends BaseController
             'coinPriceAll'        => $coinPriceAll,
             'priceAll'            => $priceAll
         ));
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     protected function getClassroomService()
