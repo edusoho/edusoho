@@ -184,11 +184,13 @@ class ClassroomManageController extends BaseController
 
         $fields    = $request->query->all();
 
-        $condition = array(
-            'targetType' => 'classroom',
-            'targetId' => $id,
-            'status' => 'success'
-            );
+        $condition = array();
+
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        }
+
+        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'classroom'));
         
         $paginator = new Paginator(
             $request,
