@@ -83,7 +83,8 @@ class CourseStudentManageController extends BaseController
             'isTeacherAuthManageStudent' => $isTeacherAuthManageStudent,
             'paginator'                  => $paginator,
             'canManage'                  => $this->getCourseService()->canManageCourse($course['id']),
-            'default'                    => $default
+            'default'                    => $default,
+            'role'                       => 'student'
         ));
     }
 
@@ -125,7 +126,8 @@ class CourseStudentManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
             'course'                     => $course,
             'refunds'                   => $refunds,
-            'paginator'                  => $paginator
+            'paginator'                  => $paginator,
+            'role'                       => ''
         ));
     }
 
