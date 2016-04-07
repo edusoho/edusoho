@@ -537,14 +537,25 @@ class PayCenterController extends BaseController
         $payNames = array('alipay', 'wxpay', 'quickpay', 'heepay');
 
         foreach ($payNames as $payName) {
-            if (!empty($setting[$payName.'_enabled']) && strpos($this->getRequest()->headers->get('User-Agent'), 'MicroMessenger') !== false) {
-                $enableds[$payName] = array(
-                    'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
-                );
+            if (!empty($setting[$payName.'_enabled'])) {
+                if (!$this->isMicroMessenger()) {
+                    $enableds[$payName] = array(
+                        'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                    );
+                } else ($payName == 'wxpay') {
+                    $enableds[$payName] = array(
+                        'type' => empty($setting[$payName.'_type']) ? '' : $setting[$payName.'_type']
+                    );
+                } 
             }
         }
 
         return $enableds;
+    }
+
+    protected function isMicroMessenger()
+    {
+        return strpos($this->getRequest()->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     protected function getCouponService()
