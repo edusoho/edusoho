@@ -3,6 +3,11 @@ define(function(require, exports, module) {
     require("placeholder")
 
     exports.run = function() {
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) != "micromessenger" && $('meta[name=is-open]').attr('content') != 0) {
+            window.location.href = '/login/bind/weixinmob?_target_path='+location.href;
+        };
+
         var validator = new Validator({
             element: '#login-ajax-form',
             autoSubmit: false,
@@ -10,7 +15,7 @@ define(function(require, exports, module) {
                 $form.find('.alert-danger').hide();
 
                 if (error) {
-                    return ;
+                    return;
                 }
 
                 $.post($form.attr('action'), $form.serialize(), function(response) {
@@ -32,8 +37,6 @@ define(function(require, exports, module) {
             element: '#ajax-password',
             required: true
         });
-
-
 
     };
 
