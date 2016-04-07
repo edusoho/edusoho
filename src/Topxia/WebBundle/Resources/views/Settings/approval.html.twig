@@ -1,7 +1,7 @@
 {% extends 'TopxiaWebBundle:Settings:layout.html.twig' %}
 
 {% block title %}{{'实名认证'|trans}} - {{ parent() }}{% endblock %}
-{% set side_nav = 'profile' %}
+{% set side_nav = 'approve' %}
 {% set script_controller = 'settings/approval' %}
 
 {% block main %}
@@ -14,9 +14,38 @@
     	{% block body %}
 
     	{% if app.user.approvalStatus in ['approved', 'unapprove', 'approve_fail'] %}
+
 	    	<form id="approval-form" class="form-horizontal" method="post" enctype="multipart/form-data">
 
 	        	{{ web_macro.flash_messages() }}
+
+	        			<div class="help-block approval">
+						<label class="col-md-2 control-label" ></label>
+							{% if app.user.approvalStatus == 'approving' %}
+								<div class="alert alert-info" role="alert">
+									{{'正在实名认证中，管理员会尽快答复您。'|trans}}
+								</div>
+							{% elseif  app.user.approvalStatus == 'approved' %}
+								<div class="alert alert-success" role="alert">
+									{{'恭喜您，已通过实名认证！'|trans}}
+								</div>
+							{% elseif  app.user.approvalStatus == 'unapprove' %}
+							<div class="alert alert-warning" role="alert">
+									{{'您尚未实名认证'|trans}}
+									<!--
+										<strong><a href="{{ path('settings_approve') }}">{{'点此认证'|trans}}</a>{{'。'|trans}}
+										</strong>
+									-->
+									{% if is_plugin_installed('TeacherAudit') %}{{'若您想成为教师，请去'|trans}}<strong><a href="{{ path('teacher_audit_submit') }}">{{'教师资格申请'|trans}}</a>。
+									</strong>{% endif %}
+								</div>
+							{% elseif app.user.approvalStatus == 'approve_fail' %}
+								 <p class="text-danger" >
+									{{'实名认证审核尚未通过，请参照通知中的信息，修改后重新'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'认证。'|trans}}</a>
+									</strong>
+								 </p>
+							{% endif %}
+					</div>
 
 				    <div class="form-group">
 				      <div class="col-md-2 control-label">

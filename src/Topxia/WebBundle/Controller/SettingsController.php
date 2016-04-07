@@ -55,7 +55,7 @@ class SettingsController extends BaseController
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
-
+            
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
                 return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
             }
