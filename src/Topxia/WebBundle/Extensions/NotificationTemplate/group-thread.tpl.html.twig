@@ -7,33 +7,33 @@
 	     {% set data = notification.content %}
 	    
 	     {% if data.type == 'delete'%}
-	     	    您的话题 <strong>“{{data.title}}”</strong>被<a href ="{{path('user_show',{id:data.userId})}}">{{data.userName}}</a>删除。
+	     	    {{'您的话题'|trans}} <strong>“{{data.title}}”</strong>{{'被'|trans}}<a href ="{{path('user_show',{id:data.userId})}}">{{data.userName}}</a>{{'删除。'|trans}}
 	     {% elseif data.type == 'elite' %}
-	     	    您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被设为精华。
+	     	    {{'您的话题'|trans}}<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被设为精华。'|trans}}
 	     {% elseif data.type == 'unelite' %}
-	      	  您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被取消精华。
+	      	  {{'您的话题'|trans}}<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被取消精华。'|trans}}
 	     {% elseif data.type == 'top' %}
-	     	    您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被置顶。
+	     	    {{'您的话题'|trans}}<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被置顶。'|trans}}
         {% elseif data.type == 'untop' %}
-			      您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被取消置顶。
+			      {{'您的话题'|trans}}<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被取消置顶。'|trans}}
         {% elseif data.type == 'close' %}
-         	  您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被关闭。
+         	  {{'您的话题'|trans}}<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被关闭。'|trans}}
         {% elseif data.type == 'open' %}
-         	  您的话题<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被打开。
+         	  {{'您的话题'|trans}}<a href="{{path('group_thread_show',{id:data.groupId, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被打开。'|trans}}
         {% elseif data.type == 'modify' %}
-            您的话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员编辑。<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'>点击查看</a>
+            {{'您的话题'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员编辑。'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'>{{'点击查看'|trans}}</a>
         {% elseif data.type == 'collect'%}
-            用户<a href="{{path('user_show', {id:data.userId})}}" target='_blank'>{{data.userName}}</a>已经收藏了你的话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>！
+            {{'用户'|trans}}<a href="{{path('user_show', {id:data.userId})}}" target='_blank'>{{data.userName}}</a>{{'已经收藏了你的话题'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>！
         {% elseif data.type == 'uncollect'%}
-            用户<a href="{{path('user_show', {id:data.userId})}}" target='_blank'>{{data.userName}}</a>已经取消收藏你的话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>！
+            {{'用户'|trans}}<a href="{{path('user_show', {id:data.userId})}}" target='_blank'>{{data.userName}}</a>{{'已经取消收藏你的话题'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>！
         {% elseif data.type == 'reply' %}
-            <a href="{{path('user_show', {id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>在话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>中回复了您。<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}?page={{data.page}}#post-{{data.post}}" target='_blank'>点击查看</a>
+            <a href="{{path('user_show', {id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>{{'在话题'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'中回复了您。'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}?page={{data.page}}#post-{{data.post}}" target='_blank'>{{'点击查看'|trans}}</a>
         {% elseif data.type == 'delete-post'%}
-            您在话题<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>的回复被删除。
+            {{'您在话题'|trans}}<a href="{{path('group_thread_show', {id:data.id, threadId:data.threadId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'的回复被删除。'|trans}}
         {% elseif data.type == 'type-modify'%}
             {% set url = data.targetType~'_thread_show' %}
             {% set urlId = data.targetType~'Id'%}  
-            您的话题<a href="{{path(data.targetType~'_thread_show' ,{(data.targetType~'Id'):data.targetId,threadId:data.targetId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>被<a href="{{path('user_show',{id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>编辑
+            {{'您的话题'|trans}}<a href="{{path(data.targetType~'_thread_show' ,{(data.targetType~'Id'):data.targetId,threadId:data.targetId})}}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被'|trans}}<a href="{{path('user_show',{id:data.userId})}}" target='_blank'><strong>{{data.userName}}</strong></a>{{'编辑'|trans}}
 	 	 {% endif %}
     </div>
     <div class="notification-footer">

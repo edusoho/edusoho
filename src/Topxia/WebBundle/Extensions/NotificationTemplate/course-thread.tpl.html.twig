@@ -8,45 +8,45 @@
 
           {% if data.type == 'at' %}
 
-            <a href="{{ path('user_show', {id:data.userId}) }}" target="_blank">{{ data.userName }}</a> 在话题 <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target="_blank">{{ data.title }}</a> 中@了您。
-            <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>点击查看</a>
+            <a href="{{ path('user_show', {id:data.userId}) }}" target="_blank">{{ data.userName }}</a> {{'在话题'|trans}} <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target="_blank">{{ data.title }}</a> {{'中@了您。'|trans}}
+            <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
 
           {% elseif data.type == 'reply'%}
 
-            <a href="{{ path('user_show', {id:data.userId}) }}" target="_blank">{{ data.userName }}</a> 在话题 <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target="_blank">{{ data.title }}</a> 中回复了您。
-            <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>点击查看</a>
+            <a href="{{ path('user_show', {id:data.userId}) }}" target="_blank">{{ data.userName }}</a> {{'在话题'|trans}} <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target="_blank">{{ data.title }}</a> {{'中回复了您。'|trans}}
+            <a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
 
           {% elseif data.type == 'modify-thread' %}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员编辑。<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>点击查看</a>
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员编辑。'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
             
           {% elseif data.type == 'modify-post' %}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>有回复被管理员编辑。<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>点击查看</a>
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'有回复被管理员编辑。'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}#post-{{data.postId}}" target='_blank'>{{'点击查看'|trans}}</a>
 
           {% elseif data.type == 'delete' %}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>有回复被管理员删除.
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'有回复被管理员删除.'|trans}}
 
           {% elseif data.type == 'modify'%}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员编辑.
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员编辑.'|trans}}
 
           {% elseif data.type == 'top' %}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员设为置顶. 
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员设为置顶.'|trans}} 
 
           {% elseif data.type == 'untop'%}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员取消置顶.
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员取消置顶.'|trans}}
 
           {% elseif data.type == 'elite'%}
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员加精. 
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员加精.'|trans}} 
 
           {% elseif data.type == 'unelite'%}  
 
-            您的话题<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>被管理员取消加精.
+            {{'您的话题'|trans}}<a href="{{ path('course_thread_show', {courseId:data.courseId,threadId:data.id}) }}" target='_blank'><strong>“{{data.title}}”</strong></a>{{'被管理员取消加精.'|trans}}
 
           {% endif %}
      
