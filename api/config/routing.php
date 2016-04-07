@@ -95,3 +95,8 @@ $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
 
 $app->post(_u('/im/me/login'), 'res.MeIMLogin:post');
 $app->post(_u('/im/me/conversations/{toUserId}'), 'res.MeIMConversation:post');
+
+$app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
+$app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');
+$app->get(_u('/courses/{courseId}/threads/{threadId}/posts'), 'res.CourseThreadPosts:get');
+$app->get(_u('/courses/{courseId}/threads/{threadId}/posts/{postId}'), 'res.CourseThreadPost:get');

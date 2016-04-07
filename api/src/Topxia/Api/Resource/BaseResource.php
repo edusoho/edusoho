@@ -22,14 +22,22 @@ abstract class BaseResource
         return $res;
     }
 
+    protected function simplify($res)
+    {
+        return $res;
+    }
+
     protected function callSimplify($name, $res)
     {
         global $app;
         return $app["res.{$name}"]->simplify($res);
     }
 
-    protected function simplify($res)
+    protected function multicallSimplify($name, $res)
     {
+        foreach ($res as $key => $one) {
+            $res[$key] = $this->callSimplify($name, $one);
+        }
         return $res;
     }
 
@@ -61,7 +69,7 @@ abstract class BaseResource
         if (is_array($total)) {
             return array('resources' => $resources, 'next' => $total);
         } else {
-            return array('resources' => $resources, 'total' => $total);
+            return array('resources' => $resources, 'total' => $total ? : 0);
         }
     }
 

@@ -46,6 +46,10 @@ $resources = array(
     'Playlist',
     'MeIMLogin',
     'MeIMConversation',
+    'CourseThread',
+    'CourseThreads',
+    'CourseThreadPost',
+    'CourseThreadPosts',
 );
 
 foreach ($resources as $res) {

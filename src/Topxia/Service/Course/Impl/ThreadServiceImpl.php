@@ -166,7 +166,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getSensitiveService()->sensitiveCheck($str, $type);
     }
 
-    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy)
+    public function searchThreadPosts($conditions, $sort, $start, $limit, $groupBy = '')
     {
         if (is_array($sort)) {
             $orderBy = $sort;
@@ -179,9 +179,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         return $this->getThreadPostDao()->searchThreadPosts($conditions, $orderBy, $start, $limit, $groupBy);
     }
 
-    public function searchThreadPostsCount($conditions, $groupBy)
+    public function searchThreadPostsCount($conditions, $groupBy = '')
     {
-        $this->getThreadPostDao()->searchThreadPostsCount($conditions, $groupBy);
+        return $this->getThreadPostDao()->searchThreadPostsCount($conditions, $groupBy);
     }
 
     public function createThread($thread)
