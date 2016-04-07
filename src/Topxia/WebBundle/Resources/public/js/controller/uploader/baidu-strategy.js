@@ -114,7 +114,7 @@ define(function(require, exports, module) {
         uploadAccept: function(object, ret){
             if (ret._responseHeaders && ret._responseHeaders['ETag']) {
                 var partNumber = this._getParameterByName('partNumber', ret._requestURL);
-                object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')});
+                object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
             }
         }
     });
