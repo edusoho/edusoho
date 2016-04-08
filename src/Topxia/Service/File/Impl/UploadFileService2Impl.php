@@ -120,8 +120,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (empty($files)) {
             return array();
         }
+        $groupFiles = ArrayToolkit::group($files,'storage');
+        $cloudFiles = $this->getFileImplementor(array('storage'=>'cloud'))->findFiles($groupFiles['cloud']);
 
-        return $this->getFileImplementor($files[0])->findFiles($files);
+        $cloudFiles = ArrayToolkit::index($cloudFiles,'id');
+        foreach ($files as $key => $file) {
+          if($file['storage']=='cloud'){
+            $files[$key] = $cloudFiles[$file['id']];
+          }
+        }
+        return $files;
     }
 
     public function searchFilesCount($conditions)
