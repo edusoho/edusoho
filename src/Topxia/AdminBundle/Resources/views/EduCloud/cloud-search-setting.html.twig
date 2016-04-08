@@ -28,7 +28,7 @@
           </div>
         {% elseif data.status == 'closed' %}
             <div class="col-md-2">
-            <button type="submit" class="btn btn-primary mhs" name="upload_mode" value="cloud">启用云搜索</button>
+              <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">启用云搜索</a>
           </div>
 
         {% else %}
