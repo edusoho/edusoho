@@ -170,7 +170,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $conditions['nos'] = implode(',', $globalIds);
 
         $conditions = array_filter($conditions, function ($value) {
-            if ($value === 0) {
+            if ($value === '0') {
                 return true;
             }
 
