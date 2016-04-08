@@ -6,8 +6,6 @@
     	{% set teachers = data('RecommendTeachers',{'count':5}) %}
 		{% if teachers %}
 			{% for teacher in teachers %}
-		  {% set profile = teacher.profile %}
-		  {% set isFollowed = teacher.isFollowed %}
 			<div class="media media-default">
 				<div class="media-left prl">
 					<a class=" js-user-card" href="/user/1" data-card-url="/user/1/card/show" data-user-id="1" data-original-title="" title="">
