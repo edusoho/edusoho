@@ -17,26 +17,8 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
-        $currentUserId = $currentUser['id'];
-
-        $keyWord = $request->query->get('keyword') ?: "";
-
-        $conditions           = $request->query->all();
-        $conditions['status'] = 'ok';
-
-        if (empty($conditions['type'])) {
-            $conditions['type'] = 'all';
-        }
-
-        if (!empty($keyWord)) {
-            $conditions['filename'] = $keyWord;
-        }
-
-        $conditions['currentUserId'] = $currentUserId;
-
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
             'tags'     => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
-            'tagNames' => null
         ));
     }
 
