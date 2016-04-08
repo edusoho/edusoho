@@ -152,7 +152,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
         for ($i = 0; $i < count($noArray); $i++) {
             if (empty($noArray[$i])) {
-                $globalIds = array();
+                $globalIds = array(0);
                 break;
             }
 
@@ -160,6 +160,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                 $globalIds = $noArray[$i];
             } else {
                 $globalIds = array_intersect($globalIds, $noArray[$i]);
+            }
+
+            if (empty($globalIds)) {
+                $globalIds = array(0);
             }
         }
 
