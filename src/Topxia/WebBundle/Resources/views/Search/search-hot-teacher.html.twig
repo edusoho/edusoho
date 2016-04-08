@@ -2,7 +2,7 @@
 	<div class="panel-heading">
           <h3 class="panel-title">{{'推荐教师'|trans}}</h3>
         </div>
-    <div class="panel-body">
+    <div class="panel-body  media-list">
     	{% set teachers = data('RecommendTeachers',{'count':5}) %}
 		{% if teachers %}
 			{% for teacher in teachers %}
