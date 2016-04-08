@@ -170,6 +170,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
             return !empty($value);
         });
+
         return $filterConditions;
     }
 
@@ -188,6 +189,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         }
       }
       unset($conditions['tags']);
+
       return $conditions;
     }
 
@@ -206,7 +208,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         if(isset($conditions['nos'])) {
           $conditions['nos'] = implode(',',$conditions['nos']);
         }
-        //unset($conditions['nos']);
+        unset($conditions['tags']);
+        unset($conditions['searchType']);
         return $conditions;
       }
     }
@@ -215,9 +218,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
       if (!empty($conditions['keywords'])) {
           if ($conditions['searchType'] == 'title') {
-              $localFiles              = $this->getUploadFileService()->searchFiles(array('filename' => $conditions['keywords']), array('createdTime', 'desc'), $conditions['start'], $conditions['limit']);
-              $globalIds               = ArrayToolkit::column($localFiles, 'globalId');
-              $conditions['nos'] = $globalIds;
+
           } elseif ($conditions['searchType'] == 'course') {
               $courses = $this->getCourseService()->findCoursesByLikeTitle($conditions['keywords']);
               $courseIds = ArrayToolkit::column($courses, 'id');
