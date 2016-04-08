@@ -6,13 +6,14 @@ class EventCloudAPI extends AbstractCloudAPI
     public function push($name, array $body = array(), $timestamp)
     {
         $event = array(
-            "name"      => $name,
-            "body"      => $body,
-            'timestamp' => $timestamp
+            'name'      => $name,
+            'body'      => $body,
+            'timestamp' => $timestamp,
+            'nonce' => substr(md5(uniqid('', true)), -16),
         );
 
         $event['user']      = $this->accessKey;
-        $event["signature"] = $this->makeSignature($event);
+        $event['signature'] = $this->makeSignature($event);
 
         return $this->_request('POST', '/events', $event);
     }
@@ -30,8 +31,8 @@ class EventCloudAPI extends AbstractCloudAPI
 
         curl_setopt($curl, CURLOPT_USERAGENT, $this->userAgent);
 
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->connectTimeout);
-        curl_setopt($curl, CURLOPT_TIMEOUT, $this->timeout);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 3);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_HEADER, 1);
 
@@ -107,8 +108,12 @@ class EventCloudAPI extends AbstractCloudAPI
 
     public function makeSignature($event)
     {
-        $text = http_build_query(array('name' => $event['name'], 'timestamp' => $event['timestamp']));
-        $text .= "\n".$this->secretKey;
-        return md5($text);
+        $text = "{$event['user']}:{$event['name']}:{$event['timestamp']}:{$event['nonce']}";
+        if (!empty($event['body'])) {
+            ksort($event['body']);
+            $text .= ':'. http_build_query($event['body'], null, '&', PHP_QUERY_RFC3986);
+        }
+        return hash_hmac('sha1', $text, $this->secretKey);
     }
+
 }

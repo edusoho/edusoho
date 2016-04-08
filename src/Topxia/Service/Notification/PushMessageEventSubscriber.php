@@ -530,7 +530,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function pushCloudData(ServiceEvernt $event)
+    public function pushCloudData(ServiceEvent $event)
     {
         $data = $event->getSubject();
         $this->getCloudDataService()->push('edusoho.'.$event->getName(), $data, time());
