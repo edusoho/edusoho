@@ -14,9 +14,9 @@
         {% if file.type in ['video', 'audio'] %}
         data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
         {% elseif file.type == 'ppt' %}
-        data-url="{{ path('material_lib_file_preview_ppt', {fileId: file.id}) }}"
+        data-url="{{ path('material_lib_file_player', {fileId: file.id}) }}"
         {% elseif file.type == 'document' %}
-        data-url="{{ path('material_lib_file_preview_document', {fileId: file.id}) }}"
+        data-url="{{ path('material_lib_file_player', {fileId: file.id}) }}"
         {% elseif file.type == 'image' %}
         data-url="{{ path('material_lib_file_preview_image', {fileId: file.id}) }}"
         {% elseif file.type == 'flash' %}

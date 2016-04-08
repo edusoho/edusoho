@@ -14,7 +14,7 @@ define(function(require, exports, module) {
         var fileType = playerDiv.data("fileType");
 
         if ($("#material-preview-player").length > 0) {
-            if($.inArray(fileType, ['video', 'audio', 'ppt', 'document'])) {
+            if($.inArray(fileType, ['video', 'audio', 'ppt', 'document'])>=0) {
                 var html = '<iframe src=\''+url+'\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
                 playerDiv.html(html);
             } else if (fileType=='image') {

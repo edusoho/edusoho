@@ -101,29 +101,6 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function pptAction(Request $request, $fileId)
-    {
-        $file = $this->tryAccessFile($fileId);
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:ppt', array(
-            'globalId' => $file['globalId']
-        ));
-    }
-
-    public function documentAction(Request $request, $fileId)
-    {
-        $file = $this->tryAccessFile($fileId);
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:document', array(
-            'globalId' => $file['globalId']
-        ));
-    }
-
-    public function imageAction(Request $request, $fileId)
-    {
-        $file     = $this->tryAccessFile($fileId);
-        $download = $this->getUploadFileService()->getDownloadFile($fileId);
-        return $this->createJsonResponse($download);
-    }
-
     public function editAction(Request $request, $globalId)
     {
         $fields = $request->request->all();
