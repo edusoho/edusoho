@@ -27,13 +27,8 @@ class MaterialLibController extends BaseController
 
     public function manageAction(Request $request)
     {
-        $conditions = $request->query->all();
-
         return $this->render('MaterialLibBundle:Admin:manage.html.twig', array(
-            'type'          => $request->query->get('type', ''),
-            'courseId'      => $request->query->get('courseId', ''),
-            'createdUserId' => $request->query->get('createdUserId', ''),
-            'tags'          => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
 
