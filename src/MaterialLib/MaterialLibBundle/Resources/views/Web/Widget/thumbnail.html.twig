@@ -14,7 +14,7 @@
       <li>
         <a data-url="{{ path('material_download', {globalId:uploadFile.globalId}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" ><i class="glyphicon glyphicon-save prm"></i>下载</a>
       </li>
-      {% if uploadFile.isMine %}
+      {% if uploadFile.createdUserId == app.user.id %}
       <li>
         <a class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {globalId:uploadFile.globalId}) }}"> <i class="glyphicon glyphicon-trash prm"></i>删除</a>
       </li>
@@ -22,7 +22,7 @@
   </ul>
 </div>
 <div class="star">
-    <i class="glyphicon glyphicon-star js-collect-btn left {% if uploadFile.collected|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
+    <i class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
 </div>
 <div class="mask">
   {#}<i class="es-icon es-icon-view"></i><span>{{ uploadFile.views|default(0) }}</span>#}

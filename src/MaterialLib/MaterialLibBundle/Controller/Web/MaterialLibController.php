@@ -55,40 +55,33 @@ class MaterialLibController extends BaseController
         }
 
         $conditions['currentUserId'] = $currentUserId;
-        $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+        $paginator                   = new Paginator(
+            $request,
+            $this->getUploadFileService()->searchFilesCount($conditions),
+            20
+        );
 
-        if (empty($files)) {
-            $files = array();
-        }
+        $files = $this->getUploadFileService()->searchFiles(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
 
-        $collections = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
+        $collections = $this->getUploadFileService()->findCollectionsByUserIdAndFileIds(
+            ArrayToolkit::column($files, 'id'),
+            $currentUserId
+        );
 
-        foreach ($files as $key => $file) {
-            if (in_array($file['id'], ArrayToolkit::column($collections, 'fileId'))) {
-                $files[$key]['collected'] = 1;
-            } else {
-                $files[$key]['collected'] = 0;
-            }
-
-            $uploadTags            = $this->getUploadFileTagService()->findByFileId($file['id']);
-            $tagIds                = ArrayToolkit::column($uploadTags, 'tagId');
-            $tags                  = $this->getTagService()->findTagsByIds($tagIds);
-            $files[$key]['tags']   = ArrayToolkit::column($tags, 'name');
-            $files[$key]['isMine'] = $currentUserId == $file['createdUserId'];
-        }
+        $collections = ArrayToolkit::index($collections, 'fileId');
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
-
-        $tags = $this->getTagService()->findAllTags(0, PHP_INT_MAX);
-
         return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
-            'files'          => $files,
-            'createdUsers'   => $createdUsers,
-            'paginator'      => $paginator,
-            'now'            => time(),
-            'tags'           => $tags
+            'files'        => $files,
+            'collections'  => $collections,
+            'createdUsers' => $createdUsers,
+            'paginator'    => $paginator
         ));
     }
 
