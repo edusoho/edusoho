@@ -414,7 +414,7 @@ function _create_connection()
     return $connection;
 }
 
-class SystemInitinitAdmin
+class SystemInit
 {
     public function initAdmin($user)
     {
