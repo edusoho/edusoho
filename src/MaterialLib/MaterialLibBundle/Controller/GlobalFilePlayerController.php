@@ -49,6 +49,7 @@ class GlobalFilePlayerController extends BaseController
         if (empty($file)) {
             throw $this->createNotFoundException();
         }
+
         return $this->createJsonResponse($file);
     }
 
