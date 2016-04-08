@@ -17,6 +17,10 @@ class SearchServiceImpl extends BaseService implements SearchService
             throw new \RuntimeException("搜索失败，请稍候再试.", 1);
         }
 
+        if(empty($result['body']['datas'])){
+            return array(array(), 0);
+        }
+
         $resultSet = $result['body']['datas'];
         $counts    = $result['body']['count'];
 
