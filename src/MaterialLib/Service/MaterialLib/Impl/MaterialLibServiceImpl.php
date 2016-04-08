@@ -145,6 +145,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
         if (!empty($conditions['keywords']) && in_array($conditions['searchType'], array('course', 'user'))) {
             $noArray[] = $this->findGlobalIdsByKeyWords($conditions['searchType'], $conditions['keywords']);
+            unset($conditions['keywords']);
         }
 
         $globalIds = array();
@@ -171,6 +172,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
             return !empty($value);
         });
+
+        unset($conditions['searchType']);
+        unset($conditions['tags']);
 
         return $conditions;
     }
