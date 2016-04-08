@@ -123,12 +123,12 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="nickname"]',
             required: true,
-            rule: 'chinese_alphanumeric byte_minlength{min:4} byte_maxlength{max:18} remote'
+            rule: 'chinese_alphanumeric not_all_digital byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
 
         validator.addItem({
             element: '[name="staffNo"]',
-            required: true,
+            // required: true,
             rule: 'staff_no minlength{min:5} maxlength{max:12} remote',
         });
 
