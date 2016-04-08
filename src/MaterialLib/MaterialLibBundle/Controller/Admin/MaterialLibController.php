@@ -6,22 +6,23 @@ use Topxia\Common\Paginator;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Topxia\Common\ArrayToolkit;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
     public function indexAction()
     {
-        try{
-          $api = CloudAPIFactory::create('root');
-          $result = $api->get("/me");
+        try {
+            $api    = CloudAPIFactory::create('leaf');
+            $result = $api->get("/me");
         } catch (\RuntimeException $e) {
             return $this->render('MaterialLibBundle:Admin:api-error.html.twig', array());
         }
-        if(isset($result['hasStorage']) && $result['hasStorage'] == '1' ){
-          return $this->redirect($this->generateUrl('admin_material_lib_manage'));
+
+        if (isset($result['hasStorage']) && $result['hasStorage'] == '1') {
+            return $this->redirect($this->generateUrl('admin_material_lib_manage'));
         }
+
         return $this->render('MaterialLibBundle:Admin:error.html.twig', array());
     }
 
@@ -52,7 +53,6 @@ class MaterialLibController extends BaseController
             20
         );
 
-
         return $this->render('MaterialLibBundle:Admin:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
@@ -63,14 +63,16 @@ class MaterialLibController extends BaseController
 
     public function detailAction(Request $reqeust, $globalId)
     {
-      try{
-        $material   = $this->getMaterialLibService()->get($globalId);
-        if($material['type'] == 'video' ) {
-          $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+        try {
+            $material = $this->getMaterialLibService()->get($globalId);
+
+            if ($material['type'] == 'video') {
+                $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+            }
+        } catch (\RuntimeException $e) {
+            return $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
         }
-      }catch (\RuntimeException $e) {
-        return $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
-      }
+
         return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
             'material'   => $material,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
@@ -101,6 +103,7 @@ class MaterialLibController extends BaseController
         $date  = array();
         $data1 = array();
         $data2 = array();
+
         for ($i = 1; $i <= 365; $i++) {
             $inter   = $i + 1;
             $date[]  = date('Y-m-d', strtotime("+{$i} day"));
@@ -121,9 +124,9 @@ class MaterialLibController extends BaseController
 
     public function reconvertAction(Request $request, $globalId)
     {
-      return $this->getMaterialLibService()->reconvert($globalId,array(
-        'directives' => array()
-      ));
+        return $this->getMaterialLibService()->reconvert($globalId, array(
+            'directives' => array()
+        ));
     }
 
     public function playAction(Request $request, $globalId)
@@ -158,8 +161,10 @@ class MaterialLibController extends BaseController
             );
 
             return $this->generateUrl('hls_playlist', $params, true);
-            // } else {
-            //     $result = $client->generateHLSQualitiyListUrl($file['metas'], 3600);
+
+// } else {
+
+//     $result = $client->generateHLSQualitiyListUrl($file['metas'], 3600);
             // }
         } else {
             if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
@@ -213,5 +218,4 @@ class MaterialLibController extends BaseController
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
-
 }
