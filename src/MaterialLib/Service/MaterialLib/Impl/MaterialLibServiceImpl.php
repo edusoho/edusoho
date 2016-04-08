@@ -143,7 +143,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             $noArray[] = $this->findGlobalIdsByTags($conditions['tags']);
         }
 
-        if (!empty($conditions['keywords']) && in_array($conditions['searchType'], array('title', 'user'))) {
+        if (!empty($conditions['keywords']) && in_array($conditions['searchType'], array('course', 'user'))) {
             $noArray[] = $this->findGlobalIdsByKeyWords($conditions['searchType'], $conditions['keywords']);
         }
 
@@ -191,7 +191,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function findGlobalIdsByKeyWords($searchType, $keywords)
     {
         if ($searchType == 'course') {
-            $courses   = $this->getCourseService()->findCoursesByLikeTitle($conditions['keywords']);
+            $courses   = $this->getCourseService()->findCoursesByLikeTitle($keywords);
             $courseIds = ArrayToolkit::column($courses, 'id');
 
             if (empty($courseIds)) {
@@ -202,10 +202,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             $globalIds  = ArrayToolkit::column($localFiles, 'globalId');
 
             return $globalIds;
-        } elseif ($conditions['searchType'] == 'user') {
-            $users      = $this->getUserService()->searchUsers(array('nickname' => $conditions['keywords']), array('id', 'desc'), 0, 999);
+        } elseif ($searchType == 'user') {
+            $users      = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, 999);
             $userIds    = ArrayToolkit::column($users, 'id');
-            $localFiles = $this->getMaterialLibDao()->findFilesByUserIds($userIds, $conditions['start'], $conditions['limit']);
+            $localFiles = $this->getMaterialLibDao()->findFilesByUserIds($userIds, 0, PHP_INT_MAX);
             $globalIds  = ArrayToolkit::column($localFiles, 'globalId');
             return $globalIds;
         }
