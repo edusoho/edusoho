@@ -13,11 +13,11 @@
 					<a class=" js-user-card" href="/user/1" data-card-url="/user/1/card/show" data-user-id="1" data-original-title="" title="">
 						<img class="avatar-md" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></a>
 				</div>
-				<div class="media-body {% if not profile.about %}media-middle{% endif %}">
+				<div class="media-body {% if not profile.profile %}media-middle{% endif %}">
 					<div class="title">
 						<a class="link-dark link-light" href="/user/1">{{ teacher.nickname }}</a>
 					</div>
-					<div class="content">{% if profile.about %}{{ profile.about|plain_text(30) }}{% endif %}
+					<div class="content">{% if profile.profile %}{{ profile.profile}}{% endif %}
 					</div>
 				</div>
 			</div>
