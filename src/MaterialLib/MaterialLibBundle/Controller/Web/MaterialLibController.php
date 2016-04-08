@@ -18,7 +18,7 @@ class MaterialLibController extends BaseController
         }
 
         return $this->render('MaterialLibBundle:Web:material-thumb-view.html.twig', array(
-            'tags'     => $this->getTagService()->findAllTags(0, PHP_INT_MAX),
+            'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
     }
 
@@ -39,9 +39,14 @@ class MaterialLibController extends BaseController
     {
         //$synData = $this->getMaterialLibService()->synData();
 
-        $currentUser   = $this->getCurrentUser();
-        $currentUserId = $currentUser['id'];
-        $conditions    = $request->query->all();
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $currentUserId        = $currentUser['id'];
+        $conditions           = $request->query->all();
         $conditions['status'] = 'ok';
 
         if (!empty($conditions['keyword'])) {
@@ -51,11 +56,13 @@ class MaterialLibController extends BaseController
 
         $conditions['currentUserId'] = $currentUserId;
         $paginator                   = new Paginator($request, $this->getUploadFileService()->searchFilesCount($conditions), 20);
-        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime','DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
-        if(empty($files)) {
-          $files = array();
+        $files                       = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), $paginator->getOffsetCount(), $paginator->getPerPageCount());
+
+        if (empty($files)) {
+            $files = array();
         }
-        $collections                 = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
+
+        $collections = $this->getUploadFileService()->findcollectionsByUserIdAndFileIds(ArrayToolkit::column($files, 'id'), $currentUserId);
 
         foreach ($files as $key => $file) {
             if (in_array($file['id'], ArrayToolkit::column($collections, 'fileId'))) {
@@ -75,7 +82,7 @@ class MaterialLibController extends BaseController
 
         $storageSetting = $this->getSettingService()->get("storage");
 
-        $tags = $this->getTagService()->findAllTags(0, 999);
+        $tags = $this->getTagService()->findAllTags(0, PHP_INT_MAX);
 
         return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
             'currentUserId'  => $currentUserId,
@@ -221,15 +228,17 @@ class MaterialLibController extends BaseController
 
     public function batchTagShowAction(Request $request)
     {
-        $data = $request->request->all();
-        $fileIds  = preg_split('/,/', $data['fileIds']);
+        $data    = $request->request->all();
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
         foreach ($fileIds as $key => $fileId) {
-          $file = $this->getUploadFileService()->getFile($fileId);
-          if(!empty($file['globalId'])){
-            $this->getMaterialLibService()->edit($file['globalId'], array('tags'=>$data['tags']));
-          } else {
-            continue;
-          }
+            $file = $this->getUploadFileService()->getFile($fileId);
+
+            if (!empty($file['globalId'])) {
+                $this->getMaterialLibService()->edit($file['globalId'], array('tags' => $data['tags']));
+            } else {
+                continue;
+            }
         }
 
         return $this->redirect($this->generateUrl('material_lib_browsing'));
