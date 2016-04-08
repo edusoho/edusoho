@@ -1,8 +1,8 @@
-<div class="panel panel-default">
+<div class="panel panel-default live-course-body">
 	<div class="panel-heading">
         <h3 class="panel-title">{{'推荐课程'|trans}}</h3>
     </div>
-    <div class="panel-body">
+    <div class="panel-body es-live-recommend">
     	{% set courses = data('RecommendCourses',{'count':10}) %}
     	{% for course in courses if course %}
 	    <div class="media">
