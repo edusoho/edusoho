@@ -8,7 +8,7 @@
 			{% for teacher in teachers %}
 		  {% set profile = teacher.profile %}
 		  {% set isFollowed = teacher.isFollowed %}
-			<div class="media">
+			<div class="media media-default">
 				<div class="media-left prl">
 					<a class=" js-user-card" href="/user/1" data-card-url="/user/1/card/show" data-user-id="1" data-original-title="" title="">
 						<img class="avatar-md" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></a>
