@@ -188,6 +188,10 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId)
     {
+        /*$sms_setting                                  = $this->getSettingService()->get('cloud_sms');
+        $sms_setting['sms_open_course_member_notify'] = 'on';
+        $this->getSettingService()->set('cloud_sms', $sms_setting);*/
+
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
         if (!$this->_checkCourseStatus($courseId)) {
@@ -199,6 +203,8 @@ class OpenCourseController extends BaseController
         }
 
         $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
+
+        $member = $this->_memberOperate($request, $courseId);
 
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course' => $course
@@ -413,16 +419,17 @@ class OpenCourseController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => '该课程不存在或已删除！'));
         }
 
-        $result = $this->_checkExistsMember($request, $id);
-
-        if (!$result['result']) {
-            return $this->createJsonResponse($result);
-        }
-
         $smsSetting = $this->getSettingService()->get('cloud_sms', array());
 
         if (!$user->isLogin() && !$smsSetting['sms_enabled']) {
             throw $this->createAccessDeniedException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $member = $this->_memberOperate($request, $courseId);
+
+            $fields = $request->request->all();
+            $member = $this->getOpenCourseService()->updateMember($member['id'], $fields);
         }
 
         return $this->render('TopxiaWebBundle:OpenCourse:member-sms-modal.html.twig', array(
@@ -568,6 +575,24 @@ class OpenCourseController extends BaseController
         return $favoriteNum;
     }
 
+    private function _memberOperate(Request $request, $courseId)
+    {
+        $result = $this->_checkExistsMember($request, $courseId);
+
+        if ($result['result']) {
+            $fields = array(
+                'courseId'      => $courseId,
+                'ip'            => $request->getClientIp(),
+                'lastEnterTime' => time()
+            );
+            $member = $this->getOpenCourseService()->createMember($fields);
+        } else {
+            $member = $this->getOpenCourseService()->updateMember($result['member']['id'], array('lastEnterTime' => time()));
+        }
+
+        return $member;
+    }
+
     private function _checkExistsMember(Request $request, $courseId)
     {
         $user   = $this->getCurrentUser();
@@ -580,7 +605,7 @@ class OpenCourseController extends BaseController
         }
 
         if ($openCourseMember) {
-            return array('result' => false, 'message' => '课程用户已存在！');
+            return array('result' => false, 'message' => '课程用户已存在！', 'member' => $openCourseMember);
         }
 
         return array('result' => true);

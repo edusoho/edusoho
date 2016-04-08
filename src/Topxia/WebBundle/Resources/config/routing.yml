@@ -2132,6 +2132,11 @@ open_course_manage_replay_title_update:
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:updateReplayTitle }
     methods: [POST]
 
+open_course_manage_student_export_csv:
+    pattern:  /open/course/{id}/manage/student/export
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
+
+
 open_course_course_search:
     pattern: /open/course/{filter}/course/{id}/search
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}

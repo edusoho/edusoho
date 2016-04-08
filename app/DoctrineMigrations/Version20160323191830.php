@@ -108,6 +108,7 @@ class Version20160323191830 extends AbstractMigration
                   `role` enum('student','teacher') NOT NULL DEFAULT 'student' COMMENT '课程会员角色',
                   `ip` varchar(64) COMMENT 'IP地址',
                   `lastEnterTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次进入时间',
+                  `isNotified` int(10) NOT NULL DEFAULT '0' COMMENT '直播开始通知',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '学员加入课程时间',
                   PRIMARY KEY (`id`),
                   UNIQUE KEY `courseId` (`courseId`,`userId`)

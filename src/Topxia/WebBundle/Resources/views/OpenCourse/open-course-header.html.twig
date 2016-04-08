@@ -53,23 +53,16 @@
           {% if lesson.startTimeLeft <= 7200 %}
             <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id})}}" target="_blank">{{'进入直播教室'|trans}}</a>
           {% else %}
-            <a id="alert-btn" class="btn btn-info btn-lg mask-btn" 
-              {% if setting('cloud_sms.sms_enabled') or ( not app.user and not setting('cloud_sms.sms_enabled')) %} 
-                data-url="{{ path('open_course_member_sms',{id:course.id}) }}" data-toggle="modal" data-target="#modal" 
-              {% elseif app.user and not setting('cloud_sms.sms_enabled') %} 
-                data-url="{{ path('open_course_member_create',{id:course.id}) }}" 
-              {% endif %}
-
-              {% if member %}
-                style="display:none;"
-              {% endif %}
-            >
-              {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
-            </a>
-          
-            <button id="alerted-btn" class="btn btn-info btn-lg mask-btn active" {% if not member %}style="display:none;"{% endif %}>
-            {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
-            </button>
+            {% if member and member.isNotified %}
+              <button id="alerted-btn" class="btn btn-info btn-lg mask-btn active">
+                {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
+              </button>
+            {% elseif setting('cloud_sms.sms_enabled') %}
+              <a id="alert-btn" class="btn btn-info btn-lg mask-btn" 
+                data-url="{{ path('open_course_member_sms',{id:course.id}) }}" data-toggle="modal" data-target="#modal" >
+                {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
+              </a>
+            {% endif %}
           {% endif %}
           <div class="color-gray mtl">已有<span class="member-num">{{ course.studentNum}}</span>人设置了提醒</div>
         </div>
@@ -83,7 +76,7 @@
         <div class="mask-content">
           <h2>{{'直播已经结束'|trans}}</h2>
           {% for replay in lesson.replays if replay %}
-            <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}">{{'查看回放'|trans}}</a>
+            <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_live_replay_entry',{courseId:lesson.courseId,lessonId:lesson.id,replayId:replay.id}) }}" target="_blank">{{'查看回放'|trans}}</a>
           {% endfor %}
         </div>
       {% endif %}

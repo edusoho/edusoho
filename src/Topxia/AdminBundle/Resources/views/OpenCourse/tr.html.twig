@@ -3,7 +3,7 @@
 <tr id="course-tr-{{ course.id }}">
   <td>{{ course.id }}</td>
   <td>
-    <a href="{{ path('course_show', {id:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
+    <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank"><strong>{{ course.title }}</strong></a>
     
     {% if course.type == 'liveOpen' %}
       <span class="label label-success live-label mls">直播</span>
