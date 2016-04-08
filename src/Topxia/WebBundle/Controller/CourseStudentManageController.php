@@ -17,33 +17,7 @@ class CourseStudentManageController extends BaseController
         $condition = array();
 
         if (isset($fields['keyword']) && !empty($fields['keyword'])) {
-            if (SimpleValidator::email($fields['keyword'])) {
-                $condition['email'] = $fields['keyword'];
-                $user               = $this->getUserService()->getUserByEmail($condition['email']);
-
-                $condition['userId'] = $user ? $user['id'] : -1;
-                unset($condition['email']);
-            } elseif (SimpleValidator::mobile($fields['keyword'])) {
-                $condition['mobile'] = $fields['keyword'];
-                $userIds             = array();
-                $mobileVerifiedUser  = $this->getUserService()->getUserByVerifiedMobile($condition['mobile']);
-                $profileUsers        = $this->getUserService()->searchUserProfiles(array('tel' => $condition['mobile']), array('id', 'DESC'), 0, PHP_INT_MAX);
-                $mobileNameUser      = $this->getUserService()->getUserByNickname($condition['mobile']);
-                $userIds             = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
-
-                $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
-                $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
-
-                $userIds = array_unique($userIds);
-
-                $condition['userIds'] = $userIds ? $userIds : -1;
-                unset($condition['mobile']);
-            } else {
-                $condition['nickname'] = $fields['keyword'];
-                $user                  = $this->getUserService()->getUserByNickname($condition['nickname']);
-                $condition['userId']   = $user ? $user['id'] : -1;
-                unset($condition['nickname']);
-            }
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
         $condition = array_merge($condition, array('courseId' => $course['id'], 'role' => 'student'));
