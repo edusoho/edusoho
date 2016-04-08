@@ -5,8 +5,29 @@
     <div class="panel-body">
     	{% set teachers = data('RecommendTeachers',{'count':5}) %}
 		{% if teachers %}
-		  <section class="recommend-teacher {{config.background|default("")}}">
+			{% for teacher in teachers %}
+		  {% set profile = teacher.profile %}
+		  {% set isFollowed = teacher.isFollowed %}
+			<div class="media">
+				<div class="media-left prl">
+					<a class=" js-user-card" href="/user/1" data-card-url="/user/1/card/show" data-user-id="1" data-original-title="" title="">
+						<img class="avatar-md" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></a>
+				</div>
+				<div class="media-body">
+					<div class="title">
+						<a class="link-dark link-light" href="/user/1">{{ teacher.nickname }}</a>
+					</div>
+					<div class="content">{% if profile.about %}{{ profile.about|plain_text(30) }}{% endif %}
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		  {#<section class="recommend-teacher {{config.background|default("")}}">
 		    <div class="container">
+		      <div class="text-line">
+		        <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
+		        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
+		      </div>
 		      <div class="row">
 		        {% for teacher in teachers %}
 		        {% set profile = teacher.profile %}
@@ -22,7 +43,7 @@
 		        </a>
 		      </div>
 		    </div>
-		  </section>
+		  </section>#}
 		{% else %}
 			<div class="empty">{{'暂无推荐教师信息！'|trans}}</div>
 		{% endif %}

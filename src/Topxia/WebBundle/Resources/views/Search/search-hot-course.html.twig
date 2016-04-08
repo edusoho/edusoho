@@ -8,7 +8,7 @@
 	    <div class="media">
 	      <div class="media-left">
 	      	<a href="{{ path('course_show',{id:course.id}) }}" title="{{ course.title }}" target="_blank">
-            <img src="{{ filepath(course.smallPicture, 'course.png') }}" style="width:96px;">
+            <img src="{{ filepath(course.smallPicture, 'course.png') }}">
           </a>
 	        
 	      </div>
@@ -24,7 +24,5 @@
     {% else %}
     	<div class="empty">暂无推荐课程</div>
     {% endfor %}
-
-
     </div>
 </div>
