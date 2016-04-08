@@ -76,7 +76,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             array_push($file,$cloudFiles);
           }
         }
-        var_dump($cloudFiles);
+
         return $cloudFiles;
     }
 

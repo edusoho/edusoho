@@ -699,6 +699,10 @@ course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
 
+course_manage_batch_upload_course_files:
+    pattern:  /course/{id}/manage/batch/upload/course/files/{targetType}
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:batchUploadCourseFiles }
+
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
@@ -1153,28 +1157,28 @@ settings_avatar_fetch_partner:
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
 
-settings_security: 
-    pattern:  /settings/security 
+settings_security:
+    pattern:  /settings/security
     defaults: { _controller: TopxiaWebBundle:Settings:security }
 
-settings_set_pay_password: 
+settings_set_pay_password:
     pattern:  /settings/set_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
 
-settings_pay_password: 
-    pattern:  /settings/pay_password 
+settings_pay_password:
+    pattern:  /settings/pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
 
 settings_reset_pay_password:
-    pattern:  /settings/reset_pay_password 
+    pattern:  /settings/reset_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
 
 settings_find_pay_password:
-    pattern:  /settings/find_pay_password 
+    pattern:  /settings/find_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
 
 settings_update_pay_password:
-    pattern:  /settings/update_pay_password 
+    pattern:  /settings/update_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:updatePayPassword }
 
 settings_security_questions:
@@ -1402,35 +1406,35 @@ my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
 
-user_show: 
+user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
-my_page_show: 
+my_page_show:
     pattern:  /my/page/show
     defaults: { _controller: TopxiaWebBundle:User:pageShow }
 
-user_about: 
+user_about:
     pattern:  /user/{id}/about
     defaults: { _controller: TopxiaWebBundle:User:about }
 
-user_teach: 
+user_teach:
     pattern:  /user/{id}/teach
     defaults: { _controller: TopxiaWebBundle:User:teach }
 
-user_learn: 
+user_learn:
     pattern:  /user/{id}/learn
     defaults: { _controller: TopxiaWebBundle:User:learn }
 
-user_favorited: 
+user_favorited:
     pattern:  /user/{id}/favorited
     defaults: { _controller: TopxiaWebBundle:User:favorited }
 
-user_friend: 
+user_friend:
     pattern:  /user/{id}/friend
     defaults: { _controller: TopxiaWebBundle:User:friend }
 
-user_group: 
+user_group:
     pattern:  /user/{id}/group
     defaults: { _controller: TopxiaWebBundle:User:group }
 
@@ -1456,11 +1460,11 @@ user_remind_counter:
     pattern:  /user_remind_counter
     defaults: { _controller: TopxiaWebBundle:User:remindCounter }
 
-user_teaching_classrooms: 
+user_teaching_classrooms:
     pattern:  /user/{id}/teaching/classrooms
     defaults: { _controller: TopxiaWebBundle:User:teaching }
 
-user_learning_classrooms: 
+user_learning_classrooms:
     pattern:  /user/{id}/learning/classrooms
     defaults: { _controller: TopxiaWebBundle:User:learning }
 
@@ -2004,7 +2008,7 @@ password_reset_by_sms:
     methods: [POST]
 
 settings_find_pay_password_by_sms:
-    pattern:  /settings/find_pay_password_by_sms 
+    pattern:  /settings/find_pay_password_by_sms
     defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
 
 order_pay_sms_verification:
@@ -2082,6 +2086,3 @@ live_course_manage_lesson_replay_title_update:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
-
-
-
