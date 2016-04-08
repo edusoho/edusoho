@@ -150,6 +150,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         } elseif (empty($conditions['keywords'])) {
           unset($conditions['searchType']);
           $filterConditions = $this->filterTags($conditions);
+
           if(isset($filterConditions['nos'])) {
             if(empty($filterConditions['nos'])) {
               $filterConditions['nos'] = 0;
@@ -177,10 +178,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
       if(!empty($conditions['tags'])) {
         $filesInTags = $this->getUploadFileTagService()->findByTagId($conditions['tags']);
         $fileIds     = ArrayToolkit::column($filesInTags, 'fileId');
-        $files = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $files = $this->getUploadFileService()->findLocalFilesByIds($fileIds);
 
-        if($files) {
+        if(!empty($files)) {
           $conditions['nos'] = ArrayToolkit::column($files, 'globalId');
+
         } else {
           $conditions['nos'] = array(0) ;
         }
