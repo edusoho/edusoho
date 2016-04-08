@@ -141,7 +141,7 @@ class BuildPluginAppCommand extends BaseCommand
         $meta = json_decode(file_get_contents($pluginDir.'/plugin.json'), true);
 
         if (empty($meta) || empty($meta['version'])) {
-            throw new \RuntimeException($this->trans('获取插件版本号失败！'));
+            throw new \RuntimeException('获取插件版本号失败！');
         }
 
         return $meta['version'];
@@ -152,7 +152,7 @@ class BuildPluginAppCommand extends BaseCommand
         $pluginDir = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../plugins/'.$name);
 
         if (empty($pluginDir)) {
-            throw new \RuntimeException($this->trans('%pluginDir%目录不存在', array('%pluginDir%' =>$pluginDir )));
+            throw new \RuntimeException("${pluginDir}目录不存在");
         }
 
         return $pluginDir;
@@ -168,7 +168,7 @@ class BuildPluginAppCommand extends BaseCommand
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id'        => 0,
-            'nickname'  => $this->trans('游客'),
+            'nickname'  => '游客',
             'currentIp' => '127.0.0.1',
             'roles'     => array()
         ));

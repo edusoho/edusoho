@@ -14,7 +14,7 @@ class BuildPackageCommand extends BaseCommand
     {
         $this
             ->setName('topxia:build-package')
-            ->setDescription($this->trans('编制升级包'))
+            ->setDescription('编制升级包')
             ->addArgument('name', InputArgument::REQUIRED, 'package name')
             ->addArgument('version', InputArgument::REQUIRED, 'which version to update')
             ->addArgument('diff_file', InputArgument::REQUIRED, 'Where is Diff file of both versions');
@@ -22,7 +22,7 @@ class BuildPackageCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('<question>'.'开始编制升级包'.'</question>');
+        $output->writeln('<question>开始编制升级包</question>');
 
         $name     = $input->getArgument('name');
         $version  = $input->getArgument('version');
@@ -48,14 +48,14 @@ class BuildPackageCommand extends BaseCommand
             $op   = $line[0];
 
             if (!in_array($line[0], array('M', 'A', 'D'))) {
-                echo $this->trans('无法处理该文件：%line%', array('%line%' =>$line ));
+                echo "无法处理该文件：{$line}";
                 continue;
             }
 
             $opFile = trim(substr($line, 1));
 
             if (empty($opFile)) {
-                echo $this->trans('无法处理该文件：%line%', array('%line%' =>$line ));
+                echo "无法处理该文件：{$line}";
                 continue;
             }
 
@@ -169,7 +169,7 @@ class BuildPackageCommand extends BaseCommand
         $path = realpath($this->getContainer()->getParameter('kernel.root_dir').'/../').'/scripts/upgrade-'.$version.'.php';
 
         if (!file_exists($path)) {
-            $output->writeln($this->trans('无升级脚本'));
+            $output->writeln("无升级脚本");
         } else {
             $targetPath = realpath($dir).'/Upgrade.php';
             $output->writeln($path." -> {$targetPath}");

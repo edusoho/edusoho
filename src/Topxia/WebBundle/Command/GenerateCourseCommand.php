@@ -19,7 +19,7 @@ class GenerateCourseCommand extends BaseCommand
         $this->setName ( 'generate:course' )
         ->addArgument('count',InputArgument::OPTIONAL)
         ->addArgument('price', InputArgument::OPTIONAL)
-        ->setDescription($this->trans('第一个参数为创建课程数量(默认为50),第二个参数为价格(默认为随即)'));
+        ->setDescription('第一个参数为创建课程数量(默认为50),第二个参数为价格(默认为随即)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -31,7 +31,7 @@ class GenerateCourseCommand extends BaseCommand
         try {
             for ($i=0; $i < $count; $i++) {
                 $price = $input->getArgument('price', raund(0, 100));
-                $course['title'] = $this->trans('课程-').$price.$this->trans('元-').time().'-'.$i;
+                $course['title'] = '课程-'.$price.'元-'.time().'-'.$i;
                 $course['status'] = 'published';
                 $course['about'] = '';
                 $course['userId'] = 1;

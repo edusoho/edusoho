@@ -20,7 +20,7 @@ class ApiTestCommand extends BaseCommand
     protected function configure()
     {
         $this->setName ( 'api:test' )
-            ->addArgument('type', InputArgument::OPTIONAL, $this->trans('类型'));
+            ->addArgument('type', InputArgument::OPTIONAL, '类型');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -82,7 +82,7 @@ class ApiTestCommand extends BaseCommand
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 0,
-            'nickname' => $this->trans('游客'),
+            'nickname' => '游客',
             'currentIp' =>  '127.0.0.1',
             'roles' => array(),
         ));

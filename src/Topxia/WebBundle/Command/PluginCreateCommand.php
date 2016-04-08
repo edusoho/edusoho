@@ -20,7 +20,7 @@ use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\User\CurrentUser;
 use Topxia\Common\ArrayToolkit;
 
-class PluginCreateCommand extends BaseCommand
+class PluginCreateCommand extends GeneratorCommand
 {
     protected function configure()
     {
@@ -28,10 +28,10 @@ class PluginCreateCommand extends BaseCommand
             ->addArgument(
                 'bundlename',
                 InputArgument::OPTIONAL,
-                $this->trans('插件名称?')
+                '插件名称?'
             )
             ->setName('plugin:create')
-            ->setDescription($this->trans('创建插件模板'))
+            ->setDescription('创建插件模板')
         ;
     }
 
@@ -41,11 +41,11 @@ class PluginCreateCommand extends BaseCommand
         $name = $input->getArgument('bundlename');
 
         if (!$name) {
-            throw new \RuntimeException($this->trans('插件名称不能为空！'));
+            throw new \RuntimeException("插件名称不能为空！");
         }
 
         if (!preg_match('/^[a-zA-Z\s]+$/', $name)) {
-            throw new \RuntimeException($this->trans('插件名称只能为英文！'));
+            throw new \RuntimeException("插件名称只能为英文！");
         }
         $name=ucfirst($name);
 

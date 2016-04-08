@@ -13,8 +13,8 @@ class CreateTestDataCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('test:create-data')
-             ->addArgument('start', InputArgument::REQUIRED, $this->trans('数据的起始索引'))
-             ->addArgument('num', InputArgument::REQUIRED, $this->trans('数据个数'));
+             ->addArgument('start', InputArgument::REQUIRED, '数据的起始索引')
+             ->addArgument('num', InputArgument::REQUIRED, '数据个数');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -37,7 +37,7 @@ class CreateTestDataCommand extends BaseCommand
             $user = $this->getAuthService()->register($user);
 
             $course = array(
-                'title'   => $this->trans('课程测试%i%', array('%i%' =>$i )),
+                'title'   => "课程测试{$i}",
                 "buyable" => "1",
                 "type"    => "normal"
             );
@@ -50,10 +50,10 @@ class CreateTestDataCommand extends BaseCommand
             for ($j = 0; $j < 5; $j++) {
                 $lesson = array(
                     'courseId' => $course['id'],
-                    'title'    => $this->trans('测试课时%j%', array('%j%' =>$j )),
+                    'title'    => "测试课时{$j}",
                     'type'     => 'text',
-                    'content'  => $this->trans('课时内容'),
-                    'summary'  => $this->trans('课时内容')
+                    'content'  => '课时内容',
+                    'summary'  => '课时内容'
                 );
                 $lesson = $this->getCourseService()->createLesson($lesson);
 
@@ -104,7 +104,7 @@ class CreateTestDataCommand extends BaseCommand
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id'        => 0,
-            'nickname'  => $this->trans('游客'),
+            'nickname'  => '游客',
             'currentIp' => '127.0.0.1',
             'roles'     => array()
         ));

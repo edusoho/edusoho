@@ -55,12 +55,12 @@ class GenerateQuestionCommand extends BaseCommand
 
             $question = array(
                 'type' => 'choice',
-                'stem' => $this->trans('单选题选择题 %i%，正确答案：', array('%i%' =>$i )) . implode('/', $answers),
+                'stem' => "单选题选择题 {$i}，正确答案：" . implode('/', $answers),
                 'choices' => array(
-                    $this->trans('选项0'),
-                    $this->trans('选项1'),
-                    $this->trans('选项2'),
-                    $this->trans('选项3'),
+                    '选项0',
+                    '选项1',
+                    '选项2',
+                    '选项3',
                 ),
                 'answer' => $answers,
                 'target' => $target,
@@ -85,12 +85,12 @@ class GenerateQuestionCommand extends BaseCommand
             $question = array(
                 'type' => 'choice',
                 'parentId' => $parentId,
-                'stem' => $this->trans('多选题选择题 %i%，正确答案：', array('%i%' =>$i )) . implode('/', $answers),
+                'stem' => "多选题选择题 {$i}，正确答案：" . implode('/', $answers),
                 'choices' => array(
-                    $this->trans('多选题选项0'),
-                    $this->trans('多选题选项1'),
-                    $this->trans('多选题选项2'),
-                    $this->trans('多选题选项3'),
+                    '多选题选项0',
+                    '多选题选项1',
+                    '多选题选项2',
+                    '多选题选项3',
                 ),
                 'answer' => $answers,
                 'target' => $target,
@@ -110,7 +110,7 @@ class GenerateQuestionCommand extends BaseCommand
             $question = array(
                 'type' => 'determine',
                 'parentId' => $parentId,
-                'stem' => $this->trans('判断题 %i%，答案：', array('%i%' =>$i )),
+                'stem' => "判断题 {$i}，答案：",
                 'target' => $target,
                 'answer' => array($answer),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
@@ -128,7 +128,7 @@ class GenerateQuestionCommand extends BaseCommand
             $question = array(
                 'type' => 'fill',
                 'parentId' => $parentId,
-                'stem' => $this->trans('填空题 %i%： [[答案1|答案2]].', array('%i%' =>$i )),
+                'stem' => "填空题 {$i}： [[答案1|答案2]].",
                 'target' => $target,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
@@ -145,9 +145,9 @@ class GenerateQuestionCommand extends BaseCommand
             $question = array(
                 'type' => 'essay',
                 'parentId' => $parentId,
-                'stem' => $this->trans('问答题 %i%', array('%i%' =>$i )),
+                'stem' => "问答题 {$i}",
                 'target' => $target,
-                'answer' => array($this->trans('答案')),
+                'answer' => array('答案'),
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
 
@@ -162,7 +162,7 @@ class GenerateQuestionCommand extends BaseCommand
         for ($i=0; $i<$count; $i++) {
             $question = array(
                 'type' => 'material',
-                'stem' => $this->trans('材料题 %i%', array('%i%' =>$i )),
+                'stem' => "材料题 {$i}",
                 'target' => $target,
                 'difficulty' => empty($difficulty) ? 'normal' : $difficulty,
             );
@@ -188,7 +188,7 @@ class GenerateQuestionCommand extends BaseCommand
         $currentUser = new CurrentUser();
         $currentUser->fromArray(array(
             'id' => 1,
-            'nickname' => $this->trans('游客'),
+            'nickname' => '游客',
             'currentIp' =>  '127.0.0.1',
             'roles' => array(),
         ));

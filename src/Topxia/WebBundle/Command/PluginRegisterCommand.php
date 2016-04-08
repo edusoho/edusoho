@@ -19,8 +19,8 @@ class PluginRegisterCommand extends BaseCommand
     protected function configure()
     {
         $this->setName ( 'plugin:register')
-            ->addArgument('code', InputArgument::REQUIRED, $this->trans('插件编码'))
-            ->setDescription($this->trans('注册插件到EduSoho'));
+            ->addArgument('code', InputArgument::REQUIRED, '插件编码')
+            ->setDescription('注册插件到EduSoho');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -32,7 +32,7 @@ class PluginRegisterCommand extends BaseCommand
 
         $pluginDir = dirname($this->getContainer()->getParameter('kernel.root_dir')) . '/plugins/' . $code;
         if (!is_dir($pluginDir)) {
-            throw new \RuntimeException($this->trans('插件目录%pluginDir%不存在！', array('%pluginDir%' =>$pluginDir )));
+            throw new \RuntimeException("插件目录{$pluginDir}不存在！");
         }
         $output->writeln("<comment>  - 检查插件目录...</comment><info>OK</info>");
 
@@ -60,12 +60,12 @@ class PluginRegisterCommand extends BaseCommand
     {
         $installFile = $pluginDir . '/Scripts/InstallScript.php';
         if (!file_exists($installFile)) {
-            throw new \RuntimeException($this->trans('插件安装脚本%installFile%不存在！', array('%installFile%' =>$installFile )));
+            throw new \RuntimeException("插件安装脚本{$installFile}不存在！");
         }
 
         include $installFile;
         if (!class_exists('InstallScript')) {
-            throw new \RuntimeException($this->trans('插件脚本%installFile%中，不存在InstallScript类。', array('%installFile%' =>$installFile )));
+            throw new \RuntimeException("插件脚本{$installFile}中，不存在InstallScript类。");
         }
 
         $installer = new \InstallScript(ServiceKernel::instance());
@@ -77,16 +77,16 @@ class PluginRegisterCommand extends BaseCommand
     {
         $metaFile = $pluginDir . '/plugin.json';
         if (!file_exists($metaFile)) {
-            throw new \RuntimeException($this->trans('插件元信息文件%metaFile%不存在！', array('%metaFile%' =>$metaFile )));
+            throw new \RuntimeException("插件元信息文件{$metaFile}不存在！");
         }
 
         $meta = json_decode(file_get_contents($metaFile), true);
         if (empty($meta)) {
-            throw new \RuntimeException($this->trans('插件元信息文件%metaFile%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFile%' =>$metaFile )));
+            throw new \RuntimeException("插件元信息文件{$metaFile}格式不符合JSON规范，解析失败，请检查元信息文件格式");
         }
 
         if (empty($meta['code']) || empty($meta['name']) || empty($meta['version'])) {
-            throw new \RuntimeException($this->trans('插件元信息必须包含code、name、version属性'));
+            throw new \RuntimeException("插件元信息必须包含code、name、version属性");
         }
 
         if ($meta['code'] != $code) {
