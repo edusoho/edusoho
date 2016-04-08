@@ -3,7 +3,6 @@
 namespace MaterialLib\MaterialLibBundle\Controller\Admin;
 
 use Topxia\Common\Paginator;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use MaterialLib\MaterialLibBundle\Controller\BaseController;
@@ -134,79 +133,6 @@ class MaterialLibController extends BaseController
         return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
             'globalId' => $globalId
         ));
-    }
-
-    protected function getPlayUrl($globalId, $context)
-    {
-        $file = $this->getMaterialLibService()->get($globalId);
-
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if (!in_array($file["type"], array("audio", "video"))) {
-            throw $this->createAccessDeniedException();
-        }
-
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        if (!empty($file['metas']) && !empty($file['metas']['levels']['sd']['key'])) {
-            // if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-            $token = $this->makeToken('hls.playlist', $file['id'], $context);
-
-            $params = array(
-                'id'    => $file['id'],
-                'token' => $token['token']
-            );
-
-            return $this->generateUrl('hls_playlist', $params, true);
-
-// } else {
-
-//     $result = $client->generateHLSQualitiyListUrl($file['metas'], 3600);
-            // }
-        } else {
-            if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                $key = $file['metas']['hd']['key'];
-            } else {
-                $key = $file['reskey'];
-            }
-
-            if ($key) {
-                $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
-            }
-        }
-
-        return $result['url'];
-    }
-
-    protected function makeToken($type, $fileId, $context = array())
-    {
-        $fileds = array(
-            'data'     => array(
-                'id' => $fileId
-            ),
-            'times'    => 3,
-            'duration' => 3600,
-            'userId'   => $this->getCurrentUser()->getId()
-        );
-
-        if (isset($context['watchTimeLimit'])) {
-            $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
-        }
-
-        if (isset($context['hideBeginning'])) {
-            $fileds['data']['hideBeginning'] = $context['hideBeginning'];
-        }
-
-        $token = $this->getTokenService()->makeToken($type, $fileds);
-        return $token;
-    }
-
-    protected function getTokenService()
-    {
-        return $this->createService('User.TokenService');
     }
 
     protected function getTagService()
