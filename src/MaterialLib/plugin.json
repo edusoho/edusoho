@@ -1,8 +1,0 @@
-{
-    "code": "MaterialLib",
-    "name": "素材库",
-    "description": "统一管理全部素材文件。可以与其他用户相互分享素材库内的文件。创建课程时可以从素材库中选取所需文件。",
-    "author": "EduSoho官方",
-    "version": "1.0.6",
-    "supprot_version": "4.8.0+"
-}
