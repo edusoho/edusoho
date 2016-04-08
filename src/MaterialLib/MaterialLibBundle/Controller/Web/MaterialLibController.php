@@ -80,16 +80,13 @@ class MaterialLibController extends BaseController
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
 
-        $storageSetting = $this->getSettingService()->get("storage");
 
         $tags = $this->getTagService()->findAllTags(0, PHP_INT_MAX);
 
         return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
-            'currentUserId'  => $currentUserId,
             'files'          => $files,
             'createdUsers'   => $createdUsers,
             'paginator'      => $paginator,
-            'storageSetting' => $storageSetting,
             'now'            => time(),
             'tags'           => $tags
         ));
