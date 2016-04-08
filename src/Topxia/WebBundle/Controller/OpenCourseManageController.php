@@ -404,42 +404,6 @@ class OpenCourseManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    private function _createCloudLive($liveCourse, $formFields)
-    {
-        $speakerId = current($liveCourse['teacherIds']);
-        $speaker   = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
-        $speaker   = $speaker ? $speaker['nickname'] : '老师';
-
-        $liveLogo    = $this->getSettingService()->get('course');
-        $liveLogoUrl = "";
-
-        if (!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])) {
-            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
-        }
-
-        $client = new EdusohoLiveClient();
-        $live   = $client->createLive(array(
-            'summary'     => null,
-            'title'       => $formFields['title'],
-            'speaker'     => $speaker,
-            'startTime'   => $formFields['startTime'].'',
-            'endTime'     => ($formFields['startTime'] + $formFields['length'] * 60).'',
-            'authUrl'     => $this->generateUrl('live_auth', array(), true),
-            'jumpUrl'     => $this->generateUrl('live_jump', array('id' => $formFields['courseId']), true),
-            'liveLogoUrl' => $liveLogoUrl
-        ));
-
-        if (empty($live)) {
-            throw new \RuntimeException('创建直播教室失败，请重试！');
-        }
-
-        if (isset($live['error'])) {
-            throw new \RuntimeException($live['error']);
-        }
-
-        return $live;
-    }
-
     private function getOpenCourse($request, $conditions)
     {
         $paginator = new Paginator(

@@ -318,7 +318,8 @@ throw $this->createServiceException('不能收藏未发布课程');
             'testMode'      => 'normal',
             'testStartTime' => 0,
             'suggestHours'  => '0.0',
-            'copyId'        => 0
+            'copyId'        => 0,
+            'status'        => 'unpublished'
         ));
 
         if (!ArrayToolkit::requireds($lesson, array('courseId', 'title', 'type'))) {
@@ -345,8 +346,6 @@ throw $this->createServiceException('不能收藏未发布课程');
             $fields['title'] = $this->purifyHtml($fields['title']);
         }
 
-        // 课程处于发布状态时，新增课时，课时默认的状态为“未发布"
-        $lesson['status']      = $course['status'] == 'published' ? 'unpublished' : 'published';
         $lesson['free']        = empty($lesson['free']) ? 0 : 1;
         $lesson['number']      = $this->_getNextLessonNumber($lesson['courseId']);
         $lesson['seq']         = $this->_getNextCourseItemSeq($lesson['courseId']);
@@ -406,7 +405,8 @@ throw $this->createServiceException('不能收藏未发布课程');
             'testMode'      => 'normal',
             'testStartTime' => 0,
             'suggestHours'  => '1.0',
-            'replayStatus'  => 'ungenerated'
+            'replayStatus'  => 'ungenerated',
+            'status'        => 'unpublished'
         ));
 
         if (isset($fields['title'])) {

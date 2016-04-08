@@ -30,7 +30,7 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $liveParams = $this->_filterParams($course['teacherIds'], $lesson, $container, 'update');
 
         $client = new EdusohoLiveClient();
-        $live   = $client->createLive($liveParams);
+        $live   = $client->updateLive($liveParams);
 
         return $live;
     }
@@ -41,6 +41,26 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
         $client = new EdusohoLiveClient();
         $result = $client->entryLive($params);
 
+        return $result;
+    }
+
+    public function entryReplay($lessonReplayId)
+    {
+        $lessonReplay = $this->getCourseService('course')->getCourseLessonReplay($lessonReplayId);
+        $user         = $this->getCurrentUser();
+
+        $lesson = $this->getCourseService($lessonReplay['type'])->getCourseLesson($lessonReplay['courseId'], $lessonReplay['lessonId']);
+
+        $args = array(
+            'liveId'   => $lesson["mediaId"],
+            'replayId' => $lessonReplay["replayId"],
+            'provider' => $lesson["liveProvider"],
+            'user'     => $user ? $user['email'] : '',
+            'nickname' => $user ? $user['nickname'] : 'guest'
+        );
+
+        $client = new EdusohoLiveClient();
+        $result = $client->entryReplay($args);
         return $result;
     }
 

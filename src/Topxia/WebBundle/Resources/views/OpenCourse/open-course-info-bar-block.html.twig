@@ -1,65 +1,65 @@
 <div class="col-md-12">
-  <div class="es-section open-course-header clearfix">
-  <div class="course-img">
-    <img class="img-responsive" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}" alt="{{ course.title }}">
-  </div>
-  <div class="course-info">
-    <h2 class="title">
-      {{ course.title }}
-    </h2>
-    <div class="matas">
-      <span><i class="es-icon es-icon-removeredeye mrm"></i>{{ course.hitNum }}</span>
-      <span><i class="es-icon es-icon-textsms mrm"></i>{{ course.postNum }}</span>
+  <div class="es-section open-course-header row">
+    <div class="col-md-2 course-img">
+      <img class="" src="{{ filepath(course.smallPicture|default(''), 'course.png') }}" alt="{{ course.title }}">
     </div>
-  </div>
-  <div class="course-operation">
-    <ul class="clearfix">
-      <li id="zan-btn" data-url="{{ path('open_course_unlike', {id:course.id}) }}" style="display: none;">
-        <a href="javascript:;"><i class="es-icon es-icon-thumbup active operation-icon"></i></a>
-        {{'已点赞'|trans}}
-        <div class="gray-darker">{{ course.likeNum }}</div>
-      </li>
-      <li id="unzan-btn" data-url="{{ path('open_course_like', {id:course.id}) }}" style="display: list-item;">
-        <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
-        {{'点赞'|trans}}
-        <div class="gray-darker">{{ course.likeNum }}</div>
-      </li>
-      <li>
-        <div class="es-share top">
-          <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share operation-icon"></i></a>
-          {{'分享'|trans}}
-          {#<div class="gray-darker">523</div>#}
-          {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
-        </div>
-      </li>
-      <li id="favorite-btn" data-url="{{ path('open_course_unfavorite',{id:course.id}) }}" style="display: none;">
-        <a href="javascript:;"><i class="es-icon es-icon-bookmark operation-icon"></i></a>
-        {{'已收藏'|trans}}
-        <div class="gray-darker">{{ course.favoriteNum }}</div>
-      </li>
-      <li id="unfavorite-btn" data-url="{{ path('open_course_favorite',{id:course.id}) }}" style="display: list-item;">
-        <a href="javascript:;"><i class="es-icon es-icon-bookmarkoutline operation-icon"></i></a>
-        {{'收藏'|trans}}
-        <div class="gray-darker">{{ course.favoriteNum }}</div>
-      </li>
-      <li>
-        <i class="es-icon es-icon-phone1 operation-icon"></i>
-          {{'二维码'|trans}}
-        {#<a class="qrcode-popover top" href="" data-url="{{path('open_course_qrcode',{id: course.id})}}">
-          <div class="gray-darker">{{'点击查看'|trans}}</div>
-          <div class="qrcode-content">
-           <img src="" alt="">  
+    <div class="col-md-2">
+      <h2 class="title">
+        {{ course.title }}
+      </h2>
+      <div class="matas">
+        <span><i class="es-icon es-icon-removeredeye mrm"></i>{{ course.hitNum }}</span>
+        <span><i class="es-icon es-icon-textsms mrm"></i>{{ course.postNum }}</span>
+      </div>
+    </div>
+    <div class="course-operation col-md-8 clearfix">
+      <ul class="clearfix">
+        <li id="zan-btn" data-url="{{ path('open_course_unlike', {id:course.id}) }}" style="display: none;">
+          <a href="javascript:;"><i class="es-icon es-icon-thumbup active operation-icon"></i></a>
+          {{'已点赞'|trans}}
+          <div class="gray-darker">{{ course.likeNum }}</div>
+        </li>
+        <li id="unzan-btn" data-url="{{ path('open_course_like', {id:course.id}) }}" style="display: list-item;">
+          <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
+          {{'点赞'|trans}}
+          <div class="gray-darker">{{ course.likeNum }}</div>
+        </li>
+        <li>
+          <div class="es-share top">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share operation-icon"></i></a>
+            {{'分享'|trans}}
+            {#<div class="gray-darker">523</div>#}
+            {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
           </div>
-        </a>#}
-        <span class="es-qrcode top" data-url="{{path('course_qrcode',{id: course.id})}}">
-        <div class="gray-darker es-qrcode">{{'点击查看'|trans}}</div>
-        <span class="qrcode-popover">
-          <img src="" alt="">
-          {{'扫二维码继续学习'|trans}}
+        </li>
+        <li id="favorite-btn" data-url="{{ path('open_course_unfavorite',{id:course.id}) }}" style="display: none;">
+          <a href="javascript:;"><i class="es-icon es-icon-bookmark operation-icon"></i></a>
+          {{'已收藏'|trans}}
+          <div class="gray-darker">{{ course.favoriteNum }}</div>
+        </li>
+        <li id="unfavorite-btn" data-url="{{ path('open_course_favorite',{id:course.id}) }}" style="display: list-item;">
+          <a href="javascript:;"><i class="es-icon es-icon-bookmarkoutline operation-icon"></i></a>
+          {{'收藏'|trans}}
+          <div class="gray-darker">{{ course.favoriteNum }}</div>
+        </li>
+        <li>
+          <i class="es-icon es-icon-phone1 operation-icon"></i>
+            {{'二维码'|trans}}
+          {#<a class="qrcode-popover top" href="" data-url="{{path('open_course_qrcode',{id: course.id})}}">
+            <div class="gray-darker">{{'点击查看'|trans}}</div>
+            <div class="qrcode-content">
+             <img src="" alt="">  
+            </div>
+          </a>#}
+          <span class="es-qrcode top" data-url="{{path('course_qrcode',{id: course.id})}}">
+          <div class="gray-darker es-qrcode" style="text-align:left">{{'点击查看'|trans}}</div>
+          <span class="qrcode-popover">
+            <img src="" alt="">
+            {{'扫二维码继续学习'|trans}}
+          </span>
         </span>
-      </span>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

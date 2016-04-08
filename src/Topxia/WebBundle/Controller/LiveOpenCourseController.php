@@ -47,8 +47,7 @@ class LiveOpenCourseController extends BaseController
 
     public function createLessonReplayAction(Request $request, $courseId, $lessonId)
     {
-        //$course = $this->getCourseService()->tryManageCourse($courseId);
-        $course = $this->getOpenCourseService()->getCourse($courseId);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
         if (!$lesson) {
@@ -71,9 +70,8 @@ class LiveOpenCourseController extends BaseController
 
     public function editLessonReplayAction(Request $request, $lessonId, $courseId)
     {
-        //$course = $this->getCourseService()->tryManageCourse($courseId);
-        $course = $this->getOpenCourseService()->getCourse($courseId);
-        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (!$lesson) {
             return $this->createMessageResponse('error', '改课程不存在或已删除！');
@@ -95,40 +93,28 @@ class LiveOpenCourseController extends BaseController
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:replay-lesson-modal.html.twig', array(
             'replayLessons' => $replayLessons,
             'lessonId'      => $lessonId,
-            'courseId'      => $courseId
+            'courseId'      => $courseId,
+            'lesson'        => $lesson
         ));
     }
 
-    public function entryReplayAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
+    public function updateReplayTitleAction(Request $request, $courseId, $lessonId, $replayId)
     {
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
-        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
 
-        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
-            'lesson' => $lesson,
-            'url'    => $this->generateUrl('live_classroom_replay_url', array(
-                'courseId'             => $courseId,
-                'lessonId'             => $lessonId,
-                'courseLessonReplayId' => $courseLessonReplayId
-            ))
-        ));
-    }
+        $title = $request->request->get('title');
 
-    public function getReplayUrlAction(Request $request, $courseId, $lessonId, $courseLessonReplayId)
-    {
-        $course = $this->getCourseService()->tryTakeCourse($courseId);
-        $result = $this->getCourseService()->entryReplay($lessonId, $courseLessonReplayId);
+        if (empty($title)) {
+            return $this->createJsonResponse(false);
+        }
 
-        return $this->createJsonResponse(array(
-            'url'   => $result['url'],
-            'param' => isset($result['param']) ? $result['param'] : null
-        ));
+        $this->getCourseService()->updateCourseLessonReplay($replayId, array('title' => $title));
+        return $this->createJsonResponse(true);
     }
 
     public function replayManageAction(Request $request, $id)
     {
-        //$course      = $this->getCourseService()->tryManageCourse($id);
-        $course  = $this->getOpenCourseService()->getCourse($id);
+        $course  = $this->getOpenCourseService()->tryManageOpenCourse($id);
         $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
 
         foreach ($lessons as $key => $lesson) {
@@ -141,6 +127,32 @@ class LiveOpenCourseController extends BaseController
             'course'  => $course,
             'items'   => $lessons,
             'default' => $default
+        ));
+    }
+
+    public function entryReplayAction(Request $request, $courseId, $lessonId, $replayId)
+    {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+
+        return $this->render("TopxiaWebBundle:LiveCourse:classroom.html.twig", array(
+            'lesson' => $lesson,
+            'url'    => $this->generateUrl('live_open_course_live_replay_url', array(
+                'courseId' => $courseId,
+                'lessonId' => $lessonId,
+                'replayId' => $replayId
+            ))
+        ));
+    }
+
+    public function getReplayUrlAction(Request $request, $courseId, $lessonId, $replayId)
+    {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+        $result = $this->getLiveCourseService()->entryReplay($replayId);
+
+        return $this->createJsonResponse(array(
+            'url'   => $result['url'],
+            'param' => isset($result['param']) ? $result['param'] : null
         ));
     }
 

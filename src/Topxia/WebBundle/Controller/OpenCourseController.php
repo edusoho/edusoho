@@ -236,6 +236,8 @@ class OpenCourseController extends BaseController
             $member = $this->getOpenCourseService()->getCourseMemberByIp($course['id'], $request->getClientIp());
         }
 
+        $lesson['replays'] = $this->_getLiveReplay($lesson);
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
             'course' => $course,
             'lesson' => $lesson,
@@ -450,7 +452,7 @@ class OpenCourseController extends BaseController
 
     public function playerAction($courseId, $lessonId)
     {
-        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException('课时不存在！');
@@ -462,7 +464,7 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    public function _getLessonVedioInfo($lesson)
+    private function _getLessonVedioInfo($lesson)
     {
         $lesson['videoWatermarkEmbedded'] = 0;
 
@@ -517,6 +519,12 @@ class OpenCourseController extends BaseController
                 $lesson['mediaSource'] = 'iframe';
             } else {
                 $lesson['mediaUri'] = $lesson['mediaUri'];
+            }
+        }
+
+        if ($lesson['type'] == 'liveOpen') {
+            if ($lesson['startTime'] > time()) {
+                $lesson['startTimeLeft'] = $lesson['startTime'] - time();
             }
         }
 
@@ -594,6 +602,22 @@ class OpenCourseController extends BaseController
         }
 
         return $text;
+    }
+
+    private function _getLiveReplay($lesson)
+    {
+        $replays = array();
+
+        if ($lesson['type'] == 'liveOpen') {
+            $replays = $this->getCourseService()->searchCourseLessonReplays(array(
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'hidden'   => 0,
+                'type'     => 'liveOpen'
+            ), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        }
+
+        return $replays;
     }
 
     protected function getOpenCourseService()

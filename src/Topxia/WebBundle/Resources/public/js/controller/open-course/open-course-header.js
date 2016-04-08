@@ -31,9 +31,11 @@ define(function(require, exports, module) {
             
         });
 
-        $('#live-tab li').click(function(){
+        $('#live-tab li a').click(function(){
             var $this = $(this);
-            var url = $this.find('a').data('url');
+            var url = $this.data('url');
+            $('#live-tab li a').removeClass('active');
+            $this.addClass('active');
             
             showPlayer(url);
         })

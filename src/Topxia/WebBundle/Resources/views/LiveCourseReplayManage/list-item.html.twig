@@ -48,7 +48,7 @@
 			{% set editUrl = path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
 			{% set createUrl = path('live_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
 		{% elseif lesson.type == 'liveOpen' %}
-			{% set editUrl = path('live_course_manage_lesson_replay_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
+			{% set editUrl = path('open_course_manage_lesson_replays_edit',{ lessonId:lesson.id ,courseId:course.id}) %}
 			{% set createUrl = path('live_open_course_lesson_replay_create', {courseId:course.id, lessonId:lesson.id}) %}
 		{% endif %}
 
