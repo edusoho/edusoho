@@ -29,7 +29,7 @@ class CourseOrderController extends OrderController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $userInfo                   = $this->getUserService()->getUserProfile($user['id']);
-        $complentUser = $this->getUserService()->getUser($user['id']);
+
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
@@ -85,8 +85,7 @@ class CourseOrderController extends OrderController
             'userFields'       => $userFields,
             'account'          => $account,
             'amount'           => $amount,
-            'vipStatus'        => $vipStatus,
-            'complentUser'     => $complentUser
+            'vipStatus'        => $vipStatus
         ));
     }
 
