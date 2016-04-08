@@ -29,6 +29,7 @@ class CourseOrderController extends OrderController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $userInfo                   = $this->getUserService()->getUserProfile($user['id']);
+        $complentUser = $this->getUserService()->getUser($user['id']);
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
@@ -84,7 +85,8 @@ class CourseOrderController extends OrderController
             'userFields'       => $userFields,
             'account'          => $account,
             'amount'           => $amount,
-            'vipStatus'        => $vipStatus
+            'vipStatus'        => $vipStatus,
+            'complentUser'     => $complentUser
         ));
     }
 
@@ -120,9 +122,9 @@ class CourseOrderController extends OrderController
             'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
             'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10'
         ));
-
+        $complentUser = ArrayToolkit::parts($formData, array('email'));
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
-
+        $user = $this->getUserService()->updateUser($user['id'], $complentUser);
         //判断用户是否为VIP
         $vipStatus = $courseVip = null;
 
