@@ -162,7 +162,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             }
         }
 
-        var_dump($globalIds);
         $conditions['nos'] = implode(',', $globalIds);
 
         $conditions = array_filter($conditions, function ($value) {
