@@ -540,28 +540,21 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('cloud_search', $cloud_search_settting);
         }
 
-        $data = array('status' => 'success');
+        $data = $cloud_search_settting;
 
         try {
             $api = CloudAPIFactory::create('root');
 
             $overview = $api->get("/users/{$api->getAccessKey()}/overview");
 
-            if($cloud_search_settting['status']=='waiting'){
-                $search_account = $api->get("/me/search_account");
-                if($search_account['isInit']=='yes'){
-                    $this->getSettingService()->set('cloud_search', array(
-                        'search_enabled' => $cloud_search_settting['search_enabled'],
-                        'status'         => 'ok'
-                        ));
-                }
-            }
-
+            $this->isSearchInited($api);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
                 'data' => array('status' => 'unlink')
             ));
         }
+
+
 
         //是否接入教育云
         if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
@@ -614,26 +607,30 @@ class EduCloudController extends BaseController
 
     public function searchOpenAction()
     {
-        $searchSetting['search_enabled'] = 1;
-        $searchSetting['status'] = 'ok';
-        $this->getSettingService()->set('cloud_search', $searchSetting);
-
-        $data = array('status' => 'success');
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+        if($cloud_search_settting['status'] == 'ok'){
+            $this->getSettingService()->set('cloud_search', array(
+                'search_enabled' => 1,
+                'status' => $cloud_search_settting['status'],
+            ));
+        }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
-            'data' => $data
+            'data' => array('status' => 'success')
         ));
     }
 
     public function searchCloseAction()
     {
-        $searchSetting['search_enabled'] = 0;
-        $this->getSettingService()->set('cloud_search', $searchSetting);
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
 
-        $data = array('status' => 'success');
+        $this->getSettingService()->set('cloud_search', array(
+            'search_enabled' => 0,
+            'status' => $cloud_search_settting['status'],
+            ));
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
-            'data' => $data
+            'data' => array('status' => 'success')
         ));
     }
 
@@ -976,6 +973,22 @@ class EduCloudController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-error.html.twig', array());
         }
+    }
+
+    protected function isSearchInited($api)
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        if($cloud_search_settting['status']=='waiting'){
+            $search_account = $api->get("/me/search_account");
+            if($search_account['isInit']=='yes'){
+                $this->getSettingService()->set('cloud_search', array(
+                    'search_enabled' => $cloud_search_settting['search_enabled'],
+                    'status'         => 'ok'
+                    ));
+            }
+        }
+        return true;
     }
 
     protected function getAppService()
