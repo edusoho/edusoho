@@ -28,5 +28,4 @@ interface MaterialLibService
 
     public function synData();
 
-    public function filterTagCondition($conditions,$data);
 }
