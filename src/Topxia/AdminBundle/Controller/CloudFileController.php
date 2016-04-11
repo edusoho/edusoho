@@ -77,6 +77,13 @@ class CloudFileController extends BaseController
         ));
     }
 
+    public function playerAction(Request $request, $globalId)
+    {
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+            'globalId' => $globalId
+        ));
+    }
+
     public function reconvertAction(Request $request, $globalId)
     {
         return $this->getCloudFileService()->reconvert($globalId, array(

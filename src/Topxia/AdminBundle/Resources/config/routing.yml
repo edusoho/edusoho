@@ -826,6 +826,10 @@ admin_cloud_file_detail:
     pattern:  /cloud_file/{globalId}/detail
     defaults: { _controller: TopxiaAdminBundle:CloudFile:detail }
 
+admin_cloud_file_play:
+    pattern:  /cloud_files/{globalId}/play
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:player }
+
 admin_cloud_file_reconvert:
     pattern: /cloud_file/{globalId}/reconvert
     defaults: { _controller: TopxiaAdminBundle:CloudFile:reconvert }
