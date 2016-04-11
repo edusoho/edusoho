@@ -61,8 +61,9 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         if (empty($targetIds)) {
             return array();
         }
+
         $marks = str_repeat('?,', count($targetIds) - 1).'?';
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = 'courselesson' AND targetId IN ({$marks})";
+        $sql   = "SELECT * FROM {$this->table} WHERE targetType = 'courselesson' AND targetId IN ({$marks})";
         return $this->getConnection()->fetchAll($sql, $targetIds) ?: array();
     }
 
@@ -87,14 +88,14 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchColumn($sql, array($etag));
     }
 
-    public function searchFiles($conditions, $orderBy, $start, $limit)
+    public function searchFiles($conditions, $orderBy = array('id', 'DESC'), $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
 
         return $builder->execute()->fetchAll() ?: array();
     }
@@ -102,7 +103,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     public function searchFileCount($conditions)
     {
         $builder = $this->createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -158,38 +159,41 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
     protected function createSearchQueryBuilder($conditions)
     {
-        $conditions           = array_filter($conditions,function ($value){
-            if($value === '0') {
-              return true;
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value === '0') {
+                return true;
             }
-            if(empty($value)) {
-              return false;
+
+            if (empty($value)) {
+                return false;
             }
+
             return true;
         });
         $conditions['status'] = 'ok';
+
         if (isset($conditions['filename'])) {
             $conditions['filenameLike'] = "%{$conditions['filename']}%";
             unset($conditions['filename']);
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, $this->table)
-                        ->andWhere('targetType = :targetType')
-                        ->andWhere('globalId = :globalId')
-                        ->andWhere('targetId = :targetId')
-                        ->andWhere('status = :status')
-                        ->andWhere('isPublic = :isPublic')
-                        ->andWhere('targetId IN ( :targets )')
-                        ->andWhere('type = :type')
-                        ->andWhere('storage = :storage')
-                        ->andWhere('filename LIKE :filenameLike')
-                        ->andWhere('id IN ( :ids )')
-                        ->andWhere('createdTime >= :startDate')
-                        ->andWhere('createdTime < :endDate')
-                        ->andWhere('usedCount >= :startCount')
-                        ->andWhere('usedCount < :endCount')
-                        ->andWhere('createdUserId IN ( :createdUserIds )');
+            ->from($this->table, $this->table)
+            ->andWhere('targetType = :targetType')
+            ->andWhere('globalId = :globalId')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('status = :status')
+            ->andWhere('isPublic = :isPublic')
+            ->andWhere('targetId IN ( :targets )')
+            ->andWhere('type = :type')
+            ->andWhere('storage = :storage')
+            ->andWhere('filename LIKE :filenameLike')
+            ->andWhere('id IN ( :ids )')
+            ->andWhere('createdTime >= :startDate')
+            ->andWhere('createdTime < :endDate')
+            ->andWhere('usedCount >= :startCount')
+            ->andWhere('usedCount < :endCount')
+            ->andWhere('createdUserId IN ( :createdUserIds )');
 
         return $builder;
     }
