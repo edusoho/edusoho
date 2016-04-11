@@ -3,35 +3,28 @@
     <h3 class="panel-title">{{'热门小组'|trans}}</h3>
   </div>
   <div class="panel-body">
-    {#{% set hotThreads = data('HotThreads',{'count':10}) %}
-      {% if hotThreads %}
-          {% for thread in hotThreads %}
-    <li style="border-bottom:none;background:url('{{asset('assets/img/default/triangle.png')}}') no-repeat 0 3px;padding-left:8px;padding-top:0px;margin-bottom:8px;">
-      <a  href="{{path('group_thread_show',{id:thread.groupId,threadId:thread.id})}}">{{thread.title|sub_text(textNum|default('15'))}}</a>
-    </li>
-    {% endfor %}
-      {% else %}
-    <div class="empty">{{'暂无话题信息！'|trans}}</div>
-    {% endif %}#}
     <div class="media-group-list">
       <div class="media media-group">
+        {% set hotGrops = data('HotGroup',{'count':5}) %}
+        {% for group in hotGrops %}
         <div class="media-left">
-          <a href="/group/1" title="123123123">
-            <img src="/files/default/2015/07-13/160431f01c37572154.jpg?6.16.1" alt="123123123" class="avatar-square-md"></a>
+          <a href="{{path('group_show',{'id':group.id})}}" title="{{group.title}}">
+            <img src="{{filepath(group.logo, 'group.png')}}" alt="{{group.title}}" class="avatar-square-md"></a>
         </div>
         <div class="media-body">
           <div class="title">
-            <a class="gray-darker" href="/group/1" title="123123123">123123123</a>
+            <a class="gray-darker" href="{{path('group_show',{'id':group.id})}}" title="{{group.title}}">{{group.title}}</a>
           </div>
           <div class="metas">
             <span> <i class="es-icon es-icon-people"></i>
-              5
+              {{group.memberNum}}
             </span>
             <span> <i class="es-icon es-icon-textsms"></i>
-              5
+              {{group.threadNum}}
             </span>
           </div>
         </div>
+      {% endfor %}
       </div>
     </div>
   </div>
