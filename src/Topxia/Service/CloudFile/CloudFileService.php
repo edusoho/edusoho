@@ -1,6 +1,6 @@
 <?php
 
-namespace MaterialLib\Service\MaterialLib;
+namespace Topxia\Service\CloudFile;
 
 interface CloudFileService
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace MaterialLib\Service\MaterialLib\Impl;
+namespace Topxia\Service\CloudFile\Impl;
 
-use MaterialLib\Service\BaseService;
-use MaterialLib\Service\MaterialLib\CloudFileService;
+use Topxia\Service\Common\BaseService;
+use Topxia\Service\CloudFile\CloudFileService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {

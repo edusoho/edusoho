@@ -245,7 +245,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getCloudFileService()
     {
-        return $this->createService('MaterialLib:MaterialLib.CloudFileService');
+        return $this->createService('CloudFile.CloudFileService');
     }
 
     protected function getUploadFileTagService()
