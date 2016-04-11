@@ -1,6 +1,6 @@
 <?php
 
-namespace MaterialLib\MaterialLibBundle\Controller\Web;
+namespace MaterialLib\MaterialLibBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;

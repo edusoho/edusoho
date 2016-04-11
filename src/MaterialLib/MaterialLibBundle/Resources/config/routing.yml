@@ -1,22 +1,22 @@
 material_lib_browsing:
     pattern: /material/lib/browse
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:index}
+    defaults: { _controller: MaterialLibBundle:MaterialLib:index}
 
 material_lib_show_browsing:
     pattern: /material/lib/show/browse
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:showMyMaterialLibForm}
+    defaults: { _controller: MaterialLibBundle:MaterialLib:showMyMaterialLibForm}
 
 material_lib_my_sharing:
     pattern: /material/lib/my/sharing/show
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:showShareForm }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:showShareForm }
 
 material_lib_my_sharing_detail:
     pattern: /material/lib/my/sharing_detail/show
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:historyDetailShow }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:historyDetailShow }
 
 material_lib_my_sharing_users:
     pattern: /material/lib/my/sharing_users/show
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:historyUserShow }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:historyUserShow }
 
 material_lib_my_sharing_history:
     pattern: /material/lib/my/sharing/users_history
@@ -24,27 +24,27 @@ material_lib_my_sharing_history:
 
 material_lib_my_sharing_contacts:
     pattern: /material/lib/recent/contacts
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:findMySharingContacts }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:findMySharingContacts }
 
 material_lib_save_sharing:
     pattern: /material/lib/my/sharing/save
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:saveShare }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:saveShare }
 
 material_tag_show_match:
     pattern: /material/lib/tag/match
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:match }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:match }
 
 material_lib_show_sharing_history:
     pattern: /material/lib/my/sharing/history
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:showShareHistory }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:showShareHistory }
 
 material_lib_cancel_sharing:
     pattern: /material/lib/my/sharing/cancel
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:cancelShare }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:cancelShare }
 
 material_lib_save_collection:
     pattern: /material/lib/my/collection/save
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:collect }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:collect }
 
 material_lib_file_preview_content:
     pattern:  /materiallib/file/{fileId}/preview_content
@@ -52,7 +52,7 @@ material_lib_file_preview_content:
 
 material_lib_file_preview:
     pattern:  /material/lib/file/{fileId}/preview
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:preview }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
 
 materiallib_file_delete:
     pattern: /materiallib/file/{id}/delete
@@ -60,7 +60,7 @@ materiallib_file_delete:
 
 material_lib_file_player:
     pattern:  /material/lib/{fileId}/player
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:player }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:player }
 
 material_lib_file_play_url:
     pattern:  /material/lib/{fileId}/play_url{suffix}
@@ -70,50 +70,50 @@ material_lib_file_play_url:
 
 material_lib_file_preview_image:
     pattern: /material/lib/{fileId}/preview/image
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:image }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:image }
 
 material_lib_file_preview_document:
     pattern:  /material/lib/{fileId}/preview/document
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:document }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:document }
 
 material_reconvert:
     pattern:  /material/lib/{globalId}/reconvert
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:reconvert }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:reconvert }
 
 material_thumbnail_generate:
     pattern:  /material/lib/{globalId}/thumbnail/generate
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:generateThumbnail }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:generateThumbnail }
 
 material_lib_file_detail:
     pattern:  /material/lib/{globalId}/detail
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:detail }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:detail }
 
 material_download:
     pattern:  /materiallib/{globalId}/download
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:download }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:download }
 
 material_delete:
     pattern:  /materiallib/{globalId}/delete
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:delete }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
     methods: [POST]
 
 material_batch_delete:
     pattern: /materials/batch/delete
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchDelete }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:batchDelete }
     methods: [POST]
 
 material_batch_share:
     pattern: /materials/batch/share
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchShare }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:batchShare }
     methods: [POST]
 
 material_batch_tag_show:
     pattern: /materials/batch/tag/show
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:batchTagShow }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:batchTagShow }
 
 material_edit:
     pattern:  /materiallib/{globalId}/edit
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:edit }
+    defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
     methods: [POST]
 
 
