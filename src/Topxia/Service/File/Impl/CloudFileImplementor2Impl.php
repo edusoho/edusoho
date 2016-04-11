@@ -91,6 +91,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         if (empty($result['data'])) {
             return $files;
         }
+
         $cloudFiles = $result['data'];
         $cloudFiles = ArrayToolkit::index($cloudFiles, 'no');
 
@@ -190,7 +191,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $params['directives'] = $file['directives'];
         }
 
-        #TODO... 暂时直传
+#TODO... 暂时直传
         // $params['uploadType'] = 'direct';
 
         $api       = CloudAPIFactory::create();
@@ -226,7 +227,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
                 continue;
             }
 
-            // 防错
+// 防错
 
             if (strlen($file['metas2'][$key]['key']) < 5) {
                 continue;
@@ -295,16 +296,16 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $api                     = CloudAPIFactory::create('root');
         $result                  = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
         $result['convertStatus'] = 'none';
-        $file = $api->get("/resources/{$file['globalId']}", array("refresh"=>true));
-        $result['length'] = $file['length'];
+        $file                    = $api->get("/resources/{$file['globalId']}", array("refresh" => true));
+        $result['length']        = $file['length'];
         return $result;
     }
 
     public function search($conditions)
     {
-        $api    = CloudAPIFactory::create('root');
-        $url    = '/resources?'.http_build_query($conditions);
-        $result = $api->get($url);
+        $api          = CloudAPIFactory::create('root');
+        $url          = '/resources?'.http_build_query($conditions);
+        $result       = $api->get($url);
         $cloudFiles   = $result['data'];
         $cloudFiles   = ArrayToolkit::index($cloudFiles, 'no');
         $localFileIds = ArrayToolkit::column($cloudFiles, 'extno');
@@ -378,38 +379,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
                 );
                 $file['metas2'] = $cloudFile['metas']['levels'];
             }
-
-            // if ($file['type'] == 'video') {
-            //     $file['convertParams'] = array(
-            //         'convertor'    => $cloudFile['directives']['output'],
-            //         'videoQuality' => $cloudFile['directives']['videoQuality'],
-            //         'audioQuality' => $cloudFile['directives']['audioQuality']
-            //     );
-            //     $file['metas2'] = $cloudFile['metas']['levels'];
-            // } elseif ($file['type'] == 'ppt') {
-            //     $file['convertParams'] = array(
-            //         'convertor' => $cloudFile['directives']['output']
-            //     );
-            //     $file['metas2'] = $cloudFile['metas'];
-            // } elseif ($file['type'] == 'document') {
-            //     $file['convertParams'] = array(
-            //         'convertor' => $cloudFile['directives']['output']
-            //     );
-            //     $file['metas2'] = $cloudFile['metas'];
-            // } elseif ($file['type'] == 'audio') {
-            //     $file['convertParams'] = array(
-            //         'convertor'    => $cloudFile['directives']['output'],
-            //         'videoQuality' => 'normal',
-            //         'audioQuality' => 'normal'
-            //     );
-            //     $file['metas2'] = $cloudFile['metas']['levels'];
-            // }
         }
 
         return $file;
     }
 
-    //以云端数据为主，字段也一样，以云端为主，只需要合并某些业务字段
+//以云端数据为主，字段也一样，以云端为主，只需要合并某些业务字段
     //未来需要替换掉以前的merge方法
     public function mergeCloudFile2($localFile, $cloudFile)
     {
@@ -430,13 +405,15 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function synData($conditions)
     {
-      $files = $this->getUploadFileDao()->searchFiles($conditions,array('createdTime','DESC'),0,999);
-      $api              = CloudAPIFactory::create('root');
-      $syncData         = $api->post("/resources/data/sync",$files);
-      foreach ($syncData as $key => $value) {
-        $this->getUploadFileDao()->updateFile($key,array('globalId'=>$value));
-      }
-      return true;
+        $files    = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 999);
+        $api      = CloudAPIFactory::create('root');
+        $syncData = $api->post("/resources/data/sync", $files);
+
+        foreach ($syncData as $key => $value) {
+            $this->getUploadFileDao()->updateFile($key, array('globalId' => $value));
+        }
+
+        return true;
     }
 
     protected function decodeMetas($metas)
