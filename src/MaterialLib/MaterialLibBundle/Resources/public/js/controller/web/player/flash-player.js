@@ -12,8 +12,8 @@ define(function(require, exports, module) {
             $("#flash-player").html(html);
             $("#flash-player").show();
         } else {
-            
-            swfobject.embedSWF(url,
+            var flashPlayer = $("#flash-player");
+            swfobject.embedSWF(flashPlayer.data('url'),
                 'flash-player', '100%', '100%', "9.0.0", null, null, {
                     wmode: 'opaque',
                     allowFullScreen: 'true'
