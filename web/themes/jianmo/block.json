@@ -208,6 +208,40 @@
             }
         }
     },
+     "jianmo:advertisement_banner":
+    {
+        "title": "简墨主题：中部广告",
+        "category": "jianmo",
+        "templateName": "@theme/jianmo/block/advertisement_banner.template.html.twig",
+        "items": {
+            "middleImg": {
+                "title": "广告图片",
+                "desc": "建议图片大小为宽114px高 200px",
+                "count": "1",
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "alt": "图片１的描述",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "middleBackground": {
+                "title": "背景填充色",
+                "desc": "填写颜色值,例如#ffffff",
+                "count": "1",
+                "type": "text",
+                "default": [
+                    {
+                        "value": "#e2133a"
+                    }
+                ]
+            }                                                                                                                       
+        }
+    },
+   
     "jianmo:bottom_info":
     {
         "title": "简墨主题: 首页底部.链接区域",
