@@ -2,9 +2,9 @@ admin_material_lib:
     name: 云资源
     parent: admin_app
     before: admin_setting_cloud
-admin_material_lib_manage:
-    name: 资源管理
-    parent: admin_material_lib
+# admin_material_lib_manage:
+#     name: 资源管理
+#     parent: admin_material_lib
 
 # admin_material_lib_stats:
 #     name: 数据统计

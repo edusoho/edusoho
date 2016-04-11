@@ -1,17 +1,22 @@
 {% extends 'MaterialLibBundle:Admin:layout.html.twig' %}
 
-{% set menu = 'admin_material_lib_manage' %}
+{% set menu = 'admin_material_lib' %}
 {% do load_script('materiallibbundle/controller/admin/manage') %}
 
 {% block main %}
-<form class="form-inline es-materials-manage" id="materials-form">
-  {% include 'MaterialLibBundle:Admin/Form:course-user-search.html.twig' %}
-  {% include 'MaterialLibBundle:Admin/Form:nav.html.twig' %}
-  {% include 'MaterialLibBundle:Admin/Form:tags.html.twig' %}
-  {% include 'MaterialLibBundle:Admin/Form:filter.html.twig' %}
-  {% include 'MaterialLibBundle:Admin/Form:sort.html.twig' %}
-  {% include 'MaterialLibBundle:Admin:table.html.twig' %}
-</form>
+<div class="eduyun-main">
+  <div class="page-header clearfix">
+    <h1 class="pull-left">云资源</h1>
+  </div>
+  <form class="form-inline es-materials-manage" id="materials-form">
+    {% include 'MaterialLibBundle:Admin/Form:course-user-search.html.twig' %}
+    {% include 'MaterialLibBundle:Admin/Form:nav.html.twig' %}
+    {% include 'MaterialLibBundle:Admin/Form:tags.html.twig' %}
+    {% include 'MaterialLibBundle:Admin/Form:filter.html.twig' %}
+    {% include 'MaterialLibBundle:Admin/Form:sort.html.twig' %}
+    {% include 'MaterialLibBundle:Admin:table.html.twig' %}
+  </form>
+</div>
 
-  
+
 {% endblock %}
