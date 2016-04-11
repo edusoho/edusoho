@@ -10998,14 +10998,9 @@ textarea {
   width: 120px;
   border: none;
 }
-@media (max-width: 991px) and (min-width: 768px) {
+@media (max-width: 991px) {
   .search-banner .search-input-group .btn {
     width: 100px;
-  }
-}
-@media (max-width: 767px) {
-  .search-banner .search-input-group .btn {
-    width: 100%;
   }
 }
 .search-banner .search-input-group .btn:hover {
