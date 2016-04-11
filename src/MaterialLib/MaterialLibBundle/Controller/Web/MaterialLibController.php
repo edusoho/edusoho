@@ -143,6 +143,212 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function showShareFormAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $currentUserId = $currentUser['id'];
+
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
+
+        return $this->render('MaterialLibBundle:Web/MyShare:share-my-materials.html.twig', array(
+            'allTeachers'   => $allTeachers,
+            'currentUserId' => $currentUserId
+        ));
+    }
+
+    public function showShareHistoryAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+        $conditions['sourceUserId'] = $user['id'];
+
+        $conditions['isActive'] = 1;
+        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            10
+        );
+
+        $shareHistories = $this->getUploadFileService()->searchShareHistories(
+            $conditions,
+            array('updatedTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+
+        $targetUserIds = array();
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
+        }
+
+        $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
+        return $this->render('MaterialLibBundle:Web/MyShare:material-share-history.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'allTeachers'    => $allTeachers,
+            'paginator'      => $paginator
+            ));
+    }
+
+    public function historyUserShowAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $conditions['sourceUserId'] = $user['id'];
+
+        $conditions['isActive'] = 1;
+        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            10
+        );
+
+        $shareHistories = $this->getUploadFileService()->searchShareHistories(
+            $conditions,
+            array('updatedTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $targetUserIds = array();
+
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
+        }
+
+        return $this->render('MaterialLibBundle:Web/MyShare:material-share-history-users.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'paginator'      => $paginator
+            ));
+    }
+
+    public function historyDetailShowAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+        $conditions['sourceUserId'] = $user['id'];
+
+        $shareHistoryCount = $this->getUploadFileShareHistoryService()->searchShareHistoryCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $shareHistoryCount,
+            10
+        );
+
+
+        $shareHistories = $this->getUploadFileShareHistoryService()->searchShareHistories(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $targetUserIds = array();
+
+        if (!empty($shareHistories)) {
+            foreach ($shareHistories as $history) {
+                array_push($targetUserIds, $history['targetUserId']);
+            }
+
+            $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
+
+        }
+
+        return $this->render('MaterialLibBundle:Web/MyShare:material-share-history-detail.html.twig', array(
+            'shareHistories' => isset($shareHistories) ? $shareHistories : array(),
+            'targetUsers'    => isset($targetUsers) ? $targetUsers : array(),
+            'source'         => 'myShareHistory',
+            'currentUserId'  => $user['id'],
+            'paginator'      => $paginator
+        ));
+    }
+
+    public function saveShareAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+        $currentUserId = $currentUser['id'];
+        $targetUserIds = $request->request->get('targetUserIds');
+
+        if (!empty($targetUserIds)) {
+            foreach ($targetUserIds as $targetUserId) {
+                if ($targetUserId != $currentUserId) {
+                    $shareHistory = $this->getUploadFileService()->findShareHistoryByUserId($currentUserId, $targetUserId);
+
+                    if (isset($shareHistory)) {
+                        $this->getUploadFileService()->updateShare($shareHistory['id']);
+                    } else {
+                        $this->getUploadFileService()->addShare($currentUserId, $targetUserId);
+                    }
+
+                    $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 1);
+
+                    $targetUser   = $this->getUserService()->getUser($targetUserId);
+                    $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
+                    $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
+                    $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>已将资料分享给你，<a href='{$toMyShareUrl}'>点击查看</a>");
+                }
+            }
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
+    public function cancelShareAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $currentUserId = $currentUser['id'];
+        $targetUserId  = $request->get('targetUserId');
+
+        if (!empty($targetUserId)) {
+            $this->getUploadFileService()->cancelShareFile($currentUserId, $targetUserId);
+            $this->getUploadFileShareHistoryService()->addShareHistory($currentUserId, $targetUserId, 0);
+
+            $targetUser   = $this->getUserService()->getUser($targetUserId);
+            $userUrl      = $this->generateUrl('user_show', array('id' => $currentUser['id']), true);
+            $toMyShareUrl = $this->generateUrl('material_lib_browsing', array('type' => 'all', 'viewMode' => 'thumb', 'source' => 'shared'));
+            $this->getNotificationService()->notify($targetUser['id'], 'default', "<a href='{$userUrl}' target='_blank'><strong>{$currentUser['nickname']}</strong></a>已取消分享资料给你，<a href='{$toMyShareUrl}'>点击查看</a>");
+        }
+
+        return $this->createJsonResponse(true);
+    }
+
     public function collectAction(Request $request)
     {
         $user = $this->getCurrentUser();
@@ -254,6 +460,11 @@ class MaterialLibController extends BaseController
         throw $this->createAccessDeniedException('您无权访问此文件！');
     }
 
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
     protected function getMaterialLibService()
     {
         return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
@@ -277,5 +488,15 @@ class MaterialLibController extends BaseController
     protected function getUploadFileTagService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileTagService');
+    }
+
+    protected function getUploadFileShareHistoryService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileShareHistoryService');
+    }
+
+    protected function getNotificationService()
+    {
+        return $this->getServiceKernel()->createService('User.NotificationService');
     }
 }

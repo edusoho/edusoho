@@ -8,19 +8,15 @@ material_lib_show_browsing:
 
 material_lib_my_sharing:
     pattern: /material/lib/my/sharing/show
-    defaults: { _controller: MaterialLibBundle:MaterialLib:showShareForm }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:showShareForm }
 
 material_lib_my_sharing_detail:
     pattern: /material/lib/my/sharing_detail/show
-    defaults: { _controller: MaterialLibBundle:MaterialLib:historyDetailShow }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:historyDetailShow }
 
 material_lib_my_sharing_users:
     pattern: /material/lib/my/sharing_users/show
-    defaults: { _controller: MaterialLibBundle:MaterialLib:historyUserShow }
-
-material_lib_delete_file:
-    pattern: /material/lib/{id}/delete
-    defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:historyUserShow }
 
 material_lib_my_sharing_history:
     pattern: /material/lib/my/sharing/users_history
@@ -28,7 +24,7 @@ material_lib_my_sharing_history:
 
 material_lib_save_sharing:
     pattern: /material/lib/my/sharing/save
-    defaults: { _controller: MaterialLibBundle:MaterialLib:saveShare }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:saveShare }
 
 material_tag_show_match:
     pattern: /material/lib/tag/match
@@ -36,15 +32,11 @@ material_tag_show_match:
 
 material_lib_show_sharing_history:
     pattern: /material/lib/my/sharing/history
-    defaults: { _controller: MaterialLibBundle:MaterialLib:showShareHistory }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:showShareHistory }
 
 material_lib_cancel_sharing:
     pattern: /material/lib/my/sharing/cancel
-    defaults: { _controller: MaterialLibBundle:MaterialLib:cancelShare }
-
-material_lib_my_sharing_contacts:
-    pattern: /material/lib/recent/contacts
-    defaults: { _controller: MaterialLibBundle:MaterialLib:findMySharingContacts }
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:cancelShare }
 
 material_lib_save_collection:
     pattern: /material/lib/my/collection/save
@@ -54,10 +46,6 @@ material_lib_file_preview_content:
     pattern:  /materiallib/file/{fileId}/preview_content
     defaults: { _controller: TopxiaWebBundle:CourseLesson:file }
 
-materiallib_file_deletes:
-    pattern: /materiallib/file/deletes
-    defaults: { _controller: MaterialLibBundle:MaterialLib:deletes }
-
 material_lib_file_preview:
     pattern:  /material/lib/file/{fileId}/preview
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:preview }
@@ -65,10 +53,6 @@ material_lib_file_preview:
 materiallib_file_delete:
     pattern: /materiallib/file/{id}/delete
     defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
-
-materiallib_file_download:
-    pattern: /materiallib/file/{id}/download
-    defaults: { _controller: MaterialLibBundle:MaterialLib:download }
 
 material_lib_file_player:
     pattern:  /material/lib/{fileId}/player
@@ -80,21 +64,10 @@ material_lib_file_play_url:
     requirements:
         suffix:  |.m3u8
 
-material_lib_file_preview_hlskeyurl:
-    pattern: /material/lib/{fileId}/preview/hlskeyurl/{token}
-    defaults: { _controller: MaterialLibBundle:MaterialLib:hlskeyurl }
-
-material_lib_file_preview_ppt:
-    pattern: /material/lib/{fileId}/preview/ppt
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:ppt }
-
 material_lib_file_preview_image:
     pattern: /material/lib/{fileId}/preview/image
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:image }
 
-# material_lib_file_preview_content:
-#     pattern:  /material/lib/{fileId}/preview/content
-#     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:content }
 material_lib_file_preview_document:
     pattern:  /material/lib/{fileId}/preview/document
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:document }
