@@ -11000,7 +11000,7 @@ textarea {
 }
 @media (max-width: 991px) {
   .search-banner .search-input-group .btn {
-    width: 100px;
+    width: 80px;
   }
 }
 .search-banner .search-input-group .btn:hover {
