@@ -13775,6 +13775,7 @@ textarea {
   background-color: #46c37b;
 }
 .open-course-header {
+  position: relative;
   margin-top: 20px;
 }
 @media (min-width: 992px) {
@@ -13918,6 +13919,12 @@ textarea {
 }
 .open-course-header .course-operation li .qrcode-popover.top .qrcode-content {
   top: -250px;
+}
+.open-course-header .setting {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0 3px;
 }
 .open-course-detail .intro-img {
   width: 186px;
