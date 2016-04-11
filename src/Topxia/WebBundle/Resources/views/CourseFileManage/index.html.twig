@@ -13,17 +13,15 @@
     <div class="panel-heading">
       {% if type == 'courselesson' %}
         <button class="btn btn-info btn-sm pull-right"
-        data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'courselesson'}) }}"
-        data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'courselesson'}) }}"
-        data-storage="{{storageSetting.upload_mode}}"
+        data-toggle="modal" data-target="#modal"
+        data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
         >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}
+        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}{{course.id}}
         </button>
       {% elseif type == 'coursematerial' %}
         <button class="btn btn-info btn-sm pull-right"
-        data-html5-url="{{ path('course_manage_batch_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}"
-        data-normal-url="{{ path('course_manage_upload_course_files', {id:course.id, targetType:'coursematerial'}) }}"
-        data-storage="{{storageSetting.upload_mode}}"
+        data-toggle="modal" data-target="#modal"
+        data-url="{{path('uploader_batch_uplod', {token:uploader_token('coursematerial', course.id, 'private')}) }}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传备用资料文件'|trans}}
         </button>
