@@ -8,40 +8,18 @@
 			{% for teacher in teachers %}
 			<div class="media media-default">
 				<div class="media-left prl">
-					<a class=" js-user-card" href="/user/1" data-card-url="/user/1/card/show" data-user-id="1" data-original-title="" title="">
+					<a class="js-user-card" href="{{path('user_show',{id:teacher.id})}}" data-card-url="{{path('user_card_show',{userId:teacher.id})}}" data-user-id="{{teacher.id}}" data-original-title="" title="">
 						<img class="avatar-md" src="{{ filepath(teacher.largeAvatar, 'avatar.png') }}" alt=""></a>
 				</div>
-				<div class="media-body {% if not teacher.profile %}media-middle{% endif %}">
+				<div class="media-body media-middle">
 					<div class="title">
-						<a class="link-dark link-light" href="/user/1">{{ teacher.nickname }}</a>
+						<a class="link-dark link-light" href="{{path('user_show',{id:teacher.id})}}">{{ teacher.nickname }}</a>
 					</div>
-					<div class="content">{% if teacher.profile %}{{ teacher.profile}}{% endif %}
+					<div class="content">{{ teacher.title}}
 					</div>
 				</div>
 			</div>
 			{% endfor %}
-		  {#<section class="recommend-teacher {{config.background|default("")}}">
-		    <div class="container">
-		      <div class="text-line">
-		        <h5><span>{{ config.title|default(config.defaultTitle) }}</span><div class="line"></div></h5>
-		        <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle) }}</div>
-		      </div>
-		      <div class="row">
-		        {% for teacher in teachers %}
-		        {% set profile = teacher.profile %}
-		        {% set isFollowed = teacher.isFollowed %}
-		          <div class="col-md-3 col-xs-6">
-		            {% include 'TopxiaWebBundle:Teacher:teacher-item.html.twig' %}
-		          </div>
-		        {% endfor %}
-		      </div>
-		      <div class="section-more-btn">
-		        <a href="{{ path('teacher') }}" class="btn btn-default btn-lg">
-		          {{'更多教师'|trans}} <i class="mrs-o es-icon es-icon-chevronright"></i>
-		        </a>
-		      </div>
-		    </div>
-		  </section>#}
 		{% else %}
 			<div class="empty">{{'暂无推荐教师信息！'|trans}}</div>
 		{% endif %}
