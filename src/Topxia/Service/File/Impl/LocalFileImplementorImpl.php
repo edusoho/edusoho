@@ -70,7 +70,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     {
         $filename = $this->getFileFullPath($file);
         @unlink($filename);
-        return true;
+        return array('success' => true);
     }
 
     public function makeUploadParams($params)

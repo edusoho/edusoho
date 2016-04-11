@@ -26,6 +26,8 @@ interface UploadFileService2
 
     public function setFileProcessed($params);
 
+    public function deleteFile($id);
+
     public function deleteFiles(array $ids);
 
     public function increaseFileUsedCount($id);

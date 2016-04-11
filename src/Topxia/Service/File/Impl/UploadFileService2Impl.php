@@ -279,6 +279,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
     }
 
+    public function deleteFile($id)
+    {
+      $file = $this->getUploadFileDao()->getFile($id);
+      $result = $this->getFileImplementor($file)->deleteFile($file);
+      if (isset($file['success']) && $file['success'] == true) {
+          return $this->getUploadFileDao()->deleteFile($id);
+      }
+
+      return false;
+    }
+
     public function deleteFiles(array $ids)
     {
         foreach ($ids as $id) {

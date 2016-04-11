@@ -9,14 +9,14 @@
   </i>
   <ul class="dropdown-menu">
       <li>
-      <a href="javascript:;"class=" js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {globalId:uploadFile.globalId}) }}"><i class="glyphicon glyphicon-pencil prm"></i>详情</a>
+      <a href="javascript:;"class=" js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}"><i class="glyphicon glyphicon-pencil prm"></i>详情</a>
       </li>
       <li>
-        <a data-url="{{ path('material_download', {globalId:uploadFile.globalId}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" ><i class="glyphicon glyphicon-save prm"></i>下载</a>
+        <a data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" ><i class="glyphicon glyphicon-save prm"></i>下载</a>
       </li>
       {% if uploadFile.createdUserId == app.user.id %}
       <li>
-        <a class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {globalId:uploadFile.globalId}) }}"> <i class="glyphicon glyphicon-trash prm"></i>删除</a>
+        <a class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {fileId:uploadFile.id}) }}"> <i class="glyphicon glyphicon-trash prm"></i>删除</a>
       </li>
       {% endif %}
   </ul>

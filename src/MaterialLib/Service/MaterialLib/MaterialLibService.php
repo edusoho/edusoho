@@ -4,17 +4,17 @@ namespace MaterialLib\Service\MaterialLib;
 
 interface MaterialLibService
 {
-    public function get($globalId);
+    public function get($id);
 
     public function edit($globalId, $fields);
 
-    public function delete($globalId);
+    public function delete($id);
 
     public function batchDelete($ids);
 
     public function batchShare($ids);
 
-    public function download($globalId);
+    public function download($id);
 
     public function reconvert($globalId, $options);
 

@@ -36,7 +36,9 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function deleteFile($file)
     {
-
+      $filename = $this->getFileFullPath($file);
+      @unlink($filename);
+      return true;
     }
 
     public function search($conditions)

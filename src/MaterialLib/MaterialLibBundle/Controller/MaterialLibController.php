@@ -116,20 +116,22 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(array('success' => true));
     }
 
-    public function detailAction($globalId)
+    public function detailAction($fileId)
     {
         $currentUser = $this->getCurrentUser();
-        $file        = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $file = $this->getMaterialLibService()->get($fileId);
 
-        if (!($file['createdUserId'] == $currentUser['id'])) {
-            $material = $this->getMaterialLibService()->get($globalId);
+        if (!($file['createdUserId'] == $currentUser['id']))  {
+            if ($material['type'] == 'video') {
+              $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
+            }
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $material,
                 'thumbnails' => empty($thumbnails) ? "" : $thumbnails
             ));
         }
 
-        return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $globalId));
+        return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
     }
 
     public function showShareFormAction(Request $request)
@@ -363,15 +365,15 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function downloadAction($globalId)
+    public function downloadAction($fileId)
     {
-        $download = $this->getMaterialLibService()->download($globalId);
+        $download = $this->getMaterialLibService()->download($fileId);
         return $this->redirect($download['url']);
     }
 
-    public function deleteAction($globalId)
+    public function deleteAction($fileId)
     {
-        $result = $this->getMaterialLibService()->delete($globalId);
+        $result = $this->getMaterialLibService()->delete($fileId);
         return $this->createJsonResponse($result);
     }
 

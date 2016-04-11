@@ -10,10 +10,10 @@ use MaterialLib\Service\MaterialLib\MaterialLibService;
 
 class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
-    public function get($globalId)
+    public function get($id)
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
-        return $this->getCloudFileService()->get($globalId);
+        //$this->checkPermission(Permission::VIEW, array('id' => $id));
+        return $this->getUploadFileService()->getFile($id);
     }
 
     public function player($globalId)
@@ -29,25 +29,13 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         $this->getUploadFileService()->edit($globalId, $fields);
     }
 
-    public function delete($globalId)
+    public function delete($id)
     {
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
-
-        if ($globalId) {
-            $this->checkPermission(Permission::DELETE, array('file' => $file));
-            $result = $this->getCloudFileService()->delete($globalId);
-
-            if (isset($result['success']) && $result['success']) {
-                $result = $this->getUploadFileService()->deleteByGlobalId($globalId);
-
-                if ($result) {
-                    $this->getUploadFileTagService()->deleteByFileId($file['id']);
-                }
-
-                return $result;
-            }
+        $this->checkPermission(Permission::DELETE, array('file' => $file));
+        $result = $this->getUploadFileService()->deleteFile($id);
+        if($result) {
+          return true;
         }
-
         return false;
     }
 
@@ -84,10 +72,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return array('success' => true);
     }
 
-    public function download($globalId)
+    public function download($id)
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
-        return $this->getCloudFileService()->download($globalId);
+        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
+        return $this->getUploadFileService()->getDownloadFile($id);
     }
 
     public function reconvert($globalId, $options = array())

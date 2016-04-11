@@ -85,11 +85,11 @@ material_thumbnail_generate:
     defaults: { _controller: MaterialLibBundle:MaterialLib:generateThumbnail }
 
 material_lib_file_detail:
-    pattern:  /material/lib/{globalId}/detail
+    pattern:  /material/lib/{fileId}/detail
     defaults: { _controller: MaterialLibBundle:MaterialLib:detail }
 
 material_download:
-    pattern:  /materiallib/{globalId}/download
+    pattern:  /materiallib/{fileId}/download
     defaults: { _controller: MaterialLibBundle:MaterialLib:download }
 
 material_delete:

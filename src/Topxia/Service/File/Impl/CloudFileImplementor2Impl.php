@@ -40,10 +40,10 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $this->mergeCloudFile2($localFile, $cloudFile);
     }
 
-    public function delete($globalId)
+    public function deleteFile($file)
     {
         $api = CloudAPIFactory::create('root');
-        return $api->delete("/resources/{$globalId}");
+        return $api->delete("/resources/{$file['globalId']}");
     }
 
     public function download($globalId)
