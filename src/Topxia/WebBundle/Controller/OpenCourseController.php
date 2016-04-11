@@ -212,7 +212,7 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    public function lessonShowAction($courseId, $lessonId)
+    public function lessonShowAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
@@ -220,7 +220,7 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '该课时不存在！');
         }
 
-        $lesson = $this->_getLessonVedioInfo($lesson);
+        $lesson = $this->_getLessonVedioInfo($request, $lesson);
 
         return $this->createJsonResponse($lesson);
     }
@@ -235,7 +235,7 @@ class OpenCourseController extends BaseController
         $lesson = $this->_checkPublishedLessonExists($course['id']);
         $lesson = $lesson ? $lesson : array();
 
-        $lesson = $this->_getLessonVedioInfo($lesson);
+        $lesson = $this->_getLessonVedioInfo($request, $lesson);
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
@@ -472,7 +472,7 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    private function _getLessonVedioInfo($lesson)
+    private function _getLessonVedioInfo(Request $request, $lesson)
     {
         $lesson['videoWatermarkEmbedded'] = 0;
 
