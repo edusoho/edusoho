@@ -2706,9 +2706,9 @@ return true;
         return $result;
     }
 
-    public function getCourseLessonReplayByLessonId($lessonId)
+    public function getCourseLessonReplayByLessonId($lessonId, $lessonType = 'course')
     {
-        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId);
+        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId, $lessonType);
     }
 
     public function deleteCourseLessonReplayByLessonId($lessonId)
@@ -2716,9 +2716,14 @@ return true;
         $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
     }
 
-    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId)
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'course')
     {
-        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+        return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
+    }
+
+    public function getCourseLessonReplay($id)
+    {
+        return $this->getCourseLessonReplayDao()->getCourseLessonReplay($id);
     }
 
     public function findCoursesByStudentIdAndCourseIds($studentId, $courseIds)
@@ -2750,7 +2755,17 @@ return true;
     {
         $fields = ArrayToolkit::parts($fields, array('hidden'));
 
-        return $this->getCourseLessonReplayDao()->updateCourseLessonReplayByLessonId($lessonId, $fields, $live);
+        return $this->getCourseLessonReplayDao()->updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
+    }
+
+    public function searchCourseLessonReplayCount($conditions)
+    {
+        return $this->getCourseLessonReplayDao()->searchCourseLessonReplayCount($conditions);
+    }
+
+    public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getCourseLessonReplayDao()->searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
     }
 
     protected function isClassroomMember($course, $userId)

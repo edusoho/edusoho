@@ -59,11 +59,6 @@ define(function(require, exports, module) {
                 }
             });
         });
-
-        $(".tab-live a").on('click', function() {
-            var $this = $(this);
-            $this.addClass('active').siblings().removeClass('active');
-        });
         
 	};
 });

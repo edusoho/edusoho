@@ -9,7 +9,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 {
     protected $table = 'open_course';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'teacherIds' => 'saw',
         'tags'       => 'saw'
     );
@@ -22,7 +22,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
             $sql    = "SELECT * FROM {$that->getTable()} WHERE id = ? LIMIT 1";
             $course = $that->getConnection()->fetchAssoc($sql, array($id));
 
-            return $course ? $this->createSerializer()->unserialize($course, $this->serializeFields) : null;
+            return $course ? $that->createSerializer()->unserialize($course, $that->serializeFields) : null;
         }
         );
     }

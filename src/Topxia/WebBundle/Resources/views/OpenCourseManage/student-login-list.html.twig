@@ -1,0 +1,42 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+  
+<table class="table table-striped" id="course-student-list">
+  <thead>
+    <tr>
+      <th width="40%">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}</th>
+      <th width="30%">{{'最近进入'|trans}}</th>
+      <th width="30%">{{'操作'|trans}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+      {% set user = users[student.userId] %}
+      <tr id="student-{{ user.id }}-tr">
+        <td class="media" style="vertical-align: middle;">
+          {{ web_macro.user_avatar(user, 'pull-left', 'avatar-sm') }}
+          <a target="_blank" href="{{ path('user_show', {id:user.id}) }}">{{ user.nickname }}</a>
+          <div class="text-muted text-sm">{{'加入时间：'|trans}}{{ student.createdTime|date('Y-n-d H:i') }}</div>
+        </td>
+
+        <td style="vertical-align: middle;">
+          {{ student.lastEnterTime|date('Y-m-d H:i:s') }}
+        </td>
+
+        <td style="vertical-align: middle;">
+          <div class="btn-group">
+            {% if app.user.id != user.id %}
+              <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('message_create', {toId:user.id})}}">{{'发私信'|trans}}</button>
+            {% endif %}
+            {% if app.user.isAdmin() %}
+              <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal" data-url="{{path('course_manage_students_show', {courseId:course.id, userId:user.id})}}">{{'查看资料'|trans}}</button>
+            {% endif %}
+          </div>
+        </td>
+      </tr>
+    {% else %}
+      <tr class="empty"><td colspan="20">{{'暂无记录'|trans}}</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+

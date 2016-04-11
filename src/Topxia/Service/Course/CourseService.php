@@ -364,7 +364,7 @@ interface CourseService
 
     public function entryReplay($lessonId, $courseLessonReplayId);
 
-    public function getCourseLessonReplayByLessonId($lessonId);
+    public function getCourseLessonReplayByLessonId($lessonId, $lessonType);
 
     public function deleteCourseLessonReplayByLessonId($lessonId);
 
@@ -378,10 +378,16 @@ interface CourseService
 
     public function deleteLessonReplayByLessonId($lessonId, $lessonType);
 
-    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
+
+    public function getCourseLessonReplay($id);
 
     public function updateCourseLessonReplay($id, $fields);
 
     public function updateCourseLessonReplayByLessonId($lessonId, $fields, $lessonType);
+
+    public function searchCourseLessonReplayCount($conditions);
+
+    public function searchCourseLessonReplays($conditions, $orderBy, $start, $limit);
 
 }

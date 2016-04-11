@@ -2123,6 +2123,20 @@ open_course_manage_course_pick:
     pattern: /open/course/manage/{filter}/course/{id}/pick
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
 
+open_course_manage_lesson_replays_edit:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/replays/edit
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:editLessonReplay }
+
+open_course_manage_replay_title_update:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/replay/{replayId}/update
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:updateReplayTitle }
+    methods: [POST]
+
+open_course_manage_student_export_csv:
+    pattern:  /open/course/{id}/manage/student/export
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
+
+
 open_course_course_search:
     pattern: /open/course/{filter}/course/{id}/search
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}
@@ -2184,6 +2198,14 @@ live_open_course_lesson_replay_create:
     pattern:  /open/course/{courseId}/lesson/{lessonId}/live/replay/create
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:createLessonReplay }
 
+live_open_course_live_replay_entry:
+    pattern: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/entry
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:entryReplay }
+
+live_open_course_live_replay_url:
+    pattern: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url
+    defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:getReplayUrl }
+
 open_course_member_sms:
     pattern:  /open/course/{id}/member/sms
     defaults: { _controller: TopxiaWebBundle:OpenCourse:memberSms }
@@ -2195,6 +2217,9 @@ open_course_member_create:
 open_course_lesson_player:
     pattern:  /open/course/{courseId}/lesson/{lessonId}/player
     defaults: { _controller: TopxiaWebBundle:OpenCourse:player }
+
+
+
 
 
 

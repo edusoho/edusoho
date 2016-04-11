@@ -145,6 +145,11 @@ class OpenCourseManageController extends BaseController
             $condition['userId'] = 0;
         }
 
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $user                = $this->getUserService()->getUserByNickname($fields['keyword']);
+            $condition['userId'] = $user ? $user['id'] : -1;
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getOpenCourseService()->searchMemberCount($condition),
@@ -404,40 +409,89 @@ class OpenCourseManageController extends BaseController
         return $this->createJsonResponse($result);
     }
 
-    private function _createCloudLive($liveCourse, $formFields)
+    public function studentsExportAction(Request $request, $id)
     {
-        $speakerId = current($liveCourse['teacherIds']);
-        $speaker   = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
-        $speaker   = $speaker ? $speaker['nickname'] : '老师';
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $liveLogo    = $this->getSettingService()->get('course');
-        $liveLogoUrl = "";
+        $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
 
-        if (!empty($liveLogo) && array_key_exists("live_logo", $liveLogo) && !empty($liveLogo["live_logo"])) {
-            $liveLogoUrl = $this->getServiceKernel()->getEnvVariable('baseUrl')."/".$liveLogo["live_logo"];
+        $courseMembers = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 20000);
+
+        $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
+
+        $fields['weibo'] = "微博";
+
+        foreach ($userFields as $userField) {
+            $fields[$userField['fieldName']] = $userField['title'];
         }
 
-        $client = new EdusohoLiveClient();
-        $live   = $client->createLive(array(
-            'summary'     => null,
-            'title'       => $formFields['title'],
-            'speaker'     => $speaker,
-            'startTime'   => $formFields['startTime'].'',
-            'endTime'     => ($formFields['startTime'] + $formFields['length'] * 60).'',
-            'authUrl'     => $this->generateUrl('live_auth', array(), true),
-            'jumpUrl'     => $this->generateUrl('live_jump', array('id' => $formFields['courseId']), true),
-            'liveLogoUrl' => $liveLogoUrl
-        ));
+        $studentUserIds = ArrayToolkit::column($courseMembers, 'userId');
 
-        if (empty($live)) {
-            throw new \RuntimeException('创建直播教室失败，请重试！');
+        $users = $this->getUserService()->findUsersByIds($studentUserIds);
+        $users = ArrayToolkit::index($users, 'id');
+
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
+        $progresses = array();
+
+        $str = "用户名,Email,加入学习时间,上次进入时间,IP,姓名,性别,QQ号,微信号,手机号,公司,职业,头衔";
+
+        foreach ($fields as $key => $value) {
+            $str .= ",".$value;
         }
 
-        if (isset($live['error'])) {
-            throw new \RuntimeException($live['error']);
-        }
+        $str .= "\r\n";
 
-        return $live;
+        $students = array();
+
+        foreach ($courseMembers as $courseMember) {
+            $member = "";
+
+            if ($courseMember['userId'] != 0) {
+                $member .= $users[$courseMember['userId']]['nickname'].",";
+                $member .= $users[$courseMember['userId']]['email'].",";
+                $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+                $member .= date('Y-n-d H:i:s', $courseMember['lastEnterTime']).",";
+                $member .= $courseMember['ip'].",";
+                $member .= $profiles[$courseMember['userId']]['truename'] ? $profiles[$courseMember['userId']]['truename']."," : "-".",";
+                $member .= $gender[$profiles[$courseMember['userId']]['gender']].",";
+                $member .= $profiles[$courseMember['userId']]['qq'] ? $profiles[$courseMember['userId']]['qq']."," : "-".",";
+                $member .= $profiles[$courseMember['userId']]['weixin'] ? $profiles[$courseMember['userId']]['weixin']."," : "-".",";
+                $member .= $profiles[$courseMember['userId']]['mobile'] ? $profiles[$courseMember['userId']]['mobile']."," : "-".",";
+                $member .= $profiles[$courseMember['userId']]['company'] ? $profiles[$courseMember['userId']]['company']."," : "-".",";
+                $member .= $profiles[$courseMember['userId']]['job'] ? $profiles[$courseMember['userId']]['job']."," : "-".",";
+                $member .= $users[$courseMember['userId']]['title'] ? $users[$courseMember['userId']]['title']."," : "-".",";
+
+                foreach ($fields as $key => $value) {
+                    $member .= $profiles[$courseMember['userId']][$key] ? $profiles[$courseMember['userId']][$key]."," : "-".",";
+                }
+            } else {
+                $member .= "-,-,";
+                $member .= date('Y-n-d H:i:s', $courseMember['createdTime']).",";
+                $member .= date('Y-n-d H:i:s', $courseMember['lastEnterTime']).",";
+                $member .= $courseMember['ip'].",";
+                $member .= "-,-,-,-,";
+                $member .= $courseMember['mobile'] ? $courseMember['mobile'].',' : '-,';
+                $member .= "-,-,-,";
+                $member .= str_repeat('-,', count($fields) - 1).'-,';
+            }
+
+            $students[] = $member;
+        };
+
+        $str .= implode("\r\n", $students);
+        $str = chr(239).chr(187).chr(191).$str;
+
+        $filename = sprintf("open-course-%s-students-(%s).csv", $course['id'], date('Y-n-d'));
+
+        $response = new Response();
+        $response->headers->set('Content-type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $response->headers->set('Content-length', strlen($str));
+        $response->setContent($str);
+
+        return $response;
     }
 
     private function getOpenCourse($request, $conditions)
@@ -582,5 +636,15 @@ class OpenCourseManageController extends BaseController
     protected function getLiveCourseService()
     {
         return $this->getServiceKernel()->createService('Course.LiveCourseService');
+    }
+
+    protected function getUserFieldService()
+    {
+        return $this->getServiceKernel()->createService('User.UserFieldService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }

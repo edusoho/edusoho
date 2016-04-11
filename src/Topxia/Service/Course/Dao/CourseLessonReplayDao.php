@@ -10,11 +10,11 @@ interface CourseLessonReplayDao
 
     public function deleteLessonReplayByLessonId($lessonId, $lessonType);
 
-    public function getCourseLessonReplayByLessonId($lessonId);
+    public function getCourseLessonReplayByLessonId($lessonId, $lessonType);
 
-    public function deleteLessonReplayByCourseId($courseId);
+    public function deleteLessonReplayByCourseId($courseId, $lessonType);
 
-    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId);
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
 
     public function searchCourseLessonReplayCount($conditions);
 

@@ -3,6 +3,7 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseController extends BaseController
@@ -188,6 +189,10 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId)
     {
+        /*$sms_setting                                  = $this->getSettingService()->get('cloud_sms');
+        $sms_setting['sms_open_course_member_notify'] = 'on';
+        $this->getSettingService()->set('cloud_sms', $sms_setting);*/
+
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
         if (!$this->_checkCourseStatus($courseId)) {
@@ -200,18 +205,24 @@ class OpenCourseController extends BaseController
 
         $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
+        $member = $this->_memberOperate($request, $courseId);
+
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
             'course' => $course
         ));
     }
 
-    public function lessonShow($courseId, $lessonId)
+    public function lessonShowAction(Request $request, $courseId, $lessonId)
     {
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
         if (!$lesson) {
             return $this->createMessageResponse('error', '该课时不存在！');
         }
+
+        $lesson = $this->_getLessonVedioInfo($request, $lesson);
+
+        return $this->createJsonResponse($lesson);
     }
 
     /**
@@ -224,7 +235,7 @@ class OpenCourseController extends BaseController
         $lesson = $this->_checkPublishedLessonExists($course['id']);
         $lesson = $lesson ? $lesson : array();
 
-        list($lesson, $hasVideoWatermarkEmbedded, $hlsUrl) = $this->_getLessonVedioInfo($lesson);
+        $lesson = $this->_getLessonVedioInfo($request, $lesson);
 
         if ($user->isLogin()) {
             $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
@@ -232,12 +243,12 @@ class OpenCourseController extends BaseController
             $member = $this->getOpenCourseService()->getCourseMemberByIp($course['id'], $request->getClientIp());
         }
 
+        $lesson['replays'] = $this->_getLiveReplay($lesson);
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
-            'course'                    => $course,
-            'lesson'                    => $lesson,
-            'hasVideoWatermarkEmbedded' => $hasVideoWatermarkEmbedded,
-            'hlsUrl'                    => (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '',
-            'member'                    => $member
+            'course' => $course,
+            'lesson' => $lesson,
+            'member' => $member
         ));
     }
 
@@ -409,16 +420,17 @@ class OpenCourseController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => '该课程不存在或已删除！'));
         }
 
-        $result = $this->_checkExistsMember($request, $id);
-
-        if (!$result['result']) {
-            return $this->createJsonResponse($result);
-        }
-
         $smsSetting = $this->getSettingService()->get('cloud_sms', array());
 
         if (!$user->isLogin() && !$smsSetting['sms_enabled']) {
             throw $this->createAccessDeniedException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $member = $this->_memberOperate($request, $courseId);
+
+            $fields = $request->request->all();
+            $member = $this->getOpenCourseService()->updateMember($member['id'], $fields);
         }
 
         return $this->render('TopxiaWebBundle:OpenCourse:member-sms-modal.html.twig', array(
@@ -448,7 +460,7 @@ class OpenCourseController extends BaseController
 
     public function playerAction($courseId, $lessonId)
     {
-        $lesson = $this->getOpenCourseService()->getLesson($lessonId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
 
         if (empty($lesson)) {
             throw $this->createNotFoundException('课时不存在！');
@@ -460,9 +472,9 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    public function _getLessonVedioInfo($lesson)
+    private function _getLessonVedioInfo(Request $request, $lesson)
     {
-        $hasVideoWatermarkEmbedded = 0;
+        $lesson['videoWatermarkEmbedded'] = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
@@ -491,10 +503,12 @@ class OpenCourseController extends BaseController
                 } else {
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
+
+                $lesson['mediaHLSUri'] = $hls['url'];
             }
 
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $hasVideoWatermarkEmbedded = 1;
+                $lesson['videoWatermarkEmbedded'] = 1;
             }
         } elseif ($lesson['mediaSource'] == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
@@ -516,9 +530,13 @@ class OpenCourseController extends BaseController
             }
         }
 
-        $hlsUrl = (isset($hls) && is_array($hls) && !empty($hls['url'])) ? $hls['url'] : '';
+        if ($lesson['type'] == 'liveOpen') {
+            if ($lesson['startTime'] > time()) {
+                $lesson['startTimeLeft'] = $lesson['startTime'] - time();
+            }
+        }
 
-        return array($lesson, $hasVideoWatermarkEmbedded, $hlsUrl);
+        return $lesson;
     }
 
     private function _checkCourseStatus($courseId)
@@ -558,6 +576,24 @@ class OpenCourseController extends BaseController
         return $favoriteNum;
     }
 
+    private function _memberOperate(Request $request, $courseId)
+    {
+        $result = $this->_checkExistsMember($request, $courseId);
+
+        if ($result['result']) {
+            $fields = array(
+                'courseId'      => $courseId,
+                'ip'            => $request->getClientIp(),
+                'lastEnterTime' => time()
+            );
+            $member = $this->getOpenCourseService()->createMember($fields);
+        } else {
+            $member = $this->getOpenCourseService()->updateMember($result['member']['id'], array('lastEnterTime' => time()));
+        }
+
+        return $member;
+    }
+
     private function _checkExistsMember(Request $request, $courseId)
     {
         $user   = $this->getCurrentUser();
@@ -570,7 +606,7 @@ class OpenCourseController extends BaseController
         }
 
         if ($openCourseMember) {
-            return array('result' => false, 'message' => '课程用户已存在！');
+            return array('result' => false, 'message' => '课程用户已存在！', 'member' => $openCourseMember);
         }
 
         return array('result' => true);
@@ -592,6 +628,22 @@ class OpenCourseController extends BaseController
         }
 
         return $text;
+    }
+
+    private function _getLiveReplay($lesson)
+    {
+        $replays = array();
+
+        if ($lesson['type'] == 'liveOpen') {
+            $replays = $this->getCourseService()->searchCourseLessonReplays(array(
+                'courseId' => $lesson['courseId'],
+                'lessonId' => $lesson['id'],
+                'hidden'   => 0,
+                'type'     => 'liveOpen'
+            ), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        }
+
+        return $replays;
     }
 
     protected function getOpenCourseService()
