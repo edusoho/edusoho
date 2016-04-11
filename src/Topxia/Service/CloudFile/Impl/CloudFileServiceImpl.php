@@ -8,7 +8,7 @@ use Topxia\Service\CloudFile\CloudFileService;
 
 class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
-    public function search($conditions)
+    public function search($conditions, $start, $limit)
     {
         $conditions['start']    = $start;
         $conditions['limit']    = $limit;

@@ -4,7 +4,7 @@ namespace Topxia\Service\CloudFile;
 
 interface CloudFileService
 {
-    public function search($conditions);
+    public function search($conditions, $start, $limit);
 
     public function get($globalId);
 
