@@ -117,7 +117,7 @@ class SearchController extends BaseController
             $conditions['type']    = 'user';
             $conditions['num']     = $pageSize;
             $conditions['filters'] = json_encode(array('role' => 'teacher'));
-        } elseif ($type == 'thread' && !empty($targetType)) {
+        } elseif ($type == 'thread') {
             $conditions['filters'] = json_encode(array('targetType' => 'group'));
         }
 
