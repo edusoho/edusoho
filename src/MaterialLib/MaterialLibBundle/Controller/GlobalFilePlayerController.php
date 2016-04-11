@@ -33,6 +33,10 @@ class GlobalFilePlayerController extends BaseController
                 'file' => $file
             ));
         } elseif ($file["type"] == 'flash') {
+            $api         = CloudAPIFactory::create();
+            $result      = $api->get(sprintf("/files/%s/player", $file['no']));
+            $file['url'] = $result['url'];
+
             return $this->render('MaterialLibBundle:Player:flash-player.html.twig', array(
                 'file' => $file
             ));
