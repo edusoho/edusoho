@@ -83,15 +83,6 @@ material_lib_file_play_url:
 material_lib_file_preview_hlskeyurl:
     pattern: /material/lib/{fileId}/preview/hlskeyurl/{token}
     defaults: { _controller: MaterialLibBundle:MaterialLib:hlskeyurl }
-
-material_lib_file_preview_ppt:
-    pattern: /material/lib/{fileId}/preview/ppt
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:ppt }
-
-material_lib_file_preview_image:
-    pattern: /material/lib/{fileId}/preview/image
-    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:image }
-
 # material_lib_file_preview_content:
 #     pattern:  /material/lib/{fileId}/preview/content
 #     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:content }
