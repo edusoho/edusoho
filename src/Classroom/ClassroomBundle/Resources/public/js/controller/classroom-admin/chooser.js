@@ -19,10 +19,7 @@ define(function(require, exports, module) {
             var classroomName = $(this).data('name');
             var html = '<a href="/classroom/'+classroomId+'" target="_blank"><strong>'+classroomName+'</strong></a>';
             $('#choose-classroom-input').val(classroomId);
-            $('#course-display .well').html(html);       
-            $('.js-rechoose-classroom').show();
-            $('.js-rechoose-course').hide();
-            $('.js-rechoose-vip').hide();  
+            $('#course-display .well').html(html);
             $('#course-display').show();
             $modal.modal('hide');
             Notify.success('指定班级成功');
@@ -32,6 +29,6 @@ define(function(require, exports, module) {
             if (!$('#choose-course-input').val()) {
                 $('.radio').button('reset');
             };
-        })
+        });
     };
 })

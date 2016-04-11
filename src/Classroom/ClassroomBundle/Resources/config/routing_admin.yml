@@ -73,5 +73,5 @@ admin_classroom_review_batch_delete:
     methods: [POST]
 
 admin_classroom_chooser:
-    pattern: /classroon/choose
+    pattern: /classroom/chooser
     defaults: { _controller: ClassroomBundle:ClassroomAdmin:chooser }    

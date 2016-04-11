@@ -21,9 +21,6 @@ define(function(require, exports, module) {
         	$('#choose-course-input').val(courseId);
         	$('#course-display .well').html(html);
         	$('#course-display').show();
-             $('.js-rechoose-course').show();
-            $('.js-rechoose-vip').hide();
-            $('.js-rechoose-classroom').hide(); 
             $modal.modal('hide');
             Notify.success('指定课程成功');
         });
