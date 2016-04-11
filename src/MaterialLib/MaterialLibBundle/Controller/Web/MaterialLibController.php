@@ -97,15 +97,9 @@ class MaterialLibController extends BaseController
     {
         $file = $this->tryAccessFile($fileId);
 
-        if ($file['storage'] == 'cloud') {
-            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-                'globalId' => $file['globalId']
-            ));
-        } elseif ($file['storage'] == 'local') {
-            return $this->forward('MaterialLibBundle:LocalFilePlayer:player', array(
-                'file' => $file
-            ));
-        }
+        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+            'globalId' => $file['globalId']
+        ));
     }
 
     public function editAction(Request $request, $globalId)
