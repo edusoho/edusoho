@@ -6,7 +6,7 @@ use MaterialLib\Service\BaseService;
 
 class PermissionServiceImpl extends BaseService
 {
-    public function check($permission, $options)
+    public function checkPermission($permission, $options)
     {
         $method      = strtolower($permission);
         $currentUser = $this->getCurrentUser();

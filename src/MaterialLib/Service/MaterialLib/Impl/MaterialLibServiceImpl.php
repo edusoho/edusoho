@@ -223,7 +223,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function checkPermission($permission, $options = array())
     {
-        if (!$this->getPermissionService()->check($permission, $options)) {
+        if (!$this->getPermissionService()->checkPermission($permission, $options)) {
             throw new AccessDeniedException("无权限操作", 403);
         }
     }
