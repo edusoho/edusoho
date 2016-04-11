@@ -4,7 +4,7 @@
 {% set script_controller = 'auth/login-bind-choose' %}
 
 {% block content %}
-<div class="es-section login-section">
+<div class="es-section login-section login-section-weixin">
   <div class="section-header">
     <h1>{{ name }}</h1>
   </div>
@@ -34,7 +34,7 @@
       <div class="form-group clearfix">
         <div class="row">
           <div class="col-xs-6">
-            <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="{{'正在登录'|trans}}...">{{'确认登录'|trans}}</button>
+            <button id="set-bind-new-btn" class="btn btn-primary btn-lg btn-block" type='submit' data-loading-text="{{'正在登录'|trans}}...">{{'注册帐号'|trans}}</button>
           </div>
           <div class="col-xs-6">
             <a class="btn btn btn-default btn-lg btn-block" href="{{ path('login_bind_change', {type: type}) }}">{{'绑定已有帐号'|trans}}</a>

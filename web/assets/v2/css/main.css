@@ -11918,6 +11918,9 @@ textarea {
     margin: 20px auto;
   }
 }
+.login-section.login-section-weixin {
+  min-height: 315px;
+}
 .login-section .logon-tab {
   margin: -15px -15px 0 -15px;
 }
