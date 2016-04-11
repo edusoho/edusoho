@@ -245,7 +245,11 @@ class ClassroomAdminController extends BaseController
 
         $count = $this->getClassroomService()->searchClassroomsCount($conditions);
 
-        $paginator = new Paginator($this->get('request'), $count, 20);
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count,
+            20
+        );
 
         $classrooms = $this->getClassroomService()->searchClassrooms(
             $conditions,
