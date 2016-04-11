@@ -47,7 +47,7 @@ class CourseController extends CourseBaseController
             if ($priceType == 'RMB') {
                 $conditions['price'] = '0.00';
             } else {
-                $conditions['coinPrice'] = '0.00';
+                $conditions['price'] = '0.00';
             }
         }
 
@@ -364,18 +364,6 @@ class CourseController extends CourseBaseController
             'course' => $course,
             'member' => $member,
             'items'  => $items
-        ));
-    }
-
-    public function keywordsAction($course)
-    {
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
-
-        return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
-            'category' => $category,
-            'tags'     => $tags,
-            'course'   => $course
         ));
     }
 

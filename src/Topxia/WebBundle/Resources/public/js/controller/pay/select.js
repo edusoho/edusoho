@@ -8,7 +8,7 @@ define(function(require, exports, module){
 
         $(".form-paytype").on('click','.check', function() {
             var $this = $(this);
-            if (!$this.hasClass('active')) {
+            if (!$this.hasClass('active') && !$this.hasClass('disabled')) {
                 $this.addClass('active').siblings().removeClass('active');
                 $("input[name='payment']").val($this.attr("id"));
             }

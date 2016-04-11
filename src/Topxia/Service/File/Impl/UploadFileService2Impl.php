@@ -73,12 +73,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $condisions = array('nos' => implode(',', $fileIds));
         $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($condisions);
 
-        foreach ($files as $key => $file) {
-            if ($file['globalId'] == 0) {
-                array_push($file, $cloudFiles);
-            }
-        }
-
         return $cloudFiles;
     }
 
@@ -154,7 +148,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $this->updateTags($localFile, $fields);
             $fields['filename'] = $fields['name'];
             unset($fields['name']);
-            $fields = ArrayToolkit::parts($fields, array('isPublic','filename'));
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename'));
 
             return $this->getUploadFileDao()->updateFile($localFile['id'], $fields);
         }

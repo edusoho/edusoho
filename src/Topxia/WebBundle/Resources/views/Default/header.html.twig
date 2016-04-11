@@ -13,7 +13,8 @@
           </div>
         </form>
         <ul class="nav navbar-nav">
-          {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null), isMobile:true })) }}
+          {% set navigations = data('NavigationsTree', {}) %}
+          {% include 'TopxiaWebBundle:Default:top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: true} %}
         </ul>
       </div>
     </div>
@@ -27,7 +28,7 @@
   </div>
   <nav class="collapse navbar-collapse">
     <ul class="nav navbar-nav clearfix hidden-xs " id="nav">
-      {{ render(controller('TopxiaWebBundle:Default:topNavigation', {siteNav:siteNav|default(null)})) }}
+      {% include 'TopxiaWebBundle:Default:top-navigation.html.twig' with {navigations: navigations,siteNav: siteNav|default(null), isMobile: false} %}
     </ul>
     <div class="navbar-user {% if setting('esBar.enabled', 0) %} left {% endif %}">
       <ul class="nav user-nav">

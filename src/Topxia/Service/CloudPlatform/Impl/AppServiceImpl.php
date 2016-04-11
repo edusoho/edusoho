@@ -480,7 +480,8 @@ class AppServiceImpl extends BaseService implements AppService
             $cachePath  = $this->getKernel()->getParameter('kernel.root_dir').'/cache/'.$this->getKernel()->getEnvironment();
             $filesystem = new Filesystem();
             $filesystem->remove($cachePath);
-            //注解需要该目录存在
+
+//注解需要该目录存在
             if (!$filesystem->exists($cachePath.'/annotations/topxia')) {
                 $filesystem->mkdir($cachePath.'/annotations/topxia');
             }
@@ -519,12 +520,18 @@ class AppServiceImpl extends BaseService implements AppService
             throw $this->createServiceException("App {$code} is not exist.");
         }
 
-        $uninstallScript = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../plugins/'.ucfirst($app['code']).'/Scripts/uninstall.php');
+        if ($app['type'] == 'plugin') {
+            $uninstallScript = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../plugins/'.ucfirst($app['code']).'/Scripts/uninstall.php');
 
-        if (file_exists($uninstallScript)) {
-            include $uninstallScript;
-            $uninstaller = new \AppUninstaller($this->getKernel());
-            $uninstaller->uninstall();
+            if (file_exists($uninstallScript)) {
+                include $uninstallScript;
+                $uninstaller = new \AppUninstaller($this->getKernel());
+                $uninstaller->uninstall();
+            }
+        } elseif ($app['type'] == 'theme') {
+            $themeDir   = realpath($this->getKernel()->getParameter('kernel.root_dir').'/../web/themes/'.strtolower($app['code']));
+            $filesystem = new Filesystem();
+            $filesystem->remove($themeDir);
         }
 
         $this->getAppDao()->deleteApp($app['id']);

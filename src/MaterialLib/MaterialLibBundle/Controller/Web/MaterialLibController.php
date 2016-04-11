@@ -96,9 +96,16 @@ class MaterialLibController extends BaseController
     public function playerAction(Request $request, $fileId)
     {
         $file = $this->tryAccessFile($fileId);
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-            'globalId' => $file['globalId']
-        ));
+
+        if ($file['storage'] == 'cloud') {
+            return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+                'globalId' => $file['globalId']
+            ));
+        } elseif ($file['storage'] == 'local') {
+            return $this->forward('MaterialLibBundle:LocalFilePlayer:player', array(
+                'file' => $file
+            ));
+        }
     }
 
     public function editAction(Request $request, $globalId)
@@ -168,10 +175,11 @@ class MaterialLibController extends BaseController
         if (!$user->isTeacher() && !$user->isAdmin()) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
+
         $conditions['sourceUserId'] = $user['id'];
 
         $conditions['isActive'] = 1;
-        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+        $shareHistoryCount      = $this->getUploadFileService()->searchShareHistoryCount($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -186,15 +194,14 @@ class MaterialLibController extends BaseController
             $paginator->getPerPageCount()
         );
 
-
         $targetUserIds = array();
+
         if (!empty($shareHistories)) {
             foreach ($shareHistories as $history) {
                 array_push($targetUserIds, $history['targetUserId']);
             }
 
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
-
         }
 
         $allTeachers = $this->getUserService()->searchUsers(array('roles' => 'ROLE_TEACHER', 'locked' => 0), array('nickname', 'ASC'), 0, 1000);
@@ -205,7 +212,7 @@ class MaterialLibController extends BaseController
             'currentUserId'  => $user['id'],
             'allTeachers'    => $allTeachers,
             'paginator'      => $paginator
-            ));
+        ));
     }
 
     public function historyUserShowAction(Request $request)
@@ -215,7 +222,7 @@ class MaterialLibController extends BaseController
         $conditions['sourceUserId'] = $user['id'];
 
         $conditions['isActive'] = 1;
-        $shareHistoryCount = $this->getUploadFileService()->searchShareHistoryCount($conditions);
+        $shareHistoryCount      = $this->getUploadFileService()->searchShareHistoryCount($conditions);
 
         $paginator = new Paginator(
             $this->get('request'),
@@ -238,7 +245,6 @@ class MaterialLibController extends BaseController
             }
 
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
-
         }
 
         return $this->render('MaterialLibBundle:Web/MyShare:material-share-history-users.html.twig', array(
@@ -247,12 +253,12 @@ class MaterialLibController extends BaseController
             'source'         => 'myShareHistory',
             'currentUserId'  => $user['id'],
             'paginator'      => $paginator
-            ));
+        ));
     }
 
     public function historyDetailShowAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user                       = $this->getCurrentUser();
         $conditions['sourceUserId'] = $user['id'];
 
         $shareHistoryCount = $this->getUploadFileShareHistoryService()->searchShareHistoryCount($conditions);
@@ -262,7 +268,6 @@ class MaterialLibController extends BaseController
             $shareHistoryCount,
             10
         );
-
 
         $shareHistories = $this->getUploadFileShareHistoryService()->searchShareHistories(
             $conditions,
@@ -279,7 +284,6 @@ class MaterialLibController extends BaseController
             }
 
             $targetUsers = $this->getUserService()->findUsersByIds($targetUserIds);
-
         }
 
         return $this->render('MaterialLibBundle:Web/MyShare:material-share-history-detail.html.twig', array(
@@ -311,6 +315,7 @@ class MaterialLibController extends BaseController
         if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
+
         $currentUserId = $currentUser['id'];
         $targetUserIds = $request->request->get('targetUserIds');
 

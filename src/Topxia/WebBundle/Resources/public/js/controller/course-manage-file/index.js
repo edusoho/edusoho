@@ -21,6 +21,26 @@ define(function(require, exports, module) {
 
         $('.tip').tooltip();
 
+        $("#modal").modal({
+            backdrop: 'static',
+            keyboard: false,
+            show: false
+        });
+        
+        $("button", ".panel-heading").on('click',function(){
+            var url="";
+            if($(this).data("storage")!='cloud' || typeof(FileReader)=="undefined" || typeof(XMLHttpRequest)=="undefined"){
+                url = $(this).data("normalUrl");
+            } else {
+                url = $(this).data("html5Url");
+            }
+            $("#modal").html('');
+            $("#modal").modal('show');
+            $.get(url, function(html){
+                $("#modal").html(html);
+            });
+        })
+
         $("[rel='tooltip']").tooltip();
 
         asyncLoadFiles();
@@ -28,7 +48,7 @@ define(function(require, exports, module) {
 
     function asyncLoadFiles()
     {
-      var fileIds = new Array();
+        var fileIds = new Array();
         $('tbody [type=checkbox]').each(function(){
             if(!isNaN($(this).val())){
                 fileIds.push($(this).val());

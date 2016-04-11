@@ -345,13 +345,16 @@ class CourseLessonManageController extends BaseController
         }
 
         $mediaIds = array_keys($mediaMap);
-        $files    = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
-        foreach ($files['data'] as $file) {
-            $lessonIds = $mediaMap[$file['extno']];
+        if (!empty($mediIds)) {
+            $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
-            foreach ($lessonIds as $lessonId) {
-                $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['processStatus'];
+            foreach ($files['data'] as $file) {
+                $lessonIds = $mediaMap[$file['extno']];
+
+                foreach ($lessonIds as $lessonId) {
+                    $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['processStatus'];
+                }
             }
         }
 
@@ -360,8 +363,45 @@ class CourseLessonManageController extends BaseController
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
             'homeworks' => empty($homeworks) ? array() : $homeworks,
-            'files'     => ArrayToolkit::index($files['data'], 'extno')
+            'files'     => isset($files) ? ArrayToolkit::index($files['data'], 'extno') : array()
         ));
+    }
+
+    protected function getLessonFiles($courseItems)
+    {
+        $mediaMap = array();
+
+        foreach ($courseItems as $item) {
+            if ($item['itemType'] != 'lesson') {
+                continue;
+            }
+
+            if (empty($item['mediaId'])) {
+                continue;
+            }
+
+            if (empty($mediaMap[$item['mediaId']])) {
+                $mediaMap[$item['mediaId']] = array();
+            }
+
+            $mediaMap[$item['mediaId']][] = $item['id'];
+        }
+
+        $mediaIds = array_keys($mediaMap);
+
+        if (!empty($mediIds)) {
+            $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
+            foreach ($files['data'] as $file) {
+                $lessonIds = $mediaMap[$file['extno']];
+
+                foreach ($lessonIds as $lessonId) {
+                    $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['processStatus'];
+                }
+            }
+        }
+
+        return isset($files) ? ArrayToolkit::index($files['data'], 'extno') : array();
     }
 
     public function viewDraftAction(Request $request)
