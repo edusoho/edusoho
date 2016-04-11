@@ -26,15 +26,7 @@
 			{% for id, item in items %}
 			  
 			  {% if 'lesson' in id  %}
-			  	{% if course.type == 'open' or course.type == 'openLive'%}
-						{% include 'TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-			  	{% else %}
-						{% include 'TopxiaWebBundle:CourseLessonManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-			  	{% endif %}
-			  {#
-			  {% elseif  item.type == 'testpaper'  %}
-			      {% include 'TopxiaWebBundle:CourseTestpaperManage:list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
-			  #}
+					{% include 'TopxiaWebBundle:OpenCourseLessonManage:open-course-lesson-list-item.html.twig' with {lesson: item, file: files[item.mediaId]|default(null)} %}
 			  {% endif %}
 			{% endfor %}
 
