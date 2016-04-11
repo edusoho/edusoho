@@ -8,14 +8,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
     
   </head>
-  <body>
-  	<div id="document-player" 
-      data-url='{{path('global_file_document', {globalId:file.no})}}' 
-      style="height:100%"/>
+  <body style="overflow:hidden;border:0px;">
+	<div id="flash-player" data-url='{{file.url}}'></div>
 
-
-  	{% set script_controller = 'materiallibbundle/controller/web/player/document-player' %}
+	{% set script_controller = 'materiallibbundle/controller/web/player/flash-player' %}
 
     {% include 'TopxiaWebBundle::script_boot.html.twig' with {script_main: asset('bundles/topxiaweb/js/app.js')} %}
-  </body>
+</body>
 </html>
