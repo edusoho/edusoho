@@ -504,7 +504,7 @@ class OpenCourseController extends BaseController
                     $hls = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
 
-                $lesson['mediaHLSUri'] = $url['url'];
+                $lesson['mediaHLSUri'] = $hls['url'];
             }
 
             if (!empty($file['convertParams']['hasVideoWatermark'])) {
