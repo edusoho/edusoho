@@ -61,10 +61,10 @@ class CloudFileController extends BaseController
                 return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
             }
 
-            $material = $this->getMaterialLibService()->get($globalId);
+            $material = $this->getCloudFileService()->get($globalId);
 
             if ($material['type'] == 'video') {
-                $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
+                $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($globalId);
             }
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
@@ -79,7 +79,7 @@ class CloudFileController extends BaseController
 
     public function reconvertAction(Request $request, $globalId)
     {
-        return $this->getMaterialLibService()->reconvert($globalId, array(
+        return $this->getCloudFileService()->reconvert($globalId, array(
             'directives' => array()
         ));
     }
@@ -94,8 +94,8 @@ class CloudFileController extends BaseController
         return $this->createService('Taxonomy.TagService');
     }
 
-    protected function getMaterialLibService()
+    protected function getCloudFileService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->createService('CloudFile.CloudFileService');
     }
 }
