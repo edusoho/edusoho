@@ -1,0 +1,22 @@
+{% extends 'TopxiaAdminBundle:CloudFile:layout.html.twig' %}
+
+{% set menu = 'admin_cloud_file' %}
+{% do load_script('materiallibbundle/controller/admin/manage') %}
+
+{% block main %}
+<div class="eduyun-main">
+  <div class="page-header clearfix">
+    <h1 class="pull-left">云资源</h1>
+  </div>
+  <form class="form-inline es-materials-manage" id="materials-form">
+    {% include 'TopxiaAdminBundle:CloudFile/Form:course-user-search.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile/Form:nav.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile/Form:tags.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile/Form:filter.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile/Form:sort.html.twig' %}
+    {% include 'TopxiaAdminBundle:CloudFile:table.html.twig' %}
+  </form>
+</div>
+
+
+{% endblock %}

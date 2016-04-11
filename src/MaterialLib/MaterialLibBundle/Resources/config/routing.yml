@@ -22,6 +22,10 @@ material_lib_my_sharing_history:
     pattern: /material/lib/my/sharing/users_history
     defaults: { _controller: MaterialLibBundle:MaterialLib:showHistory }
 
+material_lib_my_sharing_contacts:
+    pattern: /material/lib/recent/contacts
+    defaults: { _controller: MaterialLibBundle:Web/MaterialLib:findMySharingContacts }
+
 material_lib_save_sharing:
     pattern: /material/lib/my/sharing/save
     defaults: { _controller: MaterialLibBundle:Web/MaterialLib:saveShare }

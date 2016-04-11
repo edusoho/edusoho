@@ -291,6 +291,19 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    public function findMySharingContactsAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
+        $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
+
+        return $this->createJsonResponse($mySharingContacts);
+    }
+
     public function saveShareAction(Request $request)
     {
         $currentUser = $this->getCurrentUser();
