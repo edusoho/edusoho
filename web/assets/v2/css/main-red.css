@@ -3345,7 +3345,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3365,7 +3365,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -10822,7 +10822,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -10954,6 +10954,12 @@ textarea {
   margin: 75px 20%;
   height: 50px;
 }
+@media (max-width: 991px) {
+  .search-banner .search-input-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
 .search-banner .search-input-group .form-control {
   height: 50px;
   border: none;
@@ -10991,6 +10997,11 @@ textarea {
   height: 50px;
   width: 120px;
   border: none;
+}
+@media (max-width: 991px) {
+  .search-banner .search-input-group .btn {
+    width: 80px;
+  }
 }
 .search-banner .search-input-group .btn:hover {
   z-index: 1;
