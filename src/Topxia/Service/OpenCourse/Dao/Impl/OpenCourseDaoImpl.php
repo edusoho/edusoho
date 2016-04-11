@@ -9,7 +9,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
 {
     protected $table = 'open_course';
 
-    private $serializeFields = array(
+    public $serializeFields = array(
         'teacherIds' => 'saw',
         'tags'       => 'saw'
     );
