@@ -5,7 +5,6 @@ namespace Topxia\AdminBundle\Controller;
 use Topxia\Common\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
 
 class CloudFileController extends BaseController
 {
@@ -58,16 +57,20 @@ class CloudFileController extends BaseController
     public function detailAction(Request $reqeust, $globalId)
     {
         try {
+            if (!$globalId) {
+                return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
+            }
+
             $material = $this->getMaterialLibService()->get($globalId);
 
             if ($material['type'] == 'video') {
                 $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
             }
         } catch (\RuntimeException $e) {
-            return $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
+            return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
         }
 
-        return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
+        return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
             'material'   => $material,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
             'params'     => $reqeust->query->all()
@@ -81,11 +84,9 @@ class CloudFileController extends BaseController
         ));
     }
 
-    public function playAction(Request $request, $globalId)
+    protected function createService($service)
     {
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-            'globalId' => $globalId
-        ));
+        return $this->getServiceKernel()->createService($service);
     }
 
     protected function getTagService()

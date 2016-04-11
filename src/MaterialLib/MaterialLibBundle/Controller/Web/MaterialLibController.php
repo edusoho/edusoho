@@ -118,30 +118,18 @@ class MaterialLibController extends BaseController
 
     public function detailAction($globalId)
     {
-        if (!$globalId) {
-            return $this->render('MaterialLibBundle:Web:detail-not-found.html.twig', array());
-        }
-
-        $material = $this->getMaterialLibService()->get($globalId);
-
-        if ($material['type'] == 'video') {
-            $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($globalId);
-        }
-
         $currentUser = $this->getCurrentUser();
         $file        = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (!($file['createdUserId'] == $currentUser['id'])) {
+            $material = $this->getMaterialLibService()->get($globalId);
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $material,
                 'thumbnails' => empty($thumbnails) ? "" : $thumbnails
             ));
         }
 
-        return $this->render('MaterialLibBundle:Web:detail.html.twig', array(
-            'material'   => $material,
-            'thumbnails' => empty($thumbnails) ? "" : $thumbnails
-        ));
+        return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $globalId));
     }
 
     public function showShareFormAction(Request $request)
