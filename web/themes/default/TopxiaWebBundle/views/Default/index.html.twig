@@ -6,92 +6,90 @@
 
 <div class="es-row-wrap container-gap">
 
-    <div class="homepage-feature homepage-feature-slides mbl">
-      <div class="cycle-pager"></div>
-      {{ block_show('default:home_top_banner') }}
-    </div>
+  <div class="homepage-feature homepage-feature-slides mbl">
+    <div class="cycle-pager"></div>
+    {{ block_show('default:home_top_banner') }}
+  </div>
   
   <div class="row row-9-3">
 
     <div class="col-md-9">
-
-
       {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
-          {% if classrooms %}
-          <div class="es-box">
-              <div class="es-box-heading">
-                <h2>{{ setting('classroom.name')|default("班级") }}</h2>
-                <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
-              </div>
-              <div class="es-box-body">
-               
-                 {% set teachers = classroom.users|default(null) %}
-                <ul class="home-class-list clearfix">
-                  {% for classroom in classrooms %}
-                  {% if loop.index <= 1 %}
-                    <li class="class-item">
-                      <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
-                        {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
-                      </a>
-                      <div class="class-body">
-                        <h3 class="class-title">
-                          <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
-                        </h3>
-                        <div class="class-metas">
-                          {% if teachers %}
-                            <span class="class-teacher">
-                              <i class="fa fa-user"></i>
-                              {% for teacher in teachers %}
-                                {% if loop.index <= 5%}
-                                   {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
-                                   <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-                                 {% endif %}
-                              {% endfor %}
-                            </span>
-                          {% endif %}
-                          <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
-                          <span class="class-price">
-                            {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                                {% if classroom.price > 0 %}
-                                 {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
-                                {% else %}
-                                  免费
-                                {% endif %}
-                            {% else %}
-                                {% if classroom.price > 0 %}
-                                  {{ classroom.price }}元
-                                {% else %}
-                                  免费
-                                {% endif %}
-                            {% endif %}
-                          </span>
-                        </div>
-                        <div class="course-num">共{{classroom.courseNum}}课程</div>
-                      </div>
-                    </li>
-                   {% endif %}
-                 {% endfor %}
-                </ul>
-              </div>
-            </div>
-            {% endif %}
-
-
-
-      {% if courses %}
-        <div class="es-box">
+      {% if classrooms %}
+      <div class="es-box">
           <div class="es-box-heading">
-            <h2>课程</h2>
-            <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
+            <h2>{{ setting('classroom.name')|default("班级") }}</h2>
+            <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
           </div>
           <div class="es-box-body">
-              {{ _self.course_lists(data('LatestCourses',{ count:5 })) }}
-          </div>
+            <ul class="home-class-list">
+            {% for classroom in classrooms %}
+            {% set teachers = classroom.users|default(null) %}
+            {% if loop.index <= 5%}
+              <li class="class-item">
+                <a class="class-picture-link" href="{{ path('classroom_show', {id:classroom.id}) }}">
+                  {{ lazy_img(filepath(classroom.middlePicture, 'classroom.png'), 'img-responsive', classroom.title, 'lazyload_class.png') }}
+                </a>
+                <div class="class-body">
+                  <h3 class="class-title">
+                    <a href="{{ path('classroom_show', {id:classroom.id}) }}">{{ classroom.title }}</a>
+                  </h3>
+                  <div class="class-metas">
+                    {% if teachers %}
+                  <span class="class-teacher">
+                    <i class="fa fa-user"></i>
+                    {% for teacher in teachers %}
+                      {% if loop.index <= 5%}
+                         {# {{ web_macro.user_link(teacher,'teacher-nickname mrl') }} #}
+                         <a class="teacher-nickname mrl" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
+                       {% endif %}
+                    {% endfor %}
+                  </span>
+                {% endif %}
+                    <span class="class-student hidden-md"><i class="fa fa-users"></i>{{classroom.studentNum + classroom.auditorNum }}</span>
+                    <span class="class-price">
+
+                      {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
+                          {% if classroom.price > 0 %}
+                           {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name', '虚拟币')}}
+                          {% else %}
+                            免费
+                          {% endif %}
+                      {% else %}
+                          {% if classroom.price > 0 %}
+                            {{ classroom.price }}元
+                          {% else %}
+                            免费
+                          {% endif %}
+                      {% endif %}
+
+                    </span>
+                  </div>
+                  <div class="course-num">共{{classroom.courseNum}}课程</div>
+                </div>
+              </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
         </div>
-      {% endif %} 
+      </div>
+      {% endif %}
+
+      {% set courses = data('LatestCourses',{ count:5 }) %}
+      {% if courses %}
+      <div class="es-box">
+        <div class="es-box-heading">
+          <h2>课程</h2>
+          <a class="pull-right" href="{{ path('course_explore') }}">更多&gt;</a>
+        </div>
+        <div class="es-box-body">
+            {{ _self.course_lists(courses) }}
+        </div>
+      </div>
+      {% endif %}
 
       {% if setting('course.live_course_enabled') %}
-
+        {% set recentLiveCourses = data('RecentLiveCourses',{ count:5 }) %}
         {% if recentLiveCourses %}
           <div class="es-box">
             <div class="es-box-heading">
@@ -158,7 +156,7 @@
                           </div>
                           <div class="vip-price col-sm-3 col-md-3">
                           {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-                            <h4> {{  set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
+                            <h4> {{  set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name')}}</h4>
                            {% else %}
                             <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                          {% endif %}

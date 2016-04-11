@@ -2,7 +2,10 @@
 
 {% block title %}{{ course.title }} - {{ parent() }}{% endblock %}
 
-{% block keywords %}{{ render(controller('TopxiaWebBundle:Course:keywords',{course: course} )) }}{% endblock %}
+{% block keywords %}
+  {% include 'TopxiaWebBundle:Course:keywords.html.twig' with {course: course} %}
+{% endblock %}
+
 {% block description %}{{ course.about|purify_and_trim_html|default('')|plain_text(100) }}{% endblock %}
 
 {% set bodyClass = 'course-dashboard-page' %}
@@ -20,7 +23,7 @@
   <div class="course-detail row">
     <div class="col-lg-9 col-md-8  course-detail-main">
 
-      {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:course,targetType:'course'})) }}
+      {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:course.id,targetType:'course'} %}
 
       <section class="es-section">
         {% include 'TopxiaWebBundle:Course:Part/normal-nav.html.twig' %}

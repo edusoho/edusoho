@@ -25,7 +25,7 @@
                 <div class="alert alert-warning">
                   <small>当前课程正处于「{{ discount.name }}」打折活动中。
                   折扣： <strong>{{ course.discount }} 折</strong>，
-                  折后价：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.coinPrice }}</span> {{setting('coin.coin_name')}}</strong>。</small>
+                  折后价：<strong> <span class="course-discount-price" data-discount="{{ course.discount }}">{{ course.price * setting('coin.cash_rate')}}</span> {{setting('coin.coin_name')}}</strong>。</small>
                 </div>
               {% endif %}
             </div>

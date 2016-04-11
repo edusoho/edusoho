@@ -1441,6 +1441,7 @@ class UserServiceImpl extends BaseService implements UserService
         $profileMobiles = ArrayToolkit::column($userProfiles, 'mobile');
 
         $mobiles = array_merge($verifiedMobiles, $profileMobiles);
+        $mobiles = array_filter($mobiles);
         return array_unique($mobiles);
     }
 

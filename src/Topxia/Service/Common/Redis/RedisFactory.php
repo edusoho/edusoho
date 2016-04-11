@@ -1,5 +1,7 @@
 <?php
-namespace Topxia\Service\Common;
+namespace Topxia\Service\Common\Redis;
+
+use Topxia\Service\Common\ServiceKernel;
 
 class RedisFactory
 {
@@ -52,6 +54,6 @@ class RedisFactory
 
     protected function getSettingService()
     {
-        return ServiceKernel::instance()->createService('System.SettingService');
+        return ServiceKernel::instance()->createService('Topxia.Basis:System.SettingService');
     }
 }
