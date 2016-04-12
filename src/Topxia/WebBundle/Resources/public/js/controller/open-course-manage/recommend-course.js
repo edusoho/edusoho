@@ -4,7 +4,8 @@ define(function(require, exports, module) {
     require('jquery.sortable');
     
     exports.run = function() {
-
+        require('../course-manage/header').run();
+        
         $(".course-list-group").on('click','.close',function(){
 
             var courseId=$(this).data('id');

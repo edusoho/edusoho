@@ -230,18 +230,12 @@ class OpenCourseController extends BaseController
      */
     public function headerAction(Request $request, $course)
     {
-        $user = $this->getCurrentUser();
-
         $lesson = $this->_checkPublishedLessonExists($course['id']);
         $lesson = $lesson ? $lesson : array();
 
         $lesson = $this->_getLessonVedioInfo($request, $lesson);
 
-        if ($user->isLogin()) {
-            $member = $this->getOpenCourseService()->getCourseMember($course['id'], $user['id']);
-        } else {
-            $member = $this->getOpenCourseService()->getCourseMemberByIp($course['id'], $request->getClientIp());
-        }
+        $member = $this->_getMember($request, $course['id']);
 
         $lesson['replays'] = $this->_getLiveReplay($lesson);
 
@@ -272,13 +266,16 @@ class OpenCourseController extends BaseController
         ));
     }
 
-    public function infoBarAction($courseId)
+    public function infoBarAction(Request $request, $courseId)
     {
         $course                = $this->getOpenCourseService()->getCourse($courseId);
         $course['favoriteNum'] = $this->_getFavoriteNum($courseId);
 
+        $member = $this->_getMember($request, $course['id']);
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-info-bar-block.html.twig', array(
-            'course' => $course
+            'course' => $course,
+            'member' => $member
         ));
     }
 
@@ -470,6 +467,19 @@ class OpenCourseController extends BaseController
             'id'      => $lesson["mediaId"],
             'context' => array()
         ));
+    }
+
+    private function _getMember($request, $courseId)
+    {
+        $user = $this->getCurrentUser();
+
+        if ($user->isLogin()) {
+            $member = $this->getOpenCourseService()->getCourseMember($courseId, $user['id']);
+        } else {
+            $member = $this->getOpenCourseService()->getCourseMemberByIp($courseId, $request->getClientIp());
+        }
+
+        return $member;
     }
 
     private function _getLessonVedioInfo(Request $request, $lesson)

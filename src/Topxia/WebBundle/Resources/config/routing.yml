@@ -2136,7 +2136,6 @@ open_course_manage_student_export_csv:
     pattern:  /open/course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
 
-
 open_course_course_search:
     pattern: /open/course/{filter}/course/{id}/search
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}
@@ -2205,6 +2204,10 @@ live_open_course_live_replay_entry:
 live_open_course_live_replay_url:
     pattern: /open/course/{courseId}/lesson/{lessonId}/live/replay/{replayId}/url
     defaults: { _controller: TopxiaWebBundle:LiveOpenCourse:getReplayUrl }
+
+live_open_lesson_time_check:
+    pattern:  /open/course/{courseId}/manage/live/time/check
+    defaults: { _controller: TopxiaWebBundle:OpenCourseManage:lessonTimeCheck }
 
 open_course_member_sms:
     pattern:  /open/course/{id}/member/sms

@@ -31,7 +31,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'homework.check'            => 'onHomeworkCheck',
             'course.lesson_finish'      => 'onCourseLessonFinish',
             'course.lesson_start'       => 'onCourseLessonStart',
-            'course.thread.create'      => 'onCourseThreadCreate'
+            'course.thread.create'      => 'onCourseThreadCreate',
+            'open.course.lesson.create' => 'onLiveOpenCourseLessonCreate',
+            'open.course.lesson.update' => 'onLiveOpenCourseLessonUpdate'
         );
     }
 
@@ -297,10 +299,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $content;
 
         switch ($discount['type']) {
-            case 'free':;
+            case 'free':
+                ;
                 $content = "【限时免费】";
                 break;
-            case 'discount':;
+            case 'discount':
+                ;
                 $content = "【限时打折】";
                 break;
             default:;
@@ -438,6 +442,38 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function onLiveOpenCourseLessonCreate(ServiceEvent $event)
+    {
+        $context       = $event->getSubject();
+        $lesson        = $context['lesson'];
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime']) && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+            if ($lesson['status'] == 'published') {
+                $this->LiveOpenCreateJob($lesson);
+            }
+        }
+    }
+
+    public function onLiveOpenCourseLessonUpdate(ServiceEvent $event)
+    {
+        $context       = $event->getSubject();
+        $lesson        = $context['lesson'];
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ($lesson['type'] == 'liveOpen' && isset($lesson['startTime']) && $lesson['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+            $job = $this->getCrontabService()->findJobByNameAndTargetTypeAndTargetId('LiveOpenPushNotificationOneHourJob', 'liveOpenLesson', $lesson['id']);
+
+            if ($job) {
+                $this->getCrontabService()->deleteJob($job['id']);
+            }
+
+            if ($lesson['status'] == 'published') {
+                $this->LiveOpenCreateJob($lesson);
+            }
+        }
+    }
+
     protected function push($title, $content, $from, $to, $body)
     {
         $message = array(
@@ -472,16 +508,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $target = array('type' => $type, 'id' => $id);
 
         switch ($type) {
-            case 'course':;
+            case 'course':
+                ;
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
                 break;
-            case 'classroom':;
+            case 'classroom':
+                ;
                 $classroom       = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
-            case 'global':;
+            case 'global':
+                ;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
                 $target['title'] = '网校公告';
@@ -531,6 +570,21 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'time'       => $lesson['startTime'] - 60 * 60,
                 'jobClass'   => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
                 'targetType' => 'lesson',
+                'targetId'   => $lesson['id']
+            );
+            $startJob = $this->getCrontabService()->createJob($startJob);
+        }
+    }
+
+    protected function LiveOpenCreateJob($lesson)
+    {
+        if ($lesson['startTime'] >= (time() + 60 * 60)) {
+            $startJob = array(
+                'name'       => "LiveOpenPushNotificationOneHourJob",
+                'cycle'      => 'once',
+                'time'       => $lesson['startTime'] - 60 * 60,
+                'jobClass'   => 'Topxia\\Service\\Notification\\Job\\LiveOpenPushNotificationOneHourJob',
+                'targetType' => 'liveOpenLesson',
                 'targetId'   => $lesson['id']
             );
             $startJob = $this->getCrontabService()->createJob($startJob);

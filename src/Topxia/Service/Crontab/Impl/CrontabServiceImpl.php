@@ -72,7 +72,7 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             // 加锁
             $job = $this->getJob($id, true);
 
-            // 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
+// 并发的时候，一旦有多个请求进来执行同个任务，阻止第２个起的请求执行任务
 
             if (empty($job) || $job['executing']) {
                 $this->getLogService()->error('crontab', 'execute', "任务(#{$job['id']})已经完成或者在执行");

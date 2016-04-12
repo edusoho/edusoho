@@ -373,8 +373,7 @@ throw $this->createServiceException('不能收藏未发布课程');
 
     public function updateLesson($courseId, $lessonId, $fields)
     {
-        $argument = $fields;
-        $course   = $this->getCourse($courseId);
+        $course = $this->getCourse($courseId);
 
         if (empty($course)) {
             throw $this->createServiceException("课程(#{$courseId})不存在！");
@@ -437,6 +436,9 @@ throw $this->createServiceException('不能收藏未发布课程');
                 }
             }
         }
+
+        $updatedLesson['fields'] = $lesson;
+        $this->dispatchEvent("open.course.lesson.update", array('lesson' => $updatedLesson));
 
         return $updatedLesson;
     }
@@ -557,6 +559,45 @@ throw $this->createServiceException('不能收藏未发布课程');
                 $this->updateLesson($courseId, $item['id'], $fields);
             }
         }
+    }
+
+    public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException('此课程不存在！');
+        }
+
+        $thisStartTime = $thisEndTime = 0;
+
+        $conditions = array();
+
+        if ($lessonId) {
+            $liveLesson                  = $this->getCourseLesson($course['id'], $lessonId);
+            $conditions['lessonIdNotIn'] = array($lessonId);
+        } else {
+            $lessonId = "";
+        }
+
+        $startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
+        $endTime   = $startTime + $length * 60;
+
+        $conditions['courseId']             = $courseId;
+        $conditions['startTimeGreaterThan'] = $startTime;
+        $conditions['endTimeLessThan']      = $endTime;
+
+        $thisLessons = $this->searchLessons($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+
+        if (($length / 60) > 8) {
+            return array('error_timeout', '时长不能超过8小时！');
+        }
+
+        if ($thisLessons) {
+            return array('error_occupied', '该时段内已有直播课时存在，请调整直播开始时间');
+        }
+
+        return array('success', '');
     }
 
     /**
@@ -867,5 +908,10 @@ throw $this->createServiceException('不能收藏未发布课程');
     protected function getFileService()
     {
         return $this->createService('Content.FileService');
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 }

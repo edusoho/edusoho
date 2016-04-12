@@ -494,6 +494,25 @@ class OpenCourseManageController extends BaseController
         return $response;
     }
 
+    public function lessonTimeCheckAction(Request $request, $courseId)
+    {
+        $data = $request->query->all();
+
+        $startTime = $data['startTime'];
+        $length    = $data['length'];
+        $lessonId  = empty($data['lessonId']) ? "" : $data['lessonId'];
+
+        list($result, $message) = $this->getOpenCourseService()->liveLessonTimeCheck($courseId, $lessonId, $startTime, $length);
+
+        if ($result == 'success') {
+            $response = array('success' => true, 'message' => '这个时间段的课时可以创建');
+        } else {
+            $response = array('success' => false, 'message' => $message);
+        }
+
+        return $this->createJsonResponse($response);
+    }
+
     private function getOpenCourse($request, $conditions)
     {
         $paginator = new Paginator(
