@@ -114,6 +114,8 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
 
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
+            ->andWhere('id = :lessonId')
+            ->andWhere('id NOT IN (:lessonIdNotIn)')
             ->andWhere('courseId = :courseId')
             ->andWhere('updatedTime >= :updatedTime_GE')
             ->andWhere('status = :status')

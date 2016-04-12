@@ -64,6 +64,8 @@ interface OpenCourseService
 
     public function sortCourseItems($courseId, array $items);
 
+    public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length);
+
     /**
      * open_course_member
      */

@@ -561,6 +561,45 @@ throw $this->createServiceException('不能收藏未发布课程');
         }
     }
 
+    public function liveLessonTimeCheck($courseId, $lessonId, $startTime, $length)
+    {
+        $course = $this->getCourse($courseId);
+
+        if (empty($course)) {
+            throw $this->createServiceException('此课程不存在！');
+        }
+
+        $thisStartTime = $thisEndTime = 0;
+
+        $conditions = array();
+
+        if ($lessonId) {
+            $liveLesson                  = $this->getCourseLesson($course['id'], $lessonId);
+            $conditions['lessonIdNotIn'] = array($lessonId);
+        } else {
+            $lessonId = "";
+        }
+
+        $startTime = is_numeric($startTime) ? $startTime : strtotime($startTime);
+        $endTime   = $startTime + $length * 60;
+
+        $conditions['courseId']             = $courseId;
+        $conditions['startTimeGreaterThan'] = $startTime;
+        $conditions['endTimeLessThan']      = $endTime;
+
+        $thisLessons = $this->searchLessons($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+
+        if (($length / 60) > 8) {
+            return array('error_timeout', '时长不能超过8小时！');
+        }
+
+        if ($thisLessons) {
+            return array('error_occupied', '该时段内已有直播课时存在，请调整直播开始时间');
+        }
+
+        return array('success', '');
+    }
+
     /**
      * open_course_member
      */
