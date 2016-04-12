@@ -63,6 +63,10 @@ register_staffNo_check:
     pattern:  /register/staff-no/check
     defaults: { _controller: MoocWebBundle:Register:checkStaffNo }
 
+register:
+    pattern:  /register
+    defaults: { _controller: MoocWebBundle:Register:index }
+
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: MoocWebBundle:CourseStudentManage:index }
