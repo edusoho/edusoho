@@ -14,7 +14,7 @@
   <td>
     {{ dict_text('fileType', uploadFile.type) }}
   </td>
-  <td>{{ web_macro.bytesToSize(uploadFile.size) }}</td>
+  <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>
