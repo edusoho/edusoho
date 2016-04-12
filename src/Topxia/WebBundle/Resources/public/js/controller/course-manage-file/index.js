@@ -66,9 +66,9 @@ define(function(require, exports, module) {
               }else if(file.convertStatus=='error'){
                 $("#upload-file-tr-"+file.id).find('a:first').after("<br><span class='text-danger text-sm'>文件格式转换失败</span>");
               }else if(file.convertStatus=='none'){
-                $("#upload-file-tr-"+file.id).find('a:first').after("<br><span class='label label-default tip'>未转码</span>");
+                $("#upload-file-tr-"+file.id).find('br:first').after("<span class='label label-default tip'>未转码</span>");
               }else if(file.convertStatus=='success'){
-                $("#upload-file-tr-"+file.id).find('a:first').after("<br><span class='label label-success tip'>已转码</span>");
+                $("#upload-file-tr-"+file.id).find('br:first').after("<span class='label label-success tip'>已转码</span>");
               }
             }
         });

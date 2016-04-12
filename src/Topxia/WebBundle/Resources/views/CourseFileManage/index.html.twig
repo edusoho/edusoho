@@ -46,13 +46,13 @@
         </thead>
         <tbody>
           {% if type == 'courselesson' %}
-            {% for uploadFile in courseLessons %}
+            {% for uploadFile in files %}
               {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr.html.twig' %}
             {% else %}
               <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>
             {% endfor %}
           {% elseif type == 'coursematerial' %}
-            {% for uploadFile in courseLessons %}
+            {% for uploadFile in files %}
               {% include 'TopxiaWebBundle:CourseFileManage:tbody-tr-coursematerial.html.twig' %}
             {% else %}
               <tr class="empty"><td colspan="20">{{'无文件记录'|trans}}</td></tr>

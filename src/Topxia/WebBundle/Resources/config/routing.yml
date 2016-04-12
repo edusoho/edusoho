@@ -669,10 +669,6 @@ course_manage_files:
     pattern:  /course/{id}/manage/files
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:index }
 
-course_manage_files_upload:
-    pattern:  /course/{id}/manage/files_upload
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:upload }
-
 course_manage_file_show:
     pattern:  /course/{id}/manage/file/{fileId}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:show }
