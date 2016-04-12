@@ -40,6 +40,12 @@ define(function(require, exports, module) {
         "必须为数字"
     );
 
+    Validator.addRule(
+        'cannot_allNumber',
+        /^(?!\d+$)/,
+        "不能全为数字"
+    );
+
     exports.run = function() {
         $(".date").datetimepicker({
             language: 'zh-CN',
@@ -123,7 +129,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="nickname"]',
             required: true,
-            rule: 'chinese_alphanumeric not_all_digital byte_minlength{min:4} byte_maxlength{max:18} remote'
+            rule: 'chinese_alphanumeric cannot_allNumber byte_minlength{min:4} byte_maxlength{max:18} remote'
         });
 
         validator.addItem({
