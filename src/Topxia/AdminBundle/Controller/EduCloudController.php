@@ -529,7 +529,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-    public function searchSettingAction()
+    public function searchSettingAction(Request $request)
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
         if (!$cloud_search_settting) {
@@ -554,11 +554,16 @@ class EduCloudController extends BaseController
             ));
         }
 
-
-
         //是否接入教育云
         if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
+        } elseif(empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        }else {
+             $currentHost = $request->server->get('HTTP_HOST');
+             if(!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))){
+                $data['status'] = 'binded_error';
+             }
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(

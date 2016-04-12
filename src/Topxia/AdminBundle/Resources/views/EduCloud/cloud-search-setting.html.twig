@@ -26,6 +26,22 @@
             <span class="text-danger text-sm" >抱歉，您尚未接入教育云，不能使用云搜索服务！</span>
             <p><a href="http://open.edusoho.com/educloud" target="_blank">立即接入</a></p>
           </div>
+        {% elseif data.status == 'unbinded' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm" >未绑定授权域名不能开通云搜索！</span>
+            <p><a href="path('admin_setting_cloud')">立即设置</a></p>
+          </div>
+        {% elseif data.status == 'binded_error' %}
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-default" name="upload_mode" value="cloud" disabled="disabled">启用云搜索</button>
+          </div>
+          <div class="col-md-10">
+            <span class="text-danger text-sm" >当前域名与授权域名不符，不能开通云搜索！</span>
+            <p><a href="path('admin_setting_cloud')" target="_blank">立即设置</a></p>
+          </div>
         {% elseif data.status == 'closed' %}
             <div class="col-md-2">
               <a class="btn btn-primary mhs" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_edu_cloud_search_clause') }}">启用云搜索</a>
