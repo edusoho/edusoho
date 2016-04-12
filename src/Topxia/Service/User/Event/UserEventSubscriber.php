@@ -48,8 +48,8 @@ class UserEventSubscriber implements EventSubscriberInterface
             'fromId' => $friend['fromId'],
             'toId' => $friend['toId'],
             'type' => 'text',
-            'title' => '好友添加',
-            'content' => $user['nickname'].'添加你为好友',
+            'title' => $this->getKernel()->trans('好友添加'),
+            'content' => $user['nickname'].$this->getKernel()->trans('添加你为好友'),
             'custom' => json_encode(array(
                 'fromId' => $friend['fromId'],
                 'nickname' => $user['nickname'],

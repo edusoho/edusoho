@@ -40,7 +40,7 @@ class RecentPostNumDaoImpl  extends BaseDao implements RecentPostNumDao
     	$fields = array('num');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans("%field%字段不允许增减，只有%fields%才被允许增减",array('%field%'=>$field,'%fields%'=>implode(',', $fields)))));
         }
 
         $currentTime = time();
@@ -48,5 +48,10 @@ class RecentPostNumDaoImpl  extends BaseDao implements RecentPostNumDao
         
         return $this->getConnection()->executeQuery($sql, array($diff, $currentTime, $id));
     }
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
 
 }

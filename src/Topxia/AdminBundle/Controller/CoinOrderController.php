@@ -111,8 +111,8 @@ class CoinOrderController extends BaseController
             $conditions['endTime']   = strtotime($conditions['endTime']);
         }
 
-        $status  = array('created' => '未付款', 'paid' => '已付款', 'cancelled' => '已关闭');
-        $payment = array('alipay' => '支付宝', 'wxpay' => '微信支付', 'heepay' => '网银支付', 'quickpay' => '快捷支付', 'coin' => '虚拟币支付', 'none' => '--');
+        $status  = array('created' => $this->getServiceKernel()->trans('未付款'), 'paid' => $this->getServiceKernel()->trans('已付款'), 'cancelled' => $this->getServiceKernel()->trans('已关闭'));
+        $payment = array('alipay' => $this->getServiceKernel()->trans('支付宝'), 'wxpay' => $this->getServiceKernel()->trans('微信支付'), 'heepay' => $this->getServiceKernel()->trans('网银支付'), 'quickpay' => $this->getServiceKernel()->trans('快捷支付'), 'coin' => $this->getServiceKernel()->trans('虚拟币支付'), 'none' => '--');
         $orders  = $this->getCashOrdersService()->searchOrders($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $studentUserIds = ArrayToolkit::column($orders, 'userId');
@@ -123,7 +123,7 @@ class CoinOrderController extends BaseController
         $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
         $profiles = ArrayToolkit::index($profiles, 'id');
 
-        $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
+        $str = $this->getServiceKernel()->trans('订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间');
 
         $str .= "\r\n";
 

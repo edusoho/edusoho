@@ -23,24 +23,24 @@ class CourseUserImporterProcessor implements ImporterProcessor
         $errorMessage = '';
 
         if (!is_object($file)) {
-            $errorMessage = '请选择上传的文件';
+            $errorMessage = $this->getKernel()->trans('请选择上传的文件');
             return $errorMessage;
         }
 
         if (FileToolkit::validateFileExtension($file, 'xls xlsx')) {
-            $errorMessage = 'Excel格式不正确！';
+            $errorMessage = $this->getKernel()->trans('Excel格式不正确！');
             return $errorMessage;
         }
 
         $this->excelAnalyse($file);
 
         if ($this->rowTotal > 1000) {
-            $message = 'Excel超过1000行数据!';
+            $message = $this->getKernel()->trans('Excel超过1000行数据!');
             return $errorMessage;
         }
 
         if (!$this->checkNecessaryFields($this->excelFields)) {
-            $message = '缺少必要的字段';
+            $message = $this->getKernel()->trans('缺少必要的字段');
             return $errorMessage;
         }
 
@@ -108,7 +108,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
         }
 
         if (!$user) {
-            $errorInfo = "第 ".$row."行的信息有误，用户数据不存在，请检查。";
+            $errorInfo = $this->getKernel()->trans("第%row%行的信息有误，用户数据不存在，请检查。",array('%row%'=>$row));
         }
 
         return $errorInfo;
@@ -151,12 +151,12 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
         foreach ($repeatArrayCount as $key => $value) {
             if ($value > 1 && !empty($key)) {
-                $repeatRow .= '第'.($nickNameCol + 1)."列重复:<br>";
+                $repeatRow .= $this->getKernel()->trans('第(%nickNameCol%)列重复:',array('%nickNameCol%'=>$nickNameCol + 1))."<br>";
 
                 for ($i = 1; $i <= $value; $i++) {
                     $row = array_search($key, $array) + 3;
 
-                    $repeatRow .= "第".$row."行"."    ".$key."<br>";
+                    $repeatRow .= $this->getKernel()->trans('第%row%行%key%',array('%row%'=>$row,'%key%'=>$key))."<br>";
 
                     unset($array[$row - 3]);
                 }
@@ -169,7 +169,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
     public function getFieldSort()
     {
         $fieldSort       = array();
-        $necessaryFields = $this->necessaryFields;
+        $necessaryFields = $this->getNecessaryFields();
         $excelFields     = $this->excelFields;
 
         foreach ($excelFields as $key => $value) {
@@ -188,7 +188,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
     public function checkNecessaryFields($excelFields)
     {
-        $necessaryFields = $this->necessaryFields;
+        $necessaryFields = $this->getNecessaryFields();
 
         if ($necessaryFields = array_intersect($necessaryFields, array_values($excelFields))) {
             return true;
@@ -218,7 +218,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
             $emptyData = array_count_values($userData);
 
             if (isset($emptyData[""]) && count($userData) == $emptyData[""]) {
-                $checkInfo[] = "第".$row."行为空行，已跳过";
+                $checkInfo[] = $this->getKernel()->trans('第%row%行为空行，已跳过',array('%row%'=>$row));
                 continue;
             }
 
@@ -279,13 +279,13 @@ class CourseUserImporterProcessor implements ImporterProcessor
         $repeatArray   = array();
 
         if (!empty($repeatRow)) {
-            $repeatRowInfo .= "字段对应用户数据重复</br>";
+            $repeatRowInfo .= $this->getKernel()->trans('字段对应用户数据重复')."</br>";
 
             foreach ($repeatRow as $row) {
-                $repeatRowInfo .= "重复行：</br>";
+                $repeatRowInfo .= $this->getKernel()->trans('重复行：')."</br>";
 
                 foreach ($row as $value) {
-                    $repeatRowInfo .= "第".$value."行 ";
+                    $repeatRowInfo .= $this->getKernel()->trans('第%value%行 ',array('%value%'=>$value));
                 }
 
                 $repeatRowInfo .= "</br>";
@@ -344,7 +344,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
                 $order = $this->getOrderService()->createOrder(array(
                     'userId'     => $user['id'],
-                    'title'      => "购买课程《{$targetObject['title']}》(管理员添加)",
+                    'title'      => $this->getKernel()->trans('购买课程《%title%》(管理员添加)',array('%title%'=>$targetObject['title'])),
                     'targetType' => 'course',
                     'targetId'   => $targetObject['id'],
                     'amount'     => 0,
@@ -361,7 +361,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
                 $info = array(
                     'orderId' => $order['id'],
-                    'note'    => '通过批量导入添加'
+                    'note'    => $this->getKernel()->trans('通过批量导入添加')
                 );
 
                 if ($this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info)) {
@@ -379,7 +379,7 @@ class CourseUserImporterProcessor implements ImporterProcessor
 
                 $this->getNotificationService()->notify($member['userId'], 'course-student', $message);
 
-                $this->getLogService()->info('course', 'add_student', "课程《{$targetObject['title']}》(#{$targetObject['id']})，添加学员{$user['nickname']}(#{$user['id']})，备注：通过批量导入添加");
+                $this->getLogService()->info('course', 'add_student', $this->getKernel()->trans("课程《%title%》(#%objectId%)，添加学员%nickname%(#%id%)，备注：通过批量导入添加",array('%title%'=>$targetObject['title'],'%objectId%'=>$targetObject['id'],'%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
             }
         }
 
@@ -395,6 +395,11 @@ class CourseUserImporterProcessor implements ImporterProcessor
         $data = str_replace('\t', '', $data);
 
         return $data;
+    }
+    public function getNecessaryFields()
+    {
+           $necessaryFields = array('nickname' => '用户名', 'verifiedMobile' => '手机', 'email' => '邮箱');
+         return $this->getKernel()->transArray($necessaryFields);
     }
 
     protected function getUserService()
@@ -420,5 +425,9 @@ class CourseUserImporterProcessor implements ImporterProcessor
     protected function getLogService()
     {
         return ServiceKernel::instance()->createService('System.LogService');
+    }
+        protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

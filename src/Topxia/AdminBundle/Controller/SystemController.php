@@ -29,12 +29,12 @@ class SystemController extends BaseController
         if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
             $discuzProvider = new DiscuzAuthProvider();
             if ($discuzProvider->checkConnect()) {
-                return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
+                return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('通信成功')));
             } else {
-                return $this->createJsonResponse(array('status' => false, 'message' => '通信失败'));
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('通信失败')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => '未开通Ucenter'));
+            return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('未开通Ucenter')));
         }
     }
 
@@ -47,26 +47,26 @@ class SystemController extends BaseController
         if (!empty($mailer['enabled'])) {
             try {
                 if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
-                    return $this->createJsonResponse(array('status' => true, 'message' => '已经使用云邮件'));
+                    return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('已经使用云邮件')));
                 } else {
                     $normalMail = array(
                         'to'    => $user['email'],
-                        'title' => "【{$site['name']}】系统自检邮件",
-                        'body'  => '系统邮件发送检测测试，请不要回复此邮件！'
+                        'title' => $this->getServiceKernel()->trans('【%name%】系统自检邮件',array('%name%'=>$site['name'])),   
+                        'body'  => $this->getServiceKernel()->trans('系统邮件发送检测测试，请不要回复此邮件！')
                     );
                     $cloudMail = array();
                     $mail      = new Mail($normalMail, $cloudMail);
 
                     $this->sendEmail($mail);
 
-                    return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送正常'));
+                    return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('邮件发送正常')));
                 }
             } catch (\Exception $e) {
-                $this->getLogService()->error('user', 'email_send_check', "【系统邮件发送自检】 发送邮件失败：".$e->getMessage());
-                return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
+                $this->getLogService()->error('user', 'email_send_check', $this->getServiceKernel()->trans('【系统邮件发送自检】 发送邮件失败：').$e->getMessage());
+                return $this->createJsonResponse(array('status' => false, 'message' => $this->getServiceKernel()->trans('邮件发送异常')));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送服务并没开通！'));
+            return $this->createJsonResponse(array('status' => true, 'message' => $this->getServiceKernel()->trans('邮件发送服务并没开通！')));
         }
     }
 

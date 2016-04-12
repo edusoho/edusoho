@@ -110,7 +110,7 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
         $fields = array('subposts', 'ups');
 
         if (!in_array($field, $fields)) {
-            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+            throw \InvalidArgumentException(sprintf($this->getKernel()->trans('%field%字段不允许增减，只有%fields%才被允许增减',array('%field%'=>$field,'%fields%'=>implode(',', $fields)))));
         }
 
         $sql = "UPDATE {$this->table} SET {$field} = {$field} + ? WHERE id = ? LIMIT 1";
@@ -151,5 +151,9 @@ class ThreadPostDaoImpl extends BaseDao implements ThreadPostDao
                         ->andWhere('targetType = :targetType')
                         ->andWhere('adopted = :adopted');
         return $builder;
+    }
+       protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

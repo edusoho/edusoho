@@ -32,12 +32,12 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
-            $this->getLogService()->info('system', 'update_settings', "更新开发者设置", $developerSetting);
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新开发者设置'), $developerSetting);
 
             $this->dealServerConfigFile();
             $this->dealNetworkLockFile($developerSetting);
 
-            $this->setFlashMessage('success', '开发者已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('开发者已保存！'));
         }
 
         return $this->render('TopxiaAdminBundle:DeveloperSetting:index.html.twig', array(
@@ -94,8 +94,8 @@ class DeveloperSettingController extends BaseController
             $setting = $request->request->get('setting', '{}');
             $setting = json_decode($setting, true);
             $this->getSettingService()->set('magic', $setting);
-            $this->getLogService()->info('system', 'update_settings', "更新Magic设置", $setting);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('更新Magic设置'), $setting);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $setting = $this->getSettingService()->get('magic', array());
@@ -123,8 +123,8 @@ class DeveloperSettingController extends BaseController
                 file_exists($redisConfigFile) && unlink($redisConfigFile);
             }
 
-            $this->getLogService()->info('system', 'update_redis', "更新redis设置", $redis);
-            $this->setFlashMessage('success', '设置已保存！');
+            $this->getLogService()->info('system', 'update_redis', $this->getServiceKernel()->trans('更新redis设置'), $redis);
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('设置已保存！'));
         }
 
         $redis = $this->getSettingService()->get('redis', array());

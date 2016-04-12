@@ -3,6 +3,8 @@ namespace Topxia\Service\CloudPlatform\Client;
 
 use Psr\Log\LoggerInterface;
 
+use  Topxia\Service\Common\ServiceKernel;
+
 class AbstractCloudAPI
 {
     const VERSION = 'v1';

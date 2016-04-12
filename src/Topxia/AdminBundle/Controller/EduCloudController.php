@@ -160,7 +160,7 @@ class EduCloudController extends BaseController
 
             $storageSetting = array_merge($default, $storageSetting, $set);
             $this->getSettingService()->set('storage', $storageSetting);
-            $this->setFlashMessage('success', '云视频设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云视频设置已保存！'));
         } else {
             $storageSetting = array_merge($default, $storageSetting);
         }
@@ -208,7 +208,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename = 'watermark_'.time().'.'.$file->getClientOriginalExtension();
@@ -230,7 +230,7 @@ class EduCloudController extends BaseController
         $file = $request->files->get('watermark');
 
         if (!FileToolkit::isImageFile($file)) {
-            throw $this->createAccessDeniedException('图片格式不正确！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('图片格式不正确！'));
         }
 
         $filename = 'watermarkembed_'.time().'.'.$file->getClientOriginalExtension();
@@ -281,7 +281,7 @@ class EduCloudController extends BaseController
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -313,7 +313,7 @@ class EduCloudController extends BaseController
         $settings = $this->getSettingService()->get('storage', array());
 
         if (empty($settings['cloud_access_key']) || empty($settings['cloud_secret_key'])) {
-            $this->setFlashMessage('warning', '您还没有授权码，请先绑定。');
+            $this->setFlashMessage('warning', $this->getServiceKernel()->trans('您还没有授权码，请先绑定。'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key_update'));
         }
 
@@ -470,9 +470,9 @@ class EduCloudController extends BaseController
         $result      = $api->post('/me/license-domain', array('domain' => $currentHost));
 
         if (!empty($result['licenseDomains'])) {
-            $this->setFlashMessage('success', '授权域名绑定成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('授权域名绑定成功！'));
         } else {
-            $this->setFlashMessage('danger', '授权域名绑定失败，请重试！');
+            $this->setFlashMessage('danger', $this->getServiceKernel()->trans('授权域名绑定失败，请重试！'));
         }
 
         return $this->createJsonResponse($result);
@@ -495,14 +495,14 @@ class EduCloudController extends BaseController
             $result = $api->post(sprintf('/keys/%s/verification', $options['accessKey']));
 
             if (isset($result['error'])) {
-                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('AccessKey / SecretKey　不正确！'));
                 goto render;
             }
 
             $user = $api->get('/me');
 
             if ($user['edition'] != 'opensource') {
-                $this->setFlashMessage('danger', 'AccessKey / SecretKey　不正确！！');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('AccessKey / SecretKey　不正确！！'));
                 goto render;
             }
 
@@ -512,7 +512,7 @@ class EduCloudController extends BaseController
 
             $this->getSettingService()->set('storage', $settings);
 
-            $this->setFlashMessage('success', '授权码保存成功！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('授权码保存成功！'));
             return $this->redirect($this->generateUrl('admin_setting_cloud_key'));
         }
 
@@ -617,7 +617,7 @@ class EduCloudController extends BaseController
         $keys    = $applier->applyKey($this->getCurrentUser());
 
         if (empty($keys['accessKey']) || empty($keys['secretKey'])) {
-            return $this->createJsonResponse(array('error' => 'Key生成失败，请检查服务器网络后，重试！'));
+            return $this->createJsonResponse(array('error' => $this->getServiceKernel()->trans('Key生成失败，请检查服务器网络后，重试！')));
         }
 
         $settings = $this->getSettingService()->get('storage', array());
@@ -637,7 +637,7 @@ class EduCloudController extends BaseController
         $info = $api->get('/me');
 
         if (empty($info['copyright'])) {
-            throw $this->createAccessDeniedException('您无权操作!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('您无权操作!'));
         }
 
         $name = $request->request->get('name');
@@ -698,7 +698,7 @@ class EduCloudController extends BaseController
             if (isset($settings['sms_school_name'])) {
                 $status = $api->get('/me/sms_account');
 
-                if (isset($status['error']) && $status['error'] == '不存在短信账号') {
+                if (isset($status['error']) && $status['error'] == $this->getServiceKernel()->trans('不存在短信账号')) {
                     $info   = $api->post('/sms_accounts', array('name' => $settings['sms_school_name']));
                     $status = $api->get('/me/sms_account');
                 }
@@ -794,7 +794,7 @@ class EduCloudController extends BaseController
 
             if (isset($status['code']) && $status['code'] == 101) {
                 $site   = $this->getSettingService()->get('site', array());
-                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : "我的网校"));
+                $result = $api->post("/email_accounts", array('sender' => isset($site['name']) ? $site['name'] : $this->getServiceKernel()->trans("我的网校")));
 
                 if (isset($result['status']) && $result['status'] == 'enable') {
                     $emailStatus['status'] = 'enable';
@@ -808,7 +808,7 @@ class EduCloudController extends BaseController
             }
 
             $result = $api->get("/me/email_account");
-            $this->setFlashMessage('success', '云邮件设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
             $mailer = $this->getSettingService()->get('mailer', array());
 
             if (isset($result['status']) && $result['status'] == 'enable' && $mailer['enabled'] == "1") {
@@ -826,7 +826,7 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('mailer', $mailer);
                 $mailerWithoutPassword             = $mailer;
                 $mailerWithoutPassword['password'] = '******';
-                $this->getLogService()->info('system', 'update_settings', "开启云邮件关闭第三方邮件服务器设置", $mailerWithoutPassword);
+                $this->getLogService()->info('system', 'update_settings', $this->getServiceKernel()->trans('开启云邮件关闭第三方邮件服务器设置'), $mailerWithoutPassword);
             }
         }
 
@@ -838,11 +838,11 @@ class EduCloudController extends BaseController
                 $result = $api->post("/me/email_account", $params);
 
                 if (isset($result['nickname'])) {
-                    $this->setFlashMessage('success', '云邮件设置已保存！');
+                    $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
                     $emailStatus['status'] = $settings['status'];
                     $sign                  = array('sign' => $result['nickname']);
                 } else {
-                    $this->setFlashMessage('danger', '云邮件设置保存失败！');
+                    $this->setFlashMessage('danger', $this->getServiceKernel()->trans('云邮件设置保存失败！'));
                 }
             } else {
                 $emailStatus['status'] = $settings['status'];
@@ -853,7 +853,7 @@ class EduCloudController extends BaseController
         if (isset($operation['email-close'])) {
             $emailStatus['status'] = 'disable';
             $emailStatus           = array_merge($settings, $emailStatus);
-            $this->setFlashMessage('success', '云邮件设置已保存！');
+            $this->setFlashMessage('success', $this->getServiceKernel()->trans('云邮件设置已保存！'));
         }
 
         if (empty($operation)) {
