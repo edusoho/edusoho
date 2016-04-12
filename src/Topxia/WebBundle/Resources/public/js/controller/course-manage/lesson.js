@@ -74,7 +74,7 @@ define(function(require, exports, module) {
         $list.on('click', '.delete-chapter-btn', function(e) {
             var chapter_name = $(this).data('chapter') ;
             var part_name = $(this).data('part') ; 
-            if (!confirm(Translator.trans('您真的要删除该')+chapter_name+''+part_name+Translator.trans('吗？'))) {
+            if (!confirm(Translator.trans('您真的要删除该%foo%%foo1%吗？',{foo:chapter_name,foo1:Translator.trans})) {
                 return ;
             }
             var $btn = $(e.currentTarget);

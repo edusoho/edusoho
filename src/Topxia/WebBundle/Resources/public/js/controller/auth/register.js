@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             }
             return  result;  
         },
-            Translator.trans('{{display}}格式错误')
+           {{display}}Translator.trans('格式错误')
     );
 
     Validator.addRule(
@@ -44,10 +44,10 @@ define(function(require, exports, module) {
                 }
                 return result;
             },
-                Translator.trans('{{display}}不允许以1开头的11位纯数字')
+                {{display}}Translator.trans('不允许以1开头的11位纯数字')
         );
 
-    exports.run = function() {
+    exports.run = function() 
         $(".date").datetimepicker({
             language: 'zh-CN',
             autoclose: true,

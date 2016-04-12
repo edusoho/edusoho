@@ -11,17 +11,17 @@ define(function(require, exports, module) {
         $list.on('click', '.student-remove', function(){
             var $tr = $(this).parents('tr');
             var user_name = $('.student-remove').data('user') ;
-            if (!confirm(Translator.trans('您真的要移除该')+user_name+Translator.trans('吗？'))) {
+            if (!confirm(Translator.trans('您真的要移除该%foo%吗？',{foo:user_name}))) {
                 return ;
             }
 
             $.post($(this).data('url'), function(){
             	var user_name = $('.student-remove').data('user') ;
-                Notify.success(Translator.trans('移除')+user_name+Translator.trans('成功！'));
+                Notify.success(Translator.trans('移除%foo%成功！',{foo:user_name}));
                 $tr.remove();
             }).error(function(){
             	var user_name = $('.student-remove').data('user') ;
-                Notify.danger(Translator.trans('移除')+user_name+Translator.trans('失败，请重试！'));
+                Notify.danger(Translator.trans('移除%foo%失败，请重试！',{foo:user_name}));
             });
         });
 

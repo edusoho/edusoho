@@ -81,7 +81,7 @@ define(function(require, exports, module) {
                 $(document).dequeue('update_step_queue');
             }
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            progressBar.error( title +  Translator.trans('时，发生了未知错误。'));
+            progressBar.error( Translator.trans('%foo%时，发生了未知错误。',{foo:title}));
             $(document).clearQueue('update_step_queue');
         });
     }
