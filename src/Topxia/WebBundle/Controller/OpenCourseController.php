@@ -189,8 +189,8 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId)
     {
-        /*$sms_setting                                  = $this->getSettingService()->get('cloud_sms');
-        $sms_setting['sms_open_course_member_notify'] = 'on';
+        /*$sms_setting                  = $this->getSettingService()->get('cloud_sms');
+        $sms_setting['system_remind'] = 'on';
         $this->getSettingService()->set('cloud_sms', $sms_setting);*/
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
@@ -239,10 +239,13 @@ class OpenCourseController extends BaseController
 
         $lesson['replays'] = $this->_getLiveReplay($lesson);
 
+        $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
-            'course' => $course,
-            'lesson' => $lesson,
-            'member' => $member
+            'course'    => $course,
+            'lesson'    => $lesson,
+            'member'    => $member,
+            'notifyNum' => $notifyNum
         ));
     }
 
@@ -424,10 +427,15 @@ class OpenCourseController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $member = $this->_memberOperate($request, $courseId);
+            $member = $this->_memberOperate($request, $id);
 
-            $fields = $request->request->all();
-            $member = $this->getOpenCourseService()->updateMember($member['id'], $fields);
+            $fields               = $request->request->all();
+            $fields['isNotified'] = 1;
+            $member               = $this->getOpenCourseService()->updateMember($member['id'], $fields);
+
+            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id, 'isNotified' => 1));
+
+            return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }
 
         return $this->render('TopxiaWebBundle:OpenCourse:member-sms-modal.html.twig', array(

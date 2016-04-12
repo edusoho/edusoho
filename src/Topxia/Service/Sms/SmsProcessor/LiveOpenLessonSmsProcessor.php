@@ -53,8 +53,8 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
         }
 
         $originUrl = $hostName;
-        $originUrl .= $kernel->getContainer()->get('router')->generate('course_learn', array('id' => $lesson['courseId']));
-        $originUrl .= '#lesson/'.$lesson['id'];
+        $originUrl .= $kernel->getContainer()->get('router')->generate('open_course_show', array('courseId' => $lesson['courseId']));
+
         $url    = $this->changeLink($originUrl);
         $course = $this->getOpenCourseService()->getCourse($lesson['courseId']);
         $to     = '';
@@ -63,15 +63,14 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
 
         $to = array_filter(ArrayToolkit::column($students, 'mobile'));
 
-        $lesson['title']            = StringToolkit::cutter($lesson['title'], 20, 15, 4);
-        $parameters['lesson_title'] = '课时：《'.$lesson['title'].'》';
+        $parameters['lesson_title'] = '';
 
         if ($lesson['type'] == 'liveOpen') {
             $parameters['startTime'] = date("Y-m-d H:i:s", $lesson['startTime']);
         }
 
         $course['title']            = StringToolkit::cutter($course['title'], 20, 15, 4);
-        $parameters['course_title'] = '课程：《'.$course['title'].'》';
+        $parameters['course_title'] = '直播公开课：《'.$course['title'].'》';
 
         $description = $parameters['course_title'].' '.$parameters['lesson_title'].'预告';
 

@@ -713,6 +713,18 @@ throw $this->createServiceException('不能收藏未发布课程');
 
     public function updateMember($id, $member)
     {
+        $member = ArrayToolkit::filter($member, array(
+            'learnedNum'    => '',
+            'learnTime'     => '',
+            'role'          => '',
+            'ip'            => '',
+            'lastEnterTime' => 0,
+            'mobile'        => '',
+            'seq'           => 0,
+            'isVisible'     => 1,
+            'isNotified'    => 0
+        ));
+
         return $this->getOpenCourseMemberDao()->updateMember($id, $member);
     }
 
@@ -793,7 +805,9 @@ throw $this->createServiceException('不能收藏未发布课程');
             'smallPicture'  => '',
             'middlePicture' => '',
             'largePicture'  => '',
-            'teacherIds'    => ''
+            'teacherIds'    => '',
+            'studentNum'    => 0,
+            'updateTime'    => time()
         ));
 
         if (!empty($fields['about'])) {

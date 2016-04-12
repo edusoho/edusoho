@@ -11,7 +11,7 @@ define(function(require, exports, module) {
 		var smsValidator = new Validator({
             element: $form,
             autoSubmit: false,
-            onFormValidated: function(error){
+            onFormValidated: function(error){console.log(error);
                 if (error) {
                     return false;
                 }
@@ -41,11 +41,11 @@ define(function(require, exports, module) {
 	    var smsSender = new SmsSender({
 	    	element: '.js-sms-send',
 	    	url: $('.js-sms-send').data('url'),
-	        smsType:'sms_open_course_member_notify' 
+	        smsType:'system_remind' 
 	    });
 
     	
-	    /*$('.js-confirm').click(function(e){
+	    $('.js-confirm').click(function(e){
 	    	smsValidator.execute(function(error, results, element) {
                 if (error) {
                     return false;
@@ -56,7 +56,7 @@ define(function(require, exports, module) {
 		    	$('#order-create-form').submit();
             });	            
 	    	return false;
-	    });*/
+	    });
 
 	}
 
