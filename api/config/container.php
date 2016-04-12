@@ -50,7 +50,8 @@ $resources = array(
     'CourseThreads',
     'CourseThreadPost',
     'CourseThreadPosts',
-    'ClassRoomPlay'
+    'ClassRoomPlay',
+    'ClassRoomPlayStatus'
 );
 
 foreach ($resources as $res) {
