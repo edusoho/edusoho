@@ -1000,5 +1000,9 @@ class FileToolkit
 
         return array($naturalSize, $scaledSize);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

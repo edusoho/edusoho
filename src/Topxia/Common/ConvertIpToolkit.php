@@ -52,4 +52,8 @@ class ConvertIpToolkit
 			return $this->getServiceKernel()->trans('查询不到此IP');
 		}
 	}
+	protected function getServiceKernel()
+    	{
+        		return ServiceKernel::instance();
+    	}
 }

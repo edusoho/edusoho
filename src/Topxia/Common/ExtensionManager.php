@@ -256,4 +256,8 @@ class ExtensionManager
 
         return $this->bundles;
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 }

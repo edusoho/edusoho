@@ -134,5 +134,9 @@ class NeteaseOpenCourseAlbumParser extends AbstractAlbumParser
     {
         return !! preg_match($this->patterns['p1'], $url);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

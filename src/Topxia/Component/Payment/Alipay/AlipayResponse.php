@@ -141,5 +141,9 @@ class AlipayResponse extends Response
         $sign .=$this->options['secret'];
         return md5($sign);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }
