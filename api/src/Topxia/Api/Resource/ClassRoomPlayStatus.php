@@ -24,15 +24,15 @@ class ClassRoomPlayStatus extends BaseResource
 			return array();
 		}
 
+		$realLessonStatusArray = array();
 		$lessonStatusArray = $this->getClassRoomPlayStatus();
-		$lessonStatusArray = array_map(function($lessonStatus) {
+		foreach ($lessonStatusArray as $key => $lessonStatus) {
 			if (in_array($lessonStatus['courseId'], $courseIds)) {
-				return $lessonStatus;
+				$realLessonStatusArray[] = $lessonStatus;
 			}
+		}
 
-		}, $lessonStatusArray);
-
-		return $lessonStatusArray;
+		return $realLessonStatusArray;
 	}
 
 	protected function getClassRoomPlayStatus() {
