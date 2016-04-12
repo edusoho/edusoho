@@ -6,7 +6,6 @@ use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseLessonController extends BaseController
 {
@@ -60,7 +59,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        //开启限制加入
+//开启限制加入
 
         if (empty($lesson['free']) && empty($course['buyable']) && empty($course['tryLookable'])) {
             return $this->render('TopxiaWebBundle:CourseLesson:preview-notice-modal.html.twig', array('course' => $course));
@@ -72,7 +71,7 @@ class CourseLessonController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        //课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
+//课时不免费并且不满足1.有时间限制设置2.课时为视频课时3.视频课时非优酷等外链视频时提示购买
 
         if (empty($lesson['free']) && !(!empty($course['tryLookable']) && $lesson['type'] == 'video' && $lesson['mediaSource'] == 'self')) {
             if (!$user->isLogin()) {
@@ -340,7 +339,7 @@ class CourseLessonController extends BaseController
                                 $json['mediaUri'] = $url['url'];
                             } else {
                                 $api              = CloudAPIFactory::create();
-                                $result           = $api->get(sprintf("/files/%s/player", $file['globalId']));
+                                $result           = $api->get("/resources/{$file['globalId']}/player");
                                 $json['mediaUri'] = $result['url'];
                             }
                         } else {
@@ -497,39 +496,27 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!empty($file['globalId'])) {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
+        if (empty($file['globalId'])) {
+            throw $this->createNotFoundException();
         }
 
-        if ($file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
-                $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
-                $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+        $result = $this->getMaterialLibService()->player($file['globalId']);
 
-                return $this->createJsonResponse(array(
-                    'error' => array('code' => 'error', 'message' => $message)
-                ));
-            } else {
-                return $this->createJsonResponse(array(
-                    'error' => array('code' => 'processing', 'message' => 'PPT文档还在转换中，还不能查看，请稍等。')
-                ));
-            }
-        }
+        return $this->createJsonResponse($result['images']);
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+// $api    = CloudAPIFactory::create();
 
-        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-        return $this->createJsonResponse($result);
+// $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
 
-        // $api    = CloudAPIFactory::create();
-        // $result = $api->get(sprintf("/files/%s/player", $file['globalId']));
+// if (empty($result['images'])) {
 
-        // if (empty($result['images'])) {
-        //     return $this->createJsonResponse(array(
-        //         'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。')
-        //     ));
-        // }
+//     return $this->createJsonResponse(array(
+
+//         'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败，请重试。')
+
+//     ));
+
+// }
 
         // return $this->createJsonResponse($result['images']);
     }
@@ -584,18 +571,25 @@ class CourseLessonController extends BaseController
         $result['swfUri'] = $url['url'];
         return $this->createJsonResponse($result);
 
-        // $api    = CloudAPIFactory::create();
-        // $result = $api->get(sprintf("/resource/%s/player", $file['globalId']));
+// $api    = CloudAPIFactory::create();
 
-        // if (empty($result['pdf']) || empty($result['swf'])) {
-        //     return $this->createJsonResponse(array(
-        //         'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。')
-        //     ));
-        // }
+// $result = $api->get(sprintf("/resource/%s/player", $file['globalId']));
 
-        // return $this->createJsonResponse(array(
-        //     'pdfUri' => $result['pdf'],
-        //     'swfUri' => $result['swf']
+// if (empty($result['pdf']) || empty($result['swf'])) {
+
+//     return $this->createJsonResponse(array(
+
+//         'error' => array('code' => 'processing', 'message' => '获取文件播放信息失败。')
+
+//     ));
+
+// }
+
+// return $this->createJsonResponse(array(
+
+//     'pdfUri' => $result['pdf'],
+
+//     'swfUri' => $result['swf']
         // ));
     }
 
@@ -716,38 +710,40 @@ class CourseLessonController extends BaseController
 
     protected function isMobile()
     {
-        // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+// 如果有HTTP_X_WAP_PROFILE则一定是移动设备
 
         if (isset($_SERVER['HTTP_X_WAP_PROFILE'])) {
             return true;
         }
 
-        //如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+//如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
 
         if (isset($_SERVER['HTTP_VIA'])) {
             //找不到为flase,否则为true
             return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
         }
 
-        //判断手机发送的客户端标志,兼容性有待提高
+//判断手机发送的客户端标志,兼容性有待提高
 
         if (isset($_SERVER['HTTP_USER_AGENT'])) {
             $clientkeywords = array('nokia', 'sony', 'ericsson', 'mot', 'samsung', 'htc', 'sgh', 'lg', 'sharp',
                 'sie-', 'philips', 'panasonic', 'alcatel', 'lenovo', 'iphone', 'ipod', 'blackberry', 'meizu',
                 'android', 'netfront', 'symbian', 'ucweb', 'windowsce', 'palm', 'operamini', 'operamobi',
                 'openwave', 'nexusone', 'cldc', 'midp', 'wap', 'mobile');
-            // 从HTTP_USER_AGENT中查找手机浏览器的关键字
+
+// 从HTTP_USER_AGENT中查找手机浏览器的关键字
 
             if (preg_match("/(".implode('|', $clientkeywords).")/i", strtolower($_SERVER['HTTP_USER_AGENT']))) {
                 return true;
             }
         }
 
-        //协议法，因为有可能不准确，放到最后判断
+//协议法，因为有可能不准确，放到最后判断
 
         if (isset($_SERVER['HTTP_ACCEPT'])) {
-            // 如果只支持wml并且不支持html那一定是移动设备
-            // 如果支持wml和html但是wml在html之前则是移动设备
+// 如果只支持wml并且不支持html那一定是移动设备
+
+// 如果支持wml和html但是wml在html之前则是移动设备
 
             if ((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))) {
                 return true;
@@ -952,5 +948,10 @@ class CourseLessonController extends BaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }
