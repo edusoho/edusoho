@@ -96,7 +96,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function createBlock($block)
     {   
         if (!ArrayToolkit::requireds($block, array('code', 'title'))) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('创建编辑区失败，缺少必要的字段'));
+            throw $this->createServiceException($this->getKernel()->trans('创建编辑区失败，缺少必要的字段'));
         }
 
         $user = $this->getCurrentUser();
@@ -122,7 +122,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         $user = $this->getCurrentUser();
 
         if (!$block) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('此编辑区不存在，更新失败!'));
+            throw $this->createServiceException($this->getKernel()->trans('此编辑区不存在，更新失败!'));
         }
         $fields['updateTime'] = time();
         $updatedBlock = $this->getBlockDao()->updateBlock($id, $fields);
@@ -137,7 +137,7 @@ class BlockServiceImpl extends BaseService implements BlockService
         );
         $this->getBlockHistoryDao()->addBlockHistory($blockHistoryInfo);
 
-        $this->getLogService()->info('block', 'update', $this->getServiceKernel()->trans('更新编辑区#%id%', array('%id%' =>$id )), array('content' => $updatedBlock['content']));
+        $this->getLogService()->info('block', 'update', $this->getKernel()->trans('更新编辑区#%id%', array('%id%' =>$id )), array('content' => $updatedBlock['content']));
         return $updatedBlock;
     }
 
@@ -151,7 +151,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     public function getContentsByCodes(array $codes)
     {
         if(empty($codes)){
-            throw $this->createServiceException($this->getServiceKernel()->trans('获取内容失败，不允许查询空编号所对应的内容!'));
+            throw $this->createServiceException($this->getKernel()->trans('获取内容失败，不允许查询空编号所对应的内容!'));
         }
 
         $cdn = $this->getSettingService()->get('cdn');
@@ -177,7 +177,7 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $block = $this->getBlockDao()->getBlock($id);
         if (!$block) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('此编辑区不存在，更新失败!'));
+            throw $this->createServiceException($this->getKernel()->trans('此编辑区不存在，更新失败!'));
         }
 
         // $content = $this->purifyHtml($content);
@@ -191,11 +191,11 @@ class BlockServiceImpl extends BaseService implements BlockService
     {
         $block = $this->getBlockDao()->getBlock($blockId);
         if (!$block) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('此编辑区不存在，更新失败!'));
+            throw $this->createServiceException($this->getKernel()->trans('此编辑区不存在，更新失败!'));
         }
 
         if ($block['mode'] == 'template' && empty($history['data'])) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('此编辑区数据不存在，更新失败!'));
+            throw $this->createServiceException($this->getKernel()->trans('此编辑区数据不存在，更新失败!'));
         }
 
         // $content = $this->purifyHtml($content);

@@ -121,14 +121,14 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         $keysOfFields = array_keys($fields);
         foreach ($keysOfFields as $key => $keyOfFields) {
             if(!in_array($keyOfFields, $keysArray)){
-                throw $this->createServiceException($this->getServiceKernel()->trans('添加的字段有问题！'));
+                throw $this->createServiceException($this->getKernel()->trans('添加的字段有问题！'));
             }
         }
         $fields['createdTime'] = $fields['updateTime'] = time();
         $fields['sequence'] = $this->getNavigationDao()->getNavigationsCountByType($fields['type']) + 1;
         $result = $this->getNavigationDao()->addNavigation($fields);
 
-        $this->getLogService()->info('info', 'navigation_create', $this->getServiceKernel()->trans('创建导航%fieldsName%', array('%fieldsName%' =>$fields['name'] )));
+        $this->getLogService()->info('info', 'navigation_create', $this->getKernel()->trans('创建导航%fieldsName%', array('%fieldsName%' =>$fields['name'] )));
 
         return $result;
     }
@@ -140,7 +140,7 @@ class NavigationServiceImpl extends BaseService implements NavigationService
         }
         $fields['updateTime'] = time();
 
-        $this->getLogService()->info('info', 'navigation_update', $this->getServiceKernel()->trans('编辑导航#%id%', array('%id%' =>$id )), $fields);
+        $this->getLogService()->info('info', 'navigation_update', $this->getKernel()->trans('编辑导航#%id%', array('%id%' =>$id )), $fields);
 
         return $this->getNavigationDao()->updateNavigation($id, $fields);
     }

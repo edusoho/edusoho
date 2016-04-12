@@ -22,32 +22,32 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
             
             $user = $this->getCurrentUser();
             if (!$user->isLogin()) {
-                throw $this->createServiceException($this->getServiceKernel()->trans('用户未登录，不能创建订单'));
+                throw $this->createServiceException($this->getKernel()->trans('用户未登录，不能创建订单'));
             }
 
             if (!ArrayToolkit::requireds($info, array('targetId', 'payment'))) {
-                throw $this->createServiceException($this->getServiceKernel()->trans('订单数据缺失，创建课程订单失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('订单数据缺失，创建课程订单失败。'));
             }
 
             // 获得锁
             $user = $this->getUserService()->getUser($user['id'], true);
 
             if ($this->getCourseService()->isCourseStudent($info['targetId'], $user['id'])) {
-                throw $this->createServiceException($this->getServiceKernel()->trans('已经是课程学员，操作失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('已经是课程学员，操作失败。'));
             }
 
             $course = $this->getCourseService()->getCourse($info['targetId']);
             if (empty($course)) {
-                throw $this->createServiceException($this->getServiceKernel()->trans('课程不存在，操作失败。'));
+                throw $this->createServiceException($this->getKernel()->trans('课程不存在，操作失败。'));
             }
             if ($course['approval'] && $user['approvalStatus'] != 'approved') {
-                throw $this->createServiceException($this->getServiceKernel()->trans('该课程需要实名认证，你还没有实名认证，不可购买。'));
+                throw $this->createServiceException($this->getKernel()->trans('该课程需要实名认证，你还没有实名认证，不可购买。'));
             }
 
             $order = array();
 
             $order['userId'] = $user['id'];
-            $order['title'] = $this->getServiceKernel()->trans('购买课程《%courseTitle%》', array('%courseTitle%' =>$course['title'] ));
+            $order['title'] = $this->getKernel()->trans('购买课程《%courseTitle%》', array('%courseTitle%' =>$course['title'] ));
             $order['targetType'] = 'course';
             $order['targetId'] = $course['id'];
             if(!empty($course['discountId'])){
@@ -88,7 +88,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
 
             $order = $this->getOrderService()->createOrder($order);
             if (empty($order)) {
-                throw $this->createServiceException($this->getServiceKernel()->trans('创建课程订单失败！'));
+                throw $this->createServiceException($this->getKernel()->trans('创建课程订单失败！'));
             }
 
             // 免费课程或VIP用户，就直接将订单置为已购买
@@ -121,7 +121,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     {
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order) || $order['targetType'] != 'course') {
-            throw $this->createServiceException($this->getServiceKernel()->trans('非课程订单，加入课程失败。'));
+            throw $this->createServiceException($this->getKernel()->trans('非课程订单，加入课程失败。'));
         }
 
         $info = array(
@@ -132,8 +132,8 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         if (!$this->getCourseService()->isCourseStudent($order['targetId'], $order['userId'])) {
             $this->getCourseService()->becomeStudent($order['targetId'], $order['userId'], $info);
         } else {
-            $this->getOrderService()->createOrderLog($order['id'],"pay_success", $this->getServiceKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
-            $this->getLogService()->warning("course_order", "pay_success", $this->getServiceKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
+            $this->getOrderService()->createOrderLog($order['id'],"pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
+            $this->getLogService()->warning("course_order", "pay_success", $this->getKernel()->trans('当前用户已经是课程学员，支付宝支付成功。'), $order);
         }
 
         return ;
@@ -144,7 +144,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
         $user = $this->getCurrentUser();
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order)) {
-            throw $this->createServiceException($this->getServiceKernel()->trans('订单不存在，不能申请退款。'));
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，不能申请退款。'));
         }
 
         $refund = $this->getOrderService()->applyRefundOrder($id, $amount, $reason);
@@ -164,7 +164,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
                 $this->getNotificationService()->notify($refund['userId'], 'default', $message);
             }
 
-            $adminmessage = $this->getServiceKernel()->trans('用户')."{$user['nickname']}".$this->getServiceKernel()->trans('申请退款')."<a href='{$courseUrl}'>{$course['title']}</a>".$this->getServiceKernel()->trans('课程，请审核。');
+            $adminmessage = $this->getKernel()->trans('用户')."{$user['nickname']}".$this->getKernel()->trans('申请退款')."<a href='{$courseUrl}'>{$course['title']}</a>".$this->getKernel()->trans('课程，请审核。');
             $adminCount = $this->getUserService()->searchUserCount(array('roles'=>'ADMIN'));
             $admins = $this->getUserService()->searchUsers(array('roles'=>'ADMIN'),array('id','DESC'),0,$adminCount);
                 foreach ($admins as $key => $admin) {
@@ -182,7 +182,7 @@ class CourseOrderServiceImpl extends BaseService implements CourseOrderService
     {
         $order = $this->getOrderService()->getOrder($id);
         if (empty($order) || $order['targetType'] != 'course') {
-            throw $this->createServiceException($this->getServiceKernel()->trans('订单不存在，取消退款申请失败。'));
+            throw $this->createServiceException($this->getKernel()->trans('订单不存在，取消退款申请失败。'));
         }
 
         $this->getOrderService()->cancelRefundOrder($id);
