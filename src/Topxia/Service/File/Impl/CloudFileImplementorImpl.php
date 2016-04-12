@@ -25,7 +25,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
     {
         if (!ArrayToolkit::requireds($fileInfo, array('filename', 'key', 'size'))) {
-            throw $this->createServiceException('参数缺失，添加用户文件失败!');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失，添加用户文件失败!'));
         }
 
         $uploadFile = array();
@@ -72,7 +72,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
     public function saveConvertResult($file, array $result = array())
     {
         if (empty($result['id'])) {
-            throw new \RuntimeException('数据中id不能为空');
+            throw new \RuntimeException($this->getKernel()->trans('数据中id不能为空'));
         }
 
         if ($result['code'] != 0) {

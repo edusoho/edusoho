@@ -80,7 +80,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 );
                 break;
 			default :
-                throw $this->createServiceException ( '参数sort不正确。' );
+                throw $this->createServiceException ( $this->getKernel()->trans('参数sort不正确。') );
 		}
 		
 		if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
@@ -149,7 +149,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $file = $this->getFile($id);
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，删除失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，删除失败', array('%id%' =>$id )));
         }
         
         $deleted = $this->getFileImplementorByFile($file)->deleteFile($file);
@@ -171,7 +171,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $file = $this->getFile($id);
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，转换失败', array('%id%' =>$id )));
         }
 
         $file = $this->getFileImplementorByFile($file)->saveConvertResult($file, $result);
@@ -189,7 +189,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $file = $this->getFile($id);
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，转换失败', array('%id%' =>$id )));
         }
         $file['convertParams']['convertor'] = 'HLSEncryptedVideo';
 
@@ -211,12 +211,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     {
         $statuses = array('none', 'waiting', 'doing', 'success', 'error');
         if (!in_array($status, $statuses)) {
-            throw $this->createServiceException('状态不正确，变更文件转换状态失败！');
+            throw $this->createServiceException($this->getKernel()->trans('状态不正确，变更文件转换状态失败！'));
         }
 
         $file = $this->getFile($id);
         if (empty($file)) {
-            throw $this->createServiceException("文件(#{$id})不存在，转换失败");
+            throw $this->createServiceException($this->getKernel()->trans('文件(#%id%)不存在，转换失败', array('%id%' =>$id )));
         }
 
         $file = $this->getFileImplementorByFile($file)->convertFile($file, $status, $result, $callback);
@@ -273,28 +273,28 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $file = $this->getFile($id);
         if (empty($file)) {
-            return array('error' => 'file_not_found', 'message' => "文件(#{$id})不存在");
+            return array('error' => 'file_not_found', 'message' => $this->getKernel()->trans('文件(#%id%)不存在', array('%id%' =>$id )));
         }
 
         if ($file['storage'] != 'cloud') {
-            return array('error' => 'not_cloud_file', 'message' => "文件(#{$id})，不是云文件。");
+            return array('error' => 'not_cloud_file', 'message' => $this->getKernel()->trans('文件(#%id%)，不是云文件。', array('%id%' =>$id )));
         }
 
         if ($file['type'] != 'video') {
-            return array('error' => 'not_video_file', 'message' => "文件(#{$id})，不是视频文件。");
+            return array('error' => 'not_video_file', 'message' => $this->getKernel()->trans('文件(#%id%)，不是视频文件。', array('%id%' =>$id )));
         }
 
         if ($file['targetType'] != 'courselesson') {
-            return array('error' => 'not_course_file', 'message' => "文件(#{$id})，不是课时文件。");
+            return array('error' => 'not_course_file', 'message' => $this->getKernel()->trans('文件(#%id%)，不是课时文件。', array('%id%' =>$id )));
         }
 
         $target = $this->createService('Course.CourseService')->getCourse($file['targetId']);
         if (empty($target)) {
-            return array('error' => 'course_not_exist', 'message' => "文件(#{$id})所属的课程已删除。");
+            return array('error' => 'course_not_exist', 'message' => $this->getKernel()->trans('文件(#%id%)所属的课程已删除。', array('%id%' =>$id )));
         }
 
         if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
-            return array('error' => 'already_converted', 'message' => "文件(#{$id})已转换");
+            return array('error' => 'already_converted', 'message' => $this->getKernel()->trans('文件(#%id%)已转换', array('%id%' =>$id )));
         }
 
         $fileNeedUpdateFields = array();
@@ -331,7 +331,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
         $convertHash = $this->getFileImplementorByFile($file)->reconvertOldFile($file, $convertCallback, $pipeline);
         if (empty($convertHash)) {
-            return array('error' => 'convert_request_failed', 'message' => "文件(#{$id})转换请求失败！");
+            return array('error' => 'convert_request_failed', 'message' => $this->getKernel()->trans('文件(#%id%)转换请求失败！', array('%id%' =>$id )));
         }
 
         $fileNeedUpdateFields['convertHash'] = $convertHash;
