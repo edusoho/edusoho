@@ -3,7 +3,7 @@
         <h3 class="panel-title">{{'推荐课程'|trans}}</h3>
     </div>
     <div class="panel-body es-live-recommend">
-    	{% set courses = data('RecommendCourses',{'count':10,'type':'normal','notFill':true}) %}
+    	{% set courses = data('RecommendCourses',{'count':10,'notFill':true}) %}
     	{% for course in courses if course %}
 	    <div class="media">
 	      <div class="media-left">
