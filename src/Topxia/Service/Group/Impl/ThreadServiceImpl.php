@@ -347,12 +347,14 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function closeThread($threadId)
     {
-        $this->getThreadDao()->updateThread($threadId, array('status' => 'close'));
+        $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'close'));
+        $this->dispatchEvent('group.thread.close', $thread);
     }
 
     public function openThread($threadId)
     {
-        $this->getThreadDao()->updateThread($threadId, array('status' => 'open'));
+        $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'open'));
+        $this->dispatchEvent('group.thread.open', $thread);
     }
 
     public function searchThreads($conditions, $orderBy, $start, $limit)

@@ -52,8 +52,10 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.thread.update'      => 'onThreadUpdate',
             'course.thread.delete'      => 'onThreadDelete',
             'group.thread.create'       => 'onThreadCreate',
+            'group.thread.open'         => 'onThreadCreate',
             'group.thread.update'       => 'onThreadUpdate',
             'group.thread.delete'       => 'onThreadDelete',
+            'group.thread.close'        => 'onThreadDelete',
 
             'thread.post.create'        => 'onThreadPostCreate',
             'thread.post.delete'        => 'onThreadPostDelete',
