@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * 素材库上传组件控制器
+ * 上传组件控制器
  */
 class UploaderController extends BaseController
 {
@@ -23,7 +23,7 @@ class UploaderController extends BaseController
 
         $params['uploadCallback']  = $this->generateUrl('uploader_upload_callback', array(), true);
         $params['processCallback'] = $this->generateUrl('uploader_process_callback', array(), true);
-        $result = $this->getUploadFileService()->initUpload($params);
+        $result                    = $this->getUploadFileService()->initUpload($params);
 
         $result['uploadProxyUrl'] = $this->generateUrl('uploader_entry');
 
@@ -33,7 +33,7 @@ class UploaderController extends BaseController
     public function uploadAuthAction(Request $request)
     {
         $params = $request->request->all();
-        $auth = $this->getUploadFileService()->getUploadAuth($params);
+        $auth   = $this->getUploadFileService()->getUploadAuth($params);
         return $this->createJsonResponse($auth);
     }
 

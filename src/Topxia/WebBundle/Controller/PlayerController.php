@@ -4,6 +4,7 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\FileToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
@@ -27,7 +28,8 @@ class PlayerController extends BaseController
         } elseif ($file["type"] == 'audio') {
             $player = "audio-player";
         }
-        $url = $this->getPlayUrl($file);
+
+        $url = $this->getPlayUrl($id, $context);
 
         return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
             'file'             => $file,
@@ -38,21 +40,28 @@ class PlayerController extends BaseController
         ));
     }
 
-    protected function getPlayUrl($file)
-    {
-        if (!in_array($file["type"], array("audio", "video"))) {
-            throw $this->createAccessDeniedException();
-        }
-        //var_dump($file);
-        $token = $this->makeToken('hls.playlist', $file['globalId']);
+// protected function getPlayUrl($file)
 
-        $params = array(
-            'globalId' => $file['globalId'],
-            'token'    => $token['token']
-        );
+// {
 
-        return $this->generateUrl('global_file_hls_playlist', $params, true);
-    }
+//     if (!in_array($file["type"], array("audio", "video"))) {
+
+//         throw $this->createAccessDeniedException();
+
+//     }
+
+//     $token = $this->makeToken('hls.playlist', $file['globalId']);
+
+//     $params = array(
+
+//         'globalId' => $file['globalId'],
+
+//         'token'    => $token['token']
+
+//     );
+
+//     return $this->generateUrl('global_file_hls_playlist', $params, true);
+    // }
 
     public function playlistAction(Request $request, $globalId, $token)
     {
@@ -203,98 +212,115 @@ class PlayerController extends BaseController
         return new Response($file['metas']['levels'][$token['data']['level']]['hlsKey']);
     }
 
-    protected function makeToken($type, $globalId)
-    {
-        $fileds = array(
-            'data'     => array(
-                'globalId' => $globalId
-            ),
-            'times'    => 3,
-            'duration' => 3600,
-            'userId'   => $this->getCurrentUser()->getId()
-        );
+// protected function makeToken($type, $globalId)
 
-        $token = $this->getTokenService()->makeToken($type, $fileds);
-        return $token;
+// {
+
+//     $fileds = array(
+
+//         'data'     => array(
+
+//             'globalId' => $globalId
+
+//         ),
+
+//         'times'    => 3,
+
+//         'duration' => 3600,
+
+//         'userId'   => $this->getCurrentUser()->getId()
+
+//     );
+
+//     $token = $this->getTokenService()->makeToken($type, $fileds);
+
+//     return $token;
+    // }
+
+    protected function getPlayUrl($id, $context)
+    {
+        $file = $this->getUploadFileService()->getFile($id);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!in_array($file["type"], array("audio", "video"))) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            $factory = new CloudClientFactory();
+            $client  = $factory->createClient();
+
+            if (!empty($file['globalId'])) {
+                $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($file['id']);
+            }
+
+            if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
+                if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
+                    $token  = $this->makeToken('hls.playlist', $file['id'], $context);
+                    $params = array(
+                        'id'    => $file['id'],
+                        'token' => $token['token']
+                    );
+
+                    return $this->generateUrl('hls_playlist', $params, true);
+                } else {
+                    $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                }
+            } else {
+                if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
+                    $key = $file['metas']['hd']['key'];
+                } else {
+                    $key = $file['hashId'];
+                }
+
+                if ($key) {
+                    $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                }
+            }
+
+            return $result['url'];
+        } else {
+            $token = $this->makeToken('local.media', $file['id']);
+            return $this->generateUrl('player_local_media', array(
+                'id'    => $id,
+                'token' => $token['token']
+            ));
+        }
     }
 
-    // protected function getPlayUrl($id, $context)
-    // {
-    //     $file = $this->getUploadFileService()->getFile($id);
-    //
-    //     if (empty($file)) {
-    //         throw $this->createNotFoundException();
-    //     }
-    //
-    //     if (!in_array($file["type"], array("audio", "video"))) {
-    //         throw $this->createAccessDeniedException();
-    //     }
-    //
-    //     if ($file['storage'] == 'cloud') {
-    //         $factory = new CloudClientFactory();
-    //         $client  = $factory->createClient();
-    //
-    //         if (!empty($file['globalId'])) {
-    //             $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($file['id']);
-    //         }
-    //
-    //         if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-    //             if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-    //                 $token = $this->makeToken('hls.playlist', $file['id'], $context);
-    //
-    //                 $params = array(
-    //                     'id'    => $file['id'],
-    //                     'token' => $token['token']
-    //                 );
-    //
-    //                 return $this->generateUrl('hls_playlist', $params, true);
-    //             } else {
-    //                 $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-    //             }
-    //         } else {
-    //             if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-    //                 $key = $file['metas']['hd']['key'];
-    //             } else {
-    //                 $key = $file['hashId'];
-    //             }
-    //             if ($key) {
-    //                 $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
-    //             }
-    //         }
-    //
-    //         return $result['url'];
-    //     } else {
-    //         $token = $this->makeToken('local.media', $file['id']);
-    //
-    //         return $this->generateUrl('player_local_media', array(
-    //             'id'    => $id,
-    //             'token' => $token['token']
-    //         ));
-    //     }
-    // }
-    //
-    // protected function makeToken($type, $fileId, $context = array())
-    // {
-    //     $fileds = array(
-    //         'data'     => array(
-    //             'id' => $fileId
-    //         ),
-    //         'times'    => 3,
-    //         'duration' => 3600,
-    //         'userId'   => $this->getCurrentUser()->getId()
-    //     );
-    //
-    //     if (isset($context['watchTimeLimit'])) {
-    //         $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
-    //     }
-    //
-    //     if (isset($context['hideBeginning'])) {
-    //         $fileds['data']['hideBeginning'] = $context['hideBeginning'];
-    //     }
-    //
-    //     $token = $this->getTokenService()->makeToken($type, $fileds);
-    //     return $token;
-    // }
+    protected function makeToken($type, $fileId, $context = array())
+    {
+        $fileds = array(
+
+            'data'     => array(
+
+                'id' => $fileId
+
+            ),
+
+            'times'    => 3,
+
+            'duration' => 3600,
+
+            'userId'   => $this->getCurrentUser()->getId()
+
+        );
+
+        if (isset($context['watchTimeLimit'])) {
+            $fileds['data']['watchTimeLimit'] = $context['watchTimeLimit'];
+        }
+
+        if (isset($context['hideBeginning'])) {
+            $fileds['data']['hideBeginning'] = $context['hideBeginning'];
+        }
+
+        $token = $this->getTokenService()->makeToken($type, $fileds);
+
+        return $token;
+    }
 
     public function localMediaAction(Request $request, $id, $token)
     {

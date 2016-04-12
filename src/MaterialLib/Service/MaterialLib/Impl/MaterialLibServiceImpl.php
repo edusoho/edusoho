@@ -32,9 +32,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         //$this->checkPermission(Permission::DELETE, array('file' => $file));
         $result = $this->getUploadFileService()->deleteFile($id);
-        if($result) {
-          return true;
+
+        if ($result) {
+            return true;
         }
+
         return false;
     }
 
@@ -108,6 +110,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->createService('File.UploadFileService2');
     }
 
+    //TODO 去除dao
     protected function getMaterialLibDao()
     {
         return $this->createDao('MaterialLib:MaterialLib.MaterialLibDao');
