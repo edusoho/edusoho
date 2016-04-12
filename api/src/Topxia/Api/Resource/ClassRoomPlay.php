@@ -31,25 +31,7 @@ class ClassRoomPlay extends BaseResource
 			0, $searchLessonCount
 		);
 
-		$playArray = $this->createPlayArray($courses, $lessons);
-		$playArray["status"] = $this->getClassRoomPlayStatus();
-
-		return $playArray;
-	}
-
-	protected function getClassRoomPlayStatus() {
-		$user = $this->getCurrentUser();
-		if (empty($user)) {
-			return array();
-		}
-		$lessonStatus = $this->getCourseService()->searchLearns(
-			array("userId"=>$user['id']),
-			array('startTime', 'ASC'),
-			0,
-			100
-		);
-
-		return $lessonStatus;
+		return $this->createPlayArray($courses, $lessons);
 	}
 
 	protected function createPlayArray($courses, $lessons) {
