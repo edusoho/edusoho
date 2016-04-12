@@ -146,7 +146,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if ($file) {
             $this->updateTags($file, $fields);
             if(!empty($file['globalId'])){
-              $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags','description','endShared'));
+              $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags','description','endShared','thumbNo','endUser'));
               if(!empty($cloudFields)){
                 $this->getFileImplementor(array('storage'=>'cloud'))->updateFile($file['globalId'],$cloudFields);
               }

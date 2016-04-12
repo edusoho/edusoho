@@ -338,6 +338,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $cloudFile['createdUserId'] = $localFile['createdUserId'];
             $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
             $cloudFile['isPublic']      = $localFile['isPublic'];
+            $cloudFile['usedCount']     = $localFile['usedCount'];
         } else {
             //没有本地文件
             $cloudFile['id'] = 0;
