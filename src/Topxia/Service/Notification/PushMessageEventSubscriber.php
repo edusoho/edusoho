@@ -12,72 +12,390 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'testpaper.reviewed'        => 'onTestPaperReviewed',
-            'course.lesson.publish'     => 'onLessonPublish',
+            'user.service.registered'   => 'onUserCreate',
+            'user.unlock'               => 'onUserCreate',
+            'user.lock'                 => 'onUserDelete',
+            'user.update'               => 'onUserUpdate',
+            'user.change_nickname'      => 'onUserUpdate',
+
+            'course.publish'            => 'onCourseCreate',
+            'course.update'             => 'onCourseUpdate',
+            'course.delete'             => 'onCourseDelete',
+            'course.close'              => 'onCourseDelete',
             'course.join'               => 'onCourseJoin',
             'course.quit'               => 'onCourseQuit',
-            'course.create'             => 'onCourseCreate',
-            'course.publish'            => 'onCoursePublish',
-            'course.lesson.delete'      => 'onCourseLessonDelete',
+
+            'course.lesson.publish'     => 'onCourseLessonCreate',
+            'course.lesson.unpublish'   => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
-            'course.close'              => 'onCourseClose',
-            'announcement.create'       => 'onAnnouncementCreate',
-            'classroom.create'          => 'onClassroomCreate',
+            'course.lesson.delete'      => 'onCourseLessonDelete',
+
             'classroom.join'            => 'onClassroomJoin',
             'classroom.quit'            => 'onClassroomQuit',
-            'classroom.put_course'      => 'onClassroomPutCourse',
+
             'article.create'            => 'onArticleCreate',
-            'discount.pass'             => 'onDiscountPass',
-            'course.thread.post.create' => 'onCourseThreadPostCreate',
-            'homework.check'            => 'onHomeworkCheck',
-            'course.lesson_finish'      => 'onCourseLessonFinish',
-            'course.lesson_start'       => 'onCourseLessonStart',
-            'course.thread.create'      => 'onCourseThreadCreate',
-            'user.update'               => 'onUserUpdate',
-            'course.lesson.create'      => 'onCourseLessonCreate',
-            'profile.update'            => 'onProfileUpdate',
-            'course.update'             => 'onCourseUpdate',
+            'article.publish'           => 'onArticleCreate',
+            'article.update'            => 'onArticleUpdate',
+            'article.trash'             => 'onArticleDelete',
+            'article.unpublish'         => 'onArticleDelete',
+            'article.delete'            => 'onArticleDelete',
 
-            'user.register'             => 'pushCloudData',
-            'mobile.change'             => 'pushCloudData',
-            'course.close'              => 'pushCloudData',
-            'course.delete'             => 'pushCloudData',
-            'course.lesson.unpublish'   => 'pushCloudData',
-            'article.update'            => 'pushCloudData',
-            'article.trash'             => 'pushCloudData',
-            'article.delete'            => 'pushCloudData',
-            'thread.update'             => 'pushCloudData',
-            'thread.delete'             => 'pushCloudData',
-            'thread.create'             => 'pushCloudData',
-            'course.thread.update'      => 'pushCloudData',
-            'course.thread.delete'      => 'pushCloudData',
-            'user.change_nickname'      => 'pushCloudData',
-            'user.change_email'         => 'pushCloudData',
-            'user.unlock'               => 'pushCloudData',
-            'user.lock'                 => 'pushCloudData'
+            'thread.create'             => 'onThreadCreate',
+            'thread.update'             => 'onThreadUpdate',
+            'thread.delete'             => 'onThreadDelete',
 
+            // 'testpaper.reviewed'        => 'onTestPaperReviewed',
+            // // -- 'course.lesson.publish'     => 'onLessonPublish',
+            // // -- 'course.join'               => 'onCourseJoin',
+            // // -- 'course.quit'               => 'onCourseQuit',
+            // // -- 'course.create'             => 'onCourseCreate',
+            // // -- 'course.publish'            => 'onCoursePublish',
+            // // -- 'course.lesson.delete'      => 'onCourseLessonDelete',
+            // // -- 'course.lesson.update'      => 'onCourseLessonUpdate',
+            // // -- 'course.close'              => 'onCourseClose',
+            // 'announcement.create'       => 'onAnnouncementCreate',
+            // 'classroom.create'          => 'onClassroomCreate',
+            // // -- 'classroom.join'            => 'onClassroomJoin',
+            // // -- 'classroom.quit'            => 'onClassroomQuit',
+            // 'classroom.put_course'      => 'onClassroomPutCourse',
+            // // -- 'article.create'            => 'onArticleCreate',
+            // 'discount.pass'             => 'onDiscountPass',
+            // 'course.thread.post.create' => 'onCourseThreadPostCreate',
+            // 'homework.check'            => 'onHomeworkCheck',
+            // 'course.lesson_finish'      => 'onCourseLessonFinish',
+            // 'course.lesson_start'       => 'onCourseLessonStart',
+            // 'course.thread.create'      => 'onCourseThreadCreate',
+            // // -- 'course.lesson.create'      => 'onCourseLessonCreate',
+            // // -- 'profile.update'            => 'onProfileUpdate',
+            // // -- 'course.update'             => 'onCourseUpdate',
+
+            // 'mobile.change'             => 'pushCloudData',
+            // // -- 'course.close'              => 'pushCloudData',
+            // // -- 'course.delete'             => 'pushCloudData',
+            // // -- 'course.lesson.unpublish'   => 'pushCloudData',
+            // // -- 'article.update'            => 'pushCloudData',
+            // // -- 'article.trash'             => 'pushCloudData',
+            // // -- 'article.delete'            => 'pushCloudData',
+            // // -- 'thread.update'             => 'pushCloudData',
+            // // -- 'thread.delete'             => 'pushCloudData',
+            // // -- 'thread.create'             => 'pushCloudData',
+            // 'course.thread.update'      => 'pushCloudData',
+            // 'course.thread.delete'      => 'pushCloudData',
         );
     }
 
+    protected function pushCloud($eventName, array $data)
+    {
+        return $this->getCloudDataService()->push('school.'.$eventName, $data, time());
+    }
+
+    /**
+     * User相关
+     */
+    public function onUserUpdate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        if ($event->getName() == 'user.update') {
+            $user = $context['user'];
+        } else {
+            $user = $context;
+        }
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+
+        $result = $this->pushCloud('user.update', $this->filterUser($user, $profile));
+    }
+
+    public function onUserCreate(ServiceEvent $event)
+    {
+        $user = $event->getSubject();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $this->pushCloud('user.create', $this->filterUser($user, $profile));
+    }
+
+    public function onUserDelete(ServiceEvent $event)
+    {
+        $user = $event->getSubject();
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $this->pushCloud('user.delete', $this->filterUser($user, $profile));
+    }
+
+    protected function filterUser($user, $profile = array())
+    {
+        // id, nickname, title, roles, point, avatar(最大那个), about, updatedTime, createdTime
+        $filtered = array();
+        $filtered['id'] = $user['id'];
+        $filtered['nickname'] = $user['nickname'];
+        $filtered['title'] = $user['title'];
+
+        if (!is_array($user['roles'])) {
+            $user['roles'] = explode('|', $user['roles']);
+        }
+        
+        $filtered['roles'] = in_array('ROLE_TEACHER', $user['roles']) ? 'teacher' : 'student';
+        $filtered['point'] = $user['point'];
+        $filtered['avatar'] = $this->getFileUrl($user['largeAvatar']);
+        $filtered['about'] = empty($profile['about']) ? '' : strip_tags($profile['about']);
+        $filtered['updatedTime'] = $user['updatedTime'];
+        $filtered['createdTime'] = $user['createdTime'];
+        return $filtered;
+    }
+
+    /**
+     * Course相关
+     */
     public function onCourseCreate(ServiceEvent $event)
     {
         $course = $event->getSubject();
 
-        $currentUser = ServiceKernel::instance()->getCurrentUser();
-        $message     = array(
-            'name'    => $course['title'],
-            'clients' => array(array(
-                'clientId'   => $currentUser['id'],
-                'clientName' => $currentUser['nickname']
-            ))
-        );
+        //创建课程IM会话
+        // $currentUser = ServiceKernel::instance()->getCurrentUser();
+        // $message = array(
+        //     'name' => $course['title'],
+        //     'clients' => array(array(
+        //         'clientId' => $currentUser['id'],
+        //         'clientName' => $currentUser['nickname']
+        //     ))
+        // );
 
-        $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
-        $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
+        // $result = CloudAPIFactory::create('root')->post('/im/me/conversation', $message);
+        // $course = $this->getCourseService()->updateCourse($course['id'], array('conversationId' => $result['no']));
 
-        $this->getCloudDataService()->push('edusoho.course.create', $course, time());
+        $this->pushCloud('course.create', $this->filterCourse($course));
     }
 
+    public function onCourseUpdate(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        $course  = $context['course'];
+        $this->pushCloud('course.update', $this->filterCourse($course));
+    }
+
+    public function onCourseDelete(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+
+        // if ($event->getName() == 'course.close') {
+        //     $from = array(
+        //         'type'  => 'course',
+        //         'id'    => $course['id'],
+        //         'image' => $this->getFileUrl($course['smallPicture'])
+        //     );
+
+        //     $to = array('type' => 'course', 'id' => $course['id']);
+
+        //     $body = array('type' => 'course.close');
+
+        //     $this->push($course['title'], '课程被关闭!', $from, $to, $body);
+        // }
+
+        $this->pushCloud('course.delete', $this->filterCourse($course));
+    }
+
+    public function onCourseJoin(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+
+        if (!$course['parentId'] && $course['conversationId']) {
+            $this->addGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
+        }
+
+        $data = array(
+            'course' => $this->filterCourse($course),
+            'userId' => $userId
+        );
+
+        $this->pushCloud('course.join', $data);
+    }
+
+    public function onCourseQuit(ServiceEvent $event)
+    {
+        $course = $event->getSubject();
+        $userId = $event->getArgument('userId');
+
+        if (!$course['parentId'] && $course['conversationId']) {
+            $this->deleteGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
+        }
+
+        $data = array(
+            'course' => $this->filterCourse($course),
+            'userId' => $userId
+        );
+
+        $this->pushCloud('course.quit', $data);
+    }
+
+    protected function filterCourse($course)
+    {
+        $course['smallPicture'] = $this->getFileUrl($course['smallPicture']);
+        $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
+        $course['largePicture'] = $this->getFileUrl($course['largePicture']);
+        $course['about'] = $this->filterHtml($course['about']);
+        return $course;
+    }
+
+    /**
+     * CourseLesson相关
+     */
+    public function onCourseLessonCreate(ServiceEvent $event)
+    {
+        $lesson = $event->getSubject();
+
+        // $course = $this->getCourseService()->getCourse($lesson['courseId']);
+        // $from   = array(
+        //     'type'  => 'course',
+        //     'id'    => $course['id'],
+        //     'image' => $this->getFileUrl($course['smallPicture'])
+        // );
+
+        // $to = array('type' => 'course', 'id' => $course['id']);
+
+        // $body = array('type' => 'lesson.publish', 'id' => $lesson['id'], 'lessonType' => $lesson['type']);
+
+        // $this->push($course['title'], $lesson['title'], $from, $to, $body);
+
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
+            $this->createJob($lesson);
+        }
+
+        $this->pushCloud('lesson.create', $lesson);
+    }
+
+    public function onCourseLessonUpdate(ServiceEvent $event)
+    {
+        $context       = $event->getSubject();
+        $argument      = $context['argument'];
+        $lesson        = $context['lesson'];
+        $mobileSetting = $this->getSettingService()->get('mobile');
+
+        if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+
+            if ($jobs) {
+                $this->deleteJob($jobs);
+            }
+
+            if ($lesson['status'] == 'published') {
+                $this->createJob($lesson);
+            }
+        }
+
+        $this->pushCloud('lesson.update', $lesson);
+    }
+    
+    public function onCourseLessonDelete(ServiceEvent $event)
+    {
+        $context = $event->getSubject();
+        if ($event->getName() == 'course.lesson.delete') {
+            $lesson = $context['lesson'];
+            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+            if ($jobs) {
+                $this->deleteJob($jobs);
+            }
+        } else {
+            $lesson = $context;
+        }
+        
+        $this->pushCloud('lesson.delete', $lesson);
+    }
+
+    /**
+     * Classroom相关
+     */
+    public function onClassroomJoin(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+
+        $data = array(
+            'classroom' => $classroom,
+            'userId' => $userId
+        );
+        $this->pushCloud('classroom.join', $data);
+    }
+
+    public function onClassroomQuit(ServiceEvent $event)
+    {
+        $classroom = $event->getSubject();
+        $userId = $event->getArgument('userId');
+
+        if ($classroom['conversationId']) {
+            $this->deleteGroupMember('course', $classroom['conversationId'], $classroom['createdTime'], $userId);
+        }
+
+        $data = array(
+            'classroom' => $classroom,
+            'userId' => $userId
+        );
+        $this->pushCloud('classroom.quit', $data);
+    }
+
+    protected function filterClassroom($classroom)
+    {
+        $classroom['smallPicture'] = $this->getFileUrl($classroom['smallPicture']);
+        $classroom['middlePicture'] = $this->getFileUrl($classroom['middlePicture']);
+        $classroom['largePicture'] = $this->getFileUrl($classroom['largePicture']);
+        $classroom['about'] = $this->filterHtml($classroom['about']);
+        return $classroom;
+    }
+
+    /**
+     * Article相关
+     */
+    public function onArticleCreate(ServiceEvent $event)
+    {
+        $article = $event->getSubject();
+        $this->pushCloud('article.create', $article);
+    }
+
+    public function onArticleUpdate(ServiceEvent $event)
+    {
+        $article = $event->getSubject();
+        $this->pushCloud('article.update', $article);
+    }
+
+    public function onArticleDelete(ServiceEvent $event)
+    {
+        $article = $event->getSubject();
+        $this->pushCloud('article.delete', $article);
+    }
+
+    protected function filterArticle($article)
+    {
+        $article['thumb'] = $this->getFileUrl($article['thumb']);
+        $article['originalThumb'] = $this->getFileUrl($article['originalThumb']);
+        $article['picture'] = $this->getFileUrl($article['picture']);
+        $article['body'] = $this->filterHtml($article['body']);
+        return $article;
+    }
+
+    /**
+     * Thread相关
+     */
+    public function onThreadCreate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.create', $thread);
+    }
+
+    public function onThreadUpdate(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.update', $thread);
+    }
+
+    public function onThreadDelete(ServiceEvent $event)
+    {
+        $thread = $event->getSubject();
+        $this->pushCloud('thread.delete', $thread);
+    }
+
+
+    /**
+     * 旧的事件发送机制
+     */
     public function onClassroomCreate(ServiceEvent $event)
     {
         $classroom = $event->getSubject();
@@ -120,112 +438,93 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         //$this->push($lesson['title'], $result['paperName'], $from, $to, $body);
     }
 
-    public function onLessonPublish(ServiceEvent $event)
-    {
-        $lesson = $event->getSubject();
-        $course = $this->getCourseService()->getCourse($lesson['courseId']);
-        $from   = array(
-            'type'  => 'course',
-            'id'    => $course['id'],
-            'image' => $this->getFileUrl($course['smallPicture'])
-        );
+    // public function onLessonPublish(ServiceEvent $event)
+    // {
+    //     $lesson = $event->getSubject();
+    //     $course = $this->getCourseService()->getCourse($lesson['courseId']);
+    //     $from   = array(
+    //         'type'  => 'course',
+    //         'id'    => $course['id'],
+    //         'image' => $this->getFileUrl($course['smallPicture'])
+    //     );
 
-        $to = array('type' => 'course', 'id' => $course['id']);
+    //     $to = array('type' => 'course', 'id' => $course['id']);
 
-        $body = array('type' => 'lesson.publish', 'id' => $lesson['id'], 'lessonType' => $lesson['type']);
+    //     $body = array('type' => 'lesson.publish', 'id' => $lesson['id'], 'lessonType' => $lesson['type']);
 
-        $this->push($course['title'], $lesson['title'], $from, $to, $body);
+    //     $this->push($course['title'], $lesson['title'], $from, $to, $body);
 
-        $mobileSetting = $this->getSettingService()->get('mobile');
+    //     $mobileSetting = $this->getSettingService()->get('mobile');
 
-        if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
-            $this->createJob($lesson);
-        }
+    //     if ((!isset($mobileSetting['enable']) || $mobileSetting['enable']) && $lesson['type'] == 'live') {
+    //         $this->createJob($lesson);
+    //     }
 
-        $this->getCloudDataService()->push('edusoho.lesson.publish', $lesson, time());
-    }
+    //     $this->getCloudDataService()->push('edusoho.lesson.publish', $lesson, time());
+    // }
 
-    public function onCourseLessonUnpublish(ServiceEvent $event)
-    {
-        $lesson = $event->getSubject();
-        $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+    // public function onCourseLessonUnpublish(ServiceEvent $event)
+    // {
+    //     $lesson = $event->getSubject();
+    //     $jobs   = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
 
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
-    }
+    //     if ($jobs) {
+    //         $this->deleteJob($jobs);
+    //     }
+    // }
 
-    public function onCourseLessonUpdate(ServiceEvent $event)
-    {
-        $context       = $event->getSubject();
-        $argument      = $context['argument'];
-        $lesson        = $context['lesson'];
-        $mobileSetting = $this->getSettingService()->get('mobile');
+    // public function onCourseLessonUpdate(ServiceEvent $event)
+    // {
+    //     $context       = $event->getSubject();
+    //     $argument      = $context['argument'];
+    //     $lesson        = $context['lesson'];
+    //     $mobileSetting = $this->getSettingService()->get('mobile');
 
-        if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
-            $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+    //     if ($lesson['type'] == 'live' && isset($argument['startTime']) && $argument['startTime'] != $lesson['fields']['startTime'] && (!isset($mobileSetting['enable']) || $mobileSetting['enable'])) {
+    //         $jobs = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
 
-            if ($jobs) {
-                $this->deleteJob($jobs);
-            }
+    //         if ($jobs) {
+    //             $this->deleteJob($jobs);
+    //         }
 
-            if ($lesson['status'] == 'published') {
-                $this->createJob($lesson);
-            }
-        }
+    //         if ($lesson['status'] == 'published') {
+    //             $this->createJob($lesson);
+    //         }
+    //     }
 
-        $this->getCloudDataService()->push('eduoho.lesson,update', $lesson, time());
-        //$this->puchCloudData('edusoho.course.lesson.update', 'update', 'lesson', $lesson['id'], time());
-    }
+    //     $this->getCloudDataService()->push('eduoho.lesson,update', $lesson, time());
+    //     //$this->puchCloudData('edusoho.course.lesson.update', 'update', 'lesson', $lesson['id'], time());
+    // }
 
-    public function onCourseLessonDelete(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $lesson  = $context['lesson'];
-        $jobs    = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
+    // public function onCourseLessonDelete(ServiceEvent $event)
+    // {
+    //     $context = $event->getSubject();
+    //     $lesson  = $context['lesson'];
+    //     $jobs    = $this->getCrontabService()->findJobByTargetTypeAndTargetId('lesson', $lesson['id']);
 
-        if ($jobs) {
-            $this->deleteJob($jobs);
-        }
+    //     if ($jobs) {
+    //         $this->deleteJob($jobs);
+    //     }
 
-        $this->getCloudDataService()->push('edusoho.lesson.delete', $lesson['id'], time());
-    }
+    //     $this->getCloudDataService()->push('edusoho.lesson.delete', $lesson['id'], time());
+    // }
 
-    public function onCoursePublish(ServiceEvent $event)
-    {
-        $course = $event->getSubject();
+    // public function onCourseClose(ServiceEvent $event)
+    // {
+    //     $course = $event->getSubject();
 
-        $from = array(
-            'type'  => 'course',
-            'id'    => $course['id'],
-            'image' => $this->getFileUrl($course['smallPicture'])
-        );
+    //     $from = array(
+    //         'type'  => 'course',
+    //         'id'    => $course['id'],
+    //         'image' => $this->getFileUrl($course['smallPicture'])
+    //     );
 
-        $to = array('type' => 'course', 'id' => $course['id']);
+    //     $to = array('type' => 'course', 'id' => $course['id']);
 
-        $body = array('type' => 'course.open');
+    //     $body = array('type' => 'course.close');
 
-        $this->getCloudDataService()->push('edusoho.course.publish', $course, time());
-
-        //return $this->push($course['title'], '课程已发布!', $from, $to, $body);
-    }
-
-    public function onCourseClose(ServiceEvent $event)
-    {
-        $course = $event->getSubject();
-
-        $from = array(
-            'type'  => 'course',
-            'id'    => $course['id'],
-            'image' => $this->getFileUrl($course['smallPicture'])
-        );
-
-        $to = array('type' => 'course', 'id' => $course['id']);
-
-        $body = array('type' => 'course.close');
-
-        return $this->push($course['title'], '课程被关闭!', $from, $to, $body);
-    }
+    //     return $this->push($course['title'], '课程被关闭!', $from, $to, $body);
+    // }
 
     public function onAnnouncementCreate(ServiceEvent $event)
     {
@@ -254,62 +553,42 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         //$this->push($target['title'], $announcement['content'], $from, $to, $body);
     }
 
-    public function onClassroomJoin(ServiceEvent $event)
-    {
-        $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
+    // public function onClassroomJoin(ServiceEvent $event)
+    // {
+    //     $classroom = $event->getSubject();
+    //     $userId    = $event->getArgument('userId');
 
-        if ($classroom['conversationId']) {
-            $this->addGroupMember('classroom', $classroom['conversationId'], $classroom['createdTime'], $userId);
-        }
+    //     if ($classroom['conversationId']) {
+    //         $this->addGroupMember('classroom', $classroom['conversationId'], $classroom['createdTime'], $userId);
+    //     }
 
-        $from = array(
-            'type'  => 'classroom',
-            'id'    => $classroom['id'],
-            'image' => $this->getFileUrl($classroom['smallPicture'])
-        );
+    //     $from = array(
+    //         'type'  => 'classroom',
+    //         'id'    => $classroom['id'],
+    //         'image' => $this->getFileUrl($classroom['smallPicture'])
+    //     );
 
-        $to = array(
-            'type' => 'classroom',
-            'id'   => $classroom['id']
-        );
+    //     $to = array(
+    //         'type' => 'classroom',
+    //         'id'   => $classroom['id']
+    //     );
 
-        $body = array('type' => 'classroom.join', 'userId' => $userId);
+    //     $body = array('type' => 'classroom.join', 'userId' => $userId);
 
-        $this->getCloudDataService()->push('edusoho.classroom.join', $classroom, time());
+    //     $this->getCloudDataService()->push('edusoho.classroom.join', $classroom, time());
 
-        //$this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
-    }
+    //     //$this->push($classroom['title'], '班级有新成员加入', $from, $to, $body);
+    // }
 
-    public function onClassroomQuit(ServiceEvent $event)
-    {
-        $classroom = $event->getSubject();
-        $userId    = $event->getArgument('userId');
+    // public function onClassroomQuit(ServiceEvent $event)
+    // {
+    //     $classroom = $event->getSubject();
+    //     $userId    = $event->getArgument('userId');
 
-        if ($classroom['conversationId']) {
-            $this->deleteGroupMember('course', $classroom['conversationId'], $classroom['createdTime'], $userId);
-        }
-    }
-
-    public function onCourseJoin(ServiceEvent $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-
-        if (!$course['parentId'] && $course['conversationId']) {
-            $this->addGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
-        }
-    }
-
-    public function onCourseQuit(ServiceEvent $event)
-    {
-        $course = $event->getSubject();
-        $userId = $event->getArgument('userId');
-
-        if (!$course['parentId'] && $course['conversationId']) {
-            $this->deleteGroupMember('course', $course['conversationId'], $course['createdTime'], $userId);
-        }
-    }
+    //     if ($classroom['conversationId']) {
+    //         $this->deleteGroupMember('course', $classroom['conversationId'], $classroom['createdTime'], $userId);
+    //     }
+    // }
 
     public function onClassroomPutCourse(ServiceEvent $event)
     {
@@ -343,31 +622,31 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         //$this->push($classroom['title'], '班级有新课程加入！', $from, $to, $body);
     }
 
-    public function onArticleCreate(ServiceEvent $event)
-    {
-        $article    = $event->getSubject();
-        $schoolUtil = new MobileSchoolUtil();
-        $articleApp = $schoolUtil->getArticleApp();
-        $from       = array(
-            'id'    => $articleApp['id'],
-            'type'  => $articleApp['code'],
-            'image' => $this->getAssetUrl($articleApp['avatar'])
-        );
+    // public function onArticleCreate(ServiceEvent $event)
+    // {
+    //     $article    = $event->getSubject();
+    //     $schoolUtil = new MobileSchoolUtil();
+    //     $articleApp = $schoolUtil->getArticleApp();
+    //     $from       = array(
+    //         'id'    => $articleApp['id'],
+    //         'type'  => $articleApp['code'],
+    //         'image' => $this->getAssetUrl($articleApp['avatar'])
+    //     );
 
-        $to = array(
-            'type' => 'global'
-        );
+    //     $to = array(
+    //         'type' => 'global'
+    //     );
 
-        $body = array(
-            'type'    => 'news.create',
-            'id'      => $article['id'],
-            'title'   => $article['title'],
-            'image'   => $this->getFileUrl($article['thumb']),
-            'content' => $this->plainText($article['body'], 50)
-        );
-        $this->getCloudDataService()->push('edusho.article.create', $article, time());
-        //$this->push('资讯', $article['title'], $from, $to, $body);
-    }
+    //     $body = array(
+    //         'type'    => 'news.create',
+    //         'id'      => $article['id'],
+    //         'title'   => $article['title'],
+    //         'image'   => $this->getFileUrl($article['thumb']),
+    //         'content' => $this->plainText($article['body'], 50)
+    //     );
+    //     $this->getCloudDataService()->push('edusho.article.create', $article, time());
+    //     //$this->push('资讯', $article['title'], $from, $to, $body);
+    // }
 
     public function onDiscountPass(ServiceEvent $event)
     {
@@ -381,13 +660,13 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $content;
 
         switch ($discount['type']) {
-            case 'free':;
+            case 'free':
                 $content = "【限时免费】";
                 break;
-            case 'discount':;
+            case 'discount':
                 $content = "【限时打折】";
                 break;
-            default:;
+            default:
                 $content = "【全站打折】";
                 break;
         }
@@ -536,33 +815,12 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->getCloudDataService()->push('edusoho.'.$event->getName(), $data, time());
     }
 
-    public function onUserUpdate(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $user    = $context['user'];
-        $this->getCloudDataService()->push('edusoho.user.update', $user, time());
-    }
-
-    public function onProfileUpdate(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $user    = $context['user'];
-        $this->getCloudDataService()->push('edusoho.profile.update', $user, time());
-    }
-
-    public function onCourseUpdate(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $course  = $context['course'];
-        $this->getCloudDataService()->push('eudsoho.course.update', $course, time());
-    }
-
-    public function onCourseLessonCreate(ServiceEvent $event)
-    {
-        $context = $event->getSubject();
-        $lesson  = $context['lesson'];
-        $this->getCloudDataService()->push('eudsoho.lesson.create', $lesson, time());
-    }
+    // public function onProfileUpdate(ServiceEvent $event)
+    // {
+    //     $context = $event->getSubject();
+    //     $user    = $context['user'];
+    //     $this->getCloudDataService()->push('edusoho.profile.update', $user, time());
+    // }
 
     protected function push($title, $content, $from, $to, $body)
     {
@@ -603,23 +861,22 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         switch ($type) {
             case 'course':
-                ;
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
                 break;
             case 'classroom':
-                ;
                 $classroom       = $this->getClassroomService()->getClassroom($id);
                 $target['title'] = $classroom['title'];
                 $target['image'] = $this->getFileUrl($classroom['smallPicture']);
+                // no break
             case 'global':
-                ;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
                 $target['title'] = '网校公告';
                 $target['id']    = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
+                // no break
             default:
                 # code...
                 break;
@@ -648,6 +905,20 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $path = "http://{$_SERVER['HTTP_HOST']}/assets/{$path}";
         return $path;
+    }
+
+    protected function filterHtml($text)
+    {
+        preg_match_all('/\<img.*?src\s*=\s*[\'\"](.*?)[\'\"]/i', $text, $matches);
+        if (empty($matches)) {
+            return $text;
+        }
+
+        foreach ($matches[1] as $url) {
+            $text = str_replace($url, $this->getFileUrl($url), $text);
+        }
+
+        return $text;
     }
 
     protected function plainText($text, $count)

@@ -8,27 +8,23 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CloudDataServiceImpl extends BaseService implements CloudDataService
 {
-    public function push($name, array $body = array(), $timestamp, $tryTimes = 0)
+
+    public function push($name, array $body = array(), $timestamp = 0, $level = 'normal')
     {
         try {
             return CloudAPIFactory::create('event')->push($name, $body, $timestamp);
         } catch (\Exception $e) {
             $this->getLogService()->error('cloud_data', 'push', "{$name} 事件发送失败", array('message' => $e->getMessage()));
 
-            if ($tryTimes == 0) {
-                $tryTimes++;
-                return $this->push($name, $body, $timestamp, $tryTimes);
-            } else {
-                $user   = $this->getCurrentUser();
-                $fields = array(
-                    'name'          => $name,
-                    'body'          => $body,
-                    'timestamp'     => $timestamp,
-                    'createdUserId' => $user['id']
-                );
-                $this->getCloudDataDao()->add($fields);
-                return false;
-            }
+            $user   = $this->getCurrentUser();
+            $fields = array(
+                'name'          => $name,
+                'body'          => $body,
+                'timestamp'     => $timestamp,
+                'createdUserId' => $user['id']
+            );
+            $this->getCloudDataDao()->add($fields);
+            return false;
         }
     }
 

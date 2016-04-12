@@ -283,14 +283,16 @@ class ArticleServiceImpl extends BaseService implements ArticleService
 
     public function publishArticle($id)
     {
-        $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
+        $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'published'));
         $this->getLogService()->info('Article', 'publish', "文章#{$id}发布");
+        $this->dispatchEvent('article.publish', $article);
     }
 
     public function unpublishArticle($id)
     {
-        $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'unpublished'));
+        $article = $this->getArticleDao()->updateArticle($id, $fields = array('status' => 'unpublished'));
         $this->getLogService()->info('Article', 'unpublish', "文章#{$id}未发布");
+        $this->dispatchEvent('article.unpublish', $article);
     }
 
     public function changeIndexPicture($data)
