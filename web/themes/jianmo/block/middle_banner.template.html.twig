@@ -6,7 +6,9 @@
         {% set title =_context['icon' ~ i ~ 'title'] %}
         {% set introduction =_context['icon' ~ i ~ 'introduction'] %}
         <div class="col-md-4 col-sm-4 col-xs-12 introduction-item">
+         <a href="{{ (icon[0].href|default(''))}}" target="{{ icon[0].target}}"> 
           <img class="img-responsive" src="{{ icon[0].src|default('') }}">
+         </a> 
           <h4>{{ title[0].value|default('') }}</h4>
           <h5>{{ introduction[0].value|default('') }}</h5>
         </div>
