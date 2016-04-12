@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         ],
         [
             'not_all_digital',
-            /^(?!\d+$)/,
+            /(^(?![^0-9a-zA-Z]+$))(?![0-9]+$).+/,
             '{{display}}不能全为数字'
         ], 
         [
