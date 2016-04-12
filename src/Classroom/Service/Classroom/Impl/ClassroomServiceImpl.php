@@ -460,7 +460,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员#{$member['id']}");
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 
@@ -594,7 +594,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getClassroomDao()->updateClassroom($classroomId, $fields);
         $this->dispatchEvent(
             'classroom.join',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
         );
 
         return $member;
@@ -1179,7 +1179,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $userId))
+            new ServiceEvent($classroom, array('userId' => $userId, 'member' => $member))
         );
     }
 
