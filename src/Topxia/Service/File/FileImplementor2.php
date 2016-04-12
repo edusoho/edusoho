@@ -11,6 +11,8 @@ interface FileImplementor2
 
     public function resumeUpload($hash, $params);
 
+    public function updateFile($file, $fields);
+
     public function getDownloadFile($id);
 
     public function deleteFile($file);

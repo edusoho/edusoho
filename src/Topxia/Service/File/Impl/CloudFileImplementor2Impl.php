@@ -32,16 +32,22 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $this->mergeCloudFile2($localFile, $cloudFile);
     }
 
-    public function edit($globalId, $fields)
+    public function updateFile($globalId, $fields)
     {
-        $api       = CloudAPIFactory::create('root');
-        $cloudFile = $api->post("/resources/".$globalId, $fields);
-        $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
-        return $this->mergeCloudFile2($localFile, $cloudFile);
+        if(!empty($globalId)){
+          $api       = CloudAPIFactory::create('root');
+          $cloudFile = $api->post("/resources/".$globalId, $fields);
+          $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
+          return $this->mergeCloudFile2($localFile, $cloudFile);
+        }
+        return false;
     }
 
     public function deleteFile($file)
     {
+        if (empty($file['globalId'])) {
+            return $this->deleteFileOld($file);
+        }
         $api = CloudAPIFactory::create('root');
         return $api->delete("/resources/{$file['globalId']}");
     }
@@ -210,12 +216,10 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $result;
     }
 
-    public function deleteFile($file)
-    {
-        if (empty($file['globalId'])) {
-            return $this->deleteFileOld($file);
-        }
-    }
+    // public function deleteFile($file)
+    // {
+    //
+    // }
 
     private function deleteFileOld($file)
     {

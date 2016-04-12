@@ -15,7 +15,7 @@
     <div class="tab-content">
 
       <div class="tab-pane active" id="info-tab">
-        <form class="form-horizontal" id="info-form" action="{{ path('material_edit', {globalId:material.no}) }}">
+        <form class="form-horizontal" id="info-form" action="{{ path('material_edit', {fileId:material.id}) }}">
           <div class="form-group">
             <label for="name" class="col-md-2 control-label">标题</label>
             <div class="col-md-6">
@@ -62,7 +62,7 @@
       {% if material.type == 'video' %}
         <div class="tab-pane" id="cover-tab">
           {% if material.processStatus == 'ok' %}
-          <form class="form-horizontal" id="cover-form" action="{{ path('material_edit', {globalId:material.no}) }}">
+          <form class="form-horizontal" id="cover-form" action="{{ path('material_edit', {fileId:material.id}) }}">
             <div class="form-group">
               <label for="name" class="col-md-2 control-label">封面</label>
               <div class="col-md-4">

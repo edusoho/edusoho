@@ -834,6 +834,14 @@ admin_cloud_file_reconvert:
     pattern: /cloud_file/{globalId}/reconvert
     defaults: { _controller: TopxiaAdminBundle:CloudFile:reconvert }
 
+admin_cloud_file_download:
+    pattern: /cloud_file/{globalId}/download
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:download }
+
+admin_cloud_file_delete:
+    pattern: /cloud_file/{globalId}/delete
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
+
 admin_app_installed:
     pattern:  /app/installed/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:App:installed }

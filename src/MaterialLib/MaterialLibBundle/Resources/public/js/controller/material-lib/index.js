@@ -168,7 +168,7 @@ define(function(require, exports, module) {
                 $target.parent().find('li.active').removeClass('active');
                 $target.parent().addClass('active');
                 $target.parent().parent().siblings('input[name="sourceFrom"]').val($target.parent().data('value'));
-                
+
                 if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
                     this.set('attribute','mine');
                     $('.js-manage-batch-btn').removeClass('hide');
@@ -187,7 +187,7 @@ define(function(require, exports, module) {
                     $('.js-batch-share-btn').hide();
                     $('.js-batch-delete-btn').hide();
                     $('#material-lib-items-panel').find('[data-role=batch-manage]').hide();
-                    
+
                 }
                 this.renderTable();
             },
@@ -252,7 +252,7 @@ define(function(require, exports, module) {
                         return;
                     }
 
-                    $.post($target.data('url'),{"globalIds":ids},function(data){
+                    $.post($target.data('url'),{"ids":ids},function(data){
                         if(data){
                             Notify.success('删除资源成功');
 
@@ -281,7 +281,7 @@ define(function(require, exports, module) {
                         return;
                     }
 
-                    $.post($target.data('url'),{"globalIds":ids},function(data){
+                    $.post($target.data('url'),{"ids":ids},function(data){
                         if(data){
                             Notify.success('分享资源成功');
                             self.renderTable();

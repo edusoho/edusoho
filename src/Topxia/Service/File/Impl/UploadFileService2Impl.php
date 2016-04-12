@@ -140,18 +140,27 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getUploadFileDao()->searchFileCount($conditions);
     }
 
-    public function edit($globalId, $fields)
+    public function edit($fileId, $fields)
     {
-        $localFile = $this->getFileByGlobalId($globalId);
-
-        if ($localFile) {
-            $this->updateTags($localFile, $fields);
-            $fields['filename'] = $fields['name'];
-            unset($fields['name']);
+        $file = $this->getUploadFileDao()->getFile($fileId);
+        if ($file) {
+            $this->updateTags($file, $fields);
+            if(!empty($file['globalId'])){
+              $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags','description','endShared'));
+              if(!empty($cloudFields)){
+                $this->getFileImplementor(array('storage'=>'cloud'))->updateFile($file['globalId'],$cloudFields);
+              }
+            }
+            if(isset($fields['name'])) {
+                $fields['filename'] = $fields['name'];
+            }
             $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename'));
-
-            return $this->getUploadFileDao()->updateFile($localFile['id'], $fields);
+            unset($fields['name']);
+            if(!empty($fields)){
+              return $this->getUploadFileDao()->updateFile($file['id'], $fields);
+            }
         }
+        return false;
     }
 
     public function getDownloadFile($id)
@@ -283,7 +292,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     {
       $file = $this->getUploadFileDao()->getFile($id);
       $result = $this->getFileImplementor($file)->deleteFile($file);
-      if (isset($file['success']) && $file['success'] == true) {
+      if (isset($result['success']) && $result['success'] == true) {
           return $this->getUploadFileDao()->deleteFile($id);
       }
 

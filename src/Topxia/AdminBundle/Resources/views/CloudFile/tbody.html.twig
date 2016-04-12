@@ -29,7 +29,7 @@
                 {{ dict_text('processStatus', material.processStatus) }}
               </span>
             {% elseif material.processStatus == 'error' %}
-              <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span><br><a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
+              <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span><br><a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
             {% else %}
               {% if material.type != "image" %}
                 <span class="label label-default">
@@ -57,16 +57,16 @@
     </td>
     <td class="es-materillib-table">
       <a type="button" class="glyphicon glyphicon-info-sign js-detail-btn mrl" href="javascript:;"data-toggle="tooltip" data-placement="top" title="详细信息" data-url="{{ path('admin_cloud_file_detail', {globalId:material.no}) }}"></a>
-      <a class="glyphicon glyphicon-save js-download-btn mrl" href="{{ path('material_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
+      <a class="glyphicon glyphicon-save js-download-btn mrl" href="{{ path('admin_cloud_file_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
       <div class="btn-group">
         <a href="javascript:;" class="es-icon es-icon-morehoriz" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="sr-only">Toggle Dropdown</span>
         </a>
         <ul class="dropdown-menu">
-          {% if material.processStatus == 'error' %}
-            <li><a href="javascript:;" class="glyphicon glyphicon-refresh js-refresh-btn" data-url="{{ path('material_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..."> 重新转码</a></li>
-          {% endif %}
-          <li class="js-delete-btn" data-url="{{ path('material_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
+          {#}{% if material.processStatus == 'error' %}
+            <li><a href="javascript:;" class="glyphicon glyphicon-refresh js-refresh-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..."> 重新转码</a></li>
+          {% endif %}#}
+          <li class="js-delete-btn" data-url="{{ path('admin_cloud_file_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
         </ul>
       </div>
     </td>

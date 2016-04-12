@@ -93,7 +93,7 @@ material_download:
     defaults: { _controller: MaterialLibBundle:MaterialLib:download }
 
 material_delete:
-    pattern:  /materiallib/{globalId}/delete
+    pattern:  /materiallib/{fileId}/delete
     defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
     methods: [POST]
 
@@ -112,7 +112,7 @@ material_batch_tag_show:
     defaults: { _controller: MaterialLibBundle:MaterialLib:batchTagShow }
 
 material_edit:
-    pattern:  /materiallib/{globalId}/edit
+    pattern:  /materiallib/{fileId}/edit
     defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
     methods: [POST]
 

@@ -22,16 +22,15 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->getCloudFileService()->player($globalId);
     }
 
-    public function edit($globalId, $fields)
+    public function edit($fileId, $fields)
     {
-        $this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
-        $this->getCloudFileService()->edit($globalId, $fields);
-        $this->getUploadFileService()->edit($globalId, $fields);
+        //$this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
+        $this->getUploadFileService()->edit($fileId, $fields);
     }
 
     public function delete($id)
     {
-        $this->checkPermission(Permission::DELETE, array('file' => $file));
+        //$this->checkPermission(Permission::DELETE, array('file' => $file));
         $result = $this->getUploadFileService()->deleteFile($id);
         if($result) {
           return true;
@@ -41,11 +40,8 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function batchDelete($ids)
     {
-        $files     = $this->getUploadFileService()->findFilesByIds($ids);
-        $globalIds = ArrayToolkit::column($files, 'globalId');
-
-        foreach ($globalIds as $key => $globalId) {
-            $result = $this->delete($globalId);
+        foreach ($ids as $key => $id) {
+            $result = $this->delete($id);
         }
 
         return array('success' => true);
@@ -53,22 +49,12 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function batchShare($ids)
     {
-        $files     = $this->getUploadFileService()->findFilesByIds($ids);
-        $globalIds = ArrayToolkit::column($files, 'globalId');
-
-        foreach ($globalIds as $key => $value) {
-            $this->checkPermission(Permission::EDIT, array('globalId' => $value));
+        foreach ($ids as $key => $id) {
+            //$this->checkPermission(Permission::EDIT, array('globalId' => $value));
             $fields = array('isPublic' => '1');
 
-            $result = $this->getUploadFileService()->edit($value, $fields);
-
-            if (!$result) {
-                return false;
-            } else {
-                return true;
-            }
+            $this->getUploadFileService()->edit($id, $fields);
         }
-
         return array('success' => true);
     }
 

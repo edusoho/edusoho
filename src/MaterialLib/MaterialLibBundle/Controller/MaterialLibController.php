@@ -102,11 +102,11 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $globalId)
+    public function editAction(Request $request, $fileId)
     {
         $fields = $request->request->all();
 
-        $this->getMaterialLibService()->edit($globalId, $fields);
+        $this->getMaterialLibService()->edit($fileId, $fields);
         return $this->createJsonResponse(array('success' => true));
     }
 
@@ -125,12 +125,12 @@ class MaterialLibController extends BaseController
             if ($material['type'] == 'video') {
               $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
             }
+
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
-                'material'   => $material,
+                'material'   => $file,
                 'thumbnails' => empty($thumbnails) ? "" : $thumbnails
             ));
         }
-
         return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
     }
 
@@ -381,9 +381,9 @@ class MaterialLibController extends BaseController
     {
         $data = $request->request->all();
 
-        if (isset($data['globalIds']) && $data['globalIds'] != "") {
-            $result = $this->getMaterialLibService()->batchDelete($data['globalIds']);
-            return $this->createJsonResponse($result);
+        if (isset($data['ids']) && $data['ids'] != "") {
+            $this->getMaterialLibService()->batchDelete($data['ids']);
+            return $this->createJsonResponse(true);
         }
 
         return $this->createJsonResponse(false);
@@ -392,9 +392,8 @@ class MaterialLibController extends BaseController
     public function batchShareAction(Request $request)
     {
         $data = $request->request->all();
-
-        if (isset($data['globalIds']) && $data['globalIds'] != "") {
-            $result = $this->getMaterialLibService()->batchShare($data['globalIds']);
+        if (isset($data['ids']) && $data['ids'] != "") {
+            $result = $this->getMaterialLibService()->batchShare($data['ids']);
             return $this->createJsonResponse($result);
         }
 

@@ -115,7 +115,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function delete($globalId)
     {
-        return $this->getCloudFileImplementor()->delete($globalId);
+        if(empty($globalId)) {
+          return false;
+        }
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if(!empty($file)) {
+          $result = $this->getUploadFileService()->deleteFile($file['id']);
+          return array('success'=>true);
+        }
+
+        return $this->getCloudFileImplementor()->deleteFile(array('globalId'=>$globalId));
     }
 
     public function get($globalId)
