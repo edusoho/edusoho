@@ -4,6 +4,7 @@ namespace Topxia\Service\Course\Impl;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\Course\ThreadService;
+use Topxia\Service\Common\ServiceEvent;
 
 class ThreadServiceImpl extends BaseService implements ThreadService
 {
@@ -243,17 +244,18 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function updateThread($courseId, $threadId, $fields)
     {
-        $checkThread = $this->getThread($courseId, $threadId);
+        $thread = $this->getThread($courseId, $threadId);
 
-        if (empty($checkThread)) {
+        if (empty($thread)) {
             throw $this->createServiceException('话题不存在，更新失败！');
         }
 
         $fields['content'] = $this->sensitiveFilter($fields['content'], 'course-thread-update');
         $fields['title']   = $this->sensitiveFilter($fields['title'], 'course-thread-update');
 
-        $user = $this->getCurrentUser();
-        ($user->isLogin() && $user->id == $thread['userId']) || $this->getCourseService()->tryManageCourse($thread['courseId']);
+        if ($this->getCurrentUser()->getId() != $thread['userId']) {
+            $this->getCourseService()->tryManageCourse($thread['courseId']);
+        }
 
         $fields = ArrayToolkit::parts($fields, array('title', 'content'));
 
@@ -463,7 +465,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         //更新post过滤html
         $fields['content'] = $this->purifyHtml($fields['content']);
-        return $this->getThreadPostDao()->updatePost($id, $fields);
+        $post = $this->getThreadPostDao()->updatePost($id, $fields);
+        $this->dispatchEvent('course.thread.post.update', $post);
+        return $post;
     }
 
     public function deletePost($courseId, $id)
@@ -482,6 +486,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
         $this->getThreadPostDao()->deletePost($post['id']);
         $this->getThreadDao()->waveThread($post['threadId'], 'postNum', -1);
+        $this->dispatchEvent('course.thread.post.delete', $post);
     }
 
     protected function getThreadDao()
