@@ -50,6 +50,7 @@ $resources = array(
     'CourseThreads',
     'CourseThreadPost',
     'CourseThreadPosts',
+    'ClassRoomPlay'
 );
 
 foreach ($resources as $res) {

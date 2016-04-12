@@ -100,3 +100,5 @@ $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}/posts'), 'res.CourseThreadPosts:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}/posts/{postId}'), 'res.CourseThreadPost:get');
+
+$app->get(_u('/classroom_play/{classRoomId}'), 'res.ClassRoomPlay:get');
