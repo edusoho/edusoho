@@ -80,6 +80,16 @@ define(function(require, exports, module) {
             }
         },
 
+        _getJsonKey: function (data, key) {
+            var realKey;
+            $.each(data, function(index, val) {
+                if (key.toLowerCase() == index.toLowerCase()) {
+                    realKey = index;
+                }
+            });
+            return realKey;
+        },
+
         finishUpload: function(deferred, file) {
             var uploadAuthUrl = file.uploaderWidget.get('uploadAuthUrl');
             var baiduParts = file.baiduParts;
@@ -112,9 +122,10 @@ define(function(require, exports, module) {
         },
 
         uploadAccept: function(object, ret){
-            if (ret._responseHeaders && ret._responseHeaders['ETag']) {
+            var etagKey = this._getJsonKey(ret._responseHeaders, 'etag');
+            if (etagKey !== undefined) {
                 var partNumber = this._getParameterByName('partNumber', ret._requestURL);
-                object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders['ETag'].replace(/\"/g, '')}); 
+                object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders[etagKey].replace(/\"/g, '')});
             }
         }
     });
