@@ -24,12 +24,12 @@ define(function(require, exports, module) {
         });
 
         uploader.on( 'fileQueued', function( file ) {
-            Notify.info('正在上传，请稍等！', 0);
+            Notify.info(Translator.trans('正在上传，请稍等！'), 0);
             uploader.upload();
         });
 
         uploader.on( 'uploadSuccess', function( file, response ) {
-            Notify.success('上传成功！', 1);
+            Notify.success(Translator.trans('上传成功！'), 1);
             $('#category-icon-field').html('<img src="' + response.hashId + '">');
             $('#category-icon-field').addClass('mbm');
             $form.find('[name=icon]').val(response.hashId);
@@ -37,20 +37,20 @@ define(function(require, exports, module) {
         });
 
         uploader.on( 'uploadError', function( file, response ) {
-            Notify.danger('上传失败，请重试！');
+            Notify.danger(Translator.trans('上传失败，请重试！'));
         });
 
         $("#category-icon-delete").on('click', function(){
-            if (!confirm('确认要删除图标吗？')) return false;
+            if (!confirm(Translator.trans('确认要删除图标吗？'))) return false;
             var $btn = $(this);
             $.post($btn.data('url'), function(){
                 $("#category-icon-field").html('');
                 $form.find('[name=icon]').val('');
                 $btn.hide();
                 $('#category-icon-field').removeClass('mbm');
-                Notify.success('删除分类图标成功！');
+                Notify.success(Translator.trans('删除分类图标成功！'));
             }).error(function(){
-                Notify.danger('删除分类图标失败！');
+                Notify.danger(Translator.trans('删除分类图标失败！'));
             });
         });
 
@@ -67,9 +67,9 @@ define(function(require, exports, module) {
                 $.post($form.attr('action'), $form.serialize(), function(html){
                     $modal.modal('hide');
                     $table.find('tbody').replaceWith(html);
-                    Notify.success('保存分类成功！');
+                    Notify.success(Translator.trans('保存分类成功！'));
 				}).fail(function() {
-                    Notify.danger("添加分类失败，请重试！");
+                    Notify.danger(Translator.trans('添加分类失败，请重试！'));
                 });
 
             }
@@ -94,7 +94,7 @@ define(function(require, exports, module) {
         });
 
         $modal.find('.delete-category').on('click', function() {
-            if (!confirm('真的要删除该分类及其子分类吗？')) {
+            if (!confirm(Translator.trans('真的要删除该分类及其子分类吗？'))) {
                 return ;
             }
 

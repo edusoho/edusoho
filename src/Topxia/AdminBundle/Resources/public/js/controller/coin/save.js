@@ -56,7 +56,7 @@ define(function(require, exports, module) {
                     element: $(this),
                     required: true,
                     rule: 'float',
-                    errormessageRequired: '请输入虚拟币价格'
+                    errormessageRequired: Translator.trans('请输入虚拟币价格')
                 });
             });
         }
@@ -67,7 +67,7 @@ define(function(require, exports, module) {
                     element: $(this),
                     required: true,
                     rule: 'percent_number',
-                    errormessageRequired: '请输入最大可抵扣比率'
+                    errormessageRequired: Translator.trans('请输入最大可抵扣比率')
                 });
             });
         }

@@ -31,10 +31,10 @@ define(function(require, exports, module) {
 
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
-                    Notify.success('复制课程成功');
+                    Notify.success(Translator.trans('复制课程成功'));
                     window.location.reload();
                 }).error(function(){
-                    Notify.danger('复制课程失败');
+                    Notify.danger(Translator.trans('复制课程失败'));
                 });
 
             }
@@ -43,7 +43,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '#course_title',
             required: true,
-            errormessageRequired: '请输入标题，不能为空。'
+            errormessageRequired: Translator.trans('请输入标题，不能为空。')
         });
 
 

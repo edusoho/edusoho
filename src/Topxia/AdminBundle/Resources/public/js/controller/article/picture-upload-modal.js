@@ -12,7 +12,7 @@ define(function(require, exports, module) {
 
         uploader.on('uploadSuccess', function(file, response ) {
             var url = $("#article-upload-btn").data("gotoUrl");
-            Notify.success('上传成功！', 1);
+            Notify.success(Translator.trans('上传成功！'), 1);
 
             $('#modal').load(url);
         });

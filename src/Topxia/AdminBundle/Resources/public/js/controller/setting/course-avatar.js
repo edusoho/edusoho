@@ -16,7 +16,7 @@ define(function(require, exports, module) {
             element: '#course-picture-field',
             required: true,
             rule: 'maxsize_image',
-            errormessageRequired: '请选择要上传的默认课程图片文件'
+            errormessageRequired: Translator.trans('请选择要上传的默认课程图片文件')
         });
 
         var $systemCoursePictureClass = $('#system-course-picture-class');
