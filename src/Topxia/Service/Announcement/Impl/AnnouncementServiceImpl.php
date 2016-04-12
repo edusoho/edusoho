@@ -31,15 +31,15 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function createAnnouncement($announcement)
     {
         if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException("公告内容不能为空！");
+            throw $this->createServiceException($this->getServiceKernel()->trans('公告内容不能为空！'));
         }
 
         if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException("发布时间不能为空！");
+            throw $this->createServiceException($this->getServiceKernel()->trans('发布时间不能为空！'));
         }
 
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException("结束时间不能为空！");
+            throw $this->createServiceException($this->getServiceKernel()->trans('结束时间不能为空！'));
         }
 
         if (isset($announcement['notify'])){
@@ -59,15 +59,15 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     public function updateAnnouncement($id, $announcement)
     {   
         if (!isset($announcement['content']) || empty($announcement['content'])) {
-            throw $this->createServiceException("公告内容不能为空！");
+            throw $this->createServiceException($this->getServiceKernel()->trans('公告内容不能为空！'));
         }
 
         if (!isset($announcement['startTime']) || empty($announcement['startTime'])) {
-            throw $this->createServiceException("发布时间不能为空！");
+            throw $this->createServiceException($this->getServiceKernel()->trans('发布时间不能为空！'));
         }
 
         if (!isset($announcement['endTime']) || empty($announcement['endTime'])) {
-            throw $this->createServiceException("结束时间不能为空！");
+            throw $this->createServiceException($this->getServiceKernel()->trans('结束时间不能为空！'));
         }
 
         $announcement['updatedTime'] = time();
@@ -78,7 +78,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
 	{
 		$announcement = $this->getAnnouncement($id);
 		if(empty($announcement)) {
-			$this->createNotFoundException("公告#{$id}不存在。");
+			$this->createNotFoundException($this->getServiceKernel()->trans('公告#%id%不存在。', array('%id%' =>$id )));
 		}
 
 		$this->getAnnouncementDao()->deleteAnnouncement($id);
@@ -93,7 +93,7 @@ class AnnouncementServiceImpl extends BaseService implements AnnouncementService
     {
     	$targetType = array('course','classroom','global');
     	if(!in_array($conditions['targetType'], $targetType)){
-    		throw $this->createServiceException('targetType不正确！');
+    		throw $this->createServiceException($this->getServiceKernel()->trans('targetType不正确！'));
     	}
 
     	return $conditions;

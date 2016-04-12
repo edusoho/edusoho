@@ -17,14 +17,14 @@ class YoukuVideoItemParser extends AbstractItemParser
 
         $matched = preg_match('/\/id_(.+?).html/s', $url, $matches);
         if (empty($matched)) {
-            throw $this->createParseException("优酷视频地址不正确！");
+            throw $this->createParseException($this->getServiceKernel()->trans('优酷视频地址不正确！'));
         }
 
         $videoId = $matches[1];
 
         $response = $this->fetchUrl($url);
         if ($response['code'] != 200) {
-            throw $this->createParseException('获取优酷视频页面信息失败！');
+            throw $this->createParseException($this->getServiceKernel()->trans('获取优酷视频页面信息失败！'));
         }
 
         $item = array();
@@ -34,12 +34,12 @@ class YoukuVideoItemParser extends AbstractItemParser
 
         $matched = preg_match('/id="s_baidu1"\s+href="(.*?)"/s', $response['content'], $matches);
         if (empty($matched)) {
-            throw $this->createParseException('解析优酷视频页面信息失败!');
+            throw $this->createParseException($this->getServiceKernel()->trans('解析优酷视频页面信息失败!'));
         }
 
         parse_str(parse_url($matches[1], PHP_URL_QUERY), $query);
         if (empty($query) || empty($query['title'])) {
-            throw $this->createParseException('解析优酷视频页面信息失败!!');
+            throw $this->createParseException($this->getServiceKernel()->trans('解析优酷视频页面信息失败!!'));
         }
 
         $item['name'] = iconv('gbk', 'utf-8', $query['title']);

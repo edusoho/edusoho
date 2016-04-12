@@ -52,9 +52,9 @@ class AjaxExceptionListener
         if ($statusCode == 403) {
             $user = $this->getUser($event);
             if ($user) {
-                $error = array('name' => 'AccessDenied', 'message' => '访问被拒绝！');
+                $error = array('name' => 'AccessDenied', 'message' => $this->getServiceKernel()->trans('访问被拒绝！'));
             } else {
-                $error = array('name' => 'Unlogin', 'message' => '当前操作，需要登录！');
+                $error = array('name' => 'Unlogin', 'message' => $this->getServiceKernel()->trans('当前操作，需要登录！'));
             }
         }
 

@@ -20,7 +20,7 @@ class LiveCourseLessonManageController extends BaseController
 
             $speakerId = current($liveCourse['teacherIds']);
             $speaker   = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
-            $speaker   = $speaker ? $speaker['nickname'] : '老师';
+            $speaker   = $speaker ? $speaker['nickname'] : $this->getServiceKernel()->trans('老师');
 
             $liveLogo    = $this->getSettingService()->get('course');
             $liveLogoUrl = "";
@@ -42,7 +42,7 @@ class LiveCourseLessonManageController extends BaseController
             ));
 
             if (empty($live)) {
-                throw new \RuntimeException('创建直播教室失败，请重试！');
+                throw new \RuntimeException($this->getServiceKernel()->trans('创建直播教室失败，请重试！'));
             }
 
             if (isset($live['error'])) {
@@ -83,7 +83,7 @@ class LiveCourseLessonManageController extends BaseController
 
             $speakerId = current($liveCourse['teacherIds']);
             $speaker   = $speakerId ? $this->getUserService()->getUser($speakerId) : null;
-            $speaker   = $speaker ? $speaker['nickname'] : '老师';
+            $speaker   = $speaker ? $speaker['nickname'] : $this->getServiceKernel()->trans('老师');
 
             $liveParams = array(
                 'liveId'   => $liveLesson['mediaId'],
@@ -131,7 +131,7 @@ class LiveCourseLessonManageController extends BaseController
         list($result, $message) = $this->getCourseService()->liveLessonTimeCheck($id, $lessonId, $startTime, $length);
 
         if ($result == 'success') {
-            $response = array('success' => true, 'message' => '这个时间段的课时可以创建');
+            $response = array('success' => true, 'message' => $this->getServiceKernel()->trans('这个时间段的课时可以创建'));
         } else {
             $response = array('success' => false, 'message' => $message);
         }

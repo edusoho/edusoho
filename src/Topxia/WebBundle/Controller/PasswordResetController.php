@@ -38,7 +38,7 @@ class PasswordResetController extends BaseController
                     list($result, $message) = $this->getAuthService()->checkEmail($data['email']);
 
                     if ($result == 'error_duplicate') {
-                        $error = '请通过论坛找回密码';
+                        $error = $this->getServiceKernel()->trans('请通过论坛找回密码');
                         return $this->render("TopxiaWebBundle:PasswordReset:index.html.twig", array(
                             'form'  => $form->createView(),
                             'error' => $error
@@ -51,7 +51,7 @@ class PasswordResetController extends BaseController
                     try {
                         $normalMail = array(
                             'to'     => $user['email'],
-                            'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                            'title'  => $this->getServiceKernel()->trans('重设%userNickName%在%siteName%的密码', array('%userNickName%' => $user['nickname'], '%siteName%' =>$this->setting('site.name', 'EDUSOHO') )),
                             'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
                                 'user'  => $user,
                                 'token' => $token
@@ -67,18 +67,18 @@ class PasswordResetController extends BaseController
                         $mail = new Mail($normalMail, $cloudMail);
                         $this->sendEmail($mail);
                     } catch (\Exception $e) {
-                        $this->getLogService()->error('user', 'password-reset', '重设密码邮件发送失败:'.$e->getMessage());
-                        return $this->createMessageResponse('error', '重设密码邮件发送失败，请联系管理员。');
+                        $this->getLogService()->error('user', 'password-reset', $this->getServiceKernel()->trans('重设密码邮件发送失败:').$e->getMessage());
+                        return $this->createMessageResponse('error', $this->getServiceKernel()->trans('重设密码邮件发送失败，请联系管理员。'));
                     }
 
-                    $this->getLogService()->info('user', 'password-reset', "{$user['email']}向发送了找回密码邮件。");
+                    $this->getLogService()->info('user', 'password-reset', $this->getServiceKernel()->trans('%userEmail%向发送了找回密码邮件。', array('%userEmail%' =>$user['email'] )));
 
                     return $this->render('TopxiaWebBundle:PasswordReset:sent.html.twig', array(
                         'user'          => $user,
                         'emailLoginUrl' => $this->getEmailLoginUrl($user['email'])
                     ));
                 } else {
-                    $error = '该邮箱地址没有注册过帐号';
+                    $error = $this->getServiceKernel()->trans('该邮箱地址没有注册过帐号');
                 }
             }
         }
@@ -132,7 +132,7 @@ class PasswordResetController extends BaseController
                 $targetUser = $this->getUserService()->getUserByVerifiedMobile($request->request->get('mobile'));
 
                 if (empty($targetUser)) {
-                    return $this->createMessageResponse('error', '用户不存在，请重新找回');
+                    return $this->createMessageResponse('error', $this->getServiceKernel()->trans('用户不存在，请重新找回'));
                 }
 
                 $token = $this->getUserService()->makeToken('password-reset', $targetUser['id'], strtotime('+1 day'));
@@ -142,7 +142,7 @@ class PasswordResetController extends BaseController
                     'token' => $token
                 )));
             } else {
-                return $this->createMessageResponse('error', '手机短信验证错误，请重新找回');
+                return $this->createMessageResponse('error', $this->getServiceKernel()->trans('手机短信验证错误，请重新找回'));
             }
         }
 
@@ -170,7 +170,7 @@ class PasswordResetController extends BaseController
         list($result, $message) = $this->getAuthService()->checkMobile($mobile);
 
         if ($result == 'success') {
-            $response = array('success' => false, 'message' => '该手机号码不存在');
+            $response = array('success' => false, 'message' => $this->getServiceKernel()->trans('该手机号码不存在'));
         } else {
             $response = array('success' => true, 'message' => '');
         }

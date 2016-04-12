@@ -67,7 +67,7 @@ class CourseAnnouncementController extends BaseController
 
         $announcement = $this->getCourseService()->getCourseAnnouncement($courseId, $id);
         if (empty($announcement)) {
-        	return $this->createNotFoundException("课程公告(#{$id})不存在。");
+        	return $this->createNotFoundException($this->getServiceKernel()->trans('课程公告(#%id%)不存在。', array('%id%' =>$id )));
         }
 
 	    if($request->getMethod() == 'POST') {

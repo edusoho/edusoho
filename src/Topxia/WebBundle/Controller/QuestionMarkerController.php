@@ -65,14 +65,14 @@ class QuestionMarkerController extends BaseController
         $lesson = $this->getCourseService()->getLesson($lessonId);
 
         if (empty($lesson)) {
-            return $this->createMessageResponse('error', '该课时不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('该课时不存在!'));
         }
 
         $data['questionId'] = isset($data['questionId']) ? $data['questionId'] : 0;
         $question           = $this->getQuestionService()->getQuestion($data['questionId']);
 
         if (empty($question)) {
-            return $this->createMessageResponse('error', '该题目不存在!');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('该题目不存在!'));
         }
 
         if (empty($data['markerId'])) {
@@ -216,10 +216,10 @@ class QuestionMarkerController extends BaseController
     {
         $lessons                           = $this->getCourseService()->getCourseLessons($course['id']);
         $choices                           = array();
-        $choices["course-{$course['id']}"] = '本课程';
+        $choices["course-{$course['id']}"] = $this->getServiceKernel()->trans('本课程');
 
         foreach ($lessons as $lesson) {
-            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = "课时{$lesson['number']}：{$lesson['title']}";
+            $choices["course-{$course['id']}/lesson-{$lesson['id']}"] = $this->getServiceKernel()->trans('课时%lessonNumber%：%lessonTitle%', array('%lessonNumber%' =>$lesson['number'], '%lessonTitle%' =>$lesson['title'] ));
         }
 
         return $choices;

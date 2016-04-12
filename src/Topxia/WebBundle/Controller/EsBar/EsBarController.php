@@ -12,7 +12,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $classrooms = $this->getClassroomStudyMissions();
@@ -30,7 +30,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $conditions = array(
@@ -78,7 +78,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $memberConditions = array(
@@ -153,7 +153,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $notifications = $this->getNotificationService()->findUserNotifications(
@@ -173,7 +173,7 @@ class EsBarController extends BaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException('用户没有登录,不能查看!');
+            $this->createAccessDeniedException($this->getServiceKernel()->trans('用户没有登录,不能查看!'));
         }
 
         $homeworkResults  = array();

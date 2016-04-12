@@ -24,8 +24,8 @@ class UserProfileType extends AbstractType
 
         $builder->add('iam', 'choice', array(
             'choices' => array(
-                'student' => '在校生',
-                'notStudent' => '非在校生'
+                'student' => $this->getServiceKernel()->trans('在校生'),
+                'notStudent' => $this->getServiceKernel()->trans('非在校生')
             ),
             'expanded' => true,
             // 'required' => true
@@ -37,5 +37,9 @@ class UserProfileType extends AbstractType
     public function getName()
     {
         return 'profile';
+    }
+        protected function getServiceKernel()
+    {
+        return ServiceKernel::instance();
     }
 }

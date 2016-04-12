@@ -25,7 +25,7 @@ class MobileController extends BaseController
         $mobile = $this->setting('mobile', array());
 
         if (empty($mobile['enabled'])) {
-            return $this->createMessageResponse('info', '客户端尚未开启！');
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('客户端尚未开启！'));
         }
 
         $result = CloudAPIFactory::create('leaf')->get('/me');

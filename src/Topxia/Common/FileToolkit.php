@@ -57,7 +57,7 @@ class FileToolkit
         $errors = array();
         $regex = '/\.(' . preg_replace('/ +/', '|', preg_quote($extensions)) . ')$/i';
         if (!preg_match($regex, $filename)) {
-            $errors[] = "只允许上传以下扩展名的文件：" . $extensions;
+            $errors[] = $this->getServiceKernel()->trans('只允许上传以下扩展名的文件：' ). $extensions;
         }
         return $errors;
     }
@@ -992,7 +992,7 @@ class FileToolkit
             $imagine = new Imagine();
             $image = $imagine->open($fullPath);
         } catch (\Exception $e) {
-            throw new Exception("该文件为非图片格式文件，请重新上传。");
+            throw new Exception($this->getServiceKernel()->trans('该文件为非图片格式文件，请重新上传。'));
         }
 
         $naturalSize = $image->getSize();

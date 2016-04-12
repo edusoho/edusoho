@@ -10,7 +10,7 @@ class LatestCoursesDataTagTest extends BaseTestCase
 
     public function testGetData()
     {
-    	$group = $this->getCategoryService()->addGroup(array('code' => 'course','name' => '课程分类','depth' => 2));
+              $group = $this->getCategoryService()->addGroup(array('code' => 'course','name' => '课程分类','depth' => 2));
 
     	$course1 = array(
             'type' => 'normal',

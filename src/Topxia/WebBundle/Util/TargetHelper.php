@@ -119,9 +119,9 @@ class LessonTargetFinder extends AbstractTargetFinder
             $targets[$id] = array(
                 'type' => 'lesson',
                 'id' => $id,
-                'simple_name' => "课时{$lesson['number']}",
+                'simple_name' => $this->getServiceKernel()->trans('课时%lessonNumber%', array('%lessonNumber%' =>$lesson['number'] )),
                 'name' => $lesson['title'],
-                'full_name' => "课时{$lesson['number']}：{$lesson['title']}",
+                'full_name' => $this->getServiceKernel()->trans('课时%lessonNumber%：%lessonTitle%', array('%lessonNumber%' =>$lesson['number'], '%lessonTitle%' =>$lesson['title'] )),
                 'url' => $this->container->get('router')->generate('course_learn', array('id' => $lesson['courseId'])) . '#lesson/' . $id,
             );
         }

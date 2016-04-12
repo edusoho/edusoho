@@ -19,7 +19,7 @@ class GroupDataTag extends BaseDataTag implements DataTag
     public function getData(array $arguments)
     {
         if (empty($arguments['groupId'])) {
-            throw new \InvalidArgumentException("groupId参数缺失");
+            throw new \InvalidArgumentException($this->getServiceKernel()->trans('groupId参数缺失'));
         } else {
             $group = $this->getGroupService()->getGroup($arguments['groupId']);
         }

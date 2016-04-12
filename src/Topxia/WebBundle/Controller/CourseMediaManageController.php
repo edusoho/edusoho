@@ -12,7 +12,7 @@ class CourseMediaManageController extends BaseController
         $type = $request->query->get('type');
 
         if (!in_array($type, array('video', 'audio'))) {
-            throw $this->createNotFoundException('参数不正确！');
+            throw $this->createNotFoundException($this->getServiceKernel()->trans('参数不正确！'));
         }
 
         $file      = $this->setting('file');

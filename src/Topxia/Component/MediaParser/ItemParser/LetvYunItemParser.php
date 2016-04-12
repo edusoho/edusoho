@@ -12,7 +12,7 @@ class LetvYunItemParser extends AbstractItemParser
         $response = $this->fetchUrl($url);
 
         if ($response['code'] != 200) {
-            throw $this->createParseException('获取乐视视频信息失败！');
+            throw $this->createParseException($this->getServiceKernel()->trans('获取乐视视频信息失败！'));
         }
 
         $url  = str_replace('width=640&height=360', 'width=100%&height=100%', $url);
