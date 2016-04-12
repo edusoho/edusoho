@@ -909,4 +909,9 @@ throw $this->createServiceException('不能收藏未发布课程');
     {
         return $this->createService('Content.FileService');
     }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
+    }
 }

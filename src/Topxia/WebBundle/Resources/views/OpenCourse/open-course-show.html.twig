@@ -47,8 +47,11 @@
       <div class="open-course-detail row">
         <div class="col-md-9">
           <div class="es-section gray-darker">
-            {{ course.about|raw }}
-            <img src="{{ filepath(course.smallPicture|default(''), 'course.png') }}" alt="{{ course.title }}" class="intro-img">
+            {% if course.about %}
+              {{ course.about|raw }}
+            {% else %}
+              <div class="empty">暂无简介</div>
+            {% endif %}
           </div>
 
           {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{courseId:course.id})) }}
