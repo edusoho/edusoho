@@ -24,7 +24,7 @@ class ActivityContentType extends ContentType
 
 	public function getName()
 	{
-		return '活动';
+		return $this->getServiceKernel()->trans('活动');
 	}
 
 }

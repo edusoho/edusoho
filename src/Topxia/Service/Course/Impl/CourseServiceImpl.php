@@ -395,7 +395,7 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function createCourse($course)
     {
         if (!ArrayToolkit::requireds($course, array('title'))) {
-            throw $this->createServiceException('缺少必要字段，创建课程失败！');
+            throw $this->createServiceException($this->getServiceKernel()->trans('缺少必要字段，创建课程失败！'));
         }
 
         $course                = ArrayToolkit::parts($course, array('title', 'buyable', 'type', 'about', 'categoryId', 'tags', 'price', 'startTime', 'endTime', 'locationId', 'address'));
@@ -418,7 +418,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourse($course['id']);
 
-        $this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
+        $this->getLogService()->info('course', 'create', $this->getServiceKernel()->trans('创建课程《%courseTitle%》(#%courseId%)', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )));
 
         return $course;
     }
@@ -429,12 +429,12 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course   = $this->getCourseDao()->getCourse($id);
 
         if (empty($course)) {
-            throw $this->createServiceException('课程不存在，更新失败！');
+            throw $this->createServiceException($this->getServiceKernel()->trans('课程不存在，更新失败！'));
         }
 
         $fields = $this->_filterCourseFields($fields);
 
-        $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
+        $this->getLogService()->info('course', 'update', $this->getServiceKernel()->trans('更新课程《%courseTitle%》(#%courseId%)的信息', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )), $fields);
 
         $fields = CourseSerialize::serialize($fields);
 
@@ -451,7 +451,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $fields = ArrayToolkit::parts($counter, array('rating', 'ratingNum', 'lessonNum', 'giveCredit'));
 
         if (empty($fields)) {
-            throw $this->createServiceException('参数不正确，更新计数器失败！');
+            throw $this->createServiceException($this->getServiceKernel()->trans('参数不正确，更新计数器失败！'));
         }
 
         $this->getCourseDao()->updateCourse($id, $fields);
@@ -506,7 +506,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->getCourseDao()->getCourse($courseId);
 
         if (empty($course)) {
-            throw $this->createServiceException('课程不存在，图标更新失败！');
+            throw $this->createServiceException($this->getServiceKernel()->trans('课程不存在，图标更新失败！'));
         }
 
         $fileIds = ArrayToolkit::column($data, "id");
@@ -523,7 +523,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->deleteNotUsedPictures($course);
 
-        $this->getLogService()->info('course', 'update_picture', "更新课程《{$course['title']}》(#{$course['id']})图片", $fields);
+        $this->getLogService()->info('course', 'update_picture', $this->getServiceKernel()->trans('更新课程《%courseTitle%》(#%courseId%)图片', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'] )), $fields);
 
         $update_picture = $this->getCourseDao()->updateCourse($courseId, $fields);
 
@@ -557,7 +557,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $course = $this->tryAdminCourse($id);
 
         if (!is_numeric($number)) {
-            throw $this->createAccessDeniedException('推荐课程序号只能为数字！');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('推荐课程序号只能为数字！'));
         }
 
         $course = $this->getCourseDao()->updateCourse($id, array(
@@ -566,7 +566,7 @@ class CourseServiceImpl extends BaseService implements CourseService
             'recommendedTime' => time()
         ));
 
-        $this->getLogService()->info('course', 'recommend', "推荐课程《{$course['title']}》(#{$course['id']}),序号为{$number}");
+        $this->getLogService()->info('course', 'recommend', $this->getServiceKernel()->trans('推荐课程《%courseTitle%》(#%courseId%),序号为%number%', array('%courseTitle%' =>$course['title'], '%courseId%' =>$course['id'], '%number%' =>$number )));
 
         return $course;
     }

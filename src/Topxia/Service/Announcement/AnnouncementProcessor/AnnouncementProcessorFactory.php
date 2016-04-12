@@ -16,6 +16,10 @@ class AnnouncementProcessorFactory
 
     	return new $class();
     }
+       protected function getServiceKernel(){
+    
+        return  ServiceKernel::instance();
+   }
 
 }
 
