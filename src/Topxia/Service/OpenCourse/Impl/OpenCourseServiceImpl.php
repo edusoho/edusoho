@@ -373,8 +373,7 @@ throw $this->createServiceException('不能收藏未发布课程');
 
     public function updateLesson($courseId, $lessonId, $fields)
     {
-        $argument = $fields;
-        $course   = $this->getCourse($courseId);
+        $course = $this->getCourse($courseId);
 
         if (empty($course)) {
             throw $this->createServiceException("课程(#{$courseId})不存在！");
@@ -437,6 +436,9 @@ throw $this->createServiceException('不能收藏未发布课程');
                 }
             }
         }
+
+        $updatedLesson['fields'] = $lesson;
+        $this->dispatchEvent("open.course.lesson.update", array('lesson' => $updatedLesson));
 
         return $updatedLesson;
     }
