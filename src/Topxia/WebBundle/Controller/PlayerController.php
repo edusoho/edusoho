@@ -2,7 +2,9 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
+use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PlayerController extends BaseController
