@@ -16,7 +16,7 @@
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
         >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}{{course.id}}
+        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}
         </button>
       {% elseif type == 'coursematerial' %}
         <button class="btn btn-info btn-sm pull-right"
