@@ -102,14 +102,6 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $fileId)
-    {
-        $fields = $request->request->all();
-
-        $this->getMaterialLibService()->edit($fileId, $fields);
-        return $this->createJsonResponse(array('success' => true));
-    }
-
     public function reconvertAction($globalId)
     {
         $this->getMaterialLibService()->reconvert($globalId);
@@ -409,12 +401,11 @@ class MaterialLibController extends BaseController
             $file = $this->getUploadFileService()->getFile($fileId);
 
             if (!empty($file['globalId'])) {
-                $this->getMaterialLibService()->edit($file['globalId'], array('tags' => $data['tags']));
+                $this->getMaterialLibService()->edit($fileId, array('tags' => $data['tags']));
             } else {
                 continue;
             }
         }
-
         return $this->redirect($this->generateUrl('material_lib_browsing'));
     }
 

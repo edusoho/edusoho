@@ -110,7 +110,16 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function edit($globalId, $fields)
     {
-        return $this->getCloudFileImplementor()->edit($globalId, $fields);
+        if(empty($globalId)) {
+          return false;
+        }
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        if(!empty($file)) {
+          $result = $this->getUploadFileService()->edit($file['id'],$fields);
+          return array('success'=>true);
+        }
+        $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags','description','endShared'));
+        return $this->getCloudFileImplementor()->updateFile($globalId, $cloudFields);
     }
 
     public function delete($globalId)

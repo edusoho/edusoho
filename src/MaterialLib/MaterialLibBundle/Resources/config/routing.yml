@@ -111,12 +111,6 @@ material_batch_tag_show:
     pattern: /materials/batch/tag/show
     defaults: { _controller: MaterialLibBundle:MaterialLib:batchTagShow }
 
-material_edit:
-    pattern:  /materiallib/{fileId}/edit
-    defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
-    methods: [POST]
-
-
 global_file_player:
     pattern:  /global_file/{globalId}/player
     defaults: { _controller: MaterialLibBundle:GlobalFilePlayer:player }
