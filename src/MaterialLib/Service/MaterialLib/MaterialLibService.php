@@ -6,6 +6,8 @@ interface MaterialLibService
 {
     public function get($id);
 
+    public function getByGlobalId($globalId);
+
     public function edit($fileId, $fields);
 
     public function delete($id);
