@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:System:layout.html.twig' %}
 
-{% block title %}云账单 - {{ parent() }}{% endblock %}
+{% block title %}{{'云账单'|trans}} - {{ parent() }}{% endblock %}
 
 {% set menu = 'bill' %}
 
@@ -8,12 +8,12 @@
 <ul class="nav nav-tabs mbl">
 
   <li class="{% if submenu == 'video' %}active{% endif %}">
-    <a href="{{ url('admin_cloud_bill') }}">云视频账单
+    <a href="{{ url('admin_cloud_bill') }}">{{'云视频账单'|trans}}
     </a>
   </li>
 
   <li class="{% if submenu == 'sms' %}active{% endif %}">
-    <a href="{{ url('admin_edu_cloud_sms_bill') }}">云短信账单
+    <a href="{{ url('admin_edu_cloud_sms_bill') }}">{{'云短信账单'|trans}}
     </a>
   </li>
 

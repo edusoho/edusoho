@@ -4,8 +4,8 @@
         <div class="panel-heading">
 
             <a class="pull-right" href="{{ url('admin_coin_user_records') }}"
-            >更多</a>
-            <h3 class="panel-title">用户虚拟币记录</h3>
+            >{{'更多'|trans}}</a>
+            <h3 class="panel-title">{{'用户虚拟币记录'|trans}}</h3>
              
         </div>
 
@@ -13,10 +13,10 @@
         <table class="table table-condensed table-bordered table-striped table-hover">
           <thead>
             <tr>
-              <th width="40%">用户名</th>
-              <th width="10%">充值虚拟币</th>
-              <th width="15%">支出虚拟币</th>
-              <th width="35%">当前余额</th>
+              <th width="40%">{{'用户名'|trans}}</th>
+              <th width="10%">{{'充值虚拟币'|trans}}</th>
+              <th width="15%">{{'支出虚拟币'|trans}}</th>
+              <th width="35%">{{'当前余额'|trans}}</th>
             </tr>
           </thead>
           <tbody>
@@ -26,7 +26,7 @@
           </tbody>
         </table>
       {% else %}
-      <div class="empty">暂无用户虚拟币记录</div>
+      <div class="empty">{{'暂无用户虚拟币记录'|trans}}</div>
       {% endif %}
     </div>
 </div>

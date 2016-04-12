@@ -1,6 +1,6 @@
 {% extends 'TopxiaAdminBundle:Content:layout.html.twig' %}
 
-{% block title %}文件管理 - {{ parent() }}{% endblock %}
+{% block title %}{{'文件管理'|trans}} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'file/list' %}
 
@@ -9,7 +9,7 @@
 {% block main %}
 
 <div class="page-header clearfix">
-  <h1 class="pull-left">文件</h1>
+  <h1 class="pull-left">{{'文件'|trans}}</h1>
 </div>
 
 <div class="well btn-small">
@@ -17,7 +17,7 @@
     <div class="col-md-2">
     {{ form_widget(form.group) }}
     </div>
-    <input type="submit" class="btn btn-primary" value="检索">
+    <input type="submit" class="btn btn-primary" value="{{'检索'|trans}}">
   </form>
 </div>
 <div id="files">
@@ -37,7 +37,7 @@
             <p><a href="{{ filepath(file.uri) }}" target="_blank">{{ fileUri.name }}</a></p>
             <p>
               <span class="text-muted">{{ file.size|file_size }}</span>
-              <a href="javascript:" class="delete pull-right btn btn-danger btn-sm" data-url="{{ path('admin_file_delete', {id:file.id}) }}">删除</a>
+              <a href="javascript:" class="delete pull-right btn btn-danger btn-sm" data-url="{{ path('admin_file_delete', {id:file.id}) }}">{{'删除'|trans}}</a>
             </p>
             <p>
               <span class="text-muted"><i class="glyphicon glyphicon-time"></i> {{ file.createdTime|date('Y-n-d H:i:s') }}</span>
@@ -47,13 +47,13 @@
                 <i class="text-muted glyphicon glyphicon-user"></i>
                 <a href="{{ path('user_show', {userId:user.id}) }}">{{ user.nickname }}</a>
               {% else %}
-                <span class="label label-danger">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}不存在</span>
+                <span class="label label-danger">{% if setting('default.user_name') %}{{'%user_name%不存在'|trans({'%user_name%': setting('default.user_name')|default('学员'|trans)})}}{% endif %}</span>
               {% endif %}
             </p>
             <p>
               <span class="text-success">
                 <i class="glyphicon glyphicon-folder-open"></i> 
-                {{ fileGroup.name|default('文件组不存在') }}
+                {{ fileGroup.name|default('文件组不存在'|trans) }}
               </span>
             </p>
           </div>

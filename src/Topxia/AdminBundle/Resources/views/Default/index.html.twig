@@ -1,12 +1,12 @@
   {% extends 'TopxiaAdminBundle::layout.html.twig' %}
-{% block title %}管理后台{% endblock %}
+{% block title %}{{'管理后台'|trans}}{% endblock %}
 {% set panel = 'dashboard' %}
 {% set script_controller = 'default/index' %}
 {% block content %}
 
 {{ render(controller('TopxiaAdminBundle:Default:inspect')) }}
 <div class="page-header">
-  <h1>管理中心  </h1>
+  <h1>{{'管理中心'|trans}}  </h1>
 </div>
 {% if is_granted('ROLE_ADMIN') %}
   
@@ -29,14 +29,14 @@
   
     <div class="panel-heading clearfix">
      <span class="pull-right" style="display:block">
-         <span id="onlineNum" data-url="{{path('admin_online_count')}}">正在载入在线人数...</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">正在载入登录人数...</span>）
+         <span id="onlineNum" data-url="{{path('admin_online_count')}}">{{'正在载入在线人数...'|trans}}</span>（<span id="loginNum" data-url="{{path('admin_login_count')}}">{{'正在载入登录人数...'|trans}}</span>）
      </span>
-     <h3 class="panel-title pull-left" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}"> 数据统计
+     <h3 class="panel-title pull-left" id="operation-analysis-title" data-url="{{path('admin_operation_analysis')}}"> {{'数据统计'|trans}}
 
      </h3>
     </div>
     <div id="operation-analysis-table" >
-      <div class="empty">正在载入数据，请稍等。</div>
+      <div class="empty">{{'正在载入数据，请稍等。'|trans}}</div>
     </div>
   </div>
 </div>
@@ -54,10 +54,10 @@
     <div class="col-md-6">
        <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title" id="system-status-title" data-url="{{path('admin_system_status')}}">系统状态</h3>
+          <h3 class="panel-title" id="system-status-title" data-url="{{path('admin_system_status')}}">{{'系统状态'|trans}}</h3>
         </div>
         <div id="system-status" >
-          <div class="empty">正在载入数据，请稍等。</div>
+          <div class="empty">{{'正在载入数据，请稍等。'|trans}}</div>
         </div>
       </div>
     </div>
@@ -68,10 +68,10 @@
           <select id="popular-courses-type" class="pull-right" data-url="{{path('admin_popular_courses')}}">
               {{ select_options(dict('dateType'), app.request.query.get('dateType')) }}
           </select>
-          <h3 class="panel-title">受欢迎课程</h3>
+          <h3 class="panel-title">{{'受欢迎课程'|trans}}</h3>
         </div>
         <div id="popular-courses-table">
-        	<div class="empty">正在载入数据，请稍等。</div>
+        	<div class="empty">{{'正在载入数据，请稍等。'|trans}}</div>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@
 {% else %}
   <div class="row">
     <div class="col-md-12">
-      <h4>欢迎来到{{ setting('site.name') }}管理后台</h4>
+      <h4>{{'欢迎来到%name%管理后台'|trans({'%name%': setting('site.name') })}}</h4>
     </div>
   </div>
 {% endif %}

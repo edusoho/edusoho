@@ -1,17 +1,17 @@
 {% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
 
-{% block title %}每周精品课程{% endblock %}
+{% block title %}{{'每周精品课程'|trans}}{% endblock %}
 {% block body %}
 <div>
 	<div>
 		<form action="{{path('admin_course_search')}}" class="form-inline" role="search-form">
 			<div class="form-group ">
 				<input type="text" class="form-control" name="key" value="{{ key|default('') }}"
-				placeholder="课程名称"
+				placeholder="{{'课程名称'|trans}}"
 				/>
 				<input id="hiddenText" type="text" style="display:none" />
 			</div>
-			<button type="button" class="btn btn-primary">搜索</button>
+			<button type="button" class="btn btn-primary">{{'搜索'|trans}}</button>
 		</form>
 	</div>
 	<div role="course-list">
@@ -21,7 +21,7 @@
 			{% include 'TopxiaAdminBundle:Course:course-item.html.twig' with {course:course} %}
 			{% endfor %}
 		{% else %}
-			<div class="empty">无课程记录</div>
+			<div class="empty">{{'无课程记录'|trans}}</div>
 		{% endif %}
 		</ul>
 	</div>
@@ -31,6 +31,6 @@
 
 {% endblock %}
 {% block footer %}
-  <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-primary pull-right" data-dismiss="modal">{{'关闭'|trans}}</button>
   <script>app.load('course/search')</script>
 {% endblock %}

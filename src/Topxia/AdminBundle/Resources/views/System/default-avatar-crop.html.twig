@@ -8,7 +8,7 @@
 <meta http-equiv="pragma" content="no-cache" />
 <div class="panel panel-default panel-col">
   <div class="panel-heading">
-    自定义默认头像
+    {{'自定义默认头像'|trans}}
   </div>
 
   <div class="panel-body">
@@ -18,7 +18,7 @@
         <img src="{{ filepath(pictureUrl) }}" 
         id="default-avatar-crop" 
         width="{{scaledSize.width}}" height="{{scaledSize.height}}" data-natural-width="{{ naturalSize.width }}" data-natural-height="{{ naturalSize.height }}" />
-        <div class="help-block">提示：请选择图片裁剪区域。</div>
+        <div class="help-block">{{'提示：请选择图片裁剪区域。'|trans}}</div>
       </div>
     </div>
 
@@ -28,8 +28,8 @@
         id="upload-picture-btn" 
         data-url="{{path('admin_setting_default_avatar_crop')}}"
         data-goto-url="{{path('admin_setting_avatar')}}"
-        >保存</a>
-        <a href="javascript:;" class="go-back btn btn-link">重新选择图片</a>
+        >{{'保存'|trans}}</a>
+        <a href="javascript:;" class="go-back btn btn-link">{{'重新选择图片'|trans}}</a>
       </div>
     </div>
 

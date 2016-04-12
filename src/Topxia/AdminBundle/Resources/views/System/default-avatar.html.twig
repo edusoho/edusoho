@@ -3,7 +3,7 @@
 style="display:none;"
 {% endif %}
 >
-  <div class="col-md-8 control-label"><b>自定义默认头像</b></div>
+  <div class="col-md-8 control-label"><b>{{'自定义默认头像'|trans}}</b></div>
   <form id="avatar-form" method="post">
     <div class="controls col-md-8 controls">
       <img src="{{ system_default_path('avatar.png' ) }}">
@@ -12,7 +12,7 @@ style="display:none;"
     <div class="form-group">
       <div class="col-md-2 control-label"></div>
       <div class="controls col-md-8 controls">
-        <p class="help-block">你可以上传JPG、GIF或PNG格式的文件。</p>
+        <p class="help-block">{{'你可以上传JPG、GIF或PNG格式的文件'|trans}}。</p>
       </div>
     </div>
 
@@ -23,7 +23,7 @@ style="display:none;"
           class="btn btn-default btn-sm"
           data-upload-token="{{ upload_token('system', 'image') }}"
           data-goto-url="{{path('admin_setting_default_avatar_crop')}}"
-        >上传</a>
+        >{{'上传'|trans}}</a>
       </div>
     </div>
   </form>
@@ -34,7 +34,7 @@ style="display:none;"
 style="display:none;"
 {% endif %}
 >
-  <div class="col-md-8 control-label"><b>系统默认头像</b></div>
+  <div class="col-md-8 control-label"><b>{{'系统默认头像'|trans}}</b></div>
     <div class="controls col-md-8 controls">
       <img src="{{ asset('assets/img/default/avatar.png') }}">
     </div>

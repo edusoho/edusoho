@@ -11,15 +11,15 @@
 <form class="form-horizontal" method="post" id="consult-setting-form" novalidate>
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label >客服功能</label>
+      <label >{{'客服功能'|trans}}</label>
     </div>
     <div class="controls col-md-8 radios">
-      {{ radios('enabled', {1:'开启', 0:'关闭'}, consult.enabled) }}
+      {{ radios('enabled', {1:'开启'|trans, 0:'关闭'|trans}, consult.enabled) }}
     </div>
   </div>
   <div class="row form-group">
     <div class="col-md-3 control-label">
-      <label >浮动条颜色</label>
+      <label >{{'浮动条颜色'|trans}}</label>
     </div>
     <div class="controls col-md-8 radios">
       {{ 
@@ -41,7 +41,7 @@
       </div>
       <div class="controls col-md-4">
         <input type="text" name="" class="form-control" value="" placeholder="">
-        <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button></input>
+        <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="{{'删除'|trans}}">×</button></input>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@
       </div>
       <div class="controls col-md-4">
         <input type="text" name="" class="form-control" value="" placeholder="">
-        <button class="close delete-btn form-control-feedback" data-role="phone-item-delete" type="button" title="删除">×</button></input>
+        <button class="close delete-btn form-control-feedback" data-role="phone-item-delete" type="button" title="{{'删除'|trans}}">×</button></input>
       </div>
     </div>
   </div>
@@ -68,19 +68,19 @@
       </div>
       <div class="controls col-md-4">
         <input type="text" name="" class="form-control" value="" placeholder="">
-        <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button></input>
+        <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="{{'删除'|trans}}">×</button></input>
       </div>
     </div>
   </div>
 
   <fieldset>
-    <legend>QQ客服设置
+    <legend>QQ{{'客服设置'|trans}}
       <span class="glyphicon glyphicon-question-sign text-muted pull-right mll mts" id="qq-property-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
       <div id="qq-property-tips-html" style="display:none;">
         <div style="width:250px;">
-          <span style="color:blue;">如何获取在线咨询链接？</span><br>
-          1，登录 <a target="_blank" href="https://id.b.qq.com/login/index">https://id.b.qq.com/login/index</a>。 <br>
-          2，登录后，找到【营销QQ】-【在线代码生成】，选择【在论坛/微博发布在线咨询链接】。（包含“http://”）<br>
+          <span style="color:blue;">{{'如何获取在线咨询链接？'|trans}}</span><br>
+          1，{{'登录'|trans}} <a target="_blank" href="https://id.b.qq.com/login/index">https://id.b.qq.com/login/index</a>。 <br>
+          2，{{'登录后，找到【营销QQ】-【在线代码生成】，选择【在论坛/微博发布在线咨询链接】。（包含“http://”）'|trans}}<br>
         </div>
       </div>
     </legend>
@@ -88,15 +88,15 @@
       {% for qq in consult.qq %}
       <div class="row form-group has-feedback">
         <div class="controls col-md-2 col-md-offset-2">
-          <input type="text" name="qq[{{loop.index0}}][name]" class="form-control" value="{{qq.name}}" placeholder="QQ客服名称">
+          <input type="text" name="qq[{{loop.index0}}][name]" class="form-control" value="{{qq.name}}" placeholder="{{'QQ客服名称'|trans}}">
         </div>
         <div class="controls col-md-2">
-          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" value="{{qq.number}}" placeholder="QQ号">
+          <input type="text" name="qq[{{loop.index0}}][number]" class="form-control" value="{{qq.number}}" placeholder="{{'QQ号'|trans}}">
         </div>
         <div class="controls col-md-4">
-          <input type="text" name="qq[{{loop.index0}}][url]" class="form-control" value="{{qq.url|default('')}}" placeholder="若使用营销QQ，请填入在线咨询链接">
+          <input type="text" name="qq[{{loop.index0}}][url]" class="form-control" value="{{qq.url|default('')}}" placeholder="{{'若使用营销QQ，请填入在线咨询链接'|trans}}">
           {% if loop.index0 > 0 %}
-          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="删除">×</button>
+          <button class="close delete-btn form-control-feedback" data-role="item-delete" type="button" title="{{'删除'|trans}}">×</button>
           {% endif %}
         </div>
       </div>
@@ -104,7 +104,7 @@
     </div>
     <div class="row form-group">
       <div class="controls col-md-4 col-md-offset-2">
-        <span  class="btn-link" data-role="item-add" data-parentId='consult-qq' data-length='{{consult.qq | length}}'>新增</span>
+        <span  class="btn-link" data-role="item-add" data-parentId='consult-qq' data-length='{{consult.qq | length}}'>{{'新增'|trans}}</span>
       </div>
     </div>
   </fieldset>

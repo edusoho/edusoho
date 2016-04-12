@@ -11,11 +11,11 @@
 {% block main %}
   
       {% if locked|default(0) == 1 %}
-        <div class="alert alert-warning" role="alert">您的教育云服务已被锁定，请联系客服人员：0571-86819929。</div>
+        <div class="alert alert-warning" role="alert">{{'您的教育云服务已被锁定，请联系客服人员：'|trans}}0571-86819929。</div>
       {% endif %}
 
       {% if enabled|default(1) == 0 %}
-        <div class="alert alert-danger" role="alert">您的教育云服务已被禁用，请联系客服人员：0571-86819929。</div>
+        <div class="alert alert-danger" role="alert">{{'您的教育云服务已被禁用，请联系客服人员：'|trans}}0571-86819929。</div>
       {% endif %}
 
       {% if is_trial() %}
@@ -29,7 +29,7 @@
         {% endif %}
 
         <div class="page-header clearfix">
-          <h1 class="pull-left">账户概览</h1>
+          <h1 class="pull-left">{{'账户概览'|trans}}</h1>
         </div>
 
         <div class="panel panel-default">
@@ -41,12 +41,12 @@
               <div class="edu-user-info">
                 <div class="detail">
                   {% if isBinded.name|default("")  == "" %}
-                    您尚未绑定EduSoho开放云平台&nbsp;
-                    <a href="http://open.edusoho.com/article/1" target="_blank"  title="什么是EduSoho开放云平台？" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i></a>
+                    {{'您尚未绑定EduSoho开放云平台'|trans}}&nbsp;
+                    <a href="http://open.edusoho.com/article/1" target="_blank"  title="{{'什么是EduSoho开放云平台？'|trans}}" style="color: #999;"> <i class="glyphicon glyphicon-question-sign"></i></a>
                   {% else %}
                     <div>Hi,<span class="name">{{ isBinded.name|default("")}}</span></div>
                     <hr style="margin: 10px 0">
-                    <div>ES云平台账户名: {{isBinded.email|default('') }}</div>
+                    <div>{{'ES云平台账户名:'|trans}} {{isBinded.email|default('') }}</div>
                   {% endif %}
                 </div>
               </div>
@@ -74,7 +74,7 @@
 
 
           <div class="page-header clearfix">
-            <h1 class="pull-left">产品与服务</h1>
+            <h1 class="pull-left">{{'产品与服务'|trans}}</h1>
           </div>
 
             <!--服务动态内容 --> 

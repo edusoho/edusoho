@@ -11,24 +11,24 @@
   <fieldset>
     <div class="form-group">
       <div class="col-md-5 control-label">
-        <label >同一IP，5分钟内最多发帖次数（包含回复数）</label>
-        <label style="display:none" for="thread-post-num-for-ip">发帖次数</label>
+        <label >{{'同一IP，5分钟内最多发帖次数（包含回复数）'|trans}}</label>
+        <label style="display:none" for="thread-post-num-for-ip">{{'发帖次数'|trans}}</label>
       </div>
       <div class="controls col-md-6">
         <input type="hidden" name="setting[rules][thread][fiveMuniteRule][interval]" class="form-control" value="300">
         <input id="thread-post-num-for-ip" type="text" name="setting[rules][thread][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.thread.fiveMuniteRule.postNum|default('')}}">
-        <div class="help-block" style="">发帖次数必须大于或者等于0的整数，0表示不限制</div>
+        <div class="help-block" style="">{{'发帖次数必须大于或者等于0的整数，0表示不限制'|trans}}</div>
       </div>
     </div>
     <div class="form-group">
       <div class="col-md-5 control-label">
-        <label>同一用户，5分钟内最多发帖次数（包含回复数）</label>
-        <label style="display:none" for="thread-post-num-for-user">发帖次数</label>
+        <label>{{'同一用户，5分钟内最多发帖次数（包含回复数）'|trans}}</label>
+        <label style="display:none" for="thread-post-num-for-user">{{'发帖次数'|trans}}</label>
       </div>
       <div class="controls col-md-6">
         <input type="hidden" name="setting[rules][threadLoginedUser][fiveMuniteRule][interval]" class="form-control" value="300">
         <input id="thread-post-num-for-user" type="text" name="setting[rules][threadLoginedUser][fiveMuniteRule][postNum]" class="form-control" value="{{setting('post_num_rules').rules.threadLoginedUser.fiveMuniteRule.postNum|default('')}}">
-        <div class="help-block" style="">发帖次数必须大于或者等于0的整数，0表示不限制</div>
+        <div class="help-block" style="">{{'发帖次数必须大于或者等于0的整数，0表示不限制'|trans}}</div>
       </div>
     </div>
   </fieldset>
@@ -36,7 +36,7 @@
   <div class="form-group">
     <div class="col-md-4 control-label"></div>
     <div class="controls col-md-8">
-      <button type="submit" class="btn btn-primary">提交</button>
+      <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
     </div>
   </div>
 

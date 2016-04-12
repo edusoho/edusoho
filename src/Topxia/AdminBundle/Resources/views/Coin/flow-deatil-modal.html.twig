@@ -2,23 +2,23 @@
 
 {% set modal_class = 'modal-lg' %}
 
-{% block title %}{{user.nickname}}的{{ setting('coin.coin_name') }}明细 {% endblock %}
+{% block title %}{{'%nickname%的%coin_name%明细'|trans({'%nickname%': user.nickname,'%coin_name%': setting('coin.coin_name') })}} {% endblock %}
 {% block body %}
 
   <p>
-    <span>账户余额: <strong class="amount-num">{{userAccount(user.id).cash}}</strong> {{ setting('coin.coin_name') }}</span>
-    <span class="mll">充值: <strong class="inflow-num">{{userInCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
-    <span class="mll">消费: <strong class="outflow-num">{{userOutCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span>{{'账户余额:'|trans}} <strong class="amount-num">{{userAccount(user.id).cash}}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'充值:'|trans}} <strong class="inflow-num">{{userInCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
+    <span class="mll">{{'消费:'|trans}} <strong class="outflow-num">{{userOutCash(user.id,timeType)|default("0.00") }}</strong> {{ setting('coin.coin_name') }}</span>
   </p>
 
     <div class="table-responsive">
       <table class="table table-striped">
         {% if cashes|default(null) %}
         <tr>
-          <th>名称</th>          
-          <th>充值</th>
-          <th>消费</th>
-          <th>创建时间</th>  
+          <th>{{'名称'|trans}}</th>          
+          <th>{{'充值'|trans}}</th>
+          <th>{{'消费'|trans}}</th>
+          <th>{{'创建时间'|trans}}</th>  
         </tr>
         {% for cash in cashes %}
            <tr>
@@ -40,7 +40,7 @@
           </tr>
         {% endfor %}
         {% else %}
-        <div class="empty">暂无记录</div>
+        <div class="empty">{{'暂无记录'|trans}}</div>
         {% endif %}
       </table>
     </div>
@@ -49,5 +49,5 @@
 
 {% block footer %}
 
-  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">关闭</button>
+  <button type="button" class="btn btn-default pull-right" data-dismiss="modal">{{'关闭'|trans}}</button>
 {% endblock %}

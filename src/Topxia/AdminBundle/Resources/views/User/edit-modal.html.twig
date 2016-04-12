@@ -2,14 +2,14 @@
 
 {% set modalSize = 'large' %}
 
-{% block title %}编辑用户信息{% endblock %}
+{% block title %}{{'编辑用户信息'|trans}}{% endblock %}
 {% block body %}
 
 <form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_edit', {id:user.id}) }}">
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="truename">姓名</label>
+      <label for="truename">{{'姓名'|trans}}</label>
     </div>
     <div class="col-md-7 controls">
       <input type="text" id="truename" name="truename" class="form-control" value="{{profile.truename}}" >
@@ -18,17 +18,17 @@
 
   <div class="row form-group">
     <div class="col-md-2 control-label">
-      <label for="gender">性别</label>
+      <label for="gender">{{'性别'|trans}}</label>
     </div>
     <div class="col-md-7 controls radios">
       <div id="gender">
         <input type="radio" id="gender_0" name="gender" value="male"
         {% if profile.gender == 'male' %} checked="checked" {% endif %}>
-        <label for="gender_0">男</label>
+        <label for="gender_0">{{'男'|trans}}</label>
 
         <input type="radio" id="gender_1" name="gender" value="female"
         {% if profile.gender == 'female' %} checked="checked" {% endif %}>
-        <label for="gender_1">女</label>
+        <label for="gender_1">{{'女'|trans}}</label>
       </div>
 
     </div>
@@ -36,7 +36,7 @@
 
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="idcard">身份证号</label>
+        <label for="idcard">{{'身份证号'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="idcard" name="idcard" class="form-control" value="{{profile.idcard}}">
@@ -46,16 +46,16 @@
     {% if (user.verifiedMobile|length) > 0 %}
       <div class="row form-group">
         <div class="col-md-2 control-label"> 
-          <label for="mobile">手机号码</label>
+          <label for="mobile">{{'手机号码'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
-          <div class="control-text"> {{user.verifiedMobile|default('')}}<span class="text-success">(已绑定)</span> </div>
+          <div class="control-text"> {{user.verifiedMobile|default('')}}<span class="text-success">({{'已绑定'|trans}})</span> </div>
        </div>
       </div>
     {% else %}
       <div class="row form-group">
         <div class="col-md-2 control-label"> 
-          <label for="mobile">手机号码</label>
+          <label for="mobile">{{'手机号码'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
           <input type="text" id="mobile" name="mobile" class="form-control" value="{{profile.mobile|default('')}}">
@@ -65,7 +65,7 @@
 
     <div class="row form-group">
         <div class="col-md-2 control-label"> 
-          <label for="company">公司</label>
+          <label for="company">{{'公司'|trans}}</label>
         </div>
         <div class="col-md-7 controls">
           <input type="text" id="company" name="company" class="form-control" value="{{profile.company}}">
@@ -74,7 +74,7 @@
     
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="job">职业</label>
+        <label for="job">{{'职业'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="job" name="job" class="form-control" value="{{profile.job}}">
@@ -84,7 +84,7 @@
     <p></p>
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="title">头衔</label>
+        <label for="title">{{'头衔'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="title" name="title" class="form-control" value="{{profile.title}}">
@@ -93,7 +93,7 @@
     <p></p>
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="signature">个人签名</label>
+        <label for="signature">{{'个人签名'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <textarea type="text" rows="4" maxlength="80" id="signature" name="signature" class="form-control">{{profile.signature}}</textarea>
@@ -102,7 +102,7 @@
     <p></p>
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="about">自我介绍</label>
+        <label for="about">{{'自我介绍'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <textarea id="about" name="about" data-image-upload-url="{{ path('editor_upload', {token:upload_token('default')}) }}">{{profile.about}}</textarea>
@@ -111,7 +111,7 @@
     <p></p>
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="site">个人主页</label>
+        <label for="site">{{'个人主页'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="site" name="site" class="form-control" value="{{profile.site}}">
@@ -120,7 +120,7 @@
     <p></p>
   <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="weibo">微博</label>
+        <label for="weibo">{{'微博'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="weibo" name="weibo" class="form-control" value="{{profile.weibo}}">
@@ -138,7 +138,7 @@
     <p></p>
     <div class="row form-group">
       <div class="col-md-2 control-label"> 
-        <label for="weixin">微信</label>
+        <label for="weixin">{{'微信'|trans}}</label>
       </div>
       <div class="col-md-7 controls">
         <input type="text" id="weixin" name="weixin" class="form-control" value="{{profile.weixin}}">
@@ -162,7 +162,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" placeholder="最大值为9位整数" name="{{field.fieldName}}" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder="{{'最大值为9位整数'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control"  value="{{ profile[field.fieldName]|default('') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
@@ -170,7 +170,7 @@
           <div class="form-group">
             <label for="{{field.fieldName}}" class="col-md-2 control-label">{{field.title}}</label>
             <div class="col-md-7 controls">
-              <input type="text" id="{{field.fieldName}}" placeholder="保留到2位小数" name="{{field.fieldName}}" class="{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
+              <input type="text" id="{{field.fieldName}}" placeholder="{{'保留到2位小数'|trans}}" name="{{field.fieldName}}" class="{{field.type}} form-control" value="{{ profile[field.fieldName]|default('') }}">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
@@ -198,7 +198,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
-  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <button id="edit-user-btn" data-submiting-text="{{'正在提交'|trans}}" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">{{'保存'|trans}}</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">{{'取消'|trans}}</button>
   <script>app.load('user/edit-modal')</script>
 {% endblock %}

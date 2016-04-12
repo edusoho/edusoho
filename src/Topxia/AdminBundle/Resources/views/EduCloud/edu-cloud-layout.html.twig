@@ -7,11 +7,11 @@
     {% block sidebar %}
       <div class="panel panel-default">
         <div class="list-group">
-          <a href="{{ path('admin_edu_cloud') }}" class="list-group-item {% if menu == 'overview' %}active{% endif %}">概览</a>
+          <a href="{{ path('admin_edu_cloud') }}" class="list-group-item {% if menu == 'overview' %}active{% endif %}">{{'概览'|trans}}</a>
         </div>
 
         <div class="list-group">
-          <a href="{{ path('admin_edu_cloud_sms') }}" class="list-group-item {% if menu == 'sms' %}active{% endif %}">云短信</a>
+          <a href="{{ path('admin_edu_cloud_sms') }}" class="list-group-item {% if menu == 'sms' %}active{% endif %}">{{'云短信'|trans}}</a>
         </div>
       </div>
     {% endblock %}

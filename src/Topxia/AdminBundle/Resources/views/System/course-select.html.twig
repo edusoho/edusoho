@@ -81,7 +81,7 @@
 
   <fieldset>
 
-    <div class="help-block">所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。<br>
+    <div class="help-block">{{'所选择的课程将会在客户端【每周精选】栏目中显示，最多选择三门。'|trans}}<br>
     </div>
     <div class="form-group">
       <input type='hidden' name="courseIds" value="{{mobile.courseIds}}"/>
@@ -106,7 +106,7 @@
 
   <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
 
-  <button type="submit" class="btn btn-primary">提交</button>
+  <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
   
 </form>
 
@@ -114,7 +114,7 @@
 <div class="well" style="text-align:center;">
 
 
-移动端未开启，请先在<a href="{{ path('admin_setting_mobile') }}"> 系统-课程设置-移动端设置 </a>中设置开启
+{{'移动端未开启'|trans}}，{{'请先在'|trans}}<a href="{{ path('admin_setting_mobile') }}"> {{'系统-课程设置-移动端设置'|trans}} </a>{{'中设置开启'|trans}}
 
 </div>
 {% endif %}
