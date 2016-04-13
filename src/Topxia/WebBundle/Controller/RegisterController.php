@@ -16,19 +16,17 @@ class RegisterController extends BaseController
         $user   = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
         }
 
         $registerEnable = $this->getAuthService()->isRegisterEnabled();
 
         if (!$registerEnable) {
-            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->getTargetPath($request));
         }
 
         if ($request->getMethod() == 'POST') {
             $registration = $request->request->all();
-
-// $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
