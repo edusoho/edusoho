@@ -20,7 +20,7 @@
             <span class="status label label-info">等待转码</span>
           {% endif %}
         {% endif %}
-          {% if uploadFile.usedCount|default(0) == 0 %}
+          {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and uploadFile.usedCount|default(0) == 0 %}
             <span class="label label-default">未使用</span>
           {% endif %}
         </p>
