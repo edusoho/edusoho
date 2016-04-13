@@ -9,15 +9,13 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 {
     public function getFile($file)
     {
-
     }
 
     public function updateFile($globalId, $fields)
     {
-
     }
 
-    public function findFiles($file,$conditions)
+    public function findFiles($file, $conditions)
     {
     }
 
@@ -41,19 +39,17 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function deleteFile($file)
     {
-      $filename = $this->getFileFullPath($file);
-      @unlink($filename);
-      return true;
+        $filename = $this->getFileFullPath($file);
+        @unlink($filename);
+        return array('success' => true);
     }
 
     public function search($conditions)
     {
-
     }
 
     public function synData($conditions)
     {
-
     }
 
     public function initUpload($params)

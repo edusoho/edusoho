@@ -62,12 +62,16 @@ class CloudFileController extends BaseController
             }
 
             $cloudFile = $this->getCloudFileService()->get($globalId);
+        } catch (\RuntimeException $e) {
+            return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
+        }
 
+        try {
             if ($cloudFile['type'] == 'video') {
                 $thumbnails = $this->getCloudFileService()->getDefaultHumbnails($globalId);
             }
         } catch (\RuntimeException $e) {
-            return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
+            $thumbnails = array();
         }
 
         return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
@@ -77,7 +81,7 @@ class CloudFileController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $globalId)
+    public function editAction(Request $request, $globalId, $fields)
     {
         $fields = $request->request->all();
 
@@ -94,9 +98,9 @@ class CloudFileController extends BaseController
 
     public function reconvertAction(Request $request, $globalId)
     {
-        return $this->getCloudFileService()->reconvert($globalId, array(
+        return $this->createJsonResponse($this->getCloudFileService()->reconvert($globalId, array(
             'directives' => array()
-        ));
+        )));
     }
 
     public function downloadAction($globalId)
