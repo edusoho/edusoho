@@ -1168,6 +1168,10 @@ a {
   line-height: 55px;
 }
 
+.ui-course .ui-list-lesson .ui-list-info h4 {
+  padding-right: 44px;
+}
+
 .ui-course .ui-list-lesson .ui-list-info {
   padding-left: 32px;
   line-height: 55px;
