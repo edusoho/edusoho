@@ -32,7 +32,7 @@ class CloudAPIFactory
             $api = new EventCloudAPI(array(
                 'accessKey' => empty($storage['cloud_access_key']) ? '' : $storage['cloud_access_key'],
                 'secretKey' => empty($storage['cloud_secret_key']) ? '' : $storage['cloud_secret_key'],
-                'apiUrl'    => empty($storage['cloud_api_event_server']) ? '' : $storage['cloud_api_event_server'],
+                'apiUrl'    => empty($storage['cloud_api_event_server']) ? 'http://event.edusoho.net' : $storage['cloud_api_event_server'],
                 'debug'     => empty($developer['debug']) ? false : true
             ));
             $api->setLogger($logger);
