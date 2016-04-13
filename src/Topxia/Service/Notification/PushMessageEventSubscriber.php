@@ -412,6 +412,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $converted['target'] = $this->getTarget($thread['targetType'], $thread['targetId']);
         $converted['relationId'] = $thread['relationId'];
         $converted['type'] = empty($thread['type']) ? 'none' : $thread['type'];
+        $converted['userId'] = empty($thread['userId']) ? 0 : $thread['userId'];
         $converted['title'] = $thread['title'];
         $converted['content'] = $this->convertHtml($thread['content']);
         $converted['postNum'] = $thread['postNum'];
@@ -428,19 +429,19 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     public function onThreadPostCreate(ServiceEvent $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread.post.create', $this->convertThreadPost($threadPost, $event->getName()));
+        $this->pushCloud('thread_post.create', $this->convertThreadPost($threadPost, $event->getName()));
     }
 
     public function onThreadPostUpdate(ServiceEvent $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread.post.update', $this->convertThreadPost($threadPost, $event->getName()));
+        $this->pushCloud('thread_post.update', $this->convertThreadPost($threadPost, $event->getName()));
     }
 
     public function onThreadPostDelete(ServiceEvent $event)
     {
         $threadPost = $event->getSubject();
-        $this->pushCloud('thread.post.delete', $this->convertThreadPost($threadPost, $event->getName()));
+        $this->pushCloud('thread_post.delete', $this->convertThreadPost($threadPost, $event->getName()));
     }
 
     protected function convertThreadPost($threadPost, $eventName)
