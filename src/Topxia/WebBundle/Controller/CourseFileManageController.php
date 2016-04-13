@@ -5,7 +5,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseFileManageController extends BaseController
@@ -44,12 +43,7 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2'] = json_decode($file['metas2'], true) ?: array();
-
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
-            $useNum = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-
+            $useNum            = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
             $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
 
             if ($files[$key]['targetType'] == 'coursematerial') {
@@ -65,16 +59,12 @@ class CourseFileManageController extends BaseController
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
             'type'           => $type,
             'course'         => $course,
-            'courseLessons'  => $files,
+            'files'          => $files,
             'users'          => ArrayToolkit::index($users, 'id'),
             'paginator'      => $paginator,
             'now'            => time(),
             'storageSetting' => $storageSetting
         ));
-    }
-
-    public function uploadAction(Request $request, $id)
-    {
     }
 
     public function fileStatusAction(Request $request)
@@ -93,6 +83,7 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
+        //TODO: 转码类型（流畅，高清，超清）
         return $this->createJsonResponse($this->getUploadFileService2()->findFiles($fileIds));
     }
 

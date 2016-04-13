@@ -10,7 +10,7 @@ class GlobalFilePlayerController extends BaseController
 {
     public function playerAction(Request $request, $globalId)
     {
-        $file = $this->getMaterialLibService()->get($globalId);
+        $file = $this->getMaterialLibService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -115,7 +115,7 @@ class GlobalFilePlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getMaterialLibService()->get($globalId);
+        $file = $this->getMaterialLibService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -176,7 +176,7 @@ class GlobalFilePlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getMaterialLibService()->get($globalId);
+        $file = $this->getMaterialLibService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -237,7 +237,7 @@ class GlobalFilePlayerController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $file = $this->getMaterialLibService()->get($globalId);
+        $file = $this->getMaterialLibService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             return $this->makeFakeTokenString();

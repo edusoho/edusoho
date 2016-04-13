@@ -2,7 +2,6 @@
 
 namespace MaterialLib\Service\MaterialLib\Impl;
 
-use Topxia\Common\ArrayToolkit;
 use MaterialLib\Service\BaseService;
 use MaterialLib\Service\MaterialLib\Permission;
 use Topxia\Service\Common\AccessDeniedException;
@@ -14,6 +13,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         //$this->checkPermission(Permission::VIEW, array('id' => $id));
         return $this->getUploadFileService()->getFile($id);
+    }
+
+    public function getByGlobalId($globalId)
+    {
+        return $this->getCloudFileService()->get($globalId);
     }
 
     public function player($globalId)
@@ -57,6 +61,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
             $this->getUploadFileService()->edit($id, $fields);
         }
+
         return array('success' => true);
     }
 

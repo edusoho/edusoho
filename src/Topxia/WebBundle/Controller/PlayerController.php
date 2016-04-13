@@ -277,7 +277,7 @@ class PlayerController extends BaseController
                 }
 
                 if ($key) {
-                    $result = $client->generateFileUrl($client->getBucket(), $key, 3600);
+                    $result = $this->getMaterialLibService()->player($file['globalId']);
                 }
             }
 
@@ -360,5 +360,10 @@ class PlayerController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }
