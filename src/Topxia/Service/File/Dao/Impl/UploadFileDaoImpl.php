@@ -157,6 +157,12 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAssoc($sql, array($targetType));
     }
 
+    public function getHeadLeaderFiles()
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE targetType = 'headLeader'";
+        return $this->getConnection()->fetchAll($sql, array());
+    }
+
     protected function createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
