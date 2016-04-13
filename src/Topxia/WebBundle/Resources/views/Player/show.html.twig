@@ -28,7 +28,11 @@
           data-fingerprint="{{ finger_print() }}"
           data-fingerprint-src="{{ url('cloud_video_fingerprint', {userId:app.user.id}) }}"
         {% endif %}
+        {% if file.storage == 'cloud' %}
           class="ballon-video-player"
+        {% elseif file.storage == 'local' %}
+          class="local-video-player"
+        {% endif %}
           data-timelimit="{{ context.watchTimeLimit|default('')}}"
           data-markerurl="{{ context.markerUrl|default('')}}"
           data-starttime="{{ context.starttime|default('')}}"
