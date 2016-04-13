@@ -196,13 +196,19 @@
   margin-right: 10px;
 }
 
-.materials-ul li.img-li img {
-  cursor: pointer;
+.materials-ul li.img-li .img-link  {
   height: 103px;
+  background-color: #313131;
   overflow: hidden;
+  text-align: center;
 }
 
-.materials-ul li.img-li img.disable {
+.materials-ul li.img-li .img-link img {
+  cursor: pointer;
+  height: 100%;
+}
+
+.materials-ul li.img-li .img-link img.disable {
   cursor: default;
 }
 
