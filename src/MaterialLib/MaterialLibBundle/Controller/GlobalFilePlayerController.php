@@ -29,6 +29,7 @@ class GlobalFilePlayerController extends BaseController
                 'file' => $file
             ));
         } elseif ($file["type"] == 'image') {
+            $file = $this->getMaterialLibService()->download($file['id']);
             return $this->render('MaterialLibBundle:Player:image-player.html.twig', array(
                 'file' => $file
             ));
