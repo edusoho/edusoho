@@ -346,7 +346,7 @@ class CourseLessonManageController extends BaseController
 
         $mediaIds = array_keys($mediaMap);
 
-        if (!empty($mediIds)) {
+        if (!empty($mediaIds)) {
             $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
 
             foreach ($files['data'] as $file) {
