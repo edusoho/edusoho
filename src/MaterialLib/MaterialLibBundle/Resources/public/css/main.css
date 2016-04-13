@@ -230,13 +230,15 @@
 }
 
 .materials-ul li.img-li:hover .option-vertical i{
-  filter:alpha(opacity=100);  /*支持 IE 浏览器*/
-  -moz-opacity:1; /*支持 FireFox 浏览器*/
-  opacity:1;  
+  filter:alpha(opacity=60);  /*支持 IE 浏览器*/
+  -moz-opacity:0.6; /*支持 FireFox 浏览器*/
+  opacity:0.6;  
 }
 
 .materials-ul li.img-li:hover .option-vertical i:hover {
-  color: #fff;
+  filter:alpha(opacity=100);  /*支持 IE 浏览器*/
+  -moz-opacity:1; /*支持 FireFox 浏览器*/
+  opacity:1; 
 }
 
 
