@@ -21,13 +21,14 @@ class Courses extends BaseResource
             $courses = $this->getCourseService()->searchCourses($conditions, array('updatedTime', 'ASC'), $start, $limit);
             $courses = $this->assemblyCourses($courses);
             $next = $this->nextCursorPaging($conditions['cursor'], $start, $limit, $courses);
+
             return $this->wrap($this->filter($courses), $next);
         } else {
             $total = $this->getCourseService()->searchCourseCount($conditions);
-            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime','DESC'), $start, $limit);
+            $courses = $this->getCourseService()->searchCourses($conditions, array('createdTime', 'DESC'), $start, $limit);
+
             return $this->wrap($this->filter($courses), $total);
         }
-
     }
 
     public function discoveryColumn(Application $app, Request $request)
@@ -37,27 +38,24 @@ class Courses extends BaseResource
 
         if ($result['orderType'] == 'hot') {
             $orderBy = 'hitNum';
-        }
-        elseif ($result['orderType'] == 'recommend') {
+        } elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
-        }
-        else {
+        } else {
             $orderBy = 'createdTime';
         }
 
         if ($result['type'] == 'live') {
             $conditions['type'] = 'live';
-        }
-        else {
+        } else {
             $conditions['type'] = 'normal';
         }
         if (empty($result['showCount'])) {
             $result['showCount'] = 6;
         }
-        
+
         $conditions['status'] = 'published';
         $total = $this->getCourseService()->searchCourseCount($conditions);
-        $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
+        $courses = $this->getCourseService()->searchCourses($conditions, $orderBy, 0, $result['showCount']);
         $courses = $this->filter($courses);
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
@@ -65,13 +63,13 @@ class Courses extends BaseResource
             $userIds = $courses[$key]['teacherIds'];
             $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
             $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
-        }   
+        }
+
         return $this->wrap($courses, min($result['showCount'], $total));
     }
 
     public function post(Application $app, Request $request)
     {
-        
     }
 
     protected function assemblyCourses(&$courses)
@@ -94,7 +92,7 @@ class Courses extends BaseResource
             foreach ($course['tags'] as $tagId) {
                 if (empty($tags[$tagId])) {
                     continue;
-                } 
+                }
                 $courseTags[] = array(
                     'id' => $tagId,
                     'name' => $tags[$tagId]['name'],
@@ -120,14 +118,6 @@ class Courses extends BaseResource
     public function filter($res)
     {
         return $this->multicallFilter('Course', $res);
-    }
-
-    protected function multicallFilter($name, &$res)
-    {
-        foreach ($res as &$one) {
-            $this->callFilter($name, $one);
-        }
-        return $res;
     }
 
     protected function getCourseService()
