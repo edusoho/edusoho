@@ -21,7 +21,7 @@ define(function(require, exports, module) {
         getProcess: function() {
             var quality = {
                 videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
-                audioQuality: $('.video-quality-switcher').find('input[name=audio_quality]:checked').val()
+                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val()
             };
             return quality;
         },

@@ -14,7 +14,7 @@ define(function(require, exports, module) {
         esuploader.on('preupload', function(file){
             var quality = {
                 videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
-                audioQuality: $('.video-quality-switcher').find('input[name=audio_quality]:checked').val()
+                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val()
             };
             esuploader.set('process', quality);
         });
