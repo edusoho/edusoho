@@ -13889,7 +13889,7 @@ textarea {
   margin-bottom: 10px;
 }
 .material-collection {
-  color: #ff4400;
+  color: #ff8a0c;
 }
 .tags-container {
   padding-left: 70px;
@@ -13904,6 +13904,7 @@ textarea {
   position: absolute;
   left: 8px;
   top: 4px;
+  z-index: 101;
 }
 .materials-type {
   margin-bottom: 25px!important;
