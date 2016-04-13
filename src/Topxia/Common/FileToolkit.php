@@ -883,7 +883,7 @@ class FileToolkit
             return 'audio';
         } elseif (in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'bmp'))) {
             return 'image';
-        } elseif (in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt', 'txt'))) {
+        } elseif (in_array($extension, array('doc', 'docx', 'pdf', 'xls', 'xlsx', 'wps', 'odt'))) {
             return 'document';
         } elseif (in_array($extension, array('ppt', 'pptx'))) {
             return 'ppt';
