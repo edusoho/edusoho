@@ -190,7 +190,9 @@ define(function(require, exports, module) {
             };
 
             var paramsDefault = {
-                'video' : {videoQuality: 'normal', audioQuality: 'normal'},
+                'video' : {
+                    videoQuality: 'normal', audioQuality: 'normal'
+                },
                 'document' : {},
                 'ppt' : {},
                 'audio' : {}
@@ -198,10 +200,14 @@ define(function(require, exports, module) {
 
             var params = {};
             var extOutput = extOutputs[file.ext];
-            if ((this.get('process') == 'auto') && extOutput) {
-                params = paramsDefault[extOutput];
-                params.output = extOutput;
+            if(extOutput){
+                if ((this.get('process') == 'auto')) {
+                    params = paramsDefault[extOutput];
+                } else {
+                    params = this.get('process');
+                }
             }
+            params.output = extOutput;
 
             return params;
         },
@@ -225,8 +231,9 @@ define(function(require, exports, module) {
             }, {
                 preupload: function(file) {
                     var deferred = WebUploader.Deferred();
-
+                    file.uploaderWidget.trigger('preupload', file);
                     file.uploaderWidget._makeFileHash(file).done(function(hash) {
+
                         file.hash = hash;
                         var params = {
                             fileName: file.name,
