@@ -17,7 +17,7 @@
           {% elseif uploadFile.convertStatus == 'doing' %}
             <span class="status label label-info">转码中</span>
           {% elseif uploadFile.convertStatus == 'waiting' %}
-            <span class="status label label-info">等待转码</span>
+            <span class="status label label-info">转码中</span>
           {% endif %}
         {% endif %}
           {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and uploadFile.usedCount|default(0) == 0 %}
