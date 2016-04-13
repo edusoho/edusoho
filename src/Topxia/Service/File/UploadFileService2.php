@@ -12,8 +12,6 @@ interface UploadFileService2
 
     public function getFileByGlobalId($globalId);
 
-    public function findFilesByIds(array $ids);
-
     public function findCloudFilesByIds($fileIds);
 
     public function searchFiles($conditions, $orderBy, $start, $limit);

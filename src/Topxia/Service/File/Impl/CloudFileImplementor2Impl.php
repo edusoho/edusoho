@@ -298,7 +298,6 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $file['metas2']        = array();
         } else {
             if ($file['type'] == 'video') {
-                var_dump($cloudFile);
                 $file['convertParams'] = array(
                     'convertor'    => 'HLSEncryptedVideo',
                     'videoQuality' => $cloudFile['directives']['videoQuality'],
