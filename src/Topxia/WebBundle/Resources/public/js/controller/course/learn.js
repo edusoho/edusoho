@@ -641,8 +641,8 @@ define(function(require, exports, module) {
                             $.get(watermarkUrl, function(watermark) {
                                 var player = new DocumentPlayer({
                                     element: '#lesson-document-content',
-                                    swfFileUrl: response.swfUri,
-                                    pdfFileUrl: response.pdfUri,
+                                    swfFileUrl: response.swf,
+                                    pdfFileUrl: response.pdf,
                                     watermark: {
                                         'xPosition': 'center',
                                         'yPosition': 'center',
@@ -654,8 +654,8 @@ define(function(require, exports, module) {
                         } else {
                             var player = new DocumentPlayer({
                                 element: '#lesson-document-content',
-                                swfFileUrl: response.swfUri,
-                                pdfFileUrl: response.pdfUri
+                                swfFileUrl: response.swf,
+                                pdfFileUrl: response.pdf
                             });
                         }
                     }, 'json');

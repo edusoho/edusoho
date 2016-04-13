@@ -160,6 +160,7 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function(file) {
+                self.trigger('file.uploadStart');
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
@@ -200,7 +201,7 @@ define(function(require, exports, module) {
 
             var params = {};
             var extOutput = extOutputs[file.ext];
-            if(extOutput){
+            if(extOutput == 'video'){
                 if ((this.get('process') == 'auto')) {
                     params = paramsDefault[extOutput];
                 } else {

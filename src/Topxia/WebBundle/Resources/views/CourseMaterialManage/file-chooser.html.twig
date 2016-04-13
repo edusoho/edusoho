@@ -192,42 +192,32 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane" id="file-chooser-upload-pane">
-
-        <div class="file-chooser-uploader">
-          <div class="file-chooser-uploader-label">{{'选择你要上传的文件：'|trans}}</div>
-          <div class="file-chooser-uploader-control">
-            <button
-              id="file-chooser-uploader-btn"
-              type="button"
-              class="btn btn-default btn-sm"
-              data-role="uploader-btn"
-              data-upload-url="{{ path('uploadfile_upload', {targetType:targetType, targetId:targetId}) }}"
-              data-params-url="{{ path('uploadfile_params', {targetType:targetType, targetId:targetId, storage:storageSetting.upload_mode}) }}"
-              {% if storageSetting.upload_mode == 'cloud' %}
-                data-callback="{{ path('uploadfile_cloud_callback', {targetType:targetType, targetId:targetId}) }}"
-              {% endif %}
-              {% if uploadSettings|default(null) %}
-                data-upload-settings="{{ uploadSettings|json_encode }}"
-              {% endif %}
-            >{{'上传'|trans}}</button>
+        {% set token = uploader_token('coursematerial', course.id, 'private') %}
+        <div class="balloon-uploader" id="batch-uploader"
+          data-init-url="{{ path('uploader_init', {token:token}) }}"
+          data-finish-url="{{ path('uploader_finished', {token:token}) }}"
+          data-upload-auth-url = "{{ path('uploader_auth', {token:token}) }}"
+          data-accept="{{ uploader_accept(targetType)|json_encode }}"
+          data-process="{{ uploader_process(targetType) }}"
+        >
+          <div class="balloon-uploader-heading">上传文件</div>
+          <div class="balloon-uploader-body">
+            <div class="balloon-nofile">请将文件拖到这里，或点击添加文件按钮</div>
+            <div class="balloon-filelist">
+              <div class="balloon-filelist-heading">
+                <div class="file-name">文件名</div>
+                <div class="file-size">大小</div>
+                <div class="file-status">状态</div>
+              </div>
+              <ul>
+              </ul>
+            </div>
           </div>
-          <div class="progress" data-role="progress" style="display:none;">
-            <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+          <div class="balloon-uploader-footer">
+            <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>
+            <div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> 开始上传</div>
           </div>
-
-          <div class="alert alert-info">
-            <ul>
-              <li>{{'支持常见文档、图片、音视频、压缩包文件格式。'|trans}}</li>
-              {% if storageSetting.upload_mode == 'cloud' %}
-                {{'<li>文件将上传到<strong>云服务器</strong></li>'|trans|raw}}
-              {% else %}
-                <li>视频将上传到<strong>网站服务器</strong>，如需使用{{ 'EduSoho'|copyright_less }}云视频,点击<a href="http://open.edusoho.com/show/cloud/video" target="_blank">这里</a>了解详情。</li>
-              {% endif %}
-            </ul>
-          </div>
-
         </div>
-
       </div>
       {% if is_plugin_installed('MaterialLib') %}
         <div class="tab-pane" id="file-chooser-browser-pane">

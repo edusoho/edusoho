@@ -10,17 +10,17 @@
         <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">{{ uploadFile.filename }}</p>
 
         <p class="text-overflow">
-        {% if uploadFile.type != 'image' %}
+        {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
           {% if uploadFile.convertStatus == 'error' %}
             <span class="status label label-danger">转码失败</span>
             <button class="reconvert-btn btn btn-xs btn-primary">重新转码</button>
           {% elseif uploadFile.convertStatus == 'doing' %}
             <span class="status label label-info">转码中</span>
           {% elseif uploadFile.convertStatus == 'waiting' %}
-            <span class="status label label-info">等待转码</span>
+            <span class="status label label-info">转码中</span>
           {% endif %}
         {% endif %}
-          {% if uploadFile.usedCount|default(0) == 0 %}
+          {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and uploadFile.usedCount|default(0) == 0 %}
             <span class="label label-default">未使用</span>
           {% endif %}
         </p>
