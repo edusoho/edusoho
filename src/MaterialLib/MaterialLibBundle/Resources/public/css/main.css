@@ -144,7 +144,7 @@
 .materials-ul {
   border: solid 1px #eee;
   padding-left: 0;
-  height: 220px;
+  height: 200px;
   background: #fafafa;
 }
 
@@ -209,9 +209,26 @@
   cursor: pointer;
   position: absolute;
   right: 0;
-  top: 10px;
-  z-index:100;
-  opacity: .6;
+  top: 0;
+  z-index: 100;
+  /* opacity: .6; */
+  color: #fff;
+  width: 100%;
+  padding: 5px 0;
+  text-align: right;
+  background-image: -webkit-linear-gradient(top,rgba(0,0,0,.3),transparent);
+  background-image: linear-gradient(180deg,rgba(0,0,0,.3) 0,transparent);
+  background-repeat: repeat-x;
+  cursor: default;
+}
+
+.materials-ul li.img-li .option-vertical .dropdown-menu{
+  left: auto;
+  right: 0;
+}
+
+.materials-ul li.img-li .option-vertical i {
+  cursor: pointer;
 }
 
 .materials-ul li.img-li:hover .star {

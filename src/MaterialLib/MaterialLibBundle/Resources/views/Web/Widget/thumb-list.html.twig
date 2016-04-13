@@ -24,7 +24,7 @@
             <span class="label label-default">未使用</span>
           {% endif %}
         </p>
-        <p class="text-muted use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>
+        {#<p class="text-muted use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>#}
         <p class="text-muted date">时间：  {{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
       </li>
     </ul>
