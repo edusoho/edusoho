@@ -79,13 +79,13 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function getDefaultHumbnails($globalId)
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
+        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getDefaultHumbnails($globalId);
     }
 
     public function getThumbnail($globalId, $options = array())
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
+        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getThumbnail($globalId, $options);
     }
 
