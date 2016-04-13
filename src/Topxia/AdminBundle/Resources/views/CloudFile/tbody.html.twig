@@ -6,7 +6,7 @@
           <img style="height:100%;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
         </div>
         <div class="">
-          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}" style="margin:0;">{{ material.name }}</p>
+          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.filename }}" style="margin:0;">{{ material.filename }}</p>
           <div>
             <span class="text-sm text-muted">
               {% if createdUser %}
@@ -43,7 +43,7 @@
       {{ dict_text('fileType', material.type) }}
     </td>
     <td class="text-center">
-      {{ material.size|file_size }}
+      {{ material.fileSize|file_size }}
     </td>
     <td class="text-center">
       <span style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>

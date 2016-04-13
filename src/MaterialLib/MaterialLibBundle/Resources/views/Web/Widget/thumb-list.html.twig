@@ -7,7 +7,10 @@
         {% include 'MaterialLibBundle:Web/Widget:thumbnail.html.twig' %}
       </li>
       <li class="caption">
-        <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">{{ uploadFile.filename }}</p>
+        
+        <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">{% if uploadFile.storage == 'cloud' %}
+          <span class="glyphicon glyphicon-cloud"></span>
+        {% endif %}{{ uploadFile.filename }}</p>
 
         <p class="text-overflow">
         {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
