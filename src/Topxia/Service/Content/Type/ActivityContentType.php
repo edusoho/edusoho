@@ -24,7 +24,12 @@ class ActivityContentType extends ContentType
 
 	public function getName()
 	{
-		return '活动';
+		return $this->getKernel()->trans('活动');
 	}
+
+	protected function getKernel()
+	{
+        		return  ServiceKernel::instance();
+   	}
 
 }

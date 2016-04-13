@@ -63,5 +63,9 @@ class QQVideoAlbumParser extends AbstractAlbumParser
     {
         return !! preg_match('/^http\:\/\/v\.qq\.com\/cover\//s', $url);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

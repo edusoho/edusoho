@@ -1276,6 +1276,10 @@ class WebExtension extends \Twig_Extension
         $tail = substr($idcardNum, -2, 2);
         return ($head.'************'.$tail);
     }
+   protected function getServiceKernel(){
+    
+        return  ServiceKernel::instance();
+   }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)
     {

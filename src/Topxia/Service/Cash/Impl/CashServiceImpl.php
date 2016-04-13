@@ -26,11 +26,11 @@ class CashServiceImpl extends BaseService implements CashService
         if(!ArrayToolkit::requireds($outflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
-            throw $this->createServiceException('参数缺失');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失'));
         }
 
         if(!is_numeric($outflow["amount"]) || $outflow["amount"] <= 0) {
-            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+            throw $this->createServiceException($this->getKernel()->trans('金额必须为数字，并且不能小于0'));
         }
 
         $account = $this->getCashAccountService()->getAccountByUserId($outflow["userId"], true);
@@ -60,11 +60,11 @@ class CashServiceImpl extends BaseService implements CashService
         if(!ArrayToolkit::requireds($inflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
-            throw $this->createServiceException('参数缺失');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失'));
         }
 
         if(!is_numeric($inflow["amount"]) || $inflow["amount"] <= 0) {
-            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+            throw $this->createServiceException($this->getKernel()->trans('金额必须为数字，并且不能小于0'));
         }
 
         $account = $this->getCashAccountService()->getAccountByUserId($inflow["userId"]);
@@ -91,11 +91,11 @@ class CashServiceImpl extends BaseService implements CashService
         if(!ArrayToolkit::requireds($inflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
-            throw $this->createServiceException('参数缺失');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失'));
         }
 
         if(!is_numeric($inflow["amount"]) || $inflow["amount"] <= 0) {
-            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+            throw $this->createServiceException($this->getKernel()->trans('金额必须为数字，并且不能小于0'));
         }
 
         $inflow["cashType"] = "RMB";
@@ -113,11 +113,11 @@ class CashServiceImpl extends BaseService implements CashService
         if(!ArrayToolkit::requireds($outflow, array(
             'userId', 'amount', 'name', 'orderSn', 'category', 'note'
         ))){
-            throw $this->createServiceException('参数缺失');
+            throw $this->createServiceException($this->getKernel()->trans('参数缺失'));
         }
 
         if(!is_numeric($outflow["amount"]) || $outflow["amount"] <= 0) {
-            throw $this->createServiceException('金额必须为数字，并且不能小于0');
+            throw $this->createServiceException($this->getKernel()->trans('金额必须为数字，并且不能小于0'));
         }
 
         $outflow["cashType"] = "RMB";

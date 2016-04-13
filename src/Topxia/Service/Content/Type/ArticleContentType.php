@@ -15,7 +15,11 @@ class ArticleContentType extends ContentType
 
 	public function getName()
 	{
-		return '文章';
+		return $this->getKernel()->trans('文章');
 	}
+	protected function getKernel()
+    	{
+        		return ServiceKernel::instance();
+    	}
 
 }

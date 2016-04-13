@@ -83,7 +83,7 @@ class BlockToolkit
         $metas = file_get_contents($metaFilePath);
         $metas = json_decode($metas, true);
         if (empty($metas)) {
-            throw new \RuntimeException($this->getServiceKernel()->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' =>$metaFilePath )));
+            throw new \RuntimeException(ServiceKernel::instance()->trans('插件元信息文件%metaFilePath%格式不符合JSON规范，解析失败，请检查元信息文件格式', array('%metaFilePath%' =>$metaFilePath )));
         }
 
         foreach ($metas as $code => $meta) {

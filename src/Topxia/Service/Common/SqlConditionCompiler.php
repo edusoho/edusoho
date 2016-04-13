@@ -15,7 +15,7 @@ class SqlConditionCompiler
                     break;
                 case 'in':
                     if (!is_array($param)) {
-                        throw \InvalidArgumentException('IN查询的值需为数组.');
+                        throw \InvalidArgumentException($this->getKernel()->trans('IN查询的值需为数组.'));
                     }
                     $marks = str_repeat('?,', count($param) - 1) . '?';
                     $wheres[] = "({$where['field']} IN ({$marks}))";
@@ -37,7 +37,7 @@ class SqlConditionCompiler
                 return "({$where['field']} >= ? AND < ?)";
             case 'in':
                 if (!is_array($param)) {
-                    throw \InvalidArgumentException('IN查询的值需为数组.');
+                    throw \InvalidArgumentException($this->getKernel()->trans('IN查询的值需为数组.'));
                 }
                 $marks = str_repeat('?,', count($param) - 1) . '?';
                 return "({$where['field']} IN ({$marks}))";

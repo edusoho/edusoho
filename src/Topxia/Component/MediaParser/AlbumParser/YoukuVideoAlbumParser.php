@@ -84,5 +84,9 @@ class YoukuVideoAlbumParser extends AbstractAlbumParser
     {
         return !! preg_match('/^http:\/\/www\.youku\.com\/playlist_show\/id_(\d+)/s', $url);
     }
+    protected function getServiceKernel()
+    {
+            return ServiceKernel::instance();
+     }
 
 }

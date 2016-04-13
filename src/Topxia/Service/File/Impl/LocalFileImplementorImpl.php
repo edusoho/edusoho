@@ -21,7 +21,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         $errors = FileToolkit::validateFileExtension($originalFile);
         if ($errors) {
             @unlink($originalFile->getRealPath());
-            throw $this->createServiceException("该文件格式，不允许上传。");
+            throw $this->createServiceException($this->getKernel()->trans('该文件格式，不允许上传。'));
         }
 
         $uploadFile = array();
@@ -64,7 +64,7 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function convertFile($file, $status, $result=null, $callback = null)
     {
-    	throw $this->createServiceException('本地文件暂不支持转换');
+    	throw $this->createServiceException($this->getKernel()->trans('本地文件暂不支持转换'));
     }
 
     public function deleteFile($file)

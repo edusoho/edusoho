@@ -13,12 +13,12 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	{
 		$argument = $material;
 		if (!ArrayToolkit::requireds($material, array('courseId', 'fileId'))) {
-			throw $this->createServiceException('参数缺失，上传失败！');
+			throw $this->createServiceException($this->getKernel()->trans('参数缺失，上传失败！'));
 		}
 
 		$course = $this->getCourseService()->getCourse($material['courseId']);
 		if (empty($course)) {
-			throw $this->createServiceException('课程不存在，上传资料失败！');
+			throw $this->createServiceException($this->getKernel()->trans('课程不存在，上传资料失败！'));
 		}
 
         $fields = array(
@@ -31,7 +31,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
         if (empty($material['fileId'])) {
             if (empty($material['link'])) {
-                throw $this->createServiceException('资料链接地址不能为空，添加资料失败！');
+                throw $this->createServiceException($this->getKernel()->trans('资料链接地址不能为空，添加资料失败！'));
             }
             $fields['fileId'] = 0;
             $fields['link'] = $material['link'];
@@ -40,7 +40,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['fileId'] = (int) $material['fileId'];
     		$file = $this->getUploadFileService()->getFile($material['fileId']);
     		if (empty($file)) {
-    			throw $this->createServiceException('文件不存在，上传资料失败！');
+    			throw $this->createServiceException($this->getKernel()->trans('文件不存在，上传资料失败！'));
     		}
             $fields['link'] = '';
             $fields['title'] = $file['filename'];
@@ -67,7 +67,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 	{
 		$material = $this->getMaterialDao()->getMaterial($materialId);
 		if (empty($material) || $material['courseId'] != $courseId) {
-			throw $this->createNotFoundException('课程资料不存在，删除失败。');
+			throw $this->createNotFoundException($this->getKernel()->trans('课程资料不存在，删除失败。'));
 		}
 		$this->getMaterialDao()->deleteMaterial($materialId);
 		// Decrease the linked file usage count, if there's a linked file used by this material.

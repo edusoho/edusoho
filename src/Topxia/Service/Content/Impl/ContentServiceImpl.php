@@ -49,7 +49,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 	public function createContent($content)
 	{
 		if (empty($content['type'])) {
-			throw $this->createServiceException('参数缺失，创建内容失败！');
+			throw $this->createServiceException($this->getKernel()->trans('参数缺失，创建内容失败！'));
 		}
 
 		$type = ContentTypeFactory::create($content['type']);
@@ -58,7 +58,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 		$content['type'] = $type->getAlias();
 
 		if (empty($content['title'])) {
-			throw $this->createServiceException('内容标题不能为空，创建内容失败！');
+			throw $this->createServiceException($this->getKernel()->trans('内容标题不能为空，创建内容失败！'));
 		}
 
 		$content['userId'] = $this->getCurrentUser()->id;
@@ -77,7 +77,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content = $this->getContent($id);
 
-        $this->getLogService()->info('content', 'create', "创建内容《({$content['title']})》({$content['id']})", $content);
+        $this->getLogService()->info('content', 'create', $this->getKernel()->trans('创建内容《(%contentTitle%)》(%contentId%)', array('%contentTitle%' =>$content['title'], '%contentId%' =>$content['id'] )), $content);
 
 		return $content;
 	}
@@ -86,7 +86,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 	{
 		$content = $this->getContent($id);
 		if (empty($content)) {
-			throw $this->createServiceException('内容不存在，更新失败！');
+			throw $this->createServiceException($this->getKernel()->trans('内容不存在，更新失败！'));
 		}
 
 		$type = ContentTypeFactory::create($content['type']);
@@ -101,7 +101,7 @@ class ContentServiceImpl extends BaseService implements ContentService
 
 		$content = $this->getContent($id);
 
-		$this->getLogService()->info('content', 'update', "内容《({$content['title']})》({$content['id']})更新", $content);
+		$this->getLogService()->info('content', 'update', $this->getKernel()->trans('内容《(%contentTitle%)》(%contentId%)更新', array('%contentTitle%' =>$content['title'], '%contentId%' =>$content['id'] )), $content);
 
 		return $content;
 	}
@@ -109,19 +109,19 @@ class ContentServiceImpl extends BaseService implements ContentService
 	public function trashContent($id)
 	{
 		$this->getContentDao()->updateContent($id, $fields = array('status' => 'trash'));
-		$this->getLogService()->info('content', 'trash', "内容#{$id}移动到回收站");
+		$this->getLogService()->info('content', 'trash', $this->getKernel()->trans('内容#%id%移动到回收站', array('%id%' =>$id )));
 	}
 
 	public function deleteContent($id)
 	{
 		$this->getContentDao()->deleteContent($id);
-		$this->getLogService()->info('content', 'delete', "内容#{$id}永久删除");
+		$this->getLogService()->info('content', 'delete', $this->getKernel()->trans('内容#%id%永久删除', array('%id%' =>$id )));
 	}
 
 	public function publishContent($id)
 	{
 		$this->getContentDao()->updateContent($id, $fields = array('status' => 'published'));
-		$this->getLogService()->info('content', 'publish', "内容#{$id}发布");
+		$this->getLogService()->info('content', 'publish', $this->getKernel()->trans('内容#%id%发布', array('%id%' =>$id )));
 	}
 
 	public function isAliasAvaliable($alias)
