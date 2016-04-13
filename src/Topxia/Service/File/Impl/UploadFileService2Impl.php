@@ -470,17 +470,15 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
     }
 
-    public function reconvertFile($id, $convertCallback)
+    public function reconvertFile($id, $options = array())
     {
-        $file = $this->getFile($id);
+        $file = $this->getThinFile($id);
 
         if (empty($file)) {
             throw $this->createServiceException('file not exist.');
         }
 
-        $convertHash = $this->getFileImplementorByFile($file)->reconvertFile($file, $convertCallback);
-
-        $this->setFileConverting($file['id'], $convertHash);
+        $convertHash = $this->getFileImplementorByStorage($file['storage'])->reconvert($file['globalId'], $options);
 
         return $convertHash;
     }
@@ -540,7 +538,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     protected function _prepareSearchConditions($conditions)
     {
-
         $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
@@ -607,27 +604,30 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $files = $this->getUploadFileTagDao()->findByTagId($conditions['tagId']);
             $ids   = ArrayToolkit::column($files, 'fileId');
 
-            if(isset($conditions['ids'])) {
-              if ($ids) {
-                  $conditions['ids'] = array_intersect($conditions['ids'],$ids);
-                  if(empty($conditions['ids'])) {
+            if (isset($conditions['ids'])) {
+                if ($ids) {
+                    $conditions['ids'] = array_intersect($conditions['ids'], $ids);
+
+                    if (empty($conditions['ids'])) {
+                        $conditions['ids'] = array('-1');
+                    }
+                } else {
                     $conditions['ids'] = array('-1');
-                  }
-              } else {
-                  $conditions['ids'] = array('-1');
-              }
-            }
-            if($conditions['sourceFrom'] == 'favorite' && !isset($conditions['ids'])){
-              $conditions['ids'] = array('-1');
+                }
             }
 
-            if($conditions['sourceFrom'] != 'favorite'){
-              if ($ids) {
-                  $conditions['ids'] = $ids;
-              } else {
-                  $conditions['ids'] = array('-1');
-              }
+            if ($conditions['sourceFrom'] == 'favorite' && !isset($conditions['ids'])) {
+                $conditions['ids'] = array('-1');
             }
+
+            if ($conditions['sourceFrom'] != 'favorite') {
+                if ($ids) {
+                    $conditions['ids'] = $ids;
+                } else {
+                    $conditions['ids'] = array('-1');
+                }
+            }
+
             unset($conditions['tagId']);
         }
 

@@ -55,15 +55,13 @@ class CourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        $storageSetting = $this->getSettingService()->get("storage");
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'           => $type,
-            'course'         => $course,
-            'files'          => $files,
-            'users'          => ArrayToolkit::index($users, 'id'),
-            'paginator'      => $paginator,
-            'now'            => time(),
-            'storageSetting' => $storageSetting
+            'type'      => $type,
+            'course'    => $course,
+            'files'     => $files,
+            'users'     => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now'       => time()
         ));
     }
 
@@ -75,7 +73,7 @@ class CourseFileManageController extends BaseController
             return $this->createJsonResponse(array());
         }
 
-        $fileIds = $request->query->get('ids');
+        $fileIds = $request->request->get('ids');
 
         if (empty($fileIds)) {
             return $this->createJsonResponse(array());
@@ -114,10 +112,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService()->reconvertFile(
-            $file['id'],
-            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-        );
+        $convertHash = $this->getUploadFileService2()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
