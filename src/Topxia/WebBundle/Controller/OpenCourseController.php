@@ -497,6 +497,8 @@ class OpenCourseController extends BaseController
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
 
+            $lesson['mediaConvertStatus'] = $file['convertStatus'];
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
                 $client  = $factory->createClient();

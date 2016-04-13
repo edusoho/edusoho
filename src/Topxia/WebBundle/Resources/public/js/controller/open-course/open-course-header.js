@@ -49,6 +49,7 @@ define(function(require, exports, module) {
             swfobject.removeSWF('lesson-preview-swf-player');
             $ifrimeContent.empty();
             $videoContent.html("");
+            $('.media-unconvert').hide();
 
             $('.lesson-content').hide();
 
@@ -70,7 +71,7 @@ define(function(require, exports, module) {
                         var lessonVideoDiv = $videoContent;
 
                         if ((lesson.mediaConvertStatus == 'waiting') || (lesson.mediaConvertStatus == 'doing')) {
-                            Notify.warning('视频文件正在转换中，稍后完成后即可查看');
+                            $('.media-unconvert').show();
                             return;
                         }
 

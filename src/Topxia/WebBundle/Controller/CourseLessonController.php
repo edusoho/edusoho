@@ -174,9 +174,6 @@ class CourseLessonController extends BaseController
             }
         }
 
-        var_dump($lesson);
-        var_dump($hasVideoWatermarkEmbedded);
-        var_dump($hlsUrl);
         return $this->render('TopxiaWebBundle:CourseLesson:preview-modal.html.twig', array(
             'user'                      => $user,
             'course'                    => $course,
