@@ -59,7 +59,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
@@ -171,6 +171,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
             ->andWhere('parentId IN ( :parentIds )')
             ->andWhere('id NOT IN ( :excludeIds )')
             ->andWhere('id IN ( :courseIds )')
+            ->andWhere('recommended = :recommended')
             ->andWhere('locked = :locked');
 
         if (isset($conditions['tagIds'])) {

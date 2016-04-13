@@ -38,6 +38,9 @@ class Version20160323191830 extends AbstractMigration
                   `userId` int(10) unsigned NOT NULL COMMENT '课程发布人ID',
                   `parentId` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '课程的父Id',
                   `locked` INT(10) NOT NULL DEFAULT '0' COMMENT '是否上锁1上锁,0解锁',
+                  `recommended` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推荐课程',
+                  `recommendedSeq` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐序号',
+                  `recommendedTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推荐时间',
                   `createdTime` int(10) unsigned NOT NULL COMMENT '课程创建时间',
                   `updatedTime` INT UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后更新时间',
                   PRIMARY KEY (`id`)

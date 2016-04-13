@@ -28,6 +28,14 @@
       </a>
       <ul class="dropdown-menu pull-right">
     
+        {% if not course.recommended %}
+          <li><a class="recommend-course" href="#modal" data-toggle="modal" data-url="{{ path('admin_open_course_recommend', {id:course.id, ref:'courseList', filter:filter}) }}"><span class="glyphicon glyphicon-hand-up"></span> 推荐课程</a></li>
+        {% endif %}
+
+        {% if course.recommended %}
+          <li><a class="cancel-recommend-course" href="javascript:" data-url="{{ path('admin_open_course_cancel_recommend', {id:course.id, filter:filter,target:target}) }}"><span class="glyphicon glyphicon-hand-right"></span> 取消推荐</a></li>
+        {% endif %}
+
         {% if course.status == 'published' %}
           <li class="divider"></li>
           <li><a class="close-course" href="javascript:" data-url="{{ path('admin_open_course_close', {id:course.id, filter:filter}) }}" data-user="{{default.user_name|default('学员')}}"><span class="glyphicon glyphicon-ban-circle"></span> 关闭课程</a></li>

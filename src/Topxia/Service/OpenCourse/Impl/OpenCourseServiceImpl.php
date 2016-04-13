@@ -29,6 +29,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareCourseConditions($conditions);
         return $this->getOpenCourseDao()->searchCourses($conditions, $orderBy, $start, $limit);
     }
 
@@ -787,27 +788,30 @@ throw $this->createServiceException('不能收藏未发布课程');
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'         => '',
-            'subtitle'      => '',
-            'about'         => '',
-            'categoryId'    => 0,
-            'tags'          => '',
-            'startTime'     => 0,
-            'endTime'       => 0,
-            'locationId'    => 0,
-            'address'       => '',
-            'locked'        => 0,
-            'hitNum'        => 0,
-            'likeNum'       => 0,
-            'postNum'       => 0,
-            'status'        => 'draft',
-            'lessonNum'     => 0,
-            'smallPicture'  => '',
-            'middlePicture' => '',
-            'largePicture'  => '',
-            'teacherIds'    => '',
-            'studentNum'    => 0,
-            'updateTime'    => time()
+            'title'           => '',
+            'subtitle'        => '',
+            'about'           => '',
+            'categoryId'      => 0,
+            'tags'            => '',
+            'startTime'       => 0,
+            'endTime'         => 0,
+            'locationId'      => 0,
+            'address'         => '',
+            'locked'          => 0,
+            'hitNum'          => 0,
+            'likeNum'         => 0,
+            'postNum'         => 0,
+            'status'          => 'draft',
+            'lessonNum'       => 0,
+            'smallPicture'    => '',
+            'middlePicture'   => '',
+            'largePicture'    => '',
+            'teacherIds'      => '',
+            'recommended'     => 0,
+            'recommendedSeq'  => 0,
+            'recommendedTime' => 0,
+            'studentNum'      => 0,
+            'updateTime'      => time()
         ));
 
         if (!empty($fields['about'])) {
@@ -840,6 +844,38 @@ throw $this->createServiceException('不能收藏未发布课程');
         }
 
         return false;
+    }
+
+    protected function _prepareCourseConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+        );
+
+        if (isset($conditions['creator']) && !empty($conditions['creator'])) {
+            $user                 = $this->getUserService()->getUserByNickname($conditions['creator']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['creator']);
+        }
+
+        if (isset($conditions['categoryId'])) {
+            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            unset($conditions['categoryId']);
+        }
+
+        if (isset($conditions['nickname'])) {
+            $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['nickname']);
+        }
+
+        return $conditions;
     }
 
     private function _getNextLessonNumber($courseId)
@@ -927,5 +963,10 @@ throw $this->createServiceException('不能收藏未发布课程');
     protected function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy.CategoryService');
     }
 }
