@@ -72,7 +72,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         $filesInTags = $this->getUploadFileTagService()->findByTagId($tags);
         $fileIds     = ArrayToolkit::column($filesInTags, 'fileId');
-        $files       = $this->getUploadFileService()->findLocalFilesByIds($fileIds);
+        $files       = $this->getUploadFileService()->findFilesByIds($fileIds);
 
         if (!empty($files)) {
             return ArrayToolkit::column($files, 'globalId');

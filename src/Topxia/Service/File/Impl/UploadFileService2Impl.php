@@ -77,7 +77,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     /**
      * 不走云
      */
-    public function findLocalFilesByIds(array $ids)
+    public function findFilesByIds(array $ids)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
 
