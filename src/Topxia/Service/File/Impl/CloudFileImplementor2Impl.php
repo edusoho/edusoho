@@ -83,16 +83,16 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $api->get("/resources/data/statistics", $options);
     }
 
-    public function findFiles($files)
+    public function findFiles($files,$conditions)
     {
         if (empty($files)) {
             return array();
         }
+        $conditions['nos'] = ArrayToolkit::column($files, 'globalId');
+        $conditions['nos'] = implode(",",array_unique($conditions['nos']));
 
-        $globalIds = ArrayToolkit::column($files, 'globalId');
-        $globalIds = array_unique($globalIds);
         $api       = CloudAPIFactory::create('root');
-        $result    = $api->get("/resources?nos=".join(',', $globalIds));
+        $result    = $api->get("/resources",$conditions);
 
         if (empty($result['data'])) {
             return $files;

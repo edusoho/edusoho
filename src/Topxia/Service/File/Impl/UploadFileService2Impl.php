@@ -110,6 +110,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
+        $filds = array();
+        if(!empty($conditions['processStatus']))
+        {
+          $filds['processStatus'] = $conditions['processStatus'];
+        }
         $conditions = $this->_prepareSearchConditions($conditions);
         $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
 
@@ -120,17 +125,15 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $groupFiles = ArrayToolkit::group($files, 'storage');
 
         if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
-            $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->findFiles($groupFiles['cloud']);
+            $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->findFiles($groupFiles['cloud'],$filds);
 
             $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
-
             foreach ($files as $key => $file) {
                 if ($file['storage'] == 'cloud') {
                     $files[$key] = $cloudFiles[$file['id']];
                 }
             }
         }
-
         return $files;
     }
 
