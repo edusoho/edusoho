@@ -12,15 +12,15 @@ define(function(require, exports, module) {
             uploadAuthUrl: $el.data('uploadAuthUrl')
         });
 
-        var switcher = null;
-        if ($('.quality-switcher').length > 0) {
-            switcher = new VideoQualitySwitcher({
-                element: '.quality-switcher'
-            });
-        }
+        var switcher = new VideoQualitySwitcher({
+            element: '.video-quality-switcher'
+        });
 
         esuploader.on('preupload', function(file){
-            var quality = {videoQuality: switcher.get('videoQuality'), audioQuality: switcher.get('audioQuality')};
+            var quality = {
+                videoQuality: switcher.get('videoQuality'), 
+                audioQuality: switcher.get('audioQuality')
+            };
             esuploader.set('process', quality);
         });
 

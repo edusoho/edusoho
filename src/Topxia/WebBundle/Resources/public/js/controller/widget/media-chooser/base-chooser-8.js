@@ -183,6 +183,12 @@ define(function(require, exports, module) {
                 self.trigger("change", item);
             });
 
+            uploader.on('preupload', function(file){
+                if(self.preUpload){
+                    uploader.set('process', self.preUpload());
+                }
+            });
+
             this.uploader = uploader;
         },
 

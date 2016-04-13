@@ -22,35 +22,8 @@ define(function(require, exports, module) {
                 if (this.qualitySwitcher) {
                     data.videoQuality = this.qualitySwitcher.get('videoQuality');
                     data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                    if (this.element.data('hlsEncrypted')) {
-                        data.convertor = 'HLSEncryptedVideo';
-                    } else {
-                        data.convertor = 'HLSVideo';
-                    }
-                    data.lazyConvert = 1;
                 }
-                var self = this;
-                $.ajax({
-                    url: this.element.data('paramsUrl'),
-                    async: false,
-                    dataType: 'json',
-                    data: data,
-                    cache: false,
-                    success: function(response, status, jqXHR) {
-                        var paramsKey = {};
-                        paramsKey.data=data;
-                        paramsKey.targetType=self.element.data('targetType');
-                        paramsKey.targetId=self.element.data('targetId');
-
-                        response.postParams.paramsKey = JSON.stringify(paramsKey);
-
-                        uploader.setUploadURL(response.url);
-                        uploader.setPostParams(response.postParams);
-                    },
-                    error: function(jqXHR, status, error) {
-                        Notify.danger('请求上传授权码失败！');
-                    }
-                });
+                return data;
             }
     	},
 
