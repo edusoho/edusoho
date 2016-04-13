@@ -98,13 +98,36 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getUploadFileDao()->findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
     }
 
+    public function searchFilesByProcessStatus($conditions, $orderBy, $start, $limit)
+    {
+      $filds = array();
+
+      if (!empty($conditions['processStatus'])) {
+          $filds['processStatus'] = $conditions['processStatus'];
+      }
+
+      $conditions = $this->_prepareSearchConditions($conditions);
+      $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+
+      if (empty($files)) {
+          return array();
+      }
+
+      $groupFiles = ArrayToolkit::group($files, 'storage');
+
+      $filds['nos'] = implode(',',ArrayToolkit::column($groupFiles['cloud'],'globalId'));
+
+      if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
+          $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($filds);
+          $cloudFiles = ArrayToolkit::index($cloudFiles['data'], 'id');
+      }
+
+      return $cloudFiles;
+    }
+
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         $filds = array();
-
-        if (!empty($conditions['processStatus'])) {
-            $filds['processStatus'] = $conditions['processStatus'];
-        }
 
         $conditions = $this->_prepareSearchConditions($conditions);
         $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
@@ -115,6 +138,17 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $groupFiles = ArrayToolkit::group($files, 'storage');
 
+        if (!empty($conditions['processStatus'])) {
+            $filds['processStatus'] = $conditions['processStatus'];
+            $filds['nos'] = implode(',',ArrayToolkit::column($groupFiles['cloud'],'globalId'));
+
+            if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
+                $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($filds);
+                $cloudFiles = ArrayToolkit::index($cloudFiles['data'], 'id');
+            }
+
+            return $cloudFiles;
+        }
         if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
             $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->findFiles($groupFiles['cloud'], $filds);
 
@@ -126,14 +160,32 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 }
             }
         }
-
         return $files;
     }
 
     public function searchFilesCount($conditions)
     {
         $conditions = $this->_prepareSearchConditions($conditions);
-        return $this->getUploadFileDao()->searchFileCount($conditions);
+        $localCount = $this->getUploadFileDao()->searchFileCount($conditions);
+
+        if (empty($localCount)) {
+            return 0;
+        }
+        $files      = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime','DESC'), 0, 9999);
+
+        $groupFiles = ArrayToolkit::group($files, 'storage');
+
+        if (!empty($conditions['processStatus'])) {
+            $filds['processStatus'] = $conditions['processStatus'];
+            $filds['nos'] = implode(',',ArrayToolkit::column($groupFiles['cloud'],'globalId'));
+
+            if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
+                $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($filds);
+            }
+
+            return $cloudFiles['count'];
+        }
+        return $localCount;
     }
 
     public function edit($fileId, $fields)

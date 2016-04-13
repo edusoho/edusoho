@@ -2,13 +2,13 @@
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   <tr>
     <td>
-        <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;overflow:hidden">
-          <img style="height:100%;border-radius:4px;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
+        <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;background:#313131;border-radius:5px;overflow:hidden;">
+          <img style="height:100%;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
         </div>
         <div class="">
           <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}" style="margin:0;">{{ material.name }}</p>
           <div>
-            <span class="text-sm text-muted" style="display:block">
+            <span class="text-sm text-muted">
               {% if createdUser %}
                 {{ createdUser.nickname }} 上传
               {% endif %}
@@ -25,8 +25,7 @@
               <span class="label label-info">{{ dict_text('processStatus', material.processStatus) }}</span>
               {% elseif material.processStatus == 'error' %}
               <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span>
-              <br>
-              <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
+              <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交...">重新转码</a>
               {% else %}
                 {% if material.type != "image" %}
               <span class="label label-default">{{ dict_text('processStatus', material.processStatus) }}</span>
@@ -46,10 +45,10 @@
     <td class="text-center">
       {{ material.size|file_size }}
     </td>
-    <td>
+    <td class="text-center">
       <span style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
     </td>
-    <td class="es-materillib-table">
+    <td class="es-materillib-table text-center">
       <a type="button" class="glyphicon glyphicon-info-sign js-detail-btn mrl" href="javascript:;"data-toggle="tooltip" data-placement="top" title="详细信息" data-url="{{ path('admin_cloud_file_detail', {globalId:material.no}) }}"></a>
       <a class="glyphicon glyphicon-save js-download-btn mrl" href="{{ path('admin_cloud_file_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
       <div class="btn-group">

@@ -8,6 +8,10 @@ textarea {
   resize: none;
 }
 
+li {
+  list-style-type: none;
+}
+
 legend {
   font-size: 16px;
   background: #fafafa;
@@ -517,3 +521,68 @@ margin-top: 14px;
   white-space: nowrap;
   word-wrap: normal;
 }
+
+.materials-group {
+  padding-left: 8px;
+  padding-bottom: 15px;
+  margin: 0;
+  border-bottom:  1px solid #ddd;
+}
+.materials-group.bottom {
+  position: relative;
+  padding-left: 75px;
+  padding-top: 15px;
+}
+.materials-group.bottom  .all {
+  position: absolute;
+  left: 8px;
+  top: 26px;
+}
+
+
+.materials-nav {
+  position: relative;
+  padding-left: 60px;
+  margin: 0;
+  border-bottom:  1px solid #ddd;
+}
+
+.materials-nav li {
+  float: left;
+  margin-bottom: 0;
+}
+.materials-nav li .item{
+  padding: 15px;
+  display: inline-block;
+  color: #555;
+  cursor: pointer;
+  text-decoration: none;
+}
+.materials-nav li .item:hover {
+  color: #428bca;
+  background-color: transparent;
+  border-color: transparent;
+}
+.materials-nav>li.active>.item, 
+.materials-nav>li.active>.item:hover, 
+.materials-nav>li.active>.item:focus {
+  border-color: transparent;;
+}
+
+.materials-nav li.all {
+  position: absolute;
+  left: 8px;
+  top:15px;
+}
+
+.materials-nav.materials-tags {
+
+}
+
+.materials-nav.materials-tags .label{
+  display: inline-block;
+  margin:15px;
+}
+
+
+

@@ -1,14 +1,12 @@
 <input class="batch-item" value="{{uploadFile.id}}" type="checkbox" data-role="batch-item"
       data-link-count="{{ uploadFile.usedCount }}"
       data-file-name="{{ uploadFile.filename }}" style="display:none;">
-{% if uploadFile.type in ['video', 'ppt', 'document'] and uploadFile.convertStatus != "success" %}
+  {% if uploadFile.type in ['video', 'ppt', 'document'] and uploadFile.convertStatus != "success" %}
   <img class="disable" src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
-{% else %}
+  {% else %}
   <a href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >
-    <img src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}">
-  </a>
-{% endif %}
-
+    <img src="{{ asset(uploadFile.thumbnail|default('assets/img/default/cloud_' ~ uploadFile.type ~ '.png')) }}"></a>
+  {% endif %}
 
 <div class="option-vertical">
   <i class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
@@ -16,7 +14,7 @@
   </i>
   <ul class="dropdown-menu">
       <li>
-      <a href="javascript:;"class=" js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}"><i class="glyphicon glyphicon-pencil prm"></i>详情</a>
+      <a href="javascript:;"class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}"><i class="glyphicon glyphicon-pencil prm"></i>详情</a>
       </li>
       <li>
         <a data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" ><i class="glyphicon glyphicon-save prm"></i>下载</a>

@@ -16,6 +16,8 @@ interface UploadFileService2
 
     public function searchFiles($conditions, $orderBy, $start, $limit);
 
+    public function searchFilesByProcessStatus($conditions, $orderBy, $start, $limit);
+
     public function searchFilesCount($conditions);
 
     public function getDownloadFile($id);
