@@ -8647,6 +8647,9 @@ textarea {
   padding-bottom: 20px;
   background: #fff;
 }
+.feature-banner img {
+  margin: 0 auto;
+}
 .aricle-carousel {
   overflow: hidden;
 }
