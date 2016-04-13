@@ -361,6 +361,17 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function editAction(Request $request, $globalId)
+    {
+        $fields = $request->request->all();
+
+        // $result = $this->getCloudFileService()->edit($globalId, $fields);
+        return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
+          'globalId' => $globalId,
+          'fields' => $fields
+        ));
+    }
+
     public function downloadAction($fileId)
     {
         $download = $this->getMaterialLibService()->download($fileId);

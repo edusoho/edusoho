@@ -82,7 +82,7 @@ class CloudFileController extends BaseController
         ));
     }
 
-    public function editAction(Request $request, $globalId)
+    public function editAction(Request $request, $globalId,$fields)
     {
         $fields = $request->request->all();
 

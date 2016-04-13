@@ -828,7 +828,7 @@ admin_cloud_file_detail:
 
 admin_cloud_file_edit:
     pattern:  /cloud_file/{globalId}/edit
-    defaults: { _controller: TopxiaAdminBundle:CloudFile:edit }
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:edit, fields:'' }
     methods: [POST]
 
 admin_cloud_file_play:
