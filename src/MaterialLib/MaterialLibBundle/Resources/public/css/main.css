@@ -223,12 +223,16 @@
 }
 
 .materials-ul li.img-li .option-vertical i {
-  display: none;
+  filter:alpha(opacity=0);  
+  -moz-opacity:0; 
+  opacity:0;  
   cursor: pointer;
 }
 
 .materials-ul li.img-li:hover .option-vertical i{
-  display: inline;
+  filter:alpha(opacity=100);  /*支持 IE 浏览器*/
+  -moz-opacity:1; /*支持 FireFox 浏览器*/
+  opacity:1;  
 }
 
 .materials-ul li.img-li:hover .option-vertical i:hover {
@@ -265,6 +269,7 @@
   background: #000;
   color: #fff;
   font-size: 12px;
+  cursor: default;
 }
 
 .materials-ul li.img-li .mask {
