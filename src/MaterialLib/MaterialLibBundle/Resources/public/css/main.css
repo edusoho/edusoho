@@ -206,14 +206,6 @@
   cursor: default;
 }
 
-.materials-ul li.img-li:hover .option-vertical i{
-  display: block;
-}
-
-.materials-ul li.img-li:hover .option-vertical i:hover {
-  color: #fff;
-}
-
 .materials-ul li.img-li .option-vertical {
   cursor: pointer;
   position: absolute;
@@ -229,17 +221,24 @@
   background-repeat: repeat-x;
   cursor: default;
 }
+
 .materials-ul li.img-li .option-vertical i {
-  display: block;
+  display: none;
+  cursor: pointer;
 }
+
+.materials-ul li.img-li:hover .option-vertical i{
+  display: inline;
+}
+
+.materials-ul li.img-li:hover .option-vertical i:hover {
+  color: #fff;
+}
+
 
 .materials-ul li.img-li .option-vertical .dropdown-menu{
   left: auto;
   right: 0;
-}
-
-.materials-ul li.img-li .option-vertical i {
-  cursor: pointer;
 }
 
 .materials-ul li.img-li:hover .star {
