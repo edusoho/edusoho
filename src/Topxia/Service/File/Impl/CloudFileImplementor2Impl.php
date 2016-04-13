@@ -90,6 +90,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $api->get("/resources/data/statistics", $options);
     }
 
+
+
     public function findFiles($files, $conditions)
     {
         if (empty($files)) {
@@ -267,7 +269,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
         foreach ($cloudFiles as $i => $cloudFile) {
             $localFile       = empty($localFiles[$cloudFile['no']]) ? null : $localFiles[$cloudFile['no']];
-            $mergedFiles[$i] = $this->mergeCloudFile2($localFile, $cloudFile);
+            $mergedFiles[$i] = $this->mergeCloudFile($localFile, $cloudFile);
         }
 
         $result['data'] = $mergedFiles;
@@ -348,6 +350,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
             $cloudFile['isPublic']      = $localFile['isPublic'];
             $cloudFile['usedCount']     = $localFile['usedCount'];
+            $cloudFile['ext']           = $localFile['ext'];
         } else {
             //没有本地文件
             $cloudFile['id'] = 0;
