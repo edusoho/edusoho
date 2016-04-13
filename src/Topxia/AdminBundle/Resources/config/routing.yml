@@ -1336,6 +1336,14 @@ admin_edu_cloud_search_clause:
     pattern: /setting/edu_cloud/search/clause
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
 
+admin_edu_cloud_search_reapply:
+    pattern: /setting/edu_cloud/search/reapply
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchReapply }
+
+admin_edu_cloud_search_open:
+    pattern: /setting/edu_cloud/search/open
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOpen }
+
 admin_edu_cloud_search_close:
     pattern: /setting/edu_cloud/search/close
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClose }
