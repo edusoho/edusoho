@@ -34,15 +34,12 @@ class Courses extends BaseResource
     {
         $result = $request->query->all();
         $conditions['categoryId'] = $result['categoryId'];
-        if ($conditions['categoryId'] == 0) {
-            unset($conditions['categoryId']);
-        }
+
         if ($result['orderType'] == 'hot') {
-            $orderBy = 'studentNum';
+            $orderBy = 'hitNum';
         }
         elseif ($result['orderType'] == 'recommend') {
             $orderBy = 'recommendedSeq';
-            $conditions['recommended'] = 1;
         }
         else {
             $orderBy = 'createdTime';
@@ -58,16 +55,9 @@ class Courses extends BaseResource
             $result['showCount'] = 6;
         }
         
-        $conditions['parentId'] = 0;
         $conditions['status'] = 'published';
-
-        
+        $total = $this->getCourseService()->searchCourseCount($conditions);
         $courses = $this->getCourseService()->searchCourses($conditions,$orderBy,0,$result['showCount']);
-        if ($result['orderType'] == 'recommend' && count($courses)<$result['showCount']) {
-            $conditions['recommended'] = 0;
-            $unrecommendCourses = $this->getCourseService()->searchCourses($conditions,'createdTime',0,$result['showCount']-count($courses));
-            $courses = array_merge($courses, $unrecommendCourses);
-        }
         $courses = $this->filter($courses);
         foreach ($courses as $key => $value) {
             $courses[$key]['createdTime'] = strval(strtotime($value['createdTime']));
@@ -76,7 +66,6 @@ class Courses extends BaseResource
             $courses[$key]['teachers'] = $this->getUserService()->findUsersByIds($userIds);
             $courses[$key]['teachers'] = array_values($this->multicallFilter('User', $courses[$key]['teachers']));
         }   
-        $total = count($courses);
         return $this->wrap($courses, min($result['showCount'], $total));
     }
     public function post(Application $app, Request $request)
