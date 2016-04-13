@@ -31,7 +31,7 @@
           <div class="form-group">
             <label class="col-md-2 control-label">简介</label>
             <div class="col-md-6 controls" style="padding:6px;">
-              {{ material.description }}
+              {{ material.description|default("") }}
             </div>
           </div>
 
