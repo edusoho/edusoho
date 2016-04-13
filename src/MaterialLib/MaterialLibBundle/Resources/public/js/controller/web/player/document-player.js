@@ -11,8 +11,8 @@ define(function(require, exports, module) {
 		$.get(player.data('url'), function(response) {
             var player = new DocumentPlayer({
                 element: '#document-player',
-                swfFileUrl: response.swfUri,
-                pdfFileUrl: response.pdfUri
+                swfFileUrl: response.swf,
+                pdfFileUrl: response.pdf
             });
         }, 'json');
 	}
