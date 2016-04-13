@@ -526,8 +526,11 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $result             = $this->getMaterialLibService()->player($file['globalId']);
-        $result['mediaUri'] = $result['url'];
+        if ($file['storage'] == 'cloud') {
+            $result             = $this->getMaterialLibService()->player($file['globalId']);
+            $result['mediaUri'] = $result['url'];
+        }
+
         return $this->createJsonResponse($result);
     }
 
