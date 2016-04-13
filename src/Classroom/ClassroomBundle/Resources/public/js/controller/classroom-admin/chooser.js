@@ -26,7 +26,7 @@ define(function(require, exports, module) {
         });
 
         $modal.on('hidden.bs.modal', function (e) {
-            if (!$('#choose-course-input').val()) {
+            if (!$('#choose-classroom-input').val()) {
                 $('.radio').button('reset');
             };
         });
