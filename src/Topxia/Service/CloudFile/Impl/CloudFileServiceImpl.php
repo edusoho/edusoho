@@ -72,7 +72,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         $filesInTags = $this->getUploadFileTagService()->findByTagId($tags);
         $fileIds     = ArrayToolkit::column($filesInTags, 'fileId');
-        $files       = $this->getUploadFileService()->findLocalFilesByIds($fileIds);
+        $files       = $this->getUploadFileService()->findFilesByIds($fileIds);
 
         if (!empty($files)) {
             return ArrayToolkit::column($files, 'globalId');
@@ -91,7 +91,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                 $courseIds = array('0');
             }
 
-            $localFiles = $this->getUploadFileService()->findFilesByCourseIds($courseIds);
+            $localFiles = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('courselesson', $courseIds);
             $globalIds  = ArrayToolkit::column($localFiles, 'globalId');
 
             return $globalIds;
@@ -110,30 +110,35 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     public function edit($globalId, $fields)
     {
-        if(empty($globalId)) {
-          return false;
+        if (empty($globalId)) {
+            return false;
         }
+
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
-        if(!empty($file)) {
-          $result = $this->getUploadFileService()->edit($file['id'],$fields);
-          return array('success'=>true);
+
+        if (!empty($file)) {
+            $result = $this->getUploadFileService()->edit($file['id'], $fields);
+            return array('success' => true);
         }
-        $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags','description','endShared'));
+
+        $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'endShared'));
         return $this->getCloudFileImplementor()->updateFile($globalId, $cloudFields);
     }
 
     public function delete($globalId)
     {
-        if(empty($globalId)) {
-          return false;
-        }
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
-        if(!empty($file)) {
-          $result = $this->getUploadFileService()->deleteFile($file['id']);
-          return array('success'=>true);
+        if (empty($globalId)) {
+            return false;
         }
 
-        return $this->getCloudFileImplementor()->deleteFile(array('globalId'=>$globalId));
+        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+
+        if (!empty($file)) {
+            $result = $this->getUploadFileService()->deleteFile($file['id']);
+            return array('success' => true);
+        }
+
+        return $this->getCloudFileImplementor()->deleteFile(array('globalId' => $globalId));
     }
 
     public function get($globalId)

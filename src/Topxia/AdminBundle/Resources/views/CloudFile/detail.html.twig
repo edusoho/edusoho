@@ -15,7 +15,7 @@
     <div class="tab-content">
 
       <div class="tab-pane active" id="info-tab">
-        <form class="form-horizontal" id="info-form" method="post" action="{{ path('admin_cloud_file_edit', {globalId:material.no}) }}">
+        <form class="form-horizontal" id="info-form" method="post" action="{{ path('material_edit', {globalId:material.no}) }}">
           <div class="form-group">
             <label for="name" class="col-md-2 control-label">标题</label>
             <div class="col-md-6">
@@ -69,7 +69,7 @@
                 <img class="js-cover-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
               </div>
 
-
+              {% if material.thumbnail|default(0) %}
                 <div class="col-md-6" id="thumbnail-set">
                   <div class="links" style="padding-left:15px;">
                     <a class="js-set-default disabled" href="#default-thumbnails">默认</a>
@@ -91,15 +91,18 @@
                   </div>
 
                 </div>
+              {% endif %}
             </div>
 
             <input type="hidden" name="thumbNo" id="thumbNo">
             <input type="hidden" id="orignalThumb" value="{{ asset(material.thumbnail) }}">
+            {% if material.thumbnail|default(0) %}
               <div class="col-md-offset-2 col-md-8 controls">
                 <a class="btn btn-fat btn-info js-reset-btn" href="javascript:;">还原</a>
                 <a class="btn btn-fat btn-info js-screenshot-btn pull-right hide" href="javascript:;" data-url="{{ path('material_thumbnail_generate', {globalId:material.no}) }}" data-loading-text="正在生成截图，请稍等...">截图</a>
                 <button class="btn btn-fat btn-primary" id="save-btn" data-loading-text="正在保存..." type="submit">保存</button>
               </div>
+            {% endif %}
           </form>
           {% else %}
             <div class="empty text-muted">

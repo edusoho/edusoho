@@ -262,6 +262,11 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
+    protected function getOldUploadFileService()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
     protected function getTokenService()
     {
         return $this->getServiceKernel()->createService('User.TokenService');
@@ -282,7 +287,7 @@ class HLSController extends BaseController
         $storage = $this->getSettingService()->get("storage");
 
         if (!empty($storage['video_header'])) {
-            $file       = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $file       = $this->getOldUploadFileService()->getFileByTargetType('headLeader');
             $beginnings = json_decode($file['metas2'], true);
             $levels     = array($level);
             $levels     = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));

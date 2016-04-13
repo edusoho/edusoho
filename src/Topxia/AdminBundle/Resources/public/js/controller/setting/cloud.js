@@ -90,7 +90,6 @@ define(function(require, exports, module) {
             });
 
             uploader.on('file.uploaded', function(file, media){
-                console.log(file);
                 if (media) {
                     this.element.find('[data-role=placeholder]').html(media.name);
                     this.element.find(".file-chooser-main").hide();

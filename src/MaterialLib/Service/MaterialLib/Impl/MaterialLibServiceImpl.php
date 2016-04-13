@@ -22,7 +22,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function player($globalId)
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
+        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->player($globalId);
     }
 
@@ -73,19 +73,19 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function reconvert($globalId, $options = array())
     {
-        $this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
+        //$this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
         return $this->getCloudFileService()->reconvert($globalId, $options);
     }
 
     public function getDefaultHumbnails($globalId)
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
+        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getDefaultHumbnails($globalId);
     }
 
     public function getThumbnail($globalId, $options = array())
     {
-        $this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
+        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getThumbnail($globalId, $options);
     }
 

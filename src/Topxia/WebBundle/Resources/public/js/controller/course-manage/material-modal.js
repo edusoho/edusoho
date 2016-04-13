@@ -1,12 +1,24 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Validator = require('bootstrap.validator');
     var FileChooser = require('../widget/file/file-chooser3');
+    var BatchUploader = require('../uploader/batch-uploader');
 
     exports.run = function() {
-
         var $form = $("#course-material-form");
+
+        var $el = $('#batch-uploader');
+
+        var uploader = new BatchUploader({
+            element: $el,
+            initUrl: $el.data('initUrl'),
+            finishUrl: $el.data('finishUrl'),
+            uploadAuthUrl: $el.data('uploadAuthUrl')
+        });
+
+        uploader.on('file.uploaded', function(file, media){
+            $form.find('[name="fileId"]').val(media.id);
+        });
 
         var materialChooser = new FileChooser({
             element: '#material-file-chooser'

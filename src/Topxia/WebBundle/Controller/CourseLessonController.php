@@ -496,32 +496,41 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if (!empty($file['globalId'])) {
-            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($lesson['mediaId']);
+        if (empty($file['globalId'])) {
+            throw $this->createNotFoundException();
         }
 
-        if ($file['convertStatus'] != 'success') {
-            if ($file['convertStatus'] == 'error') {
-                $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
-                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+        $result = $this->getMaterialLibService()->player($file['globalId']);
+        return $this->createJsonResponse($result);
+    }
 
-                return $this->createJsonResponse(array(
-                    'error' => array('code' => 'error', 'message' => $message)
-                ));
-            } else {
-                return $this->createJsonResponse(array(
-                    'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
-                ));
-            }
+    public function flashAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
         }
 
-        $factory          = new CloudClientFactory();
-        $client           = $factory->createClient();
-        $metas2           = $file['metas2'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-        $result['pdfUri'] = $url['url'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-        $result['swfUri'] = $url['url'];
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        if ($lesson['type'] != 'flash' || empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($file['storage'] == 'cloud') {
+            $result             = $this->getMaterialLibService()->player($file['globalId']);
+            $result['mediaUri'] = $result['url'];
+        }
+
         return $this->createJsonResponse($result);
     }
 

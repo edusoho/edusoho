@@ -24,8 +24,8 @@
 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
 
-  <div class="well well-sm es-material-tabs " style="margin-bottom:0;position:relative">
-    <span style="position:absolute;top:9px;left:15px;">标签:</span>
+  <div class="well es-material-tabs " style="position:relative;margin-bottom:0;padding:5px 15px 15px 15px;">
+    <span style="position:absolute;top:13px;left:15px;color: #919191;">标签:</span>
       <div class="tags-container">
         {% for tag in tags %}
           <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
@@ -35,7 +35,7 @@
   </div>
 
   <ul class="es-material-tabs nav" style="margin-bottom:20px">
-    <li class="all"><span>筛选：</span></li>
+    <li class="all" style="margin-top: 10px;margin-right: 14px;"><span>筛选：</span></li>
     <div class="form-group" style="margin:15px 0;">
       <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
       -

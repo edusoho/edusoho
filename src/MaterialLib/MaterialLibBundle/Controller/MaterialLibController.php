@@ -115,7 +115,11 @@ class MaterialLibController extends BaseController
 
         if (!($file['createdUserId'] == $currentUser['id']))  {
             if ($file['type'] == 'video') {
-              $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
+              try{
+                $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
+              } catch (\RuntimeException $e) {
+                $thumbnails = array();
+              }
             }
 
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
@@ -355,6 +359,17 @@ class MaterialLibController extends BaseController
         }
 
         return $this->createJsonResponse(true);
+    }
+
+    public function editAction(Request $request, $globalId)
+    {
+        $fields = $request->request->all();
+
+        // $result = $this->getCloudFileService()->edit($globalId, $fields);
+        return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
+          'globalId' => $globalId,
+          'fields' => $fields
+        ));
     }
 
     public function downloadAction($fileId)
