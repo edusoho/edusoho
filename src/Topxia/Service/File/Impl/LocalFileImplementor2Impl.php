@@ -68,6 +68,17 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         return $uploadParams;
     }
 
+    protected function getFileFullPath($file)
+    {
+        if (empty($file['isPublic'])) {
+            $baseDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
+        } else {
+            $baseDirectory = $this->getKernel()->getParameter('topxia.upload.public_directory');
+        }
+
+        return $baseDirectory.DIRECTORY_SEPARATOR.$file['hashId'];
+    }
+
     protected function getUserService()
     {
         return $this->createService('User.UserService');
