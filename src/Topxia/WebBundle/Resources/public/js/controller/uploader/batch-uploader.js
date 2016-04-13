@@ -160,6 +160,7 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function(file) {
+                self.trigger('file.uploadStart');
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers, tr) {

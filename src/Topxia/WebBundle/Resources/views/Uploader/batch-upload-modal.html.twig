@@ -179,6 +179,7 @@
 
 </style>
 
+  {% include 'TopxiaWebBundle:CloudFile:video-quality-switcher.html.twig' %}
   <div class="balloon-uploader" id="batch-uploader"
     data-init-url="{{ path('uploader_init', {token:token}) }}"
     data-finish-url="{{ path('uploader_finished', {token:token}) }}"
@@ -205,29 +206,6 @@
     </div>
   </div>
 
-  {% if setting('storage.upload_mode') == 'cloud' %}
-    <div class="quality-switcher">
-      <div class="quality-switcher-bar">
-        {{'视频转码类型'|trans}}<span class="text-muted quality-switcher-name"></span> <a href="javascript:;" class="edit-btn text-info"><span class="glyphicon glyphicon-cog"></span> {{'设置'|trans}}</a>
-      </div>
-      <div class="quality-switcher-control">
-        <div class="video-quality radios">
-          {{'画质：'|trans}}
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>'|trans|raw, 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>'|trans|raw, 'high': '精细 <span class="text-muted">(适合动态电影)</span>'|trans|raw}, storageSetting.video_quality|default('low')) }}
-        </div>
-
-        <div class="audio-quality radios">
-          {{'音质：'|trans}}
-          {{ radios('video_audio_quality', {'low':'流畅'|trans, 'normal':'标准'|trans, 'high': '高品'|trans}, storageSetting.video_audio_quality|default('low')) }}
-        </div>
-
-        <div class="quality-actions">
-          <a href="javascript:;" class="btn btn-default btn-sm confrim-btn">{{'确定'|trans}}</a>
-          <a href="javascript:;" class="btn btn-link btn-sm cancel-btn">{{'取消'|trans}}</a>
-        </div>
-      </div>
-    </div>
-  {% endif %}
 
 <script>app.load('uploader/batch-upload-modal')</script>
 {% endblock %}
