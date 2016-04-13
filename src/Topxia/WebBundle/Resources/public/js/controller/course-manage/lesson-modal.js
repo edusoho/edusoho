@@ -375,7 +375,6 @@ define(function(require, exports, module) {
                     Notify.danger('文件正在上传，等待上传完后再保存。');
                     return false;
                 }
-
             }
             for(var i=0; i<$choosers.length; i++){
                 $choosers[i]._destoryUploader();
