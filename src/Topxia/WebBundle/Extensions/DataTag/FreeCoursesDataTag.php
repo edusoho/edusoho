@@ -23,9 +23,9 @@ class FreeCoursesDataTag extends CourseBaseDataTag implements DataTag
         $this->checkCount($arguments);
 
         if (empty($arguments['categoryId'])) {
-            $conditions = array('status' => 'published','price' => '0.00','coinPrice' => '0.00', 'parentId' => 0);
+            $conditions = array('status' => 'published','price' => '0.00', 'parentId' => 0);
         } else {
-            $conditions = array('status' => 'published', 'price' =>'0.00','coinPrice' => '0.00' ,'categoryId' => $arguments['categoryId'], 'parentId' => 0);
+            $conditions = array('status' => 'published', 'price' =>'0.00' ,'categoryId' => $arguments['categoryId'], 'parentId' => 0);
         }
 
         $courses = $this->getCourseService()->searchCourses($conditions,'latest', 0, $arguments['count']);

@@ -21,7 +21,6 @@ class KernelResponseListener
 
         $request      = $event->getRequest();
         $currentUser  = $this->getUserService()->getCurrentUser();
-        $setting      = $this->getSettingService()->get('login_bind');
         $user_agent   = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
 
@@ -57,20 +56,6 @@ class KernelResponseListener
                 $event->setResponse($response);
                 return;
             }
-        }
-
-        if (strpos($user_agent, 'MicroMessenger') && !$currentUser->isLogin() && $setting['enabled'] && $setting['weixinmob_enabled']) {
-            $route     = 'login_bind';
-            $whiteList = array('/login/bind/weixinmob', '/login/bind/weixinmob/callback', '/login/bind/weixinmob/new', '/login/bind/weixinmob/newset', '/login/bind/weixinmob/choose', '/register/captcha/check', '/login/bind/weixinmob/changetoexist', '/login/bind/weixinmob/existbind', '/register', '/partner/login', '/register/nickname/check', '/captcha_num', '/register/email/check');
-
-            if (in_array($request->getPathInfo(), $whiteList)) {
-                return;
-            }
-
-            $url      = $this->container->get('router')->generate($route, array('type' => 'weixinmob', '_target_path' => $request->getPathInfo()));
-            $response = new RedirectResponse($url);
-            $event->setResponse($response);
-            return;
         }
     }
 

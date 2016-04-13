@@ -13,6 +13,7 @@
     </div>
     
     <ul class="homepage-category-nav">
+      {% set categories = data('Categories', {parentId:0, group:'course'}) %}
       {% for category in categories %}
         <li><a href="{{ path('course_explore', {category:category.code,fliter:{type: 'all',price: 'all',currentLevelId: 'all'},orderBy:'latest'}) }}">{{ category.name }}</a></li>
       {% endfor %}
@@ -21,8 +22,6 @@
 
     <div class="row row-9-3">
       <div class="col-md-9">
-
-       
         {% set classrooms = data('RecommendClassrooms',{'count':6}) %}
           {% if classrooms %}
           <div class="es-box">
@@ -243,7 +242,7 @@
                             </div>
                             <div class="vip-price col-sm-3 col-md-3">
                                {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin'%}
-                                <h4> {{ set_price((level.monthPrice) * (cashRate)) }}{{setting('coin.coin_name')}}</h4>
+                                <h4> {{ set_price((level.monthPrice) * (setting('coin.cash_rate'))) }}{{setting('coin.coin_name', '虚拟币')}}</h4>
                                {% else %}
                                   <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                                {% endif %}
