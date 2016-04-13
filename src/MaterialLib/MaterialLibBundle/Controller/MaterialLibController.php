@@ -112,7 +112,8 @@ class MaterialLibController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $file = $this->getMaterialLibService()->get($fileId);
-
+        var_dump($file);
+        exit();
         if (!($file['createdUserId'] == $currentUser['id']))  {
             if ($file['type'] == 'video') {
               $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
