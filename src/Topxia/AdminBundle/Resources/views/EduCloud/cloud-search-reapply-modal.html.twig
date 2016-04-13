@@ -6,9 +6,9 @@
   <form id="search-clause-form" class="form-horizontal" method="post" action="{{ path('admin_edu_cloud_search_reapply') }}">
     <div class="item">
       <h3 class="text-center">风险提示</h3>
-      <p>1.重建索引会清空之前的搜索数据；<br>
+      <p>1.重建索引完成后会覆盖之前的搜索数据；<br>
         2.索引在重建时需要大约30分钟的时间；<br>
-        3.在重建索引期间云搜索功能自动切换到本地搜索，待重建索引完毕后自动切回云索引</p>
+        3.在重建索引期间不影响云搜索功能正常使用；</p>
     </div>
 
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
