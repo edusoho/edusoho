@@ -2,7 +2,7 @@
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   <tr>
     <td>
-        <div class="pull-left mrm" style="height:56px;width:100px;text-algin:center;overflow:hidden">
+        <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;overflow:hidden">
           <img style="height:100%;border-radius:4px;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
         </div>
         <div class="">
