@@ -14,6 +14,8 @@ interface UploadFileService2
 
     public function findFilesByIds(array $ids);
 
+    public function findCloudFilesByIds($fileIds);
+
     public function searchFiles($conditions, $orderBy, $start, $limit);
 
     public function searchFilesCount($conditions);
@@ -67,6 +69,6 @@ interface UploadFileService2
 
     public function findCollectionsByUserId($userId);
 
-    public function findFilesByCourseIds($targetIds);
+    public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
 
 }

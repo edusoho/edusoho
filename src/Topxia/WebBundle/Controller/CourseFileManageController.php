@@ -83,8 +83,7 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
-        //TODO: 转码类型（流畅，高清，超清）
-        return $this->createJsonResponse($this->getUploadFileService2()->findFiles($fileIds));
+        return $this->createJsonResponse($this->getUploadFileService2()->findCloudFilesByIds($fileIds));
     }
 
     public function showAction(Request $request, $id, $fileId)
