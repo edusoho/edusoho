@@ -30,10 +30,12 @@
     
 </div> -->
 <div class="mask">
-  {#}<i class="es-icon es-icon-view"></i><span>{{ uploadFile.views|default(0) }}</span>#}
   {% if uploadFile.type in ['video', 'audio'] %}
     <span class="text-muted text-overflow">{{ uploadFile.length|date('i:s') }}</span>
   {% else %}
     <span class="">{{ uploadFile.ext|upper }}</span>
+  {% endif %}
+  {% if uploadFile.storage == 'cloud' %}
+    <span class="glyphicon glyphicon-cloud"></span>
   {% endif %}
 </div>
