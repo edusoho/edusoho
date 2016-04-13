@@ -525,6 +525,33 @@ class CourseLessonController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function flashAction(Request $request, $courseId, $lessonId)
+    {
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (!$lesson['free']) {
+            $this->getCourseService()->tryTakeCourse($courseId);
+        }
+
+        if ($lesson['type'] != 'flash' || empty($lesson['mediaId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        $result             = $this->getMaterialLibService()->player($file['globalId']);
+        $result['mediaUri'] = $result['url'];
+        return $this->createJsonResponse($result);
+    }
+
     public function learnStatusAction(Request $request, $courseId, $lessonId)
     {
         $user   = $this->getCurrentUser();
