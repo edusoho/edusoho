@@ -13892,11 +13892,12 @@ textarea {
   color: #ff4400;
 }
 .tags-container {
-  padding-left: 80px;
+  padding-left: 70px;
 }
 .tags-container .label {
   display: inline-block;
-  margin-left: 5px;
+  margin-right: 10px;
+  margin-top: 10px;
   cursor: pointer;
 }
 .batch-item {

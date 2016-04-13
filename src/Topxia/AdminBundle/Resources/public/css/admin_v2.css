@@ -567,6 +567,7 @@ margin-top: 14px;
 .materials-nav>li.active>.item:hover, 
 .materials-nav>li.active>.item:focus {
   border-color: transparent;;
+  color: #428bca;
 }
 
 .materials-nav li.all {
@@ -576,12 +577,15 @@ margin-top: 14px;
 }
 
 .materials-nav.materials-tags {
-
+  padding-top: 5px;
+  padding-bottom: 15px;
+  padding-left: 75px;
 }
 
 .materials-nav.materials-tags .label{
   display: inline-block;
-  margin:15px;
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 
