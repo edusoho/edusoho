@@ -274,7 +274,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['views']     = $cloudFile['views'];
         $file['tags']      = $cloudFile['tags'];
         $file['thumbnail'] = $cloudFile['thumbnail'];
-
+        $file['description'] = $cloudFile['description'];
+        $file['processStatus'] = $cloudFile['processStatus'];
         $statusMap = array(
             'none'       => 'none',
             'waiting'    => 'waiting',

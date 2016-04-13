@@ -15,11 +15,11 @@
     <div class="tab-content">
 
       <div class="tab-pane active" id="info-tab">
-        <form class="form-horizontal" id="info-form" action="{{ path('material_edit', {globalId:material.no}) }}">
+        <form class="form-horizontal" id="info-form" >
           <div class="form-group">
             <label for="name" class="col-md-2 control-label">标题</label>
             <div class="col-md-6" style="padding:6px;">
-              {{ material.name }}
+              {{ material.filename }}
             </div>
           </div>
           <div class="form-group">
