@@ -97,8 +97,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         return array_map(function ($lessonMaterial) use ($newFiles) {
             $lessonMaterial['createdTime'] = date('c', $lessonMaterial['createdTime']);
-            $field = $lessonMaterial['fileId'];
-            $lessonMaterial['fileMime'] = $newFiles[$field]['type'];
+            $field                         = $lessonMaterial['fileId'];
+            $lessonMaterial['fileMime']    = $newFiles[$field]['type'];
             return $lessonMaterial;
         }, $lessonMaterials);
     }
@@ -494,9 +494,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } else
-
-        if ($mediaSource == 'youku') {
+        } elseif ($mediaSource == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -504,9 +502,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } else
-
-        if ($mediaSource == 'tudou') {
+        } elseif ($mediaSource == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -620,7 +616,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getDocumentLesson($lesson)
     {
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
@@ -634,20 +630,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-        $pdfUri = $url['url'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-        $swfUri = $url['url'];
+        $file = $this->controller->getMaterialLibService()->player($file['globalId']);
 
         $content = $lesson['content'];
         $content = $this->controller->convertAbsoluteUrl($this->request, $content);
         $render  = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-            'pdfUri' => $pdfUri,
-            'swfUri' => $swfUri,
+            'pdfUri' => $file['pdf'],
+            'swfUri' => $file['swf'],
             'title'  => $lesson['title']
         ));
 
