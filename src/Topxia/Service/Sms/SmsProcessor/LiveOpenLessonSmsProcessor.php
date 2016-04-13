@@ -62,6 +62,7 @@ class LiveOpenLessonSmsProcessor extends BaseProcessor implements SmsProcessor
         $students = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id']), array('createdTime', 'Desc'), $index, 1000);
 
         $to = array_filter(ArrayToolkit::column($students, 'mobile'));
+        $to = implode(',', $to);
 
         $parameters['lesson_title'] = '';
 
