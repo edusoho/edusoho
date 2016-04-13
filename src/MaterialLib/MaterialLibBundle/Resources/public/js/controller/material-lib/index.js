@@ -262,7 +262,7 @@ define(function(require, exports, module) {
                             self.renderTable();
                         }
                         $('#material-lib-items-panel').find('[data-role=batch-item]').show();
-
+                        $('#material-lib-items-panel').find('[data-role=batch-select]').attr("checked",false);
                     });
                 }
 
