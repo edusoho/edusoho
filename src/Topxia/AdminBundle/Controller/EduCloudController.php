@@ -571,39 +571,23 @@ class EduCloudController extends BaseController
         ));
     }
 
+    public function searchReapplyAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
+            $this->getSearchService()->refactorAllDocuments();
+            return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-reapply-modal.html.twig');
+    }
+
     public function searchClauseAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $searchSetting = $this->getSettingService()->get('cloud_search');
-
-            $siteSetting        = $this->getSettingService()->get('site');
-            $siteSetting['url'] = rtrim($siteSetting['url']);
-            $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-
-            $api  = CloudAPIFactory::create('root');
-            $urls = array(
-                array('category' => 'course', 'url' => $siteSetting['url'].'/api/courses?cursor=0&start=0&limit=100'),
-                array('category' => 'lesson', 'url' => $siteSetting['url'].'/api/lessons?cursor=0&start=0&limit=100'),
-                array('category' => 'user', 'url' => $siteSetting['url'].'/api/users?cursor=0&start=0&limit=100'),
-                array('category' => 'thread', 'url' => $siteSetting['url'].'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-                array('category' => 'article', 'url' => $siteSetting['url'].'/api/articles?cursor=0&start=0&limit=100')
-            );
-            $urls = urlencode(json_encode($urls));
-
-            $callbackUrl = $siteSetting['url'];
-            $callbackUrl .= $this->generateUrl('edu_cloud_search_callback');
-            $sign = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
-            $sign = rawurlencode($sign);
-            $callbackUrl .= '?sign='.$sign;
-
-            $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
-
-            if ($result['success']) {
-                $searchSetting['search_enabled'] = 1;
-                $searchSetting['status']         = 'waiting';
-                $this->getSettingService()->set('cloud_search', $searchSetting);
-            }
-
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
@@ -994,6 +978,11 @@ class EduCloudController extends BaseController
             }
         }
         return true;
+    }
+
+    protected function getSearchService()
+    {
+        return $this->getServiceKernel()->createService('Search.SearchService');
     }
 
     protected function getAppService()
