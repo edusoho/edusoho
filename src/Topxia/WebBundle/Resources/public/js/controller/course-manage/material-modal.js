@@ -1,30 +1,24 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Validator = require('bootstrap.validator');
     var FileChooser = require('../widget/file/file-chooser3');
-    var BatchUploader = require('./batch-uploader');
+    var BatchUploader = require('../uploader/batch-uploader');
 
     exports.run = function() {
+        var $form = $("#course-material-form");
 
         var $el = $('#batch-uploader');
-        var esuploader = new BatchUploader({
+
+        var uploader = new BatchUploader({
             element: $el,
             initUrl: $el.data('initUrl'),
             finishUrl: $el.data('finishUrl'),
             uploadAuthUrl: $el.data('uploadAuthUrl')
         });
 
-        esuploader.on('preupload', function(file){
-            var quality = {
-                videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
-                audioQuality: $('.video-quality-switcher').find('input[name=video_audio_quality]:checked').val()
-            };
-            esuploader.set('process', quality);
+        uploader.on('file.uploaded', function(file, media){
+            $form.find('[name="fileId"]').val(media.id);
         });
-
-
-        var $form = $("#course-material-form");
 
         var materialChooser = new FileChooser({
             element: '#material-file-chooser'
