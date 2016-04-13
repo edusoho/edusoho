@@ -18,10 +18,10 @@ define(function(require, exports, module) {
     		},
         },
 
-        preUpload: function(uploader, file) {
+        getProcess: function() {
             var quality = {
-                videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked'), 
-                audioQuality: $('.video-quality-switcher').find('input[name=audio_quality]:checked')
+                videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked').val(), 
+                audioQuality: $('.video-quality-switcher').find('input[name=audio_quality]:checked').val()
             };
             return quality;
         },

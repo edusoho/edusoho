@@ -191,8 +191,8 @@ define(function(require, exports, module) {
             });
 
             uploader.on('preupload', function(file){
-                if(self.preUpload){
-                    uploader.set('process', self.preUpload(uploader,file));
+                if(self.getProcess){
+                    uploader.set('process', self.getProcess());
                 }
             });
 
