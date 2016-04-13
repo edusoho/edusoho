@@ -37,4 +37,6 @@ interface UploadFileDao
     public function getFileByTargetType($targetType);
 
     public function findFilesByCourseIds($targetIds);
+
+    public function getHeadLeaderFiles();
 }

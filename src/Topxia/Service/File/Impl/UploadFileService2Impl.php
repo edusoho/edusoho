@@ -143,23 +143,30 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function edit($fileId, $fields)
     {
         $file = $this->getUploadFileDao()->getFile($fileId);
+
         if ($file) {
             $this->updateTags($file, $fields);
-            if(!empty($file['globalId'])){
-              $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags','description','endShared','thumbNo','endUser'));
-              if(!empty($cloudFields)){
-                $this->getFileImplementor(array('storage'=>'cloud'))->updateFile($file['globalId'],$cloudFields);
-              }
+
+            if (!empty($file['globalId'])) {
+                $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'endShared', 'thumbNo', 'endUser'));
+
+                if (!empty($cloudFields)) {
+                    $this->getFileImplementor(array('storage' => 'cloud'))->updateFile($file['globalId'], $cloudFields);
+                }
             }
-            if(isset($fields['name'])) {
+
+            if (isset($fields['name'])) {
                 $fields['filename'] = $fields['name'];
             }
+
             $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename'));
             unset($fields['name']);
-            if(!empty($fields)){
-              return $this->getUploadFileDao()->updateFile($file['id'], $fields);
+
+            if (!empty($fields)) {
+                return $this->getUploadFileDao()->updateFile($file['id'], $fields);
             }
         }
+
         return false;
     }
 
@@ -271,6 +278,16 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             'fileSize'      => $params['size']
         );
         $file = $this->getUploadFileDao()->updateFile($file['id'], $fields);
+
+        if ($file['targetType'] == 'headLeader') {
+            $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
+
+            foreach ($headLeaders as $headLeader) {
+                if ($headLeader['id'] != $file['id']) {
+                    $this->deleteFile($headLeader['id']);
+                }
+            }
+        }
     }
 
     public function setFileProcessed($params)
@@ -290,13 +307,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function deleteFile($id)
     {
-      $file = $this->getUploadFileDao()->getFile($id);
-      $result = $this->getFileImplementor($file)->deleteFile($file);
-      if (isset($result['success']) && $result['success'] == true) {
-          return $this->getUploadFileDao()->deleteFile($id);
-      }
+        $file   = $this->getUploadFileDao()->getFile($id);
+        $result = $this->getFileImplementor($file)->deleteFile($file);
 
-      return false;
+        if (isset($result['success']) && $result['success'] == true) {
+            return $this->getUploadFileDao()->deleteFile($id);
+        }
+
+        return false;
     }
 
     public function deleteFiles(array $ids)
