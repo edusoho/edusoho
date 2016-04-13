@@ -68,7 +68,7 @@ class Courses extends BaseResource
         }   
         return $this->wrap($courses, min($result['showCount'], $total));
     }
-    
+
     public function post(Application $app, Request $request)
     {
         
@@ -117,7 +117,7 @@ class Courses extends BaseResource
         return $courses;
     }
 
-    public function filter(&$res)
+    public function filter($res)
     {
         return $this->multicallFilter('Course', $res);
     }
