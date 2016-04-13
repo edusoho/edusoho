@@ -62,13 +62,13 @@ define(function(require, exports, module) {
             for(var i=0;i<data.length;i++){
               var file=data[i];
               if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
-                $("#upload-file-tr-"+file.id).find('a:first ~ br').after("<span class='text-warning text-sm'>正在文件格式转换</span><br/>");
+                $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after("<span class='text-warning text-sm'>正在文件格式转换</span><br/>");
               }else if(file.convertStatus=='error'){
-                $("#upload-file-tr-"+file.id).find('a:first ~ br').after("<span class='text-danger text-sm'>文件格式转换失败</span><br/>");
+                $("#upload-file-tr-"+file.id).find('a:first ~ br:first').after("<span class='text-danger text-sm'>文件格式转换失败</span><br/>");
               }else if(file.convertStatus=='none'){
-                $("#upload-file-tr-"+file.id).find('a:first ~ br').after("<span class='label label-default tip'>未转码</span>");
+                $("#upload-file-tr-"+file.id).find('a:first ~ br:last').after("<span class='label label-default tip'>未转码</span>");
               }else if(file.convertStatus=='success'){
-                $("#upload-file-tr-"+file.id).find('a:first ~ br').after("<span class='label label-success tip'>已转码</span>");
+                $("#upload-file-tr-"+file.id).find('a:first ~ br:last').after("<span class='label label-success tip'>已转码</span>");
               }
             }
         });
