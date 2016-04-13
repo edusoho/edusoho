@@ -13,9 +13,11 @@
   <i href="javascript:;" class="glyphicon glyphicon-option-vertical" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   </i>
   <ul class="dropdown-menu">
+    {% if uploadFile.storage == "cloud" %}
       <li>
       <a href="javascript:;"class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}"><i class="glyphicon glyphicon-pencil prm"></i>详情</a>
       </li>
+    {% endif %}
       <li>
         <a data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" ><i class="glyphicon glyphicon-save prm"></i>下载</a>
       </li>
@@ -27,7 +29,7 @@
   </ul>
 </div>
 <!-- <div class="star">
-    
+
 </div> -->
 <div class="mask">
   {% if uploadFile.type in ['video', 'audio'] %}
@@ -35,5 +37,5 @@
   {% else %}
     <span class="">{{ uploadFile.ext|upper }}</span>
   {% endif %}
-  
+
 </div>
