@@ -369,11 +369,17 @@ define(function(require, exports, module) {
 
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
-            videoChooser._destoryUploader();
-            audioChooser._destoryUploader();
-            pptChooser._destoryUploader();
-            documentChooser._destoryUploader();
-            flashChooser._destoryUploader();
+            var $choosers = [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser];
+            for(var i=0; i<$choosers.length; i++){
+                if($choosers[i].isUploading()){
+                    Notify.danger('文件正在上传，等待上传完后再保存。');
+                    return false;
+                }
+
+            }
+            for(var i=0; i<$choosers.length; i++){
+                $choosers[i]._destoryUploader();
+            }
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);

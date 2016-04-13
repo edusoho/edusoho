@@ -17,15 +17,16 @@ define(function(require, exports, module) {
                 file_size_limit : "2048 MB",
                 file_types_description: "视频文件"
     		},
-            preUpload: function(uploader, file) {
-                var data = {};
-                if (this.qualitySwitcher) {
-                    data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                    data.audioQuality = this.qualitySwitcher.get('audioQuality');
-                }
-                return data;
+        },
+
+        preUpload: function(uploader, file) {
+            var data = {};
+            if (this.qualitySwitcher) {
+                data.videoQuality = this.qualitySwitcher.get('videoQuality');
+                data.audioQuality = this.qualitySwitcher.get('audioQuality');
             }
-    	},
+            return data;
+        },
 
     	events: {
     		'click [data-role=import]': 'onImport'

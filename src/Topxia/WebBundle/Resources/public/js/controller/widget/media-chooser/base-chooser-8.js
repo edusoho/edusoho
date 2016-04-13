@@ -13,6 +13,8 @@ define(function(require, exports, module) {
 	
     var BaseChooser = Widget.extend({
         uploader: null,
+        _isUploading: false,
+
 
         attrs: {
             choosed: null,
@@ -78,8 +80,8 @@ define(function(require, exports, module) {
             return this;
         },
 
-        isUploading: function() {
-
+        isUploading: function() { 
+            return this._isUploading;
         },
 
         onChanged: function(item) {
@@ -109,9 +111,9 @@ define(function(require, exports, module) {
                 }
 
                 if ($(e.relatedTarget).hasClass('file-chooser-uploader-tab')) {
-                    // if (self.isUploading()) {
-                    //     return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
-                    // }
+                    if (self.isUploading()) {
+                        return confirm('当前正在上传文件，离开此页面，将自动取消上传。您真的要离开吗？');
+                    }
                     self._destoryUploader();
                 }
 
@@ -181,11 +183,16 @@ define(function(require, exports, module) {
                 };
 
                 self.trigger("change", item);
+                self._isUploading = false;
+            });
+
+            uploader.on('file.uploadStart', function(){
+                self._isUploading = true;
             });
 
             uploader.on('preupload', function(file){
                 if(self.preUpload){
-                    uploader.set('process', self.preUpload());
+                    uploader.set('process', self.preUpload(uploader,file));
                 }
             });
 
