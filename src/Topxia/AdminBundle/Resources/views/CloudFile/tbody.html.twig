@@ -33,7 +33,7 @@
                 {% endif %}
               {% endif %}
             {% endif %}
-            {% if material.usedCount|default(0) == 0 %}
+            {% if material.type in ['video', 'audio', 'ppt', 'document', 'flash'] and  material.usedCount|default(0) == 0 %}
             <span class="label label-default">未使用</span>
             {% endif %}
           </div>
