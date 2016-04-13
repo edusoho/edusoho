@@ -20,10 +20,10 @@ define(function(require, exports, module) {
                     $('#'+$html.attr('id')).replaceWith($html);
                     $modal.modal('hide');
                     var user_name = $('#student-remark-form').data('user') ;
-                    Notify.success(Translator.trans('备注%foo%成功',{foo:user_name}));
+                    Notify.success(Translator.trans('备注%name%成功',{name:user_name}));
                 }).error(function(){
                     var user_name = $('#student-remark-form').data('user') ;
-                    Notify.danger(Translator.trans('备注%foo%失败，请重试！',{foo:user_name}));
+                    Notify.danger(Translator.trans('备注%name%失败，请重试！',{name:user_name}));
                 });
             }
 

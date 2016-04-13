@@ -24,10 +24,10 @@ define(function(require, exports, module) {
                     $(html).prependTo($table.find('tbody'));
                     $modal.modal('hide');
                     var user_name = $('#student-create-form-submit').data('user') ;
-                    Notify.success(Translator.trans('添加%foo%操作成功!',{foo:user_name}));
+                    Notify.success(Translator.trans('添加%name%操作成功!',{name:user_name}));
                 }).error(function(){
                     var user_name = $('#student-create-form-submit').data('user') ;
-                    Notify.danger(Translator.trans('添加%foo%操作失败!',{foo:user_name}));
+                    Notify.danger(Translator.trans('添加%name%操作失败!',{name:user_name}));
                     $btn.button('reset').removeClass('disabled');
                 });
 
