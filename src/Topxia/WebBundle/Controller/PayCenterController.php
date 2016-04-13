@@ -56,7 +56,7 @@ class PayCenterController extends BaseController
             return $this->createMessageResponse('error', '订单已经过期，不能支付');
         }
 
-        // $this->isPluginInstalled('Coupon') &&
+// $this->isPluginInstalled('Coupon') &&
 
         if (!empty($order['coupon'])) {
             $result = $this->getCouponService()->checkCouponUseable($order['coupon'], $order['targetType'], $order['targetId'], $order['amount']);

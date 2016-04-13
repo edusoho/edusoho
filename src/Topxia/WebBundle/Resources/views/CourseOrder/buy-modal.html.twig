@@ -2,7 +2,7 @@
 
 {% set billable = true %}
 {% if (
-  (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.coinPrice == 0)
+  (setting('coin.coin_enabled') == 1 and setting('coin.price_type') == 'Coin' and course.price == 0)
   or (( not setting('coin.price_type') or setting('coin.price_type') == "RMB" ) and course.price == 0 )
   ) %}
   {% set billable = false %}
@@ -33,7 +33,7 @@
             {{'会员免费'|trans}}
           {% else %}
             {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            <strong class="money">{{ course.coinPrice }}</strong>
+            <strong class="money">{{ course.price * setting('coin.cash_rate')}}</strong>
             <span class="text-muted">{{setting('coin.coin_name')}}</span>
             {% else %}
             <strong class="money">{{ course.price }}</strong>
@@ -69,7 +69,7 @@
 
 {% block footer %}
   {% set priceType = setting("coin.price_type") %}
-  {% if billable and ((priceType|default("RMB") == "RMB" and course.price > 0) or (priceType|default("RMB") == "Coin" and course.coinPrice > 0)) %}
+  {% if billable and ((priceType|default("RMB") == "RMB" and course.price > 0) or (priceType|default("RMB") == "Coin" and course.price > 0)) %}
     {% if payments %}
       {% if member %}
         <span class="text-muted">{{'预览模式无法支付'|trans}}</span>

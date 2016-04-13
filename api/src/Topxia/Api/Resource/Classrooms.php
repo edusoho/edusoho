@@ -11,7 +11,7 @@ class Classrooms extends BaseResource
     {
         $result = $request->query->all();
         if($result['categoryId']) {
-            $result['categoryId'] = 0;
+            
             $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($result['categoryId']);
             $conditions['categoryIds'] = array_merge(array($result['categoryId']), $childrenIds);
         }

@@ -162,7 +162,6 @@ class RegisterController extends BaseController
                 }
 
                 return true;
-                break;
             case 'high':
                 $condition = array(
                     'startTime' => time() - 24 * 3600,
@@ -182,10 +181,8 @@ class RegisterController extends BaseController
                 }
 
                 return true;
-                break;
             default:
                 return true;
-                break;
         }
     }
 
@@ -235,9 +232,6 @@ class RegisterController extends BaseController
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                 '_target_path'  => $this->getTargetPath($request)
             ));
-        } elseif ($this->getAuthService()->hasPartnerAuth()) {
-            $this->authenticateUser($user);
-            return $this->redirect($this->getTargetPath($request));
         } else {
             $this->authenticateUser($user);
             return $this->redirect($this->getTargetPath($request));
@@ -430,11 +424,6 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getCardService()
-    {
-        return $this->getServiceKernel()->createService('Card.CardService');
-    }
-
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
@@ -484,8 +473,7 @@ class RegisterController extends BaseController
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace   = array($user['nickname'], $site['name'], $site['url']);
         $welcomeBody       = $this->setting('auth.welcome_body', '注册欢迎的内容');
-        $welcomeBody       = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
-        return $welcomeBody;
+        return str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
     }
 
     protected function sendVerifyEmail($token, $user)
