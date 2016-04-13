@@ -5,7 +5,6 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('jquery.perfect-scrollbar');
 
-    var VideoQualitySwitcher = require('../video-quality-switcher');
 
     var VideoChooser = BaseChooser.extend({
 
@@ -20,12 +19,11 @@ define(function(require, exports, module) {
         },
 
         preUpload: function(uploader, file) {
-            var data = {};
-            if (this.qualitySwitcher) {
-                data.videoQuality = this.qualitySwitcher.get('videoQuality');
-                data.audioQuality = this.qualitySwitcher.get('audioQuality');
-            }
-            return data;
+            var quality = {
+                videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked'), 
+                audioQuality: $('.video-quality-switcher').find('input[name=audio_quality]:checked')
+            };
+            return quality;
         },
 
     	events: {
@@ -35,14 +33,6 @@ define(function(require, exports, module) {
     	setup: function() {
     		VideoChooser.superclass.setup.call(this);
             $('#disk-browser-video').perfectScrollbar({wheelSpeed:50});
-
-            if ($('.video-quality-switcher').length > 0) {
-                var switcher = new VideoQualitySwitcher({
-                    element: '.video-quality-switcher'
-                });
-
-                this.qualitySwitcher = switcher;
-            }
     	},
 
     	onImport: function(e) {

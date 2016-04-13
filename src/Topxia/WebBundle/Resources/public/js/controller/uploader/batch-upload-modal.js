@@ -1,6 +1,5 @@
 define(function(require, exports, module) {
     var BatchUploader = require('./batch-uploader');
-    var VideoQualitySwitcher = require('../widget/video-quality-switcher');
 
     exports.run = function() {
 
@@ -12,14 +11,10 @@ define(function(require, exports, module) {
             uploadAuthUrl: $el.data('uploadAuthUrl')
         });
 
-        var switcher = new VideoQualitySwitcher({
-            element: '.video-quality-switcher'
-        });
-
         esuploader.on('preupload', function(file){
             var quality = {
-                videoQuality: switcher.get('videoQuality'), 
-                audioQuality: switcher.get('audioQuality')
+                videoQuality: $('.video-quality-switcher').find('input[name=video_quality]:checked'), 
+                audioQuality: $('.video-quality-switcher').find('input[name=audio_quality]:checked')
             };
             esuploader.set('process', quality);
         });
@@ -27,7 +22,6 @@ define(function(require, exports, module) {
         $el.parents('.modal').on('hidden.bs.modal', function(){
             window.location.reload();
         });
-
 
     };
 
