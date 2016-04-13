@@ -216,12 +216,12 @@
         "items": {
             "middleImg": {
                 "title": "广告图片",
-                "desc": "建议图片大小为宽114px高 200px",
+                "desc": "建议图片大小为宽1920px高 200px",
                 "count": "1",
                 "type": "imglink",
                 "default": [
                     {
-                        "src": "\/themes\/jianmo\/img\/banner_net.jpg",
+                        "src": "\/themes\/jianmo\/img\/banner_ad.jpg",
                         "alt": "图片１的描述",
                         "href": "#",
                         "target": "_blank"
