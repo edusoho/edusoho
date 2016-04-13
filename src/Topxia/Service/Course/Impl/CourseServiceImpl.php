@@ -418,6 +418,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourse($course['id']);
 
+        $this->dispatchEvent("course.create", $course);
+
         $this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
 
         return $course;
@@ -460,28 +462,29 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'         => '',
-            'subtitle'      => '',
-            'about'         => '',
-            'expiryDay'     => 0,
-            'serializeMode' => 'none',
-            'categoryId'    => 0,
-            'vipLevelId'    => 0,
-            'goals'         => array(),
-            'audiences'     => array(),
-            'tags'          => '',
-            'startTime'     => 0,
-            'endTime'       => 0,
-            'locationId'    => 0,
-            'address'       => '',
-            'maxStudentNum' => 0,
-            'watchLimit'    => 0,
-            'approval'      => 0,
-            'maxRate'       => 0,
-            'locked'        => 0,
-            'tryLookable'   => 0,
-            'tryLookTime'   => 0,
-            'buyable'       => 0
+            'title'          => '',
+            'subtitle'       => '',
+            'about'          => '',
+            'expiryDay'      => 0,
+            'serializeMode'  => 'none',
+            'categoryId'     => 0,
+            'vipLevelId'     => 0,
+            'goals'          => array(),
+            'audiences'      => array(),
+            'tags'           => '',
+            'startTime'      => 0,
+            'endTime'        => 0,
+            'locationId'     => 0,
+            'address'        => '',
+            'maxStudentNum'  => 0,
+            'watchLimit'     => 0,
+            'approval'       => 0,
+            'maxRate'        => 0,
+            'locked'         => 0,
+            'tryLookable'    => 0,
+            'tryLookTime'    => 0,
+            'buyable'        => 0,
+            'conversationId' => ''
         ));
 
         if (!empty($fields['about'])) {
@@ -632,11 +635,10 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
         }
 
+        $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
         $this->dispatchEvent("course.delete", array(
             "id" => $id
         ));
-
-        $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
 
         return true;
     }
@@ -2291,7 +2293,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->updateCourse($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            new ServiceEvent($course, array('userId' => $member['userId']))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
         return $member;
     }
@@ -2356,7 +2358,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
         $this->dispatchEvent(
             'course.quit',
-            new ServiceEvent($course, array('userId' => $member['userId']))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 

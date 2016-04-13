@@ -15,11 +15,12 @@ class DeveloperSettingController extends BaseController
         $storageSetting   = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'debug'                => '0',
-            'app_api_url'          => '',
-            'cloud_api_server'     => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
-            'hls_encrypted'        => '1'
+            'debug'                  => '0',
+            'app_api_url'            => '',
+            'cloud_api_server'       => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_api_tui_server'   => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
+            'cloud_api_event_server' => empty($storageSetting['cloud_api_event_server']) ? '' : $storageSetting['cloud_api_event_server'],
+            'hls_encrypted'          => '1'
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -27,8 +28,9 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
 
-            $storageSetting['cloud_api_server']     = $developerSetting['cloud_api_server'];
-            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_server']       = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server']   = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
@@ -114,8 +116,9 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('redis', $redis);
 
             $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
+
             if ($redis['opened'] == '1') {
-                $config          = "<?php \nreturn ".var_export($redis['setting'], true).';';
+                $config = "<?php \nreturn ".var_export($redis['setting'], true).';';
                 file_put_contents($redisConfigFile, $config);
             }
 
