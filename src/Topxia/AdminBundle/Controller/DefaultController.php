@@ -26,7 +26,7 @@ class DefaultController extends BaseController
         }
 
         if ($dateType == "this_week") {
-            if ($currentDay == '星期日') {
+            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
                 $startTime = strtotime('Monday last week');
                 $endTime   = strtotime('Monday this week');
             } else {
@@ -36,7 +36,7 @@ class DefaultController extends BaseController
         }
 
         if ($dateType == "last_week") {
-            if ($currentDay == '星期日') {
+            if ($currentDay == $this->getServiceKernel()->trans('星期日')) {
                 $startTime = strtotime('Monday last week') - (7 * 24 * 60 * 60);
                 $endTime   = strtotime('Monday this week') - (7 * 24 * 60 * 60);
             } else {
@@ -134,7 +134,7 @@ class DefaultController extends BaseController
         if ($currentHost != str_replace($fliter, "", $siteSetting['url'])) {
             return array(
                 'status'       => 'fail',
-                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'errorMessage' => $this->getServiceKernel()->trans('当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】'),
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
                 'settingUrl'   => $settingUrl
@@ -185,12 +185,12 @@ class DefaultController extends BaseController
         $apps          = array();
         $systemVersion = "";
         $error         = "";
+
         $apps          = $this->getAppService()->checkAppUpgrades();
 
         $appsAll = $this->getAppService()->getCenterApps();
-
+    
         $codes = ArrayToolkit::column($appsAll, 'code');
-
         $installedApps = $this->getAppService()->findAppsByCodes($codes);
 
         $unInstallAppCount = count($appsAll) - count($installedApps);
@@ -474,7 +474,7 @@ class DefaultController extends BaseController
     public function weekday($time)
     {
         if (is_numeric($time)) {
-            $weekday = array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+            $weekday = array($this->getServiceKernel()->trans('星期日'), $this->getServiceKernel()->trans('星期一'), $this->getServiceKernel()->trans('星期二'), $this->getServiceKernel()->trans('星期三'), $this->getServiceKernel()->trans('星期四'), $this->getServiceKernel()->trans('星期五'), $this->getServiceKernel()->trans('星期六'));
             return $weekday[date('w', $time)];
         }
 

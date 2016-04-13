@@ -1,7 +1,9 @@
 <?php
 namespace Topxia\Service\User\AuthProvider;
 
-class DiscuzAuthProvider implements AuthProvider
+use Topxia\Service\Common\BaseService;
+
+class DiscuzAuthProvider extends BaseService implements AuthProvider
 {
     public function register($registration)
     {
@@ -195,21 +197,21 @@ class DiscuzAuthProvider implements AuthProvider
 
         switch ($result) {
             case 0:
-                return array('error_input', '输入不合法');
+                return array('error_input', $this->getKernel()->trans('输入不合法'));
             case -1:
-                return array('error_length_invalid', '名称不合法,长度不符合关联论坛用户名要求');
+                return array('error_length_invalid', $this->getKernel()->trans('名称不合法,长度不符合关联论坛用户名要求'));
             case -2:
-                return array('error_illegal_char', '名称含有非法字符');
+                return array('error_illegal_char', $this->getKernel()->trans('名称含有非法字符'));
             case -3:
-                return array('error_duplicate', '名称已被注册');
+                return array('error_duplicate', $this->getKernel()->trans('名称已被注册'));
             case -4:
-                return array('error_illegal', 'Email格式不正确');
+                return array('error_illegal', $this->getKernel()->trans('Email格式不正确'));
             case -5:
-                return array('error_white_list', 'Email不允许注册');
+                return array('error_white_list', $this->getKernel()->trans('Email不允许注册'));
             case -6:
-                return array('error_duplicate', 'Email已存在');
+                return array('error_duplicate', $this->getKernel()->trans('Email已存在'));
             default:
-                return array('error_unknown', '未知错误');
+                return array('error_unknown', $this->getKernel()->trans('未知错误'));
         }
     }
 }

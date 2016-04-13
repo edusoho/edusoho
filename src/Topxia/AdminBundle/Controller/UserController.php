@@ -11,8 +11,9 @@ class UserController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        
         $fields = $request->query->all();
-
+      
         $conditions = array(
             'roles'           => '',
             'keywordType'     => '',
@@ -150,7 +151,7 @@ class UserController extends BaseController
                 $this->getUserService()->changeUserRoles($user['id'], $roles);
             }
 
-            $this->getLogService()->info('user', 'add', "管理员添加新用户 {$user['nickname']} ({$user['id']})");
+            $this->getLogService()->info('user', 'add', $this->getServiceKernel()->trans('管理员添加新用户 %nickname% (%id%)',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
 
             return $this->redirect($this->generateUrl('admin_user'));
         }
@@ -209,9 +210,9 @@ class UserController extends BaseController
 
             if (!((strlen($user['verifiedMobile']) > 0) && isset($profile['mobile']))) {
                 $profile = $this->getUserService()->updateUserProfile($user['id'], $profile);
-                $this->getLogService()->info('user', 'edit', "管理员编辑用户资料 {$user['nickname']} (#{$user['id']})", $profile);
+                $this->getLogService()->info('user', 'edit', $this->getServiceKernel()->trans('管理员编辑用户资料 %nickname% (#%id%)',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])), $profile);
             } else {
-                $this->setFlashMessage('danger', '用户已绑定的手机不能修改。');
+                $this->setFlashMessage('danger', $this->getServiceKernel()->trans('用户已绑定的手机不能修改。'));
             }
 
             return $this->redirect($this->generateUrl('admin_user'));
@@ -406,7 +407,7 @@ class UserController extends BaseController
         try {
             $mail = new Mail(array(
                 'to'     => $user['email'],
-                'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
+                'title'  => $this->getServiceKernel()->trans('重设%nickname%在%EDUSOHO%的密码',array('%nickname%'=>$user['nickname'],'%EDUSOHO%'=>$this->setting('site.name', 'EDUSOHO'))),
                 'format' => 'html',
                 'body'   => $this->renderView('TopxiaWebBundle:PasswordReset:reset.txt.twig', array(
                     'user'  => $user,
@@ -419,9 +420,10 @@ class UserController extends BaseController
                     'nickname'  => $user['nickname']
                 ));
             $this->sendEmail($mail);
-            $this->getLogService()->info('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件");
+
+            $this->getLogService()->info('user', 'send_password_reset', $this->getServiceKernel()->trans("管理员给用户 %nickname%(%id%) 发送密码重置邮件",array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_password_reset', "管理员给用户 ${user['nickname']}({$user['id']}) 发送密码重置邮件失败：".$e->getMessage());
+            $this->getLogService()->error('user', 'send_password_reset', $this->getServiceKernel()->trans('管理员给用户 %nickname%(%id%) 发送密码重置邮件失败：',array(' %nickname%'=>$user['nickname'],'%id%'=>$user['id'])).$e->getMessage());
             throw $e;
         }
 
@@ -440,7 +442,7 @@ class UserController extends BaseController
         $auth  = $this->getSettingService()->get('auth', array());
 
         $site      = $this->getSettingService()->get('site', array());
-        $emailBody = $this->setting('auth.email_activation_body', ' 验证邮箱内容');
+        $emailBody = $this->setting('auth.email_activation_body', $this->getServiceKernel()->trans(' 验证邮箱内容'));
 
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}', '{{verifyurl}}');
         $verifyurl         = $this->generateUrl('register_email_verify', array('token' => $token), true);
@@ -459,7 +461,7 @@ class UserController extends BaseController
         try {
             $normalMail = array(
                 'to'    => $user['email'],
-                'title' => '请激活你的帐号 完成注册',
+                'title' => $this->getServiceKernel()->trans('请激活你的帐号 完成注册'),
                 'body'  => $emailBody
             );
             $cloudMail = array(
@@ -470,9 +472,9 @@ class UserController extends BaseController
             );
             $mail = new Mail($normalMail, $cloudMail);
             $this->sendEmail($mail);
-            $this->getLogService()->info('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件");
+            $this->getLogService()->info('user', 'send_email_verify', $this->getServiceKernel()->trans('管理员给用户 %nickname%(%id%) 发送Email验证邮件',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])));
         } catch (\Exception $e) {
-            $this->getLogService()->error('user', 'send_email_verify', "管理员给用户 ${user['nickname']}({$user['id']}) 发送Email验证邮件失败：".$e->getMessage());
+            $this->getLogService()->error('user', 'send_email_verify', $this->getServiceKernel()->trans('管理员给用户 %nickname%(%id%) 发送Email验证邮件失败：',array('%nickname%'=>$user['nickname'],'%id%'=>$user['id'])).$e->getMessage());
             throw $e;
         }
 

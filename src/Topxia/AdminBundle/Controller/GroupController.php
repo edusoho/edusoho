@@ -323,7 +323,7 @@ class GroupController extends BaseController
                 );
                 break;
             default:
-                throw $this->createServiceException('参数sort不正确。');
+                throw $this->createServiceException($this->getServiceKernel()->trans('参数sort不正确。'));
         }
         return $orderBys;
     }

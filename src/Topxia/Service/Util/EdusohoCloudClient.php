@@ -3,10 +3,13 @@
 namespace Topxia\Service\Util;
 
 use Topxia\Common\ArrayToolkit;
+
+use Topxia\Service\Common\BaseService;
+
 use \RuntimeException;
 
 
-class EdusohoCloudClient implements CloudClient
+class EdusohoCloudClient extends BaseService implements CloudClient
 {
 	protected $accessKey;
 
@@ -36,7 +39,7 @@ class EdusohoCloudClient implements CloudClient
         }
 
     	if (empty($options['accessKey']) || empty($options['secretKey'])) {
-    		throw new \RuntimeException('云平台accessKey/secretKey不能为空，请更改云视频设置。');
+    		throw new \RuntimeException($this->getKernel()->trans('云平台accessKey/secretKey不能为空，请更改云视频设置。'));
     	}
     	
     	$this->apiServer = rtrim($options['apiServer'], '/');
@@ -63,7 +66,7 @@ class EdusohoCloudClient implements CloudClient
 
 		$cleanParams['bucket'] = (string) $bucket;
 		if (empty($cleanParams['bucket'])) {
-			throw new RuntimeException('bucket不能为空');
+			throw new RuntimeException($this->getKernel()->trans('bucket不能为空'));
 		}
 
 		if (!empty($params['duration'])) {
@@ -128,7 +131,7 @@ class EdusohoCloudClient implements CloudClient
     {
         $url = $this->apiServer . '/api.m3u8?action=HLSQualitiyList';
 
-        $names = array('sd' => '标清', 'hd' => '高清', 'shd' => '超清');
+        $names = array('sd' => $this->getKernel()->trans('标清'), 'hd' => $this->getKernel()->trans('高清'), 'shd' => $this->getKernel()->trans('超清'));
         $bandwidths = array('sd' => '245760', 'hd' => '450560', 'shd' => '655360');
 
         $items = array();
@@ -177,7 +180,7 @@ class EdusohoCloudClient implements CloudClient
     public function getBucket()
     {
         if (empty($this->bucket)) {
-            throw new \RuntimeException('云视频bucket不能为空，请更改云视频设置。');
+            throw new \RuntimeException($this->getKernel()->trans('云视频bucket不能为空，请更改云视频设置。'));
         }
         return $this->bucket;
     }

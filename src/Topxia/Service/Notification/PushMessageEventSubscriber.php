@@ -122,7 +122,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
 
         $body = array('type' => 'course.open');
 
-        return $this->push($course['title'], '课程已发布!', $from, $to, $body);
+        return $this->push($course['title'], $this->getKernel()->trans('课程已发布!'), $from, $to, $body);
     }
 
     public function onAnnouncementCreate(ServiceEvent $event)
@@ -173,7 +173,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'content' => $this->plainText($article['body'], 50)
         );
 
-        $this->push('资讯', $article['title'], $from, $to, $body);
+        $this->push($this->getKernel()->trans('资讯'), $article['title'], $from, $to, $body);
     }
 
     public function onCourseThreadPostCreate(ServiceEvent $event)
@@ -349,7 +349,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             case 'global':;
                 $schoolUtil      = new MobileSchoolUtil();
                 $schoolApp       = $schoolUtil->getAnnouncementApp();
-                $target['title'] = '网校公告';
+                $target['title'] = $this->getKernel()->trans('网校公告');
                 $target['id']    = $schoolApp['id'];
                 $target['image'] = $this->getFileUrl($schoolApp['avatar']);
             default:
@@ -445,4 +445,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
     {
         return ServiceKernel::instance()->createService('System.SettingService');
     }
+    protected function getKernel()
+    {
+        return ServiceKernel::instance();
+    }
+
 }

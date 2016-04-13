@@ -46,9 +46,9 @@ class OptimizeController extends BaseController
     {
         $result = $this->getSystemUtilService()->removeUnusedUploadFiles();
         if($result){
-            return $this->createJsonResponse(array("success"=>true,'message'=>'优化文件'));
+            return $this->createJsonResponse(array("success"=>true,'message'=>$this->getServiceKernel()->trans('优化文件')));
         }else{
-            return $this->createJsonResponse(array("success"=>false,'message'=>'无可优化文件')); 
+            return $this->createJsonResponse(array("success"=>false,'message'=>$this->getServiceKernel()->trans('无可优化文件'))); 
         }
     }
 

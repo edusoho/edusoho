@@ -10,7 +10,7 @@ class FillQuestionType extends AbstractQuestionType
 
         preg_match_all("/\[\[(.+?)\]\]/", $fields['stem'], $answer, PREG_PATTERN_ORDER);
         if (empty($answer[1])){
-            throw $this->createServiceException('该问题没有答案或答案格式不正确！');
+            throw $this->createServiceException($this->getKernel()->trans('该问题没有答案或答案格式不正确！'));
         }
 
         $fields['answer'] = array();
@@ -58,6 +58,10 @@ class FillQuestionType extends AbstractQuestionType
         } else {
             return array('status' => 'right');
         }
+    }
+        protected function getKernel()
+    {
+        return ServiceKernel::instance();
     }
 
 }
