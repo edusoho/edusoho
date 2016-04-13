@@ -411,6 +411,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $converted['id'] = $thread['id'];
         $converted['target'] = $this->getTarget($thread['targetType'], $thread['targetId']);
         $converted['relationId'] = $thread['relationId'];
+        $converted['type'] = empty($thread['type']) ? 'none' : $thread['type'];
         $converted['title'] = $thread['title'];
         $converted['content'] = $this->convertHtml($thread['content']);
         $converted['postNum'] = $thread['postNum'];
@@ -533,6 +534,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 $course          = $this->getCourseService()->getCourse($id);
                 $target['title'] = $course['title'];
                 $target['image'] = $this->getFileUrl($course['smallPicture']);
+                $target['teacherIds'] = empty($course['teacherIds']) ? array() : $course['teacherIds'];
                 break;
             case 'lesson':
                 $lesson          = $this->getCourseService()->getLesson($id);
