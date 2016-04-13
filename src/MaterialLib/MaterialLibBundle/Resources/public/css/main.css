@@ -140,6 +140,12 @@
   cursor: not-allowed;
   background-color: transparent;
 }
+@media(max-width:400px)  {
+  .materials-list {
+    width: 100%!important;
+  }
+}
+
 
 .materials-ul {
   border: solid 1px #eee;
