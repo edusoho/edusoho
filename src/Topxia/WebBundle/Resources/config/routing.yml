@@ -463,6 +463,10 @@ course_lesson_document:
     pattern:  /course/{courseId}/lesson/{lessonId}/document
     defaults: { _controller: TopxiaWebBundle:CourseLesson:document }
 
+course_lesson_flash:
+    pattern:  /course/{courseId}/lesson/{lessonId}/flash
+    defaults: { _controller: TopxiaWebBundle:CourseLesson:flash }
+
 course_lesson_learn_status:
     pattern:  /course/{courseId}/lesson/{lessonId}/learn/status
     defaults: { _controller: TopxiaWebBundle:CourseLesson:learnStatus }
