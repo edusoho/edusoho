@@ -162,10 +162,6 @@
   list-style-type: none;
 }
 
-.materials-ul li img {
-  width:100%;
-}
-
 .materials-ul li .op-btn {
   text-align: center;
   height: 40px;
