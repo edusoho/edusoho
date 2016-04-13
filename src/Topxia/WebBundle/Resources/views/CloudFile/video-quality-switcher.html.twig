@@ -10,20 +10,12 @@
   <div class="quality-switcher-control">
     <div class="video-quality radios">
       画质：
-      {% if file|default(null) %}
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, file.convertParams.videoQuality|default('low')) }}
-      {% else %}
-        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, storageSetting.video_quality|default('low')) }}
-      {% endif %}
+        {{ radios('video_quality', {'low':'流畅 <span class="text-muted">(适合PPT讲解)</span>', 'normal':'标准 <span class="text-muted">(适合屏幕录制、摄像头拍摄)</span>', 'high': '精细 <span class="text-muted">(适合动态电影)</span>'}, setting('storage.video_quality', 'normal')) }}
     </div>
 
     <div class="audio-quality radios">
       音质：
-      {% if file|default(null) %}
-        {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, file.convertParams.audioQuality|default('low')) }}
-      {% else %}
-        {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, storageSetting.video_audio_quality|default('low')) }}
-        {% endif %}
+        {{ radios('video_audio_quality', {'low':'流畅', 'normal':'标准', 'high': '高品'}, setting('storage.video_audio_quality', 'normal')) }}
     </div>
 
     <div class="quality-actions">
