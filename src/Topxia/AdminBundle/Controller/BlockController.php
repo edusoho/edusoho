@@ -16,7 +16,10 @@ class BlockController extends BaseController
 {
     public function indexAction(Request $request, $category='')
     {
-
+        $file=$this->container->getParameter('topxia.upload.public_directory');
+        $file=dirname($file).'/themes/jianmo/block.json';
+        BlockToolkit::init($file);
+        exit;
         list($condation, $sort)= $this->dealQueryFields($category);
         $paginator = new Paginator(
             $this->get('request'),
