@@ -434,10 +434,6 @@ class CourseLessonManageController extends BaseController
                 $lesson['mediaStatus'] = $file['convertStatus'];
             }
 
-//  if ($shortcut == 'true')
-
-//  return $this->render('TopxiaWebBundle:CourseLessonManage:list-item.html.twig', array( 'course' => $course,'lesson' => $lesson))->getContent();
-            //else
             $lessonId = 0;
             $this->getCourseService()->deleteCourseDrafts($id, $lessonId, $this->getCurrentUser()->id);
 
@@ -459,20 +455,6 @@ class CourseLessonManageController extends BaseController
         $targetId   = $course['id'];
         $draft      = $this->getCourseService()->findCourseDraft($targetId, 0, $userId);
         $setting    = $this->setting('storage');
-
-//      if ($setting['upload_mode'] == 'local') {
-
-//          $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
-
-//           'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-
-//           'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
-
-// );
-
-//      } else {
-
-        //      }
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
 
