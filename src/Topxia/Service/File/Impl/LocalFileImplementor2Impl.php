@@ -12,7 +12,12 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
     }
 
-    public function findFiles($file)
+    public function updateFile($globalId, $fields)
+    {
+
+    }
+
+    public function findFiles($file,$conditions)
     {
     }
 
