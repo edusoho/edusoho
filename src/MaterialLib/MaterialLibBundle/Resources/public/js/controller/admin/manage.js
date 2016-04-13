@@ -72,7 +72,7 @@ define(function(require, exports, module) {
                 }).done(function(resp){
                     self.element.hide();
                     self.element.prev().hide();
-                    self.element.parent().html(resp);
+                    self.element.parent().append(resp);
                     new DetailWidget({
                         element:'#material-detail',
                         callback: function() {
