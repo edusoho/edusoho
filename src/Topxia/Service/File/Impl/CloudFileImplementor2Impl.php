@@ -69,6 +69,9 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function getDefaultHumbnails($globalId)
     {
+        if(empty($globalId)) {
+          return array();
+        }
         $api = CloudAPIFactory::create('root');
         return $api->get("/resources/{$globalId}/default_thumbnails");
     }
@@ -277,7 +280,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['views']     = $cloudFile['views'];
         $file['tags']      = $cloudFile['tags'];
         $file['thumbnail'] = $cloudFile['thumbnail'];
-
+        $file['description'] = $cloudFile['description'];
+        $file['processStatus'] = $cloudFile['processStatus'];
         $statusMap = array(
             'none'       => 'none',
             'waiting'    => 'waiting',

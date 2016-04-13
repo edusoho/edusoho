@@ -2,48 +2,42 @@
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   <tr>
     <td>
-      <div>
-        <div class="pull-left" style="width:25%">
-            <img style="width:60px;height:60px;border-radius:4px;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
+        <div class="pull-left mrm">
+          <img style="width:100px;border-radius:4px;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
         </div>
-        <div class="pull-right" style="width:75%;">
+        <div class="">
           <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.name }}" style="margin:0;">{{ material.name }}</p>
-
           <div>
             <span class="text-sm text-muted" style="display:block">
               {% if createdUser %}
                 {{ createdUser.nickname }} 上传
               {% endif %}
             </span>
-            {% if material.processStatus == 'ok' %}
-              {#}<span class="label label-success">
-                {{ dict_text('processStatus', material.processStatus) }}
-              </span>#}
-            {% elseif material.processStatus == 'waiting' %}
-              <span class="label label-info">
-                {{ dict_text('processStatus', material.processStatus) }}
-              </span>
-            {% elseif material.processStatus == 'processing' %}
-              label-primary
-              <span class="label label-info">
-                {{ dict_text('processStatus', material.processStatus) }}
-              </span>
-            {% elseif material.processStatus == 'error' %}
-              <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span><br><a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
-            {% else %}
-              {% if material.type != "image" %}
-                <span class="label label-default">
-                  {{ dict_text('processStatus', material.processStatus) }}
-                </span>
+            {% if material.type in ['video', 'ppt', 'document'] %}
+              {% if material.processStatus == 'ok' %}
+                {#}
+              <span class="label label-success">{{ dict_text('processStatus', material.processStatus) }}</span>
+              #}
+              {% elseif material.processStatus == 'waiting' %}
+              <span class="label label-info">{{ dict_text('processStatus', material.processStatus) }}</span>
+              {% elseif material.processStatus == 'processing' %}
+                label-primary
+              <span class="label label-info">{{ dict_text('processStatus', material.processStatus) }}</span>
+              {% elseif material.processStatus == 'error' %}
+              <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span>
+              <br>
+              <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交..." style="margin-top:10px">重新转码</a>
+              {% else %}
+                {% if material.type != "image" %}
+              <span class="label label-default">{{ dict_text('processStatus', material.processStatus) }}</span>
+                {% endif %}
               {% endif %}
             {% endif %}
             {% if material.usedCount|default(0) == 0 %}
-              <span class="label label-default">未使用</span>
+            <span class="label label-default">未使用</span>
             {% endif %}
           </div>
-
         </div>
-      </div>
     </td>
 
     <td class="text-center">

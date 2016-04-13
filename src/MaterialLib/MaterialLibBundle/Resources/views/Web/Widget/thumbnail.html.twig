@@ -11,6 +11,7 @@
 
 
 <div class="option-vertical">
+  <i class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
   <i href="javascript:;" class="glyphicon glyphicon-option-vertical" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   </i>
   <ul class="dropdown-menu">
@@ -27,9 +28,9 @@
       {% endif %}
   </ul>
 </div>
-<div class="star">
-    <i class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"data-toggle="tooltip" data-placement="bottom" title="收藏" data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"></i>
-</div>
+<!-- <div class="star">
+    
+</div> -->
 <div class="mask">
   {#}<i class="es-icon es-icon-view"></i><span>{{ uploadFile.views|default(0) }}</span>#}
   {% if uploadFile.type in ['video', 'audio'] %}
