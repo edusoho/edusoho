@@ -50,7 +50,7 @@ define(function(require, exports, module) {
         });
 
         $list.on('click', '.delete-lesson-btn', function(e) {
-            if (!confirm(Translator.trans('删除课时的同时会删除课时的资料、测验。')+'\n'+Translator.trans('您真的要删除该课时吗？'))) {
+            if (!confirm(Translator.trans('删除课时的同时会删除课时的资料、测验。\n您真的要删除该课时吗？'))) {
                 return ;
             }
             var $btn = $(e.currentTarget);
@@ -81,7 +81,7 @@ define(function(require, exports, module) {
             $.post($(this).data('url'), function(response) {
                 $btn.parents('.item-chapter').remove();
                 sortList($list);
-                Notify.success(''+chapter_name+''+part_name+Translator.trans('已删除！'));
+                Notify.successTranslator.trans((''+chapter_name+''+part_name+'已删除！'));
             }, 'json');
         });
 
@@ -120,7 +120,7 @@ define(function(require, exports, module) {
             var $btn = $(e.currentTarget);
             $.post($(this).data('url'), function(html) {
                 var id = '#' + $(html).attr('id');
-                $(id).find('.item-content').append('<span class="unpublish-warning text-warning">'+Translator.trans('(未发布)')+'</span>');
+                $(id).find('.item-content').append('<span class="unpublish-warning text-warning">('+Translator.trans('(未发布)')+')</span>');
                 $(id).find('.item-actions .publish-lesson-btn').parent().addClass('show').removeClass('hidden');
                 $(id).find('.item-actions .unpublish-lesson-btn').parent().addClass('hidden').removeClass('show');
                 $(id).find('.item-actions .delete-lesson-btn').parent().addClass('show').removeClass('hidden');

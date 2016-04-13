@@ -34,7 +34,7 @@ define(function(require, exports, module) {
 				questionTotal = 0;
 			}
 			
-			var html = Translator.trans('试卷总分%foo%分%foo1%%foo2%题/%foo3%分',{foo:total,foo1:questionType,foo2:questionCount ,foo3:questionTotal});
+			var html = Translator.trans('试卷总分%total%分%questionType%%questionCount%题/%questionTotal%分',{total:total,questionType:questionType,questionCount:questionCount ,questionTotal:questionTotal});
 			$('.score-text-alert').html(html);
     	},
 

@@ -315,7 +315,7 @@ define(function(require, exports, module) {
             } else {
                 return false;
             }
-        }, {{display}}Translator.trans('只能是<=试卷总分、且>0的整数或者1位小数');
+        }, Translator.trans('{{display}}只能是<=试卷总分、且>0的整数或者1位小数');
 
 
         new TestpaperItemManager({

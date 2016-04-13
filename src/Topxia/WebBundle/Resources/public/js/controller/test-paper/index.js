@@ -27,7 +27,7 @@ define(function(require, exports, module) {
             var $trigger = $(this);
             var $oldTr = $trigger.parents('tr');
 
-            if (!confirm(Translator.trans('真的要%foo%吗？ 试卷发布后无论是否关闭都将无法修改。',{foo:$trigger.attr('title')}))) {
+            if (!confirm(Translator.trans('真的要%title%吗？ 试卷发布后无论是否关闭都将无法修改。',{title:$trigger.attr('title')}))) {
                 return ;
             }
 
