@@ -54,6 +54,11 @@ material_lib_file_preview:
     pattern:  /material/lib/file/{fileId}/preview
     defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
 
+material_edit:
+    pattern:  /materiallib/{globalId}/edit
+    defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
+    methods: [POST]
+
 materiallib_file_delete:
     pattern: /materiallib/file/{id}/delete
     defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
