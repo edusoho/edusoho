@@ -112,7 +112,12 @@ class MaterialLibController extends BaseController
     {
         $currentUser = $this->getCurrentUser();
         $file = $this->getMaterialLibService()->get($fileId);
-
+        if($file['storage'] == 'local') {
+          return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
+              'material'   => $file,
+              'thumbnails' => ""
+          ));
+        }
         if (!($file['createdUserId'] == $currentUser['id']))  {
             if ($file['type'] == 'video') {
               try{
