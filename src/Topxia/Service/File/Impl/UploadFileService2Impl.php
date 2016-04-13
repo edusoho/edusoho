@@ -28,31 +28,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
-    public function findFiles($fileIds)
-    {
-        $files = $this->findCloudFilesByIds($fileIds);
-
-        if (empty($files)) {
-            return null;
-        }
-
-        $groupFiles = ArrayToolkit::group($files, 'storage');
-
-        if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
-            $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->findFiles($groupFiles['cloud'], array());
-
-            $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
-
-            foreach ($files as $key => $file) {
-                if ($file['storage'] == 'cloud') {
-                    $files[$key] = $cloudFiles[$file['id']];
-                }
-            }
-        }
-
-        return $files;
-    }
-
+    /**
+     *  此函数不走云
+     *
+     */
     public function getThinFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
@@ -75,6 +54,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    //TODO
     public function findFilesByIds(array $ids)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
@@ -90,6 +70,29 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $cloudFiles;
     }
 
+    //TODO
+    public function findCloudFilesByIds($fileIds)
+    {
+        $files = $this->getUploadFileDao()->findCloudFilesByIds($fileIds);
+
+        if (!empty($files)) {
+            return null;
+        }
+
+        $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->findFiles($files, array());
+
+        $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
+
+        foreach ($files as $key => $file) {
+            $files[$key] = $cloudFiles[$file['id']];
+        }
+
+        return $files;
+    }
+
+    /**
+     * 不走云
+     */
     public function findLocalFilesByIds(array $ids)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
@@ -101,25 +104,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $files;
     }
 
-    protected function findCloudFilesByIds(array $ids)
+    public function findFilesByTargetTypeAndTargetId($targetType, $targetId)
     {
-        $files = $this->getUploadFileDao()->findCloudFilesByIds($ids);
-
-        if (empty($files)) {
-            return array();
-        }
-
-        return $files;
+        return $this->getUploadFileDao()->findFilesByTargetTypeAndTargetId($targetType, $targetId);
     }
 
-    public function findFilesByTypeAndId($targetType, $targetId)
+    public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds)
     {
-        return $this->getUploadFileDao()->findFilesByTypeAndId($targetType, $targetId);
-    }
-
-    public function findFilesByCourseIds($targetIds)
-    {
-        return $this->getUploadFileDao()->findFilesByCourseIds($targetIds);
+        return $this->getUploadFileDao()->findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
     }
 
     public function searchFiles($conditions, $orderBy, $start, $limit)

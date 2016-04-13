@@ -69,12 +69,13 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function getDefaultHumbnails($globalId)
     {
-        if(empty($globalId)) {
-          return array();
+        if (empty($globalId)) {
+            return array();
         }
-        $api = CloudAPIFactory::create('root');
+
+        $api    = CloudAPIFactory::create('root');
         $result = $api->get("/resources/{$globalId}/default_thumbnails");
-        return   $result;
+        return $result;
     }
 
     public function getThumbnail($globalId, $options)
@@ -276,14 +277,14 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     private function mergeCloudFile($file, $cloudFile)
     {
-        $file['hashId']    = $cloudFile['reskey'];
-        $file['fileSize']  = $cloudFile['size'];
-        $file['views']     = $cloudFile['views'];
-        $file['tags']      = $cloudFile['tags'];
-        $file['thumbnail'] = $cloudFile['thumbnail'];
-        $file['description'] = $cloudFile['description'];
+        $file['hashId']        = $cloudFile['reskey'];
+        $file['fileSize']      = $cloudFile['size'];
+        $file['views']         = $cloudFile['views'];
+        $file['tags']          = $cloudFile['tags'];
+        $file['thumbnail']     = $cloudFile['thumbnail'];
+        $file['description']   = $cloudFile['description'];
         $file['processStatus'] = $cloudFile['processStatus'];
-        $statusMap = array(
+        $statusMap             = array(
             'none'       => 'none',
             'waiting'    => 'waiting',
             'processing' => 'doing',
@@ -297,6 +298,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $file['metas2']        = array();
         } else {
             if ($file['type'] == 'video') {
+                var_dump($cloudFile);
                 $file['convertParams'] = array(
                     'convertor'    => 'HLSEncryptedVideo',
                     'videoQuality' => $cloudFile['directives']['videoQuality'],
