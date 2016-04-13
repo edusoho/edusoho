@@ -23,32 +23,9 @@
   </div>
 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
-  <ul class="es-material-tabs nav">
-    <li class="all"><span>筛选：</span></li>
-    <div class="form-group" style="margin-top:7px;">
-      <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
-      -
-      <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
-    </div>
-    <div class="form-group mll" style="margin-top:7px;">
-      <select class="form-control js-process-status-select" name="processStatus">
-        <option value="">转码状态</option>
-        <option value="ok">转码成功</option>
-        <option value="waiting">转码中</option>
-        <option value="error">转码失败</option>
-      </select>
-    </div>
-    <div class="form-group mll" style="margin-top:7px;">
-      <select class="form-control js-use-status-select" name="useStatus">
-        <option value="">使用状态</option>
-        <option value="unused">未使用</option>
-        <option value="used">已使用</option>
-      </select>
-    </div>
-  </ul>
-  <div class="well well-sm" style="margin-bottom:10px">
-    <span style="position:absolute">标签:</span>
 
+  <div class="well well-sm es-material-tabs " style="margin-bottom:0;position:relative">
+    <span style="position:absolute;top:9px;left:15px;">标签:</span>
       <div class="tags-container">
         {% for tag in tags %}
           <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
@@ -56,6 +33,31 @@
         <input type="hidden" name="tagId">
       </div>
   </div>
+
+  <ul class="es-material-tabs nav" style="margin-bottom:20px">
+    <li class="all"><span>筛选：</span></li>
+    <div class="form-group" style="margin:15px 0;">
+      <input class="form-control" type="text" id="startDate" name="startDate" value="" placeholder="起始时间">
+      -
+      <input class="form-control" type="text" id="endDate" name="endDate" value="" placeholder="结束时间">
+    </div>
+    <div class="form-group mll" style="margin:15px 0;">
+      <select class="form-control js-process-status-select" name="processStatus">
+        <option value="">转码状态</option>
+        <option value="ok">转码成功</option>
+        <option value="waiting">转码中</option>
+        <option value="error">转码失败</option>
+      </select>
+    </div>
+    <div class="form-group mll" style="margin:15px 0;">
+      <select class="form-control js-use-status-select" name="useStatus">
+        <option value="">使用状态</option>
+        <option value="unused">未使用</option>
+        <option value="used">已使用</option>
+      </select>
+    </div>
+  </ul>
+  
   <div id="material-lib-items-panel">
     <div>
       <a class="btn btn-primary js-upload-file-btn" data-toggle="modal" data-backdrop="static"  data-target="#modal"
