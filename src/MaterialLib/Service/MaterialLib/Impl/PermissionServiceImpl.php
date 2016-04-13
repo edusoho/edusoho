@@ -15,7 +15,7 @@ class PermissionServiceImpl extends BaseService
             return false;
         }
 
-        if ($currentUser->isAdmin()) {
+        if ($currentUser->isAdmin() || $currentUser->isTeacher()) {
             return true;
         }
 
