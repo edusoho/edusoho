@@ -35,15 +35,17 @@
                                 {% endif %}
                             </div>
 
+                        {% if app.user.approvalStatus != 'approving' %}
+
                             <div class="form-group">
                                 <div class="col-md-2 control-label">
                                     <label for="truename">{{'真实姓名'|trans}}</label>
                                 </div>
                                 <div class="col-md-8 controls">
-                                    {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                         <input type="text" id="truename" name="truename" class="form-control" value={{profile.truename}} disabled="true">
+                                    {% if  app.user.approvalStatus in ['approved']  %}
+                                         <input disabled="true" type="text" id="truename" name="truename" class="form-control" value="{{profile.truename}}"  disabled="">
                                     {% else %}
-                                         <input type="text" id="truename" name="truename" class="form-control" value="" disabled="false">
+                                         <input type="text" id="truename" name="truename" class="form-control" value="" >
                                     {% endif %}
                                 </div>
                             </div>
@@ -53,18 +55,17 @@
                                 <label for="idcard">{{'身份证号'|trans}}</label>
                             </div>
                             <div class="col-md-8 controls">
-                                {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                    <input type="text" id="idcard" name="idcard" class="form-control" value={{profile.idcard}} disabled="true">
+                                {% if  app.user.approvalStatus in ['approved']  %}
+                                    <input type="text" id="idcard" name="idcard" class="form-control" value="{{profile.idcard}}"disabled="true">
                                 {% else %}
                                     <input type="text" id="idcard" name="idcard" class="form-control" value="">
                                 {% endif %}
                             </div>
                             </div>
-
-
+                            {% if app.user.approvalStatus != 'approved' %}
                             <div class="form-group">
                                 <div class="col-md-2 control-label">
-                                    <label>{{'照片要求'|trans}}</label>
+                                        <label>{{'照片要求'|trans}}</label>
                                 </div>
                                 <div class="controls col-md-8 controls">
                                     {{'<p class="text-warning">证件必须是清晰彩色原件电子版，可以是扫描或者数码相机拍摄照片。<br />图片格式支持jpg、gif、png，每张图片文件大小不能超过2M。</p>'|trans|raw}}
@@ -100,9 +101,9 @@
                             <div class="row">
                                 <div class="col-md-7 col-md-offset-2">
                                     {% if  app.user.approvalStatus in ['approving' , 'approved']  %}
-                                        <button type="submit" class="btn btn-primary" disabled="true">{{'提交'|trans}}</button>
+                                        <button type="submit" class="btn btn-primary" disabled="true">{{'已提交'|trans}}</button>
                                     {% else %}
-                                        <button type="submit" class="btn btn-primary">{{'已提交'|trans}}</button>
+                                        <button type="submit" class="btn btn-primary">{{'提交'|trans}}</button>
                                     {% endif %}
                                 </div>
                             </div>
@@ -110,7 +111,11 @@
                             <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
                     </form>
 
-             {% endif %}
+                    {% endif %}
+
+                 {% endif %}
+
+            {% endif %}
 
         {% endblock %}
 
