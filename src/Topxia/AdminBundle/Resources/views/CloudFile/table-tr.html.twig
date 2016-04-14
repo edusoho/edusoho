@@ -1,40 +1,45 @@
 
   <tr>
     <td>
-        <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;background:#313131;border-radius:5px;overflow:hidden;">
-          <img style="height:100%;" src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
+        <div class="materials-table-img">
+          <div class="mask">
+            {% if cloudFile.convertStatus == 'success' %}
+              <a class="btn btn-info">资料预览</a>
+            {% endif %}
+            {% if cloudFile.convertStatus == 'error' %}
+              <a class="js-reconvert-btn btn btn-warning" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}' data-loading-text="正在提交...">重新转码</a>
+            {% endif %}
+          </div>
+          <img src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
         </div>
-        <div class="">
-          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ cloudFile.filename }}" style="margin:0;">{{ cloudFile.filename }}</p>
-          <div>
-            <span class="text-sm text-muted">
-              {% if createdUser %}
+        <div class="materials-table-title">
+          <a class="heading"  href="javascript:;" data-toggle="tooltip" data-placement="top" title="{{ cloudFile.filename }}" style="margin:0;">{{ cloudFile.filename }}</a>
+          <span class="text-sm text-muted">
+            {% if createdUser %}
                 {{ createdUser.nickname }} 上传
               {% endif %}
-            </span>
-            {% if cloudFile.type in ['video', 'ppt', 'document'] %}
+          </span>
+          {% if cloudFile.type in ['video', 'ppt', 'document'] %}
               {% if cloudFile.processStatus == 'ok' %}
                 {#}
-              <span class="label label-success">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              #}
+          <span class="label label-success">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+          #}
               {% elseif cloudFile.processStatus == 'waiting' %}
-              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              {% elseif cloudFile.processStatus == 'processing' %}
+          <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+          {% elseif cloudFile.processStatus == 'processing' %}
                 label-primary
-              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              {% elseif cloudFile.processStatus == 'error' %}
-              <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}" data-loading-text="正在提交...">重新转码</a>
-              {% else %}
-                {% if cloudFile.type != "image" %}
-              <span class="label label-default">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-                {% endif %}
+          <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+          {% elseif cloudFile.processStatus == 'error' %}
+          <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+          {% else %}
+          {% if cloudFile.type != "image" %}
+          <span class="label label-default">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+          {% endif %}
               {% endif %}
             {% endif %}
             {% if cloudFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and  cloudFile.usedCount|default(0) == 0 %}
-            <span class="label label-default">未使用</span>
-            {% endif %}
-          </div>
+          <span class="label label-default">未使用</span>
+          {% endif %}
         </div>
     </td>
 
