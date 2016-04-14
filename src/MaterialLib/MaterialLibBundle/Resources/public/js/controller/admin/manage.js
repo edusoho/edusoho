@@ -178,7 +178,7 @@ define(function(require, exports, module) {
             },
             _loading: function()
             {
-                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</td></tr>';
+                var loading = '<tr><td class="empty" colspan="10" style="color:#999;padding:80px;">正在加载，请等待......</td></tr>';
                 var $table = this.element.find('#materials-table');
                 $table.find('tbody').html(loading);
             },
