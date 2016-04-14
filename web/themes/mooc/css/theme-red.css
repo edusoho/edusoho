@@ -26,7 +26,6 @@
   background-color: #cf363f !important;
 }
 .btn {
-  padding: 8px 24px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -46,6 +45,7 @@
   text-decoration: none;
 }
 .btn-default {
+  padding: 8px 24px;
   border: 2px solid #a5a7b3;
   color: #a5a7b3;
   background: transparent;
@@ -70,7 +70,7 @@
   color: #fff;
 }
 .btn-md {
-  padding: 6px 25px;
+  padding: 6px 25px!important;
 }
 .btn-gylight {
   border: 1px solid #bfbfbf;
@@ -93,6 +93,12 @@
   background-color: #bfbfbf;
   color: #fff;
   cursor: default;
+}
+.btn-group .btn:last-child {
+  border-right: none;
+}
+.btn-group .btn:last-child {
+  border-left: none;
 }
 .label-sm {
   padding: 0.4em 0.6em;
