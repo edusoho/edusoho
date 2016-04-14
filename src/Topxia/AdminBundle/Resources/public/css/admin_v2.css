@@ -581,12 +581,26 @@ margin-top: 14px;
   padding-left: 75px;
 }
 
-.materials-nav.materials-tags .label{
+.materials-nav.materials-tags .item .label{
   display: inline-block;
   margin-right: 10px;
   margin-top: 10px;
 }
 
+<<<<<<< HEAD
+.materials-nav.materials-tags .item  .active-hide{
+  display: none;
+}
+.materials-nav.materials-tags .item .active-show{
+  display: block;
+}
+.materials-nav.materials-tags .item.active .active-hide{
+  display: block;
+}
+.materials-nav.materials-tags .item.active .active-show{
+  display: none;
+}
+=======
 .materials-table-img {
   position: relative;
   float: left;
@@ -629,5 +643,6 @@ margin-top: 14px;
   display: block;
 }
 
+>>>>>>> 6ad27120a6c7f33f341d34c014f247275eee0028
 
 
