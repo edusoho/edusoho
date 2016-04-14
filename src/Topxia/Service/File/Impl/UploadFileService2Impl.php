@@ -54,6 +54,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    public function getThinFileByGlobalId($globalId)
+    {
+        return $this->getUploadFileDao()->getFileByGlobalId($globalId);
+    }
+
     //TODO
     public function findCloudFilesByIds($fileIds)
     {

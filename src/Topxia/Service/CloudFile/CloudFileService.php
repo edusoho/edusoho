@@ -6,7 +6,7 @@ interface CloudFileService
 {
     public function search($conditions, $start, $limit);
 
-    public function get($globalId);
+    public function getByGlobalId($globalId);
 
     public function player($globalId);
 

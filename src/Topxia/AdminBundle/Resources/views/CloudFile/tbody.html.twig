@@ -1,68 +1,6 @@
 {% for material in materials %}
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
-  <tr>
-    <td>
-        <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;background:#313131;border-radius:5px;overflow:hidden;">
-          <a href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: material.no}) }}" >
-            <img style="height:100%;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
-          </a>
-        </div>
-        <div class="">
-          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.filename }}" style="margin:0;">{{ material.filename }}</p>
-          <div>
-            <span class="text-sm text-muted">
-              {% if createdUser %}
-                {{ createdUser.nickname }} 上传
-              {% endif %}
-            </span>
-            {% if material.type in ['video', 'ppt', 'document'] %}
-              {% if material.processStatus == 'ok' %}
-                {#}
-              <span class="label label-success">{{ dict_text('processStatus', material.processStatus) }}</span>
-              #}
-              {% elseif material.processStatus == 'waiting' %}
-              <span class="label label-info">{{ dict_text('processStatus', material.processStatus) }}</span>
-              {% elseif material.processStatus == 'processing' %}
-                label-primary
-              <span class="label label-info">{{ dict_text('processStatus', material.processStatus) }}</span>
-              {% elseif material.processStatus == 'error' %}
-              <span class="label label-danger">{{ dict_text('processStatus', material.processStatus) }}</span>
-              <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:material.no}) }}" data-loading-text="正在提交...">重新转码</a>
-              {% else %}
-                {% if material.type != "image" %}
-              <span class="label label-default">{{ dict_text('processStatus', material.processStatus) }}</span>
-                {% endif %}
-              {% endif %}
-            {% endif %}
-            {% if material.type in ['video', 'audio', 'ppt', 'document', 'flash'] and  material.usedCount|default(0) == 0 %}
-            <span class="label label-default">未使用</span>
-            {% endif %}
-          </div>
-        </div>
-    </td>
-
-    <td class="text-center">
-      {{ dict_text('fileType', material.type) }}
-    </td>
-    <td class="text-center">
-      {{ material.fileSize|file_size }}
-    </td>
-    <td class="text-center">
-      <span style="display:block">{{ material.createdTime|date('Y-m-d H:i:s') }}</span>
-    </td>
-    <td class="es-materillib-table text-center">
-      <a type="button" class="glyphicon glyphicon-info-sign js-detail-btn mrl" href="javascript:;"data-toggle="tooltip" data-placement="top" title="详细信息" data-url="{{ path('admin_cloud_file_detail', {globalId:material.no}) }}"></a>
-      <a class="glyphicon glyphicon-save js-download-btn mrl" href="{{ path('admin_cloud_file_download', {globalId:material.no}) }}"data-toggle="tooltip" data-placement="top" title="下载" target="__blank"></a>
-      <div class="btn-group">
-        <a href="javascript:;" class="es-icon es-icon-morehoriz" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <span class="sr-only">Toggle Dropdown</span>
-        </a>
-        <ul class="dropdown-menu">
-          <li class="js-delete-btn" data-url="{{ path('admin_cloud_file_delete', {globalId:material.no}) }}"><a class="glyphicon glyphicon-trash" href="javascript:;"> 删除文件</a></li>
-        </ul>
-      </div>
-    </td>
-  </tr>
+  {% include 'TopxiaAdminBundle:CloudFile:table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
 {% else %}
   <tr>
     <td class="empty" colspan="10" style="color:#999;padding:80px;">没有搜索到任何资源......</td>

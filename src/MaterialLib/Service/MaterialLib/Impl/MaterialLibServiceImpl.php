@@ -3,7 +3,6 @@
 namespace MaterialLib\Service\MaterialLib\Impl;
 
 use MaterialLib\Service\BaseService;
-use MaterialLib\Service\MaterialLib\Permission;
 use Topxia\Service\Common\AccessDeniedException;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
 
@@ -17,7 +16,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function getByGlobalId($globalId)
     {
-        return $this->getCloudFileService()->get($globalId);
+        return $this->getUploadFileService()->getFileByGlobalId($globalId);
     }
 
     public function player($globalId)
@@ -74,7 +73,9 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function reconvert($globalId, $options = array())
     {
         //$this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
-        return $this->getCloudFileService()->reconvert($globalId, $options);
+        $result = $this->getCloudFileService()->reconvert($globalId, $options);
+        $file   = $this->getByGlobalId($globalId);
+        return $file;
     }
 
     public function getDefaultHumbnails($globalId)

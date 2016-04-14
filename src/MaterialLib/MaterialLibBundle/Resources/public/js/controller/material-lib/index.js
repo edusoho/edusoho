@@ -94,10 +94,7 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),function(data){
                         if(data){
                             Notify.success('删除成功!');
-                            self.renderTable();
-                        } else {
-                            Notify.danger('删除失败!');
-                            self.renderTable();
+                            self.renderTable(true);
                         }
                     });
                 }
@@ -151,10 +148,9 @@ define(function(require, exports, module) {
                 $.ajax({
                     type:'POST',
                     url:$target.data('url'),
-                }).done(function(){
+                }).done(function(response){
                     Notify.success('重新转码成功!');
-                    var html = '<span class="label label-info">等待转码</span>';
-                    $target.closest('td').html(html);
+                    $target.parents(".materials-list").replaceWith($(response));
                 }).fail(function(){
                     Notify.danger('重新转码失败!');
                 }).always(function(){
@@ -255,11 +251,8 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),{"ids":ids},function(data){
                         if(data){
                             Notify.success('删除资源成功');
-
-                            self.renderTable();
-                        } else {
-                            Notify.danger('删除资源失败');
-                            self.renderTable();
+                            self.renderTable(true);
+                            $("input[name = 'batch-select']").attr("checked",false);
                         }
                         $('#material-lib-items-panel').find('[data-role=batch-item]').show();
                         $('#material-lib-items-panel').find('[data-role=batch-select]').attr("checked",false);

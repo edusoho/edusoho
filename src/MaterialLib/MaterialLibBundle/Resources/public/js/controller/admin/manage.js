@@ -97,7 +97,7 @@ define(function(require, exports, module) {
                         url:$target.data('url'),
                     }).done(function(){
                         Notify.success('删除成功!');
-                        self.renderTable();
+                        self.renderTable(true);
                     }).fail(function(){
                         Notify.danger('删除失败!');
                     });
@@ -112,8 +112,9 @@ define(function(require, exports, module) {
                 $.ajax({
                     type:'POST',
                     url:$target.data('url'),
-                }).done(function(){
+                }).done(function(response){
                     Notify.success('重新转码成功!');
+                    $target.parents('tr').replaceWith(response);
                 }).fail(function(){
                     Notify.danger('重新转码失败!');
                 }).always(function(){

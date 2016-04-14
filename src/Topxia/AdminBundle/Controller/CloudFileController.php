@@ -69,7 +69,7 @@ class CloudFileController extends BaseController
                 return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
             }
 
-            $cloudFile = $this->getCloudFileService()->get($globalId);
+            $cloudFile = $this->getCloudFileService()->getByGlobalId($globalId);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:CloudFile:detail-not-found.html.twig', array());
         }
@@ -106,9 +106,18 @@ class CloudFileController extends BaseController
 
     public function reconvertAction(Request $request, $globalId)
     {
-        return $this->createJsonResponse($this->getCloudFileService()->reconvert($globalId, array(
+        $cloudFile = $this->getCloudFileService()->reconvert($globalId, array(
             'directives' => array()
-        )));
+        ));
+
+        if (isset($cloudFile['createdUserId'])) {
+            $createdUser = $this->getUserService()->getUser($cloudFile['createdUserId']);
+        }
+
+        return $this->render('TopxiaAdminBundle:CloudFile:table-tr.html.twig', array(
+            'cloudFile'   => $cloudFile,
+            'createdUser' => isset($createdUser) ? $createdUser : array()
+        ));
     }
 
     public function downloadAction($globalId)
