@@ -68,11 +68,7 @@ class CourseTestpaperManageController extends BaseController
         $conditions["courseId"] = $course["id"];
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, "type");
-        $conditions = array();
-        $conditions['type'] = 'material';
-        $conditions['subCount'] = 0;
-        $questionNums['material']['questionNum'] = $this->getQuestionService()->searchQuestionsCount($conditions);
-
+        
         return $this->render('TopxiaWebBundle:CourseTestpaperManage:create.html.twig', array(
             'course'    => $course,
             'ranges' => $this->getQuestionRanges($course),
