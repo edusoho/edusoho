@@ -656,4 +656,14 @@ margin-top: 14px;
   margin-bottom: 20px;
 }
 
+.material-detail-widget .content #cover-tab .thumbnail-pane {
+  display: none;
+}
+.material-detail-widget .content #cover-tab .thumbnail-pane.active {
+  display: block;
+}
+.material-detail-widget .content #cover-tab .links a.disabled {
+  color: #777;
+}
+
 
