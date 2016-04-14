@@ -252,6 +252,7 @@ define(function(require, exports, module) {
                         if(data){
                             Notify.success('删除资源成功');
                             self.renderTable(true);
+                            $("input[name = 'batch-select']").attr("checked",false);
                         }
                         $('#material-lib-items-panel').find('[data-role=batch-item]').show();
                         $('#material-lib-items-panel').find('[data-role=batch-select]').attr("checked",false);
