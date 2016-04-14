@@ -131,6 +131,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $conditions = $this->_prepareSearchConditions($conditions);
         $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+
         if (empty($files)) {
             return array();
         }
@@ -199,7 +200,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $this->updateTags($file, $fields);
 
             if (!empty($file['globalId'])) {
-                $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'endShared', 'thumbNo', 'endUser'));
+                $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'thumbNo'));
 
                 if (!empty($cloudFields)) {
                     $this->getFileImplementor(array('storage' => 'cloud'))->updateFile($file['globalId'], $cloudFields);

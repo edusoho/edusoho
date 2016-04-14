@@ -27,6 +27,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if (!empty($conditions['tags'])) {
             $noArray[] = $this->findGlobalIdsByTags($conditions['tags']);
         }
+
         if (!empty($conditions['keywords']) && in_array($conditions['searchType'], array('course', 'user'))) {
             $noArray[] = $this->findGlobalIdsByKeyWords($conditions['searchType'], $conditions['keywords']);
             unset($conditions['keywords']);
@@ -98,7 +99,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $users      = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, 999);
             $userIds    = ArrayToolkit::column($users, 'id');
             $localFiles = $this->getUploadFileService()->searchFiles(
-                array('createdUserIds' => $userIds, 'storage' => 'cloud'),array('createdTime','DESC'), 0, PHP_INT_MAX
+                array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime', 'DESC'), 0, PHP_INT_MAX
             );
             $globalIds = ArrayToolkit::column($localFiles, 'globalId');
             return $globalIds;
@@ -120,7 +121,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             return array('success' => true);
         }
 
-        $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'endShared'));
+        $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description'));
         return $this->getCloudFileImplementor()->updateFile($globalId, $cloudFields);
     }
 
