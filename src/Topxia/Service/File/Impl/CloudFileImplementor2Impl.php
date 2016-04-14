@@ -244,8 +244,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'size'   => $params['size']
         );
 
-        $api = CloudAPIFactory::create('root');
-        var_dump($file['globalId']);
+        $api                     = CloudAPIFactory::create('root');
         $result                  = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
         $result['convertStatus'] = 'none';
         $file                    = $api->get("/resources/{$file['globalId']}", array("refresh" => true));
