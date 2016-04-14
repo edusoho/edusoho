@@ -90,8 +90,6 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $api->get("/resources/data/statistics", $options);
     }
 
-
-
     public function findFiles($files, $conditions)
     {
         if (empty($files)) {

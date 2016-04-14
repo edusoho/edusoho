@@ -65,6 +65,8 @@ interface UploadFileService2
      */
     public function collectFile($userId, $fileId);
 
+    public function getFileByTargetType($targetType);
+
     public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
 
     public function findCollectionsByUserId($userId);
