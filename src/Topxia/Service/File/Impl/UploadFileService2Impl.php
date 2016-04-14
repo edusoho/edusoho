@@ -304,19 +304,13 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $file              = $this->getUploadFileDao()->getFile($params['id']);
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
-        $implementor       = $this->getFileImplementorByStorage($params['storage']);
 
         if (empty($params['length'])) {
             $params['length'] = 0;
         }
 
-        $finishParams = array(
-            "length" => $params['length'],
-            'name'   => $params['filename'],
-            'size'   => $params['size']
-        );
-
-        $result = $implementor->finishedUpload($file, $params);
+        $implementor = $this->getFileImplementorByStorage($params['storage']);
+        $result      = $implementor->finishedUpload($file, $params);
 
         if (empty($result) || !$result['success']) {
             throw $this->createServiceException("uploadFile失败，完成上传失败！");
@@ -600,6 +594,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             if ($conditions['useStatus'] == 'unused') {
                 $conditions['endCount'] = 1;
             }
+
             if ($conditions['useStatus'] == 'used') {
                 $conditions['startCount'] = 1;
             }

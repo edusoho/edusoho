@@ -90,8 +90,6 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $api->get("/resources/data/statistics", $options);
     }
 
-
-
     public function findFiles($files, $conditions)
     {
         if (empty($files)) {
@@ -246,7 +244,8 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             'size'   => $params['size']
         );
 
-        $api                     = CloudAPIFactory::create('root');
+        $api = CloudAPIFactory::create('root');
+        var_dump($file['globalId']);
         $result                  = $api->post("/resources/{$file['globalId']}/upload_finish", $params);
         $result['convertStatus'] = 'none';
         $file                    = $api->get("/resources/{$file['globalId']}", array("refresh" => true));
