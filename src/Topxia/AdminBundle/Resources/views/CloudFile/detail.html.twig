@@ -5,10 +5,10 @@
   </div>
   <div class="content">
     <ul class="nav nav-pills">
-      <li role="presentation" class="active js-info" data-target="#info-tab"><a href="#info-tab">基本信息</a></li>
+      <li role="presentation" class="active js-info" data-target="#info-tab"><a href="javascript:;">基本信息</a></li>
 
       {% if material.type == 'video' %}
-        <li role="presentation" class="js-cover" data-target="#cover-tab"><a href="#cover-tab">封面图片</a></li>
+        <li role="presentation" class="js-cover" data-target="#cover-tab"><a href="javascript:;">封面图片</a></li>
       {% endif %}
     </ul>
 
@@ -72,8 +72,8 @@
               {% if material.thumbnail|default(0) %}
                 <div class="col-sm-6" id="thumbnail-set">
                   <div class="links" style="padding-left:15px;">
-                    <a class="js-set-default disabled" href="#default-thumbnails">默认</a>
-                    <a class="js-set-select" href="#self-select">自选</a>
+                    <a class="js-set-default disabled" href="javascript:;">默认</a>
+                    <a class="js-set-select" href="javascript:;">自选</a>
                   </div>
 
                   <div class="thumbnail-pane active row" id="default-thumbnails">
