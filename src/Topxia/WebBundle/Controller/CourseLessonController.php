@@ -278,9 +278,6 @@ class CourseLessonController extends BaseController
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
-
                     if ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array(
                             'courseId' => $course['id'],
