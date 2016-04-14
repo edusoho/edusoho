@@ -582,11 +582,23 @@ margin-top: 14px;
   padding-left: 75px;
 }
 
-.materials-nav.materials-tags .label{
+.materials-nav.materials-tags .item .label{
   display: inline-block;
   margin-right: 10px;
   margin-top: 10px;
 }
 
+.materials-nav.materials-tags .item  .active-hide{
+  display: none;
+}
+.materials-nav.materials-tags .item .active-show{
+  display: block;
+}
+.materials-nav.materials-tags .item.active .active-hide{
+  display: block;
+}
+.materials-nav.materials-tags .item.active .active-show{
+  display: none;
+}
 
 
