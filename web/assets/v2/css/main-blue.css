@@ -13756,6 +13756,18 @@ textarea {
 .materials-ul li .border-left {
   border-left: solid 1px #eee;
 }
+.es-material-tag {
+  position: relative;
+  margin-bottom: 0;
+  padding: 5px 15px 15px 15px;
+  border-bottom: 1px solid #ddd;
+}
+.es-material-tag .all {
+  position: absolute;
+  top: 13px;
+  left: 15px;
+  color: #919191;
+}
 .materials-ul li.img-li .reconvert-btn {
   position: absolute;
   left: 35%;

@@ -79,7 +79,7 @@
                   <div class="thumbnail-pane active" id="default-thumbnails">
                     {% for thumbnail in thumbnails %}
                       <div class="col-md-4" style="padding-bottom:10px">
-                        <img class="js-img-set" style="cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}">
+                        <img class="js-img-set img-responsive" style="cursor: pointer;" src="{{ asset(thumbnail.url) }}" data-no="{{ thumbnail.no }}">
                       </div>
                     {% endfor %}
                   </div>

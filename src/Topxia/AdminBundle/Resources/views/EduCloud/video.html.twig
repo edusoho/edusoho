@@ -371,7 +371,7 @@
 
 
         <div class="head-leader-edit" 
-          {% if not storageSetting.video_header|default(null) %}
+          {% if not headLeader|default(null) %}
           style="display:none;"
           {% endif %}
           >
@@ -386,7 +386,7 @@
         </div>
 
         <div class="file-chooser-main" 
-          {% if storageSetting.video_header|default(null) %}
+          {% if headLeader|default(null) %}
             style="display:none;"
           {% endif %}
         >
