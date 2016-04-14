@@ -307,7 +307,8 @@ define(function(require, exports, module) {
 
                     $.post(file.uploaderWidget.get('finishUrl'), data, function(response) {
                         deferred.resolve();
-                        file.uploaderWidget.trigger('file.uploaded', file, data);
+
+                        file.uploaderWidget.trigger('file.uploaded', file, data, response);
 
                         file.setStatus('complete');
                         //file.uploaderWidget._getUploader().trigger('uploadSuccess', file, ret, hds);
