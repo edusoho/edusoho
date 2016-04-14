@@ -173,13 +173,13 @@ define(function(require, exports, module) {
                 multi: false
             });
 
-            uploader.on('file.uploaded', function(file, data){
+            uploader.on('file.uploaded', function(file, data, response){
                 var item = {
                     id: file.fileId,
                     status: data.status,
                     source: 'self',
                     name: file.name,
-                    length: parseInt(data.length)
+                    length: parseInt(response.length)
                 };
 
                 self.trigger("change", item);
