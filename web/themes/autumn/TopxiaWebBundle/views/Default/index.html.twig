@@ -27,7 +27,7 @@
         {% if classrooms %}
         <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最新{{ setting('classroom.name')|default("班级") }} / <small>LatestClasses</small></h2>
+              <h2 class="panel-title">{{'最新 %classroomName% '|trans({'%classroomName%': setting('classroom.name')|default('班级'|trans)})}} / <small>LatestClasses</small></h2>
               <a class="pull-right more-autumn-primary" href="{{ path('classroom_explore') }}">More&gt;</a>
             </div>
             <div class="panel-body">
@@ -60,20 +60,20 @@
                               {% if classroom.price > 0 %}
                                {{classroom.price * setting('coin.cash_rate') }} {{setting('coin.coin_name')}}
                               {% else %}
-                                免费
+                                {{'免费'|trans}}
                               {% endif %}
                           {% else %}
                               {% if classroom.price > 0 %}
-                                {{ classroom.price }}元
+                                {{ '%classroom.price% 元'|trans({'%classroom.price%': classroom.price})}}
                               {% else %}
-                                免费
+                                {{'免费'|trans}}'
                               {% endif %}
                           {% endif %}
 
 
                       </span>
                     </div>
-                    <div class="course-num">共{{classroom.courseNum}}课程</div>
+                    <div class="course-num">{{'共%courseNum%课程'|trans({'%courseNum%': classroom.courseNum })}}</div>
                   </div>
                 </li>
                    {% endif %}
@@ -90,7 +90,7 @@
       {% if recommendCourses %}
         <div class="panel panel-autumn panel-autumn-primary">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">推荐课程 / <small>RecommendCourses</small></h2>
+            <h2 class="panel-title">{{'推荐课程'|trans}} / <small>RecommendCourses</small></h2>
             <a class="pull-right more-autumn-primary" href="{{ path('course_explore', {'sort':'recommendedSeq'}) }}">More&gt;</a>
           </div>
           <div class="panel-body">
@@ -108,7 +108,7 @@
       {% if latestCourses %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">最新课程 / <small>LatestCourse</small></h2>
+            <h2 class="panel-title">{{'最新课程'|trans}} / <small>LatestCourse</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('course_explore') }}">More&gt;</a>
           </div>
           <div class="panel-body">
@@ -126,7 +126,7 @@
         {% if recentLiveCourses %}
           <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">近期直播 / <small>LiveCourse</small></h2>
+              <h2 class="panel-title">{{'近期直播'|trans}} / <small>LiveCourse</small></h2>
               {% if recentLiveCourses|length >= 1 %}
                 <a class="pull-right more-autumn-primary" href="{{ path('live_course_explore') }}">More&gt;</a>
               {% endif %}
@@ -138,7 +138,7 @@
                   {% if course %}
                     {% include 'TopxiaWebBundle:Default:live-course-grid.html.twig' %}                    
                   {% else %}
-                    <div class="empty">无推荐课程，请在后台课程管理设置。</div>
+                    <div class="empty">{{'无推荐课程，请在后台课程管理设置。'|trans}}</div>
                   {% endif %}
                 {% endfor %}
               </ul>
@@ -153,7 +153,7 @@
       {% if articles %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">最新资讯 / <small>The latest infomation</small></h2>
+            <h2 class="panel-title">{{'最新资讯'|trans}} / <small>The latest infomation</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('article_show') }}">More&gt;</a>
           </div>
           <div class="panel-body news">
@@ -176,7 +176,7 @@
       {% if teachers %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading panel-heading-important">
-            <h2 class="panel-title">讲师团 / <small>Teachers</small></h2>
+            <h2 class="panel-title">{{'讲师团'|trans}} / <small>Teachers</small></h2>
             <a class="pull-right more-autumn-default" href="{{ path('teacher') }}">More&gt;</a>
           </div>
           <div class="panel-body teachers">
@@ -206,7 +206,7 @@
         {% if levels %}
           <div class="panel panel-autumn panel-autumn-primary">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">会员专区 / <small>Member Of The Zone</small></h2>
+              <h2 class="panel-title">{{'会员专区'|trans}} / <small>Member Of The Zone</small></h2>
             </div>
             <div class="panel-body vip">
               <ul class="row vip-lists">
@@ -230,7 +230,7 @@
                                {% else %}
                                 <h4>¥&nbsp;{{ level.monthPrice }}</h4>
                                {% endif %}
-                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">立即购买</a></h4>
+                            <h4><a href="{{ path('vip_buy') }}" class="btn btn-success">{{'立即购买'|trans}}</a></h4>
                           </div>
                         </div>
                       </div>
@@ -249,7 +249,7 @@
         {% if groups %}
           <div class="panel panel-autumn panel-autumn-default hot-group">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最热小组</h2>
+              <h2 class="panel-title">{{'最热小组'|trans}}</h2>
               <a href="{{path('group_search_group')}}" class="pull-right more-autumn-default">More&gt;</a></div>
             <div class="panel-body">
                <ul class="list-unstyled row">
@@ -268,8 +268,8 @@
                             <div class="media-body">
                               <p><a  href="{{path('group_show',{id:group.id})}}" title="{{group.title}}">{{group.title|sub_text(10)}}</a></p>
                               <div class="text-muted text-normal">
-                                {{group.memberNum}}个成员&nbsp;
-                                {{group.threadNum}}个话题
+                                {{'%memberNum%个成员'|trans({'%memberNum%': group.memberNum})}}&nbsp;
+                                {{'%threadNum%个话题'|trans({'%threadNum%': group.threadNum})}}
                               </div>
                             </div> 
                           </div>
@@ -296,7 +296,7 @@
       {% if tags %}
         <div class="panel panel-autumn panel-autumn-default">
           <div class="panel-heading side-autumn-default">
-            <h2 class="panel-title">热门标签 / <small>Hot Labels</small></h2>
+            <h2 class="panel-title">{{'热门标签'|trans}} / <small>Hot Labels</small></h2>
           </div>
           <div class="panel-body">
             <div class="tag-list">
@@ -315,7 +315,7 @@
       {% if coursesRank %}
         <div class="panel panel-autumn panel-autumn-primary">
           <div class="panel-heading">
-            <h2 class="panel-title">课程排行榜 / <small>Top10</small></h2>
+            <h2 class="panel-title">{{'课程排行榜'|trans}} / <small>Top10</small></h2>
           </div>
           <div class="panel-body">
             <ul class="media-list courses-rank">
@@ -339,7 +339,7 @@
       {% if statuses %}
         <div class="panel panel-autumn panel-autumn-default status-side">
           <div class="panel-heading side-autumn-default">
-            <h2 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}动态 / <small>Students Dynamic</small></h2>
+            <h2 class="panel-title">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'动态'|trans}} / <small>Students Dynamic</small></h2>
           </div>
           <div class="panel-body">
             <ul class="media-list">
@@ -368,7 +368,7 @@
         {% if hotThreads %}
           <div class="panel panel-autumn panel-autumn-default hot-threads">
             <div class="panel-heading panel-heading-important">
-              <h2 class="panel-title">最热话题</h2>
+              <h2 class="panel-title">{{'最热话题'|trans}}</h2>
             </div>
             <div class="panel-body">
               <ul class="text-list">
