@@ -180,7 +180,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('course.join', $member);
+        $this->pushCloud('course.join', $member, 'important');
     }
 
     public function onCourseQuit(ServiceEvent $event)
@@ -196,7 +196,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('course.quit', $member);
+        $this->pushCloud('course.quit', $member, 'important');
     }
 
     protected function convertCourse($course)
@@ -312,7 +312,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('classroom.join', $member);
+        $this->pushCloud('classroom.join', $member, 'important');
     }
 
     public function onClassroomQuit(ServiceEvent $event)
@@ -324,7 +324,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('classroom.quit', $member);
+        $this->pushCloud('classroom.quit', $member, 'important');
     }
 
     protected function convertClassroom($classroom)
