@@ -55,7 +55,7 @@ define(function(require, exports, module) {
                     $target.button('reset');
                     Notify.danger('生成截图失败！');
                 }
-             
+
             }).fail(function(){
                 $target.button('reset');
                 Notify.danger('生成截图失败！');
@@ -84,19 +84,26 @@ define(function(require, exports, module) {
                     self.player = window.frames["viewerIframe"].contentWindow.BalloonPlayer;
                 });
             }
-            
+
         },
         _changePane: function($target) {
             $target.parent().find('a.disabled').removeClass('disabled');
             $target.addClass('disabled');
             var $container = $target.closest('#thumbnail-set');
-            $container.find('.thumbnail-pane.active').removeClass('active');
-            $container.find($target.attr('href')).addClass('active');
-
-            if ($target.attr('href') == '#self-select') {
-                this.$('.js-screenshot-btn').removeClass('hide');
-            } else {
-                 this.$('.js-screenshot-btn').addClass('hide');
+            var $panl = null;
+            $container.find('.thumbnail-pane').each(function() {
+              var $this = $(this);
+              if(!$this.hasClass('active')) {
+                $panl= $this;
+              }
+            })
+            $container.find('.thumbnail-pane').removeClass('active');
+            $panl.addClass('active');
+            if($('#self-select').is(':visible')) {
+              this.$('.js-screenshot-btn').removeClass('hide');
+            }
+            else {
+               this.$('.js-screenshot-btn').addClass('hide');
             }
         },
         onSubmitCoverForm: function(event) {
@@ -119,7 +126,7 @@ define(function(require, exports, module) {
                 $target.find('#save-btn').button('reset');
             }
 
-            
+
             event.preventDefault();
         },
         onClickChangePic: function(event) {

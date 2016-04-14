@@ -73,13 +73,13 @@ define(function(require, exports, module) {
             {
                 var $target = $(event.currentTarget);
                 var $container = $target.closest('.tags-container');
-                var $prev = $container.find('.label-info');
+                var $prev = $container.find('.label-primary');
                 if ($target.html() == $prev.html()) {
-                    $target.removeClass('label-info').addClass('label-default');
+                    $target.removeClass('label-primary').addClass('label-default');
                     $container.find('[name=tagId]').val('');
                 } else {
-                    $prev.removeClass('label-info').addClass('label-default');
-                    $target.addClass('label-info').removeClass('label-default');
+                    $prev.removeClass('label-primary').addClass('label-default');
+                    $target.addClass('label-primary').removeClass('label-default');
                     $container.find('[name=tagId]').val($target.data('id'));
                 }
 
