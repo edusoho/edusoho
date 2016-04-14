@@ -523,6 +523,21 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $collections;
     }
 
+    public function getFileByTargetType($targetType)
+    {
+        $file = $this->getUploadFileDao()->getFileByTargetType($targetType);
+
+        if (empty($file)) {
+            return null;
+        }
+
+        if (empty($file['globalId'])) {
+            return $file;
+        }
+
+        return $this->getFileImplementor($file)->getFile($file);
+    }
+
     protected function updateTags($localFile, $fields)
     {
         if (!empty($fields['tags'])) {
