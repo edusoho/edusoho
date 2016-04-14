@@ -62,7 +62,7 @@
       {% if material.type == 'video' %}
         <div class="tab-pane" id="cover-tab">
           {% if material.processStatus == 'ok' %}
-          <form class="form-horizontal" id="cover-form" action="{{ path('admin_cloud_file_edit', {globalId:material.no}) }}">
+          <form class="form-horizontal" id="cover-form" action="{{ path('material_edit', {globalId:material.no}) }}">
             <div class="form-group">
               <label for="name" class="col-sm-2 control-label">封面</label>
               <div class="col-sm-4">
@@ -86,7 +86,7 @@
 
                   <div class="thumbnail-pane" id="self-select">
                     <div class="video-player-container">
-                      <iframe src="{{ path('admin_cloud_file_play', {globalId:material.no}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
+                      <iframe src="{{ path('material_lib_file_player', {globalId:material.no}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
                     </div>
                   </div>
 
