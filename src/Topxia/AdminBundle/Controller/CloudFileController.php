@@ -102,11 +102,13 @@ class CloudFileController extends BaseController
             'directives' => array()
         ));
 
-        $createdUser = $this->getUserService()->get($cloudFile['userId']);
+        if (isset($cloudFile['createdUserId'])) {
+            $createdUser = $this->getUserService()->getUser($cloudFile['createdUserId']);
+        }
 
         return $this->render('TopxiaAdminBundle:CloudFile:table-tr.html.twig', array(
             'cloudFile'   => $cloudFile,
-            'createdUser' => $createdUser
+            'createdUser' => isset($createdUser) ? $createdUser : array()
         ));
     }
 
