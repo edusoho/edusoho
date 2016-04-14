@@ -9,7 +9,7 @@
       {% endif %}{{ uploadFile.filename }}</p>
 
       <p class="status-parent">
-      {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
+      {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'ppt', 'document'] %}
         {% if uploadFile.convertStatus == 'error' %}
           <span class="status label label-danger">转码失败</span>
         {% elseif uploadFile.convertStatus in ['doing','waiting'] %}

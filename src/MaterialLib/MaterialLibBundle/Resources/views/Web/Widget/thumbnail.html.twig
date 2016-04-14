@@ -51,10 +51,10 @@
   <div class="btn-operation">
     <!-- 选择一种状态 -->
     {% if uploadFile.storage == 'cloud' %}
-      {% if uploadFile.type in ['audio','video','document','ppt','flash','image'] %}
-      <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >
-        资料预览
-      </a>
+      {% if (uploadFile.convertStatus == 'success' and uploadFile.type in ['video','document','ppt']) or uploadFile.type in ['audio','flash','image'] %}
+        <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >
+          资料预览
+        </a>
       {% endif %}
       {% if uploadFile.convertStatus == 'error' %}
         {% if setting("developer.debug")|default(0) %}

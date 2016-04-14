@@ -6,7 +6,7 @@
             {% if cloudFile.type in ['audio','video','document','ppt','flash','image'] %}
               <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}">资料预览</a>
             {% endif %}
-            {% if cloudFile.convertStatus == 'error' %}
+            {% if cloudFile.processStatus == 'error' %}
               {% if setting("developer.debug")|default(0) %}
               <a class="js-reconvert-btn btn btn-warning" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}' data-loading-text="正在提交...">重新转码</a>
               {% endif %}
@@ -22,23 +22,18 @@
             {% endif %}
           </span>
           {% if cloudFile.type in ['video', 'ppt', 'document'] %}
-              {% if cloudFile.processStatus == 'ok' %}
-                {#}
-          <span class="label label-success">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-          #}
-              {% elseif cloudFile.processStatus == 'waiting' %}
-          <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              {% elseif cloudFile.processStatus == 'processing' %}
-                label-primary
-          <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              {% elseif cloudFile.processStatus == 'error' %}
-          <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-          {% else %}
+            {% if cloudFile.processStatus == 'waiting' %}
+              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+            {% elseif cloudFile.processStatus == 'processing' %}
+              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+            {% elseif cloudFile.processStatus == 'error' %}
+              <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+            {% else %}
               {% if cloudFile.type != "image" %}
               <span class="label label-default">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
               {% endif %}
-          {% endif %}
             {% endif %}
+          {% endif %}
           {% if  cloudFile.usedCount|default(0) == 0 %}
           <span class="label label-default">未使用</span>
           {% endif %}
