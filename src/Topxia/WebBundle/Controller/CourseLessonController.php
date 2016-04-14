@@ -278,6 +278,10 @@ class CourseLessonController extends BaseController
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
+                    if ($file['type'] == 'video' && $file['status'] != 'ok') {
+                        $json['mediaConvertStatus'] = 'doing';
+                    }
+
                     if ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array(
                             'courseId' => $course['id'],
@@ -289,10 +293,6 @@ class CourseLessonController extends BaseController
                             'lessonId' => $lesson['id']
                         ));
                     } elseif (!in_array($file['type'], array('video', 'audio'))) {
-                        if ($file['status'] != 'ok') {
-                            $json['mediaConvertStatus'] = 'doing';
-                        }
-
                         $api              = CloudAPIFactory::create("leaf");
                         $result           = $api->get("/resources/{$file['globalId']}/player");
                         $json['mediaUri'] = $result['url'];

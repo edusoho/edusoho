@@ -250,11 +250,12 @@ class PlayerController extends BaseController
         }
 
         if ($file['storage'] == 'cloud') {
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-
             if (!empty($file['globalId'])) {
                 $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($file['id']);
+            }
+
+            if ($file['status'] != 'ok') {
+                return '';
             }
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
@@ -267,7 +268,9 @@ class PlayerController extends BaseController
 
                     return $this->generateUrl('hls_playlist', $params, true);
                 } else {
-                    $result = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
+                    $factory = new CloudClientFactory();
+                    $client  = $factory->createClient();
+                    $result  = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
                 }
             } else {
                 if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
