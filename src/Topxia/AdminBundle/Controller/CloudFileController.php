@@ -16,8 +16,8 @@ class CloudFileController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:CloudFile:api-error.html.twig', array());
         }
-
-        if (isset($result['hasStorage']) && $result['hasStorage'] == '1') {
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        if (isset($result['hasStorage']) && $result['hasStorage'] == '1' && $storageSetting['upload_mode']=="cloud") {
             return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
         }
 
@@ -26,6 +26,10 @@ class CloudFileController extends BaseController
 
     public function manageAction(Request $request)
     {
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        if ($storageSetting['upload_mode']!="cloud") {
+            return $this->redirect($this->generateUrl('admin_cloud_file'));
+        }
         return $this->render('TopxiaAdminBundle:CloudFile:manage.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
@@ -135,6 +139,11 @@ class CloudFileController extends BaseController
     protected function createService($service)
     {
         return $this->getServiceKernel()->createService($service);
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 
     protected function getTagService()
