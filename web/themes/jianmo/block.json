@@ -221,7 +221,7 @@
                 "type": "imglink",
                 "default": [
                     {
-                        "src": "\/themes\/jianmo\/img\/banner_ad.jpg",
+                        "src": "\/themes\/jianmo\/img\/banner_poster.jpg",
                         "alt": "图片１的描述",
                         "href": "#",
                         "target": "_blank"
