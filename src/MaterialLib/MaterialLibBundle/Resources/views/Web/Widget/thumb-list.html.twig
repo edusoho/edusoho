@@ -13,19 +13,20 @@
         {% endif %}{{ uploadFile.filename }}</p>
 
         <p class="text-overflow">
-        {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
+        {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
           {% if uploadFile.convertStatus == 'error' %}
             <span class="status label label-danger">转码失败</span>
-            <button class="reconvert-btn btn btn-xs btn-primary">重新转码</button>
+            <a class="js-reconvert-btn btn btn-xs btn-primary" data-url='{{path("material_reconvert", {globalId: uploadFile.globalId})}}'>重新转码</a>
           {% elseif uploadFile.convertStatus == 'doing' %}
             <span class="status label label-info">转码中</span>
           {% elseif uploadFile.convertStatus == 'waiting' %}
             <span class="status label label-info">转码中</span>
           {% endif %}
         {% endif %}
-          {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and uploadFile.usedCount|default(0) == 0 %}
-            <span class="label label-default">未使用</span>
-          {% endif %}
+
+        {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and uploadFile.usedCount|default(0) == 0 %}
+          <span class="label label-default">未使用</span>
+        {% endif %}
         </p>
         {#<p class="text-muted use-time text-overflow">热度： {{ uploadFile.usedCount|default(0) }}次</p>#}
         <p class="text-muted date">时间：  {{ uploadFile.createdTime|date('Y/m/d H:i') }}</p>
