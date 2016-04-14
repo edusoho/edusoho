@@ -1,5 +1,8 @@
 define(function(require, exports, module) {
-
+    function tanslate(value, tag)
+    {
+        return '<'+tag+'>'+value+'</'+tag+'>'
+    }
     var Widget     = require('widget');
     var Handlebars = require('handlebars');
     var Notify = require('common/bootstrap-notify');
@@ -115,7 +118,8 @@ define(function(require, exports, module) {
         refreshTestpaperStats: function() {
             var type = this.get('currentType');
             var stats = this._calTestpaperStats();
-            var html = Translator.trans('试卷总分')+'<strong>' + stats.total.score.toFixed(1) + '</strong>'+Translator.trans('分');
+          //  var html = Translator.trans('试卷总分')+'<strong>' + stats.total.score.toFixed(1) + '</strong>'+Translator.trans('分');
+             var html = Translator.trans('试卷总分%score%分',{score:tanslate(stats.total.score.toFixed(1),'strong')});
             html += ' <span class="stats-part">';
             if (type == 'material') {
                 html += stats[type].name + '<strong>' + stats[type].count + '</strong>'+Translator.trans('子题')+'/<strong>' + stats[type].score.toFixed(1) + '</strong>'+Translator.trans('分');
@@ -315,7 +319,7 @@ define(function(require, exports, module) {
             } else {
                 return false;
             }
-        }, Translator.trans('{{display}}只能是<=试卷总分、且>0的整数或者1位小数');
+        }, Translator.trans('%display%只能是<=试卷总分、且>0的整数或者1位小数',{display:{{display}}}));
 
 
         new TestpaperItemManager({

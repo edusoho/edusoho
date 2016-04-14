@@ -28,7 +28,7 @@ define(function(require, exports, module) {
             }
             return  result;  
         },
-          Translator.trans('{{display}}格式错误')
+          Translator.trans('%display%格式错误',{display:display})
     );
 
     Validator.addRule(
@@ -44,7 +44,7 @@ define(function(require, exports, module) {
                 }
                 return result;
             },
-                Translator.trans('{{display}}不允许以1开头的11位纯数字')
+                Translator.trans('%display%不允许以1开头的11位纯数字',{display:display})
         );
 
     exports.run = function() 

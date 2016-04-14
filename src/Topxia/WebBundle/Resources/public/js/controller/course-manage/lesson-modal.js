@@ -80,7 +80,7 @@ define(function(require, exports, module) {
             }
 
             return true;
-        }, Translator.trans('请选择或上传{{display}}文件');
+        }, Translator.trans('请选择或上传%display%文件',{display:display}));
 
         Validator.addRule('timeLength', function(options) {
             return /^\d+:\d+$/.test(options.element.val())
@@ -271,7 +271,7 @@ define(function(require, exports, module) {
                 }
                 $.post($form.data("createDraftUrl"), tmpContents, function(data){
                     localContent = objClone(tmpContents);
-                    $(".modal-title").text(titleName + (Translator.trans('草稿已于%createdTime%保存',{createdTime:tmpContents['createdTime']}));
+                    $(".modal-title").text(titleName + Translator.trans('(草稿已于%createdTime%保存)',{createdTime:tmpContents['createdTime']}));
                 });
             }
         }

@@ -1,4 +1,8 @@
 define(function(require, exports, module) {
+        function tanslate(value, tag)
+    {
+        return '<'+tag+'>'+value+'</'+tag+'>'
+    }
     var Validator = require('bootstrap.validator');
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
@@ -182,7 +186,8 @@ define(function(require, exports, module) {
                     var maxStudentNum = parseInt($(elem).data('maxStudentNum'));
                     var leftCapacity = parseInt(response);
                     if ( maxStudentNum > leftCapacity) {
-                       var message = Translator.trans('在此时间段内开课，将会超出教室容量')+'<strong>' + (maxStudentNum - leftCapacity) + '</strong>'+Translator.trans('人，届时有可能会导致满额后部分学员无法进入直播。');
+                      // var message = Translator.trans('在此时间段内开课，将会超出教室容量')+'<strong>' + (maxStudentNum - leftCapacity) + '</strong>'+Translator.trans('人，届时有可能会导致满额后部分学员无法进入直播。');
+                       var message = Translator.trans('在此时间段内开课，将会超出教室容量%count%人，届时有可能会导致满额后部分学员无法进入直播。',{count:tanslate((maxStudentNum - leftCapacity),'strong')});
                         $(elem).parent().find('.help-block').html('<div class="alert alert-warning">' + message + '</div>');
                     }
                 }, 'json');

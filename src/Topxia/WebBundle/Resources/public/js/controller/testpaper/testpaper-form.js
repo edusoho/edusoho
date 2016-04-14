@@ -1,4 +1,8 @@
 define(function(require, exports, module) {
+    function tanslate(value, tag)
+    {
+        return '<'+tag+'>'+value+'</'+tag+'>'
+    }
 
     var Widget     = require('widget');
     var Notify = require('common/bootstrap-notify');
@@ -126,7 +130,8 @@ define(function(require, exports, module) {
                             material: Translator.trans('材料题')
                         }
                         $.each(response.missing, function(type, count) {
-                            missingTexts.push(types[type] + Translator.trans('缺')+'<strong>' + count + '</strong>'+Translator.trans('道'));
+                            missingTexts.push(types[type] + Translator.trans('缺%count%道',{count:tanslate(count, 'strong')}));
+                          // missingTexts.push(types[type] + Translator.trans('缺')+'<strong>' + count + '</strong>'+Translator.trans('道'));
                         });
                         Notify.danger(Translator.trans('课程题库题目数量不足，无法生成试卷：')+'<br>' + missingTexts.join('，'), 5);
                         isOk = false;
