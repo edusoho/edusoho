@@ -131,7 +131,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $conditions = $this->_prepareSearchConditions($conditions);
         $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
-
         if (empty($files)) {
             return array();
         }
