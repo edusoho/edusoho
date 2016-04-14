@@ -3,6 +3,8 @@ namespace Topxia\Service\File;
 
 interface FileImplementor2
 {
+    public function get($globalId);
+
     public function getFile($file);
 
     public function prepareUpload($params);
