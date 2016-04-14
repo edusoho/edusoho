@@ -56,7 +56,7 @@ class MaterialLibController extends BaseController
 
         $conditions['currentUserId'] = $currentUserId;
 
-        $paginator                   = new Paginator(
+        $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFilesCount($conditions),
             20
@@ -105,27 +105,32 @@ class MaterialLibController extends BaseController
 
     public function reconvertAction($globalId)
     {
-        $this->getMaterialLibService()->reconvert($globalId);
+        $uploadFile = $this->getMaterialLibService()->reconvert($globalId);
+        return $this->render('MaterialLibBundle:Web/Widget:thumb-item.html.twig', array(
+            'uploadFile' => $uploadFile
+        ));
         return $this->createJsonResponse(array('success' => true));
     }
 
     public function detailAction($fileId)
     {
         $currentUser = $this->getCurrentUser();
-        $file = $this->getMaterialLibService()->get($fileId);
-        if($file['storage'] == 'local') {
-          return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
-              'material'   => $file,
-              'thumbnails' => ""
-          ));
+        $file        = $this->getMaterialLibService()->get($fileId);
+
+        if ($file['storage'] == 'local') {
+            return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
+                'material'   => $file,
+                'thumbnails' => ""
+            ));
         }
-        if (!($file['createdUserId'] == $currentUser['id']))  {
+
+        if (!($file['createdUserId'] == $currentUser['id'])) {
             if ($file['type'] == 'video') {
-              try{
-                $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
-              } catch (\RuntimeException $e) {
-                $thumbnails = array();
-              }
+                try {
+                    $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
+                } catch (\RuntimeException $e) {
+                    $thumbnails = array();
+                }
             }
 
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
@@ -133,6 +138,7 @@ class MaterialLibController extends BaseController
                 'thumbnails' => empty($thumbnails) ? "" : $thumbnails
             ));
         }
+
         return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
     }
 
@@ -373,8 +379,8 @@ class MaterialLibController extends BaseController
 
         // $result = $this->getCloudFileService()->edit($globalId, $fields);
         return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
-          'globalId' => $globalId,
-          'fields' => $fields
+            'globalId' => $globalId,
+            'fields'   => $fields
         ));
     }
 
@@ -405,6 +411,7 @@ class MaterialLibController extends BaseController
     public function batchShareAction(Request $request)
     {
         $data = $request->request->all();
+
         if (isset($data['ids']) && $data['ids'] != "") {
             $result = $this->getMaterialLibService()->batchShare($data['ids']);
             return $this->createJsonResponse($result);
@@ -427,6 +434,7 @@ class MaterialLibController extends BaseController
                 continue;
             }
         }
+
         return $this->redirect($this->generateUrl('material_lib_browsing'));
     }
 

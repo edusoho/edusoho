@@ -319,6 +319,26 @@ define(function(require, exports, module) {
                 this.renderTable();
                 event.preventDefault();
             },
+            renderFile: function(fileId){
+                $.ajax({
+                    type:'GET',
+                    url:this.get('renderUrl'),
+                    data:this.element.serialize()
+                }).done(function(resp){
+                    $table.html(resp);
+                    var mode = self.get('model');
+                    var attribute = self.get('attribute');
+                    if(mode == 'edit' && attribute == 'mine'){
+                      $table.find('[data-role=batch-item]').show();
+                    } else if(mode == 'normal'){
+                      $('#material-lib-items-panel').find('[data-role=batch-manage], [data-role=batch-item],[data-role=batch-dalete],[data-role=batch-share],[data-role=batch-tag],[data-role=finish-batch]').hide();
+                    }
+                    var $temp = $table.find('.js-paginator');
+                    self.element.find('[data-role=paginator]').html($temp.html());
+                }).fail(function(){
+                    self._loaded_error();
+                });
+            },
             renderTable: function(isPaginator)
             {
                 isPaginator || this._resetPage();
