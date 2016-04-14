@@ -499,6 +499,21 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
+                $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
+                $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
+
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'error', 'message' => $message)
+                ));
+            } else {
+                return $this->createJsonResponse(array(
+                    'error' => array('code' => 'processing', 'message' => '文档还在转换中，还不能查看，请稍等。')
+                ));
+            }
+        }
+
         $result = $this->getMaterialLibService()->player($file['globalId']);
         return $this->createJsonResponse($result);
     }
