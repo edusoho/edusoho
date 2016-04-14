@@ -278,7 +278,7 @@ class CourseLessonController extends BaseController
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    if (in_array($file['type'], array('video')) && $file['status'] != 'ok') {
+                    if ($file['type'] == 'video' && $file['status'] != 'ok') {
                         $json['mediaConvertStatus'] = 'doing';
                     }
 

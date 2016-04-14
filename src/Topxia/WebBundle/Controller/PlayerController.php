@@ -254,6 +254,10 @@ class PlayerController extends BaseController
                 $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($file['id']);
             }
 
+            if ($file['status'] != 'ok') {
+                return '';
+            }
+
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
                     $token  = $this->makeToken('hls.playlist', $file['id'], $context);
