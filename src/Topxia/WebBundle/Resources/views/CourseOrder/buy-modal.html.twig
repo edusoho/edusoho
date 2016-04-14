@@ -62,7 +62,7 @@
 
     {% set userinfo_enable = setting('course.buy_fill_userinfo')|default(false) %}
     {% set checkedFields = setting('course.userinfoFields')|default([]) %}
-    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:userinfo_enable, userinfoFieldsSetting:checkedFields, userFields:userFields, user:user, showNavTip:1 } %}
+    {% include 'TopxiaWebBundle:User:fill-userinfo-fields-block.html.twig' with {isBuyFillUserinfo:userinfo_enable, userinfoFieldsSetting:checkedFields, userFields:userFields, user:user, showNavTip:1} %}
  
   </form>
 {% endblock %}
