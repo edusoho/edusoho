@@ -111,7 +111,7 @@ class EventCloudAPI extends AbstractCloudAPI
         $text = "{$event['user']}:{$event['name']}:{$event['timestamp']}:{$event['nonce']}";
         if (!empty($event['body'])) {
             ksort($event['body']);
-            $text .= ':'. http_build_query($event['body'], null, '&', PHP_QUERY_RFC3986);
+            $text .= ':'. http_build_query($event['body']);
         }
         return hash_hmac('sha1', $text, $this->secretKey);
     }

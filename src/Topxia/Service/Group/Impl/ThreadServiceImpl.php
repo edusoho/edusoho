@@ -404,8 +404,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
 
     public function searchPostsCount($conditions)
     {
-        $count = $this->getThreadPostDao()->searchPostsCount($conditions);
-        return $count;
+        return $this->getThreadPostDao()->searchPostsCount($conditions);
     }
 
     public function setElite($threadId)

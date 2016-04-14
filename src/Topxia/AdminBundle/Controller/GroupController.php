@@ -209,7 +209,6 @@ class GroupController extends BaseController
     public function deleteThreadAction($threadId)
     {   
         $thread=$this->getThreadService()->getThread($threadId);
-        $threadUrl = $this->generateUrl('group_thread_show', array('id'=>$thread['groupId'],'threadId'=>$thread['id']), true);
         $this->getThreadService()->deleteThread($threadId);
 
         $message = array(
@@ -314,12 +313,6 @@ class GroupController extends BaseController
                 $orderBys=array(
                     array('isStick','DESC'),
                     array('lastPostTime','DESC'),
-                );
-                break;
-            case 'byPostNum':
-                $orderBys=array(
-                    array('isStick','DESC'),
-                    array('postNum','DESC'),
                 );
                 break;
             default:

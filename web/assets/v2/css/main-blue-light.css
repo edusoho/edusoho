@@ -3345,7 +3345,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3365,7 +3365,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -4378,6 +4378,31 @@ a.homework-essay-textarea-pack-up {
 }
 .quality-switcher .quality-actions {
   margin-top: 10px;
+}
+.ui-autocomplete {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 2px 2px 3px #eee;
+  z-index: 9999 !important;
+}
+.ui-autocomplete-ctn {
+  margin: 0;
+  padding: 0;
+}
+.ui-autocomplete-item {
+  width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 30px;
+  padding: 0 10px 0 10px;
+  cursor: default;
+}
+.ui-autocomplete-item-hover {
+  background: #f2f2f2;
+}
+.ui-autocomplete-item-hl {
+  background: #f6ff94;
 }
 .study-plan-form {
   color: #919191;
@@ -5914,6 +5939,7 @@ textarea.form-control-o {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
+.btn-tag.active,
 .btn-tag:hover {
   color: #fff;
   background-color: #4bbbfa;
@@ -10822,7 +10848,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -10954,6 +10980,12 @@ textarea {
   margin: 75px 20%;
   height: 50px;
 }
+@media (max-width: 991px) {
+  .search-banner .search-input-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
 .search-banner .search-input-group .form-control {
   height: 50px;
   border: none;
@@ -10991,6 +11023,11 @@ textarea {
   height: 50px;
   width: 120px;
   border: none;
+}
+@media (max-width: 991px) {
+  .search-banner .search-input-group .btn {
+    width: 80px;
+  }
 }
 .search-banner .search-input-group .btn:hover {
   z-index: 1;
@@ -11678,6 +11715,14 @@ textarea {
 .form-paytype .check.active .icon {
   display: block;
 }
+.form-paytype .check.disabled {
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+  cursor: default;
+}
+.form-paytype .check.disabled:hover {
+  border-color: #f5f5f5;
+}
 .form-paytype .check .icon {
   display: none;
   background: url('../img/old/pay_check_status.png') no-repeat;
@@ -11883,6 +11928,9 @@ textarea {
     width: 100%;
     margin: 20px auto;
   }
+}
+.login-section.login-section-weixin {
+  min-height: 315px;
 }
 .login-section .logon-tab {
   margin: -15px -15px 0 -15px;

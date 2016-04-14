@@ -855,8 +855,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($currency == 'coin') {
-            $fields['originCoinPrice'] = $price;
-            $fields['coinPrice']       = $price * ($discount / 10);
+            $fields['originPrice'] = $price;
+            $fields['price']       = $price * ($discount / 10);
         } else {
             $fields['originPrice'] = $price;
             $fields['price']       = $price * ($discount / 10);
@@ -884,11 +884,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($discount['type'] == 'global') {
-            if ($currency == 'coin') {
-                $conditions = array('originCoinPrice_GT' => '0.00');
-            } else {
-                $conditions = array('originPrice_GT' => '0.00');
-            }
+            $conditions = array('originPrice_GT' => '0.00');
 
             $count   = $this->searchCourseCount($conditions);
             $courses = $this->searchCourses($conditions, 'latest', 0, $count);
@@ -898,7 +894,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 if ($currency == 'coin') {
                     $fields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10
+                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
                     );
                 } else {
                     $fields = array(
@@ -926,7 +922,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 if ($currency == 'coin') {
                     $fields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $item['discount'] / 10
+                        'price' => $course['originPrice'] * $item['discount'] / 10
                     );
                 } else {
                     $fields = array(
