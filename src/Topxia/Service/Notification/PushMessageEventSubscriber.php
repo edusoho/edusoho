@@ -30,8 +30,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.lesson.unpublish'   => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
             'course.lesson.delete'      => 'onCourseLessonDelete',
-            'course.lesson_start'       => 'onCourseLessonStart',
-            'course.lesson_finish'       => 'onCourseLessonFinish',
 
             // 'classroom.create'          => 'onClassroomCreate',
             'classroom.join'            => 'onClassroomJoin',
@@ -260,30 +258,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         }
         
         $this->pushCloud('lesson.delete', $lesson);
-    }
-
-    public function onCourseLessonStart(ServiceEvent $event)
-    {
-        $lesson = $event->getSubject();
-        $course = $event->getArgument('course');
-        $learn  = $event->getArgument('learn');
-
-        $learn['course'] = $this->convertCourse($course);
-        $learn['lesson'] = $lesson;
-
-        $this->pushCloud('lesson.start', $learn);
-    }
-
-    public function onCourseLessonFinish(ServiceEvent $event)
-    {
-        $lesson = $event->getSubject();
-        $course = $event->getArgument('course');
-        $learn  = $event->getArgument('learn');
-
-        $learn['course'] = $this->convertCourse($course);
-        $learn['lesson'] = $lesson;
-
-        $this->pushCloud('lesson.finish', $learn);
     }
 
     /**
@@ -615,6 +589,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'cycle'      => 'once',
                 'time'       => $lesson['startTime'] - 60 * 60,
                 'jobClass'   => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
+                'jobParams' => '',
                 'targetType' => 'lesson',
                 'targetId'   => $lesson['id']
             );
