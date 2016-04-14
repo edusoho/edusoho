@@ -16,14 +16,16 @@ class CloudDataServiceImpl extends BaseService implements CloudDataService
         } catch (\Exception $e) {
             $this->getLogService()->error('cloud_data', 'push', "{$name} 事件发送失败", array('message' => $e->getMessage()));
 
-            $user   = $this->getCurrentUser();
-            $fields = array(
-                'name'          => $name,
-                'body'          => $body,
-                'timestamp'     => $timestamp,
-                'createdUserId' => $user['id']
-            );
-            $this->getCloudDataDao()->add($fields);
+            if ($level == 'important') {
+                $user = $this->getCurrentUser();
+                $fields = array(
+                    'name'          => $name,
+                    'body'          => $body,
+                    'timestamp'     => $timestamp,
+                    'createdUserId' => $user['id']
+                );
+                $this->getCloudDataDao()->add($fields);
+            }
             return false;
         }
     }

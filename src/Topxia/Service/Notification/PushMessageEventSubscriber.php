@@ -30,8 +30,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
             'course.lesson.unpublish'   => 'onCourseLessonDelete',
             'course.lesson.update'      => 'onCourseLessonUpdate',
             'course.lesson.delete'      => 'onCourseLessonDelete',
-            'course.lesson_start'       => 'onCourseLessonStart',
-            'course.lesson_finish'       => 'onCourseLessonFinish',
 
             // 'classroom.create'          => 'onClassroomCreate',
             'classroom.join'            => 'onClassroomJoin',
@@ -73,9 +71,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    protected function pushCloud($eventName, array $data)
+    protected function pushCloud($eventName, array $data, $level = 'normal')
     {
-        return $this->getCloudDataService()->push('school.'.$eventName, $data, time());
+        return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
     /**
@@ -180,7 +178,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('course.join', $member);
+        $this->pushCloud('course.join', $member, 'important');
     }
 
     public function onCourseQuit(ServiceEvent $event)
@@ -196,7 +194,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['course'] = $this->convertCourse($course);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('course.quit', $member);
+        $this->pushCloud('course.quit', $member, 'important');
     }
 
     protected function convertCourse($course)
@@ -262,30 +260,6 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $this->pushCloud('lesson.delete', $lesson);
     }
 
-    public function onCourseLessonStart(ServiceEvent $event)
-    {
-        $lesson = $event->getSubject();
-        $course = $event->getArgument('course');
-        $learn  = $event->getArgument('learn');
-
-        $learn['course'] = $this->convertCourse($course);
-        $learn['lesson'] = $lesson;
-
-        $this->pushCloud('lesson.start', $learn);
-    }
-
-    public function onCourseLessonFinish(ServiceEvent $event)
-    {
-        $lesson = $event->getSubject();
-        $course = $event->getArgument('course');
-        $learn  = $event->getArgument('learn');
-
-        $learn['course'] = $this->convertCourse($course);
-        $learn['lesson'] = $lesson;
-
-        $this->pushCloud('lesson.finish', $learn);
-    }
-
     /**
      * Classroom相关
      */
@@ -312,7 +286,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('classroom.join', $member);
+        $this->pushCloud('classroom.join', $member, 'important');
     }
 
     public function onClassroomQuit(ServiceEvent $event)
@@ -324,7 +298,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         $member['classroom'] = $this->convertClassroom($classroom);
         $member['user'] = $this->convertUser($this->getUserService()->getUser($userId));
 
-        $this->pushCloud('classroom.quit', $member);
+        $this->pushCloud('classroom.quit', $member, 'important');
     }
 
     protected function convertClassroom($classroom)
@@ -615,6 +589,7 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
                 'cycle'      => 'once',
                 'time'       => $lesson['startTime'] - 60 * 60,
                 'jobClass'   => 'Topxia\\Service\\Notification\\Job\\PushNotificationOneHourJob',
+                'jobParams' => '',
                 'targetType' => 'lesson',
                 'targetId'   => $lesson['id']
             );
