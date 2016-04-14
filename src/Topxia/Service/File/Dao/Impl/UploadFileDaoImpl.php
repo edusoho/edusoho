@@ -64,7 +64,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
 
         $marks = str_repeat('?,', count($targetIds) - 1).'?';
         $sql   = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId IN ({$marks})";
-        return $this->getConnection()->fetchAll($sql, array_merge($targetType, $targetIds)) ?: array();
+        return $this->getConnection()->fetchAll($sql, array_merge(array($targetType), $targetIds)) ?: array();
     }
 
     public function findCloudFilesByIds($ids)
