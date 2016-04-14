@@ -289,11 +289,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $implementor       = $this->getFileImplementorByStorage($params['storage']);
 
         if (isset($params['id'])) {
-            $file       = $this->getUploadFileDao()->getFile($params['id']);
+            $file       = $this->getUploadFileInitDao()->getFile($params['id']);
             $initParams = $implementor->resumeUpload($file, $params);
 
             if ($initParams['resumed'] == 'ok' && $file) {
-                $file = $this->getUploadFileDao()->updateFile($file['id'], array(
+                $file = $this->getUploadFileInitDao()->updateFile($file['id'], array(
                     'filename'   => $params['fileName'],
                     'fileSize'   => $params['fileSize'],
                     'targetId'   => $params['targetId'],
@@ -307,10 +307,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $preparedFile = $implementor->prepareUpload($params);
 
         if (!empty($preparedFile)) {
-            $file       = $this->getUploadFileDao()->addFile($preparedFile);
+            $file       = $this->getUploadFileInitDao()->addFile($preparedFile);
             $params     = array_merge($params, $file);
             $initParams = $implementor->initUpload($params);
-            $file       = $this->getUploadFileDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
+            $file       = $this->getUploadFileInitDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
         } else {
             $initParams = $implementor->initUpload($params);
         }
@@ -320,7 +320,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function finishedUpload($params)
     {
-        $file              = $this->getUploadFileDao()->getFile($params['id']);
+        $file = $this->getUploadFileInitDao()->getFile($params['id']);
+
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
@@ -339,10 +340,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             'status'        => 'ok',
             'convertStatus' => $result['convertStatus'],
             'length'        => isset($result['length']) ? $result['length'] : 0,
-            'fileName'      => $params['filename'],
             'fileSize'      => $params['size']
         );
-        $file = $this->getUploadFileDao()->updateFile($file['id'], $fields);
+
+        $file = array_merge($file, $fields);
+        $this->getUploadFileInitDao()->deleteFile($file['id']);
+        unset($file['id']);
+
+        $file = $this->getUploadFileDao()->addFile($file);
 
         if ($file['targetType'] == 'headLeader') {
             $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
@@ -725,6 +730,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     protected function getUploadFileTagDao()
     {
         return $this->createDao('File.UploadFileTagDao');
+    }
+
+    protected function getUploadFileInitDao()
+    {
+        return $this->createDao('File.UploadFileInitDao');
     }
 }
 

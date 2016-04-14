@@ -1,0 +1,15 @@
+<?php
+
+namespace Topxia\Service\File\Dao;
+
+interface UploadFileInitDao
+{
+    public function getFile($id);
+
+    public function addFile(array $file);
+
+    public function deleteFile($id);
+
+    public function updateFile($id, array $fields);
+
+}
