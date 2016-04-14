@@ -4,7 +4,6 @@
       {% include 'MaterialLibBundle:Web/Widget:thumbnail.html.twig' %}
     </li>
     <li class="caption">
-      
       <p class="title text-overflow" data-toggle="tooltip" data-placement="top" title="{{uploadFile.filename}}">{% if uploadFile.storage == 'cloud' %}
         <span class="glyphicon glyphicon-cloud"></span>
       {% endif %}{{ uploadFile.filename }}</p>
@@ -13,10 +12,7 @@
       {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
         {% if uploadFile.convertStatus == 'error' %}
           <span class="status label label-danger">转码失败</span>
-          <a class="js-reconvert-btn btn btn-xs btn-primary" data-url='{{path("material_reconvert", {globalId: uploadFile.globalId})}}'>重新转码</a>
-        {% elseif uploadFile.convertStatus == 'doing' %}
-          <span class="status label label-info">转码中</span>
-        {% elseif uploadFile.convertStatus == 'waiting' %}
+        {% elseif uploadFile.convertStatus in ['doing','waiting'] %}
           <span class="status label label-info">转码中</span>
         {% endif %}
       {% endif %}
