@@ -3,7 +3,9 @@
   <tr>
     <td>
         <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;background:#313131;border-radius:5px;overflow:hidden;">
-          <img style="height:100%;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
+          <a href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: material.no}) }}" >
+            <img style="height:100%;" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
+          </a>
         </div>
         <div class="">
           <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ material.filename }}" style="margin:0;">{{ material.filename }}</p>

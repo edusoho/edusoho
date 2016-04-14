@@ -831,6 +831,10 @@ admin_cloud_file_edit:
     defaults: { _controller: TopxiaAdminBundle:CloudFile:edit, fields:'' }
     methods: [POST]
 
+admin_cloud_file_preview:
+    pattern:  /cloud_file/{globalId}/preview
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:preview }
+
 admin_cloud_file_play:
     pattern:  /cloud_files/{globalId}/play
     defaults: { _controller: TopxiaAdminBundle:CloudFile:player }

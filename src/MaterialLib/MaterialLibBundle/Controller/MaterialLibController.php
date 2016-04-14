@@ -89,17 +89,17 @@ class MaterialLibController extends BaseController
     public function previewAction(Request $request, $fileId)
     {
         $file = $this->tryAccessFile($fileId);
-        return $this->render('MaterialLibBundle:Web:preview-modal.html.twig', array(
-            'file' => $file
+        return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
+            'globalId' => $file['globalId']
         ));
     }
 
-    public function playerAction(Request $request, $fileId)
+    public function playerAction(Request $request, $globalId)
     {
-        $file = $this->tryAccessFile($fileId);
+        //$file = $this->tryAccessFile($fileId);
 
         return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-            'globalId' => $file['globalId']
+            'globalId' => $globalId
         ));
     }
 
