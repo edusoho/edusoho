@@ -493,16 +493,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+        $ppt = $this->controller->getMaterialLibService()->player($file['globalId']);
 
-        $ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-
-        if (isset($ppt["error"])) {
+        if (isset($ppt["convertStatus"])) {
             $ppt = array();
         }
 
-        $lesson['content'] = $ppt;
+        $lesson['content'] = $ppt['images'];
 
         return $lesson;
     }
