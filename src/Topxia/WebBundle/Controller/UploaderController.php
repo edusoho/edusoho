@@ -51,8 +51,8 @@ class UploaderController extends BaseController
             'id', 'length', 'filename', 'size'
         ));
 
-        $this->getUploadFileService()->finishedUpload($params);
-        return $this->createJsonResponse(true);
+        $file = $this->getUploadFileService()->finishedUpload($params);
+        return $this->createJsonResponse($file);
     }
 
     public function uploadCallbackAction(Request $request)
