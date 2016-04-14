@@ -16,7 +16,7 @@
         {% if uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
           {% if uploadFile.convertStatus == 'error' %}
             <span class="status label label-danger">转码失败</span>
-            <button class="reconvert-btn btn btn-xs btn-primary">重新转码</button>
+            <button class="js-reconvert-btn btn btn-xs btn-primary">重新转码</button>
           {% elseif uploadFile.convertStatus == 'doing' %}
             <span class="status label label-info">转码中</span>
           {% elseif uploadFile.convertStatus == 'waiting' %}
