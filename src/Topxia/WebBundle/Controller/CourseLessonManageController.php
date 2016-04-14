@@ -348,6 +348,14 @@ class CourseLessonManageController extends BaseController
 
         if (!empty($mediaIds)) {
             $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
+            foreach ($files as $file) {
+                $lessonIds = $mediaMap[$file['id']];
+
+                foreach ($lessonIds as $lessonId) {
+                    $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
+                }
+            }
         }
 
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
