@@ -599,19 +599,6 @@ class UserServiceImpl extends BaseService implements UserService
         return $this->getUser($userId);
     }
 
-    public function updateUser($id, $fields)
-    {
-        $user = $this->getUser($id);
-
-        if (empty($user)) {
-            throw $this->createServiceException('用户不存在，更新用户失败。');
-        }
-
-        $fields = ArrayToolkit::filter($fields, array('email'=>''));
-
-        return $this->getUserDao()->updateUser($id, $fields);
-    }
-
     public function updateUserProfile($id, $fields)
     {
         $user = $this->getUser($id);

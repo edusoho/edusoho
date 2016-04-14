@@ -121,9 +121,16 @@ class CourseOrderController extends OrderController
             'varcharField1', 'varcharField2', 'varcharField3', 'varcharField4', 'varcharField5', 'varcharField10', 'varcharField6', 'varcharField7', 'varcharField8', 'varcharField9',
             'textField1', 'textField2', 'textField3', 'textField4', 'textField5', 'textField6', 'textField7', 'textField8', 'textField9', 'textField10'
         ));
-        $complentUser = ArrayToolkit::parts($formData, array('email'));
+
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
-        $user = $this->getUserService()->updateUser($user['id'], $complentUser);
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
+
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
         //判断用户是否为VIP
         $vipStatus = $courseVip = null;
 

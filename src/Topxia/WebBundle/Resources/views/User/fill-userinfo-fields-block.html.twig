@@ -27,10 +27,10 @@
           <label class="col-sm-3 control-label" for="email">{{ defaultFields.email }}</label>
           <div class="col-sm-6 controls">
             {% set emailArr = app.user.email|split('@') %}
-            {% if emailArr[1] != 'edusoho.net' and app.user.emailVerified %}
+            {% if emailArr[1] != 'edusoho.net' %}
               <div class="control-text">{{ app.user.email }}</div>
             {% else %}
-              <input class="form-control" id="email" type="text" name="email" {% if emailArr[1] != 'edusoho.net' %}value="{{ app.user.email }}"{% else %} value=""{% endif %} data-url="{{ path('register_email_check') }}" />
+              <input class="form-control" id="email" type="text" name="email" value="" data-url="{{ path('register_email_check') }}" />
             {% endif %}
           </div>
         </div>
