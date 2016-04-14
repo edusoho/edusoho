@@ -75,7 +75,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         //$this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
         $result = $this->getCloudFileService()->reconvert($globalId, $options);
         $file   = $this->getByGlobalId($globalId);
-        $file   = $this->get($file['extno']);
         return $file;
     }
 
