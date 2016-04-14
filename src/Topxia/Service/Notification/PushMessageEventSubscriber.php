@@ -73,9 +73,9 @@ class PushMessageEventSubscriber implements EventSubscriberInterface
         );
     }
 
-    protected function pushCloud($eventName, array $data)
+    protected function pushCloud($eventName, array $data, $level = 'normal')
     {
-        return $this->getCloudDataService()->push('school.'.$eventName, $data, time());
+        return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
     /**
