@@ -278,6 +278,10 @@ class CourseLessonController extends BaseController
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
+                    if (in_array($file['type'], array('video')) && $file['status'] != 'ok') {
+                        $json['mediaConvertStatus'] = 'doing';
+                    }
+
                     if ($file['type'] == 'ppt') {
                         $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array(
                             'courseId' => $course['id'],
