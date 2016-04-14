@@ -212,31 +212,6 @@ class PlayerController extends BaseController
         return new Response($file['metas']['levels'][$token['data']['level']]['hlsKey']);
     }
 
-// protected function makeToken($type, $globalId)
-
-// {
-
-//     $fileds = array(
-
-//         'data'     => array(
-
-//             'globalId' => $globalId
-
-//         ),
-
-//         'times'    => 3,
-
-//         'duration' => 3600,
-
-//         'userId'   => $this->getCurrentUser()->getId()
-
-//     );
-
-//     $token = $this->getTokenService()->makeToken($type, $fileds);
-
-//     return $token;
-    // }
-
     protected function getPlayUrl($id, $context)
     {
         $file = $this->getUploadFileService()->getFile($id);

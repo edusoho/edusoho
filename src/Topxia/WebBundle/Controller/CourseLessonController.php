@@ -454,11 +454,8 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $result = $this->getMaterialLibService()->player($file['globalId']);
-
-//TODO : 确认result的convertStatus
-        if (isset($result['convertStatus']) && $result['convertStatus'] != 'success') {
-            if ($result['convertStatus'] == 'error') {
+        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
+            if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
                 $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
 
@@ -472,6 +469,7 @@ class CourseLessonController extends BaseController
             }
         }
 
+        $result = $this->getMaterialLibService()->player($file['globalId']);
         return $this->createJsonResponse($result['images']);
     }
 
