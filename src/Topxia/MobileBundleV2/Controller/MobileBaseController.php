@@ -593,7 +593,7 @@ class MobileBaseController extends BaseController
         return $this->getServiceKernel()->createService('EduCloud.EduCloudService');
     }
 
-    protected function getMaterialLibService()
+    public function getMaterialLibService()
     {
         return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }

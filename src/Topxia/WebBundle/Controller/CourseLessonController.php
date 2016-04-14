@@ -292,7 +292,7 @@ class CourseLessonController extends BaseController
                             'lessonId' => $lesson['id']
                         ));
                     } elseif (!in_array($file['type'], array('video', 'audio'))) {
-                        $api              = CloudAPIFactory::create();
+                        $api              = CloudAPIFactory::create("leaf");
                         $result           = $api->get("/resources/{$file['globalId']}/player");
                         $json['mediaUri'] = $result['url'];
                     }
