@@ -71,6 +71,7 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
                     ->andWhere('targetType = :targetType')
                     ->andWhere('orderId = :orderId')
                     ->andWhere('targetType = :targetType')
+                    ->andWhere('userId IN ( :userIds )')
                     ->andWhere('targetId IN ( :courseIds )');
                     
 

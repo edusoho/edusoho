@@ -653,6 +653,10 @@ course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
 
+course_manage_record:
+    pattern:  /course/{id}/manage/record
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:record }
+
 course_manage_students_show:
     pattern:  /course/{courseId}/manage/students/{userId}/show
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:show }
