@@ -1,0 +1,67 @@
+
+  <tr>
+    <td>
+        <div class="pull-left mrm" style="height:56px;width:100px;text-align:center;background:#313131;border-radius:5px;overflow:hidden;">
+          <img style="height:100%;" src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
+        </div>
+        <div class="">
+          <p class="text-overflow" data-toggle="tooltip" data-placement="top" title="{{ cloudFile.filename }}" style="margin:0;">{{ cloudFile.filename }}</p>
+          <div>
+            <span class="text-sm text-muted">
+              {% if createdUser %}
+                {{ createdUser.nickname }} 上传
+              {% endif %}
+            </span>
+            {% if cloudFile.type in ['video', 'ppt', 'document'] %}
+              {% if cloudFile.processStatus == 'ok' %}
+                {#}
+              <span class="label label-success">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+              #}
+              {% elseif cloudFile.processStatus == 'waiting' %}
+              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+              {% elseif cloudFile.processStatus == 'processing' %}
+                label-primary
+              <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+              {% elseif cloudFile.processStatus == 'error' %}
+              <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+              <a href="javascript:;" class="btn btn-primary btn-xs js-reconvert-btn" data-url="{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}" data-loading-text="正在提交...">重新转码</a>
+              {% else %}
+                {% if cloudFile.type != "image" %}
+              <span class="label label-default">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            {% if cloudFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] and  cloudFile.usedCount|default(0) == 0 %}
+            <span class="label label-default">未使用</span>
+            {% endif %}
+          </div>
+        </div>
+    </td>
+
+    <td class="text-center">
+      {{ dict_text('fileType', cloudFile.type) }}
+    </td>
+    <td class="text-center">
+      {{ cloudFile.fileSize|file_size }}
+    </td>
+    <td class="text-center">
+      <span style="display:block">{{ cloudFile.createdTime|date('Y-m-d H:i:s') }}</span>
+    </td>
+    <td class="es-materillib-table text-center">
+      <div class="btn-group ">
+        <a class="btn btn-default btn-sm js-detail-btn " data-url="{{ path('admin_cloud_file_detail', {globalId:cloudFile.no}) }}">编辑</a>
+
+        <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu pull-right">
+          <li>
+            <a class="" href="{{ path('admin_cloud_file_download', {globalId:cloudFile.no}) }}"title="下载" target="__blank"><span class="glyphicon glyphicon-download-alt"></span> 下载</a>
+          </li>
+          <li>
+            <a class="js-delete-btn" href="javascript:" data-url="{{ path('admin_cloud_file_delete', {globalId:cloudFile.no}) }}"><span class="glyphicon glyphicon-trash"></span> 删除</a>
+          </li>
+        </ul>
+      </div>
+    </td>
+  </tr>
