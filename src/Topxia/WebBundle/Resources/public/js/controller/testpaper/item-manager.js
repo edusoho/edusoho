@@ -96,7 +96,26 @@ define(function(require, exports, module) {
             $modal = $("#testpaper-confirm-modal");
 
             var stats = this._calTestpaperStats();
+            var hasEssay = false;
+            $('.testpaper-table-tbody').each(function() {
+                var self = this;
+                var tbodyType = $(this).data('type');
 
+                if (tbodyType == 'essay' || tbodyType == 'material') {
+                    $(self).find('tr').each(function() {
+                        var type = $(this).data('type');
+                        if (type == 'essay') {
+                            hasEssay = true;
+                        }
+                    })
+                }
+            })
+
+            if (hasEssay) {
+                $('input[name="passedScore"]').val('0');
+                $('.passedScoreDiv').hide();
+                validator.removeItem('[name="passedScore"]');
+            }
             var html='';
             $.each(stats, function(index, statsItem){
                 var tr = "<tr>";
