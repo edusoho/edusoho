@@ -109,7 +109,6 @@ class MaterialLibController extends BaseController
         return $this->render('MaterialLibBundle:Web/Widget:thumb-item.html.twig', array(
             'uploadFile' => $uploadFile
         ));
-        return $this->createJsonResponse(array('success' => true));
     }
 
     public function detailAction($fileId)
