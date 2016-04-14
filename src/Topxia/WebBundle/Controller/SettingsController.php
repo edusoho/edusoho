@@ -39,7 +39,6 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'profile'    => $profile,
             'fields'     => $fields,
@@ -52,6 +51,7 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
         $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['idcard'] = substr_replace($profile['idcard'],'************',4,12);
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
