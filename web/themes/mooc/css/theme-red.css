@@ -70,7 +70,7 @@
   color: #fff;
 }
 .btn-md {
-  padding: 6px 25px;
+  padding: 6px 25px!important;
 }
 .btn-gylight {
   border: 1px solid #bfbfbf;
@@ -93,6 +93,16 @@
   background-color: #bfbfbf;
   color: #fff;
   cursor: default;
+}
+.btn-sm,
+.btn-group-sm > .btn {
+  padding: 5px 10px!important;
+}
+.btn-group .btn + .btn,
+.btn-group .btn + .btn-group,
+.btn-group .btn-group + .btn,
+.btn-group .btn-group + .btn-group {
+  margin-left: -2px;
 }
 .label-sm {
   padding: 0.4em 0.6em;
