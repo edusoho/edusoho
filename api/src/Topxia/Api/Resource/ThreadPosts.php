@@ -30,6 +30,11 @@ class ThreadPosts extends BaseResource
         return $posts;
     }
 
+    public function filter($res)
+    {
+        return $res;
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
