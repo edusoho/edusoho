@@ -27,6 +27,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         if (!empty($conditions['tags'])) {
             $noArray[] = $this->findGlobalIdsByTags($conditions['tags']);
         }
+        if (!empty($conditions['useStatus'])) {
+            $noArray[] = $this->findGlobalIdByUsedCount($conditions['useStatus']);
+        }
 
         if (!empty($conditions['keywords']) && in_array($conditions['searchType'], array('course', 'user'))) {
             $noArray[] = $this->findGlobalIdsByKeyWords($conditions['searchType'], $conditions['keywords']);
@@ -66,6 +69,22 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         unset($conditions['tags']);
 
         return $conditions;
+    }
+
+    protected function findGlobalIdByUsedCount($usedStatus)
+    {
+        if($usedStatus == "used"){
+          $conditions = array('startCount' => 1 );
+        }
+        if($usedStatus == "unused"){
+          $conditions = array('endCount' => 1 );
+        }
+        $files = $this->getUploadFileService()->searchFiles($conditions,array('createdTime','DESC'),0,PHP_INT_MAX);
+        if (!empty($files)) {
+            return ArrayToolkit::column($files, 'globalId');
+        }
+
+        return array();
     }
 
     protected function findGlobalIdsByTags($tags)
