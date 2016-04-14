@@ -51,7 +51,7 @@ class SettingsController extends BaseController
     public function approvalSubmitAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
+        $profile = $this->getUserService()->getUserProfile($user['id']);
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
@@ -66,6 +66,7 @@ class SettingsController extends BaseController
         }
 
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+            'profile' => $profile
         ));
     }
 

@@ -17,7 +17,7 @@
 
 			<form id="user-profile-form" class="form-horizontal" method="post">
 				{{ web_macro.flash_messages() }}
-		
+
 					<div class="form-group">
 					<label class="col-md-2 control-label" >{{'用户名'|trans}}</label>
 						<div class="col-md-7 controls">
@@ -48,6 +48,31 @@
             	</div>
             {% endif %}
 					</div>
+				
+					{# <div class="help-block approval">
+						<label class="col-md-2 control-label" ></label>
+							{% if app.user.approvalStatus == 'approving' %}
+								<p class="text-primary" >
+									{{'正在实名认证中，管理员会尽快答复您。'|trans}}
+								</p>
+							{% elseif  app.user.approvalStatus == 'approved' %}
+								<p class="text-success" >
+									{{'恭喜您，已通过实名认证！'|trans}}
+								</p>
+							{% elseif  app.user.approvalStatus == 'unapprove' %}
+								<p class="text-warning" >
+									{{'您尚未实名认证，'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'点此认证'|trans}}</a>{{'。'|trans}}
+									</strong>
+									{% if is_plugin_installed('TeacherAudit') %}{{'若您想成为教师，请去'|trans}}<strong><a href="{{ path('teacher_audit_submit') }}">{{'教师资格申请'|trans}}</a>。
+									</strong>{% endif %}
+								</p>
+							{% elseif app.user.approvalStatus == 'approve_fail' %}
+								 <p class="text-danger" >
+									{{'实名认证审核尚未通过，请参照通知中的信息，修改后重新'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'认证。'|trans}}</a>
+									</strong>
+								 </p>
+							{% endif %}
+					</div> #}
 
 					<div class="form-group">
 						<label class="col-md-2 control-label">{{'性别'|trans}}</label>
