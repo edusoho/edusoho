@@ -10,7 +10,6 @@ class ThreadPosts extends BaseResource
 {
 	public function get(Application $app, Request $request, $threadId)
     {
-    	$currentUser = $this->getCurrentUser();
         $start       = $request->query->get('start', 0);
         $limit       = $request->query->get('limit', 10);
 
@@ -21,7 +20,7 @@ class ThreadPosts extends BaseResource
         $count = $this->getThreadService()->searchPostsCount($conditions);
 
         $posts = $this->getThreadService()->searchPosts(
-            $conditions
+            $conditions,
             array('createdTime', 'asc'),
             0,
             100
