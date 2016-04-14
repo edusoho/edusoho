@@ -418,7 +418,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $api                = CloudAPIFactory::create();
+                    $api                = CloudAPIFactory::create("leaf");
                     $result             = $api->get("/resources/{$file['globalId']}/player");
                     $lesson['mediaUri'] = $result['url'];
                 } else {

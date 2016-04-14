@@ -19,7 +19,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function player($globalId)
     {
-        $api    = CloudAPIFactory::create('root');
+        $api    = CloudAPIFactory::create('leaf');
         $player = $api->get("/resources/{$globalId}/player");
         return $player;
     }
