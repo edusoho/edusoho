@@ -28,10 +28,6 @@
               <span class="label label-info">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
             {% elseif cloudFile.processStatus == 'error' %}
               <span class="label label-danger">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-            {% else %}
-              {% if cloudFile.type != "image" %}
-              <span class="label label-default">{{ dict_text('processStatus', cloudFile.processStatus) }}</span>
-              {% endif %}
             {% endif %}
           {% endif %}
           {% if  cloudFile.usedCount|default(0) == 0 %}
