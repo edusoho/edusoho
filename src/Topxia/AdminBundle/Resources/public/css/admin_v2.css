@@ -644,4 +644,16 @@ margin-top: 14px;
   display: block;
 }
 
+.material-detail-widget .header{
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.material-detail-widget .header h1{
+  display: inline-block;
+}
+.material-detail-widget .content .nav{
+  margin-bottom: 20px;
+}
+
 
