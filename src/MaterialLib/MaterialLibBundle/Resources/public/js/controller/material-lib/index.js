@@ -254,7 +254,6 @@ define(function(require, exports, module) {
                     $.post($target.data('url'),{"ids":ids},function(data){
                         if(data){
                             Notify.success('删除资源成功');
-
                             self.renderTable();
                         } else {
                             Notify.danger('删除资源失败');
