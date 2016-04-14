@@ -8,7 +8,17 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ClassRoomThread extends BaseResource
 {
-   
+ 
+    public function get(Application $app, Request $request, $threadId)
+    {
+        $thread = $this->getThreadService()->getThread($threadId);
+
+        $user = $this->getUserService()->getUser($thread['userId']);
+        $thread['user'] = $this->simpleUser($user);
+
+        return $this->filter($thread);
+    }
+
     public function filter($res)
     {
         $res['lastPostTime'] = date('c', $res['lastPostTime']);
@@ -37,4 +47,13 @@ class ClassRoomThread extends BaseResource
         return $simple;
     }
 
+    protected function getThreadService()
+    {
+        return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
 }

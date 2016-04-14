@@ -10,9 +10,6 @@ class ThreadPosts extends BaseResource
 {
 	public function get(Application $app, Request $request, $threadId)
     {
-        $start       = $request->query->get('start', 0);
-        $limit       = $request->query->get('limit', 10);
-
         $conditions = array(
             'threadId' => $threadId,
             'parentId' => 0
@@ -23,19 +20,31 @@ class ThreadPosts extends BaseResource
             $conditions,
             array('createdTime', 'asc'),
             0,
-            100
+            $count
         );
 
-        return $posts;
+        $userIds = ArrayToolkit::column($posts, 'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        foreach ($posts as $key => $value) {
+            $posts[$key]['user'] = $this->simpleUser($users[$value['userId']]);
+        }
+
+        return $this->wrap($this->filter($posts));
     }
 
     public function filter($res)
     {
-        return $res;
+        return $this->multicallFilter('ThreadPost', $res);
     }
 
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 }
