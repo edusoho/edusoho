@@ -12,7 +12,8 @@
       <li class="active" data-value="my"><a href="javascript:;" class="js-source-btn">我的资料</a></li>
       <li class="" data-value="public"><a href="javascript:;" class="js-source-btn">公共资料</a></li>
       <li class="" data-value="favorite"><a href="javascript:;" class="js-source-btn">收藏夹</a></li>
-      <li class="" data-value="sharing"><a href="javascript:;" class="js-source-btn">来自分享</a></li>
+      <li class="" data-value="sharing
+      "><a href="javascript:;" class="js-source-btn">来自分享</a></li>
     </ul>
     <input type="hidden" name="sourceFrom" value="my">
   </div>
@@ -24,8 +25,8 @@
 
   {% include 'MaterialLibBundle:Web/Form:nav.html.twig' %}
 
-  <div class="well es-material-tabs " style="position:relative;margin-bottom:0;padding:5px 15px 15px 15px;">
-    <span style="position:absolute;top:13px;left:15px;color: #919191;">标签:</span>
+  <div class="es-material-tag" style="">
+    <span  class="all">标签:</span>
       <div class="tags-container">
         {% for tag in tags %}
           <span class="label label-default" data-id="{{ tag.id }}">{{ tag.name }}</span>
