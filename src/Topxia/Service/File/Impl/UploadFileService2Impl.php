@@ -598,11 +598,10 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         if (isset($conditions['useStatus'])) {
             if ($conditions['useStatus'] == 'unused') {
                 $conditions['endCount'] = 1;
-            } elseif ($conditions['useStatus'] == 'used') {
+            }
+            if ($conditions['useStatus'] == 'used') {
                 $conditions['startCount'] = 1;
             }
-        } else {
-            $conditions['startCount'] = 0;
         }
 
         if (!empty($conditions['tagId'])) {
