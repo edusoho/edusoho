@@ -260,8 +260,9 @@ class PlayerController extends BaseController
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                    $token  = $this->makeToken('hls.playlist', $file['id'], $context);
-                    $params = array(
+                    $context['hideBeginning'] = $this->haveHeadLeader();
+                    $token                    = $this->makeToken('hls.playlist', $file['id'], $context);
+                    $params                   = array(
                         'id'    => $file['id'],
                         'token' => $token['token']
                     );
@@ -299,17 +300,11 @@ class PlayerController extends BaseController
         $fileds = array(
 
             'data'     => array(
-
                 'id' => $fileId
-
             ),
-
             'times'    => 3,
-
             'duration' => 3600,
-
             'userId'   => $this->getCurrentUser()->getId()
-
         );
 
         if (isset($context['watchTimeLimit'])) {
@@ -353,6 +348,17 @@ class PlayerController extends BaseController
         }
 
         return $response;
+    }
+
+    protected function haveHeadLeader()
+    {
+        $storage = $this->setting("storage");
+
+        if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getTokenService()

@@ -9,11 +9,10 @@ class HLSController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
     {
-        $line          = $request->query->get('line', null);
-        $hideBeginning = $request->query->get('hideBeginning', false);
-        $levelParam    = $request->query->get('level', "");
-        $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $fromApi       = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $line       = $request->query->get('line', null);
+        $levelParam = $request->query->get('level', "");
+        $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $fromApi    = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -56,10 +55,6 @@ class HLSController extends BaseController
                     $tokenFields['data']['watchTimeLimit'] = $token['data']['watchTimeLimit'];
                 }
 
-                if (isset($token['data']['hideBeginning'])) {
-                    $tokenFields['data']['hideBeginning'] = $token['data']['hideBeginning'] == "true" ? true : false;
-                }
-
                 $token = $this->getTokenService()->makeToken('hls.stream', $tokenFields);
             } else {
                 $token['token'] = $this->getTokenService()->makeFakeTokenString();
@@ -73,16 +68,6 @@ class HLSController extends BaseController
 
             if ($line) {
                 $params['line'] = $line;
-            }
-
-            if (isset($token['data']['hideBeginning'])) {
-                if ($token['data']['hideBeginning']) {
-                    $params['hideBeginning'] = $token['data']['hideBeginning'];
-                }
-            } else {
-                if (!$this->haveHeadLeader()) {
-                    $params['hideBeginning'] = 1;
-                }
             }
 
             $streams[$level] = $this->generateUrl('hls_stream', $params, true);
@@ -156,11 +141,12 @@ class HLSController extends BaseController
 
         $inWhiteList = $this->agentInWhiteList($request->headers->get("user-agent"));
 
-        $tokenFields = array(
+        $keyencryption = $token['data']['fromApi'] || $inWhiteList ? 0 : 1;
+        $tokenFields   = array(
             'data'     => array(
                 'id'            => $file['id'],
                 'level'         => $level,
-                'keyencryption' => $token['data']['fromApi'] || $inWhiteList ? 0 : 1
+                'keyencryption' => $keyencryption
             ),
             'times'    => $inWhiteList ? 0 : 1,
             'duration' => 3600
@@ -174,10 +160,11 @@ class HLSController extends BaseController
 
         $params['keyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
 
-        $hideBeginning = $request->query->get('hideBeginning');
-
-        if (!$inWhiteList && empty($hideBeginning)) {
-            $beginning = $this->getVideoBeginning($request, $level, $token['userId']);
+        if (!$inWhiteList && $this->haveHeadLeader()) {
+            $beginning = $this->getVideoBeginning($request, $level, array(
+                'userId'        => $token['userId'],
+                'keyencryption' => $keyencryption
+            ));
 
             if ($beginning['beginningKey']) {
                 $params = array_merge($params, $beginning);
@@ -277,7 +264,7 @@ class HLSController extends BaseController
         return $this->getServiceKernel()->createService('System.SettingService');
     }
 
-    protected function getVideoBeginning(Request $request, $level, $userId = 0)
+    protected function getVideoBeginning(Request $request, $level, $params = array())
     {
         $beginning = array(
             'beginningKey'    => null,
@@ -287,8 +274,8 @@ class HLSController extends BaseController
         $storage = $this->getSettingService()->get("storage");
 
         if (!empty($storage['video_header'])) {
-            $file       = $this->getOldUploadFileService()->getFileByTargetType('headLeader');
-            $beginnings = json_decode($file['metas2'], true);
+            $file       = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $beginnings = $file['metas2'];
             $levels     = array($level);
             $levels     = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));
 
@@ -300,13 +287,19 @@ class HLSController extends BaseController
                 $beginning['beginningKey'] = $beginnings[$level]['key'];
                 $token                     = $this->getTokenService()->makeToken('hls.clef', array(
                     'data'     => array(
-                        'id' => $file['id']
+                        'id'            => $file['id'],
+                        'level'         => $level,
+                        'keyencryption' => $params['keyencryption']
                     ),
                     'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 1,
                     'duration' => 3600,
-                    'userId'   => $userId
+                    'userId'   => $params['userId']
                 ));
-                $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array('id' => $file['id'], 'token' => $token['token']), true);
+
+                $beginning['beginningKeyUrl'] = $this->generateUrl('hls_clef', array(
+                    'id'    => $file['id'],
+                    'token' => $token['token']
+                ), true);
                 break;
             }
         }
