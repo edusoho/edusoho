@@ -56,7 +56,7 @@ class CloudFileController extends BaseController
 
     public function  previewAction(Request $reqeust, $globalId)
     {
-      $file = $this->getCloudFileService()->get($globalId);
+      $file = $this->getCloudFileService()->getByGlobalId($globalId);
       return $this->render('TopxiaAdminBundle:CloudFile:preview-modal.html.twig',array(
         'file' => $file
       ));
