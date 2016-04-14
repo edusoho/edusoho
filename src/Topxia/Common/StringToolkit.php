@@ -142,13 +142,13 @@ class StringToolkit
         }
         return $afterCutName;
     }
-    
+
     public static function jsonEncode($data)
     {
         if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
             return json_encode($data, JSON_UNESCAPED_UNICODE);
         } elseif (function_exists('iconv')) {
-            return json_encode(iconv("GB2312", "UTF-8//IGNORE", $data));
+            return json_encode(iconv("GB2312", "UTF-8//IGNORE", implode($data)));
         } else {
             return json_encode($data);
         }
