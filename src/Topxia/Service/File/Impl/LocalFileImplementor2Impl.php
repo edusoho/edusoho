@@ -52,6 +52,10 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
     {
     }
 
+    public function get($id)
+    {
+    }
+
     public function initUpload($params)
     {
         $uploadParams = array();
