@@ -8,19 +8,19 @@
 {% endif %}
 
 <div class="mask">
-  <div class="icon-operation"> 
-    <i 
-      class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}" 
-      data-toggle="tooltip" 
-      data-placement="bottom" 
-      title="收藏" 
+  <div class="icon-operation">
+    <i
+      class="glyphicon glyphicon-star js-collect-btn left {% if collections[uploadFile.id]|default(0) %} material-collection {% endif %}"
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="收藏"
       data-url="{{ path('material_lib_save_collection', {fileId:uploadFile.id}) }}"
-    ></i> 
-    <i 
-      href="javascript:;" 
-      class="glyphicon glyphicon-option-vertical" 
-      data-toggle="dropdown" 
-      aria-haspopup="true" 
+    ></i>
+    <i
+      href="javascript:;"
+      class="glyphicon glyphicon-option-vertical"
+      data-toggle="dropdown"
+      aria-haspopup="true"
       aria-expanded="false"
     ></i>
     <ul class="dropdown-menu">
@@ -49,7 +49,7 @@
     </ul>
   </div>
   <div class="btn-operation">
-    <!-- 选择一种状态 -->  
+    <!-- 选择一种状态 -->
     {% if uploadFile.storage == 'cloud' %}
       {% if uploadFile.convertStatus == 'success' %}
       <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >
@@ -57,7 +57,9 @@
       </a>
       {% endif %}
       {% if uploadFile.convertStatus == 'error' %}
+        {% if setting("developer.debug")|default(0) %}
         <a class="js-reconvert-btn btn btn-warning" data-url='{{path("material_reconvert", {globalId: uploadFile.globalId})}}'>重新转码</a>
+        {% endif %}
       {% endif %}
     {% endif %}
   </div>
