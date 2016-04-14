@@ -2788,6 +2788,9 @@ input:focus {
   -moz-transform: translateY(0px);
   -o-transform: translateY(0px);
 }
+.course-detail-header .metas p label {
+  width: auto!important;
+}
 .navbar-mobile .navbar-more {
   color: #773cec;
   padding: 15px 10px;
