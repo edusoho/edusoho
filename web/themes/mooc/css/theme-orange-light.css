@@ -26,6 +26,7 @@
   background-color: #f5c086 !important;
 }
 .btn {
+  padding: 8px 24px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -45,7 +46,6 @@
   text-decoration: none;
 }
 .btn-default {
-  padding: 8px 24px;
   border: 2px solid #a5a7b3;
   color: #a5a7b3;
   background: transparent;
@@ -94,11 +94,21 @@
   color: #fff;
   cursor: default;
 }
-.btn-group .btn:last-child {
-  border-right: none;
+.btn-group .btn:first-child {
+  border-right: none!important;
 }
 .btn-group .btn:last-child {
-  border-left: none;
+  border-left: none!important;
+}
+.btn-sm,
+.btn-group-sm > .btn {
+  padding: 5px 10px!important;
+}
+.btn-group .btn + .btn,
+.btn-group .btn + .btn-group,
+.btn-group .btn-group + .btn,
+.btn-group .btn-group + .btn-group {
+  margin-left: -2px;
 }
 .label-sm {
   padding: 0.4em 0.6em;
