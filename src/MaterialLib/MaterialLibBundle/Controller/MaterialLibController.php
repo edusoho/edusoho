@@ -55,6 +55,7 @@ class MaterialLibController extends BaseController
         }
 
         $conditions['currentUserId'] = $currentUserId;
+
         $paginator                   = new Paginator(
             $request,
             $this->getUploadFileService()->searchFilesCount($conditions),
