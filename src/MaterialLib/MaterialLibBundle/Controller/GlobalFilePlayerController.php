@@ -10,7 +10,7 @@ class GlobalFilePlayerController extends BaseController
 {
     public function playerAction(Request $request, $globalId)
     {
-        $file = $this->getCloudFileService()->get($globalId);
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -116,7 +116,7 @@ class GlobalFilePlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getCloudFileService()->get($globalId);
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -177,7 +177,7 @@ class GlobalFilePlayerController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getCloudFileService()->get($globalId);
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -238,7 +238,7 @@ class GlobalFilePlayerController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $file = $this->getCloudFileService()->get($globalId);
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
 
         if (empty($file)) {
             return $this->makeFakeTokenString();

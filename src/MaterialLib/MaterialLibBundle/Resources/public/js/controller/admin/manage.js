@@ -112,9 +112,9 @@ define(function(require, exports, module) {
                 $.ajax({
                     type:'POST',
                     url:$target.data('url'),
-                }).done(function(){
+                }).done(function(response){
                     Notify.success('重新转码成功!');
-                    self.renderTable(true);
+                    $target.parents('tr').replaceWith(response);
                 }).fail(function(){
                     Notify.danger('重新转码失败!');
                 }).always(function(){
