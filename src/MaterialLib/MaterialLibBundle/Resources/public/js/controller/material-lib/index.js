@@ -346,7 +346,7 @@ define(function(require, exports, module) {
             },
             _loading: function()
             {
-                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">正在搜索，请等待......</div>';
+                var loading = '<div class="empty" colspan="10" style="color:#999;padding:80px;">正在加载，请等待......</div>';
                 var $table = $('#material-item-list');
                 $table.html(loading);
             },

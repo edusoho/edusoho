@@ -162,7 +162,7 @@ define(function(require, exports, module) {
 			      	<span class='input-group'> \
 				    <input name='file-filter-by-name' class='form-control width-input-small file-filter-by-name' type='text' placeholder='输入视频标题关键字'  /> \
 				    <span class='input-group-btn'> \
-				      <button type='button' class='btn btn-default' data-loading-text='正在搜索，请稍等'>搜索</button> \
+				      <button type='button' class='btn btn-default' data-loading-text='正在加载，请稍等'>搜索</button> \
 				    </span> \
 				  </span> \
         			</div> \

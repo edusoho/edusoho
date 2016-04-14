@@ -6,12 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-    
+    <style>
+    body{
+      padding:0;
+      margin:0;
+      box-sizing:border-box;
+    }
+    html,body,div{
+      height:100%
+    }
+    </style>
   </head>
   <body>
   	<div id="document-player" 
       data-url='{{path('global_file_document', {globalId:file.no})}}' 
-      style="height:100%"/>
+      />
 
 
   	{% set script_controller = 'materiallibbundle/controller/web/player/document-player' %}
