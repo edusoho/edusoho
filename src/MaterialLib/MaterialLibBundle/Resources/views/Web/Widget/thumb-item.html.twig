@@ -8,7 +8,7 @@
         <span class="glyphicon glyphicon-cloud"></span>
       {% endif %}{{ uploadFile.filename }}</p>
 
-      <p class="text-overflow">
+      <p class="status-parent">
       {% if uploadFile.storage == 'cloud' and uploadFile.type in ['video', 'audio', 'ppt', 'document', 'flash'] %}
         {% if uploadFile.convertStatus == 'error' %}
           <span class="status label label-danger">转码失败</span>

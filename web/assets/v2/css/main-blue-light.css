@@ -13843,6 +13843,10 @@ textarea {
 .materials-ul .capon .state {
   height: 20px;
 }
+.materials-ul .status-parent {
+  height: 19px;
+  overflow: hidden;
+}
 .material-list-container {
   margin-top: 20px;
 }
