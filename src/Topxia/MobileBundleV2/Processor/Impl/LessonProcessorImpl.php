@@ -650,9 +650,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $storage = $this->controller->getSettingService()->get("storage");
 
         if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
-            $file                  = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
-            $file["convertParams"] = json_decode($file["convertParams"], true);
-            $file["metas2"]        = json_decode($file["metas2"], true);
+            $file = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
             return $file;
         }
 
