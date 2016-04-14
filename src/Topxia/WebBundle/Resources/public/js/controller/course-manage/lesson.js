@@ -201,7 +201,7 @@ define(function(require, exports, module) {
               if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
                 $("#lesson-"+file.id).find('.item-content').append("<span class='text-warning'>(正在文件格式转换)</span>");
               }else if(file.convertStatus=='error'){
-                $("#lesson-"+file.id).find('.item-content').append("<span class='text-danger'>(正在格式转换失败)</span>");
+                $("#lesson-"+file.id).find('.item-content').append("<span class='text-danger'>(文件格式转换失败)</span>");
               }
             }
         });
