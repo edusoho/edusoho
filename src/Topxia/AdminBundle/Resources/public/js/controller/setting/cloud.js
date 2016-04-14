@@ -81,6 +81,26 @@ define(function(require, exports, module) {
 
        if ($('.upload-mode').length >0 ) {
             var $el = $('#balloon-uploader');
+
+
+            if(!$el.is(":hidden")){
+                initUploader()
+                $el.data('init', true);
+            }
+
+            $(".edit-btn",".head-leader-edit").on('click', function(){
+                $(".file-chooser-main").show();
+                $(".head-leader-edit").hide();
+
+                if(!$el.data('init')){
+                    initUploader();
+                }
+            });
+        }
+
+        function initUploader()
+        {
+            var $el = $('#balloon-uploader');
             var uploader = new BatchUploader({
                 element: $el,
                 initUrl: $el.data('initUrl'),
@@ -89,37 +109,14 @@ define(function(require, exports, module) {
                 multi: false
             });
 
-            uploader.on('file.uploaded', function(file, media){
-                if (media) {
-                    this.element.find('[data-role=placeholder]').html(media.name);
-                    this.element.find(".file-chooser-main").hide();
-                    this.element.find(".file-chooser-bar").show();
-                    this.get('uploaderProgressbar').reset().hide();
+            uploader.on('file.uploaded', function(file){
+                if (file) {
+                    $(".head-leader-edit").find('[data-role=placeholder]').html(file.name);
+                    $(".file-chooser-main").hide();
+                    $(".head-leader-edit").show();
                 }
             });
-
-            $(".edit-btn",".head-leader-edit").on('click', function(){
-                $(".file-chooser-main").show();
-                $(".head-leader-edit").hide();
-
-                uploader = new BatchUploader({
-                    element: $el,
-                    initUrl: $el.data('initUrl'),
-                    finishUrl: $el.data('finishUrl'),
-                    uploadAuthUrl: $el.data('uploadAuthUrl'),
-                    multi: false
-                });
-
-                uploader.on('file.uploaded', function(file){
-                    if (file) {
-                        $(".head-leader-edit").find('[data-role=placeholder]').html(file.name);
-                        $(".file-chooser-main").hide();
-                        $(".head-leader-edit").show();
-                    }
-                });
-
-            });
-    }
+        }
     }
 
 })
