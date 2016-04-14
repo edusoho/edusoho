@@ -24,7 +24,6 @@ class StringToolkit
         if (!is_array($data)) {
             $data = (array) $data;
         }
-
         ksort($data);
 
         return md5(json_encode($data).$key);
@@ -43,7 +42,6 @@ class StringToolkit
         if (strpos($text, ':') === false) {
             return 0;
         }
-
         list($minutes, $seconds) = explode(':', $text, 2);
 
         return intval($minutes) * 60 + intval($seconds);
@@ -58,7 +56,6 @@ class StringToolkit
         $text = trim($text);
 
         $length = (int) $length;
-
         if (($length > 0) && (mb_strlen($text) > $length)) {
             $text = mb_substr($text, 0, $length, 'UTF-8');
             $text .= '...';
@@ -70,50 +67,44 @@ class StringToolkit
     public static function createRandomString($length)
     {
         $start = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        $code  = null;
-
+        $code = null;
         for ($i = 0; $i < $length; $i++) {
-            $rand = rand(0, 61);
-            $code = $code.$start[$rand];
+        $rand = rand(0,61);
+        $code = $code.$start[$rand];
         }
-
         return $code;
     }
 
     public static function jsonPettry($json)
     {
-        $result          = '';
-        $level           = 0;
-        $in_quotes       = false;
-        $in_escape       = false;
+        $result = '';
+        $level = 0;
+        $in_quotes = false;
+        $in_escape = false;
         $ends_line_level = null;
-        $json_length     = strlen($json);
+        $json_length = strlen($json);
 
         for ($i = 0; $i < $json_length; $i++) {
-            $char           = $json[$i];
+            $char = $json[$i];
             $new_line_level = null;
-            $post           = "";
-
+            $post = "";
             if ($ends_line_level !== null) {
-                $new_line_level  = $ends_line_level;
+                $new_line_level = $ends_line_level;
                 $ends_line_level = null;
             }
-
             if ($in_escape) {
                 $in_escape = false;
             } elseif ($char === '"') {
                 $in_quotes = !$in_quotes;
-            } elseif (!$in_quotes) {
+            } elseif (! $in_quotes) {
                 switch ($char) {
-                    case '}':
-                    case ']':
+                    case '}': case ']':
                         $level--;
                         $ends_line_level = null;
-                        $new_line_level  = $level;
+                        $new_line_level = $level;
                         break;
 
-                    case '{':
-                    case '[':
+                    case '{': case '[':
                         $level++;
                     case ',':
                         $ends_line_level = $level;
@@ -123,22 +114,18 @@ class StringToolkit
                         $post = " ";
                         break;
 
-                    case " ":
-                    case "\t":case "\n":
-                    case "\r":
-                        $char            = "";
+                    case " ": case "\t": case "\n": case "\r":
+                        $char = "";
                         $ends_line_level = $new_line_level;
-                        $new_line_level  = null;
+                        $new_line_level = null;
                         break;
                 }
             } elseif ($char === '\\') {
                 $in_escape = true;
             }
-
             if ($new_line_level !== null) {
                 $result .= "\n".str_repeat("\t", $new_line_level);
             }
-
             $result .= $char.$post;
         }
 
@@ -148,16 +135,14 @@ class StringToolkit
     public static function cutter($name, $leastLength, $prefixLength, $suffixLength)
     {
         $afterCutName = $name;
-        $length       = mb_strlen($name, 'UTF-8');
-
+        $length=mb_strlen($name,'UTF-8');
         if ($length > $leastLength) {
             $afterCutName = mb_substr($name, 0, $prefixLength, 'utf-8').'…';
-            $afterCutName .= mb_substr($name, $length - $suffixLength, $length, 'utf-8');
+            $afterCutName .= mb_substr($name, $length-$suffixLength, $length, 'utf-8');
         }
-
         return $afterCutName;
     }
-
+    
     public static function jsonEncode($data)
     {
         if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
@@ -165,7 +150,7 @@ class StringToolkit
         } elseif (function_exists('iconv')) {
             return json_encode(iconv("GB2312", "UTF-8//IGNORE", $data));
         } else {
-            return $data;
+            return json_encode($data);
         }
     }
 }
