@@ -8,14 +8,14 @@
     {# {{ render(controller('TopxiaWebBundle:FileWatch:modalBody', {file:file})) }} #}
 
     {% if file.type in ['video', 'audio', 'ppt', 'document', 'image', 'flash'] %}
-      {% if file.type in ['video', 'ppt', 'document'] and file.convertStatus != "success" %}
+      {% if file.type in ['video', 'ppt', 'document'] and file.processStatus != "ok" %}
         <div class="text-center">
           {{'该文件暂不支持预览'|trans}}
         </div>
       {% else %}
         <div id="material-preview-player"
             style="height:500px"
-            data-url="{{path('material_lib_file_player', {fileId: file.id})}}"
+            data-url="{{path('material_lib_file_player', {globalId: file.no})}}"
         ></div>
       {% endif %}
   {% else %}
