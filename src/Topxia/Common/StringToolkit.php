@@ -147,9 +147,9 @@ class StringToolkit
     {
         if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
             return json_encode($data, JSON_UNESCAPED_UNICODE);
-        } elseif (function_exists('iconv')) {
-            return json_encode(iconv("GB2312", "UTF-8//IGNORE", implode($data)));
-        } else {
+        } elseif(function_exists('iconv')){          
+            return preg_replace("#\\\u([0-9a-f]+)#ie", "iconv('UCS-2', 'UTF-8', pack('H4', '\\1'))", json_encode($data));
+        }else{
             return json_encode($data);
         }
     }
