@@ -10,12 +10,25 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 {
     public function search($conditions, $start, $limit)
     {
-        $conditions['start']    = $start;
-        $conditions['limit']    = $limit;
-        $conditions             = $this->filterConditions($conditions);
-        $result                 = $this->getCloudFileImplementor()->search($conditions);
-        $createdUserIds         = ArrayToolkit::column($result['data'], 'createdUserId');
-        $result['createdUsers'] = $this->getUserService()->findUsersByIds($createdUserIds);
+        $conditions['start'] = $start;
+        $conditions['limit'] = $limit;
+        $conditions          = $this->filterConditions($conditions);
+        $result              = $this->getCloudFileImplementor()->search($conditions);
+
+        if (!empty($result['data'])) {
+            $createdUserIds = array();
+
+            foreach ($result['data'] as &$cloudFile) {
+                $file = $this->getUploadFileService()->getThinFileByGlobalId($cloudFile['no']);
+
+                if (!empty($file)) {
+                    $createdUserIds[]           = $file['createdUserId'];
+                    $cloudFile['createdUserId'] = $file['createdUserId'];
+                }
+            }
+
+            $result['createdUsers'] = ArrayToolkit::index($this->getUserService()->findUsersByIds($createdUserIds), 'id');
+        }
 
         return $result;
     }
@@ -114,9 +127,9 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                 $courseIds = array('0');
             }
 
-            $lessonFiles = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('courselesson', $courseIds);
+            $lessonFiles   = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('courselesson', $courseIds);
             $materialFiles = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('coursematerial', $courseIds);
-            $globalIds  = ArrayToolkit::column(array_merge($lessonFiles,$materialFiles), 'globalId');
+            $globalIds     = ArrayToolkit::column(array_merge($lessonFiles, $materialFiles), 'globalId');
 
             return $globalIds;
         } elseif ($searchType == 'user') {

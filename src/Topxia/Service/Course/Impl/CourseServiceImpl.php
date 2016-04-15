@@ -1100,12 +1100,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             LessonSerialize::serialize($lesson)
         );
 
-// Increase the linked file usage count, if there's a linked file used by this lesson.
-
-        if (!empty($lesson['mediaId'])) {
-            $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
-        }
-
         $this->updateCourseCounter($course['id'], array(
             'lessonNum'  => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])

@@ -48,6 +48,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return ArrayToolkit::parts($file, array('id', 'hashId', 'globalId', 'isPublic', 'targetId', 'targetType', 'filename', 'ext', 'fileSize', 'length', 'status', 'type', 'storage', 'createdUserId', 'createdTime'));
     }
 
+    public function getThinFileByGlobalId($globalId)
+    {
+        return $this->getUploadFileDao()->getFileByGlobalId($globalId);
+    }
+
     public function getFileByGlobalId($globalId)
     {
         $file = $this->getUploadFileDao()->getFileByGlobalId($globalId);
@@ -59,12 +64,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
-    public function getThinFileByGlobalId($globalId)
-    {
-        return $this->getUploadFileDao()->getFileByGlobalId($globalId);
-    }
-
-    //TODO
     public function findCloudFilesByIds($fileIds)
     {
         $files = $this->getUploadFileDao()->findCloudFilesByIds($fileIds);
@@ -84,9 +83,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $files;
     }
 
-    /**
-     * 不走云
-     */
     public function findFilesByIds(array $ids)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
