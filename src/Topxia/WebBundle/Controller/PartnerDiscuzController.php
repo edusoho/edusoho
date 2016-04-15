@@ -235,7 +235,7 @@ class PartnerDiscuzController extends BaseController
         define('API_RETURN_FAILED', '-1');
         define('API_RETURN_FORBIDDEN', '-2');
 
-        set_magic_quotes_runtime(0);
+        //set_magic_quotes_runtime(0);
 
         defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
         require_once realpath($this->container->getParameter('kernel.root_dir')) . '/config/uc_client_config.php';
