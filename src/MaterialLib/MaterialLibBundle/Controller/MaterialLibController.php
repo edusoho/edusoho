@@ -383,10 +383,12 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function downloadAction($fileId)
+    public function downloadAction(Request $request, $fileId)
     {
-        $download = $this->getMaterialLibService()->download($fileId);
-        return $this->redirect($download['url']);
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array(
+            'request' => $request,
+            'fileId'  => $fileId
+        ));
     }
 
     public function deleteAction($fileId)

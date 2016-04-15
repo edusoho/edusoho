@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -57,20 +56,8 @@ class UploadFileController extends BaseController
 
     protected function downloadCloudFile($file)
     {
-        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-            $key = $file['metas']['hd']['key'];
-        } else {
-            $key = $file['hashId'];
-        }
-
-        if (empty($key)) {
-            throw $this->createNotFoundException();
-        }
-
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $client->download($client->getBucket(), $key, 3600, $file['filename']);
+        $file = $this->getUploadFileService2()->getDownloadFile($fileId);
+        return $this->redirect($download['url']);
     }
 
     protected function downloadLocalFile(Request $request, $file)
@@ -382,6 +369,11 @@ class UploadFileController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getUploadFileService2()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getCourseService()
