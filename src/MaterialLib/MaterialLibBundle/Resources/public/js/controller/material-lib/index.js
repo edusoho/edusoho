@@ -109,8 +109,11 @@ define(function(require, exports, module) {
                         type:'GET',
                         url:$target.data('url'),
                     }).done(function(resp){
-                       self.element.hide();
+                        console.log();
+                        self.element.hide();
                         self.element.prev().hide();
+                        console.log(self.element);
+                        self.element.parent().prev().html('资源详情');
                         self.element.parent().append(resp);
                         new DetailWidget({
                            element:'#material-detail',

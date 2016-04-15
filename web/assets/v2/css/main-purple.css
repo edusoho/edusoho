@@ -13675,6 +13675,9 @@ textarea {
 .materiallib-stats .chart.active {
   display: block;
 }
+.material-body .page-header {
+  display: none;
+}
 .material-detail-widget .header {
   padding-bottom: 12px;
   margin: 0 0 20px 0;
