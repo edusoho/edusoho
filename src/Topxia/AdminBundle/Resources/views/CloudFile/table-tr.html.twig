@@ -16,7 +16,7 @@
         </div>
         <div class="materials-table-title">
           <a class="heading"  href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no})}}"  data-placement="top" title="{{ cloudFile.filename }}">{{ cloudFile.filename }}</a>
-          <span class="text-sm text-muted">
+          <span class="subtitle">
             {% if createdUser %}
                 {{ createdUser.nickname }} 上传
             {% endif %}
