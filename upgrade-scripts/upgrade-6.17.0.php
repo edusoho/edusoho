@@ -126,7 +126,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $conditions = array(
             'storage'       => 'cloud',
             'convertStatus' => 'success',
-            'globalId'      => '0'
+            'globalId'      => 0
         );
         $total = $this->getUploadFileService()->searchFileCount($conditions);
 
