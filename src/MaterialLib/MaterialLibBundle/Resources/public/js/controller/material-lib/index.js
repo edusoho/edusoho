@@ -56,9 +56,9 @@ define(function(require, exports, module) {
             onClickTabs: function(event)
             {
               var $target = $(event.currentTarget);
-              $target.closest('.nav').find('.active').removeClass('active');
+              $target.closest('.js-material-tabs').find('.active').removeClass('active');
               $target.addClass('active');
-              $target.closest('.nav').find('[name=type]').val($target.data('value'));
+              $target.closest('.js-material-tabs').find('[name=type]').val($target.data('value'));
               this.renderTable();
               event.preventDefault();
             },

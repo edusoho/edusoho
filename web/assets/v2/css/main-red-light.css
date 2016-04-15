@@ -13737,18 +13737,6 @@ textarea {
 .materials-ul li .border-left {
   border-left: solid 1px #eee;
 }
-.es-material-tag {
-  position: relative;
-  margin-bottom: 0;
-  padding: 5px 15px 15px 15px;
-  border-bottom: 1px solid #ddd;
-}
-.es-material-tag .all {
-  position: absolute;
-  top: 13px;
-  left: 15px;
-  color: #919191;
-}
 .materials-ul li.img-li .reconvert-btn {
   position: absolute;
   left: 35%;
@@ -13766,6 +13754,171 @@ textarea {
   font-size: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+.material-list-container {
+  margin-top: 20px;
+}
+#material-search-form .source-btn {
+  margin-bottom: 10px;
+}
+.material-collection {
+  color: #ff8a0c;
+}
+.batch-item {
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  z-index: 101;
+}
+.materials-type {
+  margin-bottom: 25px!important;
+}
+.materials-type ul {
+  padding: 0;
+}
+.materials-type li {
+  list-style-type: none;
+}
+.materials-type li.dropdown {
+  padding: 5px 11px;
+  border: 1px solid #ccc;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-color: #e1e1e1;
+}
+.materials-type li.dropdown a {
+  color: #616161;
+}
+.materials-type .form-control {
+  height: 32px;
+  border-color: #e1e1e1;
+  box-shadow: none;
+  position: relative;
+  left: -4px;
+  width: 240px;
+}
+.es-materials-manage .nav-tabs > li span {
+  display: block;
+  padding: 14px 15px 15px;
+  color: #919191;
+}
+.es-materials-manage .nav-tabs > li > a {
+  padding: 14px 15px 15px;
+  color: #313131;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+}
+.es-materials-manage .nav-tabs > li > a:hover {
+  color: #fd5f56;
+  background: transparent;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+}
+.es-materials-manage .nav-tabs > li.active > a {
+  color: #fd5f56;
+  border-bottom-color: #ddd;
+}
+.es-materials-manage .nav-tabs > li.active > a:hover {
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
+}
+.es-materials-manage .es-materials-filter {
+  padding-top: 8px;
+}
+.es-materials-manage .es-materials-filter .form-control {
+  width: 180px;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+.es-materials-manage .form-csearch-type {
+  width: auto;
+}
+.es-materillib-table a {
+  color: #616161;
+}
+.es-materillib-table a:hover {
+  color: #fd5f56;
+  text-decoration: none;
+}
+.es-materials-manage .table > tbody > tr > td {
+  vertical-align: middle;
+  color: #313131;
+}
+.material-search-list {
+  position: relative;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f5f5f5;
+  margin-bottom: 0;
+}
+@media (max-width: 767px) {
+  .material-search-list .btn-group {
+    margin-top: 10px;
+  }
+}
+.material-search-list .all {
+  position: absolute;
+  top: 13px;
+  left: 15px;
+  color: #919191;
+}
+.material-search-list .right-content {
+  padding-left: 70px;
+}
+.material-search-list.material-tabs {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.material-search-list.material-tabs .all {
+  top: 15px;
+}
+.material-search-list.material-tabs .right-content {
+  margin-bottom: 0;
+}
+.material-search-list.material-tabs .right-content li {
+  float: left;
+  list-style-type: none;
+}
+.material-search-list.material-tabs .right-content li.active a,
+.material-search-list.material-tabs .right-content li:hover a {
+  color: #fd5f56;
+}
+.material-search-list.material-tabs .right-content li a {
+  display: inline-block;
+  padding: 5px 10px;
+  color: #616161;
+}
+.material-search-list.material-tag {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.material-search-list.material-tag .right-content .label {
+  margin: 5px;
+  display: inline-block;
+}
+.material-search-list.bottom {
+  padding-top: 15px;
+  margin-bottom: 20px;
+}
+.material-search-list.bottom .all {
+  top: 22px;
+}
+@media (max-width: 767px) {
+  .material-search-list.bottom {
+    padding-bottom: 5px;
+  }
+  .material-search-list.bottom .form-control {
+    margin-bottom: 10px;
+  }
+}
+.materials-modal-body .nav.nav-tabs > li > a {
+  border-bottom: 1px solid transparent;
+}
+.materials-modal-body .nav.nav-tabs > li.active > a,
+.materials-modal-body .nav.nav-tabs > li:hover > a {
+  border-bottom: 1px solid #fd5f56;
 }
 .materials-ul .img-li {
   position: relative;
@@ -13892,162 +14045,4 @@ textarea {
   padding-top: 30px;
   margin-bottom: 20px;
   border-top: 1px solid #dddddd;
-}
-.material-list-container {
-  margin-top: 20px;
-}
-#material-search-form .source-btn {
-  margin-bottom: 10px;
-}
-.material-collection {
-  color: #ff8a0c;
-}
-.tags-container {
-  padding-left: 70px;
-}
-.tags-container .label {
-  display: inline-block;
-  margin-right: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-}
-.batch-item {
-  position: absolute;
-  left: 8px;
-  top: 4px;
-  z-index: 101;
-}
-.materials-type {
-  margin-bottom: 25px!important;
-}
-.materials-type ul {
-  padding: 0;
-}
-.materials-type li {
-  list-style-type: none;
-}
-.materials-type li.dropdown {
-  padding: 5px 11px;
-  border: 1px solid #ccc;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border-color: #e1e1e1;
-}
-.materials-type li.dropdown a {
-  color: #616161;
-}
-.materials-type .form-control {
-  height: 32px;
-  border-color: #e1e1e1;
-  box-shadow: none;
-  position: relative;
-  left: -4px;
-  width: 240px;
-}
-.es-materials-manage .nav-tabs > li span {
-  display: block;
-  padding: 14px 15px 15px;
-  color: #919191;
-}
-.es-materials-manage .nav-tabs > li > a {
-  padding: 14px 15px 15px;
-  color: #313131;
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-}
-.es-materials-manage .nav-tabs > li > a:hover {
-  color: #fd5f56;
-  background: transparent;
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-}
-.es-materials-manage .nav-tabs > li.active > a {
-  color: #fd5f56;
-  border-bottom-color: #ddd;
-}
-.es-materials-manage .nav-tabs > li.active > a:hover {
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-}
-.es-materials-manage .es-materials-filter {
-  padding-top: 8px;
-}
-.es-materials-manage .es-materials-filter .form-control {
-  width: 180px;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px;
-}
-.es-materials-manage .form-csearch-type {
-  width: auto;
-}
-.es-materillib-table a {
-  color: #616161;
-}
-.es-materillib-table a:hover {
-  color: #fd5f56;
-  text-decoration: none;
-}
-.es-materials-manage .table > tbody > tr > td {
-  vertical-align: middle;
-  color: #313131;
-}
-.label {
-  padding: 0.2em 0.6em;
-  font-weight: normal;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
-  vertical-align: middle;
-}
-.label.label-md {
-  font-size: 100%;
-}
-.label.label-xs {
-  font-size: 12px;
-  padding: 2px;
-}
-.es-material-tabs {
-  border-bottom: 1px solid #ddd;
-}
-.es-material-tabs > li {
-  float: left;
-  margin-bottom: -1px;
-}
-.es-material-tabs > li span {
-  display: block;
-  padding: 14px 15px 15px;
-  color: #919191;
-}
-.es-material-tabs > li > a {
-  padding: 14px 15px 15px;
-  color: #313131;
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-}
-.es-material-tabs > li > a:hover {
-  color: #fd5f56;
-  background: transparent;
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-}
-.es-material-tabs > li.active > a {
-  color: #fd5f56;
-  border-bottom-color: #ddd;
-}
-.es-material-tabs > li.active > a:hover {
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-}
-.materials-modal-body .nav.nav-tabs > li > a {
-  border-bottom: 1px solid transparent;
-}
-.materials-modal-body .nav.nav-tabs > li.active > a,
-.materials-modal-body .nav.nav-tabs > li:hover > a {
-  border-bottom: 1px solid #fd5f56;
 }
