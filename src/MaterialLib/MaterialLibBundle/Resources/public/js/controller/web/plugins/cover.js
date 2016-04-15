@@ -35,16 +35,20 @@ define(function(require, exports, module) {
             second = Math.ceil(second);
             $target.button('loading');
             $.ajax({
-                type:'get',
-                url:$target.data('url'),
-                data:{'second':second}
-            }).done(function(resp){
+                type: 'get',
+                url: $target.data('url'),
+                data: {
+                    'second': second
+                }
+            }).done(function(resp) {
                 if (resp.status == 'success') {
                     self._successGeneratePic($target, resp);
                 } else if (resp.status == 'waiting') {
                     //轮询
-                    self.intervalId = setInterval(function(){
-                        $.get($target.data('url'), {'second':second}, function(resp){
+                    self.intervalId = setInterval(function() {
+                        $.get($target.data('url'), {
+                            'second': second
+                        }, function(resp) {
                             if (resp.status == 'success') {
                                 self._successGeneratePic($target, resp);
                                 clearInterval(self.intervalId);
@@ -56,7 +60,7 @@ define(function(require, exports, module) {
                     Notify.danger('生成截图失败！');
                 }
 
-            }).fail(function(){
+            }).fail(function() {
                 $target.button('reset');
                 Notify.danger('生成截图失败！');
             });
@@ -87,38 +91,28 @@ define(function(require, exports, module) {
 
         },
         _changePane: function($target) {
-            $target.parent().find('a.disabled').removeClass('disabled');
-            $target.addClass('disabled');
-            var $container = $target.closest('#thumbnail-set');
-            var $panl = null;
-            $container.find('.thumbnail-pane').each(function() {
-              var $this = $(this);
-              if(!$this.hasClass('active')) {
-                $panl= $this;
-              }
-            })
-            $container.find('.thumbnail-pane').removeClass('active');
-            $panl.addClass('active');
-            if($('#self-select').is(':visible')) {
-              this.$('.js-screenshot-btn').removeClass('hide');
-            }
-            else {
-               this.$('.js-screenshot-btn').addClass('hide');
-            }
+            $target.closest('.nav').find('li.active').removeClass('active');
+            $target.addClass('active');
+
+            var $tabcontent = $('.tab-content-img');
+            $tabcontent.find('.tab-pane-img.active').removeClass('active');
+            console.log($target.data('target'));
+            $tabcontent.find($target.data('target')).addClass('active');
+
         },
         onSubmitCoverForm: function(event) {
             var $target = $(event.currentTarget);
             $target.find('#save-btn').button('loading');
             if ($target.find('#thumbNo').val()) {
                 $.ajax({
-                    type:'POST',
-                    url:$target.attr('action'),
-                    data:$target.serialize()
-                }).done(function(){
+                    type: 'POST',
+                    url: $target.attr('action'),
+                    data: $target.serialize()
+                }).done(function() {
                     Notify.success('保存成功！');
-                }).fail(function(){
+                }).fail(function() {
                     Notify.danger('保存失败！');
-                }).always(function(){
+                }).always(function() {
                     $target.find('#save-btn').button('reset');
                 });
             } else {

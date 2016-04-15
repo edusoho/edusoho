@@ -115,6 +115,10 @@ define(function(require, exports, module) {
                         console.log(self.element);
                         self.element.parent().prev().html('资源详情');
                         self.element.parent().append(resp);
+
+                        require('jquery.lavalamp');
+                        $(".nav.nav-tabs").lavaLamp();
+                        
                         new DetailWidget({
                            element:'#material-detail',
                            callback: function() {

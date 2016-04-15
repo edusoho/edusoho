@@ -43,7 +43,6 @@ define(function(require, exports, module) {
                 var $tabcontent = $target.closest('.content').find('.tab-content');
                 $tabcontent.find('.tab-pane.active').removeClass('active');
                 $tabcontent.find($target.data('target')).addClass('active');
-
             },
             back: function() {
                 this.get('callback')();

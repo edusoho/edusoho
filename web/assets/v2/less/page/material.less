@@ -119,33 +119,27 @@
   margin-bottom: 20px;
 }
 
-.material-detail-widget .content #cover-tab img {
-  width: 100%;
-}
+// .material-detail-widget .content #cover-tab img {
+//   width: 100%;
+// }
 
-.material-detail-widget .content #cover-tab .links {
-  padding-left: 15px;
-}
+// .material-detail-widget .content #cover-tab .links {
+//   padding-left: 15px;
+// }
 
-.material-detail-widget .content #cover-tab .thumbnail-pane {
-  display: none;
-}
 
-.material-detail-widget .content #cover-tab .thumbnail-pane.active {
-  display: block;
-}
 
-.material-detail-widget .content #cover-tab .links a.disabled {
-  color: #777;
-}
+// .material-detail-widget .content #cover-tab .links a.disabled {
+//   color: #777;
+// }
 
-.material-detail-widget .content #cover-tab .links a.disabled:hover,
-.material-detail-widget .content #cover-tab .links a.disabled:focus {
-  color: #777;
-  text-decoration: none;
-  cursor: not-allowed;
-  background-color: transparent;
-}
+// .material-detail-widget .content #cover-tab .links a.disabled:hover,
+// .material-detail-widget .content #cover-tab .links a.disabled:focus {
+//   color: #777;
+//   text-decoration: none;
+//   cursor: not-allowed;
+//   background-color: transparent;
+// }
 @media(max-width:400px)  {
   .materials-list {
     width: 100%!important;
@@ -398,6 +392,65 @@
     overflow: hidden;
   }
 }
+
+.tab-content-img .tab-pane-img {
+  display: none;
+  &.active {
+    display: block;
+  }
+}
+
+.material-detail-img {
+  height: 150px;
+  .detail-img {
+    height: 100%;
+    width: auto;
+    margin-right: 20px;
+  }
+  @media(max-width:@screen-xs-min) {
+    height: auto;
+    .detail-img {
+      height: 150px;
+      display: block;
+      margin-bottom: 10px;
+    }
+  }
+  .btn {
+    vertical-align: middle;
+  }
+  &.tab-pane-img {
+    .video-player-container   {
+      width: 267px;
+      float: left;
+      margin-right: 20px;
+    }
+    .btn {
+      margin-top: 58px;
+    }
+    @media(max-width:@screen-xs-min) {
+      height: auto;
+      .video-player-container {
+        display: block;
+        margin-bottom: 10px;
+      }
+      .btn {
+        margin-top: 0;
+      }
+    }
+  }
+}
+.material-detail-save {
+  text-align: center;
+  padding-top: 30px;
+  margin-bottom: 20px;
+  border-top: 1px solid #dddddd;
+}
+
+
+
+
+
+
 .material-list-container {
   margin-top: 20px;
 }
