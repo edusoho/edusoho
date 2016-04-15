@@ -3,7 +3,7 @@
     <td>
         <div class="materials-table-img">
           <div class="mask">
-            {% if cloudFile.type in ['audio','video','document','ppt','flash','image'] %}
+            {% if cloudFile.type in ['audio','video','document','ppt','flash','image'] and cloudFile.processStatus == 'ok' %}
               <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}">资料预览</a>
             {% endif %}
             {% if cloudFile.processStatus == 'error' %}
