@@ -385,6 +385,7 @@ class MaterialLibController extends BaseController
 
     public function downloadAction(Request $request, $fileId)
     {
+        $this->tryAccessFile($fileId);
         return $this->forward('TopxiaWebBundle:UploadFile:download', array(
             'request' => $request,
             'fileId'  => $fileId
