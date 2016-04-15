@@ -57,7 +57,7 @@ class CloudFileController extends BaseController
         return $this->render('TopxiaAdminBundle:CloudFile:tbody.html.twig', array(
             'type'         => empty($conditions['type']) ? 'all' : $conditions['type'],
             'materials'    => $results['data'],
-            'createdUsers' => $results['createdUsers'],
+            'createdUsers' => isset($results['createdUsers']) ?$results['createdUsers'] : array(),
             'paginator'    => $paginator
         ));
     }
