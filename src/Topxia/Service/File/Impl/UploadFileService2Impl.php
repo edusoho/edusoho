@@ -28,6 +28,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    public function getUploadFileInit($id)
+    {
+        return $this->getUploadFileInitDao()->getFile($id);
+    }
+
     /**
      *  此函数不走云
      *
@@ -368,13 +373,13 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     public function setFileProcessed($params)
     {
         try {
-            $file = $this->getUploadFileDao()->getFileByGlobalId($params['globalId']);
+            $file = $this->getUploadFileInitDao()->getFileByGlobalId($params['globalId']);
 
             $fields = array(
                 'convertStatus' => 'success'
             );
 
-            $this->getUploadFileDao()->updateFile($file['id'], $fields);
+            $this->getUploadFileInitDao()->updateFile($file['id'], $fields);
         } catch (\Exception $e) {
             $msg = $e->getMessage();
         }

@@ -136,7 +136,7 @@ class UploaderController extends BaseController
         $params = $request->request->all();
 
         $id   = $params['id'];
-        $file = $this->getUploadFileService()->getThinFile($id);
+        $file = $this->getUploadFileService()->getUploadFileInit($id);
 
         if (empty($file)) {
             throw $this->createAccessDeniedException();
