@@ -166,7 +166,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
     protected function createSearchQueryBuilder($conditions)
     {
         $conditions = array_filter($conditions, function ($value) {
-            if ($value === '0') {
+            if ($value === '0' || $value === 0) {
                 return true;
             }
 
