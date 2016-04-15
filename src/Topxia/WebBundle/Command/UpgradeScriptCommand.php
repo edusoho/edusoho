@@ -14,7 +14,7 @@ class UpgradeScriptCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('topxia:upgrade-script')
-             ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号');
+            ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -23,8 +23,9 @@ class UpgradeScriptCommand extends BaseCommand
 
         $code    = 'MAIN';
         $version = $input->getArgument('version');
+        $index   = $input->getArgument('index');
 
-        $this->executeScript($code, $version);
+        $this->executeScript($code, $version, $index);
         $output->writeln("<info>执行脚本</info>");
 
         $this->removeCache();
@@ -34,7 +35,7 @@ class UpgradeScriptCommand extends BaseCommand
         $output->writeln("<info>元数据更新</info>");
     }
 
-    protected function executeScript($code, $version)
+    protected function executeScript($code, $version, $index = 0)
     {
         $scriptFile = $this->getServiceKernel()->getParameter('kernel.root_dir')."/../scripts/upgrade-{$version}.php";
 
@@ -46,7 +47,7 @@ class UpgradeScriptCommand extends BaseCommand
         $upgrade = new \EduSohoUpgrade($this->getServiceKernel());
 
         if (method_exists($upgrade, 'update')) {
-            $info = $upgrade->update();
+            $info = $upgrade->update($index);
         }
     }
 
