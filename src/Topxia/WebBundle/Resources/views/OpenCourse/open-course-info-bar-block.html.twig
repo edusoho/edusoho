@@ -29,7 +29,7 @@
             <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="es-icon es-icon-share operation-icon"></i></a>
             {{'分享'|trans}}
             {#<div class="gray-darker">523</div>#}
-            {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'course'} %}
+            {% include 'TopxiaWebBundle:Common:share-dropdown.html.twig' with {type:'open_course'} %}
           </div>
         </li>
         <li id="favorite-btn" data-url="{{ path('open_course_unfavorite',{id:course.id}) }}" style="display: none;">
