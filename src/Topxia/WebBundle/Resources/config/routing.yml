@@ -2037,6 +2037,10 @@ live_course_manage_lesson_replay_title_update:
     defaults: { _controller: TopxiaWebBundle:LiveCourseLessonManage:updateLessonReplay }
     methods: [POST]
 
+open_course_explore:
+    pattern:  /open/course/explore/{category}
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:explore, category:'' }
+
 open_course_manage:
     pattern:  /open/course/{id}/manage
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:index }
