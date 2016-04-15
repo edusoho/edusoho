@@ -510,7 +510,7 @@ margin-top: 14px;
 }
 .modal-open .modal-body{
   max-height: 435px;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .ellipsis,
