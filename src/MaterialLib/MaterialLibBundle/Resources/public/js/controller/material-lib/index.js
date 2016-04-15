@@ -324,6 +324,7 @@ define(function(require, exports, module) {
                     data:this.element.serialize()
                 }).done(function(resp){
                     $table.html(resp);
+                    $('[data-toggle="tooltip"]').tooltip();
                     var mode = self.get('model');
                     var attribute = self.get('attribute');
                     if(mode == 'edit' && attribute == 'mine'){
