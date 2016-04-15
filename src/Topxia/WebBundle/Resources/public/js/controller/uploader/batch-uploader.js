@@ -182,12 +182,12 @@ define(function(require, exports, module) {
                 'f4v': 'video',
                 'mkv': 'video',
                 'm4v': 'video',
-                doc: 'document',
-                docx: 'document',
-                pdf: 'document',
-                ppt: 'ppt',
-                pptx: 'ppt',
-                mp3: 'audio'
+                'doc': 'document',
+                'docx': 'document',
+                'pdf': 'document',
+                'ppt': 'ppt',
+                'pptx': 'ppt',
+                'mp3': 'audio'
             };
 
             var paramsDefault = {
@@ -353,38 +353,6 @@ define(function(require, exports, module) {
 
             });
             return deferred.promise();
-        },
-
-        getFileProcessor: function(file) {
-            var extProcessors = {
-                'mp4': 'video',
-                'avi': 'video',
-                'flv': 'video',
-                'wmv': 'video',
-                'mov': 'video',
-                'rmvb': 'video',
-                'vob': 'video',
-                'mpg': 'video',
-                'f4v': 'video',
-                'mkv': 'video',
-                'm4v': 'video',
-                'doc': 'document',
-                'docx': 'document',
-                'pdf': 'document',
-                'ppt': 'document',
-                'pptx': 'document'
-            };
-
-            var dotPos = file.name.lastIndexOf('.');
-            if (dotPos < 0) {
-                return '';
-            }
-            var ext = file.name.slice(dotPos);
-            if (!extProcessors[ext]) {
-                return '';
-            }
-
-            return extProcessors[ext];
         },
 
         getStrategyModel: function(mode){

@@ -33,8 +33,9 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
     {
     }
 
-    public function getDownloadFile($id)
+    public function getDownloadFile($file)
     {
+        return $file;
     }
 
     public function deleteFile($file)
