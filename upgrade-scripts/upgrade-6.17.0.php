@@ -39,13 +39,20 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
-        $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `globalId` VARCHAR(32) NOT NULL DEFAULT '0' COMMENT '云文件ID' AFTER `id`;");
+        if (!$this->isFieldExist('upload_files', 'globalId')) {
+            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `globalId` VARCHAR(32) NOT NULL DEFAULT '0' COMMENT '云文件ID' AFTER `id`;");
+        }
 
-        $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态' AFTER `length`;");
+        if (!$this->isFieldExist('upload_files', 'status')) {
+            $this->getConnection()->exec("ALTER TABLE `upload_files` ADD `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态' AFTER `length`;");
+        }
 
-        $this->getConnection()->exec("ALTER TABLE `upload_files` CHANGE `size` `fileSize` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '文件大小';");
+        if ($this->isFieldExist('upload_files', 'size')) {
+            $this->getConnection()->exec("ALTER TABLE `upload_files` CHANGE `size` `fileSize` INT(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '文件大小';");
+        }
 
-        $this->getConnection()->exec("CREATE TABLE `upload_files_collection` (
+        if (!$this->isTableExist('upload_files_collection')) {
+            $this->getConnection()->exec("CREATE TABLE `upload_files_collection` (
           `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
           `fileId` int(10) unsigned NOT NULL COMMENT '文件Id',
           `userId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '收藏者',
@@ -53,15 +60,19 @@ class EduSohoUpgrade extends AbstractUpdater
           `updatedTime` INT(10) unsigned NULL DEFAULT '0'  COMMENT '更新时间',
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='文件收藏表';");
+        }
 
-        $this->getConnection()->exec("CREATE TABLE `upload_files_tag` (
-            `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
-            `fileId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件ID',
-            `tagId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '标签ID',
-            PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件与标签的关联表'");
+        if (!$this->isTableExist('upload_files_tag')) {
+            $this->getConnection()->exec("CREATE TABLE `upload_files_tag` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
+              `fileId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件ID',
+              `tagId` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '标签ID',
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件与标签的关联表'");
+        }
 
-        $this->getConnection()->exec("CREATE TABLE `upload_files_share_history` (
+        if (!$this->isTableExist('upload_files_share_history')) {
+            $this->getConnection()->exec("CREATE TABLE `upload_files_share_history` (
              `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '系统ID',
              `sourceUserId` int(10) NOT NULL COMMENT '分享用户的ID',
              `targetUserId` int(10) NOT NULL COMMENT '被分享的用户的ID',
@@ -69,8 +80,10 @@ class EduSohoUpgrade extends AbstractUpdater
              `createdTime` int(10) DEFAULT '0' COMMENT '创建时间',
              PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+        }
 
-        $this->getConnection()->exec("CREATE TABLE `upload_file_inits` (
+        if (!$this->isTableExist('upload_file_inits')) {
+            $this->getConnection()->exec("CREATE TABLE `upload_file_inits` (
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `globalId` varchar(32) NOT NULL DEFAULT '0' COMMENT '云文件ID',
               `status` ENUM('uploading','ok') NOT NULL DEFAULT 'ok' COMMENT '文件上传状态',
@@ -96,6 +109,7 @@ class EduSohoUpgrade extends AbstractUpdater
               PRIMARY KEY (`id`),
               UNIQUE KEY `hashId` (`hashId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+        }
     }
 
     private function batchUpdate($index)
