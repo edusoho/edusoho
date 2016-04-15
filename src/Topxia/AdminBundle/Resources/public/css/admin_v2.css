@@ -647,8 +647,12 @@ margin-top: 14px;
   white-space: nowrap;
   word-wrap: normal;
   margin-bottom: 10px;
+  max-width: 250px;
 }
-
+.materials-table-title .subtitle {
+  font-size: 12px;
+  color: #999;
+}
 .material-detail-widget .header{
   border-bottom: 1px solid #ddd;
   margin-bottom: 20px;
