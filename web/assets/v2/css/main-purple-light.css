@@ -13897,6 +13897,7 @@ textarea {
 .material-search-list.material-tag .right-content .label {
   margin: 5px;
   display: inline-block;
+  cursor: pointer;
 }
 .material-search-list.bottom {
   padding-top: 15px;

@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 'click .nav.nav-tabs li': 'onClickNav',
                 'click .js-material-tabs .js-type-btn': 'onClickTabs',
                 'click .pagination li': 'onClickPagination',
-                'click .tags-container .label': 'onClickTag',
+                'click .js-material-tag .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-download-btn': 'onClickDownloadBtn',
@@ -71,8 +71,9 @@ define(function(require, exports, module) {
             },
             onClickTag: function(event)
             {
+                console.log("test");
                 var $target = $(event.currentTarget);
-                var $container = $target.closest('.tags-container');
+                var $container = $target.closest('.js-material-tag');
                 var $prev = $container.find('.label-primary');
                 if ($target.html() == $prev.html()) {
                     $target.removeClass('label-primary').addClass('label-default');
