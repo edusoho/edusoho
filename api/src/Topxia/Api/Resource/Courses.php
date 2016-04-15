@@ -67,6 +67,7 @@ class Courses extends BaseResource
 
         return $this->wrap($courses, min($result['showCount'], $total));
     }
+
     public function post(Application $app, Request $request)
     {
     }
