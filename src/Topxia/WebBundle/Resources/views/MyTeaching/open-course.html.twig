@@ -27,26 +27,26 @@
        	{% for course in courses %}
        	 <tr>
             <td>
-              <a class="pull-left mrm" href="{{ path('course_show', {id:course.id}) }}">
+              <a class="pull-left mrm" href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">
                 <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}" width="100">
               </a>
 
               <div class="mlm">
-                <a href="{{ path('course_show', {id:course.id}) }}">{{ course.title }}</a>
-                {% if course.type == 'live' %}
+                <a href="{{ path('open_course_show', {courseId:course.id}) }}" title="{{ course.title }}">{{ course.title }}</a>
+                {% if course.type == 'liveOpen' %}
                   <span class="label label-success live-label">{{'直播'|trans}}</span>
                 {% endif  %}
               </div>
             </td>
-
-           
             <td>{{ course.studentNum }}</td>
-            
             <td>{{ dict_text('courseStatus:html', course.status) }}</td>
             <td>
-             {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
               <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+                {% if 'ROLE_SUPER_ADMIN' in app.user.roles %}
+                  <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'管理'|trans}}</a>
+                {% elseif 'ROLE_TEACHER' in app.user.roles %}
+                  <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
+                {% endif %}
 
                 <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                   <span class="caret"></span>
@@ -57,20 +57,6 @@
                   <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'管理'|trans}}</a></li>
                 </ul>
               </div>
-             {% elseif 'ROLE_TEACHER' in app.user.roles %}
-              <div class="btn-group">
-                <a class="btn btn-default btn-sm" href="{{ path('open_course_manage', {id:course.id}) }}">{{'查看'|trans}}</a>
-
-                <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu pull-right">
-                  <li><a href="{{ path('open_course_manage_lesson', {id:course.id}) }}">{{'查看课时'|trans}}</a></li>
-                  <li><a href="{{ path('open_course_manage_files', {id:course.id}) }}">{{'查看文件'|trans}}</a></li>
-                  <li><a href="{{ path('open_course_manage_students', {id:course.id}) }}">{% if setting('default.user_name') %}{{setting('default.user_name')|default('查看学员'|trans)}}{% else %}{{'查看'|trans}}{% endif %}{{'学员'|trans}}</a></li>
-                </ul>
-              </div>
-             {% endif %}            
             </td>
           </tr>
         {% endfor %}
