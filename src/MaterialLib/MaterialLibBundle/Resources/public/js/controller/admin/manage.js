@@ -66,6 +66,7 @@ define(function(require, exports, module) {
             {
                 var self = this;
                 var $target = $(event.currentTarget);
+                $target.button('loading');
                 $.ajax({
                     type:'GET',
                     url:$target.data('url'),
@@ -84,6 +85,7 @@ define(function(require, exports, module) {
                         }
                     });
                 }).fail(function(){
+                    $target.button('reset');
                     Notify.danger('Opps,出错了!');
                 });
             },
