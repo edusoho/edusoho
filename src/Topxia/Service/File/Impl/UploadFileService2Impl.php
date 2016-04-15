@@ -347,11 +347,13 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             'fileSize'      => $params['size']
         );
 
-        $file = array_merge($file, $fields);
-        $this->getUploadFileInitDao()->deleteFile($file['id']);
-        unset($file['id']);
+        if ($file) {
+            $file = array_merge($file, $fields);
+            $this->getUploadFileInitDao()->deleteFile($file['id']);
+            unset($file['id']);
 
-        $file = $this->getUploadFileDao()->addFile($file);
+            $file = $this->getUploadFileDao()->addFile($file);
+        }
 
         if ($file['targetType'] == 'headLeader') {
             $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
