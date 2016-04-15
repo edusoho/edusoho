@@ -85,7 +85,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $this->dispatchEvent("open.course.update", array('argument' => $argument, 'course' => $updatedCourse));
 
-        return $this->getOpenCourseDao()->updateCourse($id, $fields);
+        return $updatedCourse;
     }
 
     public function deleteCourse($id)
@@ -337,7 +337,7 @@ throw $this->createServiceException('不能收藏未发布课程');
             throw $this->createServiceException('添加课时失败，课程不存在。');
         }
 
-        if (!in_array($lesson['type'], array('text', 'audio', 'video', 'liveOpen', 'open', 'ppt', 'document', 'flash'))) {
+        if (!in_array($lesson['type'], array('video', 'liveOpen', 'open'))) {
             throw $this->createServiceException('课时类型不正确，添加失败！');
         }
 
@@ -347,13 +347,14 @@ throw $this->createServiceException('不能收藏未发布课程');
             $fields['title'] = $this->purifyHtml($fields['title']);
         }
 
-        $lesson['free']        = empty($lesson['free']) ? 0 : 1;
+        $lesson['status']      = $course['status'] == 'published' ? 'unpublished' : 'published';
         $lesson['number']      = $this->_getNextLessonNumber($lesson['courseId']);
         $lesson['seq']         = $this->_getNextCourseItemSeq($lesson['courseId']);
         $lesson['userId']      = $this->getCurrentUser()->id;
         $lesson['createdTime'] = time();
 
         if ($lesson['type'] == 'liveOpen') {
+            $lesson['status']       = 'published';
             $lesson['endTime']      = $lesson['startTime'] + $lesson['length'] * 60;
             $lesson['suggestHours'] = $lesson['length'] / 60;
         }
