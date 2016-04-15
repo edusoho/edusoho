@@ -96,19 +96,6 @@ class CourseLessonManageController extends BaseController
         $draft      = $this->getCourseService()->findCourseDraft($courseId, $lessonId, $userId);
         $setting    = $this->setting('storage');
 
-// if ($setting['upload_mode'] == 'local') {
-
-//     // $videoUploadToken = $audioUploadToken = $pptUploadToken = array(
-
-//     //     'token' => $this->getUserService()->makeToken('fileupload', $user['id'], strtotime('+ 2 hours')),
-
-//     //     'url' => $this->generateUrl('uploadfile_upload', array('targetType' => $targetType, 'targetId' => $targetId)),
-
-//     // );
-
-// } else {
-
-        // }
         $lesson['title'] = str_replace(array('"', "'"), array('&#34;', '&#39;'), $lesson['title']);
 
         $features = $this->container->hasParameter('enabled_features') ? $this->container->getParameter('enabled_features') : array();
@@ -344,7 +331,22 @@ class CourseLessonManageController extends BaseController
             $mediaMap[$item['mediaId']][] = $item['id'];
         }
 
+        $mediaIds = array_keys($mediaMap);
+
+        if (!empty($mediaIds)) {
+            $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
+
+            foreach ($files as $file) {
+                $lessonIds = $mediaMap[$file['id']];
+
+                foreach ($lessonIds as $lessonId) {
+                    $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
+                }
+            }
+        }
+
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
+            'files'     => isset($files) ? ArrayToolkit::index($files, 'id') : array(),
             'course'    => $course,
             'items'     => $courseItems,
             'exercises' => empty($exercises) ? array() : $exercises,
