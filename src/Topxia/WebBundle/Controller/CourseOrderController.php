@@ -29,6 +29,7 @@ class CourseOrderController extends OrderController
         $courseSetting = $this->getSettingService()->get('course', array());
 
         $userInfo                   = $this->getUserService()->getUserProfile($user['id']);
+
         $userInfo['approvalStatus'] = $user['approvalStatus'];
 
         $account = $this->getCashAccountService()->getAccountByUserId($user['id'], true);
@@ -122,7 +123,14 @@ class CourseOrderController extends OrderController
         ));
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
 
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
         //判断用户是否为VIP
         $vipStatus = $courseVip = null;
 
