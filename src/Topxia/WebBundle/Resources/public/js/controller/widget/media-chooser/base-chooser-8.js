@@ -175,10 +175,10 @@ define(function(require, exports, module) {
 
             uploader.on('file.uploaded', function(file, data, response){
                 var item = {
-                    id: file.fileId,
+                    id: response.id,
                     status: data.status,
                     source: 'self',
-                    name: file.name,
+                    name: response.filename,
                     length: parseInt(response.length)
                 };
 

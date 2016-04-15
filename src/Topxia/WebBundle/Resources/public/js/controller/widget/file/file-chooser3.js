@@ -199,13 +199,12 @@ define(function(require, exports, module) {
                 multi: false
             });
 
-            uploader.on('file.uploaded', function(file, data) {
-                console.log(file);
+            uploader.on('file.uploaded', function(file, data,response) {
                 var item = {
-                    id: file.fileId,
+                    id: response.id,
                     status: 'waiting',
                     source: 'self',
-                    name: file.name,
+                    name: response.filename,
                     length: parseInt(data.length)
                 };
 
