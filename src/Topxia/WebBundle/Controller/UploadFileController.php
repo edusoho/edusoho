@@ -48,7 +48,7 @@ class UploadFileController extends BaseController
         $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
-            $this->downloadCloudFile($file);
+            return $this->downloadCloudFile($file);
         } else {
             return $this->downloadLocalFile($request, $file);
         }
@@ -56,8 +56,8 @@ class UploadFileController extends BaseController
 
     protected function downloadCloudFile($file)
     {
-        $file = $this->getUploadFileService2()->getDownloadFile($fileId);
-        return $this->redirect($download['url']);
+        $file = $this->getUploadFileService2()->getDownloadFile($file['id']);
+        return $this->redirect($file['url']);
     }
 
     protected function downloadLocalFile(Request $request, $file)
