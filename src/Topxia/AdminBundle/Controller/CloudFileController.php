@@ -16,8 +16,10 @@ class CloudFileController extends BaseController
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:CloudFile:api-error.html.twig', array());
         }
+
         $storageSetting = $this->getSettingService()->get('storage', array());
-        if (isset($result['hasStorage']) && $result['hasStorage'] == '1' && $storageSetting['upload_mode']=="cloud") {
+
+        if (isset($result['hasStorage']) && $result['hasStorage'] == '1' && $storageSetting['upload_mode'] == "cloud") {
             return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
         }
 
@@ -27,9 +29,11 @@ class CloudFileController extends BaseController
     public function manageAction(Request $request)
     {
         $storageSetting = $this->getSettingService()->get('storage', array());
-        if ($storageSetting['upload_mode']!="cloud") {
+
+        if ($storageSetting['upload_mode'] != "cloud") {
             return $this->redirect($this->generateUrl('admin_cloud_file'));
         }
+
         return $this->render('TopxiaAdminBundle:CloudFile:manage.html.twig', array(
             'tags' => $this->getTagService()->findAllTags(0, PHP_INT_MAX)
         ));
@@ -58,12 +62,12 @@ class CloudFileController extends BaseController
         ));
     }
 
-    public function  previewAction(Request $reqeust, $globalId)
+    public function previewAction(Request $reqeust, $globalId)
     {
-      $file = $this->getCloudFileService()->getByGlobalId($globalId);
-      return $this->render('TopxiaAdminBundle:CloudFile:preview-modal.html.twig',array(
-        'file' => $file
-      ));
+        $file = $this->getCloudFileService()->getByGlobalId($globalId);
+        return $this->render('TopxiaAdminBundle:CloudFile:preview-modal.html.twig', array(
+            'file' => $file
+        ));
     }
 
     public function detailAction(Request $reqeust, $globalId)
