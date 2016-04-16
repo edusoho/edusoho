@@ -15,6 +15,8 @@ interface MaterialService
 
 	public function getMaterial($courseId, $materialId);
 
+	public function batchTagEdit($fileIds,$tagIds);
+
 	public function findCourseMaterials($courseId, $start, $limit);
 
 	public function findLessonMaterials($lessonId, $start, $limit);

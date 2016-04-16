@@ -427,16 +427,7 @@ class MaterialLibController extends BaseController
         $data    = $request->request->all();
         $fileIds = preg_split('/,/', $data['fileIds']);
 
-        foreach ($fileIds as $key => $fileId) {
-            $file = $this->getUploadFileService()->getFile($fileId);
-
-            if (!empty($file['globalId'])) {
-                $this->getMaterialLibService()->edit($fileId, array('tags' => $data['tags']));
-            } else {
-                continue;
-            }
-        }
-
+        $this->getMaterialLibService()->batchTagEdit($fileIds,$data['tags']);
         return $this->redirect($this->generateUrl('material_lib_browsing'));
     }
 
