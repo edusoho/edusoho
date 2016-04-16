@@ -61,7 +61,6 @@ class MaterialLibController extends BaseController
             $this->getUploadFileService()->searchFilesCount($conditions),
             20
         );
-
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
             array('createdTime', 'DESC'),

@@ -14,6 +14,8 @@ interface MaterialLibService
 
     public function batchDelete($ids);
 
+    public function batchTagEdit($fileIds,$tagNames);
+
     public function batchShare($ids);
 
     public function download($id);
