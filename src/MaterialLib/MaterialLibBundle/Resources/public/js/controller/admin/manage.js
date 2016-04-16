@@ -66,12 +66,14 @@ define(function(require, exports, module) {
             {
                 var self = this;
                 var $target = $(event.currentTarget);
+                $target.button('loading');
                 $.ajax({
                     type:'GET',
                     url:$target.data('url'),
                 }).done(function(resp){
                     self.element.hide();
                     self.element.prev().hide();
+                    self.element.parent().prev().html('资源详情');
                     self.element.parent().append(resp);
                     new DetailWidget({
                         element:'#material-detail',
@@ -83,6 +85,7 @@ define(function(require, exports, module) {
                         }
                     });
                 }).fail(function(){
+                    $target.button('reset');
                     Notify.danger('Opps,出错了!');
                 });
             },

@@ -208,7 +208,8 @@ class GlobalFilePlayerController extends BaseController
             'globalId' => $file['no'],
             'token'    => $token['token']
         ), true);
-        $params['key'] = $file['metas']['levels'][$level]['key'];
+        $params['key']    = $file['metas']['levels'][$level]['key'];
+        $params['fileId'] = $file['extno'];
 
         $api = CloudAPIFactory::create('leaf');
 

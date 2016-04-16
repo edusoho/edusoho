@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 'click .nav.nav-tabs li': 'onClickNav',
                 'click .js-material-tabs .js-type-btn': 'onClickTabs',
                 'click .pagination li': 'onClickPagination',
-                'click .tags-container .label': 'onClickTag',
+                'click .js-material-tag .label': 'onClickTag',
                 'click .js-detail-btn': 'onClickDetailBtn',
                 'click .js-delete-btn': 'onClickDeleteBtn',
                 'click .js-download-btn': 'onClickDownloadBtn',
@@ -56,9 +56,9 @@ define(function(require, exports, module) {
             onClickTabs: function(event)
             {
               var $target = $(event.currentTarget);
-              $target.closest('.nav').find('.active').removeClass('active');
+              $target.closest('.js-material-tabs').find('.active').removeClass('active');
               $target.addClass('active');
-              $target.closest('.nav').find('[name=type]').val($target.data('value'));
+              $target.closest('.js-material-tabs').find('[name=type]').val($target.data('value'));
               this.renderTable();
               event.preventDefault();
             },
@@ -71,8 +71,9 @@ define(function(require, exports, module) {
             },
             onClickTag: function(event)
             {
+                console.log("test");
                 var $target = $(event.currentTarget);
-                var $container = $target.closest('.tags-container');
+                var $container = $target.closest('.js-material-tag');
                 var $prev = $container.find('.label-primary');
                 if ($target.html() == $prev.html()) {
                     $target.removeClass('label-primary').addClass('label-default');
@@ -109,9 +110,16 @@ define(function(require, exports, module) {
                         type:'GET',
                         url:$target.data('url'),
                     }).done(function(resp){
-                       self.element.hide();
+                        console.log();
+                        self.element.hide();
                         self.element.prev().hide();
+                        console.log(self.element);
+                        self.element.parent().prev().html('资源详情');
                         self.element.parent().append(resp);
+
+                        require('jquery.lavalamp');
+                        $(".nav.nav-tabs").lavaLamp();
+                        
                         new DetailWidget({
                            element:'#material-detail',
                            callback: function() {

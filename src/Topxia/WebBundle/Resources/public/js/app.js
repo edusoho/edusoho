@@ -134,6 +134,9 @@ define(function(require, exports, module) {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
 
+    require('jquery.lavalamp');
+        $(".nav.nav-tabs").lavaLamp();
+
     if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
         require('jquery.lavalamp');
         $(".nav.nav-tabs").lavaLamp();

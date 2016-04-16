@@ -43,7 +43,6 @@ define(function(require, exports, module) {
                 var $tabcontent = $target.closest('.content').find('.tab-content');
                 $tabcontent.find('.tab-pane.active').removeClass('active');
                 $tabcontent.find($target.data('target')).addClass('active');
-
             },
             back: function() {
                 this.get('callback')();
@@ -51,6 +50,7 @@ define(function(require, exports, module) {
                 this.info.destroy();
                 this.cover && this.cover.destroy();
                 this.destroy();
+                $('.panel-heading').html("教学资料库");
             }
     });
 

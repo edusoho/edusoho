@@ -4,11 +4,11 @@
         <div class="materials-table-img">
           <div class="mask">
             {% if (cloudFile.type in ['video','document','ppt'] and cloudFile.processStatus == 'ok') or cloudFile.type in ['audio','flash','image'] %}
-              <a class="btn btn-xs btn-info" href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}">资料预览</a>
+              <a class="btn btn-info btn-xs" href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no}) }}">资料预览</a>
             {% endif %}
             {% if cloudFile.processStatus == 'error' %}
               {% if setting("developer.debug")|default(0) %}
-              <a class="js-reconvert-btn btn btn-warning" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}' data-loading-text="正在提交...">重新转码</a>
+              <a class="js-reconvert-btn btn btn-warning btn-xs" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}' data-loading-text="正在提交...">重新转码</a>
               {% endif %}
             {% endif %}
             {% if (cloudFile.type == 'video' and cloudFile.processStatus == 'ok') %}
@@ -21,7 +21,7 @@
         </div>
         <div class="materials-table-title">
           <a class="heading"  href="#modal" data-toggle="modal" data-url="{{ path('admin_cloud_file_preview', {globalId: cloudFile.no})}}"  data-placement="top" title="{{ cloudFile.filename }}">{{ cloudFile.filename }}</a>
-          <span class="text-sm text-muted">
+          <span class="subtitle">
             {% if createdUser %}
                 {{ createdUser.nickname }} 上传
             {% endif %}
