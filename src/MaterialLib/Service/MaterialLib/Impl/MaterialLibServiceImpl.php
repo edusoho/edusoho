@@ -64,8 +64,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
           $fileTagIds = ArrayToolkit::column($result,'tagId');
 
           if(!in_array($tag['id'],$fileTagIds)){
-            // var_dump($fileId,$tag['id']);
-            // exit();
+
             $this->getUploadFileTagService()->add(array(
               'fileId'=> $fileId,
               'tagId' => $tag['id']
