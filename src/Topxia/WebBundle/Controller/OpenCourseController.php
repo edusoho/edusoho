@@ -28,11 +28,11 @@ class OpenCourseController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->searchCourseCount($conditions),
-            2
+            10
         );
 
         if ($orderBy == 'recommendedSeq') {
-            $courses = $this->_getPageRecommendedCourses($request, $conditions, $orderBy, 2);
+            $courses = $this->_getPageRecommendedCourses($request, $conditions, $orderBy, 10);
         } else {
             $courses = $this->getOpenCourseService()->searchCourses(
                 $conditions,
