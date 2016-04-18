@@ -118,7 +118,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
         $courses = array();
         foreach ($recommendCourses as $key => $value) {
-            $courses[$val['recommendCourseId']] = $totallyCourses[$val['recommendCourseId']];
+            $courses[$value['recommendCourseId']] = $totallyCourses[$value['recommendCourseId']];
         }
 
         return $courses;
