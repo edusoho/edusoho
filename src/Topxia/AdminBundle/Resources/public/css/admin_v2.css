@@ -508,10 +508,6 @@ margin-top: 14px;
 .form-horizontal .item h5{
   font-weight: bold;
 }
-.modal-open .modal-body{
-  max-height: 435px;
-  overflow: hidden;
-}
 
 .ellipsis,
 .text-overflow {
