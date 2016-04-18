@@ -28,7 +28,15 @@ define(function(require, exports, module) {
             rule:'positive_integer'
         });
 
-
+        var settingValue = $("#coupon_setting");
+        $("#coupon_setting").change(function(){
+            if(settingValue.is(':checked') ) {
+                settingValue.val("0");               
+            } else{
+               settingValue.val("1");
+            }
+        })
+   
     };
 
 });

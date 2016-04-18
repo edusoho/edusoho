@@ -50,6 +50,7 @@ class OperationSettingController extends BaseController
             'invite_code_setting'       => 0,
             'promoted_user_value'       => '',
             'promote_user_value'        => '',
+            'coupon_setting'            => 1,
             'deadline'                  => 90,
             'inviteInfomation_template' => '{{registerUrl}}'
         );
@@ -60,6 +61,7 @@ class OperationSettingController extends BaseController
                 'invite_code_setting',
                 'promoted_user_value',
                 'promote_user_value',
+                'coupon_setting',
                 'deadline',
                 'inviteInfomation_template'
             ));
