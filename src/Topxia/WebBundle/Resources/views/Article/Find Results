@@ -1,9 +1,0 @@
-Searching 23860 files for "nav nav-tabs js-tags-container"
-
-/Users/kz/projects/edusoho-2/app/cache/dev/twig/5/d/5dd433fb47b7f598945af3004c21a1bd685e85b89f7299d99e68d59d1011ac04.php:
-   19:         echo "<ul class=\"nav nav-tabs js-tags-container\">
-
-/Users/kz/projects/edusoho-2/src/Topxia/AdminBundle/Resources/views/CloudFile/Form/tags.html.twig:
-    1: <ul class="nav nav-tabs js-tags-container">
-
-2 matches across 2 files
