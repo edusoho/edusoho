@@ -26,7 +26,7 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function finishedUpload($file, $params)
     {
-        return array('success' => true, 'convertStatus' => 'success');
+        return array_merge(array('success' => true, 'convertStatus' => 'success'), $params);
     }
 
     public function resumeUpload($hash, $params)
