@@ -47,6 +47,8 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
         if (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'recommendedSeq') {
             $conditions['recommended'] = 1;
             $orderBy                   = array('recommendedSeq', 'ASC');
+        } elseif (!empty($arguments['orderBy']) && $arguments['orderBy'] == 'studentNum') {
+            $orderBy = array('studentNum', 'DESC');
         }
 
         if (!empty($arguments['categoryId'])) {
