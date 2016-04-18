@@ -84,7 +84,7 @@
       {% endif %}
       <tr>
         <th width="25%">{{'特殊操作'|trans}}</th>
-        <td width="75%">{{ order.edit[0] }}</td>
+        <td width="75%">{{ order.edit[0]|default('--') }}</td>
       </tr>
     </table>
   </div>
