@@ -209,7 +209,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
           $files      = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime','DESC'), 0, 99999);
           $globalIds = ArrayToolkit::column($files,'globalId');
           if(empty($globalIds)) {
-            return array();
+            return 0;
           }
 
           $cloudFileConditions['nos'] = implode(',',$globalIds);
