@@ -124,6 +124,10 @@ admin_operation_invite_manage:
     name: 邀请管理
     parent: admin_operation_invite
     router_name: admin_invite
+admin_operation_invite_coupon_query:
+    name: 使用查询
+    parent: admin_operation_invite
+    router_name: admin_invite_coupon    
 admin_operation_group_thread:
     name: 话题管理
     parent: admin_operation_group

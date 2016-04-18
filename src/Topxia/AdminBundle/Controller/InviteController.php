@@ -96,6 +96,18 @@ class InviteController extends BaseController
         ));
     }
 
+    public function couponAction(Request $request, $filter)
+    {
+        if ($filter = 'invited') {
+        } elseif ($filter = 'invite') {
+        }
+
+        $inviteInformations = null;
+        return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
+            'inviteInformations' => $inviteInformations
+        ));
+    }
+
     protected function getInviteRecordService()
     {
         return $this->getServiceKernel()->createService('User.InviteRecordService');

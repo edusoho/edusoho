@@ -3,6 +3,7 @@
 {% set menu = 'admin_operation_invite_manage' %}
 
 {% block main %}
+  {% include 'TopxiaAdminBundle:Course:tab-data.html.twig' %}
 	<form  class="form-inline well well-sm" action="{{path('admin_invite')}}" method="get" novalidate>
     <input class="form-control" type="text" name="nickname" placeholder="用户名" value="{{ app.request.query.get('nickname')}}">
     <button class="btn btn-primary" type="submit">搜索</button>
