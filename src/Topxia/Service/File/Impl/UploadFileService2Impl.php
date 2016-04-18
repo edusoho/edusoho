@@ -166,11 +166,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
                 $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
             }
-            $globalIds = array(0);
+            $globalIds = array();
             foreach ($cloudFiles['data'] as $key => $cloudFile) {
               array_push($globalIds,$key);
             }
             $conditions['globalIds'] = $globalIds;
+
             $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
             $groupFiles['cloud'] = $files;
         }
@@ -212,7 +213,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
                 $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
             }
-            $globalIds = array(0);
+            $globalIds = array();
             foreach ($cloudFiles['data'] as $key => $cloudFile) {
               array_push($globalIds,$key);
             }
