@@ -150,6 +150,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $files = array();
 
         $conditions = $this->_prepareSearchConditions($conditions);
+
         $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
 
         if (empty($files)) {
@@ -159,16 +160,20 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $groupFiles = ArrayToolkit::group($files, 'storage');
 
         if (!empty($conditions['processStatus'])) {
-            $cloudFileConditions                  = array();
             $cloudFileConditions['processStatus'] = $conditions['processStatus'];
-            $cloudFileConditions['nos']           = implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'));
-
+            $cloudFileConditions['start'] = 0;
+            $cloudFileConditions['limit'] = 99999;
             if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
                 $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
-                $cloudFiles = ArrayToolkit::index($cloudFiles['data'], 'id');
             }
+            $globalIds = array();
+            foreach ($cloudFiles['data'] as $key => $cloudFile) {
+              array_push($globalIds,$key);
+            }
+            $conditions['globalIds'] = $globalIds;
 
-            return $cloudFiles;
+            $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+            $groupFiles['cloud'] = $files;
         }
 
         if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
@@ -202,14 +207,20 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         $groupFiles = ArrayToolkit::group($files, 'storage');
 
         if (!empty($conditions['processStatus'])) {
-            $filds['processStatus'] = $conditions['processStatus'];
-            $filds['nos']           = implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'));
-
+            $cloudFileConditions['processStatus'] = $conditions['processStatus'];
+            $cloudFileConditions['start'] = 0;
+            $cloudFileConditions['limit'] = 99999;
             if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
-                $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($filds);
+                $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
             }
+            $globalIds = array();
+            foreach ($cloudFiles['data'] as $key => $cloudFile) {
+              array_push($globalIds,$key);
+            }
+            $conditions['globalIds'] = $globalIds;
+            $count = $this->getUploadFileDao()->searchFileCount($conditions);
 
-            return $cloudFiles['count'];
+            return $count;
         }
 
         return $localCount;
@@ -224,7 +235,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
             if (!empty($file['globalId'])) {
                 $cloudFields = ArrayToolkit::parts($fields, array('name', 'tags', 'description', 'thumbNo'));
-
                 if (!empty($cloudFields)) {
                     $this->getFileImplementor(array('storage' => 'cloud'))->updateFile($file['globalId'], $cloudFields);
                 }

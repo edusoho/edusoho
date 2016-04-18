@@ -13,6 +13,11 @@ class UploadFileTagServiceImpl extends BaseService implements UploadFileTagServi
 		return $this->getUploadFileTagDao()->get($id);
 	}
 
+	public function add($fields)
+	{
+		return  $this->getUploadFileTagDao()->add($fields);
+	}
+
 	public function findByFileId($fileId)
 	{
 		return $this->getUploadFileTagDao()->findByFileId($fileId);

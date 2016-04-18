@@ -11,6 +11,11 @@
               <a class="js-reconvert-btn btn btn-warning btn-xs" data-url='{{ path('admin_cloud_file_reconvert', {globalId:cloudFile.no}) }}' data-loading-text="正在提交...">重新转码</a>
               {% endif %}
             {% endif %}
+            {% if (cloudFile.type == 'video' and cloudFile.processStatus == 'ok') %}
+              <div class="time">
+                {{ cloudFile.length|default(0)|date('i:s') }}
+              </div>
+            {% endif %}
           </div>
           <img src="{{ asset(cloudFile.thumbnail|default('assets/img/default/cloud_' ~ cloudFile.type ~ '.png')) }}">
         </div>

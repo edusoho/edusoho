@@ -2,6 +2,7 @@
 
 namespace MaterialLib\Service\MaterialLib\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use MaterialLib\Service\BaseService;
 use Topxia\Service\Common\AccessDeniedException;
 use MaterialLib\Service\MaterialLib\MaterialLibService;
@@ -50,6 +51,37 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         }
 
         return array('success' => true);
+    }
+
+    public function batchTagEdit($fileIds,$tagNames)
+    {
+      $tagNames = explode(',',$tagNames);
+      foreach ($fileIds as $key => $fileId) {
+        foreach ($tagNames as $key => $tagName) {
+          $tag = $this->getTagService()->getTagByName($tagName);
+
+          $result = $this->getUploadFileTagService()->findByFileId($fileId);
+          $fileTagIds = ArrayToolkit::column($result,'tagId');
+
+          if(!in_array($tag['id'],$fileTagIds)){
+
+            $this->getUploadFileTagService()->add(array(
+              'fileId'=> $fileId,
+              'tagId' => $tag['id']
+            ));
+            $result = $this->getUploadFileTagService()->findByFileId($fileId);
+
+            $tagIds = ArrayToolkit::column($result,'tagId');
+            $tags = $this->getTagService()->findTagsByIds($tagIds);
+            $editTagNames = ArrayToolkit::column($tags, 'name');
+
+            $conditions = array();
+            $conditions['tags'] = implode(',',$editTagNames);
+
+            $this->getUploadFileService()->edit($fileId,$conditions);
+          }
+        }
+      }
     }
 
     public function batchShare($ids)
@@ -109,6 +141,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         if (!$this->getPermissionService()->checkPermission($permission, $options)) {
             throw new AccessDeniedException("无权限操作", 403);
         }
+    }
+
+    protected function getTagService()
+    {
+        return $this->createService('Taxonomy.TagService');
     }
 
     protected function getUploadFileService()
