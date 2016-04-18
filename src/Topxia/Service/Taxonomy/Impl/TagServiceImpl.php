@@ -2,6 +2,7 @@
 namespace Topxia\Service\Taxonomy\Impl;
 
 use Topxia\Service\Taxonomy\TagService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 

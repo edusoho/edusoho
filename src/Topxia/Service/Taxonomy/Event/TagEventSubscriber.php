@@ -19,10 +19,10 @@ class TagEventSubscriber implements EventSubscriberInterface
 
     public function onTagDelete(ServiceEvent $event)
     {
-      $tagId = $event->getArgument('tagId');
-      $this->getUploadFileTagService()->deleteByTagId($tagId);
+      $content = $event->getSubject();
+      $this->getUploadFileTagService()->deleteByTagId($content['tagId']);
     }
-    
+
     protected function getUploadFileTagService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileTagService');
