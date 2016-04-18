@@ -53,35 +53,35 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return array('success' => true);
     }
 
-    public function batchTagEdit($fileIds,$tagNames)
+    public function batchTagEdit($fileIds, $tagNames)
     {
-      $tagNames = explode(',',$tagNames);
-      foreach ($fileIds as $key => $fileId) {
-        foreach ($tagNames as $key => $tagName) {
-          $tag = $this->getTagService()->getTagByName($tagName);
+        $tagNames = explode(',', $tagNames);
 
-          $result = $this->getUploadFileTagService()->findByFileId($fileId);
-          $fileTagIds = ArrayToolkit::column($result,'tagId');
+        foreach ($fileIds as $key => $fileId) {
+            foreach ($tagNames as $key => $tagName) {
+                $tag = $this->getTagService()->getTagByName($tagName);
 
-          if(!in_array($tag['id'],$fileTagIds)){
+                $result     = $this->getUploadFileTagService()->findByFileId($fileId);
+                $fileTagIds = ArrayToolkit::column($result, 'tagId');
 
-            $this->getUploadFileTagService()->add(array(
-              'fileId'=> $fileId,
-              'tagId' => $tag['id']
-            ));
-            $result = $this->getUploadFileTagService()->findByFileId($fileId);
+                if (!in_array($tag['id'], $fileTagIds)) {
+                    $this->getUploadFileTagService()->add(array(
+                        'fileId' => $fileId,
+                        'tagId'  => $tag['id']
+                    ));
+                    $result = $this->getUploadFileTagService()->findByFileId($fileId);
 
-            $tagIds = ArrayToolkit::column($result,'tagId');
-            $tags = $this->getTagService()->findTagsByIds($tagIds);
-            $editTagNames = ArrayToolkit::column($tags, 'name');
+                    $tagIds       = ArrayToolkit::column($result, 'tagId');
+                    $tags         = $this->getTagService()->findTagsByIds($tagIds);
+                    $editTagNames = ArrayToolkit::column($tags, 'name');
 
-            $conditions = array();
-            $conditions['tags'] = implode(',',$editTagNames);
+                    $conditions         = array();
+                    $conditions['tags'] = implode(',', $editTagNames);
 
-            $this->getUploadFileService()->edit($fileId,$conditions);
-          }
+                    $this->getUploadFileService()->edit($fileId, $conditions);
+                }
+            }
         }
-      }
     }
 
     public function batchShare($ids)
@@ -151,12 +151,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService2');
-    }
-
-    //TODO 去除dao
-    protected function getMaterialLibDao()
-    {
-        return $this->createDao('MaterialLib:MaterialLib.MaterialLibDao');
     }
 
     protected function getPermissionService()

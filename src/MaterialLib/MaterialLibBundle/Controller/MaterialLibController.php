@@ -24,7 +24,14 @@ class MaterialLibController extends BaseController
 
     public function matchAction(Request $request)
     {
-        $data        = array();
+        $data = array();
+
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            return $this->createJsonResponse($data);
+        }
+
         $queryString = $request->query->get('q');
         $tags        = $this->getTagService()->getTagByLikeName($queryString);
 
@@ -93,6 +100,7 @@ class MaterialLibController extends BaseController
         ));
     }
 
+    // TODO 权限
     public function playerAction(Request $request, $globalId)
     {
         //$file = $this->tryAccessFile($fileId);
@@ -104,7 +112,10 @@ class MaterialLibController extends BaseController
 
     public function reconvertAction($globalId)
     {
+        $this->tryManageGlobalFile($globalId);
+
         $uploadFile = $this->getMaterialLibService()->reconvert($globalId);
+
         return $this->render('MaterialLibBundle:Web/Widget:thumb-item.html.twig', array(
             'uploadFile' => $uploadFile
         ));
@@ -112,8 +123,7 @@ class MaterialLibController extends BaseController
 
     public function detailAction($fileId)
     {
-        $currentUser = $this->getCurrentUser();
-        $file        = $this->getMaterialLibService()->get($fileId);
+        $file = $this->tryManageFile($fileId);
 
         if ($file['storage'] == 'local') {
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
@@ -208,6 +218,10 @@ class MaterialLibController extends BaseController
     public function historyUserShowAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
 
         $conditions['sourceUserId'] = $user['id'];
 
@@ -426,7 +440,7 @@ class MaterialLibController extends BaseController
         $data    = $request->request->all();
         $fileIds = preg_split('/,/', $data['fileIds']);
 
-        $this->getMaterialLibService()->batchTagEdit($fileIds,$data['tags']);
+        $this->getMaterialLibService()->batchTagEdit($fileIds, $data['tags']);
         return $this->redirect($this->generateUrl('material_lib_browsing'));
     }
 
@@ -434,6 +448,60 @@ class MaterialLibController extends BaseController
     {
         $second = $request->query->get('second');
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
+    }
+
+    protected function tryManageFile($fileId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        if (!$currentUser->isAdmin() && $user["id"] != $file["createdUserId"]) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+    }
+
+    protected function tryManageGlobalFile($globalFileId)
+    {
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        $file = $this->getMaterialLibService()->getFileByGlobalId($globalFileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($user->isAdmin()) {
+            return $file;
+        }
+
+        if (!$user->isTeacher()) {
+            throw $this->createAccessDeniedException('您无权访问此文件！');
+        }
+
+        if (!$currentUser->isAdmin() && $user["id"] != $file["createdUserId"]) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
     }
 
     protected function tryAccessFile($fileId)

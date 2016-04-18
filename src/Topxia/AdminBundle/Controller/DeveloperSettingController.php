@@ -113,6 +113,7 @@ class DeveloperSettingController extends BaseController
             $this->getSettingService()->set('redis', $redis);
 
             $redisConfigFile = $this->container->getParameter('kernel.root_dir').'/data/redis.php';
+
             if ($redis['opened'] == '1') {
                 $config = "<?php \nreturn ".var_export($redis['setting'], true).';';
                 file_put_contents($redisConfigFile, $config);
