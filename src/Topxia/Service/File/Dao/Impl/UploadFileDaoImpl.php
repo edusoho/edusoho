@@ -189,6 +189,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             ->andWhere('globalId = :globalId')
             ->andWhere('globalId IN ( :globalIds )')
             ->andWhere('globalId <> ( :existGlobalId )')
+            ->andWhere('targetType <> :noTargetType')
             ->andWhere('convertStatus = :convertStatus')
             ->andWhere('targetId = :targetId')
             ->andWhere('status = :status')

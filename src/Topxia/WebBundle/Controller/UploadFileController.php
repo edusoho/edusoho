@@ -94,6 +94,8 @@ class UploadFileController extends BaseController
 
         $conditions['currentUserId'] = $user['id'];
 
+        $conditions['noTargetType'] = 'coursematerial';
+
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
 
         return $this->createFilesJsonResponse($files);
