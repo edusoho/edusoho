@@ -147,28 +147,29 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
-
         if (!empty($conditions['processStatus'])) {
-          $cloudFileConditions['processStatus'] = $conditions['processStatus'];
-          $conditions['storage'] = 'cloud';
-          $conditions['existGlobalId'] = 0;
-          $conditions = $this->_prepareSearchConditions($conditions);
+            $cloudFileConditions['processStatus'] = $conditions['processStatus'];
+            $conditions['storage']                = 'cloud';
+            $conditions['existGlobalId']          = 0;
+            $conditions                           = $this->_prepareSearchConditions($conditions);
 
-          $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, 0, 99999);
-          $globalIds = ArrayToolkit::column($files,'globalId');
-          if(empty($globalIds)) {
-            return array();
-          }
+            $files     = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, 0, 99999);
+            $globalIds = ArrayToolkit::column($files, 'globalId');
 
-          $cloudFileConditions['nos'] = implode(',',$globalIds);
+            if (empty($globalIds)) {
+                return array();
+            }
 
-          $cloudFileConditions['start'] = $start;
-          $cloudFileConditions['limit'] = $limit;
+            $cloudFileConditions['nos'] = implode(',', $globalIds);
 
-          $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
+            $cloudFileConditions['start'] = $start;
+            $cloudFileConditions['limit'] = $limit;
 
-          return $cloudFiles['data'];
+            $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
+
+            return $cloudFiles['data'];
         }
+
         $files = array();
 
         $conditions = $this->_prepareSearchConditions($conditions);
@@ -200,23 +201,23 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
     public function searchFilesCount($conditions)
     {
-
         if (!empty($conditions['processStatus'])) {
-          $cloudFileConditions['processStatus'] = $conditions['processStatus'];
-          $conditions['storage'] = 'cloud';
-          $conditions['existGlobalId'] = 0;
-          $conditions = $this->_prepareSearchConditions($conditions);
-          $files      = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime','DESC'), 0, 99999);
-          $globalIds = ArrayToolkit::column($files,'globalId');
-          if(empty($globalIds)) {
-            return 0;
-          }
+            $cloudFileConditions['processStatus'] = $conditions['processStatus'];
+            $conditions['storage']                = 'cloud';
+            $conditions['existGlobalId']          = 0;
+            $conditions                           = $this->_prepareSearchConditions($conditions);
+            $files                                = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 99999);
+            $globalIds                            = ArrayToolkit::column($files, 'globalId');
 
-          $cloudFileConditions['nos'] = implode(',',$globalIds);
+            if (empty($globalIds)) {
+                return 0;
+            }
 
-          $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
+            $cloudFileConditions['nos'] = implode(',', $globalIds);
 
-          return $cloudFiles['count'];
+            $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($cloudFileConditions);
+
+            return $cloudFiles['count'];
         }
 
         $conditions = $this->_prepareSearchConditions($conditions);
@@ -346,8 +347,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         try {
             $connection->beginTransaction();
 
-            $file = $this->getUploadFileInitDao()->getFile($params['id']);
-
             $setting           = $this->getSettingService()->get('storage');
             $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
 
@@ -364,7 +363,8 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 'fileSize'      => $params['size']
             );
 
-            if ($file) {
+            if ($params['storage'] == 'cloud') {
+                $file = $this->getUploadFileInitDao()->getFile($params['id']);
                 $file = array_merge($file, $fields);
                 $this->getUploadFileInitDao()->deleteFile($file['id']);
                 unset($file['id']);
@@ -390,6 +390,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                         }
                     }
                 }
+
+                return $file;
+            } else {
+                $file   = $this->getUploadFileDao()->getFile($params['id']);
+                $result = $implementor->finishedUpload($file, $params);
+                return $result;
             }
 
             $connection->commit();
@@ -397,8 +403,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $connection->rollback();
             throw $e;
         }
-
-        return $file;
     }
 
     public function setFileProcessed($params)
