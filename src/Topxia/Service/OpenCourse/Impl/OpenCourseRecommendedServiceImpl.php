@@ -4,6 +4,7 @@ namespace Topxia\Service\OpenCourse\Impl;
 
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\OpenCourse\OpenCourseRecommendedService;
+use Topxia\Common\ArrayToolkit;
 
 class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourseRecommendedService
 {
@@ -105,9 +106,22 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         return $this->getRecommendedCourseDao()->searchRecommends($conditions, $orderBy, $start, $limit);
     }
 
-    protected function getCourseService()
+    public function recommendedCoursesSort($recommendCourses)
     {
-        return $this->createService('Course.CourseService');
+        $courseIds = ArrayToolkit::column($recommendCourses,'recommendCourseId');
+        $totallyCourses = $this->getOpenCourseService()->searchCourses(
+            array('courseIds'=>$courseIds),
+            array('createdTime','DESC'),
+            0, PHP_INT_MAX
+        );
+        $totallyCourses = ArrayToolkit::index($totallyCourses,'recommendCourseId');
+
+        $courses = array();
+        foreach ($recommendCourses as $key => $value) {
+            $courses[$val['recommendCourseId']] = $totallyCourses[$val['recommendCourseId']];
+        }
+
+        return $courses;
     }
 
     protected function getOpenCourseService()

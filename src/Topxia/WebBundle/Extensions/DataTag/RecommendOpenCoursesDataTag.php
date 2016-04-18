@@ -3,6 +3,7 @@
 namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
+use Topxia\Common\ArrayToolkit;
 
 class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
 {
@@ -18,10 +19,20 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
      */
     public function getData(array $arguments)
     {
-        $recommendCourses = $this->getOpenCourseRecommendService()->searchRecommends(array('openCourseId' => $arguments['courseId']), array('seq', 'ASC'), 0, $arguments['count']);
+        $marktingCourses = $this->getOpenCourseRecommendService()->searchRecommends(
+            array('openCourseId' => $arguments['courseId']),
+            array('seq', 'ASC'), 
+            0, $arguments['count']
+        );
+        
+        $recommendCourses = $this->getOpenCourseRecommendService()->recommendedCoursesSort($marktingCourses);
 
         if (count($recommendCourses) < $arguments['count']) {
-            $courses = $this->getCourseService()->searchCourses(array('status' => 'published'), 'createdTime', 0, ($arguments['count'] - count($recommendCourses)));
+            $courses = $this->getOpenCourseService()->searchCourses(
+                array('status' => 'published'),
+                array('createdTime','DESC'),
+                0, ($arguments['count'] - count($recommendCourses))
+            );
 
             $recommendCourses = array_merge($recommendCourses, $courses);
         }
@@ -34,8 +45,8 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
     }
 
-    protected function getCourseService()
+    protected function getOpenCourseService()
     {
-        return $this->getServiceKernel()->createService('Course.CourseService');
+        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
     }
 }

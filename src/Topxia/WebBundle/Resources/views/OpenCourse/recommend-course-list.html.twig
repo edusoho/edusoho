@@ -1,6 +1,6 @@
 {% set recommendCourses = data('RecommendOpenCourses',{courseId:course.id,count:5}) %}
 
-{% for course in recommendCourses if course%}
+{% for course in recommendCourses if course %}
 	{% set showUrl = path('open_course_show',{courseId:course.id}) %}
 
 	<li class="tab-recommand clearfix">

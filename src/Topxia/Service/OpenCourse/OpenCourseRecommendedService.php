@@ -14,4 +14,6 @@ interface OpenCourseRecommendedService
     public function searchRecommendCount($conditions);
 
     public function searchRecommends($conditions, $orderBy, $start, $limit);
+
+    public function recommendedCoursesSort($recommendCourses);
 }
