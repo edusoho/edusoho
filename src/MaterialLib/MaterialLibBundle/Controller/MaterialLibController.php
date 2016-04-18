@@ -416,7 +416,7 @@ class MaterialLibController extends BaseController
         ));
     }
 
-    public function deleteAction($fileId)
+    public function deleteAction(Request $request, $fileId)
     {
         $this->tryManageFile($fileId);
         $result = $this->getMaterialLibService()->delete($fileId);

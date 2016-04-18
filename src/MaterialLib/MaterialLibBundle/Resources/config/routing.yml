@@ -59,10 +59,6 @@ material_edit:
     defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
     methods: [POST]
 
-materiallib_file_delete:
-    pattern: /materiallib/file/{id}/delete
-    defaults: { _controller: MaterialLibBundle:MaterialLib:delete }
-
 material_lib_file_player:
     pattern:  /material/lib/{globalId}/player
     defaults: { _controller: MaterialLibBundle:MaterialLib:player }
