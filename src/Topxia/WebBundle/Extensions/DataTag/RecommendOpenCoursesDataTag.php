@@ -28,7 +28,7 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
         $recommendCourses = $this->getOpenCourseRecommendService()->recommendedCoursesSort($marktingCourses);
 
         if (count($recommendCourses) < $arguments['count']) {
-            $courses = $this->getOpenCourseService()->searchCourses(
+            $courses = $this->getCourseService()->searchCourses(
                 array('status' => 'published'),
                 array('createdTime','DESC'),
                 0, ($arguments['count'] - count($recommendCourses))
@@ -45,8 +45,8 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
     }
 
-    protected function getOpenCourseService()
+    protected function getCourseService()
     {
-        return $this->getServiceKernel()->createService('OpenCourse.OpenCourseService');
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
