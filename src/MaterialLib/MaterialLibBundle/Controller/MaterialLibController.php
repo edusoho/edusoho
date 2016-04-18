@@ -499,7 +499,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getMaterialLibService()->getFileByGlobalId($globalFileId);
+        $file = $this->getMaterialLibService()->getByGlobalId($globalFileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -513,7 +513,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        if (!$currentUser->isAdmin() && $user["id"] != $file["createdUserId"]) {
+        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
