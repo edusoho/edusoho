@@ -2948,7 +2948,6 @@ label {
 .period-list .lesson-item:hover {
   background: #fafafa;
 }
-.lesson-manage-panel .panel-heading,
 .swiper-container {
   z-index: 0!important;
 }
