@@ -18,10 +18,10 @@
         {% if user.site %}
           <a href="{{ user.site }}" target="_blank"><i class="es-icon es-icon-link"></i></a>
         {% endif %}
-        {% if user.qq %}
+        {% if (user.qq) and (app.user.id == user.id) %}
           <a data-toggle="tooltip" data-placement="top" title="{{ user.qq }}"><i class="es-icon es-icon-qq"></i></a>
         {% endif %}
-        {% if user.weixin %}
+        {% if (user.weixin) and (app.user.id == user.id) %}
           <a data-toggle="tooltip" data-placement="top" title="{{ user.weixin }}"><i class="es-icon es-icon-weixin"></i></a>
         {% endif %}
       </div>
