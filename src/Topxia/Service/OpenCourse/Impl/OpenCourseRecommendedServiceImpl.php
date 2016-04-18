@@ -110,7 +110,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
     {
         $courseIds = ArrayToolkit::column($recommendCourses,'recommendCourseId');
         $totallyCourses = $this->getOpenCourseService()->searchCourses(
-            array('courseIds'=>$courseIds),
+            array('courseIds'=>$courseIds,'status'=>'published'),
             array('createdTime','DESC'),
             0, PHP_INT_MAX
         );
@@ -118,7 +118,11 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
 
         $courses = array();
         foreach ($recommendCourses as $key => $value) {
-            $courses[$value['recommendCourseId']] = $totallyCourses[$value['recommendCourseId']];
+            if (!isset($totallyCourses[$value['recommendCourseId']])) {
+                continue;
+            }
+            
+            $courses[] = $totallyCourses[$value['recommendCourseId']];
         }
 
         return $courses;
