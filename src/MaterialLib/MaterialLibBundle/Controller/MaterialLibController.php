@@ -132,19 +132,8 @@ class MaterialLibController extends BaseController
             ));
         }
 
-        if (!($file['createdUserId'] == $currentUser['id'])) {
-            if ($file['type'] == 'video') {
-                try {
-                    $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
-                } catch (\RuntimeException $e) {
-                    $thumbnails = array();
-                }
-            }
-
-            return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
-                'material'   => $file,
-                'thumbnails' => empty($thumbnails) ? "" : $thumbnails
-            ));
+        if ($file['type'] == 'video') {
+            $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
         }
 
         return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
@@ -495,9 +484,11 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        if (!$currentUser->isAdmin() && $user["id"] != $file["createdUserId"]) {
+        if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
+
+        return $file;
     }
 
     protected function tryManageGlobalFile($globalFileId)
@@ -525,6 +516,8 @@ class MaterialLibController extends BaseController
         if (!$currentUser->isAdmin() && $user["id"] != $file["createdUserId"]) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
+
+        return $file;
     }
 
     protected function tryAccessFile($fileId)
