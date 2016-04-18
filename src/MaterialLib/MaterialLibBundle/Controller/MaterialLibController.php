@@ -262,7 +262,12 @@ class MaterialLibController extends BaseController
 
     public function historyDetailShowAction(Request $request)
     {
-        $user                       = $this->getCurrentUser();
+        $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            throw $this->createAccessDeniedException('您无权访问此页面');
+        }
+
         $conditions['sourceUserId'] = $user['id'];
 
         $shareHistoryCount = $this->getUploadFileShareHistoryService()->searchShareHistoryCount($conditions);
@@ -374,6 +379,11 @@ class MaterialLibController extends BaseController
     public function collectAction(Request $request)
     {
         $user = $this->getCurrentUser();
+
+        if (!$user->isTeacher() && !$user->isAdmin()) {
+            return $this->createJsonResponse(false);
+        }
+
         $data = $request->query->all();
 
         $collection = $this->getUploadFileService()->collectFile($user['id'], $data['fileId']);
@@ -387,9 +397,10 @@ class MaterialLibController extends BaseController
 
     public function editAction(Request $request, $globalId)
     {
+        $this->tryManageGlobalFile($globalId);
+
         $fields = $request->request->all();
 
-        // $result = $this->getCloudFileService()->edit($globalId, $fields);
         return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
             'globalId' => $globalId,
             'fields'   => $fields
@@ -407,6 +418,7 @@ class MaterialLibController extends BaseController
 
     public function deleteAction($fileId)
     {
+        $this->tryManageFile($fileId);
         $result = $this->getMaterialLibService()->delete($fileId);
         return $this->createJsonResponse($result);
     }
@@ -416,6 +428,10 @@ class MaterialLibController extends BaseController
         $data = $request->request->all();
 
         if (isset($data['ids']) && $data['ids'] != "") {
+            foreach ($data['ids'] as $fileId) {
+                $this->tryManageFile($fileId);
+            }
+
             $this->getMaterialLibService()->batchDelete($data['ids']);
             return $this->createJsonResponse(true);
         }
@@ -428,6 +444,10 @@ class MaterialLibController extends BaseController
         $data = $request->request->all();
 
         if (isset($data['ids']) && $data['ids'] != "") {
+            foreach ($data['ids'] as $fileId) {
+                $this->tryManageFile($fileId);
+            }
+
             $result = $this->getMaterialLibService()->batchShare($data['ids']);
             return $this->createJsonResponse($result);
         }
@@ -446,7 +466,10 @@ class MaterialLibController extends BaseController
 
     public function generateThumbnailAction(Request $request, $globalId)
     {
+        $this->tryManageGlobalFile($globalId);
+
         $second = $request->query->get('second');
+
         return $this->createJsonResponse($this->getMaterialLibService()->getThumbnail($globalId, array('seconds' => $second)));
     }
 
