@@ -130,8 +130,10 @@ class OpenCourseController extends BaseController
 
         $teachers = array();
 
-        foreach ($course['teacherIds'] as $key => $teacherId) {
-            $teachers[$teacherId] = $teachersNoSort[$teacherId];
+        if (!empty($course['teacherIds'][0])) {
+            foreach ($course['teacherIds'] as $key => $teacherId) {
+                $teachers[$teacherId] = $teachersNoSort[$teacherId];
+            }
         }
 
         $profiles = $this->getUserService()->findUserProfilesByIds($course['teacherIds']);

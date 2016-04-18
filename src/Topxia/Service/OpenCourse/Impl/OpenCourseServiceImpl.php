@@ -71,7 +71,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
     public function updateCourse($id, $fields)
     {
         $argument = $fields;
-        $course   = $this->getOpenCourseDao()->getCourse($id);
+        $course   = $this->getCourse($id);
 
         if (empty($course)) {
             throw $this->createServiceException('课程不存在，更新失败！');
@@ -637,7 +637,6 @@ throw $this->createServiceException('不能收藏未发布课程');
 
     public function setCourseTeachers($courseId, $teachers)
     {
-        // 过滤数据
         $teacherMembers = array();
 
         foreach (array_values($teachers) as $index => $teacher) {
@@ -661,18 +660,15 @@ throw $this->createServiceException('不能收藏未发布课程');
             );
         }
 
-        // 先清除所有的已存在的教师学员
         $existTeacherMembers = $this->findCourseTeachers($courseId);
 
         foreach ($existTeacherMembers as $member) {
             $this->getOpenCourseMemberDao()->deleteMember($member['id']);
         }
 
-        // 逐个插入新的教师的学员数据
         $visibleTeacherIds = array();
 
         foreach ($teacherMembers as $member) {
-            // 存在学员信息，说明该用户先前是学生学员，则删除该学员信息。
             $existMember = $this->getCourseMember($courseId, $member['userId']);
 
             if ($existMember) {
@@ -688,9 +684,8 @@ throw $this->createServiceException('不能收藏未发布课程');
 
         $this->getLogService()->info('open_course', 'update_teacher', "更新课程#{$courseId}的教师", $teacherMembers);
 
-        // 更新课程的teacherIds，该字段为课程可见教师的ID列表
         $fields = array('teacherIds' => $visibleTeacherIds);
-        $course = $this->getOpenCourseDao()->updateCourse($courseId, $fields);
+        $course = $this->updateCourse($courseId, $fields);
     }
 
     public function createMember($member)
@@ -807,7 +802,7 @@ throw $this->createServiceException('不能收藏未发布课程');
             'smallPicture'    => '',
             'middlePicture'   => '',
             'largePicture'    => '',
-            'teacherIds'      => '',
+            'teacherIds'      => array(),
             'recommended'     => 0,
             'recommendedSeq'  => 0,
             'recommendedTime' => 0,
@@ -827,6 +822,8 @@ throw $this->createServiceException('不能收藏未发布课程');
             }
 
             );
+        } else {
+            $fields['tags'] = array();
         }
 
         return $fields;

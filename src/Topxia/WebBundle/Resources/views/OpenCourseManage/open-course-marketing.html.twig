@@ -2,7 +2,7 @@
 
 {% set script_controller = 'open-course-manage/recommend-course' %}
 
-{% block title %}{{'营销设置'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'推荐设置'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'marketing' %}
 
@@ -38,7 +38,7 @@
 </style>
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">{{'营销设置'|trans}}
+  <div class="panel-heading">{{'推荐设置'|trans}}
   <button class="btn btn-success btn-sm panel-bar" data-toggle="modal" data-target="#modal" data-url="{{path('open_course_manage_course_pick', {id:course['id']})}}">添加课程</button></div>
   <div class="panel-body">
     <form class="form-horizontal" id="course-form" method="post">

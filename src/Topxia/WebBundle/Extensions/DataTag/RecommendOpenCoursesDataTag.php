@@ -21,7 +21,7 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
         $recommendCourses = $this->getOpenCourseRecommendService()->searchRecommends(array('openCourseId' => $arguments['courseId']), array('seq', 'ASC'), 0, $arguments['count']);
 
         if (count($recommendCourses) < $arguments['count']) {
-            $courses = $this->getCourseService()->searchCourses(array(), 'createdTime', 0, ($arguments['count'] - count($recommendCourses)));
+            $courses = $this->getCourseService()->searchCourses(array('status' => 'published'), 'createdTime', 0, ($arguments['count'] - count($recommendCourses)));
 
             $recommendCourses = array_merge($recommendCourses, $courses);
         }
