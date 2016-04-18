@@ -16,16 +16,19 @@ class OrderEventSubscriber implements EventSubscriberInterface
 
     public function onOrderPaid(ServiceEvent $event)
     {
-        $order = $event->getSubject();
+        $order         = $event->getSubject();
+        $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        if ($order['coinAmount'] > 0 || $order['amount'] > 0) {
-            $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
+        if (isset($inviteSetting['coupon_setting']) && $inviteSetting['coupon_setting'] == 0) {
+            if ($order['coinAmount'] > 0 || $order['amount'] > 0) {
+                $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
 
-            if (!empty($record) && $record['inviteUserCardId'] == null) {
-                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($record['inviteUserId'], 'pay');
+                if (!empty($record) && $record['inviteUserCardId'] == null) {
+                    $inviteCoupon = $this->getCouponService()->generateInviteCoupon($record['inviteUserId'], 'pay');
 
-                if (!empty($inviteCoupon)) {
-                    $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['userId'], array('inviteUserCardId' => $inviteCoupon['id']));
+                    if (!empty($inviteCoupon)) {
+                        $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($order['userId'], array('inviteUserCardId' => $inviteCoupon['id']));
+                    }
                 }
             }
         }
@@ -39,5 +42,10 @@ class OrderEventSubscriber implements EventSubscriberInterface
     protected function getCouponService()
     {
         return ServiceKernel::instance()->createService('Coupon.CouponService');
+    }
+
+    protected function getSettingService()
+    {
+        return ServiceKernel::instance()->createService('System.SettingService');
     }
 }

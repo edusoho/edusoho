@@ -483,11 +483,21 @@ class UserServiceImpl extends BaseService implements UserService
 
         if (!empty($inviteUser)) {
             $this->getInviteRecordService()->createInviteRecord($inviteUser['id'], $user['id']);
-            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
+            $invitedCoupon = $this->getCouponService()->generateInviteCoupon($user['id'], 'register');
 
-            if (!empty($inviteCoupon)) {
-                $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
+            if (!empty($invitedCoupon)) {
+                $card = $this->getCardService()->getCardByCardId($invitedCoupon['id']);
                 $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+            }
+
+            $inviteSetting = $this->getSettingService()->get('invite', array());
+
+            if (isset($inviteSetting['coupon_setting']) && $inviteSetting['coupon_setting'] == 1) {
+                $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUser['id'], 'pay');
+
+                if (!empty($inviteCoupon)) {
+                    $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('inviteUserCardId' => $inviteCoupon['id']));
+                }
             }
         }
 
