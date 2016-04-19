@@ -46,7 +46,7 @@ define(function(require, exports, module) {
                  + '<span>%D</span>'+Translator.trans('天 ')
                  + '<span>%H</span>'+Translator.trans('时 ')
                  + '<span>%M</span>'+Translator.trans('分 ')
-                 + '<span>%S</span> '+Translator.trans('秒'));
+                 + '<span>%S</span> '+Translator.trans('秒')));
              }).on('finish.countdown', function() {
                 $(this).html(Translator.trans('活动时间到，正在刷新网页，请稍等...'));
                 setTimeout(function() {
