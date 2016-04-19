@@ -480,10 +480,6 @@ class MaterialLibController extends BaseController
             return $file;
         }
 
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
-        }
-
         if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
@@ -507,10 +503,6 @@ class MaterialLibController extends BaseController
 
         if ($user->isAdmin()) {
             return $file;
-        }
-
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
         if (!$user->isAdmin() && $user["id"] != $file["createdUserId"]) {
