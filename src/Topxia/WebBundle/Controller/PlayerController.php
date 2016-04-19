@@ -261,7 +261,7 @@ class PlayerController extends BaseController
                 }
             }
 
-            return $result['url'];
+            return isset($result['url']) ? $result['url'] : '';
         } else {
             $token = $this->makeToken('local.media', $file['id']);
             return $this->generateUrl('player_local_media', array(
@@ -344,7 +344,7 @@ class PlayerController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getMaterialLibService()
