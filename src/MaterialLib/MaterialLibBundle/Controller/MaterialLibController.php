@@ -123,9 +123,10 @@ class MaterialLibController extends BaseController
 
     public function detailAction($fileId)
     {
-        $file = $this->tryManageFile($fileId);
+        $currentUser = $this->getCurrentUser();
+        $file = $this->tryAccessFile($fileId);
 
-        if ($file['storage'] == 'local') {
+        if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $file,
                 'thumbnails' => ""

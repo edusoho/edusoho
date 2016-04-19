@@ -13925,6 +13925,15 @@ textarea {
     margin-bottom: 10px;
   }
 }
+.material-search-list.bottom .input-time {
+  display: inline-block;
+  width: 48%;
+}
+.material-search-list.bottom .input-space {
+  display: inline-block;
+  width: 4%;
+  text-align: center;
+}
 .materials-modal-body .nav.nav-tabs > li > a {
   border-bottom: 1px solid transparent;
 }
