@@ -7,6 +7,7 @@ use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
