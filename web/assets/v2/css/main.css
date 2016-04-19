@@ -13711,15 +13711,13 @@ textarea {
 .material-detail-widget .content .nav {
   margin-bottom: 20px;
 }
-@media (max-width: 400px) {
-  .materials-list .materials-ul {
-    height: 215px;
-  }
+.my-materials-list .materials-ul {
+  height: 200px;
 }
 .materials-ul {
   border: solid 1px #eee;
   padding-left: 0;
-  height: 200px;
+  height: 218px;
   background: #fafafa;
 }
 .materials-ul.batch-hidden i {

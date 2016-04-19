@@ -54,6 +54,7 @@ class MaterialLibController extends BaseController
 
         $currentUserId        = $currentUser['id'];
         $conditions           = $request->query->all();
+        $source = $conditions['sourceFrom'];
         $conditions['status'] = 'ok';
 
         if (!empty($conditions['keyword'])) {
@@ -83,11 +84,13 @@ class MaterialLibController extends BaseController
         $collections = ArrayToolkit::index($collections, 'fileId');
 
         $createdUsers = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'createdUserId'));
+        $createdUsers = ArrayToolkit::index($createdUsers,'id');
 
         return $this->render('MaterialLibBundle:Web/Widget:thumb-list.html.twig', array(
             'files'        => $files,
             'collections'  => $collections,
             'createdUsers' => $createdUsers,
+            'source'       => $source,
             'paginator'    => $paginator
         ));
     }
