@@ -5,7 +5,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      您的打折活动<span class="text-danger">「{{ data.name }}」</span>，未通过管理员审核。
+      {{'您的打折活动'|trans}}<span class="text-danger">「{{ data.name }}」</span>{{'，未通过管理员审核。'|trans}}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  

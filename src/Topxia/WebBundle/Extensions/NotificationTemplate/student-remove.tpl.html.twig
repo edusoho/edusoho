@@ -6,7 +6,7 @@
   <div class="media-body">
     <div class="notification-body">
       {% set data = notification.content %}
-      您已经被管理员移除您在学课程<a href="{{ path('course_show', {id:data.courseId}) }}">《{{ data.courseTitle }}》</a>的{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员')}}{% else %}学员{% endif %}身份，不能再继续学习该课程。如有疑问，请联系网站客服。
+      {{'您已经被管理员移除您在学课程'|trans}}<a href="{{ path('course_show', {id:data.courseId}) }}">《{{ data.courseTitle }}》</a>{{'的'|trans}}{% if setting('default.user_name') %}{{setting('default.user_name')|default('学员'|trans)}}{% else %}{{'学员'|trans}}{% endif %}{{'身份，不能再继续学习该课程。如有疑问，请联系网站客服。'|trans}}
     </div>
     <div class="notification-footer">
      {{ notification.createdTime|date_format }}  
