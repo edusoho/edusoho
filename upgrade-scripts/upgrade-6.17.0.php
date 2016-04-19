@@ -15,7 +15,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->commit();
 
             $this->updateCrontabSetting();
-            return $result;
+
+            if (!empty($result)) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -155,24 +158,20 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         $conditions = array(
-            'storage'       => 'cloud',
-            'convertStatus' => 'success',
-            'globalId'      => '0'
+            'storage'  => 'cloud',
+            'globalId' => 0
         );
-        $total = $this->getUploadFileService()->searchFileCount($conditions);
-
+        $total   = $this->getUploadFileService()->searchFileCount($conditions);
         $maxPage = ceil($total / 100) ? ceil($total / 100) : 1;
 
         $this->getCloudFileService()->synData($conditions);
 
-        if ($index == $maxPage) {
+        if ($index <= $maxPage) {
             return array(
-                'index'    => $index,
+                'index'    => $index + 1,
                 'message'  => '正在升级数据，目前是 '.intval(($index - 1) / $maxPage * 100).'% 进度',
                 'progress' => 4.4
             );
-        } else {
-            return array();
         }
     }
 
