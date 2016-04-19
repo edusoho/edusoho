@@ -205,6 +205,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $params['directives'] = $file['directives'];
         }
 
+        $watermarks = $this->getVideoWatermarkImages();
+
+        if (!empty($watermarks)) {
+            $params['watermarks'] = $watermarks;
+        }
+
 #TODO... 暂时直传
         // $params['uploadType'] = 'direct';
 
@@ -373,6 +379,32 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         }
 
         return true;
+    }
+
+    protected function getVideoWatermarkImages()
+    {
+        $setting = $this->getSettingService()->get('storage', array());
+
+        if (empty($setting['video_embed_watermark_image']) || ($setting['video_watermark'] != 2)) {
+            return array();
+        }
+
+        $videoWatermarkImage = $this->getEnvVariable('baseUrl').$this->getKernel()->getParameter('topxia.upload.public_url_path')."/".$setting['video_embed_watermark_image'];
+        $pathinfo            = pathinfo($videoWatermarkImage);
+
+        $images = array();
+        $heighs = array('240', '360', '480', '720', '1080');
+
+        foreach ($heighs as $height) {
+            $images[$height] = "{$pathinfo['dirname']}/{$pathinfo['filename']}-{$height}.{$pathinfo['extension']}";
+        }
+
+        return $images;
+    }
+
+    protected function getSettingService()
+    {
+        return $this->createService('System.SettingService');
     }
 
     protected function decodeMetas($metas)

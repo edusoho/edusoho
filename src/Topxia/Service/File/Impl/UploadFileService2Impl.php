@@ -305,7 +305,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         $params['userId'] = $user['id'];
-        $params           = ArrayToolkit::parts($params, array('id', 'directives', 'userId', 'targetId', 'targetType', 'bucket', 'hash', 'fileSize', 'fileName'));
+        $params           = ArrayToolkit::parts($params, array('id', 'directives', 'userId', 'targetId', 'targetType', 'bucket', 'hash', 'fileSize', 'fileName', 'watermarks'));
 
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
@@ -391,14 +391,14 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                     }
                 }
 
+                $connection->commit();
                 return $file;
             } else {
                 $file   = $this->getUploadFileDao()->getFile($params['id']);
                 $result = $implementor->finishedUpload($file, $params);
+                $connection->commit();
                 return $result;
             }
-
-            $connection->commit();
         } catch (\Exception $e) {
             $connection->rollback();
             throw $e;
