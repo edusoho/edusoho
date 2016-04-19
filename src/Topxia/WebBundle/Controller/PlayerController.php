@@ -12,7 +12,7 @@ class PlayerController extends BaseController
     public function showAction(Request $request, $id, $context = array())
     {
         try {
-            $file = $this->getUploadFileService()->getFile($id);
+            $file = $this->getServiceKernel()->createService('File.UploadFileService2')->getFile($id);
 
             if (empty($file)) {
                 throw $this->createNotFoundException();
