@@ -1,5 +1,6 @@
 <?php
 
+use Topxia\Service\Util\PluginUtil;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -116,6 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         if ($index === 0) {
             $this->updateScheme();
+            $this->uninstallApp('MaterialLib');
             return array(
                 'index'    => 1,
                 'message'  => '正在升级数据，目前是 0% 进度',
@@ -143,6 +145,55 @@ class EduSohoUpgrade extends AbstractUpdater
         } else {
             return array();
         }
+    }
+
+    protected function uninstallApp($name)
+    {
+        if (!$name) {
+            throw new \RuntimeException("插件名称不能为空！");
+        }
+
+        $pluginDir = dirname(ServiceKernel::instance()->getParameter('kernel.root_dir')).'/plugins/'.$name;
+
+        if (is_dir($pluginDir)) {
+            $this->deleteDir($pluginDir);
+        }
+
+        $app = $this->getAppService()->uninstallApp($name);
+
+        PluginUtil::refresh();
+    }
+
+    private function deleteDir($dir)
+    {
+        //先删除目录下的文件：
+        $dh = opendir($dir);
+
+        while ($file = readdir($dh)) {
+            if ($file != "." && $file != "..") {
+                $fullpath = $dir."/".$file;
+
+                if (!is_dir($fullpath)) {
+                    unlink($fullpath);
+                } else {
+                    $this->deleteDir($fullpath);
+                }
+            }
+        }
+
+        closedir($dh);
+
+//删除当前文件夹：
+        if (rmdir($dir)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    protected function getAppService()
+    {
+        return ServiceKernel::instance()->createService('CloudPlatform.AppService');
     }
 
     private function updateCrontabSetting()
