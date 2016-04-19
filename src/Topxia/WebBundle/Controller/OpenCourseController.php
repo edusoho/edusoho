@@ -10,170 +10,44 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request, $category)
     {
-        $conditions    = $request->query->all();
-        $categoryArray = array();
-        $levels        = array();
+        $queryParam = $request->query->all();
+        $conditions = $this->_filterConditions($queryParam);
 
-        $conditions['code'] = $category;
-
-        if (!empty($conditions['code'])) {
-            $categoryArray             = $this->getCategoryService()->getCategoryByCode($conditions['code']);
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($categoryArray['id']);
-            $categoryIds               = array_merge($childrenIds, array($categoryArray['id']));
-            $conditions['categoryIds'] = $categoryIds;
+        if (!empty($category)) {
+            $category                 = $this->_getCategoryInfo($category);
+            $conditions['categoryId'] = $category['id'];
+        } else {
+            $category = array();
         }
-
-        unset($conditions['code']);
-
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
-                'type'           => 'all',
-                'price'          => 'all',
-                'currentLevelId' => 'all'
-            );
-        }
-
-        $fliter = $conditions['fliter'];
-
-        if ($fliter['price'] == 'free') {
-            $coinSetting = $this->getSettingService()->get("coin");
-            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
-            $priceType   = "RMB";
-
-            if ($coinEnable && !empty($coinSetting) && array_key_exists("price_type", $coinSetting)) {
-                $priceType = $coinSetting["price_type"];
-            }
-
-            if ($priceType == 'RMB') {
-                $conditions['price'] = '0.00';
-            } else {
-                $conditions['coinPrice'] = '0.00';
-            }
-        }
-
-        if ($fliter['type'] == 'live') {
-            $conditions['type'] = 'live';
-        }
-
-        if ($this->isPluginInstalled('Vip')) {
-            $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
-
-            if ($fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
-            }
-        }
-
-        unset($conditions['fliter']);
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        if (!isset($courseSetting['explore_default_orderBy'])) {
-            $courseSetting['explore_default_orderBy'] = 'latest';
-        }
+        $orderBy = $courseSetting['explore_default_orderBy'] ?: 'latest';
+        $orderBy = empty($queryParam['orderBy']) ? $orderBy : $queryParam['orderBy'];
 
-        $orderBy = $courseSetting['explore_default_orderBy'];
-        $orderBy = empty($conditions['orderBy']) ? $orderBy : $conditions['orderBy'];
-        unset($conditions['orderBy']);
-
-        $conditions['parentId'] = 0;
-        $conditions['status']   = 'published';
-        $paginator              = new Paginator(
+        $paginator = new Paginator(
             $this->get('request'),
-            $this->getCourseService()->searchCourseCount($conditions),
-            20
+            $this->getOpenCourseService()->searchCourseCount($conditions),
+            10
         );
 
-        if ($orderBy != 'recommendedSeq') {
-            $courses = $this->getCourseService()->searchCourses(
+        if ($orderBy == 'recommendedSeq') {
+            $courses = $this->_getPageRecommendedCourses($request, $conditions, $orderBy, 10);
+        } else {
+            $courses = $this->getOpenCourseService()->searchCourses(
                 $conditions,
-                $orderBy,
+                array('createdTime', 'DESC'),
                 $paginator->getOffsetCount(),
                 $paginator->getPerPageCount()
             );
         }
 
-        if ($orderBy == 'recommendedSeq') {
-            $conditions['recommended'] = 1;
-            $recommendCount            = $this->getCourseService()->searchCourseCount($conditions);
-            $currentPage               = $request->query->get('page') ? $request->query->get('page') : 1;
-            $recommendPage             = intval($recommendCount / 20);
-            $recommendLeft             = $recommendCount % 20;
-
-            if ($currentPage <= $recommendPage) {
-                $courses = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    $orderBy,
-                    ($currentPage - 1) * 20,
-                    20
-                );
-            } elseif (($recommendPage + 1) == $currentPage) {
-                $courses = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    $orderBy,
-                    ($currentPage - 1) * 20,
-                    20
-                );
-                $conditions['recommended'] = 0;
-                $coursesTemp               = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    'createdTime',
-                    0,
-                    20 - $recommendLeft
-                );
-                $courses = array_merge($courses, $coursesTemp);
-            } else {
-                $conditions['recommended'] = 0;
-                $courses                   = $this->getCourseService()->searchCourses(
-                    $conditions,
-                    'createdTime',
-                    (20 - $recommendLeft) + ($currentPage - $recommendPage - 2) * 20,
-                    20
-                );
-            }
-        }
-
-        $group = $this->getCategoryService()->getGroupByCode('course');
-
-        if (empty($group)) {
-            $categories = array();
-        } else {
-            $categories = $this->getCategoryService()->getCategoryTree($group['id']);
-        }
-
-        if (!$categoryArray) {
-            $categoryArrayDescription = array();
-        } else {
-            $categoryArrayDescription = $categoryArray['description'];
-            $categoryArrayDescription = strip_tags($categoryArrayDescription, '');
-            $categoryArrayDescription = preg_replace("/ /", "", $categoryArrayDescription);
-            $categoryArrayDescription = substr($categoryArrayDescription, 0, 100);
-        }
-
-        if (!$categoryArray) {
-            $categoryParent = '';
-        } else {
-            if (!$categoryArray['parentId']) {
-                $categoryParent = '';
-            } else {
-                $categoryParent = $this->getCategoryService()->getCategory($categoryArray['parentId']);
-            }
-        }
-
-        return $this->render('TopxiaWebBundle:Course:explore.html.twig', array(
-            'courses'                  => $courses,
-            'category'                 => $category,
-            'fliter'                   => $fliter,
-            'orderBy'                  => $orderBy,
-            'paginator'                => $paginator,
-            'categories'               => $categories,
-            'consultDisplay'           => true,
-            'path'                     => 'course_explore',
-            'categoryArray'            => $categoryArray,
-            'group'                    => $group,
-            'categoryArrayDescription' => $categoryArrayDescription,
-            'categoryParent'           => $categoryParent,
-            'levels'                   => $levels
+        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig', array(
+            'courses'   => $courses,
+            'category'  => $category,
+            'fliter'    => isset($queryParam['fliter']) ? $queryParam['fliter'] : array('type' => 'all'),
+            'orderBy'   => $orderBy,
+            'paginator' => $paginator
         ));
     }
 
@@ -189,8 +63,8 @@ class OpenCourseController extends BaseController
 
     public function showAction(Request $request, $courseId)
     {
-        /*$sms_setting                                  = $this->getSettingService()->get('cloud_sms');
-        $sms_setting['sms_open_course_member_notify'] = 'on';
+        /*$sms_setting                  = $this->getSettingService()->get('cloud_sms');
+        $sms_setting['system_remind'] = 'on';
         $this->getSettingService()->set('cloud_sms', $sms_setting);*/
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
@@ -239,10 +113,13 @@ class OpenCourseController extends BaseController
 
         $lesson['replays'] = $this->_getLiveReplay($lesson);
 
+        $notifyNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $course['id'], 'isNotified' => 1));
+
         return $this->render('TopxiaWebBundle:OpenCourse:open-course-header.html.twig', array(
-            'course' => $course,
-            'lesson' => $lesson,
-            'member' => $member
+            'course'    => $course,
+            'lesson'    => $lesson,
+            'member'    => $member,
+            'notifyNum' => $notifyNum
         ));
     }
 
@@ -253,8 +130,10 @@ class OpenCourseController extends BaseController
 
         $teachers = array();
 
-        foreach ($course['teacherIds'] as $key => $teacherId) {
-            $teachers[$teacherId] = $teachersNoSort[$teacherId];
+        if (!empty($course['teacherIds'][0])) {
+            foreach ($course['teacherIds'] as $key => $teacherId) {
+                $teachers[$teacherId] = $teachersNoSort[$teacherId];
+            }
         }
 
         $profiles = $this->getUserService()->findUserProfilesByIds($course['teacherIds']);
@@ -424,10 +303,15 @@ class OpenCourseController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $member = $this->_memberOperate($request, $courseId);
+            $member = $this->_memberOperate($request, $id);
 
-            $fields = $request->request->all();
-            $member = $this->getOpenCourseService()->updateMember($member['id'], $fields);
+            $fields               = $request->request->all();
+            $fields['isNotified'] = 1;
+            $member               = $this->getOpenCourseService()->updateMember($member['id'], $fields);
+
+            $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id, 'isNotified' => 1));
+
+            return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
         }
 
         return $this->render('TopxiaWebBundle:OpenCourse:member-sms-modal.html.twig', array(
@@ -488,6 +372,8 @@ class OpenCourseController extends BaseController
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
             $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+
+            $lesson['mediaConvertStatus'] = $file['convertStatus'];
 
             if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                 $factory = new CloudClientFactory();
@@ -654,6 +540,76 @@ class OpenCourseController extends BaseController
         }
 
         return $replays;
+    }
+
+    private function _getPageRecommendedCourses(Request $request, $conditions, $orderBy, $pageSize)
+    {
+        $conditions['recommended'] = 1;
+
+        $recommendCount = $this->getOpenCourseService()->searchCourseCount($conditions);
+        $currentPage    = $request->query->get('page') ? $request->query->get('page') : 1;
+        $recommendPage  = intval($recommendCount / $pageSize);
+        $recommendLeft  = $recommendCount % $pageSize;
+
+        $currentPageCourses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('recommendedSeq', 'ASC'),
+            ($currentPage - 1) * $pageSize,
+            $pageSize
+        );
+
+        if (count($currentPageCourses) == 0) {
+            $start = ($pageSize - $recommendLeft) + ($currentPage - $recommendPage - 2) * $pageSize;
+            $limit = $pageSize;
+        } elseif (count($currentPageCourses) > 0 && count($currentPageCourses) <= $pageSize) {
+            $start = 0;
+            $limit = $pageSize - count($currentPageCourses);
+        }
+
+        $conditions['recommended'] = 0;
+
+        $courses = $this->getOpenCourseService()->searchCourses(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $start, $limit
+        );
+
+        return array_merge($currentPageCourses, $courses);
+    }
+
+    private function _getCategoryInfo($categoryCode)
+    {
+        $category = $this->getCategoryService()->getCategoryByCode($categoryCode);
+
+        if (!$category) {
+            return array();
+        }
+
+        $category['description'] = strip_tags($category['description'], '');
+        $category['description'] = preg_replace("/ /", "", $category['description']);
+
+        if (!$category['parentId']) {
+            $category['parent'] = array();
+        } else {
+            $category['parent'] = $this->getCategoryService()->getCategory($category['parentId']);
+        }
+
+        return $category;
+    }
+
+    private function _filterConditions($queryParam)
+    {
+        $conditions = array('status' => 'published');
+
+        if (!empty($queryParam['fliter']['type']) && $queryParam['fliter']['type'] != 'all') {
+            $conditions['type'] = $queryParam['fliter']['type'];
+        }
+
+        /*if (isset($queryParam['orderBy']) && $queryParam['orderBy'] == 'recommendedSeq') {
+        $conditions['recommended'] = 1;
+        }*/
+
+        return $conditions;
     }
 
     protected function getOpenCourseService()

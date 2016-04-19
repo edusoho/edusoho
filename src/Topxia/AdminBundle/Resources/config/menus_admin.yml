@@ -143,9 +143,20 @@ admin_live_course:
     parent: admin_course
     router_params: {'status': 'coming'}
 
-admin_open_course:
+admin_open_course_manage:
     name: 公开课管理
     parent: admin_course
+    router_name: admin_open_course
+
+admin_open_course:
+    name: 公开课管理
+    parent: admin_open_course_manage
+    router_name: admin_open_course
+
+admin_open_course_recommend:
+    name: 公开课推荐
+    parent: admin_open_course_manage
+    router_name: admin_open_course_recommend_list
 
 admin_course_thread:
     name: 话题管理

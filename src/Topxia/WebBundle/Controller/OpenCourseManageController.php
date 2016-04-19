@@ -189,7 +189,6 @@ class OpenCourseManageController extends BaseController
             $liveLesson['startTime'] = strtotime($liveLessonFields['startTime']);
             $liveLesson['length']    = $liveLessonFields['timeLength'];
             $liveLesson['title']     = $liveCourse['title'];
-            $liveLesson['status']    = 'published';
 
             if ($openLiveLesson) {
                 $live       = $this->getLiveCourseService()->editLiveRoom($liveCourse, $liveLesson, $this->container);

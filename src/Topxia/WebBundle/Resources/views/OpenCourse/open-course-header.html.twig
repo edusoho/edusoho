@@ -64,7 +64,7 @@
               </a>
             {% endif %}
           {% endif %}
-          <div class="color-gray mtl">已有<span class="member-num">{{ course.studentNum}}</span>人设置了提醒</div>
+          <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
         </div>
       {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}
         <div class="mask-content">

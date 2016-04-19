@@ -46,7 +46,7 @@
       {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id})) }}
       <div class="open-course-detail row">
         <div class="col-md-9">
-          <div class="es-section gray-darker">
+          <div class="es-section gray-darker editor-text">
             {% if course.about %}
               {{ course.about|raw }}
             {% else %}

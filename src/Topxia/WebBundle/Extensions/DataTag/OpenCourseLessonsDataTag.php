@@ -11,8 +11,8 @@ class OpenCourseLessonsDataTag extends BaseDataTag implements DataTag
      *   courseId 必需 课程ID
      *   count    可选 课程数量，取值不超过10
      *
-     * @param  array $arguments     参数
-     * @return array 课程列表
+     * @param  array $arguments           参数
+     * @return array 课程课时列表
      */
     public function getData(array $arguments)
     {

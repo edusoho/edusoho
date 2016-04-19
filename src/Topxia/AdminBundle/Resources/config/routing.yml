@@ -326,6 +326,19 @@ admin_open_course_close:
     defaults: { _controller: TopxiaAdminBundle:OpenCourse:close }
     methods: [POST]
 
+admin_open_course_recommend_list:
+    pattern: /open/course/recommend/list
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:recommendList }
+
+admin_open_course_recommend:
+    pattern: /open/course/{id}/recommend
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:recommend }
+
+admin_open_course_cancel_recommend:
+    pattern: /open/course/{id}/recommend/cancel/{target}
+    defaults: { _controller: TopxiaAdminBundle:OpenCourse:cancelRecommend }
+    methods: [POST]
+
 admin_course_copy:
     pattern: /course/{id}/copy
     defaults: { _controller: TopxiaAdminBundle:Course:copy }

@@ -16,18 +16,19 @@ class RegisterController extends BaseController
         $user   = $this->getCurrentUser();
 
         if ($user->isLogin()) {
-            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '你已经登录了', null, 3000, $this->getTargetPath($request));
         }
 
         $registerEnable = $this->getAuthService()->isRegisterEnabled();
 
         if (!$registerEnable) {
-            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', '注册已关闭，请联系管理员', null, 3000, $this->getTargetPath($request));
         }
 
         if ($request->getMethod() == 'POST') {
             $registration = $request->request->all();
-            // $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+
+// $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
 
             if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
@@ -44,7 +45,7 @@ class RegisterController extends BaseController
             //验证码校验
             $this->captchaEnabledValidator($authSettings, $registration, $request);
 
-            //手机校验码
+//手机校验码
 
             if ($this->smsCodeValidator($authSettings, $registration, $request)) {
                 $registration['verifiedMobile'] = '';
@@ -59,7 +60,7 @@ class RegisterController extends BaseController
                 }
             }
 
-            //ip次数限制
+//ip次数限制
 
             if ($this->registerLimitValidator($registration, $authSettings, $request)) {
                 return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
@@ -162,7 +163,6 @@ class RegisterController extends BaseController
                 }
 
                 return true;
-                break;
             case 'high':
                 $condition = array(
                     'startTime' => time() - 24 * 3600,
@@ -182,10 +182,8 @@ class RegisterController extends BaseController
                 }
 
                 return true;
-                break;
             default:
                 return true;
-                break;
         }
     }
 
@@ -235,9 +233,6 @@ class RegisterController extends BaseController
                 'emailLoginUrl' => $this->getEmailLoginUrl($user['email']),
                 '_target_path'  => $this->getTargetPath($request)
             ));
-        } elseif ($this->getAuthService()->hasPartnerAuth()) {
-            $this->authenticateUser($user);
-            return $this->redirect($this->getTargetPath($request));
         } else {
             $this->authenticateUser($user);
             return $this->redirect($this->getTargetPath($request));
@@ -430,11 +425,6 @@ class RegisterController extends BaseController
         return $this->getServiceKernel()->createService('User.NotificationService');
     }
 
-    private function getCardService()
-    {
-        return $this->getServiceKernel()->createService('Card.CardService');
-    }
-
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
@@ -484,8 +474,7 @@ class RegisterController extends BaseController
         $valuesToBeReplace = array('{{nickname}}', '{{sitename}}', '{{siteurl}}');
         $valuesToReplace   = array($user['nickname'], $site['name'], $site['url']);
         $welcomeBody       = $this->setting('auth.welcome_body', '注册欢迎的内容');
-        $welcomeBody       = str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
-        return $welcomeBody;
+        return str_replace($valuesToBeReplace, $valuesToReplace, $welcomeBody);
     }
 
     protected function sendVerifyEmail($token, $user)

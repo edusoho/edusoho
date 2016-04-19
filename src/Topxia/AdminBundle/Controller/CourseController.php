@@ -40,19 +40,11 @@ class CourseController extends BaseController
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
 
         if (isset($conditions["chargeStatus"]) && $conditions["chargeStatus"] == "free") {
-            if ($coinEnable) {
-                $conditions['coinPrice'] = '0.00';
-            } else {
-                $conditions['price'] = '0.00';
-            }
+            $conditions['price'] = '0.00';
         }
 
         if (isset($conditions["chargeStatus"]) && $conditions["chargeStatus"] == "charge") {
-            if ($coinEnable) {
-                $conditions['coinPrice_GT'] = '0.00';
-            } else {
-                $conditions['price_GT'] = '0.00';
-            }
+            $conditions['price_GT'] = '0.00';
         }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);

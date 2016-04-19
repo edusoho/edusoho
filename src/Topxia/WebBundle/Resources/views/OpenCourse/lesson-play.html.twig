@@ -12,3 +12,10 @@
 <div id="lesson-preview-swf-player" class="lesson-content" style="display:none;height:100%;"></div>
 
 <input type="hidden" id="firstLesson" data-url="{{ path('open_course_lesson',{courseId:lesson.courseId,lessonId:lesson.id}) }}">
+
+<div class="mask media-unconvert" style="display:none;">
+  <div class="mask-content">
+    <h2>{{'视频文件正在转换中，稍后完成后即可查看'|trans}}</h2>
+  </div>
+</div>
+

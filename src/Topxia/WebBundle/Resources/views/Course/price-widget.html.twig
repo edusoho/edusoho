@@ -31,7 +31,7 @@
     {% if 'full' in shows or 'discount' in shows %}
 
       <span class="discount">
-        {% if (course.discount == 0) or (priceType == 'coin' and course.originCoinPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
+        {% if (course.discount == 0) or (priceType == 'coin' and course.originPrice == 0) or (priceType == 'default' and course.originPrice == 0) %}
           {{'限免'|trans}}
         {% else  %}
           {{ course.discount|round(2, 'common') }} {{'折'|trans}}

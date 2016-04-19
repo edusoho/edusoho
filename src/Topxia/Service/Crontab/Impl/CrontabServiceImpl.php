@@ -81,9 +81,16 @@ class CrontabServiceImpl extends BaseService implements CrontabService
             }
 
             $this->getJobDao()->updateJob($job['id'], array('executing' => 1));
-            $jobInstance                    = new $job['jobClass']();
-            $job['jobParams']['targetType'] = $job['targetType'];
-            $job['jobParams']['targetId']   = $job['targetId'];
+            $jobInstance = new $job['jobClass']();
+
+            if (!empty($job['targetType'])) {
+                $job['jobParams']['targetType'] = $job['targetType'];
+            }
+
+            if (!empty($job['targetId'])) {
+                $job['jobParams']['targetId'] = $job['targetId'];
+            }
+
             $jobInstance->execute($job['jobParams']);
         } catch (\Exception $e) {
             $message = $e->getMessage();

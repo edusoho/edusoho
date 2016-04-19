@@ -5,8 +5,8 @@
   <div class="tab-header">
     <ul class="clearfix">
       <li class="{% if category == '' %}active{% endif %}"><a href="{{ path(path, {category:'',fliter:fliter,orderBy:orderBy}) }}">{{'全部'|trans}}</a></li>
-      {% for cateogory in rootCategories %}
-        <li class="{% if cateogory.id in activeIds %}{% set nextCode = cateogory.code %}active{% endif %}"><a href="{{ path(path, {category:cateogory.code,fliter:fliter,orderBy:orderBy}) }}">{{ cateogory.name }}</a></li>
+      {% for category in rootCategories %}
+        <li class="{% if category.id in activeIds %}{% set nextCode = category.code %}active{% endif %}"><a href="{{ path(path, {category:category.code,fliter:fliter,orderBy:orderBy}) }}">{{ category.name }}</a></li>
       {% endfor %}
     </ul>
   </div>

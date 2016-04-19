@@ -12,7 +12,7 @@ class OpenCourseLessonDataTag extends BaseDataTag implements DataTag
      *   lessonId 必需 课时ID
      *
      * @param  array $arguments 参数
-     * @return array 栏目
+     * @return array 课时
      */
     public function getData(array $arguments)
     {

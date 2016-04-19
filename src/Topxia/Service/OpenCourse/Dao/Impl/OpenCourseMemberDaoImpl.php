@@ -114,6 +114,7 @@ class OpenCourseMemberDaoImpl extends BaseDao implements OpenCourseMemberDao
             ->andWhere('userId > :userIdGT')
             ->andWhere('courseId = :courseId')
             ->andWhere('role = :role')
+            ->andWhere('isNotified = :isNotified')
             ->andWhere('createdTime >= :startTimeGreaterThan')
             ->andWhere('createdTime < :startTimeLessThan')
             ->andWhere('courseId IN (:courseIds)')
