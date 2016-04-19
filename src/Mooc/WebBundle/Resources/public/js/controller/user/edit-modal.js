@@ -66,7 +66,6 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="staffNo"]',
-            required: true,
             rule: 'staff_no maxlength{max:12} remote',
         });
 
