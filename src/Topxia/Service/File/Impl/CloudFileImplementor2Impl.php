@@ -326,6 +326,10 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
                     $file['metas2'] = $cloudFile['metas']['levels'];
                 }
+
+                if (isset($cloudFile['directives']['watermarks'])) {
+                    $file['convertParams']['hasVideoWatermark'] = 1;
+                }
             } elseif ($file['type'] == 'ppt') {
                 $file['convertParams'] = array(
                     'convertor' => $cloudFile['directives']['output']
