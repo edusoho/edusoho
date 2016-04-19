@@ -31,19 +31,16 @@ class PlayerController extends BaseController
             }
 
             $url = $this->getPlayUrl($id, $context);
-
-            return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
-                'file'             => $file,
-                'url'              => $url,
-                'context'          => $context,
-                'player'           => $player,
-                'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
-            ));
         } catch (\Exception $e) {
-            return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
-                'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
-            ));
         }
+
+        return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
+            'file'             => $file,
+            'url'              => isset($url) ? $url : null,
+            'context'          => $context,
+            'player'           => $player,
+            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+        ));
     }
 
 // protected function getPlayUrl($file)
