@@ -13,7 +13,7 @@
       <div class="form-group mbl">
         <label class="control-label" for="set-bind-nickname-field">{{'头像'|trans}}</label>
         <div class="controls">
-          {% if oauthUser.avatar is not defined or oauthUser.avatar is empty %}
+          {% if oauthUser.avatar is defined and oauthUser.avatar is not empty %}
             <img width="120" height="120" src="{{ filepath(oauthUser.avatar, 'avatar.png') }}" />
           {% else %}
             {{'自动获取头像失败，请稍后在自行上传头像'|trans}}
