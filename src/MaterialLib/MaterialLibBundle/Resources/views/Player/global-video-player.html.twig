@@ -20,7 +20,7 @@
         data-player="{{player}}"
         data-agent-in-white-list="{{agentInWhiteList}}"
         data-balloon-video-player="1"
-        {% if not file.directives.watermarks|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
+        {% if app.request.watermarkOpened|default(true) and not file.directives.watermarks|default(0) and setting('storage.video_watermark') > 0 and setting('storage.video_watermark_image') %}
           data-watermark="{{ filepath(setting('storage.video_watermark_image'), null, true) }}"
         {% endif %}
         {% if setting('storage.video_fingerprint') and app.user %}

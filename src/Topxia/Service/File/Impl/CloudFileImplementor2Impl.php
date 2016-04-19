@@ -376,7 +376,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function synData($conditions)
     {
-        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 5);
+        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 100);
 
         foreach ($files as $key => $file) {
             if (!empty($file['globalId']) && $file['globalId'] != '0') {
