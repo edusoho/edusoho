@@ -13701,8 +13701,8 @@ textarea {
   margin-bottom: 20px;
 }
 @media (max-width: 400px) {
-  .materials-list {
-    width: 100%!important;
+  .materials-list .materials-ul {
+    height: 215px;
   }
 }
 .materials-ul {
