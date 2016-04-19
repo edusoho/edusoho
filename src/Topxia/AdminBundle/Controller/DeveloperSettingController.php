@@ -15,12 +15,13 @@ class DeveloperSettingController extends BaseController
         $storageSetting   = $this->getSettingService()->get('storage', array());
 
         $default = array(
-            'debug'                => '0',
-            'app_api_url'          => '',
-            'cloud_api_server'     => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
-            'cloud_file_server'    => '',
-            'cloud_api_tui_server' => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
-            'hls_encrypted'        => '1'
+            'debug'                  => '0',
+            'app_api_url'            => '',
+            'cloud_api_server'       => empty($storageSetting['cloud_api_server']) ? '' : $storageSetting['cloud_api_server'],
+            'cloud_file_server'      => '',
+            'cloud_api_tui_server'   => empty($storageSetting['cloud_api_tui_server']) ? '' : $storageSetting['cloud_api_tui_server'],
+            'cloud_api_event_server' => empty($storageSetting['cloud_api_event_server']) ? '' : $storageSetting['cloud_api_event_server'],
+            'hls_encrypted'          => '1'
         );
 
         $developerSetting = array_merge($default, $developerSetting);
@@ -28,8 +29,9 @@ class DeveloperSettingController extends BaseController
         if ($request->getMethod() == 'POST') {
             $developerSetting = $request->request->all();
 
-            $storageSetting['cloud_api_server']     = $developerSetting['cloud_api_server'];
-            $storageSetting['cloud_api_tui_server'] = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_server']       = $developerSetting['cloud_api_server'];
+            $storageSetting['cloud_api_tui_server']   = $developerSetting['cloud_api_tui_server'];
+            $storageSetting['cloud_api_event_server'] = $developerSetting['cloud_api_event_server'];
             $this->getSettingService()->set('storage', $storageSetting);
             $this->getSettingService()->set('developer', $developerSetting);
 
