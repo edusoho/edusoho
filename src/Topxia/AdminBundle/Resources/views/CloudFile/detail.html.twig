@@ -96,7 +96,7 @@
                 </div>
                 <div class="tab-pane-img material-detail-img" id="self-select">
                   <div class="video-player-container detail-img">
-                    <iframe src="{{ path('material_lib_file_player', {globalId:material.no, watermarkOpened:false}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
+                    <iframe src="{{ path('material_lib_file_player', {globalId:material.no, watermarkOpened:'hidden'}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
                   </div>
                   <div class="btn-content">
                     {% if material.thumbnail|default(0) %}

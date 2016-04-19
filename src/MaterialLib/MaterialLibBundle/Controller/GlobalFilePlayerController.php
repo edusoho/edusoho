@@ -17,7 +17,7 @@ class GlobalFilePlayerController extends BaseController
         }
 
         if ($file['type'] == 'video') {
-            return $this->videoPlayer($file);
+            return $this->videoPlayer($file, $request);
         } elseif ($file['type'] == 'ppt') {
             return $this->render('MaterialLibBundle:Player:ppt-player.html.twig', array(
                 'file' => $file
@@ -82,6 +82,7 @@ class GlobalFilePlayerController extends BaseController
             'file'             => $file,
             'url'              => $url,
             'player'           => 'balloon-cloud-video-player',
+            'params'           => $request->query->all(),
             'agentInWhiteList' => $this->agentInWhiteList($this->getRequest()->headers->get("user-agent"))
         ));
     }
