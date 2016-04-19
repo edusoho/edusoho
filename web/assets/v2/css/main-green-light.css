@@ -10241,7 +10241,7 @@ textarea {
 }
 .class-course-list .course-item .media .course-show {
   position: absolute;
-  top: 35px;
+  top: 40px;
   right: 30px;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
