@@ -130,8 +130,10 @@ define(function(require, exports, module) {
             uploader.on('uploadProgress', function(file, percentage) {
                 var $li = $('#' + file.id);
                 percentage = (percentage * 100).toFixed(2) + '%';
-                $li.find('.file-status').html(percentage);
-                $li.find('.file-progress-bar').css('width', percentage);
+                if(percentage != '100.00%'){
+                    $li.find('.file-status').html(percentage);
+                    $li.find('.file-progress-bar').css('width', percentage);
+                }
             });
 
             uploader.on('uploadSuccess', function(file) {
