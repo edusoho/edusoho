@@ -111,10 +111,34 @@ class EduSohoUpgrade extends AbstractUpdater
               UNIQUE KEY `hashId` (`hashId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
 
-            $sql    = "select max(id) from upload_files;";
+            $sql    = "select max(id) as maxId from upload_files;";
             $result = $this->getConnection()->fetchAssoc($sql);
 
-            $this->getConnection()->exec("alter table upload_file_inits AUTO_INCREMENT = {$result[0]+1000};");
+            $start = $result['maxId'] + 1000;
+            $this->getConnection()->exec("alter table upload_file_inits AUTO_INCREMENT = {$start};");
+        }
+
+        $this->getConnection()->exec("ALTER TABLE `upload_files` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL;");
+
+        if (!$this->isFieldExist('classroom', 'conversationId')) {
+            $this->getConnection()->exec("ALTER TABLE `classroom` ADD `conversationId` varchar(255) NOT NULL DEFAULT '0';");
+        }
+
+        if (!$this->isFieldExist('course', 'conversationId')) {
+            $this->getConnection()->exec("ALTER TABLE `course` ADD `conversationId` varchar(255) NOT NULL DEFAULT '0';");
+        }
+
+        if (!$this->isTableExist('cloud_data')) {
+            $this->getConnection()->exec('CREATE TABLE `cloud_data` (
+              `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+              `name` varchar(255) NOT NULL,
+              `body` text NOT NULL,
+              `timestamp` int(10) unsigned NOT NULL,
+              `createdTime` int(10) unsigned NOT NULL,
+              `updatedTime` int(10) unsigned NOT NULL,
+              `createdUserId` int(10) unsigned NOT NULL,
+              PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;');
         }
     }
 
@@ -133,7 +157,7 @@ class EduSohoUpgrade extends AbstractUpdater
         $conditions = array(
             'storage'       => 'cloud',
             'convertStatus' => 'success',
-            'globalId'      => 0
+            'globalId'      => '0'
         );
         $total = $this->getUploadFileService()->searchFileCount($conditions);
 
@@ -158,15 +182,19 @@ class EduSohoUpgrade extends AbstractUpdater
             throw new \RuntimeException("插件名称不能为空！");
         }
 
-        $pluginDir = dirname(ServiceKernel::instance()->getParameter('kernel.root_dir')).'/plugins/'.$name;
+        $app = $this->getAppService()->getAppByCode($name);
 
-        if (is_dir($pluginDir)) {
-            $this->deleteDir($pluginDir);
+        if (!empty($app)) {
+            $pluginDir = dirname(ServiceKernel::instance()->getParameter('kernel.root_dir')).'/plugins/'.$name;
+
+            if (is_dir($pluginDir)) {
+                $this->deleteDir($pluginDir);
+            }
+
+            $app = $this->getAppService()->uninstallApp($name);
+
+            PluginUtil::refresh();
         }
-
-        $app = $this->getAppService()->uninstallApp($name);
-
-        PluginUtil::refresh();
     }
 
     private function deleteDir($dir)
