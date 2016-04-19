@@ -15,6 +15,9 @@ class ClassRoomThread extends BaseResource
 
         $user = $this->getUserService()->getUser($thread['userId']);
         $thread['user'] = $this->simpleUser($user);
+        $classroom = $this->getClassroomService()->getClassRoom($thread['targetId']);
+        $thread['target']['id'] = $classroom['id'];
+        $thread['target']['title'] = $classroom['title'];
 
         return $this->filter($thread);
     }
@@ -50,6 +53,11 @@ class ClassRoomThread extends BaseResource
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getClassroomService()
+    {
+        return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
     }
 
     protected function getUserService()
