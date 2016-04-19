@@ -67,7 +67,8 @@
           <div class="form-group">
             <div class="col-sm-8 col-sm-offset-2">
               <div class="material-detail-img">
-                <img class="js-cover-img detail-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}" width="100px">      
+                <div class="detail-img">
+                  <img class="js-cover-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}" width="100px"></div>     
                 {% if material.thumbnail|default(0) %}
                 <a class="btn btn-fat btn-info js-reset-btn" href="javascript:;">还原</a>
                 {% endif %}
@@ -94,7 +95,7 @@
                   {% endfor %}
                 </div>
                 <div class="tab-pane-img material-detail-img" id="self-select">
-                  <div class="video-player-container ">
+                  <div class="video-player-container detail-img">
                     <iframe src="{{ path('material_lib_file_player', {globalId:material.no}) }}" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%" style="border:0px"></iframe>
                   </div>
                   <div class="btn-content">
