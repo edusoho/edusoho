@@ -617,6 +617,7 @@ margin-top: 14px;
   height: 100%;
   padding-top: 17px;
   text-align: center;
+  z-index: 10;
   -webkit-transition: all .3s ease;
    -moz-transition: all .3s ease;
      -o-transition: all .3s ease;
