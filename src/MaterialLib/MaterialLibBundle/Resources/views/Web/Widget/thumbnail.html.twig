@@ -26,10 +26,17 @@
     <ul class="dropdown-menu">
       {% if uploadFile.storage == "cloud" %}
       <li>
+        {% if uploadFile.createdUserId == app.user.id %}
         <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
           <i class="glyphicon glyphicon-pencil prm"></i>
-          详情
+          编辑
         </a>
+        {% elseif uploadFile.createdUserId != app.user.id %}
+        <a href="javascript:;" class="js-detail-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_lib_file_detail', {fileId:uploadFile.id}) }}">
+          <i class="glyphicon glyphicon-eye-open prm"></i>
+          查看
+        </a>
+        {% endif %}
       </li>
       {% endif %}
       <li>

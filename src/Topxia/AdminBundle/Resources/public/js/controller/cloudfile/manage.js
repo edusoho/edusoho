@@ -3,7 +3,7 @@ define(function(require, exports, module) {
     var Widget = require('widget');
     require('jquery.select2-css');
     require('jquery.select2');
-    var DetailWidget = require('materiallibbundle/controller/web/detail');
+    var DetailWidget = require('./detail');
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {

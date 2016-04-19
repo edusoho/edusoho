@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     require('jquery.select2-css');
     require('jquery.select2');
     require('jquery.colorbox');
-    var DetailWidget = require('materiallibbundle/controller/web/detail');
+    var DetailWidget = require('topxiaadminbundle/controller/cloudfile/detail');
 
 
     exports.run = function() {
