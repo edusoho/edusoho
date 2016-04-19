@@ -11,33 +11,39 @@ class PlayerController extends BaseController
 {
     public function showAction(Request $request, $id, $context = array())
     {
-        $file = $this->getUploadFileService()->getFile($id);
+        try {
+            $file = $this->getUploadFileService()->getFile($id);
 
-        if (empty($file)) {
-            throw $this->createNotFoundException();
-        }
-
-        if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
-            if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                $file['videoWatermarkEmbedded'] = 1;
+            if (empty($file)) {
+                throw $this->createNotFoundException();
             }
 
-            $player = "balloon-cloud-video-player";
-        } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
-            $player = "local-video-player";
-        } elseif ($file["type"] == 'audio') {
-            $player = "audio-player";
+            if ($file["storage"] == 'cloud' && $file["type"] == 'video') {
+                if (!empty($file['convertParams']['hasVideoWatermark'])) {
+                    $file['videoWatermarkEmbedded'] = 1;
+                }
+
+                $player = "balloon-cloud-video-player";
+            } elseif ($file["storage"] == 'local' && $file["type"] == 'video') {
+                $player = "local-video-player";
+            } elseif ($file["type"] == 'audio') {
+                $player = "audio-player";
+            }
+
+            $url = $this->getPlayUrl($id, $context);
+
+            return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
+                'file'             => $file,
+                'url'              => $url,
+                'context'          => $context,
+                'player'           => $player,
+                'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+            ));
+        } catch (\Exception $e) {
+            return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
+                'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
+            ));
         }
-
-        $url = $this->getPlayUrl($id, $context);
-
-        return $this->render('TopxiaWebBundle:Player:show.html.twig', array(
-            'file'             => $file,
-            'url'              => $url,
-            'context'          => $context,
-            'player'           => $player,
-            'agentInWhiteList' => $this->agentInWhiteList($request->headers->get("user-agent"))
-        ));
     }
 
 // protected function getPlayUrl($file)
