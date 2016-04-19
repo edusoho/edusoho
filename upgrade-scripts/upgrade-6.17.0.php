@@ -110,6 +110,11 @@ class EduSohoUpgrade extends AbstractUpdater
               PRIMARY KEY (`id`),
               UNIQUE KEY `hashId` (`hashId`)
             ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;");
+
+            $sql    = "select max(id) from upload_files;";
+            $result = $this->getConnection()->fetchAssoc($sql);
+
+            $this->getConnection()->exec("alter table upload_file_inits AUTO_INCREMENT = {$result[0]+1000};");
         }
     }
 
