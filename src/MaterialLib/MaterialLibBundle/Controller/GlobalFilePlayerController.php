@@ -74,7 +74,7 @@ class GlobalFilePlayerController extends BaseController
         ));
     }
 
-    protected function videoPlayer($file)
+    protected function videoPlayer($file, $request)
     {
         $url = $this->getPlayUrl($file);
 
