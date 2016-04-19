@@ -4,6 +4,9 @@
 	padding: 0;
 	height: 500px;
 	background-color: #000;
+	@media(max-width:@screen-sm-max) {
+		height: 300px;
+	}
 	.mask {
 		position: absolute;
 		left: 0;
@@ -101,6 +104,10 @@
 			&.active, &:hover {
 				background-color: #212121;
 				.es-transition;
+			}
+			@media(max-width:@screen-sm-max) {
+				padding: 15px 0;
+				font-size: 14px;
 			}
 		}
 	}
@@ -350,6 +357,8 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		text-align: left;
+		font-size: 12px;
+		color: @gray-darker;
 	}
 }
 .course-comment {

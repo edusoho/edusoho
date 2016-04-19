@@ -31,7 +31,7 @@
             {% if course.type == 'open' %}
               <li class="tab-header"><i class="es-icon es-icon-videocam prm"></i>课时列表</li>
             {% endif %}
-          </ul  >
+          </ul>
           <div id="content">
             <ul id="recommand-tab" >
               {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig'%}
@@ -53,12 +53,15 @@
               <div class="empty">暂无简介</div>
             {% endif %}
           </div>
-
+          <div class="visible-sm visible-xs">
+            {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+          </div>
           {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{courseId:course.id})) }}
-          
         </div>
-        
-        {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+        <div class="col-md-3 hidden-sm hidden-xs">
+          {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+        </div>
+      </div>
     {% endblock %}
   </div>
   
