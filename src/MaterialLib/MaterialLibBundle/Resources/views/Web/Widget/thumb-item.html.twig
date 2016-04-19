@@ -1,4 +1,4 @@
-<div class="col-lg-3 col-sm-4 col-xs-6 materials-list" data-file-id="{{uploadFile.id}}">
+<div class="col-lg-3 col-sm-4 col-xs-6 materials-list{% if source|default('') == 'my' %} my-material-list {% endif %}" data-file-id="{{uploadFile.id}}">
   <ul class="materials-ul clearfix">
     <li class="img-li" style="position:relative;">
       {% include 'MaterialLibBundle:Web/Widget:thumbnail.html.twig' %}
