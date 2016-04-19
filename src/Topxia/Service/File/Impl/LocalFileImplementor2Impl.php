@@ -41,7 +41,8 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         $file['createdUserId'] = $file['updatedUserId'];
         $file['createdTime']   = $file['updatedTime'];
 
-        $file['hashId'] = "{$file['targetType']}/{$file['targetId']}/{$file['filename']}";
+        $filename       = FileToolkit::generateFilename($file['ext']);
+        $file['hashId'] = "{$file['targetType']}/{$file['targetId']}/{$filename}";
 
         $file['convertHash']   = "ch-{$file['hashId']}";
         $file['convertStatus'] = 'none';
@@ -49,7 +50,7 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         return $file;
     }
 
-    public function moveFile($targetType, $targetId, $originalFile = null)
+    public function moveFile($targetType, $targetId, $originalFile = null, $data)
     {
         $errors = FileToolkit::validateFileExtension($originalFile);
 
@@ -60,7 +61,7 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
         $targetPath = $this->getFilePath($targetType, $targetId);
 
-        $filename = FileToolkit::generateFilename(FileToolkit::getFileExtension($originalFile));
+        $filename = str_replace("{$targetType}/{$targetId}/", "", $data['hashId']);
         $originalFile->move($targetPath, $filename);
     }
 

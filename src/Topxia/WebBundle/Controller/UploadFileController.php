@@ -32,7 +32,7 @@ class UploadFileController extends BaseController
 
         $originalFile = $this->get('request')->files->get('file');
 
-        $this->getUploadFileService2()->moveFile($targetType, $targetId, $originalFile);
+        $this->getUploadFileService2()->moveFile($targetType, $targetId, $originalFile, $token['data']);
 
         return $this->createJsonResponse($token['data']);
     }
