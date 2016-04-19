@@ -205,10 +205,12 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
             $params['directives'] = $file['directives'];
         }
 
-        $watermarks = $this->getVideoWatermarkImages();
+        if ($file['type'] == 'video') {
+            $watermarks = $this->getVideoWatermarkImages();
 
-        if (!empty($watermarks)) {
-            $params['watermarks'] = $watermarks;
+            if (!empty($watermarks)) {
+                $params['directives']['watermarks'] = $watermarks;
+            }
         }
 
 #TODO... 暂时直传
