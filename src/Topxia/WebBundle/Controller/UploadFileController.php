@@ -32,9 +32,9 @@ class UploadFileController extends BaseController
 
         $originalFile = $this->get('request')->files->get('file');
 
-        $file = $this->getUploadFileService()->addFile($targetType, $targetId, array(), 'local', $originalFile);
+        $this->getUploadFileService2()->moveFile($targetType, $targetId, $originalFile);
 
-        return $this->createJsonResponse($file);
+        return $this->createJsonResponse($token['data']);
     }
 
     public function downloadAction(Request $request, $fileId)

@@ -305,7 +305,18 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         $params['userId'] = $user['id'];
-        $params           = ArrayToolkit::parts($params, array('id', 'directives', 'userId', 'targetId', 'targetType', 'bucket', 'hash', 'fileSize', 'fileName', 'watermarks'));
+        $params           = ArrayToolkit::parts($params, array(
+            'id',
+            'directives',
+            'userId',
+            'targetId',
+            'targetType',
+            'bucket',
+            'hash',
+            'fileSize',
+            'fileName',
+            'watermarks'
+        ));
 
         $setting           = $this->getSettingService()->get('storage');
         $params['storage'] = empty($setting['upload_mode']) ? 'local' : $setting['upload_mode'];
@@ -329,13 +340,12 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
 
         $preparedFile = $implementor->prepareUpload($params);
 
-        if (!empty($preparedFile)) {
-            $file       = $this->getUploadFileInitDao()->addFile($preparedFile);
-            $params     = array_merge($params, $file);
-            $initParams = $implementor->initUpload($params);
-            $file       = $this->getUploadFileInitDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
-        } else {
-            $initParams = $implementor->initUpload($params);
+        $file       = $this->getUploadFileInitDao()->addFile($preparedFile);
+        $params     = array_merge($params, $file);
+        $initParams = $implementor->initUpload($params);
+
+        if ($params['storage'] == 'cloud') {
+            $file = $this->getUploadFileInitDao()->updateFile($file['id'], array('globalId' => $initParams['globalId']));
         }
 
         return $initParams;
@@ -363,46 +373,43 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
                 'fileSize'      => $params['size']
             );
 
-            if ($params['storage'] == 'cloud') {
-                $file = $this->getUploadFileInitDao()->getFile($params['id']);
-                $file = array_merge($file, $fields);
-                $this->getUploadFileInitDao()->deleteFile($file['id']);
-                unset($file['id']);
+            $file = $this->getUploadFileInitDao()->getFile($params['id']);
+            $file = array_merge($file, $fields);
+            $this->getUploadFileInitDao()->deleteFile($file['id']);
 
-                $file = $this->getUploadFileDao()->addFile($file);
+            $file = $this->getUploadFileDao()->addFile($file);
 
-                $result = $implementor->finishedUpload($file, $params);
+            $result = $implementor->finishedUpload($file, $params);
 
-                if (empty($result) || !$result['success']) {
-                    throw $this->createServiceException("uploadFile失败，完成上传失败！");
-                }
+            if (empty($result) || !$result['success']) {
+                throw $this->createServiceException("uploadFile失败，完成上传失败！");
+            }
 
-                $file = $this->getUploadFileDao()->updateFile($file['id'], array(
-                    'length' => isset($result['length']) ? $result['length'] : 0
-                ));
+            $file = $this->getUploadFileDao()->updateFile($file['id'], array(
+                'length' => isset($result['length']) ? $result['length'] : 0
+            ));
 
-                if ($file['targetType'] == 'headLeader') {
-                    $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
+            if ($file['targetType'] == 'headLeader') {
+                $headLeaders = $this->getUploadFileDao()->getHeadLeaderFiles();
 
-                    foreach ($headLeaders as $headLeader) {
-                        if ($headLeader['id'] != $file['id']) {
-                            $this->deleteFile($headLeader['id']);
-                        }
+                foreach ($headLeaders as $headLeader) {
+                    if ($headLeader['id'] != $file['id']) {
+                        $this->deleteFile($headLeader['id']);
                     }
                 }
-
-                $connection->commit();
-                return $file;
-            } else {
-                $file   = $this->getUploadFileDao()->getFile($params['id']);
-                $result = $implementor->finishedUpload($file, $params);
-                $connection->commit();
-                return $result;
             }
+
+            $connection->commit();
+            return $file;
         } catch (\Exception $e) {
             $connection->rollback();
             throw $e;
         }
+    }
+
+    public function moveFile($targetType, $targetId, $originalFile = null)
+    {
+        return $this->getFileImplementorByStorage('local')->moveFile($targetType, $targetId, $originalFile);
     }
 
     public function setFileProcessed($params)

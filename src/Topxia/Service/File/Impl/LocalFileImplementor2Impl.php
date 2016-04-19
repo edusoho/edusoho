@@ -2,6 +2,7 @@
 
 namespace Topxia\Service\File\Impl;
 
+use Topxia\Common\FileToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\File\FileImplementor2;
 
@@ -21,7 +22,52 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 
     public function prepareUpload($params)
     {
-        return null;
+        $file             = array();
+        $file['filename'] = empty($params['fileName']) ? '' : $params['fileName'];
+
+        $pos         = strrpos($file['filename'], '.');
+        $file['ext'] = empty($pos) ? '' : substr($file['filename'], $pos + 1);
+
+        $file['fileSize']   = empty($params['fileSize']) ? 0 : $params['fileSize'];
+        $file['status']     = 'uploading';
+        $file['targetId']   = $params['targetId'];
+        $file['targetType'] = $params['targetType'];
+        $file['storage']    = 'local';
+
+        $file['type'] = FileToolkit::getFileTypeByExtension($file['ext']);
+
+        $file['updatedUserId'] = empty($params['userId']) ? 0 : $params['userId'];
+        $file['updatedTime']   = time();
+        $file['createdUserId'] = $file['updatedUserId'];
+        $file['createdTime']   = $file['updatedTime'];
+
+        $file['hashId'] = "{$file['targetType']}/{$file['targetId']}/{$file['filename']}";
+
+        $file['convertHash']   = "ch-{$file['hashId']}";
+        $file['convertStatus'] = 'none';
+
+        return $file;
+    }
+
+    public function moveFile($targetType, $targetId, $originalFile = null)
+    {
+        $errors = FileToolkit::validateFileExtension($originalFile);
+
+        if ($errors) {
+            @unlink($originalFile->getRealPath());
+            throw $this->createServiceException("该文件格式，不允许上传。");
+        }
+
+        $targetPath = $this->getFilePath($targetType, $targetId);
+
+        $filename = FileToolkit::generateFilename(FileToolkit::getFileExtension($originalFile));
+        $originalFile->move($targetPath, $filename);
+    }
+
+    protected function getFilePath($targetType, $targetId)
+    {
+        $baseDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
+        return $baseDirectory.DIRECTORY_SEPARATOR.$targetType.DIRECTORY_SEPARATOR.$targetId;
     }
 
     public function finishedUpload($file, $params)
@@ -64,19 +110,14 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         $uploadParams['uploadMode']          = 'local';
         $uploadParams['url']                 = "/uploadfile/upload?targetId={$params['targetId']}&targetType={$params['targetType']}";
         $uploadParams['postParams']          = array();
-        $uploadParams['postParams']['token'] = $this->getUserService()->makeToken('fileupload', $params['userId'], strtotime('+ 2 hours'));
+        $uploadParams['postParams']['token'] = $this->getUserService()->makeToken('fileupload', $params['userId'], strtotime('+ 2 hours'), $params);
 
         return $uploadParams;
     }
 
     protected function getFileFullPath($file)
     {
-        if (empty($file['isPublic'])) {
-            $baseDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
-        } else {
-            $baseDirectory = $this->getKernel()->getParameter('topxia.upload.public_directory');
-        }
-
+        $baseDirectory = $this->getKernel()->getParameter('topxia.disk.local_directory');
         return $baseDirectory.DIRECTORY_SEPARATOR.$file['hashId'];
     }
 

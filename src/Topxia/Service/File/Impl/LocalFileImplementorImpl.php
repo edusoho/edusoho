@@ -26,10 +26,6 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
         $uploadFile = array();
 
-        $uploadFile['storage']    = 'local';
-        $uploadFile['targetId']   = $targetId;
-        $uploadFile['targetType'] = $targetType;
-
         $uploadFile['filename'] = $originalFile->getClientOriginalName();
 
         $uploadFile['ext']      = FileToolkit::getFileExtension($originalFile);
@@ -68,7 +64,6 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
 
     public function updateFile($file, $fields)
     {
-      
     }
 
     public function deleteFile($file)

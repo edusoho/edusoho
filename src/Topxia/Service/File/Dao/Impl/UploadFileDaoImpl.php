@@ -126,7 +126,7 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
             throw $this->createDaoException('Insert Course File disk file error.');
         }
 
-        return $this->getFile($this->getConnection()->lastInsertId());
+        return $this->getFile($file['id']);
     }
 
     public function updateFile($id, array $fields)
