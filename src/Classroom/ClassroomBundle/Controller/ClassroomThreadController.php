@@ -17,7 +17,7 @@ class ClassroomThreadController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
         if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服',array('%name%'=>$classroomSetting['name'])),'',3,$this->generateUrl('homepage'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';
@@ -46,21 +46,21 @@ class ClassroomThreadController extends BaseController
     public function createAction(Request $request, $classroomId, $type)
     {
         if(!in_array($type, array('discussion', 'question', 'event'))) {
-            throw $this->createAccessDeniedException('类型参数有误!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('类型参数有误!'));
         }
 
         $user = $this->getCurrentUser();
         if(!$user->isLogin()) {
             $request->getSession()->set('_target_path', $this->generateUrl('classroom_thread_create', array('classroomId'=>$classroomId,'type' => $type)));
-            return $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('你好像忘了登录哦？'), null, 3000, $this->generateUrl('login'));
         }
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
 
         if ($type == 'event' && !$this->getClassroomService()->canCreateThreadEvent(array('targetId' => $classroomId))) {
-            throw $this->createAccessDeniedException('无权限创建活动!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权限创建活动!'));
         } else if (in_array($type, array('discussion', 'question')) && !$this->getClassroomService()->canTakeClassroom($classroomId, true)) {
-            throw $this->createAccessDeniedException('无权限创建话题!');
+            throw $this->createAccessDeniedException($this->getServiceKernel()->trans('无权限创建话题!'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -89,7 +89,7 @@ class ClassroomThreadController extends BaseController
 
         $classroom = $this->getClassroomService()->getClassroom($classroomId);
         if(!$this->getClassroomService()->canLookClassroom($classroomId)){ 
-                return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
+                return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服',array('%name%'=>$classroomSetting['name'])),'',3,$this->generateUrl('homepage'));
             }
         $thread = $this->getThreadService()->getThread($threadId);
 
@@ -129,10 +129,10 @@ class ClassroomThreadController extends BaseController
 
         $member = $user ? $this->getClassroomService()->getClassroomMember($classroom['id'], $user['id']) : null;
          if(!$this->getClassroomService()->canLookClassroom($classroom['id'])){ 
-            return $this->createMessageResponse('info', "非常抱歉，您无权限访问该{$classroomSetting['name']}，如有需要请联系客服",'',3,$this->generateUrl('homepage'));
+            return $this->createMessageResponse('info', $this->getServiceKernel()->trans('非常抱歉，您无权限访问该%name%，如有需要请联系客服',array('%name%'=>$classroomSetting['name'])),'',3,$this->generateUrl('homepage'));
         }
         if (empty($thread)) {
-            return $this->createMessageResponse('error', '帖子已不存在');
+            return $this->createMessageResponse('error', $this->getServiceKernel()->trans('帖子已不存在'));
         }
 
         $layout = 'ClassroomBundle:Classroom:layout.html.twig';

@@ -19,7 +19,7 @@ define(function(require, exports, module) {
             var price = $("#price").val();
             var rate = $("#coinPrice").data('rate');
             var name = $("#coinPrice").data('name');
-            $("#coinPrice").text('相当于'+price*rate+name);
+            $("#coinPrice").text(Translator.trans('相当于')+price*rate+name);
 
         });
 

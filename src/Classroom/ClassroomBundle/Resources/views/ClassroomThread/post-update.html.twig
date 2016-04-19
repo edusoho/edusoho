@@ -2,16 +2,16 @@
 
 {% set post = post|default(null) %}
 
-{% block title %}{% if post %}编辑帖子{% else %}回复帖子{% endif %} - {{ parent() }}{% endblock %}
+{% block title %}{% if post %}{{'编辑帖子'|trans}}{% else %}{{'回复帖子'|trans}}{% endif %} - {{ parent() }}{% endblock %}
 
 {% set script_controller = 'thread/thread-post-form' %}
 
 {% block main %}
 
   <ul class="breadcrumb">
-    <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}">话题</a></li>
+    <li><a href="{{ path(target.type ~ '_threads', {(target.type ~ 'Id'): target.id}) }}">{{'话题'|trans}}</a></li>
     <li><a href="{{ path(target.type ~ '_thread_show', {(target.type ~ 'Id'): target.id, threadId: thread.id}) }}">{{ thread.title|plain_text(10) }}</a></li>
-    <li class="active">编辑帖子</li>
+    <li class="active">{{'编辑帖子'|trans}}</li>
   </ul>
 
   {{ render(controller('TopxiaWebBundle:Thread:postUpdate', {request:app.request, target:{type:'classroom', id:classroom.id}, thread:thread, post:post})) }}

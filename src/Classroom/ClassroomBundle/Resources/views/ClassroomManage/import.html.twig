@@ -1,6 +1,6 @@
 {% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
 
-{% block title %}导入管理 - {{ parent() }}{% endblock %}
+{% block title %}{{'导入管理'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'students' %}
 
 {% block main %}
@@ -8,9 +8,9 @@
 	{{ render(controller('TopxiaWebBundle:Importer:ValidateExcelInfo',{request:app.request, target:{type:'classroom', id:classroom.id}})) }}
  {% else %}
 	<div class="panel panel-default panel-col">
-		<div class="panel-heading">学员批量导入</div>
+		<div class="panel-heading">{{'学员批量导入'|trans}}</div>
  	 	<div class="panel-body">
- 	 		<div class="empty">未发布{{setting("classroom.name")|default("班级")}}不能导入学员!</div>
+ 	 		<div class="empty">{{'未发布%name%不能导入学员!'|trans({'%name%':setting("classroom.name")|default('班级'|trans)})}}</div>
  	 	</div>
  	</div>
  {% endif %}

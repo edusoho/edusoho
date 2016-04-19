@@ -6,16 +6,16 @@
     <form class="form-inline">
       <div class="form-group">
         <select class="form-control" name="keywordType">
-          {{ select_options({title:'标题', content: '内容'}, app.request.get('keywordType')) }}
+          {{ select_options({title:'标题'|trans, content: '内容'|trans}, app.request.get('keywordType')) }}
         </select>
       </div>
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="关键词" name="keyword" value="{{ app.request.get('keyword') }}">
+        <input class="form-control" type="text" placeholder="{{'关键词'|trans}}" name="keyword" value="{{ app.request.get('keyword') }}">
       </div>
       <div class="form-group">
-        <input class="form-control" type="text" placeholder="作者" name="author" value="{{ app.request.get('author') }}">
+        <input class="form-control" type="text" placeholder="{{'作者'|trans}}" name="author" value="{{ app.request.get('author') }}">
       </div>
-      <button class="btn btn-primary" type="submit">搜索</button>
+      <button class="btn btn-primary" type="submit">{{'搜索'|trans}}</button>
     </form>
   </div>
   <div id="thread-table-container">
@@ -23,10 +23,10 @@
       <thead>
         <tr>
           <th width="5%"><input type="checkbox" data-role="batch-select"></th>
-          <th width="60%">帖子</th>
-          <th width="10%">回复/查看</th>
-          <th width="15%">作者</th>
-          <th width="10%">操作</th>
+          <th width="60%">{{'帖子'|trans}}</th>
+          <th width="10%">{{'回复/查看'|trans}}</th>
+          <th width="15%">{{'作者'|trans}}</th>
+          <th width="10%">{{'操作'|trans}}</th>
         </tr>
       </thead>
       <body>
@@ -38,8 +38,8 @@
             <td>
               <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}" target="_blank"><strong>{{ thread.title }}</strong></a>
               <div class="short-long-text">
-                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">(展开)</span></div>
-                <div class="long-text">{{ thread.content|raw }} <span class="trigger">(收起)</span></div>
+                <div class="short-text text-sm text-muted">{{ thread.content|plain_text(60) }} <span class="trigger">({{'展开'|trans}})</span></div>
+                <div class="long-text">{{ thread.content|raw }} <span class="trigger">({{'收起'|trans}})</span></div>
               </div>
               
               <div class="text-sm mts">
@@ -53,16 +53,16 @@
               {{ admin_macro.user_link(author) }} <br />
               <span class="text-muted text-sm">{{ thread.createdTime|date('Y-n-d H:i:s') }}</span>
             </td>
-            <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="帖子" data-url="{{ path('admin_classroom_thread_delete', {threadId:thread.id}) }}">删除</button></td>
+            <td><button class="btn btn-default btn-sm" data-role="item-delete" data-name="{{'帖子'|trans}}" data-url="{{ path('admin_classroom_thread_delete', {threadId:thread.id}) }}">{{'删除'|trans}}</button></td>
           </tr>
         {% else %}
-          <tr><td colspan="20"><div class="empty">暂无帖子记录</div></td></tr>
+          <tr><td colspan="20"><div class="empty">{{'暂无帖子记录'|trans}}</div></td></tr>
         {% endfor %}
       </body>
     </table>
     <div class="mbm">
-      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> 全选</label>
-      <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="帖子" data-url="{{ path('admin_classroom_thread_batch_delete') }}">删除</button>
+      <label class="checkbox-inline"><input type="checkbox" data-role="batch-select"> {{'全选'|trans}}</label>
+      <button class="btn btn-default btn-sm mlm" data-role="batch-delete" data-name="{{'帖子'|trans}}" data-url="{{ path('admin_classroom_thread_batch_delete') }}">{{'删除'|trans}}</button>
     </div>
   </div>
   <nav class="text-center">

@@ -10,26 +10,26 @@ define(function(require, exports, module) {
 
 		$table.on('click','.close-classroom,.open-classroom,.cancel-recommend-classroom',function(){
 			var $trigger = $(this);
-		if (!confirm($trigger.attr('title') + '吗？')) {
+		if (!confirm(Translator.trans('%title%吗？',{title:$trigger.attr('title')}))) {
 				return ;
 			}
 		$.post($(this).data('url'), function(html){
-                Notify.success($trigger.attr('title') + '成功！');
+                Notify.success(Translator.trans('%title%成功！',{title:$trigger.attr('title')}));
                  var $tr = $(html);
                 $('#' + $tr.attr('id')).replaceWith($tr);
             }).error(function(){
-                Notify.danger($trigger.attr('title') + '失败');
+                Notify.danger(Translator.trans('%title%失败',{title:$trigger.attr('title')}));
             });
 
 		});
 
 
         $('.delete-classroom').on('click', function(){
-            if (!confirm('真的要删除该班级吗？')) {
+            if (!confirm(Translator.trans('真的要删除该班级吗？'))) {
                 return ;
             }
             $.post($(this).data('url'), function(){
-                Notify.success('删除成功！');
+                Notify.success(Translator.trans('删除成功！'));
                 window.location.reload();
             });
         });

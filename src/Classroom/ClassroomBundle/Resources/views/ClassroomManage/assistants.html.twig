@@ -1,6 +1,6 @@
 {% extends 'ClassroomBundle:ClassroomManage:layout.html.twig' %}
 
-{% block title %}助教设置 - {{ parent() }}{% endblock %}
+{% block title %}{{'助教设置'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'assistant' %}
 {% set script_controller = 'classroombundle/controller/classroom/manage/assistants' %}
@@ -37,26 +37,26 @@
 </style>
        
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">助教设置</div>
+  <div class="panel-heading">{{'助教设置'|trans}}</div>
   <div class="panel-body">
 
     <form id="teachers-form" class="form-horizontal" method="post">
       {{ web_macro.flash_messages() }}
 
       <div class="form-group" id="teachers-form-group">
-        <label class="col-md-2 control-label">设置助教</label>
+        <label class="col-md-2 control-label">{{'设置助教'|trans}}</label>
         <div class="col-md-8 controls">
           <ul class="list-group teacher-list-group sortable-list" id="teacher-list-group" data-role="list" style="display:none;"></ul>
           <div class="input-group">
             {% set url = path('classroom_assistants_match', {classroomId:classroom.id}) ~ '?q={{query}}' %}
             <input class="form-control" id="teacher-input" type="text" data-role="item-input" data-url="{{ url }}">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" data-role="item-add" >添加</button>
+              <button class="btn btn-default" type="button" data-role="item-add" >{{'添加'|trans}}</button>
             </span>
           </div>
           
           <p class="help-block">
-            <div>助教可在【{{setting("classroom.name")|default("班级")}}管理】中批改{{setting("classroom.name")|default("班级")}}作业和试卷，并且可以在{{setting("classroom.name")|default("班级")}}讨论区创建活动</div>
+            <div>{{'助教可在【%name%管理】中批改%classroom%作业和试卷，并且可以在%classroomName%讨论区创建活动'|trans({'%name%':setting('classroom.name')|default('班级'|trans),'%classroom%':setting('classroom.name')|default('班级'|trans),'%classroomName%':setting('classroom.name')|default('班级'|trans)})}}</div>
           </p>
           <script type="text/plain" data-role="model">{{ assistants|json_encode|raw }}</script>
           <script type="text/x-handlebars-template" data-role="item-template">
@@ -67,7 +67,7 @@
                 <img src="{{ avatar }}" class="avatar-small">
                 <span class="nickname">{{ nickname }}</span>
                 <input type="hidden" name="ids[]" value="{{ id }}">     
-                <button  class="close delete-btn" data-role="item-delete" type="button" title="删除" >&times; </button>
+                <button  class="close delete-btn" data-role="item-delete" type="button" title="{{'删除'|trans}}" >&times; </button>
               </li>
             {% endverbatim %}
           </script>
@@ -77,7 +77,7 @@
 
       <div class="form-group">
         <div class="col-md-offset-2 col-md-8 controls">
-          <button type="submit" class="btn btn-fat btn-primary">保存</button>
+          <button type="submit" class="btn btn-fat btn-primary">{{'保存'|trans}}</button>
         </div>  
       </div>
 

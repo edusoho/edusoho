@@ -1,13 +1,13 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}我的话题 - {{ parent() }}{% endblock %}
+{% block title %}{{'我的话题'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-discussions' %}
 
 {% block main %}
 
 <div class="panel panel-default panel-col">
-  <div class="panel-heading">我的话题</div>
+  <div class="panel-heading">{{'我的话题'|trans}}</div>
 
   <div class="panel-body">
     {% include 'TopxiaWebBundle:MyThread:tab.html.twig'%}
@@ -26,39 +26,39 @@
               {% endif %}
               <div class="mbm">
                 {% if thread.type == 'question' %}
-                  <span class="label label-info" title="问答帖">问</span>
+                  <span class="label label-info" title="{{'问答帖'|trans}}">{{'问'|trans}}</span>
                 {% endif  %}
 
                 <a href="{{ path('classroom_thread_show', {classroomId:thread.targetId, threadId:thread.id}) }}"><strong>{{ thread.title }}</strong></a>
 
                 {% if thread.nice %}
-                  <span class="label label-warning" title="精华帖">精</span>
+                  <span class="label label-warning" title="{{'精华帖'|trans}}">{{'精'|trans}}</span>
                 {% endif %}
 
               </div>
               <div class="text-muted text-normal">
                 {% if classroom %}
-                  <span>发表于{{ setting('classroom.name')|default("班级") }}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-muted">{{ classroom.title }}</a></span>
+                  <span>{{'发表于%name%'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}<a href="{{ path('classroom_show', {id:classroom.id}) }}" class="link-muted">{{ classroom.title }}</a></span>
                 {% else %}
-                  <span>{{ setting('classroom.name')|default("班级") }}已删除</span>
+                  <span>{{ setting('classroom.name')|default("班级") }}{{'已删除'|trans}}</span>
                 {% endif %}
                 <span class="bullet">•</span>
                 {% if thread.postNum > 0 %}
                   {% set poster = users[thread.lastPostUserId] %}
-                  <span>最后回复 {{ web_macro.user_link(poster, 'link-muted') }}</span>
+                  <span>{{'最后回复'|trans}} {{ web_macro.user_link(poster, 'link-muted') }}</span>
                   ,
                   <span>{{ thread.lastPostTime|smart_time }}</span>
                   <span class="bullet">•</span>
                 {% endif %}
-                <span>{{ thread.hitNum }}浏览</span>
+                <span>{{ thread.hitNum }}{{'浏览'|trans}}</span>
               </div>
             </div>
           </li>
         {% else %}
           {% if type == 'question' %}
-            <li class="empty">你还没提过问题</li>
+            <li class="empty">{{'你还没提过问题'|trans}}</li>
           {% else %}
-            <li class="empty">你还没发表过话题</li>
+            <li class="empty">{{'你还没发表过话题'|trans}}</li>
           {% endif %}
 
         {% endif %}
@@ -71,7 +71,7 @@
     </nav>
 
     {% else %}
-      <div class="empty">你还没有发表过话题</div>
+      <div class="empty">{{'你还没有发表过话题'|trans}}</div>
     {% endif %}
   </div>
 </div>

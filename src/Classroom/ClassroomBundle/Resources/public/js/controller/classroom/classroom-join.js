@@ -17,7 +17,7 @@ define(function(require, exports, module) {
         });
 
         $(".cancel-refund").on('click', function(){
-            if (!confirm('真的要取消退款吗？')) {
+            if (!confirm(Translator.trans('真的要取消退款吗？'))) {
                 return false;
             }
 
@@ -27,7 +27,7 @@ define(function(require, exports, module) {
         });
         
         $("#quit").on('click', function(){
-            if (!confirm('确定退出班级吗？')) {
+            if (!confirm(Translator.trans('确定退出班级吗？'))) {
                 return false;
             }
 

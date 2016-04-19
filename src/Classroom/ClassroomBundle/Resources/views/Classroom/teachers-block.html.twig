@@ -5,7 +5,7 @@
 <div class="panel panel-default" id="class-teacher-column">
   <div class="panel-heading">
     <h3 class="panel-title"> 
-      <i class="es-icon es-icon-assignmentind"></i>班主任
+      <i class="es-icon es-icon-assignmentind"></i>{{'班主任'|trans}}
     </h3>
   </div>
   <div class="panel-body">
@@ -22,12 +22,12 @@
         {% if headTeacher.title|default('') %}
           <div class="content">{{ headTeacher.title }}</div>
         {% else %}
-          <div class="content">还没有头衔</div>
+          <div class="content">{{'还没有头衔'|trans}}</div>
         {% endif %}
       </div>
     </div>
     {% else %}
-      <div class="empty">该{{ setting('classroom.name')|default("班级") }}尚未设置班主任</div>
+      <div class="empty">{{'该%name%尚未设置班主任'|trans({'%name%':setting('classroom.name')|default('班级'|trans)})}}</div>
     {% endif %}
 
   </div>
