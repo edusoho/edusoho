@@ -277,6 +277,10 @@ class LoginBindController extends BaseController
 
         $user = $this->getAuthService()->register($registration, $type);
 
+        if (!empty($user) && !empty($oauthUser['avatar'])) {
+            $user = $this->getUserService()->changeAvatarFromImgUrl($user['id'], $oauthUser['avatar']);
+        }
+
         return $user;
     }
 
