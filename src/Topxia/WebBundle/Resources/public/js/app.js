@@ -25,7 +25,7 @@ define(function(require, exports, module) {
         for(var index in scripts) {
             exports.load(scripts[index]);
         }
-        
+
     }
 
     window.app.load = exports.load;
@@ -83,7 +83,7 @@ define(function(require, exports, module) {
     if (app.scheduleCrontab) {
         $.post(app.scheduleCrontab);
     }
-    
+
     $("i.hover-spin").mouseenter(function() {
         $(this).addClass("md-spin");
     }).mouseleave(function() {
@@ -119,11 +119,11 @@ define(function(require, exports, module) {
 	    }).mouseleave(function(event) {
 	        $(this).removeClass("open");
 	    });
-	    
+
 	} else {
         $("li.nav-hover >a").attr("data-toggle","dropdown");
 	}
-	
+
     if ($('.es-wrap [data-toggle="tooltip"]').length > 0) {
         $('.es-wrap [data-toggle="tooltip"]').tooltip({container: 'body'});
     }
@@ -133,9 +133,6 @@ define(function(require, exports, module) {
     }).blur(function () {
         $(this).prop("placeholder", "搜索").removeClass("active");
     });
-
-    require('jquery.lavalamp');
-        $(".nav.nav-tabs").lavaLamp();
 
     if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
         require('jquery.lavalamp');
