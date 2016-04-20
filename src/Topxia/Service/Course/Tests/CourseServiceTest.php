@@ -3713,7 +3713,7 @@ class CourseServiceTest extends BaseTestCase
         $courseLessonReplay = array('lessonId' => 1, 'courseId' => 1, 'title' => '录播回放', 'replayId' => '1', 'userId' => '1', 'createdTime' => time());
         $courseLessonReplay = $this->getCourseService()->addCourseLessonReplay($courseLessonReplay);
         $this->assertEquals('录播回放', $courseLessonReplay['title']);
-        $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1, 1);
+        $courseLessonReplay = $this->getCourseService()->getCourseLessonReplayByCourseIdAndLessonId(1, 1, 'course');
         $this->assertEquals('录播回放', $courseLessonReplay['title']);
     }
 

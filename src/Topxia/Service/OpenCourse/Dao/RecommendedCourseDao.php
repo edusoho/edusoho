@@ -5,15 +5,15 @@ interface RecommendedCourseDao
 {
     public function getRecommendedCourse($id);
 
+    public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type);
+
     public function findRecommendedCoursesByOpenCourseId($oepnCourseId);
 
     public function addRecommendedCourse($recommended);
 
     public function deleteRecommendedCourse($id);
 
-    public function update($id, $fields);
-
-    public function findRecommendCourse($openCourseId, $recommendCourseId);
+    public function updateRecommendedCourse($id, $fields);
 
     public function deleteRecommendByOpenCouseIdAndRecommendCourseId($openCourseId, $recommendCourseId);
 

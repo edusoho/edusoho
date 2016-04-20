@@ -2124,7 +2124,7 @@ open_course_manage_files_delete:
     methods: [POST]
 
 open_course_manage_course_pick:
-    pattern: /open/course/manage/{filter}/course/{id}/pick
+    pattern: /open/course/{id}/manage/recommend/pick/{filter}
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:pick,filter:'openCourse'}
 
 open_course_manage_lesson_replays_edit:
@@ -2141,11 +2141,11 @@ open_course_manage_student_export_csv:
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
 
 open_course_course_search:
-    pattern: /open/course/{filter}/course/{id}/search
+    pattern: /open/course/{id}/recommended/search/{filter}
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}
 
 open_course_recommended_course_select:
-    pattern: /open/course/{filter}/recommended/course/{id}/select
+    pattern: /open/course/{id}/recommended/select/{filter}
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:recommendedCoursesSelect}
 
 open_course_show:

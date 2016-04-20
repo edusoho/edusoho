@@ -6,6 +6,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Topxia\Service\OpenCourse\CourseProcessor\CourseProcessorFactory;
 
 class OpenCourseManageController extends BaseController
 {
@@ -213,18 +214,10 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $userIds   = array();
-        $coinPrice = 0;
-        $price     = 0;
-
         if ($request->getMethod() == 'POST') {
-            $courseIds = $request->request->get('courseIds');
+            $recommendIds = $request->request->get('recommendIds');
 
-            if (empty($courseIds)) {
-                $courseIds = array();
-            }
-
-            $this->getOpenCourseRecommendedService()->updateOpenCourseRecommendedCourses($id, $courseIds);
+            $this->getOpenCourseRecommendedService()->updateOpenCourseRecommendedCourses($id, $recommendIds);
 
             $this->setFlashMessage('success', "推荐课程修改成功");
 
@@ -238,24 +231,13 @@ class OpenCourseManageController extends BaseController
         $recommendedCourses = array();
 
         foreach ($recommends as $key => $recommend) {
-            $recommendedCourses[] = $this->getRecommendCourseData($recommend['recommendCourseId'], $recommend['origin']);
+            $recommendedCourses[$recommend['id']] = $this->getTypeCourseService($recommend['type'])->getCourse($recommend['recommendCourseId']);
         }
 
-        foreach ($recommendedCourses as $recommendedCourse) {
-            $userIds = array_merge($userIds, $course['teacherIds']);
-
-            if ($recommendedCourse['type'] == 'normal' || $recommendedCourse['type'] == 'live') {
-                $coinPrice += $recommendedCourse['coinPrice'];
-                $price += $recommendedCourse['price'];
-            }
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->_getTeacherUsers($recommendedCourses);
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-marketing.html.twig', array(
             'courses'   => $recommendedCourses,
-            'price'     => $price,
-            'coinPrice' => $coinPrice,
             'users'     => $users,
             'course'    => $course
         ));
@@ -263,46 +245,13 @@ class OpenCourseManageController extends BaseController
 
     public function pickAction(Request $request, $filter, $id)
     {
-        $user                    = $this->getCurrentUser();
         $course                  = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $existRecommendCourseIds = $this->getExistRecommendCourseIds($id);
+        
         $conditions              = $request->query->all();
-        $conditions['status']    = 'published';
-        $conditions['parentId']  = 0;
 
-        if ($filter == 'openCourse') {
-            $conditions['type']       = 'open';
-            $conditions['userId']     = $user['id'];
-            $conditions['excludeIds'] = $existRecommendCourseIds['openCourse'];
-        }
+        list($paginator, $courses)  = $this->_getPickCourseData($request, $id, $conditions, $filter);
 
-        if ($filter == 'otherCourse') {
-            $conditions['type']       = 'normal';
-            $conditions['userId']     = $user['id'];
-            $conditions['excludeIds'] = (empty($existRecommendCourseIds['course'])) ? null : $existRecommendCourseIds['course'];
-        }
-
-        if ($filter == 'normal') {
-            $conditions['excludeIds'] = (empty($existRecommendCourseIds['course'])) ? null : $existRecommendCourseIds['course'];
-        }
-
-        if (isset($conditions['title']) && $conditions['title'] == "") {
-            unset($conditions['title']);
-        }
-
-        $result    = $this->getPickCourseData($filter, $this->get('request'), $conditions);
-        $paginator = $result['paginator'];
-        $courses   = $result['courses'];
-
-        $courseIds = ArrayToolkit::column($courses, 'id');
-        $userIds   = array();
-
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users   = $this->_getTeacherUsers($courses);
 
         return $this->render('TopxiaWebBundle:OpenCourseManage:open-course-pick-modal.html.twig', array(
             'users'     => $users,
@@ -315,48 +264,13 @@ class OpenCourseManageController extends BaseController
 
     public function searchAction(Request $request, $id, $filter)
     {
-        $user = $this->getCurrentUser();
-        $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $existRecommendCourseIds = $this->getExistRecommendCourseIds($id);
-        $key                     = $request->request->get("key");
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        if (isset($key) && $key == "") {
-            unset($key);
-        }
+        $conditions = array("title" => $request->request->get('key'));
 
-        $conditions = array("title" => $key);
+        list($paginator, $courses)  = $this->_getPickCourseData($request, $id, $conditions, $filter);
 
-        $conditions['status']   = 'published';
-        $conditions['parentId'] = 0;
-
-        if ($filter == 'openCourse') {
-            $conditions['type']       = 'open';
-            $conditions['userId']     = $user['id'];
-            $conditions['excludeIds'] = $existRecommendCourseIds['openCourse'];
-        }
-
-        if ($filter == 'otherCourse') {
-            $conditions['type']       = 'normal';
-            $conditions['userId']     = $user['id'];
-            $conditions['excludeIds'] = (empty($existRecommendCourseIds['course'])) ? null : $existRecommendCourseIds['course'];
-        }
-
-        if ($filter == 'normal') {
-            $conditions['excludeIds'] = (empty($existRecommendCourseIds['course'])) ? null : $existRecommendCourseIds['course'];
-        }
-
-        $courses = $this->getSearchCourseData($filter, $conditions);
-
-        $courseIds = ArrayToolkit::column($courses, 'id');
-
-        $userIds = array();
-
-        foreach ($courses as &$course) {
-            $course['tags'] = $this->getTagService()->findTagsByIds($course['tags']);
-            $userIds        = array_merge($userIds, $course['teacherIds']);
-        }
-
-        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = $this->_getTeacherUsers($courses);
 
         return $this->render('TopxiaWebBundle:Course:course-select-list.html.twig', array(
             'users'   => $users,
@@ -368,27 +282,23 @@ class OpenCourseManageController extends BaseController
     public function recommendedCoursesSelectAction(Request $request, $id, $filter)
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $types  = array(
-            'openCourse'   => 'open_course',
-            'other_course' => 'course',
-            'normal'       => 'course'
-        );
+        $type = $this->_getType($filter);
 
-        $origin = $types[$filter];
-        $data   = $request->request->all();
-        $ids    = array();
+        $recommendNum = $this->getOpenCourseRecommendedService()->searchRecommendCount(array('openCourseId'=>$id));
 
-        if (isset($data['ids']) && $data['ids'] != "") {
-            $ids = $data['ids'];
-            $ids = explode(",", $ids);
-        } else {
-            return new Response('success');
+        $ids = $request->request->get('ids');
+
+        if (empty($ids)) {
+            return $this->createJsonResponse(array('result'=>true));
         }
 
-        $this->getOpenCourseRecommendedService()->addRecommendedCoursesToOpenCourse($id, $ids, $origin);
-        $this->setFlashMessage('success', "推荐课程添加成功");
+        if (($recommendNum + count($ids)) > 5) {
+            return $this->createJsonResponse(array('result'=>false,'message'=>'推荐课程数量不能超过5个！'));
+        }
 
-        return new Response('success');
+        $this->getOpenCourseRecommendedService()->addRecommendedCourses($id, $ids, $type);
+
+        return $this->createJsonResponse(array('result'=>true));
     }
 
     public function publishAction(Request $request, $id)
@@ -512,103 +422,109 @@ class OpenCourseManageController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    private function getOpenCourse($request, $conditions)
+    private function _getPickCourseData(Request $request, $openCourseId, $conditions, $filter)
+    {
+        $existRecommendCourseIds = $this->getExistRecommendCourseIds($openCourseId);
+
+        $conditions = $this->_filterConditions($conditions, $filter, $existRecommendCourseIds);
+
+        $type = $this->_getType($filter);
+
+        return $this->_getPageCourses($type, $this->get('request'), $conditions);
+    }
+
+    private function _getPageCourses($type, $request, $conditions)
     {
         $paginator = new Paginator(
             $request,
-            $this->getOpenCourseService()->searchCourseCount($conditions),
+            $this->getTypeCourseService($type)->searchCourseCount($conditions),
             5
         );
 
-        $courses = $this->getOpenCourseService()->searchCourses(
+        $courses = $this->getTypeCourseService($type)->searchCourses(
             $conditions,
             array('createdTime', 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-    }
 
-    private function getPickCourseData($type, $request, $conditions)
-    {
-        $types = array(
-            'openCourse'  => 'OpenCourseService',
-            'otherCourse' => 'CourseService',
-            'normal'      => 'CourseService'
-        );
-
-        $method = 'get'.$types[$type];
-
-        $paginator = new Paginator(
-            $request,
-            $this->$method()->searchCourseCount($conditions),
-            5
-        );
-
-        $courses = $this->$method()->searchCourses(
-            $conditions,
-            array('createdTime', 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
-        $result              = array();
-        $result['paginator'] = $paginator;
-        $result['courses']   = $courses;
-
-        return $result;
-    }
-
-    private function getSearchCourseData($type, $conditions)
-    {
-        $types = array(
-            'openCourse'  => 'OpenCourseService',
-            'otherCourse' => 'CourseService',
-            'normal'      => 'CourseService'
-        );
-
-        $method = 'get'.$types[$type];
-
-        $courses = $this->$method()->searchCourses(
-            $conditions,
-            array('createdTime', 'ASC'),
-            0,
-            5
-        );
-
-        return $courses;
-    }
-
-    private function getRecommendCourseData($courseId, $origin)
-    {
-        $types = array(
-            'open_course' => 'OpenCourseService',
-            'course'      => 'CourseService'
-        );
-
-        $method = 'get'.$types[$origin];
-
-        $course = $this->$method()->getCourse($courseId);
-        return $course;
+        return array($paginator, $courses);
     }
 
     private function getExistRecommendCourseIds($openCourseId)
     {
-        $existRecommendCourses = $this->getOpenCourseRecommendedService()->findRecommendedCoursesByOpenCourseId($openCourseId);
+        $openCoursesRecommend = $this->getOpenCourseRecommendedService()->searchRecommends(
+            array('openCourseId' => $openCourseId, 'type' => 'open'),
+            array('createdTime','DESC'),
+            0, PHP_INT_MAX
+        );
+
+        $normalCoursesRecommend = $this->getOpenCourseRecommendedService()->searchRecommends(
+            array('openCourseId' => $openCourseId, 'type' => 'normal'),
+            array('createdTime','DESC'),
+            0, PHP_INT_MAX
+        );
 
         $existIds = array();
 
-        if (!empty($existRecommendCourses)) {
-            foreach ($existRecommendCourses as $existRecommendCourse) {
-                if ($existRecommendCourse['origin'] == 'open_course') {
-                    $existIds['openCourse'][] = $existRecommendCourse['recommendCourseId'];
-                } elseif ($existRecommendCourse['origin'] == 'course') {
-                    $existIds['course'][] = $existRecommendCourse['recommendCourseId'];
-                }
-            }
-        }
-
-        $existIds['openCourse'][] = $openCourseId;
+        $existIds['openCourse'] = ArrayToolkit::column($openCoursesRecommend,'recommendCourseId');
+        $existIds['course']     = ArrayToolkit::column($normalCoursesRecommend,'recommendCourseId');
 
         return $existIds;
+    }
+
+    private function _getTeacherUsers($courses)
+    {
+        $userIds = array();
+        foreach ($courses as &$course) {
+
+            $userIds = array_merge($userIds, $course['teacherIds']);
+        }
+
+        $users = $this->getUserService()->findUsersByIds($userIds);
+
+        return $users;
+    }
+
+    private function _filterConditions($conditions, $filter, $excludeCourseIds)
+    {
+        $conditions['status'] = 'published';
+        
+        $user = $this->getCurrentUser();
+        if ($filter == 'openCourse') {
+            $conditions['userId']     = $user['id'];
+            $conditions['excludeIds'] = (empty($excludeCourseIds['openCourse'])) ? null : $excludeCourseIds['openCourse'];
+        }
+
+        if ($filter == 'otherCourse') {
+            $conditions['userId']     = $user['id'];
+            $conditions['parentId']   = 0;
+            $conditions['excludeIds'] = (empty($excludeCourseIds['course'])) ? null : $excludeCourseIds['course'];
+        }
+
+        if ($filter == 'normal') {
+            $conditions['parentId']   = 0;
+            $conditions['excludeIds'] = (empty($excludeCourseIds['course'])) ? null : $excludeCourseIds['course'];
+        }
+
+        if (isset($conditions['title']) && $conditions['title'] == "") {
+            unset($conditions['title']);
+        }
+
+        return $conditions;
+    }
+
+    private function _getType($filter)
+    {
+        $type = 'open';
+
+        if ($filter == 'openCourse') {
+            $type = 'open';
+        } else if ($filter == 'otherCourse' || $filter == 'normal') {
+            $type = 'normal';
+        }
+
+        return $type;
     }
 
     protected function getOpenCourseService()
@@ -619,6 +535,11 @@ class OpenCourseManageController extends BaseController
     protected function getOpenCourseRecommendedService()
     {
         return $this->getServiceKernel()->createService('OpenCourse.OpenCourseRecommendedService');
+    }
+
+    protected function getTypeCourseService($type)
+    {
+        return CourseProcessorFactory::create($type);
     }
 
     protected function getTagService()

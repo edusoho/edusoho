@@ -160,7 +160,7 @@ class OpenCourseServiceTest extends BaseTestCase
 
         $updateFields = array('title' => 'openLiveCourseLessonUpdate');
 
-        $updateLesson = $this->getOpenCourseService()->updateLesson($lesson1['id'], $updateFields);
+        $updateLesson = $this->getOpenCourseService()->updateLesson($lesson1['id'], $lesson1['id'], $updateFields);
 
         $this->assertEquals($updateFields['title'], $updateLesson['title']);
     }
@@ -187,12 +187,12 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals($createMember['userId'], $member['userId']);
     }
 
-    public function testGetMemberByCourseIdAndUserId()
+    public function testGetCourseMember()
     {
         $courseMember1 = $this->_createLoginMember();
         $courseMember2 = $this->_createGuestMember();
 
-        $member = $this->getOpenCourseService()->getMemberByCourseIdAndUserId(1, 0);
+        $member = $this->getOpenCourseService()->getCourseMember(1, 0);
 
         $this->assertEquals($courseMember2['mobile'], $member['mobile']);
     }

@@ -16,8 +16,14 @@
 <ul class="course-wide-list">
   {% if courses %}
   {% for course in courses %}
+    {% if course.type == 'open' or course.type == 'liveOpen' %}
+      {% set showUrl = path('open_course_show',{courseId:course.id}) %}
+    {% else %}
+      {% set showUrl = path('course_show',{id:course.id}) %}
+    {% endif %}
+
   <li class="course-item clearfix"   data-id="{{course.id}}" >
-    <a class="course-picture-link" href="{{ path('course_show', {id:course.id}) }}" target="_blank">
+    <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
       <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
@@ -48,7 +54,7 @@
 
         </div>
 
-      <h4 class="course-title"><a href="{{ path('course_show', {id:course.id}) }}" target="_blank">{{ course.title }}</a>
+      <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ course.title }}</a>
       {% if course.type == 'normal' or course.type == 'live' %}
       {% if course.serializeMode=='serialize' %}
         <span class="label label-success ">{{'更新中'|trans}}</span>

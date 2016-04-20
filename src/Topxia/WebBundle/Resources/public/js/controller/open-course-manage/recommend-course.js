@@ -8,16 +8,9 @@ define(function(require, exports, module) {
         
         $(".course-list-group").on('click','.close',function(){
 
-            var courseId=$(this).data('id');
-
-            var currentPrice=parseFloat($('.course-price-'+courseId).data('price')).toFixed(2);
-            var price=parseFloat($('#price').html()).toFixed(2);
-            price=parseFloat(price-currentPrice).toFixed(2);
-
-            var price=parseFloat($('#price').html(price)).toFixed(2);
+            var courseId = $(this).data('id');
 
             $('.item-'+courseId).remove();
-
         });
 
         var $list = $(".course-list-group").sortable({

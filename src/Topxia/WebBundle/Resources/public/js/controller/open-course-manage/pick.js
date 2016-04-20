@@ -1,12 +1,14 @@
 define(function(require, exports, module) {
 
     var Widget = require('widget');
+    var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
 
         require("../../controller/open-course-manage/tab-manage").run();
 
         var ids=[];
+        var $searchForm = $('.form-search');
 
         $url=$('#sure').data('url');
        
@@ -16,12 +18,16 @@ define(function(require, exports, module) {
             $.ajax({
                 type : "post",
                 url : $('#sure').data('url'),
-                data : "ids="+ids,
+                data : {'ids':ids},
                 async : false,
-                success : function(data){
+                success : function(response){
+                    if (!response['result']) {
+                        Notify.danger(response['message']);
+                    } else {
+                        $('.modal').modal('hide');
+                        window.location.reload();
+                    }
                     
-                    $('.modal').modal('hide');
-                    window.location.reload();
                 }
 
              });
@@ -30,26 +36,19 @@ define(function(require, exports, module) {
 
         $('#search').on('click',function(){
 
-            if($('[name=key]').val() != "" ){
+            $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
 
-                $.post($(this).data('url'),$('.form-search').serialize(),function(data){
-
-                    $('.courses-list').html(data);
-                });
-            }
-
+                $('.courses-list').html(data);
+            });
         });
 
         $('#enterSearch').keydown(function(event){
 
-            if(event.keyCode==13){
-
-                $.post($(this).data('url'),$('.form-search').serialize(),function(data){
+            if(event.keyCode == 13){
+                $.post($searchForm.attr('action'),$searchForm.serialize(),function(data){
 
                     $('.courses-list').html(data);
-                
                 });
-                return false;
             }
         });
        

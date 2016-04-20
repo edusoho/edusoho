@@ -63,7 +63,7 @@ class CourseLessonReplayDaoImpl extends BaseDao implements CourseLessonReplayDao
     {
         $that = $this;
 
-        return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}", $courseId, $lessonId, function ($courseId, $lessonId, $lessonType) use ($that) {
+        return $this->fetchCached("courseId:{$courseId}:lessonId:{$lessonId}:lessonType:{$lessonType}", $courseId, $lessonId,$lessonType, function ($courseId, $lessonId, $lessonType) use ($that) {
             $sql = "SELECT * FROM {$that->getTable()} WHERE courseId=? AND lessonId = ? AND type = ? ";
             return $that->getConnection()->fetchAssoc($sql, array($courseId, $lessonId, $lessonType));
         }

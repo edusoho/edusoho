@@ -21,6 +21,18 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         );
     }
 
+    public function getRecommendedCourseByCourseIdAndType($openCourseId, $recommendCourseId, $type)
+    {
+        $that = $this;
+
+        return $this->fetchCached("openCourseId:{$openCourseId}:recommendCourseId:{$recommendCourseId}:type:{$type}", $openCourseId, $recommendCourseId, $type, function ($openCourseId, $recommendCourseId, $type) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE openCourseId = ? AND recommendCourseId = ? AND type = ? ORDER BY seq ASC;";
+            return $that->getConnection()->fetchAssoc($sql, array($openCourseId, $recommendCourseId, $type)) ?: null;
+        }
+
+        );
+    }
+
     public function findRecommendedCoursesByOpenCourseId($openCourseId)
     {
         $that = $this;
@@ -54,23 +66,11 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
         return $result;
     }
 
-    public function update($id, $fields)
+    public function updateRecommendedCourse($id, $fields)
     {
         $this->getConnection()->update($this->table, $fields, array('id' => $id));
         $this->clearCached();
         return $this->getRecommendedCourse($id);
-    }
-
-    public function findRecommendCourse($openCourseId, $recommendCourseId)
-    {
-        $that = $this;
-
-        return $this->fetchCached("openCourseId:{$openCourseId}:recommendCourseId:{$recommendCourseId}", $openCourseId, $recommendCourseId, function ($openCourseId, $recommendCourseId) use ($that) {
-            $sql = "SELECT * FROM {$that->getTable()} where openCourseId = ? AND recommendCourseId = ? LIMIT 1";
-            return $that->getConnection()->fetchAssoc($sql, array($openCourseId, $recommendCourseId)) ?: null;
-        }
-
-        );
     }
 
     public function deleteRecommendByOpenCouseIdAndRecommendCourseId($openCourseId, $recommendCourseId)
@@ -106,9 +106,10 @@ class RecommendedCourseDaoImpl extends BaseDao implements RecommendedCourseDao
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'open_course_recommend')
+            ->andWhere('id = :id')
+            ->andWhere('id IN (:ids)')
             ->andWhere('userId = :userId')
             ->andWhere('openCourseId = :openCourseId')
-            ->andWhere('origin = :origin')
             ->andWhere('recommendCourseId = :recommendCourseId')
             ->andWhere('type = :type')
             ->andWhere('createdTime >= :startTimeGreaterThan')
