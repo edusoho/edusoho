@@ -110,6 +110,7 @@ class MaterialLibController extends BaseController
         //$file = $this->tryAccessFile($fileId);
 
         return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+            'request'  => $request,
             'globalId' => $globalId
         ));
     }
