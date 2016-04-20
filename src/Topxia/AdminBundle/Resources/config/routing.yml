@@ -925,9 +925,6 @@ admin_app_package_update_check_newest:
     defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkNewest }
     methods: [POST]
 
-admin_category:
-    pattern: /category
-    defaults: { _controller: TopxiaAdminBundle:Category:index }
 
 admin_category_create:
     pattern: /category/create
@@ -946,10 +943,6 @@ admin_category_delete:
     defaults: { _controller: TopxiaAdminBundle:Category:delete }
     methods: [POST]
 
-admin_category_upload:
-    pattern: /category/uploadfile
-    defaults: { _controller: TopxiaAdminBundle:Category:uploadFile }
-    methods: [POST]
 
 admin_file:
     pattern:  /file

@@ -839,11 +839,6 @@ course_manage_question_preview:
     pattern: /course/{courseId}/manage/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
 
-course_manage_question_upload:
-    pattern: /course/{courseId}/manage/question/uploadfile/{type}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
-    methods: [POST]
-
 course_manage_upload_question_attachment:
     pattern:  /course/{id}/manage/upload/question/attachment/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }

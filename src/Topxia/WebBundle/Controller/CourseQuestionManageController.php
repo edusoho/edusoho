@@ -5,7 +5,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CourseQuestionManageController extends BaseController
 {
@@ -178,17 +177,6 @@ class CourseQuestionManageController extends BaseController
         }
 
         return $this->createJsonResponse(true);
-    }
-
-    public function uploadFileAction(Request $request, $courseId, $type)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-
-        if ($request->getMethod() == 'POST') {
-            $originalFile = $this->get('request')->files->get('file');
-            $file         = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
-            return new Response(json_encode($file));
-        }
     }
 
     /**

@@ -6,7 +6,6 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -816,11 +815,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
-    }
-
-    public function uploadCourseFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
-    {
-        return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
     }
 
     public function setCoursePrice($courseId, $currency, $price)
