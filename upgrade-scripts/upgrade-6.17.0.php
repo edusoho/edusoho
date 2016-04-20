@@ -152,7 +152,7 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->uninstallApp('MaterialLib');
             return array(
                 'index'    => 1,
-                'message'  => '正在升级数据，目前是 0% 进度',
+                'message'  => '正在升级数据...',
                 'progress' => 4.4
             );
         }
@@ -169,7 +169,7 @@ class EduSohoUpgrade extends AbstractUpdater
         if ($index <= $maxPage) {
             return array(
                 'index'    => $index + 1,
-                'message'  => '正在升级数据，目前是 '.intval(($index - 1) / $maxPage * 100).'% 进度',
+                'message'  => '正在升级数据...',
                 'progress' => 4.4
             );
         }
