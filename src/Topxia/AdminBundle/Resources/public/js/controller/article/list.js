@@ -7,12 +7,12 @@ define(function(require, exports, module) {
 			});
 		});
 
-                         $("#article-property-tips").popover({
-                         	             html: true,
-                                       trigger: 'hover',
-                                       placement: 'left',
-                                       content: $("#article-property-tips-html").html()
-                         });
+		$("#article-property-tips").popover({
+			html: true,
+			trigger: 'hover',
+			placement: 'left',
+			content: $("#article-property-tips-html").html()
+		});
 
 		$("#article-table").on('click', '[data-role=publish-item]', function(){
 			$.post($(this).data('url'), function(){
