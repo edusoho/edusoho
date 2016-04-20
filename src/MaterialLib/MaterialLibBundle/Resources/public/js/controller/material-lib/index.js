@@ -115,8 +115,10 @@ define(function(require, exports, module) {
                         self.element.parent().prev().html('资源详情');
                         self.element.parent().append(resp);
 
-                        require('jquery.lavalamp');
-                        $(".nav.nav-tabs").lavaLamp();
+                        if($(".nav.nav-tabs").length > 0 && !navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+                            require('jquery.lavalamp');
+                            $(".nav.nav-tabs").lavaLamp();
+                        }
 
                         new DetailWidget({
                            element:'#material-detail',
@@ -173,6 +175,8 @@ define(function(require, exports, module) {
 
                 if ($target.parent().parent().siblings('input[name="sourceFrom"]').val() == 'my') {
                     this.set('attribute','mine');
+                    $('#myShare').removeClass('hide');
+                    $('#shareMaterials').removeClass('hide');
                     $('.js-manage-batch-btn').removeClass('hide');
                     $('.js-upload-file-btn').removeClass('hide');
                     var mode = this.get('model');
@@ -183,6 +187,8 @@ define(function(require, exports, module) {
                     }
                 } else {
                     this.set('attribute','others');
+                    $('#myShare').addClass('hide');
+                    $('#shareMaterials').addClass('hide');
                     $('.js-manage-batch-btn').addClass('hide');
                     $('.js-upload-file-btn').addClass('hide');
                     $('.js-batch-tag-btn').hide();
