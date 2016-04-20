@@ -56,14 +56,27 @@ class CardDaoImpl extends BaseDao implements CardDao
         return $this->getConnection()->fetchAll($sql, array($userId, $cardType)) ?: array();
     }
 
+    public function searchCards($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'cardId')
-                        ->andWhere('cardType = :cardType')
-                        ->andWhere('deadline = :deadline')
-                        ->andWhere('status = :status')
-                        ->andWhere('userId = :userId');
+            ->from($this->table, 'cardId')
+            ->andWhere('cardType = :cardType')
+            ->andWhere('deadline = :deadline')
+            ->andWhere('status = :status')
+            ->andWhere('userId = :userId')
+            ->andWhere('useTime >= :startDateTime')
+            ->andWhere('useTime < :endDateTime');
 
         return $builder;
     }

@@ -98,13 +98,68 @@ class InviteController extends BaseController
 
     public function couponAction(Request $request, $filter)
     {
-        if ($filter = 'invited') {
-        } elseif ($filter = 'invite') {
+        $conditions = $request->query->all();
+
+        if (isset($conditions['nickname']) && $conditions['nickname'] == "") {
+            unset($conditions['nickname']);
         }
 
-        $inviteInformations = null;
+        $conditions['startDateTime'] = !empty($conditions['startDateTime']) ? strtotime($conditions['startDateTime']) : null;
+        $conditions['endDateTime']   = !empty($conditions['endDateTime']) ? strtotime($conditions['endDateTime']) : null;
+        $cards                       = $this->getCardService()->searchCards(
+            $conditions,
+            array('useTime', 'DESC'),
+            0,
+            9999
+        );
+
+        $coupons = $this->getCouponService()->searchCoupons(
+            array('ids' => ArrayToolkit::column($cards, 'cardId')),
+            array('id', 'DESC'),
+            0,
+            9999
+        );
+
+        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($cards, 'userId'));
+
+        if ($filter == 'invite') {
+            $map['inviteUserCardIds'] = empty($cards) ? array(-1) : ArrayToolkit::column($cards, 'cardId');
+        } else {
+            $map['invitedUserCardIds'] = empty($cards) ? array(-1) : ArrayToolkit::column($cards, 'cardId');
+        }
+
+        $paginator = new Paginator(
+
+            $this->get('request'),
+
+            $this->getInviteRecordService()->searchRecordCount($map),
+
+            20
+        );
+
+        $cardInformations = $this->getInviteRecordService()->searchRecords(
+            $map,
+            array('id', 'ASC'),
+
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+
+        );
+
+        $cards   = ArrayToolkit::index($cards, 'cardId');
+        $coupons = ArrayToolkit::index($coupons, 'id');
+        $orders  = ArrayToolkit::index($orders, 'id');
+
         return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
-            'inviteInformations' => $inviteInformations
+
+            'cardInformations' => $cardInformations,
+            'filter'           => $filter,
+            'users'            => $users,
+            'coupons'          => $coupons,
+            'cards'            => $cards,
+            'orders'           => $orders
         ));
     }
 
@@ -121,5 +176,15 @@ class InviteController extends BaseController
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getCardService()
+    {
+        return $this->getServiceKernel()->createService('Card.CardService');
+    }
+
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
     }
 }

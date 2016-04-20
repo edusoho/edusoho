@@ -36,8 +36,19 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->updateInviteRecord($invitedUserId, $fields);
     }
 
+    public function searchRecordCount($conditions)
+    {
+        return $this->getInviteRecordDao()->searchRecordCount($conditions);
+    }
+
+    public function searchRecords($conditions, $orderBy, $start, $limit)
+    {
+        return $this->getInviteRecordDao()->searchRecords($conditions, $orderBy, $start, $limit);
+    }
+
     private function getInviteRecordDao()
     {
         return $this->createDao('User.InviteRecordDao');
     }
+
 }

@@ -14,6 +14,8 @@ interface CardService
 
     public function getCardByCardIdAndCardType($cardId, $cardType);
 
+    public function searchCards($conditions, $orderBy, $start, $limit);
+
     public function updateCardByCardIdAndCardType($cardId, $cardType, $fields);
 
     public function findCardsByUserIdAndCardType($userId, $cardType);
@@ -21,4 +23,5 @@ interface CardService
     public function findCardDetailByCardTypeAndCardId($cardType, $id);
 
     public function findCardDetailsByCardTypeAndCardIds($cardType, $ids);
+
 }

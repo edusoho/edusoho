@@ -42,4 +42,32 @@ class InviteRecordDaoImpl extends BaseDao implements InviteRecordDao
     {
         return $this->getConnection()->update($this->table, $fields, array('invitedUserId' => $invitedUserId));
     }
+
+    public function searchRecordCount($conditions)
+    {
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
+    }
+
+    public function searchRecords($conditions, $orderBy, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
+    private function _createSearchQueryBuilder($conditions)
+    {
+        return $this->createDynamicQueryBuilder($conditions)
+            ->from($this->table, 'invite_record')
+            ->andWhere('inviteUserCardId = :inviteUserCardId')
+            ->andWhere('invitedUserCardId = :invitedUserCardId')
+            ->andWhere('inviteUserCardId IN ( :inviteUserCardIds)')
+            ->andWhere('invitedUserCardId IN ( :invitedUserCardIds)');
+    }
 }

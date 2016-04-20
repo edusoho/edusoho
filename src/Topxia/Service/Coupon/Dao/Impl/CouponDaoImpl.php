@@ -52,17 +52,17 @@ class CouponDaoImpl extends BaseDao implements CouponDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     public function searchCouponsCount(array $conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
         return $builder->execute()->fetchColumn(0);
     }
 
@@ -118,19 +118,20 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'coupon')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('targetId = :targetId')
-                        ->andWhere('targetType = :targetType')
-                        ->andWhere('batchId = :batchId')
-                        ->andWhere('batchId <> :batchIdNotEqual')
-                        ->andWhere('type = :type')
-                        ->andWhere('status = :status')
-                        ->andWhere('createdTime >= :startDateTime')
-                        ->andWhere('createdTime < :endDateTime')
-                        ->andWhere('code LIKE :codeLike')
-                        ->andWhere('orderTime >= :useStartDateTime')
-                        ->andWhere('orderTime < :useEndDateTime');
+            ->from($this->table, 'coupon')
+            ->andWhere('userId = :userId')
+            ->andWhere('targetId = :targetId')
+            ->andWhere('targetType = :targetType')
+            ->andWhere('batchId = :batchId')
+            ->andWhere('batchId <> :batchIdNotEqual')
+            ->andWhere('type = :type')
+            ->andWhere('status = :status')
+            ->andWhere('createdTime >= :startDateTime')
+            ->andWhere('createdTime < :endDateTime')
+            ->andWhere('code LIKE :codeLike')
+            ->andWhere('orderTime >= :useStartDateTime')
+            ->andWhere('orderTime < :useEndDateTime')
+            ->andWhere('id IN ( :ids)');
 
         return $builder;
     }
