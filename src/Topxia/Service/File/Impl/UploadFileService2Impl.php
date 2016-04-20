@@ -723,6 +723,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $conditions;
     }
 
+    public function syncFile($file)
+    {
+        $this->getFileImplementorByStorage('cloud')->syncFile($file);
+    }
+
     protected function getUserService()
     {
         return $this->createService('User.UserService');

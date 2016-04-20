@@ -396,6 +396,16 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return true;
     }
 
+    public function syncFile($file)
+    {
+        $api      = CloudAPIFactory::create('root');
+        $syncData = $api->post("/resources/data/sync", array($file));
+
+        foreach ($syncData as $key => $value) {
+            $this->getUploadFileDao()->updateFile($key, array('globalId' => $value));
+        }
+    }
+
     protected function getVideoWatermarkImages()
     {
         $setting = $this->getSettingService()->get('storage', array());

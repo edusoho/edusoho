@@ -184,6 +184,7 @@ class UploadFileController extends BaseController
             );
         }
 
+        $this->getUploadFileService2()->syncFile($file);
         return $file;
     }
 
@@ -248,6 +249,7 @@ class UploadFileController extends BaseController
             ));
         }
 
+        $this->getUploadFileService2()->syncFile($file);
         return $file;
     }
 
@@ -287,7 +289,7 @@ class UploadFileController extends BaseController
         }
 
         $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
-
+        $this->getUploadFileService2()->syncFile($file);
         return $this->createJsonResponse($file['metas2']);
     }
 
@@ -344,6 +346,7 @@ class UploadFileController extends BaseController
             ));
         }
 
+        $this->getUploadFileService2()->syncFile($file);
         return $this->createJsonResponse($file['metas2']);
     }
 
