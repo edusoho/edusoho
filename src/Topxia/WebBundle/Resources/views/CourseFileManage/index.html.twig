@@ -12,19 +12,19 @@
   <div class="panel panel-default panel-col">
     <div class="panel-heading">
       {% if type == 'courselesson' %}
-        <button class="btn btn-info btn-sm pull-right"
+        <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课时文件'|trans}}
-        </button>
+        </a>
       {% elseif type == 'coursematerial' %}
-        <button class="btn btn-info btn-sm pull-right"
+        <a class="btn btn-info btn-sm pull-right"
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_uplod', {token:uploader_token('coursematerial', course.id, 'private')}) }}"
         >
         <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传备用资料文件'|trans}}
-        </button>
+        </a>
       {% endif %}
       {{'文件管理'|trans}}
     </div>
