@@ -13612,6 +13612,11 @@ textarea {
   height: 500px;
   background-color: #000;
 }
+@media (max-width: 991px) {
+  .open-course-views {
+    height: 300px;
+  }
+}
 .open-course-views .mask {
   position: absolute;
   left: 0;
@@ -13720,6 +13725,12 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+@media (max-width: 991px) {
+  .open-course-tab ul .tab-header {
+    padding: 15px 0;
+    font-size: 14px;
+  }
 }
 .open-course-tab .tab-recommand {
   padding: 10px 20px 10px 15px;
@@ -13952,6 +13963,8 @@ textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  font-size: 12px;
+  color: #313131;
 }
 .course-comment {
   padding: 15px 20px;
@@ -13972,7 +13985,7 @@ textarea {
   border-bottom: 1px solid #e1e1e1;
 }
 .panel-create-course .course-select {
-  margin: 35px 0 55px 0;
+  margin: 35px 5px 55px 5px;
   height: 280px;
   padding: 35px 15px;
   border: 2px solid transparent;
