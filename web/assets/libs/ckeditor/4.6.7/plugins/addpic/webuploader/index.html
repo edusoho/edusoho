@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2014-2016, CKSource - Frederico Knabben. All rights reserved.
+Licensed under the terms of the MIT License (see LICENSE.md).
+-->
+<html>
+  <head>
+    <title>Tutorial &mdash; Timestamp Plugin</title>
+    <meta charset="utf-8">
+    <!-- <script src="../../../../../seajs/seajs/2.2.1/sea.js"></script>
+    <script src="../../../../../seajs-global-config.js"></script> -->
+    <script src="dev-lib/jquery-1.11.0.min.js"></script>
+    <script src="dev-lib/webuploader.js"></script>
+    <!-- <script src="dev-lib/ckeditor.js"></script> -->
+    <script src="dev-lib/uploader.js"></script>
+    <link href="styles/webuploader.css" rel="stylesheet">
+    <link href="styles/imguploader.css" rel="stylesheet">
+    <link href="styles/es-icon.css" rel="stylesheet" >
+    <link href="styles/bootstrap.css" rel="stylesheet">
+  </head>
+<body>
+
+  <!-- <textarea id="editor1" cols="10" rows="10">
+  &lt;p&gt;This is some sample text. You are using &lt;a href=&quot;http://ckeditor.com&quot;&gt;CKEditor&lt;/a&gt;.&lt;/p&gt;
+</textarea>
+-->
+<div id="wrapper">
+  <div id="container">
+    <!--头部，相册选择和格式选择-->
+    <div id="uploader">
+      <div class="queueList">
+        <div id="dndArea" class="placeholder">
+          <div id="filePicker"><i class="es-icon es-icon-graphicclass"></i></div>
+          <!-- <p>或将照片拖到这里，单次最多可选300张</p> -->
+        </div>
+      </div>
+      <!-- <div class="statusBar" style="display:none;">
+        <div class="progress">
+          <span class="text">0%</span>
+          <span class="percentage"></span>
+        </div>
+        <div class="info"></div>
+        <div class="btns">
+          <div id="filePicker2"><i class="es-icon es-icon-graphicclass"></i></div>
+          <div class="uploadBtn">开始上传</div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+<script>
+        // CKEDITOR.replace( 'wrapper', {
+        //     // Load the timestamp plugin.
+        //     extraPlugins: 'addpic',
+        //     // Rearrange toolbar groups and remove unnecessary plugins.
+        //     toolbarGroups: [
+        //         { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
+        //         { name: 'links' },
+        //         { name: 'insert' },
+        //         { name: 'document',    groups: [ 'mode' ] },
+        //         '/',
+        //         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+        //         { name: 'paragraph',   groups: [ 'list', 'indent' ] },
+        //         { name: 'styles' },
+        //         { name: 'about' }
+        //     ],
+        //     removePlugins: 'font,iframe,pagebreak,flash,stylescombo,print,preview,save,smiley,pastetext,pastefromword',
+        //     removeButtons: 'Anchor,Font,Strike,Subscript,Superscript'
+        // } );
+    </script>
+
+</body>
+</html>
