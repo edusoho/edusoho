@@ -8,31 +8,17 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
         buttons: [
             CKEDITOR.dialog.okButton,
             CKEDITOR.dialog.cancelButton],
-        contents: [
-            {
-                id: 'tab-basic',
-                label: '本地多图',
-                elements: [
-                    {
-                        type: 'html',
-                        id: 'local',
-                        label: 'Abbreviation',
-                        html:html
-                    }
-                ]
-            }, 
-            {
-                id: 'tab-adv',
-                label: '网络图片',
-                elements: [
-                    {
-                        type: 'text',
-                        id: 'id',
-                        label: 'Id'
-                    }
-                ]
-            }
-        ],
+        contents: [{
+                id: 'addpic',
+                label: '图片上传',
+                title: '图片上传',
+                expand: true,
+                padding: 0,
+                elements: [{
+                    type: "html",
+                    html:html
+                }]
+            }],
         onOk: function() {
             var dialog = this;
 
@@ -45,7 +31,6 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
                 abbr.setAttribute( 'id', id );
 
             editor.insertElement( abbr );
-
         }
     };
 });

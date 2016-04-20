@@ -1,6 +1,18 @@
 (function( $ ){
     // 当domReady的时候开始初始化
     $(function() {
+
+        $('#myTab li').on('click',function () {
+            console.log('test');
+            var $this = $(this);
+            $('#myTab li').removeClass('active');
+            $this.addClass('active');
+            $('#myuploadContent').find('.tab-pane').removeClass('active');
+            console.log();
+            $($this.attr('data-href')).addClass('active');
+        })
+
+
         var $wrap = $('#uploader'),
 
             // 图片容器
