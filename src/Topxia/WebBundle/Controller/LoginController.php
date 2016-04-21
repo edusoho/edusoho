@@ -22,7 +22,7 @@ class LoginController extends BaseController
         }
 
         if ($this->getWebExtension()->isMicroMessenger() && $this->setting('login_bind.enabled', 0) && $this->setting('login_bind.weixinmob_enabled', 0)) {
-            return $this->forward('TopxiaWebBundle:LoginBind:index', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request)));
+            return $this->redirect($this->generateUrl('login_bind', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request))));
         }
 
         return $this->render('TopxiaWebBundle:Login:index.html.twig', array(

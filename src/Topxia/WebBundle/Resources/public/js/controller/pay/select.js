@@ -56,6 +56,27 @@ define(function(require, exports, module){
         if (navigator.userAgent.match(/mobile/i)) {
             $("#heepay").css("display","none");
         }
+
+        $("#copy").click(function(event){
+            var textarea = document.createElement("textarea");
+            textarea.style.position = 'fixed';
+            textarea.style.top = 0;
+            textarea.style.left = 0;
+            textarea.style.border = 'none';
+            textarea.style.outline = 'none';
+            textarea.style.resize = 'none';
+            textarea.style.background = 'transparent';
+            textarea.style.color = 'transparent';
+
+            textarea.value = document.location.href;
+            var ele = $(textarea);
+            $(this).append(ele);
+
+            textarea.select();
+            document.execCommand('copy');
+
+            ele.remove();
+        })
     };
 
 });

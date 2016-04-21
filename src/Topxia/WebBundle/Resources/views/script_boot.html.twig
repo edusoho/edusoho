@@ -17,6 +17,7 @@
   {% endif %}
 
   var CKEDITOR_BASEPATH = app.basePath + '/assets/libs/ckeditor/4.6.7/';
+  var CLOUD_FILE_SERVER = "{{ setting('developer.cloud_file_server', '') }}"; 
 
   app.config = {{
     {

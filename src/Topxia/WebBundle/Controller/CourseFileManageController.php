@@ -2,8 +2,10 @@
 namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\Paginator;
+use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CourseFileManageController extends BaseController
 {
@@ -41,12 +43,7 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2'] = json_decode($file['metas2'], true) ?: array();
-
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
-            $useNum = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-
+            $useNum            = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
             $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
 
             if ($files[$key]['targetType'] == 'coursematerial') {
@@ -58,16 +55,33 @@ class CourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        $storageSetting = $this->getSettingService()->get("storage");
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'           => $type,
-            'course'         => $course,
-            'courseLessons'  => $files,
-            'users'          => ArrayToolkit::index($users, 'id'),
-            'paginator'      => $paginator,
-            'now'            => time(),
-            'storageSetting' => $storageSetting
+            'type'      => $type,
+            'course'    => $course,
+            'files'     => $files,
+            'users'     => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now'       => time()
         ));
+    }
+
+    public function fileStatusAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            return $this->createJsonResponse(array());
+        }
+
+        $fileIds = $request->request->get('ids');
+
+        if (empty($fileIds)) {
+            return $this->createJsonResponse(array());
+        }
+
+        $fileIds = explode(',', $fileIds);
+
+        return $this->createJsonResponse($this->getUploadFileService2()->findCloudFilesByIds($fileIds));
     }
 
     public function showAction(Request $request, $id, $fileId)
@@ -98,10 +112,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService()->reconvertFile(
-            $file['id'],
-            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-        );
+        $convertHash = $this->getUploadFileService2()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -127,30 +138,6 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        if ("materiallib" != $targetType) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
-
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $fileExts       = "";
-
-        if ("courselesson" == $targetType) {
-            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.mpg;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
-        }
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course'         => $course,
-            'storageSetting' => $storageSetting,
-            'targetType'     => $targetType,
-            'targetId'       => $id,
-            'fileExts'       => $fileExts
-        ));
-    }
-
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
         if (!empty($id)) {
@@ -159,7 +146,7 @@ class CourseFileManageController extends BaseController
 
         $ids = $request->request->get('ids', array());
 
-        $this->getUploadFileService()->deleteFiles($ids);
+        $this->getUploadFileService2()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
     }
@@ -174,6 +161,11 @@ class CourseFileManageController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
+    protected function getUploadFileService2()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -182,5 +174,28 @@ class CourseFileManageController extends BaseController
     protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+
+    protected function createPrivateFileDownloadResponse(Request $request, $file)
+    {
+        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
+        $response->trustXSendfileTypeHeader();
+
+        $file['filename'] = urlencode($file['filename']);
+        $file['filename'] = str_replace('+', '%20', $file['filename']);
+
+        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
+            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
+        } else {
+            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+        }
+
+        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
+
+        if ($mimeType) {
+            $response->headers->set('Content-Type', $mimeType);
+        }
+
+        return $response;
     }
 }

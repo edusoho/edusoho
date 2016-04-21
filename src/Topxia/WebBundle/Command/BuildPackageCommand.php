@@ -158,6 +158,10 @@ class BuildPackageCommand extends BaseCommand
             return str_ireplace('src/SensitiveWord/SensitiveWordBundle/Resources/public', 'web/bundles/sensitiveword', $file);
         }
 
+        if (stripos($file, 'src/MaterialLib/MaterialLibBundle/Resources/public') === 0) {
+            return str_ireplace('src/MaterialLib/MaterialLibBundle/Resources/public', 'web/bundles/materiallib', $file);
+        }
+
         return null;
     }
 

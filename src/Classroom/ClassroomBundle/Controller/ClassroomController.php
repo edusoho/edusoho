@@ -580,13 +580,13 @@ class ClassroomController extends BaseController
     public function becomeStudentAction(Request $request, $id)
     {
         if (!$this->setting('vip.enabled')) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getClassroomService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
