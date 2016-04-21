@@ -28,9 +28,9 @@ class Version20160310135826 extends AbstractMigration
                     ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
                     ");
 
-        $this->addSql("INSERT INTO `dictionary` (`id`, `type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('1', 'quitReason', NULL, '课程内容质量差', '0', '0', '0');");
+        $this->addSql("INSERT INTO `dictionary_item` (`id`, `type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('1', 'refund_reason', NULL, '课程内容质量差', '0', '0', '0');");
 
-        $this->addSql("INSERT INTO `dictionary` (`id`, `type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('2', 'quitReason', NULL, '老师服务态度不好', '0', '0', '0');");
+        $this->addSql("INSERT INTO `dictionary_item` (`id`, `type`, `code`, `name`, `weight`, `createdTime`, `updateTime`) VALUES ('2', 'refund_reason', NULL, '老师服务态度不好', '0', '0', '0');");
 
         $this->addSql("CREATE TABLE `dictionary` (
                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
