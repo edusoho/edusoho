@@ -18,12 +18,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareClassroomConditions($conditions);
         return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
     }
 
     public function searchClassroomsCount($conditions)
     {
-        $count = $this->getClassroomDao()->searchClassroomsCount($conditions);
+        $conditions = $this->_prepareClassroomConditions($conditions);
+        $count      = $this->getClassroomDao()->searchClassroomsCount($conditions);
 
         return $count;
     }
@@ -130,7 +132,8 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
 
             $diff = array_values(array_diff($courseIds, $sameCourseIds));
-            //if new copy it
+
+//if new copy it
 
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
@@ -948,6 +951,12 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             unset($conditions['nickname']);
         }
 
+        if (isset($conditions['categoryId'])) {
+            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            unset($conditions['categoryId']);
+        }
+
         return $conditions;
     }
 
@@ -1442,6 +1451,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getStatusService()
     {
         return $this->createService('User.StatusService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy.CategoryService');
     }
 }
 
