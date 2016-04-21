@@ -25,6 +25,8 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
         onLoad: function() {
             $('.cke_dialog_contents_body').css('padding',0);
             $iframeupload = $("#editorContainer_uploadpictures").contents();
+            
+
         },
         onOk: function() {
             console.log($iframeupload);

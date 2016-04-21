@@ -97,13 +97,11 @@ define(function(require, exports, module) {
     }
 
     function changeTab() {
-        $('#myTab li').on('click', function() {
-            console.log('test');
+        $('#myTab a').on('click', function() {
             var $this = $(this);
-            $('#myTab li').removeClass('active');
+            $('#myTab a').removeClass('active');
             $this.addClass('active');
             $('#myuploadContent').find('.tab-pane').removeClass('active');
-            console.log();
             $($this.attr('data-href')).addClass('active');
         });
     }

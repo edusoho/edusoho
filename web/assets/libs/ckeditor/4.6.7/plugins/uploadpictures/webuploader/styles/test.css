@@ -1,3 +1,13 @@
+body {
+  margin: 0;
+}
+
+.tab-content .tab-pane{
+  display: none;
+}
+.tab-content .tab-pane.active {
+  display: block;
+}
 .text-o-show {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11,6 +21,11 @@
 .ckeditor-images {
   z-index: 100001;
 }
+
+.ckeditor-images .tab-content {
+  padding: 10px;
+}
+
 .ckeditor-images .tab-content,
 .ckeditor-images .un-upload,
 .ckeditor-images .modal-header {
@@ -172,23 +187,47 @@
   padding: 0 10px;
   border-left: 1px solid #999;
 }
+
+
 .ckeditor-images .nav-tabs {
-  border: 0;
-  padding: 0;
-  margin: 0;
+  background-color: #eaeaea;
+  padding-top: 5px;
+  padding-left: 10px;
+  border-bottom: 1px solid #bfbfbf;
 }
-.ckeditor-images .nav-tabs li {
-  width: 50%;
-  border: 0;
+
+.ckeditor-images .nav-tabs a {
+    box-sizing: border-box;
+    height: 26px;
+    padding: 4px 8px;
+    margin-right: 3px;
+    display: inline-block;
+    margin-bottom: -1px;
+    cursor: pointer;
+    line-height: 16px;
+    outline: 0;
+    color: #595959;
+    border: 1px solid #bfbfbf;
+    -moz-border-radius: 3px 3px 0 0;
+    -webkit-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+    background: #d4d4d4;
+    text-decoration: none;
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#fafafa),to(#ededed));
+    background-image: -moz-linear-gradient(top,#fafafa,#ededed);
+    background-image: -webkit-linear-gradient(top,#fafafa,#ededed);
+    background-image: -o-linear-gradient(top,#fafafa,#ededed);
+    background-image: -ms-linear-gradient(top,#fafafa,#ededed);
+    background-image: linear-gradient(top,#fafafa,#ededed);
+    filter: progid:DXImageTransform.Microsoft.gradient;
+    font-size: 12px;
 }
-.ckeditor-images .nav-tabs li a {
-  color: #999;
-  border: 0!important;
-  padding: 13px;
-  font-size: 18px;
-}
-.ckeditor-images .nav-tabs li.active {
+.ckeditor-images .nav-tabs a.active{
   background: #fff;
+  color: #383838;
+  border-bottom-color: #fff;
+  cursor: default;
+  filter: none;
 }
 .ckeditor-images .net-image-list {
   border: 2px dashed #e6e6e6;

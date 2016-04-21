@@ -13,19 +13,14 @@ Licensed under the terms of the MIT License (see LICENSE.md).
     <link href="styles/webuploader.css" rel="stylesheet">
     <link href="styles/imguploader.css" rel="stylesheet">!-->
     <link href="styles/es-icon.css" rel="stylesheet" > 
-    <link href="styles/bootstrap.css" rel="stylesheet">
     <link href="styles/test.css" rel="stylesheet">
   </head>
 <body>
 <div class="ckeditor-images">
-  <ul id="myTab" class="nav nav-tabs">
-    <li class="active" data-href="#home-image">
-      <a href="javascript:;" data-toggle="tab">本地多图</a>
-    </li>
-    <li class="" data-href="#network-image">
-      <a href="javascript:;"  data-toggle="tab">网络图片</a>
-    </li>
-  </ul>
+  <div id="myTab" class="nav-tabs">
+    <a href="javascript:;" class="active" data-href="#home-image">本地多图</a>
+    <a href="javascript:;" class="" data-href="#network-image">网络图片</a>
+  </div>
   <div id="myuploadContent" class="tab-content">
     <div class="tab-pane active" id="home-image">
       <div class="hide" id="storehouse-image"></div>
