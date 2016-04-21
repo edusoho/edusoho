@@ -60,7 +60,7 @@ material_edit:
     methods: [POST]
 
 material_lib_file_player:
-    pattern:  /material/lib/{globalId}/player
+    pattern:  /material/lib/{fileId}/player
     defaults: { _controller: MaterialLibBundle:MaterialLib:player }
 
 material_lib_file_play_url:

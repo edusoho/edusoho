@@ -98,21 +98,29 @@ class MaterialLibController extends BaseController
     public function previewAction(Request $request, $fileId)
     {
         $file = $this->tryAccessFile($fileId);
-        return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
-            'request'  => $request,
-            'globalId' => $file['globalId']
+        if($file['storage'] == 'cloud'){
+          return $this->forward('TopxiaAdminBundle:CloudFile:preview', array(
+              'request'  => $request,
+              'globalId' => $file['globalId']
+          ));
+        }
+        $file['processStatus'] = $file['convertStatus'];
+        return $this->render('MaterialLibBundle:Web:preview.html.twig',array(
+          'file' => $file
         ));
     }
 
     // TODO 权限
-    public function playerAction(Request $request, $globalId)
+    public function playerAction(Request $request, $fileId)
     {
-        //$file = $this->tryAccessFile($fileId);
-
-        return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
-            'request'  => $request,
-            'globalId' => $globalId
-        ));
+        $file = $this->tryAccessFile($fileId);
+        if($file['storage'] == 'cloud'){
+          return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+              'request'  => $request,
+              'globalId' => $globalId
+          ));
+        }
+        return $this->render('MaterialLibBundle:Web:local-player.html.twig', array());
     }
 
     public function reconvertAction($globalId)
@@ -136,10 +144,6 @@ class MaterialLibController extends BaseController
                 'material'   => $file,
                 'thumbnails' => ""
             ));
-        }
-
-        if ($file['type'] == 'video') {
-            $thumbnails = $this->getMaterialLibService()->getDefaultHumbnails($file['globalId']);
         }
 
         return $this->forward('TopxiaAdminBundle:CloudFile:detail', array('globalId' => $file['globalId']));
@@ -532,8 +536,8 @@ class MaterialLibController extends BaseController
             return $file;
         }
 
-        if (!$user->isTeacher()) {
-            throw $this->createAccessDeniedException('您无权访问此文件！');
+        if ($user->isTeacher()) {
+            return $file;
         }
 
         if ($file['isPublic'] == 1) {

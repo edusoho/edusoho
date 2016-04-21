@@ -57,18 +57,17 @@
   </div>
   <div class="btn-operation">
     <!-- 选择一种状态 -->
-    {% if uploadFile.storage == 'cloud' %}
-      {% if (uploadFile.convertStatus == 'success' and uploadFile.type in ['video','document','ppt']) or uploadFile.type in ['audio','flash','image'] %}
+
         <a class="btn btn-info" href="#modal" data-toggle="modal" data-url="{{ path('material_lib_file_preview', {fileId: uploadFile.id}) }}" >
           资料预览
         </a>
-      {% endif %}
+
       {% if uploadFile.convertStatus == 'error' %}
         {% if setting("developer.debug")|default(0) %}
         <a class="js-reconvert-btn btn btn-warning" data-url='{{path("material_reconvert", {globalId: uploadFile.globalId})}}'>重新转码</a>
         {% endif %}
       {% endif %}
-    {% endif %}
+
   </div>
   <div class="time">
     {% if uploadFile.type in ['video', 'audio'] and uploadFile.storage == 'cloud' %}
