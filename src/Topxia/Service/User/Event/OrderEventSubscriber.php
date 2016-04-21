@@ -16,7 +16,7 @@ class OrderEventSubscriber implements EventSubscriberInterface
 
     public function onOrderPaid(ServiceEvent $event)
     {
-        $order         = $event->getSubject();
+        $order = $event->getSubject();
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
         if (isset($inviteSetting['coupon_setting']) && $inviteSetting['coupon_setting'] == 0) {
