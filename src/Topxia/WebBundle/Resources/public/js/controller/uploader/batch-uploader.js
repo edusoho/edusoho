@@ -202,7 +202,7 @@ define(function(require, exports, module) {
             }
 
             var params = {};
-            var extOutput = extOutputs[file.ext.tolocaleLowerCase()];
+            var extOutput = extOutputs[file.ext.toLocaleLowerCase()];
             if(extOutput == 'video'){
                 if (this.get('process') == 'none') {
                     params = paramsDefault[extOutput];
