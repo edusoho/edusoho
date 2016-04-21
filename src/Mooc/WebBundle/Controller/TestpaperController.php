@@ -1,6 +1,7 @@
 <?php
 namespace Mooc\WebBundle\Controller;
 
+use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\WebBundle\Controller\TestpaperController as BaseTestpaperController;
 
