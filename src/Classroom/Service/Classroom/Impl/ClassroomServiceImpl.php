@@ -133,7 +133,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
             $diff = array_values(array_diff($courseIds, $sameCourseIds));
 
-//if new copy it
+            //if new copy it
 
             if (!empty($diff)) {
                 $courses      = $this->getCourseService()->findCoursesByIds($diff);
