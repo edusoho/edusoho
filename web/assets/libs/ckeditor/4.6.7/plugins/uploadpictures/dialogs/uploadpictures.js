@@ -1,5 +1,5 @@
 CKEDITOR.dialog.add( 'addDialog', function( editor ) {
-    html = '<iframe scrolling="" id="editorContainer_'+editor.name+'" src="/assets/libs/ckeditor/4.6.7/plugins/addpic/webuploader/index.html" width="600" height="350" style="border:0"></iframe>'
+    html = '<iframe scrolling="" id="editorContainer_'+editor.name+'" src="/assets/libs/ckeditor/4.6.7/plugins/uploadpictures/webuploader/index.html" width="600" height="350" style="border:0"></iframe>'
     return {
     	name:'Title',
         title: '图片上传',
@@ -10,7 +10,7 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
             CKEDITOR.dialog.okButton,
             CKEDITOR.dialog.cancelButton],
         contents: [{
-            id: 'addpic',
+            id: 'uploadpictures',
             label: '图片上传',
             title: '图片上传',
             expand: true,
@@ -22,10 +22,9 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
         }],
         onLoad: function() {
             
+        },
+        onOk: function() {
+            console.log("ok");
         }
     };
 });
-// CKEDITOR.stylesSet.add( 'my_styles', [
-//  // Block-level styles
-//  { name: 'Blue Title', styles: { 'color': 'Blue' } },
-// ]);
