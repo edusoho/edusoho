@@ -31,6 +31,16 @@ define(function(require, exports, module) {
             return false;
         });
 
+        var validator = new Validator({
+            
+        });
+        validator.addItem({
+            element: '[name="reason[note]"]',
+            required: true,
+            display: '退学原因',
+            rule: 'maxlength{max:120}'
+        });
+
     };
 
 });

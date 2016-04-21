@@ -18,10 +18,10 @@ class Version20160310135826 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql("CREATE TABLE `dictionary_item` (
                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                     `type` varchar(255) NOT NULL,
-                     `code` varchar(64) DEFAULT NULL,
-                     `name` varchar(255) NOT NULL,
-                     `weight` int(11) NOT NULL DEFAULT '0',
+                     `type` varchar(255) NOT NULL COMMENT '字典类型',
+                     `code` varchar(64) DEFAULT NULL COMMENT '编码',
+                     `name` varchar(255) NOT NULL COMMENT '字典内容名称',
+                     `weight` int(11) NOT NULL DEFAULT '0' COMMENT '权重',
                      `createdTime` int(10) unsigned NOT NULL,
                      `updateTime` int(10) unsigned DEFAULT '0',
                      PRIMARY KEY (`id`)
@@ -34,9 +34,9 @@ class Version20160310135826 extends AbstractMigration
 
         $this->addSql("CREATE TABLE `dictionary` (
                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                     `name` varchar(255) NOT NULL,
-                     `code` varchar(64) DEFAULT NULL,
-                     `type` varchar(255) NOT NULL,
+                     `name` varchar(255) NOT NULL COMMENT '字典名称',
+                     `code` varchar(64) DEFAULT NULL COMMENT '编码',
+                     `type` varchar(255) NOT NULL COMMENT '字典类型',
                      PRIMARY KEY (`id`)
                     ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8");
 
