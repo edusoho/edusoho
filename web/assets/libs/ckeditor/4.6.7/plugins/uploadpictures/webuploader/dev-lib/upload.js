@@ -32,7 +32,7 @@ define(function(require, exports, module) {
             swf: uploaderpath + 'Uploader.swf',
             auto: true,
             // 文件接收服务端。
-            server: '/file/upload',
+            server: 'test',
 
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -57,7 +57,7 @@ define(function(require, exports, module) {
         uploader.on('fileQueued', function(file) {
             $("#un-upload").hide();
             $hzpicker.attr("data-uploadFinished", "0");
-            var $li = $('<li><div id="' + file.id + '" class="file-item thumbnail"><img /><span class="colse icon-close es-icon es-icon-delete"></span><span class="es-icon icon-complete es-icon-done"></span></div></li>'),
+            var $li = $('<li><div id="' + file.id + '" class="file-item "><img /><span class="colse icon-close es-icon es-icon-delete"></span><span class="es-icon icon-complete es-icon-done"></span></div></li>'),
                 $img = $li.find('img');
             $li.on('click', '.colse', function() {
                 $(this).closest(".file-item").remove();
