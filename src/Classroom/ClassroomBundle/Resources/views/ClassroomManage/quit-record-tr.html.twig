@@ -12,8 +12,8 @@
   <td style="vertical-align: middle;">
       {{ refund.createdTime|date('Y-n-d H:i') }}
   </td>
-  {% if refund.reasonNote == '教师移除' or (refund['order'].coinAmount|default() > 0 or refund['order'].couponDiscount|default() > 0 and refund.actualAmount == 0) %}
-  <td>
+  {% if refund.reasonNote == '教师移除' or (refund['order'].coinAmount|default() > 0 or refund['order'].couponDiscount|default() > 0 and refund['order'].amount == 0) %}
+  <td style="vertical-align: middle;">
     无记录
   </td>
   <td style="vertical-align: middle;">
