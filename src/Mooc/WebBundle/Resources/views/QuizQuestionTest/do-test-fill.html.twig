@@ -1,0 +1,181 @@
+{% if role|default(null) == 'teacher' %}
+	<div class="testpaper-question testpaper-question-fill {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ item.question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+  </div>
+
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished' ) %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in item.question.answer %}
+		        {% set userAnswer = item.question.testResult.answer[index]|default(null) %}
+			    	<li>
+			    		填空({{index+1}})： 参考答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+			    	  {% if userAnswer == '' %}
+			    	  {{'。学员回答'|trans}}
+			    	  {% elseif item.question.testResult.status == "right" %}
+			    	  {{'，学员答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
+			    	  {% elseif item.question.testResult.status == "partRight" %}
+			    	  {{'，学员答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
+			    	  {% else %}
+			    	  {{'，学员答案'|trans}}　<strong class="text-danger">{{ userAnswer }}</strong>。
+			    	  {% endif %}
+			    	</li>
+		    	{% endfor %}
+		    </ul>
+
+		    <div class="form-horizontal">
+	            <div class="form-group">
+	              <label class="col-sm-2 control-label">{{ '得分'|trans }}</label>
+	              <div class="col-sm-3 controls">
+	                <input type="text" class="form-control" placeholder="{{ '得分'|trans }}"
+	                       name="score_{{ item.questionId }}" data-score="{{ item.score }}"
+	                       value="{% if item.question.testResult.answer[0]|default('') == '' %}0{% endif %}">
+	              </div>
+	            </div>
+            	<div class="form-group">
+	              <label class="col-sm-2 control-label">{{ '评语'|trans }}</label>
+	              <div class="col-sm-9">
+	                <div class="testpaper-result-essay-teacherSay">
+	                  <textarea class="form-control testpaper-question-essay-teacherSay-short" rows="1"
+	                            style="overflow:hidden;line-height:20px;"></textarea>
+
+	                  <textarea id="question-teacherSay-long-{{ item.questionId }}"
+	                            class="form-control testpaper-question-essay-teacherSay-long"
+	                            name="teacherSay_{{ item.questionId }}" style="display:none;"
+	                            data-image-upload-url="{{ path('editor_upload', {token:upload_token('course')}) }}"
+	                            data-image-download-url="{{ path('editor_download', {token:upload_token('course')}) }}"></textarea>
+
+	                  <a class="btn btn-link btn-muted btn-sm testpaper-question-essay-teacherSay-btn" style="display:none"><span
+	                        class="glyphicon glyphicon-chevron-up text-muted"></span> {{ '收起'|trans }}</a>
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+			</div>
+
+			
+
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
+	{% else %}
+	  <div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-fill-inputs">
+				{% set input_index = 1 %}
+				{% for answer in item.question.answer %}
+					<input class="form-control " type="text" data-type="fill" name="{{ item.question.id }}" placeholder="填空({{ input_index }})答案，请填在这里" {% if item.question.testResult.answer[input_index - 1]|default(null) %}value="{{ item.question.testResult.answer[input_index - 1] }}"{% endif %} />
+					{% set input_index = input_index + 1 %}
+				{% endfor %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+			</div>
+	  </div>
+
+	  {% if questionPreview|default(false) %}
+	  <div class="testpaper-preview-answer clearfix mtl mbl">
+	  	<div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in item.question.answer %}
+		    	<li>
+		    		填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    	</li>
+		      {% endfor %}
+		    </ul>
+		</div>
+	  </div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
+	  {% endif %}
+
+	{% endif %}
+</div>
+
+{% else %}
+{# --学员--#}
+
+<div class="testpaper-question testpaper-question-fill {% if setting('magic.testpaper_watermark') %}testpaper-watermark{% endif %}" data-watermark-url="{{ path('cloud_testpaper_watermark') }}" id="question{{ item.question.id }}">
+	<div class="testpaper-question-body">
+	  {% include 'TopxiaWebBundle:QuizQuestionTest:testpaper-question-stem.html.twig' %}
+  </div>
+
+	{% if (paperResult.status|default(null) in ['reviewing', 'finished'] and setting('questions.testpaper_answers_show_mode','submitted') == 'submitted' ) or (setting('questions.testpaper_answers_show_mode','submitted') == 'reviewed'  and paperResult.status|default(null) == 'finished' ) %}
+		<div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in item.question.answer %}
+		        {% set userAnswer = item.question.testResult.answer[index]|default(null) %}
+			    	<li>
+			    		填空({{index+1}})： 参考答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+			    	  {% if userAnswer == '' %}
+			    	  {{'。你未回答'|trans}}
+			    	  {% elseif item.question.testResult.status == "right" %}
+			    	  {{'，你的答案'|trans}}　<strong class="text-success">{{ userAnswer }}</strong>。
+			    	  {% elseif item.question.testResult.status == "partRight" %}
+			    	  {{'，你的答案'|trans}}　<strong class="text-warning">{{ userAnswer }}</strong>。
+			    	  {% else %}
+			    	  {{'，你的答案'|trans}}　<strong class="text-danger">{{ userAnswer }}</strong>。
+			    	  {% endif %}
+			    	</li>
+		    	{% endfor %}
+		    </ul>
+
+		    {% if paperResult.status == 'finished' %}
+            <div class="testpaper-question-result-score mtl">
+              <div class="testpaper-question-result-title">得分：<strong>{{ item.question.testResult.score }} 分</strong>
+              </div>
+            </div>
+            {% if item.question.testResult.teacherSay != '' %}
+              <div class="testpaper-question-teacherSay mtl">
+                <div class="testpaper-question-result-title">评语：</div>
+                <div>{{ item.question.testResult.teacherSay|bbCode2Html|raw }}</div>
+              </div>
+            {% endif %}
+          {% else %}
+            <div class="testpaper-question-score mtl">
+              <div class="testpaper-question-result-title">老师正在批阅！</div>
+            </div>
+          {% endif %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['favorite', 'analysis'] } %}
+			</div>
+
+		</div>
+		<div class="testpaper-question-analysis well" style="display:none;">{{ item.question.analysis|bbCode2Html|raw|nl2br }}</div>
+	{% else %}
+	  <div class="testpaper-question-footer clearfix">
+		  <div class="testpaper-question-fill-inputs">
+				{% set input_index = 1 %}
+				{% for answer in item.question.answer %}
+					<input class="form-control " type="text" data-type="fill" name="{{ item.question.id }}" placeholder="填空({{ input_index }})答案，请填在这里" {% if item.question.testResult.answer[input_index - 1]|default(null) %}value="{{ item.question.testResult.answer[input_index - 1] }}"{% endif %} />
+					{% set input_index = input_index + 1 %}
+				{% endfor %}
+			</div>
+
+			<div class="testpaper-question-actions pull-right">
+				{% include 'TopxiaWebBundle:QuizQuestionTest:flag.html.twig' with { flags:['mark', 'favorite'] } %}
+			</div>
+	  </div>
+
+	  {% if questionPreview|default(false) %}
+	  <div class="testpaper-preview-answer clearfix mtl mbl">
+	  	<div class="testpaper-question-result">
+		    <ul>
+		      {% for index, answer in item.question.answer %}
+		    	<li>
+		    		填空({{index+1}})： 正确答案 <strong class="text-success">{{ answer|join(' 或 ') }}</strong>
+		    	</li>
+		      {% endfor %}
+		    </ul>
+		</div>
+	  </div>
+	  <div class="testpaper-question-analysis well">{{ item.question.analysis|default('无解析'|trans)|bbCode2Html|raw|nl2br }}</div>
+	  {% endif %}
+
+	{% endif %}
+</div>
+
+{% endif %}

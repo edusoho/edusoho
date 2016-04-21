@@ -37,11 +37,7 @@
               {% else %}
                 未回答
               {% endif %}
-              {% if itemResult.answer[index]|default(null)  in rightAnswer %}
-                <span class="glyphicon glyphicon-ok question-text-success">
-              {% else %}
-                <span class="glyphicon glyphicon-remove question-text-danger">
-              {% endif %}
+              
               </li>
           {% endfor %}
         </ul>
@@ -49,6 +45,44 @@
         {% if itemResult.score|default(null) %}
           得分：
           <p class="text-primary">{{ itemResult.score }} 分</p>
+        {% endif %}
+        {% if itemResult.teacherSay|default(null) %}
+          <div  class="question-eassy-form-control question-teacher-say-input">
+            <div class="teacher-say-text">老师评语:</div>
+            {{ itemResult.teacherSay }}
+          </div>
+        {% endif %}
+
+        {% if homework.type == 'evaluate' and behavior|default('view') == 'view' %}
+          {% if itemsEvaluateGroup[itemResult.id]|default(null) %}
+            <div class="quetion-eassy-form-control question-evaluate-score-input">
+              <table class="question-evaluate-table table">
+                <thead>
+                <tr>
+                  <th class="width-4">评价人</th>
+                  {% if itemResult.score|default(null) %}
+                    <th class="width-2">分数</th>
+                  {% endif %}
+                  <th>评价</th>
+                </tr>
+                </thead>
+                {% for itemsEvaluate in itemsEvaluateGroup[itemResult.id] %}
+                <tr>
+                  {% if app.user.isTeacher() %}
+                  <th class="width-4">{{ users[evaluates[itemsEvaluate.evaluateId].fromUserId].nickname }}</th>
+                  <th class="width-2">{{ itemsEvaluate.score }}</th>
+                  <th>{{ itemsEvaluate.comment }}</th>
+                </tr>
+                {% else %}
+                <th class="width-4">用户{{ loop.index }}</th>
+                <th class="width-2">{{ itemsEvaluate.score }}</th>
+                <th>{{ itemsEvaluate.comment }}</th>
+
+                {% endif %}
+                {% endfor %}
+              </table>
+            </div>
+          {% endif %}
         {% endif %}
       </div>
     </div>

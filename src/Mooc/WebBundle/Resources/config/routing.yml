@@ -150,3 +150,7 @@ course_manage_lesson_edit:
 player_local_media:
     pattern: /player/{id}/file/{token}
     defaults: { _controller: MoocWebBundle:Player:localMedia}
+
+course_manage_test_teacher_check:
+    pattern: /test/{id}/teacher/check
+    defaults: { _controller: MoocWebBundle:Testpaper:teacherCheck }
