@@ -95,6 +95,7 @@ class CourseStudentManageController extends BaseController
                 0,
                 1
             );
+            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
         return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
             'course'                     => $course,

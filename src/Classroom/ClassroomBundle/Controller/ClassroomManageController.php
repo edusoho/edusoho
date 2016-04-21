@@ -213,8 +213,9 @@ class ClassroomManageController extends BaseController
                 0,
                 1
             );
+            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
-
+        
         return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
             'classroom' => $classroom,
             'paginator' => $paginator,

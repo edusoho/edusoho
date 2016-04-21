@@ -12,15 +12,24 @@
   <td style="vertical-align: middle;">
       {{ refund.createdTime|date('Y-n-d H:i') }}
   </td>
+  {% if refund['order'].coinAmount|default() > 0 and refund.actualAmount == 0 %}
   <td style="vertical-align: middle;">
-      {% if refund.status == 'success' %}
-        退款成功
-      {% elseif refund.status == 'failed' %}
-        退款失败
-      {% elseif refund.status == 'cancelled' %}
-        退款取消
-      {% endif %}
+    无记录
+  </td>
+  <td style="vertical-align: middle;">
+    --
+  </td>
+  {% else %}
+  <td style="vertical-align: middle;">
+    {% if refund.status == 'success' %}
+      退款成功
+    {% elseif refund.status == 'failed' %}
+      退款失败
+    {% elseif refund.status == 'cancelled' %}
+      退款取消
+    {% endif %}
   <td style="vertical-align: middle;">
     {{ refund.actualAmount }}
   </td>
+  {% endif %}
 </tr>
