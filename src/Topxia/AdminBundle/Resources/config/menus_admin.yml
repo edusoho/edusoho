@@ -69,11 +69,11 @@ admin_block_visual_edit:
     router_params_context: 1
 
 
-admin_operation_dictionary:
-    name: 字典管理
-    parent: admin_operation
-    router_name: admin_dictionary
-    group: 4
+# admin_operation_dictionary:
+#     name: 字典管理
+#     parent: admin_operation
+#     router_name: admin_dictionary
+#     group: 4
 admin_block_visual_edit_history:
     name: 历史记录
     parent: admin_operation_block
