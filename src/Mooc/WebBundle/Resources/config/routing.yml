@@ -154,3 +154,7 @@ player_local_media:
 course_manage_test_teacher_check:
     pattern: /test/{id}/teacher/check
     defaults: { _controller: MoocWebBundle:Testpaper:teacherCheck }
+
+course_manage_testpaper_items:
+    pattern: /course/{courseId}/manage/testpaper/{testpaperId}/items
+    defaults: { _controller: MoocWebBundle:CourseTestpaperManage:items }
