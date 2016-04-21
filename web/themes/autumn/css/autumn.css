@@ -717,6 +717,11 @@ a:focus {
   text-align: center;
   padding: 40px 0;
 }
+@media (max-width: 767px) {
+  .footer-autumn {
+    padding: 20px 0;
+  }
+}
 .footer-autumn,
 .footer-autumn a {
   color: #999;
