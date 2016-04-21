@@ -1,5 +1,6 @@
 CKEDITOR.dialog.add( 'addDialog', function( editor ) {
     html = '<iframe scrolling="" id="editorContainer_uploadpictures" src="/assets/libs/ckeditor/4.6.7/plugins/uploadpictures/webuploader/index.html" width="600" height="350" style="border:0"></iframe>'
+    var $iframeupload  = null;
     return {
     	name:'Title',
         title: '图片上传',
@@ -20,11 +21,13 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
                 html:html
             }]
         }],
+        
         onLoad: function() {
-            
+            $('.cke_dialog_contents_body').css('padding',0);
+            $iframeupload = $("#editorContainer_uploadpictures").contents();
         },
         onOk: function() {
-            var $iframeupload = $("#editorContainer_uploadpictures").contents();
+            console.log($iframeupload);
             var $hzpicker = $iframeupload.find('#hzpicker');
             var isdone = $hzpicker.attr("data-uploadfinished");
             var $thelist = $iframeupload.contents().find("#thelist");
@@ -39,5 +42,6 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
                 })
             }
         }
+       
     };
 });
