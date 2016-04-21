@@ -17,11 +17,16 @@ class DictionaryExtension extends \Twig_Extension
     public function dictSelectOptions($type, $selected = null, $empty = null)
     {
         $dictionaryItems = $this->getDictionaryItemService()->findDictionaryItemByType($type);
-
+        if ($type == 'refund_reason') {
+            $choices['reason'] = '--请选择退学原因--';
+            $selected = 'reason';
+        }
+            
         foreach ($dictionaryItems as $key => $value) {
             $choices[$key] = $value['name'];
         }
         $choices['other'] = '其他';
+
         $html = '';
         if (!is_null($empty)) {
             if(is_array($empty)){
@@ -33,8 +38,9 @@ class DictionaryExtension extends \Twig_Extension
             }
 
         }
+
         foreach ($choices as $value => $name) {
-            if ($selected == $value) {
+            if ($selected === $value) {
                 $html .= "<option value=\"{$value}\" selected=\"selected\">{$name}</option>";
             } else {
                 $html .= "<option value=\"{$value}\">{$name}</option>";
