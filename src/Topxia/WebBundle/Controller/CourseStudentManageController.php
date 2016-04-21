@@ -145,6 +145,21 @@ class CourseStudentManageController extends BaseController
             $course = $this->getCourseService()->tryAdminCourse($courseId);
         }
 
+        $condition = array(
+            'targetType' => 'course',
+            'targetId' => $courseId,
+            'userId' => $userId
+            );
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        foreach ($orders as $key => $value) {
+            $order = $value;
+        }
+        $reason = array(
+            'type' => 'other',
+            'note' => '教师移除'
+            );
+        $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
+
         $this->getCourseService()->removeStudent($courseId, $userId);
 
         $this->getNotificationService()->notify($userId, 'student-remove', array(
