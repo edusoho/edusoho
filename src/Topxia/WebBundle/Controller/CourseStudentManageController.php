@@ -74,6 +74,7 @@ class CourseStudentManageController extends BaseController
         }
 
         $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'course'));
+
         $paginator = new Paginator(
             $request,
             $this->getOrderService()->searchRefundCount($condition),
