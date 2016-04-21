@@ -38,13 +38,13 @@ class MaterialServiceImpl extends BaseService implements MaterialService
             $fields['title'] = empty($material['description']) ? $material['link'] : $material['description'];
         } else {
             $fields['fileId'] = (int) $material['fileId'];
-    		$file = $this->getUploadFileService()->getFile($material['fileId']);
+    		$file = $this->getUploadFileService()->getThinFile($material['fileId']);
     		if (empty($file)) {
     			throw $this->createServiceException('文件不存在，上传资料失败！');
     		}
             $fields['link'] = '';
             $fields['title'] = $file['filename'];
-            $fields['fileSize'] = $file['size'];
+            $fields['fileSize'] = $file['fileSize'];
         }
         if(array_key_exists('copyId', $material)){
         	$fields['copyId'] = $material['copyId'];
@@ -173,7 +173,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService');
+        return $this->createService('File.UploadFileService2');
     }
 
 }

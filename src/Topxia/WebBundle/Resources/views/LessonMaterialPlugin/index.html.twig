@@ -14,7 +14,7 @@
 {% if lesson.type in ['video', 'audio'] and setting('course.student_download_media') and file %}
 <h5>{{'课时音视频文件下载'|trans}}</h5>
 <div class="lesson-about">
-  <a href="{{ path('course_lesson_media_download', {courseId:lesson.courseId, lessonId:lesson.id}) }}">{{ file.size|file_size }} ({{'点击下载'|trans}})</a>
+  <a href="{{ path('course_lesson_media_download', {courseId:lesson.courseId, lessonId:lesson.id}) }}">{{ file.fileSize|file_size }} ({{'点击下载'|trans}})</a>
 </div>
 {% endif %}
 

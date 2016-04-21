@@ -1242,7 +1242,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   position: absolute;
   display: none;
   background: #eee;
-  width: 36px;
+  width: 54px;
   height: 17px;
   border: solid 1px #333;
   top: -26px;
@@ -1253,7 +1253,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
 
 .mejs-controls .mejs-time-rail .mejs-time-float-current {
   margin: 2px;
-  width: 30px;
+  width: 50px;
   display: block;
   text-align: center;
   left: 0;
@@ -1271,7 +1271,7 @@ https://github.com/videojs/video.js/blob/master/src/css/video-js.less */
   -moz-border-radius: 0;
   border-radius: 0;
   top: 15px;
-  left: 13px;
+  left: 22px;
 }
 
 .mejs-long-video .mejs-controls .mejs-time-rail .mejs-time-float {

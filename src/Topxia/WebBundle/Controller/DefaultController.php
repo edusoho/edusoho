@@ -10,6 +10,10 @@ class DefaultController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $user = $this->getCurrentUser();
+        if (!empty($user['id'])) {
+            $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
+        }
         return $this->render('TopxiaWebBundle:Default:index.html.twig', array());
     }
 
