@@ -10,11 +10,12 @@
       <span class="glyphicon glyphicon-cloud text-muted" title="{{'云文件'|trans}}"></span>
     {% endif %}
     <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
+    <br/>
   </td>
   <td>
     {{ dict_text('fileType', uploadFile.type) }}
   </td>
-  <td>{{ web_macro.bytesToSize(uploadFile.size) }}</td>
+  <td>{{ web_macro.bytesToSize(uploadFile.fileSize) }}</td>
   <td>
     <span class="text-sm">{{ web_macro.user_link(users[uploadFile.updatedUserId]|default(null)) }}</span>
     <br>

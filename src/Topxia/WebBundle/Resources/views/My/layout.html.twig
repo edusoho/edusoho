@@ -52,11 +52,9 @@
             </li>
           {% endif %}
 
-          {% if is_plugin_installed('MaterialLib') %}
-            <li class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}">
-              <a href="{{path('material_lib_browsing') }}">{{'教学资料库'|trans}}</a>
-            </li>
-          {% endif %}
+          <li class="list-group-item {% if side_nav == 'material-lib' %} active {% endif %}">
+            <a href="{{path('material_lib_browsing') }}">{{'教学资料库'|trans}}</a>
+          </li>
         </ul>
       {% endif %}
 

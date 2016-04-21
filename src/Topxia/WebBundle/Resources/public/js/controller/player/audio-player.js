@@ -9,7 +9,6 @@ define(function(require, exports, module) {
         },
 
         events: {
-
         },
 
         setup: function() {
