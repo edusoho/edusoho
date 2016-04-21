@@ -156,7 +156,7 @@ class CourseStudentManageController extends BaseController
         }
         $reason = array(
             'type' => 'other',
-            'note' => '教师移除'
+            'note' => '手动移除'
             );
         $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
 
