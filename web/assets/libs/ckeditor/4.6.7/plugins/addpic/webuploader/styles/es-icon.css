@@ -15,6 +15,16 @@
   -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.es-icon {
+  font-family:"es-icon" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+/*.icon-add-image:before { content: "\e615"; }*/
 .es-icon-qrcode:before { content: "\e615"; }
 .es-icon-time:before { content: "\e69d"; }
 .es-icon-videocam:before { content: "\e678"; }

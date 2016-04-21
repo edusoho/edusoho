@@ -5,32 +5,23 @@ CKEDITOR.dialog.add( 'addDialog', function( editor ) {
         title: '图片上传',
         minWidth: 400,
         minHeight: 200,
+        padding:0,
         buttons: [
             CKEDITOR.dialog.okButton,
             CKEDITOR.dialog.cancelButton],
         contents: [{
-                id: 'addpic',
-                label: '图片上传',
-                title: '图片上传',
-                expand: true,
-                padding: 0,
-                elements: [{
-                    type: "html",
-                    html:html
-                }]
-            }],
-        onOk: function() {
-            var dialog = this;
-
-            var abbr = editor.document.createElement( 'abbr' );
-            abbr.setAttribute( 'title', dialog.getValueOf( 'tab-basic', 'local' ) );
-            abbr.setText( dialog.getValueOf( 'tab-basic', 'local' ) );
-
-            var id = dialog.getValueOf( 'tab-adv', 'id' );
-            if ( id )
-                abbr.setAttribute( 'id', id );
-
-            editor.insertElement( abbr );
+            id: 'addpic',
+            label: '图片上传',
+            title: '图片上传',
+            expand: true,
+            padding: 0,
+            elements: [{
+                type: "html",
+                html:html
+            }]
+        }],
+        onLoad: function() {
+            
         }
     };
 });
