@@ -213,6 +213,7 @@ class ClassroomManageController extends BaseController
                 0,
                 1
             );
+            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
@@ -267,8 +268,22 @@ class ClassroomManageController extends BaseController
 
         $user = $this->getCurrentUser();
 
-        $this->getClassroomService()->removeStudent($classroomId, $userId);
+        $condition = array(
+            'targetType' => 'classroom',
+            'targetId' => $classroomId,
+            'userId' => $userId
+            );
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        foreach ($orders as $key => $value) {
+            $order = $value;
+        }
 
+        $this->getClassroomService()->removeStudent($classroomId, $userId);
+        $reason = array(
+            'type' => 'other',
+            'note' => '手动移除'
+            );
+        $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
             'classroomTitle' => $classroom['title'],
