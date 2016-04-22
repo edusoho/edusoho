@@ -9,7 +9,7 @@
 {% set _target_path = path('homepage') %}
 
 {% set currentTheme = current_theme() %}
-{% set themeConfig = currentTheme.confirmConfig %}
+{% set themeConfig = isEditColor|default(false) ? currentTheme.config : currentTheme.confirmConfig %}
 {% set allConfig = currentTheme.allConfig %}
 
 {% set isIndex = true %}
@@ -30,5 +30,5 @@
 		{% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
 
     {% endfor %}
-    
+
 {% endblock %}
