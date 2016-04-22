@@ -62,7 +62,7 @@ class CourseStudentManageController extends BaseController
         ));
     }
 
-    public function recordAction(Request $request, $id)
+    public function refundRecordAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -143,7 +143,8 @@ class CourseStudentManageController extends BaseController
         $condition = array(
             'targetType' => 'course',
             'targetId' => $courseId,
-            'userId' => $userId
+            'userId' => $userId,
+            'status' => 'paid'
             );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {

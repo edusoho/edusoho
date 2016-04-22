@@ -177,7 +177,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function recordAction(Request $request, $id)
+    public function refundRecordAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -265,7 +265,8 @@ class ClassroomManageController extends BaseController
         $condition = array(
             'targetType' => 'classroom',
             'targetId' => $classroomId,
-            'userId' => $userId
+            'userId' => $userId,
+            'status' => 'paid'
             );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {

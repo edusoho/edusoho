@@ -35,12 +35,11 @@ class Version20160310135826 extends AbstractMigration
         $this->addSql("CREATE TABLE `dictionary` (
                      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                      `name` varchar(255) NOT NULL COMMENT '字典名称',
-                     `code` varchar(64) DEFAULT NULL COMMENT '编码',
                      `type` varchar(255) NOT NULL COMMENT '字典类型',
                      PRIMARY KEY (`id`)
                     ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8");
 
-        $this->addSql("INSERT INTO `dictionary` (`id`, `name`, `code`, `type`) VALUES ('1', '退学原因', 'abs2', 'refund_reason');");
+        $this->addSql("INSERT INTO `dictionary` (`id`, `name`, `type`) VALUES ('1', '退学原因', 'refund_reason');");
     }
 
     /**
