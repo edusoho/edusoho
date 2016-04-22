@@ -20,26 +20,30 @@ define(function(require, exports, module) {
             $form.find('.warnning').text('');
         }).change();
 
+        $form.find('[name="reason[note]"]').on('change', function() {
+            if ($form.find('[name="reason[note]"]').val().length >120) {
+                $form.find('.warnning').text('退学原因的长度请小于或等于120。');
+            } else if ($form.find('[name="reason[note]"]').val().length == 0){
+                $form.find('.warnning').text('请输入退学原因。');
+            } else {
+                $form.find('.warnning').text('');
+            }
+        }).change();
+
         $form.on('submit', function() {
             if ($form.find('[name="reason[type]"]').val() == 'reason') {
                 $form.find('.warnning').text('请选择退学原因');
-            } else {                
+            } else if ($form.find('[name="reason[note]"]').val().length >120) {
+                $form.find('.warnning').text('退学原因的长度请小于或等于120。');
+            } else if ($form.find('[name="reason[note]"]').val().length == 0) {
+                $form.find('.warnning').text('请输入退学原因。');
+            }else {                
                 $modal.find('[type=submit]').button('loading');
                 $.post($form.attr('action'), $form.serialize(), function(response) {
                     window.location.reload();
                 }, 'json');
             }
             return false;
-        });
-
-        var validator = new Validator({
-            
-        });
-        validator.addItem({
-            element: '[name="reason[note]"]',
-            required: true,
-            display: '退学原因',
-            rule: 'maxlength{max:120}'
         });
 
     };

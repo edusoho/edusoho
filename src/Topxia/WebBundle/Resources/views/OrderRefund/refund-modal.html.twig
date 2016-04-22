@@ -12,8 +12,8 @@
         <select class="form-control" name="reason[type]">
           {{ dict_select_options('refund_reason') }}
         </select>
-        <span class='text-danger warnning'></span>
         <textarea class="form-control" name="reason[note]" placeholder="{{'请输入您的退学原因'|trans}}" style="margin-top:10px;display:none;"></textarea>
+        <span class='text-danger warnning'></span>
       </div>
     </div>
     {% if order.payment != 'coin' and maxRefundDays > 0 and (order.amount * 100) > 0 %}
