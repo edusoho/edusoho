@@ -2,10 +2,13 @@
 	position: relative;
 	// display: table;
 	padding: 0;
-	height: 500px;
+	// height: 500px;
 	background-color: #000;
-	@media(max-width:@screen-sm-max) {
-		height: 300px;
+	@media(min-width:@screen-md-min) {
+		height: 500px;
+	}
+	.lesson-content {
+		height: 100%;
 	}
 	.mask {
 		position: absolute;
@@ -169,6 +172,9 @@
 .open-course-header {
 	position: relative;
 	margin-top: 20px;
+	@media(max-width:@screen-sm-max)  {
+		padding: 0;
+	}
 	.course-img {
 		@media(min-width:@screen-md-min)  {
 		width: 12.5%;
@@ -263,6 +269,9 @@
 			    border-radius: 50%;
 			    color: #fff;
 			    text-align: center;
+			    @media(max-width:@screen-xs-max) {
+			    	margin: 0 5px 5px;
+			    }
 		    .es-transition;
 			}
 			.unoperation-list {

@@ -13609,13 +13609,15 @@ textarea {
 .open-course-views {
   position: relative;
   padding: 0;
-  height: 500px;
   background-color: #000;
 }
-@media (max-width: 991px) {
+@media (min-width: 992px) {
   .open-course-views {
-    height: 300px;
+    height: 500px;
   }
+}
+.open-course-views .lesson-content {
+  height: 100%;
 }
 .open-course-views .mask {
   position: absolute;
@@ -13800,6 +13802,11 @@ textarea {
   position: relative;
   margin-top: 20px;
 }
+@media (max-width: 991px) {
+  .open-course-header {
+    padding: 0;
+  }
+}
 @media (min-width: 992px) {
   .open-course-header .course-img {
     width: 12.5%;
@@ -13887,6 +13894,11 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+@media (max-width: 767px) {
+  .open-course-header .course-operation li .operation-icon {
+    margin: 0 5px 5px;
+  }
 }
 .open-course-header .course-operation li .unoperation-list:hover .unoperation-list,
 .open-course-header .course-operation li .unoperation-list:active .unoperation-list {
