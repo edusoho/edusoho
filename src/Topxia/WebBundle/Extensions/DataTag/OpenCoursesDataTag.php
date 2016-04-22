@@ -36,7 +36,7 @@ class OpenCoursesDataTag extends CourseBaseDataTag implements DataTag
             }
         }
 
-        return $courses;
+        return $this->getCourseTeachersAndCategories($courses);
     }
 
     protected function filterConditions($arguments)

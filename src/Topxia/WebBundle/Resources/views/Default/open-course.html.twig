@@ -2,10 +2,8 @@
   {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
   {% set count = config.count|default(12) %}
-  {% set categoryId = config.categoryId|default(0) %}
   {% set orderBy = config.orderBy|default('latest')%}
-
-  {% set courses = data('OpenCourses',{'count':count, 'categoryId':categoryId, 'orderBy':orderBy}) %}
+  {% set courses = data('OpenCourses',{'count':count, 'orderBy':orderBy}) %}
 
   <div class="container">
     <div class="text-line">
@@ -17,7 +15,7 @@
       <div class="row">
         {% for course in courses %}
           <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'TopxiaWebBundle:OpenCourse:open-course-grid.html.twig' %}
+            {% include 'TopxiaWebBundle:OpenCourse/Widget:open-course-grid.html.twig' %}
           </div>
         {% endfor %}
       </div>
