@@ -52,7 +52,11 @@
 		    {% endif %}
 		  </td>
 		  <td>{{ course.studentNum }}</td>
-		  <td class="text-danger">{{ course.price }}</td>
+		  <td class="text-danger">
+		  {% if setting('course.coursesPrice') == 0 %}
+          	{% include "TopxiaWebBundle:Course:price-widget.html.twig" with {shows: ['price', 'discount']} %}
+      	  {% endif %}
+		  </td>
 		  <td>{{ dict_text('courseStatus:html', course.status) }}</td>
 		  <td>
 		    {{ admin_macro.user_link(user) }}
