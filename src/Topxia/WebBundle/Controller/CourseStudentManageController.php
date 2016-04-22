@@ -75,7 +75,7 @@ class CourseStudentManageController extends BaseController
 
         $condition['targetId'] = $id;
         $condition['targetType'] = 'course';
-        $condition['statusNotEqual'] = 'refunding';
+        $condition['status'] = 'success';
 
         $paginator = new Paginator(
             $request,
