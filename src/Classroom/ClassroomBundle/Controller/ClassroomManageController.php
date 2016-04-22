@@ -177,7 +177,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function recordAction(Request $request, $id)
+    public function refundRecordAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
@@ -190,7 +190,10 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'classroom'));
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'classroom';
+        $condition['statusNotEqual'] = 'refunding';
+
         
         $paginator = new Paginator(
             $request,
@@ -207,12 +210,6 @@ class ClassroomManageController extends BaseController
 
         foreach ($refunds as $key => $refund) {
             $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-            $refunds[$key]['student'] = $this->getClassroomService()->searchMembers(
-                array('orderId'=>$refund['orderId']),
-                array('createdTime', 'DESC'),
-                0,
-                1
-            );
             $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
 
@@ -271,7 +268,8 @@ class ClassroomManageController extends BaseController
         $condition = array(
             'targetType' => 'classroom',
             'targetId' => $classroomId,
-            'userId' => $userId
+            'userId' => $userId,
+            'status' => 'paid'
             );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
@@ -279,6 +277,7 @@ class ClassroomManageController extends BaseController
         }
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
+
         $reason = array(
             'type' => 'other',
             'note' => '手动移除'

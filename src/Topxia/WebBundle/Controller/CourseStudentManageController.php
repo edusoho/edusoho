@@ -62,7 +62,7 @@ class CourseStudentManageController extends BaseController
         ));
     }
 
-    public function recordAction(Request $request, $id)
+    public function refundRecordAction(Request $request, $id)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
@@ -73,7 +73,9 @@ class CourseStudentManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'course'));
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'course';
+        $condition['statusNotEqual'] = 'refunding';
 
         $paginator = new Paginator(
             $request,
@@ -90,12 +92,7 @@ class CourseStudentManageController extends BaseController
 
         foreach ($refunds as $key => $refund) {
             $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-            $refunds[$key]['student'] = $this->getCourseService()->searchMembers(
-                array('orderId'=>$refund['orderId']),
-                array('createdTime', 'DESC'),
-                0,
-                1
-            );
+
             $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
         return $this->render('TopxiaWebBundle:CourseStudentManage:quit-record.html.twig', array(
@@ -148,7 +145,8 @@ class CourseStudentManageController extends BaseController
         $condition = array(
             'targetType' => 'course',
             'targetId' => $courseId,
-            'userId' => $userId
+            'userId' => $userId,
+            'status' => 'paid'
             );
         $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
         foreach ($orders as $key => $value) {
