@@ -77,7 +77,7 @@ define(function(require, exports, module) {
 
                         var playerUrl = '../../open/course/' + lesson.courseId + '/lesson/' + lesson.id + '/player';
                         
-                        var html = '<iframe src=\'' + playerUrl + '\' name=\'viewerIframe\' id=\'viewerIframe\' width=\'100%\'allowfullscreen webkitallowfullscreen height=\'100%\' style=\'border:0px\'></iframe>';
+                        var html = '<iframe src="' + playerUrl + '" name="viewerIframe" id="viewerIframe" width="100%" allowfullscreen webkitallowfullscreen height="100%"" style="border:0px;position:absolute; left:0; top:0;"></iframe>';
 
                         $videoContent.show();
                         $videoContent.html(html);
