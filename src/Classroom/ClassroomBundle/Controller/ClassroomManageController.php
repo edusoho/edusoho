@@ -192,7 +192,7 @@ class ClassroomManageController extends BaseController
 
         $condition['targetId'] = $id;
         $condition['targetType'] = 'classroom';
-        $condition['statusNotEqual'] = 'refunding';
+        $condition['statusNotEqual'] = 'created';
 
         
         $paginator = new Paginator(
