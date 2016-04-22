@@ -18,12 +18,10 @@ define(function(require, exports, module) {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
                 $btn.hide();
-
                 if (data['result']) {
                     $("#unfavorite-btn").show();
-                    $("#unfavorite-btn").find('.gray-darker').html(parseInt(data['number']));
+                    // $("#unfavorite-btn").find('.gray-darker').html(parseInt(data['number']));
                 }
-                
             });
         });
 
@@ -33,7 +31,7 @@ define(function(require, exports, module) {
                 $btn.hide();
                 if (data['result']) {
                     $("#favorite-btn").show();
-                    $("#favorite-btn").find('.gray-darker').html(parseInt(data['number']));
+                    // $("#favorite-btn").find('.gray-darker').html(parseInt(data['number']));
                 }
             });
         });

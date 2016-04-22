@@ -13841,29 +13841,30 @@ textarea {
   color: #919191;
 }
 .open-course-header .course-operation ul {
-  float: right;
-  width: 90%;
   padding: 0;
   margin-bottom: 0;
   list-style-type: none;
 }
-@media (max-width: 991px) {
-  .open-course-header .course-operation ul {
-    float: left;
-  }
-}
 .open-course-header .course-operation li {
   float: left;
   width: 25%;
-  padding: 15px 10px 0 10px;
+  padding: 10px;
+  margin-top: 5px;
+  line-height: 35px;
   border-right: 1px solid #f1f1f1;
 }
 @media (max-width: 991px) {
   .open-course-header .course-operation li {
-    width: 50%;
+    width: 33.33%;
     height: 55px;
+    padding: 10px 0;
   }
-  .open-course-header .course-operation li:nth-child(3) {
+  .open-course-header .course-operation li:nth-child(5) {
+    border-right: 0;
+  }
+}
+@media (max-width: 991px) {
+  .open-course-header .course-operation li {
     border-right: 0;
   }
 }
@@ -13901,24 +13902,30 @@ textarea {
 .open-course-header .course-operation li .unoperation-list .operation-list {
   background-color: #e85749;
 }
-.open-course-header .course-operation li .es-icon-thumbup {
+.open-course-header .course-operation li .es-icon {
   background-color: #919191;
 }
+.open-course-header .course-operation li .es-icon-thumbup:hover,
 .open-course-header .course-operation li .es-icon-thumbup.active {
   background-color: #e85749;
 }
-.open-course-header .course-operation li .es-icon-bookmarkoutline,
-.open-course-header .course-operation li .es-icon-bookmark {
+.open-course-header .course-operation li .es-icon-bookmarkoutline:hover {
   background-color: #53c3f5;
 }
-.open-course-header .course-operation li .es-icon-share {
+.open-course-header .course-operation li .es-icon.es-icon-bookmark {
+  background-color: #53c3f5;
+}
+.open-course-header .course-operation li .es-icon-share:hover,
+.open-course-header .course-operation li .es-icon-share.active {
   background-color: #83d460;
 }
-.open-course-header .course-operation li .es-icon-phone1 {
+.open-course-header .course-operation li .es-icon-phone1:hover,
+.open-course-header .course-operation li .es-icon-phone1.active {
   background-color: #ff8a0c;
 }
 .open-course-header .course-operation li .open-course-qrcode {
   position: relative;
+  cursor: pointer;
 }
 .open-course-header .course-operation li .open-course-qrcode .qrcode-popover {
   position: absolute;
@@ -13928,7 +13935,6 @@ textarea {
   height: 110px;
   display: none;
   z-index: 10;
-  cursor: pointer;
 }
 .open-course-header .course-operation li .open-course-qrcode:hover .qrcode-popover {
   display: block;
@@ -13939,8 +13945,15 @@ textarea {
 .open-course-header .course-operation li .es-share.top .dropdown-menu a {
   margin: 3px 2px 2px 5px !important;
 }
+.open-course-header .course-operation li .es-share.top .dropdown-menu a .es-icon {
+  background-color: transparent;
+}
 .open-course-header .course-operation li .qrcode-popover.top .qrcode-content {
-  top: -250px;
+  left: -123px;
+  background-color: #f5f5f5;
+}
+.open-course-header .course-operation li .qrcode-popover.top .qrcode-content:after {
+  border-top-color: #f5f5f5;
 }
 .open-course-header .setting {
   position: absolute;

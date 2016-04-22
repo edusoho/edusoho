@@ -13614,7 +13614,7 @@ textarea {
 }
 @media (max-width: 991px) {
   .open-course-views {
-    width: 300px;
+    height: 300px;
   }
 }
 .open-course-views .mask {
@@ -13855,7 +13855,8 @@ textarea {
 .open-course-header .course-operation li {
   float: left;
   width: 25%;
-  padding: 15px 10px 0 10px;
+  padding: 10px 10px 0 10px;
+  margin-top: 5px;
   border-right: 1px solid #f1f1f1;
 }
 @media (max-width: 991px) {
@@ -13963,6 +13964,8 @@ textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  font-size: 12px;
+  color: #313131;
 }
 .course-comment {
   padding: 15px 20px;

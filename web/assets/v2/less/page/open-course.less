@@ -212,27 +212,33 @@
 		color: @gray;
 		// float: right;
 		ul {
-			float: right;
-			width: 90%;
+			// float: right;
+			// width: 90%;
 			padding: 0;
 		    	margin-bottom: 0;
 		    	list-style-type: none;
-		    	@media(max-width:@screen-sm-max) {
-		    		float: left;
-		    	}
+		    	// @media(max-width:@screen-sm-max) {
+		    	// 	float: left;
+		    	// }
 		}
 		li {
 			float: left;
 			// width: 145px;
 			width: 25%;
-			padding: 15px 10px 0 10px;
+			padding: 10px;
+			margin-top: 5px;
+			line-height: 35px;
 			border-right: 1px solid #f1f1f1;
 			@media(max-width:@screen-sm-max)  {
-				width: 50%;
+				width: 33.33%;
 				height: 55px;
-				&:nth-child(3) {
+				padding: 10px 0;
+				&:nth-child(5) {
 					border-right: 0;
 				}
+			}
+			@media(max-width:@screen-sm-max) {
+				border-right: 0;
 			}
 			// @media(max-width:@screen-xs-min)  {
 			// 	width: 25%;
@@ -247,16 +253,16 @@
 			}
 			.operation-icon {
 				float: left;
-		    display: block;
-		    width: 35px;
-		    height: 35px;
-		    margin: 0 10px 5px;
-		    font-size: 22px;
-		    line-height: 35px;
-		    vertical-align: middle;
-		    border-radius: 50%;
-		    color: #fff;
-		    text-align: center;
+			    display: block;
+			    width: 35px;
+			    height: 35px;
+			    margin: 0 10px 5px;
+			    font-size: 22px;
+			    line-height: 35px;
+			    vertical-align: middle;
+			    border-radius: 50%;
+			    color: #fff;
+			    text-align: center;
 		    .es-transition;
 			}
 			.unoperation-list {
@@ -275,23 +281,27 @@
 					background-color: #e85749;
 				}
 			}
-			.es-icon-thumbup {
+			.es-icon {
 				background-color: @gray;
-				&.active {
-					background-color: #e85749;
-				}
 			}
-			.es-icon-bookmarkoutline,.es-icon-bookmark {
+			.es-icon-thumbup:hover, .es-icon-thumbup.active{
+				background-color: #e85749;
+			}
+			.es-icon-bookmarkoutline:hover {
 				background-color: #53c3f5;
 			}
-			.es-icon-share {
+			.es-icon.es-icon-bookmark {
+				background-color: #53c3f5;
+			}
+			.es-icon-share:hover,.es-icon-share.active {
 				background-color: #83d460;
 			}
-			.es-icon-phone1 {
+			.es-icon-phone1:hover,.es-icon-phone1.active {
 				background-color: #ff8a0c;
 			}
 			.open-course-qrcode {
 				position: relative;
+				cursor: pointer;
 				.qrcode-popover {
 					position: absolute;
 					left: 0;
@@ -300,7 +310,6 @@
 					height: 110px;
 					display: none;
 					z-index: 10;
-					cursor: pointer;
 				}
 				&:hover .qrcode-popover{
 					display: block;
@@ -309,11 +318,18 @@
 			.es-share.top .dropdown-menu {
 				left: 15px;
 				a {
-			    margin: 3px 2px 2px 5px !important;
+			    		margin: 3px 2px 2px 5px !important;
+			    		.es-icon {
+			    			background-color: transparent;
+			    		}
 				}
 			}
 			.qrcode-popover.top .qrcode-content{
-				top: -250px;
+				left: -123px;
+				background-color: @gray-lighter;
+				&:after {
+					border-top-color: @gray-lighter;
+				}
 			}
 		}
 	}
