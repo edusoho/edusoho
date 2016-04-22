@@ -89,9 +89,14 @@ class ThemeController extends BaseController
 
     public function showAction(Request $request, $uri)
     {
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
-            'isEditColor' => true
-        ));
+
+      $themeConfig = $this->getThemeService()->getCurrentThemeConfig();
+
+      return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
+        'themeConfig' => $themeConfig['config'],
+        'allConfig'   => $themeConfig['allConfig'],
+        'isEditColor' => true
+      ));
     }
 
     public function themeConfigEditAction(Request $request, $uri)
