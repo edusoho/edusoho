@@ -210,19 +210,19 @@
                 "default": [
                     {
                         "src" : "\/themes\/mooc\/img\/es.jpg",
-                        "desc": "建议图片大小为212*180",
+                        "desc": "建议图片大小为212*212",
                         "value" : "Edusoho",
                         "href": "http://www.edusoho.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/howzhi.jpg",
-                        "desc": "建议图片大小为212*180",
+                        "desc": "建议图片大小为212*212",
                         "value" : "好知网",
                         "href": "http://www.howzhi.com"
                     },
                     {
                         "src" : "\/themes\/mooc\/img\/qiqiuyu.jpg",
-                        "desc": "建议图片大小为212*180",
+                        "desc": "建议图片大小为212*212",
                         "value" : "气球鱼",
                         "href": "http://www.qiqiuyu.com"
                     }
