@@ -5,6 +5,7 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class CourseLessonController extends BaseController
 {
@@ -277,68 +278,30 @@ class CourseLessonController extends BaseController
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
-
-                    $json['mediaConvertStatus'] = $file['convertStatus'];
-
-                    if (!empty($file['convertParams']['hasVideoWatermark'])) {
-                        $json['videoWatermarkEmbedded'] = 1;
+                    if ($file['type'] == 'video' && $file['convertStatus'] != 'success') {
+                        $json['mediaConvertStatus'] = 'doing';
                     }
 
-                    if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
-                        if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
-                            $token = $this->getTokenService()->makeToken('hls.playlist', array(
-                                'data'     => $file['id'],
-                                'times'    => $this->agentInWhiteList($request->headers->get("user-agent")) ? 0 : 3,
-                                'duration' => 3600,
-                                'userId'   => $this->getCurrentUser()->getId()
-                            ));
-
-                            $url = array(
-                                'url' => $this->generateUrl('hls_playlist', array(
-                                    'id'    => $file['id'],
-                                    'token' => $token['token'],
-                                    'line'  => $request->query->get('line')
-                                ), true)
-                            );
-                        } else {
-                            $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
-                        }
-
-                        $json['mediaHLSUri'] = $url['url'];
-
-                        if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
-                            $user        = $this->getCurrentUser();
-                            $watchStatus = $this->getCourseService()->checkWatchNum($user['id'], $lesson['id']);
-
-                            if ($watchStatus['status'] == 'error') {
-                                $wathcLimitTime     = $this->container->get('topxia.twig.web_extension')->durationTextFilter($watchStatus['watchLimitTime']);
-                                $json['mediaError'] = "您的观看时长已到 <strong>{$wathcLimitTime}</strong>，不能再观看。";
-                            }
-                        }
-                    } elseif ($file['type'] == 'ppt') {
-                        $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
-                    } else {
-                        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-                            $key = $file['metas']['hd']['key'];
-                        } else {
-                            if ($file['type'] == 'video') {
-                                $key = null;
-                            } else {
-                                $key = $file['hashId'];
-                            }
-                        }
-
-                        if ($key) {
-                            $url              = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                            $json['mediaUri'] = $url['url'];
-                        } else {
-                            $json['mediaUri'] = '';
-                        }
+                    if ($file['type'] == 'ppt') {
+                        $json['mediaUri'] = $this->generateUrl('course_lesson_ppt', array(
+                            'courseId' => $course['id'],
+                            'lessonId' => $lesson['id']
+                        ));
+                    } elseif ($file['type'] == 'document') {
+                        $json['mediaUri'] = $this->generateUrl('course_lesson_document', array(
+                            'courseId' => $course['id'],
+                            'lessonId' => $lesson['id']
+                        ));
+                    } elseif (!in_array($file['type'], array('video', 'audio'))) {
+                        $api              = CloudAPIFactory::create("leaf");
+                        $result           = $api->get("/resources/{$file['globalId']}/player");
+                        $json['mediaUri'] = $result['url'];
                     }
                 } else {
-                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array('courseId' => $course['id'], 'lessonId' => $lesson['id']));
+                    $json['mediaUri'] = $this->generateUrl('course_lesson_media', array(
+                        'courseId' => $course['id'],
+                        'lessonId' => $lesson['id']
+                    ));
 
                     if ($this->setting('magic.lesson_watch_limit') && $course['watchLimit'] > 0) {
                         $user        = $this->getCurrentUser();
@@ -487,7 +450,11 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['convertStatus'] != 'success') {
+        if (empty($file['globalId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
                 $message = sprintf('PPT文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
@@ -502,12 +469,8 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $result = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-
-        return $this->createJsonResponse($result);
+        $result = $this->getMaterialLibService()->player($file['globalId']);
+        return $this->createJsonResponse($result['images']);
     }
 
     public function documentAction(Request $request, $courseId, $lessonId)
@@ -532,7 +495,11 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['convertStatus'] != 'success') {
+        if (empty($file['globalId'])) {
+            throw $this->createNotFoundException();
+        }
+
+        if (isset($file['convertStatus']) && $file['convertStatus'] != 'success') {
             if ($file['convertStatus'] == 'error') {
                 $url     = $this->generateUrl('course_manage_files', array('id' => $courseId));
                 $message = sprintf('文档转换失败，请到课程<a href="%s" target="_blank">文件管理</a>中，重新转换。', $url);
@@ -547,15 +514,7 @@ class CourseLessonController extends BaseController
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $metas2           = $file['metas2'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-        $result['pdfUri'] = $url['url'];
-        $url              = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-        $result['swfUri'] = $url['url'];
-
+        $result = $this->getMaterialLibService()->player($file['globalId']);
         return $this->createJsonResponse($result);
     }
 
@@ -581,14 +540,9 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        if ($file["hashId"]) {
-            $url                = $client->generateFileUrl($client->getBucket(), $file["hashId"], 3600);
-            $result['mediaUri'] = $url['url'];
-        } else {
-            $result['mediaUri'] = '';
+        if ($file['storage'] == 'cloud') {
+            $result             = $this->getMaterialLibService()->player($file['globalId']);
+            $result['mediaUri'] = $result['url'];
         }
 
         return $this->createJsonResponse($result);
@@ -872,7 +826,7 @@ class CourseLessonController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getTestpaperService()
@@ -914,5 +868,10 @@ class CourseLessonController extends BaseController
     protected function getClassroomService()
     {
         return $this->getServiceKernel()->createService('Classroom:Classroom.ClassroomService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }

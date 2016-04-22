@@ -15,6 +15,7 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
      *   categoryCode 可选　分类CODE
      *   type 可选　课程类型：live直播, normal 普通
      *   count    必需 课程数量，取值不能超过100
+     *   notFill     可选 推荐课程不足时不填充课程数，默认:false
      * 
      * @param  array $arguments 参数
      * @return array 课程列表
@@ -39,13 +40,21 @@ class RecommendCoursesDataTag extends CourseBaseDataTag implements DataTag
         }
         
         $courses = $this->getCourseService()->searchCourses($conditions,'recommendedSeq', 0, $arguments['count']);
-        $coursesCount = count($courses);
-        if ($coursesCount < $arguments['count']) {
+        $fillCoursesCount = $arguments['count'] - count($courses);
+        if ($fillCoursesCount > 0 && empty($arguments['notFill'])) {
             $conditions['recommended'] = 0;
-            $coursesTemp = $this->getCourseService()->searchCourses($conditions,'createdTime', 0, $arguments['count']-$coursesCount);
+            $coursesTemp = $this->getCourseService()->searchCourses($conditions,'createdTime', 0, $fillCoursesCount);
             $courses = array_merge($courses, $coursesTemp);
         }
         
         return $this->getCourseTeachersAndCategories($courses);
+    }
+
+
+    protected function autoFillCourses()
+    {
+
+
+
     }
 }
