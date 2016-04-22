@@ -1,0 +1,76 @@
+{% extends 'TopxiaWebBundle:Question:question-base-layout.html.twig' %}
+
+{% block heading %}
+  {{ question.stem|fill_question_stem_html|bbCode2Html|raw }}
+{% endblock %}
+
+{% block body %}
+
+{% if itemResult.status == 'right' %}
+
+  {% set itemResultStatus = '你答对了'|trans %}
+
+{% elseif itemResult.status == 'wrong' %}
+
+  {% set itemResultStatus = '回答错误'|trans %}
+
+{% elseif itemResult.status == 'partRight' %}
+
+  {% set itemResultStatus = '部分回答正确'|trans %}
+
+{% elseif itemResult.status == 'noAnswer' %}
+
+  {% set itemResultStatus = '你未回答'|trans %}
+
+{% endif %}
+
+  <div class="question-fill-inputs ">
+    <div class="">
+      <div class="homework-question-fill">
+         <ul>
+          {% for index,rightAnswer in question.answer %}
+
+            <li>
+              填空({{index+1}})： 参考答案
+              <strong class="question-text-success">{{ rightAnswer|join(' 或 '|trans) }}</strong>
+              {% if itemResult.answer[index] or itemResult.answer[index] is same as(0) or itemResult.answer[index] is same as('0') %}
+             {{'回答是'|trans}}
+
+              <strong class="question-text-danger">{{ itemResult.answer[index]|default('') }}</strong>。
+              {% else %}
+              {{'未回答'|trans}}
+              {% endif %}
+            </li>
+
+          {% endfor %}
+
+         </ul>
+
+         {% set source = source|default('course') %}
+  {% if (source == 'classroom') %}
+    {% set canHandle = classroom_permit(targetId, 'Handle') %}
+  {% else %}
+    {% set canHandle = app.user.isTeacher() %}
+  {% endif %}
+  {% if canHandle %}
+    <div class="quetion-eassy-form-control question-theacher-score-input">
+      <div class="teacher-score-input">评分:</div>
+      <input class="form-control teacher-score" name="socre[{{ question.id }}]" style="width: 10%">
+    </div>
+    <div class="question-eassy-form-control question-teacher-say-input">
+      <div class="teacher-say-text">评语:</div>
+      <textarea class="form-control  teacher-say"  name="answer[{{ question.id }}]"  data-type="essay" data-question-id="{{ question.id }}"></textarea>
+    </div>
+  {% else %}
+    <div class="question-score">
+      <div class="question-result-title">老师正在批阅！</div>
+    </div>
+  {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}
