@@ -43,6 +43,21 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
         return $this->getConnection()->executeQuery($sql, array($rootId, $periods));
     }
 
+    public function searchCoursesMultiOrderBy($conditions, $orderBys, $start, $limit)
+    {
+        $this->filterStartLimit($start, $limit);
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        foreach ($orderBys as $orderBy) {
+            $builder->addOrderBy($orderBy[0], $orderBy[1]);
+        }
+
+        return $builder->execute()->fetchAll() ?: array();
+    }
+
     protected function _createSearchQueryBuilder($conditions)
     {
         if (isset($conditions['isPeriodic']) && true === $conditions['isPeriodic']) {
@@ -60,10 +75,12 @@ class CourseDaoImpl extends BaseCourseDao implements CourseDao
         ;
 
         if (!empty($conditions['table']) && 'singleCourse' == $conditions['table']) {
-            $now   = time();
-            $table = "(select a.* from (	select b.* from (
-						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime > {$now} UNION all select b.* from (
-						select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime < {$now}) a group by rootId )";
+            $now = time();
+
+            $table = "(select a.* from (    select b.* from (
+            select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime > {$now} UNION all select b.* from (
+select b.*, {$now} - cast(b.startTime as signed) as maxTime from course b order by maxTime desc) b where b.endTime < {$now}) a group by rootId )";
+
             $builder->from($table, 'course');
         }
 

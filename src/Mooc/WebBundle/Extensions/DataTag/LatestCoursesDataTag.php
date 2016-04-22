@@ -43,7 +43,7 @@ class LatestCoursesDataTag extends BaseTag
                 'endTimeLessThan' => time(),
                 'isPeriodic'      => true
             ),
-            'latest',
+            'recommendedOrlatest',
             0,
             PHP_INT_MAX
         );
@@ -52,7 +52,7 @@ class LatestCoursesDataTag extends BaseTag
         $conditions['excludeIds'] = $excludeIds;
         $conditions['table']      = 'singleCourse';
 
-        $courses = $this->getCourseService()->searchCourses($conditions, 'latest', 0, $arguments['count']);
+        $courses = $this->getCourseService()->searchCourses($conditions, 'recommendedOrlatest', 0, $arguments['count']);
 
         return $this->getCourseTeachersAndCategories($courses);
     }
