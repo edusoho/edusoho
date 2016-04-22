@@ -334,15 +334,7 @@ class CourseLessonManageController extends BaseController
         $mediaIds = array_keys($mediaMap);
 
         if (!empty($mediaIds)) {
-            $files = $this->getUploadFileService()->findFilesByIds($mediaIds);
-
-            foreach ($files as $file) {
-                $lessonIds = $mediaMap[$file['id']];
-
-                foreach ($lessonIds as $lessonId) {
-                    $courseItems["lesson-{$lessonId}"]['mediaStatus'] = $file['convertStatus'];
-                }
-            }
+            $files = $this->getUploadFileService()->findThinFilesByIds($mediaIds);
         }
 
         return $this->render('TopxiaWebBundle:CourseLessonManage:index.html.twig', array(
@@ -469,23 +461,34 @@ class CourseLessonManageController extends BaseController
 
     public function fileStatusAction(Request $request, $id)
     {
+        $course   = $this->getCourseService()->tryManageCourse($id);
+
         $courseItems = $this->getCourseService()->getCourseItems($id);
 
         if (empty($courseItems)) {
             return $this->createJsonResponse(array());
         }
 
-        $mediaIds = array_unique(ArrayToolkit::column($courseItems, 'mediaId'));
-
         $fileIds = array();
 
-        foreach ($mediaIds as $medisId) {
-            if (intval($medisId) > 0) {
-                $fileIds[] = intval($medisId);
+        foreach ($courseItems as $key => $item) {
+            if($item['itemType'] == 'lesson' && in_array($item['type'], array('ppt','document','video'))) {
+                $fileIds[] = $item['mediaId'];
             }
         }
+        $fileIds = array_unique($fileIds);
 
-        return $this->createJsonResponse($this->getUploadFileService()->findCloudFilesByIds($fileIds));
+        $pageSize = 20;
+        $totalPageNum = (count($fileIds) +  $pageSize  - 1) / $pageSize;
+
+        $files = array();
+        for ($i=0; $i < $totalPageNum; $i++) {
+            $partFileIds = array_slice($fileIds, $i*$pageSize, $pageSize);
+            $cloudFiles = $this->getUploadFileService()->findCloudFilesByIds($partFileIds);
+            $files = array_merge($files, $cloudFiles);
+        }
+
+        return $this->createJsonResponse($files);
     }
 
     protected function secondsToText($value)
