@@ -29,7 +29,7 @@ define(function(require, exports, module) {
 
         $("#refund-coin-tips").popover({
             html: true,
-            trigger: 'click',//'hover','click'
+            trigger: 'hover',//'hover','click'
             placement: 'left',//'bottom',
             content: $("#refund-coin-tips-html").html()
         });
