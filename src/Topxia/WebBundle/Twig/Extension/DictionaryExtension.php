@@ -16,7 +16,7 @@ class DictionaryExtension extends \Twig_Extension
 
     public function dictSelectOptions($type, $selected = null, $empty = null)
     {
-        $dictionaryItems = $this->getDictionaryItemService()->findDictionaryItemByType($type);
+        $dictionaryItems = $this->getDictionaryService()->findDictionaryItemByType($type);
         if ($type == 'refund_reason') {
             $choices['reason'] = '--请选择退学原因--';
             $selected = 'reason';
@@ -60,8 +60,8 @@ class DictionaryExtension extends \Twig_Extension
         return ServiceKernel::instance();
     }
 
-    protected function getDictionaryItemService()
+    protected function getDictionaryService()
     {
-        return $this->getServiceKernel()->createService('Dictionary.DictionaryItemService');
+        return $this->getServiceKernel()->createService('Dictionary.DictionaryService');
     }
 }
