@@ -207,12 +207,6 @@ class ClassroomManageController extends BaseController
 
         foreach ($refunds as $key => $refund) {
             $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-            $refunds[$key]['student'] = $this->getClassroomService()->searchMembers(
-                array('orderId'=>$refund['orderId']),
-                array('createdTime', 'DESC'),
-                0,
-                1
-            );
             $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
         }
 

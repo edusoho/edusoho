@@ -3,7 +3,7 @@
   <td class="media" style="vertical-align: middle;">
     {{ web_macro.user_avatar(refund['user'], 'pull-left', 'avatar-sm') }}
     <a target="_blank" href="{{ path('user_show', {id:refund['user'].id}) }}">{{ refund['user'].nickname }}</a>
-    <div class="text-muted text-sm">加入课程时间：{{ refund['student'][0].createdTime|date('Y-n-d H:i') }}</div>
+    <div class="text-muted text-sm">加入课程时间：{{ refund['order'].createdTime|date('Y-n-d H:i') }}</div>
     
   </td>
   <td style="vertical-align: middle;">
@@ -12,9 +12,9 @@
   <td style="vertical-align: middle;">
       {{ refund.createdTime|date('Y-n-d H:i') }}
   </td>
-  {% if refund.reasonNote == '手动移除' or (refund['order'].coinAmount|default() > 0 or refund['order'].couponDiscount|default() > 0 and refund['order'].amount == 0) %}
+  {% if refund.actualAmount == 0 %}
   <td style="vertical-align: middle;">
-    无记录
+    --
   </td>
   <td style="vertical-align: middle;">
     --
