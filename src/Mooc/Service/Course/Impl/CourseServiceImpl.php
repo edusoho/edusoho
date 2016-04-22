@@ -35,11 +35,11 @@ class CourseServiceImpl extends BaseCourseServiceImpl
             'studyModel'    => 'normal'
         ));
 
-        if(isset($fields['startTime']) && $success = strtotime($fields['startTime'])){
+        if (isset($fields['startTime']) && $success = strtotime($fields['startTime'])) {
             $fields['startTime'] = strtotime($fields['startTime']);
         }
 
-        if(isset($fields['endTime']) && $success = strtotime($fields['endTime'])){
+        if (isset($fields['endTime']) && $success = strtotime($fields['endTime'])) {
             $fields['endTime'] = strtotime($fields['endTime']);
         }
 
@@ -149,6 +149,41 @@ class CourseServiceImpl extends BaseCourseServiceImpl
     public function findCourseStudentsAll($courseId)
     {
         return $this->getMemberDao()->findMembersAllByCourseIdAndRole($courseId, 'student');
+    }
+
+    public function searchCourses($conditions, $sort, $start, $limit)
+    {
+        $conditions = $this->_prepareCourseConditions($conditions);
+
+        if (is_array($sort)) {
+            $orderBy = $sort;
+        } elseif ($sort == 'popular') {
+            $orderBy = array('hitNum', 'DESC');
+        } elseif ($sort == 'recommended') {
+            $orderBy = array('recommendedTime', 'DESC');
+        } elseif ($sort == 'Rating') {
+            $orderBy = array('Rating', 'DESC');
+        } elseif ($sort == 'hitNum') {
+            $orderBy = array('hitNum', 'DESC');
+        } elseif ($sort == 'studentNum') {
+            $orderBy = array('studentNum', 'DESC');
+        } elseif ($sort == 'recommendedSeq') {
+            $orderBy = array('recommendedSeq', 'ASC');
+        } elseif ($sort == 'createdTimeByAsc') {
+            $orderBy = array('createdTime', 'ASC');
+        } elseif ($sort == 'recommendedOrlatest') {
+            $orderBys = array(
+                array('recommended', 'DESC'),
+                array('recommendedSeq', 'ASC'),
+                array('recommendedTime', 'DESC'),
+                array('createdTime', 'DESC')
+            );
+            return CourseSerialize::unserializes($this->getCourseDao()->searchCoursesMultiOrderBy($conditions, $orderBys, $start, $limit));
+        } else {
+            $orderBy = array('createdTime', 'DESC');
+        }
+
+        return CourseSerialize::unserializes($this->getCourseDao()->searchCourses($conditions, $orderBy, $start, $limit));
     }
 }
 
