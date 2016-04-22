@@ -134,7 +134,7 @@ class DefaultController extends BaseController
         if ($currentHost != str_replace($fliter, "", $siteSetting['url'])) {
             return array(
                 'status'       => 'fail',
-                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
+                'errorMessage' => '当前域名和设置域名不符，为避免影响云短信、云搜索功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
                 'except'       => $siteSetting['url'],
                 'actually'     => $currentHost,
                 'settingUrl'   => $settingUrl

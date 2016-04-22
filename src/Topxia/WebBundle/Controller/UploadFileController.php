@@ -3,7 +3,6 @@ namespace Topxia\WebBundle\Controller;
 
 use Topxia\Common\FileToolkit;
 use Topxia\Service\User\CurrentUser;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -33,9 +32,9 @@ class UploadFileController extends BaseController
 
         $originalFile = $this->get('request')->files->get('file');
 
-        $file = $this->getCourseService()->uploadCourseFile($targetType, $targetId, array(), 'local', $originalFile);
+        $this->getUploadFileService2()->moveFile($targetType, $targetId, $originalFile, $token['data']);
 
-        return $this->createJsonResponse($file);
+        return $this->createJsonResponse($token['data']);
     }
 
     public function downloadAction(Request $request, $fileId)
@@ -49,7 +48,7 @@ class UploadFileController extends BaseController
         $this->getServiceKernel()->createService("System.LogService")->info('upload_file', 'download', "文件Id #{$fileId}");
 
         if ($file['storage'] == 'cloud') {
-            $this->downloadCloudFile($file);
+            return $this->downloadCloudFile($file);
         } else {
             return $this->downloadLocalFile($request, $file);
         }
@@ -57,33 +56,20 @@ class UploadFileController extends BaseController
 
     protected function downloadCloudFile($file)
     {
-        if (!empty($file['metas']) && !empty($file['metas']['hd']['key'])) {
-            $key = $file['metas']['hd']['key'];
-        } else {
-            $key = $file['hashId'];
-        }
-
-        if (empty($key)) {
-            throw $this->createNotFoundException();
-        }
-
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $client->download($client->getBucket(), $key, 3600, $file['filename']);
+        $file = $this->getUploadFileService2()->getDownloadFile($file['id']);
+        return $this->redirect($file['url']);
     }
 
     protected function downloadLocalFile(Request $request, $file)
     {
         $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
         $response->trustXSendfileTypeHeader();
-
         $file['filename'] = urlencode($file['filename']);
 
         if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
             $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
         } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
+            $response->headers->set('Content-Disposition', 'attachment; filename*=UTF-8 "'.$file['filename'].'"');
         }
 
         $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
@@ -105,11 +91,9 @@ class UploadFileController extends BaseController
 
         $conditions = $request->query->all();
 
-        $materialLibApp = $this->getAppService()->findInstallApp('MaterialLib');
+        $conditions['currentUserId'] = $user['id'];
 
-        if (!empty($materialLibApp)) {
-            $conditions['currentUserId'] = $user['id'];
-        }
+        $conditions['noTargetType'] = 'coursematerial';
 
         $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
 
@@ -199,6 +183,7 @@ class UploadFileController extends BaseController
             );
         }
 
+        $this->getUploadFileService2()->syncFile($file);
         return $file;
     }
 
@@ -263,6 +248,7 @@ class UploadFileController extends BaseController
             ));
         }
 
+        $this->getUploadFileService2()->syncFile($file);
         return $file;
     }
 
@@ -302,7 +288,7 @@ class UploadFileController extends BaseController
         }
 
         $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
-
+        $this->getUploadFileService2()->syncFile($file);
         return $this->createJsonResponse($file['metas2']);
     }
 
@@ -359,6 +345,7 @@ class UploadFileController extends BaseController
             ));
         }
 
+        $this->getUploadFileService2()->syncFile($file);
         return $this->createJsonResponse($file['metas2']);
     }
 
@@ -388,6 +375,11 @@ class UploadFileController extends BaseController
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
+    protected function getUploadFileService2()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -412,7 +404,7 @@ class UploadFileController extends BaseController
     {
         foreach ($files as &$file) {
             $file['updatedTime'] = date('Y-m-d H:i', $file['updatedTime']);
-            $file['size']        = FileToolkit::formatFileSize($file['size']);
+            $file['fileSize']    = FileToolkit::formatFileSize($file['fileSize']);
 
             // Delete some file attributes to redunce the json response size
             unset($file['hashId']);

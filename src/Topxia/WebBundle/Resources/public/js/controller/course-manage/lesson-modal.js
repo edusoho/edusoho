@@ -323,17 +323,21 @@ define(function(require, exports, module) {
             choosed: choosedMedia
         });
 
+        var fillTitle = function(name) {
+            var $title = $form.find('[name=title]');
+            if ($title.val().length > 0) {
+                return ;
+            }
+
+            $title.val(name.substring(0, name.lastIndexOf('.')));
+        }; 
+
         videoChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
 
             updateDuration(item.length);
-            var $title = $form.find('[id="lesson-title-field"]');
-            if($title.val()==""){
-                var ext = "." + item.name.replace(/.+\./, "");
-                var filenameNoExt = item.name.replace(ext, "");
-                $title.val(filenameNoExt);
-            }
+            fillTitle(item.name);
 
         });
 
@@ -342,37 +346,40 @@ define(function(require, exports, module) {
             $form.find('[name="media"]').val(value);
 
             updateDuration(item.length);
-            var $title = $form.find('[id="lesson-title-field"]');
-            if($title.val()==""){
-                var ext = "." + item.name.replace(/.+\./, "");
-                var filenameNoExt = item.name.replace(ext, "");
-                $title.val(filenameNoExt);
-            }
+            fillTitle(item.name);
 
         });
 
         pptChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         documentChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         flashChooser.on('change', function(item) {
             var value = item ? JSON.stringify(item) : '';
             $form.find('[name="media"]').val(value);
+            fillTitle(item.name);
         });
 
         $('.modal').unbind("hide.bs.modal");
         $(".modal").on("hide.bs.modal", function(){
-            videoChooser.destroy();
-            audioChooser.destroy();
-            pptChooser.destroy();
-            documentChooser.destroy();
-            flashChooser.destroy();
+            var $choosers = [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser];
+            for(var i=0; i<$choosers.length; i++){
+                if($choosers[i].isUploading()){
+                    Notify.danger('文件正在上传，等待上传完后再保存。');
+                    return false;
+                }
+            }
+            for(var i=0; i<$choosers.length; i++){
+                $choosers[i]._destoryUploader();
+            }
         });
 
         var validator = createValidator($form, [videoChooser,pptChooser,audioChooser,documentChooser,flashChooser]);
@@ -388,39 +395,39 @@ define(function(require, exports, module) {
             }
 
             if (type == 'video') {
-                videoChooser.show();
                 audioChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                videoChooser.show();
                 clearInterval(Timer);
             } else if (type == 'audio') {
-                audioChooser.show();
                 videoChooser.hide();
                 pptChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                audioChooser.show();
                 clearInterval(Timer);
             } else if (type == 'ppt') {
-                pptChooser.show();
                 videoChooser.hide();
                 audioChooser.hide();
                 documentChooser.hide();
                 flashChooser.hide();
+                pptChooser.show();
                 clearInterval(Timer);
             } else if (type == 'document') {
-                documentChooser.show();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
                 flashChooser.hide();
+                documentChooser.show();
                 clearInterval(Timer);
             } else if (type == 'flash') {
-                flashChooser.show();
                 documentChooser.hide();
                 pptChooser.hide();
                 videoChooser.hide();
                 audioChooser.hide();
+                flashChooser.show();
                 clearInterval(Timer);
             }
 
