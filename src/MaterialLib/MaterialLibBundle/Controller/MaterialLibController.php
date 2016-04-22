@@ -115,9 +115,9 @@ class MaterialLibController extends BaseController
     {
         $file = $this->tryAccessFile($fileId);
         if($file['storage'] == 'cloud'){
-          return $this->forward('MaterialLibBundle:GlobalFilePlayer:player', array(
+          return $this->forward('TopxiaAdminBundle:CloudFile:player', array(
               'request'  => $request,
-              'globalId' => $globalId
+              'globalId' => $file['globalId']
           ));
         }
         return $this->render('MaterialLibBundle:Web:local-player.html.twig', array());

@@ -851,6 +851,26 @@ admin_cloud_file_delete:
     pattern: /cloud_file/{globalId}/delete
     defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
 
+global_file_hls_playlist:
+    pattern:  /global_file/{globalId}/playlist/{token}.m3u8
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:playlist }
+
+global_file_hls_stream:
+    pattern:  /global_file/{globalId}/stream/{level}/{token}.m3u8
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:stream }
+
+global_file_hls_clef:
+    pattern:  /global_file/{globalId}/clef/{token}
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:clef }
+
+global_file_ppt:
+    pattern:  /global_file/{globalId}/ppt
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:ppt }
+
+global_file_document:
+    pattern:  /global_file/{globalId}/document
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:document }
+
 admin_app_installed:
     pattern:  /app/installed/{postStatus}
     defaults: { _controller: TopxiaAdminBundle:App:installed }
