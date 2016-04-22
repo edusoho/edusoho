@@ -10,6 +10,11 @@ define(function(require, exports, module) {
         $form.find('[name="reason[type]"]').on('change', function() {
             var $this = $(this),
                 reasonType = $this.val();
+            if (reasonType == 'reason') {
+                $modal.find('.refund-btn').attr('disabled', true);
+            } else {
+                $modal.find('.refund-btn').attr('disabled', false);
+            }
             if (reasonType == 'other') {
                 $form.find('[name="reason[note]"]').val('').show();
             } else {
@@ -24,6 +29,16 @@ define(function(require, exports, module) {
                 window.location.reload();
             }, 'json');
             return false;
+        });
+
+        var validator = new Validator({
+            
+        });
+        validator.addItem({
+            element: '[name="reason[note]"]',
+            required: true,
+            display: '退学原因',
+            rule: 'maxlength{max:120}'
         });
 
     };

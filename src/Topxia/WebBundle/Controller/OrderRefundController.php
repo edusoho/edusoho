@@ -50,13 +50,12 @@ class OrderRefundController extends BaseController
 
         $maxRefundDays = (int) $this->setting('refund.maxRefundDays', 0);
         $refundOverdue = (time() - $order['createdTime']) > ($maxRefundDays * 86400);
-
         return $this->render('TopxiaWebBundle:OrderRefund:refund-modal.html.twig', array(
             'target'        => $target,
             'targetType'    => $targetType,
             'order'         => $order,
             'maxRefundDays' => $maxRefundDays,
-            'refundOverdue' => $refundOverdue
+            'refundOverdue' => $refundOverdue,
         ));
     }
 
@@ -97,4 +96,5 @@ class OrderRefundController extends BaseController
     {
         return $this->getServiceKernel()->createService('Order.OrderService');
     }
+
 }
