@@ -22,7 +22,7 @@
             <a class="pull-right" href="{{ path('classroom_explore') }}">更多&gt;</a>
           </div>
           <div class="es-box-body">
-            <ul class="home-class-list">
+            <ul class="home-class-list clearfix">
             {% for classroom in classrooms %}
             {% set teachers = classroom.users|default(null) %}
             {% if loop.index <= 5%}
@@ -144,13 +144,13 @@
                     <li class="col-sm-12">
                       <div class="vip-item">
                         <div class="row">
-                          <div class="col-sm-4 col-md-4">
+                          <div class="vip-img col-sm-4 col-md-4 ">
                             <a href="{{ path('vip_course_explore', {levelId:level.id}) }}">
                             <img class="img-responsive" src="{{ level.picture|default(asset('assets/img/default/vip-default.png')) }}" alt="{{ level.name }}">
                             </a>
                           </div>
                           </a>
-                          <div class="col-sm-5 col-md-5">
+                          <div class="vip-intro col-sm-5 col-md-5">
                             <h3>{{ level.name }}</h3>
                             <p>{{ level.description|plain_text(40) }}</p>
                           </div>
