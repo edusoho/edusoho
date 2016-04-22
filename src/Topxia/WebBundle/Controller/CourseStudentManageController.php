@@ -73,7 +73,9 @@ class CourseStudentManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'course','exStatus'=>'refunding'));
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'course';
+        $condition['statusNotEqual'] = 'refunding';
 
         $paginator = new Paginator(
             $request,

@@ -190,7 +190,10 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'classroom','exStatus'=>'refunding'));
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'classroom';
+        $condition['statusNotEqual'] = 'refunding';
+
         
         $paginator = new Paginator(
             $request,
