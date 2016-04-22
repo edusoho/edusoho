@@ -190,7 +190,7 @@ class ClassroomManageController extends BaseController
             $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
 
-        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'classroom'));
+        $condition = array_merge($condition, array('targetId' => $id, 'targetType' => 'classroom','exStatus'=>'refunding'));
         
         $paginator = new Paginator(
             $request,
@@ -274,6 +274,7 @@ class ClassroomManageController extends BaseController
         }
 
         $this->getClassroomService()->removeStudent($classroomId, $userId);
+
         $reason = array(
             'type' => 'other',
             'note' => '手动移除'
