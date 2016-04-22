@@ -35,15 +35,14 @@
  </div>
 {% endif  %}
 
-{% if  data.value|default('') %}
+
   <div class="form-group">
     <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][value]">描述</label>
     <div class="col-md-8 col-xs-8">
       <input class="form-control js-label-input" type="text" name="data[{{ code }}][{{ dataId }}][value]" id="data[{{ code }}][{{ dataId }}][value]" value="{{ data.value|default('') }}" >
     </div>
-    
  </div>
- {% endif  %}
+ 
 
   <div class="form-group">
   <label class="control-label col-md-3 col-xs-3" for="data[{{ code }}][{{ dataId }}][href]">链接地址</label>
