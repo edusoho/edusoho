@@ -9,7 +9,7 @@ define(function(require, exports, module) {
 
         // group:'course'
         CKEDITOR.replace('course-about-field', {
-            allowedContent: 'ol{*};a[!href]{*};img[alt,!src]{*};div{*};span{*};table{*};ul{*};li{*};p{*};u{*};em{*};strong{*}',
+            allowedContent: 'ol{*};a[!href]{*};img[alt,!src]{*};div{*};span{*};table{*};tr{*};td{*};ul{*};li{*};p{*};u{*};em{*};strong{*}',
             toolbar: 'Detail',
             filebrowserImageUploadUrl: $('#course-about-field').data('imageUploadUrl')
         });
