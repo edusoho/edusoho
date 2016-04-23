@@ -14,7 +14,7 @@ define(function(require, exports, module) {
             });
         });
 
-        $table.on('click', '.choose-course', function(e){
+        $table.on('click', '.choose-classroom', function(e){
             var classroomId = $(this).data('target');
             var classroomName = $(this).data('name');
             var html = '<a href="/classroom/'+classroomId+'" target="_blank"><strong>'+classroomName+'</strong></a>';
