@@ -208,9 +208,22 @@ class ClassroomManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $userIds = ArrayToolkit::column($refunds,'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, "id");
+
+        $orderIds = ArrayToolkit::column($refunds,'orderId');
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($orders, "id");
+
         foreach ($refunds as $key => $refund) {
-            $refunds[$key]['user'] = $this->getUserService()->getUser($refund['userId']);
-            $refunds[$key]['order'] = $this->getOrderService()->getOrder($refund['orderId']);
+            if(isset($users[$refund['userId']])) {
+                $refunds[$key]['user'] = $users[$refund['userId']];
+            }
+
+            if(isset($orders[$refund['orderId']])) {
+                $refunds[$key]['order'] = $orders[$refund['orderId']];
+            }
         }
 
         return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
