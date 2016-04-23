@@ -35,6 +35,10 @@ classroom_manage_aduitor:
     pattern: /classroom/{id}/manage/aduitor
     defaults: { _controller: ClassroomBundle:ClassroomManage:aduitor }
 
+classroom_manage_record:
+    pattern: /classroom/{id}/manage/refund_record
+    defaults: { _controller: ClassroomBundle:ClassroomManage:refundRecord }
+
 classroom_manage_service:
     pattern: /classroom/{id}/manage/service
     defaults: { _controller: ClassroomBundle:ClassroomManage:service}
