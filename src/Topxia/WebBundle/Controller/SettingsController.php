@@ -901,6 +901,26 @@ class SettingsController extends BaseController
         return $this->render('TopxiaWebBundle:Settings:setup.html.twig');
     }
 
+    public function setupPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        var_dump($user);
+
+        if ($user['setup']) {
+            throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $data = $request->request->all();
+            $this->getUserService()->changePassword($user['id'], $data['password']);
+            $this->authenticateUser($user);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:setup-password.html.twig');
+    }
+
     public function setupCheckNicknameAction(Request $request)
     {
         $user = $this->getCurrentUser();
