@@ -1075,9 +1075,9 @@ admin_invite_set:
     pattern:  /setting/invite
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
 
-admin_invite_coupon:
-    pattern: /invite/{filter}/coupon
-    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invite'}    
+admin_invite_coupon_list:
+    pattern: /{filter}/coupon/list
+    defaults: { _controller: TopxiaAdminBundle:Invite:couponList, filter:'invited'}    
 
 admin_group:
     pattern:  /group/

@@ -120,6 +120,17 @@ class CardServiceImpl extends BaseService implements CardService
             unset($conditions['creator']);
         }
 
+        if (isset($conditions['startDateTime'])) {
+            $conditions['reciveStartTime'] = $conditions['startDateTime'];
+            unset($conditions['startDateTime']);
+        }
+
+         if (isset($conditions['endDateTime'])) {
+            $conditions['reciveEndTime'] = $conditions['endDateTime'];
+            unset($conditions['endDateTime']);
+        }
+
+
         return $conditions;
     }
 

@@ -96,7 +96,7 @@ class InviteController extends BaseController
         ));
     }
 
-    public function couponAction(Request $request, $filter)
+    public function couponListAction(Request $request, $filter)
     {
         $conditions = $request->query->all();
 
@@ -113,12 +113,8 @@ class InviteController extends BaseController
             9999
         );
 
-        $coupons = $this->getCouponService()->searchCoupons(
-            array('ids' => ArrayToolkit::column($cards, 'cardId')),
-            array('id', 'DESC'),
-            0,
-            9999
-        );
+
+        $coupons = $this->getCouponService()->findCouponsByIds(ArrayToolkit::column($cards,'cardId'));
 
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
 
@@ -149,9 +145,7 @@ class InviteController extends BaseController
         );
 
         $cards   = ArrayToolkit::index($cards, 'cardId');
-        $coupons = ArrayToolkit::index($coupons, 'id');
-        $orders  = ArrayToolkit::index($orders, 'id');
-
+      
         return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
 
             'cardInformations' => $cardInformations,

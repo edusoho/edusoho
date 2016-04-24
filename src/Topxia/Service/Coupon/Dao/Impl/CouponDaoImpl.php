@@ -48,6 +48,26 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         return $this->getConnection()->fetchAll($sql);
     }
 
+    public function findCouponsByIds(array $ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+
+        $that = $this;
+        $keys = implode(',', $ids);
+        return $this->fetchCached("ids:{$keys}", $marks, $ids, function ($marks, $ids) use ($that) {
+            $sql = "SELECT * FROM {$that->getTable()} WHERE id IN ({$marks});";
+
+            return $that->getConnection()->fetchAll($sql, $ids);
+        }
+
+        );
+    }
+
+
     public function searchCoupons($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
