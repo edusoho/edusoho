@@ -62,7 +62,7 @@ class SettingsController extends BaseController
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
             $this->setFlashMessage('success', '实名认证提交成功！');
-            return $this->redirect($this->generateUrl('settings'));
+            return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
