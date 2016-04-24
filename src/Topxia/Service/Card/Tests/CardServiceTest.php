@@ -59,6 +59,21 @@ class CardServiceTest extends BaseTestCase
         $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],'');
     }
 
+    public function testSearchCards()
+    { 
+        $user = $this->createUser();
+        $card1 =  $this->generateCard($user);
+        $this->getCardService()->addCard($card1);
+        $card2 = $this->generateCard($user);
+        $this->getCardService()->addCard($card2);
+        $conditions = array(
+            'userId' => $user['id']
+        );
+        $orderBy = array('createdTime', 'ASC');
+        $result  = $this->getCardService()->searchCards($conditions, $orderBy, 0, 20);
+        $this->assertEquals(2, count($result));
+    }
+
     protected function getCardService()
     {
         return $this->getServiceKernel()->createService('Card.CardService');
