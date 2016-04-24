@@ -70,15 +70,15 @@ class CardDaoImpl extends BaseDao implements CardDao
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-            ->from($this->table, 'cardId')
-            ->andWhere('cardType = :cardType')
-            ->andWhere('deadline = :deadline')
-            ->andWhere('status = :status')
-            ->andWhere('userId = :userId')
-            ->andWhere('useTime >= :startDateTime')
-            ->andWhere('useTime < :endDateTime')
-            ->andWhere('createdTime >= :reciveStartTime')
-            ->andWhere('createdTime < :reciveEndTime');
+                        ->from($this->table, 'cardId')
+                        ->andWhere('cardType = :cardType')
+                        ->andWhere('deadline = :deadline')
+                        ->andWhere('status = :status')
+                        ->andWhere('userId = :userId')
+                        ->andWhere('useTime >= :startDateTime')
+                        ->andWhere('useTime < :endDateTime')
+                        ->andWhere('createdTime >= :reciveStartTime')
+                        ->andWhere('createdTime < :reciveEndTime');
 
         return $builder;
     }
