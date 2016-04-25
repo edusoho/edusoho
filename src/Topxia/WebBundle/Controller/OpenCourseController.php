@@ -10,6 +10,7 @@ class OpenCourseController extends BaseController
 {
     public function exploreAction(Request $request, $category)
     {
+        //BlockToolkit::init($this->container->getParameter('topxia.upload.public_directory').'/./../themes/block.json');
         $queryParam = $request->query->all();
         $conditions = $this->_filterConditions($queryParam);
 
@@ -22,8 +23,7 @@ class OpenCourseController extends BaseController
 
         $courseSetting = $this->getSettingService()->get('course', array());
 
-        $orderBy = $courseSetting['explore_default_orderBy'] ?: 'latest';
-        $orderBy = empty($queryParam['orderBy']) ? $orderBy : $queryParam['orderBy'];
+        $orderBy = empty($queryParam['orderBy']) ? 'recommendedSeq' : $queryParam['orderBy'];
 
         $paginator = new Paginator(
             $this->get('request'),
