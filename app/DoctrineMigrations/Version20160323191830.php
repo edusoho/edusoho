@@ -127,6 +127,10 @@ class Version20160323191830 extends AbstractMigration
         if (!$this->isFieldExist('course_lesson_replay', 'type')) {
             $this->addSql("ALTER TABLE course_lesson_replay ADD `type` varchar(50) NOT NULL DEFAULT 'live' COMMENT '课程类型';");
         }
+
+        if (!$this->isFieldExist('course_material', 'type')) {
+            $this->addSql("ALTER TABLE course_material ADD `type` varchar(50) NOT NULL DEFAULT 'course' COMMENT '课程类型';");
+        }
     }
 
     protected function isTableExist($table)

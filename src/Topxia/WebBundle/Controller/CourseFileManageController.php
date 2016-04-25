@@ -44,7 +44,7 @@ class CourseFileManageController extends BaseController
 
         foreach ($files as $key => $file) {
             $useNum            = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-            $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
+            $manageFilesUseNum = $this->getMaterialService()->searchMaterialCount(array('fileId' => $file['id'], 'type' => 'course'));
 
             if ($files[$key]['targetType'] == 'coursematerial') {
                 $files[$key]['useNum'] = $manageFilesUseNum;

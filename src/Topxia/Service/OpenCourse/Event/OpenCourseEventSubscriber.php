@@ -12,7 +12,9 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         return array(
             'open.course.lesson.create' => 'onLessonCreate',
             'open.course.lesson.delete' => 'onLessonDelete',
-            'open.course.member.create' => 'onMemberCreate'
+            'open.course.member.create' => 'onMemberCreate',
+            'material.create'           => 'onMaterialCreate',
+            'material.delete'           => 'onMaterialDelete'
         );
     }
 
@@ -43,6 +45,26 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
         $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $fields['courseId']));
 
         $this->getOpenCourseService()->updateCourse($fields['courseId'], array('studentNum' => $memberNum));
+    }
+
+    public function onMaterialCreate(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $material = $context['material'];
+
+        if ($material) {
+            $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', 1);
+        }
+    }
+
+    public function onMaterialDelete(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $material = $context['material'];
+
+        if (!empty($material['fileId'])) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
+        }
     }
 
     protected function getNoteService()

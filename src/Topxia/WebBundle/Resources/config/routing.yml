@@ -2181,6 +2181,24 @@ open_course_manage_student_export_csv:
     pattern:  /open/course/{id}/manage/student/export
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:studentsExport }
 
+open_course_manage_material:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/material
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialModal }
+
+open_course_manage_material_upload:
+    pattern:  /open/course/{courseId}/manage/lesson/{lessonId}/material/upload
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialUpload }
+    methods: [POST]
+
+open_course_manage_material_delete:
+    pattern:  /open/course/{courseId}/manage/material/{materialId}/delete
+    defaults: { _controller: TopxiaWebBundle:OpenCourseLessonManage:materialDelete }
+    methods: [POST]
+
+open_course_material_download:
+    pattern:  /open/course/{courseId}/material/{materialId}/download
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:materialDownload }
+
 open_course_course_search:
     pattern: /open/course/{id}/recommended/search/{filter}
     defaults: { _controller: TopxiaWebBundle:OpenCourseManage:search}

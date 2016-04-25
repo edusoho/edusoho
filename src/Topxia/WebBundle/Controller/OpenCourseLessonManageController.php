@@ -283,6 +283,67 @@ class OpenCourseLessonManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function materialModalAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $materials = $this->getMaterialService()->searchMaterials(
+            array('lessonId' => $lesson['id'], 'type' => 'openCourse'),
+            array('createdTime', 'DESC'),
+            0, 100
+        );
+        return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
+            'course'         => $course,
+            'lesson'         => $lesson,
+            'materials'      => $materials,
+            'storageSetting' => $this->setting('storage'),
+            'targetType'     => 'coursematerial',
+            'targetId'       => $course['id']
+        ));
+    }
+
+    public function materialUploadAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+
+        if (empty($lesson)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($request->getMethod() == 'POST') {
+            $fields = $request->request->all();
+
+            if (empty($fields['fileId']) && empty($fields['link'])) {
+                throw $this->createNotFoundException();
+            }
+
+            $fields['courseId'] = $course['id'];
+            $fields['lessonId'] = $lesson['id'];
+            $fields['type']     = 'openCourse';
+
+            $material = $this->getMaterialService()->uploadMaterial($fields);
+
+            return $this->render('TopxiaWebBundle:CourseMaterialManage:list-item.html.twig', array(
+                'material' => $material,
+                'course'   => $course
+            ));
+        }
+
+        return $this->render('TopxiaWebBundle:CourseMaterial:upload-modal.html.twig', array(
+            'form'   => $form->createView(),
+            'course' => $course
+        ));
+    }
+
+    public function materialDeleteAction(Request $request, $courseId, $materialId)
+    {
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+        $this->getMaterialService()->deleteMaterial($courseId, $materialId);
+        return $this->createJsonResponse(true);
+    }
+
     protected function textToSeconds($minutes, $seconds)
     {
         return intval($minutes) * 60 + intval($seconds);
@@ -313,5 +374,10 @@ class OpenCourseLessonManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 }

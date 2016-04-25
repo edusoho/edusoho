@@ -241,9 +241,14 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialCreate(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $argument  = $context['argument'];
-        $material  = $context['material'];
+        $context  = $event->getSubject();
+        $argument = $context['argument'];
+        $material = $context['material'];
+
+        if ($material['lessonId'] && $material['type'] == 'course') {
+            $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
+        }
+
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
 
         if ($courseIds) {
@@ -260,14 +265,27 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context   = $event->getSubject();
-        $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
+        $context = $event->getSubject();
+        $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
 
-        if ($courseIds) {
-            $materialIds = ArrayToolkit::column($this->getMaterialService()->findMaterialsByCopyIdAndLockedCourseIds($context['id'], $courseIds), 'id');
+        if ($context['lessonId'] && $context['type'] == 'course') {
+            $count = $this->getMaterialService()->searchMaterialCount(array('courseId' => $context['courseId'], 'lessonId' => $context['lessonId'], 'type' => 'course'));
+            $this->getCourseService()->resetLessonMaterialCount($context['lessonId'], $count);
+        }
 
-            foreach ($materialIds as $key => $materialId) {
-                $this->getMaterialService()->deleteMaterial($courseIds[$key], $materialId);
+        if ($courses) {
+            $materials = $this->getMaterialService()->searchMaterials(
+                array('copyId' => $context['id'], 'courseIds' => ArrayToolkit::column($courses, 'id')),
+                array('createdTime', 'DESC'),
+                0, PHP_INT_MAX
+            );
+
+            if (!$materials) {
+                return true;
+            }
+
+            foreach ($materials as $key => $material) {
+                $this->getMaterialService()->deleteMaterial($courses[$material['courseId']]['id'], $material['id']);
             }
         }
     }
