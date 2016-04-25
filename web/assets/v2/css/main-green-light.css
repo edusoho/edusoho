@@ -1350,10 +1350,7 @@
 }
 .vip-item {
   border: 1px solid #e1e1e1;
-}
-.vip-item .row {
-  margin-left: -15px;
-  margin-right: -15;
+  background: #fff;
 }
 .vip-lists li {
   margin-bottom: 20px;
@@ -1362,19 +1359,40 @@
 .vip-item p {
   color: #555;
 }
+@media (max-width: 767px) {
+  .vip-item h3 {
+    padding: 0 10px;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+}
 .vip-item h4 {
   color: #e57259;
   text-decoration: none;
   text-align: center;
 }
 .vip-item img {
-  width: 100%;
+  width: 120px;
+  height: 120px;
+  margin: 10px 20px;
+  border-radius: 50%;
+}
+@media (max-width: 767px) {
+  .vip-item img {
+    margin: 10px auto;
+  }
 }
 .vip-item a {
   overflow: hidden;
 }
 .vip-price {
   margin-top: 20px;
+}
+@media (max-width: 767px) {
+  .vip-price {
+    margin-top: 0;
+  }
 }
 .site-footer {
   margin-top: 20px;
@@ -1423,12 +1441,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.homepage .vip ul {
-  margin-right: -10px;
-  margin-left: -10px;
-  padding-left: 0px;
-  list-style: none;
 }
 .homepage .hot-group img {
   width: 58px;
@@ -3345,7 +3357,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3365,7 +3377,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999999;
+  background-color: #999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -10848,7 +10860,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
+  background: #fff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;

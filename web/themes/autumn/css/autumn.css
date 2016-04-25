@@ -478,17 +478,8 @@ a:focus {
 }
 .homepage .teachers ul,
 .homepage .vip ul {
-  margin-right: -10px;
-  margin-left: -10px;
   padding-left: 0px;
   list-style: none;
-}
-@media (max-width: 767px) {
-  .homepage .teachers ul,
-  .homepage .vip ul {
-    margin-right: -5px;
-    margin-left: -5px;
-  }
 }
 .homepage .teachers ul li,
 .homepage .vip ul li {
@@ -546,14 +537,13 @@ a:focus {
 .teachers-item p {
   margin-top: 20px;
   font-size: 12px;
-  height: 40px;
+  height: 36px;
   text-align: left;
   overflow: hidden;
 }
 @media (max-width: 767px) {
   .teachers-item p {
     margin-top: 10px;
-    height: 36px;
     margin-bottom: 0;
   }
 }
@@ -562,33 +552,6 @@ a:focus {
   display: block;
   line-height: 24px;
   text-decoration: none;
-}
-@media (max-width: 767px) {
-  .vip-item h3 {
-    padding: 0 10px;
-    margin-top: 10px;
-    font-size: 14px;
-  }
-}
-@media (max-width: 767px) {
-  .vip-item .vip-Img {
-    padding-left: 14px;
-  }
-}
-.vip-item p {
-  font-size: 12px;
-  padding: 0 10px;
-  height: 20px;
-  line-height: 20px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: normal;
-}
-@media (max-width: 767px) {
-  .vip-price {
-    margin-top: 0;
-  }
 }
 .user-learn {
   background: #fff;
