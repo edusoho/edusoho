@@ -704,6 +704,10 @@ admin_setting_developer_magic:
     pattern:  /setting/developer/magic
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
 
+admin_setting_developer_sync_file_data:
+    pattern:  /setting/developer/sync_upload_file
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:syncUploadFile }
+
 admin_setting_post_num_rules:
     pattern:  /setting/post_num_rules
     defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
