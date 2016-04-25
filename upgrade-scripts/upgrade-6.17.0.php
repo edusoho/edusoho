@@ -149,7 +149,7 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $this->getConnection()->exec("insert into `file` (groupId, userId, uri, size, createdTime,mime, uploadFileId) select (select id from file_group where name='默认文件组') as groupId, createdUserId as userId, concat('public://',hashId) as uri, fileSize as size, createdTime, type as mime, id as uploadFileId from upload_files where isPublic=1;");
 
-            $this->getConnection()->exec("delete upload_files where isPublic=1;");
+            $this->getConnection()->exec("delete from upload_files where isPublic=1;");
         }
 
         $this->getConnection()->exec("ALTER TABLE  `upload_files` CHANGE  `convertParams`  `convertParams` TEXT NULL COMMENT '文件转换参数';");
