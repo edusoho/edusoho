@@ -39,7 +39,7 @@
         <div class="form-group order-detail-bg">
           {% for payment, options in payments %}
             {% if payment == 'alipay' and is_micro_messenger() %}
-            <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。</p>
+            <p class="color-danger">如需使用支付宝支付，请在其他浏览器中重新下单。<a id='copy' href='javascript:;'>复制地址</a></p>
             <div class="check disabled">
               {% set picture = 'assets/img/order/'~payment~'.png' %}
               <img src="{{ asset(picture) }}" />
