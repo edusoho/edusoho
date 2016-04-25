@@ -2,7 +2,7 @@
   <div class="course-img">
     <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
         <span class="tags">
-          <span class="tag-live"></span>
+          <span class="tag-open-live"></span>
         </span>
       {% if course.type == 'liveOpen' %}
         {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}

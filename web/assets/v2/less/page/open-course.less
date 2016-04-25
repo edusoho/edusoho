@@ -221,17 +221,17 @@
 			// float: right;
 			// width: 90%;
 			padding: 0;
-		    	margin-bottom: 0;
-		    	list-style-type: none;
-		    	// @media(max-width:@screen-sm-max) {
-		    	// 	float: left;
-		    	// }
+    	margin-bottom: 0;
+    	list-style-type: none;
+    	// @media(max-width:@screen-sm-max) {
+    	// 	float: left;
+    	// }
 		}
 		li {
 			float: left;
 			// width: 145px;
 			width: 25%;
-			padding: 10px;
+			padding: 10px 0 10px 20px;
 			margin-top: 5px;
 			line-height: 35px;
 			border-right: 1px solid #f1f1f1;
@@ -406,35 +406,90 @@
 	height: 30px;
   	line-height: 30px;
   	padding-left: 10px;
-  	background-color:rgba(145,145,145,0.5);
+  	background-color:rgba(0,0,0,0.5);
 }
-.open-course-list {
+//
+.open-course-list-page {
+	background-color: #f5f8fa;
 	.course-block {
-		padding: 20px 10px;
+		padding: 20px;
 		border:1px solid #e4ecf3;
 		background-color: #fff;
 		margin-bottom: 20px;
 		.course-img {
 			position: relative;
-			.tags {
-				position: absolute;
-				top: 0;
-				left: 10px;
+			float: left;
+			width: 29%;
+			img {
+				width: 100%;
 			}
-		}
-		.title {
-			// padding-top: 10px;
-			a {
-				font-size: 22px;
+			@media(max-width:@screen-xs-max) {
+				float: none;
+				width: 100%;
 			}
 		}
 		.open-course-content {
-			padding: 0 20px;
+			float: left;
+			width: 71%;
+			padding-left: 40px;
+			padding-right: 20px;
+			@media(max-width:@screen-xs-max) {
+				float: none;
+				width: 100%;
+				padding: 0;
+				.title {
+					padding-top: 10px;
+				}
+			}
+			.title {
+				a {
+					font-size: 22px;
+					vertical-align: middle;
+				}
+			}
 		}
 		.open-course-intro {
-			margin-top: 10px;
-			margin-bottom: 20px;
+			margin-top: 12px;
+			margin-bottom: 22px;
 			line-height: 24px;
+			height: 72px;
+			overflow: hidden;
+			@media(min-width:@screen-sm-min) and (max-width:@screen-md-max) {
+				height: 36px;
+				line-height: 18px;
+				margin-bottom: 5px;
+				margin-top: 0;
+			}
 		}
+		.metas {
+			line-height: 40px;
+			.btn {
+				@media(min-width:@screen-sm-min) and (max-width:@screen-md-max) {
+					font-size: 12px;
+				}
+			}
+			span {
+				padding-right: 20px;
+				color: @gray-medium;
+				font-size: 12px;
+				.es-icon {
+					padding-right: 10px;
+				}
+			}
+		}
+	}
+	.section-more-btn {
+		margin: 40px 0 70px 0;
+	}
+}
+.tags {
+	position: absolute;
+	top: 0;
+	left: 10px;
+	.tag-open-live {
+		display: inline-block;
+		width: 40px;
+		height: 50px;
+		background: url(../img/tag_open_live.png) no-repeat;
 	}
 }
