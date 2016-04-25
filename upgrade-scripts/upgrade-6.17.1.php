@@ -2,6 +2,7 @@
 
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
+use Topxia\Common\BlockToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
@@ -66,6 +67,11 @@ class EduSohoUpgrade extends AbstractUpdater
 
             $this->getConnection()->exec("INSERT INTO `dictionary` (`name`, `type`) VALUES ('退学原因', 'refund_reason');");
         }
+
+
+        global $kernel;
+
+        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"), $kernel->getContainer());
     }
 
     private function updateCrontabSetting()
