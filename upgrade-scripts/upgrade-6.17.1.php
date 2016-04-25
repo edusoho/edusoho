@@ -68,8 +68,9 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("INSERT INTO `dictionary` (`name`, `type`) VALUES ('退学原因', 'refund_reason');");
         }
 
-        global $kernel;
-        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"), $kernel->getContainer());
+        $blockMeta = json_decode(file_get_contents(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json")), true);
+        $this->updateBlock("jianmo:middle_banner", $blockMeta["jianmo:middle_banner"]);
+        $this->updateBlock("jianmo:advertisement_banner", $blockMeta["jianmo:advertisement_banner"]);
     }
 
     private function batchUpdate($index)
@@ -98,6 +99,35 @@ class EduSohoUpgrade extends AbstractUpdater
                 'message'  => '正在升级数据...',
                 'progress' => 4.4
             );
+        }
+    }
+
+    public function updateBlock($code, $meta)
+    {
+        $block = $this->getBlockService()->getBlockByCode($code);
+        $default = array();
+        foreach ($meta['items'] as $i => $item) {
+            $default[$i] = $item['default'];
+        }
+
+        if (empty($block)) {
+            $this->getBlockService()->createBlock(array(
+                'code' => $code,
+                'mode' => 'template',
+                'category' => empty($meta['category']) ? 'system' : $meta['category'],
+                'meta' => $meta,
+                'data' => $default,
+                'templateName' => $meta['templateName'],
+                'title' => $meta['title'],
+            ));
+        } else {
+            global $kernel;
+            $html = BlockToolkit::render($block, $kernel->getContainer());
+            $block = $this->getBlockService()->updateBlock($block['id'], array(
+                'data' => $default,
+                'meta' => $block['meta'],
+                'content' => $html
+            ));
         }
     }
 
@@ -138,6 +168,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getUploadFileService()
     {
         return ServiceKernel::instance()->createService('File.UploadFileService');
+    }
+
+    private function getBlockService()
+    {
+        return ServiceKernel::instance()->createService('Content.BlockService');
     }
 }
 
