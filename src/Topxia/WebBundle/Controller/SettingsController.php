@@ -289,6 +289,10 @@ class SettingsController extends BaseController
                      ->add('confirmPayPassword', 'password')
                      ->getForm();
 
+        if ($user->isLogin() && empty($user['password'])) { 
+            return $this->redirect($this->generateUrl('settings_setup_password')); 
+        }
+
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
 
@@ -358,6 +362,10 @@ class SettingsController extends BaseController
                      ->add('newPayPassword', 'password')
                      ->add('confirmPayPassword', 'password')
                      ->getForm();
+
+        if ($user->isLogin() && empty($user['password'])) { 
+            return $this->redirect($this->generateUrl('settings_setup_password')); 
+        }
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -561,6 +569,10 @@ class SettingsController extends BaseController
         $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
+        if ($user->isLogin() && empty($user['password'])) { 
+            return $this->redirect($this->generateUrl('settings_setup_password')); 
+        }
+
         if ($request->getMethod() == 'POST') {
             if (!$this->getAuthService()->checkPassword($user['id'], $request->request->get('userLoginPassword'))) {
                 $this->setFlashMessage('danger', '您的登录密码错误，不能设置安全问题。');
@@ -619,6 +631,10 @@ class SettingsController extends BaseController
 
         if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
             return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array());
+        }
+
+        if ($user->isLogin() && empty($user['password'])) { 
+            return $this->redirect($this->generateUrl('settings_setup_password')); 
         }
 
         if ($request->getMethod() == 'POST') {
@@ -681,7 +697,12 @@ class SettingsController extends BaseController
                      ->add('confirmPassword', 'password')
                      ->getForm();
 
+        if ($user->isLogin() && empty($user['password'])) {
+            return $this->redirect($this->generateUrl('settings_setup_password'));
+        }
+
         if ($request->getMethod() == 'POST') {
+
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -905,20 +926,29 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        var_dump($user);
+        // var_dump($user);
+        // if ($user['setup']) {
+        //     throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
+        // }
 
-        if ($user['setup']) {
-            throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
-        }
+        $form = $this->createFormBuilder()
+                     ->add('newPassword', 'password')
+                     ->add('confirmPassword', 'password')
+                     ->getForm();
 
         if ($request->getMethod() == 'POST') {
-            $data = $request->request->all();
-            $this->getUserService()->changePassword($user['id'], $data['password']);
-            $this->authenticateUser($user);
-            return $this->createJsonResponse(true);
+            $form->bind($request);
+            if ($form->isValid()) {
+                $passwords = $form->getData();
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                // $this->authenticateUser($user);
+                return $this->redirect($this->generateUrl('settings_security'));
+            }
         }
 
-        return $this->render('TopxiaWebBundle:Settings:setup-password.html.twig');
+        return $this->render('TopxiaWebBundle:Settings:setup-password.html.twig', array(
+            'form' => $form->createView()
+        ));
     }
 
     public function setupCheckNicknameAction(Request $request)
