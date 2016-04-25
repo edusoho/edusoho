@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
-{% set bodyClass = 'course-list-page bg-blank' %}
+{% set bodyClass = 'open-course-list-page' %}
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'course/explore' %}
 
@@ -26,6 +26,7 @@
       </div>
     </div>
   </div> #}
+  <img class="img-responsive" src="/assets/v2/img/open_channel.png" alt="">
 {% endblock %}
 
 {% block content %}
@@ -58,77 +59,76 @@
       </label>
     </div>
   </div> #}
-    <div class="course-filter" id="course-filter">
-       <div class="course-sort btn-group">
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}">
-          {{'最新'|trans}}
-        </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}">
-          {{'最热'|trans}}
-        </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}">
-          {{'推荐'|trans}}
-        </a>
-      </div>
+  <div class="clearfix">
+     <div class="course-sort btn-group pull-right mbl mtm">
+      <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}">
+        {{'最新'|trans}}
+      </a>
+      <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}">
+        {{'最热'|trans}}
+      </a>
+      <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}">
+        {{'推荐'|trans}}
+      </a>
+    </div>
+  </div>
+
+  {% if courses %}
+    <div class="open-course-list">
+    {% for course in courses %}
+      {# <div class="col-lg-3 col-md-4 col-xs-6">
+        {% include 'TopxiaWebBundle:OpenCourse/Widget:open-course-grid.html.twig' %}
+      </div> #}
+        <div class="course-block clearfix">
+          <div class="course-img">
+            <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
+                <span class="tags">
+                  <span class="tag-open-live"></span>
+                </span>
+              {% if course.type == 'liveOpen' %}
+                {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+                
+                {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
+                  <span class="tags">正在直播 今天 {{ lessons[0].startTime|date('H:i')}}</span>
+                {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+                  <span class="tags">即将直播 {{ lessons[0].startTime|date('m-d H:i')}}</span>
+                {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') != "now"|date('Y-m-d') %}
+                  <span class="tags">直播预告 {{ lessons[0].startTime|date('m-d H:i')}}</span>
+                {% else %}
+                  <span class="tags">直播已结束 {{ lessons[0].startTime|date('m-d H:i')}}</span>
+                {% endif %}
+              {% endif %} 
+              {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+            </a>
+            <div class="open-starttime">2016-01-21 09:30</div>
+          </div>
+          <div class="open-course-content">
+            <div class="title">
+              <span class="label label-primary mrm">直播中</span>
+              {# <span class="label label-warning">即将开始</span> #}
+              <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
+                {{ course.title }}
+              </a>
+            </div>
+            <div class="open-course-intro">
+              {% if course.about %}
+                {{ course.about|raw }}
+              {% else %}
+                <p><span>暂无简介</span></p>
+              {% endif %}
+            </div>
+            <div class="metas clearfix">
+              <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+              <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+              <a class="btn btn-primary btn-lg pull-right" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+    {{ web_macro.ajaxCoursePaginator(paginator) }}
     </div>
 
-  <div class="course-list open-course-list">
-      {% if courses %}
-        {% for course in courses %}
-          {# <div class="col-lg-3 col-md-4 col-xs-6">
-            {% include 'TopxiaWebBundle:OpenCourse/Widget:open-course-grid.html.twig' %}
-          </div> #}
-      <div class="row course-block">
-          <div class="col-md-3">
-              <div class="course-img">
-                <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
-                    <span class="tags">
-                      <span class="tag-live"></span>
-                    </span>
-                  {% if course.type == 'liveOpen' %}
-                    {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
-                    
-                    {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
-                      <span class="tags">正在直播 今天 {{ lessons[0].startTime|date('H:i')}}</span>
-                    {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-                      <span class="tags">即将直播 {{ lessons[0].startTime|date('m-d H:i')}}</span>
-                    {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-                      <span class="tags">直播预告 {{ lessons[0].startTime|date('m-d H:i')}}</span>
-                    {% else %}
-                      <span class="tags">直播已结束 {{ lessons[0].startTime|date('m-d H:i')}}</span>
-                    {% endif %}
-                  {% endif %} 
-                  {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
-                </a>
-              <div class="open-starttime">2016-01-21 09:30</div>
-            </div>
-          </div>
-          <div class="col-md-9">
-            <div class="open-course-content">
-              <div class="title">
-                <span class="label label-primary mrm">直播中</span>
-                {# <span class="label label-warning">即将开始</span> #}
-                <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
-                  {{ course.title }}
-                </a>
-              </div>
-              <div class="open-course-intro">
-                这里是一段解释性文字,这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字，这里是一段解释性文字...
-              </div>
-              <div class="metas clearfix">
-                <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
-                <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
-                <button class="btn btn-primary btn-lg pull-right">进入公开课</button>
-              </div>
-            </div>
-          </div>
-      </div>
-        {% endfor %}
-      {% else %}
-        <div class="empty">{{'该分类下无公开课'|trans}}</div>
-      {% endif %}
-  </div>
-  <nav class="text-center">
-    {{ web_macro.paginator(paginator) }}
-  </nav>
+  {% else %}
+    <div class="empty">{{'该分类下无公开课'|trans}}</div>
+  {% endif %}
 {% endblock %}
