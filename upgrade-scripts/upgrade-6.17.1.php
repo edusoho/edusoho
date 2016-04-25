@@ -68,7 +68,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("INSERT INTO `dictionary` (`name`, `type`) VALUES ('退学原因', 'refund_reason');");
         }
 
-        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"));
+        global $kernel;
+        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"), $kernel->getContainer());
     }
 
     private function batchUpdate($index)
