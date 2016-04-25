@@ -14074,15 +14074,21 @@ textarea {
   height: 72px;
   overflow: hidden;
 }
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1199px) {
   .open-course-list-page .course-block .open-course-intro {
-    height: 48px;
+    height: 36px;
+    line-height: 18px;
     margin-bottom: 5px;
     margin-top: 0;
   }
 }
 .open-course-list-page .course-block .metas {
   line-height: 40px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .open-course-list-page .course-block .metas .btn {
+    font-size: 12px;
+  }
 }
 .open-course-list-page .course-block .metas span {
   padding-right: 20px;
