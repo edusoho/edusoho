@@ -6,11 +6,11 @@ use Topxia\Common\BlockToolkit;
 
 class EduSohoUpgrade extends AbstractUpdater
 {
-    public function update()
+    public function update($index = 0)
     {
         $this->getConnection()->beginTransaction();
         try {
-            $this->updateScheme();
+            $result = $this->batchUpdate($index);
             $this->getConnection()->commit();
 
             $this->updateCrontabSetting();
@@ -68,10 +68,36 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->exec("INSERT INTO `dictionary` (`name`, `type`) VALUES ('退学原因', 'refund_reason');");
         }
 
+        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"));
+    }
 
-        global $kernel;
+    private function batchUpdate($index)
+    {
+        if ($index === 0) {
+            $this->updateScheme();
+            return array(
+                'index'    => 1,
+                'message'  => '正在升级数据...',
+                'progress' => 4.4
+            );
+        }
 
-        BlockToolkit::init(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json"), $kernel->getContainer());
+        $conditions = array(
+            'storage'  => 'cloud',
+            'globalId' => 0
+        );
+        $total   = $this->getUploadFileService()->searchFileCount($conditions);
+        $maxPage = ceil($total / 100) ? ceil($total / 100) : 1;
+
+        $this->getCloudFileService()->synData($conditions);
+
+        if ($index <= $maxPage) {
+            return array(
+                'index'    => $index + 1,
+                'message'  => '正在升级数据...',
+                'progress' => 4.4
+            );
+        }
     }
 
     private function updateCrontabSetting()
@@ -101,6 +127,16 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    private function getCloudFileService()
+    {
+        return ServiceKernel::instance()->createService('CloudFile.CloudFileService');
+    }
+
+    private function getUploadFileService()
+    {
+        return ServiceKernel::instance()->createService('File.UploadFileService');
     }
 }
 
