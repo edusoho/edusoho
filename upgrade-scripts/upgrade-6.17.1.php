@@ -14,6 +14,10 @@ class EduSohoUpgrade extends AbstractUpdater
             $this->getConnection()->commit();
 
             $this->updateCrontabSetting();
+
+            if (!empty($result)) {
+                return $result;
+            }
         } catch (\Exception $e) {
             $this->getConnection()->rollback();
             throw $e;
@@ -106,7 +110,6 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         global $kernel;
         $block = $this->getBlockService()->getBlockByCode($code);
-        $html = BlockToolkit::render($block, $kernel->getContainer());
         
         $default = array();
         foreach ($meta['items'] as $i => $item) {
@@ -114,7 +117,7 @@ class EduSohoUpgrade extends AbstractUpdater
         }
 
         if (empty($block)) {
-            $this->getBlockService()->createBlock(array(
+            $block = $this->getBlockService()->createBlock(array(
                 'code' => $code,
                 'mode' => 'template',
                 'category' => empty($meta['category']) ? 'system' : $meta['category'],
@@ -124,7 +127,13 @@ class EduSohoUpgrade extends AbstractUpdater
                 'title' => $meta['title'],
                 'content' => $html
             ));
+            
+            $html = BlockToolkit::render($block, $kernel->getContainer());
+            $block = $this->getBlockService()->updateBlock($block['id'], array(
+                'content' => $html
+            ));
         } else {
+            $html = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->updateBlock($block['id'], array(
                 'meta' => $meta,
                 'data' => $block['data'],
