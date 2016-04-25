@@ -13620,13 +13620,15 @@ textarea {
 .open-course-views {
   position: relative;
   padding: 0;
-  height: 500px;
   background-color: #000;
 }
-@media (max-width: 991px) {
+@media (min-width: 992px) {
   .open-course-views {
-    height: 300px;
+    height: 500px;
   }
+}
+.open-course-views .lesson-content {
+  height: 100%;
 }
 .open-course-views .mask {
   position: absolute;
@@ -13811,6 +13813,11 @@ textarea {
   position: relative;
   margin-top: 20px;
 }
+@media (max-width: 991px) {
+  .open-course-header {
+    padding: 0;
+  }
+}
 @media (min-width: 992px) {
   .open-course-header .course-img {
     width: 12.5%;
@@ -13898,6 +13905,11 @@ textarea {
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
+}
+@media (max-width: 767px) {
+  .open-course-header .course-operation li .operation-icon {
+    margin: 0 5px 5px;
+  }
 }
 .open-course-header .course-operation li .unoperation-list:hover .unoperation-list,
 .open-course-header .course-operation li .unoperation-list:active .unoperation-list {
@@ -14000,6 +14012,42 @@ textarea {
 .course-comment .media:first-child {
   margin-bottom: 20px;
   border-bottom: 1px solid #f5f5f5;
+}
+.open-starttime {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 10px;
+  background-color: rgba(145, 145, 145, 0.5);
+}
+.open-course-list .course-block {
+  padding: 20px 10px;
+  border: 1px solid #e4ecf3;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+.open-course-list .course-block .course-img {
+  position: relative;
+}
+.open-course-list .course-block .course-img .tags {
+  position: absolute;
+  top: 0;
+  left: 10px;
+}
+.open-course-list .course-block .title a {
+  font-size: 22px;
+}
+.open-course-list .course-block .open-course-content {
+  padding: 0 20px;
+}
+.open-course-list .course-block .open-course-intro {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  line-height: 24px;
 }
 .panel-create-course {
   padding: 25px 30px;

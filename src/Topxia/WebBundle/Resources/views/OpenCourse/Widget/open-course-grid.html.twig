@@ -1,7 +1,9 @@
 <div class="course-item">
   <div class="course-img">
     <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
-      
+        <span class="tags">
+          <span class="tag-live"></span>
+        </span>
       {% if course.type == 'liveOpen' %}
         {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
         
@@ -15,19 +17,21 @@
           <span class="tags">直播已结束 {{ lessons[0].startTime|date('m-d H:i')}}</span>
         {% endif %}
 
-      {% endif %}
+      {% endif %} 
       {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
     </a>
+    <div class="open-starttime">2016-01-21 09:30</div>
   </div>
   <div class="course-info">
     <div class="title">
+      <span class="label label-primary mrm">直播中</span>
+      {# <span class="label label-warning">即将开始</span> #}
       <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
         {{ course.title }}
       </a>
     </div>
     <div class="metas clearfix">
       <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
-      <span class="comment"><i class="es-icon es-icon-thumbup"></i>{{ course.likeNum }}</span>
       <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
     </div>
   </div>

@@ -10,7 +10,19 @@
       <h5><span>{{ config.title|default(config.defaultTitle|default('')) }}</span><div class="line"></div></h5>
       <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle|default('')) }}</div>
     </div>
-
+    <div class="course-filter" id="course-filter">
+       <div class="course-sort btn-group">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}">
+          {{'最新'|trans}}
+        </a>
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}">
+          {{'最热'|trans}}
+        </a>
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}">
+          {{'推荐'|trans}}
+        </a>
+      </div>
+    </div>
     <div class="course-list">
       <div class="row">
         {% for course in courses %}
