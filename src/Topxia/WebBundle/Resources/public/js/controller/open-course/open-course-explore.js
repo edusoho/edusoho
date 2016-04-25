@@ -22,7 +22,7 @@ define(function(require, exports, module) {
 
         Lazyload.init();
 
-        $(".section-more-btn a").on('click', function(){
+        $(".open-course-list").on('click','.section-more-btn a' function(){
       		var url = $(this).attr('data-url');
 	      	$.ajax({
 		        url: url,
@@ -31,6 +31,7 @@ define(function(require, exports, module) {
 		          	var html = $('.open-course-list .course-block,.open-course-list .section-more-btn', $(html)).fadeIn('slow');
 			        $(".section-more-btn").remove();
 			        $('.open-course-list').append(html);
+                    Lazyload.init();
 		        }
 	      	});
 	    });
