@@ -476,23 +476,6 @@ a:focus {
     padding: 5px;
   }
 }
-.homepage .teachers ul,
-.homepage .vip ul {
-  padding-left: 0px;
-  list-style: none;
-}
-.homepage .teachers ul li,
-.homepage .vip ul li {
-  padding-right: 10px;
-  padding-left: 10px;
-}
-@media (max-width: 767px) {
-  .homepage .teachers ul li,
-  .homepage .vip ul li {
-    padding-right: 5px;
-    padding-left: 5px;
-  }
-}
 .teachers-item {
   margin-bottom: 20px;
   padding: 20px 10px;

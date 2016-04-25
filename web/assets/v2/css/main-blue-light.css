@@ -1344,10 +1344,6 @@
   text-align: right;
   font-size: 12px;
 }
-.vip li {
-  padding-right: 10px;
-  padding-left: 10px;
-}
 .vip-item {
   border: 1px solid #e1e1e1;
   background: #fff;
@@ -1441,6 +1437,23 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.homepage .teachers ul,
+.homepage .vip ul {
+  padding-left: 0px;
+  list-style: none;
+}
+.homepage .teachers ul li,
+.homepage .vip ul li {
+  padding-right: 10px;
+  padding-left: 10px;
+}
+@media (max-width: 767px) {
+  .homepage .teachers ul li,
+  .homepage .vip ul li {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
 }
 .homepage .hot-group img {
   width: 58px;
