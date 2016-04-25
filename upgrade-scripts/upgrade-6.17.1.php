@@ -124,8 +124,8 @@ class EduSohoUpgrade extends AbstractUpdater
             global $kernel;
             $html = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->updateBlock($block['id'], array(
-                'data' => $default,
-                'meta' => $block['meta'],
+                'meta' => $meta,
+                'data' => $block['data'],
                 'content' => $html
             ));
         }
