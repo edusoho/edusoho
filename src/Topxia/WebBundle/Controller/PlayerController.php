@@ -218,7 +218,7 @@ class PlayerController extends BaseController
 
     protected function getPlayUrl($id, $context)
     {
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFileFromLeaf($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
