@@ -183,6 +183,15 @@ class DefaultController extends BaseController
         ));
     }
 
+    public function friendlyLinkAction()
+    {
+        $friendlyLinks = $this->getNavigationService()->findNavigationsByType('friendlyLink', 0, 100);
+            
+        return $this->render('TopxiaWebBundle:Default:friend-link.html.twig', array(
+                'friendlyLinks' => $friendlyLinks
+            ));
+    }
+
     public function customerServiceAction()
     {
         $customerServiceSetting = $this->getSettingService()->get('customerService', array());

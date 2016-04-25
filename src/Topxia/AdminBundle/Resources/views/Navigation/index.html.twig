@@ -3,10 +3,10 @@
 {% set script_controller = 'navigation/page' %}
 
 {% set menu = 'admin_'~type~'_navigation' %}
-{% set types = {top:'顶部', foot:'底部'} %}
+{% set types = {top:'顶部', foot:'底部', friendlyLink:'友情链接'} %}
 
 {% block page_buttons %} 
-    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">新增{{ types[type] }}导航</button>
+    <button class="btn btn-success btn-sm pull-right" id="add-navigation-btn" data-toggle="modal" data-target="#modal" data-url="{{ path('admin_navigation_create', {type: type}) }}">{% if types[type] == '友情链接' %}新增{{ types[type] }}{% else %}新增{{ types[type] }}导航{% endif %}</button>
 {% endblock %}
 
 {% block main %}
