@@ -47,7 +47,7 @@ class CourseController extends CourseBaseController
             if ($priceType == 'RMB') {
                 $conditions['price'] = '0.00';
             } else {
-                $conditions['coinPrice'] = '0.00';
+                $conditions['price'] = '0.00';
             }
         }
 
@@ -358,30 +358,12 @@ class CourseController extends CourseBaseController
 
         $this->getCourseService()->hitCourse($id);
 
-        $items       = $this->getCourseService()->getCourseItems($course['id']);
-        $courseAbout = $course['about'];
+        $items = $this->getCourseService()->getCourseItems($course['id']);
 
-        $courseAbout = strip_tags($courseAbout, '');
-
-        $courseAbout = preg_replace("/ /", "", $courseAbout);
-        
         return $this->render("TopxiaWebBundle:Course:{$course['type']}-show.html.twig", array(
-            'course'      => $course,
-            'member'      => $member,
-            'items'       => $items,
-            'courseAbout' => $courseAbout
-        ));
-    }
-
-    public function keywordsAction($course)
-    {
-        $category = $this->getCategoryService()->getCategory($course['categoryId']);
-        $tags     = $this->getTagService()->findTagsByIds($course['tags']);
-
-        return $this->render('TopxiaWebBundle:Course:keywords.html.twig', array(
-            'category' => $category,
-            'tags'     => $tags,
-            'course'   => $course
+            'course' => $course,
+            'member' => $member,
+            'items'  => $items
         ));
     }
 
@@ -479,13 +461,13 @@ class CourseController extends CourseBaseController
     public function becomeUseMemberAction(Request $request, $id)
     {
         if (!$this->setting('vip.enabled')) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getCourseService()->becomeStudent($id, $user['id'], array('becomeUseMember' => true));
@@ -545,7 +527,7 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $this->getCourseService()->waveLearningTime($user['id'], $lessonId, $time);
@@ -594,7 +576,7 @@ class CourseController extends CourseBaseController
         $user = $this->getCurrentUser();
 
         if (!$user->isLogin()) {
-            $this->createAccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $learn = $this->getCourseService()->waveWatchingTime($user['id'], $lessonId, $time);

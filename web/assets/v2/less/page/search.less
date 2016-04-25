@@ -38,6 +38,10 @@
   .search-input-group {
     margin: 75px 20%;
     height: 50px;
+    @media(max-width:@screen-sm-max) {
+      margin-left: 0;
+      margin-right: 0;
+    }
     .form-control {
       height: 50px;
       border: none;
@@ -69,6 +73,9 @@
       height: 50px;
       width: 120px;
       border: none;
+      @media(max-width:@screen-sm-max){
+        width: 80px;
+      }
       &:hover {
         z-index: 1;
       }

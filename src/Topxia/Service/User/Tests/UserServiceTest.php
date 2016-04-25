@@ -1846,8 +1846,9 @@ class UserServiceTest extends BaseTestCase
             'email'    => 'test_email@email.com'
         );
         $registeredUser = $this->getUserService()->register($userInfo);
-        $foundBind      = $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
-        $this->assertEquals($registeredUser['id'], $foundBind['toId']);
+        $this->getUserService()->bindUser('qq', 123123123, $registeredUser['id'], array('token' => 'token', 'expiredTime' => strtotime('+1 day')));
+        $user = $this->getUserService()->getUserBindByToken('token');
+        $this->assertEquals($registeredUser['id'], $user['toId']);
     }
 
     public function testMarkLoginInfo()

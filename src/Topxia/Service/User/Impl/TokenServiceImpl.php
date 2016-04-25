@@ -1,23 +1,22 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
-use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\TokenService;
-use EdusohoNet\Common\ArrayToolkit;
+use Topxia\Service\Common\BaseService;
 
 class TokenServiceImpl extends BaseService implements TokenService
 {
     public function makeToken($type, array $args = array())
     {
-        $token = array();
-        $token['type'] = $type;
-        $token['token'] = $this->_makeTokenValue(32);
-        $token['data'] = !isset($args['data']) ? null : $args['data'];
-        $token['times'] = empty($args['times']) ? 0 : intval($args['times']);
+        $token                  = array();
+        $token['type']          = $type;
+        $token['token']         = $this->_makeTokenValue(32);
+        $token['data']          = !isset($args['data']) ? null : $args['data'];
+        $token['times']         = empty($args['times']) ? 0 : intval($args['times']);
         $token['remainedTimes'] = $token['times'];
-        $token['userId'] = empty($args['userId']) ? 0 : $args['userId'];
-        $token['expiredTime'] = empty($args['duration']) ? 0 : time() + $args['duration'];
-        $token['createdTime'] = time();
+        $token['userId']        = empty($args['userId']) ? 0 : $args['userId'];
+        $token['expiredTime']   = empty($args['duration']) ? 0 : time() + $args['duration'];
+        $token['createdTime']   = time();
 
         return $this->getTokenDao()->addToken($token);
     }
@@ -30,6 +29,7 @@ class TokenServiceImpl extends BaseService implements TokenService
     public function verifyToken($type, $value)
     {
         $token = $this->getTokenDao()->getTokenByToken($value);
+
         if (empty($token)) {
             return false;
         }
@@ -38,7 +38,7 @@ class TokenServiceImpl extends BaseService implements TokenService
             return false;
         }
 
-        if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time()) ) {
+        if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time())) {
             return false;
         }
 
@@ -54,8 +54,9 @@ class TokenServiceImpl extends BaseService implements TokenService
     public function destoryToken($token)
     {
         $token = $this->getTokenDao()->getTokenByToken($token);
+
         if (empty($token)) {
-            return ;
+            return;
         }
 
         $this->getTokenDao()->deleteToken($token['id']);
@@ -75,27 +76,27 @@ class TokenServiceImpl extends BaseService implements TokenService
     {
         if (($token['times'] > 0) && ($token['remainedTimes'] <= 1)) {
             $this->getTokenDao()->deleteToken($token['id']);
-            return ;
+            return;
         }
 
-        if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time()) ) {
+        if (($token['expiredTime'] > 0) && ($token['expiredTime'] < time())) {
             $this->getTokenDao()->deleteToken($token['id']);
-            return ;
+            return;
         }
 
-        return ;
+        return;
     }
-
 
     protected function _makeTokenValue($length)
     {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
         $value = '';
-        for ( $i = 0; $i < $length; $i++ ) {
-            $value .= $chars[ mt_rand(0, strlen($chars) - 1) ];
+
+        for ($i = 0; $i < $length; $i++) {
+            $value .= $chars[mt_rand(0, strlen($chars) - 1)];
         }
-        
+
         return $value;
     }
 
@@ -103,5 +104,4 @@ class TokenServiceImpl extends BaseService implements TokenService
     {
         return $this->createDao('User.TokenDao');
     }
-
 }

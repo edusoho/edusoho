@@ -221,17 +221,14 @@ abstract class BaseController extends Controller
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'renren'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
+        if (strpos($url[0], 'callback') !== false
+            || strpos($url[0], '/login/bind') !== false
+            || strpos($url[0], 'crontab') !== false) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
 
-        ) {
-            $targetPath = $this->generateUrl('homepage');
+        if (empty($targetPath)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
         return $targetPath;

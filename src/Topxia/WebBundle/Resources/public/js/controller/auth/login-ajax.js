@@ -10,7 +10,7 @@ define(function(require, exports, module) {
                 $form.find('.alert-danger').hide();
 
                 if (error) {
-                    return ;
+                    return;
                 }
 
                 $.post($form.attr('action'), $form.serialize(), function(response) {
@@ -32,8 +32,6 @@ define(function(require, exports, module) {
             element: '#ajax-password',
             required: true
         });
-
-
 
     };
 

@@ -139,8 +139,9 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('昵称已存在！');
         }
 
+        $updatedUser = $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
+        $this->dispatchEvent('user.change_nickname', new ServiceEvent($updatedUser));
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
-        $this->getUserDao()->updateUser($userId, array('nickname' => $nickname));
     }
 
     public function changeEmail($userId, $email)
@@ -155,7 +156,8 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('Email({$email})已经存在，Email变更失败。');
         }
 
-        $this->getUserDao()->updateUser($userId, array('email' => $email));
+        $updatedUser = $this->getUserDao()->updateUser($userId, array('email' => $email));
+        $this->dispatchEvent('user.change_email', new ServiceEvent($updatedUser));
     }
 
     public function changeAvatar($userId, $data)
@@ -296,12 +298,10 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getUserDao()->updateUser($id, $fields);
-
         $this->updateUserProfile($id, array(
             'mobile' => $mobile
         ));
         $this->dispatchEvent('mobile.change', new ServiceEvent($user));
-
         $this->getLogService()->info('user', 'verifiedMobile-changed', "用户{$user['email']}(ID:{$user['id']})重置mobile成功");
 
         return true;
@@ -594,8 +594,7 @@ class UserServiceImpl extends BaseService implements UserService
             throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
         }
 
-        $this->getUserDao()->updateUser($userId, array('setup' => 1));
-
+        $user = $this->getUserDao()->updateUser($userId, array('setup' => 1));
         return $this->getUser($userId);
     }
 
@@ -867,7 +866,7 @@ class UserServiceImpl extends BaseService implements UserService
             $type = 'weixin';
         }
 
-        return $this->getUserBindDao()->addBind(array(
+        $this->getUserBindDao()->addBind(array(
             'type'        => $type,
             'fromId'      => $fromId,
             'toId'        => $toId,
@@ -997,6 +996,7 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 1));
+        $this->dispatchEvent("user.lock", new ServiceEvent($user));
 
         $this->getLogService()->info('user', 'lock', "封禁用户{$user['nickname']}(#{$user['id']})");
 
@@ -1013,6 +1013,8 @@ class UserServiceImpl extends BaseService implements UserService
 
         $this->getUserDao()->updateUser($user['id'], array('locked' => 0));
 
+        $this->dispatchEvent("user.unlock", new ServiceEvent($user));
+
         $this->getLogService()->info('user', 'unlock', "解禁用户{$user['nickname']}(#{$user['id']})");
 
         return true;
@@ -1027,7 +1029,6 @@ class UserServiceImpl extends BaseService implements UserService
         }
 
         $user = $this->getUserDao()->updateUser($user['id'], array('promoted' => 1, 'promotedSeq' => $number, 'promotedTime' => time()));
-
         $this->getLogService()->info('user', 'recommend', "推荐用户{$user['nickname']}(#{$user['id']})");
         return $user;
     }
@@ -1257,7 +1258,6 @@ class UserServiceImpl extends BaseService implements UserService
         ));
 
         $this->getUserApprovalDao()->addApproval($approval);
-
         return true;
     }
 
@@ -1291,8 +1291,6 @@ class UserServiceImpl extends BaseService implements UserService
         );
 
         $this->getLogService()->info('user', 'approved', "用户{$user['nickname']}实名认证成功，操作人:{$currentUser['nickname']} !");
-
-        $this->dispatchEvent('realname.approval', new ServiceEvent($user));
 
         $message = array(
             'note' => $note ? $note : '',
@@ -1417,6 +1415,7 @@ class UserServiceImpl extends BaseService implements UserService
         $code       = array(
             'inviteCode' => $inviteCode
         );
+
         return $this->getUserDao()->updateUser($userId, $code);
     }
 
@@ -1441,6 +1440,7 @@ class UserServiceImpl extends BaseService implements UserService
         $profileMobiles = ArrayToolkit::column($userProfiles, 'mobile');
 
         $mobiles = array_merge($verifiedMobiles, $profileMobiles);
+        $mobiles = array_filter($mobiles);
         return array_unique($mobiles);
     }
 

@@ -99,7 +99,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $classroom['createdTime'] = time();
         $classroom                = $this->getClassroomDao()->addClassroom($classroom);
-
+        $this->dispatchEvent("classroom.create", $classroom);
         return $classroom;
     }
 
@@ -181,7 +181,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
      */
     public function updateClassroom($id, $fields)
     {
-        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable'));
+        $fields = ArrayToolkit::parts($fields, array('rating', 'ratingNum', 'categoryId', 'title', 'status', 'about', 'description', 'price', 'vipLevelId', 'smallPicture', 'middlePicture', 'largePicture', 'headTeacherId', 'teacherIds', 'assistantIds', 'hitNum', 'auditorNum', 'studentNum', 'courseNum', 'lessonNum', 'threadNum', 'postNum', 'income', 'createdTime', 'private', 'service', 'maxRate', 'buyable', 'showable', 'conversationId'));
 
         if (empty($fields)) {
             throw $this->createServiceException('参数不正确，更新失败！');
@@ -460,7 +460,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getLogService()->info('classroom', 'remove_student', "班级《{$classroom['title']}》(#{$classroom['id']})，移除学员#{$member['id']}");
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 
@@ -594,7 +594,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
         $this->getClassroomDao()->updateClassroom($classroomId, $fields);
         $this->dispatchEvent(
             'classroom.join',
-            new ServiceEvent($classroom, array('userId' => $member['userId']))
+            new ServiceEvent($classroom, array('userId' => $member['userId'], 'member' => $member))
         );
 
         return $member;
@@ -1179,7 +1179,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
         $this->dispatchEvent(
             'classroom.quit',
-            new ServiceEvent($classroom, array('userId' => $userId))
+            new ServiceEvent($classroom, array('userId' => $userId, 'member' => $member))
         );
     }
 

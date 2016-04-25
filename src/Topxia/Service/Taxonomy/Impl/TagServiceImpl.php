@@ -2,6 +2,7 @@
 namespace Topxia\Service\Taxonomy\Impl;
 
 use Topxia\Service\Taxonomy\TagService;
+use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Common\BaseService;
 use Topxia\Common\ArrayToolkit;
 
@@ -17,7 +18,7 @@ class TagServiceImpl extends BaseService implements TagService
     {
         return $this->getTagDao()->getTagByName($name);
     }
-    
+
     public function isUserlevelNameAvalieable($name, $exclude)
     {
 
@@ -96,7 +97,7 @@ class TagServiceImpl extends BaseService implements TagService
     public function deleteTag($id)
     {
         $this->getTagDao()->deleteTag($id);
-
+        $this->dispatchEvent("tag.delete", array('tagId' => $id));
         $this->getLogService()->info('tag', 'delete', "编辑标签#{$id}");
     }
 
@@ -126,4 +127,4 @@ class TagServiceImpl extends BaseService implements TagService
         return $this->createService('System.LogService');
     }
 
-}  
+}

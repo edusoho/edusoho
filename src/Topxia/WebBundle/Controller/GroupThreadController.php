@@ -106,8 +106,6 @@ class GroupThreadController extends BaseController
                 }
 
                 if ($user->isAdmin()) {
-                    $threadUrl = $this->generateUrl('group_thread_show', array('id' => $id, 'threadId' => $thread['id']), true);
-
                     $message = array(
                         'id'       => $id,
                         'threadId' => $thread['id'],
@@ -157,7 +155,6 @@ class GroupThreadController extends BaseController
 
     public function checkUserAction(Request $request)
     {
-        $currentUser = $this->getCurrentUser();
 
         $nickname = $request->query->get('value');
         $result   = $this->getUserService()->isNicknameAvaliable($nickname);
@@ -181,7 +178,7 @@ class GroupThreadController extends BaseController
 
         $threadMain = $this->getThreadService()->getThread($threadId);
 
-        $isSetThread = $this->getThreadService()->threadCollect($user['id'], $threadId);
+        $this->getThreadService()->threadCollect($user['id'], $threadId);
 
         $message = array(
             'id'       => $threadMain['groupId'],
@@ -206,7 +203,7 @@ class GroupThreadController extends BaseController
 
         $threadMain = $this->getThreadService()->getThread($threadId);
 
-        $isSetThread = $this->getThreadService()->unThreadCollect($user['id'], $threadId);
+        $this->getThreadService()->unThreadCollect($user['id'], $threadId);
 
         $message = array(
             'id'       => $threadMain['groupId'],
@@ -286,7 +283,7 @@ class GroupThreadController extends BaseController
         $postFiles          = array();
         $postAttachs        = array();
 
-        foreach ($postId as $key => $value) {
+        foreach ($postId as $value) {
             $replyCount     = $this->getThreadService()->searchPostsCount(array('postId' => $value));
             $replyPaginator = new Paginator(
                 $this->get('request'),
@@ -735,8 +732,6 @@ class GroupThreadController extends BaseController
 
         $groupMemberRole = $this->getGroupMemberRole($thread['groupId']);
 
-        $user = $this->getCurrentUser();
-
         $isAdopt = $this->getThreadService()->searchPosts(array('adopt' => 1, 'threadId' => $post['threadId']), array('createdTime', 'desc'), 0, 1);
 
         if ($isAdopt) {
@@ -807,7 +802,6 @@ class GroupThreadController extends BaseController
         );
 
         if ($groupMemberRole == 2 || $groupMemberRole == 3 || $this->get('security.context')->isGranted('ROLE_ADMIN') == true) {
-            $threadUrl = $this->generateUrl('group_thread_show', array('id' => $thread['groupId'], 'threadId' => $thread['id']), true);
 
             if ($action == 'setElite') {
                 $this->getThreadService()->setElite($threadId);
@@ -848,8 +842,6 @@ class GroupThreadController extends BaseController
             $postId = $post['postId'];
         }
 
-        $count = $this->getThreadService()->searchPostsCount(array('threadId' => $threadId, 'status' => 'open', 'id' => $postId, 'postId' => 0));
-
         $page = $this->getPostPage($postId, $threadId);
 
         $url = $this->generateUrl('group_thread_show', array('id' => $id, 'threadId' => $threadId));
@@ -861,8 +853,7 @@ class GroupThreadController extends BaseController
     public function getPostPage($postId, $threadId)
     {
         $count = $this->getThreadService()->searchPostsCount(array('threadId' => $threadId, 'status' => 'open', 'id' => $postId, 'postId' => 0));
-        $page  = floor(($count) / 30) + 1;
-        return $page;
+        return floor(($count) / 30) + 1;
     }
 
     public function hideThings($thread)
@@ -877,7 +868,7 @@ class GroupThreadController extends BaseController
         $context = "";
         $count   = 0;
 
-        foreach ($data as $key => $value) {
+        foreach ($data as $value) {
             $value = " ".$value;
             sscanf($value, "%[^#]#[hide=coin%[^]]]%[^$$]", $content, $coin, $hideContent);
 
@@ -978,7 +969,6 @@ class GroupThreadController extends BaseController
 
         $record = $this->getFileService()->uploadFile($group, $file);
 
-        //$record['url'] = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
         unset($record['uri']);
         $record['name'] = $file->getClientOriginalName();
         return new Response(json_encode($record));
@@ -1074,11 +1064,6 @@ class GroupThreadController extends BaseController
                 );
                 break;
             case 'byStick':
-                $orderBys = array(
-                    array('isStick', 'DESC'),
-                    array('createdTime', 'DESC')
-                );
-                break;
             case 'byCreatedTime':
                 $orderBys = array(
                     array('isStick', 'DESC'),
@@ -1089,12 +1074,6 @@ class GroupThreadController extends BaseController
                 $orderBys = array(
                     array('isStick', 'DESC'),
                     array('lastPostTime', 'DESC')
-                );
-                break;
-            case 'byPostNum':
-                $orderBys = array(
-                    array('isStick', 'DESC'),
-                    array('postNum', 'DESC')
                 );
                 break;
             default:

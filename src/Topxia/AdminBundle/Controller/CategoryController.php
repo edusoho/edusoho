@@ -1,23 +1,24 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class CategoryController extends BaseController
 {
     public function embedAction($group, $layout)
     {
         $group = $this->getCategoryService()->getGroupByCode($group);
+
         if (empty($group)) {
             throw $this->createNotFoundException();
         }
+
         $categories = $this->getCategoryService()->getCategoryTree($group['id']);
         return $this->render('TopxiaAdminBundle:Category:embed.html.twig', array(
-            'group' => $group,
+            'group'      => $group,
             'categories' => $categories,
-            'layout' => $layout
+            'layout'     => $layout
         ));
     }
 
@@ -29,14 +30,14 @@ class CategoryController extends BaseController
         }
 
         $category = array(
-            'id' => 0,
-            'name' => '',
-            'code' => '',
-            'description'=>'',
-            'groupId' => (int) $request->query->get('groupId'),
-            'parentId' => (int) $request->query->get('parentId', 0),
-            'weight' => 0,
-            'icon' => ''
+            'id'          => 0,
+            'name'        => '',
+            'code'        => '',
+            'description' => '',
+            'groupId'     => (int) $request->query->get('groupId'),
+            'parentId'    => (int) $request->query->get('parentId', 0),
+            'weight'      => 0,
+            'icon'        => ''
         );
 
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
@@ -47,6 +48,7 @@ class CategoryController extends BaseController
     public function editAction(Request $request, $id)
     {
         $category = $this->getCategoryService()->getCategory($id);
+
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
@@ -57,13 +59,14 @@ class CategoryController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Category:modal.html.twig', array(
-            'category' => $category,
+            'category' => $category
         ));
     }
 
     public function deleteAction(Request $request, $id)
     {
         $category = $this->getCategoryService()->getCategory($id);
+
         if (empty($category)) {
             throw $this->createNotFoundException();
         }
@@ -75,7 +78,7 @@ class CategoryController extends BaseController
 
     public function checkCodeAction(Request $request)
     {
-        $code = $request->query->get('value');
+        $code    = $request->query->get('value');
         $exclude = $request->query->get('exclude');
 
         $avaliable = $this->getCategoryService()->isCategoryCodeAvaliable($code, $exclude);
@@ -89,23 +92,13 @@ class CategoryController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function uploadFileAction (Request $request)
-    {
-        if ($request->getMethod() == 'POST') {
-            $originalFile = $this->get('request')->files->get('file');
-            $file = $this->getUploadFileService()->addFile('category', 0, array('isPublic' => 1), 'local', $originalFile);
-            $file['hashId'] = "/files/".$file['hashId'];
-            return new Response(json_encode($file));
-        }
-    }
-
     protected function renderTbody($groupId)
     {
-        $group = $this->getCategoryService()->getGroup($groupId);
+        $group      = $this->getCategoryService()->getGroup($groupId);
         $categories = $this->getCategoryService()->getCategoryTree($groupId);
         return $this->render('TopxiaAdminBundle:Category:tbody.html.twig', array(
             'categories' => $categories,
-            'group' => $group
+            'group'      => $group
         ));
     }
 
@@ -118,5 +111,4 @@ class CategoryController extends BaseController
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
     }
-
 }

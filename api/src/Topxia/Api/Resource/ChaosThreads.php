@@ -69,7 +69,6 @@ class ChaosThreads extends BaseResource
 
         switch ($fields['threadType']) {
             case 'common':
-
                 if (!ArrayToolkit::requireds($fields, array('title', 'content', 'targetId', 'type', 'targetType'))) {
                     return array('message' => '缺少必填字段');
                 }
@@ -79,7 +78,6 @@ class ChaosThreads extends BaseResource
                 break;
 
             case 'course':
-
                 if (!ArrayToolkit::requireds($fields, array('title', 'content', 'courseId', 'type'))) {
                     return array('message' => '缺少必填字段');
                 }
@@ -189,6 +187,60 @@ class ChaosThreads extends BaseResource
         return $threads;
     }
 
+    public function getThreads(Application $app, Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+        $start       = $request->query->get('start', 0);
+        $limit       = $request->query->get('limit', 10);
+        $conditions  = array(
+            'userId' => $currentUser['id']
+        );
+
+        $total = $this->getCourseThreadService()->searchThreadCount($conditions);
+        $start = $start == -1 ? rand(0, $total - 1) : $start;
+
+        $courseThreads = $this->getCourseThreadService()->searchThreads($conditions, 'createdNotStick', $start, $limit);
+
+        if (empty($courseThreads)) {
+            return array();
+        }
+
+        $courseIds = ArrayToolkit::column($courseThreads, "courseId");
+        $courses   = $this->getCourseService()->findCoursesByIds($courseIds);
+        $courses   = ArrayToolkit::index($courses, "id");
+
+        foreach ($courseThreads as $key => $thread) {
+            if (isset($courses[$thread['courseId']])) {
+                $thread                  = ArrayToolkit::rename($thread, array('private' => 'isPrivate'));
+                $course                  = $courses[$thread['courseId']];
+                $course['smallPicture']  = $this->getFileUrl($course['smallPicture']);
+                $course['middlePicture'] = $this->getFileUrl($course['middlePicture']);
+                $course['largePicture']  = $this->getFileUrl($course['largePicture']);
+                $thread['course']        = $this->filterCourse($course);
+                $courseThreads[$key]     = $thread;
+            } else {
+                unset($courseThreads[$key]);
+            }
+        }
+
+        return $courseThreads;
+    }
+
+    protected function filterCourse($course)
+    {
+        $keys = array(
+            'id',
+            'type',
+            'title',
+            'userId',
+            'smallPicture',
+            'middlePicture',
+            'largePicture',
+            'createdTime'
+        );
+        return ArrayToolkit::parts($course, $keys);
+    }
+
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
@@ -202,5 +254,10 @@ class ChaosThreads extends BaseResource
     protected function getGroupThreadService()
     {
         return $this->getServiceKernel()->createService('Group.ThreadService');
+    }
+
+    protected function getCourseService()
+    {
+        return $this->getServiceKernel()->createService('Course.CourseService');
     }
 }
