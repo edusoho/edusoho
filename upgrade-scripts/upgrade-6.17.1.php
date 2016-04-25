@@ -104,7 +104,10 @@ class EduSohoUpgrade extends AbstractUpdater
 
     public function updateBlock($code, $meta)
     {
+        global $kernel;
         $block = $this->getBlockService()->getBlockByCode($code);
+        $html = BlockToolkit::render($block, $kernel->getContainer());
+        
         $default = array();
         foreach ($meta['items'] as $i => $item) {
             $default[$i] = $item['default'];
@@ -119,10 +122,9 @@ class EduSohoUpgrade extends AbstractUpdater
                 'data' => $default,
                 'templateName' => $meta['templateName'],
                 'title' => $meta['title'],
+                'content' => $html
             ));
         } else {
-            global $kernel;
-            $html = BlockToolkit::render($block, $kernel->getContainer());
             $block = $this->getBlockService()->updateBlock($block['id'], array(
                 'meta' => $meta,
                 'data' => $block['data'],
