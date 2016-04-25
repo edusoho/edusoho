@@ -12,51 +12,18 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
     public function getMaterial($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? LIMIT 1";
-        return $this->getConnection()->fetchAssoc($sql, array($id)) ? : null;
-    }
-
-    public function findMaterialsByCourseId($courseId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql ="SELECT * FROM {$this->table} WHERE courseId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($courseId)) ? : array();
-    }
-
-    public function findMaterialsByLessonId($lessonId, $start, $limit)
-    {
-        $this->filterStartLimit($start, $limit);
-        $sql ="SELECT * FROM {$this->table} WHERE lessonId=? ORDER BY createdTime DESC LIMIT {$start}, {$limit}";
-        return $this->getConnection()->fetchAll($sql, array($lessonId)) ? : array();
-    }
-
-    public function getMaterialCountByCourseId($courseId)
-    {
-        $sql ="SELECT COUNT(*) FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId));
+        return $this->getConnection()->fetchAssoc($sql, array($id)) ?: null;
     }
 
     public function addMaterial($material)
     {
         $affected = $this->getConnection()->insert($this->table, $material);
+
         if ($affected <= 0) {
             throw $this->createDaoException('Insert material error.');
         }
+
         return $this->getMaterial($this->getConnection()->lastInsertId());
-    }
-
-    public function findMaterialsByCopyIdAndLockedCourseIds($copyId, $courseIds)
-    {
-        if(empty($courseIds)){
-            return array();
-        }
-       
-        $marks = str_repeat('?,', count($courseIds) - 1) . '?';
-       
-        $parmaters = array_merge(array($copyId), $courseIds);
-
-        $sql ="SELECT * FROM {$this->table} WHERE copyId= ? AND courseId IN ({$marks})";
-        
-        return $this->getConnection()->fetchAll($sql, $parmaters) ? : array();
     }
 
     public function deleteMaterial($id)
@@ -64,30 +31,47 @@ class CourseMaterialDaoImpl extends BaseDao implements CourseMaterialDao
         return $this->getConnection()->delete($this->table, array('id' => $id));
     }
 
-    public function deleteMaterialsByLessonId($lessonId)
+    public function searchMaterials($conditions, $orderBy, $start, $limit)
     {
-        $sql = "DELETE FROM {$this->table} WHERE lessonId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($lessonId));
+        $this->filterStartLimit($start, $limit);
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime'));
+
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
+
+        return $builder->execute()->fetchAll() ?: array();
     }
 
-    public function deleteMaterialsByCourseId($courseId)
+    public function searchMaterialCount($conditions)
     {
-        $sql = "DELETE FROM {$this->table} WHERE courseId = ?";
-        return $this->getConnection()->executeUpdate($sql, array($courseId));
+        $builder = $this->_createSearchQueryBuilder($conditions)
+            ->select('COUNT(id)');
+        return $builder->execute()->fetchColumn(0);
     }
 
+    protected function _createSearchQueryBuilder($conditions)
+    {
+        if (isset($conditions['title'])) {
+            $conditions['titleLike'] = "%{$conditions['title']}%";
+            unset($conditions['title']);
+        }
 
-     public function getLessonMaterialCount($courseId,$lessonId)
-     {
-        $sql = "SELECT COUNT(*) FROM {$this->table} WHERE  courseId = ? AND lessonId = ?";
-        return $this->getConnection()->fetchColumn($sql, array($courseId, $lessonId)); 
-     } 
+        $builder = $this->createDynamicQueryBuilder($conditions)
 
-      public function getMaterialCountByFileId($fileId)
-     {
-        $sql = "SELECT COUNT(id) FROM {$this->table} WHERE  fileId = ? ";
-        return $this->getConnection()->fetchColumn($sql, array($fileId)); 
-     } 
+            ->from($this->table, $this->table)
+            ->andWhere('id = :id')
+            ->andWhere('courseId = :courseId')
+            ->andWhere('lessonId = :lessonId')
+            ->andWhere('type = :type')
+            ->andWhere('userId = :userId')
+            ->andWhere('title LIKE :titleLike')
+            ->andWhere('copyId = :copyId')
+            ->andWhere('fileId = :fileId')
+            ->andWhere('courseId IN (:courseIds)');
 
-
+        return $builder;
+    }
 }

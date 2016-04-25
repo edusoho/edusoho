@@ -10,7 +10,9 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'course.lesson.create' => 'onCourseLessonCreate'
+            'course.lesson.create' => 'onCourseLessonCreate',
+            'material.create'      => 'onMaterialCreate',
+            'material.delete'      => 'onMaterialDelete'
         );
     }
 
@@ -22,6 +24,26 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
 
         if (in_array($lesson['type'], array('video', 'audio', 'ppt', 'document', 'flash'))) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
+        }
+    }
+
+    public function onMaterialCreate(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $material = $context['material'];
+
+        if (!empty($material['fileId'])) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', 1);
+        }
+    }
+
+    public function onMaterialDelete(ServiceEvent $event)
+    {
+        $context  = $event->getSubject();
+        $material = $context['material'];
+
+        if (!empty($material['fileId'])) {
+            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
         }
     }
 

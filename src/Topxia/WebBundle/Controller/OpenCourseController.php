@@ -353,6 +353,58 @@ class OpenCourseController extends BaseController
         ));
     }
 
+    public function materialListAction(Request $request, $id)
+    {
+        $course = $this->getOpenCourseService()->getCourse($id);
+
+        $user = $this->getCurrentUser();
+
+        if (!$user->isLogin()) {
+            $this->createMessageResponse('info', '你好像忘了登录哦？', null, 3000, $this->generateUrl('login'));
+        }
+
+        $conditions = array(
+            'courseId' => $id,
+            'type'     => 'openCourse'
+        );
+
+        $paginator = new Paginator(
+            $request,
+            $this->getMaterialService()->searchMaterialCount($conditions),
+            5
+        );
+
+        $materials = $this->getMaterialService()->searchMaterials(
+            $conditions,
+            array('createdTime', 'DESC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $lessons = $this->getOpenCourseService()->findLessonsByCourseId($course['id']);
+        $lessons = ArrayToolkit::index($lessons, 'id');
+
+        return $this->render("TopxiaWebBundle:OpenCourse:open-course-material-block.html.twig", array(
+            'course'    => $course,
+            'lessons'   => $lessons,
+            'materials' => $materials,
+            'paginator' => $paginator
+        ));
+    }
+
+    public function materialDownloadAction(Request $request, $courseId, $materialId)
+    {
+        $course = $this->getOpenCourseService()->getCourse($courseId);
+
+        $material = $this->getMaterialService()->getMaterial($courseId, $materialId);
+
+        if (empty($material)) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
+    }
+
     private function _getMember($request, $courseId)
     {
         $user = $this->getCurrentUser();
@@ -655,5 +707,10 @@ class OpenCourseController extends BaseController
     protected function getThreadService()
     {
         return $this->getServiceKernel()->createService('Thread.ThreadService');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->getServiceKernel()->createService('Course.MaterialService');
     }
 }

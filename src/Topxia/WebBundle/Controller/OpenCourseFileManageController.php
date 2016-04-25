@@ -13,20 +13,13 @@ class OpenCourseFileManageController extends BaseController
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
         $type = $request->query->get('type');
-        $type = 'opencourselesson';
+        //$type = 'opencourselesson';
+        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
 
         $conditions = array(
             'targetType' => $type,
             'targetId'   => $course['id']
         );
-
-        if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
-            $course = $this->getOpenCourseService()->getCourse($conditions['targetId']);
-
-            if ($course['parentId'] > 0 && $course['locked'] == 1) {
-                $conditions['targetId'] = $course['parentId'];
-            }
-        }
 
         $paginator = new Paginator(
             $request,
@@ -48,7 +41,7 @@ class OpenCourseFileManageController extends BaseController
 
             $useNum = $this->getOpenCourseService()->searchLessonCount(array('mediaId' => $file['id']));
 
-            $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
+            $manageFilesUseNum = $this->getMaterialService()->searchMaterialCount(array('fileId' => $file['id'], 'type' => 'openCourse'));
 
             $files[$key]['useNum'] = $useNum;
         }
@@ -159,6 +152,26 @@ class OpenCourseFileManageController extends BaseController
         $this->getUploadFileService()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
+    }
+
+    public function lessonMaterialModalAction(Request $request, $courseId, $lessonId)
+    {
+        $course = $this->getOpenCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getOpenCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $materials = $this->getMaterialService()->searchMaterials(
+            array('lessonId' => $lesson['id'], 'type' => 'openCourse'),
+            array('createdTime', 'DESC'),
+            0, 100
+        );
+        return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
+            'course'         => $course,
+            'lesson'         => $lesson,
+            'materials'      => $materials,
+            'storageSetting' => $this->setting('storage'),
+            'targetType'     => 'coursematerial',
+            'targetId'       => $course['id']
+        ));
     }
 
     protected function getOpenCourseService()

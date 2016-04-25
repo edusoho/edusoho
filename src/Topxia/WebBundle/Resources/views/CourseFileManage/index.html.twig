@@ -44,18 +44,18 @@
       {{'文件管理'|trans}}
     </div>
     <div class="panel-body" id="file-manage-panel">
-    {% if course.type == 'normal' or course.type == 'live' %}
-      <ul class="nav nav-tabs mbm">
-        <li {% if type == 'courselesson' %} class="active" {% endif %}>
-        <a href="{{ path('course_manage_files', {id:course.id, type:'courselesson'}) }}">{{'课时文件'|trans}}</a></li>
-        <li {% if type == 'coursematerial' %} class="active" {% endif %}><a href="{{ path('course_manage_files', {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
-      </ul>
-    {% else %} 
-      <ul class="nav nav-tabs mbm">
-        <li {% if type == 'opencourselesson' %} class="active" {% endif %}>
-        <a href="{{ path('open_course_manage_files', {id:course.id, type:'opencourselesson'}) }}">{{'课时文件'|trans}}</a></li>
-      </ul>
-    {% endif %}   
+    {% if course.type == 'open' or course.type == 'liveOpen' %}
+      {% set filesUrl = 'open_course_manage_files' %}
+    {% else %}
+      {% set filesUrl = 'course_manage_files' %}
+    {% endif %}
+
+    <ul class="nav nav-tabs mbm">
+      <li {% if type == 'courselesson' %} class="active" {% endif %}>
+      <a href="{{ path(filesUrl, {id:course.id, type:'courselesson'}) }}">{{'课时文件'|trans}}</a></li>
+      <li {% if type == 'coursematerial' %} class="active" {% endif %}><a href="{{ path(filesUrl, {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
+    </ul>
+    
       <table class="table table-striped table-hover" id="course-lesson-table">
         <thead>
           <tr>

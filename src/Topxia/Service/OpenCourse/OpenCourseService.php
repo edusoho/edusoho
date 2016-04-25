@@ -46,6 +46,8 @@ interface OpenCourseService
 
     public function updateLesson($courseId, $lessonId, $fields);
 
+    public function waveCourseLesson($id, $field, $diff);
+
     public function deleteLesson($id);
 
     public function publishCourse($id);

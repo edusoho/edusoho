@@ -86,6 +86,23 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
         return $this->getLesson($id);
     }
 
+    public function waveCourseLesson($id, $field, $diff)
+    {
+        $fields = array('materialNum');
+
+        if (!in_array($field, $fields)) {
+            throw \InvalidArgumentException(sprintf("%s字段不允许增减，只有%s才被允许增减", $field, implode(',', $fields)));
+        }
+
+        $currentTime = time();
+
+        $sql = "UPDATE {$this->getTable()} SET {$field} = {$field} + ?, updatedTime = '{$currentTime}' WHERE id = ? LIMIT 1";
+
+        $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
+        $this->clearCached();
+        return $result;
+    }
+
     public function deleteLesson($id)
     {
         $result = $this->getConnection()->delete($this->table, array('id' => $id));

@@ -18,6 +18,7 @@ interface OpenCourseLessonDao
 
     public function updateLesson($id, $fields);
 
-    public function deleteLesson($id);
+    public function waveCourseLesson($id, $field, $diff);
 
+    public function deleteLesson($id);
 }

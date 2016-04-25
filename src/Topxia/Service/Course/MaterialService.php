@@ -3,25 +3,21 @@ namespace Topxia\Service\Course;
 
 interface MaterialService
 {
-	public function uploadMaterial($material);
+    public function uploadMaterial($material);
 
-	public function deleteMaterial($courseId, $materialId);
+    public function deleteMaterial($courseId, $materialId);
 
-	public function deleteMaterialByMaterialId($materialId);
+    public function deleteMaterialByMaterialId($materialId);
 
-	public function deleteMaterialsByLessonId($lessonId);
+    public function deleteMaterialsByLessonId($lessonId, $courseType);
 
-	public function deleteMaterialsByCourseId($courseId);
+    public function deleteMaterialsByCourseId($courseId, $courseType);
 
-	public function getMaterial($courseId, $materialId);
+    public function getMaterial($courseId, $materialId);
 
-	public function findCourseMaterials($courseId, $start, $limit);
+    public function findLessonMaterials($lessonId, $start, $limit);
 
-	public function findLessonMaterials($lessonId, $start, $limit);
+    public function searchMaterials($conditions, $orderBy, $start, $limit);
 
-	public function findMaterialsByCopyIdAndLockedCourseIds($pId, $courseIds);
-
-	public function getMaterialCount($courseId);
-
-	public function getMaterialCountByFileId($fileId);
+    public function searchMaterialCount($conditions);
 }

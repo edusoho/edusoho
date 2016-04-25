@@ -7,9 +7,14 @@ class CourseMaterialManageController extends BaseController
 {
     public function indexAction(Request $request, $courseId, $lessonId)
     {
-        $course    = $this->getCourseService()->tryManageCourse($courseId);
-        $lesson    = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
-        $materials = $this->getMaterialService()->findLessonMaterials($lesson['id'], 0, 100);
+        $course = $this->getCourseService()->tryManageCourse($courseId);
+        $lesson = $this->getCourseService()->getCourseLesson($courseId, $lessonId);
+
+        $materials = $this->getMaterialService()->searchMaterials(
+            array('lessonId' => $lesson['id'], 'type' => 'course'),
+            array('createdTime', 'DESC'),
+            0, 100
+        );
         return $this->render('TopxiaWebBundle:CourseMaterialManage:material-modal.html.twig', array(
             'course'         => $course,
             'lesson'         => $lesson,
@@ -38,11 +43,13 @@ class CourseMaterialManageController extends BaseController
 
             $fields['courseId'] = $course['id'];
             $fields['lessonId'] = $lesson['id'];
+            $fields['type']     = 'course';
 
             $material = $this->getMaterialService()->uploadMaterial($fields);
 
             return $this->render('TopxiaWebBundle:CourseMaterialManage:list-item.html.twig', array(
-                'material' => $material
+                'material' => $material,
+                'course'   => $course
             ));
         }
 

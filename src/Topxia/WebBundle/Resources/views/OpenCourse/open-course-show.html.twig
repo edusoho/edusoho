@@ -53,13 +53,12 @@
               <div class="empty">暂无简介</div>
             {% endif %}
           </div>
-          <div class="visible-sm visible-xs">
-            {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
-          </div>
           {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{courseId:course.id})) }}
         </div>
         <div class="col-md-3 hidden-sm hidden-xs">
           {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}
+
+          {{ render(controller('TopxiaWebBundle:OpenCourse:materialList',{id:course.id})) }}
         </div>
       </div>
     {% endblock %}

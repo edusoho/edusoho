@@ -84,11 +84,12 @@ class CourseDeleteServiceImpl extends BaseService implements CourseDeleteService
 
     protected function deleteMaterials($course)
     {
-        $materialCount = $this->getMaterialDao()->getMaterialCountByCourseId($course['id']);
+        $conditions = array('courseId'=>$course['id'],'type'=>'course');
+        $materialCount = $this->getMaterialDao()->searchMaterialCount($conditions);
         $count         = 0;
 
         if ($materialCount > 0) {
-            $materials = $this->getMaterialDao()->findMaterialsByCourseId($course['id'], 0, 1000);
+            $materials = $this->getMaterialDao()->searchMaterials($conditions, array('createdTime','DESC') 0, $materialCount);
 
             foreach ($materials as $material) {
                 if (!empty($material['fileId'])) {

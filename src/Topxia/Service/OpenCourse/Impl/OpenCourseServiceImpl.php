@@ -445,6 +445,11 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $updatedLesson;
     }
 
+    public function waveCourseLesson($id, $field, $diff)
+    {
+        return $this->getOpenCourseLessonDao()->waveCourseLesson($id, $field, $diff);
+    }
+
     public function deleteLesson($id)
     {
         $lesson = $this->getLesson($id);

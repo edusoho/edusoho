@@ -75,17 +75,28 @@
 
       <ul class="dropdown-menu pull-right dropdown-menu-more" role="menu" style="margin-top:12px;min-width:144px" aria-labelledby="dLabel" style="display:none;">
 
+        {% if course.type == 'open' %}
+          <li>
+            <a href="javascript:;" data-toggle="modal"  data-target="#modal" data-url="{{ path('open_course_manage_material', {courseId:course.id, lessonId:lesson.id}) }}">
+            <span class="glyphicon glyphicon-paperclip prs"></span>{{'添加资料'|trans}}</a>
+          </li>
+          <li class="divider"></li>
+        {% endif %}
+        
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="publish-lesson-btn" data-url="{{ path('open_course_manage_lesson_publish', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-ok-circle prs"></span>{{'发布'|trans}}
           </a>
         </li>
-
+        
         <li class="{% if lesson.status == 'unpublished' %}hidden {% endif %}">
           <a href="javascript:;" class="unpublish-lesson-btn" data-url="{{ path('open_course_manage_lesson_unpublish', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-remove-circle prs"></span>{{'取消发布'|trans}}
           </a>
         </li>
+
+        
+
         <li class="{% if lesson.status == 'published' %}hidden {% endif %}">
           <a href="javascript:;" class="delete-lesson-btn" data-url="{{ path('open_course_manage_lesson_delete', {courseId:course.id, lessonId:lesson.id}) }}">
             <span class="glyphicon glyphicon-trash prs"></span>{{'删除'|trans}}
