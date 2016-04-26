@@ -38,28 +38,28 @@ class ClassroomController extends BaseController
             $conditions['categoryIds'] = $categoryIds;
         }
 
-        if (!isset($conditions['fliter'])) {
-            $conditions['fliter'] = array(
+        if (!isset($conditions['filter'])) {
+            $conditions['filter'] = array(
                 'price'          => 'all',
                 'currentLevelId' => 'all'
             );
         }
 
-        $fliter = $conditions['fliter'];
+        $filter = $conditions['filter'];
 
-        if ($fliter['price'] == 'free') {
+        if ($filter['price'] == 'free') {
             $conditions['price'] = '0.00';
         }
 
-        unset($conditions['fliter']);
+        unset($conditions['filter']);
         $levels = array();
 
         if ($this->isPluginInstalled('Vip')) {
             $levels = ArrayToolkit::index($this->getLevelService()->searchLevels(array('enabled' => 1), 0, 100), 'id');
 
-            if (!$fliter['currentLevelId'] != 'all') {
-                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($fliter['currentLevelId']), 'id');
-                $conditions['vipLevelIds'] = array_merge(array($fliter['currentLevelId']), $vipLevelIds);
+            if (!$filter['currentLevelId'] != 'all') {
+                $vipLevelIds               = ArrayToolkit::column($this->getLevelService()->findPrevEnabledLevels($filter['currentLevelId']), 'id');
+                $conditions['vipLevelIds'] = array_merge(array($filter['currentLevelId']), $vipLevelIds);
             }
         }
 
@@ -108,7 +108,7 @@ class ClassroomController extends BaseController
             'categoryArray'            => $categoryArray,
             'categoryArrayDescription' => $categoryArrayDescription,
             'categoryParent'           => $categoryParent,
-            'fliter'                   => $fliter,
+            'filter'                   => $filter,
             'levels'                   => $levels,
             'orderBy'                  => $orderBy
         ));
