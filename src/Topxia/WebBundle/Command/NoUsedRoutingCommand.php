@@ -20,7 +20,8 @@ class NoUsedRoutingCommand extends BaseCommand
 
     protected function configure()
     {
-        $this->setName ( 'topxia:no-used-routing' );
+        $this->setName ('util:no-used-routing')
+        ->setDescription('扫描无效的routing配置，指配置中的action方法在controller中不存在');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
