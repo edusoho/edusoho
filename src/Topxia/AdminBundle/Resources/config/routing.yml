@@ -27,10 +27,6 @@ admin_login_count:
     pattern: /login/count
     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
-admin_dashboard:
-    pattern:  /dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
