@@ -41,9 +41,16 @@ class EdusohoCloudClient implements CloudClient
         $this->accessKey     = $options['accessKey'];
         $this->secretKey     = $options['secretKey'];
         $this->bucket        = $options['bucket'];
-        $this->videoCommands = $options['videoCommands'];
-        $this->audioCommands = $options['audioCommands'];
-        $this->pptCommands   = $options['pptCommands'];
+
+        if (isset($options['videoCommands'])) {
+            $this->videoCommands = $options['videoCommands'];
+        }
+        if (isset($options['audioCommands'])) {
+            $this->audioCommands = $options['audioCommands'];
+        }
+        if (isset($options['pptCommands'])) {
+            $this->pptCommands = $options['pptCommands'];
+        }
     }
 
     public function makeUploadParams($params)

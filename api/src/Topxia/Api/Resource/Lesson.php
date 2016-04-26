@@ -185,7 +185,7 @@ class Lesson extends BaseResource
                                 ));
 
                                 $headUrl = array(
-                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&hideBeginning=1&line=".$line
+                                    'url' => $this->getHttpHost()."/hls/{$headLeaderInfo['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line
                                 );
 
                                 $lesson['headUrl'] = $headUrl['url'];
@@ -201,7 +201,7 @@ class Lesson extends BaseResource
                             ));
 
                             $url = array(
-                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&hideBeginning=1&line=".$line
+                                'url' => $this->getHttpHost()."/hls/{$file['id']}/playlist/{$token['token']}.m3u8?format=json&line=".$line
                             );
                         } else {
                             $url = $client->generateHLSQualitiyListUrl($file['metas2'], 3600);
