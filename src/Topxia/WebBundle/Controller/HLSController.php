@@ -20,6 +20,11 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
+        //强制覆盖
+        if ($hideBeginning) {
+            $token['data']['hideBeginning'] = true;
+        }
+
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
 
         if ($dataId != $id) {
