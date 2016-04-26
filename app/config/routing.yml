@@ -21,6 +21,14 @@ classroom_admin:
     resource: "@ClassroomBundle/Resources/config/routing_admin.yml"
     prefix:   /admin
 
+materiallib_web:
+    resource: "@MaterialLibBundle/Resources/config/routing.yml"
+    prefix:   /
+
+materiallib_admin:
+    resource: "@MaterialLibBundle/Resources/config/routing_admin.yml"
+    prefix:   /admin
+
 sensitive_web:
     resource: "@SensitiveWordBundle/Resources/config/routing.yml"
     prefix:   /

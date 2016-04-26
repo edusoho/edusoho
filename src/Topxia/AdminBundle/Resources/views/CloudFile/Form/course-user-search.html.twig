@@ -1,0 +1,36 @@
+{#<div style="margin-bottom:20px;">
+  <div class="form-group">
+    <input type="hidden" name="courseId" id="js-course-search" data-url="{{ path('json_query_courses') }}" value="{{ courseId }}">
+  </div>
+  <div class="form-group">
+    <input type="hidden" name="createdUserId" id="js-user-search" data-url="{{ path('json_query_users') }}"  value="{{ createdUserId }}">
+  </div>
+</div>#}
+	<!-- <div class="row"> -->
+	  <div class="materials-group"> 
+	{#       <ul class="form-group"> #}
+	          <select class="form-control form-csearch-type js-search-type" name="searchType">按来源 <span class="caret" ></span>
+	          	<option value="course"><a href="javascript:;" >按课程</a></option>
+	            <option value="title"><a href="javascript:;" >按标题</a></option>
+	            <option value="user"><a href="javascript:;" >按用户</a></option>
+	          </select>
+          {#   <li class="dropdown">
+              <a href="javascript:;" class="dropdown-toggle js-search-type" data-toggle="dropdown" name="searchType">
+                按来源<span class="caret" ></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li value="course"><a href="javascript:;" >按课程</a></li>
+                <li value="title"><a href="javascript:;" >按标题</a></li>
+                <li value="user"><a href="javascript:;" >按用户</a></li>
+              </ul>
+            </li>
+         </ul> #}
+	      <div class="form-group">
+			    <input class="form-control " name="keywords" placeholder="输入关键词">
+		    </div>
+		    <div class="form-group">
+		      <button class="btn btn-primary">搜索</button>
+		 </div>
+	  </div>
+	<!-- </div> -->
+

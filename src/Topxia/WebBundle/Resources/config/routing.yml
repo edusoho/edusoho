@@ -151,6 +151,52 @@ file_img_crop:
     defaults: { _controller: TopxiaWebBundle:File:cropImg }
     methods: [POST]
 
+uploader_entry:
+    pattern:  /uploader
+    defaults: { _controller: TopxiaWebBundle:Uploader:entry }
+
+uploader_init:
+    pattern:  /uploader/init
+    defaults: { _controller: TopxiaWebBundle:Uploader:init }
+    methods: [POST]
+
+uploader_auth:
+    pattern:  /uploader/auth
+    defaults: { _controller: TopxiaWebBundle:Uploader:uploadAuth }
+    methods: [POST]
+
+uploader_batch_uplod:
+    pattern:  /uploader/batch_upload
+    defaults: { _controller: TopxiaWebBundle:Uploader:batchUpload }
+
+uploader_finished:
+    pattern:  /uploader/finished
+    defaults: { _controller: TopxiaWebBundle:Uploader:finished }
+    methods: [POST]
+
+uploader_upload_callback:
+    pattern:  /uploader/upload_callback
+    defaults: { _controller: TopxiaWebBundle:Uploader:uploadCallback }
+    methods: [POST]
+
+uploader_process_callback:
+    pattern:  /uploader/process_callback
+    defaults: { _controller: TopxiaWebBundle:Uploader:processCallback }
+    methods: [POST]
+
+uploader_chunks_start:
+    pattern:  /uploader/chunks/start
+    defaults: { _controller: TopxiaWebBundle:Uploader:chunksStart }
+
+uploader_chunks_finish:
+    pattern:  /uploader/chunks/finish
+    defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
+
+uploader_mkfile:
+    pattern:  /uploader/mkfile/{fileSize}
+    defaults: { _controller: TopxiaWebBundle:Uploader:mkfile }
+    methods: [POST]
+
 uploadfile_upload:
     pattern:  /uploadfile/upload
     defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
@@ -636,6 +682,10 @@ course_manage_file_convert:
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:convert }
     methods: [POST]
 
+course_manage_file_status:
+    pattern:  /course/manage/file/status
+    defaults: { _controller: TopxiaWebBundle:CourseFileManage:fileStatus }
+
 course_manage_upload_course_delete_files:
     pattern:  /course/{id}/delete/files/{type}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:deleteCourseFiles }
@@ -645,13 +695,13 @@ course_manage_upload_course_files:
     pattern:  /course/{id}/manage/upload/course/files/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseFileManage:uploadCourseFiles }
 
-course_manage_batch_upload_course_files:
-    pattern:  /course/{id}/manage/batch/upload/course/files/{targetType}
-    defaults: { _controller: TopxiaWebBundle:CourseFileManage:batchUploadCourseFiles }
-
 course_manage_students:
     pattern:  /course/{id}/manage/students
     defaults: { _controller: TopxiaWebBundle:CourseStudentManage:index }
+
+course_manage_record:
+    pattern:  /course/{id}/manage/refund_record
+    defaults: { _controller: TopxiaWebBundle:CourseStudentManage:refundRecord }
 
 course_manage_students_show:
     pattern:  /course/{courseId}/manage/students/{userId}/show
@@ -702,6 +752,10 @@ course_manage_lesson:
 course_manage_lesson_create:
     pattern:  /course/{id}/manage/lesson/create
     defaults: { _controller: TopxiaWebBundle:CourseLessonManage:create }
+
+course_manage_lesson_file_status:
+    pattern:  /course/{id}/manage/lesson/fileStatus
+    defaults: { _controller: TopxiaWebBundle:CourseLessonManage:fileStatus }
 
 course_draft_create:
     pattern:  /course/draft/create
@@ -789,18 +843,9 @@ course_manage_question_preview:
     pattern: /course/{courseId}/manage/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:preview }
 
-course_manage_question_upload:
-    pattern: /course/{courseId}/manage/question/uploadfile/{type}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadFile }
-    methods: [POST]
-
 course_manage_upload_question_attachment:
     pattern:  /course/{id}/manage/upload/question/attachment/{targetType}
     defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:uploadAttachments }
-
-course_manage_question_batch_upload_attachment:
-    pattern: /course/{id}/manage/question/batch/upload/attachment/{targetType}
-    defaults: { _controller: TopxiaWebBundle:CourseQuestionManage:batchUploadAttachments }
 
 course_manage_question_attachment_download:
     pattern: /course/{id}/manage/question/attachment/{fileId}/download
@@ -1099,28 +1144,28 @@ settings_avatar_fetch_partner:
     defaults: { _controller: TopxiaWebBundle:Settings:avatarFetchPartner }
     methods: [POST]
 
-settings_security: 
-    pattern:  /settings/security 
+settings_security:
+    pattern:  /settings/security
     defaults: { _controller: TopxiaWebBundle:Settings:security }
 
-settings_set_pay_password: 
+settings_set_pay_password:
     pattern:  /settings/set_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:setPayPassword }
 
-settings_pay_password: 
-    pattern:  /settings/pay_password 
+settings_pay_password:
+    pattern:  /settings/pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:payPassword }
 
 settings_reset_pay_password:
-    pattern:  /settings/reset_pay_password 
+    pattern:  /settings/reset_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:resetPayPassword }
 
 settings_find_pay_password:
-    pattern:  /settings/find_pay_password 
+    pattern:  /settings/find_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:findPayPassword }
 
 settings_update_pay_password:
-    pattern:  /settings/update_pay_password 
+    pattern:  /settings/update_pay_password
     defaults: { _controller: TopxiaWebBundle:Settings:updatePayPassword }
 
 settings_security_questions:
@@ -1348,35 +1393,35 @@ my_favorite_question_preview:
     pattern: /my/favorite/question/{id}/preview
     defaults: { _controller: TopxiaWebBundle:MyQuestion:preview }
 
-user_show: 
+user_show:
     pattern:  /user/{id}
     defaults: { _controller: TopxiaWebBundle:User:show }
 
-my_page_show: 
+my_page_show:
     pattern:  /my/page/show
     defaults: { _controller: TopxiaWebBundle:User:pageShow }
 
-user_about: 
+user_about:
     pattern:  /user/{id}/about
     defaults: { _controller: TopxiaWebBundle:User:about }
 
-user_teach: 
+user_teach:
     pattern:  /user/{id}/teach
     defaults: { _controller: TopxiaWebBundle:User:teach }
 
-user_learn: 
+user_learn:
     pattern:  /user/{id}/learn
     defaults: { _controller: TopxiaWebBundle:User:learn }
 
-user_favorited: 
+user_favorited:
     pattern:  /user/{id}/favorited
     defaults: { _controller: TopxiaWebBundle:User:favorited }
 
-user_friend: 
+user_friend:
     pattern:  /user/{id}/friend
     defaults: { _controller: TopxiaWebBundle:User:friend }
 
-user_group: 
+user_group:
     pattern:  /user/{id}/group
     defaults: { _controller: TopxiaWebBundle:User:group }
 
@@ -1402,11 +1447,11 @@ user_remind_counter:
     pattern:  /user_remind_counter
     defaults: { _controller: TopxiaWebBundle:User:remindCounter }
 
-user_teaching_classrooms: 
+user_teaching_classrooms:
     pattern:  /user/{id}/teaching/classrooms
     defaults: { _controller: TopxiaWebBundle:User:teaching }
 
-user_learning_classrooms: 
+user_learning_classrooms:
     pattern:  /user/{id}/learning/classrooms
     defaults: { _controller: TopxiaWebBundle:User:learning }
 
@@ -1950,7 +1995,7 @@ password_reset_by_sms:
     methods: [POST]
 
 settings_find_pay_password_by_sms:
-    pattern:  /settings/find_pay_password_by_sms 
+    pattern:  /settings/find_pay_password_by_sms
     defaults: { _controller: TopxiaWebBundle:Settings:findPayPasswordBySms }
 
 order_pay_sms_verification:
@@ -2028,6 +2073,3 @@ live_course_manage_lesson_replay_title_update:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
-
-
-

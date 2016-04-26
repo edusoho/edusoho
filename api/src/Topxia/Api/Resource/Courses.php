@@ -17,6 +17,7 @@ class Courses extends BaseResource
 
         if (isset($conditions['cursor'])) {
             $conditions['status'] = 'published';
+            $conditions['parentId'] = 0;
             $conditions['updatedTime_GE'] = $conditions['cursor'];
             $courses = $this->getCourseService()->searchCourses($conditions, array('updatedTime', 'ASC'), $start, $limit);
             $courses = $this->assemblyCourses($courses);

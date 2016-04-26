@@ -71,7 +71,10 @@ class OrderRefundDaoImpl extends BaseDao implements OrderRefundDao
                     ->andWhere('targetType = :targetType')
                     ->andWhere('orderId = :orderId')
                     ->andWhere('targetType = :targetType')
-                    ->andWhere('targetId IN ( :courseIds )');
+                    ->andWhere('userId IN ( :userIds )')
+                    ->andWhere('targetId = :targetId')
+                    ->andWhere('status <> :statusNotEqual')
+                    ->andWhere('targetId IN ( :targetIds )');
                     
 
         if (isset($conditions['targetIds'])) {
