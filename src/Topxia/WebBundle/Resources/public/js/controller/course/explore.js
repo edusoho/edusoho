@@ -12,8 +12,8 @@ define(function(require, exports, module) {
         	window.location.href = $(this).val();
         });
 
-    	$(".open-course-list").on('click','.section-more-btn' function(){
-            console.log('111');
+
+    	$(".open-course-list").on('click','.section-more-btn a' function(){
       	var url = $(this).attr('data-url');
 	      	$.ajax({
 		        url: url,
