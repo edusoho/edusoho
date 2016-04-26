@@ -14033,6 +14033,14 @@ textarea {
   background-color: #fff;
   margin-bottom: 20px;
 }
+@media (max-width: 991px) {
+  .open-course-list-page .course-block {
+    width: 48%;
+    float: left;
+    margin: 0 1% 20px 1%;
+    padding: 0;
+  }
+}
 .open-course-list-page .course-block .course-img {
   position: relative;
   float: left;
@@ -14041,7 +14049,7 @@ textarea {
 .open-course-list-page .course-block .course-img img {
   width: 100%;
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .open-course-list-page .course-block .course-img {
     float: none;
     width: 100%;
@@ -14053,11 +14061,11 @@ textarea {
   padding-left: 40px;
   padding-right: 20px;
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .open-course-list-page .course-block .open-course-content {
     float: none;
     width: 100%;
-    padding: 0;
+    padding-left: 10px;
   }
   .open-course-list-page .course-block .open-course-content .title {
     padding-top: 10px;
@@ -14066,6 +14074,11 @@ textarea {
 .open-course-list-page .course-block .open-course-content .title a {
   font-size: 22px;
   vertical-align: middle;
+}
+@media (max-width: 991px) {
+  .open-course-list-page .course-block .open-course-content .title a {
+    font-size: 14px;
+  }
 }
 .open-course-list-page .course-block .open-course-intro {
   margin-top: 12px;
