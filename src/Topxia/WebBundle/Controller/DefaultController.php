@@ -105,7 +105,7 @@ class DefaultController extends BaseController
 
     public function friendlyLinkAction()
     {
-        $friendlyLinks = $this->getNavigationService()->findNavigationsByType('friendlyLink', 0, 100);
+        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
             
         return $this->render('TopxiaWebBundle:Default:friend-link.html.twig', array(
                 'friendlyLinks' => $friendlyLinks
