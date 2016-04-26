@@ -15,12 +15,12 @@ use Monolog\Handler\StreamHandler;
 use Symfony\Component\Yaml\Yaml;
 
 
-class RoutingTestCommand extends BaseCommand
+class NoUsedRoutingCommand extends BaseCommand
 {
 
     protected function configure()
     {
-        $this->setName ( 'routing:test' );
+        $this->setName ( 'topxia:no-used-routing' );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
