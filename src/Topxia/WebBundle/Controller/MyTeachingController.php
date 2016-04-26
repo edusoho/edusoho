@@ -19,8 +19,9 @@ class MyTeachingController extends BaseController
             'userId' => $user['id']
         );
 
-        if ($filter == 'normal') {
+        if ($filter == 'normal' || $filter == 'live') {
             $conditions["parentId"] = 0;
+            $conditions["type"]     = $filter;
         }
 
         if ($filter == 'classroom') {
@@ -30,7 +31,7 @@ class MyTeachingController extends BaseController
         $paginator = new Paginator(
             $this->get('request'),
             $this->getCourseService()->findUserTeachCourseCount($conditions, false),
-            12
+            10
         );
 
         $courses = $this->getCourseService()->findUserTeachCourses(
@@ -62,7 +63,7 @@ class MyTeachingController extends BaseController
         ));
     }
 
-    public function openCoursesAction(Request $request)
+    public function openCoursesAction(Request $request, $filter)
     {
         $user = $this->getCurrentUser();
 
@@ -70,24 +71,25 @@ class MyTeachingController extends BaseController
             return $this->createMessageResponse('error', '您不是教师，不能查看此页面! ');
         }
 
-        $conditions = $this->_createSearchConitons($user);
+        $conditions = $this->_createSearchConitons($filter);
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->searchCourseCount($conditions),
-            12
+            10
         );
 
         $OpenCourses = $this->getOpenCourseService()->searchCourses(
             $conditions,
-            array('createdTime', 'ASC'),
+            array('hitNum', 'ASC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
 
         return $this->render('TopxiaWebBundle:MyTeaching:open-course.html.twig', array(
             'courses'   => $OpenCourses,
-            'paginator' => $paginator
+            'paginator' => $paginator,
+            'filter'    => $filter
         ));
     }
 
@@ -190,9 +192,13 @@ class MyTeachingController extends BaseController
         ));
     }
 
-    private function _createSearchConitons($user)
+    private function _createSearchConitons($filter)
     {
-        $conditions = array();
+        $user = $this->getCurrentUser();
+
+        $conditions = array(
+            'type' => $filter
+        );
 
         if ($user->isAdmin()) {
             $conditions['userId'] = $user['id'];

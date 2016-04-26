@@ -59,7 +59,7 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
-        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq','studentNum'));
+        $orderBy = $this->checkOrderBy($orderBy, array('createdTime', 'recommendedSeq', 'studentNum', 'hitNum'));
 
         $builder = $this->_createSearchQueryBuilder($conditions)
             ->select('*')
