@@ -142,6 +142,15 @@ class DeveloperSettingController extends BaseController
         ));
     }
 
+    public function syncUploadFileAction(Request $request)
+    {
+        $conditions = array(
+            'storage'  => 'cloud',
+            'globalId' => 0
+        );
+        $this->getCloudFileService()->synData($conditions);
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -150,5 +159,10 @@ class DeveloperSettingController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getCloudFileService()
+    {
+        return $this->getServiceKernel()->createService('CloudFile.CloudFileService');
     }
 }

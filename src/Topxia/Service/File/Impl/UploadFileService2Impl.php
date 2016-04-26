@@ -28,6 +28,21 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getFileImplementor($file)->getFile($file);
     }
 
+    public function getFileFromLeaf($id)
+    {
+        $file = $this->getUploadFileDao()->getFile($id);
+
+        if (empty($file)) {
+            return null;
+        }
+
+        if (empty($file['globalId'])) {
+            return $file;
+        }
+
+        return $this->getFileImplementor($file)->getFileFromLeaf($file);
+    }
+
     public function getUploadFileInit($id)
     {
         return $this->getUploadFileInitDao()->getFile($id);
@@ -81,6 +96,11 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         }
 
         return $files;
+    }
+
+    public function findThinFilesByIds(array $ids)
+    {
+        return $this->getUploadFileDao()->findFilesByIds($ids);
     }
 
     public function findFilesByIds(array $ids)

@@ -779,6 +779,15 @@ class ClassroomController extends BaseController
 
         $userInfo = $this->getUserService()->updateUserProfile($user['id'], $userInfo);
 
+        if (isset($formData['email']) && !empty($formData['email'])) {
+            $this->getAuthService()->changeEmail($user['id'], null, $formData['email']);
+            $this->authenticateUser($this->getUserService()->getUser($user['id']));
+
+            if (!$user['setup']) {
+                $this->getUserService()->setupAccount($user['id']);
+            }
+        }
+
         $coinSetting = $this->setting("coin");
 
         //判断用户是否为VIP
@@ -1168,5 +1177,10 @@ class ClassroomController extends BaseController
     protected function getClassroomPlanService()
     {
         return $this->getServiceKernel()->createService('ClassroomPlan:ClassroomPlan.ClassroomPlanService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 }

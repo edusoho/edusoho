@@ -16,6 +16,7 @@ define(function(require, exports, module) {
         });*/
 
         var editor_classroom_about = CKEDITOR.replace('about', {
+            allowedContent: true,
             toolbar: 'Detail',
             filebrowserImageUploadUrl: $('#about').data('imageUploadUrl'),
             filebrowserFlashUploadUrl: $('#about').data('flashUploadUrl')

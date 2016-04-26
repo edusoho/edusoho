@@ -39,7 +39,6 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'profile'    => $profile,
             'fields'     => $fields,
@@ -51,11 +50,11 @@ class SettingsController extends BaseController
     public function approvalSubmitAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['idcard'] = substr_replace($profile['idcard'],'************',4,12);
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
-
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
                 return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
             }
@@ -63,10 +62,11 @@ class SettingsController extends BaseController
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
             $this->setFlashMessage('success', '实名认证提交成功！');
-            return $this->redirect($this->generateUrl('settings'));
+            return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
 
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+            'profile' => $profile
         ));
     }
 
