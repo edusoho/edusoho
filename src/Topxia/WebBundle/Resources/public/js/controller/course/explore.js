@@ -23,7 +23,7 @@ define(function(require, exports, module) {
 		        $(".section-more-btn").remove();
 		        $('.open-course-list').append(html);
                 Lazyload.init();
-		        }
+		        } 
 	      	});
 	    });
     };
