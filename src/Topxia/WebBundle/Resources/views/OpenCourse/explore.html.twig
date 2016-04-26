@@ -4,18 +4,7 @@
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'open-course/open-course-explore' %}
 
-{% block keywords %}
-  {% if category %}{{category.name}}
-    {% if category.parent %}{{ ','}}{{ category.parent.name|default('') }}{% endif %}
-  {% else %}
-    {{ '全部' }}
-  {% endif %}
-{% endblock %}
-{% block description %}{{ category.description|default('')|plain_text(100) }}{% endblock %}
-{% block title %}{{ category.name|default('全部'|trans) }} - {{setting('site.name')}}
-  {% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}
-  {% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
-{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
 
 {% block top_content %}
   <section class="es-live-poster swiper-container">
@@ -27,11 +16,8 @@
 {% endblock %}
 
 {% block content %}
-  {% set type = fliter.type|default('all') %}
-  {% set orderBy = app.request.get('orderBy')|default('latest')%}
-
   <div class="open-course-list">
-    {% for course in courses if course %}
+    {#{% for course in courses if course %}
       {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
       
       <div class="course-block clearfix">
@@ -85,7 +71,7 @@
     {% else %}
       <div class="empty">{{'暂无公开课'|trans}}</div>
     {% endfor %}
-    {{ web_macro.ajaxCoursePaginator(paginator) }}
+    {{ web_macro.ajaxCoursePaginator(paginator) }}#}
   </div>
 
 {% endblock %}

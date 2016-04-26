@@ -42,7 +42,7 @@ define(function(require, exports, module) {
                 $btn.hide();
                 if (data['result']) {
                     $("#unzan-btn").show();
-                    $("#unzan-btn").find('.gray-darker').html(parseInt(data['number']));
+                    $("#unzan-btn").find('.likeNum').html(parseInt(data['number']));
                 }
             });
         });
@@ -53,10 +53,17 @@ define(function(require, exports, module) {
                 $btn.hide();
                 if (data['result']) {
                     $("#zan-btn").show();
-                    $("#zan-btn").find('.gray-darker').html(parseInt(data['number']));
+                    $("#zan-btn").find('.likeNum').html(parseInt(data['number']));
                 }
             });
         });
+
+        $('.open-course-qrcode').on('hover',function(){
+            var qrcodeUrl = $(this).data('url');console.log('url='+qrcodeUrl);
+            $.post(qrcodeUrl,function(response){
+                $(this).find('.qrcode-content img').attr('src',response.img);
+            })
+        })
         
 	};
 });

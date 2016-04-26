@@ -8,45 +8,29 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OpenCourseController extends BaseController
 {
-    public function exploreAction(Request $request, $category)
+    public function exploreAction(Request $request)
     {
         //BlockToolkit::init($this->container->getParameter('topxia.upload.public_directory').'/./../themes/block.json');
+        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig');
+    }
+
+    public function pageItemAction(Request $request)
+    {
         $queryParam = $request->query->all();
         $conditions = $this->_filterConditions($queryParam);
-
-        if (!empty($category)) {
-            $category                 = $this->_getCategoryInfo($category);
-            $conditions['categoryId'] = $category['id'];
-        } else {
-            $category = array();
-        }
-
-        $courseSetting = $this->getSettingService()->get('course', array());
-
-        $orderBy = empty($queryParam['orderBy']) ? 'recommendedSeq' : $queryParam['orderBy'];
 
         $paginator = new Paginator(
             $this->get('request'),
             $this->getOpenCourseService()->searchCourseCount($conditions),
-            2
+            10
         );
 
-        if ($orderBy == 'recommendedSeq') {
-            $courses = $this->_getPageRecommendedCourses($request, $conditions, $orderBy, 2);
-        } else {
-            $courses = $this->getOpenCourseService()->searchCourses(
-                $conditions,
-                array('createdTime', 'DESC'),
-                $paginator->getOffsetCount(),
-                $paginator->getPerPageCount()
-            );
-        }
+        $paginator->setBaseUrl($this->generateUrl('open_course_explore_list'));
 
-        return $this->render('TopxiaWebBundle:OpenCourse:explore.html.twig', array(
+        $courses = $this->_getPageRecommendedCourses($request, $conditions, 'recommendedSeq', 10);
+
+        return $this->render('TopxiaWebBundle:OpenCourse/Widget:open-course-grid-horizontal.html.twig', array(
             'courses'   => $courses,
-            'category'  => $category,
-            'fliter'    => isset($queryParam['fliter']) ? $queryParam['fliter'] : array('type' => 'all'),
-            'orderBy'   => $orderBy,
             'paginator' => $paginator
         ));
     }
@@ -232,7 +216,7 @@ class OpenCourseController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchPostsCount($conditions),
-            10
+            1
         );
 
         $posts = $this->getThreadService()->searchPosts(
