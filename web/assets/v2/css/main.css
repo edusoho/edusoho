@@ -3201,7 +3201,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: -25px;
+  margin-top: -24.99999999px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
