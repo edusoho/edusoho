@@ -58,10 +58,12 @@ define(function(require, exports, module) {
             });
         });
 
-        $('.open-course-qrcode').on('hover',function(){
-            var qrcodeUrl = $(this).data('url');console.log('url='+qrcodeUrl);
+        $('.course-operation').on('mouseover','.open-course-qrcode',function(){
+            $self = $(this);
+            var qrcodeUrl = $(this).data('url');
+
             $.post(qrcodeUrl,function(response){
-                $(this).find('.qrcode-content img').attr('src',response.img);
+                $self.find('.qrcode-content img').attr('src',response.img);
             })
         })
         

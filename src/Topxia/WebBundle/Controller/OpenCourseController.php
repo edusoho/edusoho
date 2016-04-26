@@ -216,7 +216,7 @@ class OpenCourseController extends BaseController
         $paginator = new Paginator(
             $request,
             $this->getThreadService()->searchPostsCount($conditions),
-            1
+            10
         );
 
         $posts = $this->getThreadService()->searchPosts(
