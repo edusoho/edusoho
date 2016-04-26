@@ -3201,7 +3201,7 @@ Basic Swiper Styles
 .arrow-right {
   position: absolute;
   top: 50%;
-  margin-top: -24.99999999px;
+  margin-top: -25px;
   color: #dbdbdb;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -14112,16 +14112,32 @@ textarea {
   height: 50px;
   background: url(../img/tag_open_live.png) no-repeat;
 }
-.panel-create-course {
-  padding: 25px 30px;
-}
 .panel-create-course .panel-heading h2 {
   padding-bottom: 20px;
   border-bottom: 1px solid #e1e1e1;
+  font-size: 16px;
+}
+.panel-create-course .course-piece {
+  position: relative;
+  text-align: left;
+  padding-left: 15px;
+  font-size: 16px;
+}
+.panel-create-course .course-piece:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 4px;
+  height: 16px;
+  background-color: #46c37b;
+}
+.panel-create-course .course-piece.title:after {
+  top: 8px;
 }
 .panel-create-course .course-select {
-  margin: 35px 5px 55px 5px;
-  height: 280px;
+  margin: 20px 5px 30px 5px;
+  height: 250px;
   padding: 35px 15px;
   border: 2px solid transparent;
   text-align: center;
@@ -14139,19 +14155,19 @@ textarea {
 }
 .panel-create-course .course-select.active .course-type,
 .panel-create-course .course-select:active .course-type {
-  border-bottom: 2px solid #e1e1e1;
+  border-bottom: 1px solid white;
 }
 .panel-create-course .course-select .es-icon {
   font-size: 47px;
 }
 .panel-create-course .course-select .course-type {
   padding: 20px 0;
-  font-size: 20px;
-  border-bottom: 2px solid #e1e1e1;
+  font-size: 16px;
+  border-bottom: 1px solid #e1e1e1;
 }
 .panel-create-course .course-select .course-intro {
   padding-top: 20px;
-  font-size: 16px;
+  font-size: 12px;
 }
 .panel-create-course .course-title {
   margin-bottom: 50px;

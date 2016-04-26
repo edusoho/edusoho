@@ -4,18 +4,7 @@
 {% set siteNav = 'course/explore' %}
 {% set script_controller = 'open-course/open-course-explore' %}
 
-{% block keywords %}
-  {% if category %}{{category.name}}
-    {% if category.parent %}{{ ','}}{{ category.parent.name|default('') }}{% endif %}
-  {% else %}
-    {{ '全部' }}
-  {% endif %}
-{% endblock %}
-{% block description %}{{ category.description|default('')|plain_text(100) }}{% endblock %}
-{% block title %}{{ category.name|default('全部'|trans) }} - {{setting('site.name')}}
-  {% if setting('site.slogan') %}{{' - '}}{{setting('site.slogan')}}{% endif %}
-  {% if not setting('copyright.owned') %} - Powered By EduSoho{% endif %}
-{% endblock %}
+{% block title %}{{ parent() }}{% endblock %}
 
 {% block top_content %}
   <section class="es-live-poster swiper-container">
@@ -27,65 +16,5 @@
 {% endblock %}
 
 {% block content %}
-  {% set type = fliter.type|default('all') %}
-  {% set orderBy = app.request.get('orderBy')|default('latest')%}
-
-  <div class="open-course-list">
-    {% for course in courses if course %}
-      {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
-      
-      <div class="course-block clearfix">
-        <div class="course-img">
-          <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
-            <span class="tags">
-              <span class="tag-live"></span>
-            </span>
-            {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
-          </a>
-          {% if course.type == 'liveOpen' and lessons %}
-            {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-              <div class="open-starttime">今日直播：{{ lessons[0].startTime|date('H:i')}}</div>
-            {% else %}
-              <div class="open-starttime">{{ lessons[0].startTime|date('Y-m-d H:i')}}</div>
-            {% endif %}
-          {% endif %}
-        </div>
-
-        <div class="open-course-content">
-          <div class="title">
-            {% if course.type == 'liveOpen' and lessons %}
-              {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
-                <span class="label label-primary mrm">直播中</span>
-              {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-                <span class="label label-primary mrm">即将开始</span>
-              {% else %}
-                <span class="label label-primary mrm">直播已结束</span>
-              {% endif %}
-            {% endif %}
-            
-            <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
-              {{ course.title }}
-            </a>
-          </div>
-          <div class="open-course-intro">
-
-            {% if course.subtitle %}
-              {{ course.subtitle|raw }}
-            {% else %}
-              <p><span>暂无简介</span></p>
-            {% endif %}
-          </div>
-          <div class="metas clearfix">
-            <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
-            <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
-            <a class="btn btn-primary btn-lg pull-right" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
-          </div>
-        </div>
-      </div>
-    {% else %}
-      <div class="empty">{{'暂无公开课'|trans}}</div>
-    {% endfor %}
-    {{ web_macro.ajaxCoursePaginator(paginator) }}
-  </div>
-
+  <div class="open-course-list"></div>
 {% endblock %}

@@ -1,55 +1,57 @@
 {% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
 
-<li class="course-item clearfix">
-  <a class="course-picture-link" href="{{ path('open_course_show', {courseId:course.id}) }}">
-    {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'course-picture', '') }}
-    
-    {% if course.type == 'liveOpen' %}
-      {% set lesson = course['lesson']|default(null) %}
-      {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}
-        <span class="label label-warning series-mode-label">正在直播中</span>
-      {% else %}
-        <span class="label label-success series-mode-label">直播</span>
+{% for course in courses if course %}
+  {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+  
+  <div class="course-block clearfix">
+    <div class="course-img">
+      <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
+        <span class="tags">
+          <span class="tag-live"></span>
+        </span>
+        {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
+      </a>
+      {% if course.type == 'liveOpen' and lessons %}
+        {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+          <div class="open-starttime">今日直播：{{ lessons[0].startTime|date('H:i')}}</div>
+        {% else %}
+          <div class="open-starttime">{{ lessons[0].startTime|date('Y-m-d H:i')}}</div>
+        {% endif %}
       {% endif %}
-    {% endif %}
-    </a>
+    </div>
 
-  <div class="course-body">
-    
-    <h4 class="course-title">
-      <a href="{{ path('open_course_show', {courseId:course.id}) }}">{{ course.title }}</a>
-    </h4>
+    <div class="open-course-content">
+      <div class="title">
+        {% if course.type == 'liveOpen' and lessons %}
+          {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
+            <span class="label label-primary mrm">直播中</span>
+          {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+            <span class="label label-primary mrm">即将开始</span>
+          {% else %}
+            <span class="label label-primary mrm">直播已结束</span>
+          {% endif %}
+        {% endif %}
+        
+        <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
+          {{ course.title }}
+        </a>
+      </div>
+      <div class="open-course-intro">
 
-    <div class="course-price-info"></div>
-
-    {% if course.type == 'liveOpen' %}
-      {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
-
-      <div class="live-course-lesson mbs">
-        {% if lessons %}
-          <span class="text-success fsm mrm">{{ lessons[0].startTime|date('n月j日 H:i') }} ~ {{ lessons[0].endTime|date('H:i') }}</span>
+        {% if course.subtitle %}
+          {{ course.subtitle|raw }}
+        {% else %}
+          <p><span>暂无简介</span></p>
         {% endif %}
       </div>
-      
-    {% else %}
-      <div class="course-about ellipsis">{{ course.subtitle }}</div>
-    {% endif %}
-
-    <div class="course-footer clearfix">
-
-      {% set teacher = course.teachers|first|default(null) %}
-      {% if teacher %}
-        <div class="teacher">
-          {{ web_macro.user_avatar(teacher,'pull-left','teacher-avatar') }}
-          <a class="teacher-nickname ellipsis" href="{{ path('user_show', {id:teacher.id}) }}">{{ teacher.nickname }}</a>
-          <span class="teacher-title ellipsis">{{ teacher.title }}</span>
-        </div>
-      {% endif %}
-      <div class="course-metas">
-        <span class="text-muted mrm"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
-        <span class="text-muted mrm"><i class="es-icon es-icon-thumbup"></i>{{ course.likeNum }}</span>
-        <span class="text-muted mrm"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+      <div class="metas clearfix">
+        <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
+        <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
+        <a class="btn btn-primary btn-lg pull-right" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
       </div>
     </div>
   </div>
-</li>
+{% else %}
+  <div class="empty">{{'暂无公开课'|trans}}</div>
+{% endfor %}
+{{ web_macro.ajaxCoursePaginator(paginator) }}

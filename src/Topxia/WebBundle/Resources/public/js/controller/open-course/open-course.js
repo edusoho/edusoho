@@ -42,7 +42,7 @@ define(function(require, exports, module) {
                 $btn.hide();
                 if (data['result']) {
                     $("#unzan-btn").show();
-                    $("#unzan-btn").find('.gray-darker').html(parseInt(data['number']));
+                    $("#unzan-btn").find('.likeNum').html(parseInt(data['number']));
                 }
             });
         });
@@ -53,10 +53,19 @@ define(function(require, exports, module) {
                 $btn.hide();
                 if (data['result']) {
                     $("#zan-btn").show();
-                    $("#zan-btn").find('.gray-darker').html(parseInt(data['number']));
+                    $("#zan-btn").find('.likeNum').html(parseInt(data['number']));
                 }
             });
         });
+
+        $('.course-operation').on('mouseover','.open-course-qrcode',function(){
+            $self = $(this);
+            var qrcodeUrl = $(this).data('url');
+
+            $.post(qrcodeUrl,function(response){
+                $self.find('.qrcode-content img').attr('src',response.img);
+            })
+        })
         
 	};
 });
