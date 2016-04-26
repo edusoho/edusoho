@@ -14,7 +14,8 @@ class DefaultController extends BaseController
         if (!empty($user['id'])) {
             $this->getBatchNotificationService()->checkoutBatchNotification($user['id']);
         }
-        return $this->render('TopxiaWebBundle:Default:index.html.twig', array());
+        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array('friendlyLinks'=>$friendlyLinks));
     }
 
     public function userlearningAction()

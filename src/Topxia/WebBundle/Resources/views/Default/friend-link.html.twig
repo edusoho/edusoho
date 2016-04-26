@@ -2,15 +2,10 @@
   <div class="container">
     <div class="title">友情链接：</div>
     <ul>
-      <li><a class="link-dark text-sm" href="">杭州电子科技大学</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电科技</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电子科技大学</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电子科</a></li>
-      <li><a class="link-dark text-sm" href="">杭州科技大学</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电子科技大学</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电学</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电大学</a></li>
-      <li><a class="link-dark text-sm" href="">杭州电子科子科技大学</a></li>
+      {% for friendLink in friendlyLinks %}
+      <li><a class="link-dark text-sm" href="{{ friendLink.url }}">{{friendLink.name}}</a></li>
+      {% endfor %}
+
     </ul>
   </div>
 </div>
