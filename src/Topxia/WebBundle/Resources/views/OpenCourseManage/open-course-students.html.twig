@@ -11,7 +11,7 @@
   <div class="panel-heading">
     {{setting('default.user_name')|default('学员'|trans)}}{{'管理'|trans}}
     {% if app.user.isAdmin() or setting('course.teacher_export_student', false) %}
-      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('open_course_manage_student_export_csv', {id:course.id}) }}"><i class="glyphicon glyphicon-export"></i> 导出{{setting('default.user_name')|default('学员'|trans)}}</a>
+      <a class="btn btn-info btn-sm pull-right mhs" href="{{ path('open_course_manage_student_export_csv', {id:course.id,userType:app.request.get('userType')}) }}"><i class="glyphicon glyphicon-export"></i> 导出{{setting('default.user_name')|default('学员'|trans)}}</a>
     {% endif %}
   </div>
 

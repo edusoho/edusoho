@@ -328,7 +328,15 @@ class OpenCourseManageController extends BaseController
 
         $gender = array('female' => '女', 'male' => '男', 'secret' => '秘密');
 
-        $courseMembers = $this->getOpenCourseService()->searchMembers(array('courseId' => $course['id'], 'role' => 'student'), array('createdTime', 'DESC'), 0, 20000);
+        $conditions = array('courseId' => $course['id'], 'role' => 'student');
+
+        if ($request->query->get('userType', '') == 'login') {
+            $conditions['userIdGT'] = 0;
+        } elseif ($request->query->get('userType', '') == 'unlogin') {
+            $conditions['userId'] = 0;
+        }
+
+        $courseMembers = $this->getOpenCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), 0, 20000);
 
         $userFields = $this->getUserFieldService()->getAllFieldsOrderBySeqAndEnabled();
 
