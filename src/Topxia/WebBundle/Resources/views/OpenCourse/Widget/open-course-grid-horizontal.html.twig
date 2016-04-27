@@ -36,8 +36,7 @@
           {{ course.title }}
         </a>
       </div>
-      <div class="open-course-intro">
-
+      <div class="open-course-intro hidden-sm">
         {% if course.subtitle %}
           {{ course.subtitle|raw }}
         {% else %}
@@ -47,7 +46,7 @@
       <div class="metas clearfix">
         <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
         <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
-        <a class="btn btn-primary btn-lg pull-right" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
+        <a class="btn btn-primary btn-lg pull-right hidden-sm" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
       </div>
     </div>
   </div>

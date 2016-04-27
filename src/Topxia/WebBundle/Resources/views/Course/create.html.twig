@@ -34,8 +34,8 @@
 
           {{ web_macro.flash_messages() }}
  
-          <div class="text-xlg">
-            {{'1、选择类型'|trans}}
+          <div class="course-piece">
+            {{'选择类型'|trans}}
           </div>
 
           <div class="row">
@@ -78,31 +78,24 @@
           </div>
 
           <div class="course-title row">
-            <div class="col-md-2 controls-label text-xlg">
-              <div class="text-left">
-                {{'2、课程标题'|trans}}
+            <div class="col-md-2 controls-label text-lg">
+              <div class="course-piece title">
+                {{'课程标题'|trans}}
               </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
               <input type="text" id="course_title" name="title" required="required" class="form-control" data-widget-cid="widget-1" data-explain="">
               <div class="help-block" style="display:none;"></div>
             </div>
           </div>
 
-          <div class="text-right row">
-            <div class="col-md-offset-3 col-md-9 controls">
-              <input id="course-create-btn" data-submiting-text="{{'正在创建'|trans}}" class="btn btn-fat btn-primary" type="submit" value="{{'创建'|trans}}">
-              <a class="btn btn-fat btn-link" href="">取消</a>
-            </div>
+          <div class="text-center">
+            {% if not setting('copyright.owned') %}
+              <span class="mrm"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">{{'如何创建课程？'|trans}}</a></span>
+            {% endif %}
+            <input id="course-create-btn" data-submiting-text="{{'正在创建'|trans}}" class="btn btn-fat btn-primary" type="submit" value="{{'创建'|trans}}">
+            <a class="btn btn-fat btn-link" href="">取消</a>
           </div>
-
-          {% if not setting('copyright.owned') %}
-            <div class="text-right row">
-              <div class="col-md-offset-3 col-md-9 controls">
-                <p class="mtl"><a href="http://www.qiqiuyu.com/course/22" class="text-muted" target="_blank">{{'如何创建课程？'|trans}}</a></p>
-              </div>
-            </div>
-          {% endif %}
 
           <input type="hidden" name="type" value="normal" />
           <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">

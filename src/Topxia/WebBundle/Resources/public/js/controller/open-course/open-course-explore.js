@@ -22,6 +22,7 @@ define(function(require, exports, module) {
 
         getPageList('../../open/course/page/list');
 
+
         $('.open-course-list').on('click','.section-more-btn a',function(){
         	var url = $(this).attr('data-url');
 	      	getPageList(url);

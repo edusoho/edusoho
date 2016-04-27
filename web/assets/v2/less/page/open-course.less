@@ -408,7 +408,7 @@
   	padding-left: 10px;
   	background-color:rgba(0,0,0,0.5);
 }
-//
+//频道页
 .open-course-list-page {
 	background-color: #f5f8fa;
 	.course-block {
@@ -416,6 +416,12 @@
 		border:1px solid #e4ecf3;
 		background-color: #fff;
 		margin-bottom: 20px;
+		@media(max-width:@screen-sm-max) {
+			width: 48%;
+			float: left;
+			margin: 0 1% 20px 1%;
+			padding: 0;
+		}
 		.course-img {
 			position: relative;
 			float: left;
@@ -423,7 +429,7 @@
 			img {
 				width: 100%;
 			}
-			@media(max-width:@screen-xs-max) {
+			@media(max-width:@screen-sm-max) {
 				float: none;
 				width: 100%;
 			}
@@ -433,10 +439,10 @@
 			width: 71%;
 			padding-left: 40px;
 			padding-right: 20px;
-			@media(max-width:@screen-xs-max) {
+			@media(max-width:@screen-sm-max) {
 				float: none;
 				width: 100%;
-				padding: 0;
+				padding-left: 10px;
 				.title {
 					padding-top: 10px;
 				}
@@ -445,6 +451,9 @@
 				a {
 					font-size: 22px;
 					vertical-align: middle;
+					@media(max-width:@screen-sm-max) {
+						font-size: 14px;
+					}
 				}
 			}
 		}
