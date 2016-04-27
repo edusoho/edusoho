@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.17.0
+        assets_version: 6.17.1
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -161,6 +161,11 @@ services:
 
     topxia.twig.html_extension:
         class: Topxia\WebBundle\Twig\Extension\HtmlExtension
+        tags:
+            - { name: twig.extension }
+
+    topxia.twig.dictionary_extension:
+        class: Topxia\WebBundle\Twig\Extension\DictionaryExtension
         tags:
             - { name: twig.extension }
 

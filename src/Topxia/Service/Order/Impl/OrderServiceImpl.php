@@ -267,8 +267,8 @@ class OrderServiceImpl extends BaseService implements OrderService
 
         $payment = $this->getSettingService()->get("payment");
 
-        if (isset($payment["enable"]) && $payment["enable"] == 1
-            && isset($payment[$order["payment"]."_enable"]) && $payment[$order["payment"]."_enable"] == 1
+        if (isset($payment["enabled"]) && $payment["enabled"] == 1
+            && isset($payment[$order["payment"]."_enabled"]) && $payment[$order["payment"]."_enabled"] == 1
             && isset($payment["close_trade_enabled"]) && $payment["close_trade_enabled"] == 1) {
             $data = array_merge($data, $this->getPayCenterService()->closeTrade($order));
         }

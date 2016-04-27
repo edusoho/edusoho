@@ -10,7 +10,7 @@
       <span class="glyphicon glyphicon-cloud text-muted" title="{{'云文件'|trans}}"></span>
     {% endif %}
 
-    <a rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
+    <a href="{{ path('course_manage_file_show', {id:course.id, fileId:uploadFile.id}) }}" target="_blank" rel="tooltip" title data-original-title="{{ uploadFile.filename }}"  >{{ uploadFile.filename|sub_text(30) }}</a>
     
     {# {% if uploadFile.convertStatus == 'doing' %}
       <br><span class="text-info text-sm">{{'正在文件格式转换'|trans}}</span>
