@@ -36,7 +36,9 @@
         <button class="btn btn-success btn-sm course-publish-btn" data-url="{{ path('open_course_manage_publish', {id:course.id}) }}">{{'发布课程'|trans}}</button>
       </div>
     {% endif %}
-
+    <div class="btn-group">
+      <a class="btn btn-default btn-sm" href="{{ path('open_course_show',{courseId:course.id,as:'preview'}) }}">预览</a>
+    </div>
   </div>
 </div>
 

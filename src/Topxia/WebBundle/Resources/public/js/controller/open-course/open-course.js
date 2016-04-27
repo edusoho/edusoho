@@ -17,8 +17,8 @@ define(function(require, exports, module) {
 		$("#favorite-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
-                $btn.hide();
                 if (data['result']) {
+                    $btn.hide();
                     $("#unfavorite-btn").show();
                     // $("#unfavorite-btn").find('.gray-darker').html(parseInt(data['number']));
                 }
@@ -28,8 +28,8 @@ define(function(require, exports, module) {
         $("#unfavorite-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
-                $btn.hide();
                 if (data['result']) {
+                    $btn.hide();
                     $("#favorite-btn").show();
                     // $("#favorite-btn").find('.gray-darker').html(parseInt(data['number']));
                 }
@@ -39,8 +39,8 @@ define(function(require, exports, module) {
          $("#zan-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
-                $btn.hide();
                 if (data['result']) {
+                    $btn.hide();
                     $("#unzan-btn").show();
                     $("#unzan-btn").find('.likeNum').html(parseInt(data['number']));
                 }
@@ -50,8 +50,8 @@ define(function(require, exports, module) {
         $("#unzan-btn").on('click', function() {
             var $btn = $(this);
             $.post($btn.data('url'), function(data) {
-                $btn.hide();
                 if (data['result']) {
+                    $btn.hide();
                     $("#zan-btn").show();
                     $("#zan-btn").find('.likeNum').html(parseInt(data['number']));
                 }

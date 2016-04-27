@@ -25,10 +25,10 @@
         {% if course.type == 'liveOpen' and lessons %}
           {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
             <span class="label label-primary mrm">直播中</span>
-          {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-            <span class="label label-primary mrm">即将开始</span>
+          {% elseif "now"|date("U") < lessons[0].startTime %}
+            <span class="label label-warning mrm">即将开始</span>
           {% else %}
-            <span class="label label-primary mrm">直播已结束</span>
+            <span class="label label-info mrm">查看回放</span>
           {% endif %}
         {% endif %}
         

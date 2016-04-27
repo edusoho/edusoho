@@ -53,6 +53,14 @@ class OpenCourseController extends BaseController
 
         $course = $this->getOpenCourseService()->getCourse($courseId);
 
+        if ($request->query->get('as') && $request->query->get('as') == 'preview') {
+            $this->getOpenCourseService()->tryManageOpenCourse($courseId);
+
+            return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
+                'course' => $course
+            ));
+        }
+
         if (!$this->_checkCourseStatus($courseId)) {
             return $this->createMessageResponse('error', '课程不存在，或未发布。');
         }

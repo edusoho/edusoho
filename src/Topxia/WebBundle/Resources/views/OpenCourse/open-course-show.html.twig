@@ -23,7 +23,7 @@
             </div>
           </div>
         </div> --> 
-        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course})) }}
+        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, as:app.request.get('as')|default('')})) }}
         
         <div class="col-md-3 open-course-tab">
           <ul class="clearfix">
@@ -43,7 +43,7 @@
         </div>
       </div>
       
-      {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id})) }}
+      {{ render(controller('TopxiaWebBundle:OpenCourse:infoBar',{courseId:course.id, as:app.request.get('as')|default('')})) }}
       <div class="open-course-detail row">
         <div class="col-md-9">
           <div class="es-section gray-darker editor-text">
@@ -53,7 +53,7 @@
               <div class="empty">暂无简介</div>
             {% endif %}
           </div>
-          {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id})) }}
+          {{ render(controller('TopxiaWebBundle:OpenCourse:comment',{request:app.request,courseId:course.id, as:app.request.get('as')|default('')})) }}
         </div>
         <div class="col-md-3 hidden-sm hidden-xs">
           {{ render(controller('TopxiaWebBundle:OpenCourse:teachers',{courseId:course.id})) }}

@@ -245,9 +245,13 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $argument = $context['argument'];
         $material = $context['material'];
 
-        if ($material['lessonId'] && $material['type'] == 'course') {
-            $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
+        $course = $this->getCourseService()->getCourse($material['courseId']);
+
+        if (!$course || ($course && !in_array($course['type'], array('normal', 'live')))) {
+            return;
         }
+
+        $this->getCourseService()->increaseLessonMaterialCount($material['lessonId']);
 
         $courseIds = ArrayToolkit::column($this->getCourseService()->findCoursesByParentIdAndLocked($material['courseId'], 1), 'id');
 
@@ -268,10 +272,14 @@ class CourseLessonEventSubscriber implements EventSubscriberInterface
         $context = $event->getSubject();
         $courses = ArrayToolkit::index($this->getCourseService()->findCoursesByParentIdAndLocked($context['courseId'], 1), 'id');
 
-        if ($context['lessonId'] && $context['type'] == 'course') {
-            $count = $this->getMaterialService()->searchMaterialCount(array('courseId' => $context['courseId'], 'lessonId' => $context['lessonId'], 'type' => 'course'));
-            $this->getCourseService()->resetLessonMaterialCount($context['lessonId'], $count);
+        $course = $this->getCourseService()->getCourse($context['courseId']);
+
+        if (!$course || ($course && !in_array($course['type'], array('normal', 'live')))) {
+            return;
         }
+
+        $count = $this->getMaterialService()->searchMaterialCount(array('courseId' => $context['courseId'], 'lessonId' => $context['lessonId'], 'type' => 'course'));
+        $this->getCourseService()->resetLessonMaterialCount($context['lessonId'], $count);
 
         if ($courses) {
             $materials = $this->getMaterialService()->searchMaterials(

@@ -14,12 +14,12 @@
     </div>
     <div class="course-operation col-lg-6 col-lg-offset-1 col-md-7 clearfix">
       <ul class="clearfix">
-        <li id="zan-btn" data-url="{{ path('open_course_unlike', {id:course.id}) }}" style="display: none;">
-          <a href="javascript:;"><i class="es-icon es-icon-thumbup active operation-icon"></i></a>
+        <li id="zan-btn" data-url="{{ path('open_course_like', {id:course.id}) }}" style="display: list-item;">
+          <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
           <span class="likeNum">{{ course.likeNum }}</span>
         </li>
-        <li id="unzan-btn" data-url="{{ path('open_course_like', {id:course.id}) }}" style="display: list-item;">
-          <a href="javascript:;"><i class="es-icon es-icon-thumbup operation-icon"></i></a>
+        <li id="unzan-btn" data-url="{{ path('open_course_unlike', {id:course.id}) }}" style="display: none;">
+          <a href="javascript:;" disabled="disabled"><i class="es-icon es-icon-thumbup active operation-icon"></i></a>
           <span class="likeNum">{{ course.likeNum }}</span>
         </li>
          <li id="favorite-btn" data-url="{{ path('open_course_unfavorite',{id:course.id}) }}" style="display: none;">
