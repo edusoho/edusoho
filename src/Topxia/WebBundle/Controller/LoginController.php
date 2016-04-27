@@ -22,7 +22,8 @@ class LoginController extends BaseController
         }
 
         if ($this->getWebExtension()->isMicroMessenger() && $this->setting('login_bind.enabled', 0) && $this->setting('login_bind.weixinmob_enabled', 0)) {
-            return $this->forward('TopxiaWebBundle:LoginBind:index', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request)));
+            $inviteCode = $request->query->get('inviteCode');
+            return $this->forward('TopxiaWebBundle:LoginBind:index', array('type' => 'weixinmob', '_target_path' => $this->getTargetPath($request), 'inviteCode' => $inviteCode));
         }
 
         return $this->render('TopxiaWebBundle:Login:index.html.twig', array(
@@ -53,12 +54,13 @@ class LoginController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function oauth2LoginsBlockAction($targetPath, $displayName = true)
+    public function oauth2LoginsBlockAction($targetPath, $inviteCode = '', $displayName = true)
     {
         $clients = OAuthClientFactory::clients();
         return $this->render('TopxiaWebBundle:Login:oauth2-logins-block.html.twig', array(
             'clients'     => $clients,
             'targetPath'  => $targetPath,
+            'inviteCode'  => $inviteCode,
             'displayName' => $displayName
         ));
     }

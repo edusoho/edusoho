@@ -22,8 +22,13 @@ class LoginBindController extends BaseController
             }
         }
 
+        $inviteCode  = $request->query->get('inviteCode', null);
         $client      = $this->createOAuthClient($type);
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
+
+        if ($inviteCode) {
+            $callbackUrl = $callbackUrl.'?inviteCode='.$inviteCode;
+        }
 
         $url = $client->getAuthorizeUrl($callbackUrl);
 
@@ -38,6 +43,7 @@ class LoginBindController extends BaseController
     public function callbackAction(Request $request, $type)
     {
         $code        = $request->query->get('code');
+        $inviteCode  = $request->query->get('inviteCode');
         $callbackUrl = $this->generateUrl('login_bind_callback', array('type' => $type), true);
         $token       = $this->createOAuthClient($type)->getAccessToken($code, $callbackUrl);
         $bind        = $this->getUserService()->getUserBindByTypeAndFromId($type, $token['userId']);
@@ -62,13 +68,25 @@ class LoginBindController extends BaseController
                 return $this->redirect($goto);
             }
         } else {
-            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type)));
+            return $this->redirect($this->generateUrl('login_bind_choose', array('type' => $type, 'inviteCode' => $inviteCode)));
         }
     }
 
     public function chooseAction(Request $request, $type)
     {
-        $token       = $request->getSession()->get('oauth_token');
+        $token      = $request->getSession()->get('oauth_token');
+        $fields     = $request->query->all();
+        $inviteCode = '';
+        $inviteUser = array();
+
+        if (!empty($fields['inviteCode'])) {
+            $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
+        }
+
+        if ($inviteUser) {
+            $inviteCode = $fields['inviteCode'];
+        }
+
         $client      = $this->createOAuthClient($type);
         $clientMetas = OAuthClientFactory::clients();
         $clientMeta  = $clientMetas[$type];
@@ -93,6 +111,8 @@ class LoginBindController extends BaseController
 
         $name = $this->mateName($type);
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
+            'inviteCode'     => $inviteCode,
+            'inviteUser'     => $inviteUser,
             'oauthUser'      => $oauthUser,
             'type'           => $type,
             'name'           => $name,
@@ -275,6 +295,10 @@ class LoginBindController extends BaseController
             $registration['emailOrMobile'] = $setData['mobile'];
         }
 
+        if (isset($setData['invite_code']) && !empty($setData['invite_code'])) {
+            $registration['invite_code'] = $setData['invite_code'];
+        }
+
         $user = $this->getAuthService()->register($registration, $type);
 
         return $user;
@@ -442,5 +466,20 @@ class LoginBindController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getInviteRecordService()
+    {
+        return $this->getServiceKernel()->createService('User.InviteRecordService');
     }
 }
