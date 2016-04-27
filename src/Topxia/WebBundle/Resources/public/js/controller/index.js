@@ -25,7 +25,7 @@ define(function(require, exports, module) {
         $("body").on('click','.js-course-filter',function(){
              var $btn = $(this);
              var courseType = $btn.data('type');
-             console.log('type='+courseType);
+             
              $.get($btn.data('url'),function(html){
                $('#'+courseType+'-list-section').after(html).remove();
                Lazyload.init();
