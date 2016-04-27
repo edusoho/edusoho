@@ -17,7 +17,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function getFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
-
+        return $file;
         if (empty($file)) {
             return null;
         }
@@ -33,7 +33,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return null;
         }
 
-        return $this->getFileImplementor($file)->getFile($file);
+        return $this->getFileImplementorByFile($file)->getFile($file);
     }
 
     public function getFileByHashId($hashId)
@@ -124,7 +124,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $conditions['createdUserIds'] = $createdUserIds;
         }
 
-        return $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+        $files = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
+        return $files;
     }
 
     public function searchFileCount($conditions)
