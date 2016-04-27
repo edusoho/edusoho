@@ -1,31 +1,30 @@
 <div class="course-item">
   <div class="course-img">
     <a href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" target="{{ course.title }}">
+      {% if course.type == 'liveOpen' %}
         <span class="tags">
           <span class="tag-open-live"></span>
         </span>
-      {% if course.type == 'liveOpen' %}
-        {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
-        
-        {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
-          <span class="tags">正在直播 今天 {{ lessons[0].startTime|date('H:i')}}</span>
-        {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-          <span class="tags">即将直播 {{ lessons[0].startTime|date('m-d H:i')}}</span>
-        {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-          <span class="tags">直播预告 {{ lessons[0].startTime|date('m-d H:i')}}</span>
-        {% else %}
-          <span class="tags">直播已结束 {{ lessons[0].startTime|date('m-d H:i')}}</span>
-        {% endif %}
-
-      {% endif %} 
+      {% endif %}
       {{ lazy_img(filepath(course.middlePicture, 'course.png'), 'img-responsive', course.title) }}
     </a>
-    <div class="open-starttime">2016-01-21 09:30</div>
+
+    {% set lessons = data('OpenCourseLessons',{courseId:course.id,count:1}) %}
+    {% if course.type == 'liveOpen' %}
+      <div class="open-starttime">{{ lessons[0].startTime|date('m-d H:i')}}</div>
+    {% endif %}
   </div>
   <div class="course-info">
     <div class="title">
-      <span class="label label-primary mrm">直播中</span>
-      {# <span class="label label-warning">即将开始</span> #}
+      {% if course.type == 'liveOpen' %}
+        {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
+          <span class="label label-primary mrm">今日直播</span>
+        {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') != "now"|date('Y-m-d') %}
+          <span class="label label-primary mrm">直播预告</span>
+        {% else %}
+          <span class="label label-warning mrm">查看回放</span>
+        {% endif %}
+      {% endif %}
       <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">
         {{ course.title }}
       </a>

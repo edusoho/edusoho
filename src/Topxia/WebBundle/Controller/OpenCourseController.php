@@ -301,6 +301,8 @@ class OpenCourseController extends BaseController
             $fields['isNotified'] = 1;
             $member               = $this->getOpenCourseService()->updateMember($member['id'], $fields);
 
+            $this->_loginMemberMobileBind($fields['mobile']);
+
             $memberNum = $this->getOpenCourseService()->searchMemberCount(array('courseId' => $id, 'isNotified' => 1));
 
             return $this->createJsonResponse(array('result' => true, 'number' => $memberNum));
@@ -654,6 +656,17 @@ class OpenCourseController extends BaseController
         }*/
 
         return $conditions;
+    }
+
+    private function _loginMemberMobileBind($userMobile)
+    {
+        $user = $this->getCurrentUser();
+
+        if ($user->isLogin() && empty($user['verifiedMobile'])) {
+            $this->getUserService()->changeMobile($user['id'], $userMobile);
+        }
+
+        return true;
     }
 
     protected function getOpenCourseService()

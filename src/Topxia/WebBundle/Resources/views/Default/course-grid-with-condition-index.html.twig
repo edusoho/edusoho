@@ -41,13 +41,13 @@
         </ul>
       </div>
       <div class="course-sort btn-group">
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'latest'}) }}" data-type='course'>
           {{'最新'|trans}}
         </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'studentNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'studentNum'}) }}" data-type='course'>
           {{'最热'|trans}}
         </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}">
+        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{categoryId : categoryId|default(0), orderBy : 'recommendedSeq'}) }}" data-type='course'>
           {{'推荐'|trans}}
         </a>
       </div>

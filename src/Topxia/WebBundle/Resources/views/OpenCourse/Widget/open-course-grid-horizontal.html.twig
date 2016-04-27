@@ -26,7 +26,7 @@
           {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
             <span class="label label-primary mrm">直播中</span>
           {% elseif "now"|date("U") < lessons[0].startTime %}
-            <span class="label label-warning mrm">即将开始</span>
+            <span class="label label-warning mrm">直播预告</span>
           {% else %}
             <span class="label label-info mrm">查看回放</span>
           {% endif %}
