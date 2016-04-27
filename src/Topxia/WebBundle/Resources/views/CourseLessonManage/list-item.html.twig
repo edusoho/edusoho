@@ -36,6 +36,7 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
+
     {% if setting('course.custom_chapter_enabled')|default(true) %}
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
@@ -67,6 +68,7 @@
       </small>
     {% endif %}
 
+    <span data-role="mediaStatus"></span>
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}

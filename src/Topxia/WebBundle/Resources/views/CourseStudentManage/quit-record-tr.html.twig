@@ -1,0 +1,35 @@
+{% import "TopxiaWebBundle::macro.html.twig" as web_macro %}
+<tr >
+  <td class="media" style="vertical-align: middle;">
+    {{ web_macro.user_avatar(refund['user'], 'pull-left', 'avatar-sm') }}
+    <a target="_blank" href="{{ path('user_show', {id:refund['user'].id}) }}">{{ refund['user'].nickname }}</a>
+    <div class="text-muted text-sm">加入课程时间：{{ refund['order'].createdTime|date('Y-n-d H:i') }}</div>
+    
+  </td>
+  <td style="vertical-align: middle;word-break: break-all;">
+      {{ refund.reasonNote }}
+  </td>
+  <td style="vertical-align: middle;">
+      {{ refund.createdTime|date('Y-n-d H:i') }}
+  </td>
+  {% if refund.actualAmount == 0 %}
+  <td style="vertical-align: middle;">
+    --
+  </td>
+  <td style="vertical-align: middle;">
+    --
+  </td>
+  {% else %}
+  <td style="vertical-align: middle;">
+    {% if refund.status == 'success' %}
+      退款成功
+    {% elseif refund.status == 'failed' %}
+      退款失败
+    {% elseif refund.status == 'cancelled' %}
+      退款取消
+    {% endif %}
+  <td style="vertical-align: middle;">
+    {{ refund.actualAmount }}
+  </td>
+  {% endif %}
+</tr>
