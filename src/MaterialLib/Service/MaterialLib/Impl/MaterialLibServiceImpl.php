@@ -136,12 +136,12 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $oldFiles;
     }
 
-    protected function checkPermission($permission, $options = array())
-    {
-        if (!$this->getPermissionService()->checkPermission($permission, $options)) {
-            throw new AccessDeniedException("无权限操作", 403);
-        }
-    }
+    // protected function checkPermission($permission, $options = array())
+    // {
+    //     if (!$this->getPermissionService()->checkPermission($permission, $options)) {
+    //         throw new AccessDeniedException("无权限操作", 403);
+    //     }
+    // }
 
     protected function getTagService()
     {
@@ -153,10 +153,10 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $this->createService('File.UploadFileService2');
     }
 
-    protected function getPermissionService()
-    {
-        return $this->createService('MaterialLib:MaterialLib.PermissionService');
-    }
+    // protected function getPermissionService()
+    // {
+    //     return $this->createService('MaterialLib:MaterialLib.PermissionService');
+    // }
 
     protected function getCloudFileService()
     {
