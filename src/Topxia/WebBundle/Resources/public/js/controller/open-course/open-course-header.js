@@ -9,9 +9,11 @@ define(function(require, exports, module) {
     require('../../util/qrcode').run();
 
     exports.run = function() {
-
-        var firstLessonUrl = $('#firstLesson').data('url');
-        showPlayer(firstLessonUrl);
+        
+        if ($('#firstLesson').length > 0) {
+            var firstLessonUrl = $('#firstLesson').data('url');
+            showPlayer(firstLessonUrl);
+        }
         
         $("#alert-btn").on('click', function() {
             var $btn = $(this);
