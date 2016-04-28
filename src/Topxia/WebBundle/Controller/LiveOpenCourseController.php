@@ -60,6 +60,7 @@ class LiveOpenCourseController extends BaseController
             return $this->createJsonResponse($resultList);
         }
 
+        $lesson          = $this->getOpenCourseService()->getLesson($lessonId);
         $lesson["isEnd"] = intval(time() - $lesson["endTime"]) > 0;
 
         return $this->render('TopxiaWebBundle:LiveCourseReplayManage:list-item.html.twig', array(

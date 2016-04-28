@@ -55,8 +55,8 @@ class LiveCourseServiceImpl extends BaseService implements LiveCourseService
             'liveId'   => $lesson["mediaId"],
             'replayId' => $lessonReplay["replayId"],
             'provider' => $lesson["liveProvider"],
-            'user'     => $user ? $user['email'] : '',
-            'nickname' => $user ? $user['nickname'] : 'guest'
+            'user'     => $user->isLogin() ? $user['email'] : '',
+            'nickname' => $user->isLogin() ? $user['nickname'] : 'guest'
         );
 
         $client = new EdusohoLiveClient();

@@ -185,7 +185,7 @@ class OpenCourseManageController extends BaseController
         if ($request->getMethod() == 'POST') {
             $liveLessonFields = $request->request->all();
 
-            if (isset($liveLesson['startTime']) && !empty($liveLesson['startTime'])) {
+            if (!isset($liveLesson['startTime']) || empty($liveLesson['startTime'])) {
                 return $this->createMessageResponse('error', '请先设置直播时间。');
             }
 

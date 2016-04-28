@@ -416,7 +416,7 @@ throw $this->createServiceException('不能收藏未发布课程');
 
         $fields['type'] = $lesson['type'];
 
-        if ($fields['type'] == 'live' && isset($fields['startTime'])) {
+        if ($fields['type'] == 'liveOpen' && isset($fields['startTime'])) {
             $fields['endTime']      = $fields['startTime'] + $fields['length'] * 60;
             $fields['suggestHours'] = $fields['length'] / 60;
         }
