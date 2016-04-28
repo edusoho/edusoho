@@ -45,8 +45,9 @@ define(function(require, exports, module) {
         	if(!postData) {
         		postData = {};
         	}
-        	postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height(), group: self.element.data("token")});
-            
+
+        	postData = $.extend(this.get("img").tellScaled(), postData, {width: this.element.width(), height: this.element.height(), group: self.get('group')});
+
             $.post(cropImgUrl, postData ,function(response){
                 self.trigger("afterCrop", response);
             })
