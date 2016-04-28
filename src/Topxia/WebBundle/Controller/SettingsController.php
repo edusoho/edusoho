@@ -55,16 +55,25 @@ class SettingsController extends BaseController
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
+            if(abs(filesize($faceImg))>2*1024*1024||abs(filesize($backImg))>2*1024*1024){
+                $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
+                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                        'profile' => $profile
+                    ));
+            }
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
-                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                // return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                 $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                        'profile' => $profile
+                    ));
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
-            $this->setFlashMessage('success', '实名认证提交成功！');
+            // $this->setFlashMessage('success', '实名认证提交成功！');
             return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
-
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
             'profile' => $profile
         ));
