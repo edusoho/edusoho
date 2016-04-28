@@ -53,9 +53,16 @@ class CouponDaoImpl extends BaseDao implements CouponDao
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
                         ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
                         ->setFirstResult($start)
                         ->setMaxResults($limit);
+        if(!empty($orderBy)) {
+            $length = count($orderBy)/2;
+            for ($i=0; $i < $length; $i++) { 
+                $index = $i*2;
+                $builder->orderBy($orderBy[$index], $orderBy[$index+1]);
+            }
+        }
+
         return $builder->execute()->fetchAll() ?: array();
     }
 
