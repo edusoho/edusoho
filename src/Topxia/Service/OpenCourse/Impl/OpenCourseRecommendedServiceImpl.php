@@ -2,9 +2,9 @@
 
 namespace Topxia\Service\OpenCourse\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\OpenCourse\OpenCourseRecommendedService;
-use Topxia\Common\ArrayToolkit;
 use Topxia\Service\OpenCourse\CourseProcessor\CourseProcessorFactory;
 
 class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourseRecommendedService
@@ -23,7 +23,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
         $recommendCourses = array();
 
         foreach ($recommendCourseIds as $key => $courseId) {
-            $exsitsRecommendCourse = $this->getRecommendedCourseByCourseIdAndType($openCourseId,$courseId, $type);
+            $exsitsRecommendCourse = $this->getRecommendedCourseByCourseIdAndType($openCourseId, $courseId, $type);
 
             if (!$exsitsRecommendCourse) {
                 $fields = array(
@@ -35,7 +35,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
             }
         }
 
-        $recommendIds = ArrayToolkit::column($recommendCourses,'id');
+        $recommendIds = ArrayToolkit::column($recommendCourses, 'id');
 
         $this->refreshCoursesSeq($openCourseId, $recommendIds);
 
@@ -85,7 +85,7 @@ class OpenCourseRecommendedServiceImpl extends BaseService implements OpenCourse
             return true;
         }
 
-        foreach($recommendIds as $key => $recommendId) {
+        foreach ($recommendIds as $key => $recommendId) {
             $this->getRecommendedCourseDao()->deleteRecommendedCourse($recommendId);
         }
 

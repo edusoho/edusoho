@@ -24,11 +24,9 @@
       <div class="title">
         {% if course.type == 'liveOpen' and lessons %}
           {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
-            <span class="label label-primary mrm">直播中</span>
+            <span class="label label-primary mrm">正在直播</span>
           {% elseif "now"|date("U") < lessons[0].startTime %}
-            <span class="label label-warning mrm">直播预告</span>
-          {% else %}
-            <span class="label label-info mrm">查看回放</span>
+            <span class="label label-warning mrm">即将直播</span>
           {% endif %}
         {% endif %}
         

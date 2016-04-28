@@ -17,12 +17,10 @@
   <div class="course-info">
     <div class="title">
       {% if course.type == 'liveOpen' %}
-        {% if lessons[0].startTime|date('Y-m-d') == "now"|date('Y-m-d') %}
-          <span class="label label-primary mrm">今日直播</span>
-        {% elseif "now"|date("U") < lessons[0].startTime and lessons[0].startTime|date('Y-m-d') != "now"|date('Y-m-d') %}
-          <span class="label label-primary mrm">直播预告</span>
-        {% else %}
-          <span class="label label-warning mrm">查看回放</span>
+        {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
+          <span class="label label-primary mrm">正在直播</span>
+        {% elseif "now"|date("U") < lessons[0].startTime %}
+          <span class="label label-warning mrm">即将直播</span>
         {% endif %}
       {% endif %}
       <a class="link-dark" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">

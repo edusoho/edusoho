@@ -1,7 +1,7 @@
 {% import 'TopxiaWebBundle::macro.html.twig' as web_macro %}
 
 <div class="es-section" id="open-course-comment">
-  <div class="gray-darker pbl">{{'评论'|trans}}({{ course.postNum }})</div>
+  <div class="gray-darker pbl">{{'评论'|trans}}(<span class="thread-post-num">{{ course.postNum }}</span>)</div>
   {% if app.user %}
     <form class="es-commet" id="thread-post-form" method="POST" action="{{ path('open_course_post',{id:course.id}) }}">
       <textarea class="form-control form-control-o" rows="6" placeholder="{{'您的想法'|trans}}" {% if not app.user %}disabled{% endif %} name="content"></textarea>

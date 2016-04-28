@@ -16,27 +16,21 @@
 <ul class="course-wide-list">
   {% if courses %}
   {% for course in courses %}
-    {% if course.type == 'open' or course.type == 'liveOpen' %}
-      {% set showUrl = path('open_course_show',{courseId:course.id}) %}
-    {% else %}
-      {% set showUrl = path('course_show',{id:course.id}) %}
-    {% endif %}
 
   <li class="course-item clearfix"   data-id="{{course.id}}" >
-    <a class="course-picture-link" href="{{ showUrl }}" target="_blank">
+    <a class="course-picture-link" href="{{ path('course_show',{id:course.id}) }}" target="_blank">
       <img class="course-picture" src="{{ filepath(course.middlePicture, 'course.png') }}" alt="{{ course.title }}">
     </a>
     <div class="course-body">
-     <div style="float:right;" class="text-muted mrm mls">
-     {% if course.type == 'normal' or course.type == 'live' %}
+      <div style="float:right;" class="text-muted mrm mls">
         {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-            <span class="course-price" style="display:inline">
-              {% if course.price > 0 %}
-                 {{'价格：'|trans}} {{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
-              {% else %}
-                {{'免费'|trans}}
-              {% endif %}
-            </span>
+          <span class="course-price" style="display:inline">
+            {% if course.price > 0 %}
+               {{'价格：'|trans}} {{ course.price * setting('coin.cash_rate')}}{{setting('coin.coin_name')}}
+            {% else %}
+              {{'免费'|trans}}
+            {% endif %}
+          </span>
         {% else %}
           <span class="course-price">
             {% if course.price > 0 %}
@@ -46,22 +40,21 @@
             {% endif %}
           </span>
         {% endif %}
-      {% endif %}
+
         {% if setting('course.show_student_num_enabled', '1') == 1 %}
           <span class="divider"></span>
           <span class="text-muted mrm mls"><strong>{{ course.studentNum }}</strong>{{setting('default.user_name', '学员'|trans)}}</span>
         {% endif %}
 
-        </div>
+      </div>
 
-      <h4 class="course-title"><a href="{{ showUrl }}" target="_blank">{{ course.title }}</a>
-      {% if course.type == 'normal' or course.type == 'live' %}
+      <h4 class="course-title"><a href="{{ path('course_show',{id:course.id}) }}" target="_blank">{{ course.title }}</a>
       {% if course.serializeMode=='serialize' %}
         <span class="label label-success ">{{'更新中'|trans}}</span>
       {% elseif course.serializeMode=='finished' %}
         <span class="label label-warning ">{{'已完结'|trans}}</span>
       {% endif %}
-      {% endif %}
+
       {% if course.type == 'live' %}
           {% set lesson = course['lesson']|default(null) %}
           {% if lesson and "now"|date("U") >= lesson.startTime and "now"|date("U") <= lesson.endTime %}

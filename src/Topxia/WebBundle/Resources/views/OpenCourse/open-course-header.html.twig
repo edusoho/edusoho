@@ -53,23 +53,24 @@
           {% if lesson.startTimeLeft <= 7200 %}
             <a class="btn btn-info btn-lg mask-btn" href="{{ path('live_open_course_play',{courseId:course.id,lessonId:lesson.id})}}" target="_blank">{{'进入直播教室'|trans}}</a>
           {% else %}
-            {% if member and member.isNotified %}
-              <button id="alerted-btn" class="btn btn-info btn-lg active">
-                {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
-              </button>
-            {% elseif setting('cloud_sms.sms_enabled') %}
+            <button id="alerted-btn" class="btn btn-info btn-lg active {% if not member or (member and not member.isNotified ) %}hidden{% endif %}">
+              {{'已设置提醒'|trans}}<i class="es-icon es-icon-alarmon"></i>
+            </button>
+
+            {% if setting('cloud_sms.sms_enabled') %}
               {% if app.request.get('as')|default('') == 'preview' %}
                 <a href="javascript:;" class="btn btn-info btn-lg mask-btn" disabled="disabled">
                   {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
                 </a>
               {% else %}
-                <a id="alert-btn" class="btn btn-info btn-lg mask-btn" 
+                <a id="alert-btn" class="btn btn-info btn-lg mask-btn {% if member and member.isNotified %}hidden{% endif %}" 
                   data-url="{{ path('open_course_member_sms',{id:course.id}) }}" data-toggle="modal" data-target="#modal" >
                   {{'提醒我参加'|trans}}<i class="es-icon es-icon-alarmon"></i>
                 </a>
               {% endif %}
             {% endif %}
           {% endif %}
+
           <div class="color-gray mtl">已有<span class="member-num">{{ notifyNum }}</span>人设置了提醒</div>
         </div>
       {% elseif ("now"|date("U")) > lesson.startTime and ("now"|date("U")) <= lesson.endTime %}

@@ -47,7 +47,7 @@ class LiveOpenCourseController extends BaseController
 
     public function createLessonReplayAction(Request $request, $courseId, $lessonId)
     {
-        $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
+        $course = $this->getOpenCourseService()->tryManageOpenCourse($courseId);
         $lesson = $this->getOpenCourseService()->getLesson($lessonId);
 
         if (!$lesson) {

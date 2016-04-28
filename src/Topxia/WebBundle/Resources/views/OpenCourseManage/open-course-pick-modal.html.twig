@@ -13,7 +13,7 @@
 }
 </style>
 
-{% include 'TopxiaWebBundle:OpenCourseManage:pick-tab.html.twig' %}
+{#{% include 'TopxiaWebBundle:OpenCourseManage:pick-tab.html.twig' %}#}
 
 <form class="form-inline form-search" role="search-form" action="{{ path('open_course_course_search',{id:courseId,filter:filter}) }}">
   <div class="form-group ">
@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block footer %}
-  <button id="sure" class="btn btn-primary pull-right" data-url="{{path('open_course_recommended_course_select', {id:courseId,filter:filter})}}">添加</button>
+  <button id="sure" class="btn btn-primary pull-right" data-url="{{path('open_course_recommended_course_select', {id:courseId})}}">添加</button>
   <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
 
   <script>app.load('topxiawebbundle/controller/open-course-manage/pick')</script>

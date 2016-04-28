@@ -69,7 +69,7 @@ class OpenCourseController extends BaseController
             return $this->createMessageResponse('error', '请先创建课时并发布！');
         }
 
-        $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
+        $course = $this->getOpenCourseService()->waveCourse($courseId, 'hitNum', +1);
 
         $member = $this->_memberOperate($request, $courseId);
 
@@ -288,7 +288,7 @@ class OpenCourseController extends BaseController
             return $this->createJsonResponse(array('result' => false, 'message' => '该课程不存在或已删除！'));
         }
 
-        $smsSetting = $this->getSettingService()->get('cloud_sms', array());
+        $smsSetting = $this->setting('cloud_sms', array());
 
         if (!$user->isLogin() && !$smsSetting['sms_enabled']) {
             throw $this->createAccessDeniedException();
@@ -397,6 +397,23 @@ class OpenCourseController extends BaseController
         }
 
         return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
+    }
+
+    public function mobileCheckAction(Request $request)
+    {
+        $user     = $this->getCurrentUser();
+        $response = array('success' => true, 'message' => '');
+
+        if ($user->isLogin()) {
+            $mobile                 = $request->query->get('value');
+            list($result, $message) = $this->getAuthService()->checkMobile($mobile);
+
+            if ($result != 'success') {
+                $response = array('success' => false, 'message' => $message);
+            }
+        }
+
+        return $this->createJsonResponse($response);
     }
 
     private function _getMember($request, $courseId)
@@ -623,26 +640,6 @@ class OpenCourseController extends BaseController
         return array_merge($currentPageCourses, $courses);
     }
 
-    private function _getCategoryInfo($categoryCode)
-    {
-        $category = $this->getCategoryService()->getCategoryByCode($categoryCode);
-
-        if (!$category) {
-            return array();
-        }
-
-        $category['description'] = strip_tags($category['description'], '');
-        $category['description'] = preg_replace("/ /", "", $category['description']);
-
-        if (!$category['parentId']) {
-            $category['parent'] = array();
-        } else {
-            $category['parent'] = $this->getCategoryService()->getCategory($category['parentId']);
-        }
-
-        return $category;
-    }
-
     private function _filterConditions($queryParam)
     {
         $conditions = array('status' => 'published');
@@ -684,16 +681,6 @@ class OpenCourseController extends BaseController
         return $this->getServiceKernel()->createService('User.UserService');
     }
 
-    protected function getCategoryService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.CategoryService');
-    }
-
-    protected function getTagService()
-    {
-        return $this->getServiceKernel()->createService('Taxonomy.TagService');
-    }
-
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
@@ -717,5 +704,10 @@ class OpenCourseController extends BaseController
     protected function getMaterialService()
     {
         return $this->getServiceKernel()->createService('Course.MaterialService');
+    }
+
+    protected function getAuthService()
+    {
+        return $this->getServiceKernel()->createService('User.AuthService');
     }
 }

@@ -11,14 +11,15 @@ define(function(require, exports, module) {
 		var smsValidator = new Validator({
             element: $form,
             autoSubmit: false,
-            onFormValidated: function(error){console.log(error);
+            onFormValidated: function(error){
                 if (error) {
                     return false;
                 }
 
-                $.post($form.attr('action'),$form.serialize(),function(){
-	                $("#alert-btn").hide();
-	                $("#alerted-btn").show();
+                $.post($form.attr('action'),$form.serialize(),function(response){
+	                $("#alert-btn").addClass('hidden');
+	                $("#alerted-btn").removeClass('hidden');
+                    $('.member-num').text(parseInt(response.number));
 	            })
             }
         });
@@ -26,7 +27,7 @@ define(function(require, exports, module) {
         smsValidator.addItem({
             element: '[name="mobile"]',
             required: true,
-            rule: 'phone',
+            rule: 'phone remote',
             display: '手机号码'           
         });
 		
