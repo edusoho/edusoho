@@ -369,7 +369,7 @@ class UploadFileServiceTest extends BaseTestCase
           )
        );
        $this->mock($name,$params);
-       $name = 'File.CloudFileImplementor';
+       $name = 'File.LocalFileImplementor';
        $params = array(
           array(
             'functionName' => 'addFile',
@@ -389,7 +389,113 @@ class UploadFileServiceTest extends BaseTestCase
           )
         );
       $this->mock($name,$params);
-      $this->getUploadFileService()->addFile('materiallib');
+      $file = $this->getUploadFileService()->addFile('materiallib',1);
+      $this->assertEquals($file['id'],1);
+    }
+
+    public function testRenameFile()
+    {
+      $id = 1;
+      $newFileName = 'test2';
+      $name = 'File.UploadFileDao';
+      $params = array(
+         array(
+           'functionName' => 'updateFile',
+           'runTimes' => 1,
+           'withParams' => array(
+            'id' => 1,
+            'filename'=> array(
+              'filename'=>'test2'
+            )
+          ),
+           'returnValue' =>array(
+             'id' => 1,
+             'storage' => 'cloud',
+             'filename'=> 'test2',
+             'createdUserId' => 1
+           )
+         ),
+         array(
+             'functionName' => 'getFile',
+             'runTimes' => 1,
+             'withParams' => array(1),
+             'returnValue' =>array(
+               'id' => 1,
+               'convertParams' => null,
+               'metas' => null,
+               'metas2' => null,
+               'storage' => 'cloud',
+               'filename'=> 'test2',
+               'createdUserId' => 1
+             )
+           )
+       );
+       $this->mock($name,$params);
+       $file = $this->getUploadFileService()->renameFile($id,$newFileName);
+       $this->assertEquals($file['filename'],'test2');
+    }
+
+    public function testDeleteFile()
+    {
+      $id = 1;
+      $name = 'File.UploadFileDao';
+      $params = array(
+         array(
+           'functionName' => 'deleteFile',
+           'runTimes' => 1,
+           'withParams' => array(
+              'id' => 1
+            ),
+           'returnValue' => true
+         ),
+         array(
+           'functionName' => 'getFile',
+           'runTimes' => 1,
+           'withParams' => array(
+            'id' => 1
+            ),
+            'returnValue' => array(
+              'id' => 1,
+              'storage' => 'cloud',
+              'filename'=> 'test',
+              'createdUserId' => 1
+            )
+         )
+       );
+       $this->mock($name,$params);
+       $name = 'File.CloudFileImplementor';
+       $params = array(
+          array(
+            'functionName' => 'deleteFile',
+            'runTimes' => 1,
+            'withParams' => array(
+             'id' => 1,
+             'storage' => 'cloud',
+             'filename'=> 'test',
+             'createdUserId' => 1
+           ),
+            'returnValue' => true
+          ),
+          array(
+            'functionName' => 'getFile',
+            'runTimes' => 1,
+            'withParams' => array(
+             'id' => 1,
+             'storage' => 'cloud',
+             'filename'=> 'test',
+             'createdUserId' => 1
+           ),
+            'returnValue' => array(
+              'id' => 1,
+              'storage' => 'cloud',
+              'filename'=> 'test',
+              'createdUserId' => 1
+            )
+          )
+        );
+      $this->mock($name,$params);
+      $result = $this->getUploadFileService()->deleteFile($id);
+      $this->assertEquals($result,true);
     }
 
   	protected function getUploadFileService()

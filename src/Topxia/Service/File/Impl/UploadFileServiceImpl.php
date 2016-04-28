@@ -17,7 +17,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     public function getFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
-        return $file;
         if (empty($file)) {
             return null;
         }
