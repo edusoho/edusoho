@@ -10,19 +10,7 @@
       <h5><span>{{ config.title|default(config.defaultTitle|default('')) }}</span><div class="line"></div></h5>
       <div class="subtitle">{{ config.subTitle|default(config.defaultSubTitle|default('')) }}</div>
     </div>
-    <div class="course-filter" id="course-filter">
-       <div class="course-sort btn-group">
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'latest') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{orderBy:'latest', 'courseType':'open-course'}) }}" data-type='open-course'>
-          {{'最新'|trans}}
-        </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'hitNum') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{orderBy:'hitNum', 'courseType':'open-course'}) }}" data-type='open-course'>
-          {{'最热'|trans}}
-        </a>
-        <a href="javascript:;" class="btn btn-default {% if (orderBy|default('recommendedSeq') == 'recommendedSeq') %} active {% endif %}js-course-filter" data-url="{{path('homepage_category',{orderBy:'recommendedSeq', 'courseType':'open-course'}) }}" data-type='open-course'>
-          {{'推荐'|trans}}
-        </a>
-      </div>
-    </div>
+ 
     <div class="course-list">
       <div class="row">
         {% for course in courses %}
