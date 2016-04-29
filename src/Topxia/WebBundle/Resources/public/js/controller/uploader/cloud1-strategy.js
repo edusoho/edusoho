@@ -1,6 +1,7 @@
 define(function(require, exports, module) {
 
 	var Class = require('class');
+    var store = require('store');
 
     var Cloud2Strategy = Class.extend({
     	initialize: function(file, response) {
@@ -59,7 +60,8 @@ define(function(require, exports, module) {
         finishUpload: function(deferred) {
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
-            var url = 'http://upload.edusoho.net/mkfile/'+cloud2UploadStatus.currentFileSize+'/key/'+this.file.hash;
+            var hashId = this.base64encode(this.utf16to8(this.file.hashId));
+            var url = 'http://upload.edusoho.net/mkfile/'+cloud2UploadStatus.currentFileSize+'/key/'+hashId;
             var result = {};
 
             var xhr = new XMLHttpRequest();
@@ -74,6 +76,59 @@ define(function(require, exports, module) {
             xhr.send(cloud2UploadStatus.ctxs.join(','));
 
             return $.extend({id: this.file.fileId}, result);
+        },
+
+        base64encode: function(str) {
+            var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+            var out, i, len;
+            var c1, c2, c3;
+            len = str.length;
+            i = 0;
+            out = "";
+            while (i < len) {
+                c1 = str.charCodeAt(i++) & 0xff;
+                if (i == len) {
+                    out += base64EncodeChars.charAt(c1 >> 2);
+                    out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+                    out += "==";
+                    break;
+                }
+                c2 = str.charCodeAt(i++);
+                if (i == len) {
+                    out += base64EncodeChars.charAt(c1 >> 2);
+                    out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+                    out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+                    out += "=";
+                    break;
+                }
+                c3 = str.charCodeAt(i++);
+                out += base64EncodeChars.charAt(c1 >> 2);
+                out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+                out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+                out += base64EncodeChars.charAt(c3 & 0x3F);
+            }
+            return out;
+        },
+
+        utf16to8: function(str) {
+            var out, i, len, c;
+            out = "";
+            len = str.length;
+            for (i = 0; i < len; i++) {
+                c = str.charCodeAt(i);
+                if ((c >= 0x0001) && (c <= 0x007F)) {
+                    out += str.charAt(i);
+                } else if (c > 0x07FF) {
+                    out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+                    out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+                    out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+                } else {
+                    out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+                    out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+                }
+            }
+            return out;
         },
 
         uploadAccept: function(object, ret){
