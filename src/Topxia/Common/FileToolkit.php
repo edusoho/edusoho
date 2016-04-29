@@ -975,7 +975,7 @@ class FileToolkit
         $options["y"] = $rate * $options["y"];
 
         $filePaths = array();
-        if (!empty($options["imgs"]) && count($options["imgs"]) > 0) {
+        if (!empty($options["imgs"]) && count($options["imgs"])>0) {
             foreach ($options["imgs"] as $key => $value) {
                 $savedFilePath   = "{$pathinfo['dirname']}/{$pathinfo['filename']}_{$key}.{$pathinfo['extension']}";
                 $image           = static::crop($rawImage, $savedFilePath, $options['x'], $options['y'], $options['w'], $options['h'], $value[0], $value[1]);
@@ -1003,5 +1003,22 @@ class FileToolkit
         $scaledSize  = $naturalSize->widen($width)->heighten($height);
 
         return array($naturalSize, $scaledSize);
+    }
+
+    public static function downloadImg($url, $savePath)
+    {
+        $fp  = fopen($savePath, 'w');
+        $img = fopen($url, 'r');
+        // stream_get_meta_data($img);
+
+        $result = '';
+        while (!feof($img)) {
+            $result .= fgets($img, 1024);
+        }
+
+        fclose($img);
+        fwrite($fp, $result);
+        fclose($fp);
+        return $savePath;
     }
 }

@@ -27,7 +27,6 @@
     {% if consult.email is not empty %}
       <span class="btn btn-consult-{{consult.color}} float-consult-email-btn" data-container=".float-consult-email-btn" data-title="电子邮箱" data-content-element="#consult-email-content"><span class="icon icon-email"></span></span>
     {% endif %}
-
   </div>
 
   <div class="consult-contents">
@@ -56,22 +55,21 @@
         <p>
           <span class="icon icon-qqgroup text-muted" style="font-size:14px;"></span>
           {{qqgroup.name}}
-          <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
+           <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
 
-           {% if not qqgroup.url|default(false) %}
+            {% if  qqgroup.url|default(true) %}
+              <p class="text-overflow">
+                {{ qqgroup.url|raw }}
+              </p>
+            {% else %}
               <p class="text-overflow">
                 {{ qqgroup.number }}
               </p>
-           {% else %}
-               <p class="text-overflow">
-                {{ qqgroup.url|raw }}
-               </p>
-           {% endif %}
-           
+            {% endif %}
+
         </p>
       {% endfor %}
     </div>
-
     <div id="consult-phone-content">
       <p>
         <strong>服务时间：</strong> {{ consult.worktime }}

@@ -21,7 +21,7 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $profile = $request->request->get('profile');
-
+            
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->setFlashMessage('success', '基础信息保存成功。');
