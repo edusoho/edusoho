@@ -30,7 +30,7 @@ class UploaderExtension extends \Twig_Extension
         );
     }
 
-    public function makeUpoaderToken($targetType, $targetId, $bucket, $ttl = 7200)
+    public function makeUpoaderToken($targetType, $targetId, $bucket, $ttl = 86400)
     {
         $maker = new UploaderToken();
         return $maker->make($targetType, $targetId, $bucket, $ttl);
