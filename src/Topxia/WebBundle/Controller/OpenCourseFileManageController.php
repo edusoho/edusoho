@@ -14,7 +14,7 @@ class OpenCourseFileManageController extends BaseController
 
         $type = $request->query->get('type');
         //$type = 'opencourselesson';
-        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
+        $type = in_array($type, array('opencourselesson', 'coursematerial')) ? $type : 'opencourselesson';
 
         $conditions = array(
             'targetType' => $type,

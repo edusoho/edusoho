@@ -52,7 +52,7 @@
 
     <ul class="nav nav-tabs mbm">
       <li {% if type == 'courselesson' %} class="active" {% endif %}>
-      <a href="{{ path(filesUrl, {id:course.id, type:'courselesson'}) }}">{{'课时文件'|trans}}</a></li>
+      <a href="{{ path(filesUrl, {id:course.id, type:'opencourselesson'}) }}">{{'课时文件'|trans}}</a></li>
       <li {% if type == 'coursematerial' %} class="active" {% endif %}><a href="{{ path(filesUrl, {id:course.id, type:'coursematerial'}) }}">{{'备用资料文件'|trans}}</a></li>
     </ul>
     
