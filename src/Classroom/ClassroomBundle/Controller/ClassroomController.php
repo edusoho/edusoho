@@ -136,8 +136,15 @@ class ClassroomController extends BaseController
         $progresses = array();
         $classrooms = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'student', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'auditor', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
