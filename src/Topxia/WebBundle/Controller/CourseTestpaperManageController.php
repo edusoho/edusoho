@@ -66,9 +66,11 @@ class CourseTestpaperManageController extends BaseController
 
         $conditions["types"] = ArrayToolkit::column($types,"key");
         $conditions["courseId"] = $course["id"];
+        
         $questionNums = $this->getQuestionService()->getQuestionCountGroupByTypes($conditions);
         $questionNums = ArrayToolkit::index($questionNums, "type");
         $conditions = array();
+        $conditions['target'] = 'course'.'-'.$course["id"];
         $conditions['type'] = 'material';
         $conditions['subCount'] = 0;
         $questionNums['material']['questionNum'] = $this->getQuestionService()->searchQuestionsCount($conditions);
