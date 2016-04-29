@@ -181,7 +181,9 @@ class OpenCourseServiceTest extends BaseTestCase
      */
     public function testGetMember()
     {
-        $createMember = $this->_createLoginMember();
+        $course = $this->_createLiveOpenCourse();
+
+        $createMember = $this->_createLoginMember($course['id']);
         $member       = $this->getOpenCourseService()->getMember($createMember['id']);
 
         $this->assertEquals($createMember['userId'], $member['userId']);
@@ -189,8 +191,11 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testGetCourseMember()
     {
-        $courseMember1 = $this->_createLoginMember();
-        $courseMember2 = $this->_createGuestMember();
+        $course1 = $this->_createOpenCourse();
+        $course2 = $this->_createLiveOpenCourse();
+
+        $courseMember1 = $this->_createLoginMember($course1['id']);
+        $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $member = $this->getOpenCourseService()->getCourseMember(1, 0);
 
@@ -199,8 +204,11 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testFindMembersByCourseIds()
     {
-        $courseMember1 = $this->_createLoginMember();
-        $courseMember2 = $this->_createGuestMember();
+        $course1 = $this->_createOpenCourse();
+        $course2 = $this->_createLiveOpenCourse();
+
+        $courseMember1 = $this->_createLoginMember($course1['id']);
+        $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $members = $this->getOpenCourseService()->findMembersByCourseIds(array(1));
 
@@ -211,8 +219,11 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testSearchMemberCount()
     {
-        $courseMember1 = $this->_createLoginMember();
-        $courseMember2 = $this->_createGuestMember();
+        $course1 = $this->_createOpenCourse();
+        $course2 = $this->_createLiveOpenCourse();
+
+        $courseMember1 = $this->_createLoginMember($course1['id']);
+        $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $membersCount = $this->getOpenCourseService()->searchMemberCount(array('mobile' => '15869165222'));
 
@@ -221,8 +232,11 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testSearchMembers()
     {
-        $courseMember1 = $this->_createLoginMember();
-        $courseMember2 = $this->_createGuestMember();
+        $course1 = $this->_createOpenCourse();
+        $course2 = $this->_createLiveOpenCourse();
+
+        $courseMember1 = $this->_createLoginMember($course1['id']);
+        $courseMember2 = $this->_createGuestMember($course2['id']);
 
         $members = $this->getOpenCourseService()->searchMembers(array('mobile' => '15869165222'), array('createdTime', 'DESC'), 0, 1);
 
@@ -232,7 +246,9 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testUpdateMember()
     {
-        $courseMember1 = $this->_createLoginMember();
+        $course = $this->_createLiveOpenCourse();
+
+        $courseMember1 = $this->_createLoginMember($course['id']);
 
         $updateMember = array('role' => 'teacher');
         $member       = $this->getOpenCourseService()->updateMember($courseMember1['id'], $updateMember);
@@ -242,7 +258,9 @@ class OpenCourseServiceTest extends BaseTestCase
 
     public function testDeleteMember()
     {
-        $courseMember1 = $this->_createLoginMember();
+        $course = $this->_createLiveOpenCourse();
+
+        $courseMember1 = $this->_createLoginMember($course['id']);
         $this->getOpenCourseService()->deleteMember($courseMember1['id']);
         $member = $this->getOpenCourseService()->getMember($courseMember1['id']);
 
@@ -303,10 +321,10 @@ class OpenCourseServiceTest extends BaseTestCase
         return $this->getOpenCourseService()->createLesson($lesson);
     }
 
-    private function _createGuestMember()
+    private function _createGuestMember($courseId)
     {
         $member = array(
-            'courseId'    => 1,
+            'courseId'    => $courseId,
             'userId'      => 0,
             'ip'          => '127.0.0.1',
             'mobile'      => '15869165222',
@@ -316,10 +334,10 @@ class OpenCourseServiceTest extends BaseTestCase
         return $this->getOpenCourseService()->createMember($member);
     }
 
-    private function _createLoginMember()
+    private function _createLoginMember($courseId)
     {
         $member = array(
-            'courseId'    => 1,
+            'courseId'    => $courseId,
             'userId'      => 1,
             'ip'          => '127.0.0.1',
             'createdTime' => time()

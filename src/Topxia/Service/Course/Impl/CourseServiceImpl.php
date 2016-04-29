@@ -294,7 +294,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         return $this->getCourseLessonReplayDao()->addCourseLessonReplay($courseLessonReplay);
     }
 
-    public function deleteLessonReplayByLessonId($lessonId, $lessonType = 'course')
+    public function deleteLessonReplayByLessonId($lessonId, $lessonType = 'live')
     {
         return $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId, $lessonType);
     }
@@ -635,7 +635,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent("course.delete",$course);
+        $this->dispatchEvent("course.delete", $course);
 
         return true;
     }
@@ -2690,7 +2690,7 @@ return true;
         return $result;
     }
 
-    public function getCourseLessonReplayByLessonId($lessonId, $lessonType = 'course')
+    public function getCourseLessonReplayByLessonId($lessonId, $lessonType = 'live')
     {
         return $this->getCourseLessonReplayDao()->getCourseLessonReplayByLessonId($lessonId, $lessonType);
     }
@@ -2700,7 +2700,7 @@ return true;
         $this->getCourseLessonReplayDao()->deleteLessonReplayByLessonId($lessonId);
     }
 
-    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'course')
+    public function getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType = 'live')
     {
         return $this->getCourseLessonReplayDao()->getCourseLessonReplayByCourseIdAndLessonId($courseId, $lessonId, $lessonType);
     }
