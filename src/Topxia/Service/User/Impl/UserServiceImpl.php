@@ -683,6 +683,9 @@ class UserServiceImpl extends BaseService implements UserService
             'weibo'          => '',
             'weixin'         => '',
             'site'           => '',
+            'isWeiboPublic'  => '',
+            'isWeixinPublic' => '',
+            'isQQPublic'     => '',
             'intField1'      => null,
             'intField2'      => null,
             'intField3'      => null,
@@ -751,6 +754,23 @@ class UserServiceImpl extends BaseService implements UserService
             $fields['about'] = $this->purifyHtml($fields['about']);
         }
 
+        if (empty($fields['isWeiboPublic'])) {
+            $fields['isWeiboPublic'] = 0;
+        } else {
+            $fields['isWeiboPublic'] = 1;
+        }
+
+        if (empty($fields['isWeixinPublic'])) {
+            $fields['isWeixinPublic'] = 0;
+        } else {
+            $fields['isWeixinPublic'] = 1;
+        }
+
+        if (empty($fields['isQQPublic'])) {
+            $fields['isQQPublic'] = 0;
+        } else {
+            $fields['isQQPublic'] = 1;
+        }
         $userProfile = $this->getProfileDao()->updateProfile($id, $fields);
 
         $this->dispatchEvent('profile.update', new ServiceEvent(array('user' => $user, 'fields' => $fields)));
