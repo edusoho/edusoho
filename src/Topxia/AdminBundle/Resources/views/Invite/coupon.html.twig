@@ -10,9 +10,9 @@
     <input class="form-control" type="text" name="nickname" placeholder="用户名" value="{{ app.request.query.get('nickname')}}">
      <div class="form-group">
     领取时间:
-    <input class="form-control" type="text" id="startDate" name="startDateTime" placeholder="开始时间" value="{{ app.request.get('startDateTime') }}">
+    <input class="form-control" type="text" id="start-date" name="startDateTime" placeholder="开始时间" value="{{ app.request.get('startDateTime') }}">
     <div class="form-group">-</div>
-    <input class="form-control" type="text" id="endDate" name="endDateTime" placeholder="结束时间" value="{{ app.request.get('endDateTime') }}">
+    <input class="form-control" type="text" id="end-date" name="endDateTime" placeholder="结束时间" value="{{ app.request.get('endDateTime') }}">
     </div>
     <button class="btn btn-primary" type="submit">搜索</button>
 	</form>
@@ -29,7 +29,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% if cardInformations %}
+			
 				{% for cardInformation in cardInformations %}
 					{% if filter == 'invite' %}
 						{% set user = users[cardInformation.inviteUserId]|default(null) %}

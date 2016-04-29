@@ -6,22 +6,22 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         
-        $("#startDate").datetimepicker({
+        $("#start-date").datetimepicker({
             autoclose: true
         }).on('changeDate',function(){
-            $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+            $("#end-date").datetimepicker('setStartDate',$("#start-date").val().substring(0,16));
         });
 
-        $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+        $("#start-date").datetimepicker('setEndDate',$("#end-date").val().substring(0,16));
 
-        $("#endDate").datetimepicker({
+        $("#end-date").datetimepicker({
             autoclose: true
         }).on('changeDate',function(){
 
-            $("#startDate").datetimepicker('setEndDate',$("#endDate").val().substring(0,16));
+            $("#start-date").datetimepicker('setEndDate',$("#end-date").val().substring(0,16));
         });
 
-        $("#endDate").datetimepicker('setStartDate',$("#startDate").val().substring(0,16));
+        $("#end-date").datetimepicker('setStartDate',$("#start-date").val().substring(0,16));
        
     };
 

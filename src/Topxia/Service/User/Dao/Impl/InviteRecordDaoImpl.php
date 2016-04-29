@@ -67,7 +67,11 @@ class InviteRecordDaoImpl extends BaseDao implements InviteRecordDao
             ->from($this->table, 'invite_record')
             ->andWhere('inviteUserCardId = :inviteUserCardId')
             ->andWhere('invitedUserCardId = :invitedUserCardId')
-            ->andWhere('inviteUserCardId IN ( :inviteUserCardIds)')
-            ->andWhere('invitedUserCardId IN ( :invitedUserCardIds)');
+            ->andWhere('inviteUserId = :inviteUserId)')
+            ->andWhere('invitedUserId = :invitedUserId)')
+            ->andWhere('inviteUserCardId <> :inviteUserCardIdNotEqual')
+            ->andWhere('invitedUserCardId <> :invitedUserCardIdNotEqual')
+            ->andWhere('createdTime >= :startDateTime')
+            ->andWhere('createdTime < :endDateTime');
     }
 }

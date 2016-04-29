@@ -38,12 +38,39 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
     public function searchRecordCount($conditions)
     {
+        $conditions = $this->_prepareConditions($conditions);
         return $this->getInviteRecordDao()->searchRecordCount($conditions);
     }
 
     public function searchRecords($conditions, $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareConditions($conditions);
         return $this->getInviteRecordDao()->searchRecords($conditions, $orderBy, $start, $limit);
+    }
+
+    private function _prepareConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+
+        );
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+
+            if (isset($conditions['inviteUserCardIdNotEqual'])) {
+                $conditions['inviteUserId'] = $user['id'];
+            } elseif (isset($conditions['invitedUserCardIdNotEqual'])) {
+                $conditions['invitedUserId'] = $user['id'];
+            }
+        }
+
+        return $conditions;
     }
 
     private function getInviteRecordDao()
@@ -51,4 +78,8 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->createDao('User.InviteRecordDao');
     }
 
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
+    }
 }
