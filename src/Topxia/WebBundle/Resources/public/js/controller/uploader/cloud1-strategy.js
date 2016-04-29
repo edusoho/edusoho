@@ -59,24 +59,20 @@ define(function(require, exports, module) {
         finishUpload: function(deferred) {
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
-            var url = '/uploader/mkfile/'+cloud2UploadStatus.currentFileSize;
+            var url = 'http://upload.edusoho.net/mkfile/'+cloud2UploadStatus.currentFileSize+'/key/'+this.file.hash;
             var result = {};
-            $.ajax({
-                url: url,
-                type:'POST',
-                async: false,
-                data:{
-                    'uploadUrl': encodeURI(self.get('uploadUrl')),
-                    'content': cloud2UploadStatus.ctxs.join(','),
-                    'id': this.file.fileId
-                },
-                beforeSend: function(xhr){
-                    xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
-                },
-                success:function(data) {
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, false);
+            xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
+            xhr.onreadystatechange = function(response) {
+                if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
                     result = eval('('+data+')');
+
                 }
-            });
+            };
+            xhr.send(cloud2UploadStatus.ctxs.join(','));
+
             return $.extend({id: this.file.fileId}, result);
         },
 
