@@ -192,11 +192,6 @@ uploader_chunks_finish:
     pattern:  /uploader/chunks/finish
     defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
 
-uploader_mkfile:
-    pattern:  /uploader/mkfile/{fileSize}
-    defaults: { _controller: TopxiaWebBundle:Uploader:mkfile }
-    methods: [POST]
-
 uploadfile_upload:
     pattern:  /uploadfile/upload
     defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
