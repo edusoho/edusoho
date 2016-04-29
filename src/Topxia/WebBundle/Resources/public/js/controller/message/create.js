@@ -25,6 +25,10 @@ define(function(require, exports, module) {
             errormessageMaxlength: '想要说的话不能大于500个字'
         });
 
+        $('#message-create-btn').on('click','',function(){
+            $('#message-create-btn').button('loading');
+            
+        });
 
         var autocomplete = new AutoComplete({
             trigger: '#message_receiver',
