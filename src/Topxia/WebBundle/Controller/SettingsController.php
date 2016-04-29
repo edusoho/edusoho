@@ -793,14 +793,29 @@ class SettingsController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
 
         try {
-            $this->sendEmail(
-                $user['email'],
-                "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
-                $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
+
+            $normalMail = array(
+                'to'    => $user['email'],
+                'title' => "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
+                'body'  => $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
                     'user'  => $user,
                     'token' => $token
                 ))
             );
+
+            $cloudMail = array(
+                'to'        => $user['email'],
+                'template'  => 'email_reset_email',
+                'verifyurl' => $this->generateUrl('auth_email_confirm', array(
+                    'user'  => $user,
+                    'token' => $token
+                ), true),
+                'nickname'  => $user['nickname']
+            );
+
+            $mail = new Mail($normalMail, $cloudMail);
+
+            $this->sendEmail($mail);
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {
             $this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());
