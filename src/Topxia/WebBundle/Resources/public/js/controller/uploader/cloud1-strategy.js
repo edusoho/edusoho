@@ -61,7 +61,7 @@ define(function(require, exports, module) {
         	var self = this.file.uploaderWidget;
         	var cloud2UploadStatus = self.get('cloud2UploadStatus');
             var hashId = this.base64encode(this.utf16to8(this.file.hashId));
-            var url = 'http://upload.edusoho.net/mkfile/'+cloud2UploadStatus.currentFileSize+'/key/'+hashId;
+            var url = self.get('uploadUrl') + '/mkfile/'+cloud2UploadStatus.currentFileSize+'/key/'+hashId;
             var result = {};
 
             var xhr = new XMLHttpRequest();
@@ -69,12 +69,10 @@ define(function(require, exports, module) {
             xhr.setRequestHeader("Authorization", "UpToken " + self.get('uploadToken'));
             xhr.onreadystatechange = function(response) {
                 if (xhr.readyState == 4 && xhr.status == 200 && response != "") {
-                    result = eval('('+data+')');
-
+                    result = JSON.parse(xhr.responseText);
                 }
             };
             xhr.send(cloud2UploadStatus.ctxs.join(','));
-
             return $.extend({id: this.file.fileId}, result);
         },
 
