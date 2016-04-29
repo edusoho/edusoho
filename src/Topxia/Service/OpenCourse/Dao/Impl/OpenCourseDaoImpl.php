@@ -40,22 +40,6 @@ class OpenCourseDaoImpl extends BaseDao implements OpenCourseDao
         return $courses ? $this->createSerializer()->unserializes($courses, $this->serializeFields) : null;
     }
 
-    public function findCoursesByParentIdAndLocked($parentId, $locked)
-    {
-        $that = $this;
-
-        return $this->fetchCached("parentId:{$parentId}:locked:{$locked}", $parentId, $locked, function ($parentId, $locked) use ($that) {
-            if (empty($parentId)) {
-                return array();
-            }
-
-            $sql = "SELECT * FROM {$that->getTable()} WHERE parentId = ? AND locked = ?";
-            return $that->getConnection()->fetchAll($sql, array($parentId, $locked));
-        }
-
-        );
-    }
-
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);

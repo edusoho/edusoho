@@ -22,11 +22,6 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
         return $this->getOpenCourseDao()->findCoursesByIds($ids);
     }
 
-    public function findCoursesByParentIdAndLocked($parentId, $locked)
-    {
-        return $this->getOpenCourseDao()->findCoursesByParentIdAndLocked($parentId, $locked);
-    }
-
     public function searchCourses($conditions, $orderBy, $start, $limit)
     {
         $conditions = $this->_prepareCourseConditions($conditions);
@@ -100,6 +95,8 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
     public function publishCourse($id)
     {
+        $course = $this->tryManageOpenCourse($id);
+
         $lessonCount = $this->searchLessonCount(array('courseId' => $id, 'status' => 'published'));
 
         if ($lessonCount < 1) {
@@ -119,7 +116,7 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
             throw $this->createNotFoundException();
         }
 
-        $this->getOpenCourseDao()->updateCourse($id, array('status' => 'closed'));
+        return $this->getOpenCourseDao()->updateCourse($id, array('status' => 'closed'));
     }
 
     public function tryManageOpenCourse($courseId)
@@ -184,12 +181,12 @@ class OpenCourseServiceImpl extends BaseService implements OpenCourseService
 
         $course = $this->getCourse($courseId);
 
-/*if ($course['status'] != 'published') {
-throw $this->createServiceException('不能收藏未发布课程');
-}*/
-
         if (empty($course)) {
             throw $this->createServiceException("该课程不存在,收藏失败!");
+        }
+
+        if ($course['status'] != 'published') {
+            throw $this->createServiceException('不能收藏未发布课程');
         }
 
         $favorite = $this->getFavoriteDao()->getFavoriteByUserIdAndCourseId($user['id'], $course['id'], 'openCourse');
@@ -249,7 +246,7 @@ throw $this->createServiceException('不能收藏未发布课程');
         return $courseFavoriteNum;
     }
 
-    public function getCourseItems($courseId)
+    public function getLessonItems($courseId)
     {
         $lessons = $this->getOpenCourseLessonDao()->findLessonsByCourseId($courseId);
 
@@ -521,7 +518,7 @@ throw $this->createServiceException('不能收藏未发布课程');
             throw $this->createServiceException("课时#{$lessonId}不存在");
         }
 
-        $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
+        return $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'published'));
     }
 
     public function unpublishLesson($courseId, $lessonId)
@@ -534,12 +531,12 @@ throw $this->createServiceException('不能收藏未发布课程');
             throw $this->createServiceException("课时#{$lessonId}不存在");
         }
 
-        $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
+        return $this->getOpenCourseLessonDao()->updateLesson($lesson['id'], array('status' => 'unpublished'));
     }
 
     public function sortCourseItems($courseId, array $itemIds)
     {
-        $items          = $this->getCourseItems($courseId);
+        $items          = $this->getLessonItems($courseId);
         $existedItemIds = array_keys($items);
 
         if (count($itemIds) != count($existedItemIds)) {
@@ -594,7 +591,7 @@ throw $this->createServiceException('不能收藏未发布课程');
         $conditions['startTimeGreaterThan'] = $startTime;
         $conditions['endTimeLessThan']      = $endTime;
 
-        $thisLessons = $this->searchLessons($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $thisLessons = $this->getOpenCourseLessonDao()->findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $lessonId);
 
         if (($length / 60) > 8) {
             return array('error_timeout', '时长不能超过8小时！');

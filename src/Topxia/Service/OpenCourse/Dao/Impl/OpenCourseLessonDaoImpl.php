@@ -100,7 +100,7 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
 
         $result = $this->getConnection()->executeQuery($sql, array($diff, $id));
         $this->clearCached();
-        return $result;
+        return $this->getLesson($id);
     }
 
     public function deleteLesson($id)
@@ -108,6 +108,22 @@ class OpenCourseLessonDaoImpl extends BaseDao implements OpenCourseLessonDao
         $result = $this->getConnection()->delete($this->table, array('id' => $id));
         $this->clearCached();
         return $result;
+    }
+
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId = 0)
+    {
+        $addtionalCondition = ";";
+
+        $params = array($courseId, $startTime, $startTime, $startTime, $endTime);
+
+        if (!empty($excludeLessonId)) {
+            $addtionalCondition = "and id != ? ;";
+            $params[]           = $excludeLessonId;
+        }
+
+        $sql = "SELECT * FROM {$this->table} WHERE courseId = ? AND ((startTime  < ? AND endTime > ?) OR  (startTime between ? AND ?)) ".$addtionalCondition;
+
+        return $this->getConnection()->fetchAll($sql, $params);
     }
 
     public function getLessonMaxSeqByCourseId($courseId)

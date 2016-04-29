@@ -11,8 +11,6 @@ interface OpenCourseService
 
     public function findCoursesByIds(array $ids);
 
-    public function findCoursesByParentIdAndLocked($parentId, $locked);
-
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
     public function searchCourseCount($conditions);
@@ -29,10 +27,18 @@ interface OpenCourseService
 
     public function unFavoriteCourse($courseId);
 
+    public function publishCourse($id);
+
+    public function closeCourse($id);
+
+    public function tryManageOpenCourse($courseId);
+
     /**
      * open_course_lesson
      */
     public function getLesson($id);
+
+    public function getCourseLesson($courseId, $lessonId);
 
     public function findLessonsByIds(array $ids);
 
@@ -50,15 +56,7 @@ interface OpenCourseService
 
     public function deleteLesson($id);
 
-    public function publishCourse($id);
-
-    public function closeCourse($id);
-
-    public function tryManageOpenCourse($courseId);
-
-    public function getCourseItems($courseId);
-
-    public function getCourseLesson($courseId, $lessonId);
+    public function getLessonItems($courseId);
 
     public function unpublishLesson($courseId, $lessonId);
 

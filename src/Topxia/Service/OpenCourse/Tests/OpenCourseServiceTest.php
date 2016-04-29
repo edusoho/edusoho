@@ -84,6 +84,95 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals(2, $course['hitNum']);
     }
 
+    public function testFavoriteCourse()
+    {
+        $course = $this->_createLiveOpenCourse();
+        $this->getOpenCourseService()->updateCourse($course['id'], array('status' => 'published'));
+
+        $courseFavoriteNum = $this->getOpenCourseService()->favoriteCourse($course['id']);
+
+        $this->assertEquals(1, $courseFavoriteNum);
+    }
+
+    public function testUnFavoriteCourse()
+    {
+        $course = $this->_createLiveOpenCourse();
+        $this->getOpenCourseService()->updateCourse($course['id'], array('status' => 'published'));
+
+        $courseFavoriteNum = $this->getOpenCourseService()->favoriteCourse($course['id']);
+
+        $newCourseFavoriteNum = $this->getOpenCourseService()->unFavoriteCourse($course['id']);
+
+        $this->assertEquals(1, $courseFavoriteNum);
+        $this->assertEquals(0, $newCourseFavoriteNum);
+    }
+
+    public function testPublishCourse()
+    {
+        $course = $this->_createOpenCourse();
+
+        $result = $this->getOpenCourseService()->publishCourse($course['id']);
+        $this->assertEquals('请先添加课时并发布！', $result['message']);
+
+        $lessonFields = array(
+            'courseId' => $course['id'],
+            'title'    => $course['title'].'的课时',
+            'type'     => 'open'
+        );
+        $this->getOpenCourseService()->createLesson($lessonFields);
+        $result = $this->getOpenCourseService()->publishCourse($course['id']);
+
+        $this->assertEquals('published', $result['course']['status']);
+    }
+
+    public function testCloseCourse()
+    {
+        $course = $this->_createOpenCourse();
+
+        $lessonFields = array(
+            'courseId' => $course['id'],
+            'title'    => $course['title'].'的课时',
+            'type'     => 'open'
+        );
+        $this->getOpenCourseService()->createLesson($lessonFields);
+        $result = $this->getOpenCourseService()->publishCourse($course['id']);
+
+        $course = $this->getOpenCourseService()->closeCourse($course['id']);
+
+        $this->assertEquals('closed', $course['status']);
+    }
+
+    public function testGetLessonItems()
+    {
+        $course  = $this->_createOpenCourse();
+        $lesson1 = array(
+            'title'       => 'openCourseLesson',
+            'courseId'    => $course['id'],
+            'createdTime' => time(),
+            'userId'      => 1,
+            'status'      => 'published',
+            'type'        => 'open',
+            'seq'         => 2
+        );
+        $lesson1 = $this->getOpenCourseService()->createLesson($lesson1);
+
+        $lesson2 = array(
+            'title'       => 'openCourseLesson',
+            'courseId'    => $course['id'],
+            'createdTime' => time(),
+            'userId'      => 1,
+            'status'      => 'published',
+            'type'        => 'open',
+            'seq'         => 1
+        );
+        $lesson2 = $this->getOpenCourseService()->createLesson($lesson2);
+
+        $lessonsSeq = $this->getOpenCourseService()->getLessonItems($course['id']);
+
+        $this->assertEquals('1', $lessonsSeq["lesson-{$lesson1['id']}"]['seq']);
+        $this->assertEquals('2', $lessonsSeq["lesson-{$lesson2['id']}"]['seq']);
+    }
+
     /**
      * open_course_lesson
      */
@@ -92,6 +181,15 @@ class OpenCourseServiceTest extends BaseTestCase
         $course       = $this->_createLiveOpenCourse();
         $createLesson = $this->_createOpenLiveCourseLesson($course);
         $lesson       = $this->getOpenCourseService()->getLesson($createLesson['id']);
+
+        $this->assertEquals($createLesson['title'], $lesson['title']);
+    }
+
+    public function testGetCourseLesson()
+    {
+        $course       = $this->_createLiveOpenCourse();
+        $createLesson = $this->_createOpenLiveCourseLesson($course);
+        $lesson       = $this->getOpenCourseService()->getLesson($course['id'], $createLesson['id']);
 
         $this->assertEquals($createLesson['title'], $lesson['title']);
     }
@@ -176,6 +274,52 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertNull($lesson);
     }
 
+    public function testWaveCourseLesson()
+    {
+        $course1 = $this->_createLiveOpenCourse();
+        $lesson1 = $this->_createOpenLiveCourseLesson($course1);
+
+        $lesson = $this->getOpenCourseService()->waveCourseLesson($lesson1['id'], 'materialNum', +1);
+
+        $this->assertEquals(1, $lesson['materialNum']);
+    }
+
+    public function testUnpublishLesson()
+    {
+        $course1 = $this->_createLiveOpenCourse();
+        $lesson1 = $this->_createOpenLiveCourseLesson($course1);
+
+        $publishedLesson = $this->getOpenCourseService()->publishLesson($course1['id'], $lesson1['id']);
+        $this->assertEquals('published', $publishedLesson['status']);
+
+        $unPublishedLesson = $this->getOpenCourseService()->unpublishLesson($course1['id'], $lesson1['id']);
+        $this->assertEquals('unpublished', $unPublishedLesson['status']);
+    }
+
+    public function testPublishLesson()
+    {
+        $course1 = $this->_createLiveOpenCourse();
+        $lesson1 = $this->_createOpenLiveCourseLesson($course1);
+
+        $publishedLesson = $this->getOpenCourseService()->publishLesson($course1['id'], $lesson1['id']);
+        $this->assertEquals('published', $publishedLesson['status']);
+    }
+
+    public function testLiveLessonTimeCheck()
+    {
+        $course1 = $this->_createLiveOpenCourse();
+        $lesson1 = $this->_createOpenLiveCourseLesson($course1);
+
+        $result1 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime('+1 day') + 10, 540);
+        $this->assertEquals('error_timeout', $result1[0]);
+
+        $result2 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime('+1 day') - 20, 10);
+        $this->assertEquals('error_occupied', $result2[0]);
+
+        $result3 = $this->getOpenCourseService()->liveLessonTimeCheck($course1['id'], '', strtotime(date('Y-m-d').' 9:00:00'), 10);
+        $this->assertEquals('success', $result3[0]);
+    }
+
     /**
      * open_course_member
      */
@@ -202,6 +346,15 @@ class OpenCourseServiceTest extends BaseTestCase
         $this->assertEquals($courseMember2['mobile'], $member['mobile']);
     }
 
+    public function getCourseMemberByIp($courseId, $ip)
+    {
+        $member1 = $this->_createLoginMember(1);
+
+        $member = $this->getOpenCourseService()->getCourseMemberByIp(1, $member1['ip']);
+
+        $this->assertEquals($member1['ip'], $member['ip']);
+    }
+
     public function testFindMembersByCourseIds()
     {
         $course1 = $this->_createOpenCourse();
@@ -225,6 +378,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $courseMember1 = $this->_createLoginMember($course1['id']);
         $courseMember2 = $this->_createGuestMember($course2['id']);
 
+        $this->getOpenCourseService()->updateMember($courseMember2['id'], array('mobile' => '15869165222', 'isNotified' => 1));
         $membersCount = $this->getOpenCourseService()->searchMemberCount(array('mobile' => '15869165222'));
 
         $this->assertEquals(1, $membersCount);
@@ -238,6 +392,7 @@ class OpenCourseServiceTest extends BaseTestCase
         $courseMember1 = $this->_createLoginMember($course1['id']);
         $courseMember2 = $this->_createGuestMember($course2['id']);
 
+        $this->getOpenCourseService()->updateMember($courseMember2['id'], array('mobile' => '15869165222', 'isNotified' => 1));
         $members = $this->getOpenCourseService()->searchMembers(array('mobile' => '15869165222'), array('createdTime', 'DESC'), 0, 1);
 
         $this->assertCount(1, $members);

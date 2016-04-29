@@ -10,7 +10,7 @@ class OpenCourseLessonManageController extends BaseController
     public function lessonAction(Request $request, $id)
     {
         $course      = $this->getOpenCourseService()->tryManageOpenCourse($id);
-        $courseItems = $this->getOpenCourseService()->getCourseItems($course['id']);
+        $courseItems = $this->getOpenCourseService()->getLessonsItems($course['id']);
         $lessonIds   = ArrayToolkit::column($courseItems, 'id');
         $mediaMap    = array();
 

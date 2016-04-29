@@ -21,4 +21,6 @@ interface OpenCourseLessonDao
     public function waveCourseLesson($id, $field, $diff);
 
     public function deleteLesson($id);
+
+    public function findTimeSlotOccupiedLessonsByCourseId($courseId, $startTime, $endTime, $excludeLessonId);
 }

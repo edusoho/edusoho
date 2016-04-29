@@ -8,8 +8,6 @@ interface OpenCourseDao
 
     public function findCoursesByIds(array $ids);
 
-    public function findCoursesByParentIdAndLocked($parentId, $locked);
-
     public function searchCourses($conditions, $orderBy, $start, $limit);
 
     public function searchCourseCount($conditions);
