@@ -75,17 +75,8 @@ class LoginBindController extends BaseController
     public function chooseAction(Request $request, $type)
     {
         $token      = $request->getSession()->get('oauth_token');
-        $fields     = $request->query->all();
-        $inviteCode = '';
-        $inviteUser = array();
-
-        if (!empty($fields['inviteCode'])) {
-            $inviteUser = $this->getUserService()->getUserByInviteCode($fields['inviteCode']);
-        }
-
-        if ($inviteUser) {
-            $inviteCode = $fields['inviteCode'];
-        }
+        $inviteCode = $request->query->get('inviteCode', '');
+        $inviteUser = $inviteCode ? $inviteUser = $this->getUserService()->getUserByInviteCode($inviteCode) : array();
 
         $client      = $this->createOAuthClient($type);
         $clientMetas = OAuthClientFactory::clients();
@@ -466,20 +457,5 @@ class LoginBindController extends BaseController
     protected function getAuthService()
     {
         return $this->getServiceKernel()->createService('User.AuthService');
-    }
-
-    protected function getUserService()
-    {
-        return $this->getServiceKernel()->createService('User.UserService');
-    }
-
-    protected function getSettingService()
-    {
-        return $this->getServiceKernel()->createService('System.SettingService');
-    }
-
-    protected function getInviteRecordService()
-    {
-        return $this->getServiceKernel()->createService('User.InviteRecordService');
     }
 }
