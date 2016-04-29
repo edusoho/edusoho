@@ -50,7 +50,7 @@ class SearchController extends BaseController
         }
 
         $categoryId = $request->query->get('categoryIds');
-        $fliter     = $request->query->get('fliter');
+        $filter     = $request->query->get('filter');
 
         $conditions = array(
             'status'     => 'published',
@@ -59,11 +59,11 @@ class SearchController extends BaseController
             'parentId'   => 0
         );
 
-        if ($fliter == 'vip') {
+        if ($filter == 'vip') {
             $conditions['vipLevelIds'] = $vipLevelIds;
-        } elseif ($fliter == 'live') {
+        } elseif ($filter == 'live') {
             $conditions['type'] = 'live';
-        } elseif ($fliter == 'free') {
+        } elseif ($filter == 'free') {
             $conditions['price'] = '0.00';
         }
 
@@ -87,7 +87,7 @@ class SearchController extends BaseController
             'isShowVipSearch'     => $isShowVipSearch,
             'currentUserVipLevel' => $currentUserVipLevel,
             'categoryIds'         => $categoryIds,
-            'fliter'              => $fliter,
+            'filter'              => $filter,
             'count'               => $count
         ));
     }
