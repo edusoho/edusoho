@@ -29,48 +29,43 @@
 			</tr>
 		</thead>
 		<tbody>
-			
-				{% for cardInformation in cardInformations %}
-					{% if filter == 'invite' %}
-						{% set user = users[cardInformation.inviteUserId]|default(null) %}
-						{% set card = cards[cardInformation.inviteUserCardId]|default(null) %}
-						{% set coupon = coupons[cardInformation.inviteUserCardId]|default(null) %}
-						{% set order = orders[coupon.orderId]|default(null) %}
-					{% elseif filter == 'invited' %}
-						{% set user = users[cardInformation.invitedUserId]|default(null) %}
-						{% set card = cards[cardInformation.invitedUserCardId]|default(null) %}
-						{% set coupon = coupons[cardInformation.invitedUserCardId]|default(null)
-						 %}
-						{% set order = orders[coupon.orderId]|default(null) %}
-					{% endif %}	
-
-								  
-			  	<tr>
-					<td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
-					<td>{{ card.createdTime|date('Y-m-d H:i:s')}}</td>
-					<td>{{coupon.rate}}元</td>
-					<td>
-						{% if card.status == 'unused' %}
-							未使用
-						{% elseif card.status == "receive" %}
-							已领取
-						{% elseif card.status == "used" %}
-							已使用
-						{% endif %}
-					</td>
-					<td>
-						{% if card.useTime != 0 %}
-          					{{ card.useTime|date('Y-m-d H:i:s') }}
-        				{% else %}
-         					 -
-        				{% endif %}
-        			</td>
-					<td class="text-danger">{{ order.title|default('-') }}</td>					
-				</tr>
-				{% endfor %}
-			{% else %}
-				<tr><td colspan="20"><div class="empty">暂无页面记录</div></td></tr>
-			{% endif %}
+		{% for cardInformation in cardInformations %}
+			{% if filter == 'invite' %}
+				{% set user = users[cardInformation.inviteUserId]|default(null) %}
+				{% set card = cards[cardInformation.inviteUserCardId]|default(null) %}
+				{% set coupon = coupons[cardInformation.inviteUserCardId]|default(null) %}
+				{% set order = orders[coupon.orderId]|default(null) %}
+			{% elseif filter == 'invited' %}
+				{% set user = users[cardInformation.invitedUserId]|default(null) %}
+				{% set card = cards[cardInformation.invitedUserCardId]|default(null) %}
+				{% set coupon = coupons[cardInformation.invitedUserCardId]|default(null) %}
+				{% set order = orders[coupon.orderId]|default(null) %}
+			{% endif %}									  
+			<tr>
+				<td>{% if user %}{{ web_macro.user_link(user) }}{% else %}-{% endif %}</td>
+				<td>{{ card.createdTime|date('Y-m-d H:i:s')}}</td>
+				<td>{{coupon.rate}}元</td>
+				<td>
+					{% if card.status == 'unused' %}
+						未使用
+					{% elseif card.status == "receive" %}
+						已领取
+					{% elseif card.status == "used" %}
+						已使用
+					{% endif %}
+				</td>
+				<td>
+					{% if card.useTime != 0 %}
+          				{{ card.useTime|date('Y-m-d H:i:s') }}
+        			{% else %}
+         				 -
+        			{% endif %}
+        		</td>
+				<td class="text-danger">{{ order.title|default('-') }}</td>					
+			</tr>
+		{% else %}
+			<tr><td colspan="20"><div class="empty">暂无页面记录</div></td></tr>
+		{% endfor %}
 		</tbody>
 	</table>
 
