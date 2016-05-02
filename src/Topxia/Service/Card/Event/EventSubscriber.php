@@ -34,7 +34,7 @@ class EventSubscriber implements EventSubscriberInterface
         $order         = $event->getSubject();
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        if (isset($inviteSetting['coupon_setting']) && $inviteSetting['coupon_setting'] == 1) {
+        if ($inviteSetting['get_coupon_setting'] == 1) {
             if ($order['coinAmount'] > 0 || $order['amount'] > 0) {
                 $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
 
@@ -51,16 +51,19 @@ class EventSubscriber implements EventSubscriberInterface
 
     public function onUserRegister(ServiceEvent $event)
     {
-        $user       = $event->getArgument('user');
-        $inviteUser = $event->getArgument('inviteUser');
+        $userIds      = $event->getSubject();
+        $userId       = $userIds['userId'];
+        $inviteUserId = $userIds['inviteUserId'];
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        if (isset($inviteSetting['coupon_setting']) && $inviteSetting['coupon_setting'] == 0) {
-            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUser['id'], 'pay');
+        if ($inviteSetting['get_coupon_setting'] == 0) {
+            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
+            var_dump($inviteUserId);
+            exit;
 
             if (!empty($inviteCoupon)) {
-                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('inviteUserCardId' => $inviteCoupon['id']));
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($useriD, array('inviteUserCardId' => $inviteCoupon['id']));
             }
         }
     }
@@ -83,5 +86,10 @@ class EventSubscriber implements EventSubscriberInterface
     protected function getSettingService()
     {
         return ServiceKernel::instance()->createService('System.SettingService');
+    }
+
+    protected function getUserService()
+    {
+        return ServiceKernel::instance()->createService('User.UserService');
     }
 }

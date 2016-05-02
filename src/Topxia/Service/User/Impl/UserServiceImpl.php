@@ -490,7 +490,10 @@ class UserServiceImpl extends BaseService implements UserService
                 $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
             }
 
-            $this->getDispatcher()->dispatch('user.register', new ServiceEvent(array('user' => $user, 'inviteUser' => $inviteUser)));
+            $this->dispatchEvent(
+                'user.register',
+                new ServiceEvent(array('userId' => $user['id'], 'inviteUserId' => $inviteUser['id']))
+            );
         }
 
         if (isset($registration['mobile']) && $registration['mobile'] != "" && !SimpleValidator::mobile($registration['mobile'])) {
