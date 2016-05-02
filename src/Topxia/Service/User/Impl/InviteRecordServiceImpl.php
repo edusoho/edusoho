@@ -64,10 +64,12 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
             $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
 
             if (isset($conditions['inviteUserCardIdNotEqual'])) {
-                $conditions['inviteUserId'] = $user['id'];
+                $conditions['inviteUserId'] = $user ? $user['id'] : -1;
             } elseif (isset($conditions['invitedUserCardIdNotEqual'])) {
-                $conditions['invitedUserId'] = $user['id'];
+                $conditions['invitedUserId'] = $user ? $user['id'] : -1;
             }
+
+            unset($conditions['nickname']);
         }
 
         return $conditions;

@@ -63,12 +63,22 @@ class InviteRecordDaoImpl extends BaseDao implements InviteRecordDao
 
     private function _createSearchQueryBuilder($conditions)
     {
+        $tmpConditions = array();
+
+        if (isset($conditions['inviteUserCardIdNotEqual'])) {
+            $tmpConditions['inviteUserCardIdNotEqual'] = $conditions['inviteUserCardIdNotEqual'];
+        }
+
+        if (isset($conditions['invitedUserCardIdNotEqual'])) {
+            $tmpConditions['invitedUserCardIdNotEqual'] = $conditions['invitedUserCardIdNotEqual'];
+        }
+
+        $conditions = array_merge($conditions, $tmpConditions);
+
         return $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, 'invite_record')
-            ->andWhere('inviteUserCardId = :inviteUserCardId')
-            ->andWhere('invitedUserCardId = :invitedUserCardId')
-            ->andWhere('inviteUserId = :inviteUserId)')
-            ->andWhere('invitedUserId = :invitedUserId)')
+            ->andWhere('inviteUserId = :inviteUserId')
+            ->andWhere('invitedUserId = :invitedUserId')
             ->andWhere('inviteUserCardId <> :inviteUserCardIdNotEqual')
             ->andWhere('invitedUserCardId <> :invitedUserCardIdNotEqual')
             ->andWhere('inviteTime >= :startDateTime')
