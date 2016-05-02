@@ -59,11 +59,9 @@ class EventSubscriber implements EventSubscriberInterface
 
         if ($inviteSetting['get_coupon_setting'] == 0) {
             $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
-            var_dump($inviteUserId);
-            exit;
 
             if (!empty($inviteCoupon)) {
-                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($useriD, array('inviteUserCardId' => $inviteCoupon['id']));
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($userId, array('inviteUserCardId' => $inviteCoupon['id']));
             }
         }
     }
