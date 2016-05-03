@@ -632,7 +632,7 @@ class SettingsController extends BaseController
         if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
             return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array());
         }
-
+        $user = $this->getCurrentUser();
         if ($user->isLogin() && empty($user['password'])) { 
             return $this->redirect($this->generateUrl('settings_setup_password')); 
         }
