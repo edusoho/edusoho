@@ -169,7 +169,12 @@ class OrderController extends BaseController
                 $member .= $status[$orders['status']].",";
                 $member .= $orders['title'].",";
                 $member .= "《".$result['title']."》".",";
-                $member .= $result['price'].",";
+                if (isset($result['originPrice'])) {
+
+                    $member .= $result['originPrice'].",";
+                } else {
+                    $member .= $result['price'].",";
+                }
                 if ($orders['discountId'] != 0) {
                     if ($orders['discount'] > $course['price']) {
                         $member .= $course['price'].",";
@@ -178,7 +183,7 @@ class OrderController extends BaseController
                     }
                     
                 } else {
-                    $column .= '0'.",";
+                    $member .= '0'.",";
                 }
                 $member .= $orders['totalPrice'].",";
                 $member .= $orders['couponDiscount'].",";
