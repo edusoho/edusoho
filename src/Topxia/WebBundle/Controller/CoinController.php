@@ -258,8 +258,7 @@ class CoinController extends BaseController
 
     public function writeInvitecodeAction(Request $request)
     {
-        $user          = $this->getCurrentUser();
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $user = $this->getCurrentUser();
 
         if ($request->getMethod() == 'POST') {
             $fields     = $request->request->all();
@@ -294,9 +293,7 @@ class CoinController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        return $this->render('TopxiaWebBundle:Coin:write-invitecode-modal.html.twig', array(
-            'couponSetting' => $inviteSetting['get_coupon_setting']
-        ));
+        return $this->render('TopxiaWebBundle:Coin:write-invitecode-modal.html.twig');
     }
 
     public function receiveCouponAction(Request $request)
@@ -361,9 +358,11 @@ class CoinController extends BaseController
         ));
     }
 
-    private function sendInviteUserCard($getCouponSetting, $inviteUserId, $invitedUserId)
+    private function sendInviteUserCard($inviteUserId, $invitedUserId)
     {
-        if ($getCouponSetting == 0) {
+        $inviteSetting = $this->getSettingService()->get('invite', array());
+
+        if ($inviteSetting['get_coupon_setting'] == 0) {
             $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
 
             if (!empty($inviteCoupon)) {
