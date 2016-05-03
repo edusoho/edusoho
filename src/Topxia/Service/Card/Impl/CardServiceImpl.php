@@ -73,10 +73,10 @@ class CardServiceImpl extends BaseService implements CardService
         return $cardsDetail;
     }
 
-    public function findCardsByIds($ids)
+    public function findCardsByCardIds($cardIds)
     {
-        $cards = $this->getCardDao()->findCardsByIds($ids);
-        return ArrayToolkit::index($cards, 'id');
+        $cards = $this->getCardDao()->findCardsByCardIds($cardIds);
+        return ArrayToolkit::index($cards, 'cardId');
     }
 
     public function sortArrayByField(array $array, $field)

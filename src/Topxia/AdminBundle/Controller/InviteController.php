@@ -128,13 +128,12 @@ class InviteController extends BaseController
             $cardIds = ArrayToolkit::column($cardInformations, 'invitedUserCardId');
         }
 
-        $cards   = $this->getCardService()->findCardsByIds($cardIds);
+        $cards   = $this->getCardService()->findCardsByCardIds($cardIds);
         $coupons = $this->getCouponService()->findCouponsByIds(ArrayToolkit::column($cards, 'cardId'));
 
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($cards, 'userId'));
-        $cards = ArrayToolkit::index($cards, 'cardId');
         return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
             'cardInformations' => $cardInformations,
             'filter'           => $filter,

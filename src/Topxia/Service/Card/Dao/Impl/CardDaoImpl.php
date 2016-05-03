@@ -56,15 +56,15 @@ class CardDaoImpl extends BaseDao implements CardDao
         return $this->getConnection()->fetchAll($sql, array($userId, $cardType)) ?: array();
     }
 
-    public function findCardsByIds($ids)
+    public function findCardsByCardIds($cardIds)
     {
-        if (empty($ids)) {
+        if (empty($cardIds)) {
             return array();
         }
 
-        $marks = str_repeat('?,', count($ids) - 1).'?';
-        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
-        return $this->getConnection()->fetchAll($sql, $ids);
+        $marks = str_repeat('?,', count($cardIds) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE cardId IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $cardIds);
     }
 
     public function searchCards($conditions, $orderBy, $start, $limit)
