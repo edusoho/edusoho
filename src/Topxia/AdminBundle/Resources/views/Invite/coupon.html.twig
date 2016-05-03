@@ -5,7 +5,7 @@
 {% set script_controller = 'invite/coupon.js' %}
 
 {% block main %}
-    {% include 'TopxiaAdminBundle:invite:tab-data.html.twig' %}
+    {% include 'TopxiaAdminBundle:Invite:tab-data.html.twig' %}
     {% if filter == 'invited' %}
 	<form  class="form-inline well well-sm" action="{{path('admin_invite_coupon', {filter: filter})}}" method="get" novalidate>
 	{% elseif filter == 'invite' %}
