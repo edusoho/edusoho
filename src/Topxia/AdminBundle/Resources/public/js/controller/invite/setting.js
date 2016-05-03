@@ -28,7 +28,6 @@ define(function(require, exports, module) {
             rule:'positive_integer'
         });
 
-
     };
 
 });
