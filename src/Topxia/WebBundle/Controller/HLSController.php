@@ -13,15 +13,10 @@ class HLSController extends BaseController
         $levelParam = $request->query->get('level', "");
         $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
         $fromApi    = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
-        $clientIp = $request->getClientIp();
+        $clientIp   = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
-        }
-
-        //强制覆盖
-        if ($hideBeginning) {
-            $token['data']['hideBeginning'] = true;
         }
 
         $dataId = is_array($token['data']) ? $token['data']['id'] : $token['data'];
@@ -87,9 +82,9 @@ class HLSController extends BaseController
 
         if ($fromApi) {
             $playlist = $api->get('/hls/playlist', array(
-                'streams' => $streams, 
+                'streams'   => $streams,
                 'qualities' => $qualities,
-                'clientIp' => $clientIp
+                'clientIp'  => $clientIp
             ));
 
             if (empty($playlist['playlist'])) {
@@ -102,9 +97,9 @@ class HLSController extends BaseController
             ));
         } else {
             $playlist = $api->get('/hls/playlist/json', array(
-                'streams' => $streams, 
+                'streams'   => $streams,
                 'qualities' => $qualities,
-                'clientIp' => $clientIp
+                'clientIp'  => $clientIp
             ));
 
             return $this->createJsonResponse($playlist);
@@ -124,7 +119,7 @@ class HLSController extends BaseController
 
     public function streamAction(Request $request, $id, $level, $token)
     {
-        $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
         $clientIp = $request->getClientIp();
 
         if (empty($token)) {
@@ -147,9 +142,9 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params           = array();
-        $params['key']    = $file['metas2'][$level]['key'];
-        $params['fileId'] = $file['id'];
+        $params             = array();
+        $params['key']      = $file['metas2'][$level]['key'];
+        $params['fileId']   = $file['id'];
         $params['clientIp'] = $clientIp;
 
         if (!empty($token['data']['watchTimeLimit'])) {
