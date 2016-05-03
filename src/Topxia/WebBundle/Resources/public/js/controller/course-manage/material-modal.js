@@ -1,11 +1,9 @@
 define(function(require, exports, module) {
 
     var Notify = require('common/bootstrap-notify');
-    var Validator = require('bootstrap.validator');
     var FileChooser = require('../widget/file/file-chooser3');
 
     exports.run = function() {
-
         var $form = $("#course-material-form");
 
         var materialChooser = new FileChooser({

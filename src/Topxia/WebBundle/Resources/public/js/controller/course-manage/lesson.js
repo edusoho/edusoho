@@ -184,6 +184,27 @@ define(function(require, exports, module) {
             $(this).find('.dropdown-menu-more').show();
         });
 
+        asyncLoadFiles();
+
     };
+
+    function asyncLoadFiles()
+    {
+        var url=$('.lesson-manage-panel').data('file-status-url');
+        $.get(url,'',function(data){
+            if(!data||data.length==0){
+                return ;
+            }
+            
+            for(var i=0;i<data.length;i++){
+              var file=data[i];
+              if(file.convertStatus=='waiting'||file.convertStatus=='doing'){
+                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
+              }else if(file.convertStatus=='error'){
+                $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
+              }
+            }
+        });
+    }
 
 });

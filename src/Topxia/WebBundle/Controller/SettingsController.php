@@ -21,7 +21,7 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $profile = $request->request->get('profile');
-
+            
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->setFlashMessage('success', '基础信息保存成功。');
@@ -39,7 +39,6 @@ class SettingsController extends BaseController
         }
 
         $fromCourse = $request->query->get('fromCourse');
-
         return $this->render('TopxiaWebBundle:Settings:profile.html.twig', array(
             'profile'    => $profile,
             'fields'     => $fields,
@@ -51,22 +50,32 @@ class SettingsController extends BaseController
     public function approvalSubmitAction(Request $request)
     {
         $user = $this->getCurrentUser();
-
+        $profile = $this->getUserService()->getUserProfile($user['id']);
+        $profile['idcard'] = substr_replace($profile['idcard'],'************',4,12);
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
-
+            if(abs(filesize($faceImg))>2*1024*1024||abs(filesize($backImg))>2*1024*1024){
+                $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
+                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                        'profile' => $profile
+                    ));
+            }
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
-                return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                // return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                 $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                        'profile' => $profile
+                    ));
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
             $this->getUserService()->applyUserApproval($user['id'], $request->request->all(), $faceImg, $backImg, $directory);
-            $this->setFlashMessage('success', '实名认证提交成功！');
-            return $this->redirect($this->generateUrl('settings'));
+            // $this->setFlashMessage('success', '实名认证提交成功！');
+            return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
-
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+            'profile' => $profile
         ));
     }
 
@@ -784,14 +793,29 @@ class SettingsController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
 
         try {
-            $this->sendEmail(
-                $user['email'],
-                "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
-                $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
+
+            $normalMail = array(
+                'to'    => $user['email'],
+                'title' => "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
+                'body'  => $this->renderView('TopxiaWebBundle:Settings:email-verify.txt.twig', array(
                     'user'  => $user,
                     'token' => $token
                 ))
             );
+
+            $cloudMail = array(
+                'to'        => $user['email'],
+                'template'  => 'email_reset_email',
+                'verifyurl' => $this->generateUrl('auth_email_confirm', array(
+                    'user'  => $user,
+                    'token' => $token
+                ), true),
+                'nickname'  => $user['nickname']
+            );
+
+            $mail = new Mail($normalMail, $cloudMail);
+
+            $this->sendEmail($mail);
             $this->setFlashMessage('success', "请到邮箱{$user['email']}中接收验证邮件，并点击邮件中的链接完成验证。");
         } catch (\Exception $e) {
             $this->getLogService()->error('setting', 'email-verify', '邮箱验证邮件发送失败:'.$e->getMessage());

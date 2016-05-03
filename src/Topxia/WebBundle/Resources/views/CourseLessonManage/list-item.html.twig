@@ -1,4 +1,4 @@
-<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}"style="word-break: break-all;" >
+<li class="item-lesson clearfix" id="lesson-{{ lesson.id }}" data-file-id="{{lesson.mediaId}}" data-lesson-type="{{lesson.type}}" style="word-break: break-all;" >
   <div class="item-line"></div>
   <div class="item-content">
     {% set mediaStatus = lesson.mediaStatus|default(null) %}
@@ -36,10 +36,11 @@
     {% else %}
       <i class="fa fa-file-powerpoint-o text-success"></i>
     {% endif %}
+
     {% if setting('course.custom_chapter_enabled')|default(true) %}
       课时 <span class="number">{{ lesson.number }}</span>：
     {% endif %}
-    
+
     {% if lesson.free == 1 %}
       <span class="label label-success">{{'免费'|trans}}</span>
     {% elseif course.tryLookable and lesson.type == 'video' and file.storage|default('') == 'cloud' %}
@@ -67,6 +68,7 @@
       </small>
     {% endif %}
 
+    <span data-role="mediaStatus"></span>
     {% if lesson.type != 'testpaper' %}
       {% set mediaTypeName = lesson.type == 'video' ? '视频'|trans : (lesson.type == 'audio' ? '音频'|trans : '文件'|trans) %}
       {% if mediaStatus == 'waiting' %}
@@ -124,9 +126,8 @@
           <li class="divider"></li>
         {% endif %}
 
-        {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
-          {% if  file.convertStatus|default(null) == 'success' %}
-          <!-- file.createdUserId|default(null) == app.user.id and -->
+        {% if lesson.type == 'video' and mediaStatus == 'success' and lesson.type  and setting('storage.upload_mode') == 'cloud' %}
+          {% if  file.storage|default(null) == 'cloud' %}
           <li>
             <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
             <span class="glyphicon glyphicon-list prs"></span>弹题管理

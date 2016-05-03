@@ -14,7 +14,7 @@ class OrderServiceTest extends BaseTestCase
     public function testCreateOrderNoLogin()
     {
         $order = array('');
-        $this->getOrderService()->createOrder($order);
+        $this->getCourseOrderService()->createOrder($order);
     }
 
     /**
@@ -25,7 +25,7 @@ class OrderServiceTest extends BaseTestCase
         $this->normalLogin();
 
         $order = array('');
-        $this->getOrderService()->createOrder($order);
+        $this->getCourseOrderService()->createOrder($order);
     }
 
     /**
@@ -36,7 +36,7 @@ class OrderServiceTest extends BaseTestCase
      
         $this->normalLogin();
         $order = array('targetId'>=1,'payment'=>'alipay');
-        $this->getOrderService()->createOrder($order);
+        $this->getCourseOrderService()->createOrder($order);
     }
 
     public function testCreateOrder()
@@ -56,7 +56,7 @@ class OrderServiceTest extends BaseTestCase
             'coinRate' => 1,
             'coinAmount' => 0
         );
-        $createdOrder = $this->getOrderService()->createOrder($order);
+        $createdOrder = $this->getCourseOrderService()->createOrder($order);
         $this->assertEquals($createdOrder['targetId'], $order['targetId']);
         $this->assertEquals($createdOrder['payment'], $order['payment']);
         $this->assertEquals($createdOrder['totalPrice'], $order['totalPrice']);
@@ -83,9 +83,9 @@ class OrderServiceTest extends BaseTestCase
             'coinRate' => 1,
             'coinAmount' => 0
         );
-        $createdOrder = $this->getOrderService()->createOrder($order);
+        $createdOrder = $this->getCourseOrderService()->createOrder($order);
 
-        $updatedOrder = $this->getOrderService()->updateOrder($createdOrder['id'],array(
+        $updatedOrder = $this->getCourseOrderService()->updateOrder($createdOrder['id'],array(
             'payment' => 'alipay',
             'totalPrice' => 12,
             'priceType' =>'RMB',
@@ -104,6 +104,29 @@ class OrderServiceTest extends BaseTestCase
 
     }
 
+    public function testCancelOrder()
+    {
+        $this->teacherLogin();
+        $course1 = $this->getCourseService()->createCourse(array('title' => 'test course 1'));
+
+        $this->getCourseService()->publishCourse($course1['id']);
+
+        $this->normalLogin();
+        $order = array(
+            'targetId' => $course1['id'],
+            'payment' => 'none',
+            'totalPrice' => 10,
+            'priceType' =>'RMB',
+            'coinRate' => 1,
+            'coinAmount' => 1
+        );
+        $createdOrder = $this->getCourseOrderService()->createOrder($order);
+        $this->getCourseOrderService()->cancelOrder($createdOrder['id']);
+
+        $order = $this->getOrderService()->getOrder($createdOrder['id']);
+
+        $this->assertEquals('cancelled', $order['status']);
+    }
 
 
 
@@ -130,9 +153,14 @@ class OrderServiceTest extends BaseTestCase
         return $this->getServiceKernel()->createService('Course.CourseService');
     }
 
-    protected function getOrderService()
+    protected function getCourseOrderService()
     {
         return $this->getServiceKernel()->createService('Course.CourseOrderService');
+    }
+
+    protected function getOrderService()
+    {
+        return $this->getServiceKernel()->createService('Order.OrderService');
     }
 
     private function createNormalUser()
