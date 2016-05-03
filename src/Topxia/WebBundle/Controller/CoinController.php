@@ -282,7 +282,7 @@ class CoinController extends BaseController
                         if (!empty($inviteCoupon)) {
                             $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
                             $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
-                            $this->sendInviteUserCard($inviteSetting['get_coupon_setting'], $promoteUser['id'], $user['id']);
+                            $this->sendInviteUserCard($promoteUser['id'], $user['id']);
                         }
                     }
                 } else {
@@ -360,7 +360,7 @@ class CoinController extends BaseController
 
     private function sendInviteUserCard($inviteUserId, $invitedUserId)
     {
-        $inviteSetting = $this->getSettingService()->get('invite', array());
+        $inviteSetting = $this->setting('invite');
 
         if ($inviteSetting['get_coupon_setting'] == 0) {
             $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
