@@ -6,9 +6,6 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $modal = $("#message-create-form").parents('.modal');
 
-        $.ajax({ 
-          async:false 
-        });
         var validator = new Validator({
             element: '#message-create-form',
             autoSubmit: false,
