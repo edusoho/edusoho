@@ -526,6 +526,7 @@ CREATE TABLE `file` (
   `size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '文件状态',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件上传时间',
+  `uploadFileId` INT(10) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
