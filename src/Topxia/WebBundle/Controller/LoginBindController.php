@@ -102,7 +102,6 @@ class LoginBindController extends BaseController
 
         $name = $this->mateName($type);
         return $this->render('TopxiaWebBundle:Login:bind-choose.html.twig', array(
-            'inviteCode'     => $inviteCode,
             'inviteUser'     => $inviteUser,
             'oauthUser'      => $oauthUser,
             'type'           => $type,

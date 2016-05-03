@@ -54,13 +54,12 @@ class LoginController extends BaseController
         return $this->createJsonResponse($response);
     }
 
-    public function oauth2LoginsBlockAction($targetPath, $inviteCode = '', $displayName = true)
+    public function oauth2LoginsBlockAction($targetPath, $displayName = true)
     {
         $clients = OAuthClientFactory::clients();
         return $this->render('TopxiaWebBundle:Login:oauth2-logins-block.html.twig', array(
             'clients'     => $clients,
             'targetPath'  => $targetPath,
-            'inviteCode'  => $inviteCode,
             'displayName' => $displayName
         ));
     }
