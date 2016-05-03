@@ -18,6 +18,8 @@ interface CardDao
 
     public function findCardsByUserIdAndCardType($userId, $cardType);
 
+    public function findCardsByIds($ids);
+
     public function searchCards($conditions, $orderBy, $start, $limit);
 
 }

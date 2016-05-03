@@ -73,6 +73,12 @@ class CardServiceImpl extends BaseService implements CardService
         return $cardsDetail;
     }
 
+    public function findCardsByIds($ids)
+    {
+        $cards = $this->getCardDao()->findCardsByIds($ids);
+        return ArrayToolkit::index($cards, 'id');
+    }
+
     public function sortArrayByField(array $array, $field)
     {
         uasort($array, function ($a, $b) use ($field) {
@@ -125,11 +131,10 @@ class CardServiceImpl extends BaseService implements CardService
             unset($conditions['startDateTime']);
         }
 
-         if (isset($conditions['endDateTime'])) {
+        if (isset($conditions['endDateTime'])) {
             $conditions['reciveEndTime'] = $conditions['endDateTime'];
             unset($conditions['endDateTime']);
         }
-
 
         return $conditions;
     }

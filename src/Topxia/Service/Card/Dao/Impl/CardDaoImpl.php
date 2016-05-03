@@ -56,29 +56,40 @@ class CardDaoImpl extends BaseDao implements CardDao
         return $this->getConnection()->fetchAll($sql, array($userId, $cardType)) ?: array();
     }
 
+    public function findCardsByIds($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+
+        $marks = str_repeat('?,', count($ids) - 1).'?';
+        $sql   = "SELECT * FROM {$this->table} WHERE id IN ({$marks});";
+        return $this->getConnection()->fetchAll($sql, $ids);
+    }
+
     public function searchCards($conditions, $orderBy, $start, $limit)
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
     protected function _createSearchQueryBuilder($conditions)
     {
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'cardId')
-                        ->andWhere('cardType = :cardType')
-                        ->andWhere('deadline = :deadline')
-                        ->andWhere('status = :status')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('useTime >= :startDateTime')
-                        ->andWhere('useTime < :endDateTime')
-                        ->andWhere('createdTime >= :reciveStartTime')
-                        ->andWhere('createdTime < :reciveEndTime');
+            ->from($this->table, 'cardId')
+            ->andWhere('cardType = :cardType')
+            ->andWhere('deadline = :deadline')
+            ->andWhere('status = :status')
+            ->andWhere('userId = :userId')
+            ->andWhere('useTime >= :startDateTime')
+            ->andWhere('useTime < :endDateTime')
+            ->andWhere('createdTime >= :reciveStartTime')
+            ->andWhere('createdTime < :reciveEndTime');
 
         return $builder;
     }

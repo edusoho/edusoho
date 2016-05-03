@@ -138,13 +138,7 @@ class InviteController extends BaseController
             $cardIds = ArrayToolkit::column($cardInformations, 'invitedUserCardId');
         }
 
-        $cards = $this->getCardService()->searchCards(
-            array('cardIds' => $cardIds),
-            array('useTime', 'DESC'),
-            0,
-            count($cardIds)
-        );
-
+        $cards   = $this->getCardService()->findCardsByIds($cardIds);
         $coupons = $this->getCouponService()->findCouponsByIds(ArrayToolkit::column($cards, 'cardId'));
 
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));

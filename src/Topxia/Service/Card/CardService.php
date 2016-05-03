@@ -24,4 +24,6 @@ interface CardService
 
     public function findCardDetailsByCardTypeAndCardIds($cardType, $ids);
 
+    public function findCardsByIds($ids);
+
 }
