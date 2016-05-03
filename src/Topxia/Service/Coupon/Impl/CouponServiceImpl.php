@@ -35,6 +35,13 @@ class CouponServiceImpl extends BaseService implements CouponService
         return ArrayToolkit::index($coupons, 'id');
     }
 
+    public function findCouponsByIds(array $ids)
+    {
+        $coupons = $this->getCouponDao()->findCouponsByIds($ids);
+
+        return ArrayToolkit::index($coupons, 'id');
+    }
+
     public function searchCoupons(array $conditions, $orderBy, $start, $limit)
     {
         $coupons = $this->getCouponDao()->searchCoupons($conditions, $orderBy, $start, $limit);

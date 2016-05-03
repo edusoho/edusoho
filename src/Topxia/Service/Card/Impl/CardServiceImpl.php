@@ -44,10 +44,11 @@ class CardServiceImpl extends BaseService implements CardService
         return $this->getCardDao()->updateCardByCardIdAndCardType($cardId, $cardType, $fields);
     }
 
-    // public function searchCards($conditions,$sort,$start,$limit)
-    // {
-
-    // }
+    public function searchCards($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareRecordConditions($conditions);
+        return $this->getCardDao()->searchCards($conditions, $orderBy, $start, $limit);
+    }
 
     public function findCardsByUserIdAndCardType($userId, $cardType)
     {
@@ -70,6 +71,12 @@ class CardServiceImpl extends BaseService implements CardService
         $limit       = count($ids);
         $cardsDetail = $processor->getCardDetailsByCardIds($ids);
         return $cardsDetail;
+    }
+
+    public function findCardsByCardIds($cardIds)
+    {
+        $cards = $this->getCardDao()->findCardsByCardIds($cardIds);
+        return ArrayToolkit::index($cards, 'cardId');
     }
 
     public function sortArrayByField(array $array, $field)
@@ -101,6 +108,37 @@ class CardServiceImpl extends BaseService implements CardService
         return $array;
     }
 
+    private function _prepareRecordConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+
+        );
+
+        if (isset($conditions['nickname']) && !empty($conditions['nickname'])) {
+            $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
+            $conditions['userId'] = $user ? $user['id'] : -1;
+            unset($conditions['creator']);
+        }
+
+        if (isset($conditions['startDateTime'])) {
+            $conditions['reciveStartTime'] = $conditions['startDateTime'];
+            unset($conditions['startDateTime']);
+        }
+
+        if (isset($conditions['endDateTime'])) {
+            $conditions['reciveEndTime'] = $conditions['endDateTime'];
+            unset($conditions['endDateTime']);
+        }
+
+        return $conditions;
+    }
+
     protected function getCardDao()
     {
         return $this->createDao('Card.CardDao');
@@ -109,5 +147,10 @@ class CardServiceImpl extends BaseService implements CardService
     protected function getDetailProcessor($cardType)
     {
         return DetailFactory::create($cardType);
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }
