@@ -274,12 +274,15 @@ class CourseTestpaperManageController extends BaseController
         $hasEssay   = false;
         $scoreTotal = 0;
 
+
         foreach ($items as $key => $item) {
             if ($item['questionType'] == 'essay') {
                 $hasEssay = true;
             }
 
-            $scoreTotal = $scoreTotal + $item['score'];
+            if ($item['questionType'] != 'material') {
+                $scoreTotal = $scoreTotal + $item['score'];
+            }
 
             if ($item['parentId'] > 0) {
                 $subItems[$item['parentId']][] = $item;
