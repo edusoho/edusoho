@@ -13,17 +13,14 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                
-                if (typeof($form.find('button').attr("disabled")) == 'undefined') {
-                    $.post($form.attr('action'), $form.serialize(), function(html) {
-                        $modal.modal('hide');
-                        Notify.success('私信发送成功');
-                    }).error(function(){
-                        $modal.modal('hide');
-                        Notify.danger('私信发送失败，请重试！');
-                    });
-                }
-                $form.find('button').attr("disabled",true);
+                $form.find('button').button("loading");
+                $.post($form.attr('action'), $form.serialize(), function(html) {
+                    $modal.modal('hide');
+                    Notify.success('私信发送成功');
+                }).error(function(){
+                    $modal.modal('hide');
+                    Notify.danger('私信发送失败，请重试！');
+                });
             }
 
         });
