@@ -84,7 +84,7 @@ class CoinController extends BaseController
         $conditions['type'] = 'outflow';
         $amountOutflow      = $this->getCashService()->analysisAmount($conditions);
 
-        // $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
+// $amount=$this->getOrderService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         // $amount+=$this->getCashOrdersService()->analysisAmount(array('userId'=>$user->id,'status'=>'paid'));
         return $this->render('TopxiaWebBundle:Coin:index.html.twig', array(
             'account'       => $account,
@@ -258,7 +258,8 @@ class CoinController extends BaseController
 
     public function writeInvitecodeAction(Request $request)
     {
-        $user = $this->getCurrentUser();
+        $user          = $this->getCurrentUser();
+        $inviteSetting = $this->getSettingService()->get('invite', array());
 
         if ($request->getMethod() == 'POST') {
             $fields     = $request->request->all();
@@ -282,6 +283,7 @@ class CoinController extends BaseController
                         if (!empty($inviteCoupon)) {
                             $card = $this->getCardService()->getCardByCardId($inviteCoupon['id']);
                             $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($user['id'], array('invitedUserCardId' => $card['cardId']));
+                            $this->sendInviteUserCard($inviteSetting['get_coupon_setting'], $promoteUser['id'], $user['id']);
                         }
                     }
                 } else {
@@ -292,7 +294,9 @@ class CoinController extends BaseController
             return $this->createJsonResponse($response);
         }
 
-        return $this->render('TopxiaWebBundle:Coin:write-invitecode-modal.html.twig');
+        return $this->render('TopxiaWebBundle:Coin:write-invitecode-modal.html.twig', array(
+            'couponSetting' => $inviteSetting['get_coupon_setting']
+        ));
     }
 
     public function receiveCouponAction(Request $request)
@@ -355,6 +359,17 @@ class CoinController extends BaseController
             'content'     => $content,
             'coinSetting' => $coinSetting
         ));
+    }
+
+    private function sendInviteUserCard($getCouponSetting, $inviteUserId, $invitedUserId)
+    {
+        if ($getCouponSetting == 0) {
+            $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
+
+            if (!empty($inviteCoupon)) {
+                $this->getInviteRecordService()->addInviteRewardRecordToInvitedUser($invitedUserId, array('inviteUserCardId' => $inviteCoupon['id']));
+            }
+        }
     }
 
     protected function caculate($amount, $canChange, $data)
