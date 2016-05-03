@@ -109,18 +109,7 @@ class InviteController extends BaseController
             $conditions['invitedUserCardIdNotEqual'] = 0;
         }
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getInviteRecordService()->searchRecordCount($conditions),
-            20
-        );
-
-        $cardInformations = $this->getInviteRecordService()->searchRecords(
-            $conditions,
-            array('id', 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $cardInformations = $this->getCardInformations($request, $conditions);
 
         if ($filter == 'invite') {
             $cardIds = ArrayToolkit::column($cardInformations, 'inviteUserCardId');
@@ -156,17 +145,7 @@ class InviteController extends BaseController
         list($coupons, $orders, $users)  = $this->getCardsData($cards);
         $conditions                      = array();
         $conditions['inviteUserCardIds'] = empty($cards) ? array(-1) : ArrayToolkit::column($cards, 'cardId');
-        $paginator                       = new Paginator(
-            $this->get('request'),
-            $this->getInviteRecordService()->searchRecordCount($conditions),
-            20
-        );
-        $cardInformations = $this->getInviteRecordService()->searchRecords(
-            $conditions,
-            array('id', 'ASC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+        $cardInformations                = $this->getCardInformations($request, $conditions);
         return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
             'cardInformations' => $cardInformations,
             'filter'           => 'invite',
@@ -204,6 +183,24 @@ class InviteController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($cards, 'userId'));
         return array($coupons, $orders, $users);
+    }
+
+    private function getCardInformations($request, $conditions)
+    {
+        $paginator = new Paginator(
+            $request,
+            $this->getInviteRecordService()->searchRecordCount($conditions),
+            20
+        );
+
+        $cardInformations = $this->getInviteRecordService()->searchRecords(
+            $conditions,
+            array('id', 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        return $cardInformations;
     }
 
     protected function getInviteRecordService()
