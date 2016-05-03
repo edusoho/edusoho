@@ -480,11 +480,15 @@ class UserServiceImpl extends BaseService implements UserService
         return base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
     }
 
+    protected function validateNickname($nickname) {
+        if (!SimpleValidator::nickname($nickname)) {
+            throw $this->createServiceException('Invalid nickname: ' . $nickname);
+        }
+    }
+
     public function register($registration, $type = 'default')
     {
-        if (!SimpleValidator::nickname($registration['nickname'])) {
-            throw $this->createServiceException('nickname error!');
-        }
+        $this->validateNickname($registration['nickname']);
 
         if (!$this->isNicknameAvaliable($registration['nickname'])) {
             throw $this->createServiceException('昵称已存在');
