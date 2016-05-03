@@ -340,8 +340,8 @@ class CourseManageController extends BaseController
             $column .= $orders['title'].",";
             $column .= "《".$course['title']."》".",";
             $column .= $course['price'].",";
-            if ($orders['discount'] > $result['price']) {
-                $column .= $result['price'].",";
+            if ($orders['discount'] > $course['price']) {
+                $column .= $course['price'].",";
             } else {
                 $column .= $orders['discount'].",";
             }
