@@ -146,13 +146,11 @@ class InviteController extends BaseController
 
     public function queryInviteCouponAction(Request $request)
     {
-        $conditions = array(
-            'cardType' => 'coupon'
-        );
-        $fileds     = $request->query->all();
-        $conditions = $this->_prepareQueryCondition($fileds);
-
-        $cards = $this->getCardService()->searchCards(
+        $conditions             = array();
+        $fileds                 = $request->query->all();
+        $conditions             = $this->_prepareQueryCondition($fileds);
+        $conditions['cardType'] = 'coupon';
+        $cards                  = $this->getCardService()->searchCards(
             $conditions,
             array('id', 'ASC'),
             0,
