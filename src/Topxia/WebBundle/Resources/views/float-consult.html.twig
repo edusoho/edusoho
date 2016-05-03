@@ -57,7 +57,7 @@
           {{qqgroup.name}}
            <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
 
-            {% if  qqgroup.url|default(true) %}
+            {% if  qqgroup.url|default('') %}
               <p class="text-overflow">
                 {{ qqgroup.url|raw }}
               </p>
