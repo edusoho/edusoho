@@ -601,6 +601,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 		$site = $this->controller->getSettingService()->get('site', array());
 
 		if ($user != null) {
+			if ($user['locked']) {
+				return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
+			}
 			$userProfile = $this->controller->getUserService()->getUserProfile($token['userId']);
 			$userProfile = $this->filterUserProfile($userProfile);
 			$user = array_merge($user, $userProfile);
@@ -642,6 +645,9 @@ class UserProcessorImpl extends BaseProcessor implements UserProcessor {
 			return $this->createErrorResponse('password_error', '帐号密码不正确');
 		}
 
+		if ($user['locked']) {
+			return $this->createErrorResponse('user_locked', '用户已锁定，请联系网校管理员');
+		}
 		$token = $this->controller->createToken($user, $this->request);
 
 		$userProfile = $this->controller->getUserService()->getUserProfile($user['id']);

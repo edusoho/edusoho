@@ -332,6 +332,13 @@ passedStatus:
     passed: 合格
     unpassed: 不合格
 
+processStatus:
+    none: 未转码
+    waiting: 转码中
+    processing: 转码中
+    ok: 转码成功
+    error: 转码失败
+
 state:
     banned: 禁用
     replaced: 屏蔽
