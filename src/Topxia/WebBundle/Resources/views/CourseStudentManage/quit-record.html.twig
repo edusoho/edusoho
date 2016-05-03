@@ -1,0 +1,47 @@
+{% extends 'TopxiaWebBundle:CourseStudentManage:index.html.twig' %}
+
+{% block title %}退出记录 - {{ parent() }}{% endblock %}
+
+{% set submenu = 'record' %}
+
+{% set script_controller = 'course-manage/students' %}
+
+{% block maincontent %}
+  <form class="form-inline well well-sm " action="" method="get" novalidate>
+    <div class="form-group col-md-7">
+      <input class="form-control " style="width:45%" type="text" placeholder="请输入用户名/邮箱/手机号" name="keyword" value="{{ app.request.get('keyword') }}">
+
+      <button class="btn btn-primary">搜索</button>
+    </div>
+    <div class="clearfix"></div>
+  </form>
+  
+	<table class="table table-striped" id="quit-record-list">
+    <thead>
+      <tr>
+        <th>学员名称</th>
+        <th width="30%">退出原因 </th>
+        <th>退出日期</th>
+        <th>退款状态</th>
+        <th>退款金额  
+          <span class="glyphicon glyphicon-question-sign text-muted" id="refund-coin-tips" data-toggle="tooltip" data-placement="bottom" href="javascript:" title="" data-original-title=""></span>
+          <div id="refund-coin-tips-html" style="display:none;">
+            <div style="width:150px;">
+              <span style="color:blue;">1.</span>仅显示通过现金购买加入的学员退款记录<br><br>
+              <span style="color:blue;">2.</span>班级课程退款情况请在班级管理中查看<br>
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for refund in refunds %}        
+        {% include 'TopxiaWebBundle:CourseStudentManage:quit-record-tr.html.twig' %}
+      {% else %}
+        <tr class="empty"><td colspan="20">无学员记录</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {{ web_macro.paginator(paginator) }}
+{% endblock %}

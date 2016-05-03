@@ -192,6 +192,7 @@ class OrderController extends BaseController
     {
         $order = $this->getOrderService()->getOrder($id);
 
+        preg_match('/管理员添加/', $order['title'], $order['edit']);
         $user = $this->getUserService()->getUser($order['userId']);
 
         $orderLogs = $this->getOrderService()->findOrderLogs($order['id']);

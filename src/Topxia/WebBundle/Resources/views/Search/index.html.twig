@@ -21,39 +21,39 @@
       共找到<span>{{ count }}</span>门{% if keywords %}<span>“{{ keywords }}”</span>相关{% endif %}课程
     </div>
     <ul class="nav nav-pills hidden-xs" role="tablist">
-      <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>
+      <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>
       {% if isShowVipSearch  %}
         {% if currentUserVipLevel  %}
-          <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'vip'}) }}">{{'会员课程'|trans}}</a>
+          <li role="presentation" class="{% if filter == 'vip' %}active{% endif %}">
+            <a href="{{ path('search',{filter:'vip'}) }}">{{'会员课程'|trans}}</a>
           </li>
         {% endif %}
       {% endif %}
-      <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
-          <a href="{{ path('search',{fliter:'free'}) }}">{{'免费课程'|trans}}</a>
+      <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+          <a href="{{ path('search',{filter:'free'}) }}">{{'免费课程'|trans}}</a>
       </li>
-      <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
-          <a href="{{ path('search',{fliter:'live'}) }}">{{'直播课程'|trans}}</a>
+      <li role="presentation" class="{% if filter == 'live' %}active{% endif %}">
+          <a href="{{ path('search',{filter:'live'}) }}">{{'直播课程'|trans}}</a>
       </li>
     </ul>
     <div class="btn-group visible-xs">
-      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',fliter|default('all')) }}
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ dict_text('searchCourseType',filter|default('all')) }}
       <span class="caret"></span></button>
 
       <ul class="dropdown-menu" role="menu">
-        <li role="presentation" class="{% if not fliter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>
+        <li role="presentation" class="{% if not filter %}active{% endif %}"><a href="{{ path('search') }}">{{'全部课程'|trans}}</a></li>
         {% if isShowVipSearch  %}
             {% if currentUserVipLevel  %}
-              <li role="presentation" class="{% if fliter == 'vip' %}active{% endif %}">
-                <a href="{{ path('search',{fliter:'vip'}) }}">{{'会员课程'|trans}}</a>
+              <li role="presentation" class="{% if filter == 'vip' %}active{% endif %}">
+                <a href="{{ path('search',{filter:'vip'}) }}">{{'会员课程'|trans}}</a>
               </li>
           {% endif %}
         {% endif %}
-        <li role="presentation" class="{% if fliter == 'free' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'free'}) }}">{{'免费课程'|trans}}</a>
+        <li role="presentation" class="{% if filter == 'free' %}active{% endif %}">
+            <a href="{{ path('search',{filter:'free'}) }}">{{'免费课程'|trans}}</a>
         </li>
-        <li role="presentation" class="{% if fliter == 'live' %}active{% endif %}">
-            <a href="{{ path('search',{fliter:'live'}) }}">{{'直播课程'|trans}}</a>
+        <li role="presentation" class="{% if filter == 'live' %}active{% endif %}">
+            <a href="{{ path('search',{filter:'live'}) }}">{{'直播课程'|trans}}</a>
         </li>
       </ul>
     </div>

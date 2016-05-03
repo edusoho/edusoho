@@ -322,9 +322,12 @@ class CourseManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds($studentUserIds);
         $users = ArrayToolkit::index($users, 'id');
 
+        $profiles = $this->getUserService()->findUserProfilesByIds($studentUserIds);
+        $profiles = ArrayToolkit::index($profiles, 'id');
+
         $course = $this->getCourseService()->getCourse($id);
 
-        $str = "订单号,名称,创建时间,状态,实际付款,购买者,支付方式,支付时间";
+        $str = "订单号,订单状态,订单名称,课程名称,课程价格（定价）,折扣金额,订单价格,优惠金额,购买者,姓名,实付价格,支付方式,优惠码,创建时间,付款时间,操作";
 
         $str .= "\r\n";
 
@@ -333,17 +336,35 @@ class CourseManageController extends BaseController
         foreach ($orders as $key => $orders) {
             $column = "";
             $column .= $orders['sn'].",";
-            $column .= $orders['title'].",";
-            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
             $column .= $status[$orders['status']].",";
-            $column .= $orders['amount'].",";
+            $column .= $orders['title'].",";
+            $column .= "《".$course['title']."》".",";
+            $column .= $course['price'].",";
+            $column .= $orders['discount'].",";
+            $column .= $orders['totalPrice'].",";
+            $column .= $orders['couponDiscount'].",";
             $column .= $users[$orders['userId']]['nickname'].",";
+            $column .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+            $column .= $orders['amount'].",";
             $column .= $payment[$orders['payment']].",";
-
-            if ($orders['paidTime'] == 0) {
-                $column .= "-".",";
+            if (!empty($order['coupon'])) {
+                $column .= $order['coupon'].",";
             } else {
+                $column .= "无".",";
+            }
+            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+
+            if ($orders['paidTime'] != 0) {
                 $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            } else {
+                $column .= "-".",";
+            }
+
+            if (preg_match('/管理员添加/',$orders['title'])) {
+
+                $column .= '管理员添加';
+            } else {
+                $column .= "-";
             }
 
             $results[] = $column;

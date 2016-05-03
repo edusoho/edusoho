@@ -69,7 +69,11 @@ admin_block_visual_edit:
     router_params_context: 1
 
 
-
+# admin_operation_dictionary:
+#     name: 字典管理
+#     parent: admin_operation
+#     router_name: admin_dictionary
+#     group: 4
 admin_block_visual_edit_history:
     name: 历史记录
     parent: admin_operation_block
@@ -214,7 +218,7 @@ admin_teacher:
     name: 教师管理
     parent: admin_user
 admin_teacher_manage:
-    name: 教师管理 
+    name: 教师管理
     parent: admin_teacher
     router_name: admin_teacher
 admin_teacher_promote:
@@ -434,6 +438,9 @@ admin_cloud_video_setting:
 admin_edu_cloud_sms:
     name: 云短信设置
     parent: admin_app
+admin_edu_cloud_search:
+   name: 云搜索设置
+   parent: admin_app
 # admin_edu_cloud_email:
 #     name: 云邮件设置
 #     parent: admin_app
@@ -475,6 +482,10 @@ admin_cloud_bill:
     name: 云视频账单
     parent: admin_my_cloud
     router_name: admin_cloud_bill
+admin_cloud_file:
+    name: 云资源
+    parent: admin_app
+    before: admin_setting_cloud
 #admin_edu_cloud_search:
 #   name: 云搜索设置
 #   parent: admin_setting_cloud_video

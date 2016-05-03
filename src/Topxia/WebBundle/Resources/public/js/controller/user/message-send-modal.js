@@ -13,7 +13,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                
+                $form.find('button').button("loading");
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('私信发送成功');

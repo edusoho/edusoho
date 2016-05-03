@@ -4,9 +4,9 @@ define(function(require, exports, module) {
 
         var join_btn = false;
 
-        $('.join-btn').click(function() {
+        $('.btn-lg').click(function() {
             if (!join_btn) {
-                $('.join-btn').addClass('disabled');
+                $('.btn-lg').addClass('disabled');
                 join_btn = true;
             }
             return true;

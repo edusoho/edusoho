@@ -55,7 +55,18 @@
         <p>
           <span class="icon icon-qqgroup text-muted" style="font-size:14px;"></span>
           {{qqgroup.name}}
-          <br> <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span>
+           <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
+
+            {% if  qqgroup.url|default(true) %}
+              <p class="text-overflow">
+                {{ qqgroup.url|raw }}
+              </p>
+            {% else %}
+              <p class="text-overflow">
+                {{ qqgroup.number }}
+              </p>
+            {% endif %}
+
         </p>
       {% endfor %}
     </div>

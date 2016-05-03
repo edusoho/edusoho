@@ -28,14 +28,8 @@ class RegisterController extends BaseController
         if ($request->getMethod() == 'POST') {
             $registration = $request->request->all();
 
-// $registration['mobile'] = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
-
             if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
                 $registration['verifiedMobile'] = $registration['emailOrMobile'];
-            }
-
-            if ($this->getSensitiveService()->scanText($registration['nickname'])) {
-                return $this->createMessageResponse('error', '用户名中含有敏感词！');
             }
 
             $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
@@ -45,9 +39,8 @@ class RegisterController extends BaseController
             //验证码校验
             $this->captchaEnabledValidator($authSettings, $registration, $request);
 
-//手机校验码
-
-            if ($this->smsCodeValidator($authSettings, $registration, $request)) {
+            //手机校验码
+            if ($this->smsCodeValidator($authSettings, $registration)) {
                 $registration['verifiedMobile'] = '';
                 $request->request->add(array_merge($request->request->all(), array('mobile' => $registration['mobile'])));
 
@@ -60,11 +53,7 @@ class RegisterController extends BaseController
                 }
             }
 
-//ip次数限制
-
-            if ($this->registerLimitValidator($registration, $authSettings, $request)) {
-                return $this->createMessageResponse('info', '由于您注册次数过多，请稍候尝试');
-            }
+            $registration['createdIp'] = $request->getClientIp();
 
             $user = $this->getAuthService()->register($registration);
 
@@ -147,44 +136,6 @@ class RegisterController extends BaseController
         }
 
         return true;
-    }
-
-    protected function protectiveRule($type, $ip)
-    {
-        switch ($type) {
-            case 'middle':
-                $condition = array(
-                    'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
-                $registerCount = $this->getUserService()->searchUserCount($condition);
-
-                if ($registerCount > 30) {
-                    return false;
-                }
-
-                return true;
-            case 'high':
-                $condition = array(
-                    'startTime' => time() - 24 * 3600,
-                    'createdIp' => $ip);
-                $registerCount = $this->getUserService()->searchUserCount($condition);
-
-                if ($registerCount > 10) {
-                    return false;
-                }
-
-                $registerCount = $this->getUserService()->searchUserCount(array(
-                    'startTime' => time() - 3600,
-                    'createdIp' => $ip));
-
-                if ($registerCount >= 1) {
-                    return false;
-                }
-
-                return true;
-            default:
-                return true;
-        }
     }
 
     public function userTermsAction(Request $request)
@@ -537,8 +488,7 @@ class RegisterController extends BaseController
             $request->getSession()->set('captcha_code', mt_rand(0, 999999999));
         }
     }
-
-    protected function smsCodeValidator($authSettings, $registration, $request)
+    protected function smsCodeValidator($authSettings, $registration)
     {
         if (
             in_array($authSettings['register_mode'], array('mobile', 'email_or_mobile'))
@@ -549,21 +499,6 @@ class RegisterController extends BaseController
         }
     }
 
-    protected function getSensitiveService()
-    {
-        return $this->getServiceKernel()->createService('SensitiveWord:Sensitive.SensitiveService');
-    }
 
-    protected function registerLimitValidator($registration, $authSettings, $request)
-    {
-        $registration['createdIp'] = $request->getClientIp();
-
-        if (isset($authSettings['register_protective'])) {
-            $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
-
-            if (!$status) {
-                return true;
-            }
-        }
-    }
+    
 }
