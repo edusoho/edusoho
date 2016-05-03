@@ -6,6 +6,9 @@ define(function(require, exports, module) {
     exports.run = function() {
         var $modal = $("#message-create-form").parents('.modal');
 
+        $.ajax({ 
+          async:false 
+        });
         var validator = new Validator({
             element: '#message-create-form',
             autoSubmit: false,
@@ -13,7 +16,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                $form.find('button').button("loading");
+                $form.find('button').button('loading');
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('私信发送成功');
