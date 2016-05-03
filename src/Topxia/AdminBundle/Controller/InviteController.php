@@ -101,17 +101,7 @@ class InviteController extends BaseController
         $conditions = array();
         $fileds     = $request->query->all();
 
-        if (!empty($fileds['nickname'])) {
-            $conditions['nickname'] = $fileds['nickname'];
-        }
-
-        if (!empty($fileds['startDateTime'])) {
-            $conditions['startDateTime'] = strtotime($fileds['startDateTime']);
-        }
-
-        if (!empty($fileds['endDateTime'])) {
-            $conditions['endDateTime'] = strtotime($fileds['endDateTime']);
-        }
+        $conditions = $this->_prepareQueryCondition($fileds);
 
         if ($filter == 'invite') {
             $conditions['inviteUserCardIdNotEqual'] = 0;
@@ -144,9 +134,7 @@ class InviteController extends BaseController
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($cards, 'userId'));
-
         $cards = ArrayToolkit::index($cards, 'cardId');
-
         return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
             'cardInformations' => $cardInformations,
             'filter'           => $filter,
@@ -155,6 +143,69 @@ class InviteController extends BaseController
             'cards'            => $cards,
             'orders'           => $orders
         ));
+    }
+
+    public function queryInviteCouponAction(Request $request, $filter)
+    {
+        $conditions = array(
+            'cardType' => 'coupon'
+        );
+        $fileds     = $request->query->all();
+        $conditions = $this->_prepareQueryCondition($fileds);
+
+        $cards = $this->getCardService()->searchCards(
+            $conditions,
+            array('id', 'ASC'),
+            0,
+            PHP_INT_MAX
+        );
+        $coupons = $this->getCouponService()->findCouponsByIds(ArrayToolkit::column($cards, 'cardId'));
+
+        $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($coupons, 'orderId'));
+
+        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($cards, 'userId'));
+
+        $conditions                      = array();
+        $conditions['inviteUserCardIds'] = empty($cards) ? array(-1) : ArrayToolkit::column($cards, 'cardId');
+        $paginator                       = new Paginator(
+            $this->get('request'),
+            $this->getInviteRecordService()->searchRecordCount($conditions),
+            20
+        );
+        $cardInformations = $this->getInviteRecordService()->searchRecords(
+            $conditions,
+            array('id', 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+        $cards = ArrayToolkit::index($cards, 'cardId');
+        return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
+            'cardInformations' => $cardInformations,
+            'filter'           => $filter,
+            'users'            => $users,
+            'coupons'          => $coupons,
+            'cards'            => $cards,
+            'orders'           => $orders
+        ));
+    }
+
+    private function _prepareQueryCondition($fileds)
+    {
+        $conditions = array();
+
+        if (!empty($fileds['nickname'])) {
+            $conditions['nickname'] = $fileds['nickname'];
+        }
+
+        if (!empty($fileds['startDateTime'])) {
+            $conditions['startDateTime'] = strtotime($fileds['startDateTime']);
+        }
+
+        if (!empty($fileds['endDateTime'])) {
+            $conditions['endDateTime'] = strtotime($fileds['endDateTime']);
+        }
+
+        return $conditions;
     }
 
     protected function getInviteRecordService()

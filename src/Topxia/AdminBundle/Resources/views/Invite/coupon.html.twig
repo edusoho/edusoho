@@ -6,7 +6,11 @@
 
 {% block main %}
     {% include 'TopxiaAdminBundle:invite:tab-data.html.twig' %}
+    {% if filter == 'invited' %}
 	<form  class="form-inline well well-sm" action="{{path('admin_invite_coupon', {filter: filter})}}" method="get" novalidate>
+	{% elseif filter == 'invite' %}
+	<form  class="form-inline well well-sm" action="{{path('admin_invite_coupon_query', {filter: filter})}}" method="get" novalidate>
+	{% endif %}
     <input class="form-control" type="text" name="nickname" placeholder="用户名" value="{{ app.request.query.get('nickname')}}">
      <div class="form-group">
     领取时间:
