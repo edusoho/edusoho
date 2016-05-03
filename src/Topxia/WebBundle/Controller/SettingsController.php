@@ -926,11 +926,6 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        // var_dump($user);
-        // if ($user['setup']) {
-        //     throw $this->createServiceException('该帐号，已经设置过帐号信息，不能再设置！');
-        // }
-
         $form = $this->createFormBuilder()
                      ->add('newPassword', 'password')
                      ->add('confirmPassword', 'password')
