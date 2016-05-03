@@ -1081,7 +1081,7 @@ admin_invite_coupon:
 
 admin_invite_coupon_query:
     pattern: /invite/coupon/query/
-    defaults: { _controller: TopxiaAdminBundle:Invite:queryInviteCoupon, filter:'invite' }
+    defaults: { _controller: TopxiaAdminBundle:Invite:queryInviteCoupon }
 
 admin_group:
     pattern:  /group/

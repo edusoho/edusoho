@@ -144,7 +144,7 @@ class InviteController extends BaseController
         ));
     }
 
-    public function queryInviteCouponAction(Request $request, $filter)
+    public function queryInviteCouponAction(Request $request)
     {
         $conditions = array(
             'cardType' => 'coupon'
@@ -180,7 +180,7 @@ class InviteController extends BaseController
         $cards = ArrayToolkit::index($cards, 'cardId');
         return $this->render('TopxiaAdminBundle:Invite:coupon.html.twig', array(
             'cardInformations' => $cardInformations,
-            'filter'           => $filter,
+            'filter'           => 'invite',
             'users'            => $users,
             'coupons'          => $coupons,
             'cards'            => $cards,
