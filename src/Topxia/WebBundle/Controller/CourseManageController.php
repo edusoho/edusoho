@@ -339,11 +339,16 @@ class CourseManageController extends BaseController
             $column .= $status[$orders['status']].",";
             $column .= $orders['title'].",";
             $column .= "《".$course['title']."》".",";
-            $column .= $course['price'].",";
-            if ($orders['discount'] > $result['price']) {
-                $column .= $result['price'].",";
+            $column .= $course['originPrice'].",";
+            if ($orders['discountId'] != 0) {
+                if ($orders['discount'] > $course['price']) {
+                    $column .= $course['price'].",";
+                } else {
+                    $column .= $orders['discount'].",";
+                }
+                
             } else {
-                $column .= $orders['discount'].",";
+                $column .= '0'.",";
             }
             $column .= $orders['totalPrice'].",";
             $column .= $orders['couponDiscount'].",";

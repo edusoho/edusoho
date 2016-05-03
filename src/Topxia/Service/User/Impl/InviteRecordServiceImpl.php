@@ -36,8 +36,52 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
         return $this->getInviteRecordDao()->updateInviteRecord($invitedUserId, $fields);
     }
 
+    public function searchRecordCount($conditions)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+        return $this->getInviteRecordDao()->searchRecordCount($conditions);
+    }
+
+    public function searchRecords($conditions, $orderBy, $start, $limit)
+    {
+        $conditions = $this->_prepareConditions($conditions);
+        return $this->getInviteRecordDao()->searchRecords($conditions, $orderBy, $start, $limit);
+    }
+
+    private function _prepareConditions($conditions)
+    {
+        $conditions = array_filter($conditions, function ($value) {
+            if ($value == 0) {
+                return true;
+            }
+
+            return !empty($value);
+        }
+
+        );
+
+        if (!empty($conditions['nickname'])) {
+            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+
+            if (isset($conditions['inviteUserCardIdNotEqual'])) {
+                $conditions['inviteUserId'] = $user ? $user['id'] : -1;
+            } elseif (isset($conditions['invitedUserCardIdNotEqual'])) {
+                $conditions['invitedUserId'] = $user ? $user['id'] : -1;
+            }
+
+            unset($conditions['nickname']);
+        }
+
+        return $conditions;
+    }
+
     private function getInviteRecordDao()
     {
         return $this->createDao('User.InviteRecordDao');
+    }
+
+    protected function getUserService()
+    {
+        return $this->createService('User.UserService');
     }
 }
