@@ -97,6 +97,7 @@ define(function(require, exports, module) {
 
             var stats = this._calTestpaperStats();
             var hasEssay = false;
+
             $('.testpaper-table-tbody').each(function() {
                 var self = this;
                 var tbodyType = $(this).data('type');
