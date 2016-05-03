@@ -365,6 +365,10 @@ class CourseTestpaperManageController extends BaseController
             $conditions['stem'] = $conditions['keyword'];
         }
 
+        if ($conditions['type'] == 'material') {
+            $conditions['subCount'] = 0;
+        }
+
         $replace = empty($conditions['replace']) ? '' : $conditions['replace'];
 
         $paginator = new Paginator(
