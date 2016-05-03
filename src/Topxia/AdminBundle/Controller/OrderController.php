@@ -169,12 +169,8 @@ class OrderController extends BaseController
                 $member .= $status[$orders['status']].",";
                 $member .= $orders['title'].",";
                 $member .= "《".$result['title']."》".",";
-                if (isset($result['originPrice'])) {
-
-                    $member .= $result['originPrice'].",";
-                } else {
-                    $member .= $result['price'].",";
-                }
+   
+                $member .= $result['totalPrice'].",";
                 if ($orders['discountId'] != 0) {
                     if ($orders['discount'] > $course['price']) {
                         $member .= $course['price'].",";
