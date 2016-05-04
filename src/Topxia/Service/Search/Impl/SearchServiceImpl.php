@@ -69,7 +69,11 @@ class SearchServiceImpl extends BaseService implements SearchService
     protected function getSiteUrl()
     {
         $siteSetting        = $this->getSettingService()->get('site');
-        return  rtrim(rtrim($siteSetting['url']), '/');
+        $siteUrl            = $siteSetting['url'];
+        if(strpos($siteUrl, 'http://') !== 0){
+            $siteUrl ='http://'.$siteUrl;
+        }
+        return  rtrim(rtrim($siteUrl), '/');
     }
 
     protected function setCloudSearchWaiting()
