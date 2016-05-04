@@ -196,7 +196,7 @@ class InviteController extends BaseController
 
         $cardInformations = $this->getInviteRecordService()->searchRecords(
             $conditions,
-            array('id', 'ASC'),
+            array('inviteTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
