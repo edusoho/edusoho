@@ -1007,18 +1007,13 @@ class FileToolkit
 
     public static function downloadImg($url, $savePath)
     {
-        $fp  = fopen($savePath, 'w');
-        $img = fopen($url, 'r');
-        // stream_get_meta_data($img);
-
-        $result = '';
-        while (!feof($img)) {
-            $result .= fgets($img, 1024);
-        }
-
-        fclose($img);
-        fwrite($fp, $result);
-        fclose($fp);
+        $curl = curl_init($url);
+        curl_setopt($curl,CURLOPT_RETURNTRANSFER,1);
+        $imageData = curl_exec($curl);
+        curl_close($curl);
+        $tp = @fopen($savePath, 'w');
+        fwrite($tp, $imageData);
+        fclose($tp);
         return $savePath;
     }
 }

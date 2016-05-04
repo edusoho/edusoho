@@ -333,43 +333,43 @@ class CourseManageController extends BaseController
 
         $results = array();
 
-        foreach ($orders as $key => $orders) {
+        foreach ($orders as $key => $order) {
             $column = "";
-            $column .= $orders['sn'].",";
-            $column .= $status[$orders['status']].",";
-            $column .= $orders['title'].",";
+            $column .= $order['sn'].",";
+            $column .= $status[$order['status']].",";
+            $column .= $order['title'].",";
             $column .= "《".$course['title']."》".",";
-            $column .= $course['totalPrice'].",";
-            if ($orders['discountId'] != 0) {
-                if ($orders['discount'] > $course['price']) {
+            $column .= $order['totalPrice'].",";
+            if ($order['discountId'] != 0) {
+                if ($order['discount'] > $course['price']) {
                     $column .= $course['price'].",";
                 } else {
-                    $column .= $orders['discount'].",";
+                    $column .= $order['discount'].",";
                 }
                 
             } else {
                 $column .= '0'.",";
             }
-            $column .= $orders['totalPrice'].",";
-            $column .= $orders['couponDiscount'].",";
-            $column .= $users[$orders['userId']]['nickname'].",";
-            $column .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-            $column .= $orders['amount'].",";
-            $column .= $payment[$orders['payment']].",";
-            if (!empty($orders['coupon'])) {
-                $column .= $orders['coupon'].",";
+            $column .= $order['totalPrice'].",";
+            $column .= $order['couponDiscount'].",";
+            $column .= $users[$order['userId']]['nickname'].",";
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+            $column .= $order['amount'].",";
+            $column .= $payment[$order['payment']].",";
+            if (!empty($order['coupon'])) {
+                $column .= $order['coupon'].",";
             } else {
                 $column .= "无".",";
             }
-            $column .= date('Y-n-d H:i:s', $orders['createdTime']).",";
+            $column .= date('Y-n-d H:i:s', $order['createdTime']).",";
 
-            if ($orders['paidTime'] != 0) {
-                $column .= date('Y-n-d H:i:s', $orders['paidTime']).",";
+            if ($order['paidTime'] != 0) {
+                $column .= date('Y-n-d H:i:s', $order['paidTime']).",";
             } else {
                 $column .= "-".",";
             }
 
-            if (preg_match('/管理员添加/',$orders['title'])) {
+            if (preg_match('/管理员添加/',$order['title'])) {
 
                 $column .= '管理员添加';
             } else {
@@ -382,7 +382,7 @@ class CourseManageController extends BaseController
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
 
-        $filename = sprintf("course-%s-orders-(%s).csv", $course['title'], date('Y-n-d'));
+        $filename = sprintf("%s-订单-(%s).csv", $course['title'], date('Y-n-d'));
 
         $response = new Response();
         $response->headers->set('Content-type', 'text/csv');

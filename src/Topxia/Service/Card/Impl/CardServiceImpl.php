@@ -120,10 +120,11 @@ class CardServiceImpl extends BaseService implements CardService
 
         );
 
-        if (isset($conditions['nickname']) && !empty($conditions['nickname'])) {
-            $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
-            $conditions['userId'] = $user ? $user['id'] : -1;
-            unset($conditions['creator']);
+        if (array_key_exists('nickname', $conditions)) {
+            if ($conditions['nickname']) {
+                $users                 = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+                $conditions['userIds'] = empty($users) ? -1 : ArrayToolkit::column($users, 'id');
+            }
         }
 
         if (isset($conditions['startDateTime'])) {
