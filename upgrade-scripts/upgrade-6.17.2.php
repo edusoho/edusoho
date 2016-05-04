@@ -1,5 +1,6 @@
 <?php
 
+use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -60,6 +61,9 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('user_profile', 'isWeiboPublic')) {
             $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '0' AFTER `isWeixinPublic`;");
         }
+
+        $blockMeta = json_decode(file_get_contents(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json")), true);
+        $this->updateBlock("jianmo:bottom_info", $blockMeta["jianmo:bottom_info"]);
     }
 
     private function batchUpdate($index)
@@ -88,6 +92,43 @@ class EduSohoUpgrade extends AbstractUpdater
                 'message'  => '正在升级数据...',
                 'progress' => 4.4
             );
+        }
+    }
+
+    public function updateBlock($code, $meta)
+    {
+        global $kernel;
+        $block = $this->getBlockService()->getBlockByCode($code);
+
+        $default = array();
+
+        foreach ($meta['items'] as $i => $item) {
+            $default[$i] = $item['default'];
+        }
+
+        if (empty($block)) {
+            $block = $this->getBlockService()->createBlock(array(
+                'code'         => $code,
+                'mode'         => 'template',
+                'category'     => empty($meta['category']) ? 'system' : $meta['category'],
+                'meta'         => $meta,
+                'data'         => $default,
+                'templateName' => $meta['templateName'],
+                'title'        => $meta['title'],
+                'content'      => $html
+            ));
+
+            $html  = BlockToolkit::render($block, $kernel->getContainer());
+            $block = $this->getBlockService()->updateBlock($block['id'], array(
+                'content' => $html
+            ));
+        } else {
+            $html  = BlockToolkit::render($block, $kernel->getContainer());
+            $block = $this->getBlockService()->updateBlock($block['id'], array(
+                'meta'    => $meta,
+                'data'    => $block['data'],
+                'content' => $html
+            ));
         }
     }
 
