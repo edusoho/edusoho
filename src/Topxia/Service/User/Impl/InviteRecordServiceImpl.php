@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Service\User\Impl;
 
+use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
 use Topxia\Service\User\InviteRecordService;
 
@@ -60,16 +61,12 @@ class InviteRecordServiceImpl extends BaseService implements InviteRecordService
 
         );
 
-        if (!empty($conditions['nickname'])) {
-            $user = $this->getUserService()->getUserByNickname($conditions['nickname']);
+        if (array_key_exists('nickname', $conditions)) {
+            if ($conditions['nickname']) {
+                $users = $this->getUserService()->searchUsers(array('nickname' => $conditions['nickname']), array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
-            if (isset($conditions['inviteUserCardIdNotEqual'])) {
-                $conditions['inviteUserId'] = $user ? $user['id'] : -1;
-            } elseif (isset($conditions['invitedUserCardIdNotEqual'])) {
-                $conditions['invitedUserId'] = $user ? $user['id'] : -1;
+                $conditions['invitedUserIds'] = empty($users) ? -1 : ArrayToolkit::column($users, 'id');
             }
-
-            unset($conditions['nickname']);
         }
 
         return $conditions;

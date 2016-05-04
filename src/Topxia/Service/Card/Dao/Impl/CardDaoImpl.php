@@ -86,6 +86,7 @@ class CardDaoImpl extends BaseDao implements CardDao
             ->andWhere('deadline = :deadline')
             ->andWhere('status = :status')
             ->andWhere('userId = :userId')
+            ->andWhere('userId IN ( :userIds)')
             ->andWhere('useTime >= :startDateTime')
             ->andWhere('useTime < :endDateTime')
             ->andWhere('createdTime >= :reciveStartTime')
