@@ -50,15 +50,15 @@ class EduSohoUpgrade extends AbstractUpdater
         $this->getSettingService()->set('invite', $inviteSetting);
 
         if (!$this->isFieldExist('user_profile', 'isQQPublic')) {
-            $connection->exec("ALTER TABLE `user_profile` ADD `isQQPublic` INT NOT NULL DEFAULT '1' AFTER `weixin`;");
+            $connection->exec("ALTER TABLE `user_profile` ADD `isQQPublic` INT NOT NULL DEFAULT '0' AFTER `weixin`;");
         }
 
         if (!$this->isFieldExist('user_profile', 'isWeixinPublic')) {
-            $connection->exec("ALTER TABLE `user_profile` ADD `isWeixinPublic` INT NOT NULL DEFAULT '1' AFTER `isQQPublic`;");
+            $connection->exec("ALTER TABLE `user_profile` ADD `isWeixinPublic` INT NOT NULL DEFAULT '0' AFTER `isQQPublic`;");
         }
 
         if (!$this->isFieldExist('user_profile', 'isWeiboPublic')) {
-            $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '1' AFTER `isWeixinPublic`;");
+            $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '0' AFTER `isWeixinPublic`;");
         }
     }
 
