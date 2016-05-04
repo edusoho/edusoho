@@ -17,7 +17,7 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('login_limit', {1:'开启', 0:'关闭'}, loginConnect.login_limit) }}
-      <p class="help-block">开启后同一帐号只能在一处登录。“一处”的限制范围是指同一台电脑，同一个ip或者是同一个省市，又或者是手机和电脑上不能同时进行登录。</p>
+      <p class="help-block">开启后同一账号将不能在不同IP或者不同地域下同时登录，并且app端与web端不能同时登录。</p>
       </div>
     </div>
   </fieldset>

@@ -339,16 +339,25 @@ class CourseManageController extends BaseController
             $column .= $status[$orders['status']].",";
             $column .= $orders['title'].",";
             $column .= "《".$course['title']."》".",";
-            $column .= $course['price'].",";
-            $column .= $orders['discount'].",";
+            $column .= $course['totalPrice'].",";
+            if ($orders['discountId'] != 0) {
+                if ($orders['discount'] > $course['price']) {
+                    $column .= $course['price'].",";
+                } else {
+                    $column .= $orders['discount'].",";
+                }
+                
+            } else {
+                $column .= '0'.",";
+            }
             $column .= $orders['totalPrice'].",";
             $column .= $orders['couponDiscount'].",";
             $column .= $users[$orders['userId']]['nickname'].",";
             $column .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
             $column .= $orders['amount'].",";
             $column .= $payment[$orders['payment']].",";
-            if (!empty($order['coupon'])) {
-                $column .= $order['coupon'].",";
+            if (!empty($orders['coupon'])) {
+                $column .= $orders['coupon'].",";
             } else {
                 $column .= "无".",";
             }

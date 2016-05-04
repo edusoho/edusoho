@@ -1192,6 +1192,10 @@ settings_setup:
     pattern: /settings/setup
     defaults: { _controller: TopxiaWebBundle:Settings:setup }
 
+settings_setup_password:
+    pattern: /settings/setup_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setupPassword }
+
 settings_setup_check_nickname:
     pattern: /settings/setup/check_nickname
     defaults: { _controller: TopxiaWebBundle:Settings:setupCheckNickname }

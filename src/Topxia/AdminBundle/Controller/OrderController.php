@@ -169,16 +169,26 @@ class OrderController extends BaseController
                 $member .= $status[$orders['status']].",";
                 $member .= $orders['title'].",";
                 $member .= "《".$result['title']."》".",";
-                $member .= $result['price'].",";
-                $member .= $orders['discount'].",";
+   
+                $member .= $result['totalPrice'].",";
+                if ($orders['discountId'] != 0) {
+                    if ($orders['discount'] > $course['price']) {
+                        $member .= $course['price'].",";
+                    } else {
+                        $member .= $orders['discount'].",";
+                    }
+                    
+                } else {
+                    $member .= '0'.",";
+                }
                 $member .= $orders['totalPrice'].",";
                 $member .= $orders['couponDiscount'].",";
                 $member .= $users[$orders['userId']]['nickname'].",";
                 $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
                 $member .= $orders['amount'].",";
                 $member .= $payment[$orders['payment']].",";
-                if (!empty($order['coupon'])) {
-                    $member .= $order['coupon'].",";
+                if (!empty($orders['coupon'])) {
+                    $member .= $orders['coupon'].",";
                 } else {
                     $member .= "无".",";
                 }
