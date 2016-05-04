@@ -129,7 +129,7 @@ admin_operation_invite_manage:
     parent: admin_operation_invite
     router_name: admin_invite
 admin_operation_invite_coupon:
-    name: 使用查询
+    name: 奖励查询
     parent: admin_operation_invite
     router_name: admin_invite_coupon
 admin_operation_group_thread:
