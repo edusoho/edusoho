@@ -61,9 +61,6 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('user_profile', 'isWeiboPublic')) {
             $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '0' AFTER `isWeixinPublic`;");
         }
-
-        $blockMeta = json_decode(file_get_contents(realpath(ServiceKernel::instance()->getParameter('kernel.root_dir')."/../web/themes/jianmo/block.json")), true);
-        $this->updateBlock("jianmo:bottom_info", $blockMeta["jianmo:bottom_info"]);
     }
 
     private function batchUpdate($index)
