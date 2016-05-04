@@ -61,6 +61,30 @@ class EduSohoUpgrade extends AbstractUpdater
         if (!$this->isFieldExist('user_profile', 'isWeiboPublic')) {
             $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '0' AFTER `isWeixinPublic`;");
         }
+
+        $theme = $connection->fetchAssoc("select * from theme_config where name='简默'");
+        $confirmConfig = json_decode($theme['confirmConfig'], true);
+        if(isset($confirmConfig['blocks']['left']) && !empty($confirmConfig['blocks']['left'])) {
+            $blocks = $confirmConfig['blocks']['left'];
+            $hasFooterLink = false;
+            foreach ($blocks as $key => $block) {
+                if($block['code'] == 'footer-link') {
+                    $hasFooterLink = true;
+                }
+            }
+
+            if(!$hasFooterLink){
+                $json = '{"title": "","count": "","code": "footer-link","defaultTitle": "底部链接","id": "footerLink"}';
+                $footerLink = json_decode($json, true);
+                $blocks[] = $footerLink;
+
+                $blocks = json_encode($blocks);
+
+                $connection->exec("update theme_config set confirmConfig='{$blocks}' where name='简默';");
+            }
+        }
+
+
     }
 
     private function batchUpdate($index)
