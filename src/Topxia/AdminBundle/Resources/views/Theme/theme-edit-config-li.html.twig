@@ -1,6 +1,6 @@
-<li class="list-group-item clearfix theme-edit-item" data-code="theme_edit_item_{{ pendant.code }}" id="{{ pendant.id }}">
+<li class="list-group-item clearfix  {% if pendant.code != 'footer-link' %}theme-edit-item{% endif %}" data-code="theme_edit_item_{{ pendant.code }}" id="{{ pendant.id }}">
   <div class="col-md-4 ">
-    <span class="glyphicon glyphicon-move edit-sort"></span>
+    {% if pendant.code != 'footer-link' %}<span class="glyphicon glyphicon-move edit-sort"></span>{% else %}<span class="glyphicon glyphicon-lock  edit-sort"></span>{% endif %}
     <label>
       <input type="checkbox" class="check-block" {% if isChoiced|default(null) %}checked{% endif %}><span class="default-title">{{ pendant.defaultTitle }}</span>
     </label>
