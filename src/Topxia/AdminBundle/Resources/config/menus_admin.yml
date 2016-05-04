@@ -69,7 +69,11 @@ admin_block_visual_edit:
     router_params_context: 1
 
 
-
+# admin_operation_dictionary:
+#     name: 字典管理
+#     parent: admin_operation
+#     router_name: admin_dictionary
+#     group: 4
 admin_block_visual_edit_history:
     name: 历史记录
     parent: admin_operation_block
@@ -124,6 +128,10 @@ admin_operation_invite_manage:
     name: 邀请管理
     parent: admin_operation_invite
     router_name: admin_invite
+admin_operation_invite_coupon:
+    name: 奖励查询
+    parent: admin_operation_invite
+    router_name: admin_invite_coupon
 admin_operation_group_thread:
     name: 话题管理
     parent: admin_operation_group

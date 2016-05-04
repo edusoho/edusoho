@@ -69,24 +69,24 @@
         margin-right: 5px;
       }
     }
-    .tag-serialing {
-      display: inline-block;
-      width: 40px;
-      height: 50px;
-      margin-right: 6px;
-      background: url("@{img-src}tag_serialing.png") no-repeat;
-    }
-    .tag-live {
-      display: inline-block;
-      width: 40px;
-      height: 50px;
-      background: url("@{img-src}tag_live.png") no-repeat;
-    }
+    .tag-serialing,
+    .tag-live,
     .tag-finished {
       display: inline-block;
       width: 40px;
       height: 50px;
+    }
+    .tag-serialing {
+      background: url("@{img-src}tag_serialing.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}tag_serialing.png") 1x,url("@{img-src}tag_serialing@2x.png") 2x);
+    }
+    .tag-live {
+      background: url("@{img-src}tag_live.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}tag_live.png") 1x,url("@{img-src}tag_live@2x.png") 2x);
+    }
+    .tag-finished {
       background: url("@{img-src}tag_finished.png") no-repeat;
+      background-image: -webkit-image-set(url("@{img-src}tag_finished.png") 1x,url("@{img-src}tag_finished@2x.png") 2x);
     }
   }
   .title {

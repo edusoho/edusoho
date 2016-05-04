@@ -256,6 +256,7 @@ define(function(require, exports, module) {
 
                         $.post(file.uploaderWidget.get('initUrl'), params, function(response) {
                             var key = 'file_' + file.hash;
+                            file.hashId = response.hashId;
                             if(response.resumed != 'ok') {
                                 var value = {};
                                 value.id = response.outerId;

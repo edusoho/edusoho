@@ -18,12 +18,14 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     public function searchClassrooms($conditions, $orderBy, $start, $limit)
     {
+        $conditions = $this->_prepareClassroomConditions($conditions);
         return $this->getClassroomDao()->searchClassrooms($conditions, $orderBy, $start, $limit);
     }
 
     public function searchClassroomsCount($conditions)
     {
-        $count = $this->getClassroomDao()->searchClassroomsCount($conditions);
+        $conditions = $this->_prepareClassroomConditions($conditions);
+        $count      = $this->getClassroomDao()->searchClassroomsCount($conditions);
 
         return $count;
     }
@@ -130,6 +132,7 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
             }
 
             $diff = array_values(array_diff($courseIds, $sameCourseIds));
+
             //if new copy it
 
             if (!empty($diff)) {
@@ -940,12 +943,24 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     private function _prepareClassroomConditions($conditions)
     {
-        $conditions = array_filter($conditions);
+        $conditions = array_filter($conditions, function($value){
+            if ($value === 0 || !empty($value)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         if (isset($conditions['nickname'])) {
             $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);
             $conditions['userId'] = $user ? $user['id'] : -1;
             unset($conditions['nickname']);
+        }
+
+        if (isset($conditions['categoryId'])) {
+            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            unset($conditions['categoryId']);
         }
 
         return $conditions;
@@ -1442,6 +1457,11 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
     protected function getStatusService()
     {
         return $this->createService('User.StatusService');
+    }
+
+    protected function getCategoryService()
+    {
+        return $this->createService('Taxonomy.CategoryService');
     }
 }
 

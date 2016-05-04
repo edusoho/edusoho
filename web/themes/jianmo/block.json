@@ -214,26 +214,37 @@
             }
         }
     },
-    "jianmo:middle_full_banner":
+     "jianmo:advertisement_banner":
     {
-        "title": "简墨主题：首页中部.全屏.横幅",
+        "title": "简墨主题：中部广告",
         "category": "jianmo",
-        "templateName": "@theme/jianmo/block/middle_full_banner.template.html.twig",
+        "templateName": "@theme/jianmo/block/advertisement_banner.template.html.twig",
         "items": {
-            "carousel": {
-                "title": "全屏横幅内容",
-                "desc": "推荐尺寸为1920px宽300px高",
-                "count": 1,
+            "middleImg": {
+                "title": "广告图片",
+                "desc": "建议图片大小为宽1920px高 400px",
+                "count": "1",
                 "type": "imglink",
                 "default": [
                     {
-                        "src": "",
-                        "alt": "全屏横幅",
+                        "src": "\/themes\/jianmo\/img\/banner_poster.jpg",
+                        "alt": "图片１的描述",
                         "href": "#",
-                        "target": "_blank" 
+                        "target": "_blank"
                     }
                 ]
-            }
+            },
+            "middleBackground": {
+                "title": "背景填充色",
+                "desc": "填写颜色值,例如#ffffff",
+                "count": "1",
+                "type": "text",
+                "default": [
+                    {
+                        "value": "#e2133a"
+                    }
+                ]
+            }                                                                                                                       
         }
     },
     "jianmo:bottom_info":

@@ -12,7 +12,9 @@
   <div class="col-md-1">
     {% if pendant.code not in ['login-box']%}
       
-      {% if pendant.code == 'middle-banner' or pendant.code == 'middle-full-banner' or pendant.code == 'footer-link'  %}
+      {% if pendant.code == 'middle-banner' or pendant.code == 'footer-link' %}
+        <a href="{{path('admin_block', {category:'theme'|default('all')})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %}><span class="glyphicon glyphicon-wrench"></span> 设置</a>
+      {% elseif pendant.code == 'advertisement-banner' %}
         <a href="{{path('admin_block', {category:'theme'|default('all')})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn" {% if not isChoiced|default(null) %}style="display:none;"{% endif %}><span class="glyphicon glyphicon-wrench"></span> 设置</a>
       {% elseif pendant.code == 'friend-link' %}
         <a href="{{path('admin_navigation', {type:'friendlyLink'})}}" target="_blank" class="btn btn-primary btn-sm item-set-btn"><span class="glyphicon glyphicon-wrench"></span> 设置</a>

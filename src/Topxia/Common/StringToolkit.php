@@ -142,4 +142,14 @@ class StringToolkit
         }
         return $afterCutName;
     }
+
+    public static function jsonEncode($data)
+    {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            return json_encode($data, JSON_UNESCAPED_UNICODE);
+        }else{
+            $data=urlencode(json_encode($data));
+            return urldecode($data);
+        }
+    }
 }

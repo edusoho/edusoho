@@ -3,13 +3,13 @@
   <div class="btn-group-vertical">
 
     {% set break = 0 %}
-    {% for qq in consult.qq if qq.name is not empty and break == 0 %}
+    {% for qq in consult.qq if qq.name is not empty and qq.number is not empty and break == 0 %}
       <span class="btn btn-consult-{{consult.color}} float-consult-qq-btn" data-container=".float-consult-qq-btn" data-title="QQ客服" data-content-element="#consult-qq-content"><span class="icon icon-qq"></span></span>
       {% set break = 1 %}
     {% endfor %}
 
     {% set break = 0 %}
-    {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and break == 0 %}
+    {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty and break == 0 %}
       <span class="btn btn-consult-{{consult.color}} float-consult-qqgroup-btn" data-container=".float-consult-qqgroup-btn" data-title="QQ群" data-content-element="#consult-qqgroup-content"><span class="icon icon-qqgroup"></span></span>
       {% set break = 1 %}
     {% endfor %}
@@ -31,7 +31,7 @@
 
   <div class="consult-contents">
     <div id="consult-qq-content">
-      {% for qq in consult.qq if qq.name is not empty %}
+      {% for qq in consult.qq if qq.name is not empty and qq.number is not empty %}
         {% if not qq.url|default(false) %}
         <p>
           <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin={{ qq.number }}&site=qq&menu=yes" >
@@ -51,11 +51,22 @@
     </div>
 
     <div id="consult-qqgroup-content">
-      {% for qqgroup in consult.qqgroup if qqgroup.name is not empty %}
+      {% for qqgroup in consult.qqgroup if qqgroup.name is not empty and qqgroup.number is not empty %}
         <p>
           <span class="icon icon-qqgroup text-muted" style="font-size:14px;"></span>
           {{qqgroup.name}}
-          <br> <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span>
+           <br> {# <span class="text-info" style="margin-left:20px;">{{qqgroup.number}}</span> #}
+
+            {% if  qqgroup.url|default('') %}
+              <p class="text-overflow">
+                {{ qqgroup.url|raw }}
+              </p>
+            {% else %}
+              <p class="text-overflow">
+                {{ qqgroup.number }}
+              </p>
+            {% endif %}
+
         </p>
       {% endfor %}
     </div>
