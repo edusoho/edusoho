@@ -86,8 +86,10 @@ define(function(require, exports, module) {
                 return ;
             }
 
+            this.refreshPassedScoreStats();
+
             if( $('[name="passedScore"]').length > 0){
-                var passedScoreErrorMsg = $('[name="passedScore"]').siblings('.help-block').html();
+                var passedScoreErrorMsg = $('.passedScoreDiv').siblings('.help-block').html();
                 if ($.trim(passedScoreErrorMsg) != ''){
                     return ;
                 }
@@ -96,27 +98,7 @@ define(function(require, exports, module) {
             $modal = $("#testpaper-confirm-modal");
 
             var stats = this._calTestpaperStats();
-            var hasEssay = false;
-
-            $('.testpaper-table-tbody').each(function() {
-                var self = this;
-                var tbodyType = $(this).data('type');
-
-                if (tbodyType == 'essay' || tbodyType == 'material') {
-                    $(self).find('tr').each(function() {
-                        var type = $(this).data('type');
-                        if (type == 'essay') {
-                            hasEssay = true;
-                        }
-                    })
-                }
-            })
-
-            if (hasEssay) {
-                $('input[name="passedScore"]').val('0');
-                $('.passedScoreDiv').hide();
-                validator.removeItem('[name="passedScore"]');
-            }
+            
             var html='';
             $.each(stats, function(index, statsItem){
                 var tr = "<tr>";
@@ -198,11 +180,11 @@ define(function(require, exports, module) {
                 $('.passedScoreDiv').hide();
                 validator.removeItem('[name="passedScore"]');
             } else {
-                var stats = this._calTestpaperStats();
+                /*var stats = this._calTestpaperStats();
                 var passeScoreDefault = Math.ceil(stats.total.score * 0.6);
 
                 $('input[name="passedScore"]').val(passeScoreDefault);
-                $('input[name="passedScore"]').data('scoreTotal',stats.total.score);
+                $('input[name="passedScore"]').data('scoreTotal',stats.total.score);*/
                 $('.passedScoreDiv').show();
 
                 validator.addItem({
@@ -330,7 +312,7 @@ define(function(require, exports, module) {
                 return false;
             }
 
-            if (Number(element.val()) <= Number(element.data('scoreTotal'))) {
+            if (Number(element.val()) <= Number(element.attr('data-score-total'))) {
                 return true;
             } else {
                 return false;
@@ -341,6 +323,15 @@ define(function(require, exports, module) {
         new TestpaperItemManager({
             element: '#testpaper-items-manager',
         });
+
+        if( $('[name="passedScore"]').length > 0){
+            validator.addItem({
+                element: '[name="passedScore"]',
+                required: true,
+                rule: 'score',
+                display: '分数'
+            });
+        }
 
     }
 });
