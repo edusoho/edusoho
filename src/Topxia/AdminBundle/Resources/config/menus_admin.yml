@@ -316,6 +316,11 @@ admin_foot_navigation:
     parent: admin_setting
     router_name: admin_navigation
     router_params: { type: foot }
+admin_friendlyLink_navigation:
+    name: 友情链接
+    parent: admin_setting
+    router_name: admin_navigation
+    router_params: { type: friendlyLink }
 admin_setting_consult_setting:
     name: 客服
     parent: admin_setting

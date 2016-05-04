@@ -89,9 +89,12 @@ class ThemeController extends BaseController
 
     public function showAction(Request $request, $uri)
     {
-      return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
-        'isEditColor' => true
-      ));
+        $friendlyLinks = $this->getNavigationService()->getOpenedNavigationsTreeByType('friendlyLink');
+
+        return $this->render('TopxiaWebBundle:Default:index.html.twig', array(
+            'isEditColor' => true,
+            'friendlyLinks' => $friendlyLinks
+        ));
     }
 
     public function themeConfigEditAction(Request $request, $uri)
@@ -216,5 +219,10 @@ class ThemeController extends BaseController
     protected function getThemeService()
     {
         return $this->getServiceKernel()->createService('Theme.ThemeService');
+    }
+
+    protected function getNavigationService()
+    {
+        return $this->getServiceKernel()->createService('Content.NavigationService');
     }
 }
