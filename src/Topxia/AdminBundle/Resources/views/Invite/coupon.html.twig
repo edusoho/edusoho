@@ -6,11 +6,14 @@
 
 {% block main %}
     {% include 'TopxiaAdminBundle:Invite:tab-data.html.twig' %}
-    {% if filter == 'invited' %}
-	<form  class="form-inline well well-sm" action="{{path('admin_invite_coupon', {filter: filter})}}" method="get" novalidate>
+
+  {% if filter == 'invited' %}
+    {% set actionUrl = path('admin_invite_coupon', {filter: filter}) %}
 	{% elseif filter == 'invite' %}
-	<form  class="form-inline well well-sm" action="{{path('admin_invite_coupon_query')}}" method="get" novalidate>
+		{% set actionUrl = path('admin_invite_coupon_query') %}
 	{% endif %}
+
+	<form  class="form-inline well well-sm" action="{{ actionUrl }}" method="get" novalidate>
     <input class="form-control" type="text" name="nickname" placeholder="用户名" value="{{ app.request.query.get('nickname')}}">
      <div class="form-group">
     领取时间:
@@ -21,7 +24,7 @@
     <button class="btn btn-primary" type="submit">搜索</button>
 	</form>
 
-    <table class="table table-hover table-striped" >
+  <table class="table table-hover table-striped" >
 		<thead>
 			<tr>
 				<th width="15%">用户名</th>
@@ -60,11 +63,11 @@
 				</td>
 				<td>
 					{% if card.useTime != 0 %}
-          				{{ card.useTime|date('Y-m-d H:i:s') }}
-        			{% else %}
-         				 -
-        			{% endif %}
-        		</td>
+      			{{ card.useTime|date('Y-m-d H:i:s') }}
+    			{% else %}
+     				 -
+    			{% endif %}
+    		</td>
 				<td class="text-danger">{{ order.title|default('-') }}</td>					
 			</tr>
 		{% else %}

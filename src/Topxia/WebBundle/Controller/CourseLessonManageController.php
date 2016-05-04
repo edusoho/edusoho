@@ -38,7 +38,7 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
 
                 if ($file['type'] == "document" && $file['convertStatus'] == "none") {
@@ -59,7 +59,7 @@ class CourseLessonManageController extends BaseController
         $file = null;
 
         if ($lesson['mediaId']) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
 
             if (!empty($file)) {
                 $lesson['media'] = array(
@@ -225,7 +225,7 @@ class CourseLessonManageController extends BaseController
         $file = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -245,7 +245,7 @@ class CourseLessonManageController extends BaseController
         $file   = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -417,7 +417,7 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
             }
 
