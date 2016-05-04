@@ -327,7 +327,7 @@ class CourseManageController extends BaseController
 
         $course = $this->getCourseService()->getCourse($id);
 
-        $str = "订单号,订单状态,订单名称,课程名称,课程价格（定价）,折扣金额,订单价格,优惠金额,购买者,姓名,实付价格,支付方式,优惠码,创建时间,付款时间,操作";
+        $str = "订单号,订单状态,订单名称,课程名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
 
         $str .= "\r\n";
 
@@ -340,38 +340,30 @@ class CourseManageController extends BaseController
             $column .= $order['title'].",";
             $column .= "《".$course['title']."》".",";
             $column .= $order['totalPrice'].",";
-            if ($order['discountId'] != 0) {
-                if ($order['discount'] > $course['price']) {
-                    $column .= $course['price'].",";
-                } else {
-                    $column .= $order['discount'].",";
-                }
-                
-            } else {
-                $column .= '0'.",";
-            }
-            $column .= $order['totalPrice'].",";
-            $column .= $order['couponDiscount'].",";
-            $column .= $users[$order['userId']]['nickname'].",";
-            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
-            $column .= $order['amount'].",";
-            $column .= $payment[$order['payment']].",";
+
             if (!empty($order['coupon'])) {
                 $column .= $order['coupon'].",";
             } else {
                 $column .= "无".",";
             }
+
+            $column .= $order['couponDiscount'].",";
+            $column .= $order['coinRate'] ? ($order['coinAmount'] / $order['coinRate'])."," : '0,';
+            $column .= $order['amount'].",";
+            $column .= $payment[$order['payment']].",";
+            $column .= $users[$order['userId']]['nickname'].",";
+            $column .= $profiles[$order['userId']]['truename'] ? $profiles[$order['userId']]['truename']."," : "-".",";
+
+            if (preg_match('/管理员添加/', $order['title'])) {
+                $column .= '管理员添加,';
+            } else {
+                $column .= "-,";
+            }
+
             $column .= date('Y-n-d H:i:s', $order['createdTime']).",";
 
             if ($order['paidTime'] != 0) {
-                $column .= date('Y-n-d H:i:s', $order['paidTime']).",";
-            } else {
-                $column .= "-".",";
-            }
-
-            if (preg_match('/管理员添加/',$order['title'])) {
-
-                $column .= '管理员添加';
+                $column .= date('Y-n-d H:i:s', $order['paidTime']);
             } else {
                 $column .= "-";
             }
