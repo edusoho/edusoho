@@ -10,7 +10,7 @@ class EduSohoUpgrade extends AbstractUpdater
     {
         $this->getConnection()->beginTransaction();
         try {
-            $result = $this->batchUpdate($index);
+            $result = $this->updateScheme($index);
             $this->getConnection()->commit();
 
             $this->updateCrontabSetting();
@@ -62,8 +62,8 @@ class EduSohoUpgrade extends AbstractUpdater
             $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '0' AFTER `isWeixinPublic`;");
         }
 
-        $theme = $connection->fetchAssoc("select * from theme_config where name='简默'");
-        $confirmConfig = json_decode($theme['confirmConfig'], true);
+        $theme = $this->getThemeConfigDao()->getThemeConfigByName('简墨');
+        $confirmConfig = $theme['confirmConfig'];
         if(isset($confirmConfig['blocks']['left']) && !empty($confirmConfig['blocks']['left'])) {
             $blocks = $confirmConfig['blocks']['left'];
             $hasFooterLink = false;
@@ -78,42 +78,15 @@ class EduSohoUpgrade extends AbstractUpdater
                 $footerLink = json_decode($json, true);
                 $blocks[] = $footerLink;
 
-                $blocks = json_encode($blocks);
+                $confirmConfig['blocks']['left'] = $blocks;
 
-                $connection->exec("update theme_config set confirmConfig='{$blocks}' where name='简默';");
+                $this->getThemeConfigDao()->updateThemeConfigByName('简墨', array('confirmConfig'=>$confirmConfig
+                ));
+                
             }
         }
 
 
-    }
-
-    private function batchUpdate($index)
-    {
-        if ($index === 0) {
-            $this->updateScheme();
-            return array(
-                'index'    => 1,
-                'message'  => '正在升级数据...',
-                'progress' => 4.4
-            );
-        }
-
-        $conditions = array(
-            'storage'  => 'cloud',
-            'globalId' => 0
-        );
-        $total   = $this->getUploadFileService()->searchFileCount($conditions);
-        $maxPage = ceil($total / 100) ? ceil($total / 100) : 1;
-
-        $this->getCloudFileService()->synData($conditions);
-
-        if ($index <= $maxPage) {
-            return array(
-                'index'    => $index + 1,
-                'message'  => '正在升级数据...',
-                'progress' => 4.4
-            );
-        }
     }
 
     public function updateBlock($code, $meta)
@@ -195,6 +168,11 @@ class EduSohoUpgrade extends AbstractUpdater
     private function getBlockService()
     {
         return ServiceKernel::instance()->createService('Content.BlockService');
+    }
+
+    private function getThemeConfigDao()
+    {
+        return ServiceKernel::instance()->createDao('Theme.ThemeConfigDao');
     }
 }
 
