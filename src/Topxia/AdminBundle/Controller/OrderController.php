@@ -124,11 +124,9 @@ class OrderController extends BaseController
         $profiles = ArrayToolkit::index($profiles, 'id');
 
         if ($targetType == 'course') {
-
-            $str = "订单号,订单状态,订单名称,课程名称,课程价格（定价）,折扣金额,订单价格,优惠金额,购买者,姓名,实付价格,支付方式,优惠码,创建时间,付款时间,操作";
-            
+            $str = "订单号,订单状态,订单名称,课程名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
         } elseif ($targetType == 'classroom') {
-            $str = "订单号,订单状态,订单名称,班级名称,班级价格（定价）,折扣金额,订单价格,优惠金额,购买者,姓名,实付价格,支付方式,优惠码,创建时间,付款时间,操作";
+            $str = "订单号,订单状态,订单名称,班级名称,订单价格,优惠码,优惠金额,虚拟币支付,实付价格,支付方式,购买者,姓名,操作,创建时间,付款时间";
         } else {
             $str = "订单号,订单状态,订单名称,购买者,姓名,实付价格,支付方式,创建时间,付款时间";
         }
@@ -136,7 +134,7 @@ class OrderController extends BaseController
         $str .= "\r\n";
 
         $results = array();
-           
+
         if ($targetType == 'vip') {
             foreach ($orders as $key => $orders) {
                 $member = "";
@@ -159,50 +157,44 @@ class OrderController extends BaseController
             }
         } else {
             foreach ($orders as $key => $orders) {
-                if ($targetType == 'course') {  
+                if ($targetType == 'course') {
                     $result = $this->getCourseService()->getCourse($orders['targetId']);
                 } else {
                     $result = $this->getClassroomService()->getClassroom($orders['targetId']);
                 }
+
                 $member = "";
                 $member .= $orders['sn'].",";
                 $member .= $status[$orders['status']].",";
                 $member .= $orders['title'].",";
                 $member .= "《".$result['title']."》".",";
-   
-                $member .= $result['totalPrice'].",";
-                if ($orders['discountId'] != 0) {
-                    if ($orders['discount'] > $course['price']) {
-                        $member .= $course['price'].",";
-                    } else {
-                        $member .= $orders['discount'].",";
-                    }
-                    
-                } else {
-                    $member .= '0'.",";
-                }
+
                 $member .= $orders['totalPrice'].",";
-                $member .= $orders['couponDiscount'].",";
-                $member .= $users[$orders['userId']]['nickname'].",";
-                $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
-                $member .= $orders['amount'].",";
-                $member .= $payment[$orders['payment']].",";
+
                 if (!empty($orders['coupon'])) {
                     $member .= $orders['coupon'].",";
                 } else {
                     $member .= "无".",";
                 }
+
+                $member .= $orders['couponDiscount'].",";
+                $member .= $orders['coinRate'] ? ($orders['coinAmount'] / $orders['coinRate'])."," : '0,';
+                $member .= $orders['amount'].",";
+                $member .= $payment[$orders['payment']].",";
+
+                $member .= $users[$orders['userId']]['nickname'].",";
+                $member .= $profiles[$orders['userId']]['truename'] ? $profiles[$orders['userId']]['truename']."," : "-".",";
+
+                if (preg_match('/管理员添加/', $orders['title'])) {
+                    $member .= '管理员添加,';
+                } else {
+                    $member .= "-,";
+                }
+
                 $member .= date('Y-n-d H:i:s', $orders['createdTime']).",";
 
                 if ($orders['paidTime'] != 0) {
-                    $member .= date('Y-n-d H:i:s', $orders['paidTime']).",";
-                } else {
-                    $member .= "-".",";
-                }
-
-                if (preg_match('/管理员添加/',$orders['title'])) {
-
-                    $member .= '管理员添加';
+                    $member .= date('Y-n-d H:i:s', $orders['paidTime']);
                 } else {
                     $member .= "-";
                 }
@@ -210,7 +202,6 @@ class OrderController extends BaseController
                 $results[] = $member;
             }
         }
-
 
         $str .= implode("\r\n", $results);
         $str = chr(239).chr(187).chr(191).$str;
