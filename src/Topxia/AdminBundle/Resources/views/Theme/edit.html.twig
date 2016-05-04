@@ -73,23 +73,24 @@
               </div>
 
             </div>
+            <div class="panel-body">
+              <!-- List group -->
+              <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
+                {% for pendant in themeConfig.blocks.left|default([]) %}
 
-            <!-- List group -->
-            <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
-              {% for pendant in themeConfig.blocks.left|default([]) %}
+                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true,uri:themeUri} %}
+                  
+                {% endfor %}
 
-                {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true,uri:themeUri} %}
-                
-              {% endfor %}
+                {% for pendant in allConfig.blocks.left|default([]) %}
+                  {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
 
-              {% for pendant in allConfig.blocks.left|default([]) %}
-                {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
-
-                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false,uri:themeUri} %}
-                
-                {% endif %}
-              {% endfor %}
-            </ul>
+                    {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false,uri:themeUri} %}
+                  
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
           </div>
       </div>
 

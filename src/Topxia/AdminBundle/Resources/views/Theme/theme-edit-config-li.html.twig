@@ -8,8 +8,7 @@
   <div class="col-md-4">
     &nbsp;{% if pendant.title|default(null) %}{{ pendant.title }}{% else %}{{ pendant.defaultTitle }}{% endif %}
   </div>
-  <div class="col-md-3"></div>
-  <div class="col-md-1">
+  <div class="col-md-4 text-right">
     {% if pendant.code not in ['login-box']%}
       
       {% if pendant.code == 'middle-banner' or pendant.code == 'footer-link' %}
