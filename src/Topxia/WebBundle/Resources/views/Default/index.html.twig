@@ -29,7 +29,8 @@
     	{% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
     	{% if code == 'friend-link' %}
     	   {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
-    	{% else %}
+    	{% elseif code == 'footer-link' %}
+        {% else %}
 		   {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
 		{% endif %}
     {% endfor %}
