@@ -12,6 +12,7 @@ class EditorController extends BaseController
 {
     public function uploadAction(Request $request)
     {
+        $isWebuploader = 0;
         try {
             $token = $request->query->get('token');
 
@@ -44,14 +45,14 @@ class EditorController extends BaseController
                 throw new \RuntimeException("上传类型不正确！");
             }
 
-
             $record = $this->getFileService()->uploadFile($token['group'], $file);
-            $url = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
+            $url    = $this->get('topxia.twig.web_extension')->getFilePath($record['uri']);
 
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('url' => $url));
             } else {
                 $funcNum = $request->query->get('CKEditorFuncNum');
+
                 if ($token['type'] == 'image') {
                     $response = "<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction({$funcNum}, '{$url}', function(){ this._.dialog.getParentEditor().insertHtml('<img src=\"{$url}\">'); this._.dialog.hide(); return false; });</script>";
                 } else {
@@ -60,9 +61,8 @@ class EditorController extends BaseController
 
                 return new Response($response);
             }
-            
         } catch (\Exception $e) {
-            $message  = $e->getMessage();
+            $message = $e->getMessage();
 
             if ($isWebuploader) {
                 return $this->createJsonResponse(array('message' => $message));
