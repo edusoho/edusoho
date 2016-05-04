@@ -1,6 +1,5 @@
 <?php
 
-use Topxia\Common\BlockToolkit;
 use Topxia\Service\Common\ServiceKernel;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -42,11 +41,25 @@ class EduSohoUpgrade extends AbstractUpdater
 
     private function updateScheme()
     {
+        $connection = $this->getConnection();
+
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
         $inviteSetting['get_coupon_setting'] = 1;
 
-        ServiceKernel::instance()->createService('System.SettingService')->set('invite', $inviteSetting);
+        $this->getSettingService()->set('invite', $inviteSetting);
+
+        if (!$this->isFieldExist('user_profile', 'isQQPublic')) {
+            $connection->exec("ALTER TABLE `user_profile` ADD `isQQPublic` INT NOT NULL DEFAULT '1' AFTER `weixin`;");
+        }
+
+        if (!$this->isFieldExist('user_profile', 'isWeixinPublic')) {
+            $connection->exec("ALTER TABLE `user_profile` ADD `isWeixinPublic` INT NOT NULL DEFAULT '1' AFTER `isQQPublic`;");
+        }
+
+        if (!$this->isFieldExist('user_profile', 'isWeiboPublic')) {
+            $connection->exec("ALTER TABLE `user_profile` ADD `isWeiboPublic` INT NOT NULL DEFAULT '1' AFTER `isWeixinPublic`;");
+        }
     }
 
     private function batchUpdate($index)
@@ -75,43 +88,6 @@ class EduSohoUpgrade extends AbstractUpdater
                 'message'  => '正在升级数据...',
                 'progress' => 4.4
             );
-        }
-    }
-
-    public function updateBlock($code, $meta)
-    {
-        global $kernel;
-        $block = $this->getBlockService()->getBlockByCode($code);
-
-        $default = array();
-
-        foreach ($meta['items'] as $i => $item) {
-            $default[$i] = $item['default'];
-        }
-
-        if (empty($block)) {
-            $block = $this->getBlockService()->createBlock(array(
-                'code'         => $code,
-                'mode'         => 'template',
-                'category'     => empty($meta['category']) ? 'system' : $meta['category'],
-                'meta'         => $meta,
-                'data'         => $default,
-                'templateName' => $meta['templateName'],
-                'title'        => $meta['title'],
-                'content'      => $html
-            ));
-
-            $html  = BlockToolkit::render($block, $kernel->getContainer());
-            $block = $this->getBlockService()->updateBlock($block['id'], array(
-                'content' => $html
-            ));
-        } else {
-            $html  = BlockToolkit::render($block, $kernel->getContainer());
-            $block = $this->getBlockService()->updateBlock($block['id'], array(
-                'meta'    => $meta,
-                'data'    => $block['data'],
-                'content' => $html
-            ));
         }
     }
 
