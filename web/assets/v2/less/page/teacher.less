@@ -4,7 +4,8 @@
   text-align: center;
   z-index: 1;
   .border-radius;
-  .es-box-shadow;
+  // .es-box-shadow;
+  border: 1px solid @border-color;
   @media(max-width: @screen-xs-max) {
     margin-left: -5px;
     margin-right: -5px;
@@ -25,9 +26,9 @@
   .teacher-top {
     position: relative;
     z-index: 1;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
-    background-color: @bg-color;
+    .border-top-left-radius();
+    .border-top-right-radius();
+    background-color: @bg-new-color;
     padding: 20px 10px;
     @media(max-width: @screen-xs-max) {
       padding: 10px;
@@ -107,10 +108,10 @@
   }
 }
 
-.teacher-list.no-shadow .teacher-item {
-  .box-shadow(none);
-}
+// .teacher-list.no-shadow .teacher-item {
+//   .box-shadow(none);
+// }
 
-.lt-ie9 .teacher-item {
-  border: 1px solid @gray-light;
-}
+// .lt-ie9 .teacher-item {
+//   border: 1px solid @gray-light;
+// }
