@@ -1,0 +1,172 @@
+.webuploader-container {
+  position: relative;
+}
+.webuploader-element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px,1px,1px,1px);
+}
+.webuploader-pick {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: #fff;
+  padding: 5px 10px;
+  color: #333;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+.webuploader-pick-hover {
+  background: #e6e6e6;
+  border-color: #adadad;
+}
+
+.webuploader-pick-disable {
+  opacity: 0.6;
+  pointer-events:none;
+}
+
+.balloon-uploader {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.balloon-uploader-footer {
+  background-color: #f5f5f5;
+  color: #333;
+  padding: 10px 15px;
+  border-top: 1px solid #ddd;
+  text-align: right;
+}
+
+.balloon-filelist {
+  width: 100%;
+}
+
+.balloon-filelist-heading {
+  position: relative;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.balloon-uploader-body {
+  position: relative;
+  
+}
+
+.balloon-filelist .file-name {
+  margin-right: 250px;
+  padding: 8px;
+}
+
+.balloon-filelist .file-size {
+  position: absolute;
+  top: 0px;
+  right: 150px;
+  width: 100px;
+  padding: 8px;
+}
+
+.balloon-filelist .file-status {
+  position: absolute;
+  top: 0px;
+  right: 30px;
+  width: 120px;
+  text-align: left;
+  padding: 8px;
+
+}
+
+.balloon-filelist .file-remove {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 50px;
+  text-align: left;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+.balloon-filelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.balloon-filelist ul li {
+  position: relative;
+  border-bottom: 1px solid #ddd;
+}
+
+.balloon-dnd {
+  visibility: hidden;
+}
+
+.balloon-uploader-none .balloon-uploader-footer,
+.balloon-uploader-none .balloon-uploader-body {
+  visibility: hidden;
+}
+
+.balloon-uploader-none .balloon-dnd {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.balloon-nofile {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 200px;
+  text-align: center;
+  color: #999;
+}
+
+.balloon-uploader .file-pick-btn {
+  display: inline-block;
+}
+
+.balloon-uploader .start-upload-btn {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  background: #5bc0de;
+  padding: 5px 10px;
+  color: #fff;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #46b8da;
+  overflow: hidden;
+}
+
+.balloon-uploader .start-upload-btn:hover {
+  background: #31b0d5;
+  border-color: #269abc;
+}
+
+.balloon-filelist .file-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.balloon-filelist .file-progress-bar {
+  background: rgba(59, 181, 33, 0.18);
+  float: left;
+  height: 100%;
+}

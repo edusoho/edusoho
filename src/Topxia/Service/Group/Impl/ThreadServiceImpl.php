@@ -340,17 +340,21 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $fields['title']   = $this->purifyHtml($fields['title']);
         $fields['content'] = $this->purifyHtml($fields['content']);
 
-        return $this->getThreadDao()->updateThread($id, $fields);
+        $thread = $this->getThreadDao()->updateThread($id, $fields);
+        $this->dispatchEvent('group.thread.update', $thread);
+        return $thread;
     }
 
     public function closeThread($threadId)
     {
-        $this->getThreadDao()->updateThread($threadId, array('status' => 'close'));
+        $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'close'));
+        $this->dispatchEvent('group.thread.close', $thread);
     }
 
     public function openThread($threadId)
     {
-        $this->getThreadDao()->updateThread($threadId, array('status' => 'open'));
+        $thread = $this->getThreadDao()->updateThread($threadId, array('status' => 'open'));
+        $this->dispatchEvent('group.thread.open', $thread);
     }
 
     public function searchThreads($conditions, $orderBy, $start, $limit)
@@ -432,6 +436,7 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getGroupService()->waveGroup($thread['groupId'], 'threadNum', -1);
 
         $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'threadNum', -1);
+        $this->dispatchEvent('group.thread.delete', $thread);
     }
 
     public function updatePost($id, $fields)
@@ -441,7 +446,9 @@ class ThreadServiceImpl extends BaseService implements ThreadService
             $fields['content'] = $this->purifyHtml($fields['content']);
         }
 
-        return $this->getThreadPostDao()->updatePost($id, $fields);
+        $post = $this->getThreadPostDao()->updatePost($id, $fields);
+        // $this->dispatchEvent('group.thread.post.update', $post);
+        return $post;
     }
 
     public function deletePost($postId)
@@ -457,6 +464,8 @@ class ThreadServiceImpl extends BaseService implements ThreadService
         $this->getGroupService()->waveMember($thread['groupId'], $threadId, 'postNum', -1);
 
         $this->waveThread($threadId, 'postNum', -1);
+
+        $this->dispatchEvent('group.thread.post.delete', $post);
     }
 
     public function deletePostsByThreadId($threadId)

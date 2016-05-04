@@ -13,7 +13,8 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                
+
+                $('#message-create-form-btn').button('loading').addClass('disabled');
                 $.post($form.attr('action'), $form.serialize(), function(html) {
                     $modal.modal('hide');
                     Notify.success('私信发送成功');

@@ -106,11 +106,13 @@
                 "title": "中部图标１",
                 "desc": "建议图片大小为130*130",
                 "count": 1,
-                "type": "img",
+                "type": "imglink",
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/icon_introduction_1.png",
-                        "alt": "中部横幅"
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
                     }
                 ]
             },
@@ -141,11 +143,13 @@
                 "title": "中部图标２",
                 "desc": "建议图片大小为130*130",
                 "count": 1,
-                "type": "img",
+                "type": "imglink",
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/icon_introduction_2.png",
-                        "alt": "中部横幅"
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
                     }
                 ]
             },
@@ -176,11 +180,13 @@
                 "title": "中部图标３",
                 "desc": "建议图片大小为130*130",
                 "count": 1,
-                "type": "img",
+                "type": "imglink",
                 "default": [
                     {
                         "src": "\/assets\/v2\/img\/icon_introduction_3.png",
-                        "alt": "中部横幅"
+                        "alt": "中部横幅",
+                        "href": "#",
+                        "target": "_blank"
                     }
                 ]
             },
@@ -206,6 +212,39 @@
                     }
                 ]
             }
+        }
+    },
+     "jianmo:advertisement_banner":
+    {
+        "title": "简墨主题：中部广告",
+        "category": "jianmo",
+        "templateName": "@theme/jianmo/block/advertisement_banner.template.html.twig",
+        "items": {
+            "middleImg": {
+                "title": "广告图片",
+                "desc": "建议图片大小为宽1920px高 400px",
+                "count": "1",
+                "type": "imglink",
+                "default": [
+                    {
+                        "src": "\/themes\/jianmo\/img\/banner_poster.jpg",
+                        "alt": "图片１的描述",
+                        "href": "#",
+                        "target": "_blank"
+                    }
+                ]
+            },
+            "middleBackground": {
+                "title": "背景填充色",
+                "desc": "填写颜色值,例如#ffffff",
+                "count": "1",
+                "type": "text",
+                "default": [
+                    {
+                        "value": "#e2133a"
+                    }
+                ]
+            }                                                                                                                       
         }
     },
     "jianmo:bottom_info":

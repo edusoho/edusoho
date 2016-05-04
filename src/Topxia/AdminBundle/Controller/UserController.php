@@ -377,6 +377,7 @@ class UserController extends BaseController
     public function lockAction($id)
     {
         $this->getUserService()->lockUser($id);
+         $this->kickUserLogout($id);
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user'    => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id)
@@ -491,12 +492,24 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+            $this->kickUserLogout($user['id']);
             return $this->createJsonResponse(true);
         }
 
         return $this->render('TopxiaAdminBundle:User:change-password-modal.html.twig', array(
             'user' => $user
         ));
+    }
+
+    protected function kickUserLogout($userId)
+    {
+        $this->getSessionService()->clearByUserId($userId);
+        $tokens = $this->getTokenService()->findTokensByUserIdAndType($userId,'mobile_login');
+        if(!empty($tokens)){
+            foreach ($tokens as $token) {
+                $this->getTokenService()->destoryToken($token['token']);
+            }
+        }
     }
 
     protected function getNotificationService()
@@ -512,6 +525,16 @@ class UserController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getSessionService()
+    {
+        return $this->getServiceKernel()->createService('System.SessionService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getCourseService()

@@ -54,6 +54,7 @@ class TagController extends BaseController
 	public function deleteAction(Request $request, $id)
 	{
 		$this->getTagService()->deleteTag($id);
+
 		return $this->createJsonResponse(true);
 	}
 
@@ -86,5 +87,4 @@ class TagController extends BaseController
 		}
 		return $tag;
 	}
-
 }

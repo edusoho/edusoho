@@ -36,7 +36,7 @@
   
   <div class="form-group">
     <select id="keywordType" name="keywordType" class="form-control">
-      {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType'), '--关键词类型--') }}
+      {{ select_options(dict('userKeyWordType'), app.request.query.get('keywordType') ? app.request.query.get('keywordType') : 'nickname') }}
     </select>
   </div>
 
