@@ -203,15 +203,18 @@ class MyTeachingController extends BaseController
         if ($user->isAdmin()) {
             $conditions['userId'] = $user['id'];
         } else {
-            $members = $this->getOpenCourseService()->searchMembers(
+            $conditions['courseIds'] = array(-1);
+            $members                 = $this->getOpenCourseService()->searchMembers(
                 array('userId' => $user['id'], 'role' => 'teacher'),
                 array('createdTime', 'ASC'),
                 0,
                 999
             );
 
-            foreach ($members as $key => $member) {
-                $conditions['courseIds'][$key] = $member['courseId'];
+            if ($members) {
+                foreach ($members as $key => $member) {
+                    $conditions['courseIds'][] = $member['courseId'];
+                }
             }
         }
 
