@@ -59,11 +59,10 @@ class OpenCourseEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $material = $context['material'];
+        $material = $event->getSubject();
 
-        if (!empty($material['fileId'])) {
-            $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
+        if ($material) {
+            $this->getOpenCourseService()->waveCourseLesson($material['lessonId'], 'materialNum', -1);
         }
     }
 

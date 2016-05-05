@@ -39,8 +39,7 @@ class UploadFileEventSubscriber implements EventSubscriberInterface
 
     public function onMaterialDelete(ServiceEvent $event)
     {
-        $context  = $event->getSubject();
-        $material = $context['material'];
+        $material = $event->getSubject();
 
         if (!empty($material['fileId'])) {
             $this->getUploadFileService()->waveUploadFile($material['fileId'], 'usedCount', -1);
