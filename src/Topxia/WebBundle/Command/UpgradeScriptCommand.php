@@ -13,9 +13,10 @@ class UpgradeScriptCommand extends BaseCommand
 {
     protected function configure()
     {
-        $this->setName('topxia:upgrade-script')
+        $this->setName('util:upgrade-script')
             ->addArgument('version', InputArgument::REQUIRED, '要升级的版本号')
-            ->addArgument('index', InputArgument::OPTIONAL, '');
+            ->addArgument('index', InputArgument::OPTIONAL, '')
+            ->setDescription('用于命令行中执行指定版本的升级脚本');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

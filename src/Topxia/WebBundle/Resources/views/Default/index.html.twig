@@ -27,8 +27,12 @@
         {% endif %}
 
     	{% set category = config.categoryId|default(0) ? data('Category', {categoryId: config.categoryId})  : null %}
-		{% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
-
+    	{% if code == 'friend-link' %}
+    	   {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {friendlyLinks:friendlyLinks} %}
+    	{% elseif code == 'footer-link' %}
+        {% else %}
+		   {% include 'TopxiaWebBundle:Default:' ~ code ~ '.html.twig' with {config:config, category: category} %}
+		{% endif %}
     {% endfor %}
 
 {% endblock %}

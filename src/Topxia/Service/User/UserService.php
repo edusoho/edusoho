@@ -259,4 +259,5 @@ interface UserService
 
     public function deleteUserPayAgreements($id);
 
+    public function changeAvatarFromImgUrl($userId, $imgUrl);
 }

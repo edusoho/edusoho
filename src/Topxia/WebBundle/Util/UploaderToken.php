@@ -10,7 +10,7 @@ use Topxia\Service\Common\ServiceKernel;
 class UploaderToken
 {
 
-	public function make($targetType, $targetId, $bucket, $ttl = 7200)
+	public function make($targetType, $targetId, $bucket, $ttl = 86400)
 	{
 		$user = $this->getCurrentUser();
 		$deadline = time() + $ttl;

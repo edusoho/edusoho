@@ -133,11 +133,11 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
             return $globalIds;
         } elseif ($searchType == 'user') {
-            $users      = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, 999);
+            $users = $this->getUserService()->searchUsers(array('nickname' => $keywords), array('id', 'desc'), 0, PHP_INT_MAX);
 
-            $userIds    = ArrayToolkit::column($users, 'id');
+            $userIds = ArrayToolkit::column($users, 'id');
 
-            $userIds = empty($userIds) ? array(-1) : $userIds;
+            $userIds    = empty($userIds) ? array(-1) : $userIds;
             $localFiles = $this->getUploadFileService()->searchFiles(
                 array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime', 'DESC'), 0, PHP_INT_MAX
             );

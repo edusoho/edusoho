@@ -526,6 +526,7 @@ CREATE TABLE `file` (
   `size` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件大小',
   `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '文件状态',
   `createdTime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文件上传时间',
+  `uploadFileId` INT(10) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -1168,6 +1169,9 @@ CREATE TABLE `user_profile` (
   `class` varchar(255) NOT NULL DEFAULT '' COMMENT '班级',
   `weibo` varchar(255) NOT NULL DEFAULT '' COMMENT '微博',
   `weixin` varchar(255) NOT NULL DEFAULT '' COMMENT '微信',
+  `isQQPublic` INT NOT NULL DEFAULT '0' COMMENT 'QQ号是否公开',
+  `isWeixinPublic` INT NOT NULL DEFAULT '0' COMMENT '微信是否公开',
+  `isWeiboPublic` INT NOT NULL DEFAULT '0' COMMENT '微博是否公开',
   `site` varchar(255) NOT NULL DEFAULT '' COMMENT '网站',
   `intField1` int(11) DEFAULT NULL,
   `intField2` int(11) DEFAULT NULL,
