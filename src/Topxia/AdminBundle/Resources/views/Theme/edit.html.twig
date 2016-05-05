@@ -76,18 +76,32 @@
             <!-- List group -->
             <ul class="list-group module-item-list theme-edit-block theme-custom-left-block">
               {% for pendant in themeConfig.blocks.left|default([]) %}
-
-                {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true,uri:themeUri} %}
-                
+                {% if pendant.code != 'footer-link' %} 
+                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:true,uri:themeUri} %}
+                {% endif %}
               {% endfor %}
 
               {% for pendant in allConfig.blocks.left|default([]) %}
                 {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
-
-                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false,uri:themeUri} %}
-                
+                  {% if pendant.code != 'footer-link' %}
+                    {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:false,uri:themeUri} %}
+                  {% endif %}
                 {% endif %}
               {% endfor %}
+
+              {# 底部链接始终在最下面 #}
+              {% for pendant in allConfig.blocks.left|default([]) %}
+                {% if pendant.code == 'footer-link' %}
+                  {% if not is_exist_in_subarray_by_id(pendant, themeConfig.blocks.left|default([])) %}
+                    {% set isChoiced = false %}
+                  {% else %}
+                    {% set isChoiced = true %}
+                  {% endif %}
+                  
+                  {% include 'TopxiaAdminBundle:Theme:theme-edit-config-li.html.twig' with {isChoiced:isChoiced,uri:themeUri} %}
+                {% endif %}
+              {% endfor %}
+              
             </ul>
           </div>
       </div>
