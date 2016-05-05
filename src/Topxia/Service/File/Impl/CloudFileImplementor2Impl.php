@@ -17,6 +17,14 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         return $this->mergeCloudFile($file, $cloudFile);
     }
 
+    public function getFileFromLeaf($file)
+    {
+        $api       = CloudAPIFactory::create('leaf');
+        $cloudFile = $api->get("/resources/{$file['globalId']}");
+
+        return $this->mergeCloudFile($file, $cloudFile);
+    }
+
     public function player($globalId)
     {
         $api    = CloudAPIFactory::create('leaf');

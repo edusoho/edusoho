@@ -5,6 +5,8 @@ interface UploadFileService2
 {
     public function getFile($id);
 
+    public function getFileFromLeaf($id);
+
     /**
      * 获得文件基础信息
      */
