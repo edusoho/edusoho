@@ -5,8 +5,8 @@
 
 	<li class="{% if filter == 'classroom' %}active{% endif %}"><a href="{{path('my_teaching_courses', {filter:'classroom'}) }}">{{setting("classroom.name")|default("班级"|trans)}}{{'课程'|trans}}</a></li>
 
-	<li class="{% if filter == 'openCourse' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'open'}) }}">{{'录播公开课'|trans}}</a></li>
-	<li class="{% if filter == 'openCourse' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'liveOpen'}) }}">{{'直播公开课'|trans}}</a></li>
+	<li class="{% if filter == 'open' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'open'}) }}">{{'录播公开课'|trans}}</a></li>
+	<li class="{% if filter == 'liveOpen' %}active{% endif %}"><a href="{{ path('my_teaching_open_courses', {filter:'liveOpen'}) }}">{{'直播公开课'|trans}}</a></li>
 
 </ul>
 <br>

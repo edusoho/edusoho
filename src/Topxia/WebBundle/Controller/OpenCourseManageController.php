@@ -134,15 +134,14 @@ class OpenCourseManageController extends BaseController
     {
         $course = $this->getOpenCourseService()->tryManageOpenCourse($id);
 
-        $fields = $request->query->all();
+        $fields             = $request->query->all();
+        $fields['userType'] = isset($fields['userType']) ? $fields['userType'] : 'login';
 
         $condition = array('courseId' => $course['id'], 'role' => 'student');
 
-        if (isset($fields['userType']) && $fields['userType'] == 'login') {
+        if ($fields['userType'] == 'login') {
             $condition['userIdGT'] = 0;
-        }
-
-        if (isset($fields['userType']) && $fields['userType'] == 'unlogin') {
+        } elseif ($fields['userType'] == 'unlogin') {
             $condition['userId'] = 0;
         }
 
