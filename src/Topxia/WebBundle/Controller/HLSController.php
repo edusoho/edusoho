@@ -24,7 +24,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFile2($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -121,7 +121,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFile2($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -213,7 +213,7 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFile2($id);
 
         if (empty($file)) {
             return $this->makeFakeTokenString();
@@ -246,7 +246,7 @@ class HLSController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getOldUploadFileService()
@@ -274,7 +274,7 @@ class HLSController extends BaseController
         $storage = $this->getSettingService()->get("storage");
 
         if (!empty($storage['video_header'])) {
-            $file       = $this->getUploadFileService()->getFileByTargetType('headLeader');
+            $file       = $this->getUploadFileService()->getFileByTargetType2('headLeader');
             $beginnings = $file['metas2'];
             $levels     = array($level);
             $levels     = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));

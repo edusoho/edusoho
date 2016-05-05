@@ -138,33 +138,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->getUploadFileDao()->findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
     }
 
-    public function searchFilesByProcessStatus($conditions, $orderBy, $start, $limit)
-    {
-        $filds = array();
-
-        if (!empty($conditions['processStatus'])) {
-            $filds['processStatus'] = $conditions['processStatus'];
-        }
-
-        $conditions = $this->_prepareSearchConditions($conditions);
-        $files      = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
-
-        if (empty($files)) {
-            return array();
-        }
-
-        $groupFiles = ArrayToolkit::group($files, 'storage');
-
-        $filds['nos'] = implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'));
-
-        if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
-            $cloudFiles = $this->getFileImplementor(array('storage' => 'cloud'))->search($filds);
-            $cloudFiles = ArrayToolkit::index($cloudFiles['data'], 'id');
-        }
-
-        return $cloudFiles;
-    }
-
     public function searchFiles($conditions, $orderBy, $start, $limit)
     {
         if (!empty($conditions['processStatus'])) {
@@ -753,11 +726,6 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
         return $this->createService('User.UserService');
     }
 
-    protected function getFileImplementorName($file)
-    {
-        return $file['storage'];
-    }
-
     protected function getFileImplementor($file)
     {
         return $this->getFileImplementorByStorage($file['storage']);
@@ -813,20 +781,20 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
     }
 }
 
-class FileFilter
-{
-    public static function filters($files)
-    {
-        $filterResult = array();
-
-        if (empty($files)) {
-            return $filterResult;
-        }
-
-        foreach ($files as $index => $file) {
-            array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
-        }
-
-        return $filterResult;
-    }
-}
+// class FileFilter
+// {
+//     public static function filters($files)
+//     {
+//         $filterResult = array();
+//
+//         if (empty($files)) {
+//             return $filterResult;
+//         }
+//
+//         foreach ($files as $index => $file) {
+//             array_push($filterResult, array('id' => $file['id'], 'convertStatus' => $file['convertStatus']));
+//         }
+//
+//         return $filterResult;
+//     }
+// }

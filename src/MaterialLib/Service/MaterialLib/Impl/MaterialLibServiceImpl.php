@@ -12,12 +12,12 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function get($id)
     {
         //$this->checkPermission(Permission::VIEW, array('id' => $id));
-        return $this->getUploadFileService()->getFile($id);
+        return $this->getUploadFileService()->getFile2($id);
     }
 
     public function getByGlobalId($globalId)
     {
-        return $this->getUploadFileService()->getFileByGlobalId($globalId);
+        return $this->getUploadFileService()->getFileByGlobalId2($globalId);
     }
 
     public function player($globalId)
@@ -35,7 +35,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     public function delete($id)
     {
         //$this->checkPermission(Permission::DELETE, array('file' => $file));
-        $result = $this->getUploadFileService()->deleteFile($id);
+        $result = $this->getUploadFileService()->deleteFile2($id);
 
         if ($result) {
             return true;
@@ -150,7 +150,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService2');
+        return $this->createService('File.UploadFileService');
     }
 
     // protected function getPermissionService()

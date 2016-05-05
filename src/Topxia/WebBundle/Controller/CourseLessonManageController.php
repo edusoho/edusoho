@@ -38,11 +38,11 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
 
                 if ($file['type'] == "document" && $file['convertStatus'] == "none") {
-                    $convertHash = $this->getUploadFileService()->reconvertFile(
+                    $convertHash = $this->getUploadFileService()->reconvertFile2(
                         $file['id'],
                         $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
                     );
@@ -59,7 +59,7 @@ class CourseLessonManageController extends BaseController
         $file = null;
 
         if ($lesson['mediaId']) {
-            $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFile2($lesson['mediaId']);
 
             if (!empty($file)) {
                 $lesson['media'] = array(
@@ -225,7 +225,7 @@ class CourseLessonManageController extends BaseController
         $file = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -245,7 +245,7 @@ class CourseLessonManageController extends BaseController
         $file   = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -417,7 +417,7 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
             }
 
@@ -530,7 +530,7 @@ class CourseLessonManageController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getQuestionService()

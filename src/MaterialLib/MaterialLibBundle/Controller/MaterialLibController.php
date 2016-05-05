@@ -66,10 +66,10 @@ class MaterialLibController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFilesCount($conditions),
+            $this->getUploadFileService()->searchFilesCount2($conditions),
             20
         );
-        $files = $this->getUploadFileService()->searchFiles(
+        $files = $this->getUploadFileService()->searchFiles2(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -311,7 +311,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
-        $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
+        $mySharingContacts = $this->getUploadFileService()->findMySharingContacts2($user['id']);
 
         return $this->createJsonResponse($mySharingContacts);
     }
@@ -480,7 +480,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFile2($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -524,7 +524,7 @@ class MaterialLibController extends BaseController
 
     protected function tryAccessFile($fileId)
     {
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file = $this->getUploadFileService()->getFile2($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -581,7 +581,7 @@ class MaterialLibController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
+        return $this->getServiceKernel()->createService('File.UploadFileService');
     }
 
     protected function getUploadFileTagService()

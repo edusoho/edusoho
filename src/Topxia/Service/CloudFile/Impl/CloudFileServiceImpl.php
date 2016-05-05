@@ -95,7 +95,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $conditions = array('endCount' => 1);
         }
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+        $files = $this->getUploadFileService()->searchFiles2($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         if (!empty($files)) {
             return ArrayToolkit::column($files, 'globalId');
@@ -108,7 +108,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     {
         $filesInTags = $this->getUploadFileTagService()->findByTagId($tags);
         $fileIds     = ArrayToolkit::column($filesInTags, 'fileId');
-        $files       = $this->getUploadFileService()->findFilesByIds($fileIds);
+        $files       = $this->getUploadFileService()->findFilesByIds2($fileIds);
 
         if (!empty($files)) {
             return ArrayToolkit::column($files, 'globalId');
@@ -138,7 +138,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             $userIds    = ArrayToolkit::column($users, 'id');
 
             $userIds = empty($userIds) ? array(-1) : $userIds;
-            $localFiles = $this->getUploadFileService()->searchFiles(
+            $localFiles = $this->getUploadFileService()->searchFiles2(
                 array('createdUserIds' => $userIds, 'storage' => 'cloud'), array('createdTime', 'DESC'), 0, PHP_INT_MAX
             );
             $globalIds = ArrayToolkit::column($localFiles, 'globalId');
@@ -155,7 +155,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             return false;
         }
 
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $file = $this->getUploadFileService()->getFileByGlobalId2($globalId);
 
         if (!empty($file)) {
             $result = $this->getUploadFileService()->edit($file['id'], $fields);
@@ -172,10 +172,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
             return false;
         }
 
-        $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
+        $file = $this->getUploadFileService()->getFileByGlobalId2($globalId);
 
         if (!empty($file)) {
-            $result = $this->getUploadFileService()->deleteFile($file['id']);
+            $result = $this->getUploadFileService()->deleteFile2($file['id']);
             return array('success' => true);
         }
 
@@ -231,7 +231,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService2');
+        return $this->createService('File.UploadFileService');
     }
 
     protected function getUploadFileTagService()

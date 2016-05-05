@@ -173,7 +173,7 @@ class MaterialServiceImpl extends BaseService implements MaterialService
 
     protected function getUploadFileService()
     {
-        return $this->createService('File.UploadFileService2');
+        return $this->createService('File.UploadFileService');
     }
 
 }
