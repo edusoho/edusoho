@@ -146,7 +146,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $conditions['existGlobalId']          = 0;
             $conditions                           = $this->_prepareSearchConditions($conditions);
 
-            $files     = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, 0, 99999);
+            $files     = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, 0, PHP_INT_MAX);
             $globalIds = ArrayToolkit::column($files, 'globalId');
 
             if (empty($globalIds)) {
@@ -199,7 +199,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             $conditions['storage']                = 'cloud';
             $conditions['existGlobalId']          = 0;
             $conditions                           = $this->_prepareSearchConditions($conditions);
-            $files                                = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 99999);
+            $files                                = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
             $globalIds                            = ArrayToolkit::column($files, 'globalId');
 
             if (empty($globalIds)) {
@@ -220,7 +220,7 @@ class UploadFileService2Impl extends BaseService implements UploadFileService2
             return 0;
         }
 
-        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 9999);
+        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
 
         $groupFiles = ArrayToolkit::group($files, 'storage');
 

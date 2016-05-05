@@ -120,7 +120,7 @@
         <input type="hidden" name="captcha_enabled" value="{{ setting('auth.captcha_enabled') }}" />
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
         {% if app.request.get('inviteCode', '') %}
-        <input type="hidden" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
+        <input type="hidden" id="invite_code" name="invite_code" value="{{ app.request.get('inviteCode', '')}}">
         {% endif %}
 
       </form>
@@ -128,7 +128,7 @@
       {% if setting('login_bind.enabled') %}
         <div class="social-login">
           <span>
-            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path})) }}
+            {{ render(controller('TopxiaWebBundle:Login:oauth2LoginsBlock', {targetPath:_target_path,inviteCode:inviteCode|default('')})) }}
           </span>
           <div class="line"></div>
         </div>

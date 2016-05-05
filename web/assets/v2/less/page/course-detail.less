@@ -27,8 +27,8 @@
     float: left;
     background-color: #fff;
     @media (max-width: @screen-xs-max) {
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px; 
+      .border-top-left-radius();
+      .border-top-right-radius(); 
     }
     .course-img-cover {
       position: absolute;
@@ -57,8 +57,8 @@
     .img-responsive {
       width: 100%;
       @media (max-width: @screen-xs-max) {
-        border-top-left-radius: 2px;
-        border-top-right-radius: 2px; 
+        .border-top-left-radius();
+        .border-top-right-radius(); 
       }
     }
     .tags {
@@ -157,8 +157,8 @@
     padding: 12px 15px;
     background-color: @bg-color;
     color: @gray;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    .border-top-right-radius();
+    .border-bottom-right-radius();
     @media (max-width: @screen-sm-max) {
       .border-radius;
     }
@@ -234,12 +234,12 @@
   .course-info {
     float: left;
     width: 390px;
-    width: 386px\9;
+    width: 388px\9;
     padding: 15px 20px 15px 5px;
     background-color: #fff;
     @media (max-width: @screen-md-max) {
       width: 350px;
-      width: 346px\9;
+      width: 348px\9;
       padding: 8px 10px;
       .title {
         margin-top: 10px;
@@ -251,10 +251,10 @@
       }
     }
     @media (max-width: @screen-sm-max) and (min-width: @screen-sm-min) {
-      width: 360px;
+      width: 358px;
       width: 356px\9;
-      height: 211px;
-      border-top-right-radius: 2px;
+      height: 212px;
+      .border-top-right-radius();
     }
     @media (max-width: @screen-xs-max) {
       float: none;
@@ -263,9 +263,9 @@
   }
   .course-operation {
     float: right;
-    width: 240px;
+    width: 238px;
     @media (max-width: @screen-md-max) and (min-width: @screen-md-min) {
-      width: 190px;
+      width: 188px;
       padding: 10px;
     }
     @media (max-width: @screen-sm-max) {
@@ -279,6 +279,7 @@
         float: left;
         width: 33.33%;
         border: none;
+        margin-top: 10px;
       }
     }
     .buy {
@@ -339,12 +340,12 @@
   .course-info {
     float: left;
     width: 570px;
-    width: 566px\9;
+    width: 568px\9;
     padding: 15px 25px;
     background-color: #fff;
     @media (max-width: @screen-md-max) {
       width: 470px;
-      width: 466px\9;
+      width: 468px\9;
       padding: 10px;
       .title {
         margin-top: 10px;
@@ -352,7 +353,7 @@
     }
     @media (max-width: @screen-sm-max) {
       width: 320px;
-      width: 316px\9;
+      width: 318px\9;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
@@ -360,13 +361,13 @@
   }
   .course-operation {
     float: right;
-    width: 240px;
+    width: 238px;
     @media (max-width: @screen-md-max) {
-      width: 210px;
+      width: 208px;
       padding: 10px;
     }
     @media (max-width: @screen-sm-max) {
-      width: 140px;
+      width: 138px;
     }
     @media (max-width: @screen-xs-max) {
       width: 100%;
@@ -550,9 +551,8 @@
     img {
       width: 100px;
       height: auto;
-      border: 3px solid #fff;
+      border: 3px solid @border-color;
       .border-radius;
-      .es-box-shadow;
     }
   }
   .media-body {

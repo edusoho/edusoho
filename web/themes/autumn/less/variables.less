@@ -27,9 +27,16 @@
 
 .es-transition(@property:all,@time:.3s) {
   -webkit-transition: @property @time ease;
-     -moz-transition: @property @time ease;
-       -o-transition: @property @time ease;
-          transition: @property @time ease;
+  -moz-transition: @property @time ease;
+  -o-transition: @property @time ease;
+  transition: @property @time ease;
+}
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
 }
 
 a:hover, 

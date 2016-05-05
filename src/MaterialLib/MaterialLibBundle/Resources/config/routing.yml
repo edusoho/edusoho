@@ -18,10 +18,6 @@ material_lib_my_sharing_users:
     pattern: /material/lib/my/sharing_users/show
     defaults: { _controller: MaterialLibBundle:MaterialLib:historyUserShow }
 
-material_lib_my_sharing_history:
-    pattern: /material/lib/my/sharing/users_history
-    defaults: { _controller: MaterialLibBundle:MaterialLib:showHistory }
-
 material_lib_my_sharing_contacts:
     pattern: /material/lib/recent/contacts
     defaults: { _controller: MaterialLibBundle:MaterialLib:findMySharingContacts }
@@ -46,10 +42,6 @@ material_lib_save_collection:
     pattern: /material/lib/my/collection/save
     defaults: { _controller: MaterialLibBundle:MaterialLib:collect }
 
-material_lib_file_preview_content:
-    pattern:  /materiallib/file/{fileId}/preview_content
-    defaults: { _controller: TopxiaWebBundle:CourseLesson:file }
-
 material_lib_file_preview:
     pattern:  /material/lib/file/{fileId}/preview
     defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
@@ -62,20 +54,6 @@ material_edit:
 material_lib_file_player:
     pattern:  /material/lib/{fileId}/player
     defaults: { _controller: MaterialLibBundle:MaterialLib:player }
-
-material_lib_file_play_url:
-    pattern:  /material/lib/{fileId}/play_url{suffix}
-    defaults: { _controller: MaterialLibBundle:MaterialLib:playUrl, suffix:'' }
-    requirements:
-        suffix:  |.m3u8
-
-material_lib_file_preview_image:
-    pattern: /material/lib/{fileId}/preview/image
-    defaults: { _controller: MaterialLibBundle:MaterialLib:image }
-
-material_lib_file_preview_document:
-    pattern:  /material/lib/{fileId}/preview/document
-    defaults: { _controller: MaterialLibBundle:MaterialLib:document }
 
 material_reconvert:
     pattern:  /material/lib/{globalId}/reconvert

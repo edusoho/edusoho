@@ -27,10 +27,6 @@ admin_login_count:
     pattern: /login/count
     defaults: { _controller: TopxiaAdminBundle:Default:loginCount }
 
-admin_dashboard:
-    pattern:  /dashboard
-    defaults: { _controller: TopxiaAdminBundle:Default:dashboard }
-
 admin_content:
     pattern:  /content
     defaults: { _controller: TopxiaAdminBundle:Content:index }
@@ -1152,6 +1148,14 @@ admin_invite_detail:
 admin_invite_set:
     pattern:  /setting/invite
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
+
+admin_invite_coupon:
+    pattern: /invite/{filter}/coupon/
+    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'} 
+
+admin_invite_coupon_query:
+    pattern: /invite/coupon/query/
+    defaults: { _controller: TopxiaAdminBundle:Invite:queryInviteCoupon }
 
 admin_group:
     pattern:  /group/

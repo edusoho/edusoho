@@ -38,7 +38,7 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
 
                 if ($file['type'] == "document" && $file['convertStatus'] == "none") {
@@ -59,7 +59,7 @@ class CourseLessonManageController extends BaseController
         $file = null;
 
         if ($lesson['mediaId']) {
-            $file = $this->getUploadFileService()->getFile2($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
 
             if (!empty($file)) {
                 $lesson['media'] = array(
@@ -225,7 +225,7 @@ class CourseLessonManageController extends BaseController
         $file = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -245,7 +245,7 @@ class CourseLessonManageController extends BaseController
         $file   = false;
 
         if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-            $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
+            $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
             $lesson['mediaStatus'] = $file['convertStatus'];
         }
 
@@ -417,7 +417,7 @@ class CourseLessonManageController extends BaseController
             $file = false;
 
             if ($lesson['mediaId'] > 0 && ($lesson['type'] != 'testpaper')) {
-                $file                  = $this->getUploadFileService()->getFile2($lesson['mediaId']);
+                $file                  = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
                 $lesson['mediaStatus'] = $file['convertStatus'];
             }
 
@@ -461,7 +461,7 @@ class CourseLessonManageController extends BaseController
 
     public function fileStatusAction(Request $request, $id)
     {
-        $course   = $this->getCourseService()->tryManageCourse($id);
+        $course = $this->getCourseService()->tryManageCourse($id);
 
         $courseItems = $this->getCourseService()->getCourseItems($id);
 
@@ -472,20 +472,22 @@ class CourseLessonManageController extends BaseController
         $fileIds = array();
 
         foreach ($courseItems as $key => $item) {
-            if($item['itemType'] == 'lesson' && in_array($item['type'], array('ppt','document','video'))) {
+            if ($item['itemType'] == 'lesson' && in_array($item['type'], array('ppt', 'document', 'video'))) {
                 $fileIds[] = $item['mediaId'];
             }
         }
+
         $fileIds = array_unique($fileIds);
 
-        $pageSize = 20;
-        $totalPageNum = (count($fileIds) +  $pageSize  - 1) / $pageSize;
+        $pageSize     = 20;
+        $totalPageNum = (count($fileIds) + $pageSize - 1) / $pageSize;
 
         $files = array();
-        for ($i=0; $i < $totalPageNum; $i++) {
-            $partFileIds = array_slice($fileIds, $i*$pageSize, $pageSize);
-            $cloudFiles = $this->getUploadFileService()->findCloudFilesByIds($partFileIds);
-            $files = array_merge($files, $cloudFiles);
+
+        for ($i = 0; $i < $totalPageNum; $i++) {
+            $partFileIds = array_slice($fileIds, $i * $pageSize, $pageSize);
+            $cloudFiles  = $this->getUploadFileService()->findCloudFilesByIds($partFileIds);
+            $files       = array_merge($files, $cloudFiles);
         }
 
         return $this->createJsonResponse($files);
