@@ -82,12 +82,14 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name=title]',
-            required: true
+            required: true,
+            display: '标题'
         });
 
         validator.addItem({
             element: '[name=subtitle]',
-            rule: 'maxlength{max:70}'
+            rule: 'maxlength{max:70}',
+            display: '副标题'
         });
 
         if ($('input[name=expiryDay]').length > 0) {

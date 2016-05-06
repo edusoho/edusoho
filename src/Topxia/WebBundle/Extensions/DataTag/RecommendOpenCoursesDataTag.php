@@ -3,7 +3,6 @@
 namespace Topxia\WebBundle\Extensions\DataTag;
 
 use Topxia\WebBundle\Extensions\DataTag\DataTag;
-use Topxia\Common\ArrayToolkit;
 
 class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
 {
@@ -21,21 +20,21 @@ class RecommendOpenCoursesDataTag extends BaseDataTag implements DataTag
     {
         $marktingCourses = $this->getOpenCourseRecommendService()->searchRecommends(
             array('openCourseId' => $arguments['courseId']),
-            array('seq', 'ASC'), 
+            array('seq', 'ASC'),
             0, $arguments['count']
         );
-        
+
         $recommendCourses = $this->getOpenCourseRecommendService()->recommendedCoursesSort($marktingCourses);
 
-        if (count($recommendCourses) < $arguments['count']) {
-            $courses = $this->getCourseService()->searchCourses(
-                array('status' => 'published'),
-                array('createdTime','DESC'),
-                0, ($arguments['count'] - count($recommendCourses))
-            );
+        /*if (count($recommendCourses) < $arguments['count']) {
+        $courses = $this->getCourseService()->searchCourses(
+        array('status' => 'published'),
+        array('createdTime','DESC'),
+        0, ($arguments['count'] - count($recommendCourses))
+        );
 
-            $recommendCourses = array_merge($recommendCourses, $courses);
-        }
+        $recommendCourses = array_merge($recommendCourses, $courses);
+        }*/
 
         return $recommendCourses;
     }
