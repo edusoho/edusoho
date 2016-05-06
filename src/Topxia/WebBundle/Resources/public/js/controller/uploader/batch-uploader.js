@@ -219,12 +219,12 @@ define(function(require, exports, module) {
         },
 
         _initUploaderHook: function() {
-            if (this.get('hookRegisted')) {
+            if (WebUploader.Uploader.hookRegisted) {
                 return ;
             } else {
+                WebUploader.Uploader.hookRegisted = true;
             }
 
-            this.set('hookRegisted', true);
 
             WebUploader.Uploader.register({
                 'before-send-file': 'preupload',
