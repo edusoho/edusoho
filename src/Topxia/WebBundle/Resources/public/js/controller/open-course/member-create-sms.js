@@ -28,7 +28,20 @@ define(function(require, exports, module) {
             element: '[name="mobile"]',
             required: true,
             rule: 'phone remote',
-            display: '手机号码'           
+            display: '手机号码',
+            onItemValidated: function(error, message, eleme) {
+                if (error) {
+                    $('.js-sms-send').addClass('disabled');
+                    return;
+                } else {
+                    $('.js-sms-send').removeClass('disabled');
+                    var smsSender = new SmsSender({
+                        element: '.js-sms-send',
+                        url: $('.js-sms-send').data('url'),
+                        smsType:'system_remind' 
+                    });
+                }
+            }              
         });
 		
         smsValidator.addItem({
@@ -39,13 +52,6 @@ define(function(require, exports, module) {
             display: '短信验证码'           
         });
 
-	    var smsSender = new SmsSender({
-	    	element: '.js-sms-send',
-	    	url: $('.js-sms-send').data('url'),
-	        smsType:'system_remind' 
-	    });
-
-    	
 	    $('.js-confirm').click(function(e){
 	    	smsValidator.execute(function(error, results, element) {
                 if (error) {
