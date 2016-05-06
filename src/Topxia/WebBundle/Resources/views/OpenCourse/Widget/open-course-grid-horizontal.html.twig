@@ -21,7 +21,7 @@
     </div>
 
     <div class="open-course-content">
-      <div class="title">
+      <div class="title text-overflow">
         {% if course.type == 'liveOpen' and lessons %}
           {% if "now"|date("U") >= lessons[0].startTime and "now"|date("U") <= lessons[0].endTime %}
             <span class="label label-primary mrm">正在直播</span>
@@ -34,7 +34,7 @@
           {{ course.title }}
         </a>
       </div>
-      <div class="open-course-intro hidden-sm">
+      <div class="open-course-intro hidden-sm hidden-xs">
         {% if course.subtitle %}
           {{ course.subtitle|raw }}
         {% endif %}
@@ -42,7 +42,7 @@
       <div class="metas clearfix">
         <span class="num"><i class="es-icon es-icon-removeredeye"></i>{{ course.hitNum }}</span>
         <span class="comment"><i class="es-icon es-icon-textsms"></i>{{ course.postNum }}</span>
-        <a class="btn btn-primary btn-lg pull-right hidden-sm" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
+        <a class="btn btn-primary btn-lg pull-right hidden-xs" href="{{ path('open_course_show', {courseId:course.id}) }}" target="_blank" title="{{ course.title }}">进入公开课</a>
       </div>
     </div>
   </div>

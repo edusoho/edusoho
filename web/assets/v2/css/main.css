@@ -3366,7 +3366,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-x-rail:hover .ps-scrollbar-x,
 .ps-container .ps-scrollbar-x-rail.hover .ps-scrollbar-x {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container .ps-scrollbar-y {
   position: absolute;
@@ -3386,7 +3386,7 @@ Pagination Styles
 }
 .ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y,
 .ps-container .ps-scrollbar-y-rail.hover .ps-scrollbar-y {
-  background-color: #999;
+  background-color: #999999;
 }
 .ps-container.ie .ps-scrollbar-x,
 .ps-container.ie .ps-scrollbar-y {
@@ -10904,7 +10904,7 @@ textarea {
   min-height: 500px;
 }
 .loading-background {
-  background: #fff url('../img/old/loader.gif') no-repeat center center;
+  background: #ffffff url('../img/old/loader.gif') no-repeat center center;
 }
 .slide-player-watermark {
   position: absolute;
@@ -14159,6 +14159,14 @@ textarea {
 }
 .open-course-list-page .course-block .metas span .es-icon {
   padding-right: 10px;
+}
+@media (max-width: 991px) {
+  .open-course-list-page .course-block .metas span {
+    padding-right: 5px;
+  }
+  .open-course-list-page .course-block .metas span .es-icon {
+    padding-right: 6px;
+  }
 }
 .open-course-list-page .section-more-btn {
   margin: 40px 0 70px 0;
