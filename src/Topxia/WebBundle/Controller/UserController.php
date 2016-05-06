@@ -17,6 +17,7 @@ class UserController extends BaseController
         } else {
             $isFollowed = false;
         }
+
         // 关注数
         $following = $this->getUserService()->findUserFollowingCount($user['id']);
         // 粉丝数
@@ -91,8 +92,8 @@ class UserController extends BaseController
         $user                 = array_merge($user, $userProfile);
         $classrooms           = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime', 'desc'), 0, 9999);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime', 'desc'), 0, 9999);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -148,7 +149,7 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, 9999);
+        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
         $conditions   = array(

@@ -12,7 +12,8 @@ class AuthServiceImpl extends BaseService implements AuthService
     public function register($registration, $type = 'default')
     {
 
-        if ($this->getSensitiveService()->scanText($registration['nickname'])) {
+        if (isset($registration['nickname']) && !empty($registration['nickname']) 
+            && $this->getSensitiveService()->scanText($registration['nickname'])) {
             throw  $this->createServiceException('用户名中含有敏感词！');
         }
 

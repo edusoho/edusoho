@@ -192,11 +192,6 @@ uploader_chunks_finish:
     pattern:  /uploader/chunks/finish
     defaults: { _controller: TopxiaWebBundle:Uploader:chunksFinish }
 
-uploader_mkfile:
-    pattern:  /uploader/mkfile/{fileSize}
-    defaults: { _controller: TopxiaWebBundle:Uploader:mkfile }
-    methods: [POST]
-
 uploadfile_upload:
     pattern:  /uploadfile/upload
     defaults: { _controller: TopxiaWebBundle:UploadFile:upload }
@@ -1196,6 +1191,10 @@ settings_binds_bind_callback:
 settings_setup:
     pattern: /settings/setup
     defaults: { _controller: TopxiaWebBundle:Settings:setup }
+
+settings_setup_password:
+    pattern: /settings/setup_password
+    defaults: { _controller: TopxiaWebBundle:Settings:setupPassword }
 
 settings_setup_check_nickname:
     pattern: /settings/setup/check_nickname

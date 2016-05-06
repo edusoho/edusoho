@@ -943,7 +943,13 @@ class ClassroomServiceImpl extends BaseService implements ClassroomService
 
     private function _prepareClassroomConditions($conditions)
     {
-        $conditions = array_filter($conditions);
+        $conditions = array_filter($conditions, function($value){
+            if ($value === 0 || !empty($value)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         if (isset($conditions['nickname'])) {
             $user                 = $this->getUserService()->getUserByNickname($conditions['nickname']);

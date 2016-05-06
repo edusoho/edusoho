@@ -202,6 +202,9 @@ define(function(require, exports, module) {
                 $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-warning'>(正在文件格式转换)</span>");
               }else if(file.convertStatus=='error'){
                 $("li[data-file-id="+file.id+"]").find('span[data-role="mediaStatus"]').append("<span class='text-danger'>(文件格式转换失败)</span>");
+              } else if (file.convertStatus == 'success') {
+                $("li[data-file-id="+file.id+"]").find('.mark-manage').show();
+                $("li[data-file-id="+file.id+"]").find('.mark-manage-divider').show();
               }
             }
         });

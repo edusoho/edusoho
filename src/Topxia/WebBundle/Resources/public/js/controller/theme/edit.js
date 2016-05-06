@@ -13,6 +13,7 @@ define(function(require, exports, module) {
 
         var $list = $(".module-item-list").sortable({
             distance: 20,
+            itemSelector: '.theme-edit-item',
             onDrop: function (item, container, _super) {
                 _super(item, container);
                 sortList($list);

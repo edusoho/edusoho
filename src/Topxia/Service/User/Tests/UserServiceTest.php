@@ -2265,6 +2265,23 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->unBindUserByTypeAndToId('douban', $registeredUser['id']);
     }
 
+    /**
+     * @group avatar
+     */
+    public function testChangeAvatarFromImgUrl()
+    {
+        $userInfo = array(
+            'nickname' => 'test_nickname',
+            'password' => 'test_password',
+            'email'    => 'test_email@email.com'
+        );
+        $registeredUser = $this->getUserService()->register($userInfo);
+
+        $imgUrl = 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/0';
+
+        $this->getUserService()->changeAvatarFromImgUrl($registeredUser['id'], $imgUrl);
+    }
+
     protected function createUser($user)
     {
         $userInfo             = array();

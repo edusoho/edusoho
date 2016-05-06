@@ -136,8 +136,15 @@ class ClassroomController extends BaseController
         $progresses = array();
         $classrooms = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'student', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array(
+            'role' => 'auditor', 
+            'userId' => $user->id
+        ), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -954,8 +961,8 @@ class ClassroomController extends BaseController
         }
 
         $classrooms            = array();
-        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
-        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, 9999);
+        $teacherClassrooms     = $this->getClassroomService()->searchMembers(array('role' => 'teacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $headTeacherClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'headTeacher', 'userId' => $user->id), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($teacherClassrooms, $headTeacherClassrooms);
 
