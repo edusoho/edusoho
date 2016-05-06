@@ -24,10 +24,20 @@ define(function(require, exports, module) {
             }
         });
 
+        var mobileRule = 'phone remote';
+        if ($('[name="mobile"]').attr('readonly') == 'readonly') {
+            var smsSender = new SmsSender({
+                element: '.js-sms-send',
+                url: $('.js-sms-send').data('url'),
+                smsType:'system_remind' 
+            });
+            mobileRule = 'phone';
+        }
+
         smsValidator.addItem({
             element: '[name="mobile"]',
             required: true,
-            rule: 'phone remote',
+            rule: mobileRule,
             display: '手机号码',
             onItemValidated: function(error, message, eleme) {
                 if (error) {
@@ -44,14 +54,6 @@ define(function(require, exports, module) {
             }              
         });
 		
-        if ($('[name="mobile"]').attr('readonly') == 'readonly') {
-            var smsSender = new SmsSender({
-                element: '.js-sms-send',
-                url: $('.js-sms-send').data('url'),
-                smsType:'system_remind' 
-            });
-        }
-
         smsValidator.addItem({
             element: '[name="sms_code_modal"]',
             required: true,
