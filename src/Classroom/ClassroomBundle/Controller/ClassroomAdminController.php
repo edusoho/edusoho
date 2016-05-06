@@ -39,6 +39,8 @@ class ClassroomAdminController extends BaseController
         $priceAll            = array();
         $classroomCoursesNum = array();
 
+        $cashRate = $this->getCashRate();
+
         foreach ($classroomIds as $key => $value) {
             $courses                     = $this->getClassroomService()->findActiveCoursesByClassroomId($value);
             $classroomCoursesNum[$value] = count($courses);
@@ -47,7 +49,7 @@ class ClassroomAdminController extends BaseController
             $price     = 0;
 
             foreach ($courses as $course) {
-                $coinPrice += $course['coinPrice'];
+                $coinPrice += $course['price'] * $cashRate;
                 $price += $course['price'];
             }
 
@@ -226,6 +228,48 @@ class ClassroomAdminController extends BaseController
         ));
     }
 
+    public function chooserAction(Request $request)
+    {
+        $conditions             = $request->query->all();
+        $conditions["parentId"] = 0;
+
+        if (isset($conditions["categoryId"]) && $conditions["categoryId"] == "") {
+            unset($conditions["categoryId"]);
+        }
+
+        if (isset($conditions["status"]) && $conditions["status"] == "") {
+            unset($conditions["status"]);
+        }
+
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
+            unset($conditions["title"]);
+        }
+
+        $count = $this->getClassroomService()->searchClassroomsCount($conditions);
+
+        $paginator = new Paginator(
+            $this->get('request'),
+            $count,
+            20
+        );
+
+        $classrooms = $this->getClassroomService()->searchClassrooms(
+            $conditions,
+            array('createdTime', 'ASC'),
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $categories = $this->getCategoryService()->findCategoriesByIds(ArrayToolkit::column($classrooms, 'categoryId'));
+
+        return $this->render('ClassroomBundle:ClassroomAdmin:classroom-chooser.html.twig', array(
+            'conditions' => $conditions,
+            'classrooms' => $classrooms,
+            'categories' => $categories,
+            'paginator'  => $paginator
+        ));
+    }
+
     private function renderClassroomTr($id, $classroom)
     {
         $coinPrice                = 0;
@@ -235,9 +279,10 @@ class ClassroomAdminController extends BaseController
         $classroomCoursesNum      = array();
         $courses                  = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
         $classroomCoursesNum[$id] = count($courses);
+        $cashRate                 = $this->getCashRate();
 
         foreach ($courses as $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -250,6 +295,14 @@ class ClassroomAdminController extends BaseController
             'coinPriceAll'        => $coinPriceAll,
             'priceAll'            => $priceAll
         ));
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     protected function getClassroomService()

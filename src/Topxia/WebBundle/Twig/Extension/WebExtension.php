@@ -46,6 +46,7 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFilter('fill_question_stem_html', array($this, 'fillQuestionStemHtmlFilter')),
             new \Twig_SimpleFilter('get_course_id', array($this, 'getCourseidFilter')),
             new \Twig_SimpleFilter('purify_html', array($this, 'getPurifyHtml')),
+            new \Twig_SimpleFilter('purify_and_trim_html', array($this, 'getPurifyAndTrimHtml')),
             new \Twig_SimpleFilter('file_type', array($this, 'getFileType')),
             new \Twig_SimpleFilter('at', array($this, 'atFilter')),
             new \Twig_SimpleFilter('copyright_less', array($this, 'removeCopyright')),
@@ -109,7 +110,9 @@ class WebExtension extends \Twig_Extension
             new \Twig_SimpleFunction('is_without_network', array($this, 'isWithoutNetwork')),
             new \Twig_SimpleFunction('get_admin_roles', array($this, 'getAdminRoles')),
             new \Twig_SimpleFunction('render_notification', array($this, 'renderNotification')),
-            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists'))
+            new \Twig_SimpleFunction('route_exsit', array($this, 'routeExists')),
+            new \Twig_SimpleFunction('is_micro_messenger', array($this, 'isMicroMessenger'))
+
         );
     }
 
@@ -172,6 +175,11 @@ class WebExtension extends \Twig_Extension
     {
         $content = str_replace(" ", "&nbsp;", $content);
         return $content;
+    }
+
+    public function isMicroMessenger()
+    {
+        return strpos($this->container->get('request')->headers->get('User-Agent'), 'MicroMessenger') !== false;
     }
 
     public function getFingerprint()
@@ -370,6 +378,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'topxiaweb';
         $names[] = 'topxiaadmin';
         $names[] = 'classroom';
+        $names[] = 'materiallib';
         $names[] = 'sensitiveword';
 
         $paths = array(
@@ -669,7 +678,8 @@ class WebExtension extends \Twig_Extension
 
         if (empty($uri)) {
             $url = $assets->getUrl('assets/img/default/'.$default);
-            // $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
+
+// $url = $request->getBaseUrl() . '/assets/img/default/' . $default;
 
             if ($absolute) {
                 $url = $request->getSchemeAndHttpHost().$url;
@@ -1277,6 +1287,13 @@ class WebExtension extends \Twig_Extension
         $head = substr($idcardNum, 0, 4);
         $tail = substr($idcardNum, -2, 2);
         return ($head.'************'.$tail);
+    }
+
+    public function getPurifyAndTrimHtml($html)
+    {
+        $html = strip_tags($html, '');
+
+        return preg_replace("/(\s|\&nbsp\;|　|\xc2\xa0)/", "", $html);
     }
 
     public function mb_trim($string, $charlist = '\\\\s', $ltrim = true, $rtrim = true)

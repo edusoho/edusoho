@@ -40,19 +40,11 @@ class CourseController extends BaseController
         $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1 && $coinSetting['cash_model'] == 'currency';
 
         if (isset($conditions["chargeStatus"]) && $conditions["chargeStatus"] == "free") {
-            if ($coinEnable) {
-                $conditions['coinPrice'] = '0.00';
-            } else {
-                $conditions['price'] = '0.00';
-            }
+            $conditions['price'] = '0.00';
         }
 
         if (isset($conditions["chargeStatus"]) && $conditions["chargeStatus"] == "charge") {
-            if ($coinEnable) {
-                $conditions['coinPrice_GT'] = '0.00';
-            } else {
-                $conditions['price_GT'] = '0.00';
-            }
+            $conditions['price_GT'] = '0.00';
         }
 
         $count = $this->getCourseService()->searchCourseCount($conditions);
@@ -347,14 +339,27 @@ class CourseController extends BaseController
         ));
     }
 
-    public function dataAction(Request $request)
+    public function dataAction(Request $request, $filter)
     {
-        $cond = array('type' => 'normal');
-
         $conditions = $request->query->all();
 
-        $conditions = array_merge($cond, $conditions);
-        $count      = $this->getCourseService()->searchCourseCount($conditions);
+        if ($filter == 'normal') {
+            $conditions["parentId"] = 0;
+        }
+
+        if ($filter == 'classroom') {
+            $conditions["parentId_GT"] = 0;
+        }
+
+        if (isset($conditions["title"]) && $conditions["title"] == "") {
+            unset($conditions["title"]);
+        }
+
+        if (isset($conditions["creator"]) && $conditions["creator"] == "") {
+            unset($conditions["creator"]);
+        }
+
+        $count = $this->getCourseService()->searchCourseCount($conditions);
 
         $paginator = new Paginator($this->get('request'), $count, 20);
 
@@ -364,6 +369,18 @@ class CourseController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
+
+        $classrooms = array();
+
+        if ($filter == 'classroom') {
+            $classrooms = $this->getClassroomService()->findClassroomsByCoursesIds(ArrayToolkit::column($courses, 'id'));
+            $classrooms = ArrayToolkit::index($classrooms, 'courseId');
+
+            foreach ($classrooms as $key => $classroom) {
+                $classroomInfo                      = $this->getClassroomService()->getClassroom($classroom['classroomId']);
+                $classrooms[$key]['classroomTitle'] = $classroomInfo['title'];
+            }
+        }
 
         foreach ($courses as $key => $course) {
             $isLearnedNum = $this->getCourseService()->searchMemberCount(array('isLearned' => 1, 'courseId' => $course['id']));
@@ -378,8 +395,10 @@ class CourseController extends BaseController
         }
 
         return $this->render('TopxiaAdminBundle:Course:data.html.twig', array(
-            'courses'   => $courses,
-            'paginator' => $paginator
+            'courses'    => $courses,
+            'paginator'  => $paginator,
+            'filter'     => $filter,
+            'classrooms' => $classrooms
         ));
     }
 

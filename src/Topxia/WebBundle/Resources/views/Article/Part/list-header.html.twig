@@ -16,7 +16,7 @@
               {% else %}
                 <img class="img-responsive" src="{{ asset("assets/v2/img/article/article_banner_" ~ loop.index ~ ".jpg" ) }}"  alt="{{ featuredArticle.title }}">
               {% endif %}
-              <div class="swiper-cat">{{ featuredCategories[featuredArticle['id']].name }}</div>
+              <div class="swiper-cat">{{ featuredCategories[featuredArticle['id']].name|default() }}</div>
               <div class="swiper-caption">{{ featuredArticle.title }}</div>
               <div class="image-overlay"></div>
             </a>

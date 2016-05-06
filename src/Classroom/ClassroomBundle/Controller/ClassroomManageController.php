@@ -3,6 +3,7 @@ namespace Classroom\ClassroomBundle\Controller;
 
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Common\SimpleValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\WebBundle\Controller\BaseController;
@@ -96,21 +97,23 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields   = $request->query->all();
-        $nickname = "";
+        $fields    = $request->query->all();
+        $condition = array();
 
-        if (isset($fields['nickName'])) {
-            $nickname = $fields['nickName'];
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
+
+        $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'student'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('classroomId' => $id, 'role' => 'student', 'nickname' => $nickname)),
+            $this->getClassroomService()->searchMemberCount($condition),
             20
         );
 
         $students = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $id, 'role' => 'student', 'nickname' => $nickname),
+            $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -140,21 +143,23 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        $fields   = $request->query->all();
-        $nickname = "";
+        $fields    = $request->query->all();
+        $condition = array();
 
-        if (isset($fields['nickName'])) {
-            $nickname = $fields['nickName'];
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
         }
+
+        $condition = array_merge($condition, array('classroomId' => $id, 'role' => 'auditor'));
 
         $paginator = new Paginator(
             $request,
-            $this->getClassroomService()->searchMemberCount(array('classroomId' => $id, 'role' => 'auditor', 'nickname' => $nickname)),
+            $this->getClassroomService()->searchMemberCount($condition),
             20
         );
 
         $students = $this->getClassroomService()->searchMembers(
-            array('classroomId' => $id, 'role' => 'auditor', 'nickname' => $nickname),
+            $condition,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
@@ -169,6 +174,62 @@ class ClassroomManageController extends BaseController
             'users'     => $users,
             'paginator' => $paginator,
             'role'      => $role
+        ));
+    }
+
+    public function refundRecordAction(Request $request, $id)
+    {
+        $this->getClassroomService()->tryManageClassroom($id);
+        $classroom = $this->getClassroomService()->getClassroom($id);
+
+        $fields    = $request->query->all();
+
+        $condition = array();
+
+        if (isset($fields['keyword']) && !empty($fields['keyword'])) {
+            $condition['userIds'] = $this->getUserIds($fields['keyword']);
+        }
+
+        $condition['targetId'] = $id;
+        $condition['targetType'] = 'classroom';
+        $condition['status'] = 'success';
+
+        
+        $paginator = new Paginator(
+            $request,
+            $this->getOrderService()->searchRefundCount($condition),
+            20
+        );
+
+        $refunds = $this->getOrderService()->searchRefunds(
+            $condition, 
+            'createdTime',
+            $paginator->getOffsetCount(),
+            $paginator->getPerPageCount()
+        );
+
+        $userIds = ArrayToolkit::column($refunds,'userId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, "id");
+
+        $orderIds = ArrayToolkit::column($refunds,'orderId');
+        $orders = $this->getOrderService()->findOrdersByIds($orderIds);
+        $orders = ArrayToolkit::index($orders, "id");
+
+        foreach ($refunds as $key => $refund) {
+            if(isset($users[$refund['userId']])) {
+                $refunds[$key]['user'] = $users[$refund['userId']];
+            }
+
+            if(isset($orders[$refund['orderId']])) {
+                $refunds[$key]['order'] = $orders[$refund['orderId']];
+            }
+        }
+
+        return $this->render("ClassroomBundle:ClassroomManage:quit-record.html.twig", array(
+            'classroom' => $classroom,
+            'paginator' => $paginator,
+            'refunds' => $refunds
         ));
     }
 
@@ -217,8 +278,24 @@ class ClassroomManageController extends BaseController
 
         $user = $this->getCurrentUser();
 
+        $condition = array(
+            'targetType' => 'classroom',
+            'targetId' => $classroomId,
+            'userId' => $userId,
+            'status' => 'paid'
+            );
+        $orders = $this->getOrderService()->searchOrders($condition, 'latest', 0, 1);
+        foreach ($orders as $key => $value) {
+            $order = $value;
+        }
+
         $this->getClassroomService()->removeStudent($classroomId, $userId);
 
+        $reason = array(
+            'type' => 'other',
+            'note' => '手动移除'
+            );
+        $refund = $this->getOrderService()->applyRefundOrder($order['id'], null, $reason);
         $message = array(
             'classroomId'    => $classroom['id'],
             'classroomTitle' => $classroom['title'],
@@ -235,7 +312,7 @@ class ClassroomManageController extends BaseController
         $this->getClassroomService()->tryManageClassroom($id);
         $classroom = $this->getClassroomService()->getClassroom($id);
 
-        // $currentUser = $this->getCurrentUser();
+// $currentUser = $this->getCurrentUser();
 
         if ('POST' == $request->getMethod()) {
             $data = $request->request->all();
@@ -251,6 +328,9 @@ class ClassroomManageController extends BaseController
 
             $classroomSetting = $this->getSettingService()->get('classroom');
             $classroomName    = isset($classroomSetting['name']) ? $classroomSetting['name'] : '班级';
+            if (empty($data['price'])) {
+                $data['price'] = 0;
+            }
 
             $order = $this->getOrderService()->createOrder(array(
                 'userId'     => $user['id'],
@@ -599,8 +679,10 @@ class ClassroomManageController extends BaseController
         $price     = 0;
         $courses   = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $course) {
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -678,10 +760,12 @@ class ClassroomManageController extends BaseController
 
         $courses = $this->getClassroomService()->findActiveCoursesByClassroomId($id);
 
+        $cashRate = $this->getCashRate();
+
         foreach ($courses as $course) {
             $userIds = array_merge($userIds, $course['teacherIds']);
 
-            $coinPrice += $course['coinPrice'];
+            $coinPrice += $course['price'] * $cashRate;
             $price += $course['price'];
         }
 
@@ -763,7 +847,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function excelDataImportAction($id)
+    public function excelDataImportAction(Request $request, $id)
     {
         $this->getClassroomService()->tryManageClassroom($id);
 
@@ -773,8 +857,10 @@ class ClassroomManageController extends BaseController
             throw $this->createNotFoundException("未发布班级不能导入学员!");
         }
 
-        return $this->render('ClassroomBundle:ClassroomManage:import.step3.html.twig', array(
-            'classroom' => $classroom
+        return $this->forward('TopxiaWebBundle:Importer:importExcelData', array(
+            'request'    => $request,
+            'targetId'   => $id,
+            'targetType' => 'classroom'
         ));
     }
 
@@ -940,6 +1026,43 @@ class ClassroomManageController extends BaseController
         }
 
         return $choices;
+    }
+
+    private function getUserIds($keyword)
+    {
+        $userIds = array();
+
+        if (SimpleValidator::email($keyword)) {
+            $user = $this->getUserService()->getUserByEmail($keyword);
+
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        } elseif (SimpleValidator::mobile($keyword)) {
+            $mobileVerifiedUser = $this->getUserService()->getUserByVerifiedMobile($keyword);
+            $profileUsers       = $this->getUserService()->searchUserProfiles(array('tel' => $keyword), array('id', 'DESC'), 0, PHP_INT_MAX);
+            $mobileNameUser     = $this->getUserService()->getUserByNickname($keyword);
+            $userIds            = $profileUsers ? ArrayToolkit::column($profileUsers, 'id') : null;
+
+            $userIds[] = $mobileVerifiedUser ? $mobileVerifiedUser['id'] : null;
+            $userIds[] = $mobileNameUser ? $mobileNameUser['id'] : null;
+
+            $userIds = array_unique($userIds);
+
+            $userIds = $userIds ? $userIds : null;
+            return $userIds;
+        } else {
+            $user      = $this->getUserService()->getUserByNickname($keyword);
+            $userIds[] = $user ? $user['id'] : null;
+            return $userIds;
+        }
+    }
+
+    protected function getCashRate()
+    {
+        $coinSetting = $this->getSettingService()->get("coin");
+        $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+        $cashRate    = $coinEnable && isset($coinSetting['cash_rate']) ? $coinSetting["cash_rate"] : 1;
+        return $cashRate;
     }
 
     protected function getClassroomService()

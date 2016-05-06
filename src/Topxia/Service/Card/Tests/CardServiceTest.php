@@ -3,190 +3,152 @@ namespace Topxia\Service\Card\Tests;
 
 use Topxia\Service\Common\BaseTestCase;
 
-// use Topxia\Common\ArrayToolkit;
-// use Topxia\Service\User\UserService;
-// use Topxia\Service\User\CurrentUser;
-// use Topxia\Service\System\SettingService;
-
 class CardServiceTest extends BaseTestCase
 {
     public function testAddCard()
     {
+        $card    = $this->generateCard();
+        $results = $this->getCardService()->addCard($card);
+        $this->assertEquals($card['cardId'], $results['cardId']);
+        $this->assertEquals($card['cardType'], $results['cardType']);
+        $this->assertEquals($card['deadline'], $results['deadline']);
+        $this->assertEquals($card['userId'], $results['userId']);
+
     }
 
-    // public function testAddCard()
-    // {
-    //     $user = $this->createUser();
-    //     $testCoupons = $this->generateCoupons();
-    //     $card = array(
-    //         'cardType' => 'moneyCard',
-    //         'cardId' => $testCoupons[1]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[1]['deadline']
-    //     );
-    //     $results = $this->getCardService()->addCard($card);
-    //     $this->assertEquals($results['cardId'],$testCoupons[1]['id']);
+    public function testGetCard()
+    {
+        $card    = $this->generateCard();
+        $results = $this->getCardService()->addCard($card);
+        $cardGet = $this->getCardService()->getCard($results['id']);
+        $this->assertEquals($results['id'], $cardGet['id']);
+        $this->assertEquals($results['cardId'], $cardGet['cardId']);
+        $this->assertEquals($results['cardType'], $cardGet['cardType']);
+        $this->assertEquals($results['deadline'], $cardGet['deadline']);
+        $this->assertEquals($results['userId'], $cardGet['userId']);
+    }
 
-    // }
+    public function testFindCardsByUserIdAndCardTypeOnce()
+    {
+        $user = $this->createUser();
 
-    // public function testGetCard()
-    // {
-    //     $user = $this->createUser();
-    //     $testCoupons = $this->generateCoupons();
-    //     $card = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[1]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[1]['deadline']
-    //     );
-    //     $results = $this->getCardService()->addCard($card);
-    //     $cardGet = $this->getCardService()->getCard($results['id']);
-    //     $this->assertEquals($results['id'],$cardGet['id']);
-    //     $this->assertEquals($results['cardId'],$testCoupons[1]['id']);
+        $card1 = $this->generateCard($user);
+        $this->getCardService()->addCard($card1);
+        $card2 = $this->generateCard($user);
+        $this->getCardService()->addCard($card2);
+        $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], 'moneyCard');
+        $this->assertCount(2, $cardLists);
 
-    // }
+    }
 
-    // public function testFindCardsByUserIdAndCardTypeOnce()
-    // {
-    //     $user = $this->createUser();
-    //     $testCoupons = $this->generateCoupons();
+    public function testFindCardsByUserIdAndCardTypeTwice()
+    {
+        $this->setExpectedException('Exception');
+        $user  = $this->createUser();
+        $card1 = $this->generateCard($user);
+        $this->getCardService()->addCard($card1);
+        $card2 = $this->generateCard($user);
+        $this->getCardService()->addCard($card2);
+        $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'], '');
+    }
 
-    //     $card1 = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[1]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[1]['deadline']
-    //     );
-    //     $this->getCardService()->addCard($card1);
-    //     $card2 = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[2]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[2]['deadline']
-    //     );
-    //     $this->getCardService()->addCard($card2);
-    //     $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],'coupon');
-    //     $this->assertCount(2,$cardLists);
+    public function testSearchCards()
+    {
+        $user  = $this->createUser();
+        $card1 = $this->generateCard($user);
+        $this->getCardService()->addCard($card1);
+        $card2 = $this->generateCard($user);
+        $this->getCardService()->addCard($card2);
+        $conditions = array(
+            'userId' => $user['id']
+        );
+        $orderBy = array('createdTime', 'ASC');
+        $result  = $this->getCardService()->searchCards($conditions, $orderBy, 0, 20);
+        $this->assertEquals(2, count($result));
+    }
 
-    // }
+    public function testFindCardsByCardIds()
+    {
+        $time  = time() + 86400;
+        $user  = $this->createUser();
+        $card1 = array(
+            'cardType' => 'moneyCard',
+            'cardId'   => 1,
+            'userId'   => $user['id'],
+            'deadline' => $time
+        );
+        $this->getCardService()->addCard($card1);
+        $card2 = array(
+            'cardType' => 'moneyCard',
+            'cardId'   => 2,
+            'userId'   => $user['id'],
+            'deadline' => $time
+        );
+        $this->getCardService()->addCard($card2);
+        $ids = array(
+            $card1['cardId'],
+            $card2['cardId']
+        );
 
-    // public function testFindCardsByUserIdAndCardTypeTwice()
-    // {
-    //     $this->setExpectedException('Exception');
-    //     $user = $this->createUser();
-    //     $testCoupons = $this->generateCoupons();
+        $cardLists = $this->getCardService()->findCardsByCardIds($ids);
+        $this->assertCount(2, $cardLists);
+    }
 
-    //     $card1 = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[1]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[1]['deadline']
-    //     );
-    //     $this->getCardService()->addCard($card1);
-    //     $card2 = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[2]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[2]['deadline']
-    //     );
-    //     $this->getCardService()->addCard($card2);
-    //     $cardLists = $this->getCardService()->findCardsByUserIdAndCardType($user['id'],'');
-    // }
+    protected function getCardService()
+    {
+        return $this->getServiceKernel()->createService('Card.CardService');
+    }
 
-    // public function testFindCardDetailsByCardTypeAndCardIds()
-    // {
-    //     // $this->setExpectedException('Exception');
-    //     $user = $this->createUser();
-    //     $testCoupons = $this->generateCoupons();
+    protected function getCouponService()
+    {
+        return $this->getServiceKernel()->createService('Coupon.CouponService');
+    }
 
-    //     $card1 = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[1]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[1]['deadline']
-    //     );
-    //     $cardAdd1 = $this->getCardService()->addCard($card1);
-    //     $card2 = array(
-    //         'cardType' => 'coupon',
-    //         'cardId' => $testCoupons[2]['id'],
-    //         'userId' => $user['id'],
-    //         'deadline' => $testCoupons[2]['deadline']
-    //     );
-    //     $cardAdd2 = $this->getCardService()->addCard($card2);
-    //     $ids = array($cardAdd1['cardId'],$cardAdd2['cardId']);
-    //     $results = $this->getCardService()->findCardDetailsByCardTypeAndCardIds('coupon',$ids);
-    //     if($results[0]['id'] == $card1['cardId']){
-    //         $this->assertEquals($results[0]['deadline'],$card1['deadline']);
-    //     }else{
-    //         $this->assertEquals($results[0]['deadline'],$card1['deadline']);
-    //     }
-    //     $this->assertCount(2,$results);
-    // }
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
+    }
 
-    // protected function getCardService()
-    // {
-    //     return $this->getServiceKernel()->createService('Card.CardService');
-    // }
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
 
-    // protected function getCouponService()
-    // {
-    //     return $this->getServiceKernel()->createService('Coupon:Coupon.CouponService');
-    // }
+    protected function generateCard($currentUser = null)
+    {
+        $time = time() + 86400;
+        $user = $currentUser == null ? $this->createUser() : $currentUser;
+        return array(
+            'cardType' => 'moneyCard',
+            'cardId'   => 1,
+            'userId'   => $user['id'],
+            'deadline' => $time
+        );
+    }
 
-    // protected function getSettingService()
-    // {
+    private function createUser()
+    {
+        $user              = array();
+        $user['email']     = "user@user.com";
+        $user['nickname']  = "user";
+        $user['password']  = "user";
+        $user              = $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
+        $user['roles']     = array('ROLE_USER', 'ROLE_SUPER_ADMIN', 'ROLE_TEACHER');
+        return $user;
 
-    //     return $this->getServiceKernel()->createService('System.SettingService');
-    // }
+    }
 
-    // protected function getUserService()
-    // {
-    //     return $this->getServiceKernel()->createService('User.UserService');
-    // }
-
-    // protected function generateCoupons()
-    // {
-    //     $this->getSettingService()->set('coupon',array('enabled'=>'1'));
-    //     $time = date("Y-m-d",time()+86400);
-    //     $couponData = array(
-    //         'name' => 'testCoupon',
-    //         'prefix' => 'testPrefix',
-    //         'type' => 'minus',
-    //         'rate' => '10.0',
-    //         'generatedNum' => 5,
-    //         'digits' => 8,
-    //         'deadline' => $time,
-    //         'targetType' => 'course',
-    //         'token' => 'EGEwhmrDmLEq3JJEoOqs8nyY0JCc4BGJ'
-    //     );
-    //     $couponBanch = $this->getCouponService()->generateCoupon($couponData);
-    //     $testCoupons = $this->getCouponService()->findCouponsByBatchId($couponBanch['id'],0,2);
-    //     return $testCoupons;
-    // }
-
-    // private function createUser()
-    // {
-    //     $user = array();
-    //     $user['email'] = "user@user.com";
-    //     $user['nickname'] = "user";
-    //     $user['password'] = "user";
-    //     $user =  $this->getUserService()->register($user);
-    //     $user['currentIp'] = '127.0.0.1';
-    //     $user['roles'] = array('ROLE_USER','ROLE_SUPER_ADMIN','ROLE_TEACHER');
-    //     return $user;
-
-    // }
-
-    // private function createNormalUser()
-    // {
-    //     $user = array();
-    //     $user['email'] = "normal@user.com";
-    //     $user['nickname'] = "normal";
-    //     $user['password'] = "user";
-    //     $user =  $this->getUserService()->register($user);
-    //     $user['currentIp'] = '127.0.0.1';
-    //     $user['roles'] = array('ROLE_USER');
-    //     return $user;
-    // }
+    private function createNormalUser()
+    {
+        $user              = array();
+        $user['email']     = "normal@user.com";
+        $user['nickname']  = "normal";
+        $user['password']  = "user";
+        $user              = $this->getUserService()->register($user);
+        $user['currentIp'] = '127.0.0.1';
+        $user['roles']     = array('ROLE_USER');
+        return $user;
+    }
 
 }

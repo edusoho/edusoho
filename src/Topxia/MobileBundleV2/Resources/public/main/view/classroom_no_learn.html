@@ -21,8 +21,8 @@
                     {{ classRoom.price | formatPrice }}
                 </span>
                 <span class="price-block" ng-if="classRoom.priceType == 'Coin'">
-                    {{ classRoom.coinPrice | formatCoinPrice }}
-                    <small ng-if="classRoom.coinPrice > 0">{{ classRoom.coinName }}</small>
+                    {{ classRoom.price | formatCoinPrice }}
+                    <small ng-if="classRoom.price > 0">{{ classRoom.coinName }}</small>
                 </span>
             </p>
         </div>
@@ -60,10 +60,10 @@
     <button class="ui-btn btn-gray-light btn-outline btn-col-15 iconfont icon-fenxiang" ng-click="shardClassRoom()">
     </button>
 
-    <button class="ui-btn btn-green" ng-class="!isCanShowVip(course.vipLevelId) ? 'btn-col-75' : 'btn-col-35' " ng-click="joinClassroom()">
+    <button class="ui-btn btn-green" ng-class="!isCanShowVip(classRoom.vipLevelId) ? 'btn-col-75' : 'btn-col-35' " ng-click="joinClassroom()">
         立即加入
     </button>
-    <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-if="isCanShowVip(course.vipLevelId)" ng-click="learnByVip()" ng-if="classRoom.vipLevelId > 0 ">
+    <button class="ui-btn btn-yellow btn-col-35 ui-nowrap" ng-if="isCanShowVip(classRoom.vipLevelId)" ng-click="learnByVip()" ng-if="classRoom.vipLevelId > 0 ">
         {{ getVipTitle(classRoom.vipLevelId) }}免费学
     </button>
 </div>

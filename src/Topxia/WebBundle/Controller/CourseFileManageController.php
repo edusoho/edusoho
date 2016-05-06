@@ -4,7 +4,6 @@ namespace Topxia\WebBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
-use Topxia\Service\Util\CloudClientFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -44,12 +43,7 @@ class CourseFileManageController extends BaseController
         );
 
         foreach ($files as $key => $file) {
-            $files[$key]['metas2'] = json_decode($file['metas2'], true) ?: array();
-
-            $files[$key]['convertParams'] = json_decode($file['convertParams']) ?: array();
-
-            $useNum = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-
+            $useNum            = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
             $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
 
             if ($files[$key]['targetType'] == 'coursematerial') {
@@ -61,23 +55,39 @@ class CourseFileManageController extends BaseController
 
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
-        $storageSetting = $this->getSettingService()->get("storage");
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'           => $type,
-            'course'         => $course,
-            'courseLessons'  => $files,
-            'users'          => ArrayToolkit::index($users, 'id'),
-            'paginator'      => $paginator,
-            'now'            => time(),
-            'storageSetting' => $storageSetting
+            'type'      => $type,
+            'course'    => $course,
+            'files'     => $files,
+            'users'     => ArrayToolkit::index($users, 'id'),
+            'paginator' => $paginator,
+            'now'       => time()
         ));
+    }
+
+    public function fileStatusAction(Request $request)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        if (!$currentUser->isTeacher() && !$currentUser->isAdmin()) {
+            return $this->createJsonResponse(array());
+        }
+
+        $fileIds = $request->request->get('ids');
+
+        if (empty($fileIds)) {
+            return $this->createJsonResponse(array());
+        }
+
+        $fileIds = explode(',', $fileIds);
+
+        return $this->createJsonResponse($this->getUploadFileService2()->findCloudFilesByIds($fileIds));
     }
 
     public function showAction(Request $request, $id, $fileId)
     {
         $course = $this->getCourseService()->tryManageCourse($id);
-
-        $file = $this->getUploadFileService()->getFile($fileId);
+        $file   = $this->getUploadFileService()->getFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -87,20 +97,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        if ($file['targetType'] == 'courselesson') {
-            return $this->forward('TopxiaWebBundle:CourseLesson:file', array('fileId' => $file['id'], 'isDownload' => true));
-        } else
-        if ($file['targetType'] == 'coursematerial' || $file['targetType'] == 'materiallib') {
-            if ($file['storage'] == 'cloud') {
-                $factory = new CloudClientFactory();
-                $client  = $factory->createClient();
-                $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-            } else {
-                return $this->createPrivateFileDownloadResponse($request, $file);
-            }
-        }
-
-        throw $this->createNotFoundException();
+        return $this->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $file['id']));
     }
 
     public function convertAction(Request $request, $id, $fileId)
@@ -115,10 +112,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService()->reconvertFile(
-            $file['id'],
-            $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
-        );
+        $convertHash = $this->getUploadFileService2()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -144,30 +138,6 @@ class CourseFileManageController extends BaseController
         ));
     }
 
-    public function batchUploadCourseFilesAction(Request $request, $id, $targetType)
-    {
-        if ("materiallib" != $targetType) {
-            $course = $this->getCourseService()->tryManageCourse($id);
-        } else {
-            $course = null;
-        }
-
-        $storageSetting = $this->getSettingService()->get('storage', array());
-        $fileExts       = "";
-
-        if ("courselesson" == $targetType) {
-            $fileExts = "*.mp3;*.mp4;*.avi;*.flv;*.wmv;*.mov;*.ppt;*.pptx;*.doc;*.docx;*.pdf;*.swf";
-        }
-
-        return $this->render('TopxiaWebBundle:CourseFileManage:batch-upload.html.twig', array(
-            'course'         => $course,
-            'storageSetting' => $storageSetting,
-            'targetType'     => $targetType,
-            'targetId'       => $id,
-            'fileExts'       => $fileExts
-        ));
-    }
-
     public function deleteCourseFilesAction(Request $request, $id, $type)
     {
         if (!empty($id)) {
@@ -176,7 +146,7 @@ class CourseFileManageController extends BaseController
 
         $ids = $request->request->get('ids', array());
 
-        $this->getUploadFileService()->deleteFiles($ids);
+        $this->getUploadFileService2()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
     }
@@ -189,6 +159,11 @@ class CourseFileManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getUploadFileService2()
+    {
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getSettingService()

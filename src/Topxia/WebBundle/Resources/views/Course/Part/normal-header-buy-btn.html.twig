@@ -1,5 +1,5 @@
 {% if course.buyable|default(true) == false and userVipStatus != 'ok' %}
-  {{'该课程为限制课程，请联系客服'|trans}}
+  {{'该课程为限制课程'|trans}}<br>{{'请联系客服'|trans}}
 {% else %}
   <a class="btn btn-primary btn-lg"
     {% if setting("course.buy_fill_userinfo")|default(false) or (course.approval and app.user and app.user.approvalStatus != 'approved') or setting('user_partner.avatar_alert') %}
@@ -19,7 +19,7 @@
       {{'加入学习'|trans}}
     {% else %}
       {% if setting('coin.coin_enabled') and setting('coin.price_type') == 'Coin' %}
-        {% if course.coinPrice > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
+        {% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
       {% else %}
         {% if course.price > 0 %}{{'购买课程'|trans}}{% else %}{{'加入学习'|trans}}{% endif %}</a>
       {% endif %}

@@ -28,12 +28,6 @@ class BaseTestCase extends WebTestCase
         static::$kernel->boot();
     }
 
-    /**
-     * 每个testXXX执行之前，都会执行此函数，净化数据库。
-     *
-     * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
-     */
-
     protected function setServiceKernel()
     {
         if (static::$serviceKernel) {
@@ -69,6 +63,11 @@ class BaseTestCase extends WebTestCase
         return static::$serviceKernel;
     }
 
+    /**
+     * 每个testXXX执行之前，都会执行此函数，净化数据库。
+     *
+     * NOTE: 如果数据库已创建，那么执行清表操作，不重建。
+     */
     public function setUp()
     {
         $this->setServiceKernel();
@@ -133,10 +132,15 @@ class BaseTestCase extends WebTestCase
             $tableNames = array_unique($tableNames);
         }
 
+        $tableWhiteList = array(
+            'migration_versions',
+            'file_group',
+        );
+
         $sql = '';
 
         foreach ($tableNames as $tableName) {
-            if ($tableName == 'migration_versions') {
+            if (in_array($tableName, $tableWhiteList)) {
                 continue;
             }
 

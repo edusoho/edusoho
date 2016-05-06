@@ -107,7 +107,7 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     public function searchMemberCount($conditions)
     {
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('COUNT(id)');
+            ->select('COUNT(id)');
 
         return $builder->execute()->fetchColumn(0);
     }
@@ -116,10 +116,10 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
     {
         $this->filterStartLimit($start, $limit);
         $builder = $this->_createSearchQueryBuilder($conditions)
-                        ->select('*')
-                        ->orderBy($orderBy[0], $orderBy[1])
-                        ->setFirstResult($start)
-                        ->setMaxResults($limit);
+            ->select('*')
+            ->orderBy($orderBy[0], $orderBy[1])
+            ->setFirstResult($start)
+            ->setMaxResults($limit);
         return $builder->execute()->fetchAll() ?: array();
     }
 
@@ -216,14 +216,15 @@ class ClassroomMemberDaoImpl extends BaseDao implements ClassroomMemberDao
         }
 
         $builder = $this->createDynamicQueryBuilder($conditions)
-                        ->from($this->table, 'classroom_member')
-                        ->andWhere('userId = :userId')
-                        ->andWhere('classroomId = :classroomId')
-                        ->andWhere('noteNum > :noteNumGreaterThan')
-                        ->andWhere('role LIKE :role')
-                        ->andWhere('role IN (:roles)')
-                        ->andWhere('createdTime >= :startTimeGreaterThan')
-                        ->andWhere('createdTime < :startTimeLessThan');
+            ->from($this->table, 'classroom_member')
+            ->andWhere('userId = :userId')
+            ->andWhere('classroomId = :classroomId')
+            ->andWhere('noteNum > :noteNumGreaterThan')
+            ->andWhere('role LIKE :role')
+            ->andWhere('role IN (:roles)')
+            ->andWhere('userId IN ( :userIds)')
+            ->andWhere('createdTime >= :startTimeGreaterThan')
+            ->andWhere('createdTime < :startTimeLessThan');
 
         return $builder;
     }

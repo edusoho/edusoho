@@ -53,13 +53,13 @@ seajs.config({
         'video-js': 'gallery2/video-js/4.2.1/video-js',
         'swfupload': 'gallery2/swfupload/2.2.0/swfupload',
         'webuploader': 'gallery2/webuploader/0.1.2/webuploader',
+        'webuploader2': 'webuploader/0.1.5/webuploader',
+        'filesize': 'filesize/3.1.2/index',
         'screenfull': 'screenfull/2.0.0/screenfull',
         'ckeditor': 'ckeditor/4.6.7/ckeditor',
         'es-ckeditor': 'common/es-ckeditor',
         'edusoho.linkselect': 'edusoho/linkselect/1.0/linkselect-debug.js',
         'edusoho.chunkupload': 'edusoho/chunkupload/1.0.1/chunk-upload.js',
-        'edusoho.uploadpanel': 'edusoho/uploadpanel/1.0/upload-panel.js',
-        'edusoho.uploadProgressBar': 'edusoho/uploadprogressbar/1.0/upload-progress-bar.js',
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
@@ -71,7 +71,8 @@ seajs.config({
         'jquery.easing': 'jquery-plugin/jquery.easing/jquery.easing.min',
         'jquery.lavaTab': 'jquery-plugin/jquery.lavaTab/jquery.lavaTab',
         'jquery.lavalamp': 'jquery-plugin/jquery.lavalamp/jquery.lavalamp',
-        'video-player': 'balloon-video-player/1.3.0/index'
+        'video-player': 'balloon-video-player/1.3.0/index',
+        'echarts': 'echarts/3.1.2/echarts.min.js'
     },
 
     // 预加载项

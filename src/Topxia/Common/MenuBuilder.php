@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\Common;
 
+use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
 class MenuBuilder
@@ -12,6 +13,37 @@ class MenuBuilder
     public function __construct($position)
     {
         $this->position = $position;
+    }
+
+    public function getMenuBreadcrumb($code)
+    {
+        $menus = $this->buildMenus();
+
+        if (empty($menus[$code]) || empty($menus[$code]['parent'])) {
+            return array();
+        }
+
+        $menu  = $menus[$code];
+        $paths = array($menus[$code]);
+
+        while (true) {
+            $menu = $menus[$menu['parent']];
+
+            if (empty($menu)) {
+                break;
+            }
+
+            $paths[] = $menu;
+
+            if (empty($menu['parent'])) {
+                break;
+            }
+        }
+
+        array_pop($paths);
+        $paths = array_reverse($paths);
+
+        return $paths;
     }
 
     public function getMenuChildren($code, $group = null)
@@ -133,9 +165,11 @@ class MenuBuilder
         return $menus;
     }
 
+    //TO-DO应该查询注册的bundles
     public function loadMenus()
     {
-        /*$position    = $this->position;
+        /*
+        $position    = $this->position;
         $configPaths = array();
 
         $rootDir = realpath(__DIR__.'/../../../');
@@ -144,17 +178,18 @@ class MenuBuilder
         $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
 
         $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/MaterialLib/MaterialLibBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
-        $count = $this->getAppService()->findAppCount();
-        $apps  = $this->getAppService()->findApps(0, $count);
+        $count         = $this->getAppService()->findAppCount();
+        $apps          = $this->getAppService()->findApps(0, $count);
 
         foreach ($apps as $app) {
-        if ($app['type'] != 'plugin') {
-        continue;
-        }
+            if ($app['type'] != 'plugin') {
+                continue;
+            }
 
-        $code          = ucfirst($app['code']);
-        $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
+            $code          = ucfirst($app['code']);
+            $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
         }
 
         $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
@@ -163,18 +198,25 @@ class MenuBuilder
         $menus = array();
 
         foreach ($configPaths as $path) {
-        if (!file_exists($path)) {
-        continue;
+            if (!file_exists($path)) {
+                continue;
+            }
+
+            $menu = Yaml::parse($path);
+
+            if (empty($menu)) {
+                continue;
+            }
+
+            $menu = Yaml::parse($path);
+
+            if (empty($menu)) {
+            continue;
+            }
+
+            $menus = array_merge($menus, $menu);
         }
-
-        $menu = Yaml::parse($path);
-
-        if (empty($menu)) {
-        continue;
-        }
-
-        $menus = array_merge($menus, $menu);
-        }*/
+        */
         $user = $this->getServiceKernel()->getCurrentUser();
         return $user['menus'];
     }

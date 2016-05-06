@@ -48,8 +48,8 @@
             	</div>
             {% endif %}
 					</div>
-
-					<div class="help-block approval">
+				
+					{# <div class="help-block approval">
 						<label class="col-md-2 control-label" ></label>
 							{% if app.user.approvalStatus == 'approving' %}
 								<p class="text-primary" >
@@ -63,6 +63,8 @@
 								<p class="text-warning" >
 									{{'您尚未实名认证，'|trans}}<strong><a href="{{ path('setting_approval_submit') }}">{{'点此认证'|trans}}</a>{{'。'|trans}}
 									</strong>
+									{% if is_plugin_installed('TeacherAudit') %}{{'若您想成为教师，请去'|trans}}<strong><a href="{{ path('teacher_audit_submit') }}">{{'教师资格申请'|trans}}</a>。
+									</strong>{% endif %}
 								</p>
 							{% elseif app.user.approvalStatus == 'approve_fail' %}
 								 <p class="text-danger" >
@@ -70,7 +72,7 @@
 									</strong>
 								 </p>
 							{% endif %}
-					</div>
+					</div> #}
 
 					<div class="form-group">
 						<label class="col-md-2 control-label">{{'性别'|trans}}</label>
@@ -199,6 +201,7 @@
 							<input type="text" id="weibo" name="profile[weibo]" class="form-control" data-widget-cid="widget-3" data-explain="" value="{{ profile.weibo|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeiboPublic]" {% if profile.isWeiboPublic %}checked="checked" {% endif %}/>公开</div>
 					</div>
 
 					<div class="form-group">
@@ -207,6 +210,7 @@
 							<input type="text" id="profile_weixin" name="profile[weixin]" class="form-control" value="{{ profile.weixin|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isWeixinPublic]" {% if profile.isWeixinPublic %}checked="checked" {% endif %}/>公开</div>
 					</div>
 
 					<div class="form-group">
@@ -215,6 +219,7 @@
 							<input type="text" id="profile_qq" name="profile[qq]" class="form-control" data-widget-cid="widget-2" data-explain="" value="{{ profile.qq|default('') }}">
 							<div class="help-block" style="display:none;"></div>
 						</div>
+						<div class="col-md-2 controls mts"><input type="checkbox" name="profile[isQQPublic]" {% if profile.isQQPublic %}checked="checked"{% endif %}/>公开</div>
 					</div>
 
 

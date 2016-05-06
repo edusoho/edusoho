@@ -12,8 +12,7 @@
 <div class="class-detail row" id="detail-content">
   <div class="col-lg-9 col-md-8 class-detail-main">
 
-    {{ render(controller('TopxiaWebBundle:Announcement:block',{targetObject:classroom,targetType:'classroom'})) }}
-
+    {% include 'TopxiaWebBundle:Announcement:announcement-block.html.twig' with {targetId:classroom.id,targetType:'classroom'} %}
 
     <section class="es-section">
       {% if nav is defined %}

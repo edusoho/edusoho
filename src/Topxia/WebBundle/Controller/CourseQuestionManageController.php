@@ -5,7 +5,6 @@ use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Question\QuestionService;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CourseQuestionManageController extends BaseController
 {
@@ -180,17 +179,6 @@ class CourseQuestionManageController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function uploadFileAction(Request $request, $courseId, $type)
-    {
-        $course = $this->getCourseService()->tryManageCourse($courseId);
-
-        if ($request->getMethod() == 'POST') {
-            $originalFile = $this->get('request')->files->get('file');
-            $file         = $this->getUploadFileService()->addFile('quizquestion', 0, array('isPublic' => 1), 'local', $originalFile);
-            return new Response(json_encode($file));
-        }
-    }
-
     /**
      * @todo refact it, to xxvholic.
      */
@@ -273,6 +261,39 @@ class CourseQuestionManageController extends BaseController
         return $choices;
     }
 
+    public function uploadAttachmentsAction(Request $request, $id, $targetType)
+    {
+        $course = $this->getCourseService()->tryManageCourse($id);
+
+        $storageSetting = $this->getSettingService()->get('storage', array());
+        return $this->render('TopxiaWebBundle:CourseQuestionManage:modal-upload-question-attachment.html.twig', array(
+            'course'         => $course,
+            'storageSetting' => $storageSetting,
+            'targetType'     => $targetType,
+            'targetId'       => $id
+        ));
+    }
+
+    public function attachmentDownloadAction(Request $request, $id, $fileId)
+    {
+        list($course, $member) = $this->getCourseService()->tryTakeCourse($id);
+
+        $file = $this->getUploadFileService()->getFile($fileId);
+
+        if (empty($file)) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($id != $file["targetId"] || $file['targetType'] != 'coursequestion') {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->forward("TopxiaWebBundle:UploadFile:download", array(
+            'request' => $request,
+            'fileId'  => $fileId
+        ));
+    }
+
     protected function getCourseService()
     {
         return $this->getServiceKernel()->createService('Course.CourseService');
@@ -286,5 +307,10 @@ class CourseQuestionManageController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
+    }
+
+    protected function getSettingService()
+    {
+        return $this->getServiceKernel()->createService('System.SettingService');
     }
 }

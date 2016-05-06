@@ -30,7 +30,7 @@
 .media .media-object-small img {
   width: 48px;
   height: 48px;
-  border-radius: 3px;
+  .border-radius();
 }
 
 
@@ -204,13 +204,28 @@
 }
 .media-group {
   margin-top: 20px;
+  @media(max-width:@screen-xs-max) {
+    margin-top: 15px;
+  }
   &:first-child {
     margin-top: 20px;
+    @media(max-width:@screen-xs-max) {
+      margin-top: 15px;
+    }
+  }
+  .avatar-square-md {
+    @media(max-width:@screen-xs-max) {
+      width: 40px !important;
+      height: 40px !important;
+    }
   }
   .title {
     height: 20px;
     overflow: hidden;
     margin: 5px 0;
+    @media(max-width:@screen-xs-max) {
+      margin: 0;
+    }
   }
   .metas {
     color: @gray-medium;

@@ -40,7 +40,8 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             throw new Exception("找不到要购买课程!");
         }
 
-        $users                                   = $this->getUserService()->findUsersByIds($course['teacherIds']);
+        $users = $this->getUserService()->findUsersByIds($course['teacherIds']);
+
         list($coinEnable, $priceType, $cashRate) = $this->getCoinSetting();
 
         $totalPrice = 0;
@@ -58,10 +59,19 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         }
 
         if ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $coinSetting = $this->getSettingService()->get('coin');
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $crshRate    = 1;
+
+            if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
+                $cashRate = $coinSetting['cash_rate'];
+            }
+
+            $totalPrice = $course["price"] * $cashRate;
         } elseif ($priceType == "RMB") {
             $totalPrice = $course["price"];
-            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);}
+            $maxCoin    = NumberToolkit::roundUp($course['maxRate'] * $course['originPrice'] / 100 * $cashRate);
+        }
 
         list($totalPrice, $coinPayAmount, $account, $hasPayPassword) = $this->calculateCoinAmount($totalPrice, $priceType, $cashRate);
 
@@ -90,9 +100,9 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
 
         $amount = $totalPrice;
 
-        //优惠码优惠价格
+//优惠码优惠价格
 
-        if ($fields["couponCode"] && trim($fields["couponCode"]) != "") {
+        if (isset($fields["couponCode"]) && trim($fields["couponCode"]) != "") {
             $couponResult = $this->afterCouponPay(
                 $fields["couponCode"],
                 'course',
@@ -109,7 +119,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
             }
         }
 
-        //虚拟币优惠价格
+//虚拟币优惠价格
 
         if (array_key_exists("coinPayAmount", $fields)) {
             $amount = $this->afterCoinPay(
@@ -153,7 +163,14 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if ($priceType == "RMB") {
             $totalPrice = $course["price"];
         } elseif ($priceType == "Coin") {
-            $totalPrice = $course["coinPrice"];
+            $coinSetting = $this->getSettingService()->get('coin');
+            $coinEnable  = isset($coinSetting["coin_enabled"]) && $coinSetting["coin_enabled"] == 1;
+            $crshRate    = 1;
+            if ($coinEnable && array_key_exists("cash_rate", $coinSetting)) {
+                $cashRate = $coinSetting['cash_rate'];
+            }
+
+            $totalPrice = $course["price"] * $cashRate;
         }
 
         $totalPrice = (float) $totalPrice;

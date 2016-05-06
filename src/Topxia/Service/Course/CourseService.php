@@ -2,8 +2,6 @@
 
 namespace Topxia\Service\Course;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-
 interface CourseService
 {
     /**
@@ -80,8 +78,6 @@ interface CourseService
     public function analysisCourseDataByTime($startTime, $endTime);
 
     public function findLearnedCoursesByCourseIdAndUserId($courseId, $userId);
-
-    public function uploadCourseFile($targetType, $targetId, array $fileInfo, $implemtor, UploadedFile $originalFile);
 
     public function setCoursePrice($courseId, $currency, $price);
 
@@ -173,6 +169,12 @@ interface CourseService
     public function searchLearns($conditions, $orderBy, $start, $limit);
 
     public function analysisLessonDataByTime($startTime, $endTime);
+
+    public function findFutureLiveDates($courseIds, $limit);
+
+    public function findFutureLiveCourseIds();
+
+    public function findPastLiveCourseIds();
 
     public function analysisLessonFinishedDataByTime($startTime, $endTime);
 

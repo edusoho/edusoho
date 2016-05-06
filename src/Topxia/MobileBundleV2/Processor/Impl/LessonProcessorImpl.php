@@ -97,8 +97,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
         return array_map(function ($lessonMaterial) use ($newFiles) {
             $lessonMaterial['createdTime'] = date('c', $lessonMaterial['createdTime']);
-            $field = $lessonMaterial['fileId'];
-            $lessonMaterial['fileMime'] = $newFiles[$field]['type'];
+            $field                         = $lessonMaterial['fileId'];
+            $lessonMaterial['fileMime']    = $newFiles[$field]['type'];
             return $lessonMaterial;
         }, $lessonMaterials);
     }
@@ -131,41 +131,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             throw "createNotFoundException";
         }
 
-        $file = $this->controller->getUploadFileService()->getFile($material['fileId']);
-
-        if (empty($file)) {
-            throw "createNotFoundException";
-        }
-
-        if ($file['storage'] == 'cloud') {
-            $factory = new CloudClientFactory();
-            $client  = $factory->createClient();
-            $client->download($client->getBucket(), $file['hashId'], 3600, $file['filename']);
-        } else {
-            return $this->createPrivateFileDownloadResponse($request, $file);
-        }
-    }
-
-    private function createPrivateFileDownloadResponse(Request $request, $file)
-    {
-        $response = BinaryFileResponse::create($file['fullpath'], 200, array(), false);
-        $response->trustXSendfileTypeHeader();
-
-        $file['filename'] = urlencode($file['filename']);
-
-        if (preg_match("/MSIE/i", $request->headers->get('User-Agent'))) {
-            $response->headers->set('Content-Disposition', 'attachment; filename="'.$file['filename'].'"');
-        } else {
-            $response->headers->set('Content-Disposition', "attachment; filename*=UTF-8''".$file['filename']);
-        }
-
-        $mimeType = FileToolkit::getMimeTypeByExtension($file['ext']);
-
-        if ($mimeType) {
-            $response->headers->set('Content-Type', $mimeType);
-        }
-
-        return $response;
+        return $this->controller->forward('TopxiaWebBundle:UploadFile:download', array('fileId' => $material['fileId']));
     }
 
     public function learnLesson()
@@ -451,10 +417,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
-                    $factory = new CloudClientFactory();
-                    $client  = $factory->createClient();
-
-                    $lesson['mediaConvertStatus'] = $file['convertStatus'];
+                    $lesson['mediaConvertStatus'] = $file['status'];
 
                     if (!empty($file['metas2']) && !empty($file['metas2']['sd']['key'])) {
                         if (isset($file['convertParams']['convertor']) && ($file['convertParams']['convertor'] == 'HLSEncryptedVideo')) {
@@ -516,8 +479,8 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
                         }
 
                         if ($key) {
-                            $url                = $client->generateFileUrl($client->getBucket(), $key, 3600);
-                            $lesson['mediaUri'] = isset($url["url"]) ? $url['url'] : "";
+                            $result             = $this->controller->getMaterialLibService()->player($file['globalId']);
+                            $lesson['mediaUri'] = $result['url'];
                         } else {
                             $lesson['mediaUri'] = '';
                         }
@@ -528,9 +491,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } else
-
-        if ($mediaSource == 'youku') {
+        } elseif ($mediaSource == 'youku') {
             $matched = preg_match('/\/sid\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -538,9 +499,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             } else {
                 $lesson['mediaUri'] = '';
             }
-        } else
-
-        if ($mediaSource == 'tudou') {
+        } elseif ($mediaSource == 'tudou') {
             $matched = preg_match('/\/v\/(.*?)\/v\.swf/s', $lesson['mediaUri'], $matches);
 
             if ($matched) {
@@ -598,16 +557,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
+        $ppt = $this->controller->getMaterialLibService()->player($file['globalId']);
 
-        $ppt = $client->pptImages($file['metas2']['imagePrefix'], $file['metas2']['length'].'');
-
-        if (isset($ppt["error"])) {
+        if (isset($ppt["convertStatus"])) {
             $ppt = array();
         }
 
-        $lesson['content'] = $ppt;
+        $lesson['content'] = $ppt['images'];
 
         return $lesson;
     }
@@ -654,7 +610,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
 
     private function getDocumentLesson($lesson)
     {
-        $file = $this->getUploadFileService()->getFile($lesson['mediaId']);
+        $file = $this->controller->getUploadFileService()->getFile($lesson['mediaId']);
 
         if (empty($file)) {
             return $this->createErrorResponse('not_document', '文档还在转换中，还不能查看，请稍等。!');
@@ -668,20 +624,13 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
             }
         }
 
-        $factory = new CloudClientFactory();
-        $client  = $factory->createClient();
-
-        $metas2 = $file['metas2'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['pdf']['key'], 3600);
-        $pdfUri = $url['url'];
-        $url    = $client->generateFileUrl($client->getBucket(), $metas2['swf']['key'], 3600);
-        $swfUri = $url['url'];
+        $file = $this->controller->getMaterialLibService()->player($file['globalId']);
 
         $content = $lesson['content'];
         $content = $this->controller->convertAbsoluteUrl($this->request, $content);
         $render  = $this->controller->render('TopxiaMobileBundleV2:Course:document.html.twig', array(
-            'pdfUri' => $pdfUri,
-            'swfUri' => $swfUri,
+            'pdfUri' => $file['pdf'],
+            'swfUri' => $file['swf'],
             'title'  => $lesson['title']
         ));
 
@@ -695,9 +644,7 @@ class LessonProcessorImpl extends BaseProcessor implements LessonProcessor
         $storage = $this->controller->getSettingService()->get("storage");
 
         if (!empty($storage) && array_key_exists("video_header", $storage) && $storage["video_header"]) {
-            $file                  = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
-            $file["convertParams"] = json_decode($file["convertParams"], true);
-            $file["metas2"]        = json_decode($file["metas2"], true);
+            $file = $this->controller->getUploadFileService()->getFileByTargetType('headLeader');
             return $file;
         }
 

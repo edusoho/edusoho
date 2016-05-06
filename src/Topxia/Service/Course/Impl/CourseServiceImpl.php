@@ -6,7 +6,6 @@ use Topxia\Service\Common\BaseService;
 use Topxia\Service\Common\ServiceEvent;
 use Topxia\Service\Course\CourseService;
 use Topxia\Service\Util\EdusohoLiveClient;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CourseServiceImpl extends BaseService implements CourseService
 {
@@ -418,6 +417,8 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $course = $this->getCourse($course['id']);
 
+        $this->dispatchEvent("course.create", $course);
+
         $this->getLogService()->info('course', 'create', "创建课程《{$course['title']}》(#{$course['id']})");
 
         return $course;
@@ -460,28 +461,29 @@ class CourseServiceImpl extends BaseService implements CourseService
     protected function _filterCourseFields($fields)
     {
         $fields = ArrayToolkit::filter($fields, array(
-            'title'         => '',
-            'subtitle'      => '',
-            'about'         => '',
-            'expiryDay'     => 0,
-            'serializeMode' => 'none',
-            'categoryId'    => 0,
-            'vipLevelId'    => 0,
-            'goals'         => array(),
-            'audiences'     => array(),
-            'tags'          => '',
-            'startTime'     => 0,
-            'endTime'       => 0,
-            'locationId'    => 0,
-            'address'       => '',
-            'maxStudentNum' => 0,
-            'watchLimit'    => 0,
-            'approval'      => 0,
-            'maxRate'       => 0,
-            'locked'        => 0,
-            'tryLookable'   => 0,
-            'tryLookTime'   => 0,
-            'buyable'       => 0
+            'title'          => '',
+            'subtitle'       => '',
+            'about'          => '',
+            'expiryDay'      => 0,
+            'serializeMode'  => 'none',
+            'categoryId'     => 0,
+            'vipLevelId'     => 0,
+            'goals'          => array(),
+            'audiences'      => array(),
+            'tags'           => '',
+            'startTime'      => 0,
+            'endTime'        => 0,
+            'locationId'     => 0,
+            'address'        => '',
+            'maxStudentNum'  => 0,
+            'watchLimit'     => 0,
+            'approval'       => 0,
+            'maxRate'        => 0,
+            'locked'         => 0,
+            'tryLookable'    => 0,
+            'tryLookTime'    => 0,
+            'buyable'        => 0,
+            'conversationId' => ''
         ));
 
         if (!empty($fields['about'])) {
@@ -632,11 +634,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             $this->getCourseLessonReplayDao()->deleteLessonReplayByCourseId($id);
         }
 
-        $this->dispatchEvent("course.delete", array(
-            "id" => $id
-        ));
-
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
+        $this->dispatchEvent("course.delete",$course);
 
         return true;
     }
@@ -816,11 +815,6 @@ class CourseServiceImpl extends BaseService implements CourseService
         return array('status' => 'error', 'watchedTime' => $learn['watchTime'], 'watchLimitTime' => $watchLimitTime);
     }
 
-    public function uploadCourseFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
-    {
-        return $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, $implemtor, $originalFile);
-    }
-
     public function setCoursePrice($courseId, $currency, $price)
     {
         if (!in_array($currency, array('coin', 'default'))) {
@@ -853,8 +847,8 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($currency == 'coin') {
-            $fields['originCoinPrice'] = $price;
-            $fields['coinPrice']       = $price * ($discount / 10);
+            $fields['originPrice'] = $price;
+            $fields['price']       = $price * ($discount / 10);
         } else {
             $fields['originPrice'] = $price;
             $fields['price']       = $price * ($discount / 10);
@@ -882,11 +876,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if ($discount['type'] == 'global') {
-            if ($currency == 'coin') {
-                $conditions = array('originCoinPrice_GT' => '0.00');
-            } else {
-                $conditions = array('originPrice_GT' => '0.00');
-            }
+            $conditions = array('originPrice_GT' => '0.00');
 
             $count   = $this->searchCourseCount($conditions);
             $courses = $this->searchCourses($conditions, 'latest', 0, $count);
@@ -896,7 +886,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 if ($currency == 'coin') {
                     $fields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $discount['globalDiscount'] / 10
+                        'price' => $course['originPrice'] * $discount['globalDiscount'] / 10
                     );
                 } else {
                     $fields = array(
@@ -924,7 +914,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
                 if ($currency == 'coin') {
                     $fields = array(
-                        'coinPrice' => $course['originCoinPrice'] * $item['discount'] / 10
+                        'price' => $course['originPrice'] * $item['discount'] / 10
                     );
                 } else {
                     $fields = array(
@@ -1068,10 +1058,13 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->fillLessonMediaFields($lesson);
 
-        //课程内容的过滤 @todo
-        // if(isset($lesson['content'])){
-        //     $lesson['content'] = $this->purifyHtml($lesson['content']);
-        // }
+//课程内容的过滤 @todo
+
+// if(isset($lesson['content'])){
+
+//     $lesson['content'] = $this->purifyHtml($lesson['content']);
+
+// }
 
         if (isset($fields['title'])) {
             $fields['title'] = $this->purifyHtml($fields['title']);
@@ -1101,12 +1094,6 @@ class CourseServiceImpl extends BaseService implements CourseService
             LessonSerialize::serialize($lesson)
         );
 
-        // Increase the linked file usage count, if there's a linked file used by this lesson.
-
-        if (!empty($lesson['mediaId'])) {
-            $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', 1);
-        }
-
         $this->updateCourseCounter($course['id'], array(
             'lessonNum'  => $this->getLessonDao()->getLessonCountByCourseId($course['id']),
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
@@ -1121,6 +1108,21 @@ class CourseServiceImpl extends BaseService implements CourseService
     public function analysisLessonDataByTime($startTime, $endTime)
     {
         return $this->getLessonDao()->analysisLessonDataByTime($startTime, $endTime);
+    }
+
+    public function findFutureLiveDates($courseIds, $limit)
+    {
+        return $this->getLessonDao()->findFutureLiveDates($courseIds, $limit);
+    }
+
+    public function findFutureLiveCourseIds()
+    {
+        return $this->getLessonDao()->findFutureLiveCourseIds();
+    }
+
+    public function findPastLiveCourseIds()
+    {
+        return $this->getLessonDao()->findPastLiveCourseIds();
     }
 
     protected function fillLessonMediaFields(&$lesson)
@@ -1263,17 +1265,18 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->updateCourseCounter($course['id'], array(
             'giveCredit' => $this->getLessonDao()->sumLessonGiveCreditByCourseId($course['id'])
         ));
-        // Update link count of the course lesson file, if the lesson file is changed
+
+// Update link count of the course lesson file, if the lesson file is changed
 
         if (array_key_exists('mediaId', $fields)) {
             if ($fields['mediaId'] != $lesson['mediaId']) {
-                // Incease the link count of the new selected lesson file
+// Incease the link count of the new selected lesson file
 
                 if (!empty($fields['mediaId'])) {
                     $this->getUploadFileService()->waveUploadFile($fields['mediaId'], 'usedCount', 1);
                 }
 
-                // Decrease the link count of the original lesson file
+// Decrease the link count of the original lesson file
 
                 if (!empty($lesson['mediaId'])) {
                     $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
@@ -1331,9 +1334,10 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->updateCourseCounter($course['id'], array(
             'lessonNum' => $this->getLessonDao()->getLessonCountByCourseId($course['id'])
         ));
-        // [END] 更新课时序号
 
-        // Decrease the course lesson file usage count, if there's a linked file used by this lesson.
+// [END] 更新课时序号
+
+// Decrease the course lesson file usage count, if there's a linked file used by this lesson.
 
         if (!empty($lesson['mediaId'])) {
             $this->getUploadFileService()->waveUploadFile($lesson['mediaId'], 'usedCount', -1);
@@ -2275,7 +2279,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getCourseDao()->updateCourse($courseId, $fields);
         $this->dispatchEvent(
             'course.join',
-            new ServiceEvent($course, array('userId' => $member['userId']))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
         return $member;
     }
@@ -2340,7 +2344,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         $this->getLogService()->info('course', 'remove_student', "课程《{$course['title']}》(#{$course['id']})，移除学员#{$member['id']}");
         $this->dispatchEvent(
             'course.quit',
-            new ServiceEvent($course, array('userId' => $member['userId']))
+            new ServiceEvent($course, array('userId' => $member['userId'], 'member' => $member))
         );
     }
 
@@ -2542,12 +2546,12 @@ class CourseServiceImpl extends BaseService implements CourseService
             throw $this->createServiceException("course, member参数不能为空");
         }
 
-        /*
-        如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
-        if ($course['expiryDay'] == 0) {
-        return true;
-        }
-         */
+/*
+如果课程设置了限免时间，那么即使expiryDay为0，学员到了deadline也不能参加学习
+if ($course['expiryDay'] == 0) {
+return true;
+}
+ */
 
         if ($member['deadline'] == 0) {
             return true;

@@ -23,6 +23,21 @@ service('ArticleService', ['httpService', function(httpService) {
 		httpService.apiGet("/api/articles/" + arguments[0]['id'], arguments);
 	}
 }]).
+service('LessonLiveService', ['httpService', function(httpService) {
+
+	this.createLiveTickets = function(callback) {
+		httpService.apiPost("/api/lessons/" + arguments[0]['lessonId'] + "/live_tickets", arguments);
+	}
+
+	this.getLiveInfoByTicket = function(callback) {
+		httpService.apiGet("/api/lessons/" + arguments[0]['lessonId'] + "/live_tickets/" + arguments[0]['ticket'], arguments);
+	}
+
+	this.getLiveReplay = function() {
+		httpService.apiGet("/api/lessons/" + arguments[0]['id'] + "/replay", arguments);
+	}
+
+}]).
 service('AnalysisService', ['httpService', function(httpService) {
 
 	this.getCourseChartData = function(callback) {
@@ -646,6 +661,26 @@ service('httpService', ['$http', '$rootScope', 'platformUtil', '$q', 'cordovaUti
 		errorCallback = arguments[1][2];
 
 		var options = self.getOptions("get", url, params, callback, errorCallback);
+		options.headers['Auth-Token'] = options.headers['token'];
+		options.headers['token'] = null;
+		var http = $http(options).success(options.success);
+
+		if (options.error) {
+			http.error(options.error);
+		} else {
+			http.error(function(data) {
+				console.log(data);
+			});
+		}
+	}
+
+	this.apiPost = function(url) {
+
+		params  = arguments[1][0];
+		callback = arguments[1][1];
+		errorCallback = arguments[1][2];
+
+		var options = self.getOptions("post", url, params, callback, errorCallback);
 		options.headers['Auth-Token'] = options.headers['token'];
 		options.headers['token'] = null;
 		var http = $http(options).success(options.success);

@@ -44,6 +44,27 @@ admin_content:
     defaults: { _controller: TopxiaAdminBundle:Content:index }
     permissions: [admin_content_manage]
 
+admin_dictionary:
+    pattern:  /dictionary
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:index }
+
+admin_dictionary_create:
+    pattern: /dictionary/create/{type}
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:create }
+
+admin_dictionary_delete:
+    pattern:  /Dictionary/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:delete }
+    methods: [POST]
+
+admin_dictionary_edit:
+    pattern:  /dictionary/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:edit }
+
+admin_dictionary_name_check:
+    pattern:  /dictionary/{id}/name_check
+    defaults: { _controller: TopxiaAdminBundle:Dictionary:checkName }
+
 admin_content_create:
     pattern:  /content/create/{type}
     defaults: { _controller: TopxiaAdminBundle:Content:create }
@@ -408,8 +429,8 @@ admin_course_category:
     permissions: [admin_course_category_manage]
 
 admin_course_data:
-    pattern:  /course/data
-    defaults: { _controller: TopxiaAdminBundle:Course:data }
+    pattern:  /course/{filter}/data
+    defaults: { _controller: TopxiaAdminBundle:Course:data , filter:'normal'}
     permissions: [admin_course_data]
 
 admin_course_lesson_data:
@@ -491,6 +512,30 @@ admin_operation_mobile_select:
     pattern:  /operation/mobile/select
     defaults: { _controller: TopxiaAdminBundle:Mobile:mobileSelect }
     permissions: [admin_operation_mobile_select_manage]
+
+admin_discovery_column_delete:
+    pattern:  /discovery_column/{id}/delete
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:delete }
+
+admin_discovery_column_edit:
+    pattern:  /discovery_column/{id}/edit
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:edit }
+
+admin_discovery_column_title_check:
+    pattern:  /discovery_column/{id}/title_check
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:checkTitle }
+
+admin_discovery_column_sort:
+    pattern:  /discovery_column/sort
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:sort }
+
+admin_discovery_column_index:
+    pattern:  /discovery_column/index
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:index }
+
+admin_discovery_column_create:
+    pattern:  /discovery_column/create
+    defaults: { _controller: TopxiaAdminBundle:DiscoveryColumn:create }
 
 admin_setting_mobile:
     pattern:  /setting/mobile
@@ -790,6 +835,10 @@ admin_setting_developer_magic:
     defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:magic }
     permissions: [admin]
 
+admin_setting_developer_sync_file_data:
+    pattern:  /setting/developer/sync_upload_file
+    defaults: { _controller: TopxiaAdminBundle:DeveloperSetting:syncUploadFile }
+
 admin_setting_post_num_rules:
     pattern:  /setting/post_num_rules
     defaults: { _controller: TopxiaAdminBundle:Setting:postNumRules }
@@ -939,6 +988,10 @@ admin_cloud_sms_account:
     defaults: { _controller: TopxiaAdminBundle:Cloud:smsAccount }
     permissions: [admin_my_cloud_overview]
 
+admin_cloud_video_account:
+    pattern:  /cloud/video/account
+    defaults: { _controller: TopxiaAdminBundle:Cloud:videoAccount }
+
 admin_cloud_video_upgrade:
     pattern:  /cloud/video/upgrade
     defaults: { _controller: TopxiaAdminBundle:Cloud:videoUpgrade }
@@ -971,6 +1024,46 @@ admin_my_cloud_overview:
 # admin_app_cloud:
 #     pattern:  /app/center/cloud
 #     defaults: { _controller: TopxiaAdminBundle:App:cloud }
+admin_cloud_file:
+    pattern:  /cloud_files
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:index }
+
+admin_cloud_file_manage:
+    pattern:  /cloud_files/manage
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:manage }
+
+admin_cloud_file_render_table:
+    pattern:  /cloud_files/table/render
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:render }
+
+admin_cloud_file_detail:
+    pattern:  /cloud_file/{globalId}/detail
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:detail }
+
+admin_cloud_file_edit:
+    pattern:  /cloud_file/{globalId}/edit
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:edit, fields:'' }
+    methods: [POST]
+
+admin_cloud_file_preview:
+    pattern:  /cloud_file/{globalId}/preview
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:preview }
+
+admin_cloud_file_play:
+    pattern:  /cloud_files/{globalId}/play
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:player }
+
+admin_cloud_file_reconvert:
+    pattern: /cloud_file/{globalId}/reconvert
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:reconvert }
+
+admin_cloud_file_download:
+    pattern: /cloud_file/{globalId}/download
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:download }
+
+admin_cloud_file_delete:
+    pattern: /cloud_file/{globalId}/delete
+    defaults: { _controller: TopxiaAdminBundle:CloudFile:delete }
 
 admin_app_installed:
     pattern:  /app/installed/{postStatus}
@@ -1060,6 +1153,11 @@ admin_category:
     defaults: { _controller: TopxiaAdminBundle:Category:index }
     permissions: [admin_course_category_manage]
 
+admin_app_package_update_check_newest:
+    pattern: /app/package_update/check/newest/code/{code}
+    defaults: { _controller: TopxiaAdminBundle:AppPackageUpdate:checkNewest }
+    methods: [POST]
+
 admin_category_create:
     pattern: /category/create
     defaults: { _controller: TopxiaAdminBundle:Category:create }
@@ -1133,54 +1231,6 @@ admin_thread_batch_delete:
     defaults: {_controller: TopxiaAdminBundle:CourseThread:batchDelete }
     methods: [POST]
     permissions: [admin_course_thread]
-
-# admin_money_card:
-#     pattern: /money_card
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:index }
-
-# admin_money_card_batch:
-#     pattern: /money_card/batch
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:indexBatch }
-
-# admin_money_card_get_password:
-#     pattern: /money_card/get_password/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:getPassword }
-
-# admin_money_card_create:
-#     pattern: /money_card/create
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:create }
-
-# admin_money_card_lock:
-#     pattern: /money_card/lock/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:lock }
-
-# admin_money_card_unlock:
-#     pattern: /money_card/unlock/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:unlock }
-
-# admin_money_card_delete:
-#     pattern: /money_card/delete/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:delete }
-
-# admin_money_card_lock_batch:
-#     pattern: /money_card/batch/lock/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:lockBatch }
-
-# admin_money_card_unlock_batch:
-#     pattern: /money_card/batch/unlock/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:unlockBatch }
-
-# admin_money_card_batch_delete:
-#     pattern: /money_card/batch/delete/{id}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:deleteBatch }
-
-# admin_money_card_batch_card_prefix_check:
-#     pattern: /money_card/card_prefix/check
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:cardPrefixCheck }
-
-# admin_money_card_batch_export_csv:
-#     pattern: /money_card/batch/export/csv/{batchId}
-#     defaults: {_controller: TopxiaAdminBundle:MoneyCard:exportCsv }
 
 admin_question:
     pattern:  /question/{postStatus}
@@ -1331,6 +1381,14 @@ admin_invite_set:
     pattern:  /setting/invite
     defaults: { _controller: TopxiaAdminBundle:OperationSetting:inviteSet }
     permissions: [admin_invite_set]
+
+admin_invite_coupon:
+    pattern: /invite/{filter}/coupon/
+    defaults: { _controller: TopxiaAdminBundle:Invite:coupon, filter:'invited'} 
+
+admin_invite_coupon_query:
+    pattern: /invite/coupon/query/
+    defaults: { _controller: TopxiaAdminBundle:Invite:queryInviteCoupon }
 
 admin_group:
     pattern:  /group/
@@ -1595,7 +1653,7 @@ admin_order_manage_export_csv:
     defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
     permissions: [admin_course_order_query]
 
-admin_order_manage_export_coin_csv:  
+admin_order_manage_export_coin_csv:
     pattern: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
     permissions: [admin_coin_order_query]
@@ -1678,6 +1736,14 @@ admin_edu_cloud_search_clause:
     pattern: /setting/edu_cloud/search/clause
     defaults: { _controller: TopxiaAdminBundle:EduCloud:searchClause }
     permissions: [admin_edu_cloud_search]
+
+admin_edu_cloud_search_reapply:
+    pattern: /setting/edu_cloud/search/reapply
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchReapply }
+
+admin_edu_cloud_search_open:
+    pattern: /setting/edu_cloud/search/open
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:searchOpen }
 
 admin_edu_cloud_search_close:
     pattern: /setting/edu_cloud/search/close

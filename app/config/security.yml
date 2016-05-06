@@ -3,13 +3,6 @@ services:
         class: Topxia\Service\User\UserProvider
         arguments:    ['@service_container']
 
-    security.access.blacklist_voter:
-        class:      Topxia\WebBundle\Security\Voter\ClientIpVoter
-        arguments:  ['@service_container']
-        public:     false
-        tags:
-            - { name: security.voter }
-
     topxia.authentication.failure_handler:
         class: Topxia\WebBundle\Handler\AuthenticationFailureHandler
         parent: security.authentication.failure_handler

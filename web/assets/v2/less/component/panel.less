@@ -1,10 +1,10 @@
-.panel {
-  border: none;
-}
+// .panel {
+//   border: none;
+// }
 
-.lt-ie9 .panel {
-  border: 1px solid @gray-light;
-}
+// .lt-ie9 .panel {
+//   border: 1px solid @gray-light;
+// }
 
 // 即将弃用
 .panel-col {
@@ -13,13 +13,20 @@
 
 .panel-default {
   padding: 0 15px;
-  .es-box-shadow;
+  // .es-box-shadow;
+  border-color: @border-color;
+  @media(max-width:@screen-xs-max) {
+    padding: 0 10px;
+  }
   >.panel-heading {
     position: relative;
     font-size: 16px;
     padding: 15px 0;
     background: #fff;
     border-bottom: 1px solid @gray-lighter;
+    @media(max-width:@screen-xs-max) {
+      padding: 10px 0;
+    }
     .panel-title {
       color: @gray-darker;
       >i {
@@ -33,6 +40,9 @@
       display: block;
       color: @gray;
       .es-transition;
+      @media(max-width:@screen-xs-max) {
+        top: 8px;
+      }
       &:hover {
         color: @gray-dark;
         .es-transition;
@@ -62,8 +72,8 @@
   }
   >.panel-body {
     background: @bg-color;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
+    .border-bottom-left-radius();
+    .border-bottom-right-radius();
   }
 }
 
@@ -76,8 +86,8 @@
   >.panel-body {
     color: @gray;
     background: #fff;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
+    .border-bottom-left-radius();
+    .border-bottom-right-radius();
   }
 }
 

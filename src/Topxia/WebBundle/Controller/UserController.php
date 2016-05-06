@@ -92,8 +92,8 @@ class UserController extends BaseController
         $user                 = array_merge($user, $userProfile);
         $classrooms           = array();
 
-        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime', 'desc'), 0, 9999);
-        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime', 'desc'), 0, 9999);
+        $studentClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'student', 'userId' => $user['id']), array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $auditorClassrooms = $this->getClassroomService()->searchMembers(array('role' => 'auditor', 'userId' => $user['id']), array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
@@ -149,7 +149,7 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, 9999);
+        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
         $conditions   = array(
@@ -601,5 +601,10 @@ class UserController extends BaseController
     protected function getLevelService()
     {
         return $this->getServiceKernel()->createService('Vip:Vip.LevelService');
+    }
+
+    protected function getVipService()
+    {
+        return $this->getServiceKernel()->createService('Vip:Vip.VipService');
     }
 }

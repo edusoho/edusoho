@@ -395,6 +395,7 @@ class UserController extends BaseController
     public function lockAction($id)
     {
         $this->getUserService()->lockUser($id);
+         $this->kickUserLogout($id);
         return $this->render('TopxiaAdminBundle:User:user-table-tr.html.twig', array(
             'user'    => $this->getUserService()->getUser($id),
             'profile' => $this->getUserService()->getUserProfile($id)
@@ -422,7 +423,7 @@ class UserController extends BaseController
         $token = $this->getUserService()->makeToken('password-reset', $user['id'], strtotime('+1 day'));
 
         try {
-            $mail = new Email(array(
+            $mail = new Mail(array(
                 'to'     => $user['email'],
                 'title'  => "重设{$user['nickname']}在{$this->setting('site.name', 'EDUSOHO')}的密码",
                 'format' => 'html',
@@ -509,6 +510,7 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $formData = $request->request->all();
             $this->getAuthService()->changePassword($user['id'], null, $formData['newPassword']);
+            $this->kickUserLogout($user['id']);
             return $this->createJsonResponse(true);
         }
 
@@ -517,6 +519,17 @@ class UserController extends BaseController
         ));
     }
 
+    protected function kickUserLogout($userId)
+    {
+        $this->getSessionService()->clearByUserId($userId);
+        $tokens = $this->getTokenService()->findTokensByUserIdAndType($userId,'mobile_login');
+        if(!empty($tokens)){
+            foreach ($tokens as $token) {
+                $this->getTokenService()->destoryToken($token['token']);
+            }
+        }
+    }
+    
     protected function getRoleService()
     {
         return $this->getServiceKernel()->createService('System.RoleService');
@@ -535,6 +548,16 @@ class UserController extends BaseController
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getSessionService()
+    {
+        return $this->getServiceKernel()->createService('System.SessionService');
+    }
+
+    protected function getTokenService()
+    {
+        return $this->getServiceKernel()->createService('User.TokenService');
     }
 
     protected function getCourseService()

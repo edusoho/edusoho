@@ -20,6 +20,7 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 
 	this.loadClassRoomTeachers = function() {
 		ClassRoomService.getTeachers({
+			limit : 10000,
 			classRoomId : $stateParams.targetId
 		}, function(data) {
 			$scope.users = data;
@@ -28,6 +29,7 @@ function TeacherListController($scope, UserService, ClassRoomService, $statePara
 
 	this.loadCourseTeachers = function() {
 		UserService.getCourseTeachers({
+			limit : 10000,
 			courseId : $stateParams.targetId
 		}, function(data) {
 			$scope.users = data;
@@ -78,12 +80,14 @@ function StudentListController($scope, ClassRoomService, CourseService, $statePa
 
 	function getClassRoomStudents(targetId, callback) {
 		ClassRoomService.getStudents({
+			limit : 10000,
 			classRoomId : $stateParams.targetId
 		}, callback);
 	}
 
 	function getCourseStudents(targetId, callback) {
 		CourseService.getStudents({
+			limit : 10000,
 			courseId : $stateParams.targetId,
 		}, callback);
 	}
@@ -434,9 +438,11 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 	this.filter = function(data) {
 		var users = data.users;
 		var threads = data.threads;
+
 		for (var i = 0; i < threads.length; i++) {
 			threads[i]["user"] = users[threads[i]["userId"]];
 		};
+		
 		data.threads = threads;
 		return data;
 	};
@@ -451,10 +457,12 @@ function ThreadTeachingController($scope, $stateParams, ThreadManagerService, co
 	};
 
 	$scope.initQuestionResult = function(limit) {
+		$scope.showLoad();
 		ThreadManagerService.questionResult({
 			start : limit,
 			courseId : $stateParams.courseId
 		}, function(data) {
+			$scope.hideLoad();
 			$scope.teachingResult = self.filter(data);
 		});
 	};

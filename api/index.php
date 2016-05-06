@@ -37,6 +37,7 @@ $connection = DriverManager::getConnection(array(
 $serviceKernel = ServiceKernel::create($paramaters['environment'], true);
 $serviceKernel->setParameterBag(new ParameterBag($paramaters));
 $serviceKernel->setConnection($connection);
+$serviceKernel->getConnection()->exec('SET NAMES UTF8');
 
 include __DIR__.'/src/functions.php';
 

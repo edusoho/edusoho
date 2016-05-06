@@ -86,6 +86,8 @@ abstract class BaseController extends Controller
         $loginEvent = new InteractiveLoginEvent($this->getRequest(), $token);
         $this->get('event_dispatcher')->dispatch(SecurityEvents::INTERACTIVE_LOGIN, $loginEvent);
 
+        ServiceKernel::instance()->createService("System.LogService")->info('user', 'login_success', '登录成功');
+
         $loginBind = $this->setting('login_bind', array());
 
         if (empty($loginBind['login_limit'])) {
@@ -123,7 +125,7 @@ abstract class BaseController extends Controller
 
         if (isset($cloudConfig['status']) && $cloudConfig['status'] == 'enable') {
             return $this->sendCloudEmail($mail->getCloudMail());
-        } elseif (!isset($config['enabled']) && $config['enabled'] == 1) {
+        } elseif (isset($config['enabled']) && $config['enabled'] == 1) {
             return $this->sendNormalEmail($mail->getMail());
         }
 
@@ -157,11 +159,11 @@ abstract class BaseController extends Controller
 
     private function sendNormalEmail($params)
     {
-        $format = $params['format'] == 'html' ? 'text/html' : 'text/plain';
+        $format = isset($params['format']) && $params['format'] == 'html' ? 'text/html' : 'text/plain';
 
         $config = $this->setting('mailer', array());
 
-        if (!isset($config['enabled']) && $config['enabled'] == 1) {
+        if (isset($config['enabled']) && $config['enabled'] == 1) {
             $transport = \Swift_SmtpTransport::newInstance($config['host'], $config['port'])
                 ->setUsername($config['username'])
                 ->setPassword($config['password']);
@@ -219,17 +221,14 @@ abstract class BaseController extends Controller
             $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
-        if ($url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinmob'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weixinweb'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_callback', array('type' => 'renren'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'qq'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'weibo'))
-            || $url[0] == $this->generateUrl('login_bind_choose', array('type' => 'renren'))
+        if (strpos($url[0], 'callback') !== false
+            || strpos($url[0], '/login/bind') !== false
+            || strpos($url[0], 'crontab') !== false) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
+        }
 
-        ) {
-            $targetPath = $this->generateUrl('homepage');
+        if (empty($targetPath)) {
+            $targetPath = $this->generateUrl('homepage', array(), true);
         }
 
         return $targetPath;

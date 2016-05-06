@@ -7,11 +7,14 @@ use Imagine\Gd\Imagine;
 use Topxia\Common\Paginator;
 use Topxia\Common\FileToolkit;
 use Topxia\Common\ArrayToolkit;
+use Topxia\Service\CloudPlatform\KeyApplier;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+
 
 class EduCloudController extends BaseController
 {
@@ -77,7 +80,7 @@ class EduCloudController extends BaseController
         ));
     }
 
-    //概览页，服务概况页
+//概览页，服务概况页
     // refactor
     public function myCloudOverviewAction(Request $request)
     {
@@ -175,11 +178,7 @@ class EduCloudController extends BaseController
         $overview  = $api->get("/user/center/{$api->getAccessKey()}/overview");
         $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
 
-        $headLeader = array();
-
-        if (!empty($storageSetting) && array_key_exists("video_header", $storageSetting) && $storageSetting["video_header"]) {
-            $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
-        }
+        $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
         return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
             'storageSetting' => $storageSetting,
@@ -442,7 +441,14 @@ class EduCloudController extends BaseController
                 $this->getSettingService()->set('storage', $settings);
             }
 
-            $this->refreshCopyright($info);
+            if ($info['copyright']) {
+                $copyright                   = $this->getSettingService()->get('copyright', array());
+                $copyright['owned']          = 1;
+                $copyright['thirdCopyright'] = $info['thirdCopyright'];
+                $this->getSettingService()->set('copyright', $copyright);
+            } else {
+                $this->getSettingService()->delete('copyright');
+            }
         } else {
             $settings                      = $this->getSettingService()->get('storage', array());
             $settings['cloud_key_applied'] = 0;
@@ -520,10 +526,9 @@ class EduCloudController extends BaseController
         ));
     }
 
-    public function searchSettingAction()
+    public function searchSettingAction(Request $request)
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-
         if (!$cloud_search_settting) {
             $cloud_search_settting = array(
                 'search_enabled' => 0,
@@ -532,13 +537,14 @@ class EduCloudController extends BaseController
             $this->getSettingService()->set('cloud_search', $cloud_search_settting);
         }
 
-        $data = array('status' => 'success');
+        $data = $cloud_search_settting;
 
         try {
             $api = CloudAPIFactory::create('root');
 
             $overview = $api->get("/users/{$api->getAccessKey()}/overview");
-            $info     = $api->get('/me');
+
+            $this->isSearchInited($api);
         } catch (\RuntimeException $e) {
             return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
                 'data' => array('status' => 'unlink')
@@ -546,67 +552,71 @@ class EduCloudController extends BaseController
         }
 
         //是否接入教育云
-
-        if (empty($info['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
+        if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
-            goto response;
+        } elseif(empty($overview['user']['licenseDomains'])) {
+            $data['status'] = 'unbinded';
+        }else {
+             $currentHost = $request->server->get('HTTP_HOST');
+             if(!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))){
+                $data['status'] = 'binded_error';
+             }
         }
 
-        response:
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
             'data' => $data
         ));
     }
 
+    public function searchReapplyAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
+            $this->getSearchService()->refactorAllDocuments();
+            return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
+        }
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-reapply-modal.html.twig');
+    }
+
     public function searchClauseAction(Request $request)
     {
         if ($request->getMethod() == 'POST') {
-            $searchSetting = $this->getSettingService()->get('cloud_search');
-
-            $siteSetting        = $this->getSettingService()->get('site');
-            $siteSetting['url'] = rtrim($siteSetting['url']);
-            $siteSetting['url'] = rtrim($siteSetting['url'], '/');
-
-            $api  = CloudAPIFactory::create('root');
-            $urls = array(
-                array('category' => 'course', 'url' => $siteSetting['url'].'/api/courses?cursor=0&start=0&limit=100'),
-                array('category' => 'lesson', 'url' => $siteSetting['url'].'/api/lessons?cursor=0&start=0&limit=100'),
-                array('category' => 'user', 'url' => $siteSetting['url'].'/api/users?cursor=0&start=0&limit=100'),
-                array('category' => 'thread', 'url' => $siteSetting['url'].'/api/chaos_threads?cursor=0,0,0&start=0,0,0&limit=50'),
-                array('category' => 'article', 'url' => $siteSetting['url'].'/api/articles?cursor=0&start=0&limit=100')
-            );
-            $urls = urlencode(json_encode($urls));
-
-            $callbackUrl = $siteSetting['url'];
-            $callbackUrl .= $this->generateUrl('edu_cloud_search_callback');
-            $sign = $this->getSignEncoder()->encodeSign($callbackUrl, $api->getAccessKey());
-            $sign = rawurlencode($sign);
-            $callbackUrl .= '?sign='.$sign;
-
-            $result = $api->post("/search/accounts", array('urls' => $urls, 'callback' => $callbackUrl));
-
-            if ($result['success']) {
-                $searchSetting['search_enabled'] = 1;
-                $searchSetting['status']         = 'waiting';
-                $this->getSettingService()->set('cloud_search', $searchSetting);
-            }
-
+            $callbackRouteUrl = $this->generateUrl('edu_cloud_search_callback');
+            $this->getSearchService()->applySearchAccount($callbackRouteUrl);
             return $this->redirect($this->generateUrl('admin_edu_cloud_search'));
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-clause-modal.html.twig');
     }
 
-    public function searchCloseAction()
+    public function searchOpenAction()
     {
-        $searchSetting['search_enabled'] = 0;
-        $searchSetting['status']         = 'closed';
-        $this->getSettingService()->set('cloud_search', $searchSetting);
-
-        $data = array('status' => 'success');
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+        if($cloud_search_settting['status'] == 'ok'){
+            $this->getSettingService()->set('cloud_search', array(
+                'search_enabled' => 1,
+                'status' => $cloud_search_settting['status'],
+            ));
+        }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
-            'data' => $data
+            'data' => array('status' => 'success')
+        ));
+    }
+
+    public function searchCloseAction()
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        $this->getSettingService()->set('cloud_search', array(
+            'search_enabled' => 0,
+            'status' => $cloud_search_settting['status'],
+            ));
+
+        return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
+            'data' => array('status' => 'success')
         ));
     }
 
@@ -644,7 +654,7 @@ class EduCloudController extends BaseController
         $this->getSettingService()->set('copyright', array(
             'owned'          => 1,
             'name'           => $request->request->get('name', ''),
-            'thirdCopyright' => isset($info['thirdCopyright']) && $info['thirdCopyright'] == '1' ? 1 : 0
+            'thirdCopyright' => isset($info['thirdCopyright']) ? $info['thirdCopyright'] : 0
         ));
 
         return $this->createJsonResponse(array('status' => 'ok'));
@@ -690,7 +700,8 @@ class EduCloudController extends BaseController
 
         $settings  = $this->getSettingService()->get('cloud_sms', array());
         $smsStatus = array();
-        //启用云短信，没有则创建云平台短信服务帐号
+
+//启用云短信，没有则创建云平台短信服务帐号
 
         if (isset($dataUserPosted['sms-open'])) {
             if (isset($settings['sms_school_name'])) {
@@ -723,7 +734,7 @@ class EduCloudController extends BaseController
             }
         }
 
-        //关闭云短信
+//关闭云短信
 
         if (isset($dataUserPosted['sms-close'])) {
             $status                   = $api->get('/me/sms_account');
@@ -735,7 +746,7 @@ class EduCloudController extends BaseController
             return $smsStatus;
         }
 
-        //更新云短信签名
+//更新云短信签名
 
         if (isset($dataUserPosted['sign'])) {
             if (empty($dataUserPosted['sign'])) {
@@ -771,10 +782,11 @@ class EduCloudController extends BaseController
 
         $emailStatus = array_merge($emailStatus, $sign);
 
-        if ($emailStatus['status'] != 'error') {
+        if ($emailStatus['status'] != 'error' && !empty($dataUserPosted)) {
             $this->getSettingService()->set('cloud_email', $emailStatus);
         }
 
+        $emailStatus = $this->getSettingService()->get('cloud_email', array());
         return $emailStatus;
     }
 
@@ -854,8 +866,14 @@ class EduCloudController extends BaseController
         }
 
         if (empty($operation)) {
-            $emailStatus['status'] = isset($settings['status']) ? $settings['status'] : 'error';
-            $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
+            $result = $api->get("/me/email_account");
+            if (isset($result['nickname'])) {
+                $emailStatus['status'] = $result['status'];
+                $sign                  = array('sign' => $result['nickname']);
+            } else {
+                $emailStatus['status'] = 'disable';
+                $sign                  = isset($settings['sign']) ? array('sign' => $settings['sign']) : array('sign' => "");
+            }
         }
 
         if (isset($result['error'])) {
@@ -943,6 +961,27 @@ class EduCloudController extends BaseController
         }
     }
 
+    protected function isSearchInited($api)
+    {
+        $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
+        if($cloud_search_settting['status']=='waiting'){
+            $search_account = $api->get("/me/search_account");
+            if($search_account['isInit']=='yes'){
+                $this->getSettingService()->set('cloud_search', array(
+                    'search_enabled' => $cloud_search_settting['search_enabled'],
+                    'status'         => 'ok'
+                    ));
+            }
+        }
+        return true;
+    }
+
+    protected function getSearchService()
+    {
+        return $this->getServiceKernel()->createService('Search.SearchService');
+    }
+
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
@@ -955,7 +994,7 @@ class EduCloudController extends BaseController
 
     protected function getUploadFileService()
     {
-        return $this->getServiceKernel()->createService('File.UploadFileService');
+        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     private function getWebExtension()

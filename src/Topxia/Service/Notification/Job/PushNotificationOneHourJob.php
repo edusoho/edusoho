@@ -7,45 +7,22 @@ use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
 class PushNotificationOneHourJob implements Job
 {
-  public function execute($params)
+    public function execute($params)
     {
         $targetType = $params['targetType'];
         $targetId = $params['targetId'];
         if ($targetType == 'lesson') {
             $lesson = $this->getCourseService()->getLesson($targetId);
             $course = $this->getCourseService()->getCourse($lesson['courseId']);
+
+            $lesson['course'] = $course;
+            $this->pushCloud('lesson.live_notify', $lesson);
         }
-        $from = array(
-            'type' => 'course',
-            'id' => $course['id'],
-            'image' => $this->getFileUrl($course['smallPicture']),                              
-        );
-
-        $to = array('type' => 'course', 'id' => $course['id']);
-
-        $body = array('type' => 'live.notify','id' => $lesson['id'], 'lessonType' => $lesson['type']);
-        
-        $this->push($course['title'], $lesson['title'], $from, $to, $body);
     }
 
-    protected function push($title, $content, $from, $to, $body)
+    protected function pushCloud($eventName, array $data, $level = 'normal')
     {
-        $message = array(
-            'title' => $title,
-            'content' => $content,
-            'custom' => array(
-                'from' => $from,
-                'to' => $to,
-                'body' => $body,
-            )
-        );
-
-        $result = CloudAPIFactory::create('tui')->post('/message/send', $message);
-    }
-
-    protected function getCourseService()
-    {
-        return ServiceKernel::instance()->createService('Course.CourseService');
+        return $this->getCloudDataService()->push('school.'.$eventName, $data, time(), $level);
     }
 
     protected function getFileUrl($path)
@@ -57,5 +34,15 @@ class PushNotificationOneHourJob implements Job
         $path = str_replace('files/', '', $path);
         $path = "http://{$_SERVER['HTTP_HOST']}/files/{$path}";
         return $path;
+    }
+
+    protected function getCourseService()
+    {
+        return ServiceKernel::instance()->createService('Course.CourseService');
+    }
+
+    protected function getCloudDataService()
+    {
+        return ServiceKernel::instance()->createService('CloudData.CloudDataService');
     }
 }

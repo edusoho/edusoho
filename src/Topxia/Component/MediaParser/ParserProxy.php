@@ -16,7 +16,7 @@ class ParserProxy
             $extras = $kernel->getParameter('media_parser');
         }
 
-        if ($extras['item']) {
+        if (isset($extras['item'])) {
             $extrasParsers = $extras['item'];
 
             foreach ($extrasParsers as $extrasParser) {
