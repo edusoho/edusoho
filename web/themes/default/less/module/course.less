@@ -1,0 +1,107 @@
+.course-wide-list{
+  @media (max-width: 767px) {
+    margin: 0 -5px;
+  }
+  .course-footer,.live-course-lesson,.course-about {
+    @media (max-width: 767px) {
+      display: none;
+    } 
+  }
+
+  .course-item{
+    @media (max-width: 767px) {
+      width: 50%;
+      float: left;
+      padding: 0 5px;
+      border: none;
+      margin-bottom: 10px;
+      &:hover{
+        background: transparent;
+        .course-body{
+          background: #f9f9f9;
+        }
+      }
+    }
+  }
+  .course-body{
+    position: relative;
+    @media (max-width: 767px) {
+      padding: 10px;
+      border:1px solid #eee;
+      margin: 0;
+    }
+  }
+  .course-picture{
+    @media (max-width: 767px) {
+      width: 100%;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+  .course-picture-link{
+    position: relative;
+    @media (max-width: 767px) {
+    float: none;
+    }
+    span{
+      position: absolute;
+      right: 8px;
+      top:8px;
+   }
+  }
+  .course-title{
+    max-width: 490px;
+    height: 52px;
+    line-height: 24px;
+    overflow: hidden;
+    margin: 0;
+    @media (max-width: 767px) {
+      max-width: 100%;
+      height: 30px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-wrap: normal;
+    }
+    a{
+      @media (max-width: 767px) {
+        font-weight: normal;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media (max-width: 479px) {
+  .course-wide-list .course-metas{
+    display: none;
+  }
+}
+
+.course-wide-list .course-about{
+  margin: 0px 0 5px;
+  height: 20px;
+  overflow: hidden;
+}
+.course-wide-list .live-course-lesson{
+  height: 20px;
+  overflow: hidden;
+   @media (max-width: 767px) {
+    display: none;
+   }
+} 
+.course-wide-list .course-price-info{
+  float: none;
+  position: absolute;
+  right: 0;
+  top: 4px;
+  @media (max-width: 767px) {
+    position: static;
+  }
+  span{
+   @media (max-width: 767px) {
+    font-size: 14px;
+   }
+  }
+}
+

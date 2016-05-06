@@ -9,11 +9,12 @@ class HLSController extends BaseController
 {
     public function playlistAction(Request $request, $id, $token)
     {
-        $line          = $request->query->get('line', null);
-        $levelParam    = $request->query->get('level', "");
+        $line       = $request->query->get('line', null);
+        $levelParam = $request->query->get('level', "");
         $format        = $request->query->get('format', "");
-        $token         = $this->getTokenService()->verifyToken('hls.playlist', $token);
-        $fromApi       = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $token      = $this->getTokenService()->verifyToken('hls.playlist', $token);
+        $fromApi    = isset($token['data']['fromApi']) ? $token['data']['fromApi'] : false;
+        $clientIp   = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -25,7 +26,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFileFromLeaf($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -87,7 +88,11 @@ class HLSController extends BaseController
         }
 
         if ($fromApi) {
-            $playlist = $api->get('/hls/playlist', array('streams' => $streams, 'qualities' => $qualities));
+            $playlist = $api->get('/hls/playlist', array(
+                'streams'   => $streams,
+                'qualities' => $qualities,
+                'clientIp'  => $clientIp
+            ));
 
             if (empty($playlist['playlist'])) {
                 return $this->createMessageResponse('error', '生成视频播放列表失败！');
@@ -98,7 +103,12 @@ class HLSController extends BaseController
                 'Content-Disposition' => 'inline; filename="playlist.m3u8"'
             ));
         } else {
-            $playlist = $api->get('/hls/playlist/json', array('streams' => $streams, 'qualities' => $qualities));
+            $playlist = $api->get('/hls/playlist/json', array(
+                'streams'   => $streams,
+                'qualities' => $qualities,
+                'clientIp'  => $clientIp
+            ));
+
             return $this->createJsonResponse($playlist);
         }
     }
@@ -116,7 +126,8 @@ class HLSController extends BaseController
 
     public function streamAction(Request $request, $id, $level, $token)
     {
-        $token = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $token    = $this->getTokenService()->verifyToken('hls.stream', $token);
+        $clientIp = $request->getClientIp();
 
         if (empty($token)) {
             throw $this->createNotFoundException();
@@ -128,7 +139,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFileFromLeaf($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -138,9 +149,10 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $params           = array();
-        $params['key']    = $file['metas2'][$level]['key'];
-        $params['fileId'] = $file['id'];
+        $params             = array();
+        $params['key']      = $file['metas2'][$level]['key'];
+        $params['fileId']   = $file['id'];
+        $params['clientIp'] = $clientIp;
 
         if (!empty($token['data']['watchTimeLimit'])) {
             $params['limitSecond'] = $token['data']['watchTimeLimit'];
@@ -220,7 +232,7 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $file = $this->getUploadFileService()->getFile($id);
+        $file = $this->getUploadFileService()->getFileFromLeaf($id);
 
         if (empty($file)) {
             return $this->makeFakeTokenString();

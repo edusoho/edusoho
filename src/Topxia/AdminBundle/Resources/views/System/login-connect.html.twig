@@ -17,11 +17,10 @@
       </div>
       <div class="controls col-md-8 radios">
         {{ radios('login_limit', {1:'开启', 0:'关闭'}, loginConnect.login_limit) }}
-      <p class="help-block">开启后同一帐号只能在一处登录</p>
+      <p class="help-block">开启后同一账号将不能在不同IP或者不同地域下同时登录</p>
       </div>
     </div>
   </fieldset>
-<br>
 
   <fieldset>
     <div class="form-group">
@@ -33,7 +32,6 @@
       </div>
     </div>
   </fieldset>
-<br>
 
 
 <fieldset>
@@ -46,7 +44,7 @@
           <p class="help-block">开启后，登录时用户连续多次输入错误密码时暂时封禁用户,此功能不影响admin手动永久封禁用户</p>
       </div>
 
-      <div id="times_and_minutes" class="col-md-8 col-md-offset-3">
+      <div id="times_and_minutes" class="col-md-8 col-md-offset-3" {% if not loginConnect.temporary_lock_enabled|default(false) %}style="display:none"{% endif %}>
         <div class="row">
           <div class="col-md-4 lock-user-text-right">
             用户连续输入错误密码

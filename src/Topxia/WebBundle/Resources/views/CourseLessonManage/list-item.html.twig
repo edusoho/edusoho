@@ -126,14 +126,14 @@
           <li class="divider"></li>
         {% endif %}
 
-        {% if lesson.type == 'video' and mediaStatus == 'success' and lesson.type  and setting('storage.upload_mode') == 'cloud' %}
+        {% if lesson.type == 'video' and setting('storage.upload_mode') == 'cloud' %}
           {% if  file.storage|default(null) == 'cloud' %}
-          <li>
+          <li class="mark-manage" style="display:none;">
             <a href="{{ path('course_lesson_marker_manage', {courseId:course.id, lessonId:lesson.id}) }}" target="_blank" class="manage-lesson-marker-btn" >
             <span class="glyphicon glyphicon-list prs"></span>弹题管理
             </a>
           </li>
-          <li class="divider"></li>
+          <li class="divider mark-manage-divider" style="display:none;"></li>
           {% endif %}
         {% endif %}
 

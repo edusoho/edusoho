@@ -127,11 +127,11 @@ class DefaultController extends BaseController
         $currentHost        = $request->server->get('HTTP_HOST');
         $siteSetting        = $this->getSettingService()->get('site');
         $settingUrl         = $this->generateUrl('admin_setting_site');
-        $fliter             = array('http://', 'https://');
+        $filter             = array('http://', 'https://');
         $siteSetting['url'] = rtrim($siteSetting['url']);
         $siteSetting['url'] = rtrim($siteSetting['url'], '/');
 
-        if ($currentHost != str_replace($fliter, "", $siteSetting['url'])) {
+        if ($currentHost != str_replace($filter, "", $siteSetting['url'])) {
             return array(
                 'status'       => 'fail',
                 'errorMessage' => '当前域名和设置域名不符，为避免影响云短信、云搜索功能的正常使用，请到【系统】-【站点设置】-【基础信息】-【网站域名】',
