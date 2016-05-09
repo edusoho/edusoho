@@ -238,42 +238,4 @@ $api->get('/notifications', function (Request $request) {
 
 );
 
-/*
-## 获取登录im的token
-GET /im/login
-
-[支持分页](global-parameter.md)
-
- ** 参数 **
-
-| 名称  | 类型  | 必需   | 说明 |
-| ---- | ----- | ----- | ---- |
-| type | string | 否 | 类型,未传则取全部类型 |
-
-`type`的值有：
-
- * user-follow : 关注好友
-
- ** 响应 **
-
-```
-{
-"data": "{friend-list}"
-"total": "{totalCount}"
-}
-```
-
- */
-
-$api->get('/im/login', function (Request $request) {
-    $user = getCurrentUser();
-    $message = array(
-        'clientId'   => $user['id'],
-        'clientName' => $user['nickname']
-    );
-    return CloudAPIFactory::create('leaf')->get('/im/login', $message);
-}
-
-);
-
 return $api;

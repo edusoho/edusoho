@@ -13,7 +13,12 @@ class MeIMLogin extends BaseResource
         $user = $this->getCurrentUser();
         $message = array(
             'clientId'   => $user['id'],
-            'clientName' => $user['nickname']
+            'tag' => $request->request->get('tag', ''),
+            'deviceKernel' => $request->request->get('deviceKernel', ''),
+            'deviceVersion' => $request->request->get('deviceVersion', ''),
+            'deviceToken' => $request->request->get('deviceToken', ''),
+            'desiceName' => $request->request->get('desiceName', ''),
+            'ignoreServers' => $request->request->get('ignoreServers', ''),
         );
         return CloudAPIFactory::create('leaf')->get('/im/login', $message);
     }
