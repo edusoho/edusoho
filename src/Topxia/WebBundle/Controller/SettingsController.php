@@ -362,6 +362,43 @@ class SettingsController extends BaseController
         ));
     }
 
+    public function setPasswordAction(Request $request)
+    {
+        $user = $this->getCurrentUser();
+
+        $hasPassword = strlen($user['password']) > 0;
+
+        if ($hasPassword) {
+            return $this->createJsonResponse('不能直接设置登录密码。');
+        }
+
+        $form = $this->createFormBuilder()
+                     ->add('newPassword', 'password')
+                     ->add('confirmPassword', 'password')
+                     ->getForm();
+
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $passwords = $form->getData();
+                $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
+                $form = $this->createFormBuilder()
+                     ->add('currentUserLoginPassword', 'password')
+                     ->add('newPayPassword', 'password')
+                     ->add('confirmPayPassword', 'password')
+                     ->getForm();
+
+                return $this->render('TopxiaWebBundle:Settings:pay-password-modal.html.twig', array(
+                    'form' => $form->createView()
+                ));
+            }
+        }
+
+        return $this->render('TopxiaWebBundle:Settings:password-modal.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
+
     public function resetPayPasswordAction(Request $request)
     {
         $user = $this->getCurrentUser();
