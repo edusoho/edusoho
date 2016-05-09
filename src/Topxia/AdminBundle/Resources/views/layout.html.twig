@@ -17,7 +17,7 @@
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
     {% block title %}
-      {{ menu_current.name }} - {{ menu|menu_parent.name }} - {{ menu|menu_parent.code|menu_parent.name  }}
+      {{ menu_current.name }} - {{ menu|parent_menu.name }} - {{ menu|parent_menu.code|parent_menu.name  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -56,7 +56,7 @@
         <ul class="nav navbar-nav">
            {% for m in menu_children('admin', 'admin', 1) %}  
               {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
-                <li {% if menu and  m.code == menu|menu_parent.code|menu_parent.code|default(null)  %}class="active"{% endif %}>
+                <li {% if menu and  m.code == menu|parent_menu.code|parent_menu.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
               {% endif %}
@@ -89,11 +89,11 @@
       {% block content %}
         <div class="col-md-2">
           {% block sidebar %}
-            {% for groupedMenus in menu_children('admin', menu|menu_parent.code|menu_parent.code|default(null)) %}
+            {% for groupedMenus in menu_children('admin', menu|parent_menu.code|parent_menu.code|default(null)) %}
 
               <div class="list-group">
                 {% for m in groupedMenus %}
-                    {% set menuClass = m.code == menu|menu_parent.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                    {% set menuClass = m.code == menu|parent_menu.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
                     {{ self_macro.menu_link_html(_context, m, menuClass) }}
                 {% endfor %}
               </div>
@@ -115,7 +115,7 @@
             </div>
           </div>
 
-          {% set tabMenus = menu_children('admin', menu|menu_parent.code|default(null), 1) %}
+          {% set tabMenus = menu_children('admin', menu|parent_menu.code|default(null), 1) %}
 
           {% block content_header %}{% endblock %}
           

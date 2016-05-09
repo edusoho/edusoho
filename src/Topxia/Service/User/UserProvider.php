@@ -27,7 +27,7 @@ class UserProvider implements UserProviderInterface
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
         $currentUser       = new CurrentUser();
-        $user              = $this->setPermissions($user);
+        $currentUser->setPermissions($this->loadPermissions($user));
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
@@ -48,7 +48,7 @@ class UserProvider implements UserProviderInterface
         return $class === 'Topxia\Service\User\CurrentUser';
     }
 
-    private function setPermissions($user)
+    protected function loadPermissions($user)
     {
         if (empty($user['id'])) {
             return $user;
@@ -72,9 +72,7 @@ class UserProvider implements UserProviderInterface
         }
 
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            var_dump($res);
-            $user['menus'] = $res;
-            return $user;
+            return $res;
         }
 
         $permissionCode = array();
@@ -95,23 +93,25 @@ class UserProvider implements UserProviderInterface
             }
         }
 
-        $user['menus'] = $permissions;
-        return $user;
+        return $permissions;
     }
 
     protected function getMenusFromConfig($parents)
     {
         $menus = array();
-        foreach ($parents as $key => $value) {
-            if(isset($value['children'])) {
-                $children = $value['children'];
-                $menus = array_merge($menus, $this->getMenusFromConfig($children));
-                unset($value['childer']);
-            } else {
-                $menus[$key] = $value;
-            }
+        $key = key($parents);
 
+        if(isset($parents[$key]['children'])) {
+            $childrenMenu = $parents[$key]['children'];
+            unset($parents[$key]['children']);
+            foreach ($childrenMenu as $childKey => $childValue) {
+                $childValue["parent"] = $key;
+                $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+            }
         }
+
+        $menus[$key] = $parents[$key];
+
         return $menus;
     }
 

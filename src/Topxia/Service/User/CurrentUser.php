@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAccess  {
 
     protected $data;
+    protected $permissions;
 
     public function __set($name, $value) {
         if (array_key_exists($name, $this->data)) {
@@ -147,5 +148,15 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function toArray() {
         return $this->data;
+    }
+
+    public function setPermissions($permissions)
+    {
+        $this->permissions = $permissions;
+    }
+    
+    public function getPermissions()
+    {
+        return $this->permissions;
     }
 }

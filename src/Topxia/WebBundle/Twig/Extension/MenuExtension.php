@@ -23,7 +23,7 @@ class MenuExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('menu_parent', array($this, 'getMenuParent'))
+            new \Twig_SimpleFilter('parent_menu', array($this, 'getParentMenu'))
         );
     }
 
@@ -72,9 +72,9 @@ class MenuExtension extends \Twig_Extension
         return $this->createMenuBuilder($position)->getMenuChildren($code, $group);
     }
 
-    public function getMenuParent($code, $position = 'admin')
+    public function getParentMenu($code, $position = 'admin')
     {
-        return $this->createMenuBuilder($position)->getMenuParent($code);
+        return $this->createMenuBuilder($position)->getParentMenu($code);
     }
 
     private function createMenuBuilder($position)
