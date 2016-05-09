@@ -16,10 +16,9 @@ class MenuBuilderTest extends BaseTestCase
 
     	$menuBuilder = new MenuBuilder('admin');
     	$menu = $menuBuilder->getMenuByCode('admin_user_show');
-    	var_dump($menu);
     }
 
-    private function loadPermissions($user)
+    protected function loadPermissions($user)
     {
         if (empty($user['id'])) {
             return $user;
@@ -70,19 +69,20 @@ class MenuBuilderTest extends BaseTestCase
     protected function getMenusFromConfig($parents)
     {
         $menus = array();
-        $key = key($parents);
 
-        if(isset($parents[$key]['children'])) {
-        	$childrenMenu = $parents[$key]['children'];
-        	unset($parents[$key]['children']);
+        foreach ($parents as $key => $value) {
+	        if(isset($parents[$key]['children'])) {
+	        	$childrenMenu = $parents[$key]['children'];
+	        	unset($parents[$key]['children']);
 
-	        foreach ($childrenMenu as $childKey => $childValue) {
-	        	$childValue["parent"] = $key;
-	            $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+		        foreach ($childrenMenu as $childKey => $childValue) {
+		        	$childValue["parent"] = $key;
+		            $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+		        }
 	        }
-        }
 
-       	$menus[$key] = $parents[$key];
+	       	$menus[$key] = $value;
+        }
 
         return $menus;
     }

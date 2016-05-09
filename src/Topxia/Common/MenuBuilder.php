@@ -132,6 +132,9 @@ class MenuBuilder
         }
 
         $menus = $this->loadMenus();
+        if(empty($menus)) {
+            return array();
+        }
 
         $i = 1;
         foreach ($menus as $code => &$menu) {

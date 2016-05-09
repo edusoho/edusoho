@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
-{% set menu_current = get_menu_by_code('admin', menu) %}
+{% set currentMenu = get_menu_by_code('admin', menu) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -17,7 +17,7 @@
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
     {% block title %}
-      {{ menu_current.name }} - {{ menu|parent_menu.name }} - {{ menu|parent_menu.code|parent_menu.name  }}
+      {{ currentMenu.name }} - {{ menu|parent_menu.name }} - {{ menu|parent_menu.code|parent_menu.name  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -103,11 +103,11 @@
 
         <div class="col-md-10">
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ menu_current.fullname|default(menu_current.name) }}{% endblock %}</h1>
+            <h1 class="pull-left">{% block page_title %}{{ currentMenu.fullname|default(currentMenu.name) }}{% endblock %}</h1>
             <div class="pull-right">
 
               {% block page_buttons %}
-                {% for m in menu_children('admin', menu_current.code, 2) %}
+                {% for m in menu_children('admin', currentMenu.code, 2) %}
                     {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                 {% endfor %}
               {% endblock %}
@@ -119,7 +119,7 @@
 
           {% block content_header %}{% endblock %}
           
-          {% if tabMenus|default(null) and menu_current.group == 1 and tabMenus|length > 1 %}
+          {% if tabMenus|default(null) and currentMenu.group == 1 and tabMenus|length > 1 %}
             <ul class="nav nav-tabs mbm">
               {% for m in tabMenus %}
                 <li {% if m.code == menu|default(null) %}class="active"{% endif %}>

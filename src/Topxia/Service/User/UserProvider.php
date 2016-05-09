@@ -26,8 +26,9 @@ class UserProvider implements UserProviderInterface
         }
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
-        $currentUser       = new CurrentUser();
-        $currentUser->setPermissions($this->loadPermissions($user));
+        $currentUser = new CurrentUser();
+        $permissions = $this->loadPermissions($user);
+        $currentUser->setPermissions($permissions);
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
@@ -99,18 +100,20 @@ class UserProvider implements UserProviderInterface
     protected function getMenusFromConfig($parents)
     {
         $menus = array();
-        $key = key($parents);
 
-        if(isset($parents[$key]['children'])) {
-            $childrenMenu = $parents[$key]['children'];
-            unset($parents[$key]['children']);
-            foreach ($childrenMenu as $childKey => $childValue) {
-                $childValue["parent"] = $key;
-                $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+        foreach ($parents as $key => $value) {
+            if(isset($parents[$key]['children'])) {
+                $childrenMenu = $parents[$key]['children'];
+                unset($parents[$key]['children']);
+
+                foreach ($childrenMenu as $childKey => $childValue) {
+                    $childValue["parent"] = $key;
+                    $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+                }
             }
-        }
 
-        $menus[$key] = $parents[$key];
+            $menus[$key] = $value;
+        }
 
         return $menus;
     }

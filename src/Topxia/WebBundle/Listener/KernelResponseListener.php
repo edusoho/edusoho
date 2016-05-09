@@ -21,6 +21,8 @@ class KernelResponseListener
 
         $request      = $event->getRequest();
         $currentUser  = $this->getUserService()->getCurrentUser();
+        $this->resetPermissions($currentUser);
+        
         $user_agent   = $request->server->get('HTTP_USER_AGENT');
         $_target_path = $request->getPathInfo();
 
@@ -102,6 +104,11 @@ class KernelResponseListener
         }
 
         return $targetPath;
+    }
+
+    protected function resetPermissions($currentUser)
+    {
+        $currentUser->setPermissions(null);
     }
 
     private function checkUserinfoFieldsFill($user)
