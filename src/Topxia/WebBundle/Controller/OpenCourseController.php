@@ -45,7 +45,7 @@ class OpenCourseController extends BaseController
         return $this->redirect($this->generateUrl('open_course_manage', array('id' => $course['id'])));
     }
 
-    public function showAction(Request $request, $courseId)
+    public function showAction(Request $request, $courseId, $lessonId)
     {
         /*$sms_setting                  = $this->getSettingService()->get('cloud_sms');
         $sms_setting['system_remind'] = 'on';
@@ -79,7 +79,8 @@ class OpenCourseController extends BaseController
         $member = $this->_memberOperate($request, $courseId);
 
         return $this->render("TopxiaWebBundle:OpenCourse:open-course-show.html.twig", array(
-            'course' => $course
+            'course'   => $course,
+            'lessonId' => $lessonId
         ));
     }
 
@@ -99,12 +100,19 @@ class OpenCourseController extends BaseController
     /**
      * Block Actions.
      */
-    public function headerAction(Request $request, $course)
+    public function headerAction(Request $request, $course, $lessonId)
     {
-        $lesson = $this->_checkPublishedLessonExists($course['id']);
-        $lesson = $lesson ? $lesson : array();
+        if ($lessonId) {
+            $lesson = $this->getOpenCourseService()->getCourseLesson($course['id'], $lessonId);
 
-        $lesson = $this->_getLessonVedioInfo($request, $lesson);
+            if (!$lesson || ($lesson && $lesson['status'] != 'published')) {
+                $lesson = array();
+            }
+        } else {
+            $lesson = $this->_checkPublishedLessonExists($course['id']);
+        }
+
+        $lesson = $lesson ? $lesson : array();
 
         $member = $this->_getMember($request, $course['id']);
 
