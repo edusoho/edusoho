@@ -232,6 +232,38 @@ class MenuBuilder
         return $menus[$code];
     }
 
+    public function getMenusYml()
+    {
+        $position    = $this->position;
+        $configPaths = array();
+
+        $rootDir = realpath(__DIR__.'/../../../');
+        $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
+
+        $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/MaterialLib/MaterialLibBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
+
+        $count         = $this->getAppService()->findAppCount();
+        $apps          = $this->getAppService()->findApps(0, $count);
+
+        foreach ($apps as $app) {
+            if ($app['type'] != 'plugin') {
+                continue;
+            }
+
+            $code          = ucfirst($app['code']);
+            $configPaths[] = "{$rootDir}/plugins/{$code}/{$code}Bundle/Resources/config/menus_{$position}.yml";
+        }
+
+        $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Custom/AdminBundle/Resources/config/menus_{$position}.yml";
+
+        return $configPaths;
+
+    }
+
     public function getMenuParent($code)
     {
         $menus = $this->buildMenus();

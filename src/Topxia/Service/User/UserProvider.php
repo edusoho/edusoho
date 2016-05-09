@@ -8,6 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Topxia\Common\MenuBuilder;
 
 class UserProvider implements UserProviderInterface
 {
@@ -53,15 +54,30 @@ class UserProvider implements UserProviderInterface
             return $user;
         }
 
-        $menus = array();
-        $codes = array();
-        $path  = realpath(__DIR__.'/../..')."/AdminBundle/Resources/config/menus_admin.yml";
-        $res   = Yaml::parse($path);
+        $menuBuilder = new MenuBuilder('admin');
+        $configs = $menuBuilder->getMenusYml();
 
-        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            $menus = $res;
+        $res = array();
+        foreach ($configs as $key => $config) {
+            if(!file_exists($config)) {
+                continue;
+            }
+            $menus = Yaml::parse(file_get_contents($config));
+            if(empty($menus)) {
+                continue;
+            }
+
+            $menus = $this->getMenusFromConfig($menus);
+            $res = array_merge($res, $menus);
         }
 
+        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
+            var_dump($res);
+            $user['menus'] = $res;
+            return $user;
+        }
+
+        $permissionCode = array();
         foreach ($user['roles'] as $code) {
             $role = $this->getRoleService()->getRoleByCode($code);
 
@@ -69,17 +85,34 @@ class UserProvider implements UserProviderInterface
                 $role['data'] = array();
             }
 
-            $codes = array_merge($codes, $role['data']);
+            $permissionCode = array_merge($permissionCode, $role['data']);
         }
 
+        $permissions = array();
         foreach ($res as $key => $value) {
-            if (in_array($key, $codes)) {
-                $menus[$key] = $res[$key];
+            if (in_array($key, $permissionCode)) {
+                $permissions[$key] = $res[$key];
             }
         }
 
-        $user['menus'] = $menus;
+        $user['menus'] = $permissions;
         return $user;
+    }
+
+    protected function getMenusFromConfig($parents)
+    {
+        $menus = array();
+        foreach ($parents as $key => $value) {
+            if(isset($value['children'])) {
+                $children = $value['children'];
+                $menus = array_merge($menus, $this->getMenusFromConfig($children));
+                unset($value['childer']);
+            } else {
+                $menus[$key] = $value;
+            }
+
+        }
+        return $menus;
     }
 
     protected function getUserService()
