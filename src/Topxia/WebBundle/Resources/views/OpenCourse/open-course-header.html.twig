@@ -2,6 +2,7 @@
 
 {% do load_script('open-course/open-course-header') %}
 
+<div class="row">{{ lesson.title }}</div>
 {% if course.type == 'open' %}
   <div class="col-md-9 open-course-views">
     {% include 'TopxiaWebBundle:OpenCourse:lesson-play.html.twig' %}
