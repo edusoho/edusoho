@@ -37,6 +37,7 @@ class Classroom extends BaseResource
         $simple['about'] = $res['about'];
         $simple['headTeacherId'] = $res['headTeacherId'];
         $simple['teacherIds'] = $res['teacherIds'];
+        $simple['conversationNo'] = $res['conversationId'];
 
         return $simple;
     }

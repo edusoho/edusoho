@@ -5,12 +5,14 @@ $resources = array(
     'ArticleCategories',
     'Articles',
     'Classroom',
-    'ClassroomMember',
     'ClassroomMembers',
+    'Classroom/Member',
+    'Classroom/Members',
     'Classrooms',
     'ClassroomStatus',
     'ClassroomStatuses',
-    'CourseMember',
+    'Course/Member',
+    'Course/Members',
     'CourseMembers',
     'CourseMembership',
     'CourseNotes',
@@ -60,7 +62,12 @@ $resources = array(
 
 foreach ($resources as $res) {
     $app["res.{$res}"] = $app->share(function () use ($res) {
-        $class = "Topxia\\Api\\Resource\\{$res}";
+        $class = "Topxia\\Api\\Resource";
+        $segments = explode('/', $res);
+        foreach ($segments as $seg) {
+            $class .= "\\{$seg}";
+        }
+
         return new $class();
     });
 }

@@ -23,6 +23,18 @@ class Course extends BaseResource
         return $res;
     }
 
+    public function simplify($res)
+    {
+        $simple = array();
+
+        $simple['id']       = $res['id'];
+        $simple['title'] = $res['title'];
+        $simple['picture']   = $this->getFileUrl($res['smallPicture']);
+        $simple['conversationNo']    = $res['conversationId'];
+
+        return $simple;
+    }
+
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');

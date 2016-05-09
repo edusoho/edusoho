@@ -1,11 +1,12 @@
 <?php
 
-namespace Topxia\Api\Resource;
+namespace Topxia\Api\Resource\Classroom;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Topxia\Api\Resource\BaseResource;
 
-class ClassroomMember extends BaseResource
+class Member extends BaseResource
 {
     public function get(Application $app, Request $request, $classroomId, $memberId)
     {
@@ -22,6 +23,11 @@ class ClassroomMember extends BaseResource
         if (!empty($res['user'])) {
             $res['user'] = $this->callSimplify('User', $res['user']);
         }
+
+        if (!empty($res['classroom'])) {
+            $res['classroom'] = $this->callSimplify('Classroom', $res['classroom']);
+        }
+
         $res['createdTime'] = date('c', $res['createdTime']);
         return $res;
     }

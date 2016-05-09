@@ -1,31 +1,24 @@
 <?php
 
-namespace Topxia\Api\Resource;
+namespace Topxia\Api\Resource\Course;
 
 use Topxia\Api\Resource\BaseResource;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Common\ArrayToolkit;
 
-class CourseMembers extends BaseResource
+class Members extends BaseResource
 {
-    public function get(Application $app, Request $request)
+    public function get(Application $app, Request $request, $courseId)
     {
-        $conditions = array();
+        $conditions = array('courseId' => $courseId);
         $start = $request->query->get('start', 0);
         $limit = $request->query->get('limit', 10);
 
-        if ($request->query->has('cursor')) {
-            $cursor = $request->query->get('cursor', 0);
-            $conditions['createdTime_GE'] = $cursor;
-            $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'ASC'), $start, $limit);
-            $members = $this->assemblyMembers($members);
-            $next = $this->nextCursorPaging($cursor, $start, $limit, $members);
-            return $this->wrap($this->filter($members), $next);
-        } else {
-            //@todo 暂不支持
-            return $this->wrap(array(), 0);
-        }
+        $total = $this->getCourseService()->searchMemberCount($conditions);
+        $members = $this->getCourseService()->searchMembers($conditions, array('createdTime', 'DESC'), $start, $limit);
+        $members = $this->assemblyMembers($members);
+        return $this->wrap($this->filter($members), $total);
     }
 
     public function filter($res)

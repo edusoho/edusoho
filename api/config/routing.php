@@ -44,9 +44,10 @@ $app->post(_u('/lessons/{id}/live_tickets'), 'res.LessonLiveTickets:post');
 $app->get(_u('/lessons/{id}/live_tickets/{ticket}'), 'res.LessonLiveTicket:get');
 $app->get(_u('/lessons/{id}/replay'), 'res.LessonReplay:get');
 
-$app->get(_u('/courses/{courseId}/members'), 'res.CourseMembers:get');
+$app->get(_u('/courses/{courseId}/members'), 'res.Course/Members:get');
 $app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:get');
 $app->get(_u('/course/{courseId}/status'), 'res.Status:get');
+$app->get(_u('/course_members'), 'res.CourseMembers:get');
 
 $app->get(_u('/notes/{id}'), 'res.CourseNotes:get');
 $app->get(_u('/notes'), 'res.CourseNotes:search');
@@ -63,8 +64,9 @@ $app->post(_u('/classrooms/{id}'), 'res.Classroom:post');
 
 $app->get(_u('/classrooms/{classroomId}/status'), 'res.ClassroomStatuses:get');
 
-$app->get(_u('/classrooms/{classroomId}/members'), 'res.ClassroomMembers:get');
-$app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.ClassroomMember:get');
+$app->get(_u('/classrooms/{classroomId}/members'), 'res.Classroom/Members:get');
+$app->get(_u('/classrooms/{classroomId}/members/{memberId}'), 'res.Classroom/Member:get');
+$app->get(_u('/classroom_members'), 'res.ClassroomMembers:get');
 
 $app->get(_u('/exercise/{id}'), 'res.Exercise:get');
 $app->get(_u('/exercise/{id}/result'), 'res.Exercise:result');
@@ -102,9 +104,12 @@ $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}/posts'), 'res.CourseThreadPosts:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}/posts/{postId}'), 'res.CourseThreadPost:get');
 
+
 $app->get(_u('/classroom_play/{classRoomId}'), 'res.ClassRoomPlay:get');
 $app->get(_u('/classroom_play/{classRoomId}/status'), 'res.ClassRoomPlayStatus:get');
 
 $app->get(_u('/classrooms/{classRoomId}/threads'), 'res.ClassRoomThreads:get');
+$app->get(_u('/classrooms/{classroomId}/base_members'), 'res.ClassroomBaseMembers:get');
+
 $app->get(_u('/thread/{threadId}/posts'), 'res.ThreadPosts:get');
 $app->get(_u('/classroom/thread/{threadId}'), 'res.ClassRoomThread:get');
