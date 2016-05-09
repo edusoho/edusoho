@@ -26,61 +26,66 @@ class RegisterController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-            $registration = $request->request->all();
+            try{
 
-            if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
-                $registration['verifiedMobile'] = $registration['emailOrMobile'];
-            }
+                $registration = $request->request->all();
 
-            $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
-            $registration['createdIp'] = $request->getClientIp();
-            $authSettings              = $this->getSettingService()->get('auth', array());
-
-            //验证码校验
-            $this->captchaEnabledValidator($authSettings, $registration, $request);
-
-            //手机校验码
-            if ($this->smsCodeValidator($authSettings, $registration)) {
-                $registration['verifiedMobile'] = '';
-                $request->request->add(array_merge($request->request->all(), array('mobile' => $registration['mobile'])));
-
-                list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
-
-                if ($result) {
-                    $registration['verifiedMobile'] = $sessionField['to'];
-                } else {
-                    return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
+                if (isset($registration['emailOrMobile']) && SimpleValidator::mobile($registration['emailOrMobile'])) {
+                    $registration['verifiedMobile'] = $registration['emailOrMobile'];
                 }
-            }
 
-            $registration['createdIp'] = $request->getClientIp();
+                $registration['mobile']    = isset($registration['verifiedMobile']) ? $registration['verifiedMobile'] : '';
+                $registration['createdIp'] = $request->getClientIp();
+                $authSettings              = $this->getSettingService()->get('auth', array());
 
-            $user = $this->getAuthService()->register($registration);
+                //验证码校验
+                $this->captchaEnabledValidator($authSettings, $registration, $request);
 
-            if (($authSettings
-                && isset($authSettings['email_enabled'])
-                && $authSettings['email_enabled'] == 'closed')
-                || !$this->isEmptyVeryfyMobile($user)) {
-                $this->authenticateUser($user);
-            }
+                //手机校验码
+                if ($this->smsCodeValidator($authSettings, $registration)) {
+                    $registration['verifiedMobile'] = '';
+                    $request->request->add(array_merge($request->request->all(), array('mobile' => $registration['mobile'])));
 
-            $goto = $this->generateUrl('register_submited', array(
-                'id'   => $user['id'],
-                'hash' => $this->makeHash($user),
-                'goto' => $this->getTargetPath($request)
-            ));
+                    list($result, $sessionField, $requestField) = SmsToolkit::smsCheck($request, $scenario = 'sms_registration');
 
-            if ($this->getAuthService()->hasPartnerAuth()) {
-                $currentUser = $this->getCurrentUser();
+                    if ($result) {
+                        $registration['verifiedMobile'] = $sessionField['to'];
+                    } else {
+                        return $this->createMessageResponse('info', '手机号码和短信验证码不匹配，请重新注册');
+                    }
+                }
 
-                if (!$currentUser->isLogin()) {
+                $registration['createdIp'] = $request->getClientIp();
+
+                $user = $this->getAuthService()->register($registration);
+
+                if (($authSettings
+                    && isset($authSettings['email_enabled'])
+                    && $authSettings['email_enabled'] == 'closed')
+                    || !$this->isEmptyVeryfyMobile($user)) {
                     $this->authenticateUser($user);
                 }
 
-                $goto = $this->generateUrl('partner_login', array('goto' => $goto));
-            }
+                $goto = $this->generateUrl('register_submited', array(
+                    'id'   => $user['id'],
+                    'hash' => $this->makeHash($user),
+                    'goto' => $this->getTargetPath($request)
+                ));
 
-            return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+                if ($this->getAuthService()->hasPartnerAuth()) {
+                    $currentUser = $this->getCurrentUser();
+
+                    if (!$currentUser->isLogin()) {
+                        $this->authenticateUser($user);
+                    }
+
+                    $goto = $this->generateUrl('partner_login', array('goto' => $goto));
+                }
+
+                return $this->redirect($this->generateUrl('register_success', array('goto' => $goto)));
+            } catch (\Exception $e) {
+                return $this->createMessageResponse('error', $e->getMessage());
+            }
         }
 
         $inviteCode = '';
