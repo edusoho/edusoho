@@ -299,6 +299,7 @@ class SettingsController extends BaseController
                      ->getForm();
 
         if ($user->isLogin() && empty($user['password'])) { 
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
             return $this->redirect($this->generateUrl('settings_setup_password')); 
         }
 
@@ -373,6 +374,8 @@ class SettingsController extends BaseController
                      ->getForm();
 
         if ($user->isLogin() && empty($user['password'])) { 
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
+
             return $this->redirect($this->generateUrl('settings_setup_password')); 
         }
 
@@ -579,6 +582,7 @@ class SettingsController extends BaseController
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
         if ($user->isLogin() && empty($user['password'])) { 
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions')); 
             return $this->redirect($this->generateUrl('settings_setup_password')); 
         }
 
@@ -643,6 +647,7 @@ class SettingsController extends BaseController
         }
         $user = $this->getCurrentUser();
         if ($user->isLogin() && empty($user['password'])) { 
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));            
             return $this->redirect($this->generateUrl('settings_setup_password')); 
         }
 
@@ -707,6 +712,7 @@ class SettingsController extends BaseController
                      ->getForm();
 
         if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
             return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
@@ -956,12 +962,12 @@ class SettingsController extends BaseController
                      ->getForm();
 
         if ($request->getMethod() == 'POST') {
+            $targetPath = $this->getTargetPath($request);
             $form->bind($request);
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
-                // $this->authenticateUser($user);
-                return $this->redirect($this->generateUrl('settings_security'));
+                return $this->redirect($targetPath);
             }
         }
 
