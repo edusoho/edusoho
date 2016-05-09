@@ -1,3 +1,14 @@
+# 一个完整的permission配置如下：
+# admin_user_manage:
+#   name: 用户管理
+#   router_name: admin_user //可选
+#   children:               //可选
+#   mode:                   //可选
+#   group:                  //可选
+#   router_params:          //可选
+#   blank:                  //可选
+#   router_params_context:  //可选
+
 admin:
     name: 后台
     parent: null
