@@ -1,0 +1,29 @@
+{% import _self as self_macro %}
+
+<ul class="nav navbar-nav">
+{% for m in permissions %}  
+	{# {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %} #}
+	  <li {% if activePermission and  m.code == activePermission|parent_permission.code|parent_permission.code|default(null)  %}class="active"{% endif %}>
+	    {{ self_macro.menu_link_html(_context, m) }}
+	  </li>
+	{# {% endif %} #}
+{% endfor %}
+</ul>
+
+{% macro menu_link_html(_context, menu, class) %}
+  <a 
+  {% if class %}
+    class="{{ class }}"
+  {% endif %}
+  {% if menu.mode|default(null) == 'modal' %}
+    data-url="{{ permission_path(menu) }}"
+    data-toggle="modal"
+    data-target="#modal"
+  {% else %}
+    href="{{ permission_path(menu) }}"
+  {% endif %}
+  {% if menu.blank|default(false) %}
+    target="blank"
+  {% endif %}
+  >{{ menu.name }}</a>
+{% endmacro %}

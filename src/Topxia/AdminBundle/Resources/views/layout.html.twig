@@ -54,15 +54,7 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-           {% for m in sub_permissions('admin') %}  
-              {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
-                <li {% if menu and  m.code == menu|parent_permission.code|parent_permission.code|default(null)  %}class="active"{% endif %}>
-                  {{ self_macro.menu_link_html(_context, m) }}
-                </li>
-              {% endif %}
-          {% endfor %}
-        </ul>
+        {{render_permission('admin', menu, 'navigation')|raw}}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">

@@ -32,10 +32,14 @@ class PermissionExtension extends \Twig_Extension
         );
     }
 
-    public function renderPermission($parentCode, $template)
+    public function renderPermission($parentCode, $activePermission, $template)
     {
         $children = $this->getSubPermissions($parentCode);
-        return $this->container->get('templating')->render($template, array('permissions' => $children));
+        $template = "PermissionBundle:Templates:{$template}.html.twig";
+        return $this->container->get('templating')->render($template, array(
+            'permissions' => $children,
+            'activePermission' => $activePermission,
+        ));
     }
 
     public function getPermissionPath($env, $context, $menu)
