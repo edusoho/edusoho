@@ -238,34 +238,34 @@ admin_user_show:
 admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:User:edit }
-    permissions: [admin_user_manage]
+    permissions: [admin_user_edit]
 
 admin_user_lock:
     pattern:  /user/{id}/lock
     defaults: { _controller: TopxiaAdminBundle:User:lock }
     methods:  [POST]
-    permissions: [admin_user_manage]
+    permissions: [admin_user_lock]
 
 admin_user_unlock:
     pattern:  /user/{id}/unlock
     defaults: { _controller: TopxiaAdminBundle:User:unlock }
     methods:  [POST]
-    permissions: [admin_user_manage]
+    permissions: [admin_user_unlock]
 
 admin_user_roles:
     pattern:  /user/{id}/roles
     defaults: { _controller: TopxiaAdminBundle:User:roles }
-    permissions: [admin_user_manage]
+    permissions: [admin_user_roles]
 
 admin_user_avatar:
     pattern:  /user/{id}/avatar
     defaults: { _controller: TopxiaAdminBundle:User:avatar }
-    permissions: [admin_user_manage]
+    permissions: [admin_user_avatar]
 
 admin_user_avatar_crop:
     pattern:  /user/{id}/avatar/crop
     defaults: { _controller: TopxiaAdminBundle:User:avatarCrop }
-    permissions: [admin_user_manage]
+    permissions: [admin_user_avatar]
 
 admin_teacher:
     pattern:  /teacher
@@ -291,19 +291,19 @@ admin_teacher_promote_cancel:
 admin_user_change_password:
     pattern:  /user/{userId}/change/password
     defaults: { _controller: TopxiaAdminBundle:User:changePassword }
-    permissions: [admin_user_manage]
+    permissions: [admin_user_change_password]
 
 admin_user_send_passwordreset_email:
     pattern:  /user/{id}/send_passwordreset_email
     defaults: { _controller: TopxiaAdminBundle:User:sendPasswordResetEmail }
     methods:  [POST]
-    permissions: [admin_user_manage]
+    permissions: [admin_user_send_passwordreset_email]
 
 admin_user_send_emailverify_email:
     pattern:  /user/{id}/send_emailverify_email
     defaults: { _controller: TopxiaAdminBundle:User:sendEmailVerifyEmail }
     methods:  [POST]
-    permissions: [admin_user_manage]
+    permissions: [admin_user_send_emailverify_email]
 
 admin_navigation:
     pattern:  /setting/navigation
