@@ -76,6 +76,7 @@ class PermissionBuilder
         $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/MaterialLib/MaterialLibBundle/Resources/config/menus_{$position}.yml";
         $configPaths[] = "{$rootDir}/src/SensitiveWord/SensitiveWordBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Permission/PermissionBundle/Resources/config/menus_{$position}.yml";
 
         $count         = $this->getAppService()->findAppCount();
         $apps          = $this->getAppService()->findApps(0, $count);

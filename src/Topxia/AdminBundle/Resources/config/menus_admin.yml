@@ -559,15 +559,3 @@ admin:
                             router_name: admin_logs
                         admin_logs_prod:
                             name: 程序运行日志
-                admin_roles:
-                    name: 角色管理
-                    group: 2
-                    children:
-                        admin_role_namage:
-                            name: 角色管理
-                            router_name: admin_roles
-                            children:
-                                admin_role_create:
-                                    name: 新增角色
-                                    mode: modal
-                                    group: 2
