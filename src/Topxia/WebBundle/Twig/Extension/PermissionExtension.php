@@ -28,7 +28,8 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
             new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions')),
-            new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission'))
+            new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
+            new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true))
         );
     }
 
@@ -56,6 +57,11 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return $this->container->get('router')->generate($route, $params);
+    }
+
+    public function evalExpression($code)
+    {
+        $value = explode('.', $code);
     }
 
     public function getPermissionByCode($code)

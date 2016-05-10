@@ -50,6 +50,10 @@ class UpgradeScriptCommand extends BaseCommand
 
         if (method_exists($upgrade, 'update')) {
             $info = $upgrade->update($index);
+            var_dump($info);
+            if(!empty($info) && isset($info['index'])) {
+                $this->executeScript($code, $version, $info['index']);
+            }
         }
     }
 

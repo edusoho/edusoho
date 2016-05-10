@@ -122,14 +122,13 @@ class YamlFileLoader extends FileLoader
         $schemes      = isset($config['schemes']) ? $config['schemes'] : array();
         $methods      = isset($config['methods']) ? $config['methods'] : array();
 
-        if(strpos($config['path'], '/admin')===0){
+        if(strpos($name, 'admin_') === 0){
             $permissions  = isset($config['permissions']) ? $config['permissions'] : array($name);
         } else {
             $permissions  = isset($config['permissions']) ? $config['permissions'] : array();
         }
 
         $route        = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $permissions);
-
         $collection->add($name, $route);
     }
 

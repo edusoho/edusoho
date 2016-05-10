@@ -21,15 +21,12 @@ class KernelControllerListener
 
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
-        
         $permissions = $this->container->get('router')->getRouteCollection()->get($route)->getPermissions();
-
         $currentUser = $this->getUserService()->getCurrentUser();
-
         if (preg_match('/admin/s', $route) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
             $currentUserPermissions = $currentUser->getPermissions();
             foreach ($permissions as $permission) {
-                if (isset($currentUserPermissions[$permission])) {
+                if (!empty($currentUserPermissions[$permission])) {
                     return;
                 }
             }

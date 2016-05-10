@@ -59,13 +59,8 @@ class RoleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $res  = $this->dataPrepare('admin');
-
-        foreach ($res as &$re) {
-            if (in_array($re['code'], $role['data'])) {
-                $re['checked'] = 'true';
-            }
-        }
+        $menuBuilder = new MenuBuilder();
+        $res = $menuBuilder->getOriginPermissionTree();
 
         if ('POST' == $request->getMethod()) {
             $params         = $request->request->all();
