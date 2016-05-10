@@ -32,7 +32,7 @@ class PermissionExtension extends \Twig_Extension
         return array(
             new \Twig_SimpleFunction('permission', array($this, 'getPermissionByCode')),
             new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
-            new \Twig_SimpleFunction('permission_crumb', array($this, 'getPermissionCrumb'), array('needs_context' => true, 'needs_environment' => true)),
+            new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('render_permission', array($this, 'renderPermission'))
         );
     }
@@ -43,7 +43,7 @@ class PermissionExtension extends \Twig_Extension
         return $this->container->get('templating')->render($template, array('permissions' => $children));
     }
 
-    public function getPermissionCrumb($env, $context, $menu)
+    public function getPermissionPath($env, $context, $menu)
     {
         $menus = $this->getSubPermissions('admin', $menu['code'], '1');
 
