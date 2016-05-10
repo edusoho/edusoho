@@ -27,6 +27,38 @@ admin:
                                     name: '添加新用户'
                                     mode: modal
                                     group: 2
+                                admin_user_edit:
+                                    name: '编辑用户信息'
+                                    mode: modal
+                                    group: 3
+                                admin_user_roles:
+                                    name: '设置用户组'
+                                    mode: modal
+                                    group: 3
+                                admin_user_avatar:
+                                    name: '修改用户头像'
+                                    mode: modal
+                                    group: 3
+                                admin_user_change_password:
+                                    name: '修改密码'
+                                    mode: modal
+                                    group: 3
+                                admin_user_send_passwordreset_email:
+                                    name: '发送密码重置邮件'
+                                    mode: modal
+                                    group: 3
+                                admin_user_send_emailverify_email:
+                                    name: '发送Email验证邮件'
+                                    mode: modal
+                                    group: 3
+                                admin_user_lock:
+                                    name: '封禁用户'
+                                    mode: modal
+                                    group: 3
+                                admin_user_unlock:
+                                    name: '封禁用户'
+                                    mode: modal
+                                    group: 3
                         admin_login_record:
                             name: 登录日志
                 admin_teacher:
