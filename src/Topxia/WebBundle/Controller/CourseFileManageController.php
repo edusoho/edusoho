@@ -37,7 +37,7 @@ class CourseFileManageController extends BaseController
 
         $files = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime','DESC'),
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );

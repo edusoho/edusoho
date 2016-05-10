@@ -71,7 +71,6 @@ define(function(require, exports, module) {
             },
             onClickTag: function(event)
             {
-                console.log("test");
                 var $target = $(event.currentTarget);
                 var $container = $target.closest('.js-material-tag');
                 var $prev = $container.find('.label-primary');

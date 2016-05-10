@@ -22,7 +22,7 @@ class SystemUtilServiceImpl extends BaseService implements SystemUtilService
 	   	);
     	$uploadFiles = $this->getUploadFileService()->searchFiles(
             $conditions,
-            'latestCreated',
+            array('createdTime', 'DESC'),
             0,
             500
         );

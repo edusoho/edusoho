@@ -52,6 +52,51 @@ class UploadFileServiceTest extends BaseTestCase
 
        $this->assertEquals($file['id'],$fileId);
     }
+
+    public function testGetFile2()
+    {
+       $fileId = 1;
+       $name = 'File.UploadFileDao';
+       $params = array(
+         array(
+             'functionName' => 'getFile',
+             'runTimes' => 1,
+             'withParams' => array(1),
+             'returnValue' =>array(
+               'id' => 1,
+               'storage' => 'cloud',
+               'filename'=> 'test',
+               'createdUserId' => 1
+             )
+           )
+        );
+        $this->mock($name,$params);
+        $name = 'File.CloudFileImplementor';
+        $params = array(
+           array(
+             'functionName' => 'getCloudFile',
+             'runTimes' => 1,
+             'withParams' => array(
+              'id' => 1,
+              'storage' => 'cloud',
+              'filename'=> 'test',
+              'createdUserId' => 1
+            ),
+             'returnValue' =>array(
+               'id' => 1,
+               'storage' => 'cloud',
+               'filename'=> 'test',
+               'createdUserId' => 1
+             )
+           )
+         );
+       $this->mock($name,$params);
+
+       $file = $this->getUploadFileService()->getFile2($fileId);
+
+       $this->assertEquals($file['id'],$fileId);
+    }
+
     public function testGetFileByGlobalId()
     {
       $fileId = '65d474f089074fa0810d1f2f146fd218';
@@ -216,7 +261,7 @@ class UploadFileServiceTest extends BaseTestCase
         ),
         'currentUserId' => 1
       );
-      $sort = 'latestCreated';
+      
       $orderBy = array('createdTime','DESC');
       $start = 0;
       $limit = 20;
@@ -274,7 +319,7 @@ class UploadFileServiceTest extends BaseTestCase
         )
       );
       $this->mock($name,$params);
-      $files = $this->getUploadFileService()->searchFiles($conditions, $sort, $start, $limit);
+      $files = $this->getUploadFileService()->searchFiles($conditions, $orderBy, $start, $limit);
       $this->assertEquals($files[0]['id'],1);
       $this->assertEquals($files[1]['id'],2);
     }

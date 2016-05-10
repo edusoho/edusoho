@@ -8,7 +8,7 @@ use Topxia\Service\File\FileImplementor2;
 
 class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
 {
-    public function getFile($file)
+    public function getCloudFile($file)
     {
     }
 
@@ -85,7 +85,7 @@ class LocalFileImplementor2Impl extends BaseService implements FileImplementor2
         return $file;
     }
 
-    public function deleteFile($file)
+    public function deleteCloudFile($file)
     {
         $filename = $this->getFileFullPath($file);
         @unlink($filename);

@@ -178,7 +178,7 @@ class EduCloudController extends BaseController
         $overview  = $api->get("/user/center/{$api->getAccessKey()}/overview");
         $videoInfo = isset($overview['vlseInfo']['videoInfo']) ? $overview['vlseInfo']['videoInfo'] : null;
 
-        $headLeader = $this->getUploadFileService()->getFileByTargetType2('headLeader');
+        $headLeader = $this->getUploadFileService()->getFileByTargetType('headLeader');
 
         return $this->render('TopxiaAdminBundle:EduCloud:video.html.twig', array(
             'storageSetting' => $storageSetting,

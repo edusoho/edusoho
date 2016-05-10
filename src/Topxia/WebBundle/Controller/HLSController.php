@@ -286,7 +286,7 @@ class HLSController extends BaseController
         $storage = $this->getSettingService()->get("storage");
 
         if (!empty($storage['video_header'])) {
-            $file       = $this->getUploadFileService()->getFileByTargetType2('headLeader');
+            $file       = $this->getUploadFileService()->getFileByTargetType('headLeader');
             $beginnings = $file['metas2'];
             $levels     = array($level);
             $levels     = array_merge($levels, array_diff(array('shd', 'hd', 'sd'), $levels));
