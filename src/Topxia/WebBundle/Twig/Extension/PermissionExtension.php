@@ -3,7 +3,7 @@ namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Common\MenuBuilder;
 
-class MenuExtension extends \Twig_Extension
+class PermissionExtension extends \Twig_Extension
 {
     protected $container;
 
@@ -23,26 +23,33 @@ class MenuExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            new \Twig_SimpleFilter('parent_menu', array($this, 'getParentMenu'))
+            new \Twig_SimpleFilter('parent_permission', array($this, 'getParentPermission'))
         );
     }
 
     public function getFunctions()
     {
         return array(
-            new \Twig_SimpleFunction('get_menu_by_code', array($this, 'getMenuByCode')),
-            new \Twig_SimpleFunction('menu_children', array($this, 'getMenuChildren')),
-            new \Twig_SimpleFunction('menu_path', array($this, 'getMenuPath'), array('needs_context' => true, 'needs_environment' => true))
+            new \Twig_SimpleFunction('permission', array($this, 'getPermissionByCode')),
+            new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
+            new \Twig_SimpleFunction('permission_crumb', array($this, 'getPermissionCrumb'), array('needs_context' => true, 'needs_environment' => true)),
+            new \Twig_SimpleFunction('render_permission', array($this, 'renderPermission'))
         );
     }
 
-    public function getMenuPath($env, $context, $menu)
+    public function renderPermission($parentCode, $template)
     {
-        $menus = $this->getMenuChildren('admin', $menu['code'], '1');
+        $children = $this->getSubPermissions($parentCode);
+        return $this->container->get('templating')->render($template, array('permissions' => $children));
+    }
+
+    public function getPermissionCrumb($env, $context, $menu)
+    {
+        $menus = $this->getSubPermissions('admin', $menu['code'], '1');
 
         if ($menus) {
             $menu  = current($menus);
-            $menus = $this->getMenuChildren('admin', $menu['code'], '1');
+            $menus = $this->getSubPermissions('admin', $menu['code'], '1');
 
             if ($menus) {
                 $menu = current($menus);
@@ -62,17 +69,17 @@ class MenuExtension extends \Twig_Extension
         return $this->container->get('router')->generate($route, $params);
     }
 
-    public function getMenuByCode($position, $code)
+    public function getPermissionByCode($position, $code)
     {
         return $this->createMenuBuilder($position)->getMenuByCode($code);
     }
 
-    public function getMenuChildren($position, $code, $group = null)
+    public function getSubPermissions($position, $code, $group = null)
     {
         return $this->createMenuBuilder($position)->getMenuChildren($code, $group);
     }
 
-    public function getParentMenu($code, $position = 'admin')
+    public function getParentPermission($code, $position = 'admin')
     {
         return $this->createMenuBuilder($position)->getParentMenu($code);
     }

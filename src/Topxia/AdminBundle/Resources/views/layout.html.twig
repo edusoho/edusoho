@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
-{% set currentMenu = get_menu_by_code('admin', menu) %}
+{% set currentMenu = permission('admin', menu) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -17,7 +17,7 @@
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
     {% block title %}
-      {{ currentMenu.name }} - {{ menu|parent_menu.name }} - {{ menu|parent_menu.code|parent_menu.name  }}
+      {{ currentMenu.name }} - {{ menu|parent_permission.name }} - {{ menu|parent_permission.code|parent_permission.name  }}
     {% endblock %}
     {% if not setting('copyright.owned') %} | EduSoho{% endif %}
   </title>
@@ -54,9 +54,9 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-           {% for m in menu_children('admin', 'admin', 1) %}  
+           {% for m in sub_permissions('admin', 'admin', 1) %}  
               {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
-                <li {% if menu and  m.code == menu|parent_menu.code|parent_menu.code|default(null)  %}class="active"{% endif %}>
+                <li {% if menu and  m.code == menu|parent_permission.code|parent_permission.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
                 </li>
               {% endif %}
@@ -89,11 +89,11 @@
       {% block content %}
         <div class="col-md-2">
           {% block sidebar %}
-            {% for groupedMenus in menu_children('admin', menu|parent_menu.code|parent_menu.code|default(null)) %}
+            {% for groupedMenus in sub_permissions('admin', menu|parent_permission.code|parent_permission.code|default(null)) %}
 
               <div class="list-group">
                 {% for m in groupedMenus %}
-                    {% set menuClass = m.code == menu|parent_menu.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
+                    {% set menuClass = m.code == menu|parent_permission.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
                     {{ self_macro.menu_link_html(_context, m, menuClass) }}
                 {% endfor %}
               </div>
@@ -107,7 +107,7 @@
             <div class="pull-right">
 
               {% block page_buttons %}
-                {% for m in menu_children('admin', currentMenu.code, 2) %}
+                {% for m in sub_permissions('admin', currentMenu.code, 2) %}
                     {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                 {% endfor %}
               {% endblock %}
@@ -115,7 +115,7 @@
             </div>
           </div>
 
-          {% set tabMenus = menu_children('admin', menu|parent_menu.code|default(null), 1) %}
+          {% set tabMenus = sub_permissions('admin', menu|parent_permission.code|default(null), 1) %}
 
           {% block content_header %}{% endblock %}
           
@@ -159,11 +159,11 @@
     class="{{ class }}"
   {% endif %}
   {% if menu.mode|default(null) == 'modal' %}
-    data-url="{{ menu_path(menu) }}"
+    data-url="{{ permission_crumb(menu) }}"
     data-toggle="modal"
     data-target="#modal"
   {% else %}
-    href="{{ menu_path(menu) }}"
+    href="{{ permission_crumb(menu) }}"
   {% endif %}
   {% if menu.blank|default(false) %}
     target="blank"

@@ -181,8 +181,8 @@ services:
         tags:
             - { name: twig.extension }
 
-    topxia.twig.menu_extension:
-        class: Topxia\WebBundle\Twig\Extension\MenuExtension
+    topxia.twig.permission_extension:
+        class: Topxia\WebBundle\Twig\Extension\PermissionExtension
         arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
