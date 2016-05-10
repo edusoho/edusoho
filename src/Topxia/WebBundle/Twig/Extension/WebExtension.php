@@ -380,6 +380,7 @@ class WebExtension extends \Twig_Extension
         $names[] = 'classroom';
         $names[] = 'materiallib';
         $names[] = 'sensitiveword';
+        $names[] = 'permission';
 
         $paths = array(
             'common' => 'common',
