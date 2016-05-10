@@ -3,6 +3,7 @@ namespace Permission\Common;
 
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
+use Topxia\Common\ArrayToolkit;
 
 class PermissionBuilder
 {
