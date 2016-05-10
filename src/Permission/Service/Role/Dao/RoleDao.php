@@ -1,7 +1,7 @@
 <?php
-namespace Topxia\Service\System;
+namespace Permission\Service\Role\Dao;
 
-interface RoleService
+interface RoleDao
 {
     public function getRole($id);
 
@@ -11,7 +11,7 @@ interface RoleService
 
     public function updateRole($id, array $fiedls);
 
-    public function searchRoles($conditions, $sort, $start, $limit);
+    public function searchRoles($conditions, $orderBy, $start, $limit);
 
     public function searchRolesCount($conditions);
 }

@@ -874,35 +874,6 @@ admin_jobs:
     defaults: { _controller: TopxiaAdminBundle:Job:index }
     permissions: [admin_jobs_manage]
 
-admin_roles:
-    pattern:  /setting/roles
-    defaults: { _controller: TopxiaAdminBundle:Role:index }
-    permissions: [admin_role_namage]
-
-admin_role_create:
-    pattern:  /setting/role/create
-    defaults: { _controller: TopxiaAdminBundle:Role:create }
-
-admin_role_edit:
-    pattern:  /setting/role/{id}/edit
-    defaults: { _controller: TopxiaAdminBundle:Role:edit }
-    permissions: [admin_role_namage]
-
-admin_role_show:
-    pattern:  /setting/role/{id}/show
-    defaults: { _controller: TopxiaAdminBundle:Role:show }
-    permissions: [admin_role_namage]
-
-admin_role_check_name:
-    pattern:  /setting/role/checkName
-    defaults: { _controller: TopxiaAdminBundle:Role:checkName }
-    permissions: [admin_role_namage,admin_role_create]
-
-admin_role_check_code:
-    pattern:  /setting/role/checkCode
-    defaults: { _controller: TopxiaAdminBundle:Role:checkCode }
-    permissions: [admin_role_namage,admin_role_create]
-
 admin_logs:
     pattern:  /setting/logs
     defaults: { _controller: TopxiaAdminBundle:Log:index }

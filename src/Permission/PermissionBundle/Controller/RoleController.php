@@ -1,5 +1,5 @@
 <?php
-namespace Topxia\AdminBundle\Controller;
+namespace Permission\PermissionBundle\Controller;
 
 use Topxia\Common\MenuBuilder;
 use Topxia\Common\Paginator;
@@ -7,6 +7,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Topxia\AdminBundle\Controller\BaseController;
 
 class RoleController extends BaseController
 {
@@ -36,7 +37,7 @@ class RoleController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        return $this->render('TopxiaAdminBundle:System:role.html.twig', array(
+        return $this->render('PermissionBundle:Role:index.html.twig', array(
             'roles'     => $roles,
             'paginator' => $paginator
         ));
@@ -53,7 +54,7 @@ class RoleController extends BaseController
 
         $menuBuilder = new MenuBuilder();
         $res = $menuBuilder->getOriginPermissionTree();
-        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
     }
 
     public function editAction(Request $request, $id)
@@ -77,7 +78,7 @@ class RoleController extends BaseController
             }
         }
 
-        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'edit', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'edit', 'role' => $role));
     }
 
     public function showAction(Request $request, $id)
@@ -95,7 +96,7 @@ class RoleController extends BaseController
             $re['chkDisabled'] = 'true';
         }
 
-        return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'show', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'show', 'role' => $role));
     }
 
     protected function dataPrepare($position)
@@ -192,37 +193,7 @@ class RoleController extends BaseController
 
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('System.RoleService');
-    }
-
-    protected function getStatisticsService()
-    {
-        return $this->getServiceKernel()->createService('System.StatisticsService');
-    }
-
-    protected function getThreadService()
-    {
-        return $this->getServiceKernel()->createService('Course.ThreadService');
-    }
-
-    protected function getCourseService()
-    {
-        return $this->getServiceKernel()->createService('Course.CourseService');
-    }
-
-    protected function getOrderService()
-    {
-        return $this->getServiceKernel()->createService('Order.OrderService');
-    }
-
-    protected function getNotificationService()
-    {
-        return $this->getServiceKernel()->createService('User.NotificationService');
-    }
-
-    protected function getLogService()
-    {
-        return $this->getServiceKernel()->createService('System.LogService');
+        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
     }
 
     protected function getAppService()
@@ -230,13 +201,4 @@ class RoleController extends BaseController
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
     }
 
-    protected function getCashService()
-    {
-        return $this->getServiceKernel()->createService('Cash.CashService');
-    }
-
-    private function getWebExtension()
-    {
-        return $this->container->get('topxia.twig.web_extension');
-    }
 }

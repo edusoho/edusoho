@@ -523,7 +523,7 @@ class UserController extends BaseController
     
     protected function getRoleService()
     {
-        return $this->getServiceKernel()->createService('System.RoleService');
+        return $this->getServiceKernel()->createService('Permission:Role.RoleService');
     }
 
     protected function getNotificationService()

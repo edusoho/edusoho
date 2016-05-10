@@ -1,8 +1,8 @@
 <?php
-namespace Topxia\Service\System\Dao\Impl;
+namespace Permission\Service\Role\Dao\Impl;
 
 use Topxia\Service\Common\BaseDao;
-use Topxia\Service\System\Dao\RoleDao;
+use Permission\Service\Role\Dao\RoleDao;
 
 class RoleDaoImpl extends BaseDao implements RoleDao
 {

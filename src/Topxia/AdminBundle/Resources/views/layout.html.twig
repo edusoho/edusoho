@@ -16,11 +16,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="{{ csrf_token('site') }}" name="csrf-token" />
   <title>
+    
     {% block title %}
       {{ currentMenu.name }} - {{ menu|parent_permission.name }} - {{ menu|parent_permission.code|parent_permission.name  }}
-      }
     {% endblock %}
-    {% if not setting('copyright.owned') %} | EduSoho{% endif %}
+
+    {% if not setting('copyright.owned') %} Powerd by EduSoho{% endif %}
   </title>
 
   {% if setting('site.favicon') %}

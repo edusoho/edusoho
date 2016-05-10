@@ -1,9 +1,9 @@
 <?php
-namespace Topxia\Service\System\Impl;
+namespace Permission\Service\Role\Impl;
 
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\BaseService;
-use Topxia\Service\System\RoleService;
+use Permission\Service\Role\RoleService;
 
 class RoleServiceImpl extends BaseService implements RoleService
 {
@@ -125,7 +125,7 @@ class RoleServiceImpl extends BaseService implements RoleService
 
     protected function getRoleDao()
     {
-        return $this->createDao('System.RoleDao');
+        return $this->createDao('Permission:Role.RoleDao');
     }
 
     protected function getLogService()

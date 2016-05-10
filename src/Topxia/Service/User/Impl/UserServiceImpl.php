@@ -1569,7 +1569,7 @@ class UserServiceImpl extends BaseService implements UserService
 
     protected function getRoleService()
     {
-        return $this->createService('System.RoleService');
+        return $this->createService('Permission:Role.RoleService');
     }
 
     protected function getFriendDao()
