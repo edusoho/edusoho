@@ -27,7 +27,8 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('permission', array($this, 'getPermissionByCode')),
             new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
             new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('render_permission', array($this, 'renderPermission'))
+            new \Twig_SimpleFunction('render_permission', array($this, 'renderPermission')),
+            new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions'))
         );
     }
 
@@ -39,11 +40,11 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionPath($env, $context, $menu)
     {
-        $menus = $this->getSubPermissions($menu['code'], '1');
+        $menus = $this->getSubPermissions($menu['code']);
 
         if ($menus) {
             $menu  = current($menus);
-            $menus = $this->getSubPermissions($menu['code'], '1');
+            $menus = $this->getSubPermissions($menu['code']);
 
             if ($menus) {
                 $menu = current($menus);
@@ -68,9 +69,14 @@ class PermissionExtension extends \Twig_Extension
         return $this->createMenuBuilder()->getMenuByCode($code);
     }
 
-    public function getSubPermissions($code, $group = null)
+    public function getSubPermissions($code, $group = '1')
     {
         return $this->createMenuBuilder()->getMenuChildren($code, $group);
+    }
+
+    public function groupedPermissions($code)
+    {
+        return $this->createMenuBuilder()->groupedMenus($code);
     }
 
     public function getParentPermission($code)

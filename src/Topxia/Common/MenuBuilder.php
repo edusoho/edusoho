@@ -10,7 +10,7 @@ class MenuBuilder
 
     private $menus = array();
 
-    public function getMenuChildren($code, $group = null)
+    public function getMenuChildren($code, $group = '1')
     {
         $menus = $this->buildMenus();
 
@@ -33,6 +33,23 @@ class MenuBuilder
         }
 
         return $children;
+    }
+
+    public function groupedMenus($code)
+    {
+        $menus = $this->buildMenus();
+
+        if (!isset($menus[$code])) {
+            return array();
+        }
+
+        $children = array();
+
+        foreach ($menus[$code]['children'] as $childCode) {
+            $children[] = $menus[$childCode];
+        }
+
+        return $this->groupMenus($children);
     }
 
     public function getMenuByCode($code)
