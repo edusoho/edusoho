@@ -19,5 +19,5 @@ interface OrgDao
 
     public function deleteOrgsByOrgCode($orgCode);
 
-    public function findOrgTablelist();
+    public function findOrgsByOrgCode($orgCode);
 }
