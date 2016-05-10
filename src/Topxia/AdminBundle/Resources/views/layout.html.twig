@@ -54,7 +54,7 @@
         <a class="navbar-brand" href="{{ url('admin') }}">{% if not setting('copyright.owned') %}EduSoho{% endif %}管理后台</a>
       </div>
       <div class="navbar-collapse collapse">
-        {{render_permission('admin', menu, 'navigation')|raw}}
+        {% include 'PermissionBundle:Templates:navigation.html.twig' with {parentCode:'admin'} %}
 
         <ul class="nav navbar-nav navbar-right">
           <li data-url="{{path('admin_common_admin')}}">
@@ -82,21 +82,17 @@
       {% block content %}
         <div class="col-md-2">
           {% block sidebar %}
-            {% for groupedMenus in grouped_permissions(menu|parent_permission.code|parent_permission.code|default(null)) %}
-
-              <div class="list-group">
-                {% for m in groupedMenus %}
-                    {% set menuClass = m.code == menu|parent_permission.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-                    {{ self_macro.menu_link_html(_context, m, menuClass) }}
-                {% endfor %}
-              </div>
-            {% endfor %}
+            {% include 'PermissionBundle:Templates:side-bar.html.twig' %}
           {% endblock %}
         </div>
 
         <div class="col-md-10">
           <div class="page-header clearfix">
-            <h1 class="pull-left">{% block page_title %}{{ currentMenu.fullname|default(currentMenu.name) }}{% endblock %}</h1>
+            <h1 class="pull-left">
+              {% block page_title %}
+                {{ currentMenu.fullname|default(currentMenu.name) }}
+              {% endblock %}
+            </h1>
             <div class="pull-right">
 
               {% block page_buttons %}
@@ -108,19 +104,9 @@
             </div>
           </div>
 
-          {% set tabMenus = sub_permissions(menu|parent_permission.code|default(null)) %}
-
           {% block content_header %}{% endblock %}
           
-          {% if tabMenus|default(null) and currentMenu.group == 1 and tabMenus|length > 1 %}
-            <ul class="nav nav-tabs mbm">
-              {% for m in tabMenus %}
-                <li {% if m.code == menu|default(null) %}class="active"{% endif %}>
-                    {{ self_macro.menu_link_html(_context, m, m.class|default('')) }}
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}
+          {% include 'PermissionBundle:Templates:tabs.html.twig' %}
 
           {% block main %}{% endblock %}
         </div>

@@ -27,19 +27,8 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('permission', array($this, 'getPermissionByCode')),
             new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
             new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('render_permission', array($this, 'renderPermission')),
             new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions'))
         );
-    }
-
-    public function renderPermission($parentCode, $activePermission, $template)
-    {
-        $children = $this->getSubPermissions($parentCode);
-        $template = "PermissionBundle:Templates:{$template}.html.twig";
-        return $this->container->get('templating')->render($template, array(
-            'permissions' => $children,
-            'activePermission' => $activePermission,
-        ));
     }
 
     public function getPermissionPath($env, $context, $menu)
