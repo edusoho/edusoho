@@ -2,6 +2,7 @@
 namespace Topxia\WebBundle\Twig\Extension;
 
 use Topxia\Common\MenuBuilder;
+use Eexit\Twig\ContextParser\ContextParser;
 
 class PermissionExtension extends \Twig_Extension
 {
@@ -59,9 +60,15 @@ class PermissionExtension extends \Twig_Extension
         return $this->container->get('router')->generate($route, $params);
     }
 
-    public function evalExpression($code)
+    public function evalExpression($twig, $context, $code)
     {
-        $value = explode('.', $code);
+        $loader = new \Twig_Loader_Array(array(
+            'expression.twig' => '{{'.$code.'}}',
+        ));
+
+        $twig = new \Twig_Environment($loader);
+
+        return $twig->render('expression.twig', $context);
     }
 
     public function getPermissionByCode($code)
@@ -97,6 +104,11 @@ class PermissionExtension extends \Twig_Extension
         }
 
         return $this->builder;
+    }
+
+    public function initRuntime(\Twig_Environment $environment)
+    {
+        $this->environment = $environment;
     }
 
     public function getName()

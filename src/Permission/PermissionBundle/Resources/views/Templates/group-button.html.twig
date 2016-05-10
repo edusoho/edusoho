@@ -9,24 +9,19 @@
 <ul class="dropdown-menu">
   {% for permission in permissions %}
     <li>
-      {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+      {% if permission.showExpression|default(false) %}
+        {% if eval_expression(permission.showExpression) %}
+          {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+        {% endif %}
+      {% else %}
+        {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
+      {% endif %}
     </li>
   {% endfor %}
 
 </ul>
 {% endif %}
 {# 
-{% if 'ROLE_SUPER_ADMIN' in user.roles %}
-  <li></li>
-{% else %}
-  <li><a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a></li>
-{% endif %}
-
-{% else %}
-  <li>
-    <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_roles', {id:user.id}) }}">设置用户组</a>
-  </li>
-{% endif %}
 
 {% if user.locked %}
   <li>
