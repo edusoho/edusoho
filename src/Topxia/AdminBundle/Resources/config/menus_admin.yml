@@ -282,9 +282,8 @@ admin:
                 admin_operation_content:
                     name: 自定义页面管理
                     children:
-                        admin_content_manage:
+                        admin_content:
                             name: 自定义页面管理
-                            router_name: admin_content
                             router_params:
                                 type: page
                 admin_operation_analysis_register:
