@@ -1,8 +1,7 @@
 <?php
-namespace Topxia\WebBundle\Twig\Extension;
+namespace Permission\PermissionBundle\TwigExtension;
 
-use Topxia\Common\MenuBuilder;
-use Eexit\Twig\ContextParser\ContextParser;
+use Permission\Common\PermissionBuilder;
 
 class PermissionExtension extends \Twig_Extension
 {
@@ -73,34 +72,34 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionByCode($code)
     {
-        return $this->createMenuBuilder()->getMenuByCode($code);
+        return $this->createPermissionBuilder()->getMenuByCode($code);
     }
 
     public function hasPermission($code)
     {
-        $permission = $this->createMenuBuilder()->getMenuByCode($code);
+        $permission = $this->createPermissionBuilder()->getMenuByCode($code);
         return !empty($permission);
     }
 
     public function getSubPermissions($code, $group = '1')
     {
-        return $this->createMenuBuilder()->getMenuChildren($code, $group);
+        return $this->createPermissionBuilder()->getMenuChildren($code, $group);
     }
 
     public function groupedPermissions($code)
     {
-        return $this->createMenuBuilder()->groupedMenus($code);
+        return $this->createPermissionBuilder()->groupedMenus($code);
     }
 
     public function getParentPermission($code)
     {
-        return $this->createMenuBuilder()->getParentMenu($code);
+        return $this->createPermissionBuilder()->getParentMenu($code);
     }
 
-    private function createMenuBuilder()
+    private function createPermissionBuilder()
     {
         if (empty($this->builder)) {
-            $this->builder = new MenuBuilder();
+            $this->builder = new PermissionBuilder();
         }
 
         return $this->builder;

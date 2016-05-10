@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Topxia\Common\MenuBuilder;
+use Permission\Common\PermissionBuilder;
 
 class UserProvider implements UserProviderInterface
 {
@@ -55,8 +55,8 @@ class UserProvider implements UserProviderInterface
             return $user;
         }
 
-        $menuBuilder = new MenuBuilder();
-        $res = $menuBuilder->getOriginMenus();
+        $permissionBuilder = new PermissionBuilder();
+        $res = $permissionBuilder->getOriginMenus();
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
             return $res;
         }

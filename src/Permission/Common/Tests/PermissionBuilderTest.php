@@ -1,12 +1,12 @@
 <?php
-namespace Topxia\Common\Tests;
+namespace Permission\Common\Tests;
 
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 use Topxia\Service\Common\BaseTestCase;
-use Topxia\Common\MenuBuilder;
+use Permission\Common\PermissionBuilder;
 
-class MenuBuilderTest extends BaseTestCase
+class PermissionBuilderTest extends BaseTestCase
 {
 	public function testGetMenuByCode()
     {
@@ -14,8 +14,8 @@ class MenuBuilderTest extends BaseTestCase
     	$permissions = $this->loadPermissions($user->toArray());
     	$user->setPermissions($permissions);
 
-    	$menuBuilder = new MenuBuilder();
-    	$menu = $menuBuilder->getMenuByCode('admin_user_show');
+    	$permissionBuilder = new PermissionBuilder();
+    	$menu = $permissionBuilder->getMenuByCode('admin_user_show');
     }
 
     protected function loadPermissions($user)
@@ -24,8 +24,8 @@ class MenuBuilderTest extends BaseTestCase
             return $user;
         }
 
-        $menuBuilder = new MenuBuilder();
-        $configs = $menuBuilder->getMenusYml();
+        $permissionBuilder = new PermissionBuilder();
+        $configs = $permissionBuilder->getMenusYml();
 
         $res = array();
         foreach ($configs as $key => $config) {

@@ -1,7 +1,7 @@
 <?php
 namespace Permission\PermissionBundle\Controller;
 
-use Topxia\Common\MenuBuilder;
+use Permission\Common\PermissionBuilder;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
@@ -52,16 +52,16 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $menuBuilder = new MenuBuilder();
-        $res = $menuBuilder->getOriginPermissionTree();
+        $permissionBuilder = new PermissionBuilder();
+        $res = $permissionBuilder->getOriginPermissionTree();
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
     }
 
     public function editAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $menuBuilder = new MenuBuilder();
-        $res = $menuBuilder->getOriginPermissionTree();
+        $permissionBuilder = new PermissionBuilder();
+        $res = $permissionBuilder->getOriginPermissionTree();
 
         if ('POST' == $request->getMethod()) {
             $params         = $request->request->all();
@@ -84,9 +84,9 @@ class RoleController extends BaseController
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $menuBuilder = new MenuBuilder();
+        $permissionBuilder = new PermissionBuilder();
 
-        $res  = $menuBuilder->getOriginMenus();
+        $res  = $permissionBuilder->getOriginMenus();
 
         foreach ($res as &$re) {
             if (in_array($re['code'], $role['data'])) {

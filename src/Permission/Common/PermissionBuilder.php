@@ -1,10 +1,10 @@
 <?php
-namespace Topxia\Common;
+namespace Permission\Common;
 
 use Symfony\Component\Yaml\Yaml;
 use Topxia\Service\Common\ServiceKernel;
 
-class MenuBuilder
+class PermissionBuilder
 {
     private $position = 'admin';
 

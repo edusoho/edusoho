@@ -1,0 +1,6 @@
+services:
+    topxia.twig.permission_extension:
+        class: Permission\PermissionBundle\TwigExtension\PermissionExtension
+        arguments:    ['@service_container']
+        tags:
+            - { name: twig.extension }

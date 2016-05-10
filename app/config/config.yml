@@ -181,12 +181,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    topxia.twig.permission_extension:
-        class: Topxia\WebBundle\Twig\Extension\PermissionExtension
-        arguments:    ['@service_container']
-        tags:
-            - { name: twig.extension }
-
     topxia.twig.block_extension:
         class: Topxia\WebBundle\Twig\Extension\BlockExtension
         arguments:    ['@service_container']
