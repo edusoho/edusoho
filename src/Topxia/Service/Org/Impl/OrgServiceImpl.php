@@ -70,6 +70,17 @@ class OrgServiceImpl extends BaseService implements OrgService
         $this->getOrgDao()->deleteOrgsByOrgCode($org['orgCode']);
     }
 
+    public function switchOrg($id)
+    {
+        $org  = $this->checkBeforProccess($id);
+        $user = $this->getCurrentUser();
+
+        $data                  = $user->toArray();
+        $data['selectOrgCode'] = $org['orgCode'];
+        $user->fromArray($data);
+        $this->getKernel()->setCurrentUser($user);
+    }
+
     public function getOrg($id)
     {
         return $this->getOrgDao()->getOrg($id);
