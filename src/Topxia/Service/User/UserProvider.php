@@ -55,7 +55,7 @@ class UserProvider implements UserProviderInterface
             return $user;
         }
 
-        $menuBuilder = new MenuBuilder('admin');
+        $menuBuilder = new MenuBuilder();
         $configs = $menuBuilder->getMenusYml();
 
         $res = array();

@@ -6,14 +6,9 @@ use Topxia\Service\Common\ServiceKernel;
 
 class MenuBuilder
 {
-    private $position = null;
+    private $position = 'admin';
 
     private $menus = array();
-
-    public function __construct($position)
-    {
-        $this->position = $position;
-    }
 
     public function getMenuChildren($code, $group = null)
     {
@@ -53,8 +48,8 @@ class MenuBuilder
 
     public function getMenusYml()
     {
-        $position    = $this->position;
         $configPaths = array();
+        $position = $this->position;
 
         $rootDir = realpath(__DIR__.'/../../../');
         $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";

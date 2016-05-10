@@ -14,7 +14,7 @@ class MenuBuilderTest extends BaseTestCase
     	$permissions = $this->loadPermissions($user->toArray());
     	$user->setPermissions($permissions);
 
-    	$menuBuilder = new MenuBuilder('admin');
+    	$menuBuilder = new MenuBuilder();
     	$menu = $menuBuilder->getMenuByCode('admin_user_show');
     }
 
@@ -24,7 +24,7 @@ class MenuBuilderTest extends BaseTestCase
             return $user;
         }
 
-        $menuBuilder = new MenuBuilder('admin');
+        $menuBuilder = new MenuBuilder();
         $configs = $menuBuilder->getMenusYml();
 
         $res = array();

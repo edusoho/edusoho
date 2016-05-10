@@ -7,13 +7,7 @@ class PermissionExtension extends \Twig_Extension
 {
     protected $container;
 
-    protected $menuUtil = null;
-
-    protected $builders = array();
-
-    protected $levelOneMenus = array();
-
-    protected $levelTwoMenus = array();
+    protected $builder = null;
 
     public function __construct($container)
     {
@@ -45,11 +39,11 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionPath($env, $context, $menu)
     {
-        $menus = $this->getSubPermissions('admin', $menu['code'], '1');
+        $menus = $this->getSubPermissions($menu['code'], '1');
 
         if ($menus) {
             $menu  = current($menus);
-            $menus = $this->getSubPermissions('admin', $menu['code'], '1');
+            $menus = $this->getSubPermissions($menu['code'], '1');
 
             if ($menus) {
                 $menu = current($menus);
@@ -69,32 +63,32 @@ class PermissionExtension extends \Twig_Extension
         return $this->container->get('router')->generate($route, $params);
     }
 
-    public function getPermissionByCode($position, $code)
+    public function getPermissionByCode($code)
     {
-        return $this->createMenuBuilder($position)->getMenuByCode($code);
+        return $this->createMenuBuilder()->getMenuByCode($code);
     }
 
-    public function getSubPermissions($position, $code, $group = null)
+    public function getSubPermissions($code, $group = null)
     {
-        return $this->createMenuBuilder($position)->getMenuChildren($code, $group);
+        return $this->createMenuBuilder()->getMenuChildren($code, $group);
     }
 
-    public function getParentPermission($code, $position = 'admin')
+    public function getParentPermission($code)
     {
-        return $this->createMenuBuilder($position)->getParentMenu($code);
+        return $this->createMenuBuilder()->getParentMenu($code);
     }
 
-    private function createMenuBuilder($position)
+    private function createMenuBuilder()
     {
-        if (!isset($this->builders[$position])) {
-            $this->builders[$position] = new MenuBuilder($position);
+        if (empty($this->builder)) {
+            $this->builder = new MenuBuilder();
         }
 
-        return $this->builders[$position];
+        return $this->builder;
     }
 
     public function getName()
     {
-        return 'topxia_menu_twig';
+        return 'topxia_permission_twig';
     }
 }

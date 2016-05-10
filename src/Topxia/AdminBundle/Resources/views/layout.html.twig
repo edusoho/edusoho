@@ -4,7 +4,7 @@
 
 <!DOCTYPE html>
 {% set menu = menu|default(null) %}
-{% set currentMenu = permission('admin', menu) %}
+{% set currentMenu = permission(menu) %}
 <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
@@ -55,7 +55,7 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-           {% for m in sub_permissions('admin', 'admin', 1) %}  
+           {% for m in sub_permissions('admin', 1) %}  
               {% if not (m.code == 'admin_app' and (setting('copyright.thirdCopyright') == 1 or is_without_network())) %}
                 <li {% if menu and  m.code == menu|parent_permission.code|parent_permission.code|default(null)  %}class="active"{% endif %}>
                   {{ self_macro.menu_link_html(_context, m) }}
@@ -90,7 +90,7 @@
       {% block content %}
         <div class="col-md-2">
           {% block sidebar %}
-            {% for groupedMenus in sub_permissions('admin', menu|parent_permission.code|parent_permission.code|default(null)) %}
+            {% for groupedMenus in sub_permissions(menu|parent_permission.code|parent_permission.code|default(null)) %}
 
               <div class="list-group">
                 {% for m in groupedMenus %}
@@ -108,7 +108,7 @@
             <div class="pull-right">
 
               {% block page_buttons %}
-                {% for m in sub_permissions('admin', currentMenu.code, 2) %}
+                {% for m in sub_permissions(currentMenu.code, 2) %}
                     {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                 {% endfor %}
               {% endblock %}
@@ -116,7 +116,7 @@
             </div>
           </div>
 
-          {% set tabMenus = sub_permissions('admin', menu|parent_permission.code|default(null), 1) %}
+          {% set tabMenus = sub_permissions(menu|parent_permission.code|default(null), 1) %}
 
           {% block content_header %}{% endblock %}
           
