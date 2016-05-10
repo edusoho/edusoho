@@ -17,8 +17,8 @@ class Version20160509150945 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(
-            "CREATE TABLE `org` (
-             `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织机构ID',
+            "CREATE TABLE IF NOT EXISTS  `org` (
+              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织机构ID',
 			  `name` varchar(255) NOT NULL COMMENT '名称',
 			  `parentId` int(11) NOT NULL DEFAULT '0' COMMENT '组织机构父ID',
 			  `childRenNum` tinyint(3) unsigned NOT NULL  DEFAULT  '0' COMMENT '辖下组织机构数量',
