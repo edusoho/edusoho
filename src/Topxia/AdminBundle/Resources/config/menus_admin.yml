@@ -424,9 +424,11 @@ admin:
                     before: admin_setting_cloud
         admin_system:
             name: 系统
+            router_name: admin_setting_site
             children:
                 admin_setting:
                     name: 站点设置
+                    router_name: admin_setting_site
                     children:
                         admin_setting_message:
                             name: 基础信息

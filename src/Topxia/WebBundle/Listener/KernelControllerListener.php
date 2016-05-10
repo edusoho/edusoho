@@ -27,8 +27,9 @@ class KernelControllerListener
         $currentUser = $this->getUserService()->getCurrentUser();
 
         if (preg_match('/admin/s', $route) && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+            $currentUserPermissions = $currentUser->getPermissions();
             foreach ($permissions as $permission) {
-                if (isset($currentUser['menus'][$permission])) {
+                if (isset($currentUserPermissions[$permission])) {
                     return;
                 }
             }

@@ -12,6 +12,7 @@
   {% else %}
     href="{{ permission_path(menu) }}"
   {% endif %}
+  
   {% if menu.blank|default(false) %}
     target="blank"
   {% endif %}
