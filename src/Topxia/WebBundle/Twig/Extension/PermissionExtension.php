@@ -27,7 +27,8 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('permission', array($this, 'getPermissionByCode')),
             new \Twig_SimpleFunction('sub_permissions', array($this, 'getSubPermissions')),
             new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions'))
+            new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions')),
+            new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission'))
         );
     }
 
@@ -60,6 +61,12 @@ class PermissionExtension extends \Twig_Extension
     public function getPermissionByCode($code)
     {
         return $this->createMenuBuilder()->getMenuByCode($code);
+    }
+
+    public function hasPermission($code)
+    {
+        $permission = $this->createMenuBuilder()->getMenuByCode($code);
+        return !empty($permission);
     }
 
     public function getSubPermissions($code, $group = '1')
