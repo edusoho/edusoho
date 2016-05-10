@@ -37,8 +37,13 @@ class RoleController extends BaseController
             $paginator->getPerPageCount()
         );
 
+        $userIds = ArrayToolkit::column($roles, 'createdUserId');
+        $users = $this->getUserService()->findUsersByIds($userIds);
+        $users = ArrayToolkit::index($users, 'id');
+
         return $this->render('PermissionBundle:Role:index.html.twig', array(
             'roles'     => $roles,
+            'users'     => $users,
             'paginator' => $paginator
         ));
     }
@@ -199,6 +204,11 @@ class RoleController extends BaseController
     protected function getAppService()
     {
         return $this->getServiceKernel()->createService('CloudPlatform.AppService');
+    }
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
     }
 
 }

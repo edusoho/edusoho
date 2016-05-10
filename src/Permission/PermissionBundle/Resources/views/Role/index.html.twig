@@ -10,7 +10,7 @@
 
   <div class="form-group">
     <select id="keywordType" class="form-control" name="keywordType">
-          {% set options = {'':'--关键词类型--','name':'权限名称','code':'权限CODE'} %}
+          {% set options = {'':'--关键词类型--','name':'角色名称','code':'编号'} %}
           {{ select_options(options, app.request.get('keywordType')) }}
     </select>
   </div>
@@ -40,7 +40,7 @@
         <td>
           {{ role.createdTime|date('Y-m-d H:i:s') }}        </td>
         <td>
-          {{ role.createdUserId }}
+          {{ users[role.createdUserId].nickname }}
         </td>
         <td>
           <div class="btn-group">
