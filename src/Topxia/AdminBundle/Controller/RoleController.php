@@ -69,6 +69,14 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
+        if(!empty($role['data'])){
+            foreach ($res as $key => &$permission) {
+                if(in_array($permission['code'], $role['data'])) {
+                    $permission['checked'] = true;
+                }
+            }
+        }
+
         return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'edit', 'role' => $role));
     }
 
