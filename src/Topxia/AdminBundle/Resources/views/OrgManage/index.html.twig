@@ -1,0 +1,37 @@
+{% extends 'TopxiaAdminBundle::layout.html.twig' %}
+
+{% set script_controller = 'orgManage/list' %}
+
+{% set menu = 'admin_operation_org_manage' %}
+
+{% block main %}
+
+<table class='table tree'>
+   <thead>
+      <tr>
+        <th>名称</th>
+        <th>辖下机构数</th>
+        <th>创建者</th>
+        <th>创建时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for org in orgs%}
+      <tr class="treegrid-{{org.id}} {% if org.parentId %}treegrid-parent-{{org.parentId}} {% endif %}">
+        {% set user = createUsers[org.createdUserId]%}
+        <td>{{org.name}}</td>
+        <td>{{org.childrenNum}}</td>
+        <td>{{user.nickname}}</td>
+        <td>{{org.createdTime|date('y-m-d')}}</td>
+        <td>
+          <a href="javascript:;" class="btn btn-default btn-sm " data-url="{{ path('admin_org_update', {id:org.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-edit"></i> 编辑</a>
+        {% if org.depth <= 5 %}
+          <a href="javascript:;" class="btn btn-default btn-sm" data-url="{{ path('admin_org_create', {parentId:org.id}) }}" data-toggle="modal" data-target="#modal"><i class="glyphicon glyphicon-plus"></i> 添加</a>
+        {% endif %}
+      </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
