@@ -1,6 +1,7 @@
 <?php
 namespace Topxia\AdminBundle\Controller;
 
+use Topxia\Common\MenuBuilder;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\Yaml\Yaml;
@@ -50,8 +51,8 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $res = $this->dataPrepare('admin');
-
+        $menuBuilder = new MenuBuilder();
+        $res = $menuBuilder->getOriginPermissionTree();
         return $this->render('TopxiaAdminBundle:System:roles.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
     }
 
@@ -79,7 +80,9 @@ class RoleController extends BaseController
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $res  = $this->dataPrepare('admin');
+        $menuBuilder = new MenuBuilder();
+
+        $res  = $menuBuilder->getOriginMenus();
 
         foreach ($res as &$re) {
             if (in_array($re['code'], $role['data'])) {

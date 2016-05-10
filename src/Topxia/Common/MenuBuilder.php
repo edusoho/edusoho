@@ -95,6 +95,75 @@ class MenuBuilder
 
     }
 
+    public function getOriginPermissionTree()
+    {
+        $permissions = $this->getOriginMenus();
+        $tree = array();
+        return $this->getMenuTree($tree, 'admin', $permissions);
+    }
+
+    public function getOriginMenus()
+    {
+        $configs = $this->getMenusYml();
+        $res = array();
+        foreach ($configs as $key => $config) {
+            if(!file_exists($config)) {
+                continue;
+            }
+            $menus = Yaml::parse(file_get_contents($config));
+            if(empty($menus)) {
+                continue;
+            }
+
+            $menus = $this->getMenusFromConfig($menus);
+            $res = array_merge($res, $menus);
+        }
+
+        return $res;
+    }
+
+
+    protected function getMenuTree(&$tree, $root, $menus)
+    {
+        $id = 0;
+        $node = $menus[$root];
+        $node['id'] = $id;
+        $node['code'] = $root;
+        $node['parent'] = null;
+        $tree[] = $node;
+
+        foreach ($menus as $key => &$menu) {
+            if($menu['parent'] == $root) {
+                $id++;
+                $menu['id'] = $id;
+                $menu['pId'] = $node['id'];
+                $menu['code'] = $key;
+                $tree[] = $menu;
+
+                $this->getSubTree($tree, $id, $menu, $menus);
+            }
+        }
+
+        $tree = ArrayToolkit::index($tree, 'id');
+
+        return $tree;
+    }
+
+    protected function getSubTree(&$tree, &$id, $parentNode, $menus)
+    {
+        foreach ($menus as $key => &$menu) {
+            if($menu['parent'] == $parentNode['code']) {
+                $id++;
+                $menu['id'] = $id;
+                $menu['pId'] = $parentNode['id'];
+                $menu['code'] = $key;
+                $tree[] = $menu;
+
+                $this->getSubTree($tree, $id, $menu, $menus);
+            }
+        }
+    }
+
     public function getParentMenu($code)
     {
         $menus = $this->buildMenus();
@@ -104,6 +173,27 @@ class MenuBuilder
         }
 
         return $menus[$menus[$code]['parent']];
+    }
+
+    protected function getMenusFromConfig($parents)
+    {
+        $menus = array();
+
+        foreach ($parents as $key => $value) {
+            if(isset($value['children'])) {
+                $childrenMenu = $value['children'];
+                unset($value['children']);
+
+                foreach ($childrenMenu as $childKey => $childValue) {
+                    $childValue["parent"] = $key;
+                    $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+                }
+            }
+
+            $menus[$key] = $value;
+        }
+
+        return $menus;
     }
 
     private function groupMenus($menus)

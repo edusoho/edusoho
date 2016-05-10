@@ -56,22 +56,7 @@ class UserProvider implements UserProviderInterface
         }
 
         $menuBuilder = new MenuBuilder();
-        $configs = $menuBuilder->getMenusYml();
-
-        $res = array();
-        foreach ($configs as $key => $config) {
-            if(!file_exists($config)) {
-                continue;
-            }
-            $menus = Yaml::parse(file_get_contents($config));
-            if(empty($menus)) {
-                continue;
-            }
-
-            $menus = $this->getMenusFromConfig($menus);
-            $res = array_merge($res, $menus);
-        }
-
+        $res = $menuBuilder->getOriginMenus();
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
             return $res;
         }
@@ -95,27 +80,6 @@ class UserProvider implements UserProviderInterface
         }
 
         return $permissions;
-    }
-
-    protected function getMenusFromConfig($parents)
-    {
-        $menus = array();
-
-        foreach ($parents as $key => $value) {
-            if(isset($parents[$key]['children'])) {
-                $childrenMenu = $parents[$key]['children'];
-                unset($parents[$key]['children']);
-
-                foreach ($childrenMenu as $childKey => $childValue) {
-                    $childValue["parent"] = $key;
-                    $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
-                }
-            }
-
-            $menus[$key] = $value;
-        }
-
-        return $menus;
     }
 
     protected function getUserService()
