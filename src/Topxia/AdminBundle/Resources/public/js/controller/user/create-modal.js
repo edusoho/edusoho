@@ -4,7 +4,8 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function() {
-
+        var ztree = require('edusoho.ztree');
+        ztree('#modal-orgZtree', "#modal-orgName", "#modal-orgCode", "modal-ztreeContent");
         var $modal = $('#user-create-form').parents('.modal');
         
         var validator = new Validator({

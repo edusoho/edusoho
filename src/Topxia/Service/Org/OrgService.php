@@ -16,6 +16,8 @@ interface OrgService
     public function getOrg($id);
 
     public function deleteOrg($id);
+
+    public function getOrgByOrgCode($orgCode);
     /**
      *  获取后台管理组织机构数据
      *  如果没有传orgcode, 默认获取所有

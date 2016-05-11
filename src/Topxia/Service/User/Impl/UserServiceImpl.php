@@ -516,6 +516,11 @@ class UserServiceImpl extends BaseService implements UserService
         $user['roles']         = array('ROLE_USER');
         $user['type']          = isset($registration['type']) ? $registration['type'] : $type;
         $user['createdIp']     = empty($registration['createdIp']) ? '' : $registration['createdIp'];
+
+        if(!empty($registration['orgCode'])){
+            $user['orgCode'] = $registration['orgCode'];
+        }
+
         $user['createdTime']   = time();
 
         $thirdLoginInfo = $this->getSettingService()->get('login_bind', array());

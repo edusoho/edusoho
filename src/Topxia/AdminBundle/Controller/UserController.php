@@ -12,7 +12,7 @@ class UserController extends BaseController
     public function indexAction(Request $request)
     {
         $fields = $request->query->all();
-
+        
         $conditions = array(
             'roles'           => '',
             'keywordType'     => '',
@@ -25,6 +25,10 @@ class UserController extends BaseController
         }
 
         $conditions = array_merge($conditions, $fields);
+
+        if(isset($conditions['orgCode'])){
+            $conditions['likeOrgCode'] = $conditions['orgCode'];
+        }
 
         $userCount = $this->getUserService()->searchUserCount($conditions);
         $paginator = new Paginator(
