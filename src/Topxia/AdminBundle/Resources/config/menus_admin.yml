@@ -115,14 +115,13 @@ admin:
                                         id: user.id
                         admin_teacher_promote_list:
                             name: 教师推荐
-                admin_approval_approvals:
+                admin_approval_manage:
                     name: 实名认证管理
                     children:
-                        admin_approval_approvals_manage:
+                        admin_approval_approvals:
                             name: 实名认证管理
-                            router_name: admin_approval_approvals
                             router_params:
-                                approvalStatus: approving
+                                approvalStatus: "'approving'"
                 admin_message:
                     name: 私信管理
                     children:

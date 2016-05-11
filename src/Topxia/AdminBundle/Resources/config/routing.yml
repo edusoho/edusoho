@@ -1176,28 +1176,27 @@ admin_question:
 admin_approval_approvals:
     pattern:  approvals/{approvalStatus}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approvals}
-    permissions: [admin_approval_approvals_manage]
 
 admin_approval_approve:
     pattern:  approvals/{id}/approve
     defaults: { _controller: TopxiaAdminBundle:UserApproval:approve }
-    permissions: [admin_approval_approvals_manage]
+    permissions: [admin_approval_approvals]
 
 admin_approval_info_view:
     pattern:  approvals/{id}/view
     defaults: { _controller: TopxiaAdminBundle:UserApproval:viewApprovalInfo }
-    permissions: [admin_approval_approvals_manage]
+    permissions: [admin_approval_approvals]
 
 admin_approval_cancel:
     pattern:  approvals/{id}/cancel
     defaults: { _controller: TopxiaAdminBundle:UserApproval:cancel }
     methods:  [POST]
-    permissions: [admin_approval_approvals_manage]
+    permissions: [admin_approval_approvals]
 
 show_idcard:
     pattern:   approvals/idcard/show/{userId}/{type}
     defaults: { _controller: TopxiaAdminBundle:UserApproval:showIdcard }
-    permissions: [admin_approval_approvals_manage]
+    permissions: [admin_approval_approvals]
 
 admin_article_category:
     pattern: /article/category

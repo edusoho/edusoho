@@ -21,5 +21,8 @@
   {% if menu.blank|default(false) %}
     target="blank"
   {% endif %}
-  >{% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} {{ menu.name }}</a>
+  >
+  {% if menu.icon|default(false) %}<span class="{{menu.icon}}"></span>{% endif %} 
+    {{ menu.name }}
+  </a>
 {% endmacro %}
