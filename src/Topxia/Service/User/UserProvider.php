@@ -27,8 +27,6 @@ class UserProvider implements UserProviderInterface
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
         $currentUser = new CurrentUser();
-        $permissions = $this->loadPermissions($user);
-        $currentUser->setPermissions($permissions);
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
@@ -49,46 +47,8 @@ class UserProvider implements UserProviderInterface
         return $class === 'Topxia\Service\User\CurrentUser';
     }
 
-    protected function loadPermissions($user)
-    {
-        if (empty($user['id'])) {
-            return $user;
-        }
-
-        $permissionBuilder = new PermissionBuilder();
-        $res = $permissionBuilder->getOriginMenus();
-        if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            return $res;
-        }
-
-        $permissionCode = array();
-        foreach ($user['roles'] as $code) {
-            $role = $this->getRoleService()->getRoleByCode($code);
-
-            if (empty($role['data'])) {
-                $role['data'] = array();
-            }
-
-            $permissionCode = array_merge($permissionCode, $role['data']);
-        }
-
-        $permissions = array();
-        foreach ($res as $key => $value) {
-            if (in_array($key, $permissionCode)) {
-                $permissions[$key] = $res[$key];
-            }
-        }
-
-        return $permissions;
-    }
-
     protected function getUserService()
     {
         return ServiceKernel::instance()->createService('User.UserService');
-    }
-
-    protected function getRoleService()
-    {
-        return ServiceKernel::instance()->createService('Permission:Role.RoleService');
     }
 }

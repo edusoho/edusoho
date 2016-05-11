@@ -14,7 +14,6 @@ services:
         class: Topxia\WebBundle\Handler\LogoutSuccessHandler
         parent: security.logout.success_handler
 
-
     user.login_listener:
         class: Topxia\WebBundle\Handler\LoginSuccessHandler
         arguments: ['@security.context', '@doctrine']
