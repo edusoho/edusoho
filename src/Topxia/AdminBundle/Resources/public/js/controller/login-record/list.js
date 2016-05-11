@@ -5,6 +5,8 @@ define(function(require, exports, module) {
 	require("$");
 
     exports.run = function() {
+        var ztree = require('edusoho.ztree');
+        ztree('#orgZtree', "#orgName", "#orgCode");
 
 		$("#startDate").datetimepicker().on('changeDate',function(){
 
