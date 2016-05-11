@@ -62,30 +62,34 @@ admin:
                                         userId: user.id
                                 admin_user_send_passwordreset_email:
                                     name: '发送密码重置邮件'
-                                    mode: modal
                                     group: groupButton
+                                    class: send-passwordreset-email
+                                    mode: none
                                     router_params_context: 1
                                     router_params:
                                         id: user.id
                                 admin_user_send_emailverify_email:
                                     name: '发送Email验证邮件'
-                                    mode: modal
+                                    class: send-emailverify-email
                                     group: groupButton
+                                    mode: none
                                     router_params_context: 1
                                     router_params:
                                         id: user.id
                                 admin_user_lock:
                                     name: '封禁用户'
-                                    mode: modal
                                     group: groupButton
+                                    class: lock-user
+                                    mode: none
                                     router_params_context: 1
                                     router_params:
                                         id: user.id
                                     showExpression: user.locked == 0
                                 admin_user_unlock:
                                     name: '解禁用户'
-                                    mode: modal
+                                    class: unlock-user
                                     group: groupButton
+                                    mode: none
                                     router_params_context: 1
                                     router_params:
                                         id: user.id
