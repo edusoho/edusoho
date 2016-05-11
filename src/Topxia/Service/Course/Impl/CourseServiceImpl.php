@@ -437,8 +437,7 @@ class CourseServiceImpl extends BaseService implements CourseService
 
         $this->getLogService()->info('course', 'update', "更新课程《{$course['title']}》(#{$course['id']})的信息", $fields);
 
-        $fields = CourseSerialize::serialize($fields);
-
+        $fields        = CourseSerialize::serialize($fields);
         $updatedCourse = $this->getCourseDao()->updateCourse($id, $fields);
 
         $this->dispatchEvent("course.update", array('argument' => $argument, 'course' => $updatedCourse));
@@ -483,7 +482,8 @@ class CourseServiceImpl extends BaseService implements CourseService
             'tryLookable'    => 0,
             'tryLookTime'    => 0,
             'buyable'        => 0,
-            'conversationId' => ''
+            'conversationId' => '',
+            'orgCode'        => '1.'
         ));
 
         if (!empty($fields['about'])) {
@@ -635,7 +635,7 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         $this->getLogService()->info('course', 'delete', "删除课程《{$course['title']}》(#{$course['id']})");
-        $this->dispatchEvent("course.delete",$course);
+        $this->dispatchEvent("course.delete", $course);
 
         return true;
     }
