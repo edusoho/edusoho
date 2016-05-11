@@ -1,0 +1,30 @@
+{% extends 'TopxiaWebBundle::bootstrap-modal-layout.html.twig' %}
+
+{% set modalSize = 'large' %}
+
+{% block title %}编辑用户所属组织{% endblock %}
+{% block body %}
+
+<form id="user-edit-form" class="form-horizontal" method="post" action="{{ url('admin_user_org_update', {id:user.id}) }}">
+  <div class="row form-group">
+    <div class="col-md-2 control-label">
+      <label for="orgCode">组织机构</label>
+    </div>
+    <div class="col-md-7 controls">
+      <input  class="form-control" name="orgName" id ="modal-orgName"  value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"  >
+      <input  type ="hidden" class="form-control" name="orgCode" id ="modal-orgCode" value="{{ org.orgCode }}" >
+      <div id="modal-ztreeContent" class="modal-ztreeContent" style="display:none; position: absolute; z-index: 10000;">
+        <ul id="modal-orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" name="_csrf_token" value="{{ csrf_token('site') }}">
+</form>
+{% endblock %}
+
+{% block footer %}
+  <button id="edit-user-btn" data-submiting-text="正在提交" type="submit" class="btn btn-primary pull-right" data-toggle="form-submit" data-target="#user-edit-form">保存</button>
+  <button type="button" class="btn btn-link pull-right" data-dismiss="modal">取消</button>
+  <script>app.load('user/update-org-modal')</script>
+{% endblock %}

@@ -146,6 +146,19 @@ class UserServiceImpl extends BaseService implements UserService
         $this->getLogService()->info('user', 'nickname_change', "修改用户名{$user['nickname']}为{$nickname}成功");
     }
 
+    public function changeOrgCode($userId, $orgCode)
+    {
+        $org = $this->getOrgService()->getOrgByOrgCode($orgCode);
+
+        if(empty($org)){
+            throw $this->createNotFoundException("org #{$orgCode} not found");
+        }
+
+        $user = $this->getUserDao()->updateUser($userId, array('orgCode' => $org['orgCode']));
+
+        return $user;
+    }
+
     public function changeEmail($userId, $email)
     {
         if (!SimpleValidator::email($email)) {
@@ -1665,11 +1678,17 @@ class UserServiceImpl extends BaseService implements UserService
     {
         return $this->createService('User.InviteRecordService');
     }
+
+    protected function getOrgService()
+    {
+        return $this->createService('Org.OrgService');
+    }
 }
 
 class UserSerialize
 {
-    public static function serialize(array $user)
+    public static function
+    serialize(array $user)
     {
         $user['roles'] = empty($user['roles']) ? '' : '|'.implode('|', $user['roles']).'|';
         return $user;
