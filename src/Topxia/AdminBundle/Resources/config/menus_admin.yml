@@ -122,6 +122,14 @@ admin:
                             name: 实名认证管理
                             router_params:
                                 approvalStatus: approving
+                            children:
+                                admin_approval_cancel:
+                                    name: 审核
+                                    router_params:
+                                        id: (user.id)
+                                    class: 'btn cancel-approval'
+                                    mode: none
+                                    group: groupButton
                 admin_message_manage:
                     name: 私信管理
                     children:
