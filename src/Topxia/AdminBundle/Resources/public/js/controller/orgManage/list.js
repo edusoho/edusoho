@@ -5,7 +5,7 @@ define(function(require, exports, module) {
     exports.run = function() {
         $('.tree').treegrid({
             'initialState': 'collapsed',
-          //  'saveState': true,
+            'saveState': true
         });
     };
 });
