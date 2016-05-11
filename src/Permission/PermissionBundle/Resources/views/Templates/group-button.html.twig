@@ -1,6 +1,6 @@
 {% import "PermissionBundle:Templates:macro.html.twig" as self_macro %}
 
-{% set permissions = sub_permissions(parentCode, group|default('1')) %}
+{% set permissions = sub_permissions(parentCode, group|default(null)) %}
 
 {% if permissions|default(null) %}
 <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">

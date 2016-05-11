@@ -1,7 +1,7 @@
 {% import "PermissionBundle:Templates:macro.html.twig" as self_macro %}
 
 {% set tabMenus = sub_permissions(menu|parent_permission.code|default(null)) %}
-{% if tabMenus|default(null) and currentMenu.group == 1 and tabMenus|length > 1 %}
+{% if tabMenus|default(null) and tabMenus|length > 1 %}
 	<ul class="nav nav-tabs mbm">
 	  {% for m in tabMenus %}
 	    <li {% if m.code == menu|default(null) %}class="active"{% endif %}>

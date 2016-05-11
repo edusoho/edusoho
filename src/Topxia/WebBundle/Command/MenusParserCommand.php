@@ -31,7 +31,7 @@ class MenusParserCommand extends BaseCommand
         $rootDir     = realpath(__DIR__.'/../../../../');
         $position = 'admin';
         // $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
-        $configPaths[] = "{$rootDir}/src/Topxia/AdminBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/plugins/Vip/VipBundle/Resources/config/menus_{$position}.yml";
 
         // $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
 
@@ -56,9 +56,15 @@ class MenusParserCommand extends BaseCommand
 
         $environment = ServiceKernel::instance()->getEnvironment();
 
-        $root = array("admin" => $menus["admin"]);
+        $roots = array(
+            "_admin_vip_list" => $menus["_admin_vip_list"],
+            "_admin_vip_setting" => $menus["_admin_vip_setting"]
+        );
 
-        $menuTree = $this->parseMenuChildren($root, $menus);
+        $menuTree = array();
+        foreach ($roots as $key => $root) {
+            $menuTree = array_merge($menuTree, $this->parseMenuChildren(array($key=>$root), $menus));
+        }
         file_put_contents("{$rootDir}/app/cache/{$environment}/menus.yml", Yaml::dump($menuTree,10000));
     }
 

@@ -22,7 +22,7 @@ class PermissionBuilder
         return self::$builder;
     }
 
-    public function getMenuChildren($code, $group = '1')
+    public function getMenuChildren($code, $group)
     {
         $menus = $this->buildMenus();
 
@@ -33,7 +33,7 @@ class PermissionBuilder
         $children = array();
 
         foreach ($menus[$code]['children'] as $childCode) {
-            if ($group && $menus[$childCode]['group'] != $group) {
+            if (!empty($group) && $menus[$childCode]['group'] != $group) {
                 continue;
             }
 

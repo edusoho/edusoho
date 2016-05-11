@@ -98,7 +98,7 @@
             <div class="pull-right">
 
               {% block page_buttons %}
-                {% for m in sub_permissions(currentMenu.code, 2) %}
+                {% for m in sub_permissions(currentMenu.code) %}
                   {{ self_macro.menu_link_html(_context, m, 'btn btn-success btn-sm') }}
                 {% endfor %}
               {% endblock %}
