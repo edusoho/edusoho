@@ -7,7 +7,6 @@ define(function(require, exports, module) {
     var Tree = Widget.extend({
 
     	attrs: {
-            simpleData: 2*1024*1024
         },
 
     	setup: function() {

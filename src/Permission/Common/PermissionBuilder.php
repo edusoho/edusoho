@@ -11,6 +11,17 @@ class PermissionBuilder
 
     private $menus = array();
 
+    private static $builder;
+    private $cached = array();
+
+    public static function instance()
+    {
+        if(empty(self::$builder)){
+            self::$builder = new PermissionBuilder();
+        }
+        return self::$builder;
+    }
+
     public function getMenuChildren($code, $group = '1')
     {
         $menus = $this->buildMenus();
@@ -99,15 +110,26 @@ class PermissionBuilder
 
     public function getOriginPermissionTree()
     {
-        $permissions = $this->getOriginMenus();
+        if(isset($this->cached['originPermissionTree'])) {
+            return $this->cached['originPermissionTree'];
+        }
+
+        $permissions = $this->getOriginPermissions();
         $tree = array();
-        return $this->getMenuTree($tree, 'admin', $permissions);
+        $tree = $this->getMenuTree($tree, 'admin', $permissions);
+        
+        $this->cached['originPermissionTree'] = $tree;
+        return $tree;
     }
 
-    public function getOriginMenus()
+    public function getOriginPermissions()
     {
+        if(isset($this->cached['permissions'])) {
+            return $this->cached['permissions'];
+        }
+
         $configs = $this->getMenusYml();
-        $res = array();
+        $permissions = array();
         foreach ($configs as $key => $config) {
             if(!file_exists($config)) {
                 continue;
@@ -118,10 +140,11 @@ class PermissionBuilder
             }
 
             $menus = $this->getMenusFromConfig($menus);
-            $res = array_merge($res, $menus);
+            $permissions = array_merge($permissions, $menus);
         }
 
-        return $res;
+        $this->cached['permissions'] = $permissions;
+        return $permissions;
     }
 
 

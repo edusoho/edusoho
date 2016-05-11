@@ -16,6 +16,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Config\Resource\FileResource;
+use Permission\Common\PermissionBuilder;
 
 /**
  * YamlFileLoader loads Yaml routing files.
@@ -122,14 +123,29 @@ class YamlFileLoader extends FileLoader
         $schemes      = isset($config['schemes']) ? $config['schemes'] : array();
         $methods      = isset($config['methods']) ? $config['methods'] : array();
 
-        if(strpos($name, 'admin_') === 0){
-            $permissions  = isset($config['permissions']) ? $config['permissions'] : array($name);
-        } else {
-            $permissions  = isset($config['permissions']) ? $config['permissions'] : array();
-        }
+        $permissions = $this->getPermissions($name, $config);
 
         $route        = new Route($config['path'], $defaults, $requirements, $options, $host, $schemes, $methods, $permissions);
         $collection->add($name, $route);
+    }
+
+    protected function getPermissions($name, $config)
+    {
+        $permissions = array();
+        if(strpos($name, 'admin_') === 0){
+            if(isset($config['permissions'])){
+                $permissions  =  $config['permissions'];
+            } else {
+                $orginPermissions = PermissionBuilder::instance()->getOriginPermissions();
+                $permissionKeys = array_keys($orginPermissions);
+                if(in_array($name, $permissionKeys)) {
+                    $permissions = array($name);
+                }
+            }
+        } else {
+            $permissions  = isset($config['permissions']) ? $config['permissions'] : array();
+        }
+        return $permissions;
     }
 
     /**

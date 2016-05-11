@@ -48,9 +48,9 @@ class KernelControllerListener
         }
 
         $permissionBuilder = new PermissionBuilder();
-        $res = $permissionBuilder->getOriginMenus();
+        $originPermissions = $permissionBuilder->getOriginPermissions();
         if (in_array('ROLE_SUPER_ADMIN', $user['roles'])) {
-            return $res;
+            return $originPermissions;
         }
 
         $permissionCode = array();
@@ -65,9 +65,9 @@ class KernelControllerListener
         }
 
         $permissions = array();
-        foreach ($res as $key => $value) {
+        foreach ($originPermissions as $key => $value) {
             if (in_array($key, $permissionCode)) {
-                $permissions[$key] = $res[$key];
+                $permissions[$key] = $originPermissions[$key];
             }
         }
 

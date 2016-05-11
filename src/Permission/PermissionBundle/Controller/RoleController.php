@@ -57,16 +57,14 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $permissionBuilder = new PermissionBuilder();
-        $res = $permissionBuilder->getOriginPermissionTree();
+        $res = PermissionBuilder::instance()->getOriginPermissionTree();
         return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'create'));
     }
 
     public function editAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $permissionBuilder = new PermissionBuilder();
-        $res = $permissionBuilder->getOriginPermissionTree();
+        $res = PermissionBuilder::instance()->getOriginPermissionTree();
 
         if ('POST' == $request->getMethod()) {
             $params         = $request->request->all();
@@ -89,15 +87,13 @@ class RoleController extends BaseController
     public function showAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $permissionBuilder = new PermissionBuilder();
+        $res  = PermissionBuilder::instance()->getOriginPermissionTree();
 
-        $res  = $permissionBuilder->getOriginMenus();
-
-        foreach ($res as &$re) {
+        foreach ($res as $key => &$re) {
             if (in_array($re['code'], $role['data'])) {
                 $re['checked'] = 'true';
             }
-
+            
             $re['chkDisabled'] = 'true';
         }
 
