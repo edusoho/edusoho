@@ -163,7 +163,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function getSelectOrgCode()
     {
-        return $this->selectOrgCode;
+        return isset($this->selectOrgCode) ? $this->selectOrgCode : $this->orgCode;
     }
 
     public function getCurrentOrgCode()

@@ -25,8 +25,8 @@ interface OrgService
     public function isCodeAvaliable($value, $exclude);
     /**
      * 切换组织机构,将用户选择的组织机构写入当前用户中
-     * @param  [type] $org            [description]
+     * @param  [type] $id             [description]
      * @return [type] [description]
      */
-    public function switchOrg($org);
+    public function switchOrg($id);
 }
