@@ -26,7 +26,8 @@ define(function(require, exports, module) {
 
 	        var setting = $.extend(self.get(), defaultSetting);
 
-	        var zNodes = element.data('nodes')
+	        var zNodes = element.find('textarea').text();
+	        zNodes = eval('('+zNodes+')');
 	        $.fn.zTree.init($(element), setting, zNodes);
 	    },
 
