@@ -201,9 +201,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['status']);
         }
 
-        if (empty($conditions['likeOrgCode'])) {
-            unset($conditions['likeOrgCode']);
-        } else {
+        if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= "%";
         }
 
