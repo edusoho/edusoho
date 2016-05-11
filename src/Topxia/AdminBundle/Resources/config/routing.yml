@@ -51,7 +51,7 @@ admin_dictionary_create:
     defaults: { _controller: TopxiaAdminBundle:Dictionary:create }
 
 admin_dictionary_delete:
-    pattern:  /Dictionary/{id}/delete
+    pattern:  /dictionary/{id}/delete
     defaults: { _controller: TopxiaAdminBundle:Dictionary:delete }
     methods: [POST]
 
