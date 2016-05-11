@@ -50,12 +50,11 @@ class PermissionExtension extends \Twig_Extension
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         foreach ($params as $key => $value) {
-            if(strpos('(', $value) === 0) {
-                $value = substr($value, 1, strlen($value)-1);
+            if(strpos($value, "(") === 0) {
                 $value = $this->evalExpression($env, $context['_context'], $value);
                 $params[$key] = $value;
             } else {
-                $params[$key] = "'{$value}'";
+                $params[$key] = "{$value}";
             }
 
         }
@@ -65,9 +64,18 @@ class PermissionExtension extends \Twig_Extension
 
     public function evalExpression($twig, $context, $code)
     {
+        $code = trim($code);
+        if(strpos($code, "(") === 0) {
+            $code = substr($code, 1, strlen($code)-2);
+        } else {
+            $code = "'{$code}'";
+        }
+
         $loader = new \Twig_Loader_Array(array(
             'expression.twig' => '{{'.$code.'}}',
         ));
+
+        $twig = new \Twig_Environment($loader);
 
         return $twig->render('expression.twig', $context);
     }
