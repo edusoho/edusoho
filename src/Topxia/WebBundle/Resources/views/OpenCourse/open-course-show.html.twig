@@ -23,7 +23,7 @@
             </div>
           </div>
         </div> --> 
-        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, as:app.request.get('as')|default('')})) }}
+        {{ render(controller('TopxiaWebBundle:OpenCourse:header',{course:course, lessonId:lessonId|default(null)})) }}
         
         <div class="col-md-3 open-course-tab">
           <ul class="clearfix">
@@ -37,7 +37,7 @@
               {% include 'TopxiaWebBundle:OpenCourse:recommend-course-list.html.twig'%}
             </ul>
             <ul id="live-tab" style="display:none">
-              {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig'%}
+              {% include 'TopxiaWebBundle:OpenCourse:open-course-lesson-list.html.twig' with {currentLessonId:lessonId} %}
             </ul>
           </div>
         </div>

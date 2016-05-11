@@ -2181,10 +2181,14 @@ open_course_recommended_course_select:
 
 open_course_show:
     pattern:  /open/course/{courseId}
-    defaults: { _controller: TopxiaWebBundle:OpenCourse:show }
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:show, lessonId:null }
 
-open_course_lesson:
-    pattern:  /open/course/{courseId}/lesson/{lessonId}
+open_course_lesson_learn:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/learn
+    defaults: { _controller: TopxiaWebBundle:OpenCourse:show, lessonId:null }
+
+open_course_lesson_show:
+    pattern:  /open/course/{courseId}/lesson/{lessonId}/show
     defaults: { _controller: TopxiaWebBundle:OpenCourse:lessonShow }
 
 open_course_favorite:
