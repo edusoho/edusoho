@@ -9,8 +9,8 @@
 <ul class="dropdown-menu">
   {% for permission in permissions %}
     <li>
-      {% if permission.showExpression|default(false) %}
-        {% if eval_expression(permission.showExpression) %}
+      {% if permission.visable|default(false) %}
+        {% if eval_expression(permission.visable) %}
           {{ self_macro.menu_link_html(_context, permission, permission.class|default('')) }}
         {% endif %}
       {% else %}
