@@ -147,6 +147,12 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority:255 }
 
+#    kernel.listener.kernel_org_controller_listener:
+#        class: Topxia\WebBundle\Listener\OrgControllerListener
+#        arguments:    ['@service_container']
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.controller, method: onOrgController, priority:255 }
+
     kernel.listener.kernel_response_listener:
         class: Topxia\WebBundle\Listener\KernelResponseListener
         arguments:    ['@service_container']
