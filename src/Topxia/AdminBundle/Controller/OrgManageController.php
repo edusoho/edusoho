@@ -11,6 +11,7 @@ class OrgManageController extends BaseController
         $orgs        = $this->getOrgService()->findOrgsByOrgCode();
         $userIds     = ArrayToolkit::column($orgs, 'createdUserId');
         $createUsers = $this->getUserService()->findUsersByIds($userIds);
+
         return $this->render('TopxiaAdminBundle:OrgManage:index.html.twig', array(
             'orgs'        => $orgs,
             'createUsers' => $createUsers

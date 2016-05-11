@@ -33,9 +33,11 @@ class OrgServiceImpl extends BaseService implements OrgService
             $this->getOrgDao()->wave($parentOrg['id'], array('childrenNum' => +1));
             $org['orgCode'] = $parentOrg['orgCode'].$org['id'].'.';
             $org['depth']   = $parentOrg['depth'] + 1;
+        } else {
+            $org['orgCode'] = $org['id'].'.';
+            $org['depth']   = 1;
         }
 
-        $org['orgCode'] = $org['id'].'.';
         //更新当前深度以及内部编码
         $org = $this->getOrgDao()->updateOrg($org['id'], array('orgCode' => $org['orgCode'], 'depth' => $org['depth']));
         return $org;
