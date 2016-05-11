@@ -1,10 +1,10 @@
 define(function(require, exports, module) {
 
-    require('z_tree');
-    require('z_tree_css');
     var Validator = require('bootstrap.validator');
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
+
+    var Tree = require('edusoho.tree');
 
     exports.run = function() {
         var $form = $('#role-form');
@@ -17,6 +17,7 @@ define(function(require, exports, module) {
             };
             $('#menus').val(JSON.stringify(checkedNodesArray));
         });
+
         var validator = new Validator({
             element: $form,
             autoSubmit: false,
@@ -50,26 +51,9 @@ define(function(require, exports, module) {
             rule: 'remote alphanumeric'
         });
 
-        var setting = {
-            check: {
-                enable: true
-            },
-            data: {
-                simpleData: {
-                    enable: true
-                }
-            }
-        };
-
-        var zNodes = $('.zTreeDemoBackground').data('menus')
-
-        function getCheckedNodes() {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            var nodes = zTree.getCheckedNodes(true);
-            return nodes;
-        }
-
-        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        new Tree({
+            element: $("#tree")
+        });
     };
 
 });
