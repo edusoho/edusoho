@@ -4,7 +4,7 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require('common/validator-rules').inject(Validator);
 
-    var Tree = require('edusoho.tree');
+    var EdusohoTree = require('edusoho.tree');
 
     exports.run = function() {
         var $form = $('#role-form');
@@ -51,7 +51,7 @@ define(function(require, exports, module) {
             rule: 'remote alphanumeric'
         });
 
-        new Tree({
+        new EdusohoTree({
             element: $("#tree")
         });
     };
