@@ -21,7 +21,10 @@
   <td>
     <div class="btn-group">
       <a href="#modal" data-toggle="modal" data-url="{{ path('admin_user_show', {id:user.id}) }}" data-url="" class="btn btn-default btn-sm">查看</a>
-      <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+
+      {% include 'PermissionBundle:Templates:group-button.html.twig' with {parentCode: 'admin_teacher_manage', group:'groupButton', user: user} %}
+
+      {# <a href="#" type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu">
@@ -32,7 +35,7 @@
         {% if user.promoted %}
           <li><a class="cancel-promote-teacher" href="javascript:" data-url="{{ path('admin_teacher_promote_cancel', {id:user.id}) }}">取消推荐教师</a></li>
         {% endif %}
-      </ul>
+      </ul> #}
     </div>
   </td>
 </tr>

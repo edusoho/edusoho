@@ -266,7 +266,6 @@ admin_teacher:
 admin_teacher_promote:
     pattern:  /teacher/{id}/promote
     defaults: { _controller: TopxiaAdminBundle:Teacher:promote }
-    permissions: [admin_teacher_promote,admin_teacher]
 
 admin_teacher_promote_list:
     pattern: /teacher/promote/list

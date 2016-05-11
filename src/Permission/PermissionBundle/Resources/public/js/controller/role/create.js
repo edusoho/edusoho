@@ -8,9 +8,12 @@ define(function(require, exports, module) {
 
     exports.run = function() {
         var $form = $('#role-form');
+        var tree = new EdusohoTree({
+            element: $("#tree")
+        });
 
         $('#role-submit').on('click', function(event) {
-            var checkedNodes = getCheckedNodes();
+            var checkedNodes = tree.getCheckedNodes();
             var checkedNodesArray = [];
             for (var i = 0; i < checkedNodes.length; i++) {
                 checkedNodesArray.push(checkedNodes[i].code);
@@ -50,10 +53,7 @@ define(function(require, exports, module) {
             required: true,
             rule: 'remote alphanumeric'
         });
-
-        new EdusohoTree({
-            element: $("#tree")
-        });
+        
     };
 
 });

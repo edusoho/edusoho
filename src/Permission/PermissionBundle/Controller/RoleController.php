@@ -64,7 +64,6 @@ class RoleController extends BaseController
     public function editAction(Request $request, $id)
     {
         $role = $this->getRoleService()->getRole($id);
-        $res = PermissionBuilder::instance()->getOriginPermissionTree();
 
         if ('POST' == $request->getMethod()) {
             $params         = $request->request->all();
@@ -73,15 +72,16 @@ class RoleController extends BaseController
             return $this->createJsonResponse(true);
         }
 
+        $originPermissions = PermissionBuilder::instance()->getOriginPermissionTree();
         if(!empty($role['data'])){
-            foreach ($res as $key => &$permission) {
+            foreach ($originPermissions as $key => &$permission) {
                 if(in_array($permission['code'], $role['data'])) {
                     $permission['checked'] = true;
                 }
             }
         }
 
-        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($res), 'model' => 'edit', 'role' => $role));
+        return $this->render('PermissionBundle:Role:role-modal.html.twig', array('menus' => json_encode($originPermissions), 'model' => 'edit', 'role' => $role));
     }
 
     public function showAction(Request $request, $id)
