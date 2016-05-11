@@ -11,13 +11,15 @@ class UserController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $user = $this->getCurrentUser();
         $fields = $request->query->all();
 
         $conditions = array(
             'roles'           => '',
             'keywordType'     => '',
             'keyword'         => '',
-            'keywordUserType' => ''
+            'keywordUserType' => '',
+            'orgCode'         => $user->getCurrentOrgCode()
         );
 
         if (empty($fields)) {

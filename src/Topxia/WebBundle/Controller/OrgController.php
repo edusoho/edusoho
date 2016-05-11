@@ -13,8 +13,14 @@ class OrgController extends BaseController
 
     public function orgTreeJsonAction(Request $request)
     {
-        $orgCode = $this->getCurrentUser()->getCurrentOrgCode();
-        $orgs    = $this->getOrgService()->findOrgsByOrgCode($orgCode);
+        $user = $this->getCurrentUser();
+
+        if ($user->isSuperAdmin()) {
+            $orgs = $this->getOrgService()->findOrgsByOrgCode();
+        } else {
+            $orgs = $this->getOrgService()->findOrgsByOrgCode($user['orgCode']);
+        }
+
         return $this->createJsonResponse($orgs);
     }
 
