@@ -12,15 +12,16 @@
        href="{{ path('admin_approval_approvals',{approvalStatus: 'approved'}) }}">审核成功</a>
   </div>
   <form id="user-search-form" class="form-inline well well-sm mtl" action="" method="get" novalidate>
-
-    <div class="form-group">
-      <input class="form-control" name="orgName" id="orgName"
-             value="{{ app.request.get('orgName', app.user.orgName|default("--选择组织机构--"|trans) ) }}" autocomplete="off">
-      <input type="hidden" class="form-control" name="orgCode" id="orgCode"
-             value="{{ app.request.get('orgCode', app.user.orgCode) }}">
-      <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute;">
-        <ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000"
-            data-source="{{ path('org_tree') }}"></ul>
+    <div class="mbm">
+      <div class="form-group">
+        <input class="form-control" name="orgName" id="orgName"
+               value="{{ app.request.get('orgName', app.user.orgName|default("--选择组织机构--"|trans) ) }}" autocomplete="off">
+        <input type="hidden" class="form-control" name="orgCode" id="orgCode"
+               value="{{ app.request.get('orgCode', app.user.orgCode) }}">
+        <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute;">
+          <ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000"
+              data-source="{{ path('org_tree') }}"></ul>
+        </div>
       </div>
     </div>
 
