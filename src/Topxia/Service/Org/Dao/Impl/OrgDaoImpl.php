@@ -49,10 +49,17 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         return $this->getConnection()->executeUpdate($sql, array($orgCode));
     }
 
-    public function findOrgTablelist()
+    public function findOrgsByOrgCode($orgCode)
     {
-        $sql = "SELECT * FROM {$this->getTable()}";
-        return $this->getConnection()->fetchAll($sql, array()) ?: null;
+        $sql   = "SELECT * FROM {$this->getTable()}";
+        $query = array();
+
+        if (!empty($orgCode)) {
+            $sql .= "WHERE orgCode like ? ";
+            $query = array($orgCode.'%');
+        }
+
+        return $this->getConnection()->fetchAll($sql, $query) ?: array();
     }
 
     public function getOrgByCode($value)

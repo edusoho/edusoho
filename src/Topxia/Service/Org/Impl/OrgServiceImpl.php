@@ -70,16 +70,27 @@ class OrgServiceImpl extends BaseService implements OrgService
         $this->getOrgDao()->deleteOrgsByOrgCode($org['orgCode']);
     }
 
+    public function switchOrg($id)
+    {
+        $org  = $this->checkBeforProccess($id);
+        $user = $this->getCurrentUser();
+
+        $data                  = $user->toArray();
+        $data['selectOrgCode'] = $org['orgCode'];
+        $user->fromArray($data);
+        $this->getKernel()->setCurrentUser($user);
+    }
+
     public function getOrg($id)
     {
         return $this->getOrgDao()->getOrg($id);
     }
 
-    public function findOrgTablelist()
+    public function findOrgsByOrgCode($orgCode = null)
     {
         //是否需要对该api做用户权限处理
 
-        return $this->getOrgDao()->findOrgTablelist();
+        return $this->getOrgDao()->findOrgsByOrgCode($orgCode);
     }
 
     public function isCodeAvaliable($value, $exclude)

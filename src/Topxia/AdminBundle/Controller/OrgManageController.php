@@ -8,7 +8,7 @@ class OrgManageController extends BaseController
 {
     public function indexAction(Request $request)
     {
-        $orgs        = $this->getOrgService()->findOrgTablelist();
+        $orgs        = $this->getOrgService()->findOrgsByOrgCode();
         $userIds     = ArrayToolkit::column($orgs, 'createdUserId');
         $createUsers = $this->getUserService()->findUsersByIds($userIds);
         return $this->render('TopxiaAdminBundle:OrgManage:index.html.twig', array(
