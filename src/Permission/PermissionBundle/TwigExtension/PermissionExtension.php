@@ -50,12 +50,10 @@ class PermissionExtension extends \Twig_Extension
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
         foreach ($params as $key => $value) {
-            if(strpos($value, '@') === 0) {
-                $value = str_replace('@', '', $value);
-                $value = $this->evalExpression($env, $context['_context'], $value);
-                $params[$key] = $value;
-            }
+            $value = $this->evalExpression($env, $context['_context'], $value);
+            $params[$key] = $value;
         }
+        
         return $this->container->get('router')->generate($route, $params);
     }
 

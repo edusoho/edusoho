@@ -37,39 +37,39 @@ admin:
                                     mode: modal
                                     group: groupButton
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                                 admin_user_roles:
                                     name: '设置用户组'
                                     mode: modal
                                     group: groupButton
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                                 admin_user_avatar:
                                     name: '修改用户头像'
                                     mode: modal
                                     group: groupButton
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                                 admin_user_change_password:
                                     name: '修改密码'
                                     mode: modal
                                     group: groupButton
                                     router_params:
-                                        userId: @user.id
+                                        userId: user.id
                                 admin_user_send_passwordreset_email:
                                     name: '发送密码重置邮件'
                                     group: groupButton
                                     class: send-passwordreset-email
                                     mode: none
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                                 admin_user_send_emailverify_email:
                                     name: '发送Email验证邮件'
                                     class: send-emailverify-email
                                     group: groupButton
                                     mode: none
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                                 admin_user_lock:
                                     name: '封禁用户'
                                     group: groupButton
@@ -77,7 +77,7 @@ admin:
                                     mode: none
                                     showExpression: user.locked == 0
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                                 admin_user_unlock:
                                     name: '解禁用户'
                                     class: unlock-user
@@ -85,7 +85,7 @@ admin:
                                     mode: none
                                     showExpression: user.locked == 1
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                         admin_login_record:
                             name: 登录日志
                 admin_teacher:
@@ -103,8 +103,8 @@ admin:
                                     group: groupButton
                                     showExpression: user.promoted == 0
                                     router_params:
-                                        id: @user.id
-                                        type: teacherList
+                                        id: user.id
+                                        type: "'teacherList'"
                                 admin_teacher_promote_cancel:
                                     name: 取消推荐
                                     class: cancel-promote-teacher
@@ -112,7 +112,7 @@ admin:
                                     group: groupButton
                                     showExpression: user.promoted == 1
                                     router_params:
-                                        id: @user.id
+                                        id: user.id
                         admin_teacher_promote_list:
                             name: 教师推荐
                 admin_approval_approvals:
