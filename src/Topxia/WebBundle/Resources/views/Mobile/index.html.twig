@@ -28,7 +28,8 @@
           </div>
           <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}</div>
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">{{'下载APP'|trans}}<i class="es-icon es-icon-filedownload"></i></a>
-          {% if mobile.appname|default() == ''%}
+          
+          {% if mobileCode == 'edusohov3' %}
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-third">{{'登录网校'|trans}}<i class="es-icon es-icon-phone1"></i></a>
           {% endif %}
         </div>
@@ -37,7 +38,7 @@
     <div class=" mobile-second">
       <div class="container">
         <div class="step">
-          {% if mobile.appname|default() == '' %}<span class="member">1</span>{{'第一步:'|trans}}{% endif %} {{'扫描二维码，下载手机APP。'|trans}}
+          {% if mobileCode == 'edusohov3' %}<span class="member">1</span>{{'第一步:'|trans}}{% endif %} {{'扫描二维码，下载手机APP。'|trans}}
         </div>
         <div class="row">
           <div class="col-sm-6 text-center">
@@ -50,7 +51,7 @@
         </div>
       </div>
     </div>
-    {% if mobile.appname|default() == ''%}
+    {% if mobileCode == 'edusohov3' %}
     <div class="js-mobile-item mobile-third">
       <div class="container">
         <div class="step">
