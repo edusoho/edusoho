@@ -56,8 +56,10 @@ class OrgDaoImpl extends BaseDao implements OrgDao
         $query = array();
 
         if (!empty($orgCode)) {
-            $sql .= " WHERE orgCode like ? ";
+            $sql .= " WHERE orgCode like ?  order by orgCode ";
             $query = array($orgCode.'%');
+        } else {
+            $sql .= " order by orgCode";
         }
 
         return $this->getConnection()->fetchAll($sql, $query) ?: array();
