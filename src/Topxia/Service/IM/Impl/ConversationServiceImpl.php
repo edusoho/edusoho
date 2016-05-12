@@ -7,25 +7,55 @@ use Topxia\Service\IM\ConversationService;
 use Topxia\Common\ArrayToolkit;
 use Topxia\Service\Common\ServiceEvent;
 
-class ConversationServiceImpl extends BaseService implements ConversationService {
+class ConversationServiceImpl extends BaseService implements ConversationService
+{
 
-    public function getConversationByUserIds(array $userIds)
+    public function getConversationByMemberIds(array $memberIds)
     {
-        sort($userIds);
-        return $this->getConversationDao()->getConversationByUserIds($userIds);
+        sort($memberIds);
+        $memberHash = $this->buildMemberHash($memberIds);
+        return $this->getConversationDao()->getConversationByMemberHash($memberHash);
     }
 
     public function addConversation($conversation)
     {
-        $userIds = $conversation['userIds'];
-        if (empty($userIds) && !is_array($userIds) && count($userIds) < 2) {
-            throw $this->createServiceException("会话人数不能少于2人");
+        $conversation = $this->filterConversationFields($conversation);
+
+        if (count($conversation['memberIds']) < 2) {
+            throw $this->createServiceException("Only support memberIds's count >= 2");
         }
-        sort($conversation['userIds']);
+
+        $conversation['memberHash'] = $this->buildMemberHash($conversation['memberIds']);
+        $conversation['createdTime'] = time();
+
         return $this->getConversationDao()->addConversation($conversation);
     }
 
-    protected function getConversationDao() 
+    protected function filterConversationFields(array $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array('no', 'memberIds'));
+
+        if (empty($fields['no'])) {
+            throw $this->createServiceException('field `no` can not be empty');
+        }
+
+        if (!is_array($fields['memberIds'])) {
+            throw $this->createServiceException('field `memberIds` must be array');
+        }
+        if (empty($fields['memberIds'])) {
+            throw $this->createServiceException('field `memberIds` can not be empty');
+        }
+        sort($fields['memberIds']);
+
+        return $fields;
+    }
+
+    protected function buildMemberHash(array $memberIds)
+    {
+        return md5(join($memberIds, ','));
+    }
+
+    protected function getConversationDao()
     {
         return $this->createDao('IM.ConversationDao');
     }

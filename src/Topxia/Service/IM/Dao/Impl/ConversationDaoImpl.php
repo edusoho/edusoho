@@ -9,17 +9,24 @@ class ConversationDaoImpl extends BaseDao implements ConversationDao
     protected $table = 'im_conversation';
 
     public $serializeFields = array(
-        'userIds' => 'saw'
+        'memberIds' => 'saw'
     );
 
-    public function getConversationByUserIds(array $userIds)
+    public function getConversationByMemberIds(array $memberIds)
     {
         $conversation = array(
-            'userIds' => $userIds
+            'memberIds' => $memberIds
         );
         $conversation = $this->createSerializer()->serialize($conversation, $this->serializeFields);
-        $sql = "SELECT * FROM {$this->getTable()} where userIds=? LIMIT 1";
-        $conversation = $this->getConnection()->fetchAssoc($sql, array($conversation['userIds']));
+        $sql = "SELECT * FROM {$this->getTable()} where memberIds=? LIMIT 1";
+        $conversation = $this->getConnection()->fetchAssoc($sql, array($conversation['memberIds']));
+        return $conversation ? $this->createSerializer()->unserialize($conversation, $this->serializeFields) : null;
+    }
+
+    public function getConversationByMemberHash($memberHash)
+    {
+        $sql = "SELECT * FROM {$this->getTable()} where memberHash=? LIMIT 1";
+        $conversation = $this->getConnection()->fetchAssoc($sql, array($memberHash));
         return $conversation ? $this->createSerializer()->unserialize($conversation, $this->serializeFields) : null;
     }
 

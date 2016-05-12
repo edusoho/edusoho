@@ -188,7 +188,7 @@ services:
 
     topxia.twig.uploader_extension:
         class: Topxia\WebBundle\Twig\Extension\UploaderExtension
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 

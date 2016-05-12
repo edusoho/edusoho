@@ -96,8 +96,12 @@ $app->post(_u('/thread/create'), 'res.Thread:create');
 
 $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
 
-$app->post(_u('/im/me/login'), 'res.MeIMLogin:post');
-$app->post(_u('/im/me/conversations/{toUserId}'), 'res.MeIMConversation:post');
+$app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
+
+$app->post(_u('/im/conversations'), 'res.IM/Conversation:post');
+
+$app->get(_u('/im/my_conversations'), 'res.IM/MyConversations:get');
+$app->post(_u('/im/my_conversations/{no}'), 'res.IM/MyConversation:post');
 
 $app->get(_u('/courses/{courseId}/threads'), 'res.CourseThreads:get');
 $app->get(_u('/courses/{courseId}/threads/{threadId}'), 'res.CourseThread:get');

@@ -3,10 +3,11 @@
 namespace Topxia\Api\Resource;
 
 use Silex\Application;
+use Topxia\Api\Resource\BaseResource;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class MeIMLogin extends BaseResource
+class MeLogin extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
