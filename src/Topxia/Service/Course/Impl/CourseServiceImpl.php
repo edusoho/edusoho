@@ -183,8 +183,13 @@ class CourseServiceImpl extends BaseService implements CourseService
         }
 
         if (isset($conditions['categoryId'])) {
-            $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
-            $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            $conditions['categoryIds'] = array();
+
+            if (!empty($conditions['categoryId'])) {
+                $childrenIds               = $this->getCategoryService()->findCategoryChildrenIds($conditions['categoryId']);
+                $conditions['categoryIds'] = array_merge(array($conditions['categoryId']), $childrenIds);
+            }
+
             unset($conditions['categoryId']);
         }
 

@@ -201,6 +201,10 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             unset($conditions['status']);
         }
 
+        if (empty($conditions['categoryIds'])) {
+            unset($conditions['categoryIds']);
+        }
+
         if (isset($conditions['likeOrgCode'])) {
             $conditions['likeOrgCode'] .= "%";
         }
@@ -240,6 +244,7 @@ class CourseDaoImpl extends BaseDao implements CourseDao
             ->andWhere('id IN ( :courseIds )')
             ->andWhere('locked = :locked')
             ->andWhere('lessonNum > :lessonNumGT')
+            ->andWhere('orgCode = :orgCode')
             ->andWhere('orgCode LIKE :likeOrgCode');
 
         if (isset($conditions['tagIds'])) {
