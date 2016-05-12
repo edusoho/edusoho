@@ -1,6 +1,7 @@
 {% extends 'TopxiaWebBundle::layout.html.twig' %}
 
 {% set script_controller = 'mobile/index' %}
+{% set isEsApp = (mobileCode == 'edusohov3') %}
 
 {% block title %}{{'移动学习'|trans}} - {{ parent() }}{% endblock %}
 
@@ -24,12 +25,23 @@
             {% else %}
               <img src="{{asset("assets/v2/img/mobile/app_logo.png")}}" alt="">
             {% endif %}
-            {{mobile.appname|default('阔知学堂'|trans)}}
+            
+            {% if not isEsApp %}
+              {{mobile.appname|default('阔知学堂'|trans)}}
+            {% else %}
+              阔知学堂
+            {% endif %}
           </div>
-          <div class="subtitle">{{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}</div>
+          <div class="subtitle">
+            {% if not isEsApp %}
+              {{mobile.appabout|default(' 将学校装进口袋，移动学习，随时随地。'|trans)}}
+            {% else %}
+               将学校装进口袋，移动学习，随时随地。
+            {% endif %}
+          </div>
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-second">{{'下载APP'|trans}}<i class="es-icon es-icon-filedownload"></i></a>
-          
-          {% if mobileCode == 'edusohov3' %}
+
+          {% if isEsApp %}
           <a class="btn-mobile" href="javascript:;" data-url=".mobile-third">{{'登录网校'|trans}}<i class="es-icon es-icon-phone1"></i></a>
           {% endif %}
         </div>
@@ -51,7 +63,7 @@
         </div>
       </div>
     </div>
-    {% if mobileCode == 'edusohov3' %}
+    {% if isEsApp %}
     <div class="js-mobile-item mobile-third">
       <div class="container">
         <div class="step">
