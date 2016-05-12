@@ -20,7 +20,7 @@ define(function(require, exports, module) {
                 if (error) {
                     return false;
                 }
-                $('#order-create-btn').button('submiting').addClass('disabled');
+                $('#order-create-btn').button('submiting').attr('disabled', true);
             }
         });
 
