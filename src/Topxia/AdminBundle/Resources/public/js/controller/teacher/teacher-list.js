@@ -3,7 +3,8 @@ define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
 
 	exports.run = function() {
-
+        var ztree = require('edusoho.ztree');
+        ztree('#orgZtree', "#orgName", "#orgCode");
 		var $table = $('#teacher-table');
 
         $table.on('click', '.cancel-promote-teacher', function() {

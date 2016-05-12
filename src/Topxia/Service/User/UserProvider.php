@@ -24,6 +24,8 @@ class UserProvider implements UserProviderInterface {
             throw new UsernameNotFoundException(sprintf('User "%s" not found.', $username));
         }
         $user['currentIp'] = $this->container->get('request')->getClientIp();
+        $org = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+        $user['orgName'] = $org['name'];
         $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
@@ -48,4 +50,8 @@ class UserProvider implements UserProviderInterface {
         return ServiceKernel::instance()->createService('User.UserService');
     }
 
+    protected function getOrgService()
+    {
+        return ServiceKernel::instance()->createService('Org.OrgService');
+    }
 }

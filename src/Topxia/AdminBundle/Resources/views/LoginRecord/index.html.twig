@@ -10,6 +10,12 @@
   <form id="login-record-search-form" class="form-inline" action="" method="get" novalidate> 
     
     <div class="form-group">
+      <input  class="form-control" name="orgName" id ="orgName"  value="{{ app.request.get('orgName', app.user.orgName|default("--选择组织机构--"|trans) ) }}" autocomplete="off"  >
+      <input  type ="hidden" class="form-control" name="orgCode" id ="orgCode" value="{{ app.request.get('orgCode', app.user.orgCode) }}" >
+      <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute;">
+        <ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
+      </div>
+
       <select id="keywordType" name="keywordType" class="form-control">
         {{ select_options(dict('userKeyWordTypes'), app.request.query.get('keywordType')) }}
       </select>

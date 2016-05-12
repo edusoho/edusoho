@@ -10,30 +10,47 @@ class MessageController extends BaseController
 {
     public function indexAction(Request $request)
     {
+        $user = $this->getCurrentUser();
         $fields     = $request->query->all();
+
+        if(!isset($fields['orgCode'])){
+            $fields['orgCode'] = $user->getCurrentOrgCode();
+        }
+
         $conditions = array(
             'content'   => '',
             'nickname'  => '',
             'startDate' => 0,
-            'endDate'   => time()
+            'endDate'   => time(),
         );
 
         if (!empty($fields)) {
             $conditions = $this->convertConditions($fields);
         }
 
-        $paginator = new Paginator(
-            $request,
-            $this->getMessageService()->searchMessagesCount($conditions),
-            20
-        );
+        if(isset($conditions['fromIds']) && empty($conditions['fromIds'])){
+            $paginator = new Paginator(
+                $request,
+                0,
+                20
+            );
 
-        $messages = $this->getMessageService()->searchMessages(
-            $conditions,
-            null,
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $messages = array();
+        }else{
+            $paginator = new Paginator(
+                $request,
+                $this->getMessageService()->searchMessagesCount($conditions),
+                20
+            );
+
+            $messages = $this->getMessageService()->searchMessages(
+                $conditions,
+                null,
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
+        }
+
 
         $usersFromId = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'fromId'));
         $usersToId   = $this->getUserService()->findUsersByIds(ArrayToolkit::column($messages, 'toId'));
@@ -59,11 +76,17 @@ class MessageController extends BaseController
 
     protected function convertConditions($conditions)
     {
-        if (!empty($conditions['nickname'])) {
-            $userConditions['nickname'] = trim($conditions['nickname']);
+        if (!empty($conditions['nickname']) || !empty($conditions['orgCode'])) {
+            $userConditions = array();
+            if(!empty($conditions['orgCode'])){
+                $userConditions['likeOrgCode'] = $conditions['orgCode'];
+            }
+
+            if(!empty($conditions['nickname'])){
+                $userConditions['nickname'] = trim($conditions['nickname']);
+            }
 
             $userCount = $this->getUserService()->searchUserCount($userConditions);
-
             if ($userCount) {
                 $users                 = $this->getUserService()->searchUsers($userConditions, array('createdTime', 'DESC'), 0, $userCount);
                 $conditions['fromIds'] = ArrayToolkit::column($users, 'id');
@@ -71,6 +94,7 @@ class MessageController extends BaseController
         }
 
         unset($conditions['nickname']);
+        unset($conditions['orgCode']);
 
         if (empty($conditions['content'])) {
             unset($conditions['content']);

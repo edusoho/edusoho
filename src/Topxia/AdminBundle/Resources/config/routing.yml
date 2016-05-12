@@ -192,6 +192,10 @@ admin_user_edit:
     pattern:  /user/{id}/edit
     defaults: { _controller: TopxiaAdminBundle:User:edit }
 
+admin_user_org_update:
+    path: /user/{id}/org/update
+    defaults: { _controller: TopxiaAdminBundle:User:orgUpdate}
+
 admin_user_lock:
     pattern:  /user/{id}/lock
     defaults: { _controller: TopxiaAdminBundle:User:lock }

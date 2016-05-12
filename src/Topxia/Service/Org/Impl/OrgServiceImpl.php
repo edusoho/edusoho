@@ -83,6 +83,11 @@ class OrgServiceImpl extends BaseService implements OrgService
         $this->getKernel()->setCurrentUser($user);
     }
 
+    public function getOrgByOrgCode($orgCode)
+    {
+        return $this->getOrgDao()->getOrgByOrgCode($orgCode);
+    }
+
     public function getOrg($id)
     {
         return $this->getOrgDao()->getOrg($id);
