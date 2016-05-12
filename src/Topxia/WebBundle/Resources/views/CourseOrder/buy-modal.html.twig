@@ -70,7 +70,6 @@
 {% block footer %}
   {% set priceType = setting("coin.price_type") %}
   {% if billable and ((priceType|default("RMB") == "RMB" and course.price > 0) or (priceType|default("RMB") == "Coin" and course.price > 0)) %}
-  <button id="course-pay" class="btn btn-primary" type="submit" data-loading-text="{{'正在创建订单'|trans}}..." data-toggle="form-submit" data-target="#course-buy-form">{{'去支付'|trans}}</button>
     {% if payments %}
       {% if member %}
         <span class="text-muted">{{'预览模式无法支付'|trans}}</span>
