@@ -16,6 +16,11 @@ class ClassroomAdminController extends BaseController
             'title' => ''
         );
 
+        if (empty($conditions['likeOrgCode'])) {
+            $user                      = $this->getCurrentUser();
+            $conditions['likeOrgCode'] = $user->getCurrentOrgCode();
+        }
+
         if (!empty($fields)) {
             $conditions = $fields;
         }
