@@ -27,11 +27,11 @@ admin:
                                 admin_user_create:
                                     name: '添加新用户'
                                     mode: modal
-                                    group: 2
+                                    group: topBtns
                                 admin_user_export:
                                     name: '导出搜索结果'
                                     mode: modal
-                                    group: 4
+                                    group: none
                                 admin_user_edit:
                                     name: '编辑用户信息'
                                     mode: modal
