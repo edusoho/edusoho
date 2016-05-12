@@ -15,7 +15,6 @@ class Version20160509150945 extends AbstractMigration
      */
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(
             "CREATE TABLE IF NOT EXISTS  `org` (
               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织机构ID',
