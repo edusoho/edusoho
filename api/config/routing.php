@@ -49,9 +49,9 @@ $app->get(_u('/courses/{courseId}/membership/{userId}'), 'res.CourseMembership:g
 $app->get(_u('/course/{courseId}/status'), 'res.Status:get');
 $app->get(_u('/course_members'), 'res.CourseMembers:get');
 
-$app->get(_u('/notes/{id}'), 'res.CourseNotes:get');
-$app->get(_u('/notes'), 'res.CourseNotes:search');
-$app->post(_u('/notes'), 'res.CourseNotes:post');
+$app->get(_u('/courses/{courseId}/notes/{noteId}'), 'res.Course/Note:get');
+$app->get(_u('/courses/{courseId}/notes'), 'res.Course/Notes:get');
+$app->post(_u('/courses/{courseId}/notes'), 'res.Course/Notes:post');
 
 $app->get(_u('/courses/{courseId}/reviews'), 'res.CourseReviews:get');
 $app->post(_u('/courses/{courseId}/reviews'), 'res.CourseReviews:post');

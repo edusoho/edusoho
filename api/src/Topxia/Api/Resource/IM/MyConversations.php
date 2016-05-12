@@ -38,7 +38,7 @@ class MyConversations extends BaseResource
 
     public function filter($res)
     {
-        return $this->multicallFilter('MyConversation', $res);
+        return $this->multicallFilter('IM/MyConversation', $res);
     }
 
     protected function getMyConversationService()

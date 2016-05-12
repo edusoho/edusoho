@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\Api\Resource;
+namespace Topxia\Api\Resource\IM;
 
 use Silex\Application;
 use Topxia\Api\Resource\BaseResource;
