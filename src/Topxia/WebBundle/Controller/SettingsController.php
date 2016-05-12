@@ -366,10 +366,8 @@ class SettingsController extends BaseController
     {
         $user = $this->getCurrentUser();
 
-        $hasPassword = strlen($user['password']) > 0;
-
-        if ($hasPassword) {
-            return $this->createJsonResponse('不能直接设置登录密码。');
+        if (!empty($user['password'])) {
+            throw new \RuntimeException("登录密码已设置，请勿重复设置");
         }
 
         $form = $this->createFormBuilder()
