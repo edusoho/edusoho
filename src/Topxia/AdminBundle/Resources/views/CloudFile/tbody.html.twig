@@ -1,4 +1,5 @@
 {% for material in materials %}
+{{dump(material)}}
   {% set createdUser = createdUsers[material.createdUserId|default(0)]|default(null) %}
   {% include 'TopxiaAdminBundle:CloudFile:table-tr.html.twig' with {createdUser:createdUser, cloudFile:material} %}
 {% else %}

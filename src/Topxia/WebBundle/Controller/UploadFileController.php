@@ -177,9 +177,10 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
 
         if ($lazyConvert && $file['type'] != "document" && $targetType != 'coursematerial') {
-            $this->getUploadFileService()->reconvertFile(
-                $file['id'],
-                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+            $this->getUploadFileService()->reconvertFile($file['id'],
+                array(
+                    'callback' => $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                )
             );
         }
 

@@ -14,10 +14,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         'cloud' => 'File.CloudFileImplementor'
     );
 
-    static $implementor2 = array(
+    /*static $implementor2 = array(
         'local' => 'File.LocalFileImplementor',
         'cloud' => 'File.CloudFileImplementor'
-    );
+    );*/
 
     public function getFile($id)
     {
@@ -32,7 +32,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     //合并getfile
-    public function getFile2($id)
+    /*public function getCloudFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
 
@@ -40,14 +40,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return null;
         }
 
-        if (empty($file['globalId'])) {
-            return $file;
+        if ($file['globalId'] && $file['storage'] == 'cloud') {
+            return $this->getFileImplementor('cloud')->getFileFromLeaf($file);
+        } else {
+            return $this->getFileImplementor($file['storage'])->getFile($file);
         }
-
-        //$implementor2
-        //return $this->createFileImplementor($file['storage'])->getFile($file);
-        return $this->getFileImplementor($file['storage'])->getCloudFile($file);
-    }
+    }*/
 
     //2
     public function getFileFromLeaf($id)
@@ -62,8 +60,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $file;
         }
 
-        //$implementor2
-        //return $this->createFileImplementor($file['storage'])->getFileFromLeaf($file);
         return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
     }
 
@@ -92,7 +88,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }*/
 
     //合并getFIleByGlobalId
-    public function getFileByGlobalId2($globalId)
+    /*public function getFileByGlobalId2($globalId)
     {
         $file = $this->getUploadFileDao()->getFileByGlobalId($globalId);
 
@@ -101,8 +97,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         //return $this->createFileImplementor($file['storage'])->getFile($file);
-        return $this->getFileImplementor($file['storage'])->getCloudFile($file);
-    }
+        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
+    }*/
 
     public function getFileByGlobalId($globalId)
     {
@@ -112,11 +108,11 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return null;
         }
 
-        return $this->getFileImplementor($file['storage'])->getFile($file);
+        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
     }
 
     //2
-    public function findCloudFilesByIds($fileIds)
+    /*public function findCloudFilesByIds($fileIds)
     {
         $files = $this->getUploadFileDao()->findCloudFilesByIds($fileIds);
 
@@ -134,7 +130,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         return $files;
-    }
+    }*/
 
     //合并findFilesByIds
     /*public function findThinFilesByIds(array $ids)
@@ -142,13 +138,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getUploadFileDao()->findFilesByIds($ids);
     }*/
 
-    public function findFilesByIds(array $ids)
+    /*public function findFilesByIds(array $ids)
     {
         return $this->getUploadFileDao()->findFilesByIds($ids);
-    }
+    }*/
 
     //合并findFileByIds
-    public function findFilesByIds2(array $ids)
+    public function findFilesByIds(array $ids, $showCloud = 0)
     {
         $files = $this->getUploadFileDao()->findFilesByIds($ids);
 
@@ -156,20 +152,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return array();
         }
 
-        $groupFiles = ArrayToolkit::group($files, 'storage');
-
-        if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
-            //$cloudFiles = $this->createFileImplementor('cloud')->findFiles($groupFiles['cloud'], array());
-            $cloudFiles = $this->getFileImplementor('cloud')->findFiles($files, array());
-            $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
-
-            foreach ($files as $key => $file) {
-                if ($file['storage'] == 'cloud') {
-                    $files[$key] = $cloudFiles[$file['id']];
-                }
-            }
+        if ($showCloud) {
+            $files = $this->getFileImplementor('cloud')->findFiles($files, array());
         }
-
+        
         return $files;
     }
 
@@ -392,29 +378,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $msg = $e->getMessage();
         }
     }
-
-    //合并deleteFile
-    public function deleteFile2($id)
-    {
-        $file   = $this->getUploadFileDao()->getFile($id);
-        //$result = $this->createFileImplementor($file['storage'])->deleteFile($file);
-        $result = $this->getFileImplementor($file['storage'])->deleteCloudFile($file);
-
-        if (isset($result['success']) && $result['success'] == true) {
-            return $this->getUploadFileDao()->deleteFile($id);
-        }
-
-        return false;
-    }
-
-    //合并deleteFiles
-    public function deleteFiles2(array $ids)
-    {
-        foreach ($ids as $id) {
-            $this->getUploadFileDao()->deleteFile2($id);
-        }
-    }
-
+    
     //2
     public function deleteByGlobalId($globalId)
     {
@@ -467,9 +431,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     //合并reconvertFile
-    public function reconvertFile2($id, $options = array())
+    public function reconvertFile($id, $options = array())
     {
-        $file = $this->getThinFile($id);
+        $file = $this->getFile($id);
 
         if (empty($file)) {
             throw $this->createServiceException('file not exist.');
@@ -479,6 +443,110 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $convertHash = $this->getFileImplementor($file['storage'])->reconvert($file['globalId'], $options);
 
         return $convertHash;
+    }
+
+    /*public function reconvertFile($id, $convertCallback)
+    {
+        $file = $this->getFile($id);
+
+        if (empty($file)) {
+            throw $this->createServiceException('file not exist.');
+        }
+
+        $convertHash = $this->getFileImplementor($file['storage'])->reconvertFile($file, $convertCallback);
+
+        $this->setFileConverting($file['id'], $convertHash);
+
+        return $convertHash;
+    }*/
+
+    public function reconvertOldFile($id, $convertCallback, $pipeline)
+    {
+        $result = array();
+
+        $file = $this->getFile($id);
+
+        if (empty($file)) {
+            return array('error' => 'file_not_found', 'message' => "文件(#{$id})不存在");
+        }
+
+        if ($file['storage'] != 'cloud') {
+            return array('error' => 'not_cloud_file', 'message' => "文件(#{$id})，不是云文件。");
+        }
+
+        if ($file['type'] != 'video') {
+            return array('error' => 'not_video_file', 'message' => "文件(#{$id})，不是视频文件。");
+        }
+
+        if ($file['targetType'] != 'courselesson') {
+            return array('error' => 'not_course_file', 'message' => "文件(#{$id})，不是课时文件。");
+        }
+
+        $target = $this->createService('Course.CourseService')->getCourse($file['targetId']);
+
+        if (empty($target)) {
+            return array('error' => 'course_not_exist', 'message' => "文件(#{$id})所属的课程已删除。");
+        }
+
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
+            return array('error' => 'already_converted', 'message' => "文件(#{$id})已转换");
+        }
+
+        $fileNeedUpdateFields = array();
+
+        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSVideo') {
+            $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
+            $file['convertParams']['hlsKey']    = $this->generateKey(16);
+
+            if ($file['convertParams']['videoQuality'] == 'low') {
+                $file['convertParams']['videoQuality'] = 'normal';
+                $file['convertParams']['video']        = array('440k', '640k', '1000K');
+            }
+
+            $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
+            $file['convertParams']['convertor']    = 'HLSEncryptedVideo';
+        }
+
+        if (empty($file['convertParams'])) {
+            $convertParams = array(
+                'convertor'    => 'HLSEncryptedVideo',
+                'segtime'      => 10,
+                'videoQuality' => 'normal',
+                'audioQuality' => 'normal',
+                'video'        => array('440k', '640k', '1000K'),
+                'audio'        => array('48k', '64k', '96k'),
+                'hlsKeyUrl'    => 'http://hlskey.edusoho.net/placeholder',
+                'hlsKey'       => $this->generateKey(16)
+            );
+
+            $file['convertParams'] = $convertParams;
+
+            $convertParams['convertor']            = 'HLSVideo';
+            $fileNeedUpdateFields['convertParams'] = json_encode($convertParams);
+        }
+
+        $convertHash = $this->getFileImplementor($file['storage'])->reconvertOldFile($file, $convertCallback, $pipeline);
+
+        if (empty($convertHash)) {
+            return array('error' => 'convert_request_failed', 'message' => "文件(#{$id})转换请求失败！");
+        }
+
+        $fileNeedUpdateFields['convertHash'] = $convertHash;
+        $fileNeedUpdateFields['updatedTime'] = time();
+
+        $this->getUploadFileDao()->updateFile($file['id'], $fileNeedUpdateFields);
+
+        $subTarget = $this->createService('Course.CourseService')->findLessonsByTypeAndMediaId('video', $file['id']) ?: array();
+
+        if (!empty($subTarget)) {
+            $subTarget = $subTarget[0];
+        }
+
+        return array(
+            'convertHash' => $convertHash,
+            'courseId'    => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
+            'lessonId'    => empty($subTarget['id']) ? 0 : $subTarget['id']
+        );
     }
 
     //2
@@ -551,110 +619,108 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getUploadFileDao()->getFileByConvertHash($hash);
     }
 
-    public function searchFiles($conditions, $sort, $start, $limit)
+    /*public function searchFiles($conditions, $sort, $start, $limit)
     {
         $orderBy = $this->_checkOrderBy($sort);
 
-        /*if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
-            //Find all the users who is sharing with current user.
-            $myFriends = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId']);
+        // if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
+        //     //Find all the users who is sharing with current user.
+        //     $myFriends = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId']);
 
-            if (isset($myFriends)) {
-                $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");
-            } else {
-                //Browsing shared files, but nobody is sharing with current user.
-                return array();
-            }
-        } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'public') {
-            $conditions['isPublic'] = 1;
-        } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'collection') {
-            $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($conditions['currentUserId']);
+        //     if (isset($myFriends)) {
+        //         $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");
+        //     } else {
+        //         //Browsing shared files, but nobody is sharing with current user.
+        //         return array();
+        //     }
+        // } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'public') {
+        //     $conditions['isPublic'] = 1;
+        // } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'collection') {
+        //     $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($conditions['currentUserId']);
 
-            if (!empty($collections)) {
-                $fileIds           = ArrayToolkit::column($collections, "fileId");
-                $conditions['ids'] = $fileIds;
-            } else {
-                return array();
-            }
-        } elseif (isset($conditions['currentUserId'])) {
-            $createdUserIds = array($conditions['currentUserId']);
-        }
+        //     if (!empty($collections)) {
+        //         $fileIds           = ArrayToolkit::column($collections, "fileId");
+        //         $conditions['ids'] = $fileIds;
+        //     } else {
+        //         return array();
+        //     }
+        // } elseif (isset($conditions['currentUserId'])) {
+        //     $createdUserIds = array($conditions['currentUserId']);
+        // }
 
-        if (isset($createdUserIds)) {
-            $conditions['createdUserIds'] = $createdUserIds;
-        }*/
+        // if (isset($createdUserIds)) {
+        //     $conditions['createdUserIds'] = $createdUserIds;
+        // }
         $conditions = $this->_prepareSearchConditions($conditions);
 
         $files = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
         return $files;
-    }
+    }*/
 
-    public function searchFileCount($conditions)
+    /*public function searchFileCount($conditions)
     {
-        /*if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
-            //Find all the users who is sharing with current user.
-            $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
+        // if (array_key_exists('source', $conditions) && $conditions['source'] == 'shared') {
+        //     //Find all the users who is sharing with current user.
+        //     $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
 
-            if (isset($myFriends)) {
-                $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");
-            } else {
-                //Browsing shared files, but nobody is sharing with current user.
-                return 0;
-            }
-        } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'public') {
-            $conditions['isPublic'] = 1;
-        } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'collection') {
-            $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($conditions['currentUserId']);
+        //     if (isset($myFriends)) {
+        //         $createdUserIds = ArrayToolkit::column($myFriends, "sourceUserId");
+        //     } else {
+        //         //Browsing shared files, but nobody is sharing with current user.
+        //         return 0;
+        //     }
+        // } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'public') {
+        //     $conditions['isPublic'] = 1;
+        // } elseif (array_key_exists('source', $conditions) && $conditions['source'] == 'collection') {
+        //     $collections = $this->getUploadFileCollectDao()->findCollectionsByUserId($conditions['currentUserId']);
 
-            if (!empty($collections)) {
-                $fileIds           = ArrayToolkit::column($collections, "fileId");
-                $conditions['ids'] = $fileIds;
-            } else {
-                return array();
-            }
-        } elseif (isset($conditions['currentUserId'])) {
-            $createdUserIds = array($conditions['currentUserId']);
-        }
+        //     if (!empty($collections)) {
+        //         $fileIds           = ArrayToolkit::column($collections, "fileId");
+        //         $conditions['ids'] = $fileIds;
+        //     } else {
+        //         return array();
+        //     }
+        // } elseif (isset($conditions['currentUserId'])) {
+        //     $createdUserIds = array($conditions['currentUserId']);
+        // }
 
-        if (isset($createdUserIds)) {
-            $conditions['createdUserIds'] = $createdUserIds;
-        }*/
+        // if (isset($createdUserIds)) {
+        //     $conditions['createdUserIds'] = $createdUserIds;
+        // }
 
         $conditions = $this->_prepareSearchConditions($conditions);
 
         return $this->getUploadFileDao()->searchFileCount($conditions);
-    }
+    }*/
 
     //合并serarchFiles
-    public function searchFiles2($conditions, $orderBy, $start, $limit)
+    public function searchFiles($conditions, $orderBy, $start, $limit)
     {
-        if (!empty($conditions['processStatus'])) {
-            $cloudFileConditions['processStatus'] = $conditions['processStatus'];
-            $conditions['storage']                = 'cloud';
-            $conditions['existGlobalId']          = 0;
-            $conditions                           = $this->_prepareSearchConditions($conditions);
+        $conditions = $this->_prepareSearchConditions($conditions);
 
-            $files     = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, 0, 99999);
+        if (!empty($conditions['processStatus'])) {
+            
+            $conditions['storage']       = 'cloud';
+            $conditions['existGlobalId'] = 0;
+
+            $files     = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, 0, PHP_INT_MAX);
             $globalIds = ArrayToolkit::column($files, 'globalId');
 
             if (empty($globalIds)) {
                 return array();
             }
 
-            $cloudFileConditions['nos'] = implode(',', $globalIds);
-
-            $cloudFileConditions['start'] = $start;
-            $cloudFileConditions['limit'] = $limit;
-
+            $cloudFileConditions = array(
+                'processStatus' => $conditions['processStatus'],
+                'nos'           => implode(',', $globalIds),
+                'start'         => $start,
+                'limit'         => $limit
+            );
             //$cloudFiles = $this->createFileImplementor('cloud')->search($cloudFileConditions);
             $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
 
             return $cloudFiles['data'];
         }
-
-        $files = array();
-
-        $conditions = $this->_prepareSearchConditions($conditions);
 
         $files = $this->getUploadFileDao()->searchFiles($conditions, $orderBy, $start, $limit);
 
@@ -665,11 +731,12 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         $groupFiles = ArrayToolkit::group($files, 'storage');
 
         if (isset($groupFiles['cloud']) && !empty($groupFiles['cloud'])) {
-            $cloudFileConditions        = array();
-            $cloudFileConditions['nos'] = implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'));
-            //$cloudFiles                 = $this->createFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
-            $cloudFiles                 = $this->getFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
+            $cloudFileConditions = array(
+                'nos' => implode(',', ArrayToolkit::column($groupFiles['cloud'], 'globalId'))
+            );
 
+            //$cloudFiles                 = $this->createFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
+            $cloudFiles = $this->getFileImplementor('cloud')->findFiles($groupFiles['cloud'], $cloudFileConditions);
             $cloudFiles = ArrayToolkit::index($cloudFiles, 'id');
 
             foreach ($files as $key => $file) {
@@ -683,21 +750,26 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
     }
 
     //合并searchFilesCount
-    public function searchFilesCount2($conditions)
+    public function searchFileCount($conditions)
     {
+        $conditions = $this->_prepareSearchConditions($conditions);
+
         if (!empty($conditions['processStatus'])) {
-            $cloudFileConditions['processStatus'] = $conditions['processStatus'];
-            $conditions['storage']                = 'cloud';
-            $conditions['existGlobalId']          = 0;
-            $conditions                           = $this->_prepareSearchConditions($conditions);
-            $files                                = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 99999);
-            $globalIds                            = ArrayToolkit::column($files, 'globalId');
+            
+            $conditions['storage']       = 'cloud';
+            $conditions['existGlobalId'] = 0;
+            
+            $files     = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            $globalIds = ArrayToolkit::column($files, 'globalId');
 
             if (empty($globalIds)) {
                 return 0;
             }
 
-            $cloudFileConditions['nos'] = implode(',', $globalIds);
+            $cloudFileConditions = array(
+                'processStatus' => $conditions['processStatus'],
+                'nos'           => implode(',', $globalIds)
+            );
 
             //$cloudFiles = $this->createFileImplementor('cloud')->search($cloudFileConditions);
             $cloudFiles = $this->getFileImplementor('cloud')->search($cloudFileConditions);
@@ -705,16 +777,8 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return $cloudFiles['count'];
         }
 
-        $conditions = $this->_prepareSearchConditions($conditions);
+        
         $localCount = $this->getUploadFileDao()->searchFileCount($conditions);
-
-        if (empty($localCount)) {
-            return 0;
-        }
-
-        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 9999);
-
-        $groupFiles = ArrayToolkit::group($files, 'storage');
 
         return $localCount;
     }
@@ -744,13 +808,13 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             throw $this->createServiceException("文件(#{$id})不存在，删除失败");
         }
 
-        $deleted = $this->getFileImplementor($file['storage'])->deleteFile($file);
+        $result = $this->getFileImplementor($file['storage'])->deleteFile($file);
 
-        if ($deleted) {
-            $deleted = $this->getUploadFileDao()->deleteFile($id);
+        if (isset($result['success']) && $result['success']) {
+            $result = $this->getUploadFileDao()->deleteFile($id);
         }
 
-        return $deleted;
+        return $result;
     }
 
     public function deleteFiles(array $ids)
@@ -759,6 +823,28 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             $this->deleteFile($id);
         }
     }
+
+    //合并deleteFile
+    /*public function deleteFile2($id)
+    {
+        $file   = $this->getUploadFileDao()->getFile($id);
+        //$result = $this->createFileImplementor($file['storage'])->deleteFile($file);
+        $result = $this->getFileImplementor($file['storage'])->deleteFile($file);
+
+        if (isset($result['success']) && $result['success'] == true) {
+            return $this->getUploadFileDao()->deleteFile($id);
+        }
+
+        return false;
+    }*/
+
+    //合并deleteFiles
+    /*public function deleteFiles2(array $ids)
+    {
+        foreach ($ids as $id) {
+            $this->getUploadFileDao()->deleteFile2($id);
+        }
+    }*/
 
     public function saveConvertResult($id, array $result = array())
     {
@@ -853,109 +939,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $this->getFileImplementor($params['storage'])->makeUploadParams($params);
     }
 
-    public function reconvertFile($id, $convertCallback)
-    {
-        $file = $this->getFile($id);
-
-        if (empty($file)) {
-            throw $this->createServiceException('file not exist.');
-        }
-
-        $convertHash = $this->getFileImplementor($file['storage'])->reconvertFile($file, $convertCallback);
-
-        $this->setFileConverting($file['id'], $convertHash);
-
-        return $convertHash;
-    }
-
-    public function reconvertOldFile($id, $convertCallback, $pipeline)
-    {
-        $result = array();
-
-        $file = $this->getFile($id);
-
-        if (empty($file)) {
-            return array('error' => 'file_not_found', 'message' => "文件(#{$id})不存在");
-        }
-
-        if ($file['storage'] != 'cloud') {
-            return array('error' => 'not_cloud_file', 'message' => "文件(#{$id})，不是云文件。");
-        }
-
-        if ($file['type'] != 'video') {
-            return array('error' => 'not_video_file', 'message' => "文件(#{$id})，不是视频文件。");
-        }
-
-        if ($file['targetType'] != 'courselesson') {
-            return array('error' => 'not_course_file', 'message' => "文件(#{$id})，不是课时文件。");
-        }
-
-        $target = $this->createService('Course.CourseService')->getCourse($file['targetId']);
-
-        if (empty($target)) {
-            return array('error' => 'course_not_exist', 'message' => "文件(#{$id})所属的课程已删除。");
-        }
-
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSEncryptedVideo') {
-            return array('error' => 'already_converted', 'message' => "文件(#{$id})已转换");
-        }
-
-        $fileNeedUpdateFields = array();
-
-        if (!empty($file['convertParams']['convertor']) && $file['convertParams']['convertor'] == 'HLSVideo') {
-            $file['convertParams']['hlsKeyUrl'] = 'http://hlskey.edusoho.net/placeholder';
-            $file['convertParams']['hlsKey']    = $this->generateKey(16);
-
-            if ($file['convertParams']['videoQuality'] == 'low') {
-                $file['convertParams']['videoQuality'] = 'normal';
-                $file['convertParams']['video']        = array('440k', '640k', '1000K');
-            }
-
-            $fileNeedUpdateFields['convertParams'] = json_encode($file['convertParams']);
-            $file['convertParams']['convertor']    = 'HLSEncryptedVideo';
-        }
-
-        if (empty($file['convertParams'])) {
-            $convertParams = array(
-                'convertor'    => 'HLSEncryptedVideo',
-                'segtime'      => 10,
-                'videoQuality' => 'normal',
-                'audioQuality' => 'normal',
-                'video'        => array('440k', '640k', '1000K'),
-                'audio'        => array('48k', '64k', '96k'),
-                'hlsKeyUrl'    => 'http://hlskey.edusoho.net/placeholder',
-                'hlsKey'       => $this->generateKey(16)
-            );
-
-            $file['convertParams'] = $convertParams;
-
-            $convertParams['convertor']            = 'HLSVideo';
-            $fileNeedUpdateFields['convertParams'] = json_encode($convertParams);
-        }
-
-        $convertHash = $this->getFileImplementor($file['storage'])->reconvertOldFile($file, $convertCallback, $pipeline);
-
-        if (empty($convertHash)) {
-            return array('error' => 'convert_request_failed', 'message' => "文件(#{$id})转换请求失败！");
-        }
-
-        $fileNeedUpdateFields['convertHash'] = $convertHash;
-        $fileNeedUpdateFields['updatedTime'] = time();
-
-        $this->getUploadFileDao()->updateFile($file['id'], $fileNeedUpdateFields);
-
-        $subTarget = $this->createService('Course.CourseService')->findLessonsByTypeAndMediaId('video', $file['id']) ?: array();
-
-        if (!empty($subTarget)) {
-            $subTarget = $subTarget[0];
-        }
-
-        return array(
-            'convertHash' => $convertHash,
-            'courseId'    => empty($subTarget['courseId']) ? $target['targetId'] : $subTarget['courseId'],
-            'lessonId'    => empty($subTarget['id']) ? 0 : $subTarget['id']
-        );
-    }
+    
 
     public function getMediaInfo($key, $type)
     {
@@ -976,11 +960,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
             return null;
         }
 
-        if ($file['globalId']) {
-            return $this->getFileImplementor($file['storage'])->getCloudFile($file);
-        } else {
-            return $this->getFileImplementor($file['storage'])->getFile($file);
-        }
+        return $this->getFileImplementor($file['storage'])->getFileFromLeaf($file);
     }
 
     public function findMySharingContacts($targetUserId)
@@ -1095,9 +1075,14 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     protected function _prepareSearchConditions($conditions)
     {
+        if (!empty($conditions['processStatus'])) {
+            $conditions['storage']       = 'cloud';
+            $conditions['existGlobalId'] = 0;
+        }
+
         if (isset($conditions['source']) && !empty($conditions['source'])) {
             if ($conditions['source'] == 'shared') {
-                $myFriends = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($conditions['currentUserId']);
+                $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
 
                 if ($myFriends) {
                     $conditions['createdUserIds'] = ArrayToolkit::column($myFriends, "sourceUserId");
@@ -1272,14 +1257,14 @@ return $this->getFileImplementorByStorage($file['storage']);
     return $this->createFileImplementor($storage);
     }*/
 
-    protected function createFileImplementor($key)
+    /*protected function createFileImplementor($key)
     {
         if (!array_key_exists($key, self::$implementor2)) {
             throw $this->createServiceException(sprintf("`%s` File Implementor is not allowed.", $key));
         }
 
         return $this->createService(self::$implementor2[$key]);
-    }
+    }*/
 
     protected function getSettingService()
     {

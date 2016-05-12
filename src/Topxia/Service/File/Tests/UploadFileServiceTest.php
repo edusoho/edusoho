@@ -53,7 +53,7 @@ class UploadFileServiceTest extends BaseTestCase
        $this->assertEquals($file['id'],$fileId);
     }
 
-    public function testGetFile2()
+    public function testGetFileFromLeaf()
     {
        $fileId = 1;
        $name = 'File.UploadFileDao';
@@ -66,7 +66,8 @@ class UploadFileServiceTest extends BaseTestCase
                'id' => 1,
                'storage' => 'cloud',
                'filename'=> 'test',
-               'createdUserId' => 1
+               'createdUserId' => 1,
+               'globalId' => '535399bd5f19413c9339a5ab11c3a5d1'
              )
            )
         );
@@ -74,7 +75,7 @@ class UploadFileServiceTest extends BaseTestCase
         $name = 'File.CloudFileImplementor';
         $params = array(
            array(
-             'functionName' => 'getCloudFile',
+             'functionName' => 'getFileFromLeaf',
              'runTimes' => 1,
              'withParams' => array(
               'id' => 1,
@@ -92,55 +93,87 @@ class UploadFileServiceTest extends BaseTestCase
          );
        $this->mock($name,$params);
 
-       $file = $this->getUploadFileService()->getFile2($fileId);
+       $file = $this->getUploadFileService()->getFileFromLeaf($fileId);
 
        $this->assertEquals($file['id'],$fileId);
     }
 
     public function testGetFileByGlobalId()
     {
-      $fileId = '65d474f089074fa0810d1f2f146fd218';
-      $name = 'File.UploadFileDao';
-      $params = array(
-        array(
-          'functionName' => 'getFileByGlobalId',
-          'runTimes' => 1,
-          'withParams' => array('65d474f089074fa0810d1f2f146fd218'),
-          'returnValue' =>array(
-            'id' => 1,
-            'globalId' =>'65d474f089074fa0810d1f2f146fd218',
-            'storage' => 'cloud',
-            'filename'=> 'test',
-            'createdUserId' => 1
+        $name = 'File.UploadFileDao';
+        $params = array(
+            array(
+                'functionName' => 'getFileByGlobalId',
+                'runTimes' => 1,
+                'withParams' => array('65d474f089074fa0810d1f2f146fd218'),
+                'returnValue' =>array(
+                  'id'            => 1,
+                  'globalId'      =>'65d474f089074fa0810d1f2f146fd218',
+                  'storage'       => 'cloud',
+                  'filename'      => 'test',
+                  'createdUserId' => 1
+                )
+            ),  
+        );
+        $this->mock($name,$params);
+
+        $name = 'File.CloudFileImplementor';
+            $params = array(
+                array(
+                  'functionName' => 'getFile',
+                  'runTimes' => 1,
+                  'withParams' => array(),
+                  'returnValue' =>array(
+                        'id' => 1,
+                        'globalId' =>'65d474f089074fa0810d1f2f146fd218',
+                        'storage' => 'cloud',
+                        'filename'=> 'test',
+                        'createdUserId' => 1
+                    )
+                )
+            );
+        $this->mock($name,$params);
+
+        $name = 'File.LocalFileImplementor';
+        $params = array(
+            array(
+              'functionName' => 'getFile',
+              'runTimes'    => 1,
+              'withParams'  => array(),
+              'returnValue' => array(
+                'id'            => 2,
+                'globalId'      => 0,
+                'storage'       => 'local',
+                'filename'      => 'localFileName',
+                'createdUserId' => 1
+              )
+            )
+        );
+        $this->mock($name,$params);
+
+        $name = 'File.CloudFileImplementor';
+        $params = array(
+            array(
+             'functionName' => 'getFileFromLeaf',
+             'runTimes' => 1,
+             'withParams' => array(),
+             'returnValue' =>array(
+               'id' => 1,
+               'globalId' =>'65d474f089074fa0810d1f2f146fd218',
+               'storage' => 'cloud',
+               'filename'=> 'test',
+               'createdUserId' => 1
+            )
           )
-        ),
-      );
-      $this->mock($name,$params);
-      $name = 'File.CloudFileImplementor';
-      $params = array(
-        array(
-          'functionName' => 'getFile',
-          'runTimes' => 1,
-          'withParams' => array(array(
-           'id' => 1,
-           'globalId' =>'65d474f089074fa0810d1f2f146fd218',
-           'storage' => 'cloud',
-           'filename'=> 'test',
-           'createdUserId' => 1
-         )),
-          'returnValue' =>array(
-            'id' => 1,
-            'globalId' =>'65d474f089074fa0810d1f2f146fd218',
-            'storage' => 'cloud',
-            'filename'=> 'test',
-            'createdUserId' => 1
-          )
-        )
-      );
-      $this->mock($name,$params);
-      $file = $this->getUploadFileService()->getFileByGlobalId($fileId);
-      $this->assertEquals($file['globalId'],$fileId);
+        );
+        $this->mock($name,$params);
+
+        $globalId = '65d474f089074fa0810d1f2f146fd218';
+        $cloudFile = $this->getUploadFileService()->getFileByGlobalId($globalId);
+
+        $this->assertEquals($globalId, $cloudFile['globalId']);
     }
+
     public function testGetFileByHashId()
     {
       $hashId = 'materiallib-1/20160418040438-d11n060aceo8g8ws';
@@ -295,7 +328,7 @@ class UploadFileServiceTest extends BaseTestCase
       $name = 'File.UploadFileShareDao';
       $params = array(
         array(
-          'functionName' => 'findSharesByTargetUserIdAndIsActive',
+          'functionName' => 'findShareHistoryByUserId',
           'runTimes' => 1,
           'withParams' =>  array(1),
           'returnValue' => array(

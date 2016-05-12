@@ -7,7 +7,7 @@ interface UploadFileService
 {
 	public function getFile($id);
 
-	public function getFile2($id);//2
+	//public function getCloudFile($id);//2
 
     public function getFileByGlobalId($globalId);
 
@@ -17,21 +17,21 @@ interface UploadFileService
 
 	//public function getThinFile($id);//2
 
-	public function getFileByGlobalId2($globalId);//2
+	//public function getFileByGlobalId2($globalId);//2
 
-	public function findCloudFilesByIds($fileIds);//2
+	//public function findCloudFilesByIds($fileIds);//2
 
 	//public function findThinFilesByIds(array $ids);//2
 
-    public function findFilesByIds2(array $ids);//2
+    //public function findFilesByIds2(array $ids);//2
 
 	public function findFilesByTargetTypeAndTargetId($targetType, $targetId);//2
 
 	public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);//2
 
-	public function searchFiles2($conditions, $orderBy, $start, $limit);//2
+	//public function searchFiles2($conditions, $orderBy, $start, $limit);//2
 
-	public function searchFilesCount2($conditions);//2
+	//public function searchFilesCount2($conditions);//2
 
 	public function edit($fileId, $fields);//2
 
@@ -47,9 +47,9 @@ interface UploadFileService
 
 	public function setFileProcessed($params);//2
 
-	public function deleteFile2($id);//2
+	//public function deleteFile2($id);//2
 
-	public function deleteFiles2(array $ids);//2
+	//public function deleteFiles2(array $ids);//2
 
 	public function deleteByGlobalId($globalId);//2
 
@@ -65,7 +65,11 @@ interface UploadFileService
 
 	public function findMySharingContacts2($targetUserId);//2
 
-	public function reconvertFile2($id, $options = array());//2
+	public function reconvertFile($id, $options = array());//2
+
+	//public function reconvertFile($id, $convertCallback);
+
+    public function reconvertOldFile($id, $convertCallback, $pipeline);
 
 	public function collectFile($userId, $fileId);//2
 
@@ -81,7 +85,7 @@ interface UploadFileService
 
     public function getFileByConvertHash($hash);
 
-    public function findFilesByIds(array $ids);
+    public function findFilesByIds(array $ids, $showCloud);
 
     public function searchFiles($conditions, $sort, $start, $limit);
 
@@ -101,12 +105,7 @@ interface UploadFileService
 
     public function setFileConverting($id, $convertHash);
 
-
     public function makeUploadParams($params);
-
-    public function reconvertFile($id, $convertCallback);
-
-    public function reconvertOldFile($id, $convertCallback, $pipeline);
 
     public function getMediaInfo($key, $type);
 

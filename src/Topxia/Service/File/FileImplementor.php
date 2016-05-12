@@ -22,10 +22,7 @@ interface FileImplementor
     public function getMediaInfo($key, $mediaType);
 
     //FileImplementor2
-    public function get($globalId);
-
-    //原getFile
-    public function getCloudFile($file);
+    public function getFileByGlobalId($globalId);
 
     public function prepareUpload($params);
 
@@ -36,9 +33,6 @@ interface FileImplementor
     public function updateFile($file, $fields);
 
     public function getDownloadFile($id);
-
-    //原deleteFile
-    public function deleteCloudFile($file);
 
     public function findFiles($files, $conditions);
 

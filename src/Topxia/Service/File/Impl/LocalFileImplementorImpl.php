@@ -15,8 +15,8 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return $file;
     }
 
-    public function getCloudFile($file)
-    {
+    public function getFileFromLeaf($file) {
+        return $this->getFile($file);
     }
 
     public function addFile($targetType, $targetId, array $fileInfo = array(), UploadedFile $originalFile = null)
@@ -162,19 +162,23 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
         return array('success' => true);
     }
 
-    public function deleteCloudFile($file)
-    {
-    }
-
     public function search($conditions)
     {
+        $start = $conditions['start'];
+        $limit = $conditions['limit'];
+        unset($conditions['start']);
+        unset($conditions['limit']);
+
+        $files = $this->getUploadFileDao()->searchFiles($conditions, array('createdTime','DESC'), $start, $limit);
+
+        return $file;
     }
 
     public function synData($conditions)
     {
     }
 
-    public function get($globalId)
+    public function getFileByGlobalId($globalId)
     {
     }
 
@@ -224,5 +228,10 @@ class LocalFileImplementorImpl extends BaseService implements FileImplementor
     protected function getUserService()
     {
         return $this->createService('User.UserService');
+    }
+
+    protected function getUploadFileDao()
+    {
+        return $this->createDao('File.UploadFileDao');
     }
 }

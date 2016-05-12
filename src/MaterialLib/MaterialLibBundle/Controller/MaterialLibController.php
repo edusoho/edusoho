@@ -66,10 +66,10 @@ class MaterialLibController extends BaseController
 
         $paginator = new Paginator(
             $request,
-            $this->getUploadFileService()->searchFilesCount2($conditions),
+            $this->getUploadFileService()->searchFileCount($conditions),
             20
         );
-        $files = $this->getUploadFileService()->searchFiles2(
+        $files = $this->getUploadFileService()->searchFiles(
             $conditions,
             array('createdTime', 'DESC'),
             $paginator->getOffsetCount(),
@@ -104,7 +104,7 @@ class MaterialLibController extends BaseController
               'globalId' => $file['globalId']
           ));
         }
-        $file['processStatus'] = $file['convertStatus'];
+        
         return $this->render('MaterialLibBundle:Web:preview.html.twig',array(
           'file' => $file
         ));
@@ -480,7 +480,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getUploadFileService()->getFile2($fileId);
+        $file = $this->getUploadFileService()->getFileFromLeaf($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -524,7 +524,7 @@ class MaterialLibController extends BaseController
 
     protected function tryAccessFile($fileId)
     {
-        $file = $this->getUploadFileService()->getFile2($fileId);
+        $file = $this->getUploadFileService()->getFileFromLeaf($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();

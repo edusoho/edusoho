@@ -42,9 +42,10 @@ class CourseLessonManageController extends BaseController
                 $lesson['mediaStatus'] = $file['convertStatus'];
 
                 if ($file['type'] == "document" && $file['convertStatus'] == "none") {
-                    $convertHash = $this->getUploadFileService()->reconvertFile2(
-                        $file['id'],
-                        $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                    $convertHash = $this->getUploadFileService()->reconvertFile($file['id'],
+                        array(
+                            'callback' => $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                        )
                     );
                 }
             }
@@ -486,7 +487,7 @@ class CourseLessonManageController extends BaseController
 
         for ($i = 0; $i < $totalPageNum; $i++) {
             $partFileIds = array_slice($fileIds, $i * $pageSize, $pageSize);
-            $cloudFiles  = $this->getUploadFileService()->findCloudFilesByIds($partFileIds);
+            $cloudFiles  = $this->getUploadFileService()->findFilesByIds($partFileIds, 1);
             $files       = array_merge($files, $cloudFiles);
         }
 

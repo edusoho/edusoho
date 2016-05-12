@@ -81,7 +81,7 @@ class CourseFileManageController extends BaseController
 
         $fileIds = explode(',', $fileIds);
 
-        return $this->createJsonResponse($this->getUploadFileService()->findCloudFilesByIds($fileIds));
+        return $this->createJsonResponse($this->getUploadFileService()->findFilesByIds($fileIds, 1));
     }
 
     public function showAction(Request $request, $id, $fileId)
@@ -112,7 +112,7 @@ class CourseFileManageController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $convertHash = $this->getUploadFileService()->reconvertFile2($file['id']);
+        $convertHash = $this->getUploadFileService()->reconvertFile($file['id']);
 
         if (empty($convertHash)) {
             return $this->createJsonResponse(array('status' => 'error', 'message' => '文件转换请求失败，请重试！'));
@@ -146,7 +146,7 @@ class CourseFileManageController extends BaseController
 
         $ids = $request->request->get('ids', array());
 
-        $this->getUploadFileService()->deleteFiles2($ids);
+        $this->getUploadFileService()->deleteFiles($ids);
 
         return $this->createJsonResponse(true);
     }
