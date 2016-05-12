@@ -2,7 +2,7 @@ define(function (require, exports, module) {
     "use strict";
 
     require('z_tree');
-    require('z_tree_css');
+    require('jquery-plugin/zTree/3.5.21/css/edusohoStyle/zTreeStyle.css');
     require('org_z_tree_css');
 
     /**

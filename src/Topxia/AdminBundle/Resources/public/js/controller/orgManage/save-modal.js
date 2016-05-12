@@ -21,7 +21,6 @@ define(function (require, exports, module) {
 
             $.post($form.attr('action'), $form.serialize(), function (html) {
                 $modal.modal('hide');
-                $table.find('tbody').replaceWith(html);
                 Notify.success('保存组织机构成功！');
                 window.location.reload();
             }).fail(function () {

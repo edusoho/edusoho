@@ -45,8 +45,9 @@ class OrgDaoImpl extends BaseDao implements OrgDao
 
     public function deleteOrgsByOrgCode($orgCode)
     {
-        $sql = "DELETE  FROM {$this->getTable()} where orgCode like ?";
-        return $this->getConnection()->executeUpdate($sql, array($orgCode));
+        $likeOrgCode = $orgCode."%";
+        $sql         = "DELETE  FROM {$this->getTable()} where orgCode like ? ";
+        return $this->getConnection()->executeUpdate($sql, array($likeOrgCode));
     }
 
     public function findOrgsByOrgCode($orgCode)
