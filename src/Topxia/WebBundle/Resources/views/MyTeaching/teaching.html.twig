@@ -1,6 +1,6 @@
 {% extends 'TopxiaWebBundle:My:layout.html.twig' %}
 
-{% block title %}{{'在教课程'|trans}} - {{'我的教学'|trans }}{% endblock %}
+{% block title %}{{'在教课程'|trans}} - {{ parent() }}{% endblock %}
 
 {% set side_nav = 'my-teaching-courses' %}
 
