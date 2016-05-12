@@ -13666,6 +13666,10 @@ textarea {
   position: absolute;
   right: 0;
 }
+.open-course-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
 .open-course-views {
   position: relative;
   padding: 0;
