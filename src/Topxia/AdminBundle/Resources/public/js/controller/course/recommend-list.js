@@ -1,16 +1,17 @@
 define(function(require, exports, module) {
 	var Notify = require('common/bootstrap-notify');
-
+	var ztree = require('edusoho.ztree');
 	exports.run = function(options) {
+		ztree('#orgZtree', "#orgName", "#orgCode");
 		var $table = $('#course-recommend-table');
 
 		$table.on('click', '.cancel-recommend-course', function() {
 			if (!confirm('真的要取消该课程推荐吗？')) {
-				return ;
+				return;
 			}
 
 			var $tr = $(this).parents('tr');
-			$.post($(this).data('url'), function(){
+			$.post($(this).data('url'), function() {
 				Notify.success('课程推荐已取消！');
 				$tr.remove();
 			});

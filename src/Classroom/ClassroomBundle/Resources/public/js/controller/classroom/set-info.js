@@ -5,15 +5,15 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
     require('es-ckeditor');
-
+    var ztree = require('edusoho.ztree');
 
     exports.run = function() {
-
-/*        var editor_classroom = CKEDITOR.replace('description', {
-            toolbar: 'Detail',
-            filebrowserImageUploadUrl: $('#description').data('imageUploadUrl'),
-            filebrowserFlashUploadUrl: $('#description').data('flashUploadUrl')
-        });*/
+        ztree('#orgZtree', "#orgName", "#orgCode");
+        /*        var editor_classroom = CKEDITOR.replace('description', {
+                    toolbar: 'Detail',
+                    filebrowserImageUploadUrl: $('#description').data('imageUploadUrl'),
+                    filebrowserFlashUploadUrl: $('#description').data('flashUploadUrl')
+                });*/
 
         var editor_classroom_about = CKEDITOR.replace('about', {
             allowedContent: true,
@@ -24,7 +24,7 @@ define(function(require, exports, module) {
 
         var validator = new Validator({
             element: '#classroom-set-form',
-            onFormValidated: function(error){
+            onFormValidated: function(error) {
                 if (error) {
                     return false;
                 }
@@ -40,8 +40,8 @@ define(function(require, exports, module) {
         validator.on('formValidate', function(elemetn, event) {
             editor_classroom.updateElement();
         });
-        
-        
+
+
     };
 
 });

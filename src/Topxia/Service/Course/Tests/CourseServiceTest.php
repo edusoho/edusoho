@@ -68,7 +68,7 @@ class CourseServiceTest extends BaseTestCase
         );
         $this->getCourseService()->createCourse($course_like);
         $this->getCourseService()->createCourse($course_unlike);
-        $result        = $this->getCourseService()->findCoursesByLikeTitle($course_like['title']);
+        $result = $this->getCourseService()->findCoursesByLikeTitle($course_like['title']);
         $this->assertCount(1, $result);
         $this->assertEquals($result[1]['title'], $course_like['title']);
     }
@@ -84,7 +84,7 @@ class CourseServiceTest extends BaseTestCase
         $course = array(
             'title' => 'online test course1'
         );
-        $createCourse  = $this->getCourseService()->createCourse($course);
+        $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
 
         //创建一个普通用户，并设置为当前用户
@@ -94,7 +94,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getUserService()->changeMobile($user1['id'], '13456520930');
         $this->getCourseService()->becomeStudent($createCourse['id'], $user1['id']);
-        $count     = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id']);
+        $count = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id']);
         $this->assertEquals(1, $count);
         $this->getUserService()->lockUser($user1['id']);
         $count = $this->getCourseService()->findMobileVerifiedMemberCountByCourseId($createCourse['id'], 1);
@@ -144,7 +144,7 @@ class CourseServiceTest extends BaseTestCase
             'tags'  => array('1', '2')
         );
         $this->getCourseService()->createCourse($course);
-        $result       = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus(array('1'), 'draft', array('Rating', 'DESC'), 0, 1);
+        $result = $this->getCourseService()->findNormalCoursesByAnyTagIdsAndStatus(array('1'), 'draft', array('Rating', 'DESC'), 0, 1);
         $this->assertNotEmpty($result);
         $this->assertEquals($result[1]['title'], $course['title']);
     }
@@ -171,6 +171,41 @@ class CourseServiceTest extends BaseTestCase
 
         $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
         $this->assertCount(3, $result);
+    }
+
+    public function testSearchCoursesByLikeOrgCode()
+    {
+        $course1 = array(
+            'title'   => 'test course 1',
+            'orgCode' => '1.'
+        );
+        $course2 = array(
+            'title'   => 'test course 2',
+            'orgCode' => '1.2.'
+        );
+        $course3 = array(
+            'title'   => 'test course 3',
+            'orgCode' => '1.2.3.'
+        );
+
+        $this->getCourseService()->createCourse($course1);
+        $this->getCourseService()->createCourse($course2);
+        $this->getCourseService()->createCourse($course3);
+
+        $conditions = array(
+            'likeOrgCode' => '1.'
+        );
+
+        $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
+
+        $this->assertCount(3, $result);
+
+        $conditions = array(
+            'likeOrgCode' => '1.2.'
+        );
+        $result = $this->getCourseService()->searchCourses($conditions, 'popular', 0, 5);
+
+        $this->assertCount(2, $result);
     }
 
     public function testSearchCourseCount()
@@ -208,8 +243,8 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getCourseService()->createCourse($course1);
         $this->getCourseService()->createCourse($course2);
-        $endTime       = strtotime(date("Y-m-d", time() + 24 * 3600));
-        $result        = $this->getCourseService()->findCoursesCountByLessThanCreatedTime($endTime);
+        $endTime = strtotime(date("Y-m-d", time() + 24 * 3600));
+        $result  = $this->getCourseService()->findCoursesCountByLessThanCreatedTime($endTime);
         $this->assertEquals($result, 2);
     }
 
@@ -224,8 +259,8 @@ class CourseServiceTest extends BaseTestCase
 
         $this->getCourseService()->createCourse($course1);
         $this->getCourseService()->createCourse($course2);
-        $endTime       = strtotime(date("Y-m-d", time() + 24 * 3600));
-        $result        = $this->getCourseService()->analysisCourseSumByTime($endTime);
+        $endTime = strtotime(date("Y-m-d", time() + 24 * 3600));
+        $result  = $this->getCourseService()->analysisCourseSumByTime($endTime);
         $this->assertEquals($result[0]['count'], 2);
     }
 
@@ -240,15 +275,15 @@ class CourseServiceTest extends BaseTestCase
             'title' => 'test course 1'
         );
 
-        $createCourse  = $this->getCourseService()->createCourse($course);
+        $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
-        $user          = $this->createNormalUser();
-        $currentUser   = new CurrentUser();
+        $user        = $this->createNormalUser();
+        $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseService()->becomeStudent($createCourse['id'], $user['id']);
         $this->getCourseService()->tryLearnCourse($createCourse['id']);
-        $result    = $this->getCourseService()->findUserLearnCourses($user['id'], 0, 1);
+        $result = $this->getCourseService()->findUserLearnCourses($user['id'], 0, 1);
         $this->assertCount(1, $result);
     }
 
@@ -263,15 +298,15 @@ class CourseServiceTest extends BaseTestCase
             'title' => 'test course 1'
         );
 
-        $createCourse  = $this->getCourseService()->createCourse($course);
+        $createCourse = $this->getCourseService()->createCourse($course);
         $this->getCourseService()->publishCourse($createCourse['id']);
-        $user          = $this->createNormalUser();
-        $currentUser   = new CurrentUser();
+        $user        = $this->createNormalUser();
+        $currentUser = new CurrentUser();
         $currentUser->fromArray($user);
         $this->getServiceKernel()->setCurrentUser($currentUser);
         $this->getCourseService()->becomeStudent($createCourse['id'], $user['id']);
         $this->getCourseService()->tryLearnCourse($createCourse['id']);
-        $result    = $this->getCourseService()->findUserLearnCoursesNotInClassroom($user['id'], 0, 1);
+        $result = $this->getCourseService()->findUserLearnCoursesNotInClassroom($user['id'], 0, 1);
         $this->assertCount(1, $result);
     }
 
@@ -631,11 +666,13 @@ class CourseServiceTest extends BaseTestCase
             'title' => 'online test course1'
         );
         $courseUpdateData = array(
-            'title' => 'updateData'
+            'title'   => 'updateData',
+            'orgCode' => '1.'
         );
         $createCourse = $this->getCourseService()->createCourse($course);
         $updateCourse = $this->getCourseService()->updateCourse($createCourse['id'], $courseUpdateData);
         $this->assertEquals('updateData', $updateCourse['title']);
+        $this->assertEquals('1.', $updateCourse['orgCode']);
     }
 
     /**
@@ -917,7 +954,7 @@ class CourseServiceTest extends BaseTestCase
         //需要插件支持
     }
 
-    //=============== Course API Test [end] ================
+//=============== Course API Test [end] ================
 
     //================= 课程CRUD [start] ==================
 
@@ -1018,7 +1055,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getCourseService()->closeCourse($createCourse1['id'], 'classroom');
     }
 
-    //================= 课程CRUD [end] ===================
+//================= 课程CRUD [end] ===================
 
     //================= Lesson API [start] ==================
     public function testGetLesson()
@@ -1563,12 +1600,17 @@ class CourseServiceTest extends BaseTestCase
 
         $this->assertNull($this->getCourseService()->getCourseLesson($course['id'], $lesson1['id']));
 
-        // @FIXME
-        // $number = 1;
-        // $lessons = $this->getCourseService()->getCourseLessons($course['id']);
-        // foreach ($lessons as $lesson) {
-        //     $this->assertEquals($number, $lesson['number']);
-        //     $number ++;
+// @FIXME
+
+// $number = 1;
+
+// $lessons = $this->getCourseService()->getCourseLessons($course['id']);
+
+// foreach ($lessons as $lesson) {
+
+//     $this->assertEquals($number, $lesson['number']);
+
+//     $number ++;
         // }
     }
 
@@ -2395,12 +2437,17 @@ class CourseServiceTest extends BaseTestCase
         $lesson = $this->getCourseService()->getCourseLesson($course['id'], $lesson3['id']);
         $this->assertEquals($chapter1['id'], $lesson['chapterId']);
 
-        // @FIXME
-        // $number = 1;
-        // $chapters = $this->getCourseService()->getCourseChapters($course['id']);
-        // foreach ($chapters as $chapter) {
-        //     $this->assertEquals($number, $chapter['number']);
-        //     $number ++;
+// @FIXME
+
+// $number = 1;
+
+// $chapters = $this->getCourseService()->getCourseChapters($course['id']);
+
+// foreach ($chapters as $chapter) {
+
+//     $this->assertEquals($number, $chapter['number']);
+
+//     $number ++;
         // }
     }
 
@@ -2502,7 +2549,7 @@ class CourseServiceTest extends BaseTestCase
         }
     }
 
-    //===========获得课程的目录项[end] =======================
+//===========获得课程的目录项[end] =======================
 
     //============Member API[start] ===============
 
@@ -2791,7 +2838,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result['id'], '1');
     }
 
-    //============Member API[end] ===============
+//============Member API[end] ===============
 
     //============成为学员，即加入课程的学习[start] ===============
     public function testBecomeStudent()
@@ -2813,7 +2860,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertNotEmpty($member);
     }
 
-    //============成为学员，即加入课程的学习[end] ===============
+//============成为学员，即加入课程的学习[end] ===============
 
     //============退学[start] =====================
     public function testRemoveStudent()
@@ -2837,7 +2884,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals(false, $result);
     }
 
-    //============退学[end] =====================
+//============退学[end] =====================
 
     //==============封锁学员，封锁之后学员不能再查看该课程[start]=========
     public function testLockStudent()
@@ -2861,7 +2908,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result['locked'], '1');
     }
 
-    //==============封锁学员，封锁之后学员不能再查看该课程[end]=========
+//==============封锁学员，封锁之后学员不能再查看该课程[end]=========
 
     //===============解封学员[start] ==================
     public function testUnlockStudent()
@@ -2888,7 +2935,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertEquals($result['locked'], '0');
     }
 
-    //===============解封学员[end] ==================
+//===============解封学员[end] ==================
 
     //=============尝试管理课程, 无权限则抛出异常[start]======
     public function testTryManageCourse() //????
@@ -2919,7 +2966,7 @@ class CourseServiceTest extends BaseTestCase
         $this->getCourseService()->tryManageCourse($course['id']);
     }
 
-    //=============尝试管理课程, 无权限则抛出异常[end]======
+//=============尝试管理课程, 无权限则抛出异常[end]======
 
     //=============是否可以管理课程,如果课程不存在，且当前操作用户为管理员时，返回true [start]==============
     public function testCanManageCourse()
@@ -2963,7 +3010,7 @@ class CourseServiceTest extends BaseTestCase
         $this->assertTrue($result);
     }
 
-    //=============是否可以管理课程,如果课程不存在，且当前操作用户为管理员时，返回true [end]==============
+//=============是否可以管理课程,如果课程不存在，且当前操作用户为管理员时，返回true [end]==============
 
     /**
      * @expectedException Topxia\Service\Common\ServiceException
@@ -3013,28 +3060,31 @@ class CourseServiceTest extends BaseTestCase
         $this->getCourseService()->tryLearnCourse('1');
     }
 
-    #  /**
-    # * @expectedException Topxia\Service\Common\ServiceException
-    # */
-    /*public function testTryLearnCourseThird()//???
-    {
-    $user = $this->createTeacherUser();
-    $currentUser = new CurrentUser();
-    $currentUser->fromArray($user);
-    $this->getServiceKernel()->setCurrentUser($currentUser);
+#  /**
 
-    $course = array(
-    'title' => 'online test course 1',
-    );
-    $createCourse = $this->getCourseService()->createCourse($course);
+# * @expectedException Topxia\Service\Common\ServiceException
 
-    $userStudent = $this->createStudentUser();
-    $currentUser = new CurrentUser();
-    $currentUser->fromArray($userStudent);
-    $this->getServiceKernel()->setCurrentUser($currentUser);
-    $this->getCourseService()->tryLearnCourse($createCourse['id']);
-    }
-     */
+# */
+
+/*public function testTryLearnCourseThird()//???
+{
+$user = $this->createTeacherUser();
+$currentUser = new CurrentUser();
+$currentUser->fromArray($user);
+$this->getServiceKernel()->setCurrentUser($currentUser);
+
+$course = array(
+'title' => 'online test course 1',
+);
+$createCourse = $this->getCourseService()->createCourse($course);
+
+$userStudent = $this->createStudentUser();
+$currentUser = new CurrentUser();
+$currentUser->fromArray($userStudent);
+$this->getServiceKernel()->setCurrentUser($currentUser);
+$this->getCourseService()->tryLearnCourse($createCourse['id']);
+}
+ */
     //=============尝试学习课程[end]==============
 
     public function testIncreaseLessonQuizCount()

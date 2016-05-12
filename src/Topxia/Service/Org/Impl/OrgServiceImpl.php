@@ -65,9 +65,9 @@ class OrgServiceImpl extends BaseService implements OrgService
 
         if ($org['parentId']) {
             $this->getOrgDao()->wave($org['parentId'], array('childrenNum' => -1));
-            $this->getOrgDao()->delete($id);
         }
 
+        $this->getOrgDao()->delete($id);
         //删除辖下
         $this->getOrgDao()->deleteOrgsByOrgCode($org['orgCode']);
     }
