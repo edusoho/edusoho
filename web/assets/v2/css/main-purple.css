@@ -7011,7 +7011,7 @@ textarea {
 }
 .course-list .course-item.course-default {
   background-color: #f5f5f5;
-  padding: 48px 20px;
+  padding: 50px 20px 55px;
   border: 1px dashed #e1e1e1;
   color: #e1e1e1;
   text-align: center;
