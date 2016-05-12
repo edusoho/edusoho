@@ -311,7 +311,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此页面');
         }
 
-        $mySharingContacts = $this->getUploadFileService()->findMySharingContacts2($user['id']);
+        $mySharingContacts = $this->getUploadFileService()->findMySharingContacts($user['id']);
 
         return $this->createJsonResponse($mySharingContacts);
     }

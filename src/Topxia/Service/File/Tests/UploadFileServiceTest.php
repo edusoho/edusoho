@@ -359,36 +359,36 @@ class UploadFileServiceTest extends BaseTestCase
 
     public function testSearchFileCount()
     {
-      $conditions = array(
-        'source' => 'shared',
-        'currentUserId' => 1
-      );
-      $name = 'File.UploadFileShareDao';
-      $params = array(
-        array(
-          'functionName' => 'findShareHistoryByUserId',
-          'runTimes' => 1,
-          'withParams' =>  array(1),
-          'returnValue' => array(
+        $conditions = array(
+            'source' => 'shared',
+            'currentUserId' => 1
+        );
+        $name   = 'File.UploadFileShareDao';
+        $params = array(
             array(
-              'id' => 1,
-              'sourceUserId' => 2,
-              'targetUserId' => 1,
-              'isActive' => 1,
-              'createdTime'=> 1461037751,
-              'updatedTime' => 1461037751
-            ),
-            array(
-              'id' => 2,
-              'sourceUserId' => 3,
-              'targetUserId' => 1,
-              'isActive' => 1,
-              'createdTime'=> 1461037751,
-              'updatedTime' => 1461037751
+                'functionName' => 'findShareHistoryByUserId',
+                'runTimes' => 1,
+                'withParams' =>  array(1),
+                'returnValue' => array(
+                    array(
+                        'id' => 1,
+                        'sourceUserId' => 2,
+                        'targetUserId' => 1,
+                        'isActive' => 1,
+                        'createdTime'=> 1461037751,
+                        'updatedTime' => 1461037751
+                    ),
+                    array(
+                        'id' => 2,
+                        'sourceUserId' => 3,
+                        'targetUserId' => 1,
+                        'isActive' => 1,
+                        'createdTime'=> 1461037751,
+                        'updatedTime' => 1461037751
+                    )
+                )
             )
-          )
-        )
-      );
+        );
 
       $this->mock($name,$params);
       $name = 'File.UploadFileCollectDao';
@@ -576,9 +576,199 @@ class UploadFileServiceTest extends BaseTestCase
       $this->assertEquals($result,true);
     }
 
+    public function testFindMySharingContacts()
+    {
+        $user1 = $this->createUser('111111');
+        $user2 = $this->createUser('222222');
+        $user3 = $this->createUser('333333');
+
+        $fileShare1 = $this->getUploadFileService()->addShare($user1['id'], $user2['id']);
+        $fileShare2 = $this->getUploadFileService()->addShare($user1['id'], $user3['id']);
+        $fileShare3 = $this->getUploadFileService()->addShare($user2['id'], $user3['id']);
+
+        $sourceUsers = $this->getUploadFileService()->findMySharingContacts($user3['id']);
+
+        $this->assertArrayHasKey($user1['id'], $sourceUsers);
+        $this->assertArrayHasKey($user2['id'], $sourceUsers);
+    }
+
+    public function testShareFiles()
+    {
+        $this->getUploadFileService()->shareFiles(1, array(2,3,4));
+        $userShare = $this->getUploadFileService()->findShareHistoryByUserId(1,3);
+
+        $this->assertEquals(1, $userShare['sourceUserId']);
+        $this->assertEquals(3, $userShare['targetUserId']);
+    }
+
+    public function testAddShare()
+    {
+        $sourceUserId = 1;
+        $targetUserId = 2;
+
+        $fileShare = $this->getUploadFileService()->addShare($sourceUserId, $targetUserId);
+
+        $this->assertEquals($sourceUserId, $fileShare['sourceUserId']);
+        $this->assertEquals($targetUserId, $fileShare['targetUserId']);
+    }
+
+    public function testUpdateShare()
+    {
+        $sourceUserId = 1;
+        $targetUserId = 2;
+        $fileShare    = $this->getUploadFileService()->addShare($sourceUserId, $targetUserId);
+
+        $updateFileShare = $this->getUploadFileService()->updateShare($fileShare['id']);
+        $this->assertEquals($sourceUserId, $updateFileShare['sourceUserId']);
+        $this->assertEquals($targetUserId, $updateFileShare['targetUserId']);
+        $this->assertEquals(1, $updateFileShare['isActive']);
+    }
+
+    public function testFindShareHistoryByUserId()
+    {
+        $fileShare1 = $this->getUploadFileService()->addShare(1, 2);
+        $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
+
+        $userSharefile = $this->getUploadFileService()->findShareHistoryByUserId(1, 2);
+
+        $this->assertEquals(1, $userSharefile['sourceUserId']);
+        $this->assertEquals(2, $userSharefile['targetUserId']);
+    }
+
+    public function testFindShareHistory()
+    {
+        $fileShare1 = $this->getUploadFileService()->addShare(1, 2);
+        $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
+        $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
+
+        $shareFiles = $this->getUploadFileService()->findShareHistory(1);
+
+        $this->assertEquals(2, count($shareFiles));
+    }
+
+    public function testFindActiveShareHistory()
+    {
+        $fileShare1 = $this->getUploadFileService()->addShare(1, 2);
+        $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
+        $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
+
+        $fileShares = $this->getUploadFileService()->findActiveShareHistory(1);
+
+        $this->assertEquals(2, count($fileShares));
+    }
+
+    public function testCancelShareFile()
+    {
+        $fileShare = $this->getUploadFileService()->addShare(1, 2);
+        $fileShare = $this->getUploadFileService()->cancelShareFile(1, 2);
+
+        $this->assertEquals(0, $fileShare['isActive']);
+    }
+
+    public function testSearchShareHistoryCount()
+    {
+        $fileShare1 = $this->getUploadFileService()->addShare(1, 2);
+        $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
+        $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
+
+        $shareCount = $this->getUploadFileService()->searchShareHistoryCount(array('sourceUserId'=>1,'isActive'=>1));
+
+        $this->assertEquals(2, $shareCount);
+    }
+
+    public function testSearchShareHistories()
+    {
+        $fileShare1 = $this->getUploadFileService()->addShare(1, 2);
+        $fileShare2 = $this->getUploadFileService()->addShare(1, 3);
+        $fileShare3 = $this->getUploadFileService()->addShare(2, 3);
+
+        $shareFiles = $this->getUploadFileService()->searchShareHistories(array(
+                'sourceUserId' => 1
+            ), 
+            array('createdTime','DESC'),
+            0, 10
+        );
+
+        $this->assertEquals(2, count($shareFiles));
+    }
+
+    public function testWaveUploadFile()
+    {
+        $name = 'File.UploadFileDao';
+        $params = array(
+            array(
+                'functionName' => 'addFile',
+                'runTimes' => 1,
+                'withParams' => array(1),
+                'returnValue' =>array(
+                  'id' => 1,
+                  'storage' => 'cloud',
+                  'filename'=> 'test',
+                  'createdUserId' => 1,
+                  'usedCount' => 0
+                )
+            ),
+            array(
+                'functionName' => 'waveUploadFile',
+                'runTimes' => 1,
+                'withParams' => array(1),
+                'returnValue' =>array(
+                  'id' => 1,
+                  'storage' => 'cloud',
+                  'filename'=> 'test',
+                  'createdUserId' => 1,
+                  'usedCount' => 1
+                )
+            )
+        );
+       $this->mock($name,$params);
+
+       $name = 'File.LocalFileImplementor';
+       $params = array(
+          array(
+            'functionName' => 'addFile',
+            'runTimes' => 1,
+            'withParams' => array(
+             'id' => 1,
+             'storage' => 'cloud',
+             'filename'=> 'test',
+             'createdUserId' => 1
+           ),
+            'returnValue' =>array(
+              'id' => 1,
+              'storage' => 'cloud',
+              'filename'=> 'test',
+              'createdUserId' => 1
+            )
+          )
+        );
+        $this->mock($name,$params);
+
+        $file = $this->getUploadFileService()->addFile('materiallib',1);
+
+        $updateFile = $this->getUploadFileService()->waveUploadFile($file['id'], 'usedCount', +1);
+
+        $this->assertEquals($file['usedCount']+1, $updateFile['usedCount']);
+    }
+
+    protected function createUser($user)
+    {
+        $userInfo             = array();
+        $userInfo['email']    = "{$user}@{$user}.com";
+        $userInfo['nickname'] = "{$user}";
+        $userInfo['password'] = "{$user}";
+        $userInfo['loginIp']  = '127.0.0.1';
+        return $this->getUserService()->register($userInfo);
+    }
+
   	protected function getUploadFileService()
   	{
   		return $this->getServiceKernel()->createService('File.UploadFileService');
   	}
+
+    protected function getUserService()
+    {
+        return $this->getServiceKernel()->createService('User.UserService');
+    }
 
 }

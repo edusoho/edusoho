@@ -57,13 +57,7 @@ interface UploadFileService
 
 	public function decreaseFileUsedCount($id);//2
 
-	public function searchShareHistoryCount($conditions);//2
-
-	public function searchShareHistories($conditions, $orderBy, $start, $limit);//2
-
-	public function findActiveShareHistory($sourceUserId);//2
-
-	public function findMySharingContacts2($targetUserId);//2
+	//public function findMySharingContacts2($targetUserId);//2
 
 	public function reconvertFile($id, $options = array());//2
 
@@ -123,7 +117,13 @@ interface UploadFileService
 
     public function findShareHistory($sourceUserId);
 
+    public function findActiveShareHistory($sourceUserId);//2
+
     public function cancelShareFile($sourceUserId, $targetUserId);
+
+    public function searchShareHistoryCount($conditions);//2
+
+	public function searchShareHistories($conditions, $orderBy, $start, $limit);//2
 
     public function waveUploadFile($id, $field, $diff);
 }

@@ -418,17 +418,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $shareHistories;
     }
 
-    //合并findMySharingContacts
-    public function findMySharingContacts2($targetUserId)
-    {
-        $userIds = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($targetUserId);
-
-        if (!empty($userIds)) {
-            return $this->getUserService()->findUsersByIds(ArrayToolkit::column($userIds, 'sourceUserId'));
-        } else {
-            return null;
-        }
-    }
+    
 
     //合并reconvertFile
     public function reconvertFile($id, $options = array())
@@ -783,8 +773,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         return $localCount;
     }
 
-    
-
     public function addFile($targetType, $targetId, array $fileInfo = array(), $implemtor = 'local', UploadedFile $originalFile = null)
     {
         $file = $this->getFileImplementor($implemtor)->addFile($targetType, $targetId, $fileInfo, $originalFile);
@@ -965,7 +953,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function findMySharingContacts($targetUserId)
     {
-        $userIds = $this->getUploadFileShareDao()->findMySharingContacts($targetUserId);
+        $userIds = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($targetUserId);
 
         if (!empty($userIds)) {
             return $this->getUserService()->findUsersByIds(ArrayToolkit::column($userIds, 'sourceUserId'));
@@ -974,43 +962,38 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
     }
 
+    //合并findMySharingContacts
+    /*public function findMySharingContacts2($targetUserId)
+    {
+        $userIds = $this->getUploadFileShareDao()->findSharesByTargetUserIdAndIsActive($targetUserId);
+
+        if (!empty($userIds)) {
+            return $this->getUserService()->findUsersByIds(ArrayToolkit::column($userIds, 'sourceUserId'));
+        } else {
+            return null;
+        }
+    }*/
+
     public function findShareHistory($sourceUserId)
     {
-        $shareHistories = $this->getUploadFileShareDao()->findShareHistoryByUserId($sourceUserId);
-
-        return $shareHistories;
+        return $this->getUploadFileShareDao()->findShareHistoryByUserId($sourceUserId);
     }
 
     public function shareFiles($sourceUserId, $targetUserIds)
     {
         foreach ($targetUserIds as $targetUserId) {
-//Ignore sharing request if the sourceUserId equasls to targetUserId
 
             if ($targetUserId != $sourceUserId) {
                 $shareHistory = $this->getUploadFileShareDao()->findShareHistory($sourceUserId, $targetUserId);
 
                 if (isset($shareHistory)) {
-                    //File sharing record exists, update the existing record
-                    $fileShareFields = array(
-                        'isActive'    => 1,
-                        'updatedTime' => time()
-                    );
-
-                    $this->getUploadFileShareDao()->updateShare($shareHistory['id'], $fileShareFields);
+                    $this->updateShare($shareHistory['id']);
                 } else {
-                    //Add new file sharing record
-                    $fileShareFields = array(
-                        'sourceUserId' => $sourceUserId,
-                        'targetUserId' => $targetUserId,
-                        'isActive'     => 1,
-                        'createdTime'  => time(),
-                        'updatedTime'  => time()
-                    );
-
-                    $this->getUploadFileShareDao()->addShare($fileShareFields);
+                    $this->addShare($sourceUserId, $targetUserId);
                 }
             }
         }
+        return true;
     }
 
     public function findShareHistoryByUserId($sourceUserId, $targetUserId)
@@ -1057,7 +1040,7 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
     public function waveUploadFile($id, $field, $diff)
     {
-        $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
+        return $this->getUploadFileDao()->waveUploadFile($id, $field, $diff);
     }
 
     protected function updateTags($localFile, $fields)
