@@ -60,7 +60,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.resize_enabled = false;
     config.title = false;
 
-    config.extraPlugins = 'questionblank,smiley,table,font,kityformula,uploadpictures,codesnippet';
+    config.extraPlugins = 'questionblank,smiley,table,font,kityformula,codesnippet';
     // config.stylesSet = 'my_styles';
     config.codeSnippet_theme = 'zenburn';
 };

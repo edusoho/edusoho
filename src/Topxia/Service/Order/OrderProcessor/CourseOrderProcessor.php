@@ -78,7 +78,7 @@ class CourseOrderProcessor extends BaseProcessor implements OrderProcessor
         if (!isset($maxCoin)) {
             $maxCoin = $coinPayAmount;
         }
-
+        
         return array(
             'course'         => empty($course) ? null : $course,
             'users'          => empty($users) ? null : $users,
