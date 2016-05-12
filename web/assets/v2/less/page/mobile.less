@@ -123,18 +123,18 @@
     }
     &.active {
       .img-one {
-        .animation(fadeInLeft .5s .7s ease both);
+        .animation(fadeInLeft .5s .2s ease both);
       }
       .img-two {
-        .animation(fadeInRight .5s .7s ease both);
+        .animation(fadeInRight .5s .2s ease both);
       }
       .title {
-        .animation(fadeInDown 0.5s .2s ease both);
+        .animation(fadeInDown 0.5s .7s ease both);
       }
       .subtitle,
       .label-mobile,
       .btn-mobile {
-        .animation(fadeInUp 0.5s .2s ease both);
+        .animation(fadeInUp 0.5s .7s ease both);
       }
     }
   }
@@ -149,39 +149,40 @@
       @media(max-width: @screen-xs-max) {
         padding: 50px 10px;
       }
+    }
+    .step {
+      margin-bottom: 85px;
+      @media(max-width: @screen-xs-max) {
+        margin-bottom: 30px;
+      }
     } 
-    .img-two {
+    .qrcode {
       display: inline-block;
-      margin-left: 15%;
-      margin-right: 90px;
       width: 220px;
       height: auto;
       max-width: 100%;
-      @media(max-width: @screen-md-max) {
-        margin-left: 5%;
-        margin-right: 50px;
-      }
-      @media(max-width: @screen-sm-max){
-        margin-left: 0;
-        margin-right: 30px;
-      }
-      @media(max-width: @screen-xs-max) {
-        margin-right: 0;
-        margin-bottom: 20px;
+      @media(max-width: @screen-sm-max) {
+        width: 200px;
       }
     }
     .btn-android,
     .btn-apple {
       display: inline-block;
       color: #fff;
+      margin-top: 70px;
       text-align: center;
       font-size: 20px;
       padding: 24px 30px;
       .border-radius;
       .es-transition;
-      @media(max-width: @screen-sm-max) {
+      @media(max-width: @screen-md-max) {
         font-size: 18px;
-        padding: 15px; 
+        padding: 15px 10px;
+        margin-top: 74px;
+      }
+      @media(max-width: @screen-sm-max) {
+        padding: 15px;
+        margin-top: 28px; 
       }
       &:hover {
         background-image: none;
@@ -209,8 +210,10 @@
       @media(max-width: @screen-md-max) {
         margin-left: 20px;
       }
-      @media(max-width: @screen-xs-max) {
+      @media(max-width: @screen-sm-max) {
         margin-left: 0;
+      }
+      @media(max-width: @screen-xs-max) {
         margin-top: 20px;
       }
       box-shadow: 0 16px 40px rgba(31, 93, 234, 0.4);
@@ -235,38 +238,31 @@
         padding: 50px 10px;
       }
     }
+    .step {
+      margin-bottom: 45px;
+      @media(max-width: @screen-xs-max) {
+        margin-bottom: 30px;
+      }
+    }
     .qrcode {
-      margin-left: 15%;
-      margin-bottom: 40px;
-      text-align: center;
+      margin: 30px auto 0;
       width: 220px;
       font-size: 18px;
       color: #313131;
       @media(max-width: @screen-sm-max) {
-        margin-left: 5%;
-      }
-      @media(max-width: @screen-xs-max) {
-        margin: 0 auto;
+        width: 200px;
       }
       img {
         width: 100%;
         margin-bottom: 20px;
       }
     }
-    .img-two {
-      position: absolute;
-      right: 15%;
-      bottom: 0;
+    .thumb {
+      max-width: 100%;
       opacity: 0;
-      @media(max-width: @screen-md-max) {
-        width: 350px;
-      }
-      @media(max-width: @screen-sm-max) {
-        right: 5%;
-      }
     }
     &.active {
-      .img-two {
+      .thumb {
         .animation(fadeInUp 1s  ease both);
       }
     }
@@ -274,13 +270,8 @@
   .step {
     font-size: 24px;
     color: @gray-darker;
-    margin-bottom: 80px;
-    @media(max-width: @screen-md-max) {
-      margin-bottom: 50px;
-    }
     @media(max-width: @screen-xs-max) {
       font-size: 16px;
-      margin-bottom: 30px;
     }
     .member {
       display: inline-block;

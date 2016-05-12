@@ -37,10 +37,14 @@
         <div class="step">
           {% if mobile.appname|default() == '' %}<span class="member">1</span>{{'第一步:'|trans}}{% endif %} {{'扫描二维码，下载手机APP。'|trans}}
         </div>
-        <div class="mobile-content">
-          <img class="img-two" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
-          <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn-android"><i class='es-icon es-icon-android'></i>Android {{'客户端'|trans}}</a>
-          <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" class="btn-apple"><i class='es-icon es-icon-apple'></i>iPhone{{'客户端'|trans}}</a>
+        <div class="row">
+          <div class="col-sm-6 text-center">
+            <img class="qrcode" src="{{ path('mobile_download_qrcode',{code:mobileCode}) }}" alt="">
+          </div>
+          <div class="col-sm-6 text-center">
+            <a href="{{ path('mobile_download', {client:'android',code:mobileCode}) }}" class="btn-android"><i class='es-icon es-icon-android'></i>Android {{'客户端'|trans}}</a>
+            <a href="{{ path('mobile_download', {client:'iphone',code:mobileCode}) }}" class="btn-apple"><i class='es-icon es-icon-apple'></i>iPhone{{'客户端'|trans}}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -50,11 +54,17 @@
         <div class="step">
           <span class="member">2</span>{{'第二步: 打开阔知学堂APP，扫描网校二维码。'|trans}}
         </div>
-        <div class="qrcode">
-          <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
-          <p>{{'扫一扫登录客户端'|trans}}</p>
+        <div class="row">
+          <div class="col-sm-6 text-center">
+            <img class="thumb" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
+          </div>
+          <div class="col-sm-6 text-center">
+            <div class="qrcode">
+              <p>{{'扫一扫登录客户端'|trans}}</p>
+              <img src="{{ path('topxia_mobile_qrcode') }}" alt="">
+            </div>
+          </div>
         </div>
-        <img class="img-two hidden-xs" src="{{asset("assets/v2/img/mobile/phone_gui.png")}}" alt="">
       </div>
     </div>
     {% endif %}

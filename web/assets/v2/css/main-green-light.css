@@ -12189,30 +12189,30 @@ textarea {
   }
 }
 .es-mobile .mobile-first.active .img-one {
-  -webkit-animation: fadeInLeft 0.5s 0.7s ease both;
-  -moz-animation: fadeInLeft 0.5s 0.7s ease both;
-  -o-animation: fadeInLeft 0.5s 0.7s ease both;
-  animation: fadeInLeft 0.5s 0.7s ease both;
+  -webkit-animation: fadeInLeft 0.5s 0.2s ease both;
+  -moz-animation: fadeInLeft 0.5s 0.2s ease both;
+  -o-animation: fadeInLeft 0.5s 0.2s ease both;
+  animation: fadeInLeft 0.5s 0.2s ease both;
 }
 .es-mobile .mobile-first.active .img-two {
-  -webkit-animation: fadeInRight 0.5s 0.7s ease both;
-  -moz-animation: fadeInRight 0.5s 0.7s ease both;
-  -o-animation: fadeInRight 0.5s 0.7s ease both;
-  animation: fadeInRight 0.5s 0.7s ease both;
+  -webkit-animation: fadeInRight 0.5s 0.2s ease both;
+  -moz-animation: fadeInRight 0.5s 0.2s ease both;
+  -o-animation: fadeInRight 0.5s 0.2s ease both;
+  animation: fadeInRight 0.5s 0.2s ease both;
 }
 .es-mobile .mobile-first.active .title {
-  -webkit-animation: fadeInDown 0.5s 0.2s ease both;
-  -moz-animation: fadeInDown 0.5s 0.2s ease both;
-  -o-animation: fadeInDown 0.5s 0.2s ease both;
-  animation: fadeInDown 0.5s 0.2s ease both;
+  -webkit-animation: fadeInDown 0.5s 0.7s ease both;
+  -moz-animation: fadeInDown 0.5s 0.7s ease both;
+  -o-animation: fadeInDown 0.5s 0.7s ease both;
+  animation: fadeInDown 0.5s 0.7s ease both;
 }
 .es-mobile .mobile-first.active .subtitle,
 .es-mobile .mobile-first.active .label-mobile,
 .es-mobile .mobile-first.active .btn-mobile {
-  -webkit-animation: fadeInUp 0.5s 0.2s ease both;
-  -moz-animation: fadeInUp 0.5s 0.2s ease both;
-  -o-animation: fadeInUp 0.5s 0.2s ease both;
-  animation: fadeInUp 0.5s 0.2s ease both;
+  -webkit-animation: fadeInUp 0.5s 0.7s ease both;
+  -moz-animation: fadeInUp 0.5s 0.7s ease both;
+  -o-animation: fadeInUp 0.5s 0.7s ease both;
+  animation: fadeInUp 0.5s 0.7s ease both;
 }
 .es-mobile .mobile-second {
   min-height: 200px;
@@ -12231,36 +12231,30 @@ textarea {
     padding: 50px 10px;
   }
 }
-.es-mobile .mobile-second .img-two {
+.es-mobile .mobile-second .step {
+  margin-bottom: 85px;
+}
+@media (max-width: 767px) {
+  .es-mobile .mobile-second .step {
+    margin-bottom: 30px;
+  }
+}
+.es-mobile .mobile-second .qrcode {
   display: inline-block;
-  margin-left: 15%;
-  margin-right: 90px;
   width: 220px;
   height: auto;
   max-width: 100%;
 }
-@media (max-width: 1199px) {
-  .es-mobile .mobile-second .img-two {
-    margin-left: 5%;
-    margin-right: 50px;
-  }
-}
 @media (max-width: 991px) {
-  .es-mobile .mobile-second .img-two {
-    margin-left: 0;
-    margin-right: 30px;
-  }
-}
-@media (max-width: 767px) {
-  .es-mobile .mobile-second .img-two {
-    margin-right: 0;
-    margin-bottom: 20px;
+  .es-mobile .mobile-second .qrcode {
+    width: 200px;
   }
 }
 .es-mobile .mobile-second .btn-android,
 .es-mobile .mobile-second .btn-apple {
   display: inline-block;
   color: #fff;
+  margin-top: 70px;
   text-align: center;
   font-size: 20px;
   padding: 24px 30px;
@@ -12272,11 +12266,19 @@ textarea {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-@media (max-width: 991px) {
+@media (max-width: 1199px) {
   .es-mobile .mobile-second .btn-android,
   .es-mobile .mobile-second .btn-apple {
     font-size: 18px;
+    padding: 15px 10px;
+    margin-top: 74px;
+  }
+}
+@media (max-width: 991px) {
+  .es-mobile .mobile-second .btn-android,
+  .es-mobile .mobile-second .btn-apple {
     padding: 15px;
+    margin-top: 28px;
   }
 }
 .es-mobile .mobile-second .btn-android:hover,
@@ -12319,9 +12321,13 @@ textarea {
     margin-left: 20px;
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   .es-mobile .mobile-second .btn-apple {
     margin-left: 0;
+  }
+}
+@media (max-width: 767px) {
+  .es-mobile .mobile-second .btn-apple {
     margin-top: 20px;
   }
 }
@@ -12346,45 +12352,34 @@ textarea {
     padding: 50px 10px;
   }
 }
+.es-mobile .mobile-third .step {
+  margin-bottom: 45px;
+}
+@media (max-width: 767px) {
+  .es-mobile .mobile-third .step {
+    margin-bottom: 30px;
+  }
+}
 .es-mobile .mobile-third .qrcode {
-  margin-left: 15%;
-  margin-bottom: 40px;
-  text-align: center;
+  margin: 30px auto 0;
   width: 220px;
   font-size: 18px;
   color: #313131;
 }
 @media (max-width: 991px) {
   .es-mobile .mobile-third .qrcode {
-    margin-left: 5%;
-  }
-}
-@media (max-width: 767px) {
-  .es-mobile .mobile-third .qrcode {
-    margin: 0 auto;
+    width: 200px;
   }
 }
 .es-mobile .mobile-third .qrcode img {
   width: 100%;
   margin-bottom: 20px;
 }
-.es-mobile .mobile-third .img-two {
-  position: absolute;
-  right: 15%;
-  bottom: 0;
+.es-mobile .mobile-third .thumb {
+  max-width: 100%;
   opacity: 0;
 }
-@media (max-width: 1199px) {
-  .es-mobile .mobile-third .img-two {
-    width: 350px;
-  }
-}
-@media (max-width: 991px) {
-  .es-mobile .mobile-third .img-two {
-    right: 5%;
-  }
-}
-.es-mobile .mobile-third.active .img-two {
+.es-mobile .mobile-third.active .thumb {
   -webkit-animation: fadeInUp 1s ease both;
   -moz-animation: fadeInUp 1s ease both;
   -o-animation: fadeInUp 1s ease both;
@@ -12393,17 +12388,10 @@ textarea {
 .es-mobile .step {
   font-size: 24px;
   color: #313131;
-  margin-bottom: 80px;
-}
-@media (max-width: 1199px) {
-  .es-mobile .step {
-    margin-bottom: 50px;
-  }
 }
 @media (max-width: 767px) {
   .es-mobile .step {
     font-size: 16px;
-    margin-bottom: 30px;
   }
 }
 .es-mobile .step .member {
