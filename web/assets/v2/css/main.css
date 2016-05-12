@@ -9036,6 +9036,10 @@ textarea {
   top: 10px;
   right: 10px;
   padding: 0 3px;
+  display: block;
+}
+.course-detail-header .setting + .setting {
+  right: 35px;
 }
 .course-detail-header .course-img {
   position: relative;
@@ -9942,6 +9946,9 @@ textarea {
   top: 10px;
   right: 10px;
   padding: 0 3px;
+}
+.class-header .setting + .setting {
+  right: 35px;
 }
 .class-header.before .class-img {
   position: relative;
