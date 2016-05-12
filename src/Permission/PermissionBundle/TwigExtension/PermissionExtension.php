@@ -29,8 +29,21 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('permission_path', array($this, 'getPermissionPath'), array('needs_context' => true, 'needs_environment' => true)),
             new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions')),
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
-            new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true))
+            new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
+            new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild'), array('needs_context' => true, 'needs_environment' => true))
+            
         );
+    }
+
+    public function getFirstChild($env, $context, $menu) 
+    {
+        $menus = $this->getSubPermissions($menu['code']);
+        
+        if(empty($menus)){
+            return array();
+        }
+
+        return current($menus);
     }
 
     public function getPermissionPath($env, $context, $menu)
