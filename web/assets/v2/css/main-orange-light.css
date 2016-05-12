@@ -5206,11 +5206,12 @@ a.homework-essay-textarea-pack-up {
   margin-right: 0;
   color: #313131;
   font-size: 16px;
+  font-weight: 500;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
-  padding: 5px 20px 15px;
+  padding: 5px 30px 15px;
 }
 @media (max-width: 1199px) {
   .nav.nav-tabs > li > a {
