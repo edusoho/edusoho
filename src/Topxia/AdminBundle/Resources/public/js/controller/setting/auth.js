@@ -63,12 +63,12 @@ define(function(require, exports, module) {
           url: $('.js-email-send-check').data('url'),
           timeout: 3000 // sets timeout to 3 seconds
         }).done(function(resp) {
-          $('.js-emial-status').removeClass('alert-info').addClass('alert-success').html('<span class="text-success">√ ' + resp.message + '</span>');
+          $('.js-emial-status').removeClass('alert-info').addClass('alert-success').html('<span class="text-success">' + resp.message + '</span>');
         })
         .fail(function(resp) {
           $('input[name="email_enabled"][value="closed"]').prop("checked", true);
           $('.js-email-send-check').addClass("hidden");
-          $('.js-emial-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">X 邮件发送异常</span>');
+          $('.js-emial-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常</span>');
         })
     })
 
