@@ -1,3 +1,6 @@
+parameters:
+    routing.loader.yml.class: Permission\Loader\YamlFileLoader
+
 services:
     topxia.twig.permission_extension:
         class: Permission\PermissionBundle\TwigExtension\PermissionExtension

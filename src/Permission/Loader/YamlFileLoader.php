@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Topxia\WebBundle\Route\Loader;
+namespace Permission\Loader;
 
-use Topxia\WebBundle\Route\Route;
+use Permission\Loader\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Parser as YamlParser;

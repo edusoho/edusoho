@@ -1,6 +1,6 @@
 <?php
 
-namespace Topxia\WebBundle\Route;
+namespace Permission\Loader;
 
 use Symfony\Component\Routing\Route as BaseRoute;
 
