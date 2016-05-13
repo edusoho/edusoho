@@ -48,7 +48,7 @@ $resources = array(
     'DiscoveryColumn',
     'Playlist',
     'IM/MeLogin',
-    'IM/Conversation',
+    'IM/Conversations',
     'IM/MyConversation',
     'IM/MyConversations',
     'CourseThread',

@@ -16,7 +16,7 @@ class MyConversation extends BaseResource
 
         $fields = $this->checkRequiredFields($requiredFields, $request->request->all());
 
-        $myConversation = $this->getMyConversationService()->updateMyConversationByNo($no, $fields['updatedTime']);
+        $myConversation = $this->getConversationService()->updateMyConversationByNo($no, $fields['updatedTime']);
 
         return $this->filter($myConversation);
     }
@@ -33,8 +33,8 @@ class MyConversation extends BaseResource
     }
 
 
-    protected function getMyConversationService()
+    protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.MyConversationService');
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }

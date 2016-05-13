@@ -8,8 +8,6 @@ interface MyConversationDao
 
     public function getMyConversationByNo($no);
 
-    public function findMyConversationsByUserId($userId);
-
     public function addMyConversation($myConversation);
 
     public function updateMyConversation($id, $fields);

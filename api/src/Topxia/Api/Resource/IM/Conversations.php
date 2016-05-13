@@ -8,7 +8,7 @@ use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
 use Topxia\Service\CloudPlatform\CloudAPIFactory;
 
-class Conversation extends BaseResource
+class Conversations extends BaseResource
 {
     public function post(Application $app, Request $request)
     {
@@ -61,7 +61,7 @@ class Conversation extends BaseResource
 
             //创建用户各自的会话
             foreach ($users as $user) {
-                $this->getMyConversationService()->addMyConversation(array(
+                $this->getConversationService()->addMyConversation(array(
                     'no' => $conversationNo,
                     'userId' => $user['id'],
                 ));
@@ -85,10 +85,5 @@ class Conversation extends BaseResource
     protected function getConversationService()
     {
         return $this->getServiceKernel()->createService('IM.ConversationService');
-    }
-
-    protected function getMyConversationService()
-    {
-        return $this->getServiceKernel()->createService('IM.MyConversationService');
     }
 }

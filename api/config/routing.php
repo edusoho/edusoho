@@ -98,7 +98,7 @@ $app->get(_u('/discovery_columns'), 'res.DiscoveryColumn:get');
 
 $app->post(_u('/im/me/login'), 'res.IM/MeLogin:post');
 
-$app->post(_u('/im/conversations'), 'res.IM/Conversation:post');
+$app->post(_u('/im/conversations'), 'res.IM/Conversations:post');
 
 $app->get(_u('/im/my_conversations'), 'res.IM/MyConversations:get');
 $app->post(_u('/im/my_conversations/{no}'), 'res.IM/MyConversation:post');

@@ -31,6 +31,40 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->addConversation($conversation);
     }
 
+
+
+    public function addMyConversation($myConversation)
+    {
+        $myConversation = $this->filterMyConversationFields($myConversation);
+        $myConversation['createdTime'] = time();
+        $myConversation['updatedTime'] = time();
+        return $this->getMyConversationDao()->addMyConversation($myConversation);
+    }
+
+    public function updateMyConversationByNo($no, $fields)
+    {
+        return $this->getMyConversationDao()->updateMyConversationByNo($no, $fields);
+    }
+
+    public function listMyConversationsByUserId($userId, $start = 0, $limit = 1000)
+    {
+        $conditions = array(
+            'userId' => $userId
+        );
+
+        $orderBy = array(
+            'updatedTime',
+            'DESC'
+        );
+        
+        return $this->getMyConversationDao()->searchMyConversations(
+            $conditions,
+            $orderBy,
+            $start,
+            $limit
+        );
+    }
+
     protected function filterConversationFields(array $fields)
     {
         $fields = ArrayToolkit::parts($fields, array('no', 'memberIds'));
@@ -53,6 +87,31 @@ class ConversationServiceImpl extends BaseService implements ConversationService
     protected function buildMemberHash(array $memberIds)
     {
         return md5(join($memberIds, ','));
+    }
+
+    protected function filterMyConversationFields(array $fields)
+    {
+        $fields = ArrayToolkit::parts($fields, array(
+            'no',
+            'userId',
+            'createdTime',
+            'updatedTime'
+        ));
+        
+        if (empty($fields['no'])) {
+            throw $this->createServiceException('field `no` can not be empty');
+        }
+
+        if (empty($fields['userId'])) {
+            throw $this->createServiceException('field `userId` can not be empty');
+        }
+
+        return $fields;
+    }
+
+    protected function getMyConversationDao()
+    {
+        return $this->createDao('IM.MyConversationDao');
     }
 
     protected function getConversationDao()

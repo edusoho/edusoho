@@ -14,26 +14,12 @@ class MyConversations extends BaseResource
     {
         $user = $this->getCurrentUser();
 
-        $conditions = array(
-            'userId' => $user['id']
-        );
-
-        $orderBy = array(
-            'updatedTime',
-            'DESC'
-        );
         $start = isset($fields['start']) ? (int) $fields['start'] : 0;
-        $limit = isset($fields['limit']) ? (int) $fields['limit'] : 20;
+        $limit = isset($fields['limit']) ? (int) $fields['limit'] : 50;
 
-        $myConversations = $this->getMyConversationService()->searchMyConversations(
-            $conditions,
-            $orderBy,
-            $start,
-            $limit
-        );
-        $total = $this->getMyConversationService()->searchMyConversationCount($conditions);
+        $myConversations = $this->getConversationService()->listMyConversationsByUserId($user['id'], $start, $limit);
 
-        return $this->wrap($this->filter($myConversations), $total);
+        return $this->filter($myConversations);
     }
 
     public function filter($res)
@@ -41,8 +27,8 @@ class MyConversations extends BaseResource
         return $this->multicallFilter('IM/MyConversation', $res);
     }
 
-    protected function getMyConversationService()
+    protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.MyConversationService');
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }
