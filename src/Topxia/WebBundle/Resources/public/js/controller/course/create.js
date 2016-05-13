@@ -1,15 +1,15 @@
 define(function(require, exports, module) {
 
-	var Validator = require('bootstrap.validator');
-
+    var Validator = require('bootstrap.validator');
+    var ztree = require('edusoho.ztree');
     exports.run = function() {
-
-        if($("#course-create-form").length>0) {
+        ztree('#orgZtree', "#orgName", "#orgCode");
+        if ($("#course-create-form").length > 0) {
 
             var validator = new Validator({
                 element: '#course-create-form',
                 triggerType: 'change',
-                onFormValidated: function(error){
+                onFormValidated: function(error) {
                     if (error) {
                         return false;
                     }
@@ -21,7 +21,7 @@ define(function(require, exports, module) {
                 element: '[name="title"]',
                 required: true
             });
-        
+
         }
     };
 
