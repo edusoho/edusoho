@@ -26,8 +26,8 @@ define(function(require, exports, module) {
             accept.title = '文件';
             accept.extensions = "*";
             accept.mimeTypes = "*";
-            //this.get('accept')['extensions'].join(',');
-            //"video/mp4," + this.get('accept')['mimeTypes'].join(',');
+            /*accept.extensions = this.get('accept')['extensions'].join(',');
+            accept.mimeTypes= this.get('accept')['mimeTypes'].join(',');*/
             var defaults = {
                 runtimeOrder: 'html5,flash',
 
