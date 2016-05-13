@@ -585,5 +585,52 @@ web:
     children:
         course_manage:
             name: 课程管理
+            children:
+                course_manage_info:
+                    name: 课程信息
+                    children:
+                        course_manage_base:
+                            name: 基本信息
+                        course_manage_detail:
+                            name: 详细信息
+                        course_manage_picture:
+                            name: 课程图片
+                        course_manage_lesson:
+                            name: 课时管理
+                        course_manage_lesson:
+                            name: 课时管理
+                        live_course_manage_replay:
+                            name: 录播管理
+                        course_manage_files:
+                            name: 文件管理
+                course_manage_setting:
+                    name: 课程设置
+                    children:
+                        course_manage_price:
+                            name: 价格设置
+                        course_manage_teachers:
+                            name: 教师设置
+                        course_manage_students:
+                            name: 学员设置
+                course_manage_question:
+                    name: 题库
+                    children:
+                        course_manage_question_setting:
+                            name: 题目设置
+                        course_question_plumber:
+                            name: 题目导入导出
+                        course_manage_testpaper:
+                            name: 试卷管理
+                        course_manage_test_check:
+                            name: 试卷批阅
+                        course_homework_check_list:
+                            name: 作业批改
+                course_manange_operate:
+                    name: 课程运营
+                    children:
+                        course_manage_data:
+                            name: 课程学习数据
+                        course_manage_order:
+                            name: 课程订单管理
         classroom_manage:
             name: 班级管理
