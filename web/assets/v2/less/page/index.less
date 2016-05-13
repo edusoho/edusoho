@@ -238,42 +238,6 @@
     @media(max-width:@screen-xs-max) {
       margin: 0 -5px 20px -5px;
     }
-    // &:hover {
-      // .class-bg-layer {
-      //   transform: translateY(-6px);
-      //   -webkit-transform: translateY(-6px);
-      //   -moz-transform: translateY(-6px);
-      //   box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
-      //   -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
-      //   -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 4px 0 rgba(0,0,0,0.1);
-      //   -webkit-transition: all .4s .05s ease;
-      //   -moz-transition: all .4s .05s ease;
-      //   transition: all .4s .05s ease;
-      // }
-      // .class-item-bg {
-      //   transform: translateY(-8px);
-      //   -webkit-transform: translateY(-8px);
-      //   -moz-transform: translateY(-8px);
-      //   box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
-      //   -webkit-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
-      //   -moz-box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1),0 2px 6px 0 rgba(0,0,0,0.1);
-      //   .es-transition;
-      // }
-    // }
-    // .class-bg-layer {
-    //   .es-transition;
-    // }
-    // .class-item-bg {
-    //   background-color: #fff;
-    //   padding: 10px;
-    //   .border-radius;
-    //   .box-shadow(0 1px 3px 0 rgba(0,0,0,0.1));
-    //   .es-transition;
-    //   @media(max-width:@screen-xs-max) {
-    //     padding: 5px;
-    //   }
-    // }
-
     .class-img-wrap {
       position: relative;
       overflow: hidden;
@@ -289,6 +253,8 @@
         background-color: rgba(0, 0, 0, 0.8);
         opacity: 0;
         .es-transition;
+        .border-top-left-radius();
+        .border-top-right-radius();
         .btn {
           margin-top: 80%;
           .es-transition;
@@ -334,9 +300,9 @@
   }
 }
 
-.lt-ie9 .recommend-class-list .class-item {
-  border: 1px solid @gray-light;
-}
+// .lt-ie9 .recommend-class-list .class-item {
+//   border: 1px solid @gray-light;
+// }
 
 //小组动态
 .dynamic-section-main .panel {

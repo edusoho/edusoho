@@ -491,20 +491,33 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->changeEmail($user1['id'], 'user2@user2.com');
     }
 
-    // public function testChangeAvatar()//*
-    // {var_dump(500);
-    //     $userInfo = array(
-    //         'nickname'=>'test_nickname',
-    //         'password'=> 'test_password',
-    //         'email'=>'test_email@email.com'
-    //     );
-    //     $registeredUser = $this->getUserService()->register($userInfo);
-    //     $data = array(
-    //         'id'=>'1',
-    //         'type'=>'jpg',
-    //     );
-    //     $a = $this->getUserService()->changeAvatar($registeredUser['id'],$data);
-    //     var_dump($a);
+// public function testChangeAvatar()//*
+
+// {var_dump(500);
+
+//     $userInfo = array(
+
+//         'nickname'=>'test_nickname',
+
+//         'password'=> 'test_password',
+
+//         'email'=>'test_email@email.com'
+
+//     );
+
+//     $registeredUser = $this->getUserService()->register($userInfo);
+
+//     $data = array(
+
+//         'id'=>'1',
+
+//         'type'=>'jpg',
+
+//     );
+
+//     $a = $this->getUserService()->changeAvatar($registeredUser['id'],$data);
+
+//     var_dump($a);
     // }
 
     public function testIsEmailAvaliable()
@@ -827,14 +840,19 @@ class UserServiceTest extends BaseTestCase
         $this->assertNotNull($email);
     }
 
-    // public function testImportUpdateEmail()
-    // {
+// public function testImportUpdateEmail()
 
-    //     // $user1 = $this->createUser('user1');
-    //     // $user2 = $this->createUser('user2');
-    //     // $user3 = $this->createUser('user3');
-    //     // $users = array($user1,$user2,$user3);
-    //     // $this->getUserService()->importUpdateEmail($users);
+// {
+
+//     // $user1 = $this->createUser('user1');
+
+//     // $user2 = $this->createUser('user2');
+
+//     // $user3 = $this->createUser('user3');
+
+//     // $users = array($user1,$user2,$user3);
+
+//     // $this->getUserService()->importUpdateEmail($users);
     // }
 
     public function testSetupAccount()
@@ -1170,10 +1188,11 @@ class UserServiceTest extends BaseTestCase
         $this->assertEquals(0, count($result));
     }
 
-    // public function testApplyUserApproval()//*
-    // {
+// public function testApplyUserApproval()//*
 
-    // }
+// {
+
+// }
     /**
      * @expectedException Topxia\Service\Common\ServiceException
      */
@@ -1223,10 +1242,13 @@ class UserServiceTest extends BaseTestCase
         $this->getUserService()->rejectApproval($user['id'], $note);
     }
 
-    // public function testDropFieldData()
-    // {
-    //     $fieldName = null;
-    //     $this->getUserService()->dropFieldData($fie);
+// public function testDropFieldData()
+
+// {
+
+//     $fieldName = null;
+
+//     $this->getUserService()->dropFieldData($fie);
     // }
 
     public function testRememberLoginSessionIdOne()
@@ -2270,6 +2292,7 @@ class UserServiceTest extends BaseTestCase
      */
     public function testChangeAvatarFromImgUrl()
     {
+        $this->initFile();
         $userInfo = array(
             'nickname' => 'test_nickname',
             'password' => 'test_password',
@@ -2310,6 +2333,81 @@ class UserServiceTest extends BaseTestCase
         return $this->getUserService()->register($toUser);
     }
 
+    private function initFile()
+    {
+        $groups = $this->getFileService()->getAllFileGroups();
+
+        foreach ($groups as $group) {
+            $this->getFileService()->deleteFileGroup($group['id']);
+        }
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '默认文件组',
+            'code'   => 'default',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '缩略图',
+            'code'   => 'thumb',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '课程',
+            'code'   => 'course',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '用户',
+            'code'   => 'user',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '课程私有文件',
+            'code'   => 'course_private',
+            'public' => 0
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '资讯',
+            'code'   => 'article',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '临时目录',
+            'code'   => 'tmp',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '全局设置文件',
+            'code'   => 'system',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '小组',
+            'code'   => 'group',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '编辑区',
+            'code'   => 'block',
+            'public' => 1
+        ));
+
+        $this->getFileService()->addFileGroup(array(
+            'name'   => '班级',
+            'code'   => 'classroom',
+            'public' => 1
+        ));
+    }
+
     protected function getUserService()
     {
         return $this->getServiceKernel()->createService('User.UserService');
@@ -2318,5 +2416,10 @@ class UserServiceTest extends BaseTestCase
     protected function getSettingService()
     {
         return $this->getServiceKernel()->createService('System.SettingService');
+    }
+
+    protected function getFileService()
+    {
+        return $this->getServiceKernel()->createService('Content.FileService');
     }
 }
