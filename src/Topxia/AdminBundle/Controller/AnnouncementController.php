@@ -9,10 +9,15 @@ use Topxia\Common\ArrayToolkit;
 
 class AnnouncementController extends BaseController
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $conditions = array('targetType' => 'global');
-
+        $user = $this->getCurrentUser();
+        $query = $request->query->all();
+        $conditions = array_merge(array(
+            'targetType' => 'global',
+            'likeOrgCode' => $user->getCurrentOrgCode()
+        ), $query);
+        
         $paginator = new Paginator(
             $this->get('request'),
             $this->getAnnouncementService()->searchAnnouncementsCount($conditions),
