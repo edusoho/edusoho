@@ -23,43 +23,80 @@ define(function(require, exports, module) {
       $('.' + type).show();
 
     });
-    
+
 
     var validator = new Validator({
       element: '#auth-form'
     });
 
     if ($('input[name="user_name"]').length > 0) {
-        validator.addItem({
-            element: '[name="user_name"]',
-            required: true
-        });
+      validator.addItem({
+        element: '[name="user_name"]',
+        required: true
+      });
     }
-    
 
-    $('.model').on('click',function(){
+    validator.addItem({
+      element: '[name="email_enabled"]',
+      required: true,
+      rule: 'isEmailVerified'
+    });
 
-        var old_modle_value = $('.model.btn-primary').data('modle');
-        $('.model').removeClass("btn-primary");
-        $(this).addClass("btn-primary");
-        var modle = $(this).data('modle');
+    Validator.addRule('isEmailVerified', function(options) {
+      var check = options.element.prop('checked');
+      if (!check) {
+        $(".js-email-send-check").addClass('hidden');
+        return true;
+      }
+      if (app.arguments.emailVerified == 1) {
+        $(".js-email-send-check").removeClass('hidden');
+      } else {
+        $(".js-email-send-check").addClass('hidden');
+      }
+      return app.arguments.emailVerified == 1;
+    }, '开启前,请先验证您的邮箱')
 
-        if (modle == 'mobile' || modle == 'email_or_mobile') {
-            if ($('input[name=_cloud_sms]').val() !=1) {
-                $('.model').removeClass("btn-primary");
-                $('[data-modle="'+old_modle_value+'"]').addClass("btn-primary");
-                modle = old_modle_value;
+    $('.js-email-send-check').on('click', function() {
+      $(".js-emial-status").removeClass().addClass('alert alert-info js-emial-status').html('正在检测.....');
 
-                Notify.danger("请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~");
-            }
+      $.ajax({
+          url: $('.js-email-send-check').data('url'),
+          timeout: 3000 // sets timeout to 3 seconds
+        }).done(function(resp) {
+          $('.js-emial-status').removeClass('alert-info').addClass('alert-success').html('<span class="text-success">√ ' + resp.message + '</span>');
+        })
+        .fail(function(resp) {
+          $('input[name="email_enabled"][value="closed"]').prop("checked", true);
+          $('.js-email-send-check').addClass("hidden");
+          $('.js-emial-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">X 邮件发送异常</span>');
+        })
+    })
+
+
+
+    $('.model').on('click', function() {
+
+      var old_modle_value = $('.model.btn-primary').data('modle');
+      $('.model').removeClass("btn-primary");
+      $(this).addClass("btn-primary");
+      var modle = $(this).data('modle');
+
+      if (modle == 'mobile' || modle == 'email_or_mobile') {
+        if ($('input[name=_cloud_sms]').val() != 1) {
+          $('.model').removeClass("btn-primary");
+          $('[data-modle="' + old_modle_value + '"]').addClass("btn-primary");
+          modle = old_modle_value;
+
+          Notify.danger("请先到【管理后台】-【教育云】-【云短信设置】中开启云短信哦~");
         }
+      }
 
-        $('[name="register_mode"]').val(modle);
-        if (modle == 'email' || modle == 'email_or_mobile') {
-            $('.email-content').removeClass('hidden');
-        } else {
-            $('.email-content').addClass('hidden');
-        }
+      $('[name="register_mode"]').val(modle);
+      if (modle == 'email' || modle == 'email_or_mobile') {
+        $('.email-content').removeClass('hidden');
+      } else {
+        $('.email-content').addClass('hidden');
+      }
 
     });
 
