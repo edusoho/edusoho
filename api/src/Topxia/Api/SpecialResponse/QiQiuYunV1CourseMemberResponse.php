@@ -16,7 +16,7 @@ class QiQiuYunV1CourseMemberResponse implements SpecialResponse
             $resources[] = array(
                 'user' => $member['user'],
                 'course' => $member['course'],
-                'role' => $member['role'],
+                'role' => array($member['role']),
                 'createdTime' => $member['createdTime'],
             );
 
