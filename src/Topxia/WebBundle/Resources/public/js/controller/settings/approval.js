@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         validator.addItem({
             element: '[name="idcard"]',
             required: true,
-            rule : 'idcard'
+            rule: 'idcard'
         });
 
         validator.addItem({
@@ -22,14 +22,33 @@ define(function(require, exports, module) {
 
         validator.addItem({
             element: '[name="faceImg"]',
-            required: true
+            required: true,
+            rule: 'isImage limitSize'
         });
 
         validator.addItem({
             element: '[name="backImg"]',
-            required: true
+            required: true,
+            rule: 'isImage limitSize'
         });
 
+        Validator.addRule('isImage', function(options) {
+           
+            if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+                return true;
+            }
+            var file = options.element[0]['files'][0];
+            var types = file['type'].split('/');
+            return types[0] == 'image';
+        }, '{{display}}只能上传图片');
+
+        Validator.addRule('limitSize', function(options) {
+            if (navigator.userAgent.toLowerCase().indexOf('msie') > 0) {
+                return true;
+            }
+            var file = options.element[0]['files'][0];
+            return file['size'] / 1024 <= 2048;
+        }, '{{display}}大小不能超过2M');
     };
 
 });
