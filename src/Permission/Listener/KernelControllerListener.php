@@ -35,7 +35,7 @@ class KernelControllerListener
         $requestPath = $request->getPathInfo();
 
         foreach ($this->paths as $key => $path) {
-            if (preg_match($path.'/s', $requestPath) 
+            if (preg_match($path, $requestPath) 
                 && !empty($permissions) 
                 && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
                 
