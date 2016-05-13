@@ -612,10 +612,10 @@ web:
                             name: 教师设置
                         course_manage_students:
                             name: 学员设置
-                course_manage_question:
+                course_manage_questions:
                     name: 题库
                     children:
-                        course_manage_question_setting:
+                        course_manage_question:
                             name: 题目设置
                         course_question_plumber:
                             name: 题目导入导出

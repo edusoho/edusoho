@@ -30,12 +30,12 @@ class PermissionExtension extends \Twig_Extension
             new \Twig_SimpleFunction('grouped_permissions', array($this, 'groupedPermissions')),
             new \Twig_SimpleFunction('has_permission', array($this, 'hasPermission')),
             new \Twig_SimpleFunction('eval_expression', array($this, 'evalExpression'), array('needs_context' => true, 'needs_environment' => true)),
-            new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild'), array('needs_context' => true, 'needs_environment' => true))
+            new \Twig_SimpleFunction('first_child_permission', array($this, 'getFirstChild'))
             
         );
     }
 
-    public function getFirstChild($env, $context, $menu) 
+    public function getFirstChild($menu) 
     {
         $menus = $this->getSubPermissions($menu['code']);
         
@@ -124,6 +124,6 @@ class PermissionExtension extends \Twig_Extension
 
     public function getName()
     {
-        return 'topxia_permission_twig';
+        return 'permission.permission_extension';
     }
 }
