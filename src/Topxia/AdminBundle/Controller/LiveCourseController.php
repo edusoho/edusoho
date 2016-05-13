@@ -34,7 +34,6 @@ class LiveCourseController extends BaseController
             }
         }
 
-        var_dump($courseCondition);
         $courses   = $this->getCourseService()->searchCourses($courseCondition, $sort = 'latest', 0, 1000);
         $courseIds = ArrayToolkit::column($courses, 'id');
 
