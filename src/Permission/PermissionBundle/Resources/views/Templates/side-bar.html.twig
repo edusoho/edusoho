@@ -1,10 +1,21 @@
-{% import "PermissionBundle:Templates:macro.html.twig" as self_macro %}
 
 {% for groupedMenus in grouped_permissions(menu|parent_permission.code|parent_permission.code|default(null)) %}
   <div class="list-group">
     {% for m in groupedMenus %}
-        {% set menuClass = m.code == menu|parent_permission.code|default(null) ? 'list-group-item active' : 'list-group-item' %}
-        {{ self_macro.menu_link_html(_context, m, menuClass) }}
+        {% set menuClass = (m.code == menu|parent_permission.code|default(null) ? 'list-group-item active' : 'list-group-item') %}
+		
+		{% set tabMenu = first_child_permission(m) %}
+	  	{% if tabMenu.mode|default('') == 'capsules' %}
+	  		{% set tabMenu = first_child_permission(tabMenu) %}
+	  	{% endif %}
+
+        <a 
+		    title="{{m.name}}"
+		    class="{{ menuClass }}"
+		    href="{{ permission_path(tabMenu) }}"
+		>
+		    {{ m.name }}
+		</a>
     {% endfor %}
   </div>
 {% endfor %}

@@ -48,17 +48,6 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionPath($env, $context, $menu)
     {
-        $menus = $this->getSubPermissions($menu['code']);
-
-        if ($menus) {
-            $menu  = current($menus);
-            $menus = $this->getSubPermissions($menu['code']);
-
-            if ($menus) {
-                $menu = current($menus);
-            }
-        }
-
         $route  = empty($menu['router_name']) ? $menu['code'] : $menu['router_name'];
         $params = empty($menu['router_params']) ? array() : $menu['router_params'];
 
@@ -71,7 +60,7 @@ class PermissionExtension extends \Twig_Extension
             }
 
         }
-        
+        // return $menu;
         return $this->container->get('router')->generate($route, $params);
     }
 
@@ -104,7 +93,7 @@ class PermissionExtension extends \Twig_Extension
         return !empty($permission);
     }
 
-    public function getSubPermissions($code, $group = '1')
+    public function getSubPermissions($code, $group=null)
     {
         return $this->createPermissionBuilder()->getMenuChildren($code, $group);
     }

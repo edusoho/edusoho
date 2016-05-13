@@ -33,17 +33,15 @@ class PermissionBuilder
         $children = array();
 
         foreach ($menus[$code]['children'] as $childCode) {
-            if (!empty($group) && $menus[$childCode]['group'] != $group) {
+            if (!empty($group) 
+                && isset($menus[$childCode]['group']) 
+                && $menus[$childCode]['group'] != $group) {
                 continue;
             }
 
             $children[] = $menus[$childCode];
         }
-
-        if (!$group) {
-            $children = $this->groupMenus($children);
-        }
-
+        
         return $children;
     }
 
@@ -313,7 +311,6 @@ class PermissionBuilder
 
         $cache = "<?php \nreturn ".var_export($menus, true).';';
         file_put_contents($cacheFile, $cache);
-
         return $menus;
     }
 
