@@ -22,12 +22,6 @@ class MyConversationDaoImpl extends BaseDao implements MyConversationDao
         return $myConversation ? : null;
     }
 
-    public function findMyConversationsByUserId($userId)
-    {
-        $sql = "SELECT * FROM {$this->getTable()} where userId=?";
-        return $this->getConnection()->fetchAll($sql, array($userId)) ? : array();
-    }
-
     public function addMyConversation($myConversation)
     {
         $affected = $this->getConnection()->insert($this->table, $myConversation);

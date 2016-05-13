@@ -12,7 +12,5 @@ interface ConversationService
 
     public function updateMyConversationByNo($no, $fields);
 
-    public function searchMyConversations($conditions, $orderBy, $start, $limit);
-
-    public function searchMyConversationCount($conditions);
+    public function listMyConversationsByUserId($userId, $start, $limit);
 }

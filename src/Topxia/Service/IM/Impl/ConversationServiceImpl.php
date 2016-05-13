@@ -31,7 +31,7 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getConversationDao()->addConversation($conversation);
     }
 
-    
+
 
     public function addMyConversation($myConversation)
     {
@@ -46,14 +46,23 @@ class ConversationServiceImpl extends BaseService implements ConversationService
         return $this->getMyConversationDao()->updateMyConversationByNo($no, $fields);
     }
 
-    public function searchMyConversations($conditions, $orderBy, $start, $limit)
+    public function listMyConversationsByUserId($userId, $start = 0, $limit = 1000)
     {
-        return $this->getMyConversationDao()->searchMyConversations($conditions, $orderBy, $start, $limit);
-    }
+        $conditions = array(
+            'userId' => $userId
+        );
 
-    public function searchMyConversationCount($conditions)
-    {
-        return $this->getMyConversationDao()->searchMyConversationCount($conditions);
+        $orderBy = array(
+            'updatedTime',
+            'DESC'
+        );
+        
+        return $this->getMyConversationDao()->searchMyConversations(
+            $conditions,
+            $orderBy,
+            $start,
+            $limit
+        );
     }
 
     protected function filterConversationFields(array $fields)

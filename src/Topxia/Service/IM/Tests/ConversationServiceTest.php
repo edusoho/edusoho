@@ -49,7 +49,7 @@ class ConversationServiceTest extends BaseTestCase
         $this->assertEquals(1234567890, $updated['updatedTime']);
     }
 
-    public function testSearchMyConversations()
+    public function testListMyConversationsByUserId()
     {
         $data = array(
             array(
@@ -66,20 +66,9 @@ class ConversationServiceTest extends BaseTestCase
             $this->getConversationService()->addMyConversation($value);
         }
 
-        $conditions = array(
-            'userId' => 1
-        );
+        $listed = $this->getConversationService()->listMyConversationsByUserId(1, 0, 20);
 
-        $searched = $this->getConversationService()->searchMyConversations(
-            $conditions,
-            array('updatedTime', 'DESC'),
-            0,
-            20
-        );
-
-        $total = $this->getConversationService()->searchMyConversationCount($conditions);
-
-        $this->assertEquals($total, count($searched));
+        $this->assertEquals(2, count($listed));
     }
 
     protected function getConversationService()
