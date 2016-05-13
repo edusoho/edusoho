@@ -25,13 +25,13 @@ class MyConversations extends BaseResource
         $start = isset($fields['start']) ? (int) $fields['start'] : 0;
         $limit = isset($fields['limit']) ? (int) $fields['limit'] : 20;
 
-        $myConversations = $this->getMyConversationService()->searchMyConversations(
+        $myConversations = $this->getConversationService()->searchMyConversations(
             $conditions,
             $orderBy,
             $start,
             $limit
         );
-        $total = $this->getMyConversationService()->searchMyConversationCount($conditions);
+        $total = $this->getConversationService()->searchMyConversationCount($conditions);
 
         return $this->wrap($this->filter($myConversations), $total);
     }
@@ -41,8 +41,8 @@ class MyConversations extends BaseResource
         return $this->multicallFilter('IM/MyConversation', $res);
     }
 
-    protected function getMyConversationService()
+    protected function getConversationService()
     {
-        return $this->getServiceKernel()->createService('IM.MyConversationService');
+        return $this->getServiceKernel()->createService('IM.ConversationService');
     }
 }
