@@ -1,5 +1,5 @@
 parameters:
-    permission.path_regular_expression: ['(\^/admin)', '(\^/course/\d+/manage)']
+    permission.path_regular_expression: ['(\^/admin)', '(\^\/course\/\d+\/manage)']
 
 
 services:
