@@ -9,9 +9,12 @@ use Permission\Common\PermissionBuilder;
 
 class KernelControllerListener
 {
-    public function __construct($container)
+    protected $paths;
+
+    public function __construct($container, $paths)
     {
         $this->container = $container;
+        $this->paths = $paths;
     }
 
     public function onKernelController(FilterControllerEvent $event)
@@ -28,20 +31,26 @@ class KernelControllerListener
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
         $permissions = $this->container->get('router')->getRouteCollection()->get($route)->getPermissions();
-        if (preg_match('/admin/s', $route) 
-            && !empty($permissions) 
-            && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
-            
-            $currentUserPermissions = $currentUser->getPermissions();
 
-            foreach ($permissions as $permission) {
-                if (!empty($currentUserPermissions[$permission])) {
-                    return;
+        $requestPath = $request->getPathInfo();
+
+        foreach ($this->paths as $key => $path) {
+            if (preg_match($path.'/s', $requestPath) 
+                && !empty($permissions) 
+                && !in_array('ROLE_SUPER_ADMIN', $currentUser['roles'])) {
+                
+                $currentUserPermissions = $currentUser->getPermissions();
+
+                foreach ($permissions as $permission) {
+                    if (!empty($currentUserPermissions[$permission])) {
+                        return;
+                    }
                 }
-            }
 
-            throw new AccessDeniedException('无权限访问！');
+                throw new AccessDeniedException('无权限访问！');
+            }
         }
+
     }
 
 

@@ -131,60 +131,56 @@
           </ul>
         {% endif %}
 
-        {% if has_permission('course_manage_questions') %}    
-          <ul class="list-group">
-            <li class="list-group-heading">{{'题库'|trans}}</li>
+        <ul class="list-group">
+          <li class="list-group-heading">{{'题库'|trans}}</li>
 
-            {% if has_permission('course_manage_question') %}
-            <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
+          {% if has_permission('course_manage_question') %}
+          <li class="list-group-item {% if side_nav == 'question' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'question'}) }}{% else %}
+            {{ path('course_manage_question', {courseId:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目管理'|trans}}
+            </a>
+          </li>
+          {% endif %}
+
+          {% if is_plugin_installed('QuestionPlus') and setting('question_plus.enabled') and has_permission('course_question_plumber') %}
+            <li class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}">
               <a href="{% if course.locked|default(0) == 1 %}
-              {{ path('course_manage_course_sync', {id:course.id,type:'question'}) }}{% else %}
-              {{ path('course_manage_question', {courseId:course.id}) }}
+              {{ path('course_manage_course_sync', {id:course.id,type:'question_plumber'}) }}{% else %}
+              {{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}
               {% endif %}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目管理'|trans}}
-              </a>
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目导入/导出'|trans}}
+            </a>
             </li>
-            {% endif %}
+          {% endif %}
 
-            {% if is_plugin_installed('QuestionPlus') and setting('question_plus.enabled') and has_permission('course_question_plumber') %}
-              <li class="list-group-item {% if side_nav == 'question_plumber' %}active{% endif %}">
-                <a href="{% if course.locked|default(0) == 1 %}
-                {{ path('course_manage_course_sync', {id:course.id,type:'question_plumber'}) }}{% else %}
-                {{ path('course_question_plumber', {courseId:course.id, type:'import'}) }}
-                {% endif %}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'题目导入/导出'|trans}}
-              </a>
-              </li>
-            {% endif %}
+          <!-- <li class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}">
+            <a href="{{ path('course_manage_question_category', {courseId:course.id}) }}">题目类别管理</a>
+          </li> -->
 
-            <!-- <li class="list-group-item {% if side_nav == 'question_category' %}active{% endif %}">
-              <a href="{{ path('course_manage_question_category', {courseId:course.id}) }}">题目类别管理</a>
-            </li> -->
+          {% if has_permission('course_manage_testpaper') %}
+          <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
+            <a href="{% if course.locked|default(0) == 1 %}
+            {{ path('course_manage_course_sync', {id:course.id,type:'testpaper'}) }}{% else %}
+            {{ path('course_manage_testpaper', {courseId:course.id}) }}
+            {% endif %}">
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'试卷管理'|trans}}
+            </a>
+          </li>
+          {% endif %}
 
-            {% if has_permission('course_manage_testpaper') %}
-            <li class="list-group-item {% if side_nav == 'testpaper' %}active{% endif %}">
-              <a href="{% if course.locked|default(0) == 1 %}
-              {{ path('course_manage_course_sync', {id:course.id,type:'testpaper'}) }}{% else %}
-              {{ path('course_manage_testpaper', {courseId:course.id}) }}
-              {% endif %}">
-                <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %}></span>{{'试卷管理'|trans}}
-              </a>
+          <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
+            <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
+          </li>
+
+          {% if is_plugin_installed('Homework') %}
+            <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
+              <a href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}"><span></span>{{'作业批改'|trans}}</a>
             </li>
-            {% endif %}
-
-            {% if has_permission('course_manage_test_check') %}
-            <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
-              <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
-            </li>
-            {% endif %}
-
-            {% if is_plugin_installed('Homework') and has_permission('course_homework_check_list') %}
-              <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
-                <a href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}"><span></span>{{'作业批改'|trans}}</a>
-              </li>
-            {% endif %}
-          </ul>
-        {% endif %}
+          {% endif %}
+        </ul>
 
         {% if has_permission('course_manange_operate') %}
           <ul class="list-group">

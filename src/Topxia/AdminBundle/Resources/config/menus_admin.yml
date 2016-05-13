@@ -621,10 +621,6 @@ web:
                             name: 题目导入导出
                         course_manage_testpaper:
                             name: 试卷管理
-                        course_manage_test_check:
-                            name: 试卷批阅
-                        course_homework_check_list:
-                            name: 作业批改
                 course_manange_operate:
                     name: 课程运营
                     children:
