@@ -1,3 +1,7 @@
+parameters:
+    permission.path_regular_expression: ['/admin']
+
+
 services:
     topxia.user_provider:
         class: Topxia\Service\User\UserProvider
