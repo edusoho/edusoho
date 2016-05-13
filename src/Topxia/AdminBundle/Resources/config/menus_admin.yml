@@ -27,7 +27,7 @@ admin:
                                 admin_user_create:
                                     name: '添加新用户'
                                     mode: modal
-                                    group: topBtns
+                                    group: topBtn
                                 admin_user_export:
                                     name: '导出搜索结果'
                                     mode: modal
@@ -579,3 +579,11 @@ admin:
                             router_name: admin_logs
                         admin_logs_prod:
                             name: 程序运行日志
+web:
+    name: 前台
+    parent: null
+    children:
+        course_manage:
+            name: 课程管理
+        classroom_manage:
+            name: 班级管理

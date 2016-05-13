@@ -41,7 +41,7 @@ class PermissionBuilder
 
             $children[] = $menus[$childCode];
         }
-        
+
         return $children;
     }
 
@@ -113,9 +113,10 @@ class PermissionBuilder
         }
 
         $permissions = $this->getOriginPermissions();
+
         $tree = array();
-        $tree = $this->getMenuTree($tree, 'admin', $permissions);
-        
+        $tree = $this->getMenuTree($tree, array('web','admin'), $permissions);
+
         $this->cached['originPermissionTree'] = $tree;
         return $tree;
     }
@@ -146,28 +147,30 @@ class PermissionBuilder
     }
 
 
-    protected function getMenuTree(&$tree, $root, $menus)
+    protected function getMenuTree(&$tree, $roots, $menus)
     {
-        $id = 0;
-        $node = $menus[$root];
-        $node['id'] = $id;
-        $node['code'] = $root;
-        $node['parent'] = null;
-        $tree[] = $node;
+        $id=0;
 
-        foreach ($menus as $key => &$menu) {
-            if($menu['parent'] == $root) {
-                $id++;
-                $menu['id'] = $id;
-                $menu['pId'] = $node['id'];
-                $menu['code'] = $key;
-                $tree[] = $menu;
+        foreach ($roots as $key => $root) {
+            $id++;
+            $rootNode = $menus[$root];
+            $rootNode['id'] = $id;
+            $rootNode['code'] = $root;
+            $rootNode['parent'] = null;
+            $tree[] = $rootNode;
 
-                $this->getSubTree($tree, $id, $menu, $menus);
+            foreach ($menus as $key => &$menu) {
+                if($menu['parent'] == $root) {
+                    $id++;
+                    $menu['id'] = $id;
+                    $menu['pId'] = $rootNode['id'];
+                    $menu['code'] = $key;
+                    $tree[] = $menu;
+
+                    $this->getSubTree($tree, $id, $menu, $menus);
+                }
             }
         }
-
-        $tree = ArrayToolkit::index($tree, 'id');
 
         return $tree;
     }
