@@ -21,7 +21,7 @@ class MeLogin extends BaseResource
             'desiceName' => $request->request->get('desiceName', ''),
             'ignoreServers' => $request->request->get('ignoreServers', ''),
         );
-        return CloudAPIFactory::create('leaf')->get('/im/login', $message);
+        return CloudAPIFactory::create('root')->get('/im/login', $message);
     }
 
     public function filter($res)
