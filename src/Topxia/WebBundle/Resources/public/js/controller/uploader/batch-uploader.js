@@ -24,9 +24,10 @@ define(function(require, exports, module) {
             this._initUI();
             var accept = {};
             accept.title = '文件';
-            accept.extensions = this.get('accept')['extensions'].join(',');
-            accept.mimeTypes = this.get('accept')['mimeTypes'].join(',');
-
+            accept.extensions = "*";
+            accept.mimeTypes = "*";
+            //this.get('accept')['extensions'].join(',');
+            //"video/mp4," + this.get('accept')['mimeTypes'].join(',');
             var defaults = {
                 runtimeOrder: 'html5,flash',
 
@@ -144,6 +145,10 @@ define(function(require, exports, module) {
             });
 
             uploader.on('beforeFileQueued', function(file) {
+                if(self.get('accept').extensions.indexOf(file.ext) < 0){
+                    alert('不支持此类上传文件');
+                    return false;
+                }
                 file.uploaderWidget = self;
             });
 
