@@ -24,6 +24,10 @@ class PermissionBuilder
 
     public function getMenuChildren($code, $group)
     {
+        if(isset($this->cached['getMenuChildren'][$code][$group])) {
+            return $this->cached['getMenuChildren'][$code][$group];
+        }
+
         $menus = $this->buildMenus();
 
         if (!isset($menus[$code])) {
@@ -42,11 +46,26 @@ class PermissionBuilder
             $children[] = $menus[$childCode];
         }
 
-        return $children;
+        if(!isset($this->cached['getMenuChildren'])){
+            $this->cached['getMenuChildren'] = array();
+        }
+
+        if(!isset($this->cached['getMenuChildren'][$code])){
+            $this->cached['getMenuChildren'][$code] = array();
+        }
+        
+        $this->cached['getMenuChildren'][$code][$group] = $children;
+
+        return $this->cached['getMenuChildren'][$code][$group];
+
     }
 
     public function groupedMenus($code)
     {
+        if(isset($this->cached['groupedMenus'][$code])) {
+            return $this->cached['groupedMenus'][$code];
+        }
+
         $menus = $this->buildMenus();
 
         if (!isset($menus[$code])) {
@@ -64,11 +83,20 @@ class PermissionBuilder
 
     public function getMenuByCode($code)
     {
+        if(isset($this->cached['getMenuByCode'][$code])) {
+            return $this->cached['getMenuByCode'][$code];
+        }
+
         $menus = $this->buildMenus();
 
         if (!isset($menus[$code])) {
             return array();
         }
+
+        if(!isset($this->cached['getMenuByCode'])){
+            $this->cached['getMenuByCode'] = array();
+        }
+        $this->cached['getMenuByCode'][$code] = $menus[$code];
 
         return $menus[$code];
     }
@@ -108,8 +136,8 @@ class PermissionBuilder
 
     public function getOriginPermissionTree()
     {
-        if(isset($this->cached['originPermissionTree'])) {
-            return $this->cached['originPermissionTree'];
+        if(isset($this->cached['getOriginPermissionTree'])) {
+            return $this->cached['getOriginPermissionTree'];
         }
 
         $permissions = $this->getOriginPermissions();
@@ -117,14 +145,14 @@ class PermissionBuilder
         $tree = array();
         $tree = $this->getMenuTree($tree, array('web','admin'), $permissions);
 
-        $this->cached['originPermissionTree'] = $tree;
+        $this->cached['getOriginPermissionTree'] = $tree;
         return $tree;
     }
 
     public function getOriginPermissions()
     {
-        if(isset($this->cached['permissions'])) {
-            return $this->cached['permissions'];
+        if(isset($this->cached['getOriginPermissions'])) {
+            return $this->cached['getOriginPermissions'];
         }
 
         $configs = $this->getMenusYml();
@@ -142,7 +170,7 @@ class PermissionBuilder
             $permissions = array_merge($permissions, $menus);
         }
 
-        $this->cached['permissions'] = $permissions;
+        $this->cached['getOriginPermissions'] = $permissions;
         return $permissions;
     }
 
