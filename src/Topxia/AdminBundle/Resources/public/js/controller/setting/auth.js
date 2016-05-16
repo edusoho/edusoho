@@ -50,6 +50,7 @@ define(function(require, exports, module) {
       }
       if (app.arguments.emailVerified == 1) {
         $(".js-email-send-check").removeClass('hidden');
+        $('.js-email-send-check').trigger('click');
       } else {
         $(".js-email-send-check").addClass('hidden');
       }
@@ -68,7 +69,7 @@ define(function(require, exports, module) {
         .fail(function(resp) {
           $('input[name="email_enabled"][value="closed"]').prop("checked", true);
           $('.js-email-send-check').addClass("hidden");
-          $('.js-emial-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常</span>');
+          $('.js-emial-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="'+ $('.js-emial-status').data('url')+'">邮件服务器设置</a>是否正确</span>');
         })
     })
 
