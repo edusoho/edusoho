@@ -9,6 +9,7 @@
 #   blank:                  //可选
 #   visable:                //可选
 #   icon:                   //可选
+#   data:                   //可选
 
 admin:
     name: 后台
@@ -591,12 +592,28 @@ web:
                     children:
                         course_manage_base:
                             name: 基本信息
+                            data: 
+                                side_nav: base
+                            router_params:
+                                id: (course.id)
                         course_manage_detail:
                             name: 详细信息
+                            data: 
+                                side_nav: detail
+                            router_params:
+                                id: (course.id)
                         course_manage_picture:
                             name: 课程图片
+                            data: 
+                                side_nav: picture
+                            router_params:
+                                id: (course.id)
                         course_manage_lesson:
                             name: 课时管理
+                            data: 
+                                side_nav: lesson
+                            router_params:
+                                id: (course.id)
                             children:
                                 course_manage_lesson_create:
                                     name: 创建课时
@@ -630,32 +647,73 @@ web:
                                     name: 取消发布
                         live_course_manage_replay:
                             name: 录播管理
+                            data: 
+                                side_nav: replay
+                            router_params:
+                                id: (course.id)
                         course_manage_files:
                             name: 文件管理
+                            data: 
+                                side_nav: files
+                            router_params:
+                                id: (course.id)
                 course_manage_setting:
                     name: 课程设置
                     children:
                         course_manage_price:
                             name: 价格设置
+                            data: 
+                                side_nav: price
+                            router_params:
+                                id: (course.id)
                         course_manage_teachers:
                             name: 教师设置
+                            data: 
+                                side_nav: teachers
+                            router_params:
+                                id: (course.id)
                         course_manage_students:
                             name: 学员设置
+                            data: 
+                                side_nav: students
+                            router_params:
+                                id: (course.id)
                 course_manage_questions:
                     name: 题库
                     children:
                         course_manage_question:
                             name: 题目设置
+                            data: 
+                                side_nav: question
+                            router_params:
+                                courseId: (course.id)
                         course_question_plumber:
                             name: 题目导入导出
+                            data: 
+                                side_nav: question_plumber
+                            router_params:
+                                courseId: (course.id)
+                                type: import
                         course_manage_testpaper:
                             name: 试卷管理
+                            data: 
+                                side_nav: testpaper
+                            router_params:
+                                courseId: (course.id)
                 course_manange_operate:
                     name: 课程运营
                     children:
                         course_manage_data:
                             name: 课程学习数据
+                            data: 
+                                side_nav: data
+                            router_params:
+                                id: (course.id)
                         course_manage_order:
                             name: 课程订单管理
+                            data: 
+                                side_nav: order
+                            router_params:
+                                id: (course.id)
         classroom_manage:
             name: 班级管理
