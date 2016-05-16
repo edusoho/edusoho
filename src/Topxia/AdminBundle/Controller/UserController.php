@@ -253,7 +253,6 @@ class UserController extends BaseController
             $roleCodes = ArrayToolkit::column($roleSet, 'code');
             $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
 
-            $selectedRoles = array();
             foreach ($roles as $key => $roleCode) {
                 if(in_array($roleCode, $roleCodes)){
                     $role = $rolesByIndexCode[$roleCode];
@@ -266,18 +265,16 @@ class UserController extends BaseController
                         $roles[] = 'ROLE_BACKEND';
                         continue;
                     }
-
-                    $selectedRoles[] = $role;
                 }
             }
 
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
-            if (!empty($selectedRoles)) {
-                for ($i = 0; $i < count($selectedRoles); $i++) {
-                    $roleName .= $selectedRoles[$i]['name'];
+            if (!empty($roles)) {
+                for ($i = 0; $i < count($roles); $i++) {
+                    $roleName .= $roles[$i]['name'];
 
-                    if ($i < count($selectedRoles) - 1) {
+                    if ($i < count($roles) - 1) {
                         $roleName .= "、";
                     }
                 }
