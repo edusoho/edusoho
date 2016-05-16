@@ -4,8 +4,6 @@ define(function(require, exports, module) {
     var filesize = require('filesize');
     var Widget = require('widget');
 
-    var hookRegisted = false;
-
     var BatchUploader = Widget.extend({
 
         uploader: null,
@@ -18,7 +16,8 @@ define(function(require, exports, module) {
             accept: null,
             process: 'none',
             uploadToken: null,
-            multi: true
+            multi: true,
+            hookRegisted: false
         },
 
         setup: function() {
@@ -220,12 +219,12 @@ define(function(require, exports, module) {
         },
 
         _initUploaderHook: function() {
-            if (hookRegisted) {
+            if (WebUploader.Uploader.hookRegisted) {
                 return ;
             } else {
+                WebUploader.Uploader.hookRegisted = true;
             }
 
-            hookRegisted = true;
 
             WebUploader.Uploader.register({
                 'before-send-file': 'preupload',

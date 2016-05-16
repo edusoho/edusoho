@@ -34,7 +34,7 @@ class EventSubscriber implements EventSubscriberInterface
         $order         = $event->getSubject();
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        if ($inviteSetting['get_coupon_setting'] == 1) {
+        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 1) {
             if ($order['coinAmount'] > 0 || $order['amount'] > 0) {
                 $record = $this->getInviteRecordService()->getRecordByInvitedUserId($order['userId']);
 
@@ -57,7 +57,7 @@ class EventSubscriber implements EventSubscriberInterface
 
         $inviteSetting = $this->getSettingService()->get('invite', array());
 
-        if ($inviteSetting['get_coupon_setting'] == 0) {
+        if (isset($inviteSetting['get_coupon_setting']) && $inviteSetting['get_coupon_setting'] == 0) {
             $inviteCoupon = $this->getCouponService()->generateInviteCoupon($inviteUserId, 'pay');
 
             if (!empty($inviteCoupon)) {

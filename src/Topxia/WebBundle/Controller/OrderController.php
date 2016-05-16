@@ -67,6 +67,7 @@ class OrderController extends BaseController
         }
 
         $orderInfo['verifiedMobile'] = $verifiedMobile;
+        $orderInfo['hasPassword'] = strlen($currentUser['password']) > 0;
         return $this->render('TopxiaWebBundle:Order:order-create.html.twig', $orderInfo);
     }
 
