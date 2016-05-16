@@ -13,12 +13,12 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        $type = $request->query->get('type');
+        /*$type = $request->query->get('type');
         $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
-
+*/
         $conditions = array(
-            'targetType' => $type,
-            'targetId'   => $course['id']
+            'targetTypes' => array('courselesson', 'coursematerial'),
+            'targetId'    => $course['id']
         );
 
         if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
@@ -56,7 +56,7 @@ class CourseFileManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            'type'      => $type,
+            //'type'      => $type,
             'course'    => $course,
             'files'     => $files,
             'users'     => ArrayToolkit::index($users, 'id'),
