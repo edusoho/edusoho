@@ -3,14 +3,7 @@ namespace Topxia\Service\User;
 
 interface AuthService
 {
-    /**
-     * 用户注册
-     * @param  [array] $registration  注册数据
-     * @param  string  $type          注册方式
-     * @param  boolean $registerLimit 是否忽略限制注册次数的校验, 默认不忽略,当在后台添加用户,或者导入用户时,启用该字段
-     * @return [type]  [description] 返回注册用户.
-     */
-    public function register($registration, $type = 'default', $registerLimit = false);
+    public function register($registration, $type = 'default');
 
     public function syncLogin($userId);
 

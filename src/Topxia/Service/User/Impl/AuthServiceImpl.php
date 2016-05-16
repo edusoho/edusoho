@@ -9,15 +9,14 @@ class AuthServiceImpl extends BaseService implements AuthService
 {
     private $partner = null;
 
-    public function register($registration, $type = 'default', $registerLimit = false)
+    public function register($registration, $type = 'default')
     {
         if (isset($registration['nickname']) && !empty($registration['nickname'])
             && $this->getSensitiveService()->scanText($registration['nickname'])) {
             throw $this->createServiceException('用户名中含有敏感词！');
         }
 
-//ip次数限制
-        if (!$registerLimit && $this->registerLimitValidator($registration)) {
+        if ($this->registerLimitValidator($registration)) {
             throw $this->createServiceException('由于您注册次数过多，请稍候尝试');
         }
 
@@ -53,7 +52,9 @@ class AuthServiceImpl extends BaseService implements AuthService
     protected function registerLimitValidator($registration)
     {
         $authSettings = $this->getSettingService()->get('auth', array());
-        if (isset($authSettings['register_protective'])) {
+        $user         = $this->getCurrentUser();
+
+        if (!$user->isAdmin() && isset($authSettings['register_protective'])) {
             $status = $this->protectiveRule($authSettings['register_protective'], $registration['createdIp']);
 
             if (!$status) {

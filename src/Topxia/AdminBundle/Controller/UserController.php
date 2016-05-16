@@ -141,7 +141,7 @@ class UserController extends BaseController
             $formData         = $request->request->all();
             $formData['type'] = 'import';
             $registration     = $this->getRegisterData($formData, $request->getClientIp());
-            $user             = $this->getAuthService()->register($registration, 'default', true);
+            $user             = $this->getAuthService()->register($registration);
             $this->get('session')->set('registed_email', $user['email']);
 
             if (isset($formData['roles'])) {
