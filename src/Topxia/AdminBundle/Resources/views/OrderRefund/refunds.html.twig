@@ -44,6 +44,7 @@
         <th>订单成交金额</th>
         <th>退款人</th>
         <th>退款状态</th>
+        <th>操作人</th>
         <th>操作</th>
       </tr>
     </thead>
@@ -73,6 +74,9 @@
               {% if refund.status == 'success' %}
                 <div class="text-sm text-muted">实退{{ refund.actualAmount }}元</div>
               {% endif %}
+            </td>
+            <td>
+              {{ admin_macro.user_link(users[refund.operator]) }}
             </td>
             <td>
               {% if refund.status == 'created' %}
