@@ -54,11 +54,6 @@ define(function(require, exports, module) {
             rule: 'remote alphanumeric'
         });
         
-        $('[role="group"]').find('button').click(function(e){
-            $('[role="group"] button').removeClass('active');
-            $(this).addClass('active');
-            $('#value').val($(this).data('value'));
-        })
     };
 
 });
