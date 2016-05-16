@@ -83,7 +83,8 @@ class MenusParserCommand extends BaseCommand
             $children = $parentMenu[$parentCode]["children"];
             foreach ($children as $key => $menu) {
                 $hasChildrenMenu = $this->parseMenuChildren(array($key => $menu), $menus);
-                $parentMenu[$parentCode]["children"][$key] = array_values($hasChildrenMenu)[0];
+                $hasChildrenMenu = array_values($hasChildrenMenu);
+                $parentMenu[$parentCode]["children"][$key] = $hasChildrenMenu[0];
             }
         }
 
