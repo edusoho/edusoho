@@ -84,28 +84,28 @@ class PermissionExtension extends \Twig_Extension
 
     public function getPermissionByCode($code)
     {
-        return $this->createPermissionBuilder()->getMenuByCode($code);
+        return $this->createPermissionBuilder()->getPermissionByCode($code);
     }
 
     public function hasPermission($code)
     {
-        $permission = $this->createPermissionBuilder()->getMenuByCode($code);
+        $permission = $this->createPermissionBuilder()->getPermissionByCode($code);
         return !empty($permission);
     }
 
     public function getSubPermissions($code, $group=null)
     {
-        return $this->createPermissionBuilder()->getMenuChildren($code, $group);
+        return $this->createPermissionBuilder()->getSubPermissions($code, $group);
     }
 
     public function groupedPermissions($code)
     {
-        return $this->createPermissionBuilder()->groupedMenus($code);
+        return $this->createPermissionBuilder()->groupedPermissions($code);
     }
 
     public function getParentPermission($code)
     {
-        return $this->createPermissionBuilder()->getParentMenu($code);
+        return $this->createPermissionBuilder()->getParentPermissionByCode($code);
     }
 
     private function createPermissionBuilder()

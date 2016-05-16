@@ -22,13 +22,13 @@ class PermissionBuilder
         return self::$builder;
     }
 
-    public function getMenuChildren($code, $group)
+    public function getSubPermissions($code, $group)
     {
-        if(isset($this->cached['getMenuChildren'][$code][$group])) {
-            return $this->cached['getMenuChildren'][$code][$group];
+        if(isset($this->cached['getSubPermissions'][$code][$group])) {
+            return $this->cached['getSubPermissions'][$code][$group];
         }
 
-        $menus = $this->buildMenus();
+        $menus = $this->buildPermissions();
 
         if (!isset($menus[$code])) {
             return array();
@@ -46,27 +46,27 @@ class PermissionBuilder
             $children[] = $menus[$childCode];
         }
 
-        if(!isset($this->cached['getMenuChildren'])){
-            $this->cached['getMenuChildren'] = array();
+        if(!isset($this->cached['getSubPermissions'])){
+            $this->cached['getSubPermissions'] = array();
         }
 
-        if(!isset($this->cached['getMenuChildren'][$code])){
-            $this->cached['getMenuChildren'][$code] = array();
+        if(!isset($this->cached['getSubPermissions'][$code])){
+            $this->cached['getSubPermissions'][$code] = array();
         }
         
-        $this->cached['getMenuChildren'][$code][$group] = $children;
+        $this->cached['getSubPermissions'][$code][$group] = $children;
 
-        return $this->cached['getMenuChildren'][$code][$group];
+        return $this->cached['getSubPermissions'][$code][$group];
 
     }
 
-    public function groupedMenus($code)
+    public function groupedPermissions($code)
     {
-        if(isset($this->cached['groupedMenus'][$code])) {
-            return $this->cached['groupedMenus'][$code];
+        if(isset($this->cached['groupedPermissions'][$code])) {
+            return $this->cached['groupedPermissions'][$code];
         }
 
-        $menus = $this->buildMenus();
+        $menus = $this->buildPermissions();
 
         if (!isset($menus[$code])) {
             return array();
@@ -78,30 +78,30 @@ class PermissionBuilder
             $children[] = $menus[$childCode];
         }
 
-        return $this->groupMenus($children);
+        return $this->groupPermissions($children);
     }
 
-    public function getMenuByCode($code)
+    public function getPermissionByCode($code)
     {
-        if(isset($this->cached['getMenuByCode'][$code])) {
-            return $this->cached['getMenuByCode'][$code];
+        if(isset($this->cached['getPermissionByCode'][$code])) {
+            return $this->cached['getPermissionByCode'][$code];
         }
 
-        $menus = $this->buildMenus();
+        $menus = $this->buildPermissions();
 
         if (!isset($menus[$code])) {
             return array();
         }
 
-        if(!isset($this->cached['getMenuByCode'])){
-            $this->cached['getMenuByCode'] = array();
+        if(!isset($this->cached['getPermissionByCode'])){
+            $this->cached['getPermissionByCode'] = array();
         }
-        $this->cached['getMenuByCode'][$code] = $menus[$code];
+        $this->cached['getPermissionByCode'][$code] = $menus[$code];
 
         return $menus[$code];
     }
 
-    public function getMenusYml()
+    public function getPermissionConfig()
     {
         $configPaths = array();
         $position = $this->position;
@@ -143,7 +143,7 @@ class PermissionBuilder
         $permissions = $this->getOriginPermissions();
 
         $tree = array();
-        $tree = $this->getMenuTree($tree, array('web','admin'), $permissions);
+        $tree = $this->getPermissionTree($tree, array('web','admin'), $permissions);
 
         $this->cached['getOriginPermissionTree'] = $tree;
         return $tree;
@@ -155,7 +155,7 @@ class PermissionBuilder
             return $this->cached['getOriginPermissions'];
         }
 
-        $configs = $this->getMenusYml();
+        $configs = $this->getPermissionConfig();
         $permissions = array();
         foreach ($configs as $key => $config) {
             if(!file_exists($config)) {
@@ -166,7 +166,7 @@ class PermissionBuilder
                 continue;
             }
 
-            $menus = $this->getMenusFromConfig($menus);
+            $menus = $this->loadPermissionsFromConfig($menus);
             $permissions = array_merge($permissions, $menus);
         }
 
@@ -175,7 +175,7 @@ class PermissionBuilder
     }
 
 
-    protected function getMenuTree(&$tree, $roots, $menus)
+    protected function getPermissionTree(&$tree, $roots, $menus)
     {
         $id=0;
 
@@ -218,9 +218,9 @@ class PermissionBuilder
         }
     }
 
-    public function getParentMenu($code)
+    public function getParentPermissionByCode($code)
     {
-        $menus = $this->buildMenus();
+        $menus = $this->buildPermissions();
 
         if (!isset($menus[$code]) || empty($menus[$code]['parent'])) {
             return array();
@@ -229,7 +229,7 @@ class PermissionBuilder
         return $menus[$menus[$code]['parent']];
     }
 
-    protected function getMenusFromConfig($parents)
+    protected function loadPermissionsFromConfig($parents)
     {
         $menus = array();
 
@@ -240,7 +240,7 @@ class PermissionBuilder
 
                 foreach ($childrenMenu as $childKey => $childValue) {
                     $childValue["parent"] = $key;
-                    $menus = array_merge($menus, $this->getMenusFromConfig(array($childKey => $childValue)));
+                    $menus = array_merge($menus, $this->loadPermissionsFromConfig(array($childKey => $childValue)));
                 }
             }
 
@@ -250,7 +250,7 @@ class PermissionBuilder
         return $menus;
     }
 
-    private function groupMenus($menus)
+    private function groupPermissions($menus)
     {
         $grouped = array();
 
@@ -273,7 +273,7 @@ class PermissionBuilder
         return $grouped;
     }
 
-    private function buildMenus()
+    private function buildPermissions()
     {
         if ($this->menus) {
             return $this->menus;
@@ -287,7 +287,7 @@ class PermissionBuilder
             return include $cacheFile;
         }
 
-        $menus = $this->loadMenus();
+        $menus = $this->loadPermissions();
         if(empty($menus)) {
             return array();
         }
@@ -345,7 +345,7 @@ class PermissionBuilder
         return $menus;
     }
 
-    private function loadMenus()
+    private function loadPermissions()
     {
         $user = $this->getServiceKernel()->getCurrentUser();
         return $user->getPermissions();

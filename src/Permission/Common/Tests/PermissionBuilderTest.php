@@ -8,14 +8,14 @@ use Permission\Common\PermissionBuilder;
 
 class PermissionBuilderTest extends BaseTestCase
 {
-	public function testGetMenuByCode()
+	public function testgetPermissionByCode()
     {
     	$user = $this->getCurrentUser();
     	$permissions = $this->loadPermissions($user->toArray());
     	$user->setPermissions($permissions);
 
     	$permissionBuilder = new PermissionBuilder();
-    	$menu = $permissionBuilder->getMenuByCode('admin_user_show');
+    	$menu = $permissionBuilder->getPermissionByCode('admin_user_show');
     }
 
     protected function loadPermissions($user)
@@ -25,7 +25,7 @@ class PermissionBuilderTest extends BaseTestCase
         }
 
         $permissionBuilder = new PermissionBuilder();
-        $configs = $permissionBuilder->getMenusYml();
+        $configs = $permissionBuilder->getPermissionConfig();
 
         $res = array();
         foreach ($configs as $key => $config) {
