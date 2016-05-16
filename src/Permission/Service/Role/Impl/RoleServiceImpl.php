@@ -17,11 +17,6 @@ class RoleServiceImpl extends BaseService implements RoleService
         return $this->getRoleDao()->getRoleByCode($code);
     }
 
-    public function getRoleByName($name)
-    {
-        return $this->getRoleDao()->getRoleByName($name);
-    }
-
     public function createRole($role)
     {
         $role['createdTime']   = time();
@@ -103,7 +98,7 @@ class RoleServiceImpl extends BaseService implements RoleService
             return true;
         }
 
-        $tag = $this->getRoleByName($name);
+        $tag = $this->getRoleDao()->getRoleByName($name);
 
         return $tag ? false : true;
     }
