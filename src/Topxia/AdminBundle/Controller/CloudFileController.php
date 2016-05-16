@@ -95,7 +95,8 @@ class CloudFileController extends BaseController
         return $this->render('TopxiaAdminBundle:CloudFile:detail.html.twig', array(
             'material'   => $cloudFile,
             'thumbnails' => empty($thumbnails) ? "" : $thumbnails,
-            'params'     => $reqeust->query->all()
+            'params'     => $reqeust->query->all(),
+            'editUrl'    => $this->generateUrl('admin_cloud_file_edit',array('globalId'=>$globalId))
         ));
     }
 
