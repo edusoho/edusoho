@@ -3,7 +3,14 @@ namespace Topxia\Service\User;
 
 interface AuthService
 {
-    public function register($registration, $type = 'default');
+    /**
+     * 用户注册
+     * @param  [array] $registration  注册数据
+     * @param  string  $type          注册方式
+     * @param  boolean $registerLimit 是否忽略限制注册次数的校验, 默认不忽略,当在后台添加用户,或者导入用户时,启用该字段
+     * @return [type]  [description] 返回注册用户.
+     */
+    public function register($registration, $type = 'default', $registerLimit = false);
 
     public function syncLogin($userId);
 
@@ -17,7 +24,7 @@ interface AuthService
 
     public function changePayPassword($userId, $userLoginPassword, $newPayPassword);
 
-    public function checkUsername($username,$randomName='');
+    public function checkUsername($username, $randomName = '');
 
     public function checkEmailOrMobile($emailOrMobile);
 
