@@ -132,7 +132,8 @@ class YamlFileLoader extends FileLoader
     protected function getPermissions($name, $config)
     {
         $permissions = array();
-        if(strpos($name, 'admin_') === 0){
+
+        if(strpos($name, 'admin_') === 0 || preg_match('/^\/course\/\{\w+\}\/manage/', $config['path'])){
             if(isset($config['permissions'])){
                 $permissions  =  $config['permissions'];
             } else {
