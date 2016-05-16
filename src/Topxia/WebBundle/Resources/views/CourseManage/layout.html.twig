@@ -22,21 +22,7 @@
       <div class="sidenav locked">
 
         {% include 'TopxiaWebBundle:CourseManage:side-bar.html.twig' with {parentCode:'course_manage', _context: _context} %}
-
-        <ul class="list-group">
-          <li class="list-group-heading">{{'题库'|trans}}</li>
-
-          <li class="list-group-item {% if side_nav == 'testCheck' %}active{% endif %}">
-            <a href="{{ path('course_manage_test_check', {id:course.id, status:'reviewing'}) }}"><span></span>{{'试卷批阅'|trans}}</a>
-          </li>
-
-          {% if is_plugin_installed('Homework') %}
-            <li class="list-group-item {% if side_nav == 'homeworkCheck' %}active{% endif %}">
-              <a href="{{ path('course_homework_check_list', {courseId:course.id,status:'reviewing'}) }}"><span></span>{{'作业批改'|trans}}</a>
-            </li>
-          {% endif %}
-        </ul>
-
+        
       </div>
     {% endblock %}
   </div>
