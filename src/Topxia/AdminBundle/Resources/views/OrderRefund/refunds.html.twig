@@ -76,7 +76,11 @@
               {% endif %}
             </td>
             <td>
-              {{ admin_macro.user_link(users[refund.operator]) }}
+              {% if refund.operator != 0 %}
+                {{ admin_macro.user_link(users[refund.operator]) }}
+              {% else %}
+                --
+              {% endif %}
             </td>
             <td>
               {% if refund.status == 'created' %}
