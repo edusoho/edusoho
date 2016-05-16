@@ -24,13 +24,18 @@ class KernelControllerListener
         }
 
         $currentUser = $this->getUserService()->getCurrentUser();
-        $user = $this->getUserService()->getUser($currentUser['id']);
+        $user        = $this->getUserService()->getUser($currentUser['id']);
         $permissions = $this->loadPermissions($user);
+        
         $currentUser->setPermissions($permissions);
 
         $request     = $event->getRequest();
         $route       = $request->attributes->get('_route');
-        $permissions = $this->container->get('router')->getRouteCollection()->get($route)->getPermissions();
+        $permissions = $this->container
+                        ->get('router')
+                        ->getRouteCollection()
+                        ->get($route)
+                        ->getPermissions();
 
         $requestPath = $request->getPathInfo();
 

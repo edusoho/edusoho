@@ -1,7 +1,11 @@
 {% set permissions = sub_permissions(parentCode) %}
 
 {% if permissions|default(null) %}
-	{% set rootMenu = menu|parent_permission.code|parent_permission %}
+	{% if menu|default(null) %}
+		{% set rootMenu = menu|parent_permission.code|parent_permission %}
+	{% else %}
+		{% set rootMenu = permission('admin') %}
+	{% endif %}
 		
 	<ul class="nav navbar-nav">
 	{% for m in permissions %}  

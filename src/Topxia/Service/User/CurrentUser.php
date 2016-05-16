@@ -122,7 +122,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isAdmin()
     {
-        if (count(array_intersect($this->getRoles(), array('ROLE_ADMIN', 'ROLE_SUPER_ADMIN'))) > 0) {
+        if (in_array('admin', $this->getPermissions())) {
             return true;
         }
         return false;  
@@ -138,7 +138,7 @@ class CurrentUser implements AdvancedUserInterface, EquatableInterface, \ArrayAc
 
     public function isTeacher()
     {
-        return in_array('ROLE_TEACHER', $this->getRoles());
+        return in_array('web', $this->getPermissions());
     }
 
     public function fromArray(array $user) {
