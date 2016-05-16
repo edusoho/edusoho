@@ -73,7 +73,7 @@ class ClassroomManageController extends BaseController
         ));
     }
 
-    public function menuAction($classroom, $sideNav)
+    public function menuAction($classroom, $sideNav, $context)
     {
         $user = $this->getCurrentUser();
 
@@ -88,7 +88,8 @@ class ClassroomManageController extends BaseController
             'canManage' => $canManage,
             'canHandle' => $canHandle,
             'side_nav'  => $sideNav,
-            'classroom' => $classroom
+            'classroom' => $classroom,
+            '_context'  => $context
         ));
     }
 
