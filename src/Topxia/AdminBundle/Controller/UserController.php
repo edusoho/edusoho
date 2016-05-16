@@ -249,51 +249,46 @@ class UserController extends BaseController
         if ($request->getMethod() == 'POST') {
             $roles = $request->request->get('roles');
 
-            $setRoles = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
-            $setCodes = ArrayToolkit::column($setRoles, 'code');
+            $roleSet = $this->getRoleService()->searchRoles(array(), 'created', 0, 9999);
+            $roleCodes = ArrayToolkit::column($roleSet, 'code');
+            $rolesByIndexCode = ArrayToolkit::index($roleSet, 'code');
 
-            if (array_intersect($setCodes, $roles)) {
-                $roles[] = 'ROLE_BACKEND';
+            $selectedRoles = array();
+            foreach ($roles as $key => $roleCode) {
+                if(in_array($roleCode, $roleCodes)){
+                    $role = $rolesByIndexCode[$roleCode];
+                    if(in_array('web', $role['data'])){
+                        $roles[] = 'ROLE_TEACHER';
+                        continue;
+                    }
+
+                    if(in_array('admin', $role['data'])){
+                        $roles[] = 'ROLE_BACKEND';
+                        continue;
+                    }
+
+                    $selectedRoles[] = $role;
+                }
             }
 
             $this->getUserService()->changeUserRoles($user['id'], $roles);
 
-            $dataDict = new UserRoleDict();
-            $roleDict = $dataDict->getDict();
+            if (!empty($selectedRoles)) {
+                for ($i = 0; $i < count($selectedRoles); $i++) {
+                    $roleName .= $selectedRoles[$i]['name'];
 
-            foreach ($setRoles as $setRole) {
-                $roleDict[$setRole['code']] = $setRole['name'];
-            }
-
-            foreach ($roles as $key => $role) {
-                if ($role == 'ROLE_BACKEND') {
-                    unset($roles[$key]);
-                }
-            }
-
-            $role         = "";
-            $roleCount    = count($roles);
-            $deletedRoles = array_diff($user['roles'], $roles);
-            $addedRoles   = array_diff($roles, $user['roles']);
-
-            if (!empty($deletedRoles) || !empty($addedRoles)) {
-                for ($i = 0; $i < $roleCount; $i++) {
-                    $role .= $roleDict[$roles[$i]];
-
-                    if ($i < $roleCount - 1) {
-                        $role .= "、";
+                    if ($i < count($selectedRoles) - 1) {
+                        $roleName .= "、";
                     }
                 }
 
                 $message = array(
                     'userId'   => $currentUser['id'],
                     'userName' => $currentUser['nickname'],
-                    'role'     => $role);
-                $this->getNotifiactionService()->notify($user['id'], 'role', $message);
-            }
+                    'role'     => $roleName
+                );
 
-            if (in_array('ROLE_TEACHER', $user['roles']) && !in_array('ROLE_TEACHER', $roles)) {
-                $this->getCourseService()->cancelTeacherInAllCourses($user['id']);
+                $this->getNotifiactionService()->notify($user['id'], 'role', $message);
             }
 
             $user = $this->getUserService()->getUser($id);
