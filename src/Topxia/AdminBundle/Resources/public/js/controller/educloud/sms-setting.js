@@ -15,6 +15,19 @@ define(function(require, exports, module) {
             });
         };
 
+        validateSmsControllerForm = function() {
+            var validator = new Validator({
+                element: '#sms-controller-form'
+            });
+            validator.addItem({
+                element: '[name="sms_school_name"]',
+                required: true,
+                rule: 'chinese_alphanumeric minlength{min:3} maxlength{max:8}',
+                display: "签名",
+                errormessageRequired: '签名3-8字，建议使用汉字'
+            });
+        }
+
         if ($('#sms-form').length > 0) {
 
             $('[name="sms-close"]').click(function() {
@@ -30,19 +43,13 @@ define(function(require, exports, module) {
         $("[name='sign-update']").on('click', function() {
             $("[name='submit-sign']").show();
             $("[name='status']").hide();
-            var validator = new Validator({
-                element: '#sms-controller-form'
-            });
-            validator.addItem({
-                element: '[name="sign"]',
-                required: true,
-                rule: 'chinese_alphanumeric minlength{min:3} maxlength{max:8}',
-                display: "签名",
-                errormessageRequired: '签名3-8字，建议使用汉字'
-            });
+            validateSmsControllerForm();
+
         });
 
-
+        $("[name='sms-open']").on('click', function() {
+            validateSmsControllerForm();
+        });
     }
 
 });
