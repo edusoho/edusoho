@@ -43,9 +43,12 @@ class UserApprovalController extends BaseController
             'approvalStatus' => $approvalStatus
         );
 
-        if (!empty($conditions['startDateTime']) && !empty($conditions['endDateTime'])) {
-            $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
-            $userConditions['endApprovalTime']   = strtotime($conditions['endDateTime']);
+        if (!empty($conditions['startDateTime'])) {
+           $userConditions['startApprovalTime'] = strtotime($conditions['startDateTime']);
+        }
+
+        if (!empty($conditions['endDateTime'])) {
+           $userConditions['endApprovalTime'] = strtotime($conditions['endDateTime']);
         }
 
         $userApprovalcount = 0;
