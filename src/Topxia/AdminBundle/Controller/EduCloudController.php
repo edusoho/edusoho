@@ -268,6 +268,38 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(true);
     }
 
+    public function smsStatusAction(Request $request)
+    {
+        $dataUserPosted = $request->request->all();
+        $settings       = $this->getSettingService()->get('cloud_sms', array());
+
+        $smsStatus = $this->handleUserSmsSetting($dataUserPosted);
+        $api       = CloudAPIFactory::create('root');
+        $status    = $api->get('/me/sms_account');
+
+//启动或者更新短信签名
+        if (isset($dataUserPosted['sms-open']) || isset($dataUserPosted['sms_school_name'])) {
+            $smsStatus                    = array_merge($smsStatus, $settings);
+            $smsStatus['sms_enabled']     = 1;
+            $smsStatus['sms_school_name'] = isset($dataUserPosted['sms_school_name']) ? $dataUserPosted['sms_school_name'] : $settings['sms_school_name'];
+
+            if (isset($status['error']) && $status['error'] == '不存在短信账号') {
+                $info   = $api->post('/sms_accounts', array('name' => $smsStatus['sms_school_name']));
+                $status = $api->get('/me/sms_account');
+            }
+        }
+
+        if (isset($dataUserPosted['sms-close'])) {
+            $smsStatus                = array_merge($smsStatus, $settings);
+            $smsStatus['sms_enabled'] = 0;
+        }
+
+        $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
+
+        $this->getSettingService()->set('cloud_sms', $smsStatus);
+        return $this->redirect($this->generateUrl('admin_edu_cloud_sms'));
+    }
+
     //云短信设置页
     public function smsAction(Request $request)
     {
@@ -286,8 +318,8 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
 
-            $smsStatus = $this->handleSmsSetting($request);
-            $status    = $api->get('/me/sms_account');
+            $this->handleSmsSetting($request, $api);
+            $smsStatus = $this->getSettingService()->get('cloud_sms', array());
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -659,16 +691,19 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    protected function handleSmsSetting(Request $request)
+    /**
+     * 默认的短信策略
+     * @var [type]
+     */
+    private function handleUserSmsSetting($dataUserPosted)
     {
-        $api            = CloudAPIFactory::create('root');
         $defaultSetting = array(
             'sms_enabled'               => '0',
             'sms_registration'          => 'off',
-            'sms_forget_password'       => 'on', //
-            'sms_user_pay'              => 'on', //
-            'sms_forget_pay_password'   => 'on', //
-            'sms_bind'                  => 'on', //
+            'sms_forget_password'       => 'on',
+            'sms_user_pay'              => 'on',
+            'sms_forget_pay_password'   => 'on',
+            'sms_bind'                  => 'on',
             'sms_classroom_publish'     => 'off',
             'sms_course_publish'        => 'off',
             'sms_normal_lesson_publish' => 'off',
@@ -683,100 +718,51 @@ class EduCloudController extends BaseController
             'sms_vip_buy_notify'        => 'off',
             'sms_coin_buy_notify'       => 'off'
         );
+
+        $dataUserPosted = ArrayToolkit::filter($dataUserPosted, $defaultSetting);
+        return array_merge($defaultSetting, $dataUserPosted);
+    }
+
+    protected function handleSmsSetting(Request $request, $api)
+    {
         $dataUserPosted = $request->request->all();
+        $settings       = $this->getSettingService()->get('cloud_sms', array());
 
-        if (isset($dataUserPosted['sms_order_pay_success']) && $dataUserPosted['sms_order_pay_success'] == 'on') {
-            $dataUserPosted['sms_course_buy_notify']    = 'on';
-            $dataUserPosted['sms_classroom_buy_notify'] = 'on';
-            $dataUserPosted['sms_vip_buy_notify']       = 'on';
-            $dataUserPosted['sms_coin_buy_notify']      = 'on';
-        } else {
-            $dataUserPosted['sms_course_buy_notify']    = 'off';
-            $dataUserPosted['sms_classroom_buy_notify'] = 'off';
-            $dataUserPosted['sms_vip_buy_notify']       = 'off';
-            $dataUserPosted['sms_coin_buy_notify']      = 'off';
+//如果要更改短信策略则同步到数据库
+        if (isset($dataUserPosted['strategy_overwrite'])) {
+            $smsStatus = array_merge($settings, $dataUserPosted);
+            $smsStatus = $this->updateSmstrategy($smsStatus, $dataUserPosted);
+            $this->getSettingService()->set('cloud_sms', $smsStatus);
         }
 
-        $settings = $this->getSettingService()->get('cloud_sms', array());
-
-        $smsStatus = array();
-
-//启用云短信，没有则创建云平台短信服务帐号
-
-        if (isset($dataUserPosted['sms-open'])) {
-            if (isset($settings['sms_school_name'])) {
-                $status = $api->get('/me/sms_account');
-                if (isset($status['error']) && $status['error'] == '不存在短信账号') {
-                    $info   = $api->post('/sms_accounts', array('name' => $settings['sms_school_name']));
-                    $status = $api->get('/me/sms_account');
-                }
-
-                $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
-                $smsStatus['sms_enabled'] = '1';
-                $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                $smsStatus                = array_merge($settings, $smsStatus);
-                $this->getSettingService()->set('cloud_sms', $smsStatus);
-                return $smsStatus;
-            } else {
-                $info = $api->post('/sms_accounts', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
-
-                if ($info['status'] == 'ok') {
-                    $status = $api->get('/me/sms_account');
-
-                    $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
-                    $smsStatus['sms_enabled']     = '1';
-                    $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                    $smsStatus                    = array_merge($defaultSetting, $smsStatus);
-                    $smsStatus                    = array_merge($settings, $smsStatus);
-                    $smsStatus['sms_school_name'] = $status['name'];
-                    $this->getSettingService()->set('cloud_sms', $smsStatus);
-                    return $smsStatus;
-                }
-            }
-        }
-
-//关闭云短信
-
-        if (isset($dataUserPosted['sms-close'])) {
-            $status                   = $api->get('/me/sms_account');
-            $smsStatus['status']      = isset($status['status']) ? $status['status'] : 'error';
-            $smsStatus['sms_enabled'] = '0';
-            $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
-            $smsStatus                = array_merge($settings, $smsStatus);
+        if (empty($settings)) {
+            $smsStatus           = $this->handleUserSmsSetting($dataUserPosted);
+            $status              = $api->get('/me/sms_account');
+            $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
 
             $this->getSettingService()->set('cloud_sms', $smsStatus);
+        }
+    }
 
-            return $smsStatus;
+    /**
+     * 处理支付成功回执的总开关
+     * @param  Request $request        [description]
+     * @return [type]  [description]
+     */
+    private function updateSmstrategy($smsStatus, $dataUserPosted)
+    {
+        if ($dataUserPosted['sms_order_pay_success'] == 'on') {
+            $smsStatus['sms_course_buy_notify']    = 'on';
+            $smsStatus['sms_classroom_buy_notify'] = 'on';
+            $smsStatus['sms_vip_buy_notify']       = 'on';
+            $smsStatus['sms_coin_buy_notify']      = 'on';
+        } else {
+            $smsStatus['sms_course_buy_notify']    = 'off';
+            $smsStatus['sms_classroom_buy_notify'] = 'off';
+            $smsStatus['sms_vip_buy_notify']       = 'off';
+            $smsStatus['sms_coin_buy_notify']      = 'off';
         }
 
-//更新云短信签名
-
-        if (isset($dataUserPosted['sign'])) {
-            if (empty($dataUserPosted['sign'])) {
-                $dataUserPosted['sign'] = $settings['sms_school_name'];
-            }
-
-            var_dump('sign');exit;
-            $info = $api->post('/me/sms_account', array('name' => $dataUserPosted['sign']));
-
-            if ($info['status'] == 'ok') {
-                $status                       = $api->get('/me/sms_account');
-                $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
-                $smsStatus['sms_enabled']     = '1';
-                $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
-                $smsStatus                    = array_merge($settings, $smsStatus);
-                $smsStatus['sms_school_name'] = $status['name'];
-                $this->getSettingService()->set('cloud_sms', $smsStatus);
-                return $smsStatus;
-            }
-        }
-
-        $smsStatus           = array_merge($settings, $dataUserPosted);
-        $status              = $api->get('/me/sms_account');
-        $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
-        var_dump($smsStatus); //exit;
-
-        $this->getSettingService()->set('cloud_sms', $smsStatus);
         return $smsStatus;
     }
 

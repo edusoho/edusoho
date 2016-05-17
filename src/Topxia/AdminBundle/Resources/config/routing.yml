@@ -1374,6 +1374,10 @@ admin_edu_cloud_sms:
     pattern:  /setting/edu_cloud/sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:sms }
 
+admin_edu_cloud_sms_status:
+    pattern:  /setting/sms/status
+    defaults: { _controller: TopxiaAdminBundle:EduCloud:smsStatus }
+
 admin_edu_cloud_apply_for_sms:
     pattern:  /edu_cloud/apply_for_sms
     defaults: { _controller: TopxiaAdminBundle:EduCloud:applyForSms }
