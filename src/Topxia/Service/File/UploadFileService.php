@@ -7,78 +7,53 @@ interface UploadFileService
 {
 	public function getFile($id);
 
-	//public function getCloudFile($id);//2
-
     public function getFileByGlobalId($globalId);
 
     //TODO 重命名 getFullFile
-	public function getFileFromLeaf($id);//2
+	public function getFileFromLeaf($id);
 
-	public function getUploadFileInit($id);//2
+	public function getUploadFileInit($id);
 
-	//public function getThinFile($id);//2
+	//TODO 考虑可以和 findFilesByTargetTypeAndTargetIds 合并
+	public function findFilesByTargetTypeAndTargetId($targetType, $targetId);
 
-	//public function getFileByGlobalId2($globalId);//2
-
-	//public function findCloudFilesByIds($fileIds);//2
-
-	//public function findThinFilesByIds(array $ids);//2
-
-    //public function findFilesByIds2(array $ids);//2
-
-	// 是否可以和 findFilesByTargetTypeAndTargetIds 合并
-	public function findFilesByTargetTypeAndTargetId($targetType, $targetId);//2
-
-	public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);//2
-
-	//public function searchFiles2($conditions, $orderBy, $start, $limit);//2
-
-	//public function searchFilesCount2($conditions);//2
+	public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
 
 	// TODO update
-	public function edit($fileId, $fields);//2
+	public function edit($fileId, $fields);
 
-	// TODO downloadFile
-	public function getDownloadFile($id);//2
+	// TODO getDownloadMetas
+	public function getDownloadFile($id);
 
-	public function getUploadAuth($params);//2
+	public function getUploadAuth($params);
 
-	public function initUpload($params);//2
+	public function initUpload($params);
 
-	public function finishedUpload($params);//2
+	public function finishedUpload($params);
 
-	public function moveFile($targetType, $targetId, $originalFile = null, $data);//2
+	public function moveFile($targetType, $targetId, $originalFile = null, $data);
 
-	public function setFileProcessed($params);//2
+	public function setFileProcessed($params);
 
-	//public function deleteFile2($id);//2
+	public function deleteByGlobalId($globalId);
 
-	//public function deleteFiles2(array $ids);//2
+	// TODO 可以合并成 waveUploadFile
+	public function increaseFileUsedCount($id);
 
-	public function deleteByGlobalId($globalId);//2
+	// TODO 可以合并成 waveUploadFile
+	public function decreaseFileUsedCount($id);
 
-	// TODO 可以和decreaseFileUsedCount 合并成 waveUploadFile
-	public function increaseFileUsedCount($id);//2
-
-	public function decreaseFileUsedCount($id);//2
-
-	//public function findMySharingContacts2($targetUserId);//2
-
-	public function reconvertFile($id, $options = array());//2
-
-	//public function reconvertFile($id, $convertCallback);
+	public function reconvertFile($id, $options = array());
 
     public function reconvertOldFile($id, $convertCallback, $pipeline);
 
-	public function collectFile($userId, $fileId);//2
+	public function collectFile($userId, $fileId);
 
-	public function findCollectionsByUserIdAndFileIds($fileIds, $userId);//2
+	public function findCollectionsByUserIdAndFileIds($fileIds, $userId);
 
-	public function findCollectionsByUserId($userId);//2
+	public function findCollectionsByUserId($userId);
 
-	//public function getFileByTargetType2($targetType);//2
-
-	public function syncFile($file);//2
+	public function syncFile($file);
 
     public function getFileByHashId($hashId);
 
@@ -90,7 +65,7 @@ interface UploadFileService
 
     public function searchFileCount($conditions);
 
-    public function addFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile=null);
+    public function addFile($targetType, $targetId, array $fileInfo=array(), $implemtor='local', UploadedFile $originalFile = null);
 
     public function renameFile($id, $newFilename);
 
@@ -122,13 +97,13 @@ interface UploadFileService
 
     public function findShareHistory($sourceUserId);
 
-    public function findActiveShareHistory($sourceUserId);//2
+    public function findActiveShareHistory($sourceUserId);
 
     public function cancelShareFile($sourceUserId, $targetUserId);
 
-    public function searchShareHistoryCount($conditions);//2
+    public function searchShareHistoryCount($conditions);
 
-	public function searchShareHistories($conditions, $orderBy, $start, $limit);//2
+	public function searchShareHistories($conditions, $orderBy, $start, $limit);
 
     public function waveUploadFile($id, $field, $diff);
 }
