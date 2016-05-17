@@ -304,7 +304,7 @@ define(function(require, exports, module) {
                 var self = this;
                 var $target = $(event.currentTarget);
                 var ids = [];
-                $('#material-lib-items-panel').find('[data-role=batch-item]:checked').each(function() {
+                this.element.find('[data-role=batch-item]:checked').each(function() {
                     ids.push(this.value);
                 });
                 if(ids == ""){
@@ -313,10 +313,8 @@ define(function(require, exports, module) {
                 }
 
                 $("#select-tag-items").val(ids);
-
                 $("#tag-modal").modal('show');
-
-
+                
             },
             submitForm: function(event)
             {

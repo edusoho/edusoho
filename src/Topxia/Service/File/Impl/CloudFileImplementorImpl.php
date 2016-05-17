@@ -695,9 +695,10 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $cloudFile['globalId']      = $localFile['globalId'];
             $cloudFile['convertHash']   = $localFile['convertHash'];
         } else {
-            $cloudFile['id']      = 0;
-            $cloudFile['storage'] = 'cloud';
-            $cloudFile['globalId']      = $cloudFile['no'];
+            $cloudFile['id']        = 0;
+            $cloudFile['storage']   = 'cloud';
+            $cloudFile['globalId']  = $cloudFile['no'];
+            $cloudFile['usedCount'] = 0;
         }
 
         $cloudFile['filename']      = $cloudFile['name'];
