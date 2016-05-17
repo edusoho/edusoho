@@ -1,5 +1,5 @@
 {% extends 'TopxiaWebBundle:CourseManage:layout.html.twig' %}
-{% block title %}{{'文件管理'|trans}} - {{ parent() }}{% endblock %}
+{% block title %}{{'课程文件'|trans}} - {{ parent() }}{% endblock %}
 {% set side_nav = 'files' %}
 {% set tab = 'courseLesson' %}
 {% set script_controller = 'course-manage-file/index' %}
@@ -30,9 +30,9 @@
         data-toggle="modal" data-target="#modal"
         data-url="{{path('uploader_batch_uplod', {token:uploader_token('courselesson', course.id, 'private')}) }}"
         >
-        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传文件'|trans}}
+        <i class="glyphicon glyphicon-cloud-upload"></i>{{'上传课程文件'|trans}}
       </a>
-      {{'文件管理'|trans}}
+      {{'课程文件'|trans}}
     </div>
     <div class="panel-body" id="file-manage-panel">
       {#<ul class="nav nav-tabs mbm">
