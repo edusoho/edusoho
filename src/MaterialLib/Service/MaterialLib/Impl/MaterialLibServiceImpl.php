@@ -11,7 +11,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
     public function get($id)
     {
-        //$this->checkPermission(Permission::VIEW, array('id' => $id));
         return $this->getUploadFileService()->getFileFromLeaf($id);
     }
 
@@ -22,19 +21,16 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function player($globalId)
     {
-        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->player($globalId);
     }
 
     public function edit($fileId, $fields)
     {
-        //$this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
         $this->getUploadFileService()->edit($fileId, $fields);
     }
 
     public function delete($id)
     {
-        //$this->checkPermission(Permission::DELETE, array('file' => $file));
         $result = $this->getUploadFileService()->deleteFile($id);
 
         if ($result) {
@@ -98,13 +94,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function download($id)
     {
-        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getUploadFileService()->getDownloadFile($id);
     }
 
     public function reconvert($globalId, $options = array())
     {
-        //$this->checkPermission(Permission::EDIT, array('globalId' => $globalId));
         $result = $this->getCloudFileService()->reconvert($globalId, $options);
         $file   = $this->getByGlobalId($globalId);
         return $file;
@@ -112,13 +106,11 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function getDefaultHumbnails($globalId)
     {
-        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getDefaultHumbnails($globalId);
     }
 
     public function getThumbnail($globalId, $options = array())
     {
-        //$this->checkPermission(Permission::VIEW, array('globalId' => $globalId));
         return $this->getCloudFileService()->getThumbnail($globalId, $options);
     }
 
@@ -136,13 +128,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return $oldFiles;
     }
 
-    // protected function checkPermission($permission, $options = array())
-    // {
-    //     if (!$this->getPermissionService()->checkPermission($permission, $options)) {
-    //         throw new AccessDeniedException("无权限操作", 403);
-    //     }
-    // }
-
     protected function getTagService()
     {
         return $this->createService('Taxonomy.TagService');
@@ -152,11 +137,6 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
     {
         return $this->createService('File.UploadFileService');
     }
-
-    // protected function getPermissionService()
-    // {
-    //     return $this->createService('MaterialLib:MaterialLib.PermissionService');
-    // }
 
     protected function getCloudFileService()
     {

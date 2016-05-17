@@ -136,6 +136,28 @@ class CloudFileController extends BaseController
         return $this->createJsonResponse($result);
     }
 
+    public function batchDeleteAction(Request $request)
+    {
+        $data = $request->request->all();
+
+        if (isset($data['ids']) && !empty($data['ids'])) {
+
+            $this->getCloudFileService()->batchDelete($data['ids']);
+            return $this->createJsonResponse(true);
+        }
+
+        return $this->createJsonResponse(false);
+    }
+
+    public function batchTagShowAction(Request $request)
+    {
+        $data    = $request->request->all();
+        $fileIds = preg_split('/,/', $data['fileIds']);
+
+        $this->getMaterialLibService()->batchTagEdit($fileIds, $data['tags']);
+        return $this->redirect($this->generateUrl('admin_cloud_file_manage'));
+    }
+
     public function playerAction(Request $request, $globalId)
     {
         $file = $this->getCloudFileService()->getByGlobalId($globalId);
@@ -424,5 +446,10 @@ class CloudFileController extends BaseController
     protected function getUploadFileService()
     {
         return $this->createService('File.UploadFileService');
+    }
+
+    protected function getMaterialLibService()
+    {
+        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 }
