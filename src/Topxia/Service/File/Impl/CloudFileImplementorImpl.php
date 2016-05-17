@@ -679,6 +679,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $cloudFile;
     }
 
+    // TODO 有问题
     private function mergeCloudFile($localFile, $cloudFile)
     {
         if ($localFile) {
