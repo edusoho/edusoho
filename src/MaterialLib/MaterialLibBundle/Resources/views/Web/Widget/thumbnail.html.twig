@@ -41,19 +41,36 @@
           </a>
         </li>
       {% endif %}
+
       <li>
         <a href="javascript:;"  data-url="{{ path('material_download', {fileId:uploadFile.id}) }}" class="js-download-btn" data-toggle="tooltip" data-placement="bottom" >
-          <i class="glyphicon glyphicon-save prm"></i>
-          下载
+          <i class="glyphicon glyphicon-save prm"></i>下载
         </a>
       </li>
+
       {% if uploadFile.createdUserId == app.user.id %}
-      <li>
-        <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {fileId:uploadFile.id}) }}">
-          <i class="glyphicon glyphicon-trash prm"></i>
-          删除
-        </a>
-      </li>
+        
+        {% if uploadFile.isPublic %}
+          <li>
+            <a href="javascript:;" class="js-unshare-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_unshare', {fileId:uploadFile.id}) }}">
+              <i class="es-icon es-icon-share prm"></i>取消共享
+            </a>
+          </li>
+        {% else %}
+            <li>
+            <a href="javascript:;" class="js-share-btn" data-toggle="tooltip" data-placement="bottom" data-file-id="{{ uploadFile.id }}" data-url="{{ path('material_batch_share') }}">
+              <i class="es-icon es-icon-share prm"></i>共享
+            </a>
+          </li>
+        {% endif %}
+        
+        {% if source != 'public' %}
+          <li>
+            <a href="javascript:;"  class="js-delete-btn" data-toggle="tooltip" data-placement="bottom" data-url="{{ path('material_delete', {fileId:uploadFile.id}) }}">
+              <i class="glyphicon glyphicon-trash prm"></i>删除
+            </a>
+          </li>
+        {% endif %}
       {% endif %}
     </ul>
   </div>

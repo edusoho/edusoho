@@ -92,6 +92,15 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
         return array('success' => true);
     }
 
+    public function unShare($id)
+    {
+        $fields = array('isPublic' => '0');
+
+        $this->getUploadFileService()->edit($id, $fields);
+
+        return array('success' => true);
+    }
+
     public function download($id)
     {
         return $this->getUploadFileService()->getDownloadFile($id);

@@ -460,6 +460,13 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(false);
     }
 
+    public function unshareAction(Request $request, $fileId)
+    {
+        $this->tryManageFile($fileId);
+        $result = $this->getMaterialLibService()->unShare($fileId);
+        return $this->createJsonResponse($result);
+    }
+
     public function batchTagShowAction(Request $request)
     {
         $data    = $request->request->all();
