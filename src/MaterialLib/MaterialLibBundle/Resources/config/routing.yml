@@ -47,7 +47,7 @@ material_lib_file_preview:
     defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
 
 material_edit:
-    pattern:  /materiallib/{globalId}/edit
+    pattern:  /materiallib/{fileId}/edit
     defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
     methods: [POST]
 

@@ -5,7 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
+use Topxia\WebBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
@@ -140,9 +140,13 @@ class MaterialLibController extends BaseController
         $file        = $this->tryAccessFile($fileId);
 
         if ($file['storage'] == 'local' || $currentUser['id'] != $file['createdUserId']) {
+            $fileTags = $this->getUploadFileTagService()->findByFileId($fileId);
+            $tags = $this->getTagService()->findTagsByIds(ArrayToolkit::column($fileTags,'tagId'));
+            $file['tags'] = ArrayToolkit::column($tags,'name');
             return $this->render('MaterialLibBundle:Web:static-detail.html.twig', array(
                 'material'   => $file,
-                'thumbnails' => ""
+                'thumbnails' => "",
+                'editUrl'    => $this->generateUrl('material_edit',array('fileId'=>$file['id']))
             ));
         }
 
@@ -394,16 +398,18 @@ class MaterialLibController extends BaseController
         return $this->createJsonResponse(true);
     }
 
-    public function editAction(Request $request, $globalId)
+    public function editAction(Request $request, $fileId)
     {
-        $this->tryManageGlobalFile($globalId);
+        $this->tryManageFile($fileId);
 
         $fields = $request->request->all();
 
-        return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
+        $result = $this->getUploadFileService()->edit($fileId, $fields);
+        return $this->createJsonResponse($result);
+        /*return $this->forward('TopxiaAdminBundle:CloudFile:edit', array(
             'globalId' => $globalId,
             'fields'   => $fields
-        ));
+        ));*/
     }
 
     public function downloadAction(Request $request, $fileId)
@@ -573,7 +579,7 @@ class MaterialLibController extends BaseController
 
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 
     protected function getSettingService()

@@ -14,11 +14,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         'cloud' => 'File.CloudFileImplementor'
     );
 
-    /*static $implementor2 = array(
-        'local' => 'File.LocalFileImplementor',
-        'cloud' => 'File.CloudFileImplementor'
-    );*/
-
     public function getFile($id)
     {
         $file = $this->getUploadFileDao()->getFile($id);
@@ -192,10 +187,10 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
 
             if (isset($fields['name'])) {
                 $fields['filename'] = $fields['name'];
+                unset($fields['name']);
             }
 
-            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename'));
-            unset($fields['name']);
+            $fields = ArrayToolkit::parts($fields, array('isPublic', 'filename', 'description'));
 
             if (!empty($fields)) {
                 return $this->getUploadFileDao()->updateFile($file['id'], $fields);

@@ -1,66 +1,62 @@
 <div id="material-detail" class="material-detail-widget">
-<!--   <div class="header clearfix">
-    <h1>资源详情</h1>
-    <a href="javascript:;" class="js-back">返回列表</a>
-  </div> -->
+  <div class="page-header clearfix">
+    <h1 class="pull-left">资源详情</h1>
+  </div>
   <div class="content">
-    <ul class="nav nav-pills">
-      <li role="presentation" class="active js-info" data-target="#info-tab"><a href="#info-tab">基本信息</a></li>
-
-      {% if material.type == 'video' %}
-        <li role="presentation" class="js-cover" data-target="#cover-tab"><a href="#cover-tab">封面图片</a></li>
-      {% endif %}
+    <ul class="nav nav-tabs">
+      <li role="presentation" class="active js-info" data-target="#info-tab">
+        <a href="javascript:;">基本信息</a>
+      </li>
     </ul>
-
     <div class="tab-content">
-
       <div class="tab-pane active" id="info-tab">
-        <form class="form-horizontal" id="info-form" >
+        <form class="form-horizontal" id="info-form" method="post" action="{{ editUrl }}">
           <div class="form-group">
-            <label for="name" class="col-md-2 control-label">标题</label>
-            <div class="col-md-6" style="padding:6px;">
-              {{ material.filename }}
+            <label for="name" class="col-sm-2 control-label">标题</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="name" name="name" required="true" placeholder="标题" value="{{ material.filename }}">
             </div>
           </div>
           <div class="form-group">
-            <label for="tags" class="col-md-2 control-label">标签</label>
-            <div class="col-md-6 controls" style="padding:7px;">
-                {{ material.tags|default("暂无")|join('  ') }}
+            <label for="tags" class="col-sm-2 control-label">标签</label>
+            <div class="col-sm-8">
+              <input type="text" class="width-full select2-offscreen" id="tags" name="tags" value="{{ material.tags|join(',') }}" placeholder="标签" data-url="{{ path('tag_match') }}">
+              <div class="help-block">{{'标签来自网校课程标签，由网校管理员统一管理。'|trans}}</div>
             </div>
           </div>
           <div class="form-group">
-            <label class="col-md-2 control-label">简介</label>
-            <div class="col-md-6 controls" style="padding:6px;">
-              {{ material.description|default("暂无") }}
+            <label class="col-sm-2 control-label">简介</label>
+            <div class="col-sm-8 controls">
+              <textarea id="description" name="description" class="form-control" rows="6">{{ material.description|default('') }}</textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-2 control-label">共享</label>
+            <div class="col-sm-8 controls">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="isPublic" value="1" {% if material.isPublic|default(0) %}checked{% endif %}>
+                  共享到公共资料<span class="text-muted">（其他老师可以查看、预览、引用该资料）</span>
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="isPublic" value="0" {% if not material.isPublic|default(0) %}checked{% endif %}>
+                  仅自己可见
+                </label>
+              </div>
             </div>
           </div>
           <div class="form-group">
-            <div class="col-md-offset-2 col-md-6">
-              <a class="btn btn-primary js-back">返回列表</a>
+            <div class="col-sm-offset-2 col-sm-8 controls">
+              <button class="btn btn-fat btn-primary" id="info-save-btn" data-loading-text="正在保存..." type="submit">保存</button>
+              <a class="btn btn-link js-back" style="color:#555">返回列表</a>
             </div>
           </div>
         </form>
       </div>
 
-      {% if material.type == 'video' %}
-        <div class="tab-pane" id="cover-tab">
-          {% if material.processStatus|default('none') == 'ok' %}
-          <form class="form-horizontal" id="cover-form">
-            <div class="form-group">
-              <label for="name" class="col-md-2 control-label">封面</label>
-              <div class="col-md-4">
-                <img class="js-cover-img" src="{{ asset(material.thumbnail|default('assets/img/default/cloud_' ~ material.type ~ '.png')) }}">
-              </div>
-            </div>
-          </form>
-          {% else %}
-            <div class="empty text-muted">
-              视频还没有转码完成，请等待转码完成......
-            </div>
-          {% endif %}
-        </div>
-      {% endif %}
     </div>
   </div>
-
 </div>
