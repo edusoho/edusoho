@@ -5,7 +5,7 @@ namespace MaterialLib\MaterialLibBundle\Controller;
 use Topxia\Common\Paginator;
 use Topxia\Common\ArrayToolkit;
 use Symfony\Component\HttpFoundation\Request;
-use MaterialLib\MaterialLibBundle\Controller\BaseController;
+use Topxia\WebBundle\Controller\BaseController;
 
 class MaterialLibController extends BaseController
 {
@@ -566,7 +566,7 @@ class MaterialLibController extends BaseController
 
     protected function getMaterialLibService()
     {
-        return $this->createService('MaterialLib:MaterialLib.MaterialLibService');
+        return $this->getServiceKernel()->createService('MaterialLib:MaterialLib.MaterialLibService');
     }
 
     protected function getSettingService()
