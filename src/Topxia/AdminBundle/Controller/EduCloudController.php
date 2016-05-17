@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Topxia\Service\CloudPlatform\Client\EduSohoOpenClient;
 use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
 
-
 class EduCloudController extends BaseController
 {
     public function indexAction(Request $request)
@@ -287,9 +286,8 @@ class EduCloudController extends BaseController
             $api  = CloudAPIFactory::create('root');
             $info = $api->get('/me');
 
-            $smsStatus = $this->newHandleSmsSetting($request);
+            $smsStatus = $this->handleSmsSetting($request);
             $status    = $api->get('/me/sms_account');
-
             return $this->render('TopxiaAdminBundle:EduCloud:sms.html.twig', array(
                 'locked'      => isset($info['locked']) ? $info['locked'] : 0,
                 'enabled'     => isset($info['enabled']) ? $info['enabled'] : 1,
@@ -529,6 +527,7 @@ class EduCloudController extends BaseController
     public function searchSettingAction(Request $request)
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
+
         if (!$cloud_search_settting) {
             $cloud_search_settting = array(
                 'search_enabled' => 0,
@@ -551,16 +550,16 @@ class EduCloudController extends BaseController
             ));
         }
 
-        //是否接入教育云
+//是否接入教育云
         if (empty($overview['user']['level']) || (!(isset($overview['service']['storage'])) && !(isset($overview['service']['live'])) && !(isset($overview['service']['sms'])))) {
             $data['status'] = 'unconnect';
-        } elseif(empty($overview['user']['licenseDomains'])) {
+        } elseif (empty($overview['user']['licenseDomains'])) {
             $data['status'] = 'unbinded';
-        }else {
-             $currentHost = $request->server->get('HTTP_HOST');
-             if(!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))){
+        } else {
+            $currentHost = $request->server->get('HTTP_HOST');
+            if (!in_array($currentHost, explode(';', $overview['user']['licenseDomains']))) {
                 $data['status'] = 'binded_error';
-             }
+            }
         }
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
@@ -594,10 +593,10 @@ class EduCloudController extends BaseController
     public function searchOpenAction()
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
-        if($cloud_search_settting['status'] == 'ok'){
+        if ($cloud_search_settting['status'] == 'ok') {
             $this->getSettingService()->set('cloud_search', array(
                 'search_enabled' => 1,
-                'status' => $cloud_search_settting['status'],
+                'status'         => $cloud_search_settting['status']
             ));
         }
 
@@ -612,8 +611,8 @@ class EduCloudController extends BaseController
 
         $this->getSettingService()->set('cloud_search', array(
             'search_enabled' => 0,
-            'status' => $cloud_search_settting['status'],
-            ));
+            'status'         => $cloud_search_settting['status']
+        ));
 
         return $this->render('TopxiaAdminBundle:EduCloud:cloud-search-setting.html.twig', array(
             'data' => array('status' => 'success')
@@ -660,16 +659,16 @@ class EduCloudController extends BaseController
         return $this->createJsonResponse(array('status' => 'ok'));
     }
 
-    protected function newHandleSmsSetting(Request $request)
+    protected function handleSmsSetting(Request $request)
     {
         $api            = CloudAPIFactory::create('root');
         $defaultSetting = array(
             'sms_enabled'               => '0',
             'sms_registration'          => 'off',
-            'sms_forget_password'       => 'off',
-            'sms_user_pay'              => 'off',
-            'sms_forget_pay_password'   => 'off',
-            'sms_bind'                  => 'off',
+            'sms_forget_password'       => 'on', //
+            'sms_user_pay'              => 'on', //
+            'sms_forget_pay_password'   => 'on', //
+            'sms_bind'                  => 'on', //
             'sms_classroom_publish'     => 'off',
             'sms_course_publish'        => 'off',
             'sms_normal_lesson_publish' => 'off',
@@ -698,7 +697,8 @@ class EduCloudController extends BaseController
             $dataUserPosted['sms_coin_buy_notify']      = 'off';
         }
 
-        $settings  = $this->getSettingService()->get('cloud_sms', array());
+        $settings = $this->getSettingService()->get('cloud_sms', array());
+
         $smsStatus = array();
 
 //启用云短信，没有则创建云平台短信服务帐号
@@ -706,7 +706,6 @@ class EduCloudController extends BaseController
         if (isset($dataUserPosted['sms-open'])) {
             if (isset($settings['sms_school_name'])) {
                 $status = $api->get('/me/sms_account');
-
                 if (isset($status['error']) && $status['error'] == '不存在短信账号') {
                     $info   = $api->post('/sms_accounts', array('name' => $settings['sms_school_name']));
                     $status = $api->get('/me/sms_account');
@@ -722,10 +721,12 @@ class EduCloudController extends BaseController
                 $info = $api->post('/sms_accounts', array('name' => isset($dataUserPosted['sign']) ? $dataUserPosted['sign'] : $settings['sms_school_name']));
 
                 if ($info['status'] == 'ok') {
-                    $status                       = $api->get('/me/sms_account');
+                    $status = $api->get('/me/sms_account');
+
                     $smsStatus['status']          = isset($status['status']) ? $status['status'] : 'error';
                     $smsStatus['sms_enabled']     = '1';
                     $smsStatus                    = ArrayToolkit::filter($smsStatus, $defaultSetting);
+                    $smsStatus                    = array_merge($defaultSetting, $smsStatus);
                     $smsStatus                    = array_merge($settings, $smsStatus);
                     $smsStatus['sms_school_name'] = $status['name'];
                     $this->getSettingService()->set('cloud_sms', $smsStatus);
@@ -742,7 +743,9 @@ class EduCloudController extends BaseController
             $smsStatus['sms_enabled'] = '0';
             $smsStatus                = ArrayToolkit::filter($smsStatus, $defaultSetting);
             $smsStatus                = array_merge($settings, $smsStatus);
+
             $this->getSettingService()->set('cloud_sms', $smsStatus);
+
             return $smsStatus;
         }
 
@@ -753,6 +756,7 @@ class EduCloudController extends BaseController
                 $dataUserPosted['sign'] = $settings['sms_school_name'];
             }
 
+            var_dump('sign');exit;
             $info = $api->post('/me/sms_account', array('name' => $dataUserPosted['sign']));
 
             if ($info['status'] == 'ok') {
@@ -770,6 +774,7 @@ class EduCloudController extends BaseController
         $smsStatus           = array_merge($settings, $dataUserPosted);
         $status              = $api->get('/me/sms_account');
         $smsStatus['status'] = isset($status['status']) ? $status['status'] : 'error';
+        var_dump($smsStatus); //exit;
 
         $this->getSettingService()->set('cloud_sms', $smsStatus);
         return $smsStatus;
@@ -867,6 +872,7 @@ class EduCloudController extends BaseController
 
         if (empty($operation)) {
             $result = $api->get("/me/email_account");
+
             if (isset($result['nickname'])) {
                 $emailStatus['status'] = $result['status'];
                 $sign                  = array('sign' => $result['nickname']);
@@ -965,15 +971,17 @@ class EduCloudController extends BaseController
     {
         $cloud_search_settting = $this->getSettingService()->get('cloud_search', array());
 
-        if($cloud_search_settting['status']=='waiting'){
+        if ($cloud_search_settting['status'] == 'waiting') {
             $search_account = $api->get("/me/search_account");
-            if($search_account['isInit']=='yes'){
+
+            if ($search_account['isInit'] == 'yes') {
                 $this->getSettingService()->set('cloud_search', array(
                     'search_enabled' => $cloud_search_settting['search_enabled'],
                     'status'         => 'ok'
-                    ));
+                ));
             }
         }
+
         return true;
     }
 
