@@ -167,7 +167,10 @@ define(function(require, exports, module) {
             uploader.on('uploadProgress', function(file, percentage) {
                 var $li = $('#' + file.id);
                 percentage = (percentage * 100).toFixed(2) + '%';
-                if(percentage != '100.00%'){
+                var lastPercentage = $li.data('currentPercent');
+                console.log(percentage, lastPercentage);
+                if(percentage != '100.00%' && (lastPercentage === undefined || percentage > lastPercentage )){
+                    $li.data('currentPercent', percentage);
                     $li.find('.file-status').html(percentage);
                     $li.find('.file-progress-bar').css('width', percentage);
                 }
