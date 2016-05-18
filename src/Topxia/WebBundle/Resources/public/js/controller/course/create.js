@@ -1,9 +1,15 @@
 define(function(require, exports, module) {
 
     var Validator = require('bootstrap.validator');
-    var ztree = require('edusoho.ztree');
+    var SelectZtree = require('edusoho.selectztree');
     exports.run = function() {
-        ztree('#orgZtree', "#orgName", "#orgCode");
+
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
+
         if ($("#course-create-form").length > 0) {
 
             var validator = new Validator({

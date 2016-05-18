@@ -2,8 +2,12 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function(options) {
-        var ztree = require('edusoho.ztree');
-        ztree('#orgZtree', "#orgName", "#orgCode");
+       var SelectZtree = require('edusoho.selectztree');
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
 
         var $table = $('#teacher-promote-table');
 

@@ -4,8 +4,14 @@ define(function (require, exports, module) {
     var Notify = require('common/bootstrap-notify');
 
     exports.run = function () {
-        var ztree = require('edusoho.ztree');
-        ztree('#modal-orgZtree', "#modal-orgName", "#modal-orgCode", "modal-ztreeContent");
+       var SelectZtree = require('edusoho.selectztree');
+
+        var selectTree = new SelectZtree({
+            ztreeDom: '#modal-orgZtree',
+            clickDom: "#modal-orgName",
+            valueDom: "#modal-orgCode",
+            displayBlock:"modal-ztreeContent"
+        });
 
         var Validator = require('bootstrap.validator');
         require('common/validator-rules').inject(Validator);

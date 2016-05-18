@@ -10,8 +10,14 @@ define(function(require, exports, module) {
     '请输入正确的日期和时间,格式如XXXX-MM-DD hh:mm'
     );
     exports.run = function() {
-        var ztree = require('edusoho.ztree');
-        ztree('#modal-orgZtree', "#modal-orgName", "#modal-orgCode", "modal-ztreeContent");
+       var SelectZtree = require('edusoho.selectztree');
+
+        var selectTree = new SelectZtree({
+            ztreeDom: '#modal-orgZtree',
+            clickDom: "#modal-orgName",
+            valueDom: "#modal-orgCode",
+            displayBlock:"modal-ztreeContent"
+        });
         var $modal = $('#announcement-create-form').parents('.modal');
 
         $form = $('#announcement-create-form');

@@ -5,9 +5,13 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
-    var ztree = require('edusoho.ztree');
+   var SelectZtree = require('edusoho.selectztree');
     exports.run = function() {
-        ztree('#orgZtree', "#orgName", "#orgCode");
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
         require('./header').run();
 
         $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data) {

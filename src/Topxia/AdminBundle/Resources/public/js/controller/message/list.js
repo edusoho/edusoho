@@ -5,8 +5,12 @@ define(function(require, exports, module) {
 	require("$");
 
     exports.run = function() {
-        var ztree = require('edusoho.ztree');
-        ztree('#orgZtree', "#orgName", "#orgCode");
+       var SelectZtree = require('edusoho.selectztree');
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
         var $container = $('#message-table-container');
         var $table = $("#message-table");
         require('../../util/short-long-text')($table);
