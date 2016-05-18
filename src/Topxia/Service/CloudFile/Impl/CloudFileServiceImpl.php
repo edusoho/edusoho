@@ -127,9 +127,21 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
                 $courseIds = array('0');
             }
 
-            $lessonFiles   = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('courselesson', $courseIds);
-            $materialFiles = $this->getUploadFileService()->findFilesByTargetTypeAndTargetIds('coursematerial', $courseIds);
-            $globalIds     = ArrayToolkit::column(array_merge($lessonFiles, $materialFiles), 'globalId');
+            $conditions = array(
+                'targetTypes' => array('courselesson', 'coursematerial'),
+                'targets'     => $courseIds
+            );
+            $courseMaterials = $this->getMaterialService()->searchMaterials(
+                array('courseIds' => $courseIds), 
+                array('createdTime','DESC'),
+                0, PHP_INT_MAX
+            );
+            if ($courseMaterials) {
+                $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
+            }
+
+            $materials = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, PHP_INT_MAX);
+            $globalIds = ArrayToolkit::column($materials, 'globalId');
 
             return $globalIds;
         } elseif ($searchType == 'user') {
@@ -252,5 +264,10 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
     protected function getCloudFileImplementor()
     {
         return $this->createService('File.CloudFileImplementor2');
+    }
+
+    protected function getMaterialService()
+    {
+        return $this->createService('Course.MaterialService');
     }
 }
