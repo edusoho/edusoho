@@ -27,12 +27,14 @@ define(function(require, exports, module) {
                 var $li = $(this);
                 var fileId = $li.attr('id');
                 var fileStatus = self.uploader.getFile(fileId).getStatus();
-                return ['queued', 'cancelled', 'complete'].indexOf(fileStatus) === -1;
+                return ['queued', 'complete'].indexOf(fileStatus) === -1;
             }).map(function () {
                 return $(this).find('.js-file-resume');
             }).each(function () {
                 $(this).prop('disabled', false);
             });
+
+
         },
 
         uploadResume: function (event) {
@@ -47,14 +49,16 @@ define(function(require, exports, module) {
         
         fileUploadResume: function (event) {
             var fileId = $(event.target).parent().parent().attr('id');
-            $(event.target).prop('disabled',true);
+            var file = this.uploader.getFile(fileId);
+            file.getStatus() === 'cancelled' && file.setStatus('interrupt');
             this.uploader.upload(fileId);
+            $(event.target).prop('disabled',true);
         },
         
         fileUploadStop: function (event) {
             var fileId = $(event.target).parent().parent().attr('id');
             var file = this.uploader.getFile(fileId);
-            if(file.getStatus() !== 'complete'){
+            if(file.getStatus() !== 'complete' && file.getStatus() !== 'error'){
                 $(event.target).siblings('.js-file-resume').prop('disabled', false);
                 this.uploader.removeFile(fileId);
             }else {
@@ -137,8 +141,8 @@ define(function(require, exports, module) {
             html += '  <ul></ul>';
             html += '</div>';
             html += '<div class="balloon-uploader-footer">';
-            html += '  <button class="pause-btn js-upload-pause btn btn-default">全部暂停</button>';
-            html += '  <button class="pause-btn js-upload-resume btn btn-default" disabled>全部继续</button>';
+            html += '  <button class="pause-btn js-upload-pause btn btn-default hidden" disabled>全部暂停</button>';
+            html += '  <button class="pause-btn js-upload-resume btn btn-default hidden" disabled>全部继续</button>';
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
 
             if (this.get('multi')) {
@@ -166,7 +170,7 @@ define(function(require, exports, module) {
                     '  <div class="file-name">' + file.name + '</div>' +
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
-                    '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs">暂停</button></div>' +
+                    '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs hidden" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs hidden">暂停</button></div>' +
                     '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
                 );
@@ -327,13 +331,14 @@ define(function(require, exports, module) {
                                 file.initResponse = value.response;
                             }
                             var uploadMode = file.uploaderWidget.getStrategyModel(response.uploadMode);
+                            file.uploaderWidget.set('uploadMode', uploadMode);
                             require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
+                                file.uploaderWidget.get('uploadMode') !== 'local' && file.uploaderWidget._showHiddenButton();
                                 deferred.resolve();
                             });
                         }, 'json');
-
                     });
 
                     return deferred.promise();
@@ -417,6 +422,10 @@ define(function(require, exports, module) {
         },
 
         getStrategyModel: function(mode){
+            if(this.get('uploadMode') !== undefined){
+                return this.get('uploadMode');
+            }
+
             if (mode == 'baidu' && (this.isIE(8) || this.isIE(9))) {
                 return mode + "-direct";
             }
@@ -427,8 +436,12 @@ define(function(require, exports, module) {
             var b = document.createElement('b')
             b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
             return b.getElementsByTagName('i').length === 1
-        }
+        },
 
+        _showHiddenButton: function () {
+            this.element.find('.pause-btn').removeClass('hidden');
+            this.element.find('li').find('button').removeClass('hidden');
+        }
     });
 
     module.exports = BatchUploader;
