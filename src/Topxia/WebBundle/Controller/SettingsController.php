@@ -21,7 +21,7 @@ class SettingsController extends BaseController
 
         if ($request->getMethod() == 'POST') {
             $profile = $request->request->get('profile');
-            
+
             if (!((strlen($user['verifiedMobile']) > 0) && (isset($profile['mobile'])))) {
                 $this->getUserService()->updateUserProfile($user['id'], $profile);
                 $this->setFlashMessage('success', '基础信息保存成功。');
@@ -49,24 +49,27 @@ class SettingsController extends BaseController
 
     public function approvalSubmitAction(Request $request)
     {
-        $user = $this->getCurrentUser();
-        $profile = $this->getUserService()->getUserProfile($user['id']);
-        $profile['idcard'] = substr_replace($profile['idcard'],'************',4,12);
+        $user              = $this->getCurrentUser();
+        $profile           = $this->getUserService()->getUserProfile($user['id']);
+        $profile['idcard'] = substr_replace($profile['idcard'], '************', 4, 12);
+
         if ($request->getMethod() == 'POST') {
             $faceImg = $request->files->get('faceImg');
             $backImg = $request->files->get('backImg');
-            if(abs(filesize($faceImg))>2*1024*1024||abs(filesize($backImg))>2*1024*1024){
+
+            if (abs(filesize($faceImg)) > 2 * 1024 * 1024 || abs(filesize($backImg)) > 2 * 1024 * 1024) {
                 $this->setFlashMessage('danger', '上传文件过大，请上传较小的文件!');
-                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
-                        'profile' => $profile
-                    ));
+                return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                    'profile' => $profile
+                ));
             }
+
             if (!FileToolkit::isImageFile($backImg) || !FileToolkit::isImageFile($faceImg)) {
                 // return $this->createMessageResponse('error', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
-                 $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
-                 return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
-                        'profile' => $profile
-                    ));
+                $this->setFlashMessage('danger', '上传图片格式错误，请上传jpg, bmp,gif, png格式的文件。');
+                return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
+                    'profile' => $profile
+                ));
             }
 
             $directory = $this->container->getParameter('topxia.upload.private_directory').'/approval';
@@ -74,6 +77,7 @@ class SettingsController extends BaseController
             // $this->setFlashMessage('success', '实名认证提交成功！');
             return $this->redirect($this->generateUrl('setting_approval_submit'));
         }
+
         return $this->render('TopxiaWebBundle:Settings:approval.html.twig', array(
             'profile' => $profile
         ));
@@ -131,8 +135,8 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     ->add('avatar', 'file')
-                     ->getForm();
+            ->add('avatar', 'file')
+            ->getForm();
 
         $hasPartnerAuth = $this->getAuthService()->hasPartnerAuth();
 
@@ -187,16 +191,8 @@ class SettingsController extends BaseController
             return $this->createJsonResponse(true);
         }
 
-        $avatar = $this->fetchAvatar($url);
-
-        if (empty($avatar)) {
-            $this->setFlashMessage('danger', '获取论坛头像失败或超时，请重试！');
-            return $this->createJsonResponse(true);
-        }
-
-        $imgUrl = $request->request->get('imgUrl');
-        $file   = new File($this->downloadImg($imgUrl));
-
+        $imgUrl    = $request->request->get('imgUrl');
+        $file      = new File($this->downloadImg($imgUrl));
         $groupCode = "tmp";
         $imgs      = array(
             'large'  => array("200", "200"),
@@ -263,7 +259,7 @@ class SettingsController extends BaseController
 
         $cloudSmsSetting = $this->getSettingService()->get('cloud_sms');
         $showBindMobile  = (isset($cloudSmsSetting['sms_enabled'])) && ($cloudSmsSetting['sms_enabled'] == '1')
-        && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
+            && (isset($cloudSmsSetting['sms_bind'])) && ($cloudSmsSetting['sms_bind'] == 'on');
 
         $itemScore     = floor(100.0 / (3.0 + ($showBindMobile ? 1.0 : 0)));
         $progressScore = 1 + ($hasLoginPassword ? $itemScore : 0) + ($hasPayPassword ? $itemScore : 0) + ($hasFindPayPasswordQuestion ? $itemScore : 0) + ($showBindMobile && $hasVerifiedMobile ? $itemScore : 0);
@@ -293,14 +289,14 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
-        if ($user->isLogin() && empty($user['password'])) { 
+        if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_pay_password'));
-            return $this->redirect($this->generateUrl('settings_setup_password')); 
+            return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -337,10 +333,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+            ->add('currentUserLoginPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -371,20 +367,21 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('newPassword', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
+
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
                 $form = $this->createFormBuilder()
-                     ->add('currentUserLoginPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+                    ->add('currentUserLoginPassword', 'password')
+                    ->add('newPayPassword', 'password')
+                    ->add('confirmPayPassword', 'password')
+                    ->getForm();
 
                 return $this->render('TopxiaWebBundle:Settings:pay-password-modal.html.twig', array(
                     'form' => $form->createView()
@@ -402,16 +399,16 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     // ->add('currentUserLoginPassword','password')
-                     ->add('oldPayPassword', 'password')
-                     ->add('newPayPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->getForm();
+        // ->add('currentUserLoginPassword','password')
+            ->add('oldPayPassword', 'password')
+            ->add('newPayPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->getForm();
 
-        if ($user->isLogin() && empty($user['password'])) { 
+        if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_reset_pay_password'));
 
-            return $this->redirect($this->generateUrl('settings_setup_password')); 
+            return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -462,10 +459,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('payPassword', 'password')
-                     ->add('confirmPayPassword', 'password')
-                     ->add('currentUserLoginPassword', 'password')
-                     ->getForm();
+            ->add('payPassword', 'password')
+            ->add('confirmPayPassword', 'password')
+            ->add('currentUserLoginPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -511,8 +508,8 @@ class SettingsController extends BaseController
         $verifiedMobile       = $user['verifiedMobile'];
         $hasVerifiedMobile    = (isset($verifiedMobile)) && (strlen($verifiedMobile) > 0);
         $canSmsFind           = ($hasVerifiedMobile) &&
-        ($this->setting('cloud_sms.sms_enabled') == '1') &&
-        ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
+            ($this->setting('cloud_sms.sms_enabled') == '1') &&
+            ($this->setting('cloud_sms.sms_forget_pay_password') == 'on');
 
         if ((!$hasSecurityQuestions) && ($canSmsFind)) {
             return $this->redirect($this->generateUrl('settings_find_pay_password_by_sms', array()));
@@ -616,9 +613,9 @@ class SettingsController extends BaseController
         $userSecureQuestions  = $this->getUserService()->getUserSecureQuestionsByUserId($user['id']);
         $hasSecurityQuestions = (isset($userSecureQuestions)) && (count($userSecureQuestions) > 0);
 
-        if ($user->isLogin() && empty($user['password'])) { 
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions')); 
-            return $this->redirect($this->generateUrl('settings_setup_password')); 
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_security_questions'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -680,10 +677,12 @@ class SettingsController extends BaseController
         if ($this->setting('cloud_sms.sms_enabled') != '1' || $this->setting("cloud_sms.{$scenario}") != 'on') {
             return $this->render('TopxiaWebBundle:Settings:edu-cloud-error.html.twig', array());
         }
+
         $user = $this->getCurrentUser();
-        if ($user->isLogin() && empty($user['password'])) { 
-            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));            
-            return $this->redirect($this->generateUrl('settings_setup_password')); 
+
+        if ($user->isLogin() && empty($user['password'])) {
+            $request->getSession()->set('_target_path', $this->generateUrl('settings_bind_mobile'));
+            return $this->redirect($this->generateUrl('settings_setup_password'));
         }
 
         if ($request->getMethod() == 'POST') {
@@ -741,10 +740,10 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('currentPassword', 'password')
-                     ->add('newPassword', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('currentPassword', 'password')
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
 
         if ($user->isLogin() && empty($user['password'])) {
             $request->getSession()->set('_target_path', $this->generateUrl('settings_security'));
@@ -752,7 +751,6 @@ class SettingsController extends BaseController
         }
 
         if ($request->getMethod() == 'POST') {
-
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -785,9 +783,9 @@ class SettingsController extends BaseController
         }
 
         $form = $this->createFormBuilder()
-                     ->add('password', 'password')
-                     ->add('email', 'text')
-                     ->getForm();
+            ->add('password', 'password')
+            ->add('email', 'text')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
@@ -855,7 +853,6 @@ class SettingsController extends BaseController
         $token = $this->getUserService()->makeToken('email-verify', $user['id'], strtotime('+1 day'), $user['email']);
 
         try {
-
             $normalMail = array(
                 'to'    => $user['email'],
                 'title' => "验证{$user['nickname']}在{$this->setting('site.name')}的电子邮箱",
@@ -992,13 +989,14 @@ class SettingsController extends BaseController
         $user = $this->getCurrentUser();
 
         $form = $this->createFormBuilder()
-                     ->add('newPassword', 'password')
-                     ->add('confirmPassword', 'password')
-                     ->getForm();
+            ->add('newPassword', 'password')
+            ->add('confirmPassword', 'password')
+            ->getForm();
 
         if ($request->getMethod() == 'POST') {
             $targetPath = $this->getTargetPath($request);
             $form->bind($request);
+
             if ($form->isValid()) {
                 $passwords = $form->getData();
                 $this->getUserService()->changePassword($user['id'], $passwords['newPassword']);
