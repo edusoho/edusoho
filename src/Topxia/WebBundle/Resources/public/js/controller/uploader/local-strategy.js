@@ -33,7 +33,7 @@ define(function(require, exports, module) {
          * @param currentPercentage 当前进度
          * @returns {boolean}
          */
-        isResumeUpload: function (lastPercentage, currentPercentage) {
+        needDisplayPercent: function (lastPercentage, currentPercentage) {
             return true;
         }
     });

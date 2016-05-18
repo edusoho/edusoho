@@ -23,10 +23,27 @@ define(function(require, exports, module) {
 
         uploadStop: function (event) {
             this.uploader.stop(true);
+            var self = this;
+            this.element.find('li').filter(function () {
+                var $li = $(this);
+                var fileId = $li.attr('id');
+                var fileStatus = self.uploader.getFile(fileId).getStatus();
+                return fileStatus !== 'queued' && fileStatus !== 'cancelled';
+            }).map(function () {
+                return $(this).find('.js-file-resume');
+            }).each(function () {
+                $(this).prop('disabled', false);
+            });
         },
 
         uploadResume: function (event) {
+            var self = this;
+            this.element.find('li').each(function () {
+                var file = self.uploader.getFile($(this).attr('id'));
+                file.getStatus() === 'cancelled' && file.setStatus('queued');
+            });
             this.uploader.upload();
+            this.element.find('.js-file-resume').prop('disabled', true);
         },
         
         fileUploadResume: function (event) {
@@ -169,7 +186,7 @@ define(function(require, exports, module) {
                 var percentageStr = (percentage * 100).toFixed(2) + '%';
                 var lastPercentage = $li.data('currentPercent');
                 var strategy = self.get('strategy');
-                if(percentageStr != '100.00%' && strategy.isResumeUpload(lastPercentage, percentage)){
+                if(percentageStr != '100.00%' && strategy.needDisplayPercent(lastPercentage, percentage)){
                     $li.data('currentPercent', percentage);
                     $li.find('.file-status').html(percentageStr);
                     $li.find('.file-progress-bar').css('width', percentageStr);
