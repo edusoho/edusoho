@@ -3527,7 +3527,6 @@
                     file = file.id ? file : me.request( 'get-file', file );
     
                     if (file.getStatus() === Status.INTERRUPT) {
-
                         $.each( me.pool, function( _, v ) {
     
                             // 之前暂停过。
