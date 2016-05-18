@@ -158,7 +158,7 @@ class CloudFileImplementor2Impl extends BaseService implements FileImplementor2
         $result['globalId'] = $file['globalId'];
         $result['outerId']  = $file['id'];
         $result['resumed']  = $apiResult['resumed'];
-
+        $result['hashId']   = $file['hashId'];
         $result['uploadMode']     = $apiResult['uploadMode'];
         $result['uploadUrl']      = $apiResult['uploadUrl'];
         $result['uploadProxyUrl'] = '';

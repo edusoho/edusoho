@@ -20,6 +20,52 @@ define(function(require, exports, module) {
             hookRegisted: false
         },
 
+        uploadStop: function (event) {
+            this.uploader.stop(true);
+            var self = this;
+            this.element.find('li').filter(function () {
+                var $li = $(this);
+                var fileId = $li.attr('id');
+                var fileStatus = self.uploader.getFile(fileId).getStatus();
+                return ['queued', 'complete'].indexOf(fileStatus) === -1;
+            }).map(function () {
+                return $(this).find('.js-file-resume');
+            }).each(function () {
+                $(this).prop('disabled', false);
+            });
+
+
+        },
+
+        uploadResume: function (event) {
+            var self = this;
+            this.element.find('li').each(function () {
+                var file = self.uploader.getFile($(this).attr('id'));
+                file.getStatus() === 'cancelled' && file.setStatus('queued');
+            });
+            this.uploader.upload();
+            this.element.find('.js-file-resume').prop('disabled', true);
+        },
+        
+        fileUploadResume: function (event) {
+            var fileId = $(event.target).parent().parent().attr('id');
+            var file = this.uploader.getFile(fileId);
+            file.getStatus() === 'cancelled' && file.setStatus('interrupt');
+            this.uploader.upload(fileId);
+            $(event.target).prop('disabled',true);
+        },
+        
+        fileUploadStop: function (event) {
+            var fileId = $(event.target).parent().parent().attr('id');
+            var file = this.uploader.getFile(fileId);
+            if(file.getStatus() !== 'complete' && file.getStatus() !== 'error'){
+                $(event.target).siblings('.js-file-resume').prop('disabled', false);
+                this.uploader.removeFile(fileId);
+            }else {
+                $(event.target).prop('disabled', true);
+            }
+        },
+
         setup: function() {
             this._initUI();
             var accept = {};
@@ -60,9 +106,16 @@ define(function(require, exports, module) {
             var uploader = this.uploader = WebUploader.create(defaults);
             this._registerUploaderEvent(uploader);
 
+            var self = this;
             this.element.find('.start-upload-btn').on('click', function(){
                 uploader.upload();
+                $(self.element).find('.pause-btn').prop('disabled',false);
             });
+
+            $(this.element).on('click', '.js-upload-pause', this.uploadStop.bind(this));
+            $(this.element).on('click', '.js-upload-resume', this.uploadResume.bind(this));
+            $(this.element).on('click', '.js-file-resume', this.fileUploadResume.bind(this));
+            $(this.element).on('click', '.js-file-pause', this.fileUploadStop.bind(this));
         },
 
         destroy: function() {
@@ -83,6 +136,7 @@ define(function(require, exports, module) {
             html += '    <div class="file-name">文件名</div>';
             html += '    <div class="file-size">大小</div>';
             html += '    <div class="file-status">状态</div>';
+            html += '    <div class="file-manage">操作</div>';
             html += '  </div>';
             html += '  <ul></ul>';
             html += '</div>';
@@ -93,8 +147,9 @@ define(function(require, exports, module) {
             html += '      <span><strong class="js-speed">0</strong> MB/s</span>';
             html += '      <span class="js-left-time"></span>';
             html += '    </span>';
-            html += '  </div>'
-
+            html += '  </div>';
+            html += '  <button class="pause-btn js-upload-pause btn btn-default hidden" disabled>全部暂停</button>';
+            html += '  <button class="pause-btn js-upload-resume btn btn-default hidden" disabled>全部继续</button>';
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
 
             if (this.get('multi')) {
@@ -116,11 +171,13 @@ define(function(require, exports, module) {
             uploader.on('fileQueued', function(file) {
                 $uploader.find('.balloon-nofile').remove();
                 var $list =$uploader.find('.balloon-filelist ul');
+
                 $list.append(
                     '<li id="' + file.id + '">' +
                     '  <div class="file-name">' + file.name + '</div>' +
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
+                    '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs hidden" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs hidden">暂停</button></div>' +
                     '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
                 );
@@ -166,10 +223,13 @@ define(function(require, exports, module) {
                 }
 
                 var $li = $('#' + file.id);
-                percentage = (percentage * 100).toFixed(2) + '%';
-                if(percentage != '100.00%'){
-                    $li.find('.file-status').html(percentage);
-                    $li.find('.file-progress-bar').css('width', percentage);
+                var percentageStr = (percentage * 100).toFixed(2) + '%';
+                var lastPercentage = $li.data('currentPercent');
+                var strategy = self.get('strategy');
+                if(percentageStr != '100.00%' && strategy.needDisplayPercent(lastPercentage, percentage)){
+                    $li.data('currentPercent', percentage);
+                    $li.find('.file-status').html(percentageStr);
+                    $li.find('.file-progress-bar').css('width', percentageStr);
                 }
             });
 
@@ -177,6 +237,8 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
+                $li.find('.js-file-resume').prop('disabled',true);
+                $li.find('.js-file-pause').prop('disabled',true);
                 var key = 'file_' + file.hash;
                 store.remove(key);
             });
@@ -316,13 +378,14 @@ define(function(require, exports, module) {
                                 file.initResponse = value.response;
                             }
                             var uploadMode = file.uploaderWidget.getStrategyModel(response.uploadMode);
+                            file.uploaderWidget.set('uploadMode', uploadMode);
                             require.async('./'+uploadMode+'-strategy', function(Strategy){
                                 var strategy = new Strategy(file, response);
                                 file.uploaderWidget.set('strategy', strategy);
+                                file.uploaderWidget.get('uploadMode') !== 'local' && file.uploaderWidget._showHiddenButton();
                                 deferred.resolve();
                             });
                         }, 'json');
-
                     });
 
                     return deferred.promise();
@@ -445,6 +508,10 @@ define(function(require, exports, module) {
         },
 
         getStrategyModel: function(mode){
+            if(this.get('uploadMode') !== undefined){
+                return this.get('uploadMode');
+            }
+
             if (mode == 'baidu' && (this.isIE(8) || this.isIE(9))) {
                 return mode + "-direct";
             }
@@ -455,8 +522,12 @@ define(function(require, exports, module) {
             var b = document.createElement('b')
             b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
             return b.getElementsByTagName('i').length === 1
-        }
+        },
 
+        _showHiddenButton: function () {
+            this.element.find('.pause-btn').removeClass('hidden');
+            this.element.find('li').find('button').removeClass('hidden');
+        }
     });
 
     module.exports = BatchUploader;
