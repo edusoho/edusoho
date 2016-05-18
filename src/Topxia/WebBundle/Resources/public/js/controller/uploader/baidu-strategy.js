@@ -127,6 +127,16 @@ define(function(require, exports, module) {
                 var partNumber = this._getParameterByName('partNumber', ret._requestURL);
                 object.file.baiduParts.parts.push({partNumber:parseInt(partNumber), eTag : ret._responseHeaders[etagKey].replace(/\"/g, '')});
             }
+        },
+
+        /**
+         *
+         * @param lastPercentage    上一次进度
+         * @param currentPercentage 当前进度
+         * @returns {boolean}
+         */
+        isResumeUpload: function (lastPercentage, currentPercentage) {
+            return lastPercentage === undefined || currentPercentage > lastPercentage;
         }
     });
 

@@ -166,13 +166,13 @@ define(function(require, exports, module) {
             // 文件上传过程中创建进度条实时显示。
             uploader.on('uploadProgress', function(file, percentage) {
                 var $li = $('#' + file.id);
-                percentage = (percentage * 100).toFixed(2) + '%';
+                var percentageStr = (percentage * 100).toFixed(2) + '%';
                 var lastPercentage = $li.data('currentPercent');
-                console.log(percentage, lastPercentage);
-                if(percentage != '100.00%' && (lastPercentage === undefined || percentage > lastPercentage )){
+                var strategy = self.get('strategy');
+                if(percentageStr != '100.00%' && strategy.isResumeUpload(lastPercentage, percentage)){
                     $li.data('currentPercent', percentage);
-                    $li.find('.file-status').html(percentage);
-                    $li.find('.file-progress-bar').css('width', percentage);
+                    $li.find('.file-status').html(percentageStr);
+                    $li.find('.file-progress-bar').css('width', percentageStr);
                 }
             });
 
