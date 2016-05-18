@@ -12,22 +12,22 @@ class LoginRecordController extends BaseController
     {
         $user = $this->getCurrentUser();
     	$conditions = $request->query->all();
-        $userCondotions = array(
+        $userConditions = array(
             'likeOrgCode' => $user->getCurrentOrgCode()
         );
         if (isset($conditions['keywordType'])) {
-            $userCondotions['keywordType'] =$conditions["keywordType"];
+            $userConditions['keywordType'] =$conditions["keywordType"];
         }
 
         if (isset($conditions['keyword'])) {
-            $userCondotions['keyword'] =$conditions["keyword"];
+            $userConditions['keyword'] =$conditions["keyword"];
         }
 
         if(isset($conditions['orgCode'])){
-            $userCondotions['likeOrgCode'] = $conditions["orgCode"];
+            $userConditions['likeOrgCode'] = $conditions["orgCode"];
         }
 
-        $users = $this->getUserService()->searchUsers($userCondotions,array('createdTime', 'DESC'),0,2000);
+        $users = $this->getUserService()->searchUsers($userConditions,array('createdTime', 'DESC'),0,2000);
         $userIds = ArrayToolkit::column($users, 'id');
         if($userIds){
             $conditions['userIds'] = $userIds;
