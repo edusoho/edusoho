@@ -22,7 +22,6 @@ define(function (require, exports, module) {
             $.post($form.attr('action'), $form.serialize(), function (html) {
                 $modal.modal('hide');
                 Notify.success('保存组织机构成功！');
-                window.location.reload();
             }).fail(function () {
                 Notify.danger("添加组织机构失败，请重试！");
             });
@@ -55,8 +54,6 @@ define(function (require, exports, module) {
 
         $.post($(this).data('url'), function (html) {
             $modal.modal('hide');
-            window.location.reload();
-           // $table.find('tbody').replaceWith(html);
         });
 
     });

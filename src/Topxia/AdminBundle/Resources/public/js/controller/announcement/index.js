@@ -1,8 +1,12 @@
 define(function(require, exports, module) {
 
     exports.run = function() {
-        var ztree = require('edusoho.ztree');
-        ztree('#orgZtree', "#orgName", "#orgCode");
+       var SelectZtree = require('edusoho.selectztree');
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
         $('#announcement-table').on('click','.delete-btn',function(){
 
             if (!confirm('确定删除此公告吗？')) {

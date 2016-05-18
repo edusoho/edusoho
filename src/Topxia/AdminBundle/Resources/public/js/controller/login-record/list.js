@@ -5,8 +5,12 @@ define(function(require, exports, module) {
 	require("$");
 
     exports.run = function() {
-        var ztree = require('edusoho.ztree');
-        ztree('#orgZtree', "#orgName", "#orgCode");
+       var SelectZtree = require('edusoho.selectztree');
+       var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
 
 		$("#startDate").datetimepicker().on('changeDate',function(){
 
