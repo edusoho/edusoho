@@ -3527,6 +3527,21 @@
                     file = file.id ? file : me.request( 'get-file', file );
     
                     if (file.getStatus() === Status.INTERRUPT) {
+
+                        me.stack = me.stack.filter(function (act) {
+                            return act.file != file;
+                        });
+
+                        file.blocks.filter(function (block) {
+                            return !me.pool.some(function (poolBlock) {
+                                return poolBlock.file == file && poolBlock.chunk == block.chunk;
+                            })
+                        }).forEach(function (block) {
+                            block.file.remaning--;
+                            this.remaning--;
+                            me.pool.push(block);
+                        });
+
                         $.each( me.pool, function( _, v ) {
     
                             // 之前暂停过。

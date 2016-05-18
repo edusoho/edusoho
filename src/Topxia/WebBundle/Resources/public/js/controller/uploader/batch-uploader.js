@@ -1,3 +1,4 @@
+var uploader;
 define(function(require, exports, module) {
     require('webuploader2');
     var store = require('store');
@@ -18,6 +19,31 @@ define(function(require, exports, module) {
             uploadToken: null,
             multi: true,
             hookRegisted: false
+        },
+
+        uploadStop: function (event) {
+            this.uploader.stop(true);
+        },
+
+        uploadResume: function (event) {
+            this.uploader.upload();
+        },
+        
+        fileUploadResume: function (event) {
+            var fileId = $(event.target).parent().parent().attr('id');
+            $(event.target).prop('disabled',true);
+            this.uploader.upload(fileId);
+        },
+        
+        fileUploadStop: function (event) {
+            var fileId = $(event.target).parent().parent().attr('id');
+            var file = this.uploader.getFile(fileId);
+            if(file.getStatus() !== 'complete'){
+                $(event.target).siblings('.js-file-resume').prop('disabled', false);
+                this.uploader.stop(fileId);
+            }else {
+                $(event.target).prop('disabled', true);
+            }
         },
 
         setup: function() {
@@ -57,12 +83,19 @@ define(function(require, exports, module) {
                 alert( 'Web Uploader 不支持您的浏览器！如果你使用的是IE浏览器，请尝试升级 flash 播放器');
                 throw new Error( 'WebUploader does not support the browser you are using.' );
             }
-            var uploader = this.uploader = WebUploader.create(defaults);
+            uploader = this.uploader = WebUploader.create(defaults);
             this._registerUploaderEvent(uploader);
 
+            var self = this;
             this.element.find('.start-upload-btn').on('click', function(){
                 uploader.upload();
+                $(self.element).find('.pause-btn').prop('disabled',false);
             });
+
+            $(this.element).on('click', '.js-upload-pause', this.uploadStop.bind(this));
+            $(this.element).on('click', '.js-upload-resume', this.uploadResume.bind(this));
+            $(this.element).on('click', '.js-file-resume', this.fileUploadResume.bind(this));
+            $(this.element).on('click', '.js-file-pause', this.fileUploadStop.bind(this));
         },
 
         destroy: function() {
@@ -83,10 +116,13 @@ define(function(require, exports, module) {
             html += '    <div class="file-name">文件名</div>';
             html += '    <div class="file-size">大小</div>';
             html += '    <div class="file-status">状态</div>';
+            html += '    <div class="file-manage">操作</div>';
             html += '  </div>';
             html += '  <ul></ul>';
             html += '</div>';
             html += '<div class="balloon-uploader-footer">';
+            html += '  <button class="pause-btn js-upload-pause btn btn-default">全部暂停</button>';
+            html += '  <button class="pause-btn js-upload-resume btn btn-default" disabled>全部继续</button>';
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
 
             if (this.get('multi')) {
@@ -108,12 +144,14 @@ define(function(require, exports, module) {
             uploader.on('fileQueued', function(file) {
                 $uploader.find('.balloon-nofile').remove();
                 var $list =$uploader.find('.balloon-filelist ul');
+
                 $list.append(
                     '<li id="' + file.id + '">' +
                     '  <div class="file-name">' + file.name + '</div>' +
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
-                    '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
+                    '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs">暂停</button></div>' +
+                    //'  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
                 );
 
@@ -139,6 +177,8 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
+                $li.find('.js-file-resume').prop('disabled',true);
+                $li.find('.js-file-pause').prop('disabled',true);
                 var key = 'file_' + file.hash;
                 store.remove(key);
             });
