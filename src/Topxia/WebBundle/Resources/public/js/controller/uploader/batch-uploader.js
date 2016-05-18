@@ -40,7 +40,7 @@ define(function(require, exports, module) {
             var file = this.uploader.getFile(fileId);
             if(file.getStatus() !== 'complete'){
                 $(event.target).siblings('.js-file-resume').prop('disabled', false);
-                this.uploader.stop(fileId);
+                this.uploader.removeFile(fileId);
             }else {
                 $(event.target).prop('disabled', true);
             }
