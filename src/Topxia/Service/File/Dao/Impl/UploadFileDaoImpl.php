@@ -50,12 +50,6 @@ class UploadFileDaoImpl extends BaseDao implements UploadFileDao
         return $this->getConnection()->fetchAll($sql, $ids);
     }
 
-    public function findFilesByTargetTypeAndTargetId($targetType, $targetId)
-    {
-        $sql = "SELECT * FROM {$this->table} WHERE targetType = ? AND targetId = ?";
-        return $this->getConnection()->fetchAll($sql, array($targetType, $targetId)) ?: array();
-    }
-
     public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds)
     {
         if (empty($targetIds)) {

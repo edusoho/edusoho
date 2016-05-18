@@ -9,21 +9,15 @@ interface UploadFileService
 
     public function getFileByGlobalId($globalId);
 
-    //TODO 重命名 getFullFile
-	public function getFileFromLeaf($id);
+	public function getFullFile($id);
 
 	public function getUploadFileInit($id);
 
-	//TODO 考虑可以和 findFilesByTargetTypeAndTargetIds 合并
-	public function findFilesByTargetTypeAndTargetId($targetType, $targetId);
-
 	public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
 
-	// TODO update
-	public function edit($fileId, $fields);
+	public function update($fileId, $fields);
 
-	// TODO getDownloadMetas
-	public function getDownloadFile($id);
+	public function getDownloadMetas($id);
 
 	public function getUploadAuth($params);
 
@@ -36,12 +30,6 @@ interface UploadFileService
 	public function setFileProcessed($params);
 
 	public function deleteByGlobalId($globalId);
-
-	// TODO 可以合并成 waveUploadFile
-	public function increaseFileUsedCount($id);
-
-	// TODO 可以合并成 waveUploadFile
-	public function decreaseFileUsedCount($id);
 
 	public function reconvertFile($id, $options = array());
 

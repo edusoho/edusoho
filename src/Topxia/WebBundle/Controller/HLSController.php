@@ -25,7 +25,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($id);
+        $file = $this->getUploadFileService()->getFullFile($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -132,7 +132,7 @@ class HLSController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($id);
+        $file = $this->getUploadFileService()->getFullFile($id);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -225,7 +225,7 @@ class HLSController extends BaseController
             return $this->makeFakeTokenString();
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($id);
+        $file = $this->getUploadFileService()->getFullFile($id);
 
         if (empty($file)) {
             return $this->makeFakeTokenString();

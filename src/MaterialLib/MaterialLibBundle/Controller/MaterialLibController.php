@@ -480,7 +480,7 @@ class MaterialLibController extends BaseController
             throw $this->createAccessDeniedException('您无权访问此文件！');
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($fileId);
+        $file = $this->getUploadFileService()->getFullFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -524,7 +524,7 @@ class MaterialLibController extends BaseController
 
     protected function tryAccessFile($fileId)
     {
-        $file = $this->getUploadFileService()->getFileFromLeaf($fileId);
+        $file = $this->getUploadFileService()->getFullFile($fileId);
 
         if (empty($file)) {
             throw $this->createNotFoundException();

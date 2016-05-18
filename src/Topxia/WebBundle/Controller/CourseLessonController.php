@@ -96,7 +96,7 @@ class CourseLessonController extends BaseController
         $tryLookTime               = 0;
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self') {
-            $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (empty($lesson['free']) && $file['storage'] != 'cloud') {
                 if (!$user->isLogin()) {
@@ -274,7 +274,7 @@ class CourseLessonController extends BaseController
         }
 
         if ($json['mediaSource'] == 'self') {
-            $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+            $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
             if (!empty($file)) {
                 if ($file['storage'] == 'cloud') {
@@ -363,7 +363,7 @@ class CourseLessonController extends BaseController
             $this->getCourseService()->tryTakeCourse($courseId);
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -444,7 +444,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -489,7 +489,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -534,7 +534,7 @@ class CourseLessonController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $file = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+        $file = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
 
         if (empty($file)) {
             throw $this->createNotFoundException();
@@ -756,7 +756,7 @@ class CourseLessonController extends BaseController
         $media  = array();
 
         if ($lesson['type'] == 'video' && $lesson['mediaSource'] == 'self' && !empty($lesson['mediaId'])) {
-            $media = $this->getUploadFileService()->getFileFromLeaf($lesson['mediaId']);
+            $media = $this->getUploadFileService()->getFullFile($lesson['mediaId']);
         }
 
         return $this->Render('TopxiaWebBundle:CourseLesson/Part:status-label.html.twig', array(
