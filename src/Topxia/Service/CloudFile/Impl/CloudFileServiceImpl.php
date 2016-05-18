@@ -170,7 +170,7 @@ class CloudFileServiceImpl extends BaseService implements CloudFileService
         $file = $this->getUploadFileService()->getFileByGlobalId($globalId);
 
         if (!empty($file)) {
-            $result = $this->getUploadFileService()->edit($file['id'], $fields);
+            $result = $this->getUploadFileService()->update($file['id'], $fields);
             return array('success' => true);
         }
 

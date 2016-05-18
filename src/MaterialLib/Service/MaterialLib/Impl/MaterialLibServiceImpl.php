@@ -11,7 +11,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 {
     public function get($id)
     {
-        return $this->getUploadFileService()->getFileFromLeaf($id);
+        return $this->getUploadFileService()->getFullFile($id);
     }
 
     public function getByGlobalId($globalId)
@@ -26,7 +26,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function edit($fileId, $fields)
     {
-        $this->getUploadFileService()->edit($fileId, $fields);
+        $this->getUploadFileService()->update($fileId, $fields);
     }
 
     public function delete($id)
@@ -74,7 +74,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
                     $conditions         = array();
                     $conditions['tags'] = implode(',', $editTagNames);
 
-                    $this->getUploadFileService()->edit($fileId, $conditions);
+                    $this->getUploadFileService()->update($fileId, $conditions);
                 }
             }
         }
@@ -86,7 +86,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
             //$this->checkPermission(Permission::EDIT, array('globalId' => $value));
             $fields = array('isPublic' => '1');
 
-            $this->getUploadFileService()->edit($id, $fields);
+            $this->getUploadFileService()->update($id, $fields);
         }
 
         return array('success' => true);
@@ -103,7 +103,7 @@ class MaterialLibServiceImpl extends BaseService implements MaterialLibService
 
     public function download($id)
     {
-        return $this->getUploadFileService()->getDownloadFile($id);
+        return $this->getUploadFileService()->getDownloadMetas($id);
     }
 
     public function reconvert($globalId, $options = array())

@@ -56,7 +56,7 @@ class UploadFileController extends BaseController
 
     protected function downloadCloudFile($file)
     {
-        $file = $this->getUploadFileService()->getDownloadFile($file['id']);
+        $file = $this->getUploadFileService()->getDownloadMetas($file['id']);
         return $this->redirect($file['url']);
     }
 

@@ -53,7 +53,7 @@ class UploadFileServiceTest extends BaseTestCase
        $this->assertEquals($file['id'],$fileId);
     }
 
-    public function testGetFileFromLeaf()
+    public function testGetFullFile()
     {
        $fileId = 1;
        $name = 'File.UploadFileDao';
@@ -93,7 +93,7 @@ class UploadFileServiceTest extends BaseTestCase
          );
        $this->mock($name,$params);
 
-       $file = $this->getUploadFileService()->getFileFromLeaf($fileId);
+       $file = $this->getUploadFileService()->getFullFile($fileId);
 
        $this->assertEquals($file['id'],$fileId);
     }
