@@ -61,13 +61,20 @@ class AnnouncementDaoImpl extends BaseDao implements AnnouncementDao
 
     protected function createSearchQueryBuilder($conditions)
     {
-        
+
+        if(isset($conditions['likeOrgCode'])){
+            $conditions['likeOrgCode'] = $conditions['likeOrgCode'] . '%';
+            unset($conditions['orgCode']);
+        }
+
         $builder = $this->createDynamicQueryBuilder($conditions)
             ->from($this->table, $this->table)
             ->andWhere("targetType = :targetType")
             ->andWhere("targetId = :targetId")
             ->andWhere('startTime <=:startTime')
             ->andWhere('endTime >=:endTime')
+            ->andWhere('orgCode =:orgCode')
+            ->andWhere('orgCode LIKE :likeOrgCode')
             ->andWhere('userId =:userId');
             
         return $builder;

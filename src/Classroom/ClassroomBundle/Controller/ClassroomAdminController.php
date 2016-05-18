@@ -16,6 +16,11 @@ class ClassroomAdminController extends BaseController
             'title' => ''
         );
 
+        if (empty($conditions['likeOrgCode'])) {
+            $user                      = $this->getCurrentUser();
+            $conditions['likeOrgCode'] = $user->getCurrentOrgCode();
+        }
+
         if (!empty($fields)) {
             $conditions = $fields;
         }
@@ -121,7 +126,8 @@ class ClassroomAdminController extends BaseController
             $classroom = array(
                 'title'    => $myClassroom['title'],
                 'showable' => $myClassroom['showable'],
-                'buyable'  => $myClassroom['buyable']
+                'buyable'  => $myClassroom['buyable'],
+                'orgCode'  => $myClassroom['orgCode']
             );
 
             $classroom = $this->getClassroomService()->addClassroom($classroom);

@@ -7,6 +7,15 @@
 {% block main %}
 
 <form class="well well-sm form-inline" action="{{ path('admin_article') }}">
+
+	<div class="mbm">
+		<input  class="form-control" name="orgName" id ="orgName"  value="{{ app.request.get('orgName', app.user.orgName|default("--选择组织机构--"|trans) ) }}" autocomplete="off"  >
+		<input  type ="hidden" class="form-control" name="orgCode" id ="orgCode" value="{{ app.request.get('orgCode', app.user.orgCode) }}" >
+		<div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute;">
+			<ul id="orgZtree" class="ztree" style="margin-top:0; width:196px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
+		</div>
+	</div>
+
 	<div class="form-group">
 		<select class="form-control" name="categoryId">
 		 <option value="">--所属栏目--</option>

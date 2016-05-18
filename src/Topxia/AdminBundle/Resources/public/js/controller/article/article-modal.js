@@ -10,6 +10,8 @@ define(function(require, exports, module) {
     require('jquery.select2');
     var Notify = require('common/bootstrap-notify');
     exports.run = function() {
+        var ztree = require('edusoho.ztree');
+        ztree('#orgZtree', "#orgName", "#orgCode");
 
         var $form = $("#article-form");
         $modal = $form.parents('.modal');

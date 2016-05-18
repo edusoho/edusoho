@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Permission\Common\PermissionBuilder;
 
 class UserProvider implements UserProviderInterface
 {
@@ -26,7 +25,9 @@ class UserProvider implements UserProviderInterface
         }
 
         $user['currentIp'] = $this->container->get('request')->getClientIp();
-        $currentUser = new CurrentUser();
+        $org               = $this->getOrgService()->getOrgByOrgCode($user['orgCode']);
+        $user['orgName']   = isset($org['name']) ? $org['name'] : null;
+        $currentUser       = new CurrentUser();
         $currentUser->fromArray($user);
         ServiceKernel::instance()->setCurrentUser($currentUser);
 
@@ -51,4 +52,10 @@ class UserProvider implements UserProviderInterface
     {
         return ServiceKernel::instance()->createService('User.UserService');
     }
+
+    protected function getOrgService()
+    {
+        return ServiceKernel::instance()->createService('Org.OrgService');
+    }
+
 }

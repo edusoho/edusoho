@@ -5,16 +5,16 @@ define(function(require, exports, module) {
 
     require('jquery.select2-css');
     require('jquery.select2');
-
+    var ztree = require('edusoho.ztree');
     exports.run = function() {
-
+        ztree('#orgZtree', "#orgName", "#orgCode");
         require('./header').run();
 
-        $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data){
+        $.get($("#maxStudentNum-field").data("liveCapacityUrl"), function(data) {
             $("#maxStudentNum-field").data("liveCapacity", data.capacity);
-            if(data.code == 2 || data.code == 1) {
+            if (data.code == 2 || data.code == 1) {
                 $("#live-plugin-url").removeClass("hidden");
-                $("#live-plugin-url").find("a").attr("href","http://www.edusoho.com/files/liveplugin/live_desktop_"+data.code+".rar");
+                $("#live-plugin-url").find("a").attr("href", "http://www.edusoho.com/files/liveplugin/live_desktop_" + data.code + ".rar");
             }
         })
 
@@ -102,13 +102,13 @@ define(function(require, exports, module) {
             rule: 'integer',
             onItemValidated: function(error, message, elem) {
                 if (error) {
-                    return ;
+                    return;
                 }
 
                 var current = parseInt($(elem).val());
                 var capacity = parseInt($(elem).data('liveCapacity'));
                 if (current > capacity) {
-                    message = '网校可支持最多' + capacity +'人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
+                    message = '网校可支持最多' + capacity + '人同时参加直播，您可以设置一个更大的数值，但届时有可能会导致满额后其他学员无法进入直播。';
                     if ($(elem).parent().find('.alert-warning').length > 0) {
                         $(elem).parent().find('.alert-warning').html(message).show();
                     } else {

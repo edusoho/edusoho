@@ -27,6 +27,18 @@
           </div>
 
           <div class="form-group">
+            <label class="col-md-3 control-label">{{'组织机构'|trans}}</label>
+            <div class="col-md-8 controls">
+              {% set org = data('Org',{orgCode:app.user.orgCode})%}
+              <input  class="form-control" name="orgName" id ="orgName"  value="{{ org.name|default("--选择组织机构--"|trans) }}" autocomplete="off"  >
+              <input  type ="hidden" class="form-control" name="orgCode" id ="orgCode" value="{{ app.user.orgCode }}" >
+              <div id="ztreeContent" class="ztreeContent" style="display:none; position: absolute; z-index: 10000;">
+                <ul id="orgZtree" class="ztree" style="margin-top:0; width:427px;z-index: 10000" data-source="{{ path('org_tree') }}"></ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
             <div class="col-md-3 control-label">
               <label >{{setting("classroom.name")|default("班级")}}展示</label>
             </div>

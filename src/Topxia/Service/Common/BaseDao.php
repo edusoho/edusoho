@@ -17,7 +17,7 @@ abstract class BaseDao
 
     protected $redis;
 
-    protected function wave($id, $fields)
+    public function wave($id, $fields)
     {
         $sql        = "UPDATE {$this->getTable()} SET ";
         $fieldStmts = array();

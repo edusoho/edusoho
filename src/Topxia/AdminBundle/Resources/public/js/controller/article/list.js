@@ -1,6 +1,9 @@
 define(function(require, exports, module) {
 
 	exports.run = function() {
+		var ztree = require('edusoho.ztree');
+		ztree('#orgZtree', "#orgName", "#orgCode");
+
 		$("#article-table").on('click', '[data-role=trash-item]', function(){
 			$.post($(this).data('url'), function(){
 				window.location.reload();

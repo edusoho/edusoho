@@ -74,6 +74,10 @@ seajs.config({
         'video-player': 'balloon-video-player/1.3.0/index',
         'echarts': 'echarts/3.1.2/echarts.min.js',
         'edusoho.tree': 'edusoho/tree/1.0.0/tree.js',
+        'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
+        'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
+        'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
+        'edusoho.ztree': 'edusoho/ztree/0.0.1/ztree.js'
     },
 
     // 预加载项

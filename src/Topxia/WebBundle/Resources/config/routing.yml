@@ -2041,3 +2041,11 @@ live_course_manage_lesson_replay_title_update:
 #esbar_my_history:
 #    pattern:  /esbar/my/history
 #    defaults: { _controller: TopxiaWebBundle:EsBar/EsBar:history}
+switch_org:
+    pattern: /swithOrg/{id}
+    defaults: { _controller: TopxiaWebBundle:Org:switchOrg }
+
+org_tree:
+    path: /org-tree.json
+    defaults: { _controller: TopxiaWebBundle:Org:orgTreeJson }
+    methods: [GET]

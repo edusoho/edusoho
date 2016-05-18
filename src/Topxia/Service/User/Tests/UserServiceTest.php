@@ -360,10 +360,15 @@ class UserServiceTest extends BaseTestCase
     {
         $user1          = $this->createUser('user1');
         $user2          = $this->createUser('user2');
+        
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'nickname', 'keyword' => 'not_exist_nickname'));
         $this->assertEquals(0, $foundUserCount);
+
+        $currentUser = $this->getCurrentUser();
+        $this->getUserService()->changeUserRoles($currentUser['id'], array('ROLE_USER'));
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'roles', 'keyword' => '|ROLE_ADMIN|'));
         $this->assertEquals(0, $foundUserCount);
+
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'email', 'keyword' => 'not_exist_email@user.com'));
         $this->assertEquals(0, $foundUserCount);
         $foundUserCount = $this->getUserService()->searchUserCount(array('keywordType' => 'loginIp', 'keyword' => '192.168.0.1'));
