@@ -168,7 +168,7 @@ define(function(require, exports, module) {
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
                     '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs">暂停</button></div>' +
-                    //'  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
+                    '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
                 );
 
