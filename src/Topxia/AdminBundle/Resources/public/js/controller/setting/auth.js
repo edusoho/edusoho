@@ -45,7 +45,7 @@ define(function(require, exports, module) {
     Validator.addRule('isEmailVerified', function(options) {
       var check = options.element.prop('checked');
       if (!check) {
-        $(".js-email-send-check").addClass('hidden');
+        $(".js-email-send-check, .js-email-status").addClass('hidden');
         return true;
       }
       if (app.arguments.emailVerified == 1) {
@@ -62,14 +62,21 @@ define(function(require, exports, module) {
 
       $.ajax({
           url: $('.js-email-send-check').data('url'),
-          timeout: 3000 // sets timeout to 3 seconds
+          timeout: 3500 // sets timeout to 3 seconds
         }).done(function(resp) {
-          $('.js-email-status').removeClass('alert-info').addClass('alert-success').html('<span class="text-success">' + resp.message + '</span>');
+          if (resp.status) {
+            $('.js-email-status').removeClass('alert-info').addClass('alert-success').html('<span class="text-success">' + resp.message + '</span>');
+          } else {
+            $('input[name="email_enabled"][value="closed"]').prop("checked", true);
+            $('.js-email-send-check').addClass("hidden");
+            $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="' + $('.js-email-status').data('url') + '">邮件服务器设置</a>是否正确</span>');
+          }
         })
         .fail(function(resp) {
+          console.log('fail');
           $('input[name="email_enabled"][value="closed"]').prop("checked", true);
           $('.js-email-send-check').addClass("hidden");
-          $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="'+ $('.js-email-status').data('url')+'">邮件服务器设置</a>是否正确</span>');
+          $('.js-email-status').removeClass('alert-info').addClass('alert-danger').html('<span class="text-danger">邮件发送异常,请检查<a  target="_blank" href="' + $('.js-email-status').data('url') + '">邮件服务器设置</a>是否正确</span>');
         })
     })
 
