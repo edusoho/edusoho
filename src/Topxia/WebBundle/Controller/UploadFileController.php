@@ -32,7 +32,7 @@ class UploadFileController extends BaseController
 
         $originalFile = $this->get('request')->files->get('file');
 
-        $this->getUploadFileService2()->moveFile($targetType, $targetId, $originalFile, $token['data']);
+        $this->getUploadFileService()->moveFile($targetType, $targetId, $originalFile, $token['data']);
 
         return $this->createJsonResponse($token['data']);
     }
@@ -56,7 +56,7 @@ class UploadFileController extends BaseController
 
     protected function downloadCloudFile($file)
     {
-        $file = $this->getUploadFileService2()->getDownloadFile($file['id']);
+        $file = $this->getUploadFileService()->getDownloadMetas($file['id']);
         return $this->redirect($file['url']);
     }
 
@@ -93,9 +93,7 @@ class UploadFileController extends BaseController
 
         $conditions['currentUserId'] = $user['id'];
 
-        $conditions['noTargetType'] = 'coursematerial';
-
-        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
+        $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 10000);
 
         return $this->createFilesJsonResponse($files);
     }
@@ -118,7 +116,7 @@ class UploadFileController extends BaseController
             }
         }
 
-        $files = $this->getUploadFileService()->searchFiles($conditions, 'latestUpdated', 0, 10000);
+        $files = $this->getUploadFileService()->searchFiles($conditions, array('updatedTime', 'DESC'), 0, 10000);
 
         return $this->createFilesJsonResponse($files);
     }
@@ -177,13 +175,14 @@ class UploadFileController extends BaseController
         $file = $this->getUploadFileService()->addFile($targetType, $targetId, $fileInfo, 'cloud');
 
         if ($lazyConvert && $file['type'] != "document" && $targetType != 'coursematerial') {
-            $this->getUploadFileService()->reconvertFile(
-                $file['id'],
-                $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+            $this->getUploadFileService()->reconvertFile($file['id'],
+                array(
+                    'callback' => $this->generateUrl('uploadfile_cloud_convert_callback2', array(), true)
+                )
             );
         }
 
-        $this->getUploadFileService2()->syncFile($file);
+        $this->getUploadFileService()->syncFile($file);
         return $file;
     }
 
@@ -248,7 +247,7 @@ class UploadFileController extends BaseController
             ));
         }
 
-        $this->getUploadFileService2()->syncFile($file);
+        $this->getUploadFileService()->syncFile($file);
         return $file;
     }
 
@@ -288,7 +287,7 @@ class UploadFileController extends BaseController
         }
 
         $file = $this->getUploadFileService()->saveConvertResult3($file['id'], $result);
-        $this->getUploadFileService2()->syncFile($file);
+        $this->getUploadFileService()->syncFile($file);
         return $this->createJsonResponse($file['metas2']);
     }
 
@@ -345,7 +344,7 @@ class UploadFileController extends BaseController
             ));
         }
 
-        $this->getUploadFileService2()->syncFile($file);
+        $this->getUploadFileService()->syncFile($file);
         return $this->createJsonResponse($file['metas2']);
     }
 
@@ -373,11 +372,6 @@ class UploadFileController extends BaseController
     protected function getUploadFileService()
     {
         return $this->getServiceKernel()->createService('File.UploadFileService');
-    }
-
-    protected function getUploadFileService2()
-    {
-        return $this->getServiceKernel()->createService('File.UploadFileService2');
     }
 
     protected function getCourseService()

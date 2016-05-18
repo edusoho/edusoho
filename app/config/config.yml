@@ -16,7 +16,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 6.17.3
+        assets_version: 6.17.4
     default_locale:  "%locale%"
     trusted_proxies: ~
     session:
@@ -188,7 +188,7 @@ services:
 
     topxia.twig.uploader_extension:
         class: Topxia\WebBundle\Twig\Extension\UploaderExtension
-        arguments:    [@service_container]
+        arguments:    ['@service_container']
         tags:
             - { name: twig.extension }
 

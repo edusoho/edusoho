@@ -34,8 +34,6 @@ interface UploadFileDao
 
     public function getFileByTargetType($targetType);
 
-    public function findFilesByTargetTypeAndTargetId($targetType, $targetId);
-
     public function findFilesByTargetTypeAndTargetIds($targetType, $targetIds);
 
     public function getHeadLeaderFiles();
