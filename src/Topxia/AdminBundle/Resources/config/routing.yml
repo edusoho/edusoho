@@ -441,7 +441,6 @@ admin_course_lesson_data:
 admin_course_order_manage:
     pattern: /course/order/manage
     defaults: { _controller: TopxiaAdminBundle:CourseOrder:manage }
-    permissions: [admin_course_order_query]
 
 admin_course_search:
     pattern: /course/search
@@ -466,7 +465,6 @@ admin_live_get_max_online:
 admin_order_detail:
     pattern: /order/{id}/detail
     defaults: { _controller: TopxiaAdminBundle:Order:detail }
-    permissions: [admin_coin_order_query,admin_coin_orders]
 
 admin_order_refunds:
     pattern: /order/refunds/{targetType}
@@ -1545,12 +1543,10 @@ admin_coin_records:
 admin_coin_orders:
     path:     /coin/orders
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:orders }
-    permissions: [admin_coin_order_query]
 
 admin_coin_orders_log:
     path:     /coin/orders/log/{id}
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:logs }
-    permissions: [admin_course_order_query]
 
 # admin_coin_admin:
 #     path:     /coin/admin
@@ -1581,12 +1577,10 @@ admin_bill_export_csv:
 admin_order_manage_export_csv:
     pattern: /order/manage/export/{targetType}
     defaults: { _controller: TopxiaAdminBundle:Order:exportCsv }
-    permissions: [admin_course_order_query]
 
 admin_order_manage_export_coin_csv:
     pattern: /order/manage/coin
     defaults: { _controller: TopxiaAdminBundle:CoinOrder:exportCsv }
-    permissions: [admin_coin_order_query]
 
 admin_coin_user_records:
     path:     /coin/records/user
