@@ -13,20 +13,13 @@ class CourseFileManageController extends BaseController
     {
         $course = $this->getCourseService()->tryManageCourse($id);
 
-        /*$type = $request->query->get('type');
-        $type = in_array($type, array('courselesson', 'coursematerial')) ? $type : 'courselesson';
-*/
         $conditions = array(
             'targetTypes' => array('courselesson', 'coursematerial'),
             'targetId'    => $course['id']
         );
 
-        if (array_key_exists('targetId', $conditions) && !empty($conditions['targetId'])) {
-            $course = $this->getCourseService()->getCourse($conditions['targetId']);
-
-            if ($course['parentId'] > 0 && $course['locked'] == 1) {
-                $conditions['targetId'] = $course['parentId'];
-            }
+        if ($course['parentId'] > 0 && $course['locked'] == 1) {
+            $conditions['targetId'] = $course['parentId'];
         }
 
         $paginator = new Paginator(
