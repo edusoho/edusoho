@@ -31,9 +31,9 @@ class MenusParserCommand extends BaseCommand
         $rootDir     = realpath(__DIR__.'/../../../../');
         $position = 'admin';
         // $configPaths[] = "{$rootDir}/src/Topxia/WebBundle/Resources/config/menus_{$position}.yml";
-        $configPaths[] = "{$rootDir}/plugins/Vip/VipBundle/Resources/config/menus_{$position}.yml";
+        // $configPaths[] = "{$rootDir}/plugins/Vip/VipBundle/Resources/config/menus_{$position}.yml";
 
-        // $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
+        $configPaths[] = "{$rootDir}/src/Classroom/ClassroomBundle/Resources/config/menus_{$position}.yml";
 
         // $configPaths[] = "{$rootDir}/src/Custom/WebBundle/Resources/config/menus_{$position}.yml";
         // $configPaths[] = "{$rootDir}/src/Custom/AdminBundle/Resources/config/menus_{$position}.yml";
@@ -57,8 +57,12 @@ class MenusParserCommand extends BaseCommand
         $environment = ServiceKernel::instance()->getEnvironment();
 
         $roots = array(
-            "_admin_vip_list" => $menus["_admin_vip_list"],
-            "_admin_vip_setting" => $menus["_admin_vip_setting"]
+            "admin_classroom" => $menus["admin_classroom"],
+            "admin_classroom_refunds" => $menus["admin_classroom_refunds"],
+            "admin_classroom_order" => $menus["admin_classroom_order"],
+            "admin_classroom_setting" => $menus["admin_classroom_setting"],
+            "admin_classroom_review_tab" => $menus["admin_classroom_review_tab"],
+            "admin_classroom_thread_manage" => $menus["admin_classroom_thread_manage"],
         );
 
         $menuTree = array();

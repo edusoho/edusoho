@@ -1,15 +1,17 @@
 # 一个完整的permission配置如下：
 # admin_user_manage:
 #   name: 用户管理
-#   router_name: admin_user //可选
 #   children:               //可选
-#   mode:                   //可选
-#   group:                  //可选
+#   mode:                   //可选 none, modal, capsules（只有在tabs可用）
+#   group:                  //可选 内置: topBtn, capsule, 也可以自定义
+#   router_name: admin_user //可选 
 #   router_params:          //可选
 #   blank:                  //可选
 #   visable:                //可选
 #   icon:                   //可选
 #   data:                   //可选
+#   before:                 //可选
+#   after:                  //可选
 
 admin:
     name: 后台
@@ -312,7 +314,6 @@ admin:
                                 type: page
                 admin_operation_analysis_register:
                     name: 数据统计
-                    after: admin_operation_content
                     group: 3
                     children:
                         admin_operation_analysis:
@@ -323,7 +324,6 @@ admin:
                             router_name: admin_operation_analysis_register
                 admin_operation_notification:
                     name: '全站站内通知'
-                    before: admin_operation_block
                     group: 2
                     children:
                         admin_batch_notification:
@@ -334,7 +334,6 @@ admin:
                                     group: 2
                 admin_announcement:
                     name: '网站公告管理'
-                    before: admin_batch_notification
                     group: 2
                     children:
                         admin_announcement_manage:
@@ -355,18 +354,17 @@ admin:
         admin_order:
             name: 订单
             children:
-                admin_course_order:
+                admin_course_order_manage:
                     name: 课程订单
                     children:
-                        admin_course_order_query:
-                            name: '查阅'
+                        admin_course_order:
+                            name: 课程订单
                             router_name: admin_course_order_manage
-                admin_coin_orders:
+                admin_coin_order_manange:
                     name: 虚拟币订单
                     children:
-                        admin_coin_order_query:
-                            name: '查阅'
-                            router_name: admin_coin_orders
+                        admin_coin_orders:
+                            name: 虚拟币订单
         admin_finance:
             name: 账务
             children:
@@ -452,7 +450,6 @@ admin:
                             router_name: admin_setting_cloud
                 admin_cloud_file:
                     name: 云资源
-                    before: admin_setting_cloud
         admin_system:
             name: 系统
             router_name: admin_setting_site
