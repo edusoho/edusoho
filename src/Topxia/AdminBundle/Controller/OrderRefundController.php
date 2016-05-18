@@ -45,8 +45,8 @@ class OrderRefundController extends BaseController
             $paginator->getOffsetCount(),
             $paginator->getPerPageCount()
         );
-
-        $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($refunds, 'userId'));
+        $userIds = array_merge(ArrayToolkit::column($refunds, 'userId'), ArrayToolkit::column($refunds, 'operator'));
+        $users = $this->getUserService()->findUsersByIds($userIds);
         $orders = $this->getOrderService()->findOrdersByIds(ArrayToolkit::column($refunds, 'orderId'));
 
         return $this->render('TopxiaAdminBundle:OrderRefund:refunds.html.twig', array(

@@ -12,7 +12,9 @@ define(function(require, exports, module) {
         require('../../util/batch-select')($container);
         require('../../util/batch-delete')($container);
         require('../../util/item-delete')($container);
-		$("#startDate, #endDate").datetimepicker();		
+		$("#startDate, #endDate").datetimepicker({
+            autoclose:true
+        });		
 
     };
 

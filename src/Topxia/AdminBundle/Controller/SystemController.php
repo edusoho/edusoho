@@ -28,6 +28,7 @@ class SystemController extends BaseController
 
         if (!empty($setting['mode']) && $setting['mode'] == 'discuz') {
             $discuzProvider = new DiscuzAuthProvider();
+
             if ($discuzProvider->checkConnect()) {
                 return $this->createJsonResponse(array('status' => true, 'message' => '通信成功'));
             } else {
@@ -44,6 +45,7 @@ class SystemController extends BaseController
         $site      = $this->getSettingService()->get('site', array());
         $mailer    = $this->getSettingService()->get('mailer', array());
         $cloudMail = $this->getSettingService()->get('cloud_mail', array());
+
         if (!empty($mailer['enabled'])) {
             try {
                 if (isset($cloudMail['status']) && $cloudMail['status'] == "enable") {
@@ -66,7 +68,7 @@ class SystemController extends BaseController
                 return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送异常'));
             }
         } else {
-            return $this->createJsonResponse(array('status' => true, 'message' => '邮件发送服务并没开通！'));
+            return $this->createJsonResponse(array('status' => false, 'message' => '邮件发送服务并没开通！'));
         }
     }
 
@@ -89,6 +91,7 @@ class SystemController extends BaseController
         if (PHP_OS !== 'WINNT') {
             foreach ($paths as $folder => $opts) {
                 $finder = new Finder();
+
                 if (!empty($opts['depth'])) {
                     $finder->depth($opts['depth']);
                 }
@@ -99,8 +102,10 @@ class SystemController extends BaseController
 
                 try {
                     $finder->in($this->container->getParameter('kernel.root_dir').'/../'.$folder);
+
                     foreach ($finder as $fileInfo) {
                         $relaPath = $fileInfo->getRealPath();
+
                         if (!(is_writable($relaPath) && is_readable($relaPath))) {
                             $errorPaths[] = $relaPath;
                         }

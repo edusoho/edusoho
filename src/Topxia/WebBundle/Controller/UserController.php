@@ -98,10 +98,10 @@ class UserController extends BaseController
         $classrooms = array_merge($studentClassrooms, $auditorClassrooms);
 
         $classroomIds = ArrayToolkit::column($classrooms, 'classroomId');
-        
-        if(!empty($classroomIds)) {
 
-            $conditions   = array(
+        if (!empty($classroomIds)) {
+
+            $conditions = array(
                 'status'       => 'published',
                 'showable'     => '1',
                 'classroomIds' => $classroomIds
@@ -139,7 +139,7 @@ class UserController extends BaseController
                 0,
                 20
             );
-            $members = array();
+            $members   = array();
         }
 
         return $this->render("TopxiaWebBundle:User:classroom-learning.html.twig", array(
@@ -161,41 +161,50 @@ class UserController extends BaseController
             'roles'  => array('teacher', 'headTeacher'),
             'userId' => $user['id']
         );
-        $classroomMembers = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
+        $classroomMembers     = $this->getClassroomService()->searchMembers($conditions, array('createdTime', 'desc'), 0, PHP_INT_MAX);
 
         $classroomIds = ArrayToolkit::column($classroomMembers, 'classroomId');
-        $conditions   = array(
-            'status'       => 'published',
-            'showable'     => '1',
-            'classroomIds' => $classroomIds
-        );
+        if (empty($classroomIds)) {
+            $paginator = new Paginator(
+                $this->get('request'),
+                0,
+                20
+            );
+            $members   = array();
+            $classroom = array();
+        } else {
+            $conditions = array(
+                'status'       => 'published',
+                'showable'     => '1',
+                'classroomIds' => $classroomIds
+            );
 
-        $paginator = new Paginator(
-            $this->get('request'),
-            $this->getClassroomService()->searchClassroomsCount($conditions),
-            20
-        );
+            $paginator = new Paginator(
+                $this->get('request'),
+                $this->getClassroomService()->searchClassroomsCount($conditions),
+                20
+            );
 
-        $classrooms = $this->getClassroomService()->searchClassrooms(
-            $conditions,
-            array('createdTime', 'DESC'),
-            $paginator->getOffsetCount(),
-            $paginator->getPerPageCount()
-        );
+            $classrooms = $this->getClassroomService()->searchClassrooms(
+                $conditions,
+                array('createdTime', 'DESC'),
+                $paginator->getOffsetCount(),
+                $paginator->getPerPageCount()
+            );
 
-        $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
+            $members = $this->getClassroomService()->findMembersByUserIdAndClassroomIds($user['id'], $classroomIds);
 
-        foreach ($classrooms as $key => $classroom) {
-            if (empty($classroom['teacherIds'])) {
-                $classroomTeacherIds = array();
-            } else {
-                $classroomTeacherIds = $classroom['teacherIds'];
+            foreach ($classrooms as $key => $classroom) {
+                if (empty($classroom['teacherIds'])) {
+                    $classroomTeacherIds = array();
+                } else {
+                    $classroomTeacherIds = $classroom['teacherIds'];
+                }
+
+                $teachers                     = $this->getUserService()->findUsersByIds($classroomTeacherIds);
+                $classrooms[$key]['teachers'] = $teachers;
             }
-
-            $teachers                     = $this->getUserService()->findUsersByIds($classroomTeacherIds);
-            $classrooms[$key]['teachers'] = $teachers;
         }
-
         return $this->render('TopxiaWebBundle:User:classroom-teaching.html.twig', array(
             'paginator'  => $paginator,
             'classrooms' => $classrooms,
@@ -241,12 +250,12 @@ class UserController extends BaseController
         $admins               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'admin'),
             array('createdTime', "DESC"), 0, 1000
         );
-        $owners = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
+        $owners               = $this->getGroupService()->searchMembers(array('userId' => $user['id'], 'role' => 'owner'),
             array('createdTime', "DESC"), 0, 1000
         );
-        $members     = array_merge($admins, $owners);
-        $groupIds    = ArrayToolkit::column($members, 'groupId');
-        $adminGroups = $this->getGroupService()->getGroupsByids($groupIds);
+        $members              = array_merge($admins, $owners);
+        $groupIds             = ArrayToolkit::column($members, 'groupId');
+        $adminGroups          = $this->getGroupService()->getGroupsByids($groupIds);
 
         $paginator = new Paginator(
             $this->get('request'),
