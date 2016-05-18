@@ -22,6 +22,11 @@ class CourseFileManageController extends BaseController
             $conditions['targetId'] = $course['parentId'];
         }
 
+        $courseMaterials = $this->getMaterialService()->findCourseMaterials($conditions['targetId'], 0, PHP_INT_MAX);
+        if ($courseMaterials) {
+            $conditions['idsOr'] = array_unique(ArrayToolkit::column($courseMaterials,'fileId'));
+        }
+
         $paginator = new Paginator(
             $request,
             $this->getUploadFileService()->searchFileCount($conditions),
