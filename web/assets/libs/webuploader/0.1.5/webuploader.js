@@ -3532,13 +3532,15 @@
                             return act.file != file;
                         });
 
-                        file.blocks.filter(function (block) {
+                        var blocks = file.blocks.filter(function (block) {
                             return !me.pool.some(function (poolBlock) {
                                 return poolBlock.file === file && poolBlock.chunk === block.chunk;
                             });
-                        }).forEach(function (block) {
-                            block.file.remaning--;
-                            this.remaning--;
+                        });
+                        
+                        blocks.forEach(function (block) {
+                            block.file.remaning++;
+                            this.remaning++;
                             me.pool.push(block);
                         });
 
