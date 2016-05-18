@@ -28,7 +28,7 @@ define(function(require, exports, module) {
                 var $li = $(this);
                 var fileId = $li.attr('id');
                 var fileStatus = self.uploader.getFile(fileId).getStatus();
-                return fileStatus !== 'queued' && fileStatus !== 'cancelled';
+                return ['queued', 'cancelled', 'complete'].indexOf(fileStatus) === -1;
             }).map(function () {
                 return $(this).find('.js-file-resume');
             }).each(function () {
