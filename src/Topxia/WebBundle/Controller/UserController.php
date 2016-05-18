@@ -171,7 +171,7 @@ class UserController extends BaseController
                 20
             );
             $members   = array();
-            $classroom = array();
+            $classrooms = array();
         } else {
             $conditions = array(
                 'status'       => 'published',
