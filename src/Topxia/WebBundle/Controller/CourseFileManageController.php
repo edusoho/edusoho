@@ -54,7 +54,6 @@ class CourseFileManageController extends BaseController
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
-            //'type'      => $type,
             'course'    => $course,
             'files'     => $files,
             'users'     => ArrayToolkit::index($users, 'id'),
