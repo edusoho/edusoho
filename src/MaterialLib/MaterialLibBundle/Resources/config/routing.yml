@@ -47,7 +47,7 @@ material_lib_file_preview:
     defaults: { _controller: MaterialLibBundle:MaterialLib:preview }
 
 material_edit:
-    pattern:  /materiallib/{globalId}/edit
+    pattern:  /materiallib/{fileId}/edit
     defaults: { _controller: MaterialLibBundle:MaterialLib:edit }
     methods: [POST]
 
@@ -85,6 +85,10 @@ material_batch_share:
     pattern: /materials/batch/share
     defaults: { _controller: MaterialLibBundle:MaterialLib:batchShare }
     methods: [POST]
+
+material_unshare:
+    pattern: /materiallib/{fileId}/unshare
+    defaults: { _controller: MaterialLibBundle:MaterialLib:unshare }
 
 material_batch_tag_show:
     pattern: /materials/batch/tag/show

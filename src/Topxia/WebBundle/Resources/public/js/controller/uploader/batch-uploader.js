@@ -87,12 +87,20 @@ define(function(require, exports, module) {
             html += '  <ul></ul>';
             html += '</div>';
             html += '<div class="balloon-uploader-footer">';
+            html += '  <div class="pull-left mtm">';
+            html += '    <span class="upload-finish"></span>';
+            html += '      <span class="ballon-uploader-display-footer hidden">';
+            html += '      <span><strong class="js-speed">0</strong> MB/s</span>';
+            html += '      <span class="js-left-time"></span>';
+            html += '    </span>';
+            html += '  </div>'
+
             html += '  <div class="file-pick-btn"><i class="glyphicon glyphicon-plus"></i> 添加文件</div>';
 
             if (this.get('multi')) {
                 html += '<div class="start-upload-btn"><i class="glyphicon glyphicon-upload"></i> 开始上传</div>';
             }
-
+            
             html += '</div>';
 
             this.element.addClass('balloon-uploader');
@@ -125,8 +133,38 @@ define(function(require, exports, module) {
 
             });
 
+            uploader.on('beforeFileQueued', function (file) {
+                file.uploaderWidget = self;
+
+                if ($('.ballon-uploader-display-footer').hasClass('hidden')) {
+                    $('.upload-finish').text('');
+                    $('.js-left-time').text('');
+                    $('.js-speed').text(0);
+                    $('.ballon-uploader-display-footer').removeClass('hidden');
+                    $('.upload-finish').addClass('hidden');
+                }
+                this.uploadQueue = this.uploadQueue || {}; //存储队列中文件开始上传的信息
+                this.totalSpeedQueue = this.totalSpeedQueue || {}; //当前上传的总数的 |单位 MB/s
+                this.leftTotalSizeQueue = this.leftTotalSizeQueue || {}; //上传剩余的总文件大小 |单位 MB
+                this.updateDisplayIndex = 0; //自带的进度条更新的太快了,速度也刷新的有点快, 所以计时器增加到5,然后刷新一下,同时重置为0
+            });
+
             // 文件上传过程中创建进度条实时显示。
             uploader.on('uploadProgress', function(file, percentage) {
+
+                var queuefile = this.uploadQueue[file.id]; //获取文件开始上传时的信息
+
+                var speed = (((queuefile.size * percentage) / 1024 / 1024) / ((Date.now() - queuefile.starttime) / 1000)).toFixed(2); //MB/s
+
+                this.totalSpeedQueue[file.id] = speed; //纪录每个文件的的上传速度
+                this.leftTotalSizeQueue[file.id] = (file.size * (1 - percentage) / 1024 / 1024).toFixed(2); //更新每个文件的剩余大小
+                
+                this.updateDisplayIndex++;
+                if (this.updateDisplayIndex == 1 || this.updateDisplayIndex >= 60 || file.size <= 262144) { //256KB
+                    this.updateDisplayIndex = 0;
+                    file.uploaderWidget._displaySpeed()
+                }
+
                 var $li = $('#' + file.id);
                 percentage = (percentage * 100).toFixed(2) + '%';
                 if(percentage != '100.00%'){
@@ -161,12 +199,22 @@ define(function(require, exports, module) {
             });
 
             uploader.on('uploadStart', function(file) {
+                this.uploadQueue[file.id] = {id: file.id, size: file.size, starttime: Date.now()};
                 self.trigger('file.uploadStart');
             });
 
             uploader.on('uploadBeforeSend', function(object, data, headers, tr) {
                 var strategy = self.get('strategy');
                 strategy.uploadBeforeSend(object, data, headers, tr);
+            });
+
+            uploader.on('upload.finish', function (file) {
+                delete  this.totalSpeedQueue[file.id];
+                delete  this.leftTotalSizeQueue[file.id];
+                if ($.isEmptyObject(this.leftTotalSizeQueue)) {
+                    $('.upload-finish').removeClass('hidden').text('上传已完成');
+                    $('.ballon-uploader-display-footer').addClass('hidden');
+                }
             });
         },
 
@@ -313,12 +361,15 @@ define(function(require, exports, module) {
                         file.uploaderWidget.trigger('file.uploaded', file, data, response);
 
                         file.setStatus('complete');
-                        //file.uploaderWidget._getUploader().trigger('uploadSuccess', file, ret, hds);
 
                         var $li = $('#' + file.id);
                         $li.find('.file-status').html('已上传');
                         $li.find('.file-progress-bar').css('width', '0%');
-
+                        
+                        if (file.uploaderWidget.get('multi')) {
+                            file.uploaderWidget._getUploader().trigger('upload.finish', file, data);
+                        }
+                        
                     });
 
                     return deferred.promise();
@@ -355,6 +406,42 @@ define(function(require, exports, module) {
 
             });
             return deferred.promise();
+        },
+
+        _secondToDate: function (sd) {
+            var time = isNaN(parseFloat(sd)) ? 0 : parseFloat(sd);
+            if (null != time && "" != time) {
+                if (time > 60 && time < 60 * 60) {
+                    time = parseInt(time / 60.0) + "分钟" + parseInt((parseFloat(time / 60.0) -
+                            parseInt(time / 60.0)) * 60) + "秒";
+                }
+                else if (time >= 60 * 60 && time < 60 * 60 * 24) {
+                    time = parseInt(time / 3600.0) + "小时" + parseInt((parseFloat(time / 3600.0) -
+                            parseInt(time / 3600.0)) * 60) + "分钟" +
+                        parseInt((parseFloat((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60) -
+                            parseInt((parseFloat(time / 3600.0) - parseInt(time / 3600.0)) * 60)) * 60) + "秒";
+                }
+                else {
+                    time = parseInt(time) + "秒";
+                }
+            }
+            return time;
+        },
+
+        _displaySpeed: function () {
+            var totalspeed = 0;
+            var leftsize = 0;
+            for (var index in this.uploader.totalSpeedQueue) {
+                totalspeed += parseFloat(this.uploader.totalSpeedQueue[index]);
+            }
+            for (var index in this.uploader.leftTotalSizeQueue) {
+                leftsize += parseFloat(this.uploader.leftTotalSizeQueue[index]);
+            }
+            $('.js-speed').text(totalspeed.toFixed(2));
+
+            var time = this._secondToDate((leftsize / totalspeed));
+
+            $('.js-left-time').text((time == 0) ? '即将完成' : '剩余' + time);
         },
 
         getStrategyModel: function(mode){
