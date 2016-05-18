@@ -40,17 +40,6 @@ class CourseFileManageController extends BaseController
             $paginator->getPerPageCount()
         );
 
-        foreach ($files as $key => $file) {
-            $useNum            = $this->getCourseService()->searchLessonCount(array('mediaId' => $file['id']));
-            $manageFilesUseNum = $this->getMaterialService()->getMaterialCountByFileId($file['id']);
-
-            if ($files[$key]['targetType'] == 'coursematerial') {
-                $files[$key]['useNum'] = $manageFilesUseNum;
-            } else {
-                $files[$key]['useNum'] = $useNum;
-            }
-        }
-
         $users = $this->getUserService()->findUsersByIds(ArrayToolkit::column($files, 'updatedUserId'));
 
         return $this->render('TopxiaWebBundle:CourseFileManage:index.html.twig', array(
