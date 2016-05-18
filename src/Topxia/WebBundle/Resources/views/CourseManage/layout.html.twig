@@ -67,7 +67,7 @@
             {{ path('course_manage_course_sync', {id:course.id,type:'files'}) }}{% else %}
             {{ path('course_manage_files', {id:course.id}) }}
             {% endif %}">
-              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'文件管理'|trans}}
+              <span {% if course.locked|default(0) == 1 %}class="es-icon es-icon-lock" aria-hidden="true" {% endif %} ></span>{{'课程文件'|trans}}
             </a>
           </li>
         </ul>
