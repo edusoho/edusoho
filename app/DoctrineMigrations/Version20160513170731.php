@@ -16,7 +16,7 @@ class Version20160513170731 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql("ALTER TABLE `crontab_job` CHANGE `jobParams` `jobParams` TEXT  COLLATE utf8_general_ci NULL COMMENT '任务参数';");
+        $this->addSql("ALTER TABLE `crontab_job` CHANGE `jobParams` `jobParams` TEXT NULL COMMENT '任务参数';");
     }
 
     /**
