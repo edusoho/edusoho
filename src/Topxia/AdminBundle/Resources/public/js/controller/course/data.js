@@ -1,6 +1,10 @@
 define(function(require, exports, module) {
-    var ztree = require('edusoho.ztree');
+   var SelectZtree = require('edusoho.selectztree');
     exports.run = function(options) {
-        ztree('#orgZtree', "#orgName", "#orgCode");
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
     }
 });

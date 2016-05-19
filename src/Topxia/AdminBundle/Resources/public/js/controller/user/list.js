@@ -3,9 +3,13 @@ define(function(require, exports, module) {
     var Notify = require('common/bootstrap-notify');
     require("jquery.bootstrap-datetimepicker");
     var validator = require('bootstrap.validator');
-    var ztree = require('edusoho.ztree');
+   var SelectZtree = require('edusoho.selectztree');
     exports.run = function() {
-        ztree('#orgZtree', "#orgName", "#orgCode");
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
         var $datePicker = $('#datePicker');
         var $table = $('#user-table');
 

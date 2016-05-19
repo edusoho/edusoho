@@ -5,10 +5,14 @@ define(function(require, exports, module) {
     require('common/validator-rules').inject(Validator);
     var Notify = require('common/bootstrap-notify');
     require('es-ckeditor');
-    var ztree = require('edusoho.ztree');
+   var SelectZtree = require('edusoho.selectztree');
 
     exports.run = function() {
-        ztree('#orgZtree', "#orgName", "#orgCode");
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
         /*        var editor_classroom = CKEDITOR.replace('description', {
                     toolbar: 'Detail',
                     filebrowserImageUploadUrl: $('#description').data('imageUploadUrl'),

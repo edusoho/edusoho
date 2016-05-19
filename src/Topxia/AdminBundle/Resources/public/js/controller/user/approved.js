@@ -5,8 +5,12 @@ define(function(require, exports, module) {
     var validator = require('bootstrap.validator');
 
 	exports.run = function() {
-        var ztree = require('edusoho.ztree');
-        ztree('#orgZtree', "#orgName", "#orgCode");
+       var SelectZtree = require('edusoho.selectztree');
+        var selectTree = new SelectZtree({
+            ztreeDom: '#orgZtree',
+            clickDom: "#orgName",
+            valueDom: "#orgCode"
+        });
 		var $table = $('#user-table');
 
 		$table.on('click', '.cancel-approval', function(){

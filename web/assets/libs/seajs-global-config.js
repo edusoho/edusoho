@@ -63,6 +63,7 @@ seajs.config({
         'edusoho.webuploader': 'edusoho/webuploader/1.0.2/web-uploader.js',
         'edusoho.imagecrop': 'edusoho/imagecrop/1.0.0/image-crop.js',
         'edusoho.autocomplete': 'edusoho/autocomplete/1.0.0/autocomplete.js',
+        'edusoho.selectztree': 'edusoho/ztree/0.0.1/select-tree.js',
         'colorpicker': 'jquery-plugin/colorpicker/js/bootstrap-colorpicker',
         'fullcalendar': 'fullcalendar/lang-all.js',
         'momentmin':'fullcalendar/lib/moment.min.js',
@@ -77,7 +78,7 @@ seajs.config({
         'z_tree' :'jquery-plugin/zTree/3.5.21/js/jquery.ztree.all.min',
         'z_tree_css':'jquery-plugin/zTree/3.5.21/css/zTreeStyle/zTreeStyle.css',
         'org_z_tree_css': 'jquery-plugin/zTree/3.5.21/css/org.css',
-        'edusoho.ztree': 'edusoho/ztree/0.0.1/ztree.js'
+        
     },
 
     // 预加载项
