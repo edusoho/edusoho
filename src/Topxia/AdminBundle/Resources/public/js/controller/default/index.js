@@ -35,6 +35,25 @@ define(function(require, exports, module) {
     function step3() {
         $.post($('#system-status-title').data('url'),function(html){
             $('#system-status').html(html);
+
+            $('.mobile-customization-upgrade-btn').click(function() {
+                var $btn = $(this).button('loading');
+                var postData = $(this).data('data');
+                $.ajax({ 
+                    url: $(this).data('url'),
+                    data: postData,
+                    type: 'post'
+                }).done(function(data) {
+                    $btn.attr('disabled');
+                    $btn.html('升级受理中');
+                }).fail(function(xhr, textStatus) {
+                    Notify.danger(xhr.responseJSON.error.message);
+                    $btn.button('reset');
+                }).always(function(xhr, textStatus) {
+                    
+                });
+            })
+
             step4();
         });
     }
