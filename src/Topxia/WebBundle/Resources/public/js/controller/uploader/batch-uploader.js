@@ -21,49 +21,69 @@ define(function(require, exports, module) {
         },
 
         uploadStop: function (event) {
-            this.uploader.stop(true);
             var self = this;
+
+            //过滤出未完成的文件并做处理
             this.element.find('li').filter(function () {
                 var $li = $(this);
                 var fileId = $li.attr('id');
                 var fileStatus = self.uploader.getFile(fileId).getStatus();
-                return ['queued', 'complete'].indexOf(fileStatus) === -1;
-            }).map(function () {
-                return $(this).find('.js-file-resume');
+                return 'complete' !== fileStatus;
             }).each(function () {
-                $(this).prop('disabled', false);
+                var file = self.uploader.getFile($(this).attr('id'));
+                self.uploader.cancelFile(file.id);
+                $(this).find('.file-status').html('暂停中');
+                $(this).find('.js-file-resume').removeClass('hidden');
+                $(this).find('.js-file-pause').addClass('hidden');
             });
-
-
         },
 
         uploadResume: function (event) {
             var self = this;
-            this.element.find('li').each(function () {
+            //过滤出未完成的文件并做处理
+            this.element.find('li').filter(function () {
+                var $li = $(this);
+                var fileId = $li.attr('id');
+                var fileStatus = self.uploader.getFile(fileId).getStatus();
+                return 'complete' !== fileStatus;
+            }).each(function () {
                 var file = self.uploader.getFile($(this).attr('id'));
+                $(this).find('.file-status').html('待上传');
+                $(this).find('.js-file-resume').addClass('hidden');
                 file.getStatus() === 'cancelled' && file.setStatus('queued');
             });
             this.uploader.upload();
-            this.element.find('.js-file-resume').prop('disabled', true);
         },
         
         fileUploadResume: function (event) {
             var fileId = $(event.target).parent().parent().attr('id');
             var file = this.uploader.getFile(fileId);
+            $(event.target).addClass('hidden');
+            $(event.target).siblings('.js-file-pause').removeClass('hidden');
             file.getStatus() === 'cancelled' && file.setStatus('interrupt');
             this.uploader.upload(fileId);
-            $(event.target).prop('disabled',true);
         },
         
         fileUploadStop: function (event) {
-            var fileId = $(event.target).parent().parent().attr('id');
+            var $li = $(event.target).parent().parent();
+            var fileId = $li.attr('id');
             var file = this.uploader.getFile(fileId);
+            $(event.target).addClass('hidden');
             if(file.getStatus() !== 'complete' && file.getStatus() !== 'error'){
-                $(event.target).siblings('.js-file-resume').prop('disabled', false);
-                this.uploader.removeFile(fileId);
+                $(event.target).siblings('.js-file-resume').removeClass('hidden');
+                $li.find('.file-status').html('暂停中');
+                this.uploader.cancelFile(fileId);
             }else {
                 $(event.target).prop('disabled', true);
             }
+        },
+
+        fileUploadRemove: function (event) {
+            // 本来应该uploader监听fileDequeued事件来删除DOM节点, 但是uploader stop api的问题导致目前暂停其实用的是cancelFile, 该API会触发该事件;
+            var $li = $(event.target).parent().parent();
+            var fileId = $li.attr('id');
+            this.uploader.removeFile(fileId, true);
+            $li.remove();
         },
 
         setup: function() {
@@ -116,6 +136,7 @@ define(function(require, exports, module) {
             $(this.element).on('click', '.js-upload-resume', this.uploadResume.bind(this));
             $(this.element).on('click', '.js-file-resume', this.fileUploadResume.bind(this));
             $(this.element).on('click', '.js-file-pause', this.fileUploadStop.bind(this));
+            $(this.element).on('click', '.js-file-cancel', this.fileUploadRemove.bind(this));
         },
 
         destroy: function() {
@@ -177,7 +198,11 @@ define(function(require, exports, module) {
                     '  <div class="file-name">' + file.name + '</div>' +
                     '  <div class="file-size">' + filesize(file.size) + '</div>' +
                     '  <div class="file-status">待上传</div>' +
-                    '  <div class="file-manage"><button class="js-file-resume btn btn-default btn-xs hidden" disabled>继续</button><button class="js-file-pause btn btn-default btn-xs hidden">暂停</button></div>' +
+                    '  <div class="file-manage">' +
+                    '    <button class="js-file-resume btn btn-default btn-xs hidden">继续</button>' +
+                    '    <button class="js-file-pause btn btn-default btn-xs hidden">暂停</button>' +
+                    '    <button class="js-file-cancel btn btn-default btn-xs">取消</button>' +
+                    '  </div>' +
                     '  <div class="file-progress"><div class="file-progress-bar" style="width: 0%;"></div></div>' +
                     '</li>'
                 );
@@ -206,6 +231,10 @@ define(function(require, exports, module) {
                 this.updateDisplayIndex = 0; //自带的进度条更新的太快了,速度也刷新的有点快, 所以计时器增加到5,然后刷新一下,同时重置为0
             });
 
+            uploader.on('uploadStart', function (file) {
+                var $li = $('#' + file.id);
+                $li.find('.js-file-pause').removeClass('hidden');
+            });
             // 文件上传过程中创建进度条实时显示。
             uploader.on('uploadProgress', function(file, percentage) {
 
@@ -237,8 +266,9 @@ define(function(require, exports, module) {
                 var $li = $('#' + file.id);
                 $li.find('.file-status').html('已上传');
                 $li.find('.file-progress-bar').css('width', '0%');
-                $li.find('.js-file-resume').prop('disabled',true);
-                $li.find('.js-file-pause').prop('disabled',true);
+                $li.find('.js-file-resume').prop('disabled',true).addClass('hidden');
+                $li.find('.js-file-pause').prop('disabled',true).addClass('hidden');
+                $li.find('.js-file-cancel').prop('disabled',true).addClass('hidden');
                 var key = 'file_' + file.hash;
                 store.remove(key);
             });
@@ -519,14 +549,13 @@ define(function(require, exports, module) {
         },
 
         isIE: function(ver){
-            var b = document.createElement('b')
-            b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->'
+            var b = document.createElement('b');
+            b.innerHTML = '<!--[if IE ' + ver + ']><i></i><![endif]-->';
             return b.getElementsByTagName('i').length === 1
         },
 
         _showHiddenButton: function () {
             this.element.find('.pause-btn').removeClass('hidden');
-            this.element.find('li').find('button').removeClass('hidden');
         }
     });
 
