@@ -786,7 +786,9 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
         }
 
         if (isset($conditions['source']) && !empty($conditions['source'])) {
-            if ($conditions['source'] == 'shared') {
+            if($conditions['source'] == 'upload') {
+                $conditions['createdUserId'] = $conditions['currentUserId'];
+            } elseif ($conditions['source'] == 'shared') {
                 $myFriends = $this->getUploadFileShareDao()->findShareHistoryByUserId($conditions['currentUserId']);
 
                 if ($myFriends) {
@@ -803,8 +805,6 @@ class UploadFileServiceImpl extends BaseService implements UploadFileService
                 }
             }
         }
-
-        $conditions['createdUserIds'] = empty($conditions['createdUserIds']) ? array() : $conditions['createdUserIds'];
 
         if (isset($conditions['sourceFrom']) && ($conditions['sourceFrom'] == 'my') && !empty($conditions['currentUserId'])) {
             $conditions['createdUserIds'] = array($conditions['currentUserId']);
