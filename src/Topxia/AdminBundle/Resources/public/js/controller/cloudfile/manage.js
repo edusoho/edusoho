@@ -185,6 +185,7 @@ define(function(require, exports, module) {
 
                     if (self.get('model') == 'edit') {
                         $('#materials-form').find('[data-role=batch-item]').show();
+                        $("[data-role=batch-select]").attr("checked",false);
                     }
                 }).fail(function(){
                     self._loaded_error();
@@ -231,7 +232,6 @@ define(function(require, exports, module) {
                         if(data){
                             Notify.success('删除资源成功');
                             self.renderTable(true);
-                            $("input[name = 'batch-select']").attr("checked",false);
                         }
                         $('#materials-form').find('[data-role=batch-item]').show();
                         $('#materials-form').find('[data-role=batch-select]').attr("checked",false);
