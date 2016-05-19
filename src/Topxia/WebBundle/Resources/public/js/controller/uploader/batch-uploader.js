@@ -62,7 +62,7 @@ define(function(require, exports, module) {
             $(event.target).siblings('.js-file-pause').removeClass('hidden');
             file.getStatus() === 'cancelled' && file.setStatus('interrupt');
             this.uploader.upload(fileId);
-            this._displaySpeed();
+            //this._displaySpeed();
         },
         
         _onFileUploadStop: function (event) {
@@ -75,7 +75,7 @@ define(function(require, exports, module) {
                 $li.find('.file-status').html('暂停中');
                 this.uploader.cancelFile(fileId);
             }
-            this._displaySpeed();
+            //this._displaySpeed();
         },
 
         _onFileUploadRemove: function (event) {
@@ -228,13 +228,13 @@ define(function(require, exports, module) {
             uploader.on('beforeFileQueued', function (file) {
                 file.uploaderWidget = self;
 
-                if ($('.ballon-uploader-display-footer').hasClass('hidden')) {
+                /*if ($('.ballon-uploader-display-footer').hasClass('hidden')) {
                     $('.upload-finish').text('');
                     $('.js-left-time').text('');
                     $('.js-speed').text(0);
                     $('.ballon-uploader-display-footer').removeClass('hidden');
                     $('.upload-finish').addClass('hidden');
-                }
+                }*/
                 this.uploadQueue = this.uploadQueue || {}; //存储队列中文件开始上传的信息
                 this.totalSpeedQueue = this.totalSpeedQueue || {}; //当前上传的总数的 |单位 MB/s
                 this.leftTotalSizeQueue = this.leftTotalSizeQueue || {}; //上传剩余的总文件大小 |单位 MB
@@ -258,7 +258,7 @@ define(function(require, exports, module) {
                 this.updateDisplayIndex++;
                 if (this.updateDisplayIndex == 1 || this.updateDisplayIndex >= 60 || file.size <= 262144) { //256KB
                     this.updateDisplayIndex = 0;
-                    file.uploaderWidget._displaySpeed()
+                    //file.uploaderWidget._displaySpeed()
                 }
 
                 var $li = $('#' + file.id);
