@@ -390,7 +390,7 @@ class OrderServiceImpl extends BaseService implements OrderService
             'reasonNote'     => empty($reason['note']) ? '' : $reason['note'],
             'updatedTime'    => time(),
             'createdTime'    => time(),
-            'operator'       => $order['userId']
+            'operator'       => 0
         ));
 
         $this->getOrderDao()->updateOrder($order['id'], array(
