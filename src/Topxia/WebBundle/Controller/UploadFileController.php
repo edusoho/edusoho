@@ -91,7 +91,7 @@ class UploadFileController extends BaseController
 
         $conditions = $request->query->all();
 
-        $conditions['currentUserId'] = $user['id'];
+        $conditions['createdUserIds'] = $user['id'];
 
         $files = $this->getUploadFileService()->searchFiles($conditions, array('createdTime', 'DESC'), 0, 10000);
 
