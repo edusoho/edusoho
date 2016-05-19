@@ -367,7 +367,7 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
             $api       = CloudAPIFactory::create('root');
             $cloudFile = $api->post("/resources/".$globalId, $fields);
             $localFile = $this->getUploadFileDao()->getFileByGlobalId($globalId);
-            return $this->mergeCloudFile2($localFile, $cloudFile);
+            return $this->mergeCloudFile($localFile, $cloudFile);
         }
 
         return false;
@@ -627,34 +627,21 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
 
     private function mergeCloudFile($localFile, $cloudFile)
     {
-        if ($localFile) {
-            $cloudFile['id']            = $localFile['id'];
-            $cloudFile['targetType']    = $localFile['targetType'];
-            $cloudFile['targetId']      = $localFile['targetId'];
-            $cloudFile['createdUserId'] = $localFile['createdUserId'];
-            $cloudFile['updatedUserId'] = $localFile['updatedUserId'];
-            $cloudFile['isPublic']      = $localFile['isPublic'];
-            $cloudFile['usedCount']     = $localFile['usedCount'];
-            $cloudFile['ext']           = $localFile['ext'];
-            $cloudFile['storage']       = $localFile['storage'];
-            $cloudFile['globalId']      = $localFile['globalId'];
-            $cloudFile['convertHash']   = $localFile['convertHash'];
-        } else {
-            $cloudFile['id']        = 0;
-            $cloudFile['storage']   = 'cloud';
-            $cloudFile['globalId']  = $cloudFile['no'];
-            $cloudFile['usedCount'] = 0;
+        if(empty($localFile)){
+            $localFile = array(
+                'id'        => 0,
+                'storage'   => 'cloud',
+                'globalId'  => $cloudFile['no'],
+                'usedCount' => 0,
+                'hashId'    => $cloudFile['reskey'],
+                'fileSize'  => $cloudFile['size'],
+                'filename'  => $cloudFile['name']
+            );
         }
 
-        $cloudFile['filename']      = $cloudFile['name'];
-        $cloudFile['hashId']        = $cloudFile['reskey'];
-        $cloudFile['fileSize']      = $cloudFile['size'];
-        $cloudFile['convertStatus'] = $this->getConvertStatus($cloudFile['processStatus']);
-
-
-        $cloudFile = array_merge($this->getFileOtherInfo($localFile, $cloudFile), $cloudFile);
-
-        return $cloudFile;
+        $file = array_merge($localFile, $cloudFile);
+        $file['convertStatus'] = $this->getConvertStatus($file['processStatus']);
+        return $this->mergeConvertParamsAndMetas($file);
     }
 
     public function synData($conditions)
@@ -760,54 +747,54 @@ class CloudFileImplementorImpl extends BaseService implements FileImplementor
         return $statusMap[$processStatus];
     }
 
-    protected function getFileOtherInfo($file, $cloudFile)
+    protected function mergeConvertParamsAndMetas($file)
     {
-        $statusMap             = array(
+        $statusMap = array(
             'none'       => 'none',
             'waiting'    => 'waiting',
             'processing' => 'doing',
             'ok'         => 'success',
             'error'      => 'error'
         );
-        $file['convertStatus'] = $statusMap[$cloudFile['processStatus']];
+        $file['convertStatus'] = $statusMap[$file['processStatus']];
 
         $file['convertParams'] = array();
         $file['metas2']        = array();
 
-        if (!empty($cloudFile['directives']['output'])) {
+        if (!empty($file['directives']['output'])) {
             
             if ($file['type'] == 'video') {
                 $file['convertParams'] = array(
                     'convertor'    => 'HLSEncryptedVideo',
-                    'videoQuality' => isset($cloudFile['directives']['videoQuality']) ? $cloudFile['directives']['videoQuality'] : 'normal',
-                    'audioQuality' => isset($cloudFile['directives']['audioQuality']) ? $cloudFile['directives']['audioQuality'] : 'normal'
+                    'videoQuality' => isset($file['directives']['videoQuality']) ? $file['directives']['videoQuality'] : 'normal',
+                    'audioQuality' => isset($file['directives']['audioQuality']) ? $file['directives']['audioQuality'] : 'normal'
                 );
 
-                if (isset($cloudFile['metas']['levels'])) {
-                    foreach ($cloudFile['metas']['levels'] as $key => $value) {
+                if (isset($file['metas']['levels'])) {
+                    foreach ($file['metas']['levels'] as $key => $value) {
                         $value['type']                      = $key;
-                        $value['cmd']['hlsKey']             = $cloudFile['metas']['levels'][$key]['hlsKey'];
-                        $cloudFile['metas']['levels'][$key] = $value;
+                        $value['cmd']['hlsKey']             = $file['metas']['levels'][$key]['hlsKey'];
+                        $file['metas']['levels'][$key] = $value;
                     }
 
-                    $file['metas2'] = $cloudFile['metas']['levels'];
+                    $file['metas2'] = $file['metas']['levels'];
                 }
 
-                if (isset($cloudFile['directives']['watermarks'])) {
+                if (isset($file['directives']['watermarks'])) {
                     $file['convertParams']['hasVideoWatermark'] = 1;
                 }
             } elseif (in_array($file['type'],array('ppt','document'))) {
                 $file['convertParams'] = array(
-                    'convertor' => $cloudFile['directives']['output']
+                    'convertor' => $file['directives']['output']
                 );
-                $file['metas2'] = $cloudFile['metas'];
+                $file['metas2'] = $file['metas'];
             } elseif ($file['type'] == 'audio') {
                 $file['convertParams'] = array(
-                    'convertor'    => $cloudFile['directives']['output'],
+                    'convertor'    => $file['directives']['output'],
                     'videoQuality' => 'normal',
                     'audioQuality' => 'normal'
                 );
-                $file['metas2'] = $cloudFile['metas']['levels'];
+                $file['metas2'] = $file['metas']['levels'];
             }
         }
 
